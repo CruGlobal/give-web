@@ -5,7 +5,7 @@ describe('app', function() {
     expect(true).toBe(true);
   });
 
-  it('fails a test', function() {
+  xit('fails a test', function() {
     expect(1).toBe(0, 'intentionally failing test');
   });
 });
