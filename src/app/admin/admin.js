@@ -1,6 +1,6 @@
 import angular from 'angular';
-import BuilderModule from 'app/admin/builder/builder'
-import UsersModule from 'app/admin/users/users'
+import BuilderModule from 'app/admin/builder/builder';
+import UsersModule from 'app/admin/users/users';
 
 import { AdminController } from './AdminController';
 import adminTemplate from './admin.tpl';

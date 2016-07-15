@@ -7,7 +7,7 @@ var routing = function(module) {
 
   var RouterConfig = ['$stateProvider', '$futureStateProvider', function ($stateProvider, $futureStateProvider) {
 
-    $futureStateProvider.stateFactory('load', ['$q', '$ocLazyLoad', 'futureState', function($q, $ocLazyLoad, futureState) {
+    $futureStateProvider.stateFactory('load', ['$q', '$ocLazyLoad', 'futureState', function($q, $ocLazyLoad, futureState, $log) {
       var def = $q.defer();
 
       System.import(futureState.src).then(loaded => {
@@ -20,7 +20,7 @@ var routing = function(module) {
         $ocLazyLoad.load(newModule).then(function() {
           def.resolve();
         }, function() {
-          console.log('error loading: ' + loaded.name);
+          $log.error('error loading: ' + loaded.name);
         });
       });
 

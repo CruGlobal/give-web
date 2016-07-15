@@ -1,8 +1,8 @@
 export default class AdminController{
 
   /*@ngInject*/
-  constructor(){
-    console.log('admin!');
+  constructor($log){
+    $log.info('admin!');
   }
 
 }

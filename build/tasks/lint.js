@@ -1,11 +1,11 @@
 var gulp = require('gulp');
-var jshint = require('gulp-jshint');
-var stylish = require('jshint-stylish');
+var $ = require('gulp-load-plugins')();
+
 var paths = require('../paths');
 
 gulp.task('lint', function () {
   return gulp.src(paths.source)
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish))
-    .pipe(jshint.reporter('fail'));
+    .pipe($.eslint())
+    .pipe($.eslint.format())
+    .pipe($.eslint.failAfterError());
 });

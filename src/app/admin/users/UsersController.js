@@ -1,8 +1,8 @@
 export default class UsersController{
 
   /*@ngInject*/
-  constructor($scope){
-    console.log('users!')
+  constructor($log){
+    $log.info('users!');
   }
   
 }

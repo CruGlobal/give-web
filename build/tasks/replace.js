@@ -1,9 +1,9 @@
 var gulp = require('gulp');
-var replace = require('gulp-replace-task');
+var $ = require('gulp-load-plugins')();
 
 gulp.task('replace', function(){
   return gulp.src('./index.html')
-    .pipe(replace({
+    .pipe($.replaceTask({
       usePrefix: false,
       patterns: [
         {

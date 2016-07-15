@@ -7,7 +7,7 @@ class CurrentUser{
   }
 
   getUser(){
-    var deferred = $q.defer();
+    var deferred = this.$q.defer();
 
     deferred.resolve({
       name: 'Panda'
@@ -15,7 +15,7 @@ class CurrentUser{
 
     return deferred.promise;
   }
-};
+}
 
 export default angular
   .module('user', [])

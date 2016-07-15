@@ -1,8 +1,8 @@
 export default class BuilderController{
 
   /*@ngInject*/
-  constructor($scope){
-    console.log('builder!')
+  constructor($log){
+    $log.info('builder!');
   }
   
 }
