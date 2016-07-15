@@ -14,7 +14,7 @@ module.exports = function(config) {
       'karma-systemjs',
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      'karma-junit-reporter',
+      'karma-mocha-reporter',
       'karma-coverage'
     ],
 
@@ -30,7 +30,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage'],
+    reporters: ['mocha', 'coverage'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
@@ -88,10 +88,10 @@ module.exports = function(config) {
     preprocessors: {
     'src/!(*spec).js': ['coverage'],
     },
-    
+
     // optionally, configure the reporter
     coverageReporter: {
-      type : 'html',
+      type : 'lcov',
       dir : 'coverage/',
       instrumenters: { isparta : require('isparta') },
       instrumenter: {
