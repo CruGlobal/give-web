@@ -8,7 +8,7 @@ gulp.task('test', ['build'], function(done) {
     configFile: __dirname + '/../../karma.conf.js',
     singleRun: true
   }, (exitCode) => {
-        console.log(exitCode);
+        process.exit(exitCode);
         done();
   }).start();
 });

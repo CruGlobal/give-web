@@ -6,5 +6,6 @@ var paths = require('../paths');
 gulp.task('lint', function () {
   return gulp.src(paths.source)
     .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
+    .pipe(jshint.reporter(stylish))
+    .pipe(jshint.reporter('fail'));
 });
