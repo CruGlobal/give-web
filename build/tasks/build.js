@@ -4,7 +4,7 @@ var plumber = require('gulp-plumber');
 var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var ngAnnotate = require('gulp-ng-annotate');
-var scss = require('gulp-scss');
+var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var htmlMin = require('gulp-minify-html');
 var ngHtml2Js = require("gulp-ng-html2js");
@@ -60,7 +60,7 @@ gulp.task('scss', function () {
     .pipe(plumber())
     .pipe(changed(paths.output, {extension: '.css'}))
     .pipe(sourcemaps.init())
-    .pipe(scss())
+    .pipe(sass())
     .pipe(cleanCSS({
       advanced: true,
       keepSpecialComments: 0,

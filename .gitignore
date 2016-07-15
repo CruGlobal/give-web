@@ -8,5 +8,4 @@ jspm_packages
 
 *.log
 *.back.*
-.gulp-scss-cache
 .sass-cache
