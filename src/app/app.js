@@ -8,10 +8,14 @@ import 'common/core';
 import routing from 'common/utils/routing';
 
 let app = angular.module('demo', ['ui.router', 'oc.lazyLoad'])
-  .config(routing(app))
+  .config(routing(angular.module('demo')))
   .config(appConfig);
 
-function appConfig($urlRouterProvider, $locationProvider, $compileProvider, $logProvider, $httpProvider, $ocLazyLoadProvider, $window) {
+appConfig.$inject = ['$urlRouterProvider', '$locationProvider', '$compileProvider', '$logProvider', '$httpProvider', '$ocLazyLoadProvider', '$windowProvider'];
+
+function appConfig($urlRouterProvider, $locationProvider, $compileProvider, $logProvider, $httpProvider, $ocLazyLoadProvider, $windowProvider) {
+  var $window = $windowProvider.$get();
+
   $locationProvider.html5Mode({
     enabled: true,
     requireBase: false
