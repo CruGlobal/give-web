@@ -11,8 +11,7 @@ let app = angular.module('demo', ['ui.router', 'oc.lazyLoad'])
   .config(routing(angular.module('demo')))
   .config(appConfig);
 
-appConfig.$inject = ['$urlRouterProvider', '$locationProvider', '$compileProvider', '$logProvider', '$httpProvider', '$ocLazyLoadProvider', '$windowProvider'];
-
+/* @ngInject */
 function appConfig($urlRouterProvider, $locationProvider, $compileProvider, $logProvider, $httpProvider, $ocLazyLoadProvider, $windowProvider) {
   var $window = $windowProvider.$get();
 

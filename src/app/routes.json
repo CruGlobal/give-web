@@ -22,5 +22,11 @@
     "urlPrefix": "/forms",
     "type": "load",
     "src": "app/forms/forms"
+  },
+  {
+    "stateName": "checkout",
+    "urlPrefix": "/checkout",
+    "type": "load",
+    "src": "app/checkout/checkout"
   }
 ]
