@@ -4,7 +4,7 @@ import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
 import 'ocLazyLoad';
-import 'common/core';
+//import 'common/core';
 import routing from 'common/utils/routing';
 
 let app = angular.module('demo', ['ui.router', 'oc.lazyLoad'])
@@ -20,7 +20,7 @@ function appConfig($urlRouterProvider, $locationProvider, $compileProvider, $log
     requireBase: false
   });
   $httpProvider.useApplyAsync(true);
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/checkout');
 
   if($window.prod){
     $logProvider.debugEnabled(false);

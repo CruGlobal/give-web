@@ -1,6 +1,7 @@
 import angular from 'angular';
 
-class CurrentUser{
+class ExampleService{
+
   /*@ngInject*/
   constructor($q){
     this.$q = $q;
@@ -18,5 +19,5 @@ class CurrentUser{
 }
 
 export default angular
-  .module('user', [])
-  .factory('CurrentUser', CurrentUser);
+  .module('exampleService', [])
+  .factory('ExampleService', ExampleService);
