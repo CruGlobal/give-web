@@ -1,18 +1,22 @@
 /* eslint angular/module-getter:0, angular/document-service:0 */
 import 'babel/external-helpers';
 
+// Import packages
 import angular from 'angular';
 import 'angular-ui-router';
 import 'ocLazyLoad';
 
-import './main/main';
+// Import app code
+import mainComponent from './main/main.component';
 //import 'common/core';
+
+// Import lazy loading route code
 import routing from 'common/utils/routing';
 
 let app = angular.module('app', [
     'ui.router',
     'oc.lazyLoad',
-    'main'
+    mainComponent.name
   ])
   .config(routing(angular.module('app')))
   .config(appConfig);

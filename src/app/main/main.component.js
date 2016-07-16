@@ -1,5 +1,7 @@
 import angular from 'angular';
 
+import primaryNavComponent from './nav/primary/primary-nav.component';
+
 import mainTemplate from './main.tpl';
 import './main.css!';
 
@@ -14,7 +16,10 @@ class MainController{
 }
 
 export default angular
-  .module('main')
+  .module('main', [
+    mainTemplate.name,
+    primaryNavComponent.name
+  ])
   .component('main', {
     controller: MainController,
     templateUrl: mainTemplate.name

@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import mainModule from './main';
+import mainModule from './main.component';
 
 describe('main', function() {
   beforeEach(angular.mock.module(mainModule.name));
@@ -9,7 +9,7 @@ describe('main', function() {
   beforeEach(inject(function($rootScope, $componentController) {
     var $scope = $rootScope.$new();
 
-    self.controller = $componentController('main', {
+    self.controller = $componentController(mainModule.name, {
       $scope: $scope
     });
   }));

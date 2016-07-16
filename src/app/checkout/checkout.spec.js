@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import checkoutModule from './checkout';
+import checkoutModule from './checkout.component';
 
 describe('checkout', function() {
   beforeEach(angular.mock.module(checkoutModule.name));
@@ -9,7 +9,7 @@ describe('checkout', function() {
   beforeEach(inject(function($rootScope, $componentController) {
     var $scope = $rootScope.$new();
 
-    self.controller = $componentController('checkout', {
+    self.controller = $componentController(checkoutModule.name, {
       $scope: $scope
     });
   }));
