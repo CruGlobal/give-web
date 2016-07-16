@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-ui-router';
 
 import checkoutTemplate from './checkout.tpl';
 
@@ -12,6 +13,7 @@ function ConfigureModule($stateProvider){
 
 export default angular
   .module('checkout', [
-    checkoutTemplate.name
+    checkoutTemplate.name,
+    'ui.router'
   ])
   .config(ConfigureModule);

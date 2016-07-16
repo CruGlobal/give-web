@@ -7,6 +7,7 @@ class CheckoutController{
 
   /* @ngInject */
   constructor($log){
+    this.test = 5;
     $log.info('Loaded checkout controller');
   }
 

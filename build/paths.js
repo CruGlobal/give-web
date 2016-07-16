@@ -1,5 +1,5 @@
 module.exports = {
-  source: 'src/**/*.js',
+  source: ['src/**/*.js', '!**/*.spec.js'],
   html: '**/*.html',
   json: 'src/**/*.json',
   templates: 'src/**/*.html',

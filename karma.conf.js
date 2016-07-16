@@ -41,12 +41,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/*.spec.js'
-    ],
-    
-    // list of files to exclude
-    exclude: [
-      'test/e2e/*'
+      'src/**/*.spec.js'
     ],
 
     systemjs: {
@@ -69,13 +64,15 @@ module.exports = function(config) {
         'jspm_packages/**/*',
         'dist/**/*.js',
         'dist/**/*.css',
-        'dist/**/*.json',
-      ],      
+        'dist/**/*.json'
+      ]
     },
     
     proxies: {
       '/test': '/base/test',
       '/dist': '/base/dist',
+      '/src': '/base/dist',
+      '/base/src': '/base/dist',
       '/node_modules': '/base/node_modules'
     },
 
@@ -86,7 +83,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-    'src/!(*spec).js': ['coverage'],
+    'src/!(*spec).js': ['coverage']
     },
 
     // optionally, configure the reporter
