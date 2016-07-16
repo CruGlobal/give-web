@@ -9,7 +9,8 @@
   "extends": ["angular", "plugin:jasmine/recommended"],
   "globals": {
     "System": true,
-    "inject": true
+    "inject": true,
+    "require": true
   },
   "rules": {
     "no-alert": "off",
