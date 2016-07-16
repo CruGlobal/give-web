@@ -1,5 +1,5 @@
 System.config({
-  baseURL: "/",
+  baseURL: ".",
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -57,6 +57,7 @@ System.config({
   },
 
   map: {
+    "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
     "angular": "github:angular/bower-angular@1.5.5",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.5",
     "angular-ui-router": "github:angular-ui/ui-router@0.2.18",

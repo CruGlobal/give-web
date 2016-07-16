@@ -25,7 +25,7 @@ gulp.task('es6', function () {
       gulpWarnings: false
     }))
     .pipe($.sourcemaps.write("/sourcemaps", { sourceRoot: '/src' }))
-    .pipe(gulp.dest(paths.output))
+    .pipe(gulp.dest(paths.output));
 });
 
 gulp.task('html', function () {
@@ -44,7 +44,7 @@ gulp.task('html', function () {
         "}]);\n"
     }))
     .pipe($.babel(compilerOptions))
-    .pipe(gulp.dest(paths.output))
+    .pipe(gulp.dest(paths.output));
 });
 
 gulp.task('scss', function () {
@@ -52,8 +52,9 @@ gulp.task('scss', function () {
     .pipe($.plumber())
     .pipe($.changed(paths.output, {extension: '.css'}))
     .pipe($.sourcemaps.init())
+    .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
     .pipe($.sass())
-    .pipe($.cleanCss({
+    .pipe($.cleanCss({ //TODO: do we need this?
       advanced: true,
       keepSpecialComments: 0,
       keepBreaks: false
