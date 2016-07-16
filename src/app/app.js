@@ -4,11 +4,17 @@ import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
 import 'ocLazyLoad';
+
+import './main/main';
 //import 'common/core';
 import routing from 'common/utils/routing';
 
-let app = angular.module('demo', ['ui.router', 'oc.lazyLoad'])
-  .config(routing(angular.module('demo')))
+let app = angular.module('app', [
+    'ui.router',
+    'oc.lazyLoad',
+    'main'
+  ])
+  .config(routing(angular.module('app')))
   .config(appConfig);
 
 /* @ngInject */
