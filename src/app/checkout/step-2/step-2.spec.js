@@ -1,8 +1,8 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './step-1.component';
+import module from './step-2.component';
 
-describe('step 1', function() {
+describe('step 2', function() {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 

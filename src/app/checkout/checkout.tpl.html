@@ -1,1 +1,60 @@
-<ui-view></ui-view>
+<!-- Content wrap -->
+<div class="screenContent">
+  <div class="container container-edge-small container-edge-extrasmall">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel">
+                <div class="panel-body">
+                  <h3 class="panel-name">Checkout</h3>
+
+                  <div class="steps-wrap mb clearfix">
+                    <div class="steps-single on">
+<span class="step-title">
+Contact Information
+</span>
+                      <div class="step-bar">
+                        <span class="step-digit">1</span>
+                      </div>
+                    </div>
+                    <div class="steps-single">
+<span class="step-title">
+Payment Method
+</span>
+                      <div class="step-bar">
+                        <span class="step-digit">2</span>
+                      </div>
+                    </div>
+                    <div class="steps-single">
+<span class="step-title">
+Review and Submit Gift
+</span>
+                      <div class="step-bar">
+                        <span class="step-digit">3</span>
+                      </div>
+                    </div>
+
+                    <div class="steps-mobile-progress visible-xs">
+                      <div class="steps-single-mobile on"></div>
+                      <div class="steps-single-mobile"></div>
+                      <div class="steps-single-mobile"></div>
+                    </div>
+                  </div>
+
+                  <ui-view></ui-view>
+
+                </div> <!-- // panelbody -->
+              </div><!-- // panel -->
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <checkout-cart-summary></checkout-cart-summary>
+        </div>
+      </div>
+    </div> <!-- // masonry container -->
+
+  </div>
+</div>

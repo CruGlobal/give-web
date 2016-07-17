@@ -8,7 +8,7 @@ import template from './step-1.tpl';
 
 let componentName = 'checkoutStep1';
 
-class CartSummmaryController{
+class Step1Controller{
 
   /* @ngInject */
   constructor(){
@@ -25,6 +25,6 @@ export default angular
     organizationContactForm.name
   ])
   .component(componentName, {
-    controller: CartSummmaryController,
+    controller: Step1Controller,
     templateUrl: template.name
   });
