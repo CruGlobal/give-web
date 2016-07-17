@@ -46,24 +46,26 @@ Review and Submit Gift
                   <div class="mb">
                     <div class="row">
                       <div class="col-md-6">
-                        <a href="#indivform" data-target="tab-indiv" class="tab-btn btn btn-default btn-block">Give as
-                          an Individual</a>
+                        <button class="tab-btn btn btn-default btn-block" ng-click="$ctrl.contactType = 'individual'" ng-class="{'on': $ctrl.contactType === 'individual'}">
+                          Give as an Individual
+                        </button>
                       </div>
                       <div class="col-md-6">
-                        <a href="#orgform" data-target="tab-org" class="tab-btn btn btn-default btn-block">Give as an
-                          Organization</a>
+                        <button class="tab-btn btn btn-default btn-block" ng-click="$ctrl.contactType = 'organization'" ng-class="{'on': $ctrl.contactType === 'organization'}">
+                          Give as an Organization
+                        </button>
                       </div>
                     </div>
                   </div>
 
-                  <div class="tab-indiv cart-tab show">
+                  <div class="tab-indiv cart-tab show" ng-if="$ctrl.contactType === 'individual'">
 
-                    <!-- {% include_relative partial-individual-form.html %} -->
+                    <checkout-individual-contact-form></checkout-individual-contact-form>
 
                   </div>
-                  <div class="tab-org cart-tab">
+                  <div class="tab-org cart-tab show" ng-if="$ctrl.contactType === 'organization'">
 
-                    <!-- {% include_relative partial-organization-form.html %} -->
+                    <checkout-organization-contact-form></checkout-organization-contact-form>
 
                   </div>
 
@@ -73,7 +75,7 @@ Review and Submit Gift
           </div>
         </div>
         <div class="col-md-4 hidden-xs">
-          {% include_relative partial-cart-summary.html %}
+          <checkout-cart-summary></checkout-cart-summary>
         </div>
       </div>
     </div> <!-- // masonry container -->

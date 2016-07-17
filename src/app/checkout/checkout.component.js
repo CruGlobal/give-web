@@ -1,15 +1,18 @@
 import angular from 'angular';
 import 'angular-ui-router';
 
+import individualContactForm from './individual-contact-form/individual-contact-form.component';
+import organizationContactForm from './organization-contact-form/organization-contact-form.component';
+import cartSummary from './cart-summary/cart-summary.component';
+
 import checkoutTemplate from './checkout.tpl';
 import './checkout.css!';
 
 class CheckoutController{
 
   /* @ngInject */
-  constructor($log){
-    this.test = 5;
-    $log.info('Loaded checkout controller');
+  constructor(){
+    this.contactType = 'individual';
   }
 
 }
@@ -24,8 +27,11 @@ function ConfigureModule($stateProvider){
 
 export default angular
   .module('checkout', [
+    'ui.router',
     checkoutTemplate.name,
-    'ui.router'
+    cartSummary.name,
+    individualContactForm.name,
+    organizationContactForm.name
   ])
   .config(ConfigureModule)
   .component('checkout', {
