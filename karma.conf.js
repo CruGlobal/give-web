@@ -63,6 +63,7 @@ module.exports = function(config) {
       serveFiles: [
         'jspm_packages/**/*',
         'dist/**/*.js',
+        '!**/*.spec.js',
         'dist/**/*.css',
         'dist/**/*.json'
       ]
