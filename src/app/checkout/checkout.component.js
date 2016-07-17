@@ -3,6 +3,7 @@ import 'angular-ui-router';
 
 import step1 from './step-1/step-1.component';
 import step2 from './step-2/step-2.component';
+import step3 from './step-3/step-3.component';
 
 import template from './checkout.tpl';
 import './checkout.css!';
@@ -30,6 +31,9 @@ function ConfigureModule($stateProvider){
   }).state('checkout.step2', {
     url: '/step-2',
     template: '<checkout-step-2></checkout-step-2>'
+  }).state('checkout.step3', {
+    url: '/step-3',
+    template: '<checkout-step-3></checkout-step-3>'
   });
 }
 
@@ -38,7 +42,8 @@ export default angular
     'ui.router',
     template.name,
     step1.name,
-    step2.name
+    step2.name,
+    step3.name
   ])
   .config(ConfigureModule)
   .component(componentName, {
