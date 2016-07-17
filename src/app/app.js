@@ -30,7 +30,7 @@ function appConfig($urlRouterProvider, $locationProvider, $compileProvider, $log
     requireBase: false
   });
   $httpProvider.useApplyAsync(true);
-  $urlRouterProvider.otherwise('/checkout');
+  $urlRouterProvider.otherwise('/checkout/step-1');
 
   if($window.prod){
     $logProvider.debugEnabled(false);
