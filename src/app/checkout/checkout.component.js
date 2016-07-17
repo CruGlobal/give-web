@@ -8,6 +8,8 @@ import cartSummary from './cart-summary/cart-summary.component';
 import template from './checkout.tpl';
 import './checkout.css!';
 
+let componentName = 'checkout';
+
 class CheckoutController{
 
   /* @ngInject */
@@ -26,7 +28,7 @@ function ConfigureModule($stateProvider){
 }
 
 export default angular
-  .module('checkout', [
+  .module(componentName, [
     'ui.router',
     template.name,
     cartSummary.name,
@@ -34,7 +36,7 @@ export default angular
     organizationContactForm.name
   ])
   .config(ConfigureModule)
-  .component('checkout', {
+  .component(componentName, {
     controller: CheckoutController,
     templateUrl: template.name
   });

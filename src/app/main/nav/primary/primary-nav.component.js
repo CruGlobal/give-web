@@ -3,6 +3,8 @@ import angular from 'angular';
 import template from './primary-nav.tpl';
 //import './primary-nav.css!';
 
+let componentName = 'primaryNav';
+
 class PrimaryNavController{
 
   /* @ngInject */
@@ -13,10 +15,10 @@ class PrimaryNavController{
 }
 
 export default angular
-  .module('primaryNav', [
+  .module(componentName, [
     template.name
   ])
-  .component('primaryNav', {
+  .component(componentName, {
     controller: PrimaryNavController,
     templateUrl: template.name
   });

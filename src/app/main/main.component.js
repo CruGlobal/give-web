@@ -6,6 +6,8 @@ import subNavComponent from './nav/sub/sub-nav.component';
 import template from './main.tpl';
 import './main.css!';
 
+let componentName = 'main';
+
 class MainController{
 
   /* @ngInject */
@@ -16,12 +18,12 @@ class MainController{
 }
 
 export default angular
-  .module('main', [
+  .module(componentName, [
     template.name,
     primaryNavComponent.name,
     subNavComponent.name
   ])
-  .component('main', {
+  .component(componentName, {
     controller: MainController,
     templateUrl: template.name
   });

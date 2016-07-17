@@ -2,6 +2,8 @@ import angular from 'angular';
 
 import template from './cart-summary.tpl';
 
+let componentName = 'checkoutCartSummary';
+
 class CartSummmaryController{
 
   /* @ngInject */
@@ -12,10 +14,10 @@ class CartSummmaryController{
 }
 
 export default angular
-  .module('checkoutCartSummary', [
+  .module(componentName, [
     template.name
   ])
-  .component('checkoutCartSummary', {
+  .component(componentName, {
     controller: CartSummmaryController,
     templateUrl: template.name
   });
