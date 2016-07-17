@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import cartSummaryTemplate from './cart-summary.tpl';
+import template from './cart-summary.tpl';
 
 class CartSummmaryController{
 
@@ -13,9 +13,9 @@ class CartSummmaryController{
 
 export default angular
   .module('checkoutCartSummary', [
-    cartSummaryTemplate.name
+    template.name
   ])
   .component('checkoutCartSummary', {
     controller: CartSummmaryController,
-    templateUrl: cartSummaryTemplate.name
+    templateUrl: template.name
   });

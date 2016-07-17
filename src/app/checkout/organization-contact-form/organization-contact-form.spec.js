@@ -1,20 +1,20 @@
 import angular from 'angular';
 import 'angular-mocks';
-import organizationContactFormModule from './organization-contact-form.component';
+import module from './organization-contact-form.component';
 
-describe('cart summary', function() {
-  beforeEach(angular.mock.module(organizationContactFormModule.name));
+describe('organization contact form', function() {
+  beforeEach(angular.mock.module(module.name));
   var self = {};
 
   beforeEach(inject(function($rootScope, $componentController) {
     var $scope = $rootScope.$new();
 
-    self.controller = $componentController(cartSummaryModule.name, {
+    self.controller = $componentController(module.name, {
       $scope: $scope
     });
   }));
 
-  it('has test which is 5', function() {
-    expect(self.controller.test).toEqual(5);
+  it('to be defined', function() {
+    expect(self.controller).toBeDefined();
   });
 });

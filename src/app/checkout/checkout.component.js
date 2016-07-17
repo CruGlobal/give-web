@@ -5,7 +5,7 @@ import individualContactForm from './individual-contact-form/individual-contact-
 import organizationContactForm from './organization-contact-form/organization-contact-form.component';
 import cartSummary from './cart-summary/cart-summary.component';
 
-import checkoutTemplate from './checkout.tpl';
+import template from './checkout.tpl';
 import './checkout.css!';
 
 class CheckoutController{
@@ -28,7 +28,7 @@ function ConfigureModule($stateProvider){
 export default angular
   .module('checkout', [
     'ui.router',
-    checkoutTemplate.name,
+    template.name,
     cartSummary.name,
     individualContactForm.name,
     organizationContactForm.name
@@ -36,5 +36,5 @@ export default angular
   .config(ConfigureModule)
   .component('checkout', {
     controller: CheckoutController,
-    templateUrl: checkoutTemplate.name
+    templateUrl: template.name
   });

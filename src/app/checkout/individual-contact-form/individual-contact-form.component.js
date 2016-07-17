@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import individualContactFormTemplate from './individual-contact-form.tpl';
+import template from './individual-contact-form.tpl';
 
 class IndividualContactFormController{
 
@@ -13,9 +13,9 @@ class IndividualContactFormController{
 
 export default angular
   .module('checkoutIndividualContactForm', [
-    individualContactFormTemplate.name
+    template.name
   ])
   .component('checkoutIndividualContactForm', {
     controller: IndividualContactFormController,
-    templateUrl: individualContactFormTemplate.name
+    templateUrl: template.name
   });

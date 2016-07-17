@@ -1,23 +1,22 @@
 import angular from 'angular';
 
-import primaryNavTemplate from './primary-nav.tpl';
+import template from './primary-nav.tpl';
 //import './primary-nav.css!';
 
 class PrimaryNavController{
 
   /* @ngInject */
-  constructor($log){
-    this.test = 5;
-    $log.info('Loaded primaryNav controller');
+  constructor(){
+
   }
 
 }
 
 export default angular
   .module('primaryNav', [
-    primaryNavTemplate.name
+    template.name
   ])
   .component('primaryNav', {
     controller: PrimaryNavController,
-    templateUrl: primaryNavTemplate.name
+    templateUrl: template.name
   });

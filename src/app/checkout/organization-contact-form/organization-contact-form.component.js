@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import organizationContactFormTemplate from './organization-contact-form.tpl';
+import template from './organization-contact-form.tpl';
 
 class OrganizationContactFormController{
 
@@ -13,9 +13,9 @@ class OrganizationContactFormController{
 
 export default angular
   .module('checkoutOrganizationContactForm', [
-    organizationContactFormTemplate.name
+    template.name
   ])
   .component('checkoutOrganizationContactForm', {
     controller: OrganizationContactFormController,
-    templateUrl: organizationContactFormTemplate.name
+    templateUrl: template.name
   });
