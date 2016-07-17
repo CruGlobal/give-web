@@ -54,11 +54,6 @@ gulp.task('scss', function () {
     .pipe($.sourcemaps.init())
     .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
     .pipe($.sass())
-    .pipe($.cleanCss({ //TODO: do we need this?
-      advanced: true,
-      keepSpecialComments: 0,
-      keepBreaks: false
-    }))
     .pipe($.sourcemaps.write("."))
     .pipe(gulp.dest(paths.output))
     .pipe($.browserSync.reload({ stream: true }));
