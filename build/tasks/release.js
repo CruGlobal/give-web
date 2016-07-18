@@ -15,14 +15,14 @@ gulp.task('cache-bust', function () {
 
 gulp.task('inline-systemjs', function () {
   return gulp.src([
-    './jspm_packages/es6-module-loader.js',
-    './jspm_packages/system.js',
-    './system.config.js',
-    'dist/app/app.js'
-  ])
-  //.pipe(uglify())
-  .pipe($.concat('app/app.js'))
-  .pipe(gulp.dest(paths.output));
+      './jspm_packages/es6-module-loader.js',
+      './jspm_packages/system.js',
+      './system.config.js',
+      'dist/app/app.js'
+    ])
+    //.pipe(uglify())
+    .pipe($.concat('app/app.js'))
+    .pipe(gulp.dest(paths.output));
 });
 
 gulp.task('release', function (callback) {
@@ -31,35 +31,23 @@ gulp.task('release', function (callback) {
     'build',
     'bundle',
     'cache-bust',
-    'replace',
+    //'replace',
     'inline-systemjs',
     callback
   );
 });
 
 gulp.task('bundle', function () {
-  var routes = require('../../dist/app/routes.json');
-  routes = routes.map(function (r) {
-    return r.src;
-  });
-
-  var config = {
-    dest: 'dist',
-    main: 'app/app.js',
-    destMain: 'dist/app',
-    routes: routes,
-    bundleThreshold: 0.6,
-    jspmConfigPath: './system.config.js',
-    sourceMaps: false,
-    minify: true,
-    mangle: true,
-    verboseOutput: true,
-    ignoredPaths: [
-      'jspm_packages',
-      'npm:',
-      'github:'
-    ]
-  };
-
-  return $.systemjsRouteBundler.build(config);
+  $.jspmBuild({
+      bundleSfx: true,
+      bundles: [
+        { src: 'app/checkout/checkout.component',
+          dst: 'app.js'
+        }
+      ],
+      bundleOptions: {
+        minify: true
+      }
+    })
+    .pipe(gulp.dest('dist/bundles'));
 });

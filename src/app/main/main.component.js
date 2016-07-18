@@ -2,6 +2,7 @@ import angular from 'angular';
 
 import primaryNavComponent from './nav/primary/primary-nav.component';
 import subNavComponent from './nav/sub/sub-nav.component';
+import checkoutComponent from '../checkout/checkout.component';
 
 import template from './main.tpl';
 import './main.css!';
@@ -17,12 +18,23 @@ class MainController{
 
 }
 
+function routingConfig($stateProvider){
+  $stateProvider
+    .state('checkout', {
+      url: "/checkout",
+      template: '<checkout></checkout>'
+    });
+
+}
+
 export default angular
   .module(componentName, [
     template.name,
     primaryNavComponent.name,
-    subNavComponent.name
+    subNavComponent.name,
+    checkoutComponent.name
   ])
+  .config(routingConfig)
   .component(componentName, {
     controller: MainController,
     templateUrl: template.name
