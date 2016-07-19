@@ -11,26 +11,26 @@
                   <h3 class="panel-name">Checkout</h3>
 
                   <div class="steps-wrap mb clearfix">
-                    <div class="steps-single on">
-<span class="step-title">
-Contact Information
-</span>
+                    <div class="steps-single" ng-click="$ctrl.checkoutStep = 'contact'" ng-class="{'on': $ctrl.checkoutStep === 'contact'}">
+                      <span class="step-title">
+                      Contact Information
+                      </span>
                       <div class="step-bar">
                         <span class="step-digit">1</span>
                       </div>
                     </div>
-                    <div class="steps-single">
-<span class="step-title">
-Payment Method
-</span>
+                    <div class="steps-single" ng-click="$ctrl.checkoutStep = 'payment'" ng-class="{'on': $ctrl.checkoutStep === 'payment'}">
+                      <span class="step-title">
+                      Payment Method
+                      </span>
                       <div class="step-bar">
                         <span class="step-digit">2</span>
                       </div>
                     </div>
-                    <div class="steps-single">
-<span class="step-title">
-Review and Submit Gift
-</span>
+                    <div class="steps-single" ng-click="$ctrl.checkoutStep = 'review'" ng-class="{'on': $ctrl.checkoutStep === 'review'}">
+                      <span class="step-title">
+                      Review and Submit Gift
+                      </span>
                       <div class="step-bar">
                         <span class="step-digit">3</span>
                       </div>
@@ -43,10 +43,10 @@ Review and Submit Gift
                     </div>
                   </div>
 
-                  <checkout-step-1></checkout-step-1>
-                  <checkout-step-2></checkout-step-2>
-                  <checkout-step-3></checkout-step-3>
-                  <checkout-thank-you></checkout-thank-you>'
+                  <checkout-step-1 ng-if="$ctrl.checkoutStep === 'contact'" change-step="$ctrl.changeStep(newStep)"></checkout-step-1>
+                  <checkout-step-2 ng-if="$ctrl.checkoutStep === 'payment'" change-step="$ctrl.changeStep(newStep)"></checkout-step-2>
+                  <checkout-step-3 ng-if="$ctrl.checkoutStep === 'review'" change-step="$ctrl.changeStep(newStep)"></checkout-step-3>
+                  <!--<checkout-thank-you></checkout-thank-you>'-->
 
                 </div> <!-- // panelbody -->
               </div><!-- // panel -->

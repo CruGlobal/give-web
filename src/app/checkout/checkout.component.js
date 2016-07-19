@@ -18,18 +18,32 @@ class CheckoutController{
 
   /* @ngInject */
   constructor($log, cart, designations){
-    cart.get()
+    this.$log = $log;
+    this.cart = cart;
+    this.designations = designations;
+
+    this.checkoutStep = 'contact';
+
+    this.testRequests();
+  }
+
+  testRequests(){
+    this.cart.get()
       .then((response) => {
-        $log.info('cart', response.data);
+        this.$log.info('cart', response.data);
       });
-    designations.createSearch('a')
+    this.designations.createSearch('a')
       .then((id) => {
-        $log.info('search id', id);
-        designations.getSearchResults(id, 1)
+        this.$log.info('search id', id);
+        this.designations.getSearchResults(id, 1)
           .then((response) => {
-            $log.info('search page', response.data);
+            this.$log.info('search page', response.data);
           });
       });
+  }
+
+  changeStep(newStep){
+    this.checkoutStep = newStep;
   }
 
 }
