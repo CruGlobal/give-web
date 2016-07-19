@@ -69,6 +69,7 @@ System.config({
     "css": "github:systemjs/plugin-css@0.1.21",
     "jsencrypt": "npm:jsencrypt@2.3.1",
     "json": "github:systemjs/plugin-json@0.1.2",
+    "jsonpath": "npm:jsonpath@0.2.6",
     "lodash": "npm:lodash@4.13.1",
     "scss": "github:KevCJones/plugin-scss@0.2.11",
     "systemjs/plugin-css": "github:systemjs/plugin-css@0.1.21",
@@ -141,6 +142,13 @@ System.config({
     },
     "github:jspm/nodelibs-vm@0.1.0": {
       "vm-browserify": "npm:vm-browserify@0.0.4"
+    },
+    "npm:JSONSelect@0.4.0": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "sys": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:align-text@0.1.4": {
       "kind-of": "npm:kind-of@3.0.3",
@@ -279,6 +287,10 @@ System.config({
       "stream": "github:jspm/nodelibs-stream@0.1.0",
       "string_decoder": "github:jspm/nodelibs-string_decoder@0.1.0"
     },
+    "npm:cjson@0.2.1": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0"
+    },
     "npm:clean-css@3.4.12": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "commander": "npm:commander@2.8.1",
@@ -303,6 +315,9 @@ System.config({
     "npm:clone@1.0.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "vm": "github:jspm/nodelibs-vm@0.1.0"
+    },
+    "npm:colors@0.5.1": {
+      "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:commander@2.8.1": {
       "child_process": "github:jspm/nodelibs-child_process@0.1.0",
@@ -382,6 +397,11 @@ System.config({
     "npm:duplexer2@0.0.2": {
       "readable-stream": "npm:readable-stream@1.1.14"
     },
+    "npm:ebnf-parser@0.1.10": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
     "npm:elliptic@6.3.1": {
       "bn.js": "npm:bn.js@4.11.4",
       "brorand": "npm:brorand@1.0.5",
@@ -392,6 +412,32 @@ System.config({
     "npm:error-ex@1.3.0": {
       "is-arrayish": "npm:is-arrayish@0.2.1",
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:escodegen@0.0.21": {
+      "esprima": "npm:esprima@1.0.4",
+      "estraverse": "npm:estraverse@0.0.4",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "source-map": "npm:source-map@0.5.6",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
+    "npm:escodegen@0.0.28": {
+      "esprima": "npm:esprima@1.0.4",
+      "estraverse": "npm:estraverse@1.3.2",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "source-map": "npm:source-map@0.5.6",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
+    "npm:esprima@1.0.4": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:esprima@1.2.2": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:evp_bytestokey@1.0.0": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
@@ -505,6 +551,28 @@ System.config({
     "npm:isobject@2.1.0": {
       "isarray": "npm:isarray@1.0.0"
     },
+    "npm:jison-lex@0.2.1": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "lex-parser": "npm:lex-parser@0.1.4",
+      "nomnom": "npm:nomnom@1.5.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
+    "npm:jison@0.4.13": {
+      "JSONSelect": "npm:JSONSelect@0.4.0",
+      "cjson": "npm:cjson@0.2.1",
+      "ebnf-parser": "npm:ebnf-parser@0.1.10",
+      "escodegen": "npm:escodegen@0.0.21",
+      "esprima": "npm:esprima@1.0.4",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "jison-lex": "npm:jison-lex@0.2.1",
+      "lex-parser": "npm:lex-parser@0.1.4",
+      "nomnom": "npm:nomnom@1.5.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
     "npm:js-base64@2.1.9": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
@@ -514,11 +582,30 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2",
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
+    "npm:jsonpath@0.2.6": {
+      "assert": "github:jspm/nodelibs-assert@0.1.0",
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "esprima": "npm:esprima@1.2.2",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "jison": "npm:jison@0.4.13",
+      "module": "github:jspm/nodelibs-module@0.1.0",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "static-eval": "npm:static-eval@0.2.3",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
+      "underscore": "npm:underscore@1.7.0",
+      "util": "github:jspm/nodelibs-util@0.1.0"
+    },
     "npm:kind-of@3.0.3": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "is-buffer": "npm:is-buffer@1.1.3"
     },
     "npm:lazy-cache@1.0.4": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:lex-parser@0.1.4": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:load-json-file@1.1.0": {
@@ -584,6 +671,12 @@ System.config({
     "npm:multipipe@0.1.2": {
       "duplexer2": "npm:duplexer2@0.0.2",
       "stream": "github:jspm/nodelibs-stream@0.1.0"
+    },
+    "npm:nomnom@1.5.2": {
+      "colors": "npm:colors@0.5.1",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "underscore": "npm:underscore@1.1.7"
     },
     "npm:normalize-package-data@2.3.5": {
       "hosted-git-info": "npm:hosted-git-info@2.1.5",
@@ -758,6 +851,9 @@ System.config({
     },
     "npm:spdx-license-ids@1.2.1": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
+    "npm:static-eval@0.2.3": {
+      "escodegen": "npm:escodegen@0.0.28"
     },
     "npm:stream-browserify@1.0.0": {
       "events": "github:jspm/nodelibs-events@0.1.1",

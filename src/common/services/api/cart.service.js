@@ -1,4 +1,5 @@
 import angular from 'angular';
+import JSONPath from 'jsonpath';
 
 import apiService from '../api.service';
 
@@ -11,7 +12,8 @@ function cart(api){
   return {
     get: get,
     addItem: addItem,
-    deleteItem: deleteItem
+    deleteItem: deleteItem,
+    getDonorDetails: getDonorDetails
   };
 
   function get(){
@@ -53,6 +55,18 @@ function cart(api){
         quantity: 0
       }
     });
+  }
+
+  function getDonorDetails(){
+    return api.get({
+        path: ['carts', api.scope, 'default'],
+        params: {
+          zoom: 'order:donordetails'
+        }
+      })
+      .then((response) => {
+        return JSONPath.query(response.data, '$.._order.._donordetails.*')[0];
+      });
   }
 }
 
