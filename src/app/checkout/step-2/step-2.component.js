@@ -1,4 +1,5 @@
 import angular from 'angular';
+import ccp from 'common/ccp/ccp';
 
 import bankAccount from './bank-account/bank-account.component';
 import creditCard from './credit-card/credit-card.component';
