@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-ui-router';
 
 import primaryNavComponent from './nav/primary/primary-nav.component';
 import subNavComponent from './nav/sub/sub-nav.component';
@@ -32,7 +33,8 @@ export default angular
     template.name,
     primaryNavComponent.name,
     subNavComponent.name,
-    checkoutComponent.name
+    checkoutComponent.name,
+    'ui.router'
   ])
   .config(routingConfig)
   .component(componentName, {
