@@ -10,19 +10,16 @@
   <title>Cru | Give</title>
   <base href="/">
 </head>
-<body ng-cloak ng-app="checkout">
+<body>
 
-<noscript>
-  <div class="deprecation-warning">
-    <h1>Please enable Javascript</h1>
-    <p>This site requires your browser to have Javascript enabled.
-      <a href="http://enable-javascript.com" target="_blank">Learn more</a></p>
-  </div>
-</noscript>
-
-<checkout></checkout>
+<checkout ng-cloak ng-app="checkout"></checkout>
 
 <script src="dist/bundles/app.js"></script>
+<script src="dist/bundles/checkout.js"></script>
+
+<script>
+  System.import('app/checkout/checkout.component');
+</script>
 
 </body>
 </html>

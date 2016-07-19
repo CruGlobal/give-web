@@ -18,10 +18,12 @@ gulp.task('inline-systemjs', function () {
       './jspm_packages/es6-module-loader.js',
       './jspm_packages/system.js',
       './system.config.js',
-      'dist/app/app.js'
+      'dist/bundles/app.js'
     ])
     //.pipe(uglify())
-    .pipe($.concat('app/app.js'))
+    .pipe($.debug({title: 'before'}))
+    .pipe($.concat('bundles/app.js'))
+    .pipe($.debug({title: 'after'}))
     .pipe(gulp.dest(paths.output));
 });
 
@@ -38,11 +40,13 @@ gulp.task('release', function (callback) {
 });
 
 gulp.task('bundle', function () {
-  $.jspmBuild({
-      bundleSfx: true,
+  return $.jspmBuild({
       bundles: [
-        { src: 'app/checkout/checkout.component',
+        { src: 'angular',
           dst: 'app.js'
+        },
+        { src: 'app/checkout/checkout.component - angular',
+          dst: 'checkout.js'
         }
       ],
       bundleOptions: {
