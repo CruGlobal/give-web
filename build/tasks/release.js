@@ -21,9 +21,7 @@ gulp.task('inline-systemjs', function () {
       'dist/bundles/app.js'
     ])
     //.pipe(uglify())
-    .pipe($.debug({title: 'before'}))
     .pipe($.concat('bundles/app.js'))
-    .pipe($.debug({title: 'after'}))
     .pipe(gulp.dest(paths.output));
 });
 
