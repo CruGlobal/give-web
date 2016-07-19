@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-environment';
+import isArray from 'lodash/isArray';
 
 let serviceName = 'api';
 
@@ -8,33 +9,52 @@ function api(envService, $http){
   return {
     http: http,
     get: get,
-    post: post
+    post: post,
+    put: put,
+    scope: 'crugive'
   };
 
   function http(config){
     return $http({
         method: config.method,
-        url: envService.read('apiUrl') + config.path,
+        url: envService.read('apiUrl') + serializePath(config.path),
         params: config.params,
         data: config.data,
         withCredentials: true
       });
   }
 
-  function get(path, params){
+  function get(request){
     return http({
       method: 'GET',
-      path: path,
-      params: params
+      path: request.path,
+      params: request.params
     });
   }
 
-  function post(path, data){
+  function post(request){
     return http({
       method: 'POST',
-      path: path,
-      data: data
+      path: request.path,
+      params: request.params,
+      data: request.data
     });
+  }
+
+  function put(request){
+    return http({
+      method: 'PUT',
+      path: request.path,
+      data: request.data
+    });
+  }
+
+  function serializePath(path){
+    if(isArray(path)){
+      return path.join('/');
+    }else{
+      return path;
+    }
   }
 }
 

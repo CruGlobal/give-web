@@ -68,6 +68,7 @@ System.config({
     "core-js": "npm:core-js@1.2.6",
     "css": "github:systemjs/plugin-css@0.1.21",
     "json": "github:systemjs/plugin-json@0.1.2",
+    "lodash": "npm:lodash@4.13.1",
     "scss": "github:KevCJones/plugin-scss@0.2.11",
     "systemjs/plugin-css": "github:systemjs/plugin-css@0.1.21",
     "ui-router-extras": "npm:ui-router-extras@0.0.14",
