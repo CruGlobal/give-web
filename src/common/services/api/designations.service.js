@@ -2,10 +2,10 @@ import angular from 'angular';
 
 import apiService from '../api.service';
 
-let serviceName = 'designations';
+let serviceName = 'designationsService';
 
 /*@ngInject*/
-function designations(api){
+function designations(apiService){
 
   return {
     createSearch: createSearch,
@@ -13,8 +13,8 @@ function designations(api){
   };
 
   function createSearch(keywords){
-    return api.post({
-      path: ['searches', api.scope, 'keywords', 'items'],
+    return apiService.post({
+      path: ['searches', apiService.scope, 'keywords', 'items'],
       params: {
         FollowLocation: true
       },
@@ -29,8 +29,8 @@ function designations(api){
   }
 
   function getSearchResults(id, page){
-    return api.get({
-      path: ['searches', api.scope, 'keywords', 'items', id, 'pages', page],
+    return apiService.get({
+      path: ['searches', apiService.scope, 'keywords', 'items', id, 'pages', page],
       params: {
         zoom: 'element:definition'
       }

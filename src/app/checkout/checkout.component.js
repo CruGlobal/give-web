@@ -17,10 +17,10 @@ let componentName = 'checkout';
 class CheckoutController{
 
   /* @ngInject */
-  constructor($log, cart, designations){
+  constructor($log, cartService, designationsService){
     this.$log = $log;
-    this.cart = cart;
-    this.designations = designations;
+    this.cartService = cartService;
+    this.designationsService = designationsService;
 
     this.checkoutStep = 'contact';
 
@@ -28,20 +28,20 @@ class CheckoutController{
   }
 
   testRequests(){
-    this.cart.get()
+    this.cartService.get()
       .then((response) => {
         this.$log.info('cart', response.data);
       });
-    this.designations.createSearch('a')
+    this.designationsService.createSearch('a')
       .then((id) => {
         this.$log.info('search id', id);
-        this.designations.getSearchResults(id, 1)
+        this.designationsService.getSearchResults(id, 1)
           .then((response) => {
             this.$log.info('search page', response.data);
           });
       });
 
-    this.cart.getDonorDetails()
+    this.cartService.getDonorDetails()
       .then((data) => {
         this.$log.info('donor details', data);
       });

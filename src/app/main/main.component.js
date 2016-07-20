@@ -3,6 +3,7 @@ import 'angular-ui-router';
 
 import primaryNavComponent from './nav/primary/primary-nav.component';
 import subNavComponent from './nav/sub/sub-nav.component';
+import cartComponent from '../cart/cart.component';
 import checkoutComponent from '../checkout/checkout.component';
 
 import template from './main.tpl';
@@ -21,6 +22,10 @@ class MainController{
 
 function routingConfig($stateProvider){
   $stateProvider
+    .state('cart', {
+      url: "/cart",
+      template: '<cart></cart>'
+    })
     .state('checkout', {
       url: "/checkout",
       template: '<checkout></checkout>'
@@ -33,6 +38,7 @@ export default angular
     template.name,
     primaryNavComponent.name,
     subNavComponent.name,
+    cartComponent.name,
     checkoutComponent.name,
     'ui.router'
   ])

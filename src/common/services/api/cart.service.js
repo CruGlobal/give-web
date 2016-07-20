@@ -3,10 +3,10 @@ import JSONPath from 'jsonpath';
 
 import apiService from '../api.service';
 
-let serviceName = 'cart';
+let serviceName = 'cartService';
 
 /*@ngInject*/
-function cart(api){
+function cart(apiService){
   var cartId = null;
 
   return {
@@ -17,8 +17,8 @@ function cart(api){
   };
 
   function get(){
-    return api.get({
-      path: ['carts', api.scope, 'default'],
+    return apiService.get({
+      path: ['carts', apiService.scope, 'default'],
       params: {
         zoom: 'total,' +
         'lineitems:element:item:price,' +
@@ -31,8 +31,8 @@ function cart(api){
   }
 
   function addItem(itemId){
-    return api.post({
-      path: ['carts', api.scope, 'default/lineitems/items', api.scope, itemId],
+    return apiService.post({
+      path: ['carts', apiService.scope, 'default/lineitems/items', apiService.scope, itemId],
       data: {
         quantity: 1
       }
@@ -40,8 +40,8 @@ function cart(api){
   }
 
   function updateItem(itemId){
-    return api.post({
-      path: ['carts', api.scope, 'default/lineitems/items', api.scope, itemId],
+    return apiService.post({
+      path: ['carts', apiService.scope, 'default/lineitems/items', apiService.scope, itemId],
       data: {
         quantity: 1
       }
@@ -49,8 +49,8 @@ function cart(api){
   }
 
   function deleteItem(itemId){
-    return api.put({
-      path: ['carts', api.scope, cartId, 'lineitems', itemId],
+    return apiService.put({
+      path: ['carts', apiService.scope, cartId, 'lineitems', itemId],
       data: {
         quantity: 0
       }
@@ -58,8 +58,8 @@ function cart(api){
   }
 
   function getDonorDetails(){
-    return api.get({
-        path: ['carts', api.scope, 'default'],
+    return apiService.get({
+        path: ['carts', apiService.scope, 'default'],
         params: {
           zoom: 'order:donordetails'
         }

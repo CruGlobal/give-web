@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-environment';
 import isArray from 'lodash/isArray';
 
-let serviceName = 'api';
+let serviceName = 'apiService';
 
 /*@ngInject*/
 function api(envService, $http){
