@@ -84,7 +84,7 @@
     }
   },
   "scripts": {
-    "postinstall": "jspm install && (cd jspm_packages/npm/jsonpath*/ && npm run postinstall)",
+    "postinstall": "jspm install && (cd jspm_packages/npm/jsonpath*/ && npm install)",
     "start": "gulp watch serve"
   }
 }
