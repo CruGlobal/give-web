@@ -10,8 +10,18 @@ let componentName = 'cart';
 class CartController{
 
   /* @ngInject */
-  constructor($log, cartService){
-    $log.info(cartService);
+  constructor($log, cartService) {
+    this.$log = $log;
+    this.cartService = cartService;
+
+    this.loadCart();
+  }
+
+  loadCart(){
+    this.cartService.get()
+      .then((data) => {
+        this.$log.info('cart', data);
+      });
   }
 
 }

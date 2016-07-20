@@ -1,5 +1,7 @@
 import angular from 'angular';
 import JSONPath from 'jsonpath';
+import keyBy from 'lodash/keyBy';
+import map from 'lodash/map';
 
 import apiService from '../api.service';
 
@@ -17,7 +19,7 @@ function cart(apiService){
     updateDonorDetails: updateDonorDetails
   };
 
-  function get(){
+  function get() {
     return apiService.get({
       path: ['carts', apiService.scope, 'default'],
       params: {
@@ -27,6 +29,18 @@ function cart(apiService){
         'lineitems:element:item:definition,' +
         'lineitems:element:total,' +
         'lineitems:element:item:definition'
+      }
+    }).then((response) => {
+      let lineItems = JSONPath.query(response.data, '$.._lineitems.._element.*');
+      return {
+        items: map(lineItems, (item) => {
+          return {
+            name: JSONPath.query(item, '$.._item.._definition.*["display-name"]')[0],
+            details: keyBy(JSONPath.query(item, '$.._item.._definition..details')[0], 'name'),
+            listPrice: JSONPath.query(item, '$.._item.._price..["list-price"].*')[0],
+            purchasePrice: JSONPath.query(item, '$.._item.._price..["purchase-price"].*')[0]
+          };
+        })
       }
     });
   }
