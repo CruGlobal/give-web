@@ -28,10 +28,6 @@ class CheckoutController{
   }
 
   testRequests(){
-    this.cartService.get()
-      .then((response) => {
-        this.$log.info('cart', response.data);
-      });
     this.designationsService.createSearch('a')
       .then((id) => {
         this.$log.info('search id', id);

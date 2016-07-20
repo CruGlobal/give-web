@@ -16,12 +16,15 @@ function api(envService, $http){
 
   function http(config){
     return $http({
-        method: config.method,
-        url: envService.read('apiUrl') + serializePath(config.path),
-        params: config.params,
-        data: config.data,
-        withCredentials: true
-      });
+      method: config.method,
+      url: envService.read('apiUrl') + serializePath(config.path),
+      params: config.params,
+      data: config.data,
+      withCredentials: true,
+      headers: {
+        Authorization: 'bearer a666d489-9436-4182-afb6-513633d55c96'
+      }
+    });
   }
 
   function get(request){
