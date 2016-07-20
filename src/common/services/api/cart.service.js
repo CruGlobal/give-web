@@ -13,7 +13,8 @@ function cart(apiService){
     get: get,
     addItem: addItem,
     deleteItem: deleteItem,
-    getDonorDetails: getDonorDetails
+    getDonorDetails: getDonorDetails,
+    updateDonorDetails: updateDonorDetails
   };
 
   function get(){
@@ -67,6 +68,13 @@ function cart(apiService){
       .then((response) => {
         return JSONPath.query(response.data, '$.._order.._donordetails.*')[0];
       });
+  }
+
+  function updateDonorDetails(uri, details){
+    return apiService.put({
+      path: uri,
+      data: details
+    });
   }
 }
 

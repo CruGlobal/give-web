@@ -51,9 +51,9 @@ function api(envService, $http){
 
   function serializePath(path){
     if(isArray(path)){
-      return path.join('/');
+      return '/' + path.join('/');
     }else{
-      return path;
+      return path.charAt(0) === '/' ? path : '/' + path;
     }
   }
 }
@@ -67,10 +67,10 @@ function EnvConfig(envServiceProvider){
     },
     vars: {
       development: {
-        apiUrl: 'https://cortex-gateway-stage.cru.org/cortex/'
+        apiUrl: 'https://cortex-gateway-stage.cru.org/cortex'
       },
       production: {
-        apiUrl: 'https://cortex-gateway.cru.org/cortex/'
+        apiUrl: 'https://cortex-gateway.cru.org/cortex'
       }
     }
   });
