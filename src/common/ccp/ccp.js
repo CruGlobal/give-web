@@ -1,4 +1,12 @@
+//TODO: figure out how to import named exports using system.config.js
 import {JSEncrypt} from 'jsencrypt';
+import find from 'lodash/find';
+import includes from 'lodash/includes';
+
+let _ = {
+  find: find,
+  contains: includes //TODO: upgrade lodash in the the ccp.js source repo
+};
 
 /**
  *
