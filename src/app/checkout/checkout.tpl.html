@@ -1,4 +1,3 @@
-<!-- Content wrap -->
 <div class="screenContent">
   <div class="container container-edge-small container-edge-extrasmall">
     <div class="container">
@@ -10,8 +9,8 @@
                 <div class="panel-body">
                   <h3 class="panel-name">Checkout</h3>
 
-                  <div class="steps-wrap mb clearfix">
-                    <div class="steps-single" ng-click="$ctrl.checkoutStep = 'contact'" ng-class="{'on': $ctrl.checkoutStep === 'contact'}">
+                  <div class="steps-wrap mb_x clearfix">
+                    <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'contact'}">
                       <span class="step-title">
                       Contact Information
                       </span>
@@ -19,7 +18,7 @@
                         <span class="step-digit">1</span>
                       </div>
                     </div>
-                    <div class="steps-single" ng-click="$ctrl.checkoutStep = 'payment'" ng-class="{'on': $ctrl.checkoutStep === 'payment'}">
+                    <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'payment'}">
                       <span class="step-title">
                       Payment Method
                       </span>
@@ -27,7 +26,7 @@
                         <span class="step-digit">2</span>
                       </div>
                     </div>
-                    <div class="steps-single" ng-click="$ctrl.checkoutStep = 'review'" ng-class="{'on': $ctrl.checkoutStep === 'review'}">
+                    <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'review'}">
                       <span class="step-title">
                       Review and Submit Gift
                       </span>
@@ -43,10 +42,10 @@
                     </div>
                   </div>
 
+
                   <checkout-step-1 ng-if="$ctrl.checkoutStep === 'contact'" change-step="$ctrl.changeStep(newStep)"></checkout-step-1>
                   <checkout-step-2 ng-if="$ctrl.checkoutStep === 'payment'" change-step="$ctrl.changeStep(newStep)"></checkout-step-2>
                   <checkout-step-3 ng-if="$ctrl.checkoutStep === 'review'" change-step="$ctrl.changeStep(newStep)"></checkout-step-3>
-                  <!--<checkout-thank-you></checkout-thank-you>'-->
 
                 </div> <!-- // panelbody -->
               </div><!-- // panel -->
@@ -56,8 +55,12 @@
         <div class="col-md-4 hidden-xs">
           <checkout-cart-summary></checkout-cart-summary>
         </div>
+        <div class="col-md-4 hidden-xs hidden-sm">
+          <help></help>
+        </div>
       </div>
     </div> <!-- // masonry container -->
 
   </div>
 </div>
+<!-- End content wrap -->

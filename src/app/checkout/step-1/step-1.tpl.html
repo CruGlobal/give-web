@@ -1,14 +1,10 @@
-<div class="mb">
+<div class="mb_x">
   <div class="row">
     <div class="col-md-6">
-      <button class="tab-btn btn btn-default btn-block" ng-click="$ctrl.contactType = 'individual'" ng-class="{'on': $ctrl.contactType === 'individual'}">
-        Give as an Individual
-      </button>
+      <a href="" data-target="tab-indiv" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.contactType = 'individual'" ng-class="{'on': $ctrl.contactType === 'individual'}">Give as an Individual</a>
     </div>
     <div class="col-md-6">
-      <button class="tab-btn btn btn-default btn-block" ng-click="$ctrl.contactType = 'organization'" ng-class="{'on': $ctrl.contactType === 'organization'}">
-        Give as an Organization
-      </button>
+      <a href="" data-target="tab-org" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.contactType = 'organization'" ng-class="{'on': $ctrl.contactType === 'organization'}">Give as an Organization</a>
     </div>
   </div>
 </div>
@@ -22,16 +18,4 @@
 
   <checkout-organization-contact-form></checkout-organization-contact-form>
 
-</div>
-
-<div class="closer">
-  <div class="row">
-    <div class="col-sm-5 hidden-xs">
-      <a href="#" class="btn btn-default">Return to Cart</a>
-    </div>
-    <div class="col-sm-5 col-sm-offset-2">
-      <a href="#" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.changeStep({newStep: 'payment'})">Continue to Payment Method</a>
-      <a href="#" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Return Cart</a>
-    </div>
-  </div>
 </div>
