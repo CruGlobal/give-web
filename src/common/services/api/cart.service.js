@@ -64,11 +64,8 @@ function cart(apiService){
   }
 
   function deleteItem(itemId){
-    return apiService.put({
-      path: ['carts', apiService.scope, cartId, 'lineitems', itemId],
-      data: {
-        quantity: 0
-      }
+    return apiService.delete({
+      path: ['carts', apiService.scope, cartId, 'lineitems', itemId]
     });
   }
 

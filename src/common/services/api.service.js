@@ -11,6 +11,7 @@ function api(envService, $http){
     get: get,
     post: post,
     put: put,
+    delete: del,
     scope: 'crugive'
   };
 
@@ -49,6 +50,14 @@ function api(envService, $http){
       method: 'PUT',
       path: request.path,
       data: request.data
+    });
+  }
+
+  function del(request){
+    return http({
+      method: 'DELETE',
+      path: request.path,
+      params: request.params
     });
   }
 
