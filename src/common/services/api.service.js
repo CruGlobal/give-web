@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-environment';
+import { cortexScope } from 'common/app.constants';
 import isArray from 'lodash/isArray';
 
 let serviceName = 'apiService';
@@ -12,7 +13,7 @@ function api(envService, $http){
     post: post,
     put: put,
     delete: del,
-    scope: 'crugive'
+    scope: cortexScope
   };
 
   function http(config){

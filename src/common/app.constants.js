@@ -1,7 +1,4 @@
-import angular from 'angular';
-
-let constantName = 'ccpKey';
-let key = '-----BEGIN PUBLIC KEY-----' +
+const ccpKey = '-----BEGIN PUBLIC KEY-----' +
   'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiiBT37BsBVBgKfF6z78X' +
   'lOl73+HexgTND1Z7qCIScFPSRlQd+svsYah7kQKjNFGPYvz9dmBgNKq1EmdML2nz' +
   'iRDAsBRR14OW4P8v2EjaMDGoOc+SwOJcyfoU6iBFkjwrUzlk8SXK07k3hgrtugCB' +
@@ -11,6 +8,11 @@ let key = '-----BEGIN PUBLIC KEY-----' +
   'swIDAQAB' +
   '-----END PUBLIC KEY-----';
 
-export default angular
-  .module(constantName, [])
-  .constant(constantName, key);
+const cortexScope = 'crugive';
+
+// See EnvConfig in common/services/api.service.js for api url configurations
+
+export {
+  ccpKey,
+  cortexScope
+}
