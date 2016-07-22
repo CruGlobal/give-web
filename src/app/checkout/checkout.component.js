@@ -10,7 +10,6 @@ import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
 
 import template from './checkout.tpl';
-import './checkout.css!';
 
 let componentName = 'checkout';
 

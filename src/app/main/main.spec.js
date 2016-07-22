@@ -14,7 +14,7 @@ describe('main', function() {
     });
   }));
 
-  it('has test which is 5', function() {
-    expect(self.controller.test).toEqual(5);
+  it('to be defined', function() {
+    expect(self.controller).toBeDefined();
   });
 });
