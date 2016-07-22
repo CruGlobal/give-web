@@ -36,11 +36,6 @@ class CheckoutController{
             this.$log.info('search page', response.data);
           });
       });
-
-    this.cartService.getDonorDetails()
-      .then((data) => {
-        this.$log.info('donor details', data);
-      });
   }
 
   changeStep(newStep){
