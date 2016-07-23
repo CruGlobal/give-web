@@ -73,6 +73,7 @@ function api(envService, $http){
 
 /*@ngInject*/
 function EnvConfig(envServiceProvider){
+  // eslint-disable-next-line angular/module-getter
   envServiceProvider.config({
     domains: {
       development: ['localhost'],

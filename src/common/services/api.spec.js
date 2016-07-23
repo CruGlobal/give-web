@@ -6,15 +6,15 @@ describe('api service', function() {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
-  beforeEach(inject(function(api, $httpBackend) {
-    self.api = api;
+  beforeEach(inject(function(apiService, $httpBackend) {
+    self.apiService = apiService;
     self.$httpBackend = $httpBackend;
   }));
 
   describe('http', function() {
     it('should send a simple request', function() {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
-      self.api.http({
+      self.apiService.http({
         method: 'GET',
         path: 'test'
       }).then((response) => {
