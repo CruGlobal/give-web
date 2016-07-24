@@ -1,5 +1,8 @@
+import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
+
+import appConfig from 'common/app.config';
 
 import primaryNavComponent from './nav/primary/primary-nav.component';
 import subNavComponent from './nav/sub/sub-nav.component';
@@ -30,7 +33,8 @@ class MainController{
 
 }
 
-function routingConfig($stateProvider){
+/* @ngInject */
+function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
   $stateProvider
     .state('cart', {
       url: "/cart",
@@ -41,11 +45,17 @@ function routingConfig($stateProvider){
       template: '<checkout></checkout>'
     });
 
+  $locationProvider.html5Mode({
+    enabled: true,
+    requireBase: false
+  });
+  $urlRouterProvider.otherwise('/checkout');
 }
 
 export default angular
   .module(componentName, [
     template.name,
+    appConfig.name,
     primaryNavComponent.name,
     subNavComponent.name,
     cartComponent.name,

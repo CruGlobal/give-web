@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-environment';
 import { cortexScope } from 'common/app.constants';
+import appConfig from 'common/app.config';
 import isArray from 'lodash/isArray';
 
 let serviceName = 'apiService';
@@ -71,32 +72,9 @@ function api(envService, $http){
   }
 }
 
-/*@ngInject*/
-function EnvConfig(envServiceProvider){
-  // eslint-disable-next-line angular/module-getter
-  envServiceProvider.config({
-    domains: {
-      development: ['localhost'],
-      production: ['give.cru.org']
-    },
-    vars: {
-      development: {
-        apiUrl: 'https://cortex-gateway-stage.cru.org/cortex'
-      },
-      production: {
-        apiUrl: 'https://cortex-gateway.cru.org/cortex'
-      }
-    }
-  });
-
-  // run the environment check, so the comprobation is made
-  // before controllers and services are built
-  envServiceProvider.check();
-}
-
 export default angular
   .module(serviceName, [
-    'environment'
+    'environment',
+    appConfig.name
   ])
-  .config(EnvConfig)
   .factory(serviceName, api);

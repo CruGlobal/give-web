@@ -1,6 +1,8 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 
+import appConfig from 'common/app.config';
+
 import step1 from './step-1/step-1.component';
 import step2 from './step-2/step-2.component';
 import step3 from './step-3/step-3.component';
@@ -52,6 +54,7 @@ class CheckoutController{
 export default angular
   .module(componentName, [
     template.name,
+    appConfig.name,
     step1.name,
     step2.name,
     step3.name,

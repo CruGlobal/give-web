@@ -1,8 +1,0 @@
-[
-  {
-    "stateName": "checkout",
-    "urlPrefix": "/checkout",
-    "type": "load",
-    "src": "app/checkout/checkout.component"
-  }
-]
