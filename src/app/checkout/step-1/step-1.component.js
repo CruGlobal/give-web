@@ -12,29 +12,31 @@ class Step1Controller{
   /* @ngInject */
   constructor($q, cartService){
     this.cartService = cartService;
+    this.$q = $q;
 
     this.init();
-    this.submitDetails = function(valid){
-      if(!valid){ return; }
-      let details = this.donorDetails;
+  }
 
-      var requests = [cartService.updateDonorDetails(details.self.uri, details)];
-      if(details.email){
-        requests.push(cartService.addEmail(details.email));
-      }
-      $q.all(requests).then(() => {
-        //go to Step 2
-      });
-    };
+  submitDetails(valid){
+    if(!valid){ return; }
+    let details = this.donorDetails;
 
-    this.refreshRegions = function(country){
-      country = find(this.countries, function(v){ return v['display-name'].toUpperCase() === country; });
-      if(!country){ return; }
-
-      this.cartService.getGeographies.regions(country.links[0].uri).then((response) => {
-        this.regions = response;
-      });
+    var requests = [this.cartService.updateDonorDetails(details.self.uri, details)];
+    if(details.email){
+      requests.push(this.cartService.addEmail(details.email));
     }
+    this.$q.all(requests).then(() => {
+      //go to Step 2
+    });
+  }
+
+  refreshRegions(country){
+    country = find(this.countries, function(v){ return v['display-name'].toUpperCase() === country; });
+    if(!country){ return; }
+
+    this.cartService.getGeographies.regions(country.links[0].uri).then((response) => {
+      this.regions = response;
+    });
   }
 
   init(){
