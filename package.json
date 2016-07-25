@@ -45,6 +45,7 @@
     "karma-mocha-reporter": "^2.0.4",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-systemjs": "^0.14.0",
+    "merge-stream": "^1.0.0",
     "ng-annotate": "^1.2.1",
     "node-sass": "^3.8.0",
     "object.assign": "^4.0.3",

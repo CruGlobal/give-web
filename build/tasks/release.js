@@ -1,6 +1,6 @@
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')({
-  pattern: ['gulp-*', 'run-sequence', 'systemjs-route-bundler']
+  pattern: ['gulp-*', 'run-sequence', 'systemjs-route-bundler', 'merge-stream']
 });
 
 var paths = require('../paths');
@@ -14,15 +14,26 @@ gulp.task('cache-bust', function () {
 });
 
 gulp.task('inline-systemjs', function () {
-  return gulp.src([
+  var app = gulp.src([
       './jspm_packages/es6-module-loader.js',
       './jspm_packages/system.js',
       './system.config.js',
-      'dist/bundles/app.js'
+      'dist/bundles/main.js'
     ])
-    //.pipe(uglify())
-    .pipe($.concat('bundles/app.js'))
-    .pipe(gulp.dest(paths.output));
+    //.pipe($.uglify())
+    .pipe($.concat('main.js'));
+
+  var bundles = gulp.src([
+      './jspm_packages/es6-module-loader.js',
+      './jspm_packages/system.js',
+      './system.config.js',
+      'dist/bundles/common.js'
+    ])
+    //.pipe($.uglify())
+    .pipe($.concat('common.js'));
+
+  return $.mergeStream(app, bundles)
+    .pipe(gulp.dest(paths.outputBundles));
 });
 
 gulp.task('release', function (callback) {
@@ -31,19 +42,30 @@ gulp.task('release', function (callback) {
     'build',
     'bundle',
     'cache-bust',
-    //'replace',
+    'replace',
     'inline-systemjs',
     callback
   );
 });
 
 gulp.task('bundle', function () {
+  var bundles = [
+    'app/cart/cart.component',
+    'app/checkout/checkout.component'
+  ];
+  var commonFilesForBundles = bundles.join(' & ');
   return $.jspmBuild({
       bundles: [
-        { src: 'angular',
-          dst: 'app.js'
+        { src: 'app/main/main.component',
+          dst: 'main.js'
         },
-        { src: 'app/checkout/checkout.component - angular',
+        { src: commonFilesForBundles,
+          dst: 'common.js'
+        },
+        { src: 'app/cart/cart.component - ' + commonFilesForBundles,
+          dst: 'cart.js'
+        },
+        { src: 'app/checkout/checkout.component - ' + commonFilesForBundles,
           dst: 'checkout.js'
         }
       ],
@@ -51,5 +73,5 @@ gulp.task('bundle', function () {
         minify: true
       }
     })
-    .pipe(gulp.dest('dist/bundles'));
+    .pipe(gulp.dest(paths.outputBundles));
 });

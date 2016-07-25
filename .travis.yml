@@ -13,8 +13,20 @@ after_success:
 - bash <(curl -s https://codecov.io/bash)
 cache:
   directories:
-    - node_modules
-    - jspm_packages
+  - node_modules
+  - jspm_packages
+  - $(npm config get prefix)/bin/jspm
 env:
   global:
     secure: dsQliAKcpbWRnMbYXR6GwT63aPHzNew7M1MvvdvnsWKjSxSls4h+c/HXzbcLTBJFWqL798bcvCN+GEmQRuJaq+dJxsDFu/rcGVws1KlSNtIV/snIy1cNdQJHD13NkDh0lG33tfHz+eL2rwudDI9NqMKXFi5HbL5ehTQbnLLwxRbkMovD1QN+rfhlv/BywvRHHX+qjcScqch3nYd0LDp4DeetEINweuC/4UEcV4X2uKso5HOq/R4vPD8CI5YVSZNmc187k0OAnXA/trG0TrvUwbzPUW7osjNdD+scnCD9zYbzKETU3LqcJij72Ai7j93fHsbq8Wj08tr6R0h7vwt7SabZ7mmUtFxlwniLBElF2UrZPamSsM1dgU+sGV9lxhtOBFRpXoN0GjJ4WeIJpfOQCDOqG9/d9DzY0gAFILqGO58wDRi2L8FxKF9Q8G/jRg7S1alkZAswjFRH9RgZFc8/TiL/maceggcAurckJkYwyEbsQRrPqqsnTNkZmE9+H8oMK5IJ+Fatj+/32lKT/ZEyJfxYii6yzgVOHRo4W7uqB4U1l0f/ddYLb4YbcGwP+kef6DvH37tjMFto2jepy/V1JCHDscw7DVFc9IL4QWBtPjL1kyLLEkQ4IG+nX1vs4bMaI1SRGwz/xUxmJIC3X5dxFlj6NT3nUow3O9seoPRMbeI=
+deploy:
+  provider: s3
+  access_key_id: AKIAJ7GRCWFBCFKCP3UQ
+  secret_access_key:
+    secure: OHnRNjQg3qP+aSYYxsS5F3iQVMM8H5rPS952kRKalqbmXd/iAA5AM81OcC00O039nBdM2RC0XdgZcKlnswAvh0bNTYHX3eoNqhVAY9Og8jOTCGFZoChp6vaGXf2a8MGn7Fqz6ZPRhmpOINUd8WGKSZmcjqxwzrl6WES/E2FScCI/NAo4+tXdAeMfr7foGq8rlJSAxLV5FTt7SvkZ43xeF43jsmjwy1HTNNmnHhu79ZYZ5WdXfXsyet5GzEO/6jgQI0BKaDgfKBEFEErKul5Rf3LuLamkeXu/TqT8jBFsN+DJdJ/5kfA8p2tE7katy5GB3ratJHiql/S5KDWLMn0gQwb8M9Y+rxWjw18tR+5hczZifEz/kIj2ghhqlUyoBFZFEQrZ58LMpwKhU5Dm4u9OQ5YPm/DYr1PlSCM41U9/MEE6scJgZapaARKXrg84JhbOEMWlgAAvT/E2TVgDRIHi7U+NE4aKPlifwJj6skIPpnO7PD86oIOn3L1frKthmw6XPKHGTi4H+6HzgccpHKTqhRo61RdIT581tmQvKxpkK24d6KD38mDPVqOcx3vP3Sk8lMK1aS9PXqtxzB50W9BByABCm6ivoPiWSWGkDt6o9bAYNmOjGciBao6Eo0gUE3DDop/o7UUpmeEkUITiRH0R7wz8uU2cDNaUPm+g7URCxEE=
+  bucket: cru-givedev
+  acl: public_read
+  local-dir: dist/bundles
+  skip_cleanup: true
+  on:
+    repo: CruGlobal/give-web

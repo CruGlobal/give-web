@@ -1,6 +1,8 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 
+import appConfig from 'common/app.config';
+
 import cartService from 'common/services/api/cart.service';
 
 import template from './cart.tpl';
@@ -29,6 +31,7 @@ class CartController{
 export default angular
   .module(componentName, [
     template.name,
+    appConfig.name,
     cartService.name
   ])
   .component(componentName, {

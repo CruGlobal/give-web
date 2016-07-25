@@ -15,4 +15,4 @@ const cortexScope = 'crugive';
 export {
   ccpKey,
   cortexScope
-}
+};

@@ -1,3 +1,4 @@
+/* eslint-disable angular/typecheck-string, angular/typecheck-object, angular/typecheck-function */
 //TODO: figure out how to import named exports using system.config.js
 import {JSEncrypt} from 'jsencrypt';
 import find from 'lodash/find';
@@ -86,7 +87,6 @@ var ccp = (function () {
   var key = null;
   var promise = null;
   var keyFailure = null;
-  /* global JSEncrypt */
   var encrypter = new JSEncrypt();
 
 

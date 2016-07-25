@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
+var paths = require('../paths');
 
 gulp.task('replace', function(){
   return gulp.src('./index.html')
@@ -15,8 +16,8 @@ gulp.task('replace', function(){
           replacement: '<!-- <script src="system.config.js"></script> -->'
         },
         {
-          match: '<!-- <script src="dist/app/app.js?bust={{date}}"></script> -->',
-          replacement: '<script src="dist/app/app.js?bust={{date}}"></script>'
+          match: '<!-- <script src="main.js?bust={{date}}"></script> -->',
+          replacement: '<script src="main.js?bust={{date}}"></script>'
         },
         {
           match: '{{date}}',
@@ -24,5 +25,5 @@ gulp.task('replace', function(){
         }
       ]
     }))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest(paths.outputBundles));
 });

@@ -14,6 +14,7 @@ function cart(apiService){
   return {
     get: get,
     addItem: addItem,
+    updateItem: updateItem,
     deleteItem: deleteItem,
     getDonorDetails: getDonorDetails,
     updateDonorDetails: updateDonorDetails,
@@ -46,7 +47,7 @@ function cart(apiService){
             purchasePrice: JSONPath.query(item, '$.._item.._price..["purchase-price"].*')[0]
           };
         })
-      }
+      };
     });
   }
 
