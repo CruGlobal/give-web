@@ -20,7 +20,7 @@ function cart(apiService){
     updateDonorDetails: updateDonorDetails,
     getGeographies: {
       countries: getGeographiesCountries,
-      regions: getGeographiesRegions,
+      regions: getGeographiesRegions
     },
     addEmail: addEmail
   };
@@ -86,7 +86,7 @@ function cart(apiService){
         let details = JSONPath.query(response.data, '$.._order.._donordetails.*')[0];
         let email = JSONPath.query(response.data, '$.._order.._emailinfo.*')[0];
         details.email = email ? email['_email'][0]['email'] : '';
-        return details
+        return details;
       });
   }
 
