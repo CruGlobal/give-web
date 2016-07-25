@@ -17,7 +17,12 @@ function cart(apiService){
     updateItem: updateItem,
     deleteItem: deleteItem,
     getDonorDetails: getDonorDetails,
-    updateDonorDetails: updateDonorDetails
+    updateDonorDetails: updateDonorDetails,
+    getGeographies: {
+      countries: getGeographiesCountries,
+      regions: getGeographiesRegions
+    },
+    addEmail: addEmail
   };
 
   function get() {
@@ -74,11 +79,14 @@ function cart(apiService){
     return apiService.get({
         path: ['carts', apiService.scope, 'default'],
         params: {
-          zoom: 'order:donordetails'
+          zoom: 'order:donordetails,order:emailinfo:email'
         }
       })
       .then((response) => {
-        return JSONPath.query(response.data, '$.._order.._donordetails.*')[0];
+        let details = JSONPath.query(response.data, '$.._order.._donordetails.*')[0];
+        let email = JSONPath.query(response.data, '$.._order.._emailinfo.*')[0];
+        details.email = email ? email['_email'][0]['email'] : '';
+        return details;
       });
   }
 
@@ -86,6 +94,39 @@ function cart(apiService){
     return apiService.put({
       path: uri,
       data: details
+    });
+  }
+
+  function addEmail(email){
+    return apiService.post({
+      path: ['emails', apiService.scope],
+      data: {email: email}
+    });
+  }
+
+  function getGeographiesCountries(){
+    return apiService.get({
+      path: ['geographies', apiService.scope, 'countries'],
+      params: {
+        zoom: 'element'
+      },
+      cache: true
+    })
+    .then((response) => {
+      return response.data._element;
+    });
+  }
+
+  function getGeographiesRegions(uri){
+    return apiService.get({
+      path: uri,
+      params: {
+        zoom: 'element'
+      },
+      cache: true
+    })
+    .then((response) => {
+      return response.data._element;
     });
   }
 }
