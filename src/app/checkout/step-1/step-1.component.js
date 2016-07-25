@@ -1,7 +1,7 @@
 import angular from 'angular';
 import find from 'lodash/find';
 
-import cartSummary from '../cart-summary/cart-summary.component';
+import cartService from 'common/services/api/cart.service';
 
 import template from './step-1.tpl';
 
@@ -57,7 +57,7 @@ class Step1Controller{
 export default angular
   .module(componentName, [
     template.name,
-    cartSummary.name
+    cartService.name
   ])
   .component(componentName, {
     controller: Step1Controller,
