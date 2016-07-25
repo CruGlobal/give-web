@@ -14,7 +14,8 @@ class Step1Controller{
     this.cartService = cartService;
 
     this.init();
-    this.submitDetails = function(){
+    this.submitDetails = function(valid){
+      if(!valid){ return; }
       let details = this.donorDetails;
 
       var requests = [cartService.updateDonorDetails(details.self.uri, details)];

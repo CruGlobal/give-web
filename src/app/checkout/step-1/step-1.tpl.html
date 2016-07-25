@@ -10,9 +10,8 @@
     </div>
   </div>
 
-  <form novalidate ng-submit="$ctrl.submitDetails()" name="donorDetails">
+  <form novalidate ng-submit="$ctrl.submitDetails(donorDetails.$valid)" name="donorDetails">
     <div class="mb">
-
       <h4 class="panel-title  border-bottom-small  visible">Your Information</h4>
 
       <div class="row">
@@ -35,7 +34,7 @@
         <div class="col-sm-4">
           <div class="form-group is-required" ng-class="{'has-error': donorDetails.nameGivenName.$error.required}">
             <label>First Name</label>
-            <input type="text" class="form-control  form-control-subtle" name="nameGivenName" ng-model="$ctrl.donorDetails['name']['given-name']" required>
+            <input type="text" class="form-control  form-control-subtle" name="nameGivenName" ng-model="$ctrl.donorDetails['name']['given-name']" required maxlength="50">
             <span class="help-block" ng-if="donorDetails.nameGivenName.$error.required">First Name is required</span>
           </div>
         </div>
@@ -46,9 +45,10 @@
           </div>
         </div>
         <div class="col-sm-4">
-          <div class="form-group has-success is-required">
+          <div class="form-group is-required" ng-class="{'has-error': donorDetails.nameFamilyName.$error.required}">
             <label>Last Name</label>
-            <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['name']['family-name']">
+            <input type="text" class="form-control  form-control-subtle" name="nameFamilyName" ng-model="$ctrl.donorDetails['name']['family-name']" required maxlength="50">
+            <span class="help-block" ng-if="donorDetails.nameFamilyName.$error.required">Last Name is required</span>
           </div>
         </div>
         <div class="col-sm-2">
@@ -73,13 +73,14 @@
         <div class="col-sm-6">
           <div class="form-group is-required">
             <label>Phone</label>
-            <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['phone-number']">
+            <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['phone-number']" maxlength="100">
           </div>
         </div>
         <div class="col-sm-6">
-          <div class="form-group is-required">
+          <div class="form-group is-required" ng-class="{'has-error': donorDetails.email.$error.required}">
             <label>Email Address</label>
-            <input type="email" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['email']">
+            <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required maxlength="100">
+            <span class="help-block" ng-if="donorDetails.email.$error.required">Email Address is required</span>
           </div>
         </div>
       </div>
@@ -114,19 +115,19 @@
               <div class="col-sm-4">
                 <div class="form-group">
                   <label>First Name</label>
-                  <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['given-name']">
+                  <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" maxlength="50">
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>MI</label>
-                  <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']">
+                  <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" maxlength="50">
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="form-group">
                   <label>Last Name</label>
-                  <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['family-name']">
+                  <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" maxlength="50">
                 </div>
               </div>
               <div class="col-sm-2">
@@ -178,16 +179,17 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="form-group is-required">
+            <div class="form-group is-required" ng-class="{'has-error': donorDetails.addressStreetAddress.$error.required}">
               <label>Address</label>
-              <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['mailing-address']['street-address']">
+              <input type="text" class="form-control  form-control-subtle" name="addressStreetAddress" ng-model="$ctrl.donorDetails['mailing-address']['street-address']" required maxlength="200">
+              <span class="help-block" ng-if="donorDetails.addressStreetAddress.$error.required">Address is required</span>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
             <div class="form-group is-required">
-              <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['mailing-address']['extended-address']">
+              <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['mailing-address']['extended-address']" maxlength="100">
             </div>
           </div>
         </div>
@@ -195,7 +197,7 @@
           <div class="col-sm-12">
             <div class="form-group is-required">
               <label>City</label>
-              <input type="text" class="form-control  form-control-subtle"  ng-model="$ctrl.donorDetails['mailing-address']['locality']">
+              <input type="text" class="form-control  form-control-subtle"  ng-model="$ctrl.donorDetails['mailing-address']['locality']" required maxlength="50">
             </div>
           </div>
         </div>
@@ -226,7 +228,7 @@
             <a href="" class="btn btn-default">Return to Cart</a>
           </div>
           <div class="col-sm-5 col-sm-offset-2">
-            <button type="submit" class="btn btn-primary pull-right btn-block-mobile">Continue to Payment Methods</button>
+            <button type="submit" class="btn btn-primary pull-right btn-block-mobile" ng-disabled="!donorDetails.$valid">Continue to Payment Methods</button>
             <a href="" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Return Cart</a>
           </div>
         </div>
