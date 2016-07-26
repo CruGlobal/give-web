@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'rxjs/add/operator/map';
 
 import apiService from '../api.service';
 
@@ -14,17 +15,17 @@ function designations(apiService){
 
   function createSearch(keywords){
     return apiService.post({
-      path: ['searches', apiService.scope, 'keywords', 'items'],
-      params: {
-        FollowLocation: true
-      },
-      data: {
-        keywords: keywords,
-        'page-size': 1
-      }
-    })
-      .then((response) => {
-        return response.data.self.uri.split('/').pop();
+        path: ['searches', apiService.scope, 'keywords', 'items'],
+        params: {
+          FollowLocation: true
+        },
+        data: {
+          keywords: keywords,
+          'page-size': 1
+        }
+      })
+      .map((data) => {
+        return data.self.uri.split('/').pop();
       });
   }
 

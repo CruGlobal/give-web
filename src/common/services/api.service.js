@@ -1,69 +1,75 @@
 import angular from 'angular';
 import 'angular-environment';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import isArray from 'lodash/isArray';
+
 import { cortexScope } from 'common/app.constants';
 import appConfig from 'common/app.config';
-import isArray from 'lodash/isArray';
+import hateoasHelperService from 'common/services/hateoasHelper.service';
 
 let serviceName = 'apiService';
 
-/*@ngInject*/
-function api(envService, $http){
-  return {
-    http: http,
-    get: get,
-    post: post,
-    put: put,
-    delete: del,
-    scope: cortexScope
-  };
+class Api {
 
-  function http(config){
-    return $http({
-      method: config.method,
-      url: envService.read('apiUrl') + serializePath(config.path),
-      params: config.params,
-      data: config.data,
-      withCredentials: true,
-      headers: {
+  /*@ngInject*/
+  constructor($http, envService, hateoasHelperService){
+    this.$http = $http;
+    this.envService = envService;
+    this.hateoasHelperService = hateoasHelperService;
+    this.scope = cortexScope;
+  }
+
+  http(config){
+    config.params = config.params || {};
+    if(config.zoom){
+      config.params.zoom = this.hateoasHelperService.serializeZoom(config.zoom);
+    }
+    if(config.followLocation){
+      config.params.followLocation = true;
+    }
+
+    return Observable.from(this.$http({
+        method: config.method,
+        url: this.envService.read('apiUrl') + this.serializePath(config.path),
+        params: config.params,
+        data: config.data,
+        withCredentials: true,
+        headers: {
         Authorization: 'bearer a666d489-9436-4182-afb6-513633d55c96'
-      }
-    });
+        }
+      }))
+      .map((response) => {
+        if(config.zoom){
+          return this.hateoasHelperService.mapZoomElements(response.data, config.zoom);
+        }
+        return response.data;
+      });
   }
 
-  function get(request){
-    return http({
-      method: 'GET',
-      path: request.path,
-      params: request.params
-    });
+  get(request){
+    request.method = 'GET';
+    return this.http(request);
   }
 
-  function post(request){
-    return http({
-      method: 'POST',
-      path: request.path,
-      params: request.params,
-      data: request.data
-    });
+  post(request){
+    request.method = 'POST';
+    return this.http(request);
   }
 
-  function put(request){
-    return http({
-      method: 'PUT',
-      path: request.path,
-      data: request.data
-    });
+  put(request){
+    request.method = 'PUT';
+    return this.http(request);
   }
 
-  function del(request){
-    return http({
-      method: 'DELETE',
-      path: request.path,
-      params: request.params
-    });
+  del(request){
+    request.method = 'DELETE';
+    return this.http(request);
   }
 
-  function serializePath(path){
+  serializePath(path){
     if(isArray(path)){
       return '/' + path.join('/');
     }else{
@@ -75,6 +81,7 @@ function api(envService, $http){
 export default angular
   .module(serviceName, [
     'environment',
-    appConfig.name
+    appConfig.name,
+    hateoasHelperService.name
   ])
-  .factory(serviceName, api);
+  .service(serviceName, Api);

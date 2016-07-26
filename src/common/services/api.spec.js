@@ -17,8 +17,8 @@ describe('api service', function() {
       self.apiService.http({
         method: 'GET',
         path: 'test'
-      }).then((response) => {
-        expect(response.data).toEqual('success');
+      }).subscribe((data) => {
+        expect(data).toEqual('success');
       });
       self.$httpBackend.flush();
     });

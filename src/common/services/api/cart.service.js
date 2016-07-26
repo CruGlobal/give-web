@@ -2,6 +2,7 @@ import angular from 'angular';
 import JSONPath from 'jsonpath';
 import keyBy from 'lodash/keyBy';
 import map from 'lodash/map';
+import 'rxjs/add/operator/map';
 
 import apiService from '../api.service';
 
@@ -27,28 +28,29 @@ function cart(apiService){
 
   function get() {
     return apiService.get({
-      path: ['carts', apiService.scope, 'default'],
-      params: {
-        zoom: 'total,' +
-        'lineitems:element:item:price,' +
-        'lineitems:element:item:amount,' +
-        'lineitems:element:item:definition,' +
-        'lineitems:element:total,' +
-        'lineitems:element:item:definition'
-      }
-    }).then((response) => {
-      let lineItems = JSONPath.query(response.data, '$.._lineitems.._element.*');
-      return {
-        items: map(lineItems, (item) => {
-          return {
-            name: JSONPath.query(item, '$.._item.._definition.*["display-name"]')[0],
-            details: keyBy(JSONPath.query(item, '$.._item.._definition..details')[0], 'name'),
-            listPrice: JSONPath.query(item, '$.._item.._price..["list-price"].*')[0],
-            purchasePrice: JSONPath.query(item, '$.._item.._price..["purchase-price"].*')[0]
-          };
-        })
-      };
-    });
+        path: ['carts', apiService.scope, 'default'],
+        params: {
+          zoom: 'total,' +
+          'lineitems:element:item:price,' +
+          'lineitems:element:item:amount,' +
+          'lineitems:element:item:definition,' +
+          'lineitems:element:total,' +
+          'lineitems:element:item:definition'
+        }
+      })
+      .map((data) => {
+        let lineItems = JSONPath.query(data, '$.._lineitems.._element.*');
+        return {
+          items: map(lineItems, (item) => {
+            return {
+              name: JSONPath.query(item, '$.._item.._definition.*["display-name"]')[0],
+              details: keyBy(JSONPath.query(item, '$.._item.._definition..details')[0], 'name'),
+              listPrice: JSONPath.query(item, '$.._item.._price..["list-price"].*')[0],
+              purchasePrice: JSONPath.query(item, '$.._item.._price..["purchase-price"].*')[0]
+            };
+          })
+        };
+      });
   }
 
   function addItem(itemId){
@@ -82,9 +84,9 @@ function cart(apiService){
           zoom: 'order:donordetails,order:emailinfo:email'
         }
       })
-      .then((response) => {
-        let details = JSONPath.query(response.data, '$.._order.._donordetails.*')[0];
-        let email = JSONPath.query(response.data, '$.._order.._emailinfo.*')[0];
+      .map((data) => {
+        let details = JSONPath.query(data, '$.._order.._donordetails.*')[0];
+        let email = JSONPath.query(data, '$.._order.._emailinfo.*')[0];
         details.email = email ? email['_email'][0]['email'] : '';
         return details;
       });
@@ -106,28 +108,28 @@ function cart(apiService){
 
   function getGeographiesCountries(){
     return apiService.get({
-      path: ['geographies', apiService.scope, 'countries'],
-      params: {
-        zoom: 'element'
-      },
-      cache: true
-    })
-    .then((response) => {
-      return response.data._element;
-    });
+        path: ['geographies', apiService.scope, 'countries'],
+        params: {
+          zoom: 'element'
+        },
+        cache: true
+      })
+      .map((data) => {
+        return data._element;
+      });
   }
 
   function getGeographiesRegions(uri){
     return apiService.get({
-      path: uri,
-      params: {
-        zoom: 'element'
-      },
-      cache: true
-    })
-    .then((response) => {
-      return response.data._element;
-    });
+        path: uri,
+        params: {
+          zoom: 'element'
+        },
+        cache: true
+      })
+      .map((data) => {
+        return data._element;
+      });
   }
 }
 

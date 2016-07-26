@@ -21,7 +21,7 @@ class CartController{
 
   loadCart(){
     this.cartService.get()
-      .then((data) => {
+      .subscribe((data) => {
         this.$log.info('cart', data);
       });
   }
