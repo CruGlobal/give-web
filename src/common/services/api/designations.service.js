@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'rxjs/add/operator/map';
 
 import apiService from '../api.service';
 
@@ -23,8 +24,8 @@ function designations(apiService){
           'page-size': 1
         }
       })
-      .subscribe((response) => {
-        return response.data.self.uri.split('/').pop();
+      .map((data) => {
+        return data.self.uri.split('/').pop();
       });
   }
 

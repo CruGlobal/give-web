@@ -1,5 +1,6 @@
 import 'babel/external-helpers';
 import angular from 'angular';
+import 'rxjs/add/operator/mergeMap';
 
 import appConfig from 'common/app.config';
 
@@ -31,12 +32,12 @@ class CheckoutController{
 
   testRequests(){
     this.designationsService.createSearch('a')
-      .subscribe((id) => {
+      .mergeMap((id) => {
         this.$log.info('search id', id);
-        this.designationsService.getSearchResults(id, 1)
-          .subscribe((response) => {
-            this.$log.info('search page', response.data);
-          });
+        return this.designationsService.getSearchResults(id, 1);
+      })
+      .subscribe((data) => {
+        this.$log.info('search page', data);
       });
   }
 
