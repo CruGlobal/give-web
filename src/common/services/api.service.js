@@ -36,10 +36,7 @@ class Api {
         url: this.envService.read('apiUrl') + this.serializePath(config.path),
         params: config.params,
         data: config.data,
-        withCredentials: true,
-        headers: {
-        Authorization: 'bearer a666d489-9436-4182-afb6-513633d55c96'
-        }
+        withCredentials: true
       }))
       .map((response) => {
         if(config.zoom){
@@ -64,7 +61,7 @@ class Api {
     return this.http(request);
   }
 
-  del(request){
+  delete(request){
     request.method = 'DELETE';
     return this.http(request);
   }

@@ -11,9 +11,7 @@ let componentName = 'cart';
 
 class CartController{
 
-  /* @ngInject */
-  constructor($log, cartService) {
-    this.$log = $log;
+  constructor(cartService) {
     this.cartService = cartService;
 
     this.loadCart();
@@ -22,8 +20,19 @@ class CartController{
   loadCart(){
     this.cartService.get()
       .subscribe((data) => {
-        this.$log.info('cart', data);
+        this.cartData = data;
       });
+  }
+
+  removeItem(uri){
+    this.cartService.deleteItem(atob(uri))
+      .subscribe(() => {
+        this.loadCart();
+      });
+  }
+
+  updateFrequency(uri){
+    this.cartService.updateItem(atob(uri));
   }
 
 }
