@@ -31,10 +31,10 @@ class CheckoutController{
 
   testRequests(){
     this.designationsService.createSearch('a')
-      .then((id) => {
+      .subscribe((id) => {
         this.$log.info('search id', id);
         this.designationsService.getSearchResults(id, 1)
-          .then((response) => {
+          .subscribe((response) => {
             this.$log.info('search page', response.data);
           });
       });

@@ -14,16 +14,16 @@ function designations(apiService){
 
   function createSearch(keywords){
     return apiService.post({
-      path: ['searches', apiService.scope, 'keywords', 'items'],
-      params: {
-        FollowLocation: true
-      },
-      data: {
-        keywords: keywords,
-        'page-size': 1
-      }
-    })
-      .then((response) => {
+        path: ['searches', apiService.scope, 'keywords', 'items'],
+        params: {
+          FollowLocation: true
+        },
+        data: {
+          keywords: keywords,
+          'page-size': 1
+        }
+      })
+      .subscribe((response) => {
         return response.data.self.uri.split('/').pop();
       });
   }

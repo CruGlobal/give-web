@@ -74,6 +74,7 @@
       "json": "github:systemjs/plugin-json@^0.1.2",
       "jsonpath": "npm:jsonpath@^0.2.6",
       "lodash": "npm:lodash@^4.13.1",
+      "rxjs": "npm:rxjs@^5.0.0-beta.10",
       "scss": "github:KevCJones/plugin-scss@^0.2.11",
       "ui-router-extras": "npm:ui-router-extras@^0.0.14"
     },

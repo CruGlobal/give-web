@@ -26,7 +26,7 @@ class MainController{
 
   addItemToCart(id){
     this.cartService.addItem(id)
-      .then((response) => {
+      .subscribe((response) => {
         this.$log.info('Added new item', response.data);
       });
   }

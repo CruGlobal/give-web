@@ -71,6 +71,7 @@ System.config({
     "json": "github:systemjs/plugin-json@0.1.2",
     "jsonpath": "npm:jsonpath@0.2.6",
     "lodash": "npm:lodash@4.13.1",
+    "rxjs": "npm:rxjs@5.0.0-beta.10",
     "scss": "github:KevCJones/plugin-scss@0.2.11",
     "systemjs/plugin-css": "github:systemjs/plugin-css@0.1.21",
     "ui-router-extras": "npm:ui-router-extras@0.0.14",
@@ -810,6 +811,11 @@ System.config({
     "npm:ripemd160@1.0.1": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:rxjs@5.0.0-beta.10": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "symbol-observable": "npm:symbol-observable@1.0.1"
     },
     "npm:sass.js@0.9.10": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",

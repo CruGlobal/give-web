@@ -1,4 +1,6 @@
 import angular from 'angular';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
 import find from 'lodash/find';
 
 import cartService from 'common/services/api/cart.service';
@@ -10,9 +12,8 @@ let componentName = 'checkoutStep1';
 class Step1Controller{
 
   /* @ngInject */
-  constructor($q, cartService){
+  constructor(cartService){
     this.cartService = cartService;
-    this.$q = $q;
 
     this.init();
   }
@@ -25,32 +26,35 @@ class Step1Controller{
     if(details.email){
       requests.push(this.cartService.addEmail(details.email));
     }
-    this.$q.all(requests).then(() => {
-      //go to Step 2
-    });
+    Observable.forkJoin(requests)
+      .subscribe(() => {
+        //go to Step 2
+      });
   }
 
   refreshRegions(country){
     country = find(this.countries, function(v){ return v['display-name'].toUpperCase() === country; });
     if(!country){ return; }
 
-    this.cartService.getGeographies.regions(country.links[0].uri).then((response) => {
-      this.regions = response;
-    });
+    this.cartService.getGeographies.regions(country.links[0].uri)
+      .subscribe((data) => {
+        this.regions = data;
+      });
   }
 
   init(){
     this.cartService.getDonorDetails()
-      .then((data) => {
+      .subscribe((data) => {
         if(data['donor-type'] === ''){
           data['donor-type'] = 'individual';
         }
         this.donorDetails = data;
       });
 
-    this.cartService.getGeographies.countries().then((response) => {
-      this.countries = response;
-    });
+    this.cartService.getGeographies.countries()
+      .subscribe((data) => {
+        this.countries = data;
+      });
   }
 }
 
