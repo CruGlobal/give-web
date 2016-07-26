@@ -1,6 +1,7 @@
 import angular from 'angular';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/of';
 
 import apiService from '../api.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
