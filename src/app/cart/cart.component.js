@@ -31,7 +31,7 @@ class CartController{
       });
   }
 
-  editItem(uri){
+  editItem(){
     //trigger designation modal
   }
 
