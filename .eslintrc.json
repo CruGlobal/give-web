@@ -223,6 +223,7 @@
     "wrap-iife": "off",
     "wrap-regex": "off",
     "yield-star-spacing": "off",
-    "yoda": "off"
+    "yoda": "off",
+    "angular/definedundefined": "off"
   }
 }
