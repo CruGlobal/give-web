@@ -47,11 +47,7 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       template: '<checkout></checkout>'
     });
 
-  $locationProvider.html5Mode({
-    enabled: true,
-    requireBase: false
-  });
-  $urlRouterProvider.otherwise('/checkout');
+  $urlRouterProvider.otherwise('/cart');
 }
 
 export default angular
