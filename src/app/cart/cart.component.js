@@ -11,6 +11,7 @@ let componentName = 'cart';
 
 class CartController{
 
+  /* @ngInject */
   constructor(cartService) {
     this.cartService = cartService;
 
