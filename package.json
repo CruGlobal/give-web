@@ -65,7 +65,7 @@
     },
     "configFile": "system.config.js",
     "dependencies": {
-      "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
+      "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@checkout",
       "angular": "github:angular/bower-angular@^1.5.7",
       "angular-environment": "npm:angular-environment@^1.0.4",
       "angular-ui-router": "github:angular-ui/ui-router@^0.2.15",

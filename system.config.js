@@ -57,7 +57,7 @@ System.config({
   },
 
   map: {
-    "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
+    "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@checkout",
     "angular": "github:angular/bower-angular@1.5.5",
     "angular-environment": "npm:angular-environment@1.0.4",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.5",
