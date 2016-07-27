@@ -16,55 +16,58 @@ describe('payment encryption service', () => {
 
   describe('validateRoutingNumber', () => {
     it('to return false for numbers shorter than 9', () => {
-      expect(self.paymentEncryptionService.validateRoutingNumber(1)).toEqual(false);
-      expect(self.paymentEncryptionService.validateRoutingNumber(12345678)).toEqual(false);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(1)).toEqual(false);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(12345678)).toEqual(false);
     });
     it('to return false for numbers longer than 9', () => {
-      expect(self.paymentEncryptionService.validateRoutingNumber(1234567890)).toEqual(false);
-      expect(self.paymentEncryptionService.validateRoutingNumber(1234567890123456)).toEqual(false);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(1234567890)).toEqual(false);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(1234567890123456)).toEqual(false);
     });
     it('to return true for valid routing numbers', () => {
-      expect(self.paymentEncryptionService.validateRoutingNumber(267084131)).toEqual(true);
-      expect(self.paymentEncryptionService.validateRoutingNumber('021300420')).toEqual(true);
-      expect(self.paymentEncryptionService.validateRoutingNumber('043318092')).toEqual(true);
-      expect(self.paymentEncryptionService.validateRoutingNumber(122038251)).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(267084131)).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()('021300420')).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()('043318092')).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(122038251)).toEqual(true);
     });
     it('to return false for invalid routing numbers', () => {
-      expect(self.paymentEncryptionService.validateRoutingNumber(267084132)).toEqual(false);
-      expect(self.paymentEncryptionService.validateRoutingNumber(121300420)).toEqual(false);
-      expect(self.paymentEncryptionService.validateRoutingNumber(943318092)).toEqual(false);
-      expect(self.paymentEncryptionService.validateRoutingNumber(122030251)).toEqual(false);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(267084132)).toEqual(false);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(121300420)).toEqual(false);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(943318092)).toEqual(false);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(122030251)).toEqual(false);
     });
   });
 
   describe('validateAccountNumber', () => {
-    it('to return false for numbers with 0 digits', () => {
-      expect(self.paymentEncryptionService.validateAccountNumber('')).toEqual(false);
-      expect(self.paymentEncryptionService.validateAccountNumber('asdf&*@)njksd')).toEqual(false);
+    it('to return false for numbers with fewer than 2 digits or more than 17 digits', () => {
+      expect(self.paymentEncryptionService.validateAccountNumber()('')).toEqual(false);
+      expect(self.paymentEncryptionService.validateAccountNumber()('1')).toEqual(false);
+      expect(self.paymentEncryptionService.validateAccountNumber()('asdf&*@)njksd')).toEqual(false);
+      expect(self.paymentEncryptionService.validateAccountNumber()('123456789012345678')).toEqual(false);
     });
-    it('to return true for numbers with 1 or more digits', () => {
-      expect(self.paymentEncryptionService.validateAccountNumber(1)).toEqual(true);
-      expect(self.paymentEncryptionService.validateAccountNumber(12345678)).toEqual(true);
+    it('to return true for numbers with 2-17 digits', () => {
+      expect(self.paymentEncryptionService.validateAccountNumber()(12)).toEqual(true);
+      expect(self.paymentEncryptionService.validateAccountNumber()(12345678)).toEqual(true);
+      expect(self.paymentEncryptionService.validateAccountNumber()(12345678901234567)).toEqual(true);
     });
   });
 
   describe('validateCardNumber', () => {
     it('to return false for an invalid number', () => {
-      expect(self.paymentEncryptionService.validateCardNumber('5800000000000000')).toEqual(false);
+      expect(self.paymentEncryptionService.validateCardNumber()('5800000000000000')).toEqual(false);
     });
     it('to return true for a valid VISA number', () => {
-      expect(self.paymentEncryptionService.validateCardNumber('4111 1111 1111 1111')).toEqual(true);
+      expect(self.paymentEncryptionService.validateCardNumber()('4111 1111 1111 1111')).toEqual(true);
     });
   });
 
   describe('validateCardSecurityCode', () => {
     it('to return false for a code of invalid length', () => {
-      expect(self.paymentEncryptionService.validateCardSecurityCode('12')).toEqual(false);
-      expect(self.paymentEncryptionService.validateCardSecurityCode('12345')).toEqual(false);
+      expect(self.paymentEncryptionService.validateCardSecurityCode()('12')).toEqual(false);
+      expect(self.paymentEncryptionService.validateCardSecurityCode()('12345')).toEqual(false);
     });
     it('to return true for a code of valid length', () => {
-      expect(self.paymentEncryptionService.validateCardSecurityCode('123')).toEqual(true);
-      expect(self.paymentEncryptionService.validateCardSecurityCode('1234')).toEqual(true);
+      expect(self.paymentEncryptionService.validateCardSecurityCode()('123')).toEqual(true);
+      expect(self.paymentEncryptionService.validateCardSecurityCode()('1234')).toEqual(true);
     });
   });
 
