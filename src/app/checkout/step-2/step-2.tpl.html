@@ -1,15 +1,15 @@
-<div class="mb">
+<div class="mb_x">
   <div class="row">
     <div class="col-md-6">
       <button class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.paymentType = 'bankAccount'" ng-class="{'on': $ctrl.paymentType === 'bankAccount'}">
         Bank Account
-        <img src="{{ site.root }}assets/img/icon-bank.png" alt="Bank Account Icon"/>
+        <img src="/assets/img/icon-bank.png" alt="Bank Account Icon"/>
       </button>
     </div>
     <div class="col-md-6">
       <button class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.paymentType = 'creditCard'" ng-class="{'on': $ctrl.paymentType === 'creditCard'}">
         Credit Card
-        <img src="{{ site.root }}assets/img/icon-cc.png" alt="Credit Card Icon"/>
+        <img src="/assets/img/icon-cc.png" alt="Credit Card Icon"/>
       </button>
     </div>
   </div>
@@ -24,4 +24,16 @@
 
   <checkout-credit-card></checkout-credit-card>
 
+</div>
+
+<div class="closer">
+  <div class="row">
+    <div class="col-sm-5 hidden-xs">
+      <a href="/checkout-step-1/" class="btn btn-default">Previous Step</a>
+    </div>
+    <div class="col-sm-5 col-sm-offset-2">
+      <a href="/checkout-step-3/" class="btn btn-primary pull-right btn-block-mobile">Continue to Review &amp; Submit</a>
+      <a href="/checkout-step-1/" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Previous Step</a>
+    </div>
+  </div>
 </div>

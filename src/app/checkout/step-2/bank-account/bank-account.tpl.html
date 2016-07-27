@@ -1,4 +1,4 @@
-<div class="mb">
+<div class="mb_x">
 
 
     <h4 class="panel-title  border-bottom-small  visible">Payment Method</h4>
@@ -6,20 +6,19 @@
 
     <div class="row">
         <div class="col-sm-6">
-            <div class="form-group    form-group-default">
+            <div class="form-group    form-group-default is-required">
                 <label>Bank Name</label>
-                <input type="text" class="form-control form-control-subtle" name="bank_name"
-                       placeholder="World Global Bank"/>
+                <input type="text" class="form-control form-control-subtle" name="bank_name" />
             </div>
         </div>
         <div class="col-sm-6">
             <div class="form-group form-group-default form-group-inline">
                 <label class="label-block">Account Type</label>
                 <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Checking Account
+                    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> Checking <span class="hidden-md">Account</span>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Savings Account
+                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Savings <span class="hidden-md">Account</span>
                 </label>
             </div>
         </div>
@@ -28,20 +27,20 @@
 
     <div class="row">
         <div class="col-sm-4">
-            <div class="form-group">
-                <label>Routing</label>
+            <div class="form-group is-required">
+                <label>Routing #</label>
                 <input type="text" class="form-control  form-control-subtle">
             </div>
         </div>
         <div class="col-sm-4">
-            <div class="form-group">
-                <label>Account</label>
+            <div class="form-group is-required">
+                <label>Account #</label>
                 <input type="text" class="form-control  form-control-subtle">
             </div>
         </div>
         <div class="col-sm-4">
-            <div class="form-group">
-                <label>Retype Account</label>
+            <div class="form-group is-required">
+                <label>Retype Account #</label>
                 <input type="text" class="form-control  form-control-subtle">
             </div>
         </div>
@@ -62,7 +61,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-8">
-                                <img src="{{ site.root }}/assets/img/check-sample.png" alt="Credit Card Icon"/>
+                                <img src="/assets/img/check-sample.png" alt="Credit Card Icon"/>
                             </div>
                             <div class="col-sm-4">
                                 <h4>Where to find it.</h4>
@@ -84,34 +83,17 @@
             <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <p>By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and
-                            agree to these Terms and Conditions, and that this agreement constitutes a "writing signed
-                            by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds
-                            transfers (debits) from my account at the financial institution listed above, and to
-                            initiate </p>
+                        <p>By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.</p>
                     </div>
                 </div>
 
                 <label class="checkbox-inline">
-                    <input type="checkbox" id="inlineCheckbox1" value="option1"> I hereby certify that I have read and
-                    understand the Terms and Conditions.
+                    <input type="checkbox" id="inlineCheckbox1" value="option1"> I Agree
                 </label>
 
             </div>
         </div>
 
-    </div>
-
-    <div class="closer">
-        <div class="row">
-            <div class="col-sm-5 hidden-xs">
-                <a href="#" class="btn btn-default">Return to Cart</a>
-            </div>
-            <div class="col-sm-5 col-sm-offset-2">
-                <a href="#" class="btn btn-primary pull-right btn-block-mobile">Continue to Review &amp; Submit</a>
-                <a href="#" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Return Cart</a>
-            </div>
-        </div>
     </div>
 
 </div> <!-- // mb -->
