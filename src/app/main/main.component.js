@@ -19,15 +19,17 @@ let componentName = 'main';
 class MainController{
 
   /* @ngInject */
-  constructor(cartService, $log){
+  constructor(cartService, $log, $state){
     this.cartService = cartService;
     this.$log = $log;
+    this.$state = $state;
   }
 
   addItemToCart(id){
     this.cartService.addItem(id)
       .subscribe((response) => {
         this.$log.info('Added new item', response.data);
+        this.$state.reload();
       });
   }
 
@@ -45,11 +47,7 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       template: '<checkout></checkout>'
     });
 
-  $locationProvider.html5Mode({
-    enabled: true,
-    requireBase: false
-  });
-  $urlRouterProvider.otherwise('/checkout');
+  $urlRouterProvider.otherwise('/cart');
 }
 
 export default angular

@@ -1,7 +1,5 @@
 import angular from 'angular';
 import JSONPath from 'jsonpath';
-import keyBy from 'lodash/keyBy';
-import map from 'lodash/map';
 import 'rxjs/add/operator/map';
 
 import apiService from '../api.service';
@@ -10,8 +8,6 @@ let serviceName = 'cartService';
 
 /*@ngInject*/
 function cart(apiService){
-  var cartId = null;
-
   return {
     get: get,
     addItem: addItem,
@@ -28,52 +24,117 @@ function cart(apiService){
 
   function get() {
     return apiService.get({
-        path: ['carts', apiService.scope, 'default'],
-        params: {
-          zoom: 'total,' +
-          'lineitems:element:item:price,' +
-          'lineitems:element:item:amount,' +
-          'lineitems:element:item:definition,' +
-          'lineitems:element:total,' +
-          'lineitems:element:item:definition'
+      path: ['carts', apiService.scope, 'default'],
+      params: {
+        zoom: 'lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,lineitems:element:itemfields'
+      }
+    }).map((data) => {
+      if (!data || !data._lineitems) {
+        return {};
+      }
+      var items = [];
+      var frequencyTotals = [];
+      var total = 0;
+      var elements = JSONPath.query(data, "$._lineitems[0]._element")[0];
+      var rateTotals = JSONPath.query(data, "$._ratetotals[0]._element")[0];
+
+      if (elements){
+        angular.forEach(elements, function(element) {
+          var displayName = JSONPath.query(element, "$._item[0]._definition[0]['display-name']")[0];
+          var frequencyInterval = JSONPath.query(element, "$._rate[0].recurrence.interval")[0];
+          var frequencyTitle = JSONPath.query(element, "$._rate[0].recurrence.display")[0];
+          var price = JSONPath.query(element, "$._rate[0].cost.display")[0];
+          // var code = JSONPath.query(element, "$._item[0]._code[0].code")[0];
+          var designationNumber = JSONPath.query(element, "$._item[0]._definition[0].details[?(@.name=='replacement_designation_id')]['display-value']")[0];
+
+          var itemAmount = 0;
+          if (frequencyTitle && frequencyTitle === "Single"){
+            itemAmount = JSONPath.query(element, "$._total[0].cost[0].amount")[0];
+          } else {
+            itemAmount = JSONPath.query(element, "$._rate[0].cost.amount")[0];
+          }
+
+          var itemResource = JSONPath.query(element, "$._availability[0].links[0].uri")[0];
+          itemResource = itemResource ? btoa(itemResource) : '';
+
+          frequencyTitle = (!frequencyInterval || frequencyInterval === 'NA') ? frequencyTitle = 'Single' : frequencyTitle;
+
+          items.push({
+            uri: itemResource,
+            displayName: displayName,
+            price: price,
+            frequency: frequencyTitle,
+            amount: itemAmount,
+            designationNumber: designationNumber
+          });
+        });
+      }
+
+      // total frequency for single
+      if (data._total){
+        var amountSingle = JSONPath.query(data, "$._total[0].cost[0].amount")[0];
+        var totalSingle = JSONPath.query(data, "$._total[0].cost[0].display")[0];
+
+        if (amountSingle){
+          total = total + amountSingle;
         }
-      })
-      .map((data) => {
-        let lineItems = JSONPath.query(data, '$.._lineitems.._element.*');
-        return {
-          items: map(lineItems, (item) => {
-            return {
-              name: JSONPath.query(item, '$.._item.._definition.*["display-name"]')[0],
-              details: keyBy(JSONPath.query(item, '$.._item.._definition..details')[0], 'name'),
-              listPrice: JSONPath.query(item, '$.._item.._price..["list-price"].*')[0],
-              purchasePrice: JSONPath.query(item, '$.._item.._price..["purchase-price"].*')[0]
-            };
-          })
-        };
-      });
+
+        frequencyTotals.push({
+          frequency: 'Single',
+          amount: total,
+          total: totalSingle
+        });
+      }
+
+      // total frequency for monthly | annually ...
+      if (rateTotals){
+        angular.forEach(rateTotals, function(element) {
+          var recurrenceDisplay = JSONPath.query(element, "$.recurrence.display")[0];
+          var cost = JSONPath.query(element, "$.cost.display")[0];
+          var amount = JSONPath.query(element, "$.cost.amount")[0];
+          var totalFreq = 0;
+          if (amount){
+            totalFreq = totalFreq + amount;
+          }
+
+          frequencyTotals.push({
+            frequency: recurrenceDisplay,
+            amount: totalFreq,
+            total: cost
+          });
+        });
+      }
+
+      return {
+        items: items,
+        frequencyTotals: frequencyTotals,
+        cartTotal: total
+      };
+    });
   }
 
   function addItem(itemId){
     return apiService.post({
-      path: ['carts', apiService.scope, 'default/lineitems/items', apiService.scope, itemId],
+      path: ['itemfieldlineitems', 'items', apiService.scope, itemId],
       data: {
-        quantity: 1
+        quantity: 1,
+        amount: 25
       }
     });
   }
 
-  function updateItem(itemId){
+  function updateItem(uri){
     return apiService.post({
-      path: ['carts', apiService.scope, 'default/lineitems/items', apiService.scope, itemId],
+      path: uri,
       data: {
         quantity: 1
       }
     });
   }
 
-  function deleteItem(itemId){
+  function deleteItem(uri){
     return apiService.delete({
-      path: ['carts', apiService.scope, cartId, 'lineitems', itemId]
+      path: uri
     });
   }
 
