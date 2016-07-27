@@ -31,8 +31,8 @@ class CartController{
       });
   }
 
-  updateFrequency(uri){
-    this.cartService.updateItem(atob(uri));
+  editItem(uri){
+    //trigger designation modal
   }
 
 }

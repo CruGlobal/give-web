@@ -1,7 +1,5 @@
 import angular from 'angular';
 import JSONPath from 'jsonpath';
-import keyBy from 'lodash/keyBy';
-import map from 'lodash/map';
 import 'rxjs/add/operator/map';
 
 import apiService from '../api.service';
@@ -40,13 +38,14 @@ function cart(apiService){
       var elements = JSONPath.query(data, "$._lineitems[0]._element")[0];
       var rateTotals = JSONPath.query(data, "$._ratetotals[0]._element")[0];
 
-      if (elements != undefined){
+      if (elements){
         angular.forEach(elements, function(element) {
           var displayName = JSONPath.query(element, "$._item[0]._definition[0]['display-name']")[0];
           var frequencyInterval = JSONPath.query(element, "$._rate[0].recurrence.interval")[0];
           var frequencyTitle = JSONPath.query(element, "$._rate[0].recurrence.display")[0];
           var price = JSONPath.query(element, "$._rate[0].cost.display")[0];
-          var code = JSONPath.query(element, "$._item[0]._code[0].code")[0];
+          // var code = JSONPath.query(element, "$._item[0]._code[0].code")[0];
+          var designationNumber = JSONPath.query(element, "$._item[0]._definition[0].details[?(@.name=='replacement_designation_id')]['display-value']")[0];
 
           var itemAmount = 0;
           if (frequencyTitle && frequencyTitle === "Single"){
@@ -65,7 +64,8 @@ function cart(apiService){
             displayName: displayName,
             price: price,
             frequency: frequencyTitle,
-            amount: itemAmount
+            amount: itemAmount,
+            designationNumber: designationNumber
           });
         });
       }
