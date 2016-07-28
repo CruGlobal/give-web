@@ -19,7 +19,7 @@ class Step1Controller{
   }
 
   submitDetails(valid){
-    if(!valid){ return; }
+    if(!valid){ window.scrollTo(0, 0); return; }
     let details = this.donorDetails;
 
     var requests = [this.cartService.updateDonorDetails(details.self.uri, details)];
@@ -29,6 +29,7 @@ class Step1Controller{
     Observable.forkJoin(requests)
       .subscribe(() => {
         //go to Step 2
+        this.checkoutStep = 'payment';
       });
   }
 
@@ -67,6 +68,6 @@ export default angular
     controller: Step1Controller,
     templateUrl: template.name,
     bindings: {
-      changeStep: '&'
+      checkoutStep: '='
     }
   });
