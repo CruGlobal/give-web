@@ -17,12 +17,12 @@
 
 <div class="tab-indiv cart-tab show" ng-if="$ctrl.paymentType === 'bankAccount'">
 
-  <checkout-bank-account></checkout-bank-account>
+  <checkout-bank-account submitted="$ctrl.submitted" on-save="$ctrl.onSave(success)"></checkout-bank-account>
 
 </div>
 <div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
 
-  <checkout-credit-card></checkout-credit-card>
+  <checkout-credit-card submitted="$ctrl.submitted" on-save="$ctrl.onSave(success)"></checkout-credit-card>
 
 </div>
 
@@ -32,7 +32,7 @@
       <a href="/checkout-step-1/" class="btn btn-default">Previous Step</a>
     </div>
     <div class="col-sm-5 col-sm-offset-2">
-      <a href="/checkout-step-3/" class="btn btn-primary pull-right btn-block-mobile">Continue to Review &amp; Submit</a>
+      <button class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = true">Continue to Review &amp; Submit</button>
       <a href="/checkout-step-1/" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Previous Step</a>
     </div>
   </div>

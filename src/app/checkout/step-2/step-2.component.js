@@ -1,6 +1,5 @@
 import angular from 'angular';
 import paymentEncryptionService from 'common/services/paymentEncryption.service';
-import orderService from 'common/services/api/order.service';
 
 import bankAccount from './bank-account/bank-account.component';
 import creditCard from './credit-card/credit-card.component';
@@ -12,29 +11,19 @@ let componentName = 'checkoutStep2';
 class Step2Controller{
 
   /* @ngInject */
-  constructor(paymentEncryptionService, orderService, apiService, hateoasHelperService, $log){
-    this.paymentEncryption = paymentEncryptionService;
-    this.orderService = orderService;
-    this.apiService = apiService;
-    this.hateoasHelperService = hateoasHelperService;
+  constructor($log){
     this.$log = $log;
 
     this.paymentType = 'bankAccount';
-
-    this.savePayment();
+    this.submitted = false;
   }
 
-  savePayment(){
-    this.orderService.addBankAccountPayment({
-        'account-type': 'checking',
-        'bank-name': 'some bank',
-        'display-account-number': 'xxxxxx-1234',
-        'encrypted-account-number': '123456789012',
-        'routing-number': 123456789
-      })
-      .subscribe((data) => {
-        this.$log.info('added bank account', data);
-      });
+  onSave(success){
+    if(success){
+      this.$log.info('succeeded validation - need to go to review');
+    }else{
+      this.submitted = false;
+    }
   }
 }
 
@@ -43,8 +32,7 @@ export default angular
     template.name,
     bankAccount.name,
     creditCard.name,
-    paymentEncryptionService.name,
-    orderService.name
+    paymentEncryptionService.name
   ])
   .component(componentName, {
     controller: Step2Controller,
