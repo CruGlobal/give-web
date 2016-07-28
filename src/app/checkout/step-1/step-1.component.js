@@ -12,14 +12,15 @@ let componentName = 'checkoutStep1';
 class Step1Controller{
 
   /* @ngInject */
-  constructor(cartService){
+  constructor($window, cartService){
     this.cartService = cartService;
+    this.$window = $window;
 
     this.init();
   }
 
   submitDetails(valid){
-    if(!valid){ window.scrollTo(0, 0); return; }
+    if(!valid){ this.$window.scrollTo(0, 0); return; }
     let details = this.donorDetails;
 
     var requests = [this.cartService.updateDonorDetails(details.self.uri, details)];
