@@ -40,11 +40,6 @@ class CheckoutController{
         this.$log.info('search page', data);
       });
   }
-
-  changeStep(newStep){
-    this.checkoutStep = newStep;
-  }
-
 }
 
 export default angular

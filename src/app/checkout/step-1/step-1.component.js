@@ -12,14 +12,15 @@ let componentName = 'checkoutStep1';
 class Step1Controller{
 
   /* @ngInject */
-  constructor(cartService){
+  constructor($window, cartService){
     this.cartService = cartService;
+    this.$window = $window;
 
     this.init();
   }
 
   submitDetails(valid){
-    if(!valid){ return; }
+    if(!valid){ this.$window.scrollTo(0, 0); return; }
     let details = this.donorDetails;
 
     var requests = [this.cartService.updateDonorDetails(details.self.uri, details)];
@@ -29,6 +30,7 @@ class Step1Controller{
     Observable.forkJoin(requests)
       .subscribe(() => {
         //go to Step 2
+        this.checkoutStep = 'payment';
       });
   }
 
@@ -67,6 +69,6 @@ export default angular
     controller: Step1Controller,
     templateUrl: template.name,
     bindings: {
-      changeStep: '&'
+      checkoutStep: '='
     }
   });
