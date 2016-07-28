@@ -19,5 +19,8 @@ export default angular
   ])
   .component(componentName, {
     controller: CartSummmaryController,
-    templateUrl: template.name
+    templateUrl: template.name,
+    bindings: {
+      cartData: '<'
+    }
   });

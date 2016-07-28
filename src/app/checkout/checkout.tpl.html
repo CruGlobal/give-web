@@ -45,7 +45,7 @@
 
                   <checkout-step-1 ng-if="$ctrl.checkoutStep === 'contact'" change-step="$ctrl.changeStep(newStep)"></checkout-step-1>
                   <checkout-step-2 ng-if="$ctrl.checkoutStep === 'payment'" change-step="$ctrl.changeStep(newStep)"></checkout-step-2>
-                  <checkout-step-3 ng-if="$ctrl.checkoutStep === 'review'" change-step="$ctrl.changeStep(newStep)"></checkout-step-3>
+                  <checkout-step-3 ng-if="$ctrl.checkoutStep === 'review'" change-step="$ctrl.changeStep(newStep)" cart-data="$ctrl.cartData"></checkout-step-3>
 
                 </div> <!-- // panelbody -->
               </div><!-- // panel -->
@@ -53,7 +53,7 @@
           </div>
         </div>
         <div class="col-md-4 hidden-xs">
-          <checkout-cart-summary></checkout-cart-summary>
+          <checkout-cart-summary cart-data="$ctrl.cartData"></checkout-cart-summary>
         </div>
         <div class="col-md-4 hidden-xs hidden-sm">
           <help></help>

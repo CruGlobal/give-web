@@ -7,10 +7,18 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(){
-    //this.changeStep({newStep: 'payment'}); TODO: put this on a go back action somewhere
+  constructor(cartService){
+    this.cartService = cartService;
+
+    this.init();
   }
 
+  init(){
+    this.cartService.getDonorDetails()
+      .subscribe((data) => {
+        this.donorDetails = data;
+      });
+  }
 }
 
 export default angular
@@ -21,6 +29,7 @@ export default angular
     controller: Step3Controller,
     templateUrl: template.name,
     bindings: {
-      changeStep: '&'
+      changeStep: '&',
+      cartData: '<'
     }
   });

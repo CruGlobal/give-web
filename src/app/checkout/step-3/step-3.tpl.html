@@ -7,12 +7,16 @@
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
-            <p>1234 Strawberry Lane Road<br/>
-              Naples, Florida 77675</p>
+            <p>
+              {{$ctrl.donorDetails['mailing-address']['street-address']}}<br/>
+              {{$ctrl.donorDetails['mailing-address']['locality']}},
+              {{$ctrl.donorDetails['mailing-address']['region']}}
+              {{$ctrl.donorDetails['mailing-address']['postal-code']}}
+            </p>
           </div>
         </div>
         <div class="col-md-4 text-right">
-          <a class="btn btn-default btn-block">Change</a>
+          <a class="btn btn-default btn-block" href="" ng-click="$ctrl.changeStep({newStep: 'contact'})">Change</a>
         </div>
       </div>
     </div>
@@ -35,17 +39,17 @@
               </div>
               <div class="form-group">
                 <label class="">Account Number</label>
-                <p>********** 4567</p>
+                <p class="number">********** 4567</p>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label class="">Account Type</label>
-                <p>Checking</p>
+                <p class="number">Checking</p>
               </div>
               <div class="form-group">
                 <label class="">Routing Number</label>
-                <p>0000667656</p>
+                <p class="number">0000667656</p>
               </div>
             </div>
             <div class="col-md-12">
@@ -57,7 +61,7 @@
           </div>
         </div>
         <div class="col-md-4 text-right">
-          <a class="btn btn-default btn-block">Change</a>
+          <a class="btn btn-default btn-block" href="" ng-click="$ctrl.changeStep({newStep: 'payment'})">Change</a>
         </div>
       </div>
     </div>
@@ -72,58 +76,45 @@
     <div class="panel-body">
       <table class="table giftsum-table">
         <thead>
-        <tr>
-          <th class="th-title-gift">Gift</th>
-          <th class="th-title-frequency">Frequency</th>
-          <th class="th-title-amount">Amount</th>
-        </tr>
+          <tr>
+            <th class="th-title-gift">Gift</th>
+            <th class="th-title-frequency">Frequency</th>
+            <th class="th-title-amount">Amount</th>
+          </tr>
         </thead>
         <tbody>
-        <tr class="giftsum-gift-row">
-          <td class="td-gift">
-            <img src="http://lorempixel.com/90/70/people/" class="giftsum-profile pull-left"/>
-            <span class="giftsum-person giftsum-title">Jean Deuax</span>
-            <span class="giftsum-accountnum giftsum-detail"><span class="hidden-xs">Ministry </span>#334343223</span>
-          </td>
-          <td class="td-frequency">
-            <span class="giftsum-frequency giftsum-title">Monthly</span>
-            <span class="giftsum-date giftsum-detail">Starts on: 7/8/2019</span>
-          </td>
-          <td class="td-amount">
-            <span class="giftsum-about giftsum-title">$50.00</span>
-            <span class="giftsum-detail"><span class=" visible-xs">Gift Amount</span></span>
-          </td>
-        </tr>
-        <tr class="giftsum-gift-row">
-          <td class="td-gift">
-            <img src="http://lorempixel.com/90/70/people/" class="giftsum-profile pull-left"/>
-            <span class="giftsum-person giftsum-title">Jean Deuax</span>
-            <span class="giftsum-accountnum giftsum-detail"><span class="hidden-xs">Ministry </span>#3343223</span>
-          </td>
-          <td class="td-frequency">
-            <span class="giftsum-frequency giftsum-title">Monthly</span>
-            <span class="giftsum-date giftsum-detail">Starts on: 7/8/2019</span>
-          </td>
-          <td class="td-amount">
-            <span class="giftsum-about giftsum-title">$50.00</span>
-            <span class="giftsum-detail"><span class=" visible-xs">Gift Amount</span></span>
-          </td>
-        </tr>
+          <tr class="giftsum-gift-row" ng-repeat="i in $ctrl.cartData.items">
+            <td class="td-gift">
+              <img src="http://placehold.it/90x70" class="giftsum-profile pull-left">
+              <span class="giftsum-person giftsum-title">{{i.displayName}}</span>
+              <span class="giftsum-accountnum giftsum-detail"><span class="hidden-xs">Ministry </span>#{{i.designationNumber}}</span>
+            </td>
+            <td class="td-frequency">
+              <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
+              <span class="giftsum-date giftsum-detail">Starts on: 7/8/2019</span>
+            </td>
+            <td class="td-amount">
+              <span class="giftsum-about giftsum-title">{{i.price}}</span>
+              <span class="giftsum-detail"><span class=" visible-xs">Gift Amount</span></span>
+            </td>
+          </tr>
         </tbody>
+        <tfoot class="mobile-footer-persist">
+          <tr>
+            <td colspan="3" class="text-right">
+              <div class="checkout-cta pull-right">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                  Submit Your Gift
+                </button>
+              </div>
+              <span class="giftsum-line" ng-repeat="t in $ctrl.cartData.frequencyTotals">
+                Your {{t.frequency}} Gift Total:
+                <strong>{{t.total}}</strong>
+              </span>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>
 </div>
-
-<div class="mb">
-  <div class="row">
-    <div class="col-md-7  col-sm-7 text-right">
-      <div class="giftsum-line">Monthly Gift Total: <strong class="data-font">$50.00</strong></div>
-      <div class="giftsum-line">Single Total: <strong class="data-font">$100.00</strong></div>
-    </div>
-    <div class="col-md-5 col-sm-5">
-      <a href="" class="btn btn-primary btn-lg btn-block">Submit Your Gift</a>
-    </div>
-  </div>
-</div>
-
