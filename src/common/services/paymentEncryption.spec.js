@@ -83,11 +83,11 @@ describe('payment encryption service', () => {
 
   describe('encrypt', () => {
     it('to return the encrypted version of a number', () => {
-      expect(self.paymentEncryptionService.encrypt('4024007192720596').length).toEqual(344);
-      expect(self.paymentEncryptionService.encrypt('5116410773439691').length).toEqual(344);
-      expect(self.paymentEncryptionService.encrypt('123').length).toEqual(344);
-      expect(self.paymentEncryptionService.encrypt('1234').length).toEqual(344);
-      expect(self.paymentEncryptionService.encrypt('123456789').length).toEqual(344);
+      expect(self.paymentEncryptionService.encrypt('4024007192720596').length).toBeGreaterThan(100);
+      expect(self.paymentEncryptionService.encrypt('5116410773439691').length).toBeGreaterThan(100);
+      expect(self.paymentEncryptionService.encrypt('123').length).toBeGreaterThan(100);
+      expect(self.paymentEncryptionService.encrypt('1234').length).toBeGreaterThan(100);
+      expect(self.paymentEncryptionService.encrypt('123456789').length).toBeGreaterThan(100);
     });
   });
 
