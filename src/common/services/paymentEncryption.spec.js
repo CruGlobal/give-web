@@ -37,20 +37,6 @@ describe('payment encryption service', () => {
     });
   });
 
-  describe('validateAccountNumber', () => {
-    it('to return false for numbers with fewer than 2 digits or more than 17 digits', () => {
-      expect(self.paymentEncryptionService.validateAccountNumber()('')).toEqual(false);
-      expect(self.paymentEncryptionService.validateAccountNumber()('1')).toEqual(false);
-      expect(self.paymentEncryptionService.validateAccountNumber()('asdf&*@)njksd')).toEqual(false);
-      expect(self.paymentEncryptionService.validateAccountNumber()('123456789012345678')).toEqual(false);
-    });
-    it('to return true for numbers with 2-17 digits', () => {
-      expect(self.paymentEncryptionService.validateAccountNumber()(12)).toEqual(true);
-      expect(self.paymentEncryptionService.validateAccountNumber()(12345678)).toEqual(true);
-      expect(self.paymentEncryptionService.validateAccountNumber()(12345678901234567)).toEqual(true);
-    });
-  });
-
   describe('validateCardNumber', () => {
     it('to return false for an invalid number', () => {
       expect(self.paymentEncryptionService.validateCardNumber()('5800000000000000')).toEqual(false);

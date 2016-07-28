@@ -2,6 +2,7 @@ import angular from 'angular';
 import _ from 'lodash';
 import ccp from 'common/lib/ccp';
 import { ccpKey } from 'common/app.constants';
+import isEmpty from 'lodash/isEmpty';
 
 let serviceName = 'paymentEncryptionService';
 
@@ -14,6 +15,8 @@ class PaymentEncryption {
 
   validateRoutingNumber(){
     return (routingNumber) => {
+      if(isEmpty(routingNumber.toString())) return true; // Let other validators handle empty condition
+
       routingNumber = this.stripNonNumbers(routingNumber);
       if (routingNumber.length !== 9) {
         return false;
@@ -30,21 +33,18 @@ class PaymentEncryption {
     };
   }
 
-  validateAccountNumber(){
-    return (accountNumber) => {
-      let accountNumberLength = this.stripNonNumbers(accountNumber).length;
-      return accountNumberLength >= 2 && accountNumberLength <= 17;
-    };
-  }
-
   validateCardNumber(){
     return (cardNumber) => {
+      if(isEmpty(cardNumber.toString())) return true; // Let other validators handle empty condition
+
       return ccp.validateCardNumber(cardNumber) === null;
     };
   }
 
   validateCardSecurityCode(){
     return (securityCode) => {
+      if(isEmpty(securityCode.toString())) return true; // Let other validators handle empty condition
+
       return ccp.validateCardSecurityCode(securityCode) === null;
     };
   }

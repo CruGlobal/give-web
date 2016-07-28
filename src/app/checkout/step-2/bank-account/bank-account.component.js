@@ -1,5 +1,6 @@
 import angular from 'angular';
-import validationClasses from 'common/directives/validationClasses.directive';
+import isEmpty from 'lodash/isEmpty';
+import validation from 'common/directives/validation.directive';
 import paymentEncryptionService from 'common/services/paymentEncryption.service';
 import orderService from 'common/services/api/order.service';
 
@@ -17,7 +18,7 @@ class BankAccountController{
     this.orderService = orderService;
 
     this.bankPayment = {
-      accountType: 'checking'
+      accountType: null //TODO: should this be selected by default?
     };
 
     this.waitForFormInitialization();
@@ -38,9 +39,8 @@ class BankAccountController{
 
   addCustomValidators(){
     this.bankPaymentForm.routingNumber.$validators.routingNumber = this.paymentEncryptionService.validateRoutingNumber();
-    this.bankPaymentForm.accountNumber.$validators.accountNumber = this.paymentEncryptionService.validateAccountNumber();
     this.bankPaymentForm.verifyAccountNumber.$validators.verifyAccountNumber = (verifyAccountNumber) => {
-      return this.bankPayment.accountNumber === verifyAccountNumber;
+      return this.bankPayment.accountNumber === verifyAccountNumber || isEmpty(verifyAccountNumber);
     };
 
     this.bankPaymentForm.accountNumber.$viewChangeListeners.push(() => {
@@ -77,7 +77,7 @@ class BankAccountController{
 export default angular
   .module(componentName, [
     template.name,
-    validationClasses.name,
+    validation.name,
     paymentEncryptionService.name,
     orderService.name
   ])
