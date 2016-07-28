@@ -68,10 +68,8 @@ gulp.task('bundle', function () {
         { src: 'app/checkout/checkout.component - ' + commonFilesForBundles,
           dst: 'checkout.js'
         }
-      ],
-      bundleOptions: {
-        minify: true
-      }
+      ]
     })
+    .pipe($.uglify())
     .pipe(gulp.dest(paths.outputBundles));
 });
