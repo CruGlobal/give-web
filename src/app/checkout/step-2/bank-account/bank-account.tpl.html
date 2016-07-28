@@ -1,117 +1,114 @@
-<div class="mb">
+<form novalidate ng-submit="$ctrl.submitPayment(bankPayment.$valid)" name="$ctrl.bankPaymentForm">
 
+  <div class="mb_x">
 
     <h4 class="panel-title  border-bottom-small  visible">Payment Method</h4>
 
 
     <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group    form-group-default">
-                <label>Bank Name</label>
-                <input type="text" class="form-control form-control-subtle" name="bank_name"
-                       placeholder="World Global Bank"/>
-            </div>
+      <div class="col-sm-6">
+        <div class="form-group form-group-default is-required" validation="$ctrl.bankPaymentForm.bankName" show-error="asClass">
+          <label>Bank Name</label>
+          <input type="text" class="form-control form-control-subtle" name="bankName" ng-model="$ctrl.bankPayment.bankName" required/>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.bankName" show-error="required" translate>You must enter a bank name</span>
         </div>
-        <div class="col-sm-6">
-            <div class="form-group form-group-default form-group-inline">
-                <label class="label-block">Account Type</label>
-                <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Checking Account
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Savings Account
-                </label>
-            </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group form-group-default form-group-inline" validation="$ctrl.bankPaymentForm.accountType" show-error="asClass">
+          <label class="label-block">Account Type</label>
+          <label class="radio-inline">
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="checking" required> Checking <span class="hidden-md">Account</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="savings" required> Savings <span class="hidden-md">Account</span>
+          </label>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.accountType" show-error="required" translate>You must choose an account type</span>
         </div>
+      </div>
     </div>
 
 
     <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>Routing</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" validation="$ctrl.bankPaymentForm.routingNumber" show-error="asClass">
+          <label>Routing #</label>
+          <input type="text" class="form-control  form-control-subtle" name="routingNumber" ng-model="$ctrl.bankPayment.routingNumber" required>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.routingNumber" show-error="required" translate>You must enter a routing number</span>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.routingNumber" show-error="routingNumber" translate>This routing number is invalid</span>
         </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>Account</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" validation="$ctrl.bankPaymentForm.accountNumber" show-error="asClass">
+          <label>Account #</label>
+          <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" required minlength="2" ng-maxlength="17">
+          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="required" translate>You must enter an account number</span>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="minlength" translate>This account number is too short</span>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="maxlength" translate>This routing number is too long</span>
         </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>Retype Account</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" validation="$ctrl.bankPaymentForm.verifyAccountNumber" show-error="asClass">
+          <label>Retype Account #</label>
+          <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" ng-model="$ctrl.bankPayment.verifyAccountNumber" required>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.verifyAccountNumber" show-error="required" translate>You must retype your account number</span>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.verifyAccountNumber" show-error="verifyAccountNumber" translate>Your account numbers do not match</span>
         </div>
+      </div>
 
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
-            Locate your Routing and Account Numbers <a href="" class="circle-it bank-explain-trigger"><i
-                class="fa fa-question"></i></a>
-        </div>
+      <div class="col-sm-12">
+        Locate your Routing and Account Numbers <a href="" class="circle-it bank-explain-trigger">
+        <i class="fa fa-question"></i></a>
+      </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
-            <div class="bank-explain-wrap">
-                <div class="panel panel-default panel-secondary">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-8">
-                                <img src="{{ site.root }}/assets/img/check-sample.png" alt="Credit Card Icon"/>
-                            </div>
-                            <div class="col-sm-4">
-                                <h4>Where to find it.</h4>
-                                <p>Use your account and routing numbers from your check. Dont use your deposit slip.</p>
-                            </div>
-                        </div>
-                    </div>
+      <div class="col-sm-12">
+        <div class="bank-explain-wrap">
+          <div class="panel panel-default panel-secondary">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-8">
+                  <img src="/assets/img/check-sample.png" alt="Credit Card Icon"/>
                 </div>
+                <div class="col-sm-4">
+                  <h4>Where to find it.</h4>
+                  <p>Use your account and routing numbers from your check. Dont use your deposit slip.</p>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="mb">
+  <div class="mb">
 
     <div class="mb">
-        <h4 class="panel-title  border-bottom-small  visible">Bank Account Agreement</h4>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <p>By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and
-                            agree to these Terms and Conditions, and that this agreement constitutes a "writing signed
-                            by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds
-                            transfers (debits) from my account at the financial institution listed above, and to
-                            initiate </p>
-                    </div>
-                </div>
-
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="inlineCheckbox1" value="option1"> I hereby certify that I have read and
-                    understand the Terms and Conditions.
-                </label>
-
+      <h4 class="panel-title  border-bottom-small  visible">Bank Account Agreement</h4>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p>By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.</p>
             </div>
+          </div>
+
+          <div class="form-group is-required" validation="$ctrl.bankPaymentForm.acceptedAgreement" show-error="asClass">
+            <label class="checkbox-inline">
+              <input type="checkbox" name="acceptedAgreement" ng-model="$ctrl.bankPayment.acceptedAgreement" required value="true"> I Agree
+            </label>
+            <span class="help-block" validation="$ctrl.bankPaymentForm.acceptedAgreement" show-error="required" translate>You must accept this agreement to pay with a bank account</span>
+          </div>
+
         </div>
+      </div>
 
     </div>
 
-    <div class="closer">
-        <div class="row">
-            <div class="col-sm-5 hidden-xs">
-                <a href="#" class="btn btn-default">Return to Cart</a>
-            </div>
-            <div class="col-sm-5 col-sm-offset-2">
-                <a href="#" class="btn btn-primary pull-right btn-block-mobile">Continue to Review &amp; Submit</a>
-                <a href="#" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Return Cart</a>
-            </div>
-        </div>
-    </div>
+  </div> <!-- // mb -->
 
-</div> <!-- // mb -->
+</form>

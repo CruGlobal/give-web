@@ -1,15 +1,15 @@
-<div class="mb">
+<div class="mb_x">
   <div class="row">
     <div class="col-md-6">
       <button class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.paymentType = 'bankAccount'" ng-class="{'on': $ctrl.paymentType === 'bankAccount'}">
         Bank Account
-        <img src="{{ site.root }}assets/img/icon-bank.png" alt="Bank Account Icon"/>
+        <img src="/assets/img/icon-bank.png" alt="Bank Account Icon"/>
       </button>
     </div>
     <div class="col-md-6">
       <button class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.paymentType = 'creditCard'" ng-class="{'on': $ctrl.paymentType === 'creditCard'}">
         Credit Card
-        <img src="{{ site.root }}assets/img/icon-cc.png" alt="Credit Card Icon"/>
+        <img src="/assets/img/icon-cc.png" alt="Credit Card Icon"/>
       </button>
     </div>
   </div>
@@ -17,11 +17,23 @@
 
 <div class="tab-indiv cart-tab show" ng-if="$ctrl.paymentType === 'bankAccount'">
 
-  <checkout-bank-account></checkout-bank-account>
+  <checkout-bank-account submitted="$ctrl.submitted" on-save="$ctrl.onSave(success)"></checkout-bank-account>
 
 </div>
 <div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
 
-  <checkout-credit-card></checkout-credit-card>
+  <checkout-credit-card submitted="$ctrl.submitted" on-save="$ctrl.onSave(success)"></checkout-credit-card>
 
+</div>
+
+<div class="closer">
+  <div class="row">
+    <div class="col-sm-5 hidden-xs">
+      <a href="/checkout-step-1/" class="btn btn-default">Previous Step</a>
+    </div>
+    <div class="col-sm-5 col-sm-offset-2">
+      <button class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = true">Continue to Review &amp; Submit</button>
+      <a href="/checkout-step-1/" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Previous Step</a>
+    </div>
+  </div>
 </div>
