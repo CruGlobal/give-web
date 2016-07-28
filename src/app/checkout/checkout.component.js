@@ -30,6 +30,10 @@ class CheckoutController{
     this.testRequests();
   }
 
+  changeStep(newStep){
+    this.checkoutStep = newStep;
+  }
+
   testRequests(){
     this.designationsService.createSearch('a')
       .mergeMap((id) => {

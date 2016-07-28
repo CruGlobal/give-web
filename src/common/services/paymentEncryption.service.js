@@ -15,9 +15,9 @@ class PaymentEncryption {
 
   validateRoutingNumber(){
     return (routingNumber) => {
-      if(isEmpty(routingNumber.toString())) return true; // Let other validators handle empty condition
-
       routingNumber = this.stripNonNumbers(routingNumber);
+      if(isEmpty(routingNumber)) return true; // Let other validators handle empty condition
+
       if (routingNumber.length !== 9) {
         return false;
       }
@@ -35,7 +35,7 @@ class PaymentEncryption {
 
   validateCardNumber(){
     return (cardNumber) => {
-      if(isEmpty(cardNumber.toString())) return true; // Let other validators handle empty condition
+      if(isEmpty((cardNumber || '').toString())) return true; // Let other validators handle empty condition
 
       return ccp.validateCardNumber(cardNumber) === null;
     };
