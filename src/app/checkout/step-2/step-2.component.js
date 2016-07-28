@@ -20,7 +20,7 @@ class Step2Controller{
 
   onSave(success){
     if(success){
-      this.$log.info('succeeded validation - need to go to review');
+      this.changeStep({newStep: 'review'});
     }else{
       this.submitted = false;
     }
@@ -36,5 +36,8 @@ export default angular
   ])
   .component(componentName, {
     controller: Step2Controller,
-    templateUrl: template.name
+    templateUrl: template.name,
+    bindings: {
+      changeStep: '&'
+    }
   });

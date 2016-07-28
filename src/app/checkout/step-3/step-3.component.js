@@ -8,7 +8,7 @@ class Step3Controller{
 
   /* @ngInject */
   constructor(){
-
+    //this.changeStep({newStep: 'payment'}); TODO: put this on a go back action somewhere
   }
 
 }
@@ -19,5 +19,8 @@ export default angular
   ])
   .component(componentName, {
     controller: Step3Controller,
-    templateUrl: template.name
+    templateUrl: template.name,
+    bindings: {
+      changeStep: '&'
+    }
   });

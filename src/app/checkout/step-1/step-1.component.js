@@ -29,8 +29,7 @@ class Step1Controller{
     }
     Observable.forkJoin(requests)
       .subscribe(() => {
-        //go to Step 2
-        this.checkoutStep = 'payment';
+        this.changeStep({newStep: 'payment'});
       });
   }
 
@@ -69,6 +68,6 @@ export default angular
     controller: Step1Controller,
     templateUrl: template.name,
     bindings: {
-      checkoutStep: '='
+      changeStep: '&'
     }
   });

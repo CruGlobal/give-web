@@ -20,14 +20,20 @@ let componentName = 'checkout';
 class CheckoutController{
 
   /* @ngInject */
-  constructor($log, cartService, designationsService){
+  constructor($window, $log, cartService, designationsService){
     this.$log = $log;
+    this.$window = $window;
     this.cartService = cartService;
     this.designationsService = designationsService;
 
     this.checkoutStep = 'contact';
 
     this.testRequests();
+  }
+
+  changeStep(newStep){
+    this.$window.scrollTo(0, 0);
+    this.checkoutStep = newStep;
   }
 
   testRequests(){

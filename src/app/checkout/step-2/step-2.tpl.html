@@ -29,11 +29,11 @@
 <div class="closer">
   <div class="row">
     <div class="col-sm-5 hidden-xs">
-      <a href="/checkout-step-1/" class="btn btn-default">Previous Step</a>
+      <button class="btn btn-default" ng-click="$ctrl.changeStep({newStep: 'contact'})">Previous Step</button>
     </div>
     <div class="col-sm-5 col-sm-offset-2">
       <button class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = true">Continue to Review &amp; Submit</button>
-      <a href="/checkout-step-1/" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Previous Step</a>
+      <button class="btn btn-link btn-block visible-xs" ng-click="$ctrl.changeStep({newStep: 'contact'})"><i class="fa fa-angle-left"></i> Previous Step</button>
     </div>
   </div>
 </div>
