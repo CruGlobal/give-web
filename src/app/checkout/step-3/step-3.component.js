@@ -1,6 +1,7 @@
 import angular from 'angular';
 
 import cartService from 'common/services/api/cart.service';
+import orderService from 'common/services/api/order.service';
 
 import template from './step-3.tpl';
 
@@ -9,8 +10,9 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(cartService){
+  constructor(cartService, orderService){
     this.cartService = cartService;
+    this.orderService = orderService;
 
     this.init();
   }
@@ -20,13 +22,19 @@ class Step3Controller{
       .subscribe((data) => {
         this.donorDetails = data;
       });
+
+    this.orderService.getCurrentPayments()
+      .subscribe((data) => {
+        this.bankPayment = data;
+      });
   }
 }
 
 export default angular
   .module(componentName, [
     template.name,
-    cartService.name
+    cartService.name,
+    orderService.name
   ])
   .component(componentName, {
     controller: Step3Controller,
