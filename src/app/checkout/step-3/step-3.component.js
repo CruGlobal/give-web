@@ -1,5 +1,8 @@
 import angular from 'angular';
 
+import cartService from 'common/services/api/cart.service';
+import orderService from 'common/services/api/order.service';
+
 import template from './step-3.tpl';
 
 let componentName = 'checkoutStep3';
@@ -7,20 +10,37 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(){
-    //this.changeStep({newStep: 'payment'}); TODO: put this on a go back action somewhere
+  constructor(cartService, orderService){
+    this.cartService = cartService;
+    this.orderService = orderService;
+
+    this.init();
   }
 
+  init(){
+    this.cartService.getDonorDetails()
+      .subscribe((data) => {
+        this.donorDetails = data;
+      });
+
+    this.orderService.getCurrentPayments()
+      .subscribe((data) => {
+        this.bankPayment = data;
+      });
+  }
 }
 
 export default angular
   .module(componentName, [
-    template.name
+    template.name,
+    cartService.name,
+    orderService.name
   ])
   .component(componentName, {
     controller: Step3Controller,
     templateUrl: template.name,
     bindings: {
-      changeStep: '&'
+      changeStep: '&',
+      cartData: '<'
     }
   });

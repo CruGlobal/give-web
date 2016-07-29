@@ -19,8 +19,8 @@ class Step1Controller{
     this.init();
   }
 
-  submitDetails(valid){
-    if(!valid){ this.$window.scrollTo(0, 0); return; }
+  submitDetails(){
+    if(!this.detailsForm.$valid){ this.$window.scrollTo(0, 0); return; }
     let details = this.donorDetails;
 
     var requests = [this.cartService.updateDonorDetails(details.self.uri, details)];

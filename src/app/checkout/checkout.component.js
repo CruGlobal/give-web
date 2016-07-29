@@ -8,6 +8,7 @@ import step1 from './step-1/step-1.component';
 import step2 from './step-2/step-2.component';
 import step3 from './step-3/step-3.component';
 import thankYou from './thank-you/thank-you.component';
+import cartSummary from './cart-summary/cart-summary.component';
 import help from './help/help.component';
 
 import cartService from 'common/services/api/cart.service';
@@ -28,7 +29,8 @@ class CheckoutController{
 
     this.checkoutStep = 'contact';
 
-    this.testRequests();
+    // this.testRequests();
+    this.loadCart();
   }
 
   changeStep(newStep){
@@ -46,6 +48,13 @@ class CheckoutController{
         this.$log.info('search page', data);
       });
   }
+
+  loadCart(){
+    this.cartService.get()
+      .subscribe((data) => {
+        this.cartData = data;
+      });
+  }
 }
 
 export default angular
@@ -57,6 +66,7 @@ export default angular
     step3.name,
     thankYou.name,
     help.name,
+    cartSummary.name,
     cartService.name,
     designationsService.name
   ])

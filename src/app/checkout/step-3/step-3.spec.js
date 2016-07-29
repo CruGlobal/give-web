@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './step-3.component.js';
+import module from './step-3.component';
 
 describe('checkout', function() {
   describe('step 3', function() {

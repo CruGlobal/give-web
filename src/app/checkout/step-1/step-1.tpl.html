@@ -2,29 +2,29 @@
   <div class="mb_x">
     <div class="row">
       <div class="col-md-6">
-        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'individual'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'individual'}">Give as an Individual</a>
+        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'individual'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'individual'}" translate>Give as an Individual</a>
       </div>
       <div class="col-md-6">
-        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'organization'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'organization'}">Give as an Organization</a>
+        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'organization'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'organization'}" translate>Give as an Organization</a>
       </div>
     </div>
   </div>
 
-  <form novalidate ng-submit="showErrors = true; $ctrl.submitDetails(donorDetails.$valid);" name="donorDetails">
+  <form novalidate ng-submit="$ctrl.submitDetails();" name="$ctrl.detailsForm">
     <div class="mb">
-      <h4 class="panel-title  border-bottom-small  visible">Your Information</h4>
+      <h4 class="panel-title  border-bottom-small  visible" translate>Your Information</h4>
 
       <div class="row">
         <div class="col-sm-6">
           <div class="form-group  form-group-default">
-            <label>Title</label>
+            <label translate>Title</label>
             <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['name']['title']">
-              <option value="Mr.">Mr.</option>
-              <option value="Mrs.">Mrs.</option>
-              <option value="Ms.">Ms.</option>
-              <option value="Dr.">Dr.</option>
-              <option value="Pastor">Pastor</option>
-              <option value="Rev.">Rev.</option>
+              <option value="Mr." translate>Mr.</option>
+              <option value="Mrs." translate>Mrs.</option>
+              <option value="Ms." translate>Ms.</option>
+              <option value="Dr." translate>Dr.</option>
+              <option value="Pastor" translate>Pastor</option>
+              <option value="Rev." translate>Rev.</option>
             </select>
           </div>
         </div>
@@ -32,36 +32,36 @@
 
       <div class="row">
         <div class="col-sm-4">
-          <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.nameGivenName.$error.required}">
-            <label>First Name</label>
+          <div class="form-group is-required" validation="$ctrl.detailsForm.nameGivenName" show-error="asClass">
+            <label translate>First Name</label>
             <input type="text" class="form-control  form-control-subtle" name="nameGivenName" ng-model="$ctrl.donorDetails['name']['given-name']" required maxlength="50">
-            <span class="help-block" ng-if="showErrors && donorDetails.nameGivenName.$error.required">First Name is required</span>
+            <span class="help-block" validation="$ctrl.detailsForm.nameGivenName" show-error="required" translate>You must enter a First Name</span>
           </div>
         </div>
         <div class="col-sm-2">
           <div class="form-group">
-            <label>MI</label>
+            <label translate>MI</label>
             <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['name']['middle-initial']">
           </div>
         </div>
         <div class="col-sm-4">
-          <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.nameFamilyName.$error.required}">
-            <label>Last Name</label>
+          <div class="form-group is-required" validation="$ctrl.detailsForm.nameFamilyName" show-error="asClass">
+            <label translate>Last Name</label>
             <input type="text" class="form-control  form-control-subtle" name="nameFamilyName" ng-model="$ctrl.donorDetails['name']['family-name']" required maxlength="50">
-            <span class="help-block" ng-if="showErrors && donorDetails.nameFamilyName.$error.required">Last Name is required</span>
+            <span class="help-block" validation="$ctrl.detailsForm.nameFamilyName" show-error="required" translate>You must enter a Last Name</span>
           </div>
         </div>
         <div class="col-sm-2">
           <div class="form-group">
-            <label>Suffix</label>
+            <label translate>Suffix</label>
             <div class="form-group">
               <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['name']['suffix']">
                 <option></option>
-                <option>Jr.</option>
-                <option>Sr.</option>
-                <option>II</option>
-                <option>III</option>
-                <option>IV</option>
+                <option translate>Jr.</option>
+                <option translate>Sr.</option>
+                <option translate>II</option>
+                <option translate>III</option>
+                <option translate>IV</option>
               </select>
             </div>
           </div>
@@ -72,15 +72,15 @@
       <div class="row">
         <div class="col-sm-6">
           <div class="form-group">
-            <label>Phone</label>
+            <label translate>Phone</label>
             <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['phone-number']" maxlength="100">
           </div>
         </div>
         <div class="col-sm-6">
-          <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.email.$error.required}">
-            <label>Email Address</label>
+          <div class="form-group is-required" validation="$ctrl.detailsForm.email" show-error="asClass">
+            <label translate>Email Address</label>
             <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required maxlength="100">
-            <span class="help-block" ng-if="showErrors && donorDetails.email.$error.required">Email Address is required</span>
+            <span class="help-block" validation="$ctrl.detailsForm.email" show-error="required" translate>You must enter an Email Address</span>
           </div>
         </div>
       </div>
@@ -88,22 +88,23 @@
 
     <div class="mb_x">
       <div class="panel panel-default" ng-if="$ctrl.donorDetails['donor-type'] === 'individual'">
-        <div class="panel-title  panel-heading visible" ng-click="showSpouseDetails = !showSpouseDetails">Spouse Name (Optional)
+        <div class="panel-title  panel-heading visible" ng-click="showSpouseDetails = !showSpouseDetails" translate>
+          Spouse Name (Optional)
         </div>
         <div class="panel-collapse collapse in" ng-if="showSpouseDetails">
           <div class="panel-body">
             <div class="row">
               <div class="col-sm-6">
                 <div class="form-group">
-                  <label>Title</label>
+                  <label translate>Title</label>
                   <div class="form-group">
                     <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['title']">
-                      <option value="Mr.">Mr.</option>
-                      <option value="Mrs.">Mrs.</option>
-                      <option value="Ms.">Ms.</option>
-                      <option value="Dr.">Dr.</option>
-                      <option value="Pastor">Pastor</option>
-                      <option value="Rev.">Rev.</option>
+                      <option value="Mr." translate>Mr.</option>
+                      <option value="Mrs." translate>Mrs.</option>
+                      <option value="Ms." translate>Ms.</option>
+                      <option value="Dr." translate>Dr.</option>
+                      <option value="Pastor" translate>Pastor</option>
+                      <option value="Rev." translate>Rev.</option>
                     </select>
                   </div>
                 </div>
@@ -114,33 +115,33 @@
             <div class="row">
               <div class="col-sm-4">
                 <div class="form-group">
-                  <label>First Name</label>
+                  <label translate>First Name</label>
                   <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" maxlength="50">
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
-                  <label>MI</label>
+                  <label translate>MI</label>
                   <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" maxlength="50">
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="form-group">
-                  <label>Last Name</label>
+                  <label translate>Last Name</label>
                   <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" maxlength="50">
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
-                  <label>Suffix</label>
+                  <label translate>Suffix</label>
                   <div class="form-group">
                     <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['suffix']">
                       <option></option>
-                      <option>Jr.</option>
-                      <option>Sr.</option>
-                      <option>II</option>
-                      <option>III</option>
-                      <option>IV</option>
+                      <option translate>Jr.</option>
+                      <option translate>Sr.</option>
+                      <option translate>II</option>
+                      <option translate>III</option>
+                      <option translate>IV</option>
                     </select>
                   </div>
                 </div>
@@ -153,20 +154,20 @@
       </div>
 
       <div class="mb">
-        <h4 class="panel-title  border-bottom-small  visible">Mailing Address</h4>
+        <h4 class="panel-title  border-bottom-small  visible" translate>Mailing Address</h4>
         <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'organization'">
           <div class="col-sm-12">
-            <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.orgName.$error.required}">
-              <label>Organization Name</label>
+            <div class="form-group is-required" validation="$ctrl.detailsForm.orgName" show-error="asClass">
+              <label translate>Organization Name</label>
               <input type="text" class="form-control  form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" required>
-              <span class="help-block" ng-if="showErrors && donorDetails.orgName.$error.required">Organization Name is required</span>
+              <span class="help-block" validation="$ctrl.detailsForm.orgName" show-error="required" translate>You must enter an Organization Name</span>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.addressCountry.$error.required}">
-              <label>Country</label>
+            <div class="form-group is-required" validation="$ctrl.detailsForm.addressCountry" show-error="asClass">
+              <label translate>Country</label>
               <div class="form-group">
                 <select class="form-control  form-control-subtle"
                         name="addressCountry" required
@@ -175,17 +176,17 @@
                         ng-change="$ctrl.refreshRegions($ctrl.donorDetails['mailing-address']['country-name'])"
                         ng-init="$ctrl.refreshRegions($ctrl.donorDetails['mailing-address']['country-name'])">
                 </select>
-                <span class="help-block" ng-if="showErrors && donorDetails.addressCountry.$error.required">Country is required</span>
+                <span class="help-block" validation="$ctrl.detailsForm.addressCountry" show-error="required" translate>You must select a Country</span>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.addressStreetAddress.$error.required}">
-              <label>Address</label>
+            <div class="form-group is-required" validation="$ctrl.detailsForm.addressStreetAddress" show-error="asClass">
+              <label translate>Address</label>
               <input type="text" class="form-control  form-control-subtle" name="addressStreetAddress" ng-model="$ctrl.donorDetails['mailing-address']['street-address']" required maxlength="200">
-              <span class="help-block" ng-if="showErrors && donorDetails.addressStreetAddress.$error.required">Address is required</span>
+              <span class="help-block" validation="$ctrl.detailsForm.orgName" show-error="required" translate>You must enter an Address</span>
             </div>
           </div>
         </div>
@@ -198,32 +199,32 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.addressLocality.$error.required}">
-              <label>City</label>
+            <div class="form-group is-required" validation="$ctrl.detailsForm.addressLocality" show-error="asClass">
+              <label translate>City</label>
               <input type="text" class="form-control  form-control-subtle" name="addressLocality" ng-model="$ctrl.donorDetails['mailing-address']['locality']" required maxlength="50">
-              <span class="help-block" ng-if="showErrors && donorDetails.addressLocality.$error.required">City is required</span>
+              <span class="help-block" validation="$ctrl.detailsForm.addressLocality" show-error="required" translate>You must enter a City</span>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6" ng-if="$ctrl.regions.length">
-            <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.addressRegion.$error.required}">
-              <label>State / Region</label>
+            <div class="form-group is-required" validation="$ctrl.detailsForm.addressRegion" show-error="asClass">
+              <label translate>State / Region</label>
               <div class="form-group">
                 <select class="form-control  form-control-subtle"
                         name="addressRegion" required
                         ng-model="$ctrl.donorDetails['mailing-address']['region']"
                         ng-options="v['display-name'] | uppercase as v['display-name'] for v in $ctrl.regions">
                 </select>
-                <span class="help-block" ng-if="showErrors && donorDetails.addressRegion.$error.required">State is required</span>
+                <span class="help-block" validation="$ctrl.detailsForm.addressRegion" show-error="required" translate>You must select a State / Region</span>
               </div>
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-group is-required" ng-class="{'has-error': showErrors && donorDetails.addressPostalCode.$error.required}">
-              <label>Zip / Postal Code</label>
+            <div class="form-group is-required" validation="$ctrl.detailsForm.addressPostalCode" show-error="asClass">
+              <label translate>Zip / Postal Code</label>
               <input type="text" class="form-control  form-control-subtle" name="addressPostalCode" ng-model="$ctrl.donorDetails['mailing-address']['postal-code']" required max="20">
-              <span class="help-block" ng-if="showErrors && donorDetails.addressPostalCode.$error.required">Zip / Postal Code is required</span>
+              <span class="help-block" validation="$ctrl.detailsForm.addressPostalCode" show-error="required" translate>You must enter a Zip / Postal Code</span>
             </div>
           </div>
         </div>
@@ -232,11 +233,11 @@
       <div class="closer">
         <div class="row">
           <div class="col-sm-5 hidden-xs">
-            <a href="" class="btn btn-default">Return to Cart</a>
+            <a href="" class="btn btn-default" translate>Return to Cart</a>
           </div>
           <div class="col-sm-5 col-sm-offset-2">
-            <button type="submit" class="btn btn-primary pull-right btn-block-mobile">Continue to Payment Methods</button>
-            <a href="" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> Return Cart</a>
+            <button type="submit" class="btn btn-primary pull-right btn-block-mobile" translate>Continue to Payment Methods</button>
+            <a href="" class="btn btn-link btn-block visible-xs"><i class="fa fa-angle-left"></i> <translate>Return Cart</translate></a>
           </div>
         </div>
       </div>
