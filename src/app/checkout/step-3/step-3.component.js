@@ -1,5 +1,7 @@
 import angular from 'angular';
 
+import cartService from 'common/services/api/cart.service';
+
 import template from './step-3.tpl';
 
 let componentName = 'checkoutStep3';
@@ -23,7 +25,8 @@ class Step3Controller{
 
 export default angular
   .module(componentName, [
-    template.name
+    template.name,
+    cartService.name
   ])
   .component(componentName, {
     controller: Step3Controller,

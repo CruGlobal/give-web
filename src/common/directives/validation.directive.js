@@ -34,6 +34,7 @@ class Validation{
 
   watchErrors(){
     this.$scope.$watch('$ctrl.validation.$error', () => {
+      if(!this.validation){ return; }
       if(this.showError === 'asClass') {
         if (this.validation.$valid === true) {
           this.$element.addClass('has-success');
