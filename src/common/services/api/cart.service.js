@@ -113,13 +113,12 @@ function cart(apiService){
     });
   }
 
-  function addItem(itemId){
+  function addItem(id, data){
+    data.quantity = 1;
+
     return apiService.post({
-      path: ['itemfieldlineitems', 'items', apiService.scope, itemId],
-      data: {
-        quantity: 1,
-        amount: 25
-      }
+      path: ['itemfieldlineitems', 'items', apiService.scope, id],
+      data: data
     });
   }
 

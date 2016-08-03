@@ -1,6 +1,7 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
+import 'angular-bootstrap';
 
 import appConfig from 'common/app.config';
 
@@ -8,6 +9,7 @@ import primaryNavComponent from './nav/primary/primary-nav.component';
 import subNavComponent from './nav/sub/sub-nav.component';
 import cartComponent from '../cart/cart.component';
 import checkoutComponent from '../checkout/checkout.component';
+import productConfigComponent from '../productConfig/productConfig.component';
 
 import cartService from 'common/services/api/cart.service';
 
@@ -19,20 +21,9 @@ let componentName = 'main';
 class MainController{
 
   /* @ngInject */
-  constructor(cartService, $log, $state){
-    this.cartService = cartService;
-    this.$log = $log;
-    this.$state = $state;
-  }
+  constructor(){
 
-  addItemToCart(id){
-    this.cartService.addItem(id)
-      .subscribe((response) => {
-        this.$log.info('Added new item', response.data);
-        this.$state.reload();
-      });
   }
-
 }
 
 /* @ngInject */
@@ -58,7 +49,9 @@ export default angular
     subNavComponent.name,
     cartComponent.name,
     checkoutComponent.name,
+    productConfigComponent.name,
     'ui.router',
+    'ui.bootstrap',
     cartService.name
   ])
   .config(routingConfig)

@@ -4,7 +4,7 @@ import template from './cart-summary.tpl';
 
 let componentName = 'checkoutCartSummary';
 
-class CartSummmaryController{
+class CartSummaryController{
 
   /* @ngInject */
   constructor(){
@@ -18,7 +18,7 @@ export default angular
     template.name
   ])
   .component(componentName, {
-    controller: CartSummmaryController,
+    controller: CartSummaryController,
     templateUrl: template.name,
     bindings: {
       cartData: '<'
