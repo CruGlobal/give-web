@@ -8,7 +8,10 @@
           <div class="panel">
             <div class="panel-body">
               <h3 class="panel-name">Your Gift Cart</h3>
-              <p ng-if="!$ctrl.cartData.items.length">
+              <p ng-if="!$ctrl.cartData">
+                Loading...
+              </p>
+              <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length">
                 Your cart is empty
               </p>
               <form ng-if="$ctrl.cartData.items.length">

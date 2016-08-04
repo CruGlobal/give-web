@@ -1,4 +1,6 @@
 import angular from 'angular';
+import indexOf from 'lodash/indexOf';
+import range from 'lodash/range';
 
 import template from './productConfig.tpl';
 import templateModal from './productConfigModal.tpl';
@@ -9,12 +11,14 @@ let componentName = 'productConfig';
 class ProductConfigController{
 
   /* @ngInject */
-  constructor($uibModal) {
+  constructor($uibModal, $window) {
     this.$uibModal = $uibModal;
+    this.$window = $window;
   }
 
   configModal(){
     var productCode = this.productCode;
+    var $window = this.$window;
 
     this.$uibModal.open({
       templateUrl: templateModal.name,
@@ -23,12 +27,12 @@ class ProductConfigController{
       size: 'lg give-modal',
       resolve: {
         productData: [designationsService.name, function(designationsService){
-          return designationsService.productLookup(productCode);
+          return designationsService.productLookup(productCode).toPromise();
         }]
       }
     }).result.then(function () {
       //go to cart
-
+      $window.location.reload();
     });
   }
 }
@@ -40,10 +44,7 @@ class ModalInstanceCtrl{
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
-
-    productData.subscribe((data) => {
-      this.productData = data;
-    });
+    this.productData = productData;
 
     this.itemConfig = {
       amount: 100
@@ -52,7 +53,7 @@ class ModalInstanceCtrl{
 
   frequencyOrder(f){
     let order = ['NA', 'MON', 'QUARTERLY', 'ANNUAL', 'SEMIANNUAL'];
-    return _.indexOf(order, f.name);
+    return indexOf(order, f.name);
   }
 
   changeFrequency(productId){
@@ -70,7 +71,7 @@ class ModalInstanceCtrl{
 
   daysInMonth(month){
     var daysInMonth = new Date(2001, month, 0).getDate();
-    return _.range(1, daysInMonth + 1);
+    return range(1, daysInMonth + 1);
   }
 }
 

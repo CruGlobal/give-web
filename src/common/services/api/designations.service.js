@@ -1,6 +1,7 @@
 import angular from 'angular';
 import JSONPath from 'jsonpath';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 import apiService from '../api.service';
 
@@ -82,7 +83,7 @@ function designations(apiService){
         displayName: displayName,
         code: code,
         designationNumber: designationNumber
-      }
+      };
     });
   }
 }
