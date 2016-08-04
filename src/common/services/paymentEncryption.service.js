@@ -3,6 +3,7 @@ import _ from 'lodash';
 import ccp from 'common/lib/ccp';
 import { ccpKey } from 'common/app.constants';
 import isEmpty from 'lodash/isEmpty';
+import toString from 'lodash/toString';
 
 let serviceName = 'paymentEncryptionService';
 
@@ -15,12 +16,10 @@ class PaymentEncryption {
 
   validateRoutingNumber(){
     return (routingNumber) => {
-      routingNumber = this.stripNonNumbers(routingNumber);
+      routingNumber = toString(routingNumber);
       if(isEmpty(routingNumber)) return true; // Let other validators handle empty condition
+      if(routingNumber.length !== 9) return true; // Let other validators handle incorrect length condition
 
-      if (routingNumber.length !== 9) {
-        return false;
-      }
       let digits = routingNumber.split('');
       let multipliers = [3, 7, 1, 3, 7, 1, 3, 7, 1];
 
@@ -35,7 +34,8 @@ class PaymentEncryption {
 
   validateCardNumber(){
     return (cardNumber) => {
-      if(isEmpty((cardNumber || '').toString())) return true; // Let other validators handle empty condition
+      cardNumber = toString(cardNumber);
+      if(isEmpty(cardNumber)) return true; // Let other validators handle empty condition
 
       return ccp.validateCardNumber(cardNumber) === null;
     };
@@ -43,9 +43,19 @@ class PaymentEncryption {
 
   validateCardSecurityCode(){
     return (securityCode) => {
-      if(isEmpty(securityCode.toString())) return true; // Let other validators handle empty condition
+      securityCode = toString(securityCode);
+      if(isEmpty(securityCode)) return true; // Let other validators handle empty condition
 
       return ccp.validateCardSecurityCode(securityCode) === null;
+    };
+  }
+
+  validateNumbersOnly(){
+    return (number) => {
+      number = toString(number);
+      if(isEmpty(number)) return true; // Let other validators handle empty condition
+
+      return number.match(/^\d+$/) !== null;
     };
   }
 
@@ -55,14 +65,6 @@ class PaymentEncryption {
 
   encrypt(number){
     return ccp.encrypt(number);
-  }
-
-  stripNonNumbers(number){
-    if(number === undefined || number === null){
-      number  = '';
-    }
-    number = number.toString();
-    return number.replace(/\D/g, '');
   }
 
 }

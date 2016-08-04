@@ -39,8 +39,10 @@ class BankAccountController{
 
   addCustomValidators(){
     this.bankPaymentForm.routingNumber.$validators.routingNumber = this.paymentEncryptionService.validateRoutingNumber();
+    this.bankPaymentForm.routingNumber.$validators.numbersOnly = this.paymentEncryptionService.validateNumbersOnly();
+    this.bankPaymentForm.accountNumber.$validators.numbersOnly = this.paymentEncryptionService.validateNumbersOnly();
     this.bankPaymentForm.verifyAccountNumber.$validators.verifyAccountNumber = (verifyAccountNumber) => {
-      return this.bankPayment.accountNumber === verifyAccountNumber || isEmpty(verifyAccountNumber);
+      return this.bankPayment.accountNumber === verifyAccountNumber || isEmpty(this.bankPayment.accountNumber) || isEmpty(verifyAccountNumber);
     };
 
     this.bankPaymentForm.accountNumber.$viewChangeListeners.push(() => {

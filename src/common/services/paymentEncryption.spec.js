@@ -15,13 +15,19 @@ describe('payment encryption service', () => {
   });
 
   describe('validateRoutingNumber', () => {
-    it('to return false for numbers shorter than 9', () => {
-      expect(self.paymentEncryptionService.validateRoutingNumber()(1)).toEqual(false);
-      expect(self.paymentEncryptionService.validateRoutingNumber()(12345678)).toEqual(false);
+    it('to return true for empty values to let other validators handle empty condition', () => {
+      expect(self.paymentEncryptionService.validateRoutingNumber()()).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(undefined)).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(null)).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()('')).toEqual(true);
     });
-    it('to return false for numbers longer than 9', () => {
-      expect(self.paymentEncryptionService.validateRoutingNumber()(1234567890)).toEqual(false);
-      expect(self.paymentEncryptionService.validateRoutingNumber()(1234567890123456)).toEqual(false);
+    it('to return true for numbers shorter than 9 to let other validators handle incorrect length', () => {
+      expect(self.paymentEncryptionService.validateRoutingNumber()(1)).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(12345678)).toEqual(true);
+    });
+    it('to return true for numbers longer than 9 to let other validators handle incorrect length', () => {
+      expect(self.paymentEncryptionService.validateRoutingNumber()(1234567890)).toEqual(true);
+      expect(self.paymentEncryptionService.validateRoutingNumber()(1234567890123456)).toEqual(true);
     });
     it('to return true for valid routing numbers', () => {
       expect(self.paymentEncryptionService.validateRoutingNumber()(267084131)).toEqual(true);
@@ -74,20 +80,6 @@ describe('payment encryption service', () => {
       expect(self.paymentEncryptionService.encrypt('123').length).toBeGreaterThan(100);
       expect(self.paymentEncryptionService.encrypt('1234').length).toBeGreaterThan(100);
       expect(self.paymentEncryptionService.encrypt('123456789').length).toBeGreaterThan(100);
-    });
-  });
-
-  describe('stripNonNumbers', () => {
-    it('to convert imputs to strings', () => {
-      expect(self.paymentEncryptionService.stripNonNumbers()).toEqual('');
-      expect(self.paymentEncryptionService.stripNonNumbers(null)).toEqual('');
-      expect(self.paymentEncryptionService.stripNonNumbers(1)).toEqual('1');
-      expect(self.paymentEncryptionService.stripNonNumbers(1234567890)).toEqual('1234567890');
-      expect(self.paymentEncryptionService.stripNonNumbers('123456')).toEqual('123456');
-    });
-    it('to remove all non numbers', () => {
-      expect(self.paymentEncryptionService.stripNonNumbers('q2fha3w78')).toEqual('2378');
-      expect(self.paymentEncryptionService.stripNonNumbers('*&^71q@)(h(201JK&@')).toEqual('71201');
     });
   });
 });
