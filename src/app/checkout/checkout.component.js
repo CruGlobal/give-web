@@ -16,6 +16,8 @@ import designationsService from 'common/services/api/designations.service';
 
 import template from './checkout.tpl';
 
+import localDevNav from 'common/localDev/nav/local-dev-nav.component';
+
 let componentName = 'checkout';
 
 class CheckoutController{
@@ -68,7 +70,8 @@ export default angular
     help.name,
     cartSummary.name,
     cartService.name,
-    designationsService.name
+    designationsService.name,
+    localDevNav.name
   ])
   .component(componentName, {
     controller: CheckoutController,

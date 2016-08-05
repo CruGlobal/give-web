@@ -32,26 +32,9 @@ System.config({
         "angular"
       ]
     },
-    "github:angular-ui/ui-router@0.2.18/angular-ui-router": {
-      "deps": [
-        "angular"
-      ]
-    },
     "github:ocombe/ocLazyLoad@1.0.9/dist/ocLazyLoad": {
       "deps": [
         "angular"
-      ]
-    },
-    "npm:ui-router-extras@0.0.14/release/modular/ct-ui-router-extras.core": {
-      "format": "global",
-      "deps": [
-        "angular"
-      ]
-    },
-    "npm:ui-router-extras@0.0.14/release/modular/ct-ui-router-extras.future": {
-      "format": "global",
-      "deps": [
-        "npm:ui-router-extras@0.0.14/release/modular/ct-ui-router-extras.core"
       ]
     }
   },
@@ -62,7 +45,6 @@ System.config({
     "angular-bootstrap": "npm:angular-bootstrap-npm@0.14.3",
     "angular-environment": "npm:angular-environment@1.0.4",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.5",
-    "angular-ui-router": "github:angular-ui/ui-router@0.2.18",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "clean-css": "npm:clean-css@3.4.12",
@@ -75,7 +57,6 @@ System.config({
     "rxjs": "npm:rxjs@5.0.0-beta.10",
     "scss": "github:KevCJones/plugin-scss@0.2.11",
     "systemjs/plugin-css": "github:systemjs/plugin-css@0.1.21",
-    "ui-router-extras": "npm:ui-router-extras@0.0.14",
     "github:KevCJones/plugin-scss@0.2.11": {
       "autoprefixer": "npm:autoprefixer@6.3.7",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
@@ -85,9 +66,6 @@ System.config({
       "reqwest": "github:ded/reqwest@2.0.5",
       "sass.js": "npm:sass.js@0.9.10",
       "url": "github:jspm/nodelibs-url@0.1.0"
-    },
-    "github:angular-ui/ui-router@0.2.18": {
-      "angular": "github:angular/bower-angular@1.5.5"
     },
     "github:angular/bower-angular-mocks@1.5.5": {
       "angular": "github:angular/bower-angular@1.5.5"
@@ -908,9 +886,6 @@ System.config({
     "npm:uglify-to-browserify@1.0.2": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "stream": "github:jspm/nodelibs-stream@0.1.0"
-    },
-    "npm:ui-router-extras@0.0.14": {
-      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:url@0.10.3": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",

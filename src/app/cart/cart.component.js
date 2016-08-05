@@ -1,5 +1,6 @@
 import 'babel/external-helpers';
 import angular from 'angular';
+import 'angular-bootstrap';
 
 import appConfig from 'common/app.config';
 
@@ -8,6 +9,10 @@ import designationsService from 'common/services/api/designations.service';
 
 import template from './cart.tpl';
 import templateModal from 'app/productConfig/productConfigModal.tpl';
+
+//local dev
+import localDevNav from 'common/localDev/nav/local-dev-nav.component';
+import localDevTools from 'common/localDev/tools/local-dev-tools.component';
 
 let componentName = 'cart';
 
@@ -64,8 +69,13 @@ class CartController{
 export default angular
   .module(componentName, [
     template.name,
+    templateModal.name,
     appConfig.name,
-    cartService.name
+    cartService.name,
+    designationsService.name,
+    'ui.bootstrap',
+    localDevNav.name,
+    localDevTools.name
   ])
   .component(componentName, {
     controller: CartController,

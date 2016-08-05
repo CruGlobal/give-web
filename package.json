@@ -69,7 +69,6 @@
       "angular": "github:angular/bower-angular@^1.5.7",
       "angular-bootstrap": "npm:angular-bootstrap-npm@^0.14.3",
       "angular-environment": "npm:angular-environment@^1.0.4",
-      "angular-ui-router": "github:angular-ui/ui-router@^0.2.15",
       "css": "github:systemjs/plugin-css@^0.1.21",
       "jsencrypt": "npm:jsencrypt@^2.3.1",
       "json": "github:systemjs/plugin-json@^0.1.2",
@@ -77,7 +76,6 @@
       "lodash": "npm:lodash@^4.13.1",
       "rxjs": "npm:rxjs@^5.0.0-beta.10",
       "scss": "github:KevCJones/plugin-scss@^0.2.11",
-      "ui-router-extras": "npm:ui-router-extras@^0.0.14"
     },
     "devDependencies": {
       "angular-mocks": "github:angular/bower-angular-mocks@^1.5.7",
