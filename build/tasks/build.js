@@ -9,7 +9,7 @@ var compilerOptions = require('../babelOptions');
 gulp.task('build', function (callback) {
   return $.runSequence(
     'clean',
-    ['scss', 'html', 'es6', 'move'],
+    ['scss', 'html'/*, 'es6', 'move'*/],
     callback
   );
 });
@@ -31,7 +31,7 @@ gulp.task('es6', function () {
 gulp.task('html', function () {
   return gulp.src(paths.templates)
     .pipe($.plumber())
-    .pipe($.changed(paths.output, { extension: '.html' }))
+    .pipe($.changed(paths.srcDir, { extension: '.html' }))
     .pipe($.minifyHtml({
       empty: true,
       spare: true,
@@ -43,18 +43,18 @@ gulp.task('html', function () {
         "   $templateCache.put('<%= template.url %>',\n    '<%= template.prettyEscapedContent %>');\n" +
         "}]);\n"
     }))
-    .pipe($.babel(compilerOptions))
-    .pipe(gulp.dest('src/'));
+    //.pipe($.babel(compilerOptions))
+    .pipe(gulp.dest(paths.srcDir));
 });
 
 gulp.task('scss', function () {
   return gulp.src(paths.scss)
     .pipe($.plumber())
-    .pipe($.changed(paths.output, {extension: '.css'}))
+    .pipe($.changed(paths.srcDir, {extension: '.css'}))
     .pipe($.sourcemaps.init())
     .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
     .pipe($.sass())
     .pipe($.sourcemaps.write("."))
-    .pipe(gulp.dest('src/'))
+    .pipe(gulp.dest(paths.srcDir))
     .pipe($.browserSync.reload({ stream: true }));
 });
