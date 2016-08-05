@@ -75,7 +75,7 @@
       "jsonpath": "npm:jsonpath@^0.2.6",
       "lodash": "npm:lodash@^4.13.1",
       "rxjs": "npm:rxjs@^5.0.0-beta.10",
-      "scss": "github:KevCJones/plugin-scss@^0.2.11",
+      "scss": "github:KevCJones/plugin-scss@^0.2.11"
     },
     "devDependencies": {
       "angular-mocks": "github:angular/bower-angular-mocks@^1.5.7",
