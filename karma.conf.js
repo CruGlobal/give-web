@@ -63,7 +63,6 @@ module.exports = function(config) {
 
     proxies: {
       '/test': '/base/test',
-      '/dist': '/base/dist',
       '/src': '/base/src',
       '/node_modules': '/base/node_modules'
     },
