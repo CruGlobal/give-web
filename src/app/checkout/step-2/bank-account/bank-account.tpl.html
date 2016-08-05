@@ -43,9 +43,8 @@
       <div class="col-sm-4">
         <div class="form-group is-required" validation="$ctrl.bankPaymentForm.accountNumber" show-error="asClass">
           <label>Account #</label>
-          <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" required ng-minlength="2" ng-maxlength="17">
+          <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" required ng-maxlength="17">
           <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="required" translate>You must enter an account number</span>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="minlength" translate>This account number is too short</span>
           <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="maxlength" translate>This account number is too long</span>
           <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="numbersOnly" translate>This account number should only contain numbers</span>
         </div>

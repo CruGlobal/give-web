@@ -5,13 +5,14 @@ import { ccpKey } from 'common/app.constants';
 import isEmpty from 'lodash/isEmpty';
 import toString from 'lodash/toString';
 
-let serviceName = 'paymentEncryptionService';
+let serviceName = 'paymentValidationService';
 
-class PaymentEncryption {
+class PaymentValidation {
 
   /*@ngInject*/
   constructor(){
     ccp.initialize(ccpKey);
+    this.ccp = ccp;
   }
 
   validateRoutingNumber(){
@@ -37,7 +38,7 @@ class PaymentEncryption {
       cardNumber = toString(cardNumber);
       if(isEmpty(cardNumber)) return true; // Let other validators handle empty condition
 
-      return ccp.validateCardNumber(cardNumber) === null;
+      return (new this.ccp.CardNumber(cardNumber)).validate() === null;
     };
   }
 
@@ -46,7 +47,7 @@ class PaymentEncryption {
       securityCode = toString(securityCode);
       if(isEmpty(securityCode)) return true; // Let other validators handle empty condition
 
-      return ccp.validateCardSecurityCode(securityCode) === null;
+      return (new this.ccp.CardSecurityCode(securityCode)).validate() === null;
     };
   }
 
@@ -59,18 +60,10 @@ class PaymentEncryption {
     };
   }
 
-  getCardType(cardNumber){
-    return ccp.getCardType(cardNumber);
-  }
-
-  encrypt(number){
-    return ccp.encrypt(number);
-  }
-
 }
 
 export default angular
   .module(serviceName, [
 
   ])
-  .service(serviceName, PaymentEncryption);
+  .service(serviceName, PaymentValidation);
