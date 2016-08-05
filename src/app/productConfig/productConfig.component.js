@@ -1,6 +1,4 @@
 import angular from 'angular';
-import indexOf from 'lodash/indexOf';
-import range from 'lodash/range';
 
 import template from './productConfig.tpl';
 import templateModal from './productConfigModal.tpl';
@@ -22,13 +20,18 @@ class ProductConfigController{
 
     this.$uibModal.open({
       templateUrl: templateModal.name,
-      controller: ModalInstanceCtrl,
+      controller: require('./modalCtrl'),
       controllerAs: '$ctrl',
       size: 'lg give-modal',
       resolve: {
         productData: [designationsService.name, function(designationsService){
           return designationsService.productLookup(productCode).toPromise();
-        }]
+        }],
+        itemConfig: function(){
+          return {
+            amount: 100
+          };
+        }
       }
     }).result.then(function () {
       //go to cart
@@ -37,43 +40,7 @@ class ProductConfigController{
   }
 }
 
-class ModalInstanceCtrl{
 
-  /* @ngInject */
-  constructor($uibModalInstance, designationsService, cartService, productData) {
-    this.$uibModalInstance = $uibModalInstance;
-    this.designationsService = designationsService;
-    this.cartService = cartService;
-    this.productData = productData;
-
-    this.itemConfig = {
-      amount: 100
-    };
-  }
-
-  frequencyOrder(f){
-    let order = ['NA', 'MON', 'QUARTERLY', 'ANNUAL', 'SEMIANNUAL'];
-    return indexOf(order, f.name);
-  }
-
-  changeFrequency(productId){
-    this.designationsService.productLookup(productId, true).subscribe((data) => {
-      this.productData = data;
-    });
-  }
-
-  addToCart(){
-    this.cartService.addItem(this.productData.id, this.itemConfig)
-      .subscribe(() => {
-        this.$uibModalInstance.close();
-      });
-  }
-
-  daysInMonth(month){
-    var daysInMonth = new Date(2001, month, 0).getDate();
-    return range(1, daysInMonth + 1);
-  }
-}
 
 export default angular
   .module(componentName, [

@@ -44,8 +44,11 @@ function cart(apiService){
           var frequencyInterval = JSONPath.query(element, "$._rate[0].recurrence.interval")[0];
           var frequencyTitle = JSONPath.query(element, "$._rate[0].recurrence.display")[0];
           var price = JSONPath.query(element, "$._rate[0].cost.display")[0];
-          // var code = JSONPath.query(element, "$._item[0]._code[0].code")[0];
+          var code = JSONPath.query(element, "$._item[0]._code[0].code")[0];
           var designationNumber = JSONPath.query(element, "$._item[0]._definition[0].details[?(@.name=='replacement_designation_id')]['display-value']")[0];
+          var itemConfig = JSONPath.query(element, "$._itemfields[0]")[0];
+          delete itemConfig.links;
+          delete itemConfig.self;
 
           var itemAmount = 0;
           if (frequencyTitle && frequencyTitle === "Single"){
@@ -61,8 +64,10 @@ function cart(apiService){
 
           items.push({
             uri: itemResource,
+            code: code,
             displayName: displayName,
             price: price,
+            config: itemConfig,
             frequency: frequencyTitle,
             amount: itemAmount,
             designationNumber: designationNumber
