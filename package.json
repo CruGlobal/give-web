@@ -36,6 +36,7 @@
     "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-systemjs-resolver": "0.0.7",
     "gulp-uglify": "^1.5.3",
+    "gulp-flatten": "^0.3.0",
     "isparta": "^4.0.0",
     "jasmine-core": "^2.4.1",
     "jspm": "^0.16.39",
@@ -69,15 +70,13 @@
       "angular": "github:angular/bower-angular@^1.5.7",
       "angular-bootstrap": "npm:angular-bootstrap-npm@^0.14.3",
       "angular-environment": "npm:angular-environment@^1.0.4",
-      "angular-ui-router": "github:angular-ui/ui-router@^0.2.15",
       "css": "github:systemjs/plugin-css@^0.1.21",
       "jsencrypt": "npm:jsencrypt@^2.3.1",
       "json": "github:systemjs/plugin-json@^0.1.2",
       "jsonpath": "npm:jsonpath@^0.2.6",
       "lodash": "npm:lodash@^4.13.1",
       "rxjs": "npm:rxjs@^5.0.0-beta.10",
-      "scss": "github:KevCJones/plugin-scss@^0.2.11",
-      "ui-router-extras": "npm:ui-router-extras@^0.0.14"
+      "scss": "github:KevCJones/plugin-scss@^0.2.11"
     },
     "devDependencies": {
       "angular-mocks": "github:angular/bower-angular-mocks@^1.5.7",
