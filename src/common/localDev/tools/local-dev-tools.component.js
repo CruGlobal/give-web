@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-bootstrap';
 
 import productConfigComponent from 'app/productConfig/productConfig.component';
 
@@ -9,7 +10,8 @@ let componentName = 'localDevTools';
 export default angular
   .module(componentName, [
     productConfigComponent.name,
-    template.name
+    template.name,
+    'ui.bootstrap'
   ])
   .component(componentName, {
     templateUrl: template.name

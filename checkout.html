@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="dist/common/localDev/main.css">
   </head>
   <body >
-    <div ng-cloak ng-app="checkout">
+    <div ng-cloak ng-app="localDev">
       <local-dev-nav></local-dev-nav>
 
       <checkout></checkout>
@@ -20,11 +20,12 @@
     <!-- endbuild -->
 
     <!-- build:prod -->
-    <!-- <script src="cart.js?bust={{date}}"></script> -->
+    <!-- <script src="common.js"></script> -->
+    <!-- <script src="localDev.js"></script> -->
     <!-- endbuild -->
 
     <script>
-      System.import('app/checkout/checkout.component');
+      System.import('common/localDev/localDev.component');
     </script>
 
     <script>

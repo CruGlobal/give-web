@@ -6,33 +6,18 @@ var $ = require('gulp-load-plugins')({
 var paths = require('../paths');
 
 gulp.task('cache-bust', function () {
-  var cacheBust = "var systemLocate = System.locate; System.locate = function(load) { var cacheBust = '?bust=' + " + Math.round(new Date() / 1000) +"; return Promise.resolve(systemLocate.call(this, load)).then(function(address) { if (address.indexOf('bust') > -1 || address.indexOf('css') > -1 || address.indexOf('json') > -1) return address; return address + cacheBust; });}\n"
   return gulp.src('dist/app/app.js')
     .pipe($.insert.prepend("window.prod = true;\n"))
-    .pipe($.insert.prepend(cacheBust))
     .pipe(gulp.dest('dist/app'));
 });
 
 gulp.task('inline-systemjs', function () {
-  var app = gulp.src([
+  return gulp.src([
       './jspm_packages/es6-module-loader.js',
       './jspm_packages/system.js',
-      './system.config.js',
-      'dist/bundles/main.js'
+      './system.config.js'
     ])
-    //.pipe($.uglify())
-    .pipe($.concat('main.js'));
-
-  var bundles = gulp.src([
-      './jspm_packages/es6-module-loader.js',
-      './jspm_packages/system.js',
-      './system.config.js',
-      'dist/bundles/common.js'
-    ])
-    //.pipe($.uglify())
-    .pipe($.concat('common.js'));
-
-  return $.mergeStream(app, bundles)
+    .pipe($.concat('common.js'))
     .pipe(gulp.dest(paths.outputBundles));
 });
 
@@ -44,32 +29,31 @@ gulp.task('release', function (callback) {
     'cache-bust',
     'replace',
     'inline-systemjs',
+    'copyCss',
     callback
   );
 });
 
 gulp.task('bundle', function () {
-  var bundles = [
-    'app/cart/cart.component',
-    'app/checkout/checkout.component'
-  ];
-  var commonFilesForBundles = bundles.join(' & ');
   return $.jspmBuild({
       bundles: [
-        { src: 'app/main/main.component',
-          dst: 'main.js'
+        { src: 'common/localDev/localDev.component',
+          dst: 'localDev.js'
         },
-        { src: commonFilesForBundles,
-          dst: 'common.js'
-        },
-        { src: 'app/cart/cart.component - ' + commonFilesForBundles,
+        { src: 'app/cart/cart.component',
           dst: 'cart.js'
         },
-        { src: 'app/checkout/checkout.component - ' + commonFilesForBundles,
+        { src: 'app/checkout/checkout.component',
           dst: 'checkout.js'
         }
       ]
     })
     .pipe($.uglify())
+    .pipe(gulp.dest(paths.outputBundles));
+});
+
+gulp.task('copyCss', function () {
+  return gulp.src('dist/**/*.css')
+    .pipe($.flatten())
     .pipe(gulp.dest(paths.outputBundles));
 });

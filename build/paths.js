@@ -1,6 +1,6 @@
 module.exports = {
   source: ['src/**/*.js', '!**/*.spec.js'],
-  html: ['src/**/*.html', 'index.html'],
+  html: ['src/**/*.html', '*.html'],
   json: 'src/**/*.json',
   templates: 'src/**/*.html',
   scss: ['src/**/*.scss'],

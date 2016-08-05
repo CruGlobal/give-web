@@ -3,25 +3,24 @@ var $ = require('gulp-load-plugins')();
 var paths = require('../paths');
 
 gulp.task('replace', function(){
-  return gulp.src('./index.html')
+  return gulp.src('./*.html')
     .pipe($.replaceTask({
-      usePrefix: false,
       patterns: [
         {
-          match: '<script src="jspm_packages/system.js"></script>',
-          replacement: '<!-- <script src="jspm_packages/system.js"></script> -->'
+          match: /<!-- build:dev -->(.|\s)*?<!-- endbuild -->/,
+          replacement: ''
         },
         {
-          match: '<script src="system.config.js"></script>',
-          replacement: '<!-- <script src="system.config.js"></script> -->'
+          match: /<!-- <script src="common.js"><\/script> -->/,
+          replacement: '<script src="common.js"></script>'
         },
         {
-          match: '<!-- <script src="main.js?bust={{date}}"></script> -->',
-          replacement: '<script src="main.js?bust={{date}}"></script>'
+          match: /<!-- <script src="localDev.js"><\/script> -->/,
+          replacement: '<script src="localDev.js"></script>'
         },
         {
-          match: '{{date}}',
-          replacement: Math.round(new Date() / 1000)
+          match: /<link rel="stylesheet" type="text\/css" href="dist\/common\/localDev\/main.css">/,
+          replacement: '<link rel="stylesheet" type="text/css" href="main.css">'
         }
       ]
     }))
