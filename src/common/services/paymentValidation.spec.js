@@ -62,4 +62,14 @@ describe('payment validation service', () => {
       expect(self.paymentValidationService.validateCardSecurityCode()('1234')).toEqual(true);
     });
   });
+
+  describe('stripNonDigits', () => {
+    it('to remove all non digits from a string', () => {
+      expect(self.paymentValidationService.stripNonDigits('12')).toEqual('12');
+      expect(self.paymentValidationService.stripNonDigits('12345')).toEqual('12345');
+      expect(self.paymentValidationService.stripNonDigits('&1a23-4 5')).toEqual('12345');
+      expect(self.paymentValidationService.stripNonDigits('1234567890')).toEqual('1234567890');
+      expect(self.paymentValidationService.stripNonDigits('!@#1 23_4567-89 0 ')).toEqual('1234567890');
+    });
+  });
 });

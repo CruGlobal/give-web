@@ -51,13 +51,8 @@ class PaymentValidation {
     };
   }
 
-  validateNumbersOnly(){
-    return (number) => {
-      number = toString(number);
-      if(isEmpty(number)) return true; // Let other validators handle empty condition
-
-      return number.match(/^\d+$/) !== null;
-    };
+  stripNonDigits(number){
+    return number.replace(/\D/g, '');
   }
 
 }

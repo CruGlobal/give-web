@@ -1,5 +1,6 @@
 import angular from 'angular';
 import isEmpty from 'lodash/isEmpty';
+import toString from 'lodash/toString';
 import validation from 'common/directives/validation.directive';
 import paymentValidationService from 'common/services/paymentValidation.service';
 import orderService from 'common/services/api/order.service';
@@ -38,17 +39,22 @@ class BankAccountController{
   }
 
   addCustomValidators(){
+    this.bankPaymentForm.routingNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
+    this.bankPaymentForm.routingNumber.$validators.length = number => isEmpty(number) || toString(number).length === 9;
     this.bankPaymentForm.routingNumber.$validators.routingNumber = this.paymentValidationService.validateRoutingNumber();
-    this.bankPaymentForm.routingNumber.$validators.numbersOnly = this.paymentValidationService.validateNumbersOnly();
-    this.bankPaymentForm.accountNumber.$validators.numbersOnly = this.paymentValidationService.validateNumbersOnly();
-    this.bankPaymentForm.verifyAccountNumber.$validators.verifyAccountNumber = (verifyAccountNumber) => {
-      return this.bankPayment.accountNumber === verifyAccountNumber || isEmpty(this.bankPayment.accountNumber) || isEmpty(verifyAccountNumber);
-    };
 
+    this.bankPaymentForm.accountNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
+    this.bankPaymentForm.accountNumber.$validators.length = number => isEmpty(number) || toString(number).length <= 17;
     this.bankPaymentForm.accountNumber.$viewChangeListeners.push(() => {
       // Revalidate verifyAccountNumber after accountNumber changes
       this.bankPaymentForm.verifyAccountNumber.$validate();
     });
+
+    this.bankPaymentForm.verifyAccountNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
+    this.bankPaymentForm.verifyAccountNumber.$validators.verifyAccountNumber = (verifyAccountNumber) => {
+      return this.bankPayment.accountNumber === verifyAccountNumber || isEmpty(this.bankPayment.accountNumber) || isEmpty(verifyAccountNumber);
+    };
+
   }
 
   savePayment(){
