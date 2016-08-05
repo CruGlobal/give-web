@@ -6,7 +6,6 @@ module.exports = {
   scss: ['src/**/*.scss'],
   srcDir: 'src/',
   output: 'dist/',
-  outputBundles: 'dist/bundles',
   outputCss: 'dist/**/*.css',
   tests: 'test/e2e/**/*.spec.js'
 };

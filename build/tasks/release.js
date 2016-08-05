@@ -33,7 +33,7 @@ gulp.task('inline-systemjs', function () {
     .pipe($.concat('common.js'));
 
   return $.mergeStream(app, bundles)
-    .pipe(gulp.dest(paths.outputBundles));
+    .pipe(gulp.dest(paths.output));
 });
 
 gulp.task('release', function (callback) {
@@ -44,6 +44,7 @@ gulp.task('release', function (callback) {
     'cache-bust',
     'replace',
     'inline-systemjs',
+    'move',
     callback
   );
 });
@@ -72,5 +73,5 @@ gulp.task('bundle', function () {
     })
     .pipe($.ngAnnotate())
     .pipe($.uglify())
-    .pipe(gulp.dest(paths.outputBundles));
+    .pipe(gulp.dest(paths.output));
 });

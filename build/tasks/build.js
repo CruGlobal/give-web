@@ -7,8 +7,7 @@ var paths = require('../paths');
 
 gulp.task('build', function (callback) {
   return $.runSequence(
-    'clean',
-    ['scss', 'html', 'move'],
+    ['scss', 'html'],
     callback
   );
 });
