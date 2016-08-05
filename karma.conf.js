@@ -5,23 +5,15 @@ module.exports = function(config) {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '.',
-    
+
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['systemjs', 'jasmine'],
-    
-    plugins: [
-      'karma-systemjs',
-      'karma-phantomjs-launcher',
-      'karma-jasmine',
-      'karma-mocha-reporter',
-      'karma-coverage'
-    ],
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['PhantomJS'],
-    
+
     phantomjsLauncher: {
       // Have phantomjs exit if a ResourceError is encountered (useful if karma exits without killing phantom)
       exitOnResourceError: true
@@ -47,7 +39,7 @@ module.exports = function(config) {
     systemjs: {
       configFile: 'system.config.js',
       config: {
-        transpiler: 'babel',
+        transpiler: 'plugin-babel',
         packages: 'jspm_packages',
         paths: {
           "github:*": "/base/jspm_packages/github/*",
@@ -55,25 +47,24 @@ module.exports = function(config) {
           'es6-module-loader': 'node_modules/es6-module-loader/dist/es6-module-loader.js',
           'systemjs': 'node_modules/systemjs/dist/system.js',
           'system-polyfills': 'node_modules/systemjs/dist/system-polyfills.js',
-          'babel': 'node_modules/babel-core/browser.js',
+          'plugin-babel': 'node_modules/systemjs-plugin-babel/plugin-babel.js',
+          'systemjs-babel-build': 'node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
           'phantomjs-polyfill': 'node_modules/phantomjs-polyfill/bind-polyfill.js'
         }
       },
-      
+
       serveFiles: [
         'jspm_packages/**/*',
-        'dist/**/*.js',
-        '!**/*.spec.js',
-        'dist/**/*.css',
+        'src/**/*.js',
+        'src/**/*.css',
         'dist/**/*.json'
       ]
     },
-    
+
     proxies: {
       '/test': '/base/test',
       '/dist': '/base/dist',
-      '/src': '/base/dist',
-      '/base/src': '/base/dist',
+      '/src': '/base/src',
       '/node_modules': '/base/node_modules'
     },
 
@@ -84,17 +75,13 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-    'src/!(*spec).js': ['coverage']
+      'src/**/!(*spec|*tpl).js': ['babel']
     },
 
     // optionally, configure the reporter
     coverageReporter: {
       type : 'lcov',
-      dir : 'coverage/',
-      instrumenters: { isparta : require('isparta') },
-      instrumenter: {
-        '**/*.js': 'isparta'
-      }
+      dir : 'coverage/'
     }
 
   });

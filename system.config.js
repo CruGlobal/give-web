@@ -1,7 +1,7 @@
 System.config({
   baseURL: ".",
   defaultJSExtensions: true,
-  transpiler: "babel",
+  transpiler: "plugin-babel",
   babelOptions: {
     "optional": [
       "runtime",
@@ -10,8 +10,8 @@ System.config({
   },
   paths: {
     "systemjs-test/*": "src/*",
-    "app/*": "dist/app/*",
-    "common/*": "dist/common/*",
+    "app/*": "src/app/*",
+    "common/*": "src/common/*",
     "assets/*": "dist/assets/*",
     "bundles/*": "dist/bundles/*",
     "lib/*": "lib/*",
@@ -71,6 +71,9 @@ System.config({
     "json": "github:systemjs/plugin-json@0.1.2",
     "jsonpath": "npm:jsonpath@0.2.6",
     "lodash": "npm:lodash@4.13.1",
+    "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
+    'systemjs-babel-build': 'npm:systemjs-plugin-babel@0.0.13/systemjs-babel-browser.js',
+    "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
     "rxjs": "npm:rxjs@5.0.0-beta.10",
     "scss": "github:KevCJones/plugin-scss@0.2.11",
     "systemjs/plugin-css": "github:systemjs/plugin-css@0.1.21",

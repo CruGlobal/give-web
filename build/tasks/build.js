@@ -44,7 +44,7 @@ gulp.task('html', function () {
         "}]);\n"
     }))
     .pipe($.babel(compilerOptions))
-    .pipe(gulp.dest(paths.output));
+    .pipe(gulp.dest('src/'));
 });
 
 gulp.task('scss', function () {
@@ -55,6 +55,6 @@ gulp.task('scss', function () {
     .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
     .pipe($.sass())
     .pipe($.sourcemaps.write("."))
-    .pipe(gulp.dest(paths.output))
+    .pipe(gulp.dest('src/'))
     .pipe($.browserSync.reload({ stream: true }));
 });
