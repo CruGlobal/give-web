@@ -15,7 +15,7 @@ gulp.task('build', function (callback) {
 gulp.task('html', function () {
   return gulp.src(paths.templates)
     .pipe($.plumber())
-    .pipe($.changed(paths.srcDir, { extension: '.html' }))
+    //.pipe($.changed(paths.srcDir, { extension: '.html' })) //TODO: fix this. It doesn't work on travis
     .pipe($.minifyHtml({
       empty: true,
       spare: true,
