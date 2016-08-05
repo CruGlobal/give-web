@@ -15,5 +15,5 @@ gulp.task('move', function () {
   ];
 
   return gulp.src(srcPaths)
-    .pipe(gulp.dest(paths.output));
+    .pipe(gulp.dest(paths.outputBundles));
 });

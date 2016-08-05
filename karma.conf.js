@@ -78,6 +78,12 @@ module.exports = function(config) {
       'src/**/!(*spec|*tpl).js': ['babel']
     },
 
+    babelPreprocessor: {
+      options: {
+        "plugins": [ "__coverage__" ]
+      }
+    },
+
     // optionally, configure the reporter
     coverageReporter: {
       type : 'lcov',

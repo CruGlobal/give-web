@@ -70,6 +70,7 @@ gulp.task('bundle', function () {
         }
       ]
     })
+    .pipe($.ngAnnotate())
     .pipe($.uglify())
     .pipe(gulp.dest(paths.outputBundles));
 });

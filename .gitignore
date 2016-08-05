@@ -9,3 +9,7 @@ jspm_packages
 *.log
 *.back.*
 .sass-cache
+
+src/**/*.tpl.js
+src/**/*.css
+src/**/*.css.map
