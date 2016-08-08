@@ -53,7 +53,7 @@ gulp.task('bundle', function () {
     'app/cart/cart.component',
     'app/checkout/checkout.component'
   ];
-  var commonFilesForBundles = bundles.join(' & ');
+  var commonFilesForBundles = '(' + bundles.join(' & ') + ')';
   return $.jspmBuild({
       bundles: [
         { src: 'app/main/main.component',
