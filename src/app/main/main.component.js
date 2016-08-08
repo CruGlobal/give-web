@@ -29,15 +29,16 @@ class MainController{
 function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
   $stateProvider
     .state('cart', {
-      url: "/cart",
+      url: "/cart.html",
       template: '<cart></cart>'
     })
     .state('checkout', {
-      url: "/checkout",
+      url: "/checkout.html",
       template: '<checkout></checkout>'
     });
 
-  $urlRouterProvider.otherwise('/cart');
+  $locationProvider.html5Mode(true);
+  $urlRouterProvider.otherwise('/cart.html');
 }
 
 export default angular
