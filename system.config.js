@@ -1,7 +1,7 @@
 System.config({
   baseURL: ".",
   defaultJSExtensions: true,
-  transpiler: "babel",
+  transpiler: "plugin-babel",
   babelOptions: {
     "optional": [
       "runtime",
@@ -10,8 +10,8 @@ System.config({
   },
   paths: {
     "systemjs-test/*": "src/*",
-    "app/*": "dist/app/*",
-    "common/*": "dist/common/*",
+    "app/*": "src/app/*",
+    "common/*": "src/common/*",
     "assets/*": "dist/assets/*",
     "bundles/*": "dist/bundles/*",
     "lib/*": "lib/*",
@@ -72,8 +72,11 @@ System.config({
     "json": "github:systemjs/plugin-json@0.1.2",
     "jsonpath": "npm:jsonpath@0.2.6",
     "lodash": "npm:lodash@4.13.1",
+    "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
+    "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
     "rxjs": "npm:rxjs@5.0.0-beta.10",
     "scss": "github:KevCJones/plugin-scss@0.2.11",
+    "systemjs-babel-build": "npm:systemjs-plugin-babel@0.0.13/systemjs-babel-browser.js",
     "systemjs/plugin-css": "github:systemjs/plugin-css@0.1.21",
     "ui-router-extras": "npm:ui-router-extras@0.0.14",
     "github:KevCJones/plugin-scss@0.2.11": {
@@ -125,7 +128,7 @@ System.config({
       "path-browserify": "npm:path-browserify@0.0.0"
     },
     "github:jspm/nodelibs-process@0.1.2": {
-      "process": "npm:process@0.11.5"
+      "process": "npm:process@0.11.8"
     },
     "github:jspm/nodelibs-stream@0.1.0": {
       "stream-browserify": "npm:stream-browserify@1.0.0"
@@ -743,7 +746,7 @@ System.config({
     "npm:process-nextick-args@1.0.7": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:process@0.11.5": {
+    "npm:process@0.11.8": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "vm": "github:jspm/nodelibs-vm@0.1.0"

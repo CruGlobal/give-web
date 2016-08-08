@@ -4,34 +4,18 @@ var $ = require('gulp-load-plugins')({
 });
 
 var paths = require('../paths');
-var compilerOptions = require('../babelOptions');
 
 gulp.task('build', function (callback) {
   return $.runSequence(
-    'clean',
-    ['scss', 'html', 'es6', 'move'],
+    ['scss', 'html'],
     callback
   );
-});
-
-gulp.task('es6', function () {
-  return gulp.src(paths.source, { base: 'src' })
-    .pipe($.plumber())
-    .pipe($.changed(paths.output, { extension: '.js' }))
-    .pipe($.sourcemaps.init({ loadMaps: true }))
-    .pipe($.babel(compilerOptions))
-    .pipe($.ngAnnotate({
-      sourceMap: true,
-      gulpWarnings: false
-    }))
-    .pipe($.sourcemaps.write("/sourcemaps", { sourceRoot: '/src' }))
-    .pipe(gulp.dest(paths.output));
 });
 
 gulp.task('html', function () {
   return gulp.src(paths.templates)
     .pipe($.plumber())
-    .pipe($.changed(paths.output, { extension: '.html' }))
+    //.pipe($.changed(paths.srcDir, { extension: '.html' })) //TODO: fix this. It doesn't work on travis
     .pipe($.minifyHtml({
       empty: true,
       spare: true,
@@ -39,22 +23,21 @@ gulp.task('html', function () {
     }))
     .pipe($.ngHtml2js({
       template: "import angular from 'angular';\n" +
-        "export default angular.module('<%= moduleName %>', []).run(['$templateCache', function($templateCache) {\n" +
+        "export default angular.module('<%= moduleName %>', []).run(($templateCache) => {\n" +
         "   $templateCache.put('<%= template.url %>',\n    '<%= template.prettyEscapedContent %>');\n" +
-        "}]);\n"
+        "});\n"
     }))
-    .pipe($.babel(compilerOptions))
-    .pipe(gulp.dest(paths.output));
+    .pipe(gulp.dest(paths.srcDir));
 });
 
 gulp.task('scss', function () {
   return gulp.src(paths.scss)
     .pipe($.plumber())
-    .pipe($.changed(paths.output, {extension: '.css'}))
+    .pipe($.changed(paths.srcDir, {extension: '.css'}))
     .pipe($.sourcemaps.init())
     .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
     .pipe($.sass())
     .pipe($.sourcemaps.write("."))
-    .pipe(gulp.dest(paths.output))
+    .pipe(gulp.dest(paths.srcDir))
     .pipe($.browserSync.reload({ stream: true }));
 });

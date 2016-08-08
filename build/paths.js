@@ -4,8 +4,8 @@ module.exports = {
   json: 'src/**/*.json',
   templates: 'src/**/*.html',
   scss: ['src/**/*.scss'],
+  srcDir: 'src/',
   output: 'dist/',
-  outputBundles: 'dist/bundles',
   outputCss: 'dist/**/*.css',
   tests: 'test/e2e/**/*.spec.js'
 };

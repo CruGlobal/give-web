@@ -25,5 +25,5 @@ gulp.task('replace', function(){
         }
       ]
     }))
-    .pipe(gulp.dest(paths.outputBundles));
+    .pipe(gulp.dest(paths.output));
 });

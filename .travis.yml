@@ -26,7 +26,7 @@ deploy:
       secure: OHnRNjQg3qP+aSYYxsS5F3iQVMM8H5rPS952kRKalqbmXd/iAA5AM81OcC00O039nBdM2RC0XdgZcKlnswAvh0bNTYHX3eoNqhVAY9Og8jOTCGFZoChp6vaGXf2a8MGn7Fqz6ZPRhmpOINUd8WGKSZmcjqxwzrl6WES/E2FScCI/NAo4+tXdAeMfr7foGq8rlJSAxLV5FTt7SvkZ43xeF43jsmjwy1HTNNmnHhu79ZYZ5WdXfXsyet5GzEO/6jgQI0BKaDgfKBEFEErKul5Rf3LuLamkeXu/TqT8jBFsN+DJdJ/5kfA8p2tE7katy5GB3ratJHiql/S5KDWLMn0gQwb8M9Y+rxWjw18tR+5hczZifEz/kIj2ghhqlUyoBFZFEQrZ58LMpwKhU5Dm4u9OQ5YPm/DYr1PlSCM41U9/MEE6scJgZapaARKXrg84JhbOEMWlgAAvT/E2TVgDRIHi7U+NE4aKPlifwJj6skIPpnO7PD86oIOn3L1frKthmw6XPKHGTi4H+6HzgccpHKTqhRo61RdIT581tmQvKxpkK24d6KD38mDPVqOcx3vP3Sk8lMK1aS9PXqtxzB50W9BByABCm6ivoPiWSWGkDt6o9bAYNmOjGciBao6Eo0gUE3DDop/o7UUpmeEkUITiRH0R7wz8uU2cDNaUPm+g7URCxEE=
     bucket: cru-givedev
     acl: public_read
-    local-dir: dist/bundles
+    local-dir: dist
     skip_cleanup: true
     on:
       branch: dev
@@ -37,5 +37,5 @@ deploy:
       secure: OHnRNjQg3qP+aSYYxsS5F3iQVMM8H5rPS952kRKalqbmXd/iAA5AM81OcC00O039nBdM2RC0XdgZcKlnswAvh0bNTYHX3eoNqhVAY9Og8jOTCGFZoChp6vaGXf2a8MGn7Fqz6ZPRhmpOINUd8WGKSZmcjqxwzrl6WES/E2FScCI/NAo4+tXdAeMfr7foGq8rlJSAxLV5FTt7SvkZ43xeF43jsmjwy1HTNNmnHhu79ZYZ5WdXfXsyet5GzEO/6jgQI0BKaDgfKBEFEErKul5Rf3LuLamkeXu/TqT8jBFsN+DJdJ/5kfA8p2tE7katy5GB3ratJHiql/S5KDWLMn0gQwb8M9Y+rxWjw18tR+5hczZifEz/kIj2ghhqlUyoBFZFEQrZ58LMpwKhU5Dm4u9OQ5YPm/DYr1PlSCM41U9/MEE6scJgZapaARKXrg84JhbOEMWlgAAvT/E2TVgDRIHi7U+NE4aKPlifwJj6skIPpnO7PD86oIOn3L1frKthmw6XPKHGTi4H+6HzgccpHKTqhRo61RdIT581tmQvKxpkK24d6KD38mDPVqOcx3vP3Sk8lMK1aS9PXqtxzB50W9BByABCm6ivoPiWSWGkDt6o9bAYNmOjGciBao6Eo0gUE3DDop/o7UUpmeEkUITiRH0R7wz8uU2cDNaUPm+g7URCxEE=
     bucket: cru-givestage
     acl: public_read
-    local-dir: dist/bundles
+    local-dir: dist
     skip_cleanup: true
