@@ -37,4 +37,4 @@ class ModalInstanceCtrl{
   }
 }
 
-module.exports =  ModalInstanceCtrl;
+export default ModalInstanceCtrl;

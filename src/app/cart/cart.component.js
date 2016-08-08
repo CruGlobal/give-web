@@ -5,6 +5,7 @@ import appConfig from 'common/app.config';
 
 import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
+import modalController from 'app/productConfig/productConfig.modal';
 
 import template from './cart.tpl';
 import templateModal from 'app/productConfig/productConfigModal.tpl';
@@ -42,7 +43,7 @@ class CartController{
 
     this.$uibModal.open({
       templateUrl: templateModal.name,
-      controller: require('app/productConfig/modalCtrl'),
+      controller: modalController,
       controllerAs: '$ctrl',
       size: 'lg give-modal',
       resolve: {

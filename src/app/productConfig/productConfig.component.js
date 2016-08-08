@@ -2,6 +2,7 @@ import angular from 'angular';
 
 import template from './productConfig.tpl';
 import templateModal from './productConfigModal.tpl';
+import modalController from './productConfig.modal';
 import designationsService from 'common/services/api/designations.service';
 
 let componentName = 'productConfig';
@@ -20,7 +21,7 @@ class ProductConfigController{
 
     this.$uibModal.open({
       templateUrl: templateModal.name,
-      controller: require('./modalCtrl'),
+      controller: modalController,
       controllerAs: '$ctrl',
       size: 'lg give-modal',
       resolve: {
