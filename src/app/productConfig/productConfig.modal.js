@@ -25,6 +25,7 @@ class ModalInstanceCtrl{
   }
 
   addToCart(){
+    if(!this.itemConfigForm.$valid){ return; }
     this.cartService.addItem(this.productData.id, this.itemConfig)
       .subscribe(() => {
         this.$uibModalInstance.close();
