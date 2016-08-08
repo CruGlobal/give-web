@@ -68,7 +68,8 @@ export default angular
     'ui.bootstrap',
     template.name,
     appConfig.name,
-    cartService.name
+    cartService.name,
+    designationsService.name
   ])
   .component(componentName, {
     controller: CartController,
