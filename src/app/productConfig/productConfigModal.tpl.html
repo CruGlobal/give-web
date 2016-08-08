@@ -1,0 +1,149 @@
+<div class="give-modal-header">
+  <div class="row">
+    <div class="col-sm-6">
+      <h4 class="modal-title" translate>
+        Give a Gift
+      </h4>
+    </div>
+    <div class="col-sm-6">
+      <div class="give-modal-recipient">
+        <img class="recipient-image" src="http://placehold.it/550x310">
+        <span class="recipient-title">{{$ctrl.productData.displayName}}</span>
+        <span class="recipient-id">#{{$ctrl.productData.designationNumber}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<form>
+  <div class="modal-body pt0 p">
+    <div class="container-fluid">
+      <div class="panel panel-default panel-plain mt">
+        <div class="panel panel-default give-modal-panel">
+          <h4 class="panel-title border-bottom-small" translate>
+            Gift Amount
+          </h4>
+          <div class="panel-body pt0">
+            <!-- @todo SHOW THIS RADIO SET IF CUSTOM MINISTRY AMOUNTS EXIST -->
+            <!--<div class="radio radio-custom-amount">-->
+              <!--<label><input checked="checked" id="" name="custom_option" type="radio" value="Custom001"> Custom Ministry Option 1</label>-->
+            <!--</div>-->
+            <!--<div class="radio radio-custom-amount">-->
+              <!--<label><input id="" name="custom_option" type="radio" value="Custom002"> Custom Ministry Option 2</label>-->
+            <!--</div>-->
+            <!--<div class="radio radio-custom-amount">-->
+              <!--<label><input id="" name="custom_option" type="radio" value="Custom003"> Custom Ministry Option 3</label>-->
+            <!--</div>-->
+
+            <div data-toggle="buttons">
+              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 50" ng-class="{'active': $ctrl.itemConfig.amount === 50}"><span class="number">$50</span></label>
+              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 100" ng-class="{'active': $ctrl.itemConfig.amount === 100}"><span class="number">$100</span></label>
+              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 250" ng-class="{'active': $ctrl.itemConfig.amount === 250}"><span class="number">$250</span></label>
+              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 500" ng-class="{'active': $ctrl.itemConfig.amount === 500}"><span class="number">$500</span></label>
+              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 1000" ng-class="{'active': $ctrl.itemConfig.amount === 1000}"><span class="number">$1000</span></label>
+              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 5000" ng-class="{'active': $ctrl.itemConfig.amount === 5000}"><span class="number">$5000</span></label>
+              <label class="btn btn-default-form u-textLeft custom-amount">
+                <div class="form-group form-group-default u-inline">
+                  <input class="form-control form-control-subtle number" min="0" step="any" type="text" ng-model="$ctrl.itemConfig.amount">
+                </div>
+              </label>
+            </div>
+          </div><!-- // panel-body -->
+        </div><!-- // panel -->
+        <div class="panel panel-default give-modal-panel">
+          <h4 class="panel-title border-bottom-small mt" translate>
+            Gift Frequency
+          </h4>
+          <div class="panel-body">
+            <div data-toggle="buttons">
+              <label class="btn btn-radio btn-wide"
+                     ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder"
+                     ng-class="{'active': !f.selectAction}"
+                     ng-click="$ctrl.changeFrequency(f.selectAction)">
+                <span class="giftsum-about giftsum-title">{{f.display}}</span>
+              </label>
+              <span ng-repeat-end></span>
+            </div>
+          </div><!-- // panel-body -->
+        </div><!-- // panel -->
+        <div ng-if="$ctrl.productData.frequency !== 'NA'">
+          <div class="panel panel-default give-modal-panel">
+            <h4 class="panel-title border-bottom-small mt0 pt-" translate>
+              Transaction Date for Recurring Gifts
+            </h4>
+            <div class="panel-body pt0">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label translate>Month</label>
+                    <div class="form-group">
+                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig.month">
+                        <option value="01" translate>January</option>
+                        <option value="02" translate>February</option>
+                        <option value="03" translate>March</option>
+                        <option value="04" translate>April</option>
+                        <option value="05" translate>May</option>
+                        <option value="06" translate>June</option>
+                        <option value="07" translate>July</option>
+                        <option value="08" translate>August</option>
+                        <option value="09" translate>September</option>
+                        <option value="10" translate>October</option>
+                        <option value="11" translate>November</option>
+                        <option value="12" translate>December</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <label translate>Day</label>
+                    <div class="form-group">
+                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig.day" ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig.month)">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- // panel-body -->
+          </div><!-- // panel -->
+        </div>
+        <div class="panel panel-default give-modal-panel">
+          <h4 class="panel-title border-bottom-small mt" translate>
+            Optional Comments
+          </h4>
+          <div class="panel-body pt0">
+            <ul class="list-unstyled">
+              <li>
+                <a class="commentLink" href="" ng-click="showRecipientComments = !showRecipientComments" translate>Send a Message to {{$ctrl.productData.displayName}}</a>
+                <textarea class="staff-comments give-modal-comments" rows="3" ng-model="$ctrl.itemConfig['recipient-comments']" ng-if="showRecipientComments || $ctrl.itemConfig['recipient-comments']" style="display:block;"></textarea>
+              </li>
+              <li>
+                <a class="commentLink" href="" ng-click="showDSComments = !showDSComments" translate>Special Handling Instructions for Processing the Gift</a>
+                <textarea class="cru-comments give-modal-comments" rows="3" ng-model="$ctrl.itemConfig['donation-services-comments']" ng-if="showDSComments || $ctrl.itemConfig['donation-services-comments']" style="display:block;"></textarea>
+              </li>
+            </ul>
+          </div><!-- // panel-body -->
+        </div><!-- // panel -->
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="col-md-6 col-sm-6">
+      <button class="btn btn-default btn-md btn-block-xs" type="button" ng-click="$dismiss()" translate>Cancel &amp; Return</button>
+    </div>
+    <div class="col-md-6 col-sm-6 text-right">
+      <button class="btn btn-md btn-primary btn-block-xs" type="button" ng-click="$ctrl.addToCart()" translate>Add to Gift Cart</button>
+    </div>
+  </div>
+</form>

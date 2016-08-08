@@ -7,17 +7,23 @@
           <!-- Cart Summary -->
           <div class="panel">
             <div class="panel-body">
-              <h3 class="panel-name">Your Gift Cart</h3>
-              <p ng-if="!$ctrl.cartData.items.length">
+              <h3 class="panel-name" translate>Your Gift Cart</h3>
+              <div class="loading-wrap" ng-if="!$ctrl.cartData">
+                <span class="loading loading1"></span>
+                <span class="loading loading2"></span>
+                <span class="loading loading3"></span>
+                <span class="loading loading4"></span>
+              </div>
+              <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
                 Your cart is empty
               </p>
               <form ng-if="$ctrl.cartData.items.length">
                 <table class="table giftsum-table">
                   <thead>
                   <tr>
-                    <th class="th-title-gift">Gift</th>
-                    <th class="th-title-frequency">Frequency</th>
-                    <th class="th-title-amount">Amount</th><th class="th-title-actions"></th>
+                    <th class="th-title-gift" translate>Gift</th>
+                    <th class="th-title-frequency" translate>Frequency</th>
+                    <th class="th-title-amount" translate>Amount</th><th class="th-title-actions"></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -25,20 +31,20 @@
                       <td class="td-gift">
                         <img src="http://placehold.it/90x70" class="giftsum-profile pull-left">
                         <span class="giftsum-person giftsum-title">{{i.displayName}}</span>
-                        <span class="giftsum-accountnum giftsum-detail"><span class="hidden-xs">Ministry </span>#{{i.designationNumber}}</span>
+                        <span class="giftsum-accountnum giftsum-detail"><span class="hidden-xs" translate>Ministry </span>#{{i.designationNumber}}</span>
                       </td>
                       <td class="td-frequency">
                         <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
-                        <span class="giftsum-date giftsum-detail">Starts on: 7/8/2019</span>
+                        <span class="giftsum-date giftsum-detail"><translate>Starts on:</translate> 7/8/2019</span>
                       </td>
                       <td class="td-amount">
                         <span class="giftsum-about giftsum-title">{{i.price}}</span>
-                        <span class="giftsum-detail"><span class=" visible-xs">Gift Amount</span></span>
+                        <span class="giftsum-detail"><span class=" visible-xs" translate>Gift Amount</span></span>
                       </td>
                       <td class="td-actions giftsum-actions">
-                        <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.editItem(i.uri)">Edit</a>
+                        <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.editItem(i)" translate>Edit</a>
                         <span class="sep"> | </span>
-                        <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.removeItem(i.uri)">Remove</a>
+                        <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.removeItem(i.uri)" translate>Remove</a>
                       </td>
                     </tr>
                   </tbody>
@@ -46,7 +52,7 @@
                     <tr>
                       <td colspan="4" class="text-right">
                         <div class="checkout-cta pull-right">
-                          <a href="" ui-sref="checkout" class="btn btn-primary btn-lg btn-block">
+                          <a href="" ui-sref="checkout" class="btn btn-primary btn-lg btn-block" translate>
                             Proceed to Checkout
                           </a>
                         </div>

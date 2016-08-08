@@ -1,8 +1,8 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './cart.component';
+import module from './productConfig.component';
 
-describe('cart', function() {
+describe('product config', function() {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
