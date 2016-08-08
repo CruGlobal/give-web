@@ -14,7 +14,7 @@
     </div>
   </div>
 </div>
-<form>
+<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.addToCart()">
   <div class="modal-body pt0 p">
     <div class="container-fluid">
       <div class="panel panel-default panel-plain mt">
@@ -34,7 +34,7 @@
               <!--<label><input id="" name="custom_option" type="radio" value="Custom003"> Custom Ministry Option 3</label>-->
             <!--</div>-->
 
-            <div data-toggle="buttons">
+            <div data-toggle="buttons" validation="$ctrl.itemConfigForm.amount" show-error="asClass">
               <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 50" ng-class="{'active': $ctrl.itemConfig.amount === 50}"><span class="number">$50</span></label>
               <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 100" ng-class="{'active': $ctrl.itemConfig.amount === 100}"><span class="number">$100</span></label>
               <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 250" ng-class="{'active': $ctrl.itemConfig.amount === 250}"><span class="number">$250</span></label>
@@ -43,9 +43,11 @@
               <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 5000" ng-class="{'active': $ctrl.itemConfig.amount === 5000}"><span class="number">$5000</span></label>
               <label class="btn btn-default-form u-textLeft custom-amount">
                 <div class="form-group form-group-default u-inline">
-                  <input class="form-control form-control-subtle number" min="0" step="any" type="text" ng-model="$ctrl.itemConfig.amount">
+                  <input class="form-control form-control-subtle number" min="1" type="number" name="amount" ng-model="$ctrl.itemConfig.amount" required>
                 </div>
               </label>
+              <span class="help-block" validation="$ctrl.itemConfigForm.amount" show-error="required" translate>You must enter an amount</span>
+              <span class="help-block" validation="$ctrl.itemConfigForm.amount" show-error="min" translate>Amount must be at least $1</span>
             </div>
           </div><!-- // panel-body -->
         </div><!-- // panel -->
@@ -98,18 +100,6 @@
                     <label translate>Day</label>
                     <div class="form-group">
                       <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig.day" ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig.month)">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
                       </select>
                     </div>
                   </div>
@@ -125,12 +115,22 @@
           <div class="panel-body pt0">
             <ul class="list-unstyled">
               <li>
-                <a class="commentLink" href="" ng-click="showRecipientComments = !showRecipientComments" translate>Send a Message to {{$ctrl.productData.displayName}}</a>
-                <textarea class="staff-comments give-modal-comments" rows="3" ng-model="$ctrl.itemConfig['recipient-comments']" ng-if="showRecipientComments || $ctrl.itemConfig['recipient-comments']" style="display:block;"></textarea>
+                <a class="commentLink" href="" ng-click="showRecipientComments = !showRecipientComments"><translate>Send a Message to</translate> {{$ctrl.productData.displayName}}</a>
+                <textarea class="staff-comments give-modal-comments"
+                        rows="3"
+                        maxlength="250"
+                        ng-model="$ctrl.itemConfig['recipient-comments']"
+                        ng-if="showRecipientComments || $ctrl.itemConfig['recipient-comments']"
+                        style="display:block;"></textarea>
               </li>
               <li>
                 <a class="commentLink" href="" ng-click="showDSComments = !showDSComments" translate>Special Handling Instructions for Processing the Gift</a>
-                <textarea class="cru-comments give-modal-comments" rows="3" ng-model="$ctrl.itemConfig['donation-services-comments']" ng-if="showDSComments || $ctrl.itemConfig['donation-services-comments']" style="display:block;"></textarea>
+                <textarea class="cru-comments give-modal-comments"
+                        rows="3"
+                        maxlength="250"
+                        ng-model="$ctrl.itemConfig['donation-services-comments']"
+                        ng-if="showDSComments || $ctrl.itemConfig['donation-services-comments']"
+                        style="display:block;"></textarea>
               </li>
             </ul>
           </div><!-- // panel-body -->
@@ -143,7 +143,7 @@
       <button class="btn btn-default btn-md btn-block-xs" type="button" ng-click="$dismiss()" translate>Cancel &amp; Return</button>
     </div>
     <div class="col-md-6 col-sm-6 text-right">
-      <button class="btn btn-md btn-primary btn-block-xs" type="button" ng-click="$ctrl.addToCart()" translate>Add to Gift Cart</button>
+      <button class="btn btn-md btn-primary btn-block-xs" type="submit" translate>Add to Gift Cart</button>
     </div>
   </div>
 </form>
