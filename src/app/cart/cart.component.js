@@ -67,6 +67,7 @@ export default angular
   .module(componentName, [
     'ui.bootstrap',
     template.name,
+    templateModal.name,
     appConfig.name,
     cartService.name,
     designationsService.name
