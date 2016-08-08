@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-bootstrap';
 
 import template from './productConfig.tpl';
 import templateModal from './productConfigModal.tpl';
@@ -45,6 +46,7 @@ class ProductConfigController{
 
 export default angular
   .module(componentName, [
+    'ui.bootstrap',
     template.name,
     templateModal.name,
     designationsService.name

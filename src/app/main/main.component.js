@@ -1,7 +1,6 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
-import 'angular-bootstrap';
 
 import appConfig from 'common/app.config';
 
@@ -51,7 +50,6 @@ export default angular
     checkoutComponent.name,
     productConfigComponent.name,
     'ui.router',
-    'ui.bootstrap',
     cartService.name
   ])
   .config(routingConfig)
