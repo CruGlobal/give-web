@@ -1,5 +1,4 @@
 import angular from 'angular';
-import paymentEncryptionService from 'common/services/paymentEncryption.service';
 
 import bankAccount from './bank-account/bank-account.component';
 import creditCard from './credit-card/credit-card.component';
@@ -31,8 +30,7 @@ export default angular
   .module(componentName, [
     template.name,
     bankAccount.name,
-    creditCard.name,
-    paymentEncryptionService.name
+    creditCard.name
   ])
   .component(componentName, {
     controller: Step2Controller,

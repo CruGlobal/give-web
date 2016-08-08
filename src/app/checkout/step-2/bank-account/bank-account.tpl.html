@@ -34,16 +34,16 @@
           <label>Routing #</label>
           <input type="text" class="form-control  form-control-subtle" name="routingNumber" ng-model="$ctrl.bankPayment.routingNumber" required>
           <span class="help-block" validation="$ctrl.bankPaymentForm.routingNumber" show-error="required" translate>You must enter a routing number</span>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.routingNumber" show-error="length" translate>This routing number must contain 9 digits</span>
           <span class="help-block" validation="$ctrl.bankPaymentForm.routingNumber" show-error="routingNumber" translate>This routing number is invalid</span>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="form-group is-required" validation="$ctrl.bankPaymentForm.accountNumber" show-error="asClass">
           <label>Account #</label>
-          <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" required minlength="2" ng-maxlength="17">
+          <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" required>
           <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="required" translate>You must enter an account number</span>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="minlength" translate>This account number is too short</span>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="maxlength" translate>This routing number is too long</span>
+          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="length" translate>This account number must contain 17 or fewer digits</span>
         </div>
       </div>
       <div class="col-sm-4">

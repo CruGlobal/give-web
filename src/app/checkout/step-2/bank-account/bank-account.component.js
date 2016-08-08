@@ -1,7 +1,8 @@
 import angular from 'angular';
 import isEmpty from 'lodash/isEmpty';
+import toString from 'lodash/toString';
 import validation from 'common/directives/validation.directive';
-import paymentEncryptionService from 'common/services/paymentEncryption.service';
+import paymentValidationService from 'common/services/paymentValidation.service';
 import orderService from 'common/services/api/order.service';
 
 import template from './bank-account.tpl';
@@ -11,10 +12,10 @@ let componentName = 'checkoutBankAccount';
 class BankAccountController{
 
   /* @ngInject */
-  constructor($scope, $log, paymentEncryptionService, orderService){
+  constructor($scope, $log, paymentValidationService, orderService){
     this.$scope = $scope;
     this.$log = $log;
-    this.paymentEncryptionService = paymentEncryptionService;
+    this.paymentValidationService = paymentValidationService;
     this.orderService = orderService;
 
     this.bankPayment = {
@@ -38,25 +39,33 @@ class BankAccountController{
   }
 
   addCustomValidators(){
-    this.bankPaymentForm.routingNumber.$validators.routingNumber = this.paymentEncryptionService.validateRoutingNumber();
-    this.bankPaymentForm.verifyAccountNumber.$validators.verifyAccountNumber = (verifyAccountNumber) => {
-      return this.bankPayment.accountNumber === verifyAccountNumber || isEmpty(verifyAccountNumber);
-    };
+    this.bankPaymentForm.routingNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
+    this.bankPaymentForm.routingNumber.$validators.length = number => isEmpty(number) || toString(number).length === 9;
+    this.bankPaymentForm.routingNumber.$validators.routingNumber = this.paymentValidationService.validateRoutingNumber();
 
+    this.bankPaymentForm.accountNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
+    this.bankPaymentForm.accountNumber.$validators.length = number => isEmpty(number) || toString(number).length <= 17;
     this.bankPaymentForm.accountNumber.$viewChangeListeners.push(() => {
       // Revalidate verifyAccountNumber after accountNumber changes
       this.bankPaymentForm.verifyAccountNumber.$validate();
     });
+
+    this.bankPaymentForm.verifyAccountNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
+    this.bankPaymentForm.verifyAccountNumber.$validators.verifyAccountNumber = (verifyAccountNumber) => {
+      return this.bankPayment.accountNumber === verifyAccountNumber || isEmpty(this.bankPayment.accountNumber) || isEmpty(verifyAccountNumber);
+    };
+
   }
 
   savePayment(){
     this.bankPaymentForm.$setSubmitted();
     if(this.bankPaymentForm.$valid){
+      let ccpAccountNumber = new (this.paymentValidationService.ccp.BankAccountNumber)(this.bankPayment.accountNumber);
       this.orderService.addBankAccountPayment({
           'account-type': this.bankPayment.accountType,
           'bank-name': this.bankPayment.bankName,
-          'display-account-number': 'XXXXXXXXXXXX', //TODO: figure out if length is ok to display or if we can show last x numbers
-          'encrypted-account-number': this.paymentEncryptionService.encrypt(this.bankPayment.accountNumber),
+          'display-account-number': ccpAccountNumber.mask(),
+          'encrypted-account-number': ccpAccountNumber.encrypt(),
           'routing-number': this.bankPayment.routingNumber
         })
         .subscribe((data) => {
@@ -78,7 +87,7 @@ export default angular
   .module(componentName, [
     template.name,
     validation.name,
-    paymentEncryptionService.name,
+    paymentValidationService.name,
     orderService.name
   ])
   .component(componentName, {

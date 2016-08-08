@@ -3,24 +3,24 @@ import _ from 'lodash';
 import ccp from 'common/lib/ccp';
 import { ccpKey } from 'common/app.constants';
 import isEmpty from 'lodash/isEmpty';
+import toString from 'lodash/toString';
 
-let serviceName = 'paymentEncryptionService';
+let serviceName = 'paymentValidationService';
 
-class PaymentEncryption {
+class PaymentValidation {
 
   /*@ngInject*/
   constructor(){
     ccp.initialize(ccpKey);
+    this.ccp = ccp;
   }
 
   validateRoutingNumber(){
     return (routingNumber) => {
-      routingNumber = this.stripNonNumbers(routingNumber);
+      routingNumber = toString(routingNumber);
       if(isEmpty(routingNumber)) return true; // Let other validators handle empty condition
+      if(routingNumber.length !== 9) return true; // Let other validators handle incorrect length condition
 
-      if (routingNumber.length !== 9) {
-        return false;
-      }
       let digits = routingNumber.split('');
       let multipliers = [3, 7, 1, 3, 7, 1, 3, 7, 1];
 
@@ -35,33 +35,23 @@ class PaymentEncryption {
 
   validateCardNumber(){
     return (cardNumber) => {
-      if(isEmpty((cardNumber || '').toString())) return true; // Let other validators handle empty condition
+      cardNumber = toString(cardNumber);
+      if(isEmpty(cardNumber)) return true; // Let other validators handle empty condition
 
-      return ccp.validateCardNumber(cardNumber) === null;
+      return (new this.ccp.CardNumber(cardNumber)).validate() === null;
     };
   }
 
   validateCardSecurityCode(){
     return (securityCode) => {
-      if(isEmpty(securityCode.toString())) return true; // Let other validators handle empty condition
+      securityCode = toString(securityCode);
+      if(isEmpty(securityCode)) return true; // Let other validators handle empty condition
 
-      return ccp.validateCardSecurityCode(securityCode) === null;
+      return (new this.ccp.CardSecurityCode(securityCode)).validate() === null;
     };
   }
 
-  getCardType(cardNumber){
-    return ccp.getCardType(cardNumber);
-  }
-
-  encrypt(number){
-    return ccp.encrypt(number);
-  }
-
-  stripNonNumbers(number){
-    if(number === undefined || number === null){
-      number  = '';
-    }
-    number = number.toString();
+  stripNonDigits(number){
     return number.replace(/\D/g, '');
   }
 
@@ -71,4 +61,4 @@ export default angular
   .module(serviceName, [
 
   ])
-  .service(serviceName, PaymentEncryption);
+  .service(serviceName, PaymentValidation);
