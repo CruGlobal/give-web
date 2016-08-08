@@ -8,7 +8,14 @@ gulp.task('serve', ['watch'], function (done) {
     port: 9000,
     server: {
       baseDir: ['.'],
-      middleware: [ historyApiFallback() ]
+      middleware: [
+        historyApiFallback({
+          rewrites: [
+            //redirects all root files ending in .html to index.html excluding test-release.html
+            { from: /\/(?!test\-release).+\.html/, to: '/index.html'}
+          ]
+        })
+      ]
     }
   }, done);
 });
