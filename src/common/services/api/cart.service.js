@@ -151,6 +151,14 @@ function cart(apiService){
       })
       .map((data) => {
         let details = JSONPath.query(data, '$.._order.._donordetails.*')[0];
+        if(details['mailing-address']['country-name'] !== 'UNITED STATES'){
+          let intAddress = details['mailing-address']['street-address'].split('||');
+          details['mailing-address']['street-address'] = intAddress[0] ? intAddress[0] : '';
+          details['mailing-address']['extended-address'] = intAddress[1] ? intAddress[1] : '';
+          details['mailing-address']['locality'] = intAddress[2] ? intAddress[2] : '';
+          details['mailing-address']['region'] = intAddress[3] ? intAddress[3] : '';
+        }
+
         let email = JSONPath.query(data, '$.._order.._emailinfo.*')[0];
         details.email = email ? email['_email'][0]['email'] : '';
         return details;
@@ -158,6 +166,21 @@ function cart(apiService){
   }
 
   function updateDonorDetails(uri, details){
+    details = angular.copy(details);
+    if(details['mailing-address']['country-name'] !== 'UNITED STATES'){
+      let intAddress = [
+        details['mailing-address']['street-address'],
+        details['mailing-address']['extended-address'],
+        details['mailing-address']['locality'],
+        details['mailing-address']['region']
+      ];
+
+      details['mailing-address']['street-address'] = intAddress.join('||');
+      details['mailing-address']['extended-address'] = '';
+      details['mailing-address']['locality'] = '';
+      details['mailing-address']['region'] = '';
+    }
+
     return apiService.put({
       path: uri,
       data: details
