@@ -172,7 +172,7 @@
                 <select class="form-control  form-control-subtle"
                         name="addressCountry" required
                         ng-model="$ctrl.donorDetails['mailing-address']['country-name']"
-                        ng-options="v['display-name'] | uppercase as v['display-name'] for v in $ctrl.countries"
+                        ng-options="v['display-name'] | uppercase as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
                         ng-change="$ctrl.refreshRegions($ctrl.donorDetails['mailing-address']['country-name'])"
                         ng-init="$ctrl.refreshRegions($ctrl.donorDetails['mailing-address']['country-name'])">
                 </select>
@@ -192,55 +192,57 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="form-group is-required">
+            <div class="form-group">
               <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['mailing-address']['extended-address']" maxlength="100">
             </div>
           </div>
         </div>
-        <div>
+        <div ng-if="$ctrl.donorDetails['mailing-address']['country-name'] !== 'UNITED STATES'">
           <div class="row">
             <div class="col-sm-12">
-              <div class="form-group is-required">
-                <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['mailing-address']['extended-address']" maxlength="100">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="form-group is-required">
-                <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['mailing-address']['extended-address']" maxlength="100">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="form-group is-required" validation="$ctrl.detailsForm.addressLocality" show-error="asClass">
-              <label translate>City</label>
-              <input type="text" class="form-control  form-control-subtle" name="addressLocality" ng-model="$ctrl.donorDetails['mailing-address']['locality']" required maxlength="50">
-              <span class="help-block" validation="$ctrl.detailsForm.addressLocality" show-error="required" translate>You must enter a City</span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-6" ng-if="$ctrl.regions.length">
-            <div class="form-group is-required" validation="$ctrl.detailsForm.addressRegion" show-error="asClass">
-              <label translate>State / Region</label>
               <div class="form-group">
-                <select class="form-control  form-control-subtle"
-                        name="addressRegion" required
-                        ng-model="$ctrl.donorDetails['mailing-address']['region']"
-                        ng-options="v['display-name'] | uppercase as v['display-name'] for v in $ctrl.regions">
-                </select>
-                <span class="help-block" validation="$ctrl.detailsForm.addressRegion" show-error="required" translate>You must select a State / Region</span>
+                <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['mailing-address']['locality']" maxlength="100">
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
-            <div class="form-group is-required" validation="$ctrl.detailsForm.addressPostalCode" show-error="asClass">
-              <label translate>Zip / Postal Code</label>
-              <input type="text" class="form-control  form-control-subtle" name="addressPostalCode" ng-model="$ctrl.donorDetails['mailing-address']['postal-code']" required max="20">
-              <span class="help-block" validation="$ctrl.detailsForm.addressPostalCode" show-error="required" translate>You must enter a Zip / Postal Code</span>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <input type="text" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['mailing-address']['region']" maxlength="100">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="$ctrl.donorDetails['mailing-address']['country-name'] === 'UNITED STATES'">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group is-required" validation="$ctrl.detailsForm.addressLocality" show-error="asClass">
+                <label translate>City</label>
+                <input type="text" class="form-control  form-control-subtle" name="addressLocality" ng-model="$ctrl.donorDetails['mailing-address']['locality']" required maxlength="50">
+                <span class="help-block" validation="$ctrl.detailsForm.addressLocality" show-error="required" translate>You must enter a City</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group is-required" validation="$ctrl.detailsForm.addressRegion" show-error="asClass">
+                <label translate>State / Region</label>
+                <div class="form-group">
+                  <select class="form-control  form-control-subtle"
+                          name="addressRegion" required
+                          ng-model="$ctrl.donorDetails['mailing-address']['region']"
+                          ng-options="v['display-name'] | uppercase as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''">
+                  </select>
+                  <span class="help-block" validation="$ctrl.detailsForm.addressRegion" show-error="required" translate>You must select a State / Region</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group is-required" validation="$ctrl.detailsForm.addressPostalCode" show-error="asClass">
+                <label translate>Zip / Postal Code</label>
+                <input type="text" class="form-control  form-control-subtle" name="addressPostalCode" ng-model="$ctrl.donorDetails['mailing-address']['postal-code']" required max="20">
+                <span class="help-block" validation="$ctrl.detailsForm.addressPostalCode" show-error="required" translate>You must enter a Zip / Postal Code</span>
+              </div>
             </div>
           </div>
         </div>
@@ -249,7 +251,7 @@
       <div class="closer">
         <div class="row">
           <div class="col-sm-5 hidden-xs">
-            <a href="" class="btn btn-default" translate>Return to Cart</a>
+            <a href="cart.html" class="btn btn-default" translate>Return to Cart</a>
           </div>
           <div class="col-sm-5 col-sm-offset-2">
             <button type="submit" class="btn btn-primary pull-right btn-block-mobile" translate>Continue to Payment Methods</button>
