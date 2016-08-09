@@ -44,8 +44,15 @@ class Order{
       });
   }
 
-  addCreditCardPayment(){
-
+  addCreditCardPayment(paymentInfo){
+    return this.getCurrentPayments()
+      .mergeMap((data) => {
+        return this.cortexApiService.post({
+          path: this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction'),
+          data: paymentInfo,
+          followLocation: true
+        });
+      });
   }
 
 }

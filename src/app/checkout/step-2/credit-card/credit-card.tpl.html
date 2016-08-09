@@ -1,124 +1,133 @@
-<div class="mb">
+<form novalidate ng-submit="$ctrl.submitPayment(creditCardPayment.$valid)" name="$ctrl.creditCardPaymentForm">
 
+  <div class="mb">
 
-    <h4 class="panel-title  border-bottom-small  visible">Your Information</h4>
+    <h4 class="panel-title  border-bottom-small  visible" translate>Credit Card Payment</h4>
+
     <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label>Card #</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      <div class="col-sm-6">
+        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.cardNumber" show-error="asClass">
+          <label>Card #</label>
+          <input type="text" name="cardNumber" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardNumber" required>
+          <span class="help-block" validation="$ctrl.creditCardPaymentForm.cardNumber" show-error="required" translate>You must enter a card number</span>
         </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label>Name On Card</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.cardholderName" show-error="asClass">
+          <label>Name On Card</label>
+          <input type="text" name="cardholderName" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardholderName" required>
+          <span class="help-block" validation="$ctrl.creditCardPaymentForm.cardholderName" show-error="required" translate>You must enter the name on the card</span>
         </div>
+      </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>Exp. Month</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.expiryMonth" show-error="asClass">
+          <label>Exp. Month</label>
+          <input type="text" name="expiryMonth" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryMonth" required>
+          <span class="help-block" validation="$ctrl.creditCardPaymentForm.expiryMonth" show-error="required" translate>You must enter the expiration month</span>
         </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>Exp. Year</label>
-                <input type="email" class="form-control  form-control-subtle">
-            </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.expiryYear" show-error="asClass">
+          <label>Exp. Year</label>
+          <input type="text" name="expiryYear" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryYear" required>
+          <span class="help-block" validation="$ctrl.creditCardPaymentForm.expiryYear" show-error="required" translate>You must enter the expiration year</span>
         </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>CVV Code</label>
-                <input type="email" class="form-control  form-control-subtle">
-            </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.securityCode" show-error="asClass">
+          <label>CVV Code</label>
+          <input type="text" name="securityCode" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" required>
+          <span class="help-block" validation="$ctrl.creditCardPaymentForm.securityCode" show-error="required" translate>You must enter the security code</span>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="mb">
+  <div class="mb">
 
     <div class="">
-        <label class="checkbox-inline">
-            <input type="checkbox" id="billingAddressValue" value="option1" checked> Same as Mailing Address
-        </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="billingAddressValue" value="option1" checked> Same as Mailing Address
+      </label>
     </div>
 
     <div class="billing-address-new-wrap mt- on" id="address-billing-current">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h4 class="panel-title  border-bottom-small  visible">Billing Address</h4>
-        <p>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h4 class="panel-title  border-bottom-small  visible">Billing Address</h4>
+          <p>
             1234 Sesame Street,<br/>
             Orlando, Florida 123456-7890
-        </p>
-    </div>
+          </p>
         </div>
+      </div>
     </div>
 
     <div class="billing-address-wrap mt-" id="address-billing-new">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="mb">
-                    <h4 class="panel-title  border-bottom-small  visible">New Billing Address</h4>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Country</label>
-                                <div class="form-group">
-                                    <select class="form-control  form-control-subtle" id="suffix">
-                                        <option>Peoples Republic of China</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Address</label>
-                                <input type="text" name="address1" class="form-control  form-control-subtle">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <input type="text" name="address2" class="form-control  form-control-subtle">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>City</label>
-                                <input type="text" class="form-control  form-control-subtle">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>State</label>
-                                <div class="form-group">
-                                    <select class="form-control  form-control-subtle" id="suffix">
-                                        <option></option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Zip</label>
-                                <input type="text" class="form-control  form-control-subtle">
-                            </div>
-                        </div>
-                    </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="mb">
+            <h4 class="panel-title  border-bottom-small  visible">New Billing Address</h4>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Country</label>
+                  <div class="form-group">
+                    <select class="form-control  form-control-subtle" id="suffix">
+                      <option>Peoples Republic of China</option>
+                    </select>
+                  </div>
                 </div>
+              </div>
             </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Address</label>
+                  <input type="text" name="address1" class="form-control  form-control-subtle">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <input type="text" name="address2" class="form-control  form-control-subtle">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>City</label>
+                  <input type="text" class="form-control  form-control-subtle">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>State</label>
+                  <div class="form-group">
+                    <select class="form-control  form-control-subtle" id="suffix">
+                      <option></option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Zip</label>
+                  <input type="text" class="form-control  form-control-subtle">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
-</div> <!-- // mb -->
+  </div> <!-- // mb -->
+
+</form>
