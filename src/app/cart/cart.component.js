@@ -1,6 +1,7 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-bootstrap';
+import 'angular-gettext'
 
 import appConfig from 'common/app.config';
 
@@ -66,6 +67,7 @@ class CartController{
 export default angular
   .module(componentName, [
     'ui.bootstrap',
+    'gettext',
     template.name,
     templateModal.name,
     appConfig.name,

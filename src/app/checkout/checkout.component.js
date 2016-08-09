@@ -1,6 +1,7 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'rxjs/add/operator/mergeMap';
+import 'angular-gettext'
 
 import appConfig from 'common/app.config';
 
@@ -61,6 +62,7 @@ export default angular
   .module(componentName, [
     template.name,
     appConfig.name,
+    'gettext',
     step1.name,
     step2.name,
     step3.name,
