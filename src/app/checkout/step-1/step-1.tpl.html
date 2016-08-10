@@ -32,10 +32,12 @@
 
       <div class="row">
         <div class="col-sm-4">
-          <div class="form-group is-required" validation="$ctrl.detailsForm.nameGivenName" show-error="asClass">
+          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label translate>First Name</label>
             <input type="text" class="form-control  form-control-subtle" name="nameGivenName" ng-model="$ctrl.donorDetails['name']['given-name']" required maxlength="50">
-            <span class="help-block" validation="$ctrl.detailsForm.nameGivenName" show-error="required" translate>You must enter a First Name</span>
+            <div role="alert" ng-messages="$ctrl.detailsForm.nameGivenName.$error" ng-if="($ctrl.detailsForm.nameGivenName | showErrors)">
+              <div class="help-block" ng-message="required" translate>You must enter a first name</div>
+            </div>
           </div>
         </div>
         <div class="col-sm-2">
@@ -45,10 +47,12 @@
           </div>
         </div>
         <div class="col-sm-4">
-          <div class="form-group is-required" validation="$ctrl.detailsForm.nameFamilyName" show-error="asClass">
+          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameFamilyName | showErrors)}">
             <label translate>Last Name</label>
             <input type="text" class="form-control  form-control-subtle" name="nameFamilyName" ng-model="$ctrl.donorDetails['name']['family-name']" required maxlength="50">
-            <span class="help-block" validation="$ctrl.detailsForm.nameFamilyName" show-error="required" translate>You must enter a Last Name</span>
+            <div role="alert" ng-messages="$ctrl.detailsForm.nameFamilyName.$error" ng-if="($ctrl.detailsForm.nameFamilyName | showErrors)">
+              <div class="help-block" ng-message="required" translate>You must enter a last name</div>
+            </div>
           </div>
         </div>
         <div class="col-sm-2">
@@ -77,10 +81,13 @@
           </div>
         </div>
         <div class="col-sm-6">
-          <div class="form-group is-required" validation="$ctrl.detailsForm.email" show-error="asClass">
+          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.email | showErrors)}">
             <label translate>Email Address</label>
             <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required maxlength="100">
-            <span class="help-block" validation="$ctrl.detailsForm.email" show-error="required" translate>You must enter an Email Address</span>
+            <div role="alert" ng-messages="$ctrl.detailsForm.email.$error" ng-if="($ctrl.detailsForm.email | showErrors)">
+              <div class="help-block" ng-message="required" translate>You must enter an email address</div>
+              <div class="help-block" ng-message="email" translate>This email address is not valid</div>
+            </div>
           </div>
         </div>
       </div>
@@ -157,16 +164,18 @@
         <h4 class="panel-title  border-bottom-small  visible" translate>Mailing Address</h4>
         <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'organization'">
           <div class="col-sm-12">
-            <div class="form-group is-required" validation="$ctrl.detailsForm.orgName" show-error="asClass">
+            <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.orgName | showErrors)}">
               <label translate>Organization Name</label>
               <input type="text" class="form-control  form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" required>
-              <span class="help-block" validation="$ctrl.detailsForm.orgName" show-error="required" translate>You must enter an Organization Name</span>
+              <div role="alert" ng-messages="$ctrl.detailsForm.orgName.$error" ng-if="($ctrl.detailsForm.orgName | showErrors)">
+                <div class="help-block" ng-message="required" translate>You must enter an organization name</div>
+              </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="form-group is-required" validation="$ctrl.detailsForm.addressCountry" show-error="asClass">
+            <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.addressCountry | showErrors)}">
               <label translate>Country</label>
               <div class="form-group">
                 <select class="form-control  form-control-subtle"
@@ -176,17 +185,21 @@
                         ng-change="$ctrl.refreshRegions($ctrl.donorDetails['mailing-address']['country-name'])"
                         ng-init="$ctrl.refreshRegions($ctrl.donorDetails['mailing-address']['country-name'])">
                 </select>
-                <span class="help-block" validation="$ctrl.detailsForm.addressCountry" show-error="required" translate>You must select a Country</span>
+                <div role="alert" ng-messages="$ctrl.detailsForm.addressCountry.$error" ng-if="($ctrl.detailsForm.addressCountry | showErrors)">
+                  <div class="help-block" ng-message="required" translate>You must select a country</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="form-group is-required" validation="$ctrl.detailsForm.addressStreetAddress" show-error="asClass">
+            <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.addressStreetAddress | showErrors)}">
               <label translate>Address</label>
               <input type="text" class="form-control  form-control-subtle" name="addressStreetAddress" ng-model="$ctrl.donorDetails['mailing-address']['street-address']" required maxlength="200">
-              <span class="help-block" validation="$ctrl.detailsForm.orgName" show-error="required" translate>You must enter an Address</span>
+              <div role="alert" ng-messages="$ctrl.detailsForm.addressStreetAddress.$error" ng-if="($ctrl.detailsForm.addressStreetAddress | showErrors)">
+                <div class="help-block" ng-message="required" translate>You must enter an address</div>
+              </div>
             </div>
           </div>
         </div>
@@ -216,16 +229,18 @@
         <div ng-if="$ctrl.donorDetails['mailing-address']['country-name'] === 'UNITED STATES'">
           <div class="row">
             <div class="col-sm-12">
-              <div class="form-group is-required" validation="$ctrl.detailsForm.addressLocality" show-error="asClass">
+              <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.addressLocality | showErrors)}">
                 <label translate>City</label>
                 <input type="text" class="form-control  form-control-subtle" name="addressLocality" ng-model="$ctrl.donorDetails['mailing-address']['locality']" required maxlength="50">
-                <span class="help-block" validation="$ctrl.detailsForm.addressLocality" show-error="required" translate>You must enter a City</span>
+                <div role="alert" ng-messages="$ctrl.detailsForm.addressLocality.$error" ng-if="($ctrl.detailsForm.addressLocality | showErrors)">
+                  <div class="help-block" ng-message="required" translate>You must enter a city</div>
+                </div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-sm-6">
-              <div class="form-group is-required" validation="$ctrl.detailsForm.addressRegion" show-error="asClass">
+              <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.addressRegion | showErrors)}">
                 <label translate>State / Region</label>
                 <div class="form-group">
                   <select class="form-control  form-control-subtle"
@@ -233,15 +248,19 @@
                           ng-model="$ctrl.donorDetails['mailing-address']['region']"
                           ng-options="v['display-name'] | uppercase as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''">
                   </select>
-                  <span class="help-block" validation="$ctrl.detailsForm.addressRegion" show-error="required" translate>You must select a State / Region</span>
+                  <div role="alert" ng-messages="$ctrl.detailsForm.addressRegion.$error" ng-if="($ctrl.detailsForm.addressRegion | showErrors)">
+                    <div class="help-block" ng-message="required" translate>You must select a state / region</div>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group is-required" validation="$ctrl.detailsForm.addressPostalCode" show-error="asClass">
+              <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.addressPostalCode | showErrors)}">
                 <label translate>Zip / Postal Code</label>
                 <input type="text" class="form-control  form-control-subtle" name="addressPostalCode" ng-model="$ctrl.donorDetails['mailing-address']['postal-code']" required max="20">
-                <span class="help-block" validation="$ctrl.detailsForm.addressPostalCode" show-error="required" translate>You must enter a Zip / Postal Code</span>
+                <div role="alert" ng-messages="$ctrl.detailsForm.addressPostalCode.$error" ng-if="($ctrl.detailsForm.addressPostalCode | showErrors)">
+                  <div class="help-block" ng-message="required" translate>You must enter a zip / postal code</div>
+                </div>
               </div>
             </div>
           </div>
