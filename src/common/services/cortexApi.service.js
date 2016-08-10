@@ -10,9 +10,9 @@ import { cortexScope } from 'common/app.constants';
 import appConfig from 'common/app.config';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
 
-let serviceName = 'apiService';
+let serviceName = 'cortexApiService';
 
-class Api {
+class CortexApi {
 
   /*@ngInject*/
   constructor($http, envService, hateoasHelperService){
@@ -33,7 +33,7 @@ class Api {
 
     return Observable.from(this.$http({
         method: config.method,
-        url: this.envService.read('apiUrl') + this.serializePath(config.path),
+        url: this.envService.read('apiUrl') + '/cortex' + this.serializePath(config.path),
         params: config.params,
         data: config.data,
         withCredentials: true
@@ -81,4 +81,4 @@ export default angular
     appConfig.name,
     hateoasHelperService.name
   ])
-  .service(serviceName, Api);
+  .service(serviceName, CortexApi);

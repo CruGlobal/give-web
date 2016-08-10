@@ -17,13 +17,13 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
     },
     vars: {
       development: {
-        apiUrl: 'https://cortex-gateway-stage.cru.org/cortex'
+        apiUrl: 'https://cortex-gateway-stage.cru.org'
       },
       staging: {
-        apiUrl: 'https://cortex-gateway-stage.cru.org/cortex'
+        apiUrl: 'https://cortex-gateway-stage.cru.org'
       },
       production: {
-        apiUrl: 'https://cortex-gateway.cru.org/cortex'
+        apiUrl: 'https://cortex-gateway.cru.org'
       }
     }
   });

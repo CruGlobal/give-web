@@ -2,12 +2,12 @@ import angular from 'angular';
 import JSONPath from 'jsonpath';
 import 'rxjs/add/operator/map';
 
-import apiService from '../api.service';
+import cortexApiService from '../cortexApi.service';
 
 let serviceName = 'cartService';
 
 /*@ngInject*/
-function cart(apiService){
+function cart(cortexApiService){
   return {
     get: get,
     addItem: addItem,
@@ -23,8 +23,8 @@ function cart(apiService){
   };
 
   function get() {
-    return apiService.get({
-      path: ['carts', apiService.scope, 'default'],
+    return cortexApiService.get({
+      path: ['carts', cortexApiService.scope, 'default'],
       params: {
         zoom: 'lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,lineitems:element:itemfields'
       }
@@ -121,14 +121,14 @@ function cart(apiService){
   function addItem(id, data){
     data.quantity = 1;
 
-    return apiService.post({
-      path: ['itemfieldlineitems', 'items', apiService.scope, id],
+    return cortexApiService.post({
+      path: ['itemfieldlineitems', 'items', cortexApiService.scope, id],
       data: data
     });
   }
 
   function updateItem(uri){
-    return apiService.post({
+    return cortexApiService.post({
       path: uri,
       data: {
         quantity: 1
@@ -137,14 +137,14 @@ function cart(apiService){
   }
 
   function deleteItem(uri){
-    return apiService.delete({
+    return cortexApiService.delete({
       path: uri
     });
   }
 
   function getDonorDetails(){
-    return apiService.get({
-        path: ['carts', apiService.scope, 'default'],
+    return cortexApiService.get({
+        path: ['carts', cortexApiService.scope, 'default'],
         params: {
           zoom: 'order:donordetails,order:emailinfo:email'
         }
@@ -181,22 +181,22 @@ function cart(apiService){
       details['mailing-address']['region'] = '';
     }
 
-    return apiService.put({
+    return cortexApiService.put({
       path: uri,
       data: details
     });
   }
 
   function addEmail(email){
-    return apiService.post({
-      path: ['emails', apiService.scope],
+    return cortexApiService.post({
+      path: ['emails', cortexApiService.scope],
       data: {email: email}
     });
   }
 
   function getGeographiesCountries(){
-    return apiService.get({
-        path: ['geographies', apiService.scope, 'countries'],
+    return cortexApiService.get({
+        path: ['geographies', cortexApiService.scope, 'countries'],
         params: {
           zoom: 'element'
         },
@@ -208,7 +208,7 @@ function cart(apiService){
   }
 
   function getGeographiesRegions(uri){
-    return apiService.get({
+    return cortexApiService.get({
         path: uri,
         params: {
           zoom: 'element'
@@ -223,6 +223,6 @@ function cart(apiService){
 
 export default angular
   .module(serviceName, [
-    apiService.name
+    cortexApiService.name
   ])
   .factory(serviceName, cart);

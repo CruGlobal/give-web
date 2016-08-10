@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 
-import apiService from '../api.service';
+import cortexApiService from '../cortexApi.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
 
 let serviceName = 'orderService';
@@ -11,8 +11,8 @@ let serviceName = 'orderService';
 class Order{
 
   /*@ngInject*/
-  constructor(apiService, hateoasHelperService){
-    this.apiService = apiService;
+  constructor(cortexApiService, hateoasHelperService){
+    this.cortexApiService = cortexApiService;
     this.hateoasHelperService = hateoasHelperService;
   }
 
@@ -20,8 +20,8 @@ class Order{
     if(this.paymentTypes){
       return Observable.of(this.paymentTypes);
     }else{
-      return this.apiService.get({
-          path: ['carts', this.apiService.scope, 'default'],
+      return this.cortexApiService.get({
+          path: ['carts', this.cortexApiService.scope, 'default'],
           zoom: {
             bankAccount: 'order:paymentmethodinfo:bankaccountform',
             creditCard: 'order:paymentmethodinfo:creditcardform'
@@ -36,7 +36,7 @@ class Order{
   addBankAccountPayment(paymentInfo){
     return this.getCurrentPayments()
       .mergeMap((data) => {
-        return this.apiService.post({
+        return this.cortexApiService.post({
             path: this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction'),
             data: paymentInfo,
             followLocation: true
@@ -52,7 +52,7 @@ class Order{
 
 export default angular
   .module(serviceName, [
-    apiService.name,
+    cortexApiService.name,
     hateoasHelperService.name
   ])
   .service(serviceName, Order);
