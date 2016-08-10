@@ -32,7 +32,10 @@
     <!-- endbuild -->
 
     <script>
-      System.import('app/main/main.component');
+      System.import('app/main/main.component')
+        .catch(function(error) {
+          console.error('SystemJS import error:', error);
+        });
     </script>
 
     <script>
