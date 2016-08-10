@@ -7,14 +7,16 @@
 
     <div class="row">
       <div class="col-sm-6">
-        <div class="form-group form-group-default is-required" validation="$ctrl.bankPaymentForm.bankName" show-error="asClass">
+        <div class="form-group form-group-default is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.bankName | showErrors)}">
           <label>Bank Name</label>
           <input type="text" class="form-control form-control-subtle" name="bankName" ng-model="$ctrl.bankPayment.bankName" required/>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.bankName" show-error="required" translate>You must enter a bank name</span>
+          <div role="alert" ng-messages="$ctrl.bankPaymentForm.bankName.$error" ng-if="($ctrl.bankPaymentForm.bankName | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter a bank name</div>
+          </div>
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="form-group form-group-default form-group-inline" validation="$ctrl.bankPaymentForm.accountType" show-error="asClass">
+        <div class="form-group form-group-default form-group-inline" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}">
           <label class="label-block">Account Type</label>
           <label class="radio-inline">
             <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="checking" required> Checking <span class="hidden-md">Account</span>
@@ -22,7 +24,9 @@
           <label class="radio-inline">
             <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="savings" required> Savings <span class="hidden-md">Account</span>
           </label>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.accountType" show-error="required" translate>You must choose an account type</span>
+          <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountType.$error" ng-if="($ctrl.bankPaymentForm.accountType | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must choose an account type</div>
+          </div>
         </div>
       </div>
     </div>
@@ -30,28 +34,34 @@
 
     <div class="row">
       <div class="col-sm-4">
-        <div class="form-group is-required" validation="$ctrl.bankPaymentForm.routingNumber" show-error="asClass">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.routingNumber | showErrors)}">
           <label>Routing #</label>
           <input type="text" class="form-control  form-control-subtle" name="routingNumber" ng-model="$ctrl.bankPayment.routingNumber" required>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.routingNumber" show-error="required" translate>You must enter a routing number</span>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.routingNumber" show-error="length" translate>This routing number must contain 9 digits</span>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.routingNumber" show-error="routingNumber" translate>This routing number is invalid</span>
+          <div role="alert" ng-messages="$ctrl.bankPaymentForm.routingNumber.$error" ng-if="($ctrl.bankPaymentForm.routingNumber | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter a routing number</div>
+            <div class="help-block" ng-message="length" translate>This routing number must contain 9 digits</div>
+            <div class="help-block" ng-message="routingNumber" translate>This routing number is invalid</div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="form-group is-required" validation="$ctrl.bankPaymentForm.accountNumber" show-error="asClass">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountNumber | showErrors)}">
           <label>Account #</label>
           <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" required>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="required" translate>You must enter an account number</span>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.accountNumber" show-error="length" translate>This account number must contain 17 or fewer digits</span>
+          <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountNumber.$error" ng-if="($ctrl.bankPaymentForm.accountNumber | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter an account number</div>
+            <div class="help-block" ng-message="length" translate>This account number must contain 17 or fewer digits</div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="form-group is-required" validation="$ctrl.bankPaymentForm.verifyAccountNumber" show-error="asClass">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)}">
           <label>Retype Account #</label>
           <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" ng-model="$ctrl.bankPayment.verifyAccountNumber" required>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.verifyAccountNumber" show-error="required" translate>You must retype your account number</span>
-          <span class="help-block" validation="$ctrl.bankPaymentForm.verifyAccountNumber" show-error="verifyAccountNumber" translate>Your account numbers do not match</span>
+          <div role="alert" ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error" ng-if="($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must retype your account number</div>
+            <div class="help-block" ng-message="verifyAccountNumber" translate>Your account numbers do not match</div>
+          </div>
         </div>
       </div>
 
@@ -97,11 +107,13 @@
             </div>
           </div>
 
-          <div class="form-group is-required" validation="$ctrl.bankPaymentForm.acceptedAgreement" show-error="asClass">
+          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.acceptedAgreement | showErrors)}">
             <label class="checkbox-inline">
               <input type="checkbox" name="acceptedAgreement" ng-model="$ctrl.bankPayment.acceptedAgreement" required value="true"> I Agree
             </label>
-            <span class="help-block" validation="$ctrl.bankPaymentForm.acceptedAgreement" show-error="required" translate>You must accept this agreement to pay with a bank account</span>
+            <div role="alert" ng-messages="$ctrl.bankPaymentForm.acceptedAgreement.$error" ng-if="($ctrl.bankPaymentForm.acceptedAgreement | showErrors)">
+              <div class="help-block" ng-message="required" translate>You must accept this agreement to pay with a bank account</div>
+            </div>
           </div>
 
         </div>

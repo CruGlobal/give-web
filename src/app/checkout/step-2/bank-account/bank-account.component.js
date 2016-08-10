@@ -1,7 +1,7 @@
 import angular from 'angular';
-import isEmpty from 'lodash/isEmpty';
+import 'angular-messages';
 import toString from 'lodash/toString';
-import validation from 'common/directives/validation.directive';
+import showErrors from 'common/filters/showErrors.filter';
 import paymentValidationService from 'common/services/paymentValidation.service';
 import orderService from 'common/services/api/order.service';
 
@@ -40,11 +40,11 @@ class BankAccountController{
 
   addCustomValidators(){
     this.bankPaymentForm.routingNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.bankPaymentForm.routingNumber.$validators.length = number => isEmpty(number) || toString(number).length === 9;
+    this.bankPaymentForm.routingNumber.$validators.length = number => toString(number).length === 9;
     this.bankPaymentForm.routingNumber.$validators.routingNumber = this.paymentValidationService.validateRoutingNumber();
 
     this.bankPaymentForm.accountNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.bankPaymentForm.accountNumber.$validators.length = number => isEmpty(number) || toString(number).length <= 17;
+    this.bankPaymentForm.accountNumber.$validators.length = number => toString(number).length <= 17;
     this.bankPaymentForm.accountNumber.$viewChangeListeners.push(() => {
       // Revalidate verifyAccountNumber after accountNumber changes
       this.bankPaymentForm.verifyAccountNumber.$validate();
@@ -52,7 +52,7 @@ class BankAccountController{
 
     this.bankPaymentForm.verifyAccountNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
     this.bankPaymentForm.verifyAccountNumber.$validators.verifyAccountNumber = (verifyAccountNumber) => {
-      return this.bankPayment.accountNumber === verifyAccountNumber || isEmpty(this.bankPayment.accountNumber) || isEmpty(verifyAccountNumber);
+      return this.bankPayment.accountNumber === verifyAccountNumber;
     };
 
   }
@@ -86,7 +86,8 @@ class BankAccountController{
 export default angular
   .module(componentName, [
     template.name,
-    validation.name,
+    'ngMessages',
+    showErrors.name,
     paymentValidationService.name,
     orderService.name
   ])
