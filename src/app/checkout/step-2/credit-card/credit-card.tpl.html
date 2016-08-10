@@ -6,40 +6,54 @@
 
     <div class="row">
       <div class="col-sm-6">
-        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.cardNumber" show-error="asClass">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPayment.accountType | showErrors)}">
           <label>Card #</label>
-          <input type="text" name="cardNumber" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardNumber" required>
-          <span class="help-block" validation="$ctrl.creditCardPaymentForm.cardNumber" show-error="required" translate>You must enter a card number</span>
+          <input type="text" name="cardNumber" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardNumber" required ng-minlength="13" ng-maxlength="16">
+          <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="$ctrl.creditCardPaymentForm.$submitted || $ctrl.creditCardPaymentForm.cardNumber.$touched">
+            <div class="help-block" ng-message="required" translate>You must enter a card number</div>
+            <div class="help-block" ng-message="minlength" translate>This card number must contain at least 13 digits</div>
+            <div class="help-block" ng-message="maxlength" translate>This card number cannot contain more than 16 digits</div>
+            <div class="help-block" ng-message="cardType" translate>This card type is not accepted</div>
+            <div class="help-block" ng-message="cardNumber" translate>This card number seems to have been either typed incorrectly or is invalid</div>
+          </div>
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.cardholderName" show-error="asClass">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPayment.cardholderName | showErrors)}">
           <label>Name On Card</label>
           <input type="text" name="cardholderName" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardholderName" required>
-          <span class="help-block" validation="$ctrl.creditCardPaymentForm.cardholderName" show-error="required" translate>You must enter the name on the card</span>
+          <div role="alert" ng-messages="$ctrl.creditCardPayment.cardholderName.$error" ng-if="($ctrl.creditCardPayment.cardholderName | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter the name on the card</div>
+          </div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-4">
-        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.expiryMonth" show-error="asClass">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPayment.expiryMonth | showErrors)}">
           <label>Exp. Month</label>
           <input type="text" name="expiryMonth" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryMonth" required>
-          <span class="help-block" validation="$ctrl.creditCardPaymentForm.expiryMonth" show-error="required" translate>You must enter the expiration month</span>
+          <div role="alert" ng-messages="$ctrl.creditCardPayment.expiryMonth.$error" ng-if="($ctrl.creditCardPayment.expiryMonth | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter the expiration month</div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.expiryYear" show-error="asClass">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPayment.expiryYear | showErrors)}">
           <label>Exp. Year</label>
           <input type="text" name="expiryYear" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryYear" required>
-          <span class="help-block" validation="$ctrl.creditCardPaymentForm.expiryYear" show-error="required" translate>You must enter the expiration year</span>
+          <div role="alert" ng-messages="$ctrl.creditCardPayment.expiryYear.$error" ng-if="($ctrl.creditCardPayment.expiryYear | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter the expiration year</div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="form-group is-required" validation="$ctrl.creditCardPaymentForm.securityCode" show-error="asClass">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPayment.securityCode | showErrors)}">
           <label>CVV Code</label>
           <input type="text" name="securityCode" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" required>
-          <span class="help-block" validation="$ctrl.creditCardPaymentForm.securityCode" show-error="required" translate>You must enter the security code</span>
+          <div role="alert" ng-messages="$ctrl.creditCardPayment.securityCode.$error" ng-if="($ctrl.creditCardPayment.securityCode | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter the security code</div>
+          </div>
         </div>
       </div>
     </div>

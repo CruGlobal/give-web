@@ -1,5 +1,6 @@
 import angular from 'angular';
-import validation from 'common/directives/validation.directive';
+import 'angular-messages';
+import showErrors from 'common/filters/showErrors.filter';
 import paymentValidationService from 'common/services/paymentValidation.service';
 import orderService from 'common/services/api/order.service';
 
@@ -35,6 +36,15 @@ class CreditCardController {
   }
 
   addCustomValidators() {
+    this.creditCardPaymentForm.cardNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
+    //this.creditCardPaymentForm.cardNumber.$validators.cardType = null; TODO: implement this
+    this.creditCardPaymentForm.cardNumber.$validators.cardNumber = this.paymentValidationService.validateCardNumber();
+
+    this.creditCardPaymentForm.expiryMonth.$parsers.push(this.paymentValidationService.stripNonDigits);
+
+    this.creditCardPaymentForm.expiryYear.$parsers.push(this.paymentValidationService.stripNonDigits);
+
+    this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
 
   }
 
@@ -68,7 +78,8 @@ class CreditCardController {
 export default angular
   .module(componentName, [
     template.name,
-    validation.name,
+    'ngMessages',
+    showErrors.name,
     paymentValidationService.name,
     orderService.name
   ])
