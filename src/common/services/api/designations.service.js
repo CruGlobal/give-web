@@ -3,12 +3,12 @@ import JSONPath from 'jsonpath';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
-import apiService from '../api.service';
+import cortexApiService from '../cortexApi.service';
 
 let serviceName = 'designationsService';
 
 /*@ngInject*/
-function designations(apiService){
+function designations(cortexApiService){
 
   return {
     createSearch: createSearch,
@@ -17,8 +17,8 @@ function designations(apiService){
   };
 
   function createSearch(keywords){
-    return apiService.post({
-        path: ['searches', apiService.scope, 'keywords', 'items'],
+    return cortexApiService.post({
+        path: ['searches', cortexApiService.scope, 'keywords', 'items'],
         params: {
           FollowLocation: true
         },
@@ -33,8 +33,8 @@ function designations(apiService){
   }
 
   function getSearchResults(id, page){
-    return apiService.get({
-      path: ['searches', apiService.scope, 'keywords', 'items', id, 'pages', page],
+    return cortexApiService.get({
+      path: ['searches', cortexApiService.scope, 'keywords', 'items', id, 'pages', page],
       params: {
         zoom: 'element:definition'
       }
@@ -42,15 +42,15 @@ function designations(apiService){
   }
 
   function productLookup(query, selectQuery){
-    var httpRequest = selectQuery ? apiService.post({
+    var httpRequest = selectQuery ? cortexApiService.post({
       path: query,
       data: { },
       followLocation: true,
       params: {
         zoom: 'code,definition,definition:options:element:selector:choice:description,definition:options:element:selector:chosen:description,definition:options:element:selector:choice:selectaction'
       }
-    }) : apiService.post({
-      path: ['lookups', apiService.scope, 'items'],
+    }) : cortexApiService.post({
+      path: ['lookups', cortexApiService.scope, 'items'],
       followLocation: true,
       data: {
         code: query
@@ -90,6 +90,6 @@ function designations(apiService){
 
 export default angular
   .module(serviceName, [
-    apiService.name
+    cortexApiService.name
   ])
   .factory(serviceName, designations);
