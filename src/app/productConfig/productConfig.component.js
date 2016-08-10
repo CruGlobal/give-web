@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-messages';
 import 'angular-bootstrap';
 
 import template from './productConfig.tpl';
@@ -47,6 +48,7 @@ class ProductConfigController{
 export default angular
   .module(componentName, [
     'ui.bootstrap',
+    'ngMessages',
     template.name,
     templateModal.name,
     designationsService.name
