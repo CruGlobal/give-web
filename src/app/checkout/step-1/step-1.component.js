@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-messages';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import find from 'lodash/find';
@@ -62,6 +63,7 @@ class Step1Controller{
 export default angular
   .module(componentName, [
     template.name,
+    'ngMessages',
     cartService.name
   ])
   .component(componentName, {

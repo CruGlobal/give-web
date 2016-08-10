@@ -58,9 +58,10 @@ System.config({
 
   map: {
     "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@checkout",
-    "angular": "github:angular/bower-angular@1.5.5",
+    "angular": "github:angular/bower-angular@1.5.8",
     "angular-bootstrap": "npm:angular-bootstrap-npm@0.14.3",
     "angular-environment": "npm:angular-environment@1.0.4",
+    "angular-messages": "github:angular/bower-angular-messages@1.5.8",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.5",
     "angular-ui-router": "github:angular-ui/ui-router@0.2.18",
     "babel": "npm:babel-core@5.8.38",
@@ -90,10 +91,13 @@ System.config({
       "url": "github:jspm/nodelibs-url@0.1.0"
     },
     "github:angular-ui/ui-router@0.2.18": {
-      "angular": "github:angular/bower-angular@1.5.5"
+      "angular": "github:angular/bower-angular@1.5.8"
+    },
+    "github:angular/bower-angular-messages@1.5.8": {
+      "angular": "github:angular/bower-angular@1.5.8"
     },
     "github:angular/bower-angular-mocks@1.5.5": {
-      "angular": "github:angular/bower-angular@1.5.5"
+      "angular": "github:angular/bower-angular@1.5.8"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
@@ -552,6 +556,9 @@ System.config({
     },
     "npm:is-finite@1.0.1": {
       "number-is-nan": "npm:number-is-nan@1.0.0"
+    },
+    "npm:isarray@1.0.0": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:isobject@2.1.0": {
       "isarray": "npm:isarray@1.0.0"
