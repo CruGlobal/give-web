@@ -34,7 +34,7 @@
               <!--<label><input id="" name="custom_option" type="radio" value="Custom003"> Custom Ministry Option 3</label>-->
             <!--</div>-->
 
-            <div data-toggle="buttons" validation="$ctrl.itemConfigForm.amount" show-error="asClass">
+            <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
               <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 50" ng-class="{'active': $ctrl.itemConfig.amount === 50}"><span class="number">$50</span></label>
               <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 100" ng-class="{'active': $ctrl.itemConfig.amount === 100}"><span class="number">$100</span></label>
               <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 250" ng-class="{'active': $ctrl.itemConfig.amount === 250}"><span class="number">$250</span></label>
@@ -46,8 +46,10 @@
                   <input class="form-control form-control-subtle number" min="1" type="number" name="amount" ng-model="$ctrl.itemConfig.amount" required>
                 </div>
               </label>
-              <span class="help-block" validation="$ctrl.itemConfigForm.amount" show-error="required" translate>You must enter an amount</span>
-              <span class="help-block" validation="$ctrl.itemConfigForm.amount" show-error="min" translate>Amount must be at least $1</span>
+              <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+                <div class="help-block" ng-message="required" translate>You must enter an amount</div>
+                <div class="help-block" ng-message="min" translate>Amount must be at least $1</div>
+              </div>
             </div>
           </div><!-- // panel-body -->
         </div><!-- // panel -->
