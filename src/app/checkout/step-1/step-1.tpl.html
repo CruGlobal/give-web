@@ -286,9 +286,10 @@
             <div class="col-sm-6">
               <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.addressPostalCode | showErrors)}">
                 <label translate>Zip / Postal Code</label>
-                <input type="text" class="form-control  form-control-subtle" name="addressPostalCode" ng-model="$ctrl.donorDetails['mailing-address']['postal-code']" required max="20">
+                <input type="text" class="form-control  form-control-subtle" name="addressPostalCode" ng-model="$ctrl.donorDetails['mailing-address']['postal-code']" required ng-maxlength="20">
                 <div role="alert" ng-messages="$ctrl.detailsForm.addressPostalCode.$error" ng-if="($ctrl.detailsForm.addressPostalCode | showErrors)">
                   <div class="help-block" ng-message="required" translate>You must enter a zip / postal code</div>
+                  <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 20 characters</div>
                 </div>
               </div>
             </div>
