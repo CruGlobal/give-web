@@ -8,11 +8,22 @@ const ccpKey = '-----BEGIN PUBLIC KEY-----' +
   'swIDAQAB' +
   '-----END PUBLIC KEY-----';
 
+const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
+  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgAdFxOSlGG6b/8Wkc5qX' +
+  'EuFhMwJJ8He6XgcLRlO/ktvQ9FA02xFE7ditpyCxZ8dXRKp+kjVoAqL5fCOEnxJU' +
+  '9IsGIo3hqtzWCBbYd8uSIFtJSwAIiaw46bYX33XR4WGpXJZOQKYxS6ui+1dfCgWB' +
+  '6YUWRwWbtOXcSm38dIPomVMS7X5WVRr9Lu7QCpq8jKhbPqFAeaT64TLnC+lmBrFB' +
+  'ny5g7p9UyCPEkK4y5R7QmSIO1dxuu2Sgb42PjX+/QWriEYqJxPBzhVk+jmegv/62' +
+  'AREJneyPtIKqkDnYcKLXgMSOyLmoXlkaMX7UqOGN/cp7jgKUC2byFa04nPaRPjT1' +
+  'WwIDAQAB' +
+  '-----END PUBLIC KEY-----';
+
 const cortexScope = 'crugive';
 
 // See EnvConfig in common/services/api.service.js for api url configurations
 
 export {
   ccpKey,
+  ccpStagingKey,
   cortexScope
 };

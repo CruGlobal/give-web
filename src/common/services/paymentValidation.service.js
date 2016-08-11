@@ -1,7 +1,8 @@
 import angular from 'angular';
 import _ from 'lodash';
 import ccp from 'common/lib/ccp';
-import { ccpKey } from 'common/app.constants';
+import 'angular-environment';
+import { ccpKey, ccpStagingKey } from 'common/app.constants';
 import toString from 'lodash/toString';
 import capitalize from 'lodash/capitalize';
 
@@ -10,8 +11,12 @@ let serviceName = 'paymentValidationService';
 class PaymentValidation {
 
   /*@ngInject*/
-  constructor(){
-    ccp.initialize(ccpKey);
+  constructor(envService){
+    if(envService.is('production')){
+      ccp.initialize(ccpKey);
+    }else{
+      ccp.initialize(ccpStagingKey);
+    }
     this.ccp = ccp;
   }
 
@@ -57,6 +62,6 @@ class PaymentValidation {
 
 export default angular
   .module(serviceName, [
-
+    'environment'
   ])
   .service(serviceName, PaymentValidation);
