@@ -78,7 +78,7 @@ describe('checkout', () => {
           expect(size(self.controller.bankPaymentForm.routingNumber.$validators)).toEqual(2);
 
           expect(size(self.controller.bankPaymentForm.accountNumber.$parsers)).toEqual(1);
-          expect(size(self.controller.bankPaymentForm.accountNumber.$validators)).toEqual(1);
+          expect(size(self.controller.bankPaymentForm.accountNumber.$validators)).toEqual(2);
           expect(size(self.controller.bankPaymentForm.accountNumber.$viewChangeListeners)).toEqual(1);
 
           expect(size(self.controller.bankPaymentForm.verifyAccountNumber.$parsers)).toEqual(1);
