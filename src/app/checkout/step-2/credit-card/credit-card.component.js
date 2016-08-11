@@ -42,12 +42,11 @@ class CreditCardController {
     this.creditCardPaymentForm.cardNumber.$validators.maxlength = number => toString(number).length <= 16;
     this.creditCardPaymentForm.cardNumber.$validators.cardNumber = this.paymentValidationService.validateCardNumber();
 
-    this.creditCardPaymentForm.expiryMonth.$parsers.push(this.paymentValidationService.stripNonDigits);
-
-    this.creditCardPaymentForm.expiryYear.$parsers.push(this.paymentValidationService.stripNonDigits);
+    this.creditCardPaymentForm.expiryYear.$validators.length = number => toString(number).length === 2 || toString(number).length === 4;
 
     this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
-
+    this.creditCardPaymentForm.securityCode.$validators.minlength = number => toString(number).length >= 3;
+    this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
   }
 
   savePayment(){

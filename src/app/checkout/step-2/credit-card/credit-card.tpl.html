@@ -31,18 +31,23 @@
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryMonth | showErrors)}">
           <label>Exp. Month</label>
-          <input type="text" name="expiryMonth" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryMonth" required>
+          <input type="number" name="expiryMonth" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryMonth" required min="1" max="12">
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryMonth.$error" ng-if="($ctrl.creditCardPaymentForm.expiryMonth | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the expiration month</div>
+            <div class="help-block" ng-message="number" translate>The month must be a number</div>
+            <div class="help-block" ng-message="min" translate>The month must be 1 or greater</div>
+            <div class="help-block" ng-message="max" translate>The month cannot be larger than 12</div>
           </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryYear | showErrors)}">
           <label>Exp. Year</label>
-          <input type="text" name="expiryYear" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryYear" required>
+          <input type="number" name="expiryYear" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryYear" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryYear.$error" ng-if="($ctrl.creditCardPaymentForm.expiryYear | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the expiration year</div>
+            <div class="help-block" ng-message="number" translate>The year must be a number</div>
+            <div class="help-block" ng-message="length" translate>The year must be 2 or 4 digits</div>
           </div>
         </div>
       </div>
@@ -52,6 +57,8 @@
           <input type="text" name="securityCode" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the security code</div>
+            <div class="help-block" ng-message="minlength" translate>The security code must be at least 3 digits</div>
+            <div class="help-block" ng-message="maxlength" translate>The security code cannot be more than 4 digits</div>
           </div>
         </div>
       </div>
