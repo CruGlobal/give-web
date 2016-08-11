@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-messages';
+import toString from 'lodash/toString';
 import showErrors from 'common/filters/showErrors.filter';
 import paymentValidationService from 'common/services/paymentValidation.service';
 import orderService from 'common/services/api/order.service';
@@ -37,7 +38,8 @@ class CreditCardController {
 
   addCustomValidators() {
     this.creditCardPaymentForm.cardNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
-    //this.creditCardPaymentForm.cardNumber.$validators.cardType = null; TODO: implement this
+    this.creditCardPaymentForm.cardNumber.$validators.minlength = number => toString(number).length >= 13;
+    this.creditCardPaymentForm.cardNumber.$validators.maxlength = number => toString(number).length <= 16;
     this.creditCardPaymentForm.cardNumber.$validators.cardNumber = this.paymentValidationService.validateCardNumber();
 
     this.creditCardPaymentForm.expiryMonth.$parsers.push(this.paymentValidationService.stripNonDigits);

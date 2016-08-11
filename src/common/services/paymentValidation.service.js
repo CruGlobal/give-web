@@ -3,6 +3,7 @@ import _ from 'lodash';
 import ccp from 'common/lib/ccp';
 import { ccpKey } from 'common/app.constants';
 import toString from 'lodash/toString';
+import capitalize from 'lodash/capitalize';
 
 let serviceName = 'paymentValidationService';
 
@@ -34,6 +35,11 @@ class PaymentValidation {
       cardNumber = toString(cardNumber);
       return (new this.ccp.CardNumber(cardNumber)).validate() === null;
     };
+  }
+
+  getCardNumberErrorMessage(cardNumber) {
+    cardNumber = this.stripNonDigits(toString(cardNumber));
+    return capitalize((new this.ccp.CardNumber(cardNumber)).validate());
   }
 
   validateCardSecurityCode(){
