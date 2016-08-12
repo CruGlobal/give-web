@@ -1,124 +1,153 @@
-<div class="mb">
+<form novalidate name="$ctrl.creditCardPaymentForm">
 
+  <div class="mb">
 
-    <h4 class="panel-title  border-bottom-small  visible">Your Information</h4>
+    <h4 class="panel-title  border-bottom-small  visible" translate>Credit Card Payment</h4>
+
     <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label>Card #</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      <div class="col-sm-6">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardNumber | showErrors)}">
+          <label>Card #</label>
+          <input type="text" name="cardNumber" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardNumber" required>
+          <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="($ctrl.creditCardPaymentForm.cardNumber | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter a card number</div>
+            <div class="help-block" ng-message="minlength" translate>This card number must contain at least 13 digits</div>
+            <div class="help-block" ng-message="maxlength" translate>This card number cannot contain more than 16 digits</div>
+            <div class="help-block" ng-message="cardNumber" translate>{{$ctrl.paymentValidationService.getCardNumberErrorMessage($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}}</div>
+          </div>
         </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label>Name On Card</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardholderName | showErrors)}">
+          <label>Name On Card</label>
+          <input type="text" name="cardholderName" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardholderName" required>
+          <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.cardholderName.$error" ng-if="($ctrl.creditCardPaymentForm.cardholderName | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter the name on the card</div>
+          </div>
         </div>
+      </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>Exp. Month</label>
-                <input type="text" class="form-control  form-control-subtle">
-            </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryMonth | showErrors)}">
+          <label>Exp. Month</label>
+          <input type="number" name="expiryMonth" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryMonth" required min="1" max="12">
+          <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryMonth.$error" ng-if="($ctrl.creditCardPaymentForm.expiryMonth | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter the expiration month</div>
+            <div class="help-block" ng-message="number" translate>The month must be a number</div>
+            <div class="help-block" ng-message="min" translate>The month must be 1 or greater</div>
+            <div class="help-block" ng-message="max" translate>The month cannot be larger than 12</div>
+          </div>
         </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>Exp. Year</label>
-                <input type="email" class="form-control  form-control-subtle">
-            </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryYear | showErrors)}">
+          <label>Exp. Year</label>
+          <input type="number" name="expiryYear" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryYear" required>
+          <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryYear.$error" ng-if="($ctrl.creditCardPaymentForm.expiryYear | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter the expiration year</div>
+            <div class="help-block" ng-message="number" translate>The year must be a number</div>
+            <div class="help-block" ng-message="length" translate>The year must be 2 or 4 digits</div>
+          </div>
         </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label>CVV Code</label>
-                <input type="email" class="form-control  form-control-subtle">
-            </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors)}">
+          <label>CVV Code</label>
+          <input type="text" name="securityCode" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" required>
+          <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must enter the security code</div>
+            <div class="help-block" ng-message="minlength" translate>The security code must be at least 3 digits</div>
+            <div class="help-block" ng-message="maxlength" translate>The security code cannot be more than 4 digits</div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="mb">
+  <div class="mb">
 
     <div class="">
-        <label class="checkbox-inline">
-            <input type="checkbox" id="billingAddressValue" value="option1" checked> Same as Mailing Address
-        </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="billingAddressValue" value="option1" checked> Same as Mailing Address
+      </label>
     </div>
 
     <div class="billing-address-new-wrap mt- on" id="address-billing-current">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h4 class="panel-title  border-bottom-small  visible">Billing Address</h4>
-        <p>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h4 class="panel-title  border-bottom-small  visible">Billing Address</h4>
+          <p>
             1234 Sesame Street,<br/>
             Orlando, Florida 123456-7890
-        </p>
-    </div>
+          </p>
         </div>
+      </div>
     </div>
 
     <div class="billing-address-wrap mt-" id="address-billing-new">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="mb">
-                    <h4 class="panel-title  border-bottom-small  visible">New Billing Address</h4>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Country</label>
-                                <div class="form-group">
-                                    <select class="form-control  form-control-subtle" id="suffix">
-                                        <option>Peoples Republic of China</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Address</label>
-                                <input type="text" name="address1" class="form-control  form-control-subtle">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <input type="text" name="address2" class="form-control  form-control-subtle">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>City</label>
-                                <input type="text" class="form-control  form-control-subtle">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>State</label>
-                                <div class="form-group">
-                                    <select class="form-control  form-control-subtle" id="suffix">
-                                        <option></option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Zip</label>
-                                <input type="text" class="form-control  form-control-subtle">
-                            </div>
-                        </div>
-                    </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="mb">
+            <h4 class="panel-title  border-bottom-small  visible">New Billing Address</h4>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Country</label>
+                  <div class="form-group">
+                    <select class="form-control  form-control-subtle">
+                      <option>Peoples Republic of China</option>
+                    </select>
+                  </div>
                 </div>
+              </div>
             </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Address</label>
+                  <input type="text" name="address1" class="form-control  form-control-subtle">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <input type="text" name="address2" class="form-control  form-control-subtle">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>City</label>
+                  <input type="text" class="form-control  form-control-subtle">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>State</label>
+                  <div class="form-group">
+                    <select class="form-control  form-control-subtle">
+                      <option></option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Zip</label>
+                  <input type="text" class="form-control  form-control-subtle">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
-</div> <!-- // mb -->
+  </div> <!-- // mb -->
+
+</form>
