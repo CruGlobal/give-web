@@ -23,10 +23,7 @@ class Step3Controller{
         this.donorDetails = data;
       });
 
-    this.orderService.getCurrentPayments()
-      .subscribe((data) => {
-        this.bankPayment = data;
-      });
+    // Load current payment method from /paymentmethods/orders/crugive/
   }
 }
 

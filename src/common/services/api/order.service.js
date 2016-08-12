@@ -16,7 +16,7 @@ class Order{
     this.hateoasHelperService = hateoasHelperService;
   }
 
-  getCurrentPayments(){
+  getPaymentForms(){
     if(this.paymentTypes){
       return Observable.of(this.paymentTypes);
     }else{
@@ -34,7 +34,7 @@ class Order{
   }
 
   addBankAccountPayment(paymentInfo){
-    return this.getCurrentPayments()
+    return this.getPaymentForms()
       .mergeMap((data) => {
         return this.cortexApiService.post({
             path: this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction'),
@@ -45,7 +45,7 @@ class Order{
   }
 
   addCreditCardPayment(paymentInfo){
-    return this.getCurrentPayments()
+    return this.getPaymentForms()
       .mergeMap((data) => {
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction'),
