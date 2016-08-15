@@ -50,7 +50,8 @@
           <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" required>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountNumber.$error" ng-if="($ctrl.bankPaymentForm.accountNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter an account number</div>
-            <div class="help-block" ng-message="length" translate>This account number must contain 17 or fewer digits</div>
+            <div class="help-block" ng-message="minlength" translate>This account number must contain 2 or more digits</div>
+            <div class="help-block" ng-message="maxlength" translate>This account number must contain 17 or fewer digits</div>
           </div>
         </div>
       </div>

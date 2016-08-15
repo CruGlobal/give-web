@@ -44,7 +44,8 @@ class BankAccountController{
     this.bankPaymentForm.routingNumber.$validators.routingNumber = this.paymentValidationService.validateRoutingNumber();
 
     this.bankPaymentForm.accountNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.bankPaymentForm.accountNumber.$validators.length = number => toString(number).length <= 17;
+    this.bankPaymentForm.accountNumber.$validators.minlength = number => toString(number).length >= 2;
+    this.bankPaymentForm.accountNumber.$validators.maxlength = number => toString(number).length <= 17;
     this.bankPaymentForm.accountNumber.$viewChangeListeners.push(() => {
       // Revalidate verifyAccountNumber after accountNumber changes
       this.bankPaymentForm.verifyAccountNumber.$validate();
