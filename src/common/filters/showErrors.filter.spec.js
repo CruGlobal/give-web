@@ -11,6 +11,10 @@ describe('showErrors filter', () => {
     self.$filter = $filter;
   }));
 
+  it('should return false if ngModelController is not set', () => {
+    expect(self.$filter('showErrors')()).toEqual(false);
+  });
+
   it('should return true if there is an error and it has been touched', () => {
     let ngModelController = {
       $invalid: true,

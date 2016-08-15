@@ -1,5 +1,5 @@
 module.exports = {
-  source: ['src/**/*.js', '!**/*.spec.js'],
+  source: ['src/**/*.js', '!**/*.spec.js', '!**/*.fixture.js'],
   sourceIncludingSpecs: ['src/**/*.js'],
   html: ['src/**/*.html', 'index.html'],
   json: 'src/**/*.json',
