@@ -17,6 +17,11 @@ class Step2Controller{
     this.submitted = false;
   }
 
+  changePaymentType(type){
+    this.paymentType = type;
+    this.submitted = false;
+  }
+
   onSave(success){
     if(success){
       this.changeStep({newStep: 'review'});
