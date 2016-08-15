@@ -35,7 +35,7 @@ class Step1Controller{
   }
 
   refreshRegions(country){
-    country = find(this.countries, function(v){ return v['name'] === country; });
+    country = find(this.countries, function(v){ return v.name === country; });
     if(!country){ return; }
 
     this.cartService.getGeographies.regions(country.links[0].uri)
