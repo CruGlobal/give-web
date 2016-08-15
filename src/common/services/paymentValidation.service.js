@@ -12,7 +12,13 @@ class PaymentValidation {
 
   /*@ngInject*/
   constructor(envService){
-    if(envService.is('production')){
+    this.envService = envService;
+
+    this.initializeCcp();
+  }
+
+  initializeCcp(){
+    if(this.envService.is('production')){
       ccp.initialize(ccpKey);
     }else{
       ccp.initialize(ccpStagingKey);
