@@ -151,7 +151,7 @@ function cart(cortexApiService){
       })
       .map((data) => {
         let details = JSONPath.query(data, '$.._order.._donordetails.*')[0];
-        if(details['mailing-address']['country-name'] !== 'UNITED STATES'){
+        if(details['mailing-address']['country-name'] !== 'US'){
           let intAddress = details['mailing-address']['street-address'].split('||');
           details['mailing-address']['street-address'] = intAddress[0] ? intAddress[0] : '';
           details['mailing-address']['extended-address'] = intAddress[1] ? intAddress[1] : '';
@@ -167,7 +167,7 @@ function cart(cortexApiService){
 
   function updateDonorDetails(uri, details){
     details = angular.copy(details);
-    if(details['mailing-address']['country-name'] !== 'UNITED STATES'){
+    if(details['mailing-address']['country-name'] !== 'US'){
       let intAddress = [
         details['mailing-address']['street-address'],
         details['mailing-address']['extended-address'],
