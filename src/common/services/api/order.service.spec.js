@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './order.service';
 
+import cartResponse from 'common/services/api/fixtures/cortex-cart-paymentmethodinfo-forms.fixture.js';
 
 describe('order service', () => {
   beforeEach(angular.mock.module(module.name));
@@ -17,60 +18,21 @@ describe('order service', () => {
     self.$httpBackend.verifyNoOutstandingRequest();
   });
 
-  let paymentFormsResponse = {
-    links: [
-      {
-        rel: 'createbankaccountfororderaction',
-        uri: '/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq='
-      }
-    ],
-    "_order": [
-      {
-        "_paymentmethodinfo": [
-          {
-            "_bankaccountform": [
-              {
-                "links": [
-                  {
-                    "rel": "createbankaccountfororderaction",
-                    "uri": "/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=",
-                    "href": "http://give-ep-cortex-uat.aws.cru.org/cortex/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq="
-                  }
-                ]
-              }
-            ],
-            "_creditcardform": [
-              {
-                "links": [
-                  {
-                    "rel": "createcreditcardfororderaction",
-                    "uri": "/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=",
-                    "href": "http://give-ep-cortex-uat.aws.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq="
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  };
-
-  let paymentFormsResponseZoomMapped = {
-    bankAccount: paymentFormsResponse._order[0]._paymentmethodinfo[0]._bankaccountform[0],
-    creditCard: paymentFormsResponse._order[0]._paymentmethodinfo[0]._creditcardform[0],
-    rawData: paymentFormsResponse
+  let cartResponseZoomMapped = {
+    bankAccount: cartResponse._order[0]._paymentmethodinfo[0]._bankaccountform[0],
+    creditCard: cartResponse._order[0]._paymentmethodinfo[0]._creditcardform[0],
+    rawData: cartResponse
   };
 
   describe('getPaymentForms', () => {
     function setupRequest() {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform').respond(200, paymentFormsResponse);
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform').respond(200, cartResponse);
     }
 
     function initiateRequest(){
       self.orderService.getPaymentForms()
         .subscribe((data) => {
-          expect(data).toEqual(paymentFormsResponseZoomMapped);
+          expect(data).toEqual(cartResponseZoomMapped);
         });
     }
 
@@ -104,7 +66,7 @@ describe('order service', () => {
       ).respond(200, 'success');
 
       // cache getPaymentForms response to avoid another http request while testing
-      self.orderService.paymentTypes = paymentFormsResponseZoomMapped;
+      self.orderService.paymentTypes = cartResponseZoomMapped;
 
       self.orderService.addBankAccountPayment(paymentInfo)
         .subscribe((data) => {
@@ -131,7 +93,7 @@ describe('order service', () => {
       ).respond(200, 'success');
 
       // cache getPaymentForms response to avoid another http request while testing
-      self.orderService.paymentTypes = paymentFormsResponseZoomMapped;
+      self.orderService.paymentTypes = cartResponseZoomMapped;
 
       self.orderService.addCreditCardPayment(paymentInfo)
         .subscribe((data) => {
