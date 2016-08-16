@@ -3,6 +3,7 @@ import 'angular-mocks';
 import module from './order.service';
 
 import cartResponse from 'common/services/api/fixtures/cortex-cart-paymentmethodinfo-forms.fixture.js';
+import paymentMethodResponse from 'common/services/api/fixtures/cortex-paymentmethod.fixture.js';
 
 describe('order service', () => {
   beforeEach(angular.mock.module(module.name));
@@ -101,6 +102,20 @@ describe('order service', () => {
         });
 
       self.$httpBackend.flush();
+    });
+
+    describe('getCurrentPayment', () => {
+      it('should retrieve the current payment details', () => {
+        self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
+          .respond(200, paymentMethodResponse);
+
+        self.orderService.getCurrentPayment()
+          .subscribe((data) => {
+            expect(data).toEqual(paymentMethodResponse._order[0]._paymentmethodinfo[0]._paymentmethod[0]);
+          });
+
+        self.$httpBackend.flush();
+      });
     });
   });
 });

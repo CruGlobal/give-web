@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="col-md-4 text-right">
-          <a class="btn btn-default btn-block" href="" ng-click="$ctrl.changeStep({newStep: 'contact'})">Change</a>
+          <button class="btn btn-default btn-block" ng-click="$ctrl.changeStep({newStep: 'contact'})">Change</button>
         </div>
       </div>
     </div>
@@ -35,21 +35,21 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label class="">Bank Name</label>
-                <p>Bank of America</p>
+                <p>{{$ctrl.paymentDetails['bank-name']}}</p>
               </div>
               <div class="form-group">
                 <label class="">Account Number</label>
-                <p class="number">********** 4567</p>
+                <p class="number">************{{$ctrl.paymentDetails['display-account-number']}}</p>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label class="">Account Type</label>
-                <p class="number">Checking</p>
+                <p class="number">{{$ctrl.paymentDetails['account-type'] | capitalize}}</p>
               </div>
               <div class="form-group">
                 <label class="">Routing Number</label>
-                <p class="number">0000667656</p>
+                <p class="number">{{$ctrl.paymentDetails['routing-number']}}</p>
               </div>
             </div>
             <div class="col-md-12">
@@ -61,7 +61,7 @@
           </div>
         </div>
         <div class="col-md-4 text-right">
-          <a class="btn btn-default btn-block" href="" ng-click="$ctrl.changeStep({newStep: 'payment'})">Change</a>
+          <button class="btn btn-default btn-block" ng-click="$ctrl.changeStep({newStep: 'payment'})">Change</button>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import angular from 'angular';
 
 import cartService from 'common/services/api/cart.service';
 import orderService from 'common/services/api/order.service';
+import capitalizeFilter from 'common/filters/capitalize.filter';
 
 import template from './step-3.tpl';
 
@@ -23,7 +24,10 @@ class Step3Controller{
         this.donorDetails = data;
       });
 
-    // Load current payment method from /paymentmethods/orders/crugive/
+    this.orderService.getCurrentPayment()
+      .subscribe((data) => {
+        this.paymentDetails = data;
+      });
   }
 }
 
@@ -31,7 +35,8 @@ export default angular
   .module(componentName, [
     template.name,
     cartService.name,
-    orderService.name
+    orderService.name,
+    capitalizeFilter.name
   ])
   .component(componentName, {
     controller: Step3Controller,
