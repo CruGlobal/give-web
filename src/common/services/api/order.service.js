@@ -55,6 +55,18 @@ class Order{
       });
   }
 
+  getCurrentPayment(){
+    return this.cortexApiService.get({
+        path: ['carts', this.cortexApiService.scope, 'default'],
+        zoom: {
+          paymentmethod: 'order:paymentmethodinfo:paymentmethod'
+        }
+      })
+      .map((data) => {
+        return data.paymentmethod;
+      });
+  }
+
 }
 
 export default angular
