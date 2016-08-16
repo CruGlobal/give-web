@@ -19,6 +19,7 @@
           <div class="form-group  form-group-default">
             <label translate>Title</label>
             <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['name']['title']">
+              <option></option>
               <option value="Mr." translate>Mr.</option>
               <option value="Mrs." translate>Mrs.</option>
               <option value="Ms." translate>Ms.</option>
@@ -115,6 +116,7 @@
                   <label translate>Title</label>
                   <div class="form-group">
                     <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['title']">
+                      <option></option>
                       <option value="Mr." translate>Mr.</option>
                       <option value="Mrs." translate>Mrs.</option>
                       <option value="Ms." translate>Ms.</option>
@@ -235,9 +237,9 @@
         <div ng-if="$ctrl.donorDetails['mailing-address']['country-name'] !== 'US'">
           <div class="row">
             <div class="col-sm-12">
-              <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.addressLocality | showErrors)}">
-                <input type="text" class="form-control  form-control-subtle" name="addressLocality" ng-model="$ctrl.donorDetails['mailing-address']['locality']" ng-maxlength="100">
-                <div role="alert" ng-messages="$ctrl.detailsForm.addressLocality.$error" ng-if="($ctrl.detailsForm.addressLocality | showErrors)">
+              <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.intAddressLine3 | showErrors)}">
+                <input type="text" class="form-control  form-control-subtle" name="intAddressLine3" ng-model="$ctrl.donorDetails['mailing-address']['intAddressLine3']" ng-maxlength="100">
+                <div role="alert" ng-messages="$ctrl.detailsForm.intAddressLine3.$error" ng-if="($ctrl.detailsForm.intAddressLine3 | showErrors)">
                   <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                 </div>
               </div>
@@ -245,9 +247,9 @@
           </div>
           <div class="row">
             <div class="col-sm-12">
-              <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.addressRegion | showErrors)}">
-                <input type="text" class="form-control  form-control-subtle" name="addressRegion" ng-model="$ctrl.donorDetails['mailing-address']['region']" ng-maxlength="100">
-                <div role="alert" ng-messages="$ctrl.detailsForm.addressRegion.$error" ng-if="($ctrl.detailsForm.addressRegion | showErrors)">
+              <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.intAddressLine4 | showErrors)}">
+                <input type="text" class="form-control  form-control-subtle" name="intAddressLine4" ng-model="$ctrl.donorDetails['mailing-address']['intAddressLine4']" ng-maxlength="100">
+                <div role="alert" ng-messages="$ctrl.detailsForm.intAddressLine4.$error" ng-if="($ctrl.detailsForm.intAddressLine4 | showErrors)">
                   <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                 </div>
               </div>
