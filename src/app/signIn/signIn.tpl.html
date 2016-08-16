@@ -1,0 +1,31 @@
+<div class="screenContent">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="panel sign-in-panel">
+          <div class="panel-body">
+            <div class="row vdivide">
+              <div class="col-md-6 sign-in-section">
+                <h3 class="text-center" translate>Sign In</h3>
+                <p class="text-center section-description" translate>Logging in saves you time during checkout.</p>
+
+                <sign-in-form on-success="$ctrl.signInSuccess()"></sign-in-form>
+
+                <div class="text-center self-service"><span translate>Forgot your password?</span>
+                  <a data-toggle="modal" data-target="#resetModal" translate>Reset It</a></div>
+              </div>
+
+
+              <div class="col-md-6 sign-in-section">
+                <h3 class="text-center" translate>Checkout as Guest</h3>
+                <p class="text-center section-description" translate>You will have an opportunity to register after completing your transaction.</p>
+
+                <a href="checkout.html" class="btn btn-block btn-primary" translate>Continue as Guest</a>
+              </div>
+            </div>
+          </div>
+        </div><!-- // panel -->
+      </div>
+    </div>
+  </div>
+</div>

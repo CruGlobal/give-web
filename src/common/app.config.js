@@ -11,7 +11,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
   // eslint-disable-next-line angular/module-getter
   envServiceProvider.config({
     domains: {
-      development: ['localhost'],
+      development: ['localhost', 'localhost.cru.org'],
       staging: ['stage.give.cru.org', 'devpub.cru.org', 'uatpub.cru.org'],
       production: ['give.cru.org']
     },

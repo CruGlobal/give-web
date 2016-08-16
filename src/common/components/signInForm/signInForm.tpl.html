@@ -1,0 +1,46 @@
+<form class="sign-in-form" name="$ctrl.signInForm" style="position: relative;">
+
+  <!-- @todo Better Error Messages -->
+  <div class="error-block">{{$ctrl.errorMessage | translate}}</div>
+
+  <div class="form-group">
+    <label for="username"><span translate>EMAIL:</span></label>
+    <input id="username"
+           type="email"
+           class="form-control form-control-subtle"
+           placeholder="{{'Username'|translate}}"
+           style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAkCAYAAADo6zjiAAAAAXNSR0IArs4c6QAAAbNJREFUWAntV8FqwkAQnaymUkpChB7tKSfxWCie/Yb+gbdeCqGf0YsQ+hU95QNyDoWCF/HkqdeiIaEUqyZ1ArvodrOHxanQOiCzO28y781skKwFW3scPV1/febP69XqarNeNTB2KGs07U3Ttt/Ozp3bh/u7V7muheQf6ftLUWyYDB5yz1ijuPAub2QRDDunJsdGkAO55KYYjl0OUu1VXOzQZ64Tr+IiPXedGI79bQHdbheCIAD0dUY6gV6vB67rAvo6IxVgWVbFy71KBKkAFaEc2xPQarXA931ot9tyHphiPwpJgSbfe54Hw+EQHMfZ/msVEEURjMfjCjbFeG2dFxPo9/sVOSYzxmAwGIjnTDFRQLMQAjQ5pJAQkCQJ5HlekeERxHEsiE0xUUCzEO9AmqYQhiF0Oh2Yz+ewWCzEY6aYKKBZCAGYs1wuYTabKdNNMWWxnaA4gp3Yry5JBZRlWTXDvaozUgGTyQSyLAP0dbb3DtQlmcan0yngT2ekE9ARc+z4AvC7nauh9iouhpcGamJeX8XF8MaClwaeROWRA7nk+tUnyzGvZrKg0/40gdME/t8EvgG0/NOS6v9NHQAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;"
+           autocomplete="off"
+           required
+           ng-disabled="$ctrl.isSigningIn"
+           ng-model="$ctrl.username">
+  </div>
+  <div class="form-group">
+    <label for="password" translate>PASSWORD:</label>
+    <input id="password"
+           type="password"
+           class="form-control form-control-subtle"
+           placeholder="{{'Password'|translate}}"
+           style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAkCAYAAADo6zjiAAAAAXNSR0IArs4c6QAAAbNJREFUWAntV8FqwkAQnaymUkpChB7tKSfxWCie/Yb+gbdeCqGf0YsQ+hU95QNyDoWCF/HkqdeiIaEUqyZ1ArvodrOHxanQOiCzO28y781skKwFW3scPV1/febP69XqarNeNTB2KGs07U3Ttt/Ozp3bh/u7V7muheQf6ftLUWyYDB5yz1ijuPAub2QRDDunJsdGkAO55KYYjl0OUu1VXOzQZ64Tr+IiPXedGI79bQHdbheCIAD0dUY6gV6vB67rAvo6IxVgWVbFy71KBKkAFaEc2xPQarXA931ot9tyHphiPwpJgSbfe54Hw+EQHMfZ/msVEEURjMfjCjbFeG2dFxPo9/sVOSYzxmAwGIjnTDFRQLMQAjQ5pJAQkCQJ5HlekeERxHEsiE0xUUCzEO9AmqYQhiF0Oh2Yz+ewWCzEY6aYKKBZCAGYs1wuYTabKdNNMWWxnaA4gp3Yry5JBZRlWTXDvaozUgGTyQSyLAP0dbb3DtQlmcan0yngT2ekE9ARc+z4AvC7nauh9iouhpcGamJeX8XF8MaClwaeROWRA7nk+tUnyzGvZrKg0/40gdME/t8EvgG0/NOS6v9NHQAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;"
+           autocomplete="off"
+           required
+           ng-disabled="$ctrl.isSigningIn"
+           ng-model="$ctrl.password">
+  </div>
+  <button
+    type="submit"
+    class="btn btn-block btn-primary"
+    ng-click="$ctrl.signIn()"
+    ng-disabled="!$ctrl.signInForm.$valid || $ctrl.isSigningIn"
+    translate>Sign In
+  </button>
+  <ng-transclude></ng-transclude>
+  <div class="loading-background" ng-if="$ctrl.isSigningIn">
+    <div class="loading-wrap">
+      <span class="loading loading1"></span>
+      <span class="loading loading2"></span>
+      <span class="loading loading3"></span>
+      <span class="loading loading4"></span>
+    </div>
+  </div>
+</form>

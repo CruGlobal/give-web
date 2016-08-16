@@ -9,6 +9,7 @@ import subNavComponent from './nav/sub/sub-nav.component';
 import cartComponent from '../cart/cart.component';
 import checkoutComponent from '../checkout/checkout.component';
 import productConfigComponent from '../productConfig/productConfig.component';
+import signInComponent from '../signIn/signIn.component';
 
 import cartService from 'common/services/api/cart.service';
 
@@ -32,6 +33,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       url: "/cart.html",
       template: '<cart></cart>'
     })
+    .state('sign-in', {
+      url: "/sign-in.html",
+      template: '<sign-in></sign-in>'
+    })
     .state('checkout', {
       url: "/checkout.html",
       template: '<checkout></checkout>'
@@ -50,6 +55,7 @@ export default angular
     cartComponent.name,
     checkoutComponent.name,
     productConfigComponent.name,
+    signInComponent.name,
     'ui.router',
     cartService.name
   ])
