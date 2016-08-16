@@ -10,8 +10,7 @@ let componentName = 'signIn';
 class SignInController {
 
   /* @ngInject */
-  constructor( $log, $location ) {
-    this.$log = $log;
+  constructor( $location ) {
     this.$location = $location;
   }
 
