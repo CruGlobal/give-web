@@ -5,6 +5,8 @@ import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
+import appConfig from 'common/app.config';
+
 let serviceName = 'casApiService';
 
 class CasApi {
@@ -23,7 +25,7 @@ class CasApi {
 
     return Observable.from( this.$http( {
       method:          config.method,
-      url:             this.envService.read( 'apiUrl' ) + '/cas' + CasApi.serializePath( config.path ),
+      url:             this.envService.read( 'apiUrl' ) + '/cas' + this.serializePath( config.path ),
       params:          config.params,
       data:            config.data,
       withCredentials: true
@@ -53,7 +55,7 @@ class CasApi {
     return this.http( request );
   }
 
-  static serializePath( path ) {
+  serializePath( path ) {
     if ( angular.isArray( path ) ) {
       return '/' + path.join( '/' );
     } else {
@@ -64,6 +66,7 @@ class CasApi {
 
 export default angular
   .module( serviceName, [
-    'environment'
+    'environment',
+    appConfig.name
   ] )
   .service( serviceName, CasApi );

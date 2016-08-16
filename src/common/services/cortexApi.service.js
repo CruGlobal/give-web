@@ -32,7 +32,7 @@ class CortexApi {
 
     return Observable.from(this.$http({
         method: config.method,
-        url: this.envService.read('apiUrl') + '/cortex' + CortexApi.serializePath(config.path),
+        url: this.envService.read('apiUrl') + '/cortex' + this.serializePath(config.path),
         params: config.params,
         data: config.data,
         withCredentials: true
@@ -65,7 +65,7 @@ class CortexApi {
     return this.http(request);
   }
 
-  static serializePath( path){
+  serializePath( path){
     if(angular.isArray(path)){
       return '/' + path.join('/');
     }else{
