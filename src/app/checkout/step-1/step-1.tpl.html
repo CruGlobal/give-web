@@ -199,7 +199,7 @@
                 <select class="form-control  form-control-subtle"
                         name="addressCountry" required
                         ng-model="$ctrl.donorDetails['mailing-address']['country-name']"
-                        ng-options="v['name'] as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
+                        ng-options="v.name as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
                         ng-change="$ctrl.refreshRegions($ctrl.donorDetails['mailing-address']['country-name'])"
                         ng-init="$ctrl.refreshRegions($ctrl.donorDetails['mailing-address']['country-name'])">
                 </select>
@@ -275,7 +275,7 @@
                   <select class="form-control  form-control-subtle"
                           name="addressRegion" required
                           ng-model="$ctrl.donorDetails['mailing-address']['region']"
-                          ng-options="v['name'] as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''">
+                          ng-options="v.name as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''">
                   </select>
                   <div role="alert" ng-messages="$ctrl.detailsForm.addressRegion.$error" ng-if="($ctrl.detailsForm.addressRegion | showErrors)">
                     <div class="help-block" ng-message="required" translate>You must select a state / region</div>
