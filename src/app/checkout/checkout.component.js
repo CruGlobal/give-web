@@ -1,7 +1,7 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'rxjs/add/operator/mergeMap';
-import 'angular-gettext'
+import 'angular-gettext';
 
 import appConfig from 'common/app.config';
 

@@ -4,7 +4,6 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
-import isArray from 'lodash/isArray';
 
 import { cortexScope } from 'common/app.constants';
 import appConfig from 'common/app.config';
@@ -33,7 +32,7 @@ class CortexApi {
 
     return Observable.from(this.$http({
         method: config.method,
-        url: this.envService.read('apiUrl') + '/cortex' + this.serializePath(config.path),
+        url: this.envService.read('apiUrl') + '/cortex' + CortexApi.serializePath(config.path),
         params: config.params,
         data: config.data,
         withCredentials: true
@@ -66,8 +65,8 @@ class CortexApi {
     return this.http(request);
   }
 
-  serializePath(path){
-    if(isArray(path)){
+  static serializePath( path){
+    if(angular.isArray(path)){
       return '/' + path.join('/');
     }else{
       return path.charAt(0) === '/' ? path : '/' + path;

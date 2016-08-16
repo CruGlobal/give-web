@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-messages';
 import 'angular-bootstrap';
-import 'angular-gettext'
+import 'angular-gettext';
 
 import template from './productConfig.tpl';
 import templateModal from './productConfigModal.tpl';
