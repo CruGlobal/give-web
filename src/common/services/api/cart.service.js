@@ -155,8 +155,13 @@ function cart(cortexApiService){
           let intAddress = details['mailing-address']['street-address'].split('||');
           details['mailing-address']['street-address'] = intAddress[0] ? intAddress[0] : '';
           details['mailing-address']['extended-address'] = intAddress[1] ? intAddress[1] : '';
-          details['mailing-address']['locality'] = intAddress[2] ? intAddress[2] : '';
-          details['mailing-address']['region'] = intAddress[3] ? intAddress[3] : '';
+          details['mailing-address']['intAddressLine3'] = intAddress[2] ? intAddress[2] : '';
+          details['mailing-address']['intAddressLine4'] = intAddress[3] ? intAddress[3] : '';
+        }
+
+        //default to US
+        if(!details['mailing-address']['country-name']){
+          details['mailing-address']['country-name'] = 'US';
         }
 
         let email = JSONPath.query(data, '$.._order.._emailinfo.*')[0];
@@ -171,8 +176,8 @@ function cart(cortexApiService){
       let intAddress = [
         details['mailing-address']['street-address'],
         details['mailing-address']['extended-address'],
-        details['mailing-address']['locality'],
-        details['mailing-address']['region']
+        details['mailing-address']['intAddressLine3'],
+        details['mailing-address']['intAddressLine4']
       ];
 
       details['mailing-address']['street-address'] = intAddress.join('||');
@@ -180,6 +185,8 @@ function cart(cortexApiService){
       details['mailing-address']['locality'] = '';
       details['mailing-address']['region'] = '';
     }
+    delete details['mailing-address']['intAddressLine3'];
+    delete details['mailing-address']['intAddressLine4'];
 
     return cortexApiService.put({
       path: uri,
