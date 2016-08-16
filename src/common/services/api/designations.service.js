@@ -41,6 +41,20 @@ function designations(cortexApiService){
     });
   }
 
+  /*
+   SEARCH USAGE:
+  testRequests(){
+    this.designationsService.createSearch('a')
+      .mergeMap((id) => {
+        this.$log.info('search id', id);
+        return this.designationsService.getSearchResults(id, 1);
+      })
+      .subscribe((data) => {
+        this.$log.info('search page', data);
+      });
+  }
+  */
+
   function productLookup(query, selectQuery){
     var httpRequest = selectQuery ? cortexApiService.post({
       path: query,
