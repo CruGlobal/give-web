@@ -32,7 +32,7 @@ class ProductConfigController{
         }],
         itemConfig: function(){
           return {
-            amount: 100
+            amount: 50
           };
         }
       }
