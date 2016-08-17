@@ -14,11 +14,10 @@ class SignInFormController {
   constructor( $log, sessionService ) {
     this.$log = $log;
     this.sessionService = sessionService;
-    this.session = sessionService.current;
     this.isSigningIn = false;
 
-    if ( includes( ['IDENTIFIED', 'REGISTERED'], this.session.role ) ) {
-      this.username = this.session.cortex.email;
+    if ( includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() ) ) {
+      this.username = this.sessionService.session.email;
     }
   }
 

@@ -18,10 +18,11 @@ let componentName = 'cart';
 class CartController{
 
   /* @ngInject */
-  constructor($uibModal, cartService, sessionService) {
+  constructor($location, $uibModal, cartService, sessionService) {
+    this.$location = $location;
     this.$uibModal = $uibModal;
     this.cartService = cartService;
-    this.session = sessionService.current;
+    this.sessionService = sessionService;
 
     this.loadCart();
   }
@@ -62,6 +63,10 @@ class CartController{
       //remote old gift
       self.removeItem(item.uri);
     });
+  }
+
+  checkout() {
+    this.$location.url(this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html');
   }
 }
 
