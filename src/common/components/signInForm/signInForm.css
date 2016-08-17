@@ -1,0 +1,18 @@
+.sign-in-form .loading-background {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  top: -10px;
+  left: -10px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
+  background-color: rgba(255, 255, 255, 0.7); }
+
+.sign-in-form .loading-background > .loading-wrap {
+  position: static; }
+
+.sign-in-form .error-block {
+  color: #a94442; }
+
+/*# sourceMappingURL=signInForm.css.map */
