@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-gettext';
 import includes from 'lodash/includes';
 
-import sessionService from 'common/services/api/session.service';
+import sessionService from 'common/services/session.service';
 
 import template from './signInForm.tpl';
 import './signInForm.css!';

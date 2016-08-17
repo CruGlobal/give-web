@@ -1,13 +1,17 @@
 import angular from 'angular';
+import 'angular-environment';
 import 'angular-cookies';
 import jwtDecode from 'jwt-decode';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/map';
 
-import casApiService from '../casApi.service';
+import appConfig from 'common/app.config';
 
 let serviceName = 'sessionService';
 
 /*@ngInject*/
-function session( $log, $cookies, $rootScope, casApiService ) {
+function session( $cookies, $rootScope, $http, envService ) {
   var session = {
     role:   'PUBLIC',
     cortex: {}
@@ -20,20 +24,30 @@ function session( $log, $cookies, $rootScope, casApiService ) {
   // eslint-disable-next-line angular/on-watch
   $rootScope.$watch( () => $cookies.get( 'cortex-session' ), updateCurrentSession );
 
+  // Return sessionService public interface
   return {
     current: session,
     signIn:  signIn
   };
 
+  /* Public Methods */
+
   function signIn( username, password ) {
-    return casApiService.post( {
-      path: 'login',
-      data: {
+    return Observable.from( $http( {
+      method:          'POST',
+      url:             casApiUrl( '/login' ),
+      data:            {
         username: username,
         password: password
-      }
-    } );
+      },
+      withCredentials: true
+    } ) )
+      .map( ( response ) => {
+        return response.data;
+      } );
   }
+
+  /* Private Methods */
 
   function updateCurrentSession( encoded_value ) {
     var cortexSession = {};
@@ -45,11 +59,20 @@ function session( $log, $cookies, $rootScope, casApiService ) {
     // Copy new session into current session object
     angular.copy( cortexSession, session.cortex );
   }
+
+  function casApiUrl( path ) {
+    var apiUrl = envService.read( 'apiUrl' ) + '/cas';
+    if ( angular.isArray( path ) ) {
+      return apiUrl + '/' + path.join( '/' );
+    }
+    return apiUrl + (path.charAt( 0 ) === '/' ? path : '/' + path);
+  }
 }
 
 export default angular
   .module( serviceName, [
     'ngCookies',
-    casApiService.name
+    'environment',
+    appConfig.name
   ] )
   .factory( serviceName, session );
