@@ -86,7 +86,7 @@ describe('checkout', () => {
           self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform').respond(200, cartResponse);
 
           //Custom post data validator to check match on everything except encrypted-account-number which changes on each run
-          let expectedPostData = {"account-type":"checking","bank-name":"First Bank","display-account-number":"************9012", "encrypted-account-number": '***encrypted***',"routing-number":"123456789"};
+          let expectedPostData = {"account-type":"checking","bank-name":"First Bank", "encrypted-account-number": '***encrypted***',"routing-number":"123456789"};
           function dataValidator(data){
             data = angular.fromJson(data);
             return isEqual(omit(data, 'encrypted-account-number'), omit(expectedPostData, 'encrypted-account-number')) && data['encrypted-account-number'].length >= 100;
