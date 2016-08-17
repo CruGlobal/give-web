@@ -11,14 +11,13 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(cartService, orderService){
+  constructor(cartService, orderService, $log){
     this.cartService = cartService;
     this.orderService = orderService;
-
-    this.init();
+    this.$log = $log;
   }
 
-  init(){
+  $onInit(){
     this.cartService.getDonorDetails()
       .subscribe((data) => {
         this.donorDetails = data;
@@ -26,7 +25,13 @@ class Step3Controller{
 
     this.orderService.getCurrentPayment()
       .subscribe((data) => {
-        this.paymentDetails = data;
+        if(data.self.type === 'elasticpath.bankaccounts.bank-account') {
+          this.bankAccountPaymentDetails = data;
+        }else if(data.self.type === 'cru.creditcards.named-credit-card'){
+          this.creditCardPaymentDetails = data;
+        }else{
+          this.$log.error('Error loading current payment info: current payment type is unknown');
+        }
       });
   }
 }

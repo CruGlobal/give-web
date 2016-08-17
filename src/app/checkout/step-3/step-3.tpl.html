@@ -37,25 +37,47 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-md-8">
-          <div class="row" ng-if="$ctrl.paymentDetails">
+          <div class="row" ng-if="$ctrl.bankAccountPaymentDetails">
             <div class="col-md-6">
               <div class="form-group">
                 <label class="">Bank Name</label>
-                <p>{{$ctrl.paymentDetails['bank-name']}}</p>
+                <p>{{$ctrl.bankAccountPaymentDetails['bank-name']}}</p>
               </div>
               <div class="form-group">
                 <label class="">Account Number</label>
-                <p class="number">************{{$ctrl.paymentDetails['display-account-number']}}</p>
+                <p class="number">************{{$ctrl.bankAccountPaymentDetails['display-account-number']}}</p>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label class="">Account Type</label>
-                <p class="number">{{$ctrl.paymentDetails['account-type'] | capitalize}}</p>
+                <p class="number">{{$ctrl.bankAccountPaymentDetails['account-type'] | capitalize}}</p>
               </div>
               <div class="form-group">
                 <label class="">Routing Number</label>
-                <p class="number">{{$ctrl.paymentDetails['routing-number']}}</p>
+                <p class="number">{{$ctrl.bankAccountPaymentDetails['routing-number']}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-if="$ctrl.creditCardPaymentDetails">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="">Name on card</label>
+                <p>{{$ctrl.creditCardPaymentDetails['cardholder-name']}}</p>
+              </div>
+              <div class="form-group">
+                <label class="">Card Number</label>
+                <p class="number">************{{$ctrl.creditCardPaymentDetails['card-number']}}</p><!-- TODO: this is undefined -->
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="">Card Type</label>
+                <p class="number">{{$ctrl.creditCardPaymentDetails['card-type']}}</p>
+              </div>
+              <div class="form-group">
+                <label class="">Expires</label>
+                <p class="number">{{$ctrl.creditCardPaymentDetails['expiry-month']}}/{{$ctrl.creditCardPaymentDetails['expiry-year']}}</p><!-- TODO: deal with localization -->
               </div>
             </div>
             <div class="col-md-12">
@@ -65,7 +87,7 @@
               </div>
             </div>
           </div>
-          <div class="loading-wrap" ng-if="!$ctrl.paymentDetails">
+          <div class="loading-wrap" ng-if="!$ctrl.bankAccountPaymentDetails && !$ctrl.creditCardPaymentDetails">
             <span class="loading loading1"></span>
             <span class="loading loading2"></span>
             <span class="loading loading3"></span>

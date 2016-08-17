@@ -65,7 +65,6 @@ class BankAccountController{
       this.orderService.addBankAccountPayment({
           'account-type': this.bankPayment.accountType,
           'bank-name': this.bankPayment.bankName,
-          'display-account-number': ccpAccountNumber.mask(),
           'encrypted-account-number': ccpAccountNumber.encrypt(),
           'routing-number': this.bankPayment.routingNumber
         })
