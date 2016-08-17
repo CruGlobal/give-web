@@ -33,11 +33,11 @@ gulp.task('html', function () {
 gulp.task('scss', function () {
   return gulp.src(paths.scss)
     .pipe($.plumber())
-    .pipe($.changed(paths.srcDir, {extension: '.css'}))
     .pipe($.sourcemaps.init())
     .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
     .pipe($.sass())
+    .pipe($.concat('give.css'))
     .pipe($.sourcemaps.write("."))
-    .pipe(gulp.dest(paths.srcDir))
+    .pipe(gulp.dest(paths.output))
     .pipe($.browserSync.reload({ stream: true }));
 });
