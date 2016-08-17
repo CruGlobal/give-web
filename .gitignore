@@ -11,5 +11,3 @@ jspm_packages
 .sass-cache
 
 src/**/*.tpl.js
-src/**/*.css
-src/**/*.css.map

@@ -5,11 +5,11 @@ var $ = require('gulp-load-plugins')({
 
 var paths = require('../paths');
 
-gulp.task('cache-bust', function () {
-  var cacheBust = "var systemLocate = System.locate; System.locate = function(load) { var cacheBust = '?bust=' + " + Math.round(new Date() / 1000) +"; return Promise.resolve(systemLocate.call(this, load)).then(function(address) { if (address.indexOf('bust') > -1 || address.indexOf('css') > -1 || address.indexOf('json') > -1) return address; return address + cacheBust; });}\n"
-  return gulp.src('dist/app/app.js')
-    .pipe($.insert.prepend(cacheBust))
-    .pipe(gulp.dest('dist/app'));
+gulp.task('minify-css', function () {
+  return gulp.src(paths.outputCss)
+    .pipe($.cleanCss())
+    .pipe($.concat('give.min.css'))
+    .pipe(gulp.dest(paths.output));
 });
 
 gulp.task('inline-systemjs', function () {
@@ -39,11 +39,8 @@ gulp.task('release', function (callback) {
   return $.runSequence(
     'clean',
     'build',
-    'bundle',
-    'cache-bust',
-    'replace',
+    ['bundle', 'minify-css', 'replace', 'move'],
     'inline-systemjs',
-    'move',
     callback
   );
 });

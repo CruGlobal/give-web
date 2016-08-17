@@ -5,7 +5,6 @@ import includes from 'lodash/includes';
 import sessionService from 'common/services/session.service';
 
 import template from './signInForm.tpl';
-import './signInForm.css!';
 
 let componentName = 'signInForm';
 

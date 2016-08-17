@@ -14,7 +14,6 @@ import signInComponent from '../signIn/signIn.component';
 import cartService from 'common/services/api/cart.service';
 
 import template from './main.tpl';
-import './main.css!';
 
 let componentName = 'main';
 

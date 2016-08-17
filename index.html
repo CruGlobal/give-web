@@ -9,6 +9,13 @@
       <meta name="apple-mobile-web-app-title" content="Demo App">
       <title>Cru | Give</title>
       <base href="/">
+      <!-- @if ENV='dev' -->
+      <link rel="stylesheet" href="dist/give.css" type="text/css">
+      <!-- @endif -->
+
+      <!-- @if ENV='prod' !>
+      <link rel="stylesheet" href="give.min.css" type="text/css">
+      <!-- @endif -->
   </head>
   <body ng-cloak ng-app="main">
 
@@ -22,14 +29,14 @@
 
     <main></main>
 
-    <!-- build:dev -->
+    <!-- @if ENV='dev' -->
     <script src="jspm_packages/system.js"></script>
     <script src="system.config.js"></script>
-    <!-- endbuild -->
+    <!-- @endif -->
 
-    <!-- build:prod -->
-    <!-- <script src="main.js?bust={{date}}"></script> -->
-    <!-- endbuild -->
+    <!-- @if ENV='prod' !>
+    <script src="main.js?bust={{date}}"></script>
+    <!-- @endif -->
 
     <script>
       System.import('app/main/main.component')
