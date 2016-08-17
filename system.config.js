@@ -21,6 +21,13 @@ System.config({
   },
   buildCSS: true,
   separateCSS: false,
+  packages: {
+    'src/': {
+      meta: {
+        '*.css': { loader: 'css' }
+      }
+    }
+  },
 
   map: {
     "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
