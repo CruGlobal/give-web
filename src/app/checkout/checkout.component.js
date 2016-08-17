@@ -30,24 +30,12 @@ class CheckoutController{
 
     this.checkoutStep = 'contact';
 
-    // this.testRequests();
     this.loadCart();
   }
 
   changeStep(newStep){
     this.$window.scrollTo(0, 0);
     this.checkoutStep = newStep;
-  }
-
-  testRequests(){
-    this.designationsService.createSearch('a')
-      .mergeMap((id) => {
-        this.$log.info('search id', id);
-        return this.designationsService.getSearchResults(id, 1);
-      })
-      .subscribe((data) => {
-        this.$log.info('search page', data);
-      });
   }
 
   loadCart(){
