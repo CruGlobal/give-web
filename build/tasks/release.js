@@ -67,6 +67,12 @@ gulp.task('bundle', function () {
         },
         { src: 'app/checkout/checkout.component - ' + commonFilesForBundles,
           dst: 'checkout.js'
+        },
+        { src: 'app/productConfig/productConfig.component - ' + commonFilesForBundles,
+          dst: 'productConfig.js'
+        },
+        { src: 'app/signIn/signIn.component - ' + commonFilesForBundles,
+          dst: 'signIn.js'
         }
       ]
     })
