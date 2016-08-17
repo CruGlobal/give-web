@@ -12,10 +12,7 @@ let serviceName = 'sessionService';
 
 /*@ngInject*/
 function session( $cookies, $rootScope, $http, envService ) {
-  var session = {
-    role:   'PUBLIC',
-    cortex: {}
-  };
+  var session = {};
 
   // Set initial session on load
   updateCurrentSession( $cookies.get( 'cortex-session' ) );
@@ -26,7 +23,8 @@ function session( $cookies, $rootScope, $http, envService ) {
 
   // Return sessionService public interface
   return {
-    current: session,
+    session: session,
+    getRole: currentRole,
     signIn:  signIn
   };
 
@@ -54,10 +52,16 @@ function session( $cookies, $rootScope, $http, envService ) {
     if ( angular.isDefined( encoded_value ) ) {
       cortexSession = jwtDecode( encoded_value );
     }
-    // Update role based on new token_hash, default to PUBLIC if missing
-    session.role = angular.isDefined( cortexSession.token_hash ) ? cortexSession.token_hash.role : 'PUBLIC';
     // Copy new session into current session object
-    angular.copy( cortexSession, session.cortex );
+    angular.copy( cortexSession, session );
+  }
+
+  function currentRole() {
+    // @todo Check session expiration
+    if ( angular.isDefined( session.token_hash ) ) {
+      return session.token_hash.role;
+    }
+    return 'PUBLIC';
   }
 
   function casApiUrl( path ) {

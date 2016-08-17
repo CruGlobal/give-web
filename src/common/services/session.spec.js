@@ -1,7 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './session.service';
-import has from 'lodash/has';
 
 describe( 'session service', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -16,15 +15,19 @@ describe( 'session service', function () {
     expect( self.sessionService ).toBeDefined();
   } );
 
-  describe( 'current', () => {
+  describe( 'session', () => {
     it( 'to be defined', () => {
-      expect( self.sessionService.current ).toBeDefined();
+      expect( self.sessionService.session ).toBeDefined();
+    } );
+  } );
+
+  describe( 'getRole', () => {
+    it( 'to be defined', () => {
+      expect( self.sessionService.getRole ).toBeDefined();
     } );
 
-    it( 'to have properties', () => {
-      ['role', 'cortex'].forEach( ( prop ) => {
-        expect( has( self.sessionService.current, prop ) ).toBeTruthy();
-      } );
+    it( 'returns \'PUBLIC\' if no session exists', () => {
+      expect( self.sessionService.getRole() ).toEqual( 'PUBLIC' );
     } );
   } );
 
