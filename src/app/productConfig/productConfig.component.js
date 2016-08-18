@@ -6,6 +6,7 @@ import 'angular-gettext';
 import template from './productConfig.tpl';
 import templateModal from './productConfigModal.tpl';
 import modalController from './productConfig.modal';
+import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
 
 let componentName = 'productConfig';
@@ -53,6 +54,7 @@ export default angular
     'gettext',
     template.name,
     templateModal.name,
+    cartService.name,
     designationsService.name
   ])
   .component(componentName, {
