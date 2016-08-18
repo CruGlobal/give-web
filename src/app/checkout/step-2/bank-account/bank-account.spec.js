@@ -1,6 +1,5 @@
 import angular from 'angular';
 import 'angular-mocks';
-import isEqual from 'lodash/isEqual';
 import omit from 'lodash/omit';
 import size from 'lodash/size';
 import module from './bank-account.component';
@@ -89,7 +88,7 @@ describe('checkout', () => {
           let expectedPostData = {"account-type":"checking","bank-name":"First Bank", "encrypted-account-number": '***encrypted***',"routing-number":"123456789"};
           function dataValidator(data){
             data = angular.fromJson(data);
-            return isEqual(omit(data, 'encrypted-account-number'), omit(expectedPostData, 'encrypted-account-number')) && data['encrypted-account-number'].length >= 100;
+            return angular.equals(omit(data, 'encrypted-account-number'), omit(expectedPostData, 'encrypted-account-number')) && data['encrypted-account-number'].length >= 100;
           }
           dataValidator.toString = () => 'encrypted-account-number must be at least 100 chars and rest of object must match: ' + angular.toJson(expectedPostData);
 
@@ -160,7 +159,7 @@ describe('checkout', () => {
           it('should not be valid if the field is empty',  () => {
             self.formController.bankName.$setViewValue('');
             expect(self.formController.bankName.$valid).toEqual(false);
-            expect(self.formController.routingNumber.$error.required).toEqual(true);
+            expect(self.formController.bankName.$error.required).toEqual(true);
           });
           it('should be valid if there is something in the input',  () => {
             self.formController.bankName.$setViewValue('Some Bank');
