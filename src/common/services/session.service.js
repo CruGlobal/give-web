@@ -18,6 +18,7 @@ function session( $cookies, $rootScope, $http, envService ) {
   updateCurrentSession( $cookies.get( 'cortex-session' ) );
 
   // Watch cortex-session cookie for changes and update existing session variable
+  // This only detects changes made by $http or other angular services, not the browser expiring the cookie.
   // eslint-disable-next-line angular/on-watch
   $rootScope.$watch( () => $cookies.get( 'cortex-session' ), updateCurrentSession );
 
@@ -57,8 +58,14 @@ function session( $cookies, $rootScope, $http, envService ) {
   }
 
   function currentRole() {
-    // @todo Check session expiration
     if ( angular.isDefined( session.token_hash ) ) {
+      if ( session.token_hash.role === 'PUBLIC' ) {
+        return 'PUBLIC';
+      }
+      // Expired cookies are undefined
+      if ( angular.isUndefined( $cookies.get( 'give-session' ) ) ) {
+        return 'IDENTIFIED';
+      }
       return session.token_hash.role;
     }
     return 'PUBLIC';
