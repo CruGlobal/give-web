@@ -15,10 +15,6 @@ function cart(cortexApiService){
     deleteItem: deleteItem,
     getDonorDetails: getDonorDetails,
     updateDonorDetails: updateDonorDetails,
-    getGeographies: {
-      countries: getGeographiesCountries,
-      regions: getGeographiesRegions
-    },
     addEmail: addEmail
   };
 
@@ -199,32 +195,6 @@ function cart(cortexApiService){
       path: ['emails', cortexApiService.scope],
       data: {email: email}
     });
-  }
-
-  function getGeographiesCountries(){
-    return cortexApiService.get({
-        path: ['geographies', cortexApiService.scope, 'countries'],
-        params: {
-          zoom: 'element'
-        },
-        cache: true
-      })
-      .map((data) => {
-        return data._element;
-      });
-  }
-
-  function getGeographiesRegions(uri){
-    return cortexApiService.get({
-        path: uri,
-        params: {
-          zoom: 'element'
-        },
-        cache: true
-      })
-      .map((data) => {
-        return data._element;
-      });
   }
 }
 
