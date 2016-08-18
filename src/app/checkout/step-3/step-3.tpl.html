@@ -137,7 +137,7 @@
         <tr>
           <td colspan="3" class="text-right">
             <div class="checkout-cta pull-right">
-              <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="!($ctrl.donorDetails && $ctrl.paymentDetails && $ctrl.cartData)">
+              <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!($ctrl.donorDetails && ($ctrl.bankAccountPaymentDetails || $ctrl.creditCardPaymentDetails) && $ctrl.cartData)">
                 Submit Your Gift
               </button>
             </div>

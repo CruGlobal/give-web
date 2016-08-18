@@ -63,7 +63,7 @@ class CreditCardController {
         })
         .subscribe((data) => {
             this.$log.info('added credit card', data);
-            ccpSecurityCode.encrypt(); //TODO: save this in session storage and submit it on confirmation of order
+            this.orderService.storeCardSecurityCode(ccpSecurityCode.encrypt());
             this.onSave({success: true});
           },
           (error) => {
