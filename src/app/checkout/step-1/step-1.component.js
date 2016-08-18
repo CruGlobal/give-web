@@ -5,6 +5,7 @@ import 'rxjs/add/observable/forkJoin';
 import find from 'lodash/find';
 
 import cartService from 'common/services/api/cart.service';
+import geographiesService from 'common/services/api/geographies.service';
 
 import template from './step-1.tpl';
 
@@ -13,9 +14,10 @@ let componentName = 'checkoutStep1';
 class Step1Controller{
 
   /* @ngInject */
-  constructor($window, cartService){
-    this.cartService = cartService;
+  constructor($window, cartService, geographiesService){
     this.$window = $window;
+    this.cartService = cartService;
+    this.geographiesService = geographiesService;
 
     this.init();
   }
@@ -35,10 +37,10 @@ class Step1Controller{
   }
 
   refreshRegions(country){
-    country = find(this.countries, function(v){ return v.name === country; });
+    country = find(this.countries, {name: country});
     if(!country){ return; }
 
-    this.cartService.getGeographies.regions(country.links[0].uri)
+    this.geographiesService.getRegions(country)
       .subscribe((data) => {
         this.regions = data;
       });
@@ -53,7 +55,7 @@ class Step1Controller{
         this.donorDetails = data;
       });
 
-    this.cartService.getGeographies.countries()
+    this.geographiesService.getCountries()
       .subscribe((data) => {
         this.countries = data;
       });
@@ -64,7 +66,8 @@ export default angular
   .module(componentName, [
     template.name,
     'ngMessages',
-    cartService.name
+    cartService.name,
+    geographiesService.name
   ])
   .component(componentName, {
     controller: Step1Controller,

@@ -34,6 +34,10 @@ describe('HATEOAS helper service', function() {
     it('should get the object specified by a path string', () => {
       expect(self.hateoasHelperService.getElement(cartResponse, 'order')).toEqual(cartResponse._order[0]);
     });
+    it('should get the array specified by a path string', () => {
+      cartResponse._order.push('item 2');
+      expect(self.hateoasHelperService.getElement(cartResponse, 'order')).toEqual([cartResponse._order[0], 'item 2']);
+    });
     it('should return undefined for an unknown element', () => {
       expect(self.hateoasHelperService.getElement(cartResponse, ['order', 'nonexistent'])).toBeUndefined();
     });
