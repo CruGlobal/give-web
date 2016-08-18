@@ -18,8 +18,10 @@ class HateoasHelper {
     if(isArray(path)){
       path = path.join('[0]._');
     }
-    let objectPath = '_' + path + '[0]';
-    return get(response, objectPath);
+    let objectPath = '_' + path;
+
+    let elementArray = get(response, objectPath);
+    return isArray(elementArray) && elementArray.length === 1 ? elementArray[0] : elementArray;
   }
 
   serializeZoom(zoom){

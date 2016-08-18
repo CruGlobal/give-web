@@ -14,7 +14,7 @@ describe('order service', () => {
     self.$httpBackend = $httpBackend;
   }));
 
-  afterEach(function() {
+  afterEach(() => {
     self.$httpBackend.verifyNoOutstandingExpectation();
     self.$httpBackend.verifyNoOutstandingRequest();
   });
