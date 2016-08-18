@@ -18,8 +18,8 @@ let componentName = 'cart';
 class CartController{
 
   /* @ngInject */
-  constructor($location, $uibModal, cartService, sessionService) {
-    this.$location = $location;
+  constructor($window, $uibModal, cartService, sessionService) {
+    this.$window = $window;
     this.$uibModal = $uibModal;
     this.cartService = cartService;
     this.sessionService = sessionService;
@@ -66,7 +66,7 @@ class CartController{
   }
 
   checkout() {
-    this.$location.url(this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html');
+    this.$window.location.href = this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html';
   }
 }
 

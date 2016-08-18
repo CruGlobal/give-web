@@ -10,12 +10,12 @@ let componentName = 'signIn';
 class SignInController {
 
   /* @ngInject */
-  constructor( $location ) {
-    this.$location = $location;
+  constructor( $window ) {
+    this.$window = $window;
   }
 
   signInSuccess() {
-    this.$location.url( 'checkout.html' );
+    this.$window.location.href = 'checkout.html';
   }
 }
 
