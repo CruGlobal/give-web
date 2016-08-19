@@ -1,5 +1,8 @@
 import angular from 'angular';
 import 'angular-mocks';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+
 import module from './order.service';
 
 import cartResponse from 'common/services/api/fixtures/cortex-cart-paymentmethodinfo-forms.fixture.js';
@@ -28,7 +31,6 @@ describe('order service', () => {
   };
 
   let purchaseFormResponseZoomMapped = {
-    purchaseform: purchaseFormResponse._order[0]._purchaseform[0],
     enhancedpurchaseform: purchaseFormResponse._order[0]._enhancedpurchaseform[0],
     rawData: purchaseFormResponse
   };
@@ -128,39 +130,26 @@ describe('order service', () => {
   });
 
   describe('getPurchaseForms', () => {
-    function setupRequest() {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:purchaseform,order:enhancedpurchaseform').respond(200, purchaseFormResponse);
-    }
-
-    function initiateRequest(){
-      self.orderService.getPurchaseForms()
+    it('should send a request to get the payment form links', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:enhancedpurchaseform').respond(200, purchaseFormResponse);
+      self.orderService.getPurchaseForm()
         .subscribe((data) => {
           expect(data).toEqual(purchaseFormResponseZoomMapped);
         });
-    }
-
-    it('should send a request to get the payment form links', () => {
-      setupRequest();
-      initiateRequest();
       self.$httpBackend.flush();
-    });
-
-    it('should use the cached response if called a second time', () => {
-      setupRequest();
-      initiateRequest();
-      self.$httpBackend.flush();
-      initiateRequest();
     });
   });
 
   describe('submit', () => {
+    beforeEach(() => {
+      // Avoid another http request while testing
+      spyOn(self.orderService, 'getPurchaseForm').and.callFake(() => Observable.of(purchaseFormResponseZoomMapped));
+    });
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/purchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=',
+        'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=',
+        null
       ).respond(200, 'success');
-
-      // cache getPaymentForms response to avoid another http request while testing
-      self.orderService.purchaseForms = purchaseFormResponseZoomMapped;
 
       self.orderService.submit()
         .subscribe((data) => {
@@ -169,19 +158,13 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
-  });
-
-  describe('submitWithCcv', () => {
-    it('should send a request to finalize the purchase and send the saved CCV', () => {
+    it('should send a request to finalize the purchase and with a CCV', () => {
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=',
         {"security-code": '123'}
       ).respond(200, 'success');
 
-      // cache getPaymentForms response to avoid another http request while testing
-      self.orderService.purchaseForms = purchaseFormResponseZoomMapped;
-
-      self.orderService.submitWithCcv('123')
+      self.orderService.submit('123')
         .subscribe((data) => {
           expect(data).toEqual('success');
         });

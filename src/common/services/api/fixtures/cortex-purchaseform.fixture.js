@@ -51,18 +51,6 @@ export default {
         "href": "https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu="
       }],
       "security-code": ""
-    }],
-    "_purchaseform": [{
-      "self": {
-        "type": "elasticpath.purchases.purchase",
-        "uri": "/purchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=/form",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=/form"
-      },
-      "links": [{
-        "rel": "submitorderaction",
-        "uri": "/purchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu="
-      }]
     }]
   }],
   "total-quantity": 1
