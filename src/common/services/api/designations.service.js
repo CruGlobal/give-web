@@ -88,7 +88,7 @@ function designations(cortexApiService){
       });
       var displayName = JSONPath.query(data, "$._definition[0]['display-name']")[0];
       var code = JSONPath.query(data, "$._code[0].code")[0];
-      var designationNumber = JSONPath.query(data, "$._definition[0].details[?(@.name=='replacement_designation_id')]['display-value']")[0];
+      var designationNumber = JSONPath.query(data, "$._code[0]['product-code']")[0];
 
       return {
         id: idUri.split('/').pop(),

@@ -41,7 +41,7 @@ function cart(cortexApiService){
           var frequencyTitle = JSONPath.query(element, "$._rate[0].recurrence.display")[0];
           var price = JSONPath.query(element, "$._rate[0].cost.display")[0];
           var code = JSONPath.query(element, "$._item[0]._code[0].code")[0];
-          var designationNumber = JSONPath.query(element, "$._item[0]._definition[0].details[?(@.name=='replacement_designation_id')]['display-value']")[0];
+          var designationNumber = JSONPath.query(element, "$._item[0]._code[0]['product-code']")[0];
           var itemConfig = JSONPath.query(element, "$._itemfields[0]")[0];
           delete itemConfig.links;
           delete itemConfig.self;
