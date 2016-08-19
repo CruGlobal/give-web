@@ -89,8 +89,7 @@ describe('checkout', () => {
         self.controller.creditCardPaymentDetails = {};
         self.storedCcv = '1234';
         self.controller.submitOrder();
-        expect(self.controller.orderService.submit).not.toHaveBeenCalled();
-        expect(self.controller.orderService.submitWithCcv).toHaveBeenCalledWith('1234');
+        expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
         expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
       });
       it('should throw an error if paying with a credit card and the CCV is missing', () => {
