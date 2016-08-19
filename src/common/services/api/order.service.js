@@ -69,38 +69,23 @@ class Order{
       });
   }
 
-  getPurchaseForms(){
-    if(this.purchaseForms){
-      return Observable.of(this.purchaseForms);
-    }else{
-      return this.cortexApiService.get({
-          path: ['carts', this.cortexApiService.scope, 'default'],
-          zoom: {
-            purchaseform: 'order:purchaseform',
-            enhancedpurchaseform: 'order:enhancedpurchaseform'
-          }
-        })
-        .do((data) => {
-          this.purchaseForms = data;
-        });
-    }
+  getPurchaseForm(){
+    return this.cortexApiService.get({
+      path: ['carts', this.cortexApiService.scope, 'default'],
+      zoom: {
+        enhancedpurchaseform: 'order:enhancedpurchaseform'
+      },
+      cache: true
+    });
   }
 
-  submit(){
-    return this.getPurchaseForms()
+  submit(ccv){
+    return this.getPurchaseForm()
       .mergeMap((data) => {
-        return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.purchaseform, 'submitorderaction')
-        });
-      });
-  }
-
-  submitWithCcv(ccv){
-    return this.getPurchaseForms()
-      .mergeMap((data) => {
+        let postData = ccv ? {"security-code": ccv} : undefined;
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
-          data: {"security-code": ccv}
+          data: postData
         });
       });
   }
