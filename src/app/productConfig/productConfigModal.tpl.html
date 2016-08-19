@@ -47,7 +47,7 @@
                 </div>
               </label>
               <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-                <div class="help-block" ng-message="required" translate>You must enter an amount</div>
+                <div class="help-block" ng-message="required" translate>Amount must be at least $1</div>
                 <div class="help-block" ng-message="min" translate>Amount must be at least $1</div>
               </div>
             </div>
