@@ -35,20 +35,20 @@
             <!--</div>-->
 
             <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
-              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 50" ng-class="{'active': $ctrl.itemConfig.amount === 50}"><span class="number">$50</span></label>
-              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 100" ng-class="{'active': $ctrl.itemConfig.amount === 100}"><span class="number">$100</span></label>
-              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 250" ng-class="{'active': $ctrl.itemConfig.amount === 250}"><span class="number">$250</span></label>
-              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 500" ng-class="{'active': $ctrl.itemConfig.amount === 500}"><span class="number">$500</span></label>
-              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 1000" ng-class="{'active': $ctrl.itemConfig.amount === 1000}"><span class="number">$1000</span></label>
-              <label class="btn btn-radio" ng-click="$ctrl.itemConfig.amount = 5000" ng-class="{'active': $ctrl.itemConfig.amount === 5000}"><span class="number">$5000</span></label>
+              <label class="btn btn-radio" ng-click="$ctrl.changeAmount(a)" ng-class="{'active': $ctrl.itemConfig.amount === a}" ng-repeat-start="a in $ctrl.selectableAmounts">
+                <span class="number">${{a}}</span>
+              </label>
+              <span ng-repeat-end></span>
               <label class="btn btn-default-form u-textLeft custom-amount">
                 <div class="form-group form-group-default u-inline">
-                  <input class="form-control form-control-subtle number" min="1" type="number" name="amount" ng-model="$ctrl.itemConfig.amount" required>
+                  <input class="form-control form-control-subtle number" type="text" name="amount"
+                         ng-model="$ctrl.customAmount"
+                         ng-change="$ctrl.itemConfig.amount = $ctrl.customAmount"
+                         ng-pattern="/^[1-9]\d*(\.\d+)?$/">
                 </div>
               </label>
               <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-                <div class="help-block" ng-message="required" translate>Amount must be at least $1</div>
-                <div class="help-block" ng-message="min" translate>Amount must be at least $1</div>
+                <div class="help-block" ng-message="pattern" translate>Amount must be a valid amount and at least $1</div>
               </div>
             </div>
           </div><!-- // panel-body -->
@@ -61,9 +61,12 @@
             <div data-toggle="buttons">
               <label class="btn btn-radio btn-wide"
                      ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder"
-                     ng-class="{'active': !f.selectAction}"
-                     ng-click="$ctrl.changeFrequency(f.selectAction)">
-                <span class="giftsum-about giftsum-title">{{f.display}}</span>
+                     ng-class="{'active': f.name === $ctrl.productData.frequency}"
+                     ng-click="$ctrl.changeFrequency(f)">
+                <span class="giftsum-about giftsum-title" ng-switch="f.name">
+                  <span ng-switch-when="NA" translate>Single Gift</span>
+                  <span ng-switch-default>{{f.display}}</span>
+                </span>
               </label>
               <span ng-repeat-end></span>
             </div>
@@ -80,7 +83,7 @@
                   <div class="form-group">
                     <label translate>Month</label>
                     <div class="form-group">
-                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig.month">
+                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig['start-month']">
                         <option value="01" translate>January</option>
                         <option value="02" translate>February</option>
                         <option value="03" translate>March</option>
@@ -101,7 +104,7 @@
                   <div class="form-group">
                     <label translate>Day</label>
                     <div class="form-group">
-                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig.day" ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig.month)">
+                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig['start-day']" ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig['start-month'])">
                       </select>
                     </div>
                   </div>
@@ -112,7 +115,7 @@
         </div>
         <div class="panel panel-default give-modal-panel">
           <h4 class="panel-title border-bottom-small mt" translate>
-            Optional Comments
+            Optional
           </h4>
           <div class="panel-body pt0">
             <ul class="list-unstyled">
@@ -126,7 +129,7 @@
                         style="display:block;"></textarea>
               </li>
               <li>
-                <a class="commentLink" href="" ng-click="showDSComments = !showDSComments" translate>Special Handling Instructions for Processing the Gift</a>
+                <a class="commentLink" href="" ng-click="showDSComments = !showDSComments" translate>Special Handling Instructions for Processing This Gift</a>
                 <textarea class="cru-comments give-modal-comments"
                         rows="3"
                         maxlength="250"
