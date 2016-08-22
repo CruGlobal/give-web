@@ -23,10 +23,11 @@ class ModalInstanceCtrl{
     return indexOf(order, f.name);
   }
 
-  changeFrequency(productId){
-    this.designationsService.productLookup(productId, true).subscribe((data) => {
+  changeFrequency(product){
+    this.designationsService.productLookup(product.selectAction, true).subscribe((data) => {
       this.productData = data;
     });
+    this.productData.frequency = product.name;
   }
 
   changeAmount(amount){

@@ -61,8 +61,8 @@
             <div data-toggle="buttons">
               <label class="btn btn-radio btn-wide"
                      ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder"
-                     ng-class="{'active': !f.selectAction}"
-                     ng-click="$ctrl.changeFrequency(f.selectAction)">
+                     ng-class="{'active': f.name === $ctrl.productData.frequency}"
+                     ng-click="$ctrl.changeFrequency(f)">
                 <span class="giftsum-about giftsum-title" ng-switch="f.name">
                   <span ng-switch-when="NA" translate>Single Gift</span>
                   <span ng-switch-default>{{f.display}}</span>
@@ -83,7 +83,7 @@
                   <div class="form-group">
                     <label translate>Month</label>
                     <div class="form-group">
-                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig.month">
+                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig['start-month']">
                         <option value="01" translate>January</option>
                         <option value="02" translate>February</option>
                         <option value="03" translate>March</option>
@@ -104,7 +104,7 @@
                   <div class="form-group">
                     <label translate>Day</label>
                     <div class="form-group">
-                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig.day" ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig.month)">
+                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig['start-day']" ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig['start-month'])">
                       </select>
                     </div>
                   </div>
