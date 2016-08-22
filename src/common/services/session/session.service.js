@@ -1,8 +1,9 @@
 import angular from 'angular';
-import 'angular-environment';
 import 'angular-cookies';
+import 'angular-environment';
 import jwtDecode from 'jwt-decode';
 import {Observable} from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 
@@ -11,8 +12,9 @@ import appConfig from 'common/app.config';
 let serviceName = 'sessionService';
 
 /*@ngInject*/
-function session( $cookies, $rootScope, $http, envService ) {
-  var session = {};
+function session( $cookies, $rootScope, $http, $q, envService ) {
+  var session = {},
+    sessionSubject = new BehaviorSubject( session );
 
   // Set initial session on load
   updateCurrentSession( $cookies.get( 'cortex-session' ) );
@@ -24,13 +26,14 @@ function session( $cookies, $rootScope, $http, envService ) {
 
   // Return sessionService public interface
   return {
-    session: session,
-    getRole: currentRole,
-    signIn:  signIn
+    session:        session,
+    sessionSubject: sessionSubject,
+    getRole:        currentRole,
+    signIn:         signIn,
+    signOut:        signOut
   };
 
   /* Public Methods */
-
   function signIn( username, password ) {
     return Observable.from( $http( {
       method:          'POST',
@@ -46,8 +49,17 @@ function session( $cookies, $rootScope, $http, envService ) {
       } );
   }
 
-  /* Private Methods */
+  function signOut() {
+    var deferred = $q.defer();
+    // @todo Use gateway logout API (in development)
+    $cookies.remove( 'cortex-session', {path: '/', domain: '.cru.org'} );
+    $cookies.remove( 'give-session', {path: '/', domain: '.cru.org'} );
+    $cookies.remove( 'cru-session', {path: '/', domain: '.cru.org'} );
+    deferred.resolve();
+    return deferred.promise;
+  }
 
+  /* Private Methods */
   function updateCurrentSession( encoded_value ) {
     var cortexSession = {};
     if ( angular.isDefined( encoded_value ) ) {
@@ -55,6 +67,8 @@ function session( $cookies, $rootScope, $http, envService ) {
     }
     // Copy new session into current session object
     angular.copy( cortexSession, session );
+    // Update sessionSubject with new value
+    sessionSubject.next( session );
   }
 
   function currentRole() {
