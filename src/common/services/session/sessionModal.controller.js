@@ -1,8 +1,8 @@
 import angular from 'angular';
 
-import signInModal from 'common/components/signInModal/signInModal.component'
-import signUpModal from 'common/components/signUpModal/signUpModal.component'
-import resetPasswordModal from 'common/components/resetPasswordModal/resetPasswordModal.component'
+import signInModal from 'common/components/signInModal/signInModal.component';
+import signUpModal from 'common/components/signUpModal/signUpModal.component';
+import resetPasswordModal from 'common/components/resetPasswordModal/resetPasswordModal.component';
 
 let controllerName = 'sessionModalController';
 

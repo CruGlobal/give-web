@@ -18,7 +18,7 @@ class SignInButtonController {
   }
 
   $onInit() {
-    this.subscription = this.sessionService.sessionSubject.subscribe( ( x ) => this.sessionChanged( x ) );
+    this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
   }
 
   $onDestroy() {
@@ -45,7 +45,7 @@ class SignInButtonController {
     }
   }
 
-  sessionChanged( session ) {
+  sessionChanged() {
     this.isSignedIn = includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() );
   }
 }
@@ -60,7 +60,7 @@ export default angular
   .component( componentName, {
     controller:  SignInButtonController,
     templateUrl: template.name,
-    bindings: {
+    bindings:    {
       pageReload: '<'
     }
   } );

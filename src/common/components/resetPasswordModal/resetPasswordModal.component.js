@@ -19,7 +19,7 @@ class ResetPasswordModalController {
 export default angular
   .module( componentName, [
     'gettext',
-    template.name,
+    template.name
   ] )
   .component( componentName, {
     controller:  ResetPasswordModalController,
