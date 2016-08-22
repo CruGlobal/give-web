@@ -11,6 +11,11 @@ class ModalInstanceCtrl{
     this.productData = productData;
 
     this.itemConfig = itemConfig;
+
+    this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
+    if(this.selectableAmounts.indexOf(itemConfig.amount) === -1){
+      this.customAmount = this.itemConfig.amount;
+    }
   }
 
   frequencyOrder(f){
@@ -18,10 +23,16 @@ class ModalInstanceCtrl{
     return indexOf(order, f.name);
   }
 
-  changeFrequency(productId){
-    this.designationsService.productLookup(productId, true).subscribe((data) => {
+  changeFrequency(product){
+    this.designationsService.productLookup(product.selectAction, true).subscribe((data) => {
       this.productData = data;
     });
+    this.productData.frequency = product.name;
+  }
+
+  changeAmount(amount){
+    this.itemConfig.amount = amount;
+    this.customAmount = '';
   }
 
   addToCart(){
