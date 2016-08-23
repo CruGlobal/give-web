@@ -14,6 +14,7 @@ import help from './help/help.component';
 
 import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
+import commonModule from 'common/common.module';
 
 import template from './checkout.tpl';
 
@@ -58,7 +59,8 @@ export default angular
     help.name,
     cartSummary.name,
     cartService.name,
-    designationsService.name
+    designationsService.name,
+    commonModule.name
   ])
   .component(componentName, {
     controller: CheckoutController,

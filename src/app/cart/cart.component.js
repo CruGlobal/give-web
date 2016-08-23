@@ -9,6 +9,7 @@ import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
 import modalController from 'app/productConfig/productConfig.modal';
 import sessionService from 'common/services/session/session.service';
+import commonModule from 'common/common.module';
 
 import template from './cart.tpl';
 import templateModal from 'app/productConfig/productConfigModal.tpl';
@@ -79,7 +80,8 @@ export default angular
     appConfig.name,
     cartService.name,
     designationsService.name,
-    sessionService.name
+    sessionService.name,
+    commonModule.name
   ])
   .component(componentName, {
     controller: CartController,
