@@ -1,7 +1,7 @@
 import angular from 'angular';
-import 'angular-gettext';
 import includes from 'lodash/includes';
 import sessionService from 'common/services/session/session.service';
+import signInForm from 'common/components/signInForm/signInForm.component';
 import template from './signInModal.tpl';
 
 let componentName = 'signInModal';
@@ -32,9 +32,9 @@ class SignInModalController {
 
 export default angular
   .module( componentName, [
-    'gettext',
-    template.name,
-    sessionService.name
+    signInForm.name,
+    sessionService.name,
+    template.name
   ] )
   .component( componentName, {
     controller:  SignInModalController,

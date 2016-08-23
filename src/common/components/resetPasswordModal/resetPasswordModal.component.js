@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 'angular-gettext';
 import template from './resetPasswordModal.tpl';
 
 let componentName = 'resetPasswordModal';
@@ -18,7 +17,6 @@ class ResetPasswordModalController {
 
 export default angular
   .module( componentName, [
-    'gettext',
     template.name
   ] )
   .component( componentName, {
