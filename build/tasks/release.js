@@ -48,7 +48,9 @@ gulp.task('release', function (callback) {
 gulp.task('bundle', function () {
   var bundles = [
     'app/cart/cart.component',
-    'app/checkout/checkout.component'
+    'app/checkout/checkout.component',
+    'app/productConfig/productConfig.component',
+    'app/signIn/signIn.component'
   ];
   var commonFilesForBundles = '(' + bundles.join(' & ') + ')';
   return $.jspmBuild({
@@ -56,7 +58,7 @@ gulp.task('bundle', function () {
         { src: 'app/main/main.component',
           dst: 'main.js'
         },
-        { src: commonFilesForBundles,
+        { src: commonFilesForBundles + ' + common/components/signInButton/signInButton.component',
           dst: 'common.js'
         },
         { src: 'app/cart/cart.component - ' + commonFilesForBundles,
