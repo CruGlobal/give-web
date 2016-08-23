@@ -2,7 +2,8 @@ import angular from 'angular';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 
-import cartService from 'common/services/api/cart.service';
+import displayAddressComponent from 'common/components/display-address/display-address.component';
+
 import orderService from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
 
@@ -13,18 +14,25 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(cartService, orderService, $log){
-    this.cartService = cartService;
+  constructor(orderService, $log){
     this.orderService = orderService;
     this.$log = $log;
   }
 
   $onInit(){
-    this.cartService.getDonorDetails()
+    this.loadDonorDetails();
+    this.loadCurrentPayment();
+    this.loadBillingAddress();
+  }
+
+  loadDonorDetails(){
+    this.orderService.getDonorDetails()
       .subscribe((data) => {
         this.donorDetails = data;
       });
+  }
 
+  loadCurrentPayment(){
     this.orderService.getCurrentPayment()
       .subscribe((data) => {
         if(!data){
@@ -36,6 +44,13 @@ class Step3Controller{
         }else{
           this.$log.error('Error loading current payment info: current payment type is unknown');
         }
+      });
+  }
+
+  loadBillingAddress(){
+    this.orderService.getBillingAddress()
+      .subscribe((data) => {
+        this.billingAddress = data.address;
       });
   }
 
@@ -64,7 +79,7 @@ class Step3Controller{
 export default angular
   .module(componentName, [
     template.name,
-    cartService.name,
+    displayAddressComponent.name,
     orderService.name,
     capitalizeFilter.name
   ])
