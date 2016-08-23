@@ -1,7 +1,6 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'rxjs/add/operator/mergeMap';
-import 'angular-gettext';
 
 import appConfig from 'common/app.config';
 
@@ -49,9 +48,9 @@ class CheckoutController{
 
 export default angular
   .module(componentName, [
+    commonModule.name,
     template.name,
     appConfig.name,
-    'gettext',
     step1.name,
     step2.name,
     step3.name,
@@ -59,8 +58,7 @@ export default angular
     help.name,
     cartSummary.name,
     cartService.name,
-    designationsService.name,
-    commonModule.name
+    designationsService.name
   ])
   .component(componentName, {
     controller: CheckoutController,

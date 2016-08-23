@@ -1,6 +1,4 @@
 import angular from 'angular';
-import 'angular-gettext';
-
 import signInForm from 'common/components/signInForm/signInForm.component';
 import commonModule from 'common/common.module';
 
@@ -22,10 +20,9 @@ class SignInController {
 
 export default angular
   .module( componentName, [
-    'gettext',
+    commonModule.name,
     template.name,
-    signInForm.name,
-    commonModule.name
+    signInForm.name
   ] )
   .component( componentName, {
     controller:  SignInController,

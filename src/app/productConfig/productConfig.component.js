@@ -1,7 +1,6 @@
 import angular from 'angular';
 import 'angular-messages';
 import 'angular-bootstrap';
-import 'angular-gettext';
 
 import template from './productConfig.tpl';
 import templateModal from './productConfigModal.tpl';
@@ -50,14 +49,13 @@ class ProductConfigController{
 
 export default angular
   .module(componentName, [
+    commonModule.name,
     'ui.bootstrap',
     'ngMessages',
-    'gettext',
     template.name,
     templateModal.name,
     cartService.name,
     designationsService.name,
-    commonModule.name
   ])
   .component(componentName, {
     controller: ProductConfigController,
