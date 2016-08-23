@@ -1,10 +1,10 @@
 import angular from 'angular';
 import 'angular-mocks';
-import omit from 'lodash/omit';
 import size from 'lodash/size';
-import module from './bank-account.component';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 
-import cartResponse from 'common/services/api/fixtures/cortex-cart-paymentmethodinfo-forms.fixture.js';
+import module from './bank-account.component';
 
 describe('checkout', () => {
   describe('step 2', () => {
@@ -68,40 +68,20 @@ describe('checkout', () => {
       });
 
       describe('savePayment', () => {
-        afterEach(function() {
-          self.$httpBackend.verifyNoOutstandingExpectation();
-          self.$httpBackend.verifyNoOutstandingRequest();
+        beforeEach(() => {
+          spyOn(self.formController, '$setSubmitted');
+          spyOn(self.controller.orderService, 'addBankAccountPayment').and.callFake(() => Observable.of('saved bank account'));
+          spyOn(self.controller, 'onSave').and.callThrough();
+          spyOn(self.outerScope, 'onSave');
         });
 
         it('should call onSave with success false when form is invalid', () => {
-          spyOn(self.controller, 'onSave').and.callThrough();
-          spyOn(self.outerScope, 'onSave');
           self.controller.savePayment();
+          expect(self.formController.$setSubmitted).toHaveBeenCalled();
           expect(self.controller.onSave).toHaveBeenCalledWith({success: false});
           expect(self.outerScope.onSave).toHaveBeenCalledWith(false);
         });
         it('should send a request to save the bank account payment info', () => {
-          //Request to get form link
-          self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform').respond(200, cartResponse);
-
-          //Custom post data validator to check match on everything except encrypted-account-number which changes on each run
-          let expectedPostData = {"account-type":"checking","bank-name":"First Bank", "encrypted-account-number": '***encrypted***',"routing-number":"123456789"};
-          function dataValidator(data){
-            data = angular.fromJson(data);
-            return angular.equals(omit(data, 'encrypted-account-number'), omit(expectedPostData, 'encrypted-account-number')) && data['encrypted-account-number'].length >= 100;
-          }
-          dataValidator.toString = () => 'encrypted-account-number must be at least 100 chars and rest of object must match: ' + angular.toJson(expectedPostData);
-
-          //Request to save bank account info
-          self.$httpBackend.expectPOST(
-            'https://cortex-gateway-stage.cru.org/cortex/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
-            dataValidator
-          ).respond(200, 'success');
-
-          spyOn(self.formController, '$setSubmitted');
-          spyOn(self.controller, 'onSave').and.callThrough();
-          spyOn(self.outerScope, 'onSave');
-
           self.controller.bankPayment = {
             accountType: 'checking',
             bankName: 'First Bank',
@@ -111,19 +91,17 @@ describe('checkout', () => {
           self.formController.$valid = true;
           self.controller.savePayment();
           expect(self.formController.$setSubmitted).toHaveBeenCalled();
-
-          self.$httpBackend.flush();
-          self.$httpBackend.flush();
+          expect(self.controller.orderService.addBankAccountPayment).toHaveBeenCalledWith(jasmine.objectContaining({
+            "account-type": "checking",
+            "bank-name": "First Bank",
+            "encrypted-account-number": jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
+            "routing-number": "123456789"
+          }));
           expect(self.controller.onSave).toHaveBeenCalledWith({success: true});
           expect(self.outerScope.onSave).toHaveBeenCalledWith(true);
         });
         it('should handle an error saving to cortex', () => {
-          //Request to get form link
-          self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform').respond(400, 'error');
-
-          spyOn(self.formController, '$setSubmitted');
-          spyOn(self.controller, 'onSave').and.callThrough();
-          spyOn(self.outerScope, 'onSave');
+          self.controller.orderService.addBankAccountPayment.and.callFake(() => Observable.throw('error saving bank account info'));
 
           self.controller.bankPayment = {
             accountType: 'checking',
@@ -133,9 +111,8 @@ describe('checkout', () => {
           };
           self.formController.$valid = true;
           self.controller.savePayment();
-          expect(self.formController.$setSubmitted).toHaveBeenCalled();
 
-          self.$httpBackend.flush();
+          expect(self.formController.$setSubmitted).toHaveBeenCalled();
           expect(self.controller.onSave).toHaveBeenCalledWith({success: false});
           expect(self.outerScope.onSave).toHaveBeenCalledWith(false);
         });

@@ -12,10 +12,7 @@ function cart(cortexApiService){
     get: get,
     addItem: addItem,
     updateItem: updateItem,
-    deleteItem: deleteItem,
-    getDonorDetails: getDonorDetails,
-    updateDonorDetails: updateDonorDetails,
-    addEmail: addEmail
+    deleteItem: deleteItem
   };
 
   function get() {
@@ -135,65 +132,6 @@ function cart(cortexApiService){
   function deleteItem(uri){
     return cortexApiService.delete({
       path: uri
-    });
-  }
-
-  function getDonorDetails(){
-    return cortexApiService.get({
-        path: ['carts', cortexApiService.scope, 'default'],
-        params: {
-          zoom: 'order:donordetails,order:emailinfo:email'
-        }
-      })
-      .map((data) => {
-        let details = JSONPath.query(data, '$.._order.._donordetails.*')[0];
-        if(details['mailing-address']['country-name'] !== 'US'){
-          let intAddress = details['mailing-address']['street-address'].split('||');
-          details['mailing-address']['street-address'] = intAddress[0] ? intAddress[0] : '';
-          details['mailing-address']['extended-address'] = intAddress[1] ? intAddress[1] : '';
-          details['mailing-address']['intAddressLine3'] = intAddress[2] ? intAddress[2] : '';
-          details['mailing-address']['intAddressLine4'] = intAddress[3] ? intAddress[3] : '';
-        }
-
-        //default to US
-        if(!details['mailing-address']['country-name']){
-          details['mailing-address']['country-name'] = 'US';
-        }
-
-        let email = JSONPath.query(data, '$.._order.._emailinfo.*')[0];
-        details.email = email ? email['_email'][0]['email'] : '';
-        return details;
-      });
-  }
-
-  function updateDonorDetails(uri, details){
-    details = angular.copy(details);
-    if(details['mailing-address']['country-name'] !== 'US'){
-      let intAddress = [
-        details['mailing-address']['street-address'],
-        details['mailing-address']['extended-address'],
-        details['mailing-address']['intAddressLine3'],
-        details['mailing-address']['intAddressLine4']
-      ];
-
-      details['mailing-address']['street-address'] = intAddress.join('||');
-      details['mailing-address']['extended-address'] = '';
-      details['mailing-address']['locality'] = '';
-      details['mailing-address']['region'] = '';
-    }
-    delete details['mailing-address']['intAddressLine3'];
-    delete details['mailing-address']['intAddressLine4'];
-
-    return cortexApiService.put({
-      path: uri,
-      data: details
-    });
-  }
-
-  function addEmail(email){
-    return cortexApiService.post({
-      path: ['emails', cortexApiService.scope],
-      data: {email: email}
     });
   }
 }

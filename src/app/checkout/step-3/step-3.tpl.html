@@ -6,14 +6,7 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-md-8">
-          <div class="form-group" ng-if="$ctrl.donorDetails">
-            <p>
-              {{$ctrl.donorDetails['mailing-address']['street-address']}}<br/>
-              {{$ctrl.donorDetails['mailing-address']['locality']}},
-              {{$ctrl.donorDetails['mailing-address']['region']}}
-              {{$ctrl.donorDetails['mailing-address']['postal-code']}}
-            </p>
-          </div>
+          <display-address address="$ctrl.donorDetails.mailingAddress"></display-address>
           <div class="loading-wrap" ng-if="!$ctrl.donorDetails">
             <span class="loading loading1"></span>
             <span class="loading loading2"></span>
@@ -67,7 +60,7 @@
               </div>
               <div class="form-group">
                 <label class="">Card Number</label>
-                <p class="number">************{{$ctrl.creditCardPaymentDetails['card-number']}}</p><!-- TODO: this is undefined -->
+                <p class="number">************{{$ctrl.creditCardPaymentDetails['card-number']}}</p>
               </div>
             </div>
             <div class="col-md-6">
@@ -83,7 +76,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label class="">Billing Address</label>
-                <p>8898 Strawberry Lane, Orlando, Florida 77678-9909</p>
+                <display-address address="$ctrl.billingAddress"></display-address>
               </div>
             </div>
           </div>
