@@ -11,8 +11,6 @@ import checkoutComponent from '../checkout/checkout.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 
-import cartService from 'common/services/api/cart.service';
-
 import template from './main.tpl';
 
 let componentName = 'main';
@@ -55,8 +53,7 @@ export default angular
     checkoutComponent.name,
     productConfigComponent.name,
     signInComponent.name,
-    'ui.router',
-    cartService.name
+    'ui.router'
   ])
   .config(routingConfig)
   .component(componentName, {
