@@ -58,7 +58,7 @@ gulp.task('bundle', function () {
         { src: 'app/main/main.component',
           dst: 'main.js'
         },
-        { src: commonFilesForBundles + ' + common/components/signInButton/signInButton.component',
+        { src: commonFilesForBundles,
           dst: 'common.js'
         },
         { src: 'app/cart/cart.component - ' + commonFilesForBundles,

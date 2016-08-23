@@ -8,6 +8,7 @@ import templateModal from './productConfigModal.tpl';
 import modalController from './productConfig.modal';
 import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
+import commonModule from 'common/common.module';
 
 let componentName = 'productConfig';
 
@@ -55,7 +56,8 @@ export default angular
     template.name,
     templateModal.name,
     cartService.name,
-    designationsService.name
+    designationsService.name,
+    commonModule.name
   ])
   .component(componentName, {
     controller: ProductConfigController,

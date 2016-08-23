@@ -12,8 +12,6 @@ import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 
 import cartService from 'common/services/api/cart.service';
-import sessionModalService from 'common/services/session/sessionModal.service';
-import signInButton from 'common/components/signInButton/signInButton.component';
 
 import template from './main.tpl';
 
@@ -56,9 +54,7 @@ export default angular
     cartComponent.name,
     checkoutComponent.name,
     productConfigComponent.name,
-    signInButton.name,
     signInComponent.name,
-    sessionModalService.name,
     'ui.router',
     cartService.name
   ])
