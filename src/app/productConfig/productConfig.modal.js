@@ -19,7 +19,7 @@ class ModalInstanceCtrl{
   }
 
   frequencyOrder(f){
-    let order = ['NA', 'MON', 'QUARTERLY', 'ANNUAL', 'SEMIANNUAL'];
+    let order = ['NA', 'MON', 'QUARTERLY', 'SEMIANNUAL', 'ANNUAL'];
     return indexOf(order, f.name);
   }
 

@@ -61,6 +61,7 @@
             <div data-toggle="buttons">
               <label class="btn btn-radio btn-wide"
                      ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder"
+                     ng-if="f.name !== 'SEMIANNUAL'"
                      ng-class="{'active': f.name === $ctrl.productData.frequency}"
                      ng-click="$ctrl.changeFrequency(f)">
                 <span class="giftsum-about giftsum-title" ng-switch="f.name">
