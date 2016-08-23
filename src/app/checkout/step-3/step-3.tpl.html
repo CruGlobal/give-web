@@ -130,7 +130,7 @@
         <tr>
           <td colspan="3" class="text-right">
             <div class="checkout-cta pull-right">
-              <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!($ctrl.donorDetails && ($ctrl.bankAccountPaymentDetails || $ctrl.creditCardPaymentDetails) && $ctrl.cartData)">
+              <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!$ctrl.canSubmitOrder()">
                 Submit Your Gift
               </button>
             </div>
@@ -142,6 +142,12 @@
         </tr>
         </tfoot>
       </table>
+      <p class="text-danger" ng-repeat="error in $ctrl.errors" ng-switch="error">
+        <span ng-switch-when="email-info" translate>There was an issue with your email. Please verify that it is correct.</span>
+        <span ng-switch-when="payment-method-info" translate>There was an issue with your payment. Please verify that all your payment information is correct.</span>
+        <span ng-switch-when="billing-address-info" translate>There was an issue with your billing address. Please verify that your billing address is correct.</span>
+        <span ng-switch-default translate>There was an unknown error. Please verify all your info, try refreshing the page, and, if you are still seeing this message, contact support.</span>
+      </p>
     </div>
   </div>
 </div>

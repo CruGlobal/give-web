@@ -23,6 +23,7 @@ class Step3Controller{
     this.loadDonorDetails();
     this.loadCurrentPayment();
     this.loadBillingAddress();
+    this.checkErrors();
   }
 
   loadDonorDetails(){
@@ -52,6 +53,17 @@ class Step3Controller{
       .subscribe((data) => {
         this.billingAddress = data.address;
       });
+  }
+
+  checkErrors(){
+    this.orderService.checkErrors()
+      .subscribe((data) => {
+        this.errors = data;
+      });
+  }
+
+  canSubmitOrder(){
+    return !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.errors);
   }
 
   submitOrder(){

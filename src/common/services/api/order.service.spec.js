@@ -11,15 +11,17 @@ import paymentMethodResponse from 'common/services/api/fixtures/cortex-paymentme
 import purchaseFormResponse from 'common/services/api/fixtures/cortex-purchaseform.fixture.js';
 import donorDetailsResponse from 'common/services/api/fixtures/cortex-donordetails.fixture.js';
 import billingAddressResponse from 'common/services/api/fixtures/cortex-billing-address.fixture.js';
+import needInfoResponse from 'common/services/api/fixtures/cortex-needinfo.fixture.js';
 
 describe('order service', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
-  beforeEach(inject((orderService, $httpBackend, $window) => {
+  beforeEach(inject((orderService, $httpBackend, $window, $log) => {
     self.orderService = orderService;
     self.$httpBackend = $httpBackend;
     self.$window = $window;
+    self.$log = $log;
   }));
 
   afterEach(() => {
@@ -398,6 +400,18 @@ describe('order service', () => {
           expect(data).toEqual(purchaseFormResponseZoomMapped);
         });
       self.$httpBackend.flush();
+    });
+  });
+
+  describe('checkErrors', () => {
+    it('should send a request to get the payment form links', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, needInfoResponse);
+      self.orderService.checkErrors()
+        .subscribe((data) => {
+          expect(data).toEqual(['email-info', 'billing-address-info', 'payment-method-info']);
+        });
+      self.$httpBackend.flush();
+      expect(self.$log.error.logs[0]).toEqual([ 'The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', ['email-info', 'billing-address-info', 'payment-method-info'] ]);
     });
   });
 
