@@ -79,7 +79,7 @@ export default angular
     appConfig.name,
     cartService.name,
     designationsService.name,
-    sessionService.name,
+    sessionService.name
   ])
   .component(componentName, {
     controller: CartController,

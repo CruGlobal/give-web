@@ -55,7 +55,7 @@ export default angular
     template.name,
     templateModal.name,
     cartService.name,
-    designationsService.name,
+    designationsService.name
   ])
   .component(componentName, {
     controller: ProductConfigController,
