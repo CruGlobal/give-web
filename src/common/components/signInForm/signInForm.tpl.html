@@ -33,12 +33,5 @@
     translate>Sign In
   </button>
   <ng-transclude></ng-transclude>
-  <div class="loading-background" ng-if="$ctrl.isSigningIn">
-    <div class="loading-wrap">
-      <span class="loading loading1"></span>
-      <span class="loading loading2"></span>
-      <span class="loading loading3"></span>
-      <span class="loading loading4"></span>
-    </div>
-  </div>
+  <loading-overlay ng-if="$ctrl.isSigningIn"></loading-overlay>
 </form>
