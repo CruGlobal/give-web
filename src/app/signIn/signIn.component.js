@@ -1,6 +1,7 @@
 import angular from 'angular';
 import signInForm from 'common/components/signInForm/signInForm.component';
 import commonModule from 'common/common.module';
+import showErrors from 'common/filters/showErrors.filter';
 
 import template from './signIn.tpl';
 
@@ -22,7 +23,8 @@ export default angular
   .module( componentName, [
     commonModule.name,
     template.name,
-    signInForm.name
+    signInForm.name,
+    showErrors.name
   ] )
   .component( componentName, {
     controller:  SignInController,

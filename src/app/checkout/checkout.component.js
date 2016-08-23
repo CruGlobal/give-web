@@ -10,6 +10,7 @@ import step3 from './step-3/step-3.component';
 import thankYou from './thank-you/thank-you.component';
 import cartSummary from './cart-summary/cart-summary.component';
 import help from './help/help.component';
+import showErrors from 'common/filters/showErrors.filter';
 
 import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
@@ -58,7 +59,8 @@ export default angular
     help.name,
     cartSummary.name,
     cartService.name,
-    designationsService.name
+    designationsService.name,
+    showErrors.name
   ])
   .component(componentName, {
     controller: CheckoutController,
