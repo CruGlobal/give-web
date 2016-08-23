@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="col-xs-6">
-        <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.last_name.$valid, 'has-error': ($ctrl.signUpForm.last_name.$error | showErrors) }">
+        <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.last_name.$valid, 'has-error': ($ctrl.signUpForm.last_name | showErrors) }">
           <label for="last_name" translate>Last Name</label>
           <input id="last_name"
                  name="last_name"
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.email.$valid, 'has-error': ($ctrl.signUpForm.email.$error | showErrors) }">
+    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.email.$valid, 'has-error': ($ctrl.signUpForm.email | showErrors) }">
       <label for="email" translate>Email address</label>
       <input id="email"
              type="email"
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.password.$valid, 'has-error': ($ctrl.signUpForm.password.$error | showErrors) }">
+    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.password.$valid, 'has-error': ($ctrl.signUpForm.password | showErrors) }">
       <label for="password" translate>Password</label>
       <input id="password"
              name="password"
@@ -70,7 +70,7 @@
       </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.password_check.$valid, 'has-error': ($ctrl.signUpForm.password_check.$error  | showErrors) }">
+    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.password_check.$valid, 'has-error': ($ctrl.signUpForm.password_check  | showErrors) }">
       <label for="password_check" translate>Confirm Password</label>
       <input id="password_check"
              name="password_check"
