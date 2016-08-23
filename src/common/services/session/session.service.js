@@ -30,7 +30,8 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
     sessionSubject: sessionSubject,
     getRole:        currentRole,
     signIn:         signIn,
-    signOut:        signOut
+    signOut:        signOut,
+    signUp:         signUp
   };
 
   /* Public Methods */
@@ -57,6 +58,22 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
     $cookies.remove( 'cru-session', {path: '/', domain: '.cru.org'} );
     deferred.resolve();
     return deferred.promise;
+  }
+
+  function signUp( email, password, first_name, last_name ) {
+    return Observable
+      .from( $http( {
+        method:          'POST',
+        url:             casApiUrl( '/register' ),
+        withCredentials: true,
+        data:            {
+          email:     email,
+          password:  password,
+          firstName: first_name,
+          lastName:  last_name
+        }
+      } ) )
+      .map( ( response ) => response.data );
   }
 
   /* Private Methods */

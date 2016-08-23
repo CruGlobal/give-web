@@ -12,7 +12,8 @@
         </reset-password-modal>
         <sign-up-modal ng-switch-when="sign-up"
                        modal-title="$ctrl.modalTitle"
-                       on-state-change="$ctrl.stateChanged(state)">
+                       on-state-change="$ctrl.stateChanged(state)"
+                       on-success="$ctrl.onSignUpSuccess()">
         </sign-up-modal>
         <sign-in-modal ng-switch-when="sign-in"
                        modal-title="$ctrl.modalTitle"
