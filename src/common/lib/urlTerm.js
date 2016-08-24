@@ -1,4 +1,4 @@
-var getEPSelector = function(){
+var getUrlTerm = function(){
 
   // eslint-disable-next-line angular/window-service
   var absUrl = window.location.href;
@@ -31,5 +31,5 @@ var getEPSelector = function(){
 };
 
 export default {
-  get: getEPSelector
+  get: getUrlTerm
 };

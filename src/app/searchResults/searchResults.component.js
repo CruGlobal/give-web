@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import epSelector from 'common/lib/epSelector';
+import urlTerm from 'common/lib/urlTerm';
 import commonModule from 'common/common.module';
 import designationsService from 'common/services/api/designations.service';
 
@@ -14,7 +14,7 @@ class SearchResultsController {
   constructor(designationsService) {
     this.designationsService = designationsService;
 
-    let searchTerm = epSelector.get();
+    let searchTerm = urlTerm.get();
     if(searchTerm){
       designationsService.createSearch(searchTerm)
         .subscribe((id) => {
