@@ -50,16 +50,16 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
   }
 
   function signOut() {
-    var deferred = $q.defer();
-    // @todo Use gateway logout API (in development)
-    $cookies.remove( 'cortex-session', {path: '/', domain: '.cru.org'} );
-    $cookies.remove( 'give-session', {path: '/', domain: '.cru.org'} );
-    $cookies.remove( 'cru-session', {path: '/', domain: '.cru.org'} );
-    deferred.resolve();
-    return deferred.promise;
+    // https://github.com/CruGlobal/cortex_gateway/wiki/Logout
+    return $http( {
+      method:          'DELETE',
+      url:             casApiUrl( '/login' ),
+      withCredentials: true
+    } );
   }
 
   function signUp( email, password, first_name, last_name ) {
+    // https://github.com/CruGlobal/cortex_gateway/wiki/Create-User
     return Observable
       .from( $http( {
         method:          'POST',
