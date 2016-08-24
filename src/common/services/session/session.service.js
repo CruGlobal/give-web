@@ -30,33 +30,49 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
     sessionSubject: sessionSubject,
     getRole:        currentRole,
     signIn:         signIn,
-    signOut:        signOut
+    signOut:        signOut,
+    signUp:         signUp
   };
 
   /* Public Methods */
   function signIn( username, password ) {
-    return Observable.from( $http( {
-      method:          'POST',
-      url:             casApiUrl( '/login' ),
-      data:            {
-        username: username,
-        password: password
-      },
-      withCredentials: true
-    } ) )
-      .map( ( response ) => {
-        return response.data;
-      } );
+    return Observable
+      .from( $http( {
+        method:          'POST',
+        url:             casApiUrl( '/login' ),
+        data:            {
+          username: username,
+          password: password
+        },
+        withCredentials: true
+      } ) )
+      .map( ( response ) => response.data );
   }
 
   function signOut() {
-    var deferred = $q.defer();
-    // @todo Use gateway logout API (in development)
-    $cookies.remove( 'cortex-session', {path: '/', domain: '.cru.org'} );
-    $cookies.remove( 'give-session', {path: '/', domain: '.cru.org'} );
-    $cookies.remove( 'cru-session', {path: '/', domain: '.cru.org'} );
-    deferred.resolve();
-    return deferred.promise;
+    // https://github.com/CruGlobal/cortex_gateway/wiki/Logout
+    return $http( {
+      method:          'DELETE',
+      url:             casApiUrl( '/login' ),
+      withCredentials: true
+    } );
+  }
+
+  function signUp( email, password, first_name, last_name ) {
+    // https://github.com/CruGlobal/cortex_gateway/wiki/Create-User
+    return Observable
+      .from( $http( {
+        method:          'POST',
+        url:             casApiUrl( '/register' ),
+        withCredentials: true,
+        data:            {
+          email:     email,
+          password:  password,
+          firstName: first_name,
+          lastName:  last_name
+        }
+      } ) )
+      .map( ( response ) => response.data );
   }
 
   /* Private Methods */

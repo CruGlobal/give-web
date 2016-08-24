@@ -1,53 +1,126 @@
 <div class="col-md-12 col-xs-12">
-  <form>
+  <div class="alert alert-danger" role="alert" ng-messages="$ctrl.signUpErrors" ng-if="$ctrl.hasError">
+    <div ng-message="400" translate>An error occurred during sign up.<br />Please Check your Email Address and Password and try again.</div>
+    <div ng-message="403" translate>An error occurred during sign up.<br />This is most likely caused by the use of a reserved domain name in your email address. You might try to
+      <a ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a>,
+      <a ng-click="$ctrl.onStateChange({state: 'reset-password'})">Reset your Password</a>or
+      <a href="https://www.cru.org/about/contact-us.html">Contact Us</a>.
+    </div>
+    <div ng-message="409" translate>An account with this Email Address already exists.<br />Please
+      <a ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a> or
+      <a ng-click="$ctrl.onStateChange({state: 'reset-password'})">Reset your Password</a>.
+    </div>
+  </div>
+  <form name="$ctrl.signUpForm" style="position: relative;">
     <div class="row">
       <div class="col-xs-6">
-        <div class="form-group">
-          <label for="first-name">First Name</label>
-          <input type="text" class="form-control form-control-subtle">
+        <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.first_name.$valid, 'has-error': ($ctrl.signUpForm.first_name | showErrors)}">
+          <label for="first_name" translate>First Name</label>
+          <input id="first_name"
+                 name="first_name"
+                 type="text"
+                 class="form-control form-control-subtle"
+                 ng-model="$ctrl.first_name"
+                 minlength="2"
+                 ng-maxlength="50"
+                 required>
+          <div ng-if="($ctrl.signUpForm.first_name | showErrors)" ng-messages="$ctrl.signUpForm.first_name.$error">
+            <span class="help-block" ng-message="required" translate>First Name is required.</span>
+            <span class="help-block" ng-message="minlength" translate>Must be 2 or more characters.</span>
+            <span class="help-block" ng-message="maxlength" translate>Must be 50 characters or less.</span>
+          </div>
         </div>
       </div>
       <div class="col-xs-6">
-        <div class="form-group">
-          <label for="last-name">Last Name</label>
-          <input type="text" class="form-control form-control-subtle">
+        <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.last_name.$valid, 'has-error': ($ctrl.signUpForm.last_name | showErrors) }">
+          <label for="last_name" translate>Last Name</label>
+          <input id="last_name"
+                 name="last_name"
+                 type="text"
+                 class="form-control form-control-subtle"
+                 ng-model="$ctrl.last_name"
+                 minlength="2"
+                 ng-maxlength="50"
+                 required>
+          <div ng-if="($ctrl.signUpForm.last_name | showErrors)" ng-messages="$ctrl.signUpForm.last_name.$error">
+            <span class="help-block" ng-message="required" translate>Last Name is required.</span>
+            <span class="help-block" ng-message="minlength" translate>Must be 2 or more characters.</span>
+            <span class="help-block" ng-message="maxlength" translate>Must be 50 characters or less.</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="form-group">
-      <label for="email">Email address</label>
-      <input type="email" class="form-control form-control-subtle">
-    </div>
-
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" class="form-control form-control-subtle">
-    </div>
-
-    <div class="form-group">
-      <label for="password-confirm">Confirm Password</label>
-      <input type="password" class="form-control form-control-subtle">
-    </div>
-
-    <div class="row">
-      <div class="col-xs-6">
-        <div class="form-group">
-          <label class="tab-btn btn btn-lg btn-default btn-block on">
-            <input type="radio" name="gender" id="male" autocomplete="off" checked="">Male
-          </label>
-        </div>
-      </div>
-      <div class="col-xs-6">
-        <div class="form-group">
-          <label class="tab-btn btn btn-lg btn-default btn-block">
-            <input type="radio" name="gender" id="female" autocomplete="off" checked="">Female
-          </label>
-        </div>
+    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.email.$valid, 'has-error': ($ctrl.signUpForm.email | showErrors) }">
+      <label for="email" translate>Email address</label>
+      <input id="email"
+             type="email"
+             name="email"
+             class="form-control form-control-subtle"
+             ng-model="$ctrl.email"
+             ng-maxlength="100"
+             required>
+      <div ng-if="($ctrl.signUpForm.email | showErrors)" ng-messages="$ctrl.signUpForm.email.$error">
+        <span class="help-block" ng-message="required" translate>Email address is required.</span>
+        <span class="help-block" ng-message="email" translate>Email address is not valid.</span>
+        <span class="help-block" ng-message="maxlength" translate>Must be 100 characters or less.</span>
       </div>
     </div>
 
-    <div class="form-group">
-      <a data-toggle="modal" data-dismiss="modal" data-target="#signupModal" class="btn btn-block btn-primary">Sign Up</a>
+    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.password.$valid, 'has-error': ($ctrl.signUpForm.password | showErrors) }">
+      <label for="password" translate>Password</label>
+      <input id="password"
+             name="password"
+             type="password"
+             class="form-control form-control-subtle"
+             ng-model="$ctrl.password"
+             minlength="8"
+             ng-pattern="/^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/"
+             required>
+      <div ng-if="($ctrl.signUpForm.password | showErrors)" ng-messages="$ctrl.signUpForm.password.$error">
+        <span class="help-block" ng-message="required" translate>Password is required.</span>
+        <span class="help-block" ng-message="minlength" translate>Must be 8 or more characters.</span>
+        <span class="help-block" ng-message="pattern" translate>Must include 1 letter and 1 number.</span>
+      </div>
     </div>
+
+    <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.password_check.$valid, 'has-error': ($ctrl.signUpForm.password_check  | showErrors) }">
+      <label for="password_check" translate>Confirm Password</label>
+      <input id="password_check"
+             name="password_check"
+             type="password"
+             class="form-control form-control-subtle"
+             ng-model="$ctrl.password_check"
+             value-match="password"
+             required>
+      <div ng-if="($ctrl.signUpForm.password_check | showErrors)" ng-messages="$ctrl.signUpForm.password_check.$error">
+        <span class="help-block" ng-message="required" translate>Password is required.</span>
+        <span class="help-block" ng-message="valueMatch" translate>Passwords must match.</span>
+      </div>
+    </div>
+    <!--
+		<div class="row">
+		  <div class="col-xs-6">
+			<div class="form-group">
+			  <label class="tab-btn btn btn-lg btn-default btn-block on">
+				<input type="radio" name="gender" id="male" autocomplete="off" checked="">Male
+			  </label>
+			</div>
+		  </div>
+		  <div class="col-xs-6">
+			<div class="form-group">
+			  <label class="tab-btn btn btn-lg btn-default btn-block">
+				<input type="radio" name="gender" id="female" autocomplete="off" checked="">Female
+			  </label>
+			</div>
+		  </div>
+		</div>
+	  -->
+    <div class="form-group">
+      <a class="btn btn-block btn-primary"
+         ng-disabled="!$ctrl.signUpForm.$valid"
+         ng-click="$ctrl.signUp()"
+         translate>Sign Up</a>
+    </div>
+    <loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>
   </form>
 </div>

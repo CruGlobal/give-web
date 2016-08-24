@@ -1,6 +1,7 @@
 import angular from 'angular';
 import includes from 'lodash/includes';
 
+import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import sessionService from 'common/services/session/session.service';
 
 import template from './signInForm.tpl';
@@ -38,7 +39,8 @@ class SignInFormController {
 export default angular
   .module( componentName, [
     template.name,
-    sessionService.name
+    sessionService.name,
+    loadingOverlay.name
   ] )
   .component( componentName, {
     controller:  SignInFormController,

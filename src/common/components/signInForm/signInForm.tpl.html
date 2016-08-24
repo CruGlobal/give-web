@@ -1,8 +1,5 @@
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage | translate}}</div>
 <form class="sign-in-form" name="$ctrl.signInForm" style="position: relative;">
-
-  <!-- @todo Better Error Messages -->
-  <div class="error-block">{{$ctrl.errorMessage | translate}}</div>
-
   <div class="form-group">
     <label for="username"><span translate>EMAIL:</span></label>
     <input id="username"
@@ -33,12 +30,5 @@
     translate>Sign In
   </button>
   <ng-transclude></ng-transclude>
-  <div class="loading-background" ng-if="$ctrl.isSigningIn">
-    <div class="loading-wrap">
-      <span class="loading loading1"></span>
-      <span class="loading loading2"></span>
-      <span class="loading loading3"></span>
-      <span class="loading loading4"></span>
-    </div>
-  </div>
+  <loading-overlay ng-if="$ctrl.isSigningIn"></loading-overlay>
 </form>
