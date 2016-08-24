@@ -1,0 +1,22 @@
+<div class="screenContent">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="panel" ng-repeat="r in $ctrl.searchResults">
+          <div class="panel-body">
+            <product-config product-code="{{r.designationNumber}}" button-label="Give Gift" class="pull-right"></product-config>
+            <a ng-href="/{{r.designationNumber}}">
+              <h4>{{r.name}}</h4>
+            </a>
+          </div>
+        </div><!-- // panel -->
+      </div>
+    </div>
+
+    <div class="row" ng-if="$ctrl.pagination.current !== $ctrl.pagination.pages">
+      <div class="col-md-12 col-xs-12">
+        <a href="" ng-click="$ctrl.getPageResults($ctrl.pagination.current + 1)">Next page</a>
+      </div>
+    </div>
+  </div>
+</div>

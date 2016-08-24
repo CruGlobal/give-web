@@ -13,7 +13,14 @@
             <div class="panel">
               <div class="panel-body">
                 <h3 class="panel-name">Debug tools</h3>
-                <product-config product-code="0457287" button-label="Give Gift"></product-config>
+                <form method="get" ng-submit="$ctrl.designationSearch(designationSearchInput)">
+                  <div class="input-group">
+                    <input class="search-field form-control designationSearch-input" ng-model="designationSearchInput" placeholder="Designation Search" type="search">
+                    <div class="input-group-btn">
+                      <button class="globalSearch-button  btn  btn-subtle" value="Go" type="submit"> <i class="icon-search"></i> </button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
