@@ -1,8 +1,5 @@
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage | translate}}</div>
 <form class="sign-in-form" name="$ctrl.signInForm" style="position: relative;">
-
-  <!-- @todo Better Error Messages -->
-  <div class="error-block">{{$ctrl.errorMessage | translate}}</div>
-
   <div class="form-group">
     <label for="username"><span translate>EMAIL:</span></label>
     <input id="username"
