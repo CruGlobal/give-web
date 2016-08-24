@@ -413,6 +413,15 @@ describe('order service', () => {
       self.$httpBackend.flush();
       expect(self.$log.error.logs[0]).toEqual([ 'The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', ['email-info', 'billing-address-info', 'payment-method-info'] ]);
     });
+    it('should return undefined and not log anything if there are no errors', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, undefined);
+      self.orderService.checkErrors()
+        .subscribe((data) => {
+          expect(data).toBeUndefined();
+        });
+      self.$httpBackend.flush();
+      self.$log.assertEmpty();
+    });
   });
 
   describe('submit', () => {

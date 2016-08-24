@@ -189,10 +189,11 @@ class Order{
       }
     })
       .map((data) => {
-        return map(data.needInfo, 'name');
+        let errors = map(data.needInfo, 'name');
+        return (errors && errors.length > 0) ? errors : undefined;
       })
       .do((errors) => {
-        this.$log.error('The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', errors);
+        errors && this.$log.error('The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', errors);
       });
   }
 
