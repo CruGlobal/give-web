@@ -36,6 +36,7 @@ System.config({
     "lodash": "npm:lodash@4.15.0",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
+    "rollbar-browser": "npm:rollbar-browser@1.9.1",
     "rxjs": "npm:rxjs@5.0.0-beta.11",
     "systemjs-babel-build": "npm:systemjs-plugin-babel@0.0.13/systemjs-babel-browser.js",
     "github:angular/bower-angular-cookies@1.5.8": {
@@ -169,6 +170,9 @@ System.config({
     "npm:error-ex@1.3.0": {
       "is-arrayish": "npm:is-arrayish@0.2.1",
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:error-stack-parser@1.3.3": {
+      "stackframe": "npm:stackframe@0.3.1"
     },
     "npm:fancy-log@1.2.0": {
       "chalk": "npm:chalk@1.1.3",
@@ -428,6 +432,17 @@ System.config({
     "npm:right-align@0.1.3": {
       "align-text": "npm:align-text@0.1.4"
     },
+    "npm:rollbar-browser@1.9.1": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "console-polyfill": "npm:console-polyfill@0.2.2",
+      "error-stack-parser": "npm:error-stack-parser@1.3.3",
+      "extend": "npm:extend@3.0.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
+      "util": "github:jspm/nodelibs-util@0.1.0"
+    },
     "npm:rxjs@5.0.0-beta.11": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
@@ -456,6 +471,9 @@ System.config({
     },
     "npm:spdx-license-ids@1.2.2": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
+    "npm:stackframe@0.3.1": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:stream-browserify@1.0.0": {
       "events": "github:jspm/nodelibs-events@0.1.1",
