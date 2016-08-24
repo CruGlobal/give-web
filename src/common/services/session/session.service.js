@@ -36,18 +36,17 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
 
   /* Public Methods */
   function signIn( username, password ) {
-    return Observable.from( $http( {
-      method:          'POST',
-      url:             casApiUrl( '/login' ),
-      data:            {
-        username: username,
-        password: password
-      },
-      withCredentials: true
-    } ) )
-      .map( ( response ) => {
-        return response.data;
-      } );
+    return Observable
+      .from( $http( {
+        method:          'POST',
+        url:             casApiUrl( '/login' ),
+        data:            {
+          username: username,
+          password: password
+        },
+        withCredentials: true
+      } ) )
+      .map( ( response ) => response.data );
   }
 
   function signOut() {

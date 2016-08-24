@@ -28,11 +28,11 @@ class SessionModalController {
   }
 
   onFailure() {
-    this.$uibModalInstance.dismiss('error');
+    this.$uibModalInstance.dismiss( 'error' );
   }
 
   onCancel() {
-    this.$uibModalInstance.dismiss('cancel');
+    this.$uibModalInstance.dismiss( 'cancel' );
   }
 }
 

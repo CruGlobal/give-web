@@ -13,7 +13,7 @@ class LoadingOverlayComponent {
 
 export default angular
   .module( componentName, [
-    template.name,
+    template.name
   ] )
   .component( componentName, {
     controller:  LoadingOverlayComponent,

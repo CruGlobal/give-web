@@ -1,5 +1,17 @@
 <div class="col-md-12 col-xs-12">
-  <form name="$ctrl.signUpForm" novalidate ng-submit="">
+  <div class="alert alert-danger" role="alert" ng-messages="$ctrl.signUpErrors" ng-if="$ctrl.hasError">
+    <div ng-message="400" translate>An error occurred during sign up.<br />Please Check your Email Address and Password and try again.</div>
+    <div ng-message="403" translate>An error occurred during sign up.<br />This is most likely caused by the use of a reserved domain name in your email address. You might try to
+      <a ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a>,
+      <a ng-click="$ctrl.onStateChange({state: 'reset-password'})">Reset your Password</a>or
+      <a href="https://www.cru.org/about/contact-us.html">Contact Us</a>.
+    </div>
+    <div ng-message="409" translate>An account with this Email Address already exists.<br />Please
+      <a ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a> or
+      <a ng-click="$ctrl.onStateChange({state: 'reset-password'})">Reset your Password</a>.
+    </div>
+  </div>
+  <form name="$ctrl.signUpForm" style="position: relative;">
     <div class="row">
       <div class="col-xs-6">
         <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.first_name.$valid, 'has-error': ($ctrl.signUpForm.first_name | showErrors)}">
@@ -102,9 +114,12 @@
 		  </div>
 		</div>
 	  -->
-
     <div class="form-group">
-      <a class="btn btn-block btn-primary" ng-disabled="!$ctrl.signUpForm.$valid" translate>Sign Up</a>
+      <a class="btn btn-block btn-primary"
+         ng-disabled="!$ctrl.signUpForm.$valid"
+         ng-click="$ctrl.signUp()"
+         translate>Sign Up</a>
     </div>
+    <loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>
   </form>
 </div>
