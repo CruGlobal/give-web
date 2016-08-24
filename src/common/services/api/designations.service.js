@@ -24,7 +24,7 @@ function designations(cortexApiService){
         },
         data: {
           keywords: keywords,
-          'page-size': 1
+          'page-size': 20
         }
       })
       .map((data) => {
@@ -36,24 +36,25 @@ function designations(cortexApiService){
     return cortexApiService.get({
       path: ['searches', cortexApiService.scope, 'keywords', 'items', id, 'pages', page],
       params: {
-        zoom: 'element:definition'
+        zoom: 'element:definition,element:code'
       }
+    }).map((data) => {
+      var results = [];
+
+      var designations = JSONPath.query(data, "$._element")[0];
+      angular.forEach(designations, function(d){
+        results.push({
+          designationNumber: JSONPath.query(d, "$._code[0].code")[0],
+          name: JSONPath.query(d, "$._definition[0]['display-name']")[0]
+        });
+      });
+
+      return {
+        results: results,
+        pagination: data.pagination
+      };
     });
   }
-
-  /*
-   SEARCH USAGE:
-  testRequests(){
-    this.designationsService.createSearch('a')
-      .mergeMap((id) => {
-        this.$log.info('search id', id);
-        return this.designationsService.getSearchResults(id, 1);
-      })
-      .subscribe((data) => {
-        this.$log.info('search page', data);
-      });
-  }
-  */
 
   function productLookup(query, selectQuery){
     var httpRequest = selectQuery ? cortexApiService.post({

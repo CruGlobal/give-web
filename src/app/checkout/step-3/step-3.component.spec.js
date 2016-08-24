@@ -23,10 +23,11 @@ describe('checkout', () => {
         $scope: $scope,
         // Mock services
         cartService: {
-          getDonorDetails: () => Observable.of('donor details')
         },
         orderService: {
+          getDonorDetails: () => Observable.of('donor details'),
           getCurrentPayment: () => Observable.of(self.loadedPayment),
+          getBillingAddress: () => Observable.of({ address: 'billing address' }),
           submit: () => Observable.of('called submit'),
           submitWithCcv: (ccv) => Observable.of('called submit with a CCV of' + ccv),
           retrieveCardSecurityCode: () => self.storedCcv,
@@ -36,39 +37,61 @@ describe('checkout', () => {
     }));
 
     describe('$onInit', () => {
-      it('should load donor details', () => {
-        self.loadedPayment.self.type = 'elasticpath.bankaccounts.bank-account';
+      it('should load needed info', () => {
+        spyOn(self.controller, 'loadDonorDetails');
+        spyOn(self.controller, 'loadCurrentPayment');
+        spyOn(self.controller, 'loadBillingAddress');
         self.controller.$onInit();
+        expect(self.controller.loadDonorDetails).toHaveBeenCalled();
+        expect(self.controller.loadCurrentPayment).toHaveBeenCalled();
+        expect(self.controller.loadBillingAddress).toHaveBeenCalled();
+      });
+    });
+
+    describe('loadDonorDetails', () => {
+      it('should load donor details', () => {
+        self.controller.loadDonorDetails();
         expect(self.controller.donorDetails).toEqual('donor details');
         self.controller.$log.assertEmpty();
       });
+    });
+
+    describe('loadCurrentPayment', () => {
       it('should load bank account payment details', () => {
         self.loadedPayment.self.type = 'elasticpath.bankaccounts.bank-account';
-        self.controller.$onInit();
+        self.controller.loadCurrentPayment();
         expect(self.controller.bankAccountPaymentDetails).toEqual(self.loadedPayment);
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         self.controller.$log.assertEmpty();
       });
       it('should load credit card payment details', () => {
         self.loadedPayment.self.type = 'cru.creditcards.named-credit-card';
-        self.controller.$onInit();
+        self.controller.loadCurrentPayment();
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined();
         expect(self.controller.creditCardPaymentDetails).toEqual(self.loadedPayment);
         self.controller.$log.assertEmpty();
       });
       it('should throw an error if the payments aren\'t loaded', () => {
         self.loadedPayment = undefined;
-        self.controller.$onInit();
+        self.controller.loadCurrentPayment();
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined();
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info: current payment doesn\'t seem to exist']);
       });
       it('should throw an error if the type is unknown', () => {
         self.loadedPayment.self.type = 'some other type';
-        self.controller.$onInit();
+        self.controller.loadCurrentPayment();
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined();
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info: current payment type is unknown']);
+      });
+    });
+
+    describe('loadBillingAddress', () => {
+      it('should load donor details', () => {
+        self.controller.loadBillingAddress();
+        expect(self.controller.billingAddress).toEqual('billing address');
+        self.controller.$log.assertEmpty();
       });
     });
 

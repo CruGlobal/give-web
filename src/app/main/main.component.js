@@ -10,6 +10,7 @@ import cartComponent from '../cart/cart.component';
 import checkoutComponent from '../checkout/checkout.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
+import searchResultsComponent from '../searchResults/searchResults.component';
 
 import template from './main.tpl';
 
@@ -18,8 +19,12 @@ let componentName = 'main';
 class MainController{
 
   /* @ngInject */
-  constructor(){
+  constructor($location){
+    this.$location = $location;
+  }
 
+  designationSearch(searchString){
+    this.$location.path('search-results.' + searchString + '.html');
   }
 }
 
@@ -37,6 +42,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     .state('checkout', {
       url: "/checkout.html",
       template: '<checkout></checkout>'
+    })
+    .state('search-results', {
+      url: "/{beginPath:search-results.}{endPath:.+html}",
+      template: '<search-results></search-results>'
     });
 
   $locationProvider.html5Mode(true);
@@ -53,6 +62,7 @@ export default angular
     checkoutComponent.name,
     productConfigComponent.name,
     signInComponent.name,
+    searchResultsComponent.name,
     'ui.router'
   ])
   .config(routingConfig)
