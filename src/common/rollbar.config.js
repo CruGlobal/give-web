@@ -1,24 +1,54 @@
 import { rollbarAccessToken } from 'common/app.constants';
 import rollbar from 'rollbar-browser';
+import stacktrace from 'stacktrace-js';
 
 /* @ngInject */
-function rollbarConfig(envServiceProvider, $provide) {
+function rollbarConfig(envServiceProvider, $provide, $windowProvider) {
+  if($windowProvider.$get().__karma__ !== undefined) return; // Don't decorate $log in test env
+
   let rollbarConfig = {
     accessToken: rollbarAccessToken,
     captureUncaught: true,
     captureUnhandledRejections: true,
-    environment: envServiceProvider.get()
+    environment: envServiceProvider.get(),
+    enabled: !envServiceProvider.is('development'), // Disable rollbar in development environment
+    verbose: envServiceProvider.is('development') // Log rollbar errors to console in development environment
   };
   let Rollbar = rollbar.init(rollbarConfig);
 
   /* @ngInject */
   $provide.decorator('$log', ($delegate) => {
+    // Add rollbar functionality to each $log method
     angular.forEach(['log', 'debug', 'info', 'warn', 'error'], (ngLogLevel) => {
-      let originalFunction = $delegate[ngLogLevel];
       let rollbarLogLevel = ngLogLevel === 'warn' ? 'warning' : ngLogLevel;
-      $delegate[ngLogLevel] = function () {
-        Rollbar[rollbarLogLevel]([].slice.call(arguments)); // Convert arguments to array
-        originalFunction.apply(null, arguments);
+
+      let originalFunction = $delegate[ngLogLevel]; // Call below to keep angular $log functionality
+
+      $delegate[ngLogLevel] = (...args) => {
+        originalFunction.apply(null, args);
+
+        // Generate message string
+        let message = args
+          .map((arg) => angular.toJson(arg))
+          .join(', ');
+
+        stacktrace.get({offline: true})
+          .then((stackFrames) => {
+            // Ignore first stack frame which is this function
+            stackFrames.shift();
+            // Convert stack trace to string
+            stackFrames = stackFrames.map(function(sf) {
+              return '    at ' + sf.toString();
+            }).join('\n');
+            // Send combined message and stack trace to rollbar
+            Rollbar[rollbarLogLevel](message + '\n' + stackFrames);
+          })
+          .catch((error) => {
+            // Send message without stack trace to rollbar
+            Rollbar[rollbarLogLevel](message);
+            // Send warning about the issue loading stackframes
+            Rollbar.warning('Error loading stackframes: ' + error);
+          });
       };
     });
 
