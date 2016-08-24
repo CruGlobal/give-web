@@ -26,8 +26,9 @@ function sessionModal( $uibModal ) {
   }
 
   return {
-    open: openModal,
-    signIn: () => openModal('sign-in')
+    open:   openModal,
+    signIn: () => openModal( 'sign-in' ),
+    signUp: () => openModal( 'sign-up' )
   };
 }
 
