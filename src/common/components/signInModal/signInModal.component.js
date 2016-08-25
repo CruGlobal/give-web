@@ -42,7 +42,6 @@ export default angular
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',
-      onSuccess:     '&',
-      onFailure:     '&'
+      onSuccess:     '&'
     }
   } );
