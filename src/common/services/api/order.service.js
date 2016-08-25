@@ -3,6 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 import toString from 'lodash/toString';
+import map from 'lodash/map';
 
 import cortexApiService from '../cortexApi.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
@@ -12,10 +13,11 @@ let serviceName = 'orderService';
 class Order{
 
   /*@ngInject*/
-  constructor(cortexApiService, hateoasHelperService, $window){
+  constructor(cortexApiService, hateoasHelperService, $window, $log){
     this.cortexApiService = cortexApiService;
     this.hateoasHelperService = hateoasHelperService;
     this.sessionStorage = $window.sessionStorage;
+    this.$log = $log;
   }
 
   getDonorDetails(){
@@ -177,6 +179,22 @@ class Order{
       },
       cache: true
     });
+  }
+
+  checkErrors(){
+    return this.cortexApiService.get({
+      path: ['carts', this.cortexApiService.scope, 'default'],
+      zoom: {
+        needInfo: 'order:needinfo'
+      }
+    })
+      .map((data) => {
+        let errors = map(data.needInfo, 'name');
+        return (errors && errors.length > 0) ? errors : undefined;
+      })
+      .do((errors) => {
+        errors && this.$log.error('The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', errors);
+      });
   }
 
   submit(ccv){

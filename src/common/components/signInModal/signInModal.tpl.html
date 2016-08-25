@@ -2,7 +2,7 @@
   <p ng-if="$ctrl.identified" class="text-center mb0">
     <strong translate>Welcome back, {{$ctrl.session.first_name}} {{$ctrl.session.last_name}}!</strong>
   </p>
-  <sign-in-form on-success="$ctrl.onSuccess()" on-failure="$ctrl.onFailure()"></sign-in-form>
+  <sign-in-form on-success="$ctrl.onSuccess()"></sign-in-form>
   <p class="text-center" ng-class="{'mt mb0': $ctrl.identified}">
     <span translate>Forgot your password?</span>
     <a href ng-click="$ctrl.onStateChange({state: 'reset-password'})" translate>Reset It</a>

@@ -28,6 +28,7 @@ describe('checkout', () => {
           getDonorDetails: () => Observable.of('donor details'),
           getCurrentPayment: () => Observable.of(self.loadedPayment),
           getBillingAddress: () => Observable.of({ address: 'billing address' }),
+          checkErrors: () => Observable.of(['email-info']),
           submit: () => Observable.of('called submit'),
           submitWithCcv: (ccv) => Observable.of('called submit with a CCV of' + ccv),
           retrieveCardSecurityCode: () => self.storedCcv,
@@ -41,10 +42,12 @@ describe('checkout', () => {
         spyOn(self.controller, 'loadDonorDetails');
         spyOn(self.controller, 'loadCurrentPayment');
         spyOn(self.controller, 'loadBillingAddress');
+        spyOn(self.controller, 'checkErrors');
         self.controller.$onInit();
         expect(self.controller.loadDonorDetails).toHaveBeenCalled();
         expect(self.controller.loadCurrentPayment).toHaveBeenCalled();
         expect(self.controller.loadBillingAddress).toHaveBeenCalled();
+        expect(self.controller.checkErrors).toHaveBeenCalled();
       });
     });
 
@@ -92,6 +95,65 @@ describe('checkout', () => {
         self.controller.loadBillingAddress();
         expect(self.controller.billingAddress).toEqual('billing address');
         self.controller.$log.assertEmpty();
+      });
+    });
+
+    describe('checkErrors', () => {
+      it('should load any needinfo errors', () => {
+        self.controller.checkErrors();
+        expect(self.controller.errors).toEqual(['email-info']);
+        self.controller.$log.assertEmpty();
+      });
+    });
+
+    describe('canSubmitOrder', () => {
+      it('should let you submit the order with a bank account if everything is loaded and there are no errors', () => {
+        self.controller.cartData = {};
+        self.controller.donorDetails = {};
+        self.controller.bankAccountPaymentDetails = {};
+        self.controller.creditCardPaymentDetails = undefined;
+        self.controller.errors = undefined;
+        expect(self.controller.canSubmitOrder()).toEqual(true);
+      });
+      it('should let you submit the order with a credit card if everything is loaded and there are no errors', () => {
+        self.controller.cartData = {};
+        self.controller.donorDetails = {};
+        self.controller.bankAccountPaymentDetails = undefined;
+        self.controller.creditCardPaymentDetails = {};
+        self.controller.errors = undefined;
+        expect(self.controller.canSubmitOrder()).toEqual(true);
+      });
+      it('should not let you submit the order if there are errors', () => {
+        self.controller.cartData = {};
+        self.controller.donorDetails = {};
+        self.controller.bankAccountPaymentDetails = {};
+        self.controller.creditCardPaymentDetails = undefined;
+        self.controller.errors = [];
+        expect(self.controller.canSubmitOrder()).toEqual(false);
+      });
+      it('should not let you submit the order if both payment methods aren\'t loaded', () => {
+        self.controller.cartData = {};
+        self.controller.donorDetails = {};
+        self.controller.bankAccountPaymentDetails = undefined;
+        self.controller.creditCardPaymentDetails = undefined;
+        self.controller.errors = undefined;
+        expect(self.controller.canSubmitOrder()).toEqual(false);
+      });
+      it('should not let you submit the order if cart data isn\'t loaded', () => {
+        self.controller.cartData = undefined;
+        self.controller.donorDetails = {};
+        self.controller.bankAccountPaymentDetails = {};
+        self.controller.creditCardPaymentDetails = undefined;
+        self.controller.errors = undefined;
+        expect(self.controller.canSubmitOrder()).toEqual(false);
+      });
+      it('should not let you submit the order if donorDetails isn\'t loaded', () => {
+        self.controller.cartData = {};
+        self.controller.donorDetails = undefined;
+        self.controller.bankAccountPaymentDetails = {};
+        self.controller.creditCardPaymentDetails = undefined;
+        self.controller.errors = undefined;
+        expect(self.controller.canSubmitOrder()).toEqual(false);
       });
     });
 
