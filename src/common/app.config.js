@@ -5,7 +5,7 @@ import angular from 'angular';
 import 'angular-environment';
 
 /* @ngInject */
-function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider, $windowProvider) {
+function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider) {
   $httpProvider.useApplyAsync(true);
 
   // eslint-disable-next-line angular/module-getter
@@ -22,11 +22,11 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
       },
       staging: {
         apiUrl: 'https://cortex-gateway-stage.cru.org',
-        imgDomain: $windowProvider.$get().imgDomain
+        imgDomain: '//cru-givestage.s3.amazonaws.com'
       },
       production: {
         apiUrl: 'https://cortex-gateway.cru.org',
-        imgDomain: $windowProvider.$get().imgDomain
+        imgDomain: '//cru-givestage.s3.amazonaws.com'
       }
     }
   });
