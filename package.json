@@ -72,7 +72,6 @@
       "angular-ui-router": "github:angular-ui/ui-router@^0.3.1",
       "jsencrypt": "npm:jsencrypt@^2.3.1",
       "json": "github:systemjs/plugin-json@^0.1.2",
-      "jsonpath": "npm:jsonpath@^0.2.6",
       "jwt-decode": "github:auth0/jwt-decode@^2.1.0",
       "lodash": "npm:lodash@^4.14.2",
       "rxjs": "npm:rxjs@^5.0.0-beta.11"
@@ -87,7 +86,7 @@
     }
   },
   "scripts": {
-    "postinstall": "jspm install && (cd jspm_packages/npm/jsonpath*/ && npm install)",
+    "postinstall": "jspm install",
     "start": "gulp watch serve"
   }
 }
