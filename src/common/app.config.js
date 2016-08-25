@@ -18,7 +18,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
     vars: {
       development: {
         apiUrl: 'https://cortex-gateway-stage.cru.org',
-        imgDomain: '/src'
+        imgDomain: ''
       },
       staging: {
         apiUrl: 'https://cortex-gateway-stage.cru.org',
