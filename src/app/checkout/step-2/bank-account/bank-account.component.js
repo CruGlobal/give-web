@@ -12,12 +12,13 @@ let componentName = 'checkoutBankAccount';
 class BankAccountController{
 
   /* @ngInject */
-  constructor($scope, $log, paymentValidationService, orderService){
+  constructor($scope, $log, envService, paymentValidationService, orderService){
     this.$scope = $scope;
     this.$log = $log;
     this.paymentValidationService = paymentValidationService;
     this.orderService = orderService;
 
+    this.imgDomain = envService.read('imgDomain');
     this.bankPayment = {
       accountType: null //TODO: should this be selected by default?
     };
