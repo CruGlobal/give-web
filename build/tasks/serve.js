@@ -12,7 +12,11 @@ gulp.task('serve', ['watch'], function (done) {
         historyApiFallback({
           rewrites: [
             //redirects all root files ending in .html to index.html excluding test-release.html
-            { from: /\/(?!test\-release).+\.html/, to: '/index.html'}
+            {from: /\/(?!test\-release).+\.html/, to: '/index.html'},
+            // Rewrite all requests to /assets to /src/assets
+            {from: /^\/assets\/(.*)$/, to: function(context) {
+              return '/src/assets/' + context.match[1];
+            }}
           ]
         })
       ]
