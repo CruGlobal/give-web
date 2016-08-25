@@ -53,7 +53,7 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
     // https://github.com/CruGlobal/cortex_gateway/wiki/Logout
     return $http( {
       method:          'DELETE',
-      url:             casApiUrl( '/login' ),
+      url:             casApiUrl( '/logout' ),
       withCredentials: true
     } );
   }
