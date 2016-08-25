@@ -9,7 +9,6 @@ System.config({
     ]
   },
   paths: {
-    "systemjs-test/*": "src/*",
     "app/*": "src/app/*",
     "common/*": "src/common/*",
     "assets/*": "dist/assets/*",
@@ -33,7 +32,6 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "core-js": "npm:core-js@1.2.7",
     "jsencrypt": "npm:jsencrypt@2.3.1",
-    "json": "github:systemjs/plugin-json@0.1.2",
     "jwt-decode": "github:auth0/jwt-decode@2.1.0",
     "lodash": "npm:lodash@4.15.0",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
@@ -136,10 +134,12 @@ System.config({
       "wordwrap": "npm:wordwrap@0.0.2"
     },
     "npm:clone-stats@0.0.1": {
-      "fs": "github:jspm/nodelibs-fs@0.1.2"
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:clone@1.0.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "vm": "github:jspm/nodelibs-vm@0.1.0"
     },
     "npm:constants-browserify@0.0.1": {
@@ -163,7 +163,8 @@ System.config({
       "meow": "npm:meow@3.7.0"
     },
     "npm:duplexer2@0.0.2": {
-      "readable-stream": "npm:readable-stream@1.1.14"
+      "readable-stream": "npm:readable-stream@1.1.14",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:error-ex@1.3.0": {
       "is-arrayish": "npm:is-arrayish@0.2.1",
@@ -261,6 +262,9 @@ System.config({
     "npm:is-finite@1.0.1": {
       "number-is-nan": "npm:number-is-nan@1.0.0"
     },
+    "npm:isarray@1.0.0": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
     "npm:isobject@2.1.0": {
       "isarray": "npm:isarray@1.0.0"
     },
@@ -317,6 +321,7 @@ System.config({
       "currently-unhandled": "npm:currently-unhandled@0.4.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "signal-exit": "npm:signal-exit@3.0.0",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:meow@3.7.0": {
@@ -368,7 +373,8 @@ System.config({
       "pinkie": "npm:pinkie@2.0.4"
     },
     "npm:process-nextick-args@1.0.7": {
-      "process": "github:jspm/nodelibs-process@0.1.2"
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:process@0.11.8": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
@@ -529,6 +535,9 @@ System.config({
     "npm:window-size@0.1.0": {
       "process": "github:jspm/nodelibs-process@0.1.2",
       "tty": "github:jspm/nodelibs-tty@0.1.0"
+    },
+    "npm:xtend@4.0.1": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:yargs@3.10.0": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",

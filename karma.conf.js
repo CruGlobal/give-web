@@ -43,8 +43,6 @@ module.exports = function(config) {
           'es6-module-loader': 'node_modules/es6-module-loader/dist/es6-module-loader.js',
           'systemjs': 'node_modules/systemjs/dist/system.js',
           'system-polyfills': 'node_modules/systemjs/dist/system-polyfills.js',
-          'plugin-babel': 'node_modules/systemjs-plugin-babel/plugin-babel.js',
-          'systemjs-babel-build': 'node_modules/systemjs-plugin-babel/systemjs-babel-browser.js',
           'phantomjs-polyfill': 'node_modules/phantomjs-polyfill/bind-polyfill.js'
         }
       },
