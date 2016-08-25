@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-bootstrap';
 import sessionModalController from './sessionModal.controller';
 import sessionModalTemplate from './sessionModal.tpl';
+import sessionModalWindowTemplate from './sessionModalWindow.tpl';
 
 let serviceName = 'sessionModalService';
 
@@ -12,11 +13,12 @@ function sessionModal( $uibModal ) {
     type = angular.isDefined( type ) ? type : 'sign-in';
     options = angular.isObject( options ) ? options : {};
     var modalOptions = angular.merge( {}, {
-      templateUrl:  sessionModalTemplate.name,
-      controller:   sessionModalController.name,
-      controllerAs: '$ctrl',
-      size:         'sm',
-      resolve:      {
+      templateUrl:       sessionModalTemplate.name,
+      controller:        sessionModalController.name,
+      controllerAs:      '$ctrl',
+      size:              'sm',
+      windowTemplateUrl: sessionModalWindowTemplate.name,
+      resolve:           {
         state: () => type
       }
     }, options );
@@ -36,6 +38,7 @@ export default angular
   .module( serviceName, [
     'ui.bootstrap',
     sessionModalController.name,
-    sessionModalTemplate.name
+    sessionModalTemplate.name,
+    sessionModalWindowTemplate.name
   ] )
   .factory( serviceName, sessionModal );

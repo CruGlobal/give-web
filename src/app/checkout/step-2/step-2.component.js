@@ -10,11 +10,12 @@ let componentName = 'checkoutStep2';
 class Step2Controller{
 
   /* @ngInject */
-  constructor($log){
+  constructor($log, envService){
     this.$log = $log;
 
     this.paymentType = 'bankAccount';
     this.submitted = false;
+    this.imgDomain = envService.read('imgDomain');
   }
 
   changePaymentType(type){

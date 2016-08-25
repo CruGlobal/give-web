@@ -12,18 +12,21 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
   envServiceProvider.config({
     domains: {
       development: ['localhost', 'localhost.cru.org'],
-      staging: ['stage.give.cru.org', 'devpub.cru.org', 'uatpub.cru.org'],
+      staging: ['stage.give.cru.org', 'devpub.cru.org', 'uatpub.cru.org', 'uat-give.aws.cru.org'],
       production: ['give.cru.org']
     },
     vars: {
       development: {
-        apiUrl: 'https://cortex-gateway-stage.cru.org'
+        apiUrl: 'https://cortex-gateway-stage.cru.org',
+        imgDomain: ''
       },
       staging: {
-        apiUrl: 'https://cortex-gateway-stage.cru.org'
+        apiUrl: 'https://cortex-gateway-stage.cru.org',
+        imgDomain: '//cru-givestage.s3.amazonaws.com'
       },
       production: {
-        apiUrl: 'https://cortex-gateway.cru.org'
+        apiUrl: 'https://cortex-gateway.cru.org',
+        imgDomain: '//cru-givestage.s3.amazonaws.com'
       }
     }
   });
