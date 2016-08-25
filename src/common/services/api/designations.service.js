@@ -1,5 +1,5 @@
 import angular from 'angular';
-import JSONPath from 'jsonpath';
+import JSONPath from 'common/lib/jsonPath';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
