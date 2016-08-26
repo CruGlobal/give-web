@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './sessionModal.controller'
+import module from './sessionModal.controller';
 
 describe( 'sessionModalController', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -22,7 +22,7 @@ describe( 'sessionModalController', function () {
 
   describe( '$ctrl.stateChanged', () => {
     it( 'should be defined', () => {
-      expect( $ctrl.stateChanged ).toBeDefined()
+      expect( $ctrl.stateChanged ).toBeDefined();
       expect( $ctrl.state ).toEqual( 'sign-in' );
     } );
 
