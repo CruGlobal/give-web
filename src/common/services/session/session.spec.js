@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './session.service'
+import module from './session.service';
 
 let cortexSession = {
   public: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NzcyNDUxNTQsImlhdCI6MTQ3MjIzMzk1NSwic3ViIjoiY2FzfCIsImZpcnN0X25hbWUiOm51bGwsImxhc3RfbmFtZSI6bnVsbCwiZW1haWwiOm51bGwsInRva2VuX2hhc2giOnsiYWNjZXNzX3Rva2VuIjoiZDc4OWNkZjUtMzZmYy00ZGE5LWJmNTgtZmFjNjk3ZjY1ZjZkIiwicm9sZSI6IlBVQkxJQyJ9fQ.pHrd1uiguVNRGmnIlWrwCluIMPG2mcOI6I39kOXtjEI',
