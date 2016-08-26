@@ -1,11 +1,10 @@
 import { rollbarAccessToken } from 'common/app.constants';
 import rollbar from 'rollbar-browser';
 import stacktrace from 'stacktrace-js';
+import defaults from 'lodash/defaults';
 
 /* @ngInject */
-function rollbarConfig(envServiceProvider, $provide, $windowProvider) {
-  if($windowProvider.$get().__karma__ !== undefined) return; // Don't decorate $log in test env
-
+function rollbarConfig(envServiceProvider, $provide) {
   let rollbarConfig = {
     accessToken: rollbarAccessToken,
     captureUncaught: true,
@@ -37,7 +36,7 @@ function rollbarConfig(envServiceProvider, $provide, $windowProvider) {
             // Ignore first stack frame which is this function
             stackFrames.shift();
             // Convert stack trace to string
-            stackFrames = stackFrames.map(function(sf) {
+            stackFrames = stackFrames.map((sf) => {
               return '    at ' + sf.toString();
             }).join('\n');
             // Send combined message and stack trace to rollbar
@@ -50,10 +49,16 @@ function rollbarConfig(envServiceProvider, $provide, $windowProvider) {
             Rollbar.warning('Error loading stackframes: ' + error);
           });
       };
+
+      defaults($delegate[ngLogLevel], originalFunction); // copy properties of original $log function which specs use
     });
 
     return $delegate;
   });
 }
 
-export default rollbarConfig;
+export {
+  rollbarConfig as default,
+  rollbar, // For mocking during testing
+  stacktrace // For mocking during testing
+};
