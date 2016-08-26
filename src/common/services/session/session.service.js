@@ -103,10 +103,7 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
 
   function casApiUrl( path ) {
     var apiUrl = envService.read( 'apiUrl' ) + '/cas';
-    if ( angular.isArray( path ) ) {
-      return apiUrl + '/' + path.join( '/' );
-    }
-    return apiUrl + (path.charAt( 0 ) === '/' ? path : '/' + path);
+    return apiUrl + path;
   }
 }
 
