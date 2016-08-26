@@ -70,14 +70,16 @@
 
     <div class="row">
       <div class="col-sm-12">
-        Locate your Routing and Account Numbers <a href="" class="circle-it bank-explain-trigger">
-        <i class="fa fa-question"></i></a>
+        Locate your Routing and Account Numbers
+        <a href="" class="circle-it bank-explain-trigger" ng-click="$ctrl.showBankExplain = !$ctrl.showBankExplain">
+          <i class="fa fa-question"></i>
+        </a>
       </div>
     </div>
 
     <div class="row">
       <div class="col-sm-12">
-        <div class="bank-explain-wrap">
+        <div class="bank-explain-wrap" ng-class="{ 'on': $ctrl.showBankExplain }">
           <div class="panel panel-default panel-secondary">
             <div class="panel-body">
               <div class="row">
