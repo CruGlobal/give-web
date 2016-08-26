@@ -20,7 +20,7 @@ const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
 
 const cortexScope = 'crugive';
 
-// See EnvConfig in common/services/api.service.js for api url configurations
+// See envServiceProvider.config in common/app.config.js for url configurations
 
 export {
   ccpKey,
