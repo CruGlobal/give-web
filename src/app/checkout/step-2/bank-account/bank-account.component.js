@@ -4,6 +4,7 @@ import toString from 'lodash/toString';
 import showErrors from 'common/filters/showErrors.filter';
 import paymentValidationService from 'common/services/paymentValidation.service';
 import orderService from 'common/services/api/order.service';
+import ccpService from 'common/services/ccp.service';
 
 import template from './bank-account.tpl';
 
@@ -12,17 +13,19 @@ let componentName = 'checkoutBankAccount';
 class BankAccountController{
 
   /* @ngInject */
-  constructor($scope, $log, envService, paymentValidationService, orderService){
+  constructor($scope, $log, envService, paymentValidationService, orderService, ccpService){
     this.$scope = $scope;
     this.$log = $log;
     this.paymentValidationService = paymentValidationService;
     this.orderService = orderService;
+    this.ccpService = ccpService;
 
     this.imgDomain = envService.read('imgDomain');
     this.bankPayment = {
       accountType: null //TODO: should this be selected by default?
     };
 
+    this.loadCcp();
     this.waitForFormInitialization();
   }
 
@@ -30,6 +33,13 @@ class BankAccountController{
     if(changes.submitted.currentValue === true){
       this.savePayment();
     }
+  }
+
+  loadCcp(){
+    this.ccpService.get()
+      .subscribe((ccp) => {
+        this.ccp = ccp;
+      });
   }
 
   waitForFormInitialization(){
@@ -62,7 +72,7 @@ class BankAccountController{
   savePayment(){
     this.bankPaymentForm.$setSubmitted();
     if(this.bankPaymentForm.$valid){
-      let ccpAccountNumber = new (this.paymentValidationService.ccp.BankAccountNumber)(this.bankPayment.accountNumber);
+      let ccpAccountNumber = new (this.ccp.BankAccountNumber)(this.bankPayment.accountNumber);
       this.orderService.addBankAccountPayment({
           'account-type': this.bankPayment.accountType,
           'bank-name': this.bankPayment.bankName,
@@ -90,7 +100,8 @@ export default angular
     'ngMessages',
     showErrors.name,
     paymentValidationService.name,
-    orderService.name
+    orderService.name,
+    ccpService.name
   ])
   .component(componentName, {
     controller: BankAccountController,

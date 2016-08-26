@@ -1,29 +1,29 @@
 import angular from 'angular';
 import _ from 'lodash';
-import ccp from 'common/lib/ccp';
 import 'angular-environment';
-import { ccpKey, ccpStagingKey } from 'common/app.constants';
+import appConfig from 'common/app.config';
 import toString from 'lodash/toString';
 import capitalize from 'lodash/capitalize';
+
+import ccpService from 'common/services/ccp.service';
 
 let serviceName = 'paymentValidationService';
 
 class PaymentValidation {
 
   /*@ngInject*/
-  constructor(envService){
+  constructor(envService, ccpService){
     this.envService = envService;
+    this.ccpService = ccpService;
 
-    this.initializeCcp();
+    this.loadCcp();
   }
 
-  initializeCcp(){
-    if(this.envService.is('production')){
-      ccp.initialize(ccpKey);
-    }else{
-      ccp.initialize(ccpStagingKey);
-    }
-    this.ccp = ccp;
+  loadCcp(){
+    this.ccpService.get()
+      .subscribe((ccp) => {
+        this.ccp = ccp;
+      });
   }
 
   validateRoutingNumber(){
@@ -68,6 +68,8 @@ class PaymentValidation {
 
 export default angular
   .module(serviceName, [
-    'environment'
+    'environment',
+    appConfig.name,
+    ccpService.name
   ])
   .service(serviceName, PaymentValidation);

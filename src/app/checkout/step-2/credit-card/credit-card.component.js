@@ -11,6 +11,7 @@ import showErrors from 'common/filters/showErrors.filter';
 import paymentValidationService from 'common/services/paymentValidation.service';
 import orderService from 'common/services/api/order.service';
 import geographiesService from 'common/services/api/geographies.service';
+import ccpService from 'common/services/ccp.service';
 
 import template from './credit-card.tpl';
 
@@ -19,12 +20,13 @@ let componentName = 'checkoutCreditCard';
 class CreditCardController {
 
   /* @ngInject */
-  constructor($scope, $log, paymentValidationService, orderService, geographiesService) {
+  constructor($scope, $log, paymentValidationService, orderService, geographiesService, ccpService) {
     this.$scope = $scope;
     this.$log = $log;
     this.paymentValidationService = paymentValidationService;
     this.orderService = orderService;
     this.geographiesService = geographiesService;
+    this.ccpService = ccpService;
 
     this.creditCardPayment = {};
     this.billingAddress = {
@@ -34,6 +36,7 @@ class CreditCardController {
   }
 
   $onInit(){
+    this.loadCcp();
     this.waitForFormInitialization();
     this.loadDonorDetails();
     this.loadCountries();
@@ -43,6 +46,13 @@ class CreditCardController {
     if (changes.submitted.currentValue === true) {
       this.savePayment();
     }
+  }
+
+  loadCcp(){
+    this.ccpService.get()
+      .subscribe((ccp) => {
+        this.ccp = ccp;
+      });
   }
 
   waitForFormInitialization() {
@@ -133,7 +143,8 @@ export default angular
     showErrors.name,
     paymentValidationService.name,
     orderService.name,
-    geographiesService.name
+    geographiesService.name,
+    ccpService.name
   ])
   .component(componentName, {
     controller: CreditCardController,

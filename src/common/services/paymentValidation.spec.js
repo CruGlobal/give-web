@@ -1,31 +1,29 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './paymentValidation.service.js';
-import 'angular-environment';
+import ccp from 'common/lib/ccp';
+import { ccpStagingKey } from 'common/app.constants';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import module from './paymentValidation.service';
 
 describe('payment validation service', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
-  beforeEach(inject((envService, paymentValidationService) => {
-    self.envService = envService;
-    self.paymentValidationService = paymentValidationService;
-  }));
-
-  describe('ccp initialization', () => {
-    it('should be initialized correctly in staging', () => {
-      self.envService.set('staging');
-      self.paymentValidationService.initializeCcp();
-      // Test that ccp doesn't throw a key undefined error
-      expect(self.paymentValidationService.validateCardNumber()('4111 1111 1111 1111')).toEqual(true);
-    });
-    it('should be initialized correctly in production', () => {
-      self.envService.set('production');
-      self.paymentValidationService.initializeCcp();
-      // Test that ccp doesn't throw a key undefined error
-      expect(self.paymentValidationService.validateCardNumber()('4111 1111 1111 1111')).toEqual(true);
+  beforeEach(() => {
+    angular.mock.module(($provide) => {
+      $provide.value('ccpService', {
+        get: () => {
+          ccp.initialize(ccpStagingKey);
+          return Observable.of(ccp);
+        }
+      });
     });
   });
+
+  beforeEach(inject((paymentValidationService) => {
+    self.paymentValidationService = paymentValidationService;
+  }));
 
   describe('validateRoutingNumber', () => {
     it('should return true for valid routing numbers', () => {

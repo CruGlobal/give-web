@@ -2,6 +2,8 @@ import angular from 'angular';
 import 'angular-mocks';
 import size from 'lodash/size';
 import find from 'lodash/find';
+import ccp from 'common/lib/ccp';
+import { ccpStagingKey } from 'common/app.constants';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
@@ -15,6 +17,17 @@ describe('checkout', () => {
     describe('credit card', () => {
       beforeEach(angular.mock.module(module.name));
       var self = {};
+
+      beforeEach(() => {
+        angular.mock.module(($provide) => {
+          $provide.value('ccpService', {
+            get: () => {
+              ccp.initialize(ccpStagingKey);
+              return Observable.of(ccp);
+            }
+          });
+        });
+      });
 
       beforeEach(inject(($rootScope, $httpBackend, $compile) => {
         self.outerScope = $rootScope.$new();
