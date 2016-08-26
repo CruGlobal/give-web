@@ -18,15 +18,18 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
     vars: {
       development: {
         apiUrl: 'https://cortex-gateway-stage.cru.org',
-        imgDomain: ''
+        imgDomain: '',
+        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current'
       },
       staging: {
         apiUrl: 'https://cortex-gateway-stage.cru.org',
-        imgDomain: '//cru-givestage.s3.amazonaws.com'
+        imgDomain: '//cru-givestage.s3.amazonaws.com',
+        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current'
       },
       production: {
         apiUrl: 'https://cortex-gateway.cru.org',
-        imgDomain: '//cru-givestage.s3.amazonaws.com'
+        imgDomain: '//cru-givestage.s3.amazonaws.com',
+        ccpKeyUrl: 'https://ccp.ccci.org/api/v1/rest/client-encryption-keys/current'
       }
     }
   });
