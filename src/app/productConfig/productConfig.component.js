@@ -9,6 +9,7 @@ import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
 import commonModule from 'common/common.module';
 import showErrors from 'common/filters/showErrors.filter';
+import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 
 let componentName = 'productConfig';
 
@@ -57,7 +58,8 @@ export default angular
     templateModal.name,
     cartService.name,
     designationsService.name,
-    showErrors.name
+    showErrors.name,
+    loadingOverlay.name
   ])
   .component(componentName, {
     controller: ProductConfigController,

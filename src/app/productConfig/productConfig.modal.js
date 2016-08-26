@@ -37,15 +37,18 @@ class ModalInstanceCtrl{
 
   addToCart(){
     if(!this.itemConfigForm.$valid){ return; }
+    this.submittingGift = true;
     this.cartService.addItem(this.productData.id, this.itemConfig)
       .subscribe(() => {
         this.$uibModalInstance.close();
+      }, () => {
+        this.submittingGift = false;
       });
   }
 
   daysInMonth(month){
     var daysInMonth = new Date(2001, month, 0).getDate();
-    return range(1, daysInMonth + 1);
+    return range(1, daysInMonth + 1).map(function(n){ return n.toString(); });
   }
 }
 

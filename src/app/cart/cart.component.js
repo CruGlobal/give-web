@@ -68,6 +68,10 @@ class CartController{
   checkout() {
     this.$window.location.href = this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html';
   }
+
+  donationStartDate(month, day) {
+    return new Date(0, Number(month) - 1, Number(day));
+  }
 }
 
 export default angular
