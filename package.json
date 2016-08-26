@@ -37,6 +37,7 @@
     "jspm": "^0.16.42",
     "karma": "^1.2.0",
     "karma-babel-preprocessor": "^6.0.1",
+    "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.0.2",
     "karma-mocha-reporter": "^2.0.4",
@@ -71,7 +72,6 @@
       "angular-messages": "github:angular/bower-angular-messages@^1.5.8",
       "angular-ui-router": "github:angular-ui/ui-router@^0.3.1",
       "jsencrypt": "npm:jsencrypt@^2.3.1",
-      "json": "github:systemjs/plugin-json@^0.1.2",
       "jwt-decode": "github:auth0/jwt-decode@^2.1.0",
       "lodash": "npm:lodash@^4.14.2",
       "rxjs": "npm:rxjs@^5.0.0-beta.11"
