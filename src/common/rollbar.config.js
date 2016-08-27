@@ -13,7 +13,6 @@ function rollbarConfig(envServiceProvider, $provide) {
     captureUnhandledRejections: true,
     environment: envServiceProvider.get(),
     enabled: !envServiceProvider.is('development'), // Disable rollbar in development environment
-    verbose: envServiceProvider.is('development'), // Log rollbar errors to console in development environment
     transform: transformRollbarPayload
   };
   let Rollbar = rollbar.init(rollbarConfig);
