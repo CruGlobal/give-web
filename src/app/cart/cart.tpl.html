@@ -35,7 +35,10 @@
                       </td>
                       <td class="td-frequency">
                         <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
-                        <span class="giftsum-date giftsum-detail"><translate>Starts on:</translate> 7/8/2019</span>
+                        <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'">
+                          <translate>Starts on:</translate>
+                          {{$ctrl.donationStartDate(i.config['start-month'], i.config['start-day']) | date:'MMM d'}}
+                        </span>
                       </td>
                       <td class="td-amount">
                         <span class="giftsum-about giftsum-title">{{i.price}}</span>

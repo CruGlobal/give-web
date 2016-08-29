@@ -1,5 +1,13 @@
+import angular from 'angular';
+
 import indexOf from 'lodash/indexOf';
 import range from 'lodash/range';
+
+import designationsService from 'common/services/api/designations.service';
+import cartService from 'common/services/api/cart.service';
+import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+
+let controllerName = 'productConfigController';
 
 class ModalInstanceCtrl{
 
@@ -37,16 +45,25 @@ class ModalInstanceCtrl{
 
   addToCart(){
     if(!this.itemConfigForm.$valid){ return; }
+    this.submittingGift = true;
     this.cartService.addItem(this.productData.id, this.itemConfig)
       .subscribe(() => {
         this.$uibModalInstance.close();
+      }, () => {
+        this.submittingGift = false;
       });
   }
 
   daysInMonth(month){
     var daysInMonth = new Date(2001, month, 0).getDate();
-    return range(1, daysInMonth + 1);
+    return range(1, daysInMonth + 1).map(function(n){ return n.toString(); });
   }
 }
 
-export default ModalInstanceCtrl;
+export default angular
+  .module(controllerName, [
+    loadingOverlay.name,
+    designationsService.name,
+    cartService.name
+  ])
+  .controller(controllerName, ModalInstanceCtrl);

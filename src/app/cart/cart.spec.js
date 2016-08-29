@@ -17,4 +17,8 @@ describe('cart', function() {
   it('to be defined', function() {
     expect(self.controller).toBeDefined();
   });
+
+  it('should convert start day and month to js date', () => {
+    expect(self.controller.donationStartDate(10, 5)).toEqual(new Date(0, 9, 5));
+  });
 });

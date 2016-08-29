@@ -48,7 +48,7 @@ class CartController{
 
     this.$uibModal.open({
       templateUrl: templateModal.name,
-      controller: modalController,
+      controller: modalController.name,
       controllerAs: '$ctrl',
       size: 'lg give-modal',
       resolve: {
@@ -68,12 +68,17 @@ class CartController{
   checkout() {
     this.$window.location.href = this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html';
   }
+
+  donationStartDate(month, day) {
+    return new Date(0, Number(month) - 1, Number(day));
+  }
 }
 
 export default angular
   .module(componentName, [
     commonModule.name,
     'ui.bootstrap',
+    modalController.name,
     template.name,
     templateModal.name,
     appConfig.name,

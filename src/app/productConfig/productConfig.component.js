@@ -5,7 +5,6 @@ import 'angular-bootstrap';
 import template from './productConfig.tpl';
 import templateModal from './productConfigModal.tpl';
 import modalController from './productConfig.modal';
-import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
 import commonModule from 'common/common.module';
 import showErrors from 'common/filters/showErrors.filter';
@@ -26,7 +25,7 @@ class ProductConfigController{
 
     this.$uibModal.open({
       templateUrl: templateModal.name,
-      controller: modalController,
+      controller: modalController.name,
       controllerAs: '$ctrl',
       size: 'lg give-modal',
       resolve: {
@@ -55,9 +54,9 @@ export default angular
     'ngMessages',
     template.name,
     templateModal.name,
-    cartService.name,
     designationsService.name,
-    showErrors.name
+    showErrors.name,
+    modalController.name
   ])
   .component(componentName, {
     controller: ProductConfigController,

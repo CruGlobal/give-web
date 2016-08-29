@@ -105,7 +105,9 @@
                   <div class="form-group">
                     <label translate>Day</label>
                     <div class="form-group">
-                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig['start-day']" ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig['start-month'])">
+                      <select class="form-control form-control-subtle"
+                              ng-model="$ctrl.itemConfig['start-day']"
+                              ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig['start-month'])">
                       </select>
                     </div>
                   </div>
@@ -153,3 +155,4 @@
     </div>
   </div>
 </form>
+<loading-overlay ng-if="$ctrl.submittingGift"></loading-overlay>
