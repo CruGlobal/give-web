@@ -7,17 +7,12 @@ describe( 'sessionModalController', function () {
   let $ctrl, uibModalInstance, state;
 
   beforeEach( inject( function ( $controller, ) {
-    uibModalInstance = {
-      close:   angular.noop,
-      dismiss: angular.noop
-    };
+    uibModalInstance = jasmine.createSpyObj('uibModalInstance', ['close', 'dismiss']);
     state = 'sign-in';
     $ctrl = $controller( module.name, {
       $uibModalInstance: uibModalInstance,
       state:             state
     } );
-    spyOn( uibModalInstance, 'close' );
-    spyOn( uibModalInstance, 'dismiss' );
   } ) );
 
   describe( '$ctrl.stateChanged', () => {
