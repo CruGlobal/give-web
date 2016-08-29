@@ -36,4 +36,12 @@ describe('product config modal', function() {
     self.controller.changeAmount(5000);
     expect(self.controller.itemConfig.amount).toEqual(5000);
   });
+
+  it('should show loading overlay', function() {
+    self.controller.itemConfigForm = {
+      $valid: true
+    };
+    self.controller.addToCart();
+    expect(self.controller.submittingGift).toEqual(true);
+  });
 });
