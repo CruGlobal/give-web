@@ -7,7 +7,6 @@ import appConfig from 'common/app.config';
 import step1 from './step-1/step-1.component';
 import step2 from './step-2/step-2.component';
 import step3 from './step-3/step-3.component';
-import thankYou from './thank-you/thank-you.component';
 import cartSummary from './cart-summary/cart-summary.component';
 import help from './help/help.component';
 import showErrors from 'common/filters/showErrors.filter';
@@ -55,7 +54,6 @@ export default angular
     step1.name,
     step2.name,
     step3.name,
-    thankYou.name,
     help.name,
     cartSummary.name,
     cartService.name,

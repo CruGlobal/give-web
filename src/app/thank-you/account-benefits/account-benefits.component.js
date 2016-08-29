@@ -1,10 +1,10 @@
 import angular from 'angular';
 
-import template from './thank-you.tpl';
+import template from './account-benefits.tpl';
 
-let componentName = 'checkoutThankYou';
+let componentName = 'accountBenefits';
 
-class ThankYouController{
+class AccountBenefitsController{
 
   /* @ngInject */
   constructor(){
@@ -18,6 +18,6 @@ export default angular
     template.name
   ])
   .component(componentName, {
-    controller: ThankYouController,
+    controller: AccountBenefitsController,
     templateUrl: template.name
   });
