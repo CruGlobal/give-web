@@ -1,5 +1,13 @@
+import angular from 'angular';
+
 import indexOf from 'lodash/indexOf';
 import range from 'lodash/range';
+
+import designationsService from 'common/services/api/designations.service';
+import cartService from 'common/services/api/cart.service';
+import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+
+let controllerName = 'productConfigController';
 
 class ModalInstanceCtrl{
 
@@ -52,4 +60,10 @@ class ModalInstanceCtrl{
   }
 }
 
-export default ModalInstanceCtrl;
+export default angular
+  .module(controllerName, [
+    loadingOverlay.name,
+    designationsService.name,
+    cartService.name
+  ])
+  .controller(controllerName, ModalInstanceCtrl);

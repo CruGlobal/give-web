@@ -48,7 +48,7 @@ class CartController{
 
     this.$uibModal.open({
       templateUrl: templateModal.name,
-      controller: modalController,
+      controller: modalController.name,
       controllerAs: '$ctrl',
       size: 'lg give-modal',
       resolve: {
@@ -78,6 +78,7 @@ export default angular
   .module(componentName, [
     commonModule.name,
     'ui.bootstrap',
+    modalController.name,
     template.name,
     templateModal.name,
     appConfig.name,
