@@ -1,15 +1,24 @@
-<div class="modal-header pt">
-  <button type="button"
-          class="close"
-          aria-label="Close"
-          ng-click="$ctrl.onCancel()">
-    <span aria-hidden="true">×</span>
-  </button>
-  <h3 class="modal-title text-center">{{$ctrl.modalTitle | translate}}</h3>
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button"
+                  class="close"
+                  aria-label="Close"
+                  ng-click="$ctrl.onCancel()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h3 class="text-center">{{$ctrl.modalTitle | translate}}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="modal-body pt0 p">
+<div class="modal-body pt0">
   <div class="container-fluid" tabindex="-1" role="dialog">
     <div class="row">
+
       <div ng-switch="$ctrl.state">
         <reset-password-modal ng-switch-when="reset-password"
                               modal-title="$ctrl.modalTitle"
