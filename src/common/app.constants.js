@@ -1,3 +1,6 @@
+// These CCP keys are used as backup keys if a network request for one fails.
+// They should be updated annually (around mid-April) as CCP rotates encryption keys.
+// Last updated 08/11/2016
 const ccpKey = '-----BEGIN PUBLIC KEY-----' +
   'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiiBT37BsBVBgKfF6z78X' +
   'lOl73+HexgTND1Z7qCIScFPSRlQd+svsYah7kQKjNFGPYvz9dmBgNKq1EmdML2nz' +
