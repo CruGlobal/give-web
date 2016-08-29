@@ -4,6 +4,8 @@ import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-environment';
 
+import rollbarConfig from './rollbar.config';
+
 /* @ngInject */
 function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider) {
   $httpProvider.useApplyAsync(true);
@@ -49,4 +51,5 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
 export default angular.module('appConfig', [
     'environment'
 ])
-  .config(appConfig);
+  .config(appConfig)
+  .config(rollbarConfig);
