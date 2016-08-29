@@ -45,7 +45,6 @@ export default angular
   .component( componentName, {
     controller:  SignInFormController,
     templateUrl: template.name,
-    transclude:  true,
     bindings:    {
       onSuccess: '&',
       onFailure: '&'
