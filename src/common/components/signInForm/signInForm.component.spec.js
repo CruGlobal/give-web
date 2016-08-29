@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/from';
 import module from './signInForm.component';
 import {cortexSession} from 'common/services/session/fixtures/cortex-session';
 import {giveSession} from 'common/services/session/fixtures/give-session';
