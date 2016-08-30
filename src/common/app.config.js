@@ -14,7 +14,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
   envServiceProvider.config({
     domains: {
       development: ['localhost', 'localhost.cru.org'],
-      staging: ['stage.give.cru.org', 'devpub.cru.org', 'uatpub.cru.org', 'uat-give.aws.cru.org'],
+      staging: ['give-stage2.cru.org', 'devpub.cru.org', 'uatpub.cru.org', 'uat-give.aws.cru.org'],
       production: ['give.cru.org']
     },
     vars: {
