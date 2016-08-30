@@ -1,11 +1,10 @@
 import angular from 'angular';
 import template from './payment-method.tpl';
-//import cortexApiService from 'common/services/cortexApi.service';
 
 class PaymentMethodController{
 
   /* @ngInject */
-  constructor(cortexApiService){
+  constructor(){
     this.isCollapsed = true;
   }
 
@@ -15,7 +14,7 @@ class PaymentMethodController{
 
   getLastFourDigits(){
     let cardNumber = this.model.card_number;
-    return `ending in ****${cardNumber.substr(cardNumber.length-4,this.model.card_number.length-1)}`
+    return `ending in ****${cardNumber.substr(cardNumber.length-4,this.model.card_number.length-1)}`;
   }
 }
 
@@ -30,6 +29,6 @@ export default angular
     templateUrl: template.name,
     bindings: {
       model: '<',
-      index: '<',
+      index: '<'
     }
   });

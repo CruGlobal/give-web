@@ -43,7 +43,7 @@ class PaymentMethodsController{
         expiry_month: '07',
         expiry_year: '2099'
       }
-    ]
+    ];
   }
 }
 

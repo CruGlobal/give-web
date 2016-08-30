@@ -1,6 +1,6 @@
 import angular from 'angular';
 import appConfig from 'common/app.config';
-import template from './profile.tpl'
+import template from './profile.tpl';
 
 class ProfileController {
 
