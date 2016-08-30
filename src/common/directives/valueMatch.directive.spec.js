@@ -4,7 +4,7 @@ import module from './valueMatch.directive';
 
 describe( 'valueMatch', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let form, html, scope;
+  let form, scope;
 
   beforeEach( inject( function ( _$compile_, _$rootScope_ ) {
     let tpl = '<form name="form">' +
@@ -12,7 +12,7 @@ describe( 'valueMatch', function () {
       '<input type="password" name="check" ng-model="check" value-match="password">' +
       '</form>';
     scope = _$rootScope_.$new();
-    html = _$compile_( tpl )( scope );
+    let html = _$compile_( tpl )( scope );
     form = scope.form;
   } ) );
 
