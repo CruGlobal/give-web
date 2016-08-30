@@ -200,10 +200,11 @@ class Order{
   submit(ccv){
     return this.getPurchaseForm()
       .mergeMap((data) => {
-        let postData = ccv ? {"security-code": ccv} : undefined;
+        let postData = ccv ? {"security-code": ccv} : {};
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
-          data: postData
+          data: postData,
+          followLocation: true
         });
       });
   }
