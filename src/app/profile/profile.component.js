@@ -5,9 +5,7 @@ import template from './profile.tpl';
 class ProfileController {
 
   /* @ngInject */
-  constructor() {
-
-  }
+  constructor() {}
 }
 
 let componentName = 'profile';

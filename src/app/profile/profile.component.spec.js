@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './profile.component';
 
-describe('cart', function() {
+describe('profile', function() {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
