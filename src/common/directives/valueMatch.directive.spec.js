@@ -12,7 +12,7 @@ describe( 'valueMatch', function () {
       '<input type="password" name="check" ng-model="check" value-match="password">' +
       '</form>';
     scope = _$rootScope_.$new();
-    let html = _$compile_( tpl )( scope );
+    _$compile_( tpl )( scope );
     form = scope.form;
   } ) );
 
