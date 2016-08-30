@@ -22,7 +22,8 @@ let componentName = 'paymentMethod';
 
 export default angular
   .module(componentName, [
-    template.name
+    template.name,
+    'ui.bootstrap'
   ])
   .component(componentName, {
     controller: PaymentMethodController,
