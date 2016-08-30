@@ -1,0 +1,59 @@
+
+  <div class="panel panel-default panel-with-gray-background">
+    <div class="panel-heading" role="tab" id="paymentHeading{{index}}">
+      <div class="payment-summary-link p- collapse-indicator-row {{$ctrl.isCollapsed ? 'collapsed' : ''}}" role="button">
+        <div class="row">
+          <div class="col-md-8">
+            <p>
+              <img class="hidden-xs payment-icon" src={{"/assets/img/cc-icons/"+''}}>
+              <span class="payment-nickname">Visa</span>
+              {{ $ctrl.getLastFourDigits(paymentMethod) }}
+              <span class="payment-expiration">{{ $ctrl.getExpiration(paymentMethod) }}</span>
+            </p>
+          </div>
+          <div class="col-md-4 text-right payment-details-link">
+            <button ng-click="$ctrl.isCollapsed = !$ctrl.isCollapsed" class="btn trigger">Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="paymentMethod{{$ctrl.index}}" uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse" aria-labelledby="paymentHeading{{index}}">
+      <div class="panel-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-4">
+              <p class="section-title mb0">Name of card</p>
+              <p>{{$ctrl.model.cardholder_name}}</p>
+            </div>
+
+            <div class="col-md-5">
+              <p class="section-title mb0">Nickname</p>
+              <p>{{$ctrl.model.description}}</p>
+            </div>
+
+            <div class="col-md-3 text-right">
+              <p>
+                <a class="btn btn-default btn-block" data-toggle="modal" data-target="#editCreditCardPaymentMethod">Edit Payment Method</a>
+              </p>
+              <p>
+                <a class="btn btn-default btn-block" data-toggle="modal" data-target="#deletePaymentMethod">Delete Payment Method</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 pt">
+              <p class="section-title mb0">Billing address</p>
+              <p>{{$ctrl.model.cardholder_name}}
+                <br>
+                {{$ctrl.model.address.street_address}}
+                <br>
+                {{$ctrl.model.address.locality + ' ' + $ctrl.model.address.postal_code}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <reocuring-gifts></reocuring-gifts>  -->
+    </div>
+  </div>
