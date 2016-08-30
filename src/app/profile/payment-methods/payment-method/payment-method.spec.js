@@ -21,16 +21,16 @@ describe('payment-method', function() {
   it('should return last 4 digits of card number', () => {
     self.controller.model = {
       card_number: '4444444444442222'
-    }
-    expect(self.controller.getLastFourDigits()).toBe('ending in ****2222')
-  })
+    };
+    expect(self.controller.getLastFourDigits()).toBe('ending in ****2222');
+  });
 
   it('should return expiration date', () => {
     self.controller.model = {
       expiry_month: '05',
       expiry_year: '2019'
-    }
-    expect(self.controller.getExpiration()).toBe('EXPIRES 05/2019')
-  })
+    };
+    expect(self.controller.getExpiration()).toBe('EXPIRES 05/2019');
+  });
 
 });
