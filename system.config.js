@@ -21,6 +21,7 @@ System.config({
   map: {
     "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
     "angular": "github:angular/bower-angular@1.5.8",
+    "angular-animate": "github:angular/bower-angular-animate@1.5.8",
     "angular-bootstrap": "npm:angular-bootstrap-npm@0.14.3",
     "angular-cookies": "github:angular/bower-angular-cookies@1.5.8",
     "angular-environment": "npm:angular-environment@1.0.4",
@@ -38,6 +39,9 @@ System.config({
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
     "rxjs": "npm:rxjs@5.0.0-beta.11",
     "systemjs-babel-build": "npm:systemjs-plugin-babel@0.0.13/systemjs-babel-browser.js",
+    "github:angular/bower-angular-animate@1.5.8": {
+      "angular": "github:angular/bower-angular@1.5.8"
+    },
     "github:angular/bower-angular-cookies@1.5.8": {
       "angular": "github:angular/bower-angular@1.5.8"
     },

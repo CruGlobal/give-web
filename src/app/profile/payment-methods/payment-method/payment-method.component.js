@@ -1,5 +1,6 @@
 import angular from 'angular';
 import template from './payment-method.tpl';
+import ngAnimate from 'angular-animate';
 
 class PaymentMethodController{
 
@@ -23,7 +24,8 @@ let componentName = 'paymentMethod';
 export default angular
   .module(componentName, [
     template.name,
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngAnimate'
   ])
   .component(componentName, {
     controller: PaymentMethodController,
