@@ -24,20 +24,24 @@ class SignInButtonController {
     this.subscription.unsubscribe();
   }
 
-  signIn() {
-    this.sessionModalService
-      .signIn()
-      .then( () => {
+  signIn( reload ) {
+    reload = angular.isUndefined( reload ) ? true : reload;
+    var signInPromise = this.sessionModalService.signIn();
+    if ( reload ) {
+      signInPromise.then( () => {
         this.$window.location.reload();
       } );
+    }
   }
 
-  signOut() {
-    this.sessionService
-      .signOut()
-      .then( () => {
+  signOut( reload ) {
+    reload = angular.isUndefined( reload ) ? true : reload;
+    var signOutPromise = this.sessionService.signOut();
+    if ( reload ) {
+      signOutPromise.then( () => {
         this.$window.location.reload();
       } );
+    }
   }
 
   sessionChanged() {
@@ -53,5 +57,8 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SignInButtonController,
-    templateUrl: template.name
+    templateUrl: template.name,
+    bindings:    {
+      pageReload: '<'
+    }
   } );

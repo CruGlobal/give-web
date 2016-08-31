@@ -76,9 +76,9 @@ class Step3Controller{
     }else{
       submitRequest = Observable.throw('Current payment type is unknown');
     }
-    submitRequest.subscribe((data) => {
+    submitRequest.subscribe(() => {
         this.orderService.clearCardSecurityCode();
-        this.$log.info('Submitted purchase successfully', data);
+        this.$log.info('Submitted purchase successfully');
         // TODO: transition to thank you page
       },
       (error) => {

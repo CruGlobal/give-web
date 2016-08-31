@@ -20,15 +20,16 @@ To use the `checkout` component, include this code on your page:
 </script>
 ```
 
-For other components, replace all instances of `checkout` with the name of another component. Current components are `cart`, `checkout`, `productConfig`, `signIn`, and `searchResults`.
+For other components, replace all instances of `checkout` with the name of another component. Current components are `cart` and `checkout`.
 
 ### Importing CSS
 
-Import the following:
+TODO: Update this. Currently the process is to import the following:
 ```
-<link rel="stylesheet" href="https://cru-givestage.s3.amazonaws.com/give.min.css">
+<link rel="stylesheet" href="https://www.cru.org/css/cru.min.css">
+<link rel="stylesheet" href="https://raw.githubusercontent.com/CruGlobal/Give_Front-end/checkout/assets/css/give.css">
 ```
-This currently includes all cru.org styling from cru.scss.
+
 
 ## Development
 
@@ -44,9 +45,3 @@ This currently includes all cru.org styling from cru.scss.
 - `gulp webdriver-standalone` and `gulp sauce-test` to run e2e test - these tests have not been implemented yet
 - `gulp lint` to run eslint
 - `gulp release` to bundle and minify. These files are output to `/dist`.
-
-### Adding dependencies
-
-- Use `npm install <package-name> --save` or `npm i -D <package-name>` to install tooling (gulp plugins, css tooling, etc)
-- Use `jspm install <package-name>`, `jspm install npm:<package-name>`, or `jspm install github:<repo-name>` to install app dependencies depending on where the package is located
-- Use `jspm install <package-name> --dev` to install dev dependencies that are run in the browser when SystemJS imports modules or when karma is running tests

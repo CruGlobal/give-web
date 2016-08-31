@@ -79,7 +79,8 @@ class BankAccountController{
           'encrypted-account-number': ccpAccountNumber.encrypt(),
           'routing-number': this.bankPayment.routingNumber
         })
-        .subscribe(() => {
+        .subscribe((data) => {
+            this.$log.info('added bank account', data);
             this.onSave({success: true});
           },
           (error) => {

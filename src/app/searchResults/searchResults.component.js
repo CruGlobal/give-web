@@ -3,7 +3,6 @@ import angular from 'angular';
 import urlTerm from 'common/lib/urlTerm';
 import commonModule from 'common/common.module';
 import designationsService from 'common/services/api/designations.service';
-import productConfigComponent from 'app/productConfig/productConfig.component';
 
 import template from './searchResults.tpl';
 
@@ -40,8 +39,7 @@ export default angular
   .module( componentName, [
     template.name,
     commonModule.name,
-    designationsService.name,
-    productConfigComponent.name
+    designationsService.name
   ] )
   .component( componentName, {
     controller:  SearchResultsController,

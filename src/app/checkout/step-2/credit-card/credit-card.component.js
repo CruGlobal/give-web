@@ -120,7 +120,8 @@ class CreditCardController {
           'expiry-year': this.creditCardPayment.expiryYear
         })
         .combineLatest(this.orderService.addBillingAddress(billingAddress))
-        .subscribe(() => {
+        .subscribe((data) => {
+            this.$log.info('added credit card and billing address', data);
             this.orderService.storeCardSecurityCode(ccpSecurityCode.encrypt());
             this.onSave({success: true});
           },

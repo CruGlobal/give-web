@@ -11,11 +11,9 @@ let componentName = 'signInForm';
 class SignInFormController {
 
   /* @ngInject */
-  constructor( sessionService ) {
+  constructor( $log, sessionService ) {
+    this.$log = $log;
     this.sessionService = sessionService;
-  }
-
-  $onInit() {
     this.isSigningIn = false;
 
     if ( includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() ) ) {

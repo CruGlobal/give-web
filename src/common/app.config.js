@@ -4,8 +4,6 @@ import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-environment';
 
-import rollbarConfig from './rollbar.config';
-
 /* @ngInject */
 function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider) {
   $httpProvider.useApplyAsync(true);
@@ -14,7 +12,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
   envServiceProvider.config({
     domains: {
       development: ['localhost', 'localhost.cru.org'],
-      staging: ['give-stage2.cru.org', 'devpub.cru.org', 'uatpub.cru.org', 'uat-give.aws.cru.org'],
+      staging: ['stage.give.cru.org', 'devpub.cru.org', 'uatpub.cru.org', 'uat-give.aws.cru.org'],
       production: ['give.cru.org']
     },
     vars: {
@@ -51,5 +49,4 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
 export default angular.module('appConfig', [
     'environment'
 ])
-  .config(appConfig)
-  .config(rollbarConfig);
+  .config(appConfig);

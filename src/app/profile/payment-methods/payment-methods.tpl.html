@@ -1,0 +1,20 @@
+<div class="screenContent account-management">
+  <div class="container container-edge-small container-edge-extrasmall">
+    <div class="container">
+      <div class="panel pane-margin-bottom">
+        <div class="panel-body">
+          <div class="row pb">
+            <div class="col-md-6">
+              <h3>Your Payment Methods</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div ng-repeat="(index,paymentMethod) in $ctrl.paymentMethods" class="panel-group panel-collapse" id="accordion" role="tablist" aria-multiselectable="true">
+              <payment-method model="paymentMethod" index="index"></payment-method>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

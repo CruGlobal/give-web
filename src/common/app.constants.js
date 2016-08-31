@@ -23,13 +23,10 @@ const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
 
 const cortexScope = 'crugive';
 
-const rollbarAccessToken = 'a5bb784f937841538494e747f70a4597';
-
 // See envServiceProvider.config in common/app.config.js for url configurations
 
 export {
   ccpKey,
   ccpStagingKey,
-  cortexScope,
-  rollbarAccessToken
+  cortexScope
 };

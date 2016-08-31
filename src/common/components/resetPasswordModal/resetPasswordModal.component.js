@@ -1,6 +1,4 @@
 import angular from 'angular';
-import 'angular-gettext';
-import sessionService from 'common/services/session/session.service';
 import template from './resetPasswordModal.tpl';
 
 let componentName = 'resetPasswordModal';
@@ -19,9 +17,7 @@ class ResetPasswordModalController {
 
 export default angular
   .module( componentName, [
-    'gettext',
-    template.name,
-    sessionService.name
+    template.name
   ] )
   .component( componentName, {
     controller:  ResetPasswordModalController,

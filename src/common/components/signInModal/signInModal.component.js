@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 'angular-gettext';
 import includes from 'lodash/includes';
 import sessionService from 'common/services/session/session.service';
 import signInForm from 'common/components/signInForm/signInForm.component';
@@ -10,14 +9,13 @@ let componentName = 'signInModal';
 class SignInModalController {
 
   /* @ngInject */
-  constructor( gettext, sessionService ) {
-    this.gettext = gettext;
+  constructor( sessionService ) {
     this.sessionService = sessionService;
     this.session = sessionService.session;
   }
 
   $onInit() {
-    this.modalTitle = this.gettext( 'Sign In' );
+    this.modalTitle = 'Sign In';
     if ( includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() ) ) {
       this.identified = true;
       this.username = this.session.email;
@@ -34,7 +32,6 @@ class SignInModalController {
 
 export default angular
   .module( componentName, [
-    'gettext',
     signInForm.name,
     sessionService.name,
     template.name
