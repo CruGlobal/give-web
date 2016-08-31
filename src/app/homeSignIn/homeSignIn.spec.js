@@ -79,10 +79,10 @@ describe('home sign in', function() {
   } );
 
   describe( 'signUp', () => {
-    beforeEach( inject( function ( ) {
+    beforeEach(() => {
       spyOn( $ctrl.sessionModalService, 'signUp' );
       $ctrl.signUp();
-    } ) );
+    } );
 
     it( 'opens signUp Modal', () => {
       expect( $ctrl.sessionModalService.signUp ).toHaveBeenCalled();
