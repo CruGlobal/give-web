@@ -6,8 +6,8 @@
             <p>
               <img class="hidden-xs payment-icon" src={{"/assets/img/cc-icons/"+''}}>
               <span class="payment-nickname">Visa</span>
-              {{ $ctrl.getLastFourDigits(paymentMethod) }}
-              <span class="payment-expiration">{{ $ctrl.getExpiration(paymentMethod) }}</span>
+              {{ $ctrl.getLastFourDigits() }}
+              <span class="payment-expiration">{{ $ctrl.getExpiration() }}</span>
             </p>
           </div>
           <div class="col-md-4 text-right payment-details-link">

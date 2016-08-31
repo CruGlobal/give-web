@@ -1,6 +1,7 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
+import 'angular-animate';
 
 import appConfig from 'common/app.config';
 
@@ -9,6 +10,7 @@ import subNavComponent from './nav/sub/sub-nav.component';
 import cartComponent from '../cart/cart.component';
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
 import checkoutComponent from '../checkout/checkout.component';
+import giveComponent from '../profile/give/give.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
@@ -48,6 +50,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       url: "/payment-methods.html",
       template: '<payment-methods></payment-methods>'
     })
+    .state('manage-giving', {
+      url: "/manage-giving.html",
+      template: '<give></give>'
+    })
     .state('search-results', {
       url: "/{beginPath:search-results.}{endPath:.+html}",
       template: '<search-results></search-results>'
@@ -65,11 +71,13 @@ export default angular
     subNavComponent.name,
     cartComponent.name,
     checkoutComponent.name,
+    giveComponent.name,
     paymentMethodsComponent.name,
     productConfigComponent.name,
     signInComponent.name,
     searchResultsComponent.name,
-    'ui.router'
+    'ui.router',
+    'ngAnimate'
   ])
   .config(routingConfig)
   .component(componentName, {
