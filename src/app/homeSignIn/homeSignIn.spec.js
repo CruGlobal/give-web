@@ -79,10 +79,8 @@ describe('home sign in', function() {
   } );
 
   describe( 'signUp', () => {
-    let deferred;
-    beforeEach( inject( function ( _$q_ ) {
-      deferred = _$q_.defer();
-      spyOn( $ctrl.sessionModalService, 'signUp' ).and.callFake( () => deferred.promise );
+    beforeEach( inject( function ( ) {
+      spyOn( $ctrl.sessionModalService, 'signUp' );
       $ctrl.signUp();
     } ) );
 
