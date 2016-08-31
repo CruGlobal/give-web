@@ -69,6 +69,7 @@ export default angular
     template.name,
     appConfig.name,
     primaryNavComponent.name,
+    homeSignInComponent.name,
     subNavComponent.name,
     cartComponent.name,
     checkoutComponent.name,
