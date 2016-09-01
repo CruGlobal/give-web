@@ -25,6 +25,7 @@ class Step1Controller{
   submitDetails(){
     if(!this.detailsForm.$valid){ this.$window.scrollTo(0, 0); return; }
     let details = this.donorDetails;
+    this.submissionError = '';
 
     var requests = [this.orderService.updateDonorDetails(details)];
     if(details.email){
@@ -33,6 +34,10 @@ class Step1Controller{
     Observable.forkJoin(requests)
       .subscribe(() => {
         this.changeStep({newStep: 'payment'});
+      }, (error) => {
+        console.log('Error saving donor contact info info', error);
+        this.submissionError = error.data;
+        this.$window.scrollTo(0, 0);
       });
   }
 
@@ -50,7 +55,7 @@ class Step1Controller{
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         if(data['donor-type'] === ''){
-          data['donor-type'] = 'individual';
+          data['donor-type'] = 'Household';
         }
         this.donorDetails = data;
       });
