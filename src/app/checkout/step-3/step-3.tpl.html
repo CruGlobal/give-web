@@ -15,16 +15,23 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-md-12">
-          <span ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
+          <div>
             {{$ctrl.donorDetails.name.title}}
             {{$ctrl.donorDetails.name['given-name']}}
             {{$ctrl.donorDetails.name['middle-initial']}}
             {{$ctrl.donorDetails.name['family-name']}}
             {{$ctrl.donorDetails.name.suffix}}
-          </span>
-          <span ng-if="$ctrl.donorDetails['donor-type'] === 'Organization'">
+          </div>
+          <div ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
+            {{$ctrl.donorDetails['spouse-name'].title}}
+            {{$ctrl.donorDetails['spouse-name']['given-name']}}
+            {{$ctrl.donorDetails['spouse-name']['middle-initial']}}
+            {{$ctrl.donorDetails['spouse-name']['family-name']}}
+            {{$ctrl.donorDetails['spouse-name'].suffix}}
+          </div>
+          <div ng-if="$ctrl.donorDetails['donor-type'] === 'Organization'">
             {{$ctrl.donorDetails['organization-name']}}
-          </span>
+          </div>
           <display-address address="$ctrl.donorDetails.mailingAddress"></display-address>
           <div class="loading-wrap" ng-if="!$ctrl.donorDetails">
             <span class="loading loading1"></span>
