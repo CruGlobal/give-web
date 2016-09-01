@@ -12,6 +12,7 @@ import purchaseFormResponse from 'common/services/api/fixtures/cortex-purchasefo
 import donorDetailsResponse from 'common/services/api/fixtures/cortex-donordetails.fixture.js';
 import billingAddressResponse from 'common/services/api/fixtures/cortex-billing-address.fixture.js';
 import needInfoResponse from 'common/services/api/fixtures/cortex-needinfo.fixture.js';
+import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
 
 describe('order service', () => {
   beforeEach(angular.mock.module(module.name));
@@ -433,11 +434,11 @@ describe('order service', () => {
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
         {}
-      ).respond(200, 'success');
+      ).respond(200, purchaseResponse);
 
       self.orderService.submit()
         .subscribe((data) => {
-          expect(data).toEqual('success');
+          expect(data).toEqual(purchaseResponse);
         });
 
       self.$httpBackend.flush();
@@ -446,11 +447,11 @@ describe('order service', () => {
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
         {"security-code": '123'}
-      ).respond(200, 'success');
+      ).respond(200, purchaseResponse);
 
       self.orderService.submit('123')
         .subscribe((data) => {
-          expect(data).toEqual('success');
+          expect(data).toEqual(purchaseResponse);
         });
 
       self.$httpBackend.flush();
@@ -482,6 +483,20 @@ describe('order service', () => {
       self.$window.sessionStorage.setItem('ccv', encryptedCcv);
       self.orderService.clearCardSecurityCode();
       expect(self.$window.sessionStorage.getItem('ccv')).toBeNull();
+    });
+  });
+
+  describe('storeLastPurchaseLink', () => {
+    it('should save the link to the completed purchase', () => {
+      self.orderService.storeLastPurchaseLink('/purchases/crugive/giydanbt=');
+      expect(self.$window.sessionStorage.getItem('lastPurchaseLink')).toEqual('/purchases/crugive/giydanbt=');
+    });
+  });
+
+  describe('retrieveLastPurchaseLink', () => {
+    it('should save the link to the completed purchase', () => {
+      self.$window.sessionStorage.setItem('lastPurchaseLink', '/purchases/crugive/hiydanbt=');
+      expect(self.orderService.retrieveLastPurchaseLink()).toEqual('/purchases/crugive/hiydanbt=');
     });
   });
 });
