@@ -14,7 +14,7 @@ let componentName = 'checkoutStep1';
 class Step1Controller{
 
   /* @ngInject */
-  constructor($window, orderService, geographiesService){
+  constructor($window, $log, orderService, geographiesService){
     this.$window = $window;
     this.$log = $log;
     this.orderService = orderService;
@@ -36,7 +36,7 @@ class Step1Controller{
       .subscribe(() => {
         this.changeStep({newStep: 'payment'});
       }, (error) => {
-        this.$log.warn('Error saving donor contact info info', error);
+        this.$log.warn('Error saving donor contact info', error);
         this.submissionError = error.data;
         this.$window.scrollTo(0, 0);
       });
