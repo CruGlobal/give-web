@@ -19,11 +19,16 @@ class ProductConfigController{
     this.$window = $window;
   }
 
+  $onInit(){
+    this.loadingModal = false;
+  }
+
   configModal(){
     var productCode = this.productCode;
     var $window = this.$window;
+    this.loadingModal = true;
 
-    this.$uibModal.open({
+    let modalInstance = this.$uibModal.open({
       templateUrl: templateModal.name,
       controller: modalController.name,
       controllerAs: '$ctrl',
@@ -38,7 +43,11 @@ class ProductConfigController{
           };
         }
       }
-    }).result.then(function () {
+    });
+    modalInstance.rendered.then(() => {
+      this.loadingModal = false;
+    });
+    modalInstance.result.then(() => {
       //go to cart
       $window.location.reload();
     });
