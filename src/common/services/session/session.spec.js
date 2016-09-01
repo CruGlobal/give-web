@@ -1,8 +1,8 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './session.service';
-import { cortexSession } from './fixtures/cortex-session';
-import { giveSession } from './fixtures/give-session';
+import {cortexSession} from './fixtures/cortex-session';
+import {giveSession} from './fixtures/give-session';
 
 describe( 'session service', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -102,7 +102,7 @@ describe( 'session service', function () {
       it( 'returns \'PUBLIC\'', () => {
         expect( self.sessionService.getRole() ).toEqual( 'PUBLIC' );
       } );
-    });
+    } );
 
     describe( 'with \'IDENTIFIED\' cortex-session', () => {
       beforeEach( () => {
@@ -181,6 +181,37 @@ describe( 'session service', function () {
         .signOut()
         .then( ( response ) => {
           expect( response.data ).toEqual( {} );
+        } );
+      self.$httpBackend.flush();
+    } );
+  } );
+
+  describe( 'forgotPassword', () => {
+    it( 'makes http request to cas/send_forgot_password_email', () => {
+      self.$httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/send_forgot_password_email', {
+        email:            'professorx@xavier.edu',
+        passwordResetUrl: 'http://example.com/index.html?theme=cru#reset-password'
+      } ).respond( 200, {} );
+      self.sessionService
+        .forgotPassword( 'professorx@xavier.edu', 'http://example.com/index.html?theme=cru#reset-password' )
+        .subscribe( ( data ) => {
+          expect( data ).toEqual( {} );
+        } );
+      self.$httpBackend.flush();
+    } );
+  } );
+
+  describe( 'resetPassword', () => {
+    it( 'makes http request to cas/reset_password', () => {
+      self.$httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/reset_password', {
+        email:    'professorx@xavier.edu',
+        password: 'Cerebro123',
+        resetKey: 'abc123def456'
+      } ).respond( 200, {} );
+      self.sessionService
+        .resetPassword( 'professorx@xavier.edu', 'Cerebro123', 'abc123def456' )
+        .subscribe( ( data ) => {
+          expect( data ).toEqual( {} );
         } );
       self.$httpBackend.flush();
     } );
