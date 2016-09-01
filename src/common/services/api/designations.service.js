@@ -45,7 +45,8 @@ function designations(cortexApiService){
       angular.forEach(designations, function(d){
         results.push({
           designationNumber: JSONPath.query(d, "$._code[0].code")[0],
-          name: JSONPath.query(d, "$._definition[0]['display-name']")[0]
+          name: JSONPath.query(d, "$._definition[0]['display-name']")[0],
+          type: JSONPath.query(d, "$._definition[0].details[?(@.name=='designation_type')]['value']")[0]
         });
       });
 
