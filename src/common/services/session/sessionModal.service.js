@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-bootstrap';
+import modalStateService from 'common/services/modalState.service';
 import sessionModalController from './sessionModal.controller';
 import sessionModalTemplate from './sessionModal.tpl';
 import sessionModalWindowTemplate from './sessionModalWindow.tpl';
@@ -7,7 +8,7 @@ import sessionModalWindowTemplate from './sessionModalWindow.tpl';
 let serviceName = 'sessionModalService';
 
 /*@ngInject*/
-function sessionModal( $uibModal ) {
+function SessionModalService( $uibModal, modalStateService ) {
 
   function openModal( type, options ) {
     type = angular.isDefined( type ) ? type : 'sign-in';
@@ -24,21 +25,37 @@ function sessionModal( $uibModal ) {
     }, options );
     return $uibModal
       .open( modalOptions )
-      .result;
+      .result
+      .finally( () => {
+        // Clear the modal name and params when modals close
+        modalStateService.setName();
+        modalStateService.setParams();
+      } );
   }
 
   return {
-    open:   openModal,
-    signIn: () => openModal( 'sign-in' ),
-    signUp: () => openModal( 'sign-up' )
+    open:           openModal,
+    signIn:         () => openModal( 'sign-in' ),
+    signUp:         () => openModal( 'sign-up' ),
+    forgotPassword: () => openModal( 'forgot-password' ),
+    resetPassword:  () => openModal( 'reset-password', {backdrop: 'static'} )
   };
 }
 
 export default angular
   .module( serviceName, [
     'ui.bootstrap',
+    modalStateService.name,
     sessionModalController.name,
     sessionModalTemplate.name,
     sessionModalWindowTemplate.name
   ] )
-  .factory( serviceName, sessionModal );
+  .factory( serviceName, SessionModalService )
+  .config( function ( modalStateServiceProvider ) {
+    modalStateServiceProvider.registerModal(
+      'reset-password',
+      /*@ngInject*/
+      function ( sessionModalService ) {
+        sessionModalService.resetPassword();
+      } );
+  } );
