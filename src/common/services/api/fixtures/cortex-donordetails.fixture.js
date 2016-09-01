@@ -52,7 +52,7 @@ export default {
         "uri": "/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu=",
         "href": "https://cortex-gateway-stage.cru.org/cortex/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu="
       }],
-      "donor-type": "individual",
+      "donor-type": "Household",
       "mailing-address": {
         "country-name": "US",
         "extended-address": "",

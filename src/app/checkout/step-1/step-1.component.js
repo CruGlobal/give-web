@@ -14,8 +14,9 @@ let componentName = 'checkoutStep1';
 class Step1Controller{
 
   /* @ngInject */
-  constructor($window, orderService, geographiesService){
+  constructor($window, $log, orderService, geographiesService){
     this.$window = $window;
+    this.$log = $log;
     this.orderService = orderService;
     this.geographiesService = geographiesService;
 
@@ -25,6 +26,7 @@ class Step1Controller{
   submitDetails(){
     if(!this.detailsForm.$valid){ this.$window.scrollTo(0, 0); return; }
     let details = this.donorDetails;
+    this.submissionError = '';
 
     var requests = [this.orderService.updateDonorDetails(details)];
     if(details.email){
@@ -33,6 +35,10 @@ class Step1Controller{
     Observable.forkJoin(requests)
       .subscribe(() => {
         this.changeStep({newStep: 'payment'});
+      }, (error) => {
+        this.$log.warn('Error saving donor contact info', error);
+        this.submissionError = error.data;
+        this.$window.scrollTo(0, 0);
       });
   }
 
@@ -50,7 +56,7 @@ class Step1Controller{
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         if(data['donor-type'] === ''){
-          data['donor-type'] = 'individual';
+          data['donor-type'] = 'Household';
         }
         this.donorDetails = data;
       });

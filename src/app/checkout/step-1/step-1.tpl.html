@@ -7,14 +7,18 @@
   </div>
 </div>
 
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError">
+  <p>{{$ctrl.submissionError | translate}}</p>
+</div>
+
 <div ng-if="$ctrl.donorDetails">
   <div class="mb_x">
     <div class="row">
       <div class="col-md-6">
-        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'individual'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'individual'}" translate>Give as an Individual</a>
+        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'Household'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'Household'}" translate>Give as an Individual</a>
       </div>
       <div class="col-md-6">
-        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'organization'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'organization'}" translate>Give as an Organization</a>
+        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'Organization'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'Organization'}" translate>Give as an Organization</a>
       </div>
     </div>
   </div>
@@ -113,7 +117,7 @@
     </div>
 
     <div class="mb_x">
-      <div class="panel panel-default" ng-if="$ctrl.donorDetails['donor-type'] === 'individual'">
+      <div class="panel panel-default" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
         <div class="panel-title  panel-heading visible" ng-click="showSpouseDetails = !showSpouseDetails" translate>
           Spouse Name (Optional)
         </div>
@@ -191,7 +195,7 @@
 
       <div class="mb">
         <h4 class="panel-title  border-bottom-small  visible" translate>Mailing Address</h4>
-        <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'organization'">
+        <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Organization'">
           <div class="col-sm-12">
             <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.orgName | showErrors)}">
               <label translate>Organization Name</label>
