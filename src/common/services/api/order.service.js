@@ -3,6 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 import toString from 'lodash/toString';
+import isArray from 'lodash/isArray';
 import map from 'lodash/map';
 
 import cortexApiService from '../cortexApi.service';
@@ -189,7 +190,9 @@ class Order{
       }
     })
       .map((data) => {
-        let errors = map(data.needInfo, 'name');
+        let needInfo = data.needInfo;
+        needInfo = !needInfo || isArray(needInfo) ? needInfo : [needInfo];
+        let errors = map(needInfo, 'name');
         return (errors && errors.length > 0) ? errors : undefined;
       })
       .do((errors) => {

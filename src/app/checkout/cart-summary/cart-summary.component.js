@@ -21,6 +21,9 @@ export default angular
     controller: CartSummaryController,
     templateUrl: template.name,
     bindings: {
-      cartData: '<'
+      cartData: '<',
+      showSubmitBtn: '<',
+      enableSubmitBtn: '<',
+      onSubmit: '&'
     }
   });

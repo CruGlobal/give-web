@@ -20,21 +20,24 @@ describe('checkout', () => {
       self.storedCcv = null;
 
       self.controller = $componentController(module.name, {
-        $scope: $scope,
-        // Mock services
-        cartService: {
+          $scope: $scope,
+          // Mock services
+          cartService: {},
+          orderService: {
+            getDonorDetails: () => Observable.of('donor details'),
+            getCurrentPayment: () => Observable.of(self.loadedPayment),
+            getBillingAddress: () => Observable.of({ address: 'billing address' }),
+            checkErrors: () => Observable.of(['email-info']),
+            submit: () => Observable.of('called submit'),
+            submitWithCcv: (ccv) => Observable.of('called submit with a CCV of' + ccv),
+            retrieveCardSecurityCode: () => self.storedCcv,
+            clearCardSecurityCode: () => {}
+          }
         },
-        orderService: {
-          getDonorDetails: () => Observable.of('donor details'),
-          getCurrentPayment: () => Observable.of(self.loadedPayment),
-          getBillingAddress: () => Observable.of({ address: 'billing address' }),
-          checkErrors: () => Observable.of(['email-info']),
-          submit: () => Observable.of('called submit'),
-          submitWithCcv: (ccv) => Observable.of('called submit with a CCV of' + ccv),
-          retrieveCardSecurityCode: () => self.storedCcv,
-          clearCardSecurityCode: () => {}
-        }
-      });
+        {
+          onSubmitBtnChangeState: jasmine.createSpy('onSubmitBtnChangeState'),
+          onSubmitted: jasmine.createSpy('onSubmitted')
+        });
     }));
 
     describe('$onInit', () => {
@@ -48,6 +51,29 @@ describe('checkout', () => {
         expect(self.controller.loadCurrentPayment).toHaveBeenCalled();
         expect(self.controller.loadBillingAddress).toHaveBeenCalled();
         expect(self.controller.checkErrors).toHaveBeenCalled();
+      });
+    });
+
+    describe('$onChanges', () => {
+      beforeEach(() => {
+        spyOn(self.controller, 'submitOrder');
+      });
+
+      it('should submit order if the submit binding is true', () => {
+        self.controller.$onChanges({ submit: {
+          currentValue: true
+        }});
+        expect(self.controller.submitOrder).toHaveBeenCalled();
+      });
+      it('should not submit order if the submit binding is false', () => {
+        self.controller.$onChanges({ submit: {
+          currentValue: false
+        }});
+        expect(self.controller.submitOrder).not.toHaveBeenCalled();
+      });
+      it('should not submit order if the submit binding was not changed', () => {
+        self.controller.$onChanges({});
+        expect(self.controller.submitOrder).not.toHaveBeenCalled();
       });
     });
 
@@ -107,53 +133,79 @@ describe('checkout', () => {
     });
 
     describe('canSubmitOrder', () => {
+      function runCanSubmitOrder(config){
+        self.controller.cartData = config.cartData;
+        self.controller.donorDetails = config.donorDetails;
+        self.controller.bankAccountPaymentDetails = config.bankAccountPaymentDetails;
+        self.controller.creditCardPaymentDetails = config.creditCardPaymentDetails;
+        self.controller.errors = config.errors;
+        expect(self.controller.canSubmitOrder()).toEqual(config.outcome);
+        expect(self.controller.onSubmitBtnChangeState).toHaveBeenCalledWith({
+          $event: {
+            enabled: config.outcome
+          }
+        });
+      }
+
       it('should let you submit the order with a bank account if everything is loaded and there are no errors', () => {
-        self.controller.cartData = {};
-        self.controller.donorDetails = {};
-        self.controller.bankAccountPaymentDetails = {};
-        self.controller.creditCardPaymentDetails = undefined;
-        self.controller.errors = undefined;
-        expect(self.controller.canSubmitOrder()).toEqual(true);
+        runCanSubmitOrder({
+          cartData: {},
+          donorDetails: {},
+          bankAccountPaymentDetails: {},
+          creditCardPaymentDetails: undefined,
+          errors: undefined,
+          outcome: true
+        });
       });
       it('should let you submit the order with a credit card if everything is loaded and there are no errors', () => {
-        self.controller.cartData = {};
-        self.controller.donorDetails = {};
-        self.controller.bankAccountPaymentDetails = undefined;
-        self.controller.creditCardPaymentDetails = {};
-        self.controller.errors = undefined;
-        expect(self.controller.canSubmitOrder()).toEqual(true);
+        runCanSubmitOrder({
+          cartData: {},
+          donorDetails: {},
+          bankAccountPaymentDetails: undefined,
+          creditCardPaymentDetails: {},
+          errors: undefined,
+          outcome: true
+        });
       });
       it('should not let you submit the order if there are errors', () => {
-        self.controller.cartData = {};
-        self.controller.donorDetails = {};
-        self.controller.bankAccountPaymentDetails = {};
-        self.controller.creditCardPaymentDetails = undefined;
-        self.controller.errors = [];
-        expect(self.controller.canSubmitOrder()).toEqual(false);
+        runCanSubmitOrder({
+          cartData: {},
+          donorDetails: {},
+          bankAccountPaymentDetails: {},
+          creditCardPaymentDetails: undefined,
+          errors: [],
+          outcome: false
+        });
       });
       it('should not let you submit the order if both payment methods aren\'t loaded', () => {
-        self.controller.cartData = {};
-        self.controller.donorDetails = {};
-        self.controller.bankAccountPaymentDetails = undefined;
-        self.controller.creditCardPaymentDetails = undefined;
-        self.controller.errors = undefined;
-        expect(self.controller.canSubmitOrder()).toEqual(false);
+        runCanSubmitOrder({
+          cartData: {},
+          donorDetails: {},
+          bankAccountPaymentDetails: undefined,
+          creditCardPaymentDetails: undefined,
+          errors: undefined,
+          outcome: false
+        });
       });
       it('should not let you submit the order if cart data isn\'t loaded', () => {
-        self.controller.cartData = undefined;
-        self.controller.donorDetails = {};
-        self.controller.bankAccountPaymentDetails = {};
-        self.controller.creditCardPaymentDetails = undefined;
-        self.controller.errors = undefined;
-        expect(self.controller.canSubmitOrder()).toEqual(false);
+        runCanSubmitOrder({
+          cartData: undefined,
+          donorDetails: {},
+          bankAccountPaymentDetails: {},
+          creditCardPaymentDetails: undefined,
+          errors: undefined,
+          outcome: false
+        });
       });
       it('should not let you submit the order if donorDetails isn\'t loaded', () => {
-        self.controller.cartData = {};
-        self.controller.donorDetails = undefined;
-        self.controller.bankAccountPaymentDetails = {};
-        self.controller.creditCardPaymentDetails = undefined;
-        self.controller.errors = undefined;
-        expect(self.controller.canSubmitOrder()).toEqual(false);
+        runCanSubmitOrder({
+          cartData: {},
+          donorDetails: undefined,
+          bankAccountPaymentDetails: {},
+          creditCardPaymentDetails: undefined,
+          errors: undefined,
+          outcome: false
+        });
       });
     });
 
@@ -162,6 +214,10 @@ describe('checkout', () => {
         spyOn(self.controller.orderService, 'submit').and.callThrough();
         spyOn(self.controller.orderService, 'submitWithCcv').and.callThrough();
         spyOn(self.controller.orderService, 'clearCardSecurityCode');
+      });
+
+      afterEach(() => {
+        expect(self.controller.onSubmitted).toHaveBeenCalled();
       });
 
       it('should submit the order normally if paying with a bank account', () => {
