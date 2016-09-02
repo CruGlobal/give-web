@@ -13,9 +13,9 @@
             <div class="panel">
               <div class="panel-body">
                 <h3 class="panel-name">Debug tools</h3>
-                <form method="get" ng-submit="$ctrl.designationSearch(designationSearchInput)">
+                <form method="get" action="/search-results.html">
                   <div class="input-group">
-                    <input class="search-field form-control designationSearch-input" ng-model="designationSearchInput" placeholder="Designation Search" type="search">
+                    <input class="search-field form-control designationSearch-input" name="q" placeholder="Designation Search" type="text">
                     <div class="input-group-btn">
                       <button class="globalSearch-button  btn  btn-subtle" value="Go" type="submit"> <i class="icon-search"></i> </button>
                     </div>
