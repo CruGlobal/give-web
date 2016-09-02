@@ -1,0 +1,38 @@
+<form class="form-inline form-give-home-signin mt pb border-bottom-small text-center" ng-submit="$ctrl.signIn()" name="$ctrl.signInForm" ng-if="$ctrl.showSignInForm">
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage | translate}}</div>
+
+  <div class="form-group">
+    <span class="btn btn-default form-heading hidden-sm hidden-md">Existing Users</span>
+  </div>
+  <div class="form-group">
+    <input type="email"
+           ng-disabled="$ctrl.isSigningIn"
+           ng-model="$ctrl.username"
+           class="form-control"
+           placeholder="{{'Email'|translate}}"
+           autocomplete="off"
+           required>
+  </div>
+  <div class="form-group">
+    <input type="password"
+           class="form-control form-control-subtle"
+           placeholder="{{'Password'|translate}}"
+           autocomplete="off"
+           required
+           ng-disabled="$ctrl.isSigningIn"
+           ng-model="$ctrl.password">
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-default" ng-disabled="!$ctrl.signInForm.$valid || $ctrl.isSigningIn" translate>Sign In</button>
+  </div>
+  <div class="form-group text-left home-self-service hidden-sm">
+    <a href="" class="u-block">Forgot Password</a>
+    <a href="" class="u-block" ng-click="$ctrl.signUp()">Create an Account</a>
+  </div>
+
+  <loading-overlay ng-if="$ctrl.isSigningIn"></loading-overlay>
+</form>
+
+<div class="mt pb border-bottom-small text-center" ng-if="!$ctrl.showSignInForm" translate>
+  Welcome, {{$ctrl.username}}!
+</div>

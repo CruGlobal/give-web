@@ -2,6 +2,7 @@ import angular from 'angular';
 import signInForm from 'common/components/signInForm/signInForm.component';
 import commonModule from 'common/common.module';
 import showErrors from 'common/filters/showErrors.filter';
+import sessionService from 'common/services/session/session.service';
 
 import template from './signIn.tpl';
 
@@ -10,21 +11,33 @@ let componentName = 'signIn';
 class SignInController {
 
   /* @ngInject */
-  constructor( $window ) {
+  constructor( $window, sessionService ) {
     this.$window = $window;
+    this.sessionService = sessionService;
   }
 
-  signInSuccess() {
-    this.$window.location.href = 'checkout.html';
+  $onInit() {
+    this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
+  }
+
+  $onDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  sessionChanged() {
+    if ( this.sessionService.getRole() === 'REGISTERED' ) {
+      this.$window.location.href = 'checkout.html';
+    }
   }
 }
 
 export default angular
   .module( componentName, [
     commonModule.name,
-    template.name,
+    sessionService.name,
     signInForm.name,
-    showErrors.name
+    showErrors.name,
+    template.name
   ] )
   .component( componentName, {
     controller:  SignInController,

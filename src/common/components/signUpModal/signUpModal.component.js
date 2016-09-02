@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-gettext';
 import 'angular-messages';
 import sessionService from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
@@ -57,6 +58,7 @@ class SignUpModalController {
 
 export default angular
   .module( componentName, [
+    'gettext',
     'ngMessages',
     sessionService.name,
     showErrors.name,

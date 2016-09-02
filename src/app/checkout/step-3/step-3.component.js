@@ -26,6 +26,12 @@ class Step3Controller{
     this.checkErrors();
   }
 
+  $onChanges(changes) {
+    if (changes.submit && changes.submit.currentValue === true) {
+      this.submitOrder();
+    }
+  }
+
   loadDonorDetails(){
     this.orderService.getDonorDetails()
       .subscribe((data) => {
@@ -63,7 +69,13 @@ class Step3Controller{
   }
 
   canSubmitOrder(){
-    return !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.errors);
+    let enableSubmitBtn = !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.errors);
+    this.onSubmitBtnChangeState({
+      $event: {
+        enabled: enableSubmitBtn
+      }
+    });
+    return enableSubmitBtn;
   }
 
   submitOrder(){
@@ -76,13 +88,15 @@ class Step3Controller{
     }else{
       submitRequest = Observable.throw('Current payment type is unknown');
     }
-    submitRequest.subscribe(() => {
+    submitRequest.subscribe((data) => {
         this.orderService.clearCardSecurityCode();
-        this.$log.info('Submitted purchase successfully');
+        this.$log.info('Submitted purchase successfully', data);
+        this.onSubmitted();
         // TODO: transition to thank you page
       },
       (error) => {
         this.$log.error('Error submitting purchase:', error);
+        this.onSubmitted();
         // TODO: show error message
       });
   }
@@ -100,6 +114,9 @@ export default angular
     templateUrl: template.name,
     bindings: {
       changeStep: '&',
-      cartData: '<'
+      cartData: '<',
+      submit: '<',
+      onSubmitBtnChangeState: '&',
+      onSubmitted: '&'
     }
   });

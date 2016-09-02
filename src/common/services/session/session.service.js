@@ -12,7 +12,7 @@ import appConfig from 'common/app.config';
 let serviceName = 'sessionService';
 
 /*@ngInject*/
-function session( $cookies, $rootScope, $http, $q, envService ) {
+function session( $cookies, $rootScope, $http, envService ) {
   var session = {},
     sessionSubject = new BehaviorSubject( session );
 
@@ -31,7 +31,9 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
     getRole:        currentRole,
     signIn:         signIn,
     signOut:        signOut,
-    signUp:         signUp
+    signUp:         signUp,
+    forgotPassword: forgotPassword,
+    resetPassword:  resetPassword
   };
 
   /* Public Methods */
@@ -75,6 +77,37 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
       .map( ( response ) => response.data );
   }
 
+  function forgotPassword( email, passwordResetUrl ) {
+    // https://github.com/CruGlobal/cortex_gateway/wiki/Send-Forgot-Password-Email
+    return Observable
+      .from( $http( {
+        method:          'POST',
+        url:             casApiUrl( '/send_forgot_password_email' ),
+        withCredentials: true,
+        data:            {
+          email:            email,
+          passwordResetUrl: passwordResetUrl
+        }
+      } ) )
+      .map( ( response ) => response.data );
+  }
+
+  function resetPassword( email, password, resetKey ) {
+    // https://github.com/CruGlobal/cortex_gateway/wiki/Set-Password-By-Reset-Key
+    return Observable
+      .from( $http( {
+        method:          'POST',
+        url:             casApiUrl( '/reset_password' ),
+        withCredentials: true,
+        data:            {
+          email:    email,
+          password: password,
+          resetKey: resetKey
+        }
+      } ) )
+      .map( ( response ) => response.data );
+  }
+
   /* Private Methods */
   function updateCurrentSession( encoded_value ) {
     var cortexSession = {};
@@ -103,10 +136,7 @@ function session( $cookies, $rootScope, $http, $q, envService ) {
 
   function casApiUrl( path ) {
     var apiUrl = envService.read( 'apiUrl' ) + '/cas';
-    if ( angular.isArray( path ) ) {
-      return apiUrl + '/' + path.join( '/' );
-    }
-    return apiUrl + (path.charAt( 0 ) === '/' ? path : '/' + path);
+    return apiUrl + path;
   }
 }
 

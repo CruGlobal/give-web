@@ -12,6 +12,7 @@ import checkoutComponent from '../checkout/checkout.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
+import homeSignInComponent from '../homeSignIn/homeSignIn.component';
 
 import template from './main.tpl';
 
@@ -69,6 +70,7 @@ export default angular
     productConfigComponent.name,
     signInComponent.name,
     searchResultsComponent.name,
+    homeSignInComponent.name,
     'ui.router'
   ])
   .config(routingConfig)

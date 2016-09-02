@@ -37,7 +37,9 @@ System.config({
     "lodash": "npm:lodash@4.15.0",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
+    "rollbar-browser": "npm:rollbar-browser@1.9.1",
     "rxjs": "npm:rxjs@5.0.0-beta.11",
+    "stacktrace-js": "npm:stacktrace-js@1.3.1",
     "systemjs-babel-build": "npm:systemjs-plugin-babel@0.0.13/systemjs-babel-browser.js",
     "github:angular/bower-angular-animate@1.5.8": {
       "angular": "github:angular/bower-angular@1.5.8"
@@ -138,12 +140,10 @@ System.config({
       "wordwrap": "npm:wordwrap@0.0.2"
     },
     "npm:clone-stats@0.0.1": {
-      "fs": "github:jspm/nodelibs-fs@0.1.2",
-      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+      "fs": "github:jspm/nodelibs-fs@0.1.2"
     },
     "npm:clone@1.0.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
-      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "vm": "github:jspm/nodelibs-vm@0.1.0"
     },
     "npm:constants-browserify@0.0.1": {
@@ -167,12 +167,17 @@ System.config({
       "meow": "npm:meow@3.7.0"
     },
     "npm:duplexer2@0.0.2": {
-      "readable-stream": "npm:readable-stream@1.1.14",
-      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+      "readable-stream": "npm:readable-stream@1.1.14"
     },
     "npm:error-ex@1.3.0": {
       "is-arrayish": "npm:is-arrayish@0.2.1",
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:error-stack-parser@1.3.3": {
+      "stackframe": "npm:stackframe@0.3.1"
+    },
+    "npm:error-stack-parser@1.3.6": {
+      "stackframe": "npm:stackframe@0.3.1"
     },
     "npm:fancy-log@1.2.0": {
       "chalk": "npm:chalk@1.1.3",
@@ -325,7 +330,6 @@ System.config({
       "currently-unhandled": "npm:currently-unhandled@0.4.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "signal-exit": "npm:signal-exit@3.0.0",
-      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:meow@3.7.0": {
@@ -377,8 +381,7 @@ System.config({
       "pinkie": "npm:pinkie@2.0.4"
     },
     "npm:process-nextick-args@1.0.7": {
-      "process": "github:jspm/nodelibs-process@0.1.2",
-      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:process@0.11.8": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
@@ -432,6 +435,17 @@ System.config({
     "npm:right-align@0.1.3": {
       "align-text": "npm:align-text@0.1.4"
     },
+    "npm:rollbar-browser@1.9.1": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "console-polyfill": "npm:console-polyfill@0.2.2",
+      "error-stack-parser": "npm:error-stack-parser@1.3.3",
+      "extend": "npm:extend@3.0.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
+      "util": "github:jspm/nodelibs-util@0.1.0"
+    },
     "npm:rxjs@5.0.0-beta.11": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
@@ -460,6 +474,27 @@ System.config({
     },
     "npm:spdx-license-ids@1.2.2": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
+    "npm:stack-generator@1.1.0": {
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "stackframe": "npm:stackframe@1.0.2"
+    },
+    "npm:stackframe@0.3.1": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:stackframe@1.0.2": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:stacktrace-gps@2.4.4": {
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "source-map": "npm:source-map@0.5.6",
+      "stackframe": "npm:stackframe@0.3.1"
+    },
+    "npm:stacktrace-js@1.3.1": {
+      "error-stack-parser": "npm:error-stack-parser@1.3.6",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "stack-generator": "npm:stack-generator@1.1.0",
+      "stacktrace-gps": "npm:stacktrace-gps@2.4.4"
     },
     "npm:stream-browserify@1.0.0": {
       "events": "github:jspm/nodelibs-events@0.1.1",

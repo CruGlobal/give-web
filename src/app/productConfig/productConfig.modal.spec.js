@@ -20,7 +20,8 @@ describe('product config modal', function() {
     self.controller = $controller(module.name, {
       $uibModalInstance: uibModalInstance,
       productData: productData,
-      itemConfig: itemConfig
+      itemConfig: itemConfig,
+      removingItem: true
     });
 
   }));

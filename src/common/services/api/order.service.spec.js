@@ -431,8 +431,8 @@ describe('order service', () => {
     });
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=',
-        null
+        'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        {}
       ).respond(200, 'success');
 
       self.orderService.submit()
@@ -444,7 +444,7 @@ describe('order service', () => {
     });
     it('should send a request to finalize the purchase and with a CCV', () => {
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=',
+        'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
         {"security-code": '123'}
       ).respond(200, 'success');
 
