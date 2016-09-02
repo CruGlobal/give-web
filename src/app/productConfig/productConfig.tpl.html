@@ -1,3 +1,4 @@
-<button class="btn btn-lg btn-primary" ng-click="$ctrl.configModal()">
-  {{$ctrl.buttonLabel}}
+<button class="btn btn-lg btn-primary" ng-click="$ctrl.configModal()" ng-disabled="$ctrl.loadingModal">
+  <span ng-if="!$ctrl.loadingModal">{{$ctrl.buttonLabel}}</span>
+  <span ng-if="$ctrl.loadingModal">Loading...</span>
 </button>
