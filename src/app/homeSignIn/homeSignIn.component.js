@@ -24,7 +24,7 @@ class HomeSignInController {
 
     if ( includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() ) ) {
       this.showSignInForm = false;
-      this.username = this.sessionService.session.email;
+      this.firstName = this.sessionService.session.first_name;
     }
   }
 
@@ -37,6 +37,7 @@ class HomeSignInController {
       .subscribe( () => {
         this.isSigningIn = false;
         this.showSignInForm = false;
+        this.firstName = this.sessionService.session.first_name;
       }, ( error ) => {
         this.isSigningIn = false;
         this.errorMessage = error.data.error;
