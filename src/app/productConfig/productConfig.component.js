@@ -21,7 +21,6 @@ class ProductConfigController{
 
   configModal(){
     var productCode = this.productCode;
-    var $window = this.$window;
 
     this.$uibModal.open({
       templateUrl: templateModal.name,
@@ -36,11 +35,13 @@ class ProductConfigController{
           return {
             amount: 50
           };
+        },
+        removingItem: () => {
+          return false;
         }
       }
-    }).result.then(function () {
-      //go to cart
-      $window.location.reload();
+    }).result.then(() => {
+      this.$window.location.href = 'cart.html';
     });
   }
 }

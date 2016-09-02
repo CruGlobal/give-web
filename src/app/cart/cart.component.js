@@ -57,6 +57,9 @@ class CartController{
         }],
         itemConfig: function(){
           return item.config;
+        },
+        removingItem: () => {
+          return true;
         }
       }
     }).result.then(function () {

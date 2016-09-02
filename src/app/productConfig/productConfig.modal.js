@@ -12,13 +12,13 @@ let controllerName = 'productConfigController';
 class ModalInstanceCtrl{
 
   /* @ngInject */
-  constructor($uibModalInstance, designationsService, cartService, productData, itemConfig) {
+  constructor($uibModalInstance, designationsService, cartService, productData, itemConfig, removingItem) {
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.productData = productData;
-
     this.itemConfig = itemConfig;
+    this.removingItem = removingItem;
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
     if(this.selectableAmounts.indexOf(itemConfig.amount) === -1){
@@ -46,9 +46,16 @@ class ModalInstanceCtrl{
   addToCart(){
     if(!this.itemConfigForm.$valid){ return; }
     this.submittingGift = true;
+    this.giftSubmitted = false;
+
     this.cartService.addItem(this.productData.id, this.itemConfig)
       .subscribe(() => {
-        this.$uibModalInstance.close();
+        if(this.removingItem){
+          this.$uibModalInstance.close();
+        }else{
+          this.submittingGift = false;
+          this.giftSubmitted = true;
+        }
       }, () => {
         this.submittingGift = false;
       });
