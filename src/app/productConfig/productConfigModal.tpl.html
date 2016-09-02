@@ -7,14 +7,21 @@
     </div>
     <div class="col-sm-6">
       <div class="give-modal-recipient">
-        <img class="recipient-image" src="http://placehold.it/550x310">
+        <img class="recipient-image" src="http://placehold.it/70x50">
         <span class="recipient-title">{{$ctrl.productData.displayName}}</span>
         <span class="recipient-id">#{{$ctrl.productData.designationNumber}}</span>
       </div>
     </div>
   </div>
 </div>
-<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.addToCart()">
+
+<div class="alert alert-success text-center" ng-if="$ctrl.giftSubmitted">
+  <p>Gift has been added to your cart.</p>
+  <button class="btn btn-success" ng-click="$close()">Go to Cart</button>
+  <button class="btn btn-success" ng-click="$dismiss()">Keep Browsing</button>
+</div>
+
+<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.addToCart()" ng-if="!$ctrl.giftSubmitted">
   <div class="modal-body pt0 p">
     <div class="container-fluid">
       <div class="panel panel-default panel-plain mt">
