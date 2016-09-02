@@ -26,32 +26,52 @@
                           Payment Method
                         </div>
 
-                        <div class="panel-body">
+                        <div class="panel-body" ng-if="$ctrl.purchase.paymentMeans.self.type === 'elasticpath.bankaccountpurchases.payment-means-bank-account'">
                           <div class="form-group">
-                            <label class="">Bank Name</label>
-                            <p>
-                              Bank of America
-                            </p>
+                            <label translate>Bank Name</label>
+                            <p>{{$ctrl.purchase.paymentMeans['bank-name']}}</p>
                           </div>
 
                           <div class="form-group">
-                            <label class="">Account Type</label>
-                            <p>Checking</p>
+                            <label translate>Account Type</label>
+                            <p>{{$ctrl.purchase.paymentMeans['account-type'] | capitalize}}</p>
                           </div>
 
                           <div class="form-group">
-                            <label class="">Routing Number</label>
-                            <p>0000667656</p>
+                            <label translate>Routing Number</label>
+                            <p>{{$ctrl.purchase.paymentMeans['routing-number']}}</p>
                           </div>
 
                           <div class="form-group">
-                            <label class="">Account Number</label>
-                            <p>********** 4567</p>
+                            <label translate>Account Number</label>
+                            <p>************{{$ctrl.purchase.paymentMeans['display-account-number']}}</p>
+                          </div>
+                        </div>
+
+                        <div class="panel-body" ng-if="$ctrl.purchase.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'">
+                          <div class="form-group">
+                            <label translate>Name on card</label>
+                            <p>{{$ctrl.purchase.paymentMeans['holder-name']}}</p>
                           </div>
 
                           <div class="form-group">
-                            <label class="">Billing Address</label>
-                            <p>8898 Strawberry Lane, Orlando, Florida 77678-9909</p>
+                            <label translate>Card Number</label>
+                            <p>************{{$ctrl.purchase.paymentMeans['card-number']}}</p>
+                          </div>
+
+                          <div class="form-group">
+                            <label translate>Card Type</label>
+                            <p>{{$ctrl.purchase.paymentMeans['card-type']}}</p>
+                          </div>
+
+                          <div class="form-group">
+                            <label translate>Expires</label>
+                            <p>{{$ctrl.purchase.paymentMeans['expiry-date'].month}}/{{$ctrl.purchase.paymentMeans['expiry-date'].year}}</p><!-- TODO: deal with localization -->
+                          </div>
+
+                          <div class="form-group">
+                            <label translate>Billing Address</label>
+                            <display-address address="$ctrl.billingAddress"></display-address>
                           </div>
                         </div>
                       </div>
@@ -64,11 +84,24 @@
 
                         <div class="panel-body">
                           <div class="form-group">
-                            <p>Jean Deaux</p>
-                            <p>
-                              1234 Seaseme Street,<br>
-                              Orlando, Florida 12345-6789
-                            </p>
+                            <div>
+                              {{$ctrl.purchase.donorDetails.name.title}}
+                              {{$ctrl.purchase.donorDetails.name['given-name']}}
+                              {{$ctrl.purchase.donorDetails.name['middle-initial']}}
+                              {{$ctrl.purchase.donorDetails.name['family-name']}}
+                              {{$ctrl.purchase.donorDetails.name.suffix}}
+                            </div>
+                            <div ng-if="$ctrl.purchase.donorDetails['donor-type'] === 'Household'">
+                              {{$ctrl.purchase.donorDetails['spouse-name'].title}}
+                              {{$ctrl.purchase.donorDetails['spouse-name']['given-name']}}
+                              {{$ctrl.purchase.donorDetails['spouse-name']['middle-initial']}}
+                              {{$ctrl.purchase.donorDetails['spouse-name']['family-name']}}
+                              {{$ctrl.purchase.donorDetails['spouse-name'].suffix}}
+                            </div>
+                            <div ng-if="$ctrl.purchase.donorDetails['donor-type'] === 'Organization'">
+                              {{$ctrl.purchase.donorDetails['organization-name']}}
+                            </div>
+                            <display-address address="$ctrl.mailingAddress"></display-address>
                           </div>
                         </div>
                       </div>

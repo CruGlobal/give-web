@@ -3,6 +3,9 @@ import angular from 'angular';
 
 import accountBenefits from './account-benefits/account-benefits.component';
 import help from '../checkout/help/help.component';
+import displayAddressComponent from 'common/components/display-address/display-address.component';
+
+import capitalizeFilter from 'common/filters/capitalize.filter';
 
 import orderService from 'common/services/api/order.service';
 import purchasesService from 'common/services/api/purchases.service';
@@ -33,6 +36,8 @@ class ThankYouController{
     this.purchasesService.getPurchase(lastPurchaseLink)
       .subscribe((data) => {
         this.purchase = data;
+        this.mailingAddress = this.orderService.formatAddressForTemplate(this.purchase.donorDetails['mailing-address']);
+        this.billingAddress = this.orderService.formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
         this.$log.info('Loaded purchase info:', data);
       });
   }
@@ -44,6 +49,8 @@ export default angular
     template.name,
     accountBenefits.name,
     help.name,
+    displayAddressComponent.name,
+    capitalizeFilter.name,
     orderService.name,
     purchasesService.name
   ])
