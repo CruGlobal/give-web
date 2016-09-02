@@ -3,6 +3,7 @@ import angular from 'angular';
 import signInModal from 'common/components/signInModal/signInModal.component';
 import signUpModal from 'common/components/signUpModal/signUpModal.component';
 import resetPasswordModal from 'common/components/resetPasswordModal/resetPasswordModal.component';
+import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPasswordModal.component';
 
 let controllerName = 'sessionModalController';
 
@@ -40,6 +41,7 @@ export default angular
   .module( controllerName, [
     signInModal.name,
     signUpModal.name,
-    resetPasswordModal.name
+    resetPasswordModal.name,
+    forgotPasswordModal.name
   ] )
   .controller( controllerName, SessionModalController );

@@ -25,7 +25,6 @@ class ProductConfigController{
 
   configModal(){
     var productCode = this.productCode;
-    var $window = this.$window;
     this.loadingModal = true;
 
     let modalInstance = this.$uibModal.open({
@@ -41,6 +40,9 @@ class ProductConfigController{
           return {
             amount: 50
           };
+        },
+        removingItem: () => {
+          return false;
         }
       }
     });

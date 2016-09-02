@@ -9,11 +9,29 @@
 <div class="mb">
   <div class="panel panel-default">
     <div class="panel-heading">
-      Receipt Address
+      Contact Information
+      <button class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'contact'})">Change</button>
     </div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
+          <div>
+            {{$ctrl.donorDetails.name.title}}
+            {{$ctrl.donorDetails.name['given-name']}}
+            {{$ctrl.donorDetails.name['middle-initial']}}
+            {{$ctrl.donorDetails.name['family-name']}}
+            {{$ctrl.donorDetails.name.suffix}}
+          </div>
+          <div ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
+            {{$ctrl.donorDetails['spouse-name'].title}}
+            {{$ctrl.donorDetails['spouse-name']['given-name']}}
+            {{$ctrl.donorDetails['spouse-name']['middle-initial']}}
+            {{$ctrl.donorDetails['spouse-name']['family-name']}}
+            {{$ctrl.donorDetails['spouse-name'].suffix}}
+          </div>
+          <div ng-if="$ctrl.donorDetails['donor-type'] === 'Organization'">
+            {{$ctrl.donorDetails['organization-name']}}
+          </div>
           <display-address address="$ctrl.donorDetails.mailingAddress"></display-address>
           <div class="loading-wrap" ng-if="!$ctrl.donorDetails">
             <span class="loading loading1"></span>
@@ -21,9 +39,6 @@
             <span class="loading loading3"></span>
             <span class="loading loading4"></span>
           </div>
-        </div>
-        <div class="col-md-4 text-right">
-          <button class="btn btn-default btn-block" ng-click="$ctrl.changeStep({newStep: 'contact'})">Change</button>
         </div>
       </div>
     </div>
@@ -34,10 +49,11 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       Payment Method
+      <button class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'payment'})">Change</button>
     </div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
           <div class="row" ng-if="$ctrl.bankAccountPaymentDetails">
             <div class="col-md-6">
               <div class="form-group">
@@ -95,9 +111,6 @@
             <span class="loading loading4"></span>
           </div>
         </div>
-        <div class="col-md-4 text-right">
-          <button class="btn btn-default btn-block" ng-click="$ctrl.changeStep({newStep: 'payment'})">Change</button>
-        </div>
       </div>
     </div>
   </div>
@@ -106,7 +119,7 @@
 <div class="mb">
   <div class="panel panel-default">
     <div class="panel-heading">
-      Review Items
+      Review Gifts
     </div>
     <div class="panel-body">
       <table class="table giftsum-table">
@@ -120,9 +133,9 @@
         <tbody>
         <tr class="giftsum-gift-row" ng-repeat="i in $ctrl.cartData.items">
           <td class="td-gift">
-            <img src="http://placehold.it/90x70" class="giftsum-profile pull-left">
+            <img src="http://placehold.it/90x50" class="giftsum-profile pull-left">
             <span class="giftsum-person giftsum-title">{{i.displayName}}</span>
-            <span class="giftsum-accountnum giftsum-detail"><span class="hidden-xs">Ministry </span>#{{i.designationNumber}}</span>
+            <span class="giftsum-accountnum giftsum-detail">#{{i.designationNumber}}</span>
           </td>
           <td class="td-frequency">
             <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
