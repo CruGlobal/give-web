@@ -50,8 +50,7 @@ class ProductConfigController{
       this.loadingModal = false;
     });
     modalInstance.result.then(() => {
-      //go to cart
-      $window.location.reload();
+      this.$window.location.href = 'cart.html';
     });
   }
 }
