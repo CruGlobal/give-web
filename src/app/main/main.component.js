@@ -20,12 +20,7 @@ let componentName = 'main';
 class MainController{
 
   /* @ngInject */
-  constructor($location){
-    this.$location = $location;
-  }
-
-  designationSearch(searchString){
-    this.$location.path('search-results.' + searchString + '.html');
+  constructor(){
   }
 }
 
@@ -45,7 +40,7 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       template: '<checkout></checkout>'
     })
     .state('search-results', {
-      url: "/{beginPath:search-results.}{endPath:.+html}",
+      url: "/search-results.html",
       template: '<search-results></search-results>'
     });
 

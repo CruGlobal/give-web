@@ -1,6 +1,5 @@
 import angular from 'angular';
 
-import urlTerm from 'common/lib/urlTerm';
 import commonModule from 'common/common.module';
 import designationsService from 'common/services/api/designations.service';
 import productConfigComponent from 'app/productConfig/productConfig.component';
@@ -12,12 +11,15 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor(designationsService) {
+  constructor($location, designationsService) {
+    this.$location = $location;
     this.designationsService = designationsService;
+  }
 
-    let searchTerm = urlTerm.get();
+  $onInit(){
+    let searchTerm = this.$location.search().q;
     if(searchTerm){
-      designationsService.createSearch(searchTerm)
+      this.designationsService.createSearch(searchTerm)
         .subscribe((id) => {
           this.searchId = id;
           this.getPageResults(1);
