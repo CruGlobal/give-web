@@ -137,7 +137,7 @@
                                 <span class="giftsum-line" ng-repeat="rate in $ctrl.purchase.rateTotals">
                                   Your {{rate.recurrence.display}} Gift Total: <strong>{{rate.cost.display}}</strong>
                                 </span>
-                                <span class="giftsum-line">Your Single Total: <strong>{{$self.purchase.rawData['monetary-total'.display]}}</strong></span><!-- TODO: is this the correct way to access the single gift total? It seems to be missing from rateTotals... -->
+                                <span class="giftsum-line">Your Single Total: <strong>{{$ctrl.purchase.rawData['monetary-total'][0].display}}</strong></span><!-- TODO: is this the correct way to access the single gift total? It seems to be missing from rateTotals... -->
                               </td>
                             </tr>
                             </tfoot>
