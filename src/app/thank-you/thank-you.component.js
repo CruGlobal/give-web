@@ -41,14 +41,13 @@ class ThankYouController{
         this.purchase = data;
         this.mailingAddress = this.orderService.formatAddressForTemplate(this.purchase.donorDetails['mailing-address']);
         this.billingAddress = this.orderService.formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
-        this.$log.info('Loaded purchase info:', data);
       });
   }
 
   loadEmail(){
     this.profileService.getEmail()
       .subscribe((data) => {
-        this.email = data.email.email;
+        this.email = data;
       });
   }
 

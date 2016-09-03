@@ -13,10 +13,27 @@ describe('thank you', () => {
   beforeEach(inject(($componentController) => {
     self.controller = $componentController(module.name, {
       orderService: {
-        retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt='
+        retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt=',
+        formatAddressForTemplate: (address) => address
       },
       purchasesService: {
-        getPurchase: () => Observable.of('purchaseData')
+        getPurchase: () => Observable.of({
+          donorDetails: {
+            'mailing-address': {
+              'street-address': '123 Test St'
+            }
+          },
+          paymentMeans: {
+            'billing-address': {
+              addresss: {
+                'street-address': '123 Test St'
+              }
+            }
+          }
+        })
+      },
+      profileService: {
+        getEmail: () => Observable.of('someperson@someaddress.com')
       }
     });
   }));
@@ -34,7 +51,20 @@ describe('thank you', () => {
       spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
-      expect(self.controller.purchase).toEqual('purchaseData');
+      expect(self.controller.purchase).toEqual({
+        donorDetails: {
+          'mailing-address': {
+            'street-address': '123 Test St'
+          }
+        },
+        paymentMeans: {
+          'billing-address': {
+            addresss: {
+              'street-address': '123 Test St'
+            }
+          }
+        }
+      });
     });
     it('should not request purchase data if lastPurchaseLink is not defined', () => {
       spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').and.callFake(() => undefined);
@@ -42,6 +72,12 @@ describe('thank you', () => {
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).not.toHaveBeenCalled();
       expect(self.controller.purchase).not.toBeDefined();
+    });
+  });
+  describe('loadEmail', () => {
+    it('should load the user\'s email', () => {
+      self.controller.loadEmail();
+      expect(self.controller.email).toEqual('someperson@someaddress.com');
     });
   });
 });

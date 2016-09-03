@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'rxjs/add/operator/pluck';
 
 import cortexApiService from '../cortexApi.service';
 
@@ -17,7 +18,9 @@ class Profile{
         zoom: {
           email: 'emails:element'
         }
-      });
+      })
+      .pluck('email')
+      .pluck('email');
   }
 }
 
