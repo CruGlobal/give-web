@@ -50,3 +50,6 @@ This currently includes all cru.org styling from cru.scss.
 - Use `npm install <package-name> --save` or `npm i -D <package-name>` to install tooling (gulp plugins, css tooling, etc)
 - Use `jspm install <package-name>`, `jspm install npm:<package-name>`, or `jspm install github:<repo-name>` to install app dependencies depending on where the package is located
 - Use `jspm install <package-name> --dev` to install dev dependencies that are run in the browser when SystemJS imports modules or when karma is running tests
+
+### Making queries to Cortex
+Use the `cortexApiService` which provides convenience methods for sending requests to Cortex. For more documentation see the [cortexApiService docs](docs/cortexApiService.md).

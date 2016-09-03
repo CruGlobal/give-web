@@ -3,7 +3,6 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 import toString from 'lodash/toString';
-import isArray from 'lodash/isArray';
 import map from 'lodash/map';
 
 import cortexApiService from '../cortexApi.service';
@@ -186,12 +185,11 @@ class Order{
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        needInfo: 'order:needinfo'
+        needInfo: 'order:needinfo[]'
       }
     })
       .map((data) => {
         let needInfo = data.needInfo;
-        needInfo = !needInfo || isArray(needInfo) ? needInfo : [needInfo];
         let errors = map(needInfo, 'name');
         return (errors && errors.length > 0) ? errors : undefined;
       })
