@@ -17,7 +17,8 @@ class Purchases{
         zoom: {
           donorDetails: 'donordetails',
           paymentMeans: 'paymentmeans:element',
-          lineItems: 'lineitems:element'
+          lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
+          rateTotals: 'ratetotals:element[]'
         }
       });
   }

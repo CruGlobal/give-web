@@ -12,7 +12,7 @@
                   </h2>
 
                   <p>
-                    We are processing your gift now. We'll send an email confirmation to to peter.parker@gmail.com as well as a tax-deductible receipt by postal mail.
+                    We are processing your gift now. We'll send an email confirmation to to <strong>{{$ctrl.email}}</strong> as well as a tax-deductible receipt by postal mail.
                   </p>
 
                   <p>
@@ -116,23 +116,17 @@
 
                           <table class="table giftsum-table giftsum-table-cart">
                             <tbody>
-                            <tr class="giftsum-gift-row">
+                            <tr class="giftsum-gift-row" ng-repeat="item in $ctrl.purchase.lineItems">
                               <td class="td-gift">
-                                <span class="giftsum-person giftsum-title">Jeannette Deuax</span>
-                                <p>Ministry #1234567</p>
+                                <span class="giftsum-person giftsum-title">{{item.name}}</span>
+                                <p>#{{item.code['product-code']}}</p>
                               </td>
                               <td class="td-frequency">
-                                <span class="giftsum-about giftsum-title">$50.00 Monthly</span> <span class="giftsum-frequency giftsum-title">First Gift: 2/10/2016</span>
-                              </td>
-                            </tr>
-
-                            <tr class="giftsum-gift-row">
-                              <td class="td-gift">
-                                <span class="giftsum-person giftsum-title">Jeannette Deuax</span>
-                                <p>Ministry #1234567</p>
-                              </td>
-                              <td class="td-frequency">
-                                <span class="giftsum-about giftsum-title">$50.00 Single Gift</span> <span class="giftsum-frequency giftsum-title">Transaction Date: 1-2 Business Days</span>
+                                <span class="giftsum-about giftsum-title">{{item.rate.display}}</span>
+                                <span class="giftsum-frequency giftsum-title">
+                                  <span ng-if="item.rate.recurrence.interval !== 'NA'">First Gift: XX/XX/XXXX</span>
+                                  <span ng-if="item.rate.recurrence.interval === 'NA'">Transaction Date: 1-2 Business Days</span>
+                                </span>
                               </td>
                             </tr>
                             </tbody>
@@ -140,8 +134,10 @@
                             <tfoot>
                             <tr>
                               <td class="text-right" colspan="2">
-                                <span class="giftsum-line">Your Monthly Gift Total: <strong>$50.00</strong></span>
-                                <span class="giftsum-line">Your Single Total: <strong>$100.00</strong></span>
+                                <span class="giftsum-line" ng-repeat="rate in $ctrl.purchase.rateTotals">
+                                  Your {{rate.recurrence.display}} Gift Total: <strong>{{rate.cost.display}}</strong>
+                                </span>
+                                <span class="giftsum-line">Your Single Total: <strong>{{$self.purchase.rawData['monetary-total'.display]}}</strong></span><!-- TODO: is this the correct way to access the single gift total? It seems to be missing from rateTotals... -->
                               </td>
                             </tr>
                             </tfoot>

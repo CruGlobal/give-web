@@ -9,6 +9,7 @@ import capitalizeFilter from 'common/filters/capitalize.filter';
 
 import orderService from 'common/services/api/order.service';
 import purchasesService from 'common/services/api/purchases.service';
+import profileService from 'common/services/api/profile.service';
 
 import template from './thank-you.tpl';
 
@@ -17,14 +18,16 @@ let componentName = 'thankYou';
 class ThankYouController{
 
   /* @ngInject */
-  constructor(orderService, purchasesService, $log){
+  constructor(orderService, purchasesService, profileService, $log){
     this.orderService = orderService;
     this.purchasesService = purchasesService;
+    this.profileService = profileService;
     this.$log = $log;
   }
 
   $onInit(){
     this.loadLastPurchase();
+    this.loadEmail();
   }
 
   loadLastPurchase(){
@@ -42,6 +45,13 @@ class ThankYouController{
       });
   }
 
+  loadEmail(){
+    this.profileService.getEmail()
+      .subscribe((data) => {
+        this.email = data.email.email;
+      });
+  }
+
 }
 
 export default angular
@@ -52,7 +62,8 @@ export default angular
     displayAddressComponent.name,
     capitalizeFilter.name,
     orderService.name,
-    purchasesService.name
+    purchasesService.name,
+    profileService.name
   ])
   .component(componentName, {
     controller: ThankYouController,
