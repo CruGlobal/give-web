@@ -53,39 +53,6 @@ describe( 'modalStateService', () => {
     expect( modalStateService ).toBeDefined();
   } );
 
-  describe( 'setParams', () => {
-    beforeEach( () => {
-      spyOn( $location, 'search' );
-    } );
-
-    it( 'adds params to $location', () => {
-      modalStateService.setParams( {a: 1, b: 2} );
-      $rootScope.$digest();
-      expect( $location.search ).toHaveBeenCalledWith( '' );
-      expect( $location.search ).toHaveBeenCalledWith( 'a', 1 );
-      expect( $location.search ).toHaveBeenCalledWith( 'b', 2 );
-    } );
-
-    it( 'allows undefined', () => {
-      modalStateService.setParams();
-      $rootScope.$digest();
-      expect( $location.search ).toHaveBeenCalledWith( '' );
-    } );
-  } );
-
-  describe( 'params', () => {
-    beforeEach( () => {
-      spyOn( $location, 'search' );
-    } );
-
-    it( 'changes are reflected to $location', () => {
-      modalStateService.params.c = 4;
-      $rootScope.$digest();
-      expect( $location.search ).toHaveBeenCalledWith( '' );
-      expect( $location.search ).toHaveBeenCalledWith( 'c', 4 );
-    } );
-  } );
-
   describe( 'setName', () => {
     beforeEach( () => {
       spyOn( $location, 'hash' );
@@ -104,4 +71,3 @@ describe( 'modalStateService', () => {
     } );
   } );
 } );
-

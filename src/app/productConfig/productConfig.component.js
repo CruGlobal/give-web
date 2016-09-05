@@ -1,78 +1,63 @@
 import angular from 'angular';
 import 'angular-messages';
-import 'angular-bootstrap';
-
 import template from './productConfig.tpl';
-import templateModal from './productConfigModal.tpl';
-import modalController from './productConfig.modal';
-import designationsService from 'common/services/api/designations.service';
 import commonModule from 'common/common.module';
-import showErrors from 'common/filters/showErrors.filter';
+import productModalService from 'common/services/productModal.service';
+import modalStateService from 'common/services/modalState.service';
+import {giveGiftParams} from 'app/productConfig/productConfig.modal';
 
 let componentName = 'productConfig';
 
-class ProductConfigController{
+class ProductConfigController {
 
   /* @ngInject */
-  constructor($uibModal, $window) {
-    this.$uibModal = $uibModal;
+  constructor( productModalService, $window ) {
+    this.productModalService = productModalService;
     this.$window = $window;
   }
 
-  $onInit(){
+  $onInit() {
     this.loadingModal = false;
   }
 
-  configModal(){
-    var productCode = this.productCode;
+  configModal() {
     this.loadingModal = true;
-
-    let modalInstance = this.$uibModal.open({
-      templateUrl: templateModal.name,
-      controller: modalController.name,
-      controllerAs: '$ctrl',
-      size: 'lg give-modal',
-      resolve: {
-        productData: [designationsService.name, function(designationsService){
-          return designationsService.productLookup(productCode).toPromise();
-        }],
-        itemConfig: function(){
-          return {
-            amount: 50
-          };
-        },
-        removingItem: () => {
-          return false;
-        }
-      }
-    });
-    modalInstance.rendered.then(() => {
+    let modalInstance = this.productModalService
+      .configureProduct( this.productCode, {amount: 50}, false );
+    modalInstance.rendered.then( () => {
       this.loadingModal = false;
-    });
-    modalInstance.result.then(() => {
+    } );
+    modalInstance.result.then( () => {
       this.$window.location.href = 'cart.html';
-    });
+    } );
   }
 }
 
-
-
 export default angular
-  .module(componentName, [
+  .module( componentName, [
     commonModule.name,
-    'ui.bootstrap',
     'ngMessages',
-    template.name,
-    templateModal.name,
-    designationsService.name,
-    showErrors.name,
-    modalController.name
-  ])
-  .component(componentName, {
-    controller: ProductConfigController,
+    modalStateService.name,
+    productModalService.name,
+    template.name
+  ] )
+  .component( componentName, {
+    controller:  ProductConfigController,
     templateUrl: template.name,
-    bindings: {
+    bindings:    {
       productCode: '@',
       buttonLabel: '@'
     }
-  });
+  } )
+  // todo: Move config to designation page (individual search result).
+  .config( function ( modalStateServiceProvider ) {
+    modalStateServiceProvider.registerModal(
+      'give-gift',
+      /*@ngInject*/
+      function ( $location, productModalService ) {
+        let params = $location.search();
+        if ( params.hasOwnProperty( giveGiftParams.designation ) ) {
+          productModalService.configureProduct( params[giveGiftParams.designation], {amount: 50}, false );
+        }
+      } );
+  } );
