@@ -79,6 +79,7 @@ class ModalInstanceCtrl {
 
   changeFrequency( product ) {
     this.designationsService.productLookup( product.selectAction, true ).subscribe( ( data ) => {
+      this.itemConfigForm.$setDirty();
       this.productData = data;
     } );
     this.productData.frequency = product.name;
@@ -86,6 +87,7 @@ class ModalInstanceCtrl {
   }
 
   changeAmount( amount ) {
+    this.itemConfigForm.$setDirty();
     this.itemConfig.amount = amount;
     this.customAmount = '';
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
@@ -110,11 +112,16 @@ class ModalInstanceCtrl {
     }
     this.submittingGift = true;
     this.giftSubmitted = false;
-
-    this.cartService.addItem( this.productData.id, this.itemConfig )
+    this.cartService
+      .addItem( this.productData.id, this.itemConfig )
       .subscribe( () => {
         if ( this.isEdit ) {
-          this.$uibModalInstance.close();
+          if ( this.itemConfigForm.$dirty ) {
+            this.$uibModalInstance.close( {isUpdated: true} );
+          }
+          else {
+            this.$uibModalInstance.close( {isUpdated: false} );
+          }
         } else {
           this.submittingGift = false;
           this.giftSubmitted = true;
