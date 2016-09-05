@@ -33,6 +33,7 @@ describe( 'product config modal', function () {
   it( 'to be defined', function () {
     expect( $ctrl ).toBeDefined();
     expect( $ctrl.selectableAmounts ).toEqual( [50, 100, 250, 500, 1000, 5000] );
+    expect( $ctrl.submitLabel ).toEqual( 'Add to Gift Cart' );
   } );
 
   describe( 'initializeParams', () => {

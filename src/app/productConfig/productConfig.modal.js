@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-gettext';
 
 import indexOf from 'lodash/indexOf';
 import range from 'lodash/range';
@@ -20,7 +21,7 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, productData, itemConfig, isEdit ) {
+  constructor( $location, $uibModalInstance, gettext, designationsService, cartService, productData, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
@@ -30,7 +31,12 @@ class ModalInstanceCtrl {
     this.isEdit = isEdit;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
 
-    if ( !this.isEdit ) this.initializeParams();
+    if ( this.isEdit ) {
+      this.submitLabel = gettext( 'Update Gift' );
+    } else {
+      this.submitLabel = gettext( 'Add to Gift Cart' );
+      this.initializeParams();
+    }
 
     if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
       this.customAmount = this.itemConfig.amount;
@@ -64,7 +70,6 @@ class ModalInstanceCtrl {
     if ( params.hasOwnProperty( giveGiftParams.day ) ) {
       this.itemConfig['start-day'] = params[giveGiftParams.day];
     }
-
   }
 
   frequencyOrder( f ) {
@@ -129,6 +134,7 @@ class ModalInstanceCtrl {
 
 export default angular
   .module( controllerName, [
+    'gettext',
     loadingOverlay.name,
     designationsService.name,
     cartService.name
