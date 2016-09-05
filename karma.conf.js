@@ -29,6 +29,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/jasmine-promise-matchers/dist/jasmine-promise-matchers.js',
       'src/**/*.spec.js'
     ],
 

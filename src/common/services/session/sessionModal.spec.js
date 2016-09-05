@@ -5,12 +5,11 @@ import modalStateModule from 'common/services/modalState.service';
 
 describe( 'sessionModalService', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let sessionModalService, $uibModal, modalStateService;
+  let sessionModalService, $uibModal;
 
-  beforeEach( inject( function ( _sessionModalService_, _$uibModal_, _modalStateService_ ) {
+  beforeEach( inject( function ( _sessionModalService_, _$uibModal_ ) {
     sessionModalService = _sessionModalService_;
     $uibModal = _$uibModal_;
-    modalStateService = _modalStateService_;
     // Spy On $uibModal.open and return mock object
     spyOn( $uibModal, 'open' ).and.returnValue( {result: {finally: angular.noop}} );
   } ) );
@@ -38,12 +37,13 @@ describe( 'sessionModalService', function () {
     } );
 
     describe( 'modal closes', () => {
-      let deferred, $rootScope;
-      beforeEach( inject( function ( _$q_, _$rootScope_ ) {
+      let deferred, $rootScope, $location;
+      beforeEach( inject( function ( _$q_, _$rootScope_, _$location_ ) {
         $rootScope = _$rootScope_;
+        $location = _$location_;
         deferred = _$q_.defer();
-        spyOn( modalStateService, 'setName' );
-        spyOn( modalStateService, 'setParams' );
+        spyOn( $location, 'hash' );
+        spyOn( $location, 'search' );
         $uibModal.open.and.returnValue( {result: deferred.promise} );
       } ) );
 
@@ -51,8 +51,8 @@ describe( 'sessionModalService', function () {
         sessionModalService.open();
         deferred.resolve();
         $rootScope.$digest();
-        expect( modalStateService.setName ).toHaveBeenCalled();
-        expect( modalStateService.setParams ).toHaveBeenCalled();
+        expect( $location.hash ).toHaveBeenCalled();
+        expect( $location.search ).toHaveBeenCalled();
       } );
     } );
   } );

@@ -32,13 +32,13 @@
           <div class="panel-body pt0">
             <!-- @todo SHOW THIS RADIO SET IF CUSTOM MINISTRY AMOUNTS EXIST -->
             <!--<div class="radio radio-custom-amount">-->
-              <!--<label><input checked="checked" id="" name="custom_option" type="radio" value="Custom001"> Custom Ministry Option 1</label>-->
+            <!--<label><input checked="checked" id="" name="custom_option" type="radio" value="Custom001"> Custom Ministry Option 1</label>-->
             <!--</div>-->
             <!--<div class="radio radio-custom-amount">-->
-              <!--<label><input id="" name="custom_option" type="radio" value="Custom002"> Custom Ministry Option 2</label>-->
+            <!--<label><input id="" name="custom_option" type="radio" value="Custom002"> Custom Ministry Option 2</label>-->
             <!--</div>-->
             <!--<div class="radio radio-custom-amount">-->
-              <!--<label><input id="" name="custom_option" type="radio" value="Custom003"> Custom Ministry Option 3</label>-->
+            <!--<label><input id="" name="custom_option" type="radio" value="Custom003"> Custom Ministry Option 3</label>-->
             <!--</div>-->
 
             <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
@@ -50,7 +50,7 @@
                 <div class="form-group form-group-default u-inline">
                   <input class="form-control form-control-subtle number" type="text" name="amount"
                          ng-model="$ctrl.customAmount"
-                         ng-change="$ctrl.itemConfig.amount = $ctrl.customAmount"
+                         ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-pattern="/^[1-9]\d*(\.\d+)?$/">
                 </div>
               </label>
@@ -91,7 +91,9 @@
                   <div class="form-group">
                     <label translate>Month</label>
                     <div class="form-group">
-                      <select class="form-control form-control-subtle" ng-model="$ctrl.itemConfig['start-month']">
+                      <select class="form-control form-control-subtle"
+                              ng-model="$ctrl.itemConfig['start-month']"
+                              ng-change="$ctrl.changeStartMonth($ctrl.itemConfig['start-month'])">
                         <option value="01" translate>January</option>
                         <option value="02" translate>February</option>
                         <option value="03" translate>March</option>
@@ -114,7 +116,8 @@
                     <div class="form-group">
                       <select class="form-control form-control-subtle"
                               ng-model="$ctrl.itemConfig['start-day']"
-                              ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig['start-month'])">
+                              ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig['start-month'])"
+                              ng-change="$ctrl.changeStartDay($ctrl.itemConfig['start-day'])">
                       </select>
                     </div>
                   </div>
@@ -132,20 +135,20 @@
               <li>
                 <a class="commentLink" href="" ng-click="showRecipientComments = !showRecipientComments" translate>Send a Message to {{$ctrl.productData.displayName}}</a>
                 <textarea class="staff-comments give-modal-comments"
-                        rows="3"
-                        maxlength="250"
-                        ng-model="$ctrl.itemConfig['recipient-comments']"
-                        ng-if="showRecipientComments || $ctrl.itemConfig['recipient-comments']"
-                        style="display:block;"></textarea>
+                          rows="3"
+                          maxlength="250"
+                          ng-model="$ctrl.itemConfig['recipient-comments']"
+                          ng-if="showRecipientComments || $ctrl.itemConfig['recipient-comments']"
+                          style="display:block;"></textarea>
               </li>
               <li>
                 <a class="commentLink" href="" ng-click="showDSComments = !showDSComments" translate>Special Handling Instructions for Processing This Gift</a>
                 <textarea class="cru-comments give-modal-comments"
-                        rows="3"
-                        maxlength="250"
-                        ng-model="$ctrl.itemConfig['donation-services-comments']"
-                        ng-if="showDSComments || $ctrl.itemConfig['donation-services-comments']"
-                        style="display:block;"></textarea>
+                          rows="3"
+                          maxlength="250"
+                          ng-model="$ctrl.itemConfig['donation-services-comments']"
+                          ng-if="showDSComments || $ctrl.itemConfig['donation-services-comments']"
+                          style="display:block;"></textarea>
               </li>
             </ul>
           </div><!-- // panel-body -->
