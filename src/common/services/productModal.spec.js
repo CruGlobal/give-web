@@ -6,6 +6,7 @@ describe( 'productModalService', function () {
   beforeEach( angular.mock.module( module.name ) );
   let productModalService, designationsService, $uibModal, $rootScope;
 
+  // eslint-disable-next-line no-undef
   installPromiseMatchers();
 
   beforeEach( inject( function ( _productModalService_, _designationsService_, _$uibModal_, _$rootScope_, _$q_ ) {

@@ -35,8 +35,8 @@ describe( 'productConfig', function () {
         return {
           rendered: renderDeferred.promise,
           result:   resultDeferred.promise
-        }
-      } )
+        };
+      } );
     } ) );
 
     it( 'opens productConfig modal', () => {
@@ -58,7 +58,7 @@ describe( 'productConfig', function () {
       resultDeferred.resolve();
       $rootScope.$digest();
       expect( $ctrl.$window.location.href ).toEqual( 'cart.html' );
-    } )
+    } );
   } );
 } );
 

@@ -5,10 +5,9 @@ import {giveGiftParams} from './productConfig.modal';
 
 describe( 'product config modal', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let $ctrl, uibModalInstance, productData, itemConfig, $location, $rootScope;
+  let $ctrl, uibModalInstance, productData, itemConfig, $location;
 
-  beforeEach( inject( function ( _$rootScope_, _$controller_, _$location_ ) {
-    $rootScope = _$rootScope_;
+  beforeEach( inject( function ( _$controller_, _$location_ ) {
     $location = _$location_;
     uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
     productData = {};
@@ -20,7 +19,7 @@ describe( 'product config modal', function () {
       [giveGiftParams.amount]:      '150',
       [giveGiftParams.frequency]:   'QUARTERLY',
       [giveGiftParams.month]:       '09',
-      [giveGiftParams.day]:         '21',
+      [giveGiftParams.day]:         '21'
     } );
     spyOn( $location, 'hash' );
     $ctrl = _$controller_( module.name, {
