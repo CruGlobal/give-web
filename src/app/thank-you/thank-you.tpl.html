@@ -7,22 +7,22 @@
             <div class="col-md-12">
               <div class="panel">
                 <div class="panel-body">
-                  <h2 class="panel-name">
+                  <h2 class="panel-name" translate>
                     Thank you for Your Gift
                   </h2>
 
-                  <p>
+                  <p translate>
                     We are processing your gift now. We'll send an email confirmation to to <strong>{{$ctrl.email}}</strong> as well as a tax-deductible receipt by postal mail.
                   </p>
 
-                  <p>
+                  <p translate>
                     Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ's kingdom. (Luke 6:38)
                   </p>
 
                   <div class="row mt">
                     <div class="col-md-6">
                       <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" translate>
                           Payment Method
                         </div>
 
@@ -78,7 +78,7 @@
                     </div>
                     <div class="col-md-6">
                       <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" translate>
                           Receipt Mailing Address
                         </div>
 
@@ -112,7 +112,7 @@
                     <div class="col-md-12">
                       <div class="panel panel-default">
                         <div class="panel-body">
-                          <h4 class="panel-name">Gift Summary</h4>
+                          <h4 class="panel-name" translate>Gift Summary</h4>
 
                           <table class="table giftsum-table giftsum-table-cart">
                             <tbody>
@@ -124,8 +124,8 @@
                               <td class="td-frequency">
                                 <span class="giftsum-about giftsum-title">{{item.rate.display}}</span>
                                 <span class="giftsum-frequency giftsum-title">
-                                  <span ng-if="item.rate.recurrence.interval !== 'NA'">First Gift: XX/XX/XXXX</span>
-                                  <span ng-if="item.rate.recurrence.interval === 'NA'">Transaction Date: 1-2 Business Days</span>
+                                  <span ng-if="item.rate.recurrence.interval !== 'NA'" translate>First Gift: XX/XX/XXXX</span>
+                                  <span ng-if="item.rate.recurrence.interval === 'NA'" translate>Transaction Date: 1-2 Business Days</span>
                                 </span>
                               </td>
                             </tr>
@@ -134,10 +134,12 @@
                             <tfoot>
                             <tr>
                               <td class="text-right" colspan="2">
-                                <span class="giftsum-line" ng-repeat="rate in $ctrl.purchase.rateTotals">
+                                <span class="giftsum-line" ng-repeat="rate in $ctrl.purchase.rateTotals" translate>
                                   Your {{rate.recurrence.display}} Gift Total: <strong>{{rate.cost.display}}</strong>
                                 </span>
-                                <span class="giftsum-line">Your Single Total: <strong>{{$ctrl.purchase.rawData['monetary-total'][0].display}}</strong></span><!-- TODO: is this the correct way to access the single gift total? It seems to be missing from rateTotals... -->
+                                <span class="giftsum-line" translate>
+                                  Your Single Total: <strong>{{$ctrl.purchase.rawData['monetary-total'][0].display}}</strong><!-- TODO: is this the correct way to access the single gift total? It seems to be missing from rateTotals... -->
+                                </span>
                               </td>
                             </tr>
                             </tfoot>

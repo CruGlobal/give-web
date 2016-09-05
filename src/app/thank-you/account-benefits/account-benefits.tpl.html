@@ -1,15 +1,14 @@
 <div class="panel">
   <div class="panel-body">
-    <h3 class="panel-name">Register Your Account for Online Access</h3>
-    <p>Benefits of registering for an account include:</p>
+    <h3 class="panel-name" translate>Register Your Account for Online Access</h3>
+    <p translate>Benefits of registering for an account include:</p>
     <ul>
-      <li>Save time during checkout</li>
-      <li>Update your contact info</li>
-      <li>View your donation history</li>
-      <li>Manage your recurring gifts</li>
-      <li>Change your bank account or credit card information</li>
+      <li translate>Save time during checkout</li>
+      <li translate>Update your contact info</li>
+      <li translate>View your donation history</li>
+      <li translate>Manage your recurring gifts</li>
+      <li translate>Change your bank account or credit card information</li>
     </ul>
-    <a data-toggle="modal" data-target="#signupModal" class="btn btn-primary btn-block">Register Your Account</a>
-    <a data-toggle="modal" data-target="#signinModalRec">Register (User Match Alternate Modal)</a>
+    <button class="btn btn-primary btn-block" ng-click="$ctrl.sessionModalService.signUp()" translate>Register Your Account</button><!-- TODO: perform user match -->
   </div>
 </div>
