@@ -20,17 +20,17 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, productData, itemConfig, removingItem ) {
+  constructor( $location, $uibModalInstance, designationsService, cartService, productData, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.productData = productData;
     this.itemConfig = itemConfig;
-    this.removingItem = removingItem;
+    this.isEdit = isEdit;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
 
-    if ( !this.removingItem ) this.initializeParams();
+    if ( !this.isEdit ) this.initializeParams();
 
     if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
       this.customAmount = this.itemConfig.amount;
@@ -44,7 +44,7 @@ class ModalInstanceCtrl {
     this.$location.search( giveGiftParams.designation, this.productData.code );
 
     let amount = parseInt( params[giveGiftParams.amount], 10 );
-    if ( !Number.isNaN( amount ) ) {
+    if ( !isNaN( amount ) ) {
       this.itemConfig.amount = amount;
     }
 
@@ -77,26 +77,26 @@ class ModalInstanceCtrl {
       this.productData = data;
     } );
     this.productData.frequency = product.name;
-    if ( !this.removingItem ) this.$location.search( giveGiftParams.frequency, product.name );
+    if ( !this.isEdit ) this.$location.search( giveGiftParams.frequency, product.name );
   }
 
   changeAmount( amount ) {
     this.itemConfig.amount = amount;
     this.customAmount = '';
-    if ( !this.removingItem ) this.$location.search( giveGiftParams.amount, amount );
+    if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
   }
 
   changeCustomAmount( amount ) {
     this.itemConfig.amount = amount;
-    if ( !this.removingItem ) this.$location.search( giveGiftParams.amount, amount );
+    if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
   }
 
   changeStartMonth( month ) {
-    if ( !this.removingItem ) this.$location.search( giveGiftParams.month, month );
+    if ( !this.isEdit ) this.$location.search( giveGiftParams.month, month );
   }
 
   changeStartDay( day ) {
-    if ( !this.removingItem ) this.$location.search( giveGiftParams.day, day );
+    if ( !this.isEdit ) this.$location.search( giveGiftParams.day, day );
   }
 
   addToCart() {
@@ -108,7 +108,7 @@ class ModalInstanceCtrl {
 
     this.cartService.addItem( this.productData.id, this.itemConfig )
       .subscribe( () => {
-        if ( this.removingItem ) {
+        if ( this.isEdit ) {
           this.$uibModalInstance.close();
         } else {
           this.submittingGift = false;

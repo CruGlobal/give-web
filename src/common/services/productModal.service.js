@@ -11,12 +11,12 @@ let serviceName = 'productModalService';
 function ProductModalService( $uibModal, $location, designationsService ) {
   let modalOpen = false;
 
-  function configureProduct( code, config, removingItem ) {
+  function configureProduct( code, config, isEdit ) {
     if ( modalOpen ) {
       return;
     }
     modalOpen = true;
-    removingItem = !!removingItem;
+    isEdit = !!isEdit;
     let modalInstance = $uibModal
       .open( {
         templateUrl:  templateModal.name,
@@ -24,11 +24,11 @@ function ProductModalService( $uibModal, $location, designationsService ) {
         controllerAs: '$ctrl',
         size:         'lg give-modal',
         resolve:      {
-          productData:  function () {
+          productData: function () {
             return designationsService.productLookup( code ).toPromise();
           },
-          itemConfig:   () => config,
-          removingItem: () => removingItem
+          itemConfig:  () => config,
+          isEdit:      () => isEdit
         }
       } );
     modalInstance.result
