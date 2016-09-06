@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import sessionModalService from 'common/services/session/sessionModal.service';
 
-import template from './account-benefits.tpl';
+import template from './accountBenefits.tpl';
 
 let componentName = 'accountBenefits';
 

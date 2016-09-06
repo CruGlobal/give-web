@@ -1,7 +1,7 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 
-import accountBenefits from './account-benefits/account-benefits.component';
+import accountBenefits from './accountBenefits/accountBenefits.component';
 import help from '../checkout/help/help.component';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 
@@ -11,7 +11,7 @@ import orderService from 'common/services/api/order.service';
 import purchasesService from 'common/services/api/purchases.service';
 import profileService from 'common/services/api/profile.service';
 
-import template from './thank-you.tpl';
+import template from './thankYou.tpl';
 
 let componentName = 'thankYou';
 

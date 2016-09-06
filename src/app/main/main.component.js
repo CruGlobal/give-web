@@ -8,7 +8,7 @@ import primaryNavComponent from './nav/primary/primary-nav.component';
 import subNavComponent from './nav/sub/sub-nav.component';
 import cartComponent from '../cart/cart.component';
 import checkoutComponent from '../checkout/checkout.component';
-import thankYouComponent from '../thank-you/thank-you.component';
+import thankYouComponent from '../thankYou/thankYou.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';

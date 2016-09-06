@@ -49,7 +49,7 @@ gulp.task('bundle', function () {
   var bundles = [
     'app/cart/cart.component',
     'app/checkout/checkout.component',
-    'app/thank-you/thank-you.component',
+    'app/thankYou/thankYou.component',
     'app/productConfig/productConfig.component',
     'app/signIn/signIn.component',
     'app/searchResults/searchResults.component',
@@ -70,7 +70,7 @@ gulp.task('bundle', function () {
         { src: 'app/checkout/checkout.component - ' + commonFilesForBundles,
           dst: 'checkout.js'
         },
-        { src: 'app/thank-you/thank-you.component - ' + commonFilesForBundles,
+        { src: 'app/thankYou/thankYou.component - ' + commonFilesForBundles,
           dst: 'thankYou.js'
         },
         { src: 'app/productConfig/productConfig.component - ' + commonFilesForBundles,

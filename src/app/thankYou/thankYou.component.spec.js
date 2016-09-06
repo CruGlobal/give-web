@@ -4,7 +4,7 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import module from './thank-you.component.js';
+import module from './thankYou.component.js';
 
 describe('thank you', () => {
   beforeEach(angular.mock.module(module.name));
