@@ -14,8 +14,9 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(orderService, $log){
+  constructor(orderService, $window, $log){
     this.orderService = orderService;
+    this.$window = $window;
     this.$log = $log;
   }
 
@@ -88,11 +89,10 @@ class Step3Controller{
     }else{
       submitRequest = Observable.throw('Current payment type is unknown');
     }
-    submitRequest.subscribe((data) => {
+    submitRequest.subscribe(() => {
         this.orderService.clearCardSecurityCode();
-        this.$log.info('Submitted purchase successfully', data);
         this.onSubmitted();
-        // TODO: transition to thank you page
+        this.$window.location.href = 'thank-you.html';
       },
       (error) => {
         this.$log.error('Error submitting purchase:', error);

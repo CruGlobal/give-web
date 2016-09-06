@@ -8,6 +8,7 @@ import primaryNavComponent from './nav/primary/primary-nav.component';
 import subNavComponent from './nav/sub/sub-nav.component';
 import cartComponent from '../cart/cart.component';
 import checkoutComponent from '../checkout/checkout.component';
+import thankYouComponent from '../thankYou/thankYou.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
@@ -39,6 +40,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       url: "/checkout.html",
       template: '<checkout></checkout>'
     })
+    .state('thank-you', {
+      url: "/thank-you.html",
+      template: '<thank-you></thank-you>'
+    })
     .state('search-results', {
       url: "/search-results.html",
       template: '<search-results></search-results>'
@@ -56,6 +61,7 @@ export default angular
     subNavComponent.name,
     cartComponent.name,
     checkoutComponent.name,
+    thankYouComponent.name,
     productConfigComponent.name,
     signInComponent.name,
     searchResultsComponent.name,
