@@ -47,7 +47,7 @@ describe( 'searchResults', function () {
 
       $ctrl.$onInit();
       $ctrl.searchParams = {
-        type: 'people',
+        type: 'people'
       };
       $ctrl.requestSearch();
 
