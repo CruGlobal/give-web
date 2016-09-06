@@ -1,6 +1,5 @@
 import angular from 'angular';
 
-import urlQueryTerm from 'common/lib/urlQueryTerm';
 import commonModule from 'common/common.module';
 import designationsService from 'common/services/api/designations.service';
 import productConfigComponent from 'app/productConfig/productConfig.component';
@@ -13,17 +12,20 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor($window, designationsService) {
+  constructor($window, $location, designationsService) {
     this.$window = $window;
+    this.$location = $location;
     this.designationsService = designationsService;
     this.searchParams = {};
   }
 
   $onInit(){
-    this.searchParams.keyword = urlQueryTerm.get('q');
-    this.searchParams.first_name = urlQueryTerm.get('fName');
-    this.searchParams.last_name = urlQueryTerm.get('lName');
-    this.searchParams.type = urlQueryTerm.get('type');
+    var params = this.$location.search();
+
+    this.searchParams.keyword = params.q;
+    this.searchParams.first_name = params.fName;
+    this.searchParams.last_name = params.lName;
+    this.searchParams.type = params.type;
     this.searchParamsInitial = angular.copy(this.searchParams);
 
     this.requestSearch();
@@ -32,7 +34,7 @@ class SearchResultsController {
   requestSearch(type){
     if(angular.isDefined(type)){
       this.searchParams.type = type;
-      if(this.searchParams.type === 'all' || this.searchParams.type === 'people'){
+      if(this.searchParams.type === 'people'){
         this.searchParams.first_name = this.searchParamsInitial.first_name;
         this.searchParams.last_name = this.searchParamsInitial.last_name;
       }else{
@@ -42,7 +44,7 @@ class SearchResultsController {
     }
 
     this.loadingResults = true;
-    if(this.searchParams.type === 'featuredOpportunities'){
+    if(this.searchParams.type === 'featured'){
       this.searchResults = [];
       this.loadingResults = false;
     }else{
@@ -55,7 +57,7 @@ class SearchResultsController {
   }
 
   exploreSearch(){
-    this.$window.location.href = 'https://www.cru.org/content/cru/us/en/search.' + encodeURIComponent(this.searchTerm) + '.html';
+    this.$window.location.href = 'https://www.cru.org/content/cru/us/en/search.' + encodeURIComponent(this.searchParams.keyword) + '.html';
   }
 }
 

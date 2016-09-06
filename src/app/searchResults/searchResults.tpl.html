@@ -46,7 +46,7 @@
                     <div class="is-widget">
                       <ul class="list-unstyled is-type-links">
                         <li ng-class="{'active': !$ctrl.searchParams.type}">
-                          <a href="" ng-click="$ctrl.requestSearch('')" translate>All</a>
+                          <a href="" ng-click="$ctrl.requestSearch('')" translate>All Giving Opportunities</a>
                         </li>
                         <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
                           <a href="" ng-click="$ctrl.requestSearch('people')" translate>People</a>
@@ -54,8 +54,8 @@
                         <li ng-class="{'active': $ctrl.searchParams.type === 'ministries'}">
                           <a href="" ng-click="$ctrl.requestSearch('ministries')" translate>Ministries</a>
                         </li>
-                        <li ng-class="{'active': $ctrl.searchParams.type === 'featuredOpportunities'}">
-                          <a href="" ng-click="$ctrl.requestSearch('featuredOpportunities')" translate>Featured Opportunities</a>
+                        <li ng-class="{'active': $ctrl.searchParams.type === 'featured'}">
+                          <a href="" ng-click="$ctrl.requestSearch('featured')" translate>Featured</a>
                         </li>
                       </ul>
                     </div>
@@ -68,13 +68,13 @@
                     <div class="form-group">
                       <label translate>First Name</label>
                       <input type="text" class="form-control input-subtle" name="fName" ng-model="$ctrl.searchParams.first_name"
-                             ng-disabled="$ctrl.searchParams.type === 'ministries' || $ctrl.searchParams.type === 'featuredOpportunities'">
+                             ng-disabled="!$ctrl.searchParams.type === 'people'">
                     </div>
 
                     <div class="form-group">
                       <label translate>Last Name</label>
                       <input type="text" class="form-control input-subtle" name="lName" ng-model="$ctrl.searchParams.last_name"
-                             ng-disabled="$ctrl.searchParams.type === 'ministries' || $ctrl.searchParams.type === 'featuredOpportunities'">
+                             ng-disabled="!$ctrl.searchParams.type === 'people'">
                     </div>
 
                     <input type="hidden" name="type" value="{{$ctrl.searchParams.type}}">
