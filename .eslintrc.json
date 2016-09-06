@@ -225,6 +225,7 @@
     "yield-star-spacing": "off",
     "yoda": "off",
     "angular/definedundefined": "off",
-    "jasmine/no-spec-dupes": ["warn", "branch"]
+    "jasmine/no-spec-dupes": ["warn", "branch"],
+    "jasmine/no-suite-dupes": ["warn", "branch"]
   }
 }
