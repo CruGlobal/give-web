@@ -46,7 +46,8 @@ export default angular
     templateUrl: template.name,
     bindings:    {
       productCode: '@',
-      buttonLabel: '@'
+      buttonLabel: '@',
+      buttonSize: '@'
     }
   } )
   // todo: Move config to designation page (individual search result).
