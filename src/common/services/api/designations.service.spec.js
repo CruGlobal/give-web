@@ -26,6 +26,8 @@ describe('designation service', () => {
       })
         .subscribe((data) => {
           expect(data.length).toEqual(searchResponse.response.docs.length);
+          expect(data[0].designationNumber).toEqual(searchResponse.response.docs[0]['productCode']);
+          expect(data[0].name).toEqual(searchResponse.response.docs[0]['productName|en_US|']);
         });
       self.$httpBackend.flush();
     });
