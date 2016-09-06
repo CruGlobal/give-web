@@ -1,10 +1,10 @@
   <div class="panel panel-default panel-with-gray-background">
-    <div class="panel-heading" role="tab" id="paymentHeading{{index}}">
-      <div class="payment-summary-link p- collapse-indicator-row {{$ctrl.isCollapsed ? 'collapsed' : ''}}" role="button">
+    <div class="panel-heading" role="tab">
+      <div ng-class="{'collapsed': $ctrl.isCollapsed}" class="payment-summary-link p- collapse-indicator-row" role="button">
         <div class="row">
           <div class="col-md-8">
             <p>
-              <img class="hidden-xs payment-icon" src={{"/assets/img/cc-icons/"+''}}>
+              <!-- <img class="hidden-xs payment-icon" src={{"/assets/img/cc-icons/"+''}}> at the moment there is no way for me to know what image I need-->
               <span class="payment-nickname">Visa</span>
               {{ $ctrl.getLastFourDigits(paymentMethod) }}
               <span class="payment-expiration">{{ $ctrl.getExpiration(paymentMethod) }}</span>
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div id="paymentMethod{{$ctrl.index}}" uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse" aria-labelledby="paymentHeading{{index}}">
+    <div id="paymentMethod{{$ctrl.index}}" uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse">
       <div class="panel-body">
         <div class="container-fluid">
           <div class="row">
