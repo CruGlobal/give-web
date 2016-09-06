@@ -42,7 +42,8 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
 
   $locationProvider.html5Mode( {
     enabled: true,
-    requireBase: false
+    requireBase: false,
+    rewriteLinks: false
   } );
 
   if (envServiceProvider.is('production') || envServiceProvider.is('staging')) {
