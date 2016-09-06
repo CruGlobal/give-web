@@ -41,6 +41,18 @@ describe( 'searchResults', function () {
       $ctrl.requestSearch('ministries');
       expect( $ctrl.searchResults ).toEqual( ministries );
     } );
+
+    it( 'do not request search if params are undefined', () => {
+      spyOn( $ctrl.designationsService, 'productSearch' );
+
+      $ctrl.$onInit();
+      $ctrl.searchParams = {
+        type: 'people',
+      };
+      $ctrl.requestSearch();
+
+      expect( $ctrl.designationsService.productSearch ).not.toHaveBeenCalled( );
+    } );
   } );
 
   describe( 'exploreSearch', () => {
