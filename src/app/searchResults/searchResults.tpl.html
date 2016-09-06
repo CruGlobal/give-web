@@ -68,13 +68,13 @@
                     <div class="form-group">
                       <label translate>First Name</label>
                       <input type="text" class="form-control input-subtle" name="fName" ng-model="$ctrl.searchParams.first_name"
-                             ng-disabled="!$ctrl.searchParams.type === 'people'">
+                             ng-disabled="$ctrl.searchParams.type === 'ministries' || $ctrl.searchParams.type === 'featured'">
                     </div>
 
                     <div class="form-group">
                       <label translate>Last Name</label>
                       <input type="text" class="form-control input-subtle" name="lName" ng-model="$ctrl.searchParams.last_name"
-                             ng-disabled="!$ctrl.searchParams.type === 'people'">
+                             ng-disabled="$ctrl.searchParams.type === 'ministries' || $ctrl.searchParams.type === 'featured'">
                     </div>
 
                     <input type="hidden" name="type" value="{{$ctrl.searchParams.type}}">
