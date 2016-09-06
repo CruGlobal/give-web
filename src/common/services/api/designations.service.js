@@ -1,5 +1,7 @@
 import angular from 'angular';
 import JSONPath from 'common/lib/jsonPath';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
@@ -8,52 +10,32 @@ import cortexApiService from '../cortexApi.service';
 let serviceName = 'designationsService';
 
 /*@ngInject*/
-function designations(cortexApiService){
+function designations($http, envService, cortexApiService){
 
   return {
-    createSearch: createSearch,
-    getSearchResults: getSearchResults,
+    productSearch: productSearch,
     productLookup: productLookup
   };
 
-  function createSearch(keywords){
-    return cortexApiService.post({
-        path: ['searches', cortexApiService.scope, 'keywords', 'items'],
-        params: {
-          FollowLocation: true
-        },
-        data: {
-          keywords: keywords,
-          'page-size': 20
-        }
-      })
-      .map((data) => {
-        return data.self.uri.split('/').pop();
-      });
-  }
-
-  function getSearchResults(id, page){
-    return cortexApiService.get({
-      path: ['searches', cortexApiService.scope, 'keywords', 'items', id, 'pages', page],
-      params: {
-        zoom: 'element:definition,element:code'
-      }
-    }).map((data) => {
+  function productSearch(params){
+    return Observable.from($http({
+      method: 'get',
+      url: envService.read('apiUrl') + '/search',
+      params: params,
+      cache: true
+    })).map((response) => {
       var results = [];
 
-      var designations = JSONPath.query(data, "$._element")[0];
-      angular.forEach(designations, function(d){
+      angular.forEach(response.data.response.docs, function(d){
         results.push({
-          designationNumber: JSONPath.query(d, "$._code[0].code")[0],
-          name: JSONPath.query(d, "$._definition[0]['display-name']")[0],
-          type: JSONPath.query(d, "$._definition[0].details[?(@.name=='designation_type')]['value']")[0]
+          designationNumber: d['productCode'],
+          replacementDesignationNumber: d['attribute.replacement_designation_id_st'],
+          name: d['productName|en_US|'],
+          type: d['attribute.designation_type_st']
         });
       });
 
-      return {
-        results: results,
-        pagination: data.pagination
-      };
+      return results;
     });
   }
 

@@ -9,7 +9,7 @@ function transformToAssocArray( prmstr ) {
   var prmarr = prmstr.split("&");
   for ( var i = 0; i < prmarr.length; i++) {
     var tmparr = prmarr[i].split("=");
-    params[tmparr[0]] = tmparr[1];
+    params[tmparr[0]] = decodeURIComponent(tmparr[1]);
   }
   return params;
 }
