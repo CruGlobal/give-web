@@ -7,7 +7,7 @@ import 'angular-environment';
 import rollbarConfig from './rollbar.config';
 
 /* @ngInject */
-function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider) {
+function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider) {
   $httpProvider.useApplyAsync(true);
 
   // eslint-disable-next-line angular/module-getter
@@ -39,6 +39,11 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
   // run the environment check, so the comprobation is made
   // before controllers and services are built
   envServiceProvider.check();
+
+  $locationProvider.html5Mode( {
+    enabled: true,
+    requireBase: false
+  } );
 
   if (envServiceProvider.is('production') || envServiceProvider.is('staging')) {
     $logProvider.debugEnabled(false);
