@@ -99,6 +99,7 @@ describe( 'product config modal', function () {
     describe( 'initializeParams', () => {
       beforeEach( () => {
         spyOn( $ctrl, 'changeFrequency' );
+        spyOn( $ctrl.modalStateService, 'name' );
         $ctrl.productData.frequencies = [
           {name: 'NA', selectAction: '/a'},
           {name: 'MON', selectAction: '/b'},
@@ -106,7 +107,7 @@ describe( 'product config modal', function () {
       } );
       it( 'sets values from query params', () => {
         $ctrl.initializeParams();
-        expect( $location.hash ).toHaveBeenCalledWith( 'give-gift' );
+        expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
         expect( $location.search ).toHaveBeenCalled();
         expect( $ctrl.itemConfig.amount ).toEqual( 150 );
         expect( $ctrl.customAmount ).toEqual( 150 );

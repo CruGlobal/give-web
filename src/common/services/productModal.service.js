@@ -3,12 +3,13 @@ import 'angular-bootstrap';
 import designationsService from 'common/services/api/designations.service';
 import templateModal from 'app/productConfig/productConfigModal.tpl';
 import modalController from 'app/productConfig/productConfig.modal';
+import modalStateService from 'common/services/modalState.service';
 import {giveGiftParams} from 'app/productConfig/productConfig.modal';
 
 let serviceName = 'productModalService';
 
 /*@ngInject*/
-function ProductModalService( $uibModal, $location, designationsService ) {
+function ProductModalService( $uibModal, $location, designationsService, modalStateService ) {
   let modalOpen = false;
 
   function configureProduct( code, config, isEdit ) {
@@ -35,7 +36,7 @@ function ProductModalService( $uibModal, $location, designationsService ) {
       .finally( () => {
         modalOpen = false;
         // Clear the modal name and params when the modal closes
-        $location.hash( null );
+        modalStateService.name( null );
         angular.forEach( giveGiftParams, ( value ) => {
           $location.search( value, null );
         } );
@@ -53,6 +54,7 @@ export default angular
     'ui.bootstrap',
     designationsService.name,
     modalController.name,
+    modalStateService.name,
     templateModal.name
   ] )
   .factory( serviceName, ProductModalService );

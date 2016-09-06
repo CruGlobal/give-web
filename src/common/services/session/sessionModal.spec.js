@@ -37,12 +37,13 @@ describe( 'sessionModalService', function () {
     } );
 
     describe( 'modal closes', () => {
-      let deferred, $rootScope, $location;
-      beforeEach( inject( function ( _$q_, _$rootScope_, _$location_ ) {
+      let deferred, $rootScope, $location, modalStateService;
+      beforeEach( inject( function ( _$q_, _$rootScope_, _$location_, _modalStateService_ ) {
         $rootScope = _$rootScope_;
         $location = _$location_;
+        modalStateService = _modalStateService_;
         deferred = _$q_.defer();
-        spyOn( $location, 'hash' );
+        spyOn( modalStateService, 'name' );
         spyOn( $location, 'search' );
         $uibModal.open.and.returnValue( {result: deferred.promise} );
       } ) );
@@ -51,7 +52,7 @@ describe( 'sessionModalService', function () {
         sessionModalService.open();
         deferred.resolve();
         $rootScope.$digest();
-        expect( $location.hash ).toHaveBeenCalled();
+        expect( modalStateService.name ).toHaveBeenCalledWith( null );
         expect( $location.search ).toHaveBeenCalled();
       } );
     } );
