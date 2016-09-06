@@ -2,9 +2,12 @@
   <section class="is-top">
       <div class="container">
         <h1 ng-if="!$ctrl.searchParams.type || $ctrl.searchParams.type === 'people'">
-          <span translate>Search Results for</span>
-          <strong ng-if="$ctrl.searchParams.keyword">{{$ctrl.searchParams.keyword}}</strong>
-          <strong ng-if="!$ctrl.searchParams.keyword">{{$ctrl.searchParams.first_name}} {{$ctrl.searchParams.last_name}}</strong>
+          <span translate ng-if="$ctrl.searchParams.keyword">
+            Search Results for <strong>{{$ctrl.searchParams.keyword}}</strong>
+          </span>
+          <span translate ng-if="$ctrl.searchParams.first_name || $ctrl.searchParams.last_name">
+            Search Results for <strong>{{$ctrl.searchParams.first_name}} {{$ctrl.searchParams.last_name}}</strong>
+          </span>
           <em ng-if="$ctrl.searchResults.length">({{$ctrl.searchResults.length}} results)</em>
         </h1>
         <!-- Search Box -->
@@ -63,12 +66,12 @@
                     <div ng-if="$ctrl.searchParams.type === '' || $ctrl.searchParams.type === 'people'">
                       <div class="form-group">
                         <label translate>First Name</label>
-                        <input type="text" class="form-control input-subtle" name="fName" ng-model="$ctrl.searchParams.first_name">
+                        <input type="text" class="form-control input-subtle" name="fName" value="{{$ctrl.searchParams.first_name}}">
                       </div>
 
                       <div class="form-group">
                         <label translate>Last Name</label>
-                        <input type="text" class="form-control input-subtle" name="lName" ng-model="$ctrl.searchParams.last_name">
+                        <input type="text" class="form-control input-subtle" name="lName" value="{{$ctrl.searchParams.last_name}}">
                       </div>
                     </div>
 

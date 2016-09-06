@@ -44,11 +44,15 @@ class SearchResultsController {
       this.searchResults = ministries;
       this.loadingResults = false;
     }else{
-      this.designationsService.productSearch(this.searchParams)
-        .subscribe((results) => {
-          this.searchResults = results;
-          this.loadingResults = false;
-        });
+      if(this.searchParams.keyword || this.searchParams.first_name || this.searchParams.last_name){
+        this.designationsService.productSearch(this.searchParams)
+          .subscribe((results) => {
+            this.searchResults = results;
+            this.loadingResults = false;
+          });
+      }else{
+        this.loadingResults = false;
+      }
     }
   }
 

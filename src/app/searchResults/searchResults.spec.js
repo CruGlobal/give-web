@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './searchResults.component';
+import ministries from './searchResults.ministries';
 
 describe( 'searchResults', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -33,6 +34,12 @@ describe( 'searchResults', function () {
       };
       $ctrl.requestSearch('people');
       expect( $ctrl.searchParams.type ).toEqual( 'people' );
+    } );
+
+    it( 'pulls ministry list', () => {
+      $ctrl.$onInit();
+      $ctrl.requestSearch('ministries');
+      expect( $ctrl.searchResults ).toEqual( ministries );
     } );
   } );
 
