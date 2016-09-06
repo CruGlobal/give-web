@@ -1,10 +1,10 @@
 import angular from 'angular';
-import template from './give.tpl';
+import template from './manage-giving.tpl';
 import gift from './gift/gift.component';
 
-let componentName = 'give';
+let componentName = 'manageGiving';
 
-class GiveController{
+class ManageGivingController{
 
   /* @ngInject */
   constructor(){
@@ -64,6 +64,6 @@ export default angular
     gift.name
   ])
   .component(componentName, {
-    controller: GiveController,
+    controller: ManageGivingController,
     templateUrl: template.name
   });

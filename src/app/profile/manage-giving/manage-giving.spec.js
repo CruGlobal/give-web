@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './give.component';
+import module from './manage-giving.component';
 
 describe('give', function() {
   beforeEach(angular.mock.module(module.name));
