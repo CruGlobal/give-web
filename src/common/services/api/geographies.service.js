@@ -19,7 +19,7 @@ class Geographies {
     return this.cortexApiService.get({
         path: ['geographies', this.cortexApiService.scope, 'countries'],
         zoom: {
-          countries: 'element'
+          countries: 'element[]'
         },
         cache: true
       })
@@ -32,7 +32,7 @@ class Geographies {
     return this.cortexApiService.get({
         path: this.hateoasHelperService.getLink(country, 'regions'),
         zoom: {
-          regions: 'element'
+          regions: 'element[]'
         },
         cache: true
       })
