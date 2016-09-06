@@ -1,11 +1,15 @@
 import angular from 'angular';
 import template from './payment-methods.tpl';
 import paymentMethod from './payment-method/payment-method.component';
+import modalTemplate from './payment-method/forms/add-payment-method/modal.tpl';
+import modalController from './payment-method/forms/add-payment-method/modal';
 
 class PaymentMethodsController{
 
   /* @ngInject */
-  constructor(){
+  constructor($uibModal){
+    this.$uibModal = $uibModal;
+    this.paymentMethod = 'bankAccount';
     this.paymentMethods = [
       {
         address: {
@@ -45,6 +49,15 @@ class PaymentMethodsController{
       }
     ];
   }
+
+  addPaymentMethod(){
+    this.$uibModal.open({
+      templateUrl: modalTemplate.name,
+      windowClass: 'account-management',
+      controller: modalController.name,
+      controllerAs: '$ctrl'
+    });
+  }
 }
 
 let componentName = 'paymentMethods';
@@ -52,7 +65,9 @@ let componentName = 'paymentMethods';
 export default angular
   .module(componentName, [
     template.name,
-    paymentMethod.name
+    paymentMethod.name,
+    modalTemplate.name,
+    modalController.name
   ])
   .component(componentName, {
     controller: PaymentMethodsController,

@@ -135,7 +135,7 @@ describe('checkout', () => {
         it('should call onSave with success false when form is invalid', () => {
           self.controller.savePayment();
           expect(self.formController.$setSubmitted).toHaveBeenCalled();
-          expect(self.controller.onSave).toHaveBeenCalledWith({success: false});
+          expect(self.controller.onSave).toHaveBeenCalledWith({success: false, error: 'Invalid payment information'});
           expect(self.outerScope.onSave).toHaveBeenCalledWith(false);
         });
         it('should send a request to save the credit card payment and billing address info', () => {
@@ -237,7 +237,7 @@ describe('checkout', () => {
           self.controller.savePayment();
 
           expect(self.formController.$setSubmitted).toHaveBeenCalled();
-          expect(self.controller.onSave).toHaveBeenCalledWith({success: false});
+          expect(self.controller.onSave).toHaveBeenCalledWith({success: false, error: undefined});
           expect(self.outerScope.onSave).toHaveBeenCalledWith(false);
         });
         it('should handle an error saving billing address info', () => {
@@ -253,7 +253,7 @@ describe('checkout', () => {
           self.controller.savePayment();
 
           expect(self.formController.$setSubmitted).toHaveBeenCalled();
-          expect(self.controller.onSave).toHaveBeenCalledWith({success: false});
+          expect(self.controller.onSave).toHaveBeenCalledWith({success: false, error: undefined});
           expect(self.outerScope.onSave).toHaveBeenCalledWith(false);
         });
       });
