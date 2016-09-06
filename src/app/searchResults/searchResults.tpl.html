@@ -2,7 +2,7 @@
   <section class="is-top">
       <div class="container">
         <h1 ng-if="$ctrl.searchParamsInitial.keyword || $ctrl.searchParamsInitial.first_name || $ctrl.searchParamsInitial.last_name">
-          Search Results for
+          <span translate>Search Results for</span>
           <strong ng-if="$ctrl.searchParamsInitial.keyword">{{$ctrl.searchParamsInitial.keyword}}</strong>
           <strong ng-if="!$ctrl.searchParamsInitial.keyword">{{$ctrl.searchParamsInitial.first_name}} {{$ctrl.searchParamsInitial.last_name}}</strong>
           <em ng-if="$ctrl.searchResults.length">({{$ctrl.searchResults.length}} results)</em>
@@ -15,7 +15,7 @@
               <div class="input-group is-search-main">
                 <input type="search" class="form-control" placeholder="Search for..." name="q">
                 <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit">Search</button>
+                  <button class="btn btn-primary" type="submit" translate>Search</button>
                 </span>
               </div>
           </form>
@@ -85,12 +85,12 @@
 
               <div class="col-sm-9">
                 <div class="" ng-if="$ctrl.searchParamsInitial.type === 'people' && !$ctrl.searchParamsInitial.keyword && !$ctrl.searchParamsInitial.first_name && !$ctrl.searchParamsInitial.last_name">
-                  <h3>Search for a person below.</h3>
+                  <h3 translate>Search for a person below.</h3>
                 </div>
 
                 <div ng-if="$ctrl.searchResults && !$ctrl.searchResults.length">
-                  <p>Your search did not find any results. Please try again.</p>
-                  <p>If you are uncertain of the exact spelling, enter the first few letters and avoid searching by nicknames.
+                  <p translate>Your search did not find any results. Please try again.</p>
+                  <p translate>If you are uncertain of the exact spelling, enter the first few letters and avoid searching by nicknames.
                     If you still cannot find a staff member you are looking for, you can call 1-888-278-7233 for assistance.</p>
                 </div>
 
