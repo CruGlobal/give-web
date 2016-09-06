@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './searchResults.component';
+import ministries from './searchResults.ministries';
 
 describe( 'searchResults', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -35,18 +36,22 @@ describe( 'searchResults', function () {
       expect( $ctrl.searchParams.type ).toEqual( 'people' );
     } );
 
-    it( 'clears first/last name on type change', () => {
+    it( 'pulls ministry list', () => {
       $ctrl.$onInit();
+      $ctrl.requestSearch('ministries');
+      expect( $ctrl.searchResults ).toEqual( ministries );
+    } );
 
+    it( 'do not request search if params are undefined', () => {
+      spyOn( $ctrl.designationsService, 'productSearch' );
+
+      $ctrl.$onInit();
       $ctrl.searchParams = {
-        keyword: 'steve',
-        type: '',
-        first_name: 'Steve',
-        last_name: 'Underwood'
+        type: 'people'
       };
-      $ctrl.requestSearch('');
-      expect( $ctrl.searchParams.first_name ).toEqual( '' );
-      expect( $ctrl.searchParams.last_name ).toEqual( '' );
+      $ctrl.requestSearch();
+
+      expect( $ctrl.designationsService.productSearch ).not.toHaveBeenCalled( );
     } );
   } );
 
