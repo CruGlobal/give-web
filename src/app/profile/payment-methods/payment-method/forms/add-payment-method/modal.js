@@ -1,7 +1,6 @@
 import angular from 'angular';
 import creditCard from 'app/checkout/step-2/credit-card/credit-card.component';
 import bankAccount from 'app/checkout/step-2/bank-account/bank-account.component';
-import loadingOverlay from 'src/common/components/loadingOverlay/loadingOverlay.component';
 
 let controllerName = 'modal';
 
@@ -41,7 +40,6 @@ class ModalController{
 export default angular
   .module(controllerName,[
     creditCard.name,
-    bankAccount.name,
-    loadingOverlay.name
+    bankAccount.name
   ])
   .controller(controllerName, ModalController);

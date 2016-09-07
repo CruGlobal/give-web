@@ -37,7 +37,8 @@
               <div class="col-md-6">
                 <a
                   ng-class="{'on':$ctrl.paymentType == 'creditCard'}"
-                  ng-click = "$ctrl.switchPaymentType('creditCard')" class="tab-btn btn btn-lg btn-default btn-block">
+                  ng-click = "$ctrl.switchPaymentType('creditCard')"
+                  class="tab-btn btn btn-lg btn-default btn-block">
                   Credit Card
                   <img src="/assets/img/icon-cc.png" alt="Credit Card Icon">
                 </a>
@@ -52,7 +53,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div><!-- bank account form -->
         <!-- credit card form -->
         <div ng-if="$ctrl.paymentType === 'creditCard'" class="tab-indiv cart-tab show">
           <div class="row">
@@ -60,16 +61,14 @@
               <checkout-credit-card submitted="$ctrl.submitted" on-save="$ctrl.onSave(success,error)"></checkout-credit-card>
             </div>
           </div>
-        </div>
+        </div><!-- credit card form -->
         <!-- loading -->
         <div class="loading-wrap" ng-if="$ctrl.submitted">
           <span class="loading loading1"></span>
           <span class="loading loading2"></span>
           <span class="loading loading3"></span>
           <span class="loading loading4"></span>
-        </div>
-        <!-- loading -->
-
+        </div><!-- loading -->
         <div class="mb0">
           <div class="row">
             <div class="col-md-12 text-right">
