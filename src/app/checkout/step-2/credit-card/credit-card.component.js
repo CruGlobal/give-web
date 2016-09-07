@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-messages';
 import toString from 'lodash/toString';
 import find from 'lodash/find';
+import range from 'lodash/range';
 import 'rxjs/add/operator/combineLatest';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
@@ -40,6 +41,7 @@ class CreditCardController {
     this.waitForFormInitialization();
     this.loadDonorDetails();
     this.loadCountries();
+    this.initializeExpirationDateOptions();
   }
 
   $onChanges(changes) {
@@ -67,8 +69,6 @@ class CreditCardController {
     this.creditCardPaymentForm.cardNumber.$validators.minlength = number => toString(number).length >= 13;
     this.creditCardPaymentForm.cardNumber.$validators.maxlength = number => toString(number).length <= 16;
     this.creditCardPaymentForm.cardNumber.$validators.cardNumber = this.paymentValidationService.validateCardNumber();
-
-    this.creditCardPaymentForm.expiryYear.$validators.length = number => toString(number).length === 2 || toString(number).length === 4;
 
     this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
     this.creditCardPaymentForm.securityCode.$validators.minlength = number => toString(number).length >= 3;
@@ -98,6 +98,11 @@ class CreditCardController {
       .subscribe((data) => {
         this.donorDetails = data;
       });
+  }
+
+  initializeExpirationDateOptions(){
+    let currentYear = (new Date()).getFullYear();
+    this.expirationDateYears = range(currentYear, currentYear + 20);
   }
 
   savePayment(){

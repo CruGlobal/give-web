@@ -42,46 +42,49 @@
         <div class="panel">
           <div class="panel-body">
             <div class="row">
-              <div class="col-sm-3">
+              <div class="col-sm-12 col-md-3">
                 <div class="is-advanced">
                   <form method="get" action="/search-results.html">
-                    <h4 translate>Advanced Search</h4>
-                    <div class="is-widget">
-                      <ul class="list-unstyled is-type-links">
-                        <li ng-class="{'active': !$ctrl.searchParams.type}">
-                          <a href="" ng-click="$ctrl.requestSearch('')" translate>All Giving Opportunities</a>
-                        </li>
-                        <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
-                          <a href="" ng-click="$ctrl.requestSearch('people')" translate>People</a>
-                        </li>
-                        <li ng-class="{'active': $ctrl.searchParams.type === 'ministries'}">
-                          <a href="" ng-click="$ctrl.requestSearch('ministries')" translate>Ministries</a>
-                        </li>
-                        <li ng-class="{'active': $ctrl.searchParams.type === 'featured'}">
-                          <a href="" ng-click="$ctrl.requestSearch('featured')" translate>Featured</a>
-                        </li>
-                      </ul>
-                    </div>
+                    <h4 translate>Advanced Search <button type="button" class="btn btn-subtle pull-right visible-xs visible-sm is-toggle" ng-click="$ctrl.showAdvancedSearch = !$ctrl.showAdvancedSearch"><i class="fa fa-bars"></i></button></h4>
 
-                    <div ng-if="$ctrl.searchParams.type === '' || $ctrl.searchParams.type === 'people'">
-                      <div class="form-group">
-                        <label translate>First Name</label>
-                        <input type="text" class="form-control input-subtle" name="fName" value="{{$ctrl.searchParams.first_name}}">
+                    <div class="is-toggle-wrap" ng-class="{'open': $ctrl.showAdvancedSearch}">
+                      <div class="is-widget">
+                        <ul class="list-unstyled is-type-links">
+                          <li ng-class="{'active': !$ctrl.searchParams.type}">
+                            <a href="" ng-click="$ctrl.requestSearch('')" translate>All Giving Opportunities</a>
+                          </li>
+                          <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
+                            <a href="" ng-click="$ctrl.requestSearch('people')" translate>People</a>
+                          </li>
+                          <li ng-class="{'active': $ctrl.searchParams.type === 'ministries'}">
+                            <a href="" ng-click="$ctrl.requestSearch('ministries')" translate>Ministries</a>
+                          </li>
+                          <li ng-class="{'active': $ctrl.searchParams.type === 'featured'}">
+                            <a href="" ng-click="$ctrl.requestSearch('featured')" translate>Featured</a>
+                          </li>
+                        </ul>
                       </div>
 
-                      <div class="form-group">
-                        <label translate>Last Name</label>
-                        <input type="text" class="form-control input-subtle" name="lName" value="{{$ctrl.searchParams.last_name}}">
-                      </div>
-                    </div>
+                      <div ng-if="$ctrl.searchParams.type === '' || $ctrl.searchParams.type === 'people'">
+                        <div class="form-group">
+                          <label translate>First Name</label>
+                          <input type="text" class="form-control input-subtle" name="fName" value="{{$ctrl.searchParams.first_name}}">
+                        </div>
 
-                    <input type="hidden" name="type" value="{{$ctrl.searchParams.type}}">
-                    <button class="btn btn-primary btn-block" type="submit" translate>Search</button>
+                        <div class="form-group">
+                          <label translate>Last Name</label>
+                          <input type="text" class="form-control input-subtle" name="lName" value="{{$ctrl.searchParams.last_name}}">
+                        </div>
+                      </div>
+
+                      <input type="hidden" name="type" value="{{$ctrl.searchParams.type}}">
+                      <button class="btn btn-primary btn-block" type="submit" translate>Search</button>
+                    </div>
                   </form>
                 </div>
               </div>
 
-              <div class="col-sm-9">
+              <div class="col-md-9 col-sm-12">
                 <div class="" ng-if="$ctrl.searchParams.type === 'people' && !$ctrl.searchParams.keyword && !$ctrl.searchParams.first_name && !$ctrl.searchParams.last_name">
                   <h3 translate>Search for a person below.</h3>
                 </div>
@@ -102,7 +105,7 @@
                       <span class="is-row-num">#{{r.designationNumber}}</span>
                     </a>
                   </div>
-                  <div class="is-row-actions">
+                  <div class="is-row-actions hidden-xs">
                     <product-config product-code="{{r.designationNumber}}" button-label="Give a Gift" button-size="sm"></product-config>
                     &nbsp;
                     <a ng-href="/{{r.designationNumber}}" class="btn btn-sm btn-subtle" translate>Details</a>
