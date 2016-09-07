@@ -53,21 +53,34 @@ describe( 'modalStateService', () => {
     expect( modalStateService ).toBeDefined();
   } );
 
-  describe( 'setName', () => {
+  describe( 'name', () => {
     beforeEach( () => {
-      spyOn( $location, 'hash' );
+      $location.search( 'modal', 'sample' );
+      $rootScope.$digest();
+      spyOn( $location, 'search' ).and.callThrough();
     } );
 
-    it( 'sets $location hash', () => {
-      modalStateService.setName( 'test-modal' );
-      $rootScope.$digest();
-      expect( $location.hash ).toHaveBeenCalledWith( 'test-modal' );
+    it( 'returns current modal name', () => {
+      expect( modalStateService.name() ).toEqual( 'sample' );
+      expect( $location.search ).toHaveBeenCalled();
     } );
 
-    it( 'allows undefined', () => {
-      modalStateService.setName();
-      $rootScope.$digest();
-      expect( $location.hash ).toHaveBeenCalledWith( '' );
+    it( 'sets modal name', () => {
+      expect( modalStateService.name( 'test-modal' ) ).toEqual( 'test-modal' );
+      expect( $location.search ).toHaveBeenCalledWith( 'modal', 'test-modal' );
+    } );
+
+    it( 'removes modal name', () => {
+      expect( modalStateService.name( null ) ).not.toBeDefined();
+      expect( $location.search ).toHaveBeenCalledWith( 'modal', null );
+    } );
+  } );
+
+  describe( 'urlFor', () => {
+    it( 'correctly generates urls', () => {
+      expect( modalStateService.urlFor( 'test-modal' ) ).toEqual( 'http://server/?modal=test-modal' );
+      expect( modalStateService.urlFor( 'test-modal', {key: 'value'}, 'http://localhost/cart.html' ) )
+        .toEqual( 'http://localhost/cart.html?key=value&modal=test-modal' );
     } );
   } );
 } );

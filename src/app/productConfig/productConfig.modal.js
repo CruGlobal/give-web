@@ -8,6 +8,7 @@ import find from 'lodash/find';
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+import modalStateService from 'common/services/modalState.service';
 
 let controllerName = 'productConfigController';
 export let giveGiftParams = {
@@ -21,11 +22,12 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, gettext, designationsService, cartService, productData, itemConfig, isEdit ) {
+  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
+    this.modalStateService = modalStateService;
     this.productData = productData;
     this.itemConfig = itemConfig;
     this.isEdit = isEdit;
@@ -46,7 +48,7 @@ class ModalInstanceCtrl {
   initializeParams() {
     let params = this.$location.search();
 
-    this.$location.hash( 'give-gift' );
+    this.modalStateService.name( 'give-gift' );
     this.$location.search( giveGiftParams.designation, this.productData.code );
 
     let amount = parseInt( params[giveGiftParams.amount], 10 );
@@ -144,6 +146,7 @@ export default angular
     'gettext',
     loadingOverlay.name,
     designationsService.name,
-    cartService.name
+    cartService.name,
+    modalStateService.name
   ] )
   .controller( controllerName, ModalInstanceCtrl );
