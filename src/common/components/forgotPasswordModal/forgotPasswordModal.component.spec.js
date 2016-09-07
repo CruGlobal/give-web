@@ -90,15 +90,10 @@ describe( 'forgotPasswordModal', function () {
         absUrl: jasmine.createSpy( 'absUrl' ).and.returnValue( 'http://example.com/index.html?key=value' ),
         search: jasmine.createSpy( 'search' ).and.returnValue( {key: 'value'} )
       };
-      spyOn( $ctrl, '$httpParamSerializer' ).and.callThrough();
     } );
 
-    it( 'adds theme=cru and #reset-password to the current url', () => {
-      expect( $ctrl.resetPasswordUrl() ).toEqual( 'http://example.com/index.html?key=value&theme=cru#reset-password' );
-      expect( $ctrl.$httpParamSerializer ).toHaveBeenCalledWith( jasmine.objectContaining( {
-        key:   'value',
-        theme: 'cru'
-      } ) );
+    it( 'adds modal=reset-password&theme=cru to the current url', () => {
+      expect( $ctrl.resetPasswordUrl() ).toEqual( 'http://server/?key=value&modal=reset-password&theme=cru' );
     } );
   } );
 } );

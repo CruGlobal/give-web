@@ -12,19 +12,21 @@ let componentName = 'resetPasswordModal';
 class ResetPasswordModalController {
 
   /* @ngInject */
-  constructor( gettext, sessionService, modalStateService ) {
+  constructor( $location, gettext, sessionService, modalStateService ) {
+    this.$location = $location;
     this.gettext = gettext;
     this.sessionService = sessionService;
     this.modalState = modalStateService;
   }
 
   $onInit() {
+    let params = this.$location.search();
     this.modalTitle = this.gettext( 'Reset Password' );
-    if ( this.modalState.params.hasOwnProperty( 'e' ) ) {
-      this.email = this.modalState.params['e'];
+    if ( params.hasOwnProperty( 'e' ) ) {
+      this.email = params['e'];
     }
-    if ( this.modalState.params.hasOwnProperty( 'k' ) ) {
-      this.resetKey = this.modalState.params['k'];
+    if ( params.hasOwnProperty( 'k' ) ) {
+      this.resetKey = params['k'];
     }
     // Change state to forgot-password if we are missing required fields.
     if ( angular.isUndefined( this.email ) || angular.isUndefined( this.resetKey ) ) {
@@ -48,9 +50,9 @@ class ResetPasswordModalController {
         this.isLoading = false;
         this.passwordChanged = true;
         // Remove modal name and modal params on success
-        this.modalState.setName();
-        delete this.modalState.params.e;
-        delete this.modalState.params.k;
+        this.modalState.name(null);
+        this.$location.search( 'e', null );
+        this.$location.search( 'k', null );
       }, ( error ) => {
         this.isLoading = false;
         this.hasError = true;

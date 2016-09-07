@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-gettext';
+import modalStateService from 'common/services/modalState.service';
 import sessionService from 'common/services/session/session.service';
 import template from './forgotPasswordModal.tpl';
 
@@ -8,12 +9,12 @@ let componentName = 'forgotPasswordModal';
 class ForgotPasswordModalController {
 
   /* @ngInject */
-  constructor( $location, $document, $httpParamSerializer, gettext, sessionService ) {
+  constructor( $location, $document, gettext, sessionService, modalStateService ) {
     this.$location = $location;
     this.$document = $document;
-    this.$httpParamSerializer = $httpParamSerializer;
     this.gettext = gettext;
     this.sessionService = sessionService;
+    this.modalStateService = modalStateService;
   }
 
   $onInit() {
@@ -46,16 +47,9 @@ class ForgotPasswordModalController {
   }
 
   resetPasswordUrl() {
-    // Create in memory <a> to do url manipulation and set it to current location
-    let url = this.$document[0].createElement( 'a' );
-    url.href = this.$location.absUrl();
-    // Add theme=cru to existing query params
     let params = this.$location.search();
     params.theme = 'cru';
-    url.search = this.$httpParamSerializer( params );
-    // Set url fragment to #reset-pssword
-    url.hash = 'reset-password';
-    return url.href;
+    return this.modalStateService.urlFor( 'reset-password', params );
   }
 
   setPristine() {
@@ -67,6 +61,7 @@ class ForgotPasswordModalController {
 export default angular
   .module( componentName, [
     'gettext',
+    modalStateService.name,
     template.name,
     sessionService.name
   ] )
