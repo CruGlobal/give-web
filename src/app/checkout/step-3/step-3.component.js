@@ -80,6 +80,8 @@ class Step3Controller{
   }
 
   submitOrder(){
+    this.submittingOrder = true;
+
     let submitRequest;
     if(this.bankAccountPaymentDetails){
       submitRequest = this.orderService.submit();
@@ -90,14 +92,17 @@ class Step3Controller{
       submitRequest = Observable.throw('Current payment type is unknown');
     }
     submitRequest.subscribe(() => {
+        this.submittingOrder = false;
         this.orderService.clearCardSecurityCode();
         this.onSubmitted();
         this.$window.location.href = 'thank-you.html';
       },
       (error) => {
+        this.submittingOrder = false;
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
         // TODO: show error message
+        this.errors = [error];
       });
   }
 }
