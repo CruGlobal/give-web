@@ -7,7 +7,7 @@
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardNumber | showErrors)}">
-          <label>Card #</label>
+          <label translate>Card #</label>
           <input type="text" name="cardNumber" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardNumber" required>
           <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="($ctrl.creditCardPaymentForm.cardNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter a card number</div>
@@ -19,7 +19,7 @@
       </div>
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardholderName | showErrors)}">
-          <label>Name On Card</label>
+          <label translate>Name On Card</label>
           <input type="text" name="cardholderName" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardholderName" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.cardholderName.$error" ng-if="($ctrl.creditCardPaymentForm.cardholderName | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the name on the card</div>
@@ -30,30 +30,46 @@
     <div class="row">
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryMonth | showErrors)}">
-          <label>Exp. Month</label>
-          <input type="number" name="expiryMonth" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryMonth" required min="1" max="12">
+          <label translate>Exp. Month</label>
+          <select class="form-control  form-control-subtle"
+                  name="expiryMonth"
+                  required
+                  ng-model="$ctrl.creditCardPayment.expiryMonth">
+            <option value="01" translate>01 - January</option>
+            <option value="02" translate>02 - February</option>
+            <option value="03" translate>03 - March</option>
+            <option value="04" translate>04 - April</option>
+            <option value="05" translate>05 - May</option>
+            <option value="06" translate>06 - June</option>
+            <option value="07" translate>07 - July</option>
+            <option value="08" translate>08 - August</option>
+            <option value="09" translate>09 - September</option>
+            <option value="10" translate>10 - October</option>
+            <option value="11" translate>11 - November</option>
+            <option value="12" translate>12 - December</option>
+          </select>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryMonth.$error" ng-if="($ctrl.creditCardPaymentForm.expiryMonth | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter the expiration month</div>
-            <div class="help-block" ng-message="number" translate>The month must be a number</div>
-            <div class="help-block" ng-message="min" translate>The month must be 1 or greater</div>
-            <div class="help-block" ng-message="max" translate>The month cannot be larger than 12</div>
+            <div class="help-block" ng-message="required" translate>You must choose an expiration month</div>
           </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryYear | showErrors)}">
-          <label>Exp. Year</label>
-          <input type="number" name="expiryYear" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.expiryYear" required>
+          <label translate>Exp. Year</label>
+          <select class="form-control  form-control-subtle"
+                  name="expiryYear"
+                  required
+                  ng-model="$ctrl.creditCardPayment.expiryYear"
+                  ng-options="year for year in $ctrl.expirationDateYears">
+          </select>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryYear.$error" ng-if="($ctrl.creditCardPaymentForm.expiryYear | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter the expiration year</div>
-            <div class="help-block" ng-message="number" translate>The year must be a number</div>
-            <div class="help-block" ng-message="length" translate>The year must be 2 or 4 digits</div>
+            <div class="help-block" ng-message="required" translate>You must enter choose an expiration year</div>
           </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors)}">
-          <label>CVV Code</label>
+          <label translate>CVV Code</label>
           <input type="text" name="securityCode" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the security code</div>
@@ -96,7 +112,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-group">
-                  <label>Country</label>
+                  <label translate>Country</label>
                   <div class="form-group is-required">
                     <select class="form-control  form-control-subtle"
                             name="country" required
@@ -111,7 +127,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.streetAddress | showErrors)}">
-                  <label>Address</label>
+                  <label translate>Address</label>
                   <input type="text" name="streetAddress" class="form-control  form-control-subtle" ng-model="$ctrl.billingAddress.streetAddress" required ng-maxlength="200">
                   <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.streetAddress.$error" ng-if="($ctrl.creditCardPaymentForm.streetAddress | showErrors)">
                     <div class="help-block" ng-message="required" translate>You must enter an address</div>
@@ -156,7 +172,7 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.locality | showErrors)}">
-                    <label>City</label>
+                    <label translate>City</label>
                     <input type="text" name="locality" class="form-control  form-control-subtle" ng-model="$ctrl.billingAddress.locality" required ng-maxlength="50">
                     <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.locality.$error" ng-if="($ctrl.creditCardPaymentForm.locality | showErrors)">
                       <div class="help-block" ng-message="required" translate>You must enter a city</div>
@@ -168,7 +184,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>State</label>
+                    <label translate>State</label>
                     <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.region | showErrors)}">
                       <select class="form-control  form-control-subtle"
                               name="region" required
@@ -183,7 +199,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.postalCode | showErrors)}">
-                    <label>Zip</label>
+                    <label translate>Zip</label>
                     <input type="text" name="postalCode" class="form-control  form-control-subtle" ng-model="$ctrl.billingAddress.postalCode" required ng-pattern="/^\d{5}(?:[-\s]\d{4})?$/">
                     <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.postalCode.$error" ng-if="($ctrl.creditCardPaymentForm.postalCode | showErrors)">
                       <div class="help-block" ng-message="required" translate>You must enter a zip code</div>

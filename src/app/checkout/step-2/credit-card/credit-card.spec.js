@@ -45,6 +45,22 @@ describe('checkout', () => {
         self.formController = self.controller.creditCardPaymentForm;
       }));
 
+      describe('$onInit', () => {
+        it('should call the needed functions to load data', () => {
+          spyOn(self.controller, 'loadCcp');
+          spyOn(self.controller, 'waitForFormInitialization');
+          spyOn(self.controller, 'loadDonorDetails');
+          spyOn(self.controller, 'loadCountries');
+          spyOn(self.controller, 'initializeExpirationDateOptions');
+          self.controller.$onInit();
+          expect(self.controller.loadCcp).toHaveBeenCalled();
+          expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
+          expect(self.controller.loadDonorDetails).toHaveBeenCalled();
+          expect(self.controller.loadCountries).toHaveBeenCalled();
+          expect(self.controller.initializeExpirationDateOptions).toHaveBeenCalled();
+        });
+      });
+
       describe('$onChanges', () => {
         it('should call savePayment when called directly with a mock change object', () => {
           spyOn(self.controller, 'savePayment');
@@ -78,8 +94,6 @@ describe('checkout', () => {
           self.controller.addCustomValidators();
           expect(size(self.formController.cardNumber.$parsers)).toEqual(2);
           expect(size(self.formController.cardNumber.$validators)).toEqual(4);
-
-          expect(size(self.formController.expiryYear.$validators)).toEqual(2);
 
           expect(size(self.formController.securityCode.$parsers)).toEqual(2);
           expect(size(self.formController.securityCode.$validators)).toEqual(3);
@@ -258,6 +272,36 @@ describe('checkout', () => {
         });
       });
 
+
+      describe('initializeExpirationDateOptions', () => {
+        it('should generate a range of credit card expiration years for the view dropdown', () => {
+          jasmine.clock().mockDate(new Date(2012, 11, 31));
+          self.controller.initializeExpirationDateOptions();
+          expect(self.controller.expirationDateYears).toEqual([
+            2012,
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026,
+            2027,
+            2028,
+            2029,
+            2030,
+            2031
+          ]);
+        });
+      });
+
       describe('form controller', () => {
         it('should be invalid if any of the inputs are invalid', () => {
           self.formController.cardNumber.$setViewValue('');
@@ -308,22 +352,10 @@ describe('checkout', () => {
             expect(self.formController.expiryMonth.$valid).toEqual(false);
             expect(self.formController.expiryMonth.$error.required).toEqual(true);
           });
-          it('should not be valid if it is less than 1',  () => {
-            self.formController.expiryMonth.$setViewValue('0');
-            expect(self.formController.expiryMonth.$valid).toEqual(false);
-            expect(self.formController.expiryMonth.$error.required).toBeUndefined();
-            expect(self.formController.expiryMonth.$error.min).toEqual(true);
-          });
-          it('should not be valid if it is greater than 12',  () => {
-            self.formController.expiryMonth.$setViewValue('13');
-            expect(self.formController.expiryMonth.$valid).toEqual(false);
-            expect(self.formController.expiryMonth.$error.required).toBeUndefined();
-            expect(self.formController.expiryMonth.$error.max).toEqual(true);
-          });
-          it('should be valid if it is between 1 and 12',  () => {
-            self.formController.expiryMonth.$setViewValue('1');
+          it('should be valid if it contains a month',  () => {
+            self.formController.expiryMonth.$setViewValue('01');
             expect(self.formController.expiryMonth.$valid).toEqual(true);
-            self.formController.expiryMonth.$setViewValue('6');
+            self.formController.expiryMonth.$setViewValue('06');
             expect(self.formController.expiryMonth.$valid).toEqual(true);
             self.formController.expiryMonth.$setViewValue('12');
             expect(self.formController.expiryMonth.$valid).toEqual(true);
@@ -334,25 +366,7 @@ describe('checkout', () => {
             expect(self.formController.expiryYear.$valid).toEqual(false);
             expect(self.formController.expiryYear.$error.required).toEqual(true);
           });
-          it('should not be valid if it is not 2 or 4 digits',  () => {
-            self.formController.expiryYear.$setViewValue('1');
-            expect(self.formController.expiryYear.$valid).toEqual(false);
-            expect(self.formController.expiryYear.$error.required).toBeUndefined();
-            expect(self.formController.expiryYear.$error.length).toEqual(true);
-            self.formController.expiryMonth.$setViewValue('123');
-            expect(self.formController.expiryYear.$valid).toEqual(false);
-            expect(self.formController.expiryYear.$error.required).toBeUndefined();
-            expect(self.formController.expiryYear.$error.length).toEqual(true);
-            self.formController.expiryYear.$setViewValue('12345');
-            expect(self.formController.expiryYear.$valid).toEqual(false);
-            expect(self.formController.expiryYear.$error.required).toBeUndefined();
-            expect(self.formController.expiryYear.$error.length).toEqual(true);
-          });
           it('should be valid if it is 4 digits',  () => {
-            self.formController.expiryYear.$setViewValue('12');
-            expect(self.formController.expiryYear.$valid).toEqual(true);
-          });
-          it('should be valid if it is 2 digits',  () => {
             self.formController.expiryYear.$setViewValue('2012');
             expect(self.formController.expiryYear.$valid).toEqual(true);
           });
