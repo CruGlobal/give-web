@@ -13,8 +13,7 @@ describe( 'resetPasswordModal', function () {
     $ctrl = _$componentController_(
       module.name, {
         modalStateService: {
-          params:  {},
-          setName: jasmine.createSpy( 'setName' )
+          name: jasmine.createSpy( 'name' )
         }
       }, {
         form:          {$valid: true},
@@ -33,7 +32,7 @@ describe( 'resetPasswordModal', function () {
 
     describe( 'with modalState.params', () => {
       beforeEach( () => {
-        $ctrl.modalState.params = {e: 'professorx@xavier.edu', k: 'abc123def456'};
+        spyOn( $ctrl.$location, 'search' ).and.returnValue( {e: 'professorx@xavier.edu', k: 'abc123def456'} );
       } );
 
       it( 'initializes the modal', () => {
@@ -79,7 +78,7 @@ describe( 'resetPasswordModal', function () {
 
       describe( 'resetPassword success', () => {
         beforeEach( () => {
-          $ctrl.modalState.params = {e: 'professorx@xavier.edu', k: 'abc123def456'};
+          spyOn( $ctrl.$location, 'search' );
           deferred.resolve();
           $rootScope.$digest();
         } );
@@ -87,8 +86,8 @@ describe( 'resetPasswordModal', function () {
         it( 'sets passwordChanged', () => {
           expect( $ctrl.isLoading ).toEqual( false );
           expect( $ctrl.passwordChanged ).toEqual( true );
-          expect( $ctrl.modalState.setName ).toHaveBeenCalled();
-          expect( $ctrl.modalState.params ).toEqual( {} );
+          expect( $ctrl.modalState.name ).toHaveBeenCalledWith( null );
+          expect( $ctrl.$location.search ).toHaveBeenCalledTimes( 2 );
         } );
       } );
 

@@ -207,6 +207,9 @@ class Order{
           data: postData,
           followLocation: true
         });
+      })
+      .do((data) => {
+        this.storeLastPurchaseLink(data.self.uri);
       });
   }
 
@@ -224,6 +227,14 @@ class Order{
 
   clearCardSecurityCode(){
     return this.sessionStorage.removeItem('ccv');
+  }
+
+  storeLastPurchaseLink(link){
+    this.sessionStorage.setItem('lastPurchaseLink', link);
+  }
+
+  retrieveLastPurchaseLink(){
+    return this.sessionStorage.getItem('lastPurchaseLink');
   }
 
 }

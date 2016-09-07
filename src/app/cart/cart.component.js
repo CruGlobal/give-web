@@ -43,9 +43,12 @@ class CartController {
   editItem( item ) {
     this.productModalService
       .configureProduct( item.code, item.config, true )
-      .then( () => {
-        //remove old gift
-        this.removeItem( item.uri );
+      .result
+      .then( ( result ) => {
+        if ( result.isUpdated ) {
+          //remove old gift
+          this.removeItem( item.uri );
+        }
       } );
   }
 
