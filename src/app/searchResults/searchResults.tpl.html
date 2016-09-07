@@ -45,9 +45,9 @@
               <div class="col-sm-12 col-md-3">
                 <div class="is-advanced">
                   <form method="get" action="/search-results.html">
-                    <h4 translate>Advanced Search <a href="" class="btn btn-subtle pull-right visible-xs visible-sm is-toggle"><i class="fa fa-bars"></i></a></h4>
+                    <h4 translate>Advanced Search <button type="button" class="btn btn-subtle pull-right visible-xs visible-sm is-toggle" ng-click="$ctrl.showAdvancedSearch = !$ctrl.showAdvancedSearch"><i class="fa fa-bars"></i></button></h4>
 
-                    <div class="is-toggle-wrap">
+                    <div class="is-toggle-wrap" ng-class="{'open': $ctrl.showAdvancedSearch}">
                       <div class="is-widget">
                         <ul class="list-unstyled is-type-links">
                           <li ng-class="{'active': !$ctrl.searchParams.type}">
