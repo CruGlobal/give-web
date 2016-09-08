@@ -4,17 +4,29 @@ import template from './payment-method.tpl';
 class PaymentMethodController{
 
   /* @ngInject */
-  constructor(){
+  constructor(envService){
     this.isCollapsed = true;
+    this.imgDomain = envService.read('imgDomain');
   }
 
-  getExpiration() {
-    return `${this.model.expiry_month}/${this.model.expiry_year}`;
+  getExpiration(){
+    return `${this.model['expiry-month']}/${this.model['expiry-year']}`;
   }
 
   getLastFourDigits(){
-    let cardNumber = this.model.card_number;
-    return cardNumber.substr(cardNumber.length-4,this.model.card_number.length-1);
+    console.log(this.model)
+    return this.model['card-number'] || this.model['display-account-number'];
+  }
+
+  getPaymentNickName(){
+    return this.model['card-type'] || this.model['bank-name'];
+  }
+
+  getImage(){
+    this.model['card-type'] = 'American Express'
+    return this.model['bank-name']
+      ? 'icon-bank'
+      : 'cc-icons/' + this.model['card-type'].replace(' ','-').toLowerCase() + '-curved-128px';
   }
 }
 

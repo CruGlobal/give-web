@@ -53,12 +53,12 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       url: "/profile",
       abstract: true,
       template: '<profile></profile>',
-      onEnter: (sessionService,sessionModalService,$state) => {
-        if(sessionService.getRole() != 'REGISTERED') {
-          $state.go('cart');
-          sessionModalService.signIn();
-        }
-      }
+      // onEnter: (sessionService,sessionModalService,$state) => {
+      //   if(sessionService.getRole() != 'REGISTERED') {
+      //     $state.go('cart');
+      //     sessionModalService.signIn();
+      //   }
+      // }
     })
     .state('profile.payment-methods', {
       url: "/payment-methods",

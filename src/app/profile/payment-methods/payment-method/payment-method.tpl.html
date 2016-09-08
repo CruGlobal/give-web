@@ -4,10 +4,10 @@
         <div class="row">
           <div class="col-md-8">
             <p>
-              <!-- <img class="hidden-xs payment-icon" src={{"/assets/img/cc-icons/"+''}}> at the moment there is no way for me to know what image I need-->
-              <span class="payment-nickname">Visa</span>
-              ending in ****{{ $ctrl.getLastFourDigits(paymentMethod) }}
-              <span class="payment-expiration">EXPIRES {{ $ctrl.getExpiration(paymentMethod) }}</span>
+              <img class="hidden-xs payment-icon" ng-src="{{$ctrl.imgDomain}}/assets/img/{{$ctrl.getImage()}}.png"/>
+              <span class="payment-nickname">{{ $ctrl.getPaymentNickName() }}</span>
+              ending in ****{{ $ctrl.getLastFourDigits() }}
+              <span class="payment-expiration">EXPIRES {{ $ctrl.getExpiration() }}</span>
             </p>
           </div>
           <div class="col-md-4 text-right payment-details-link">
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div id="paymentMethod{{$ctrl.index}}" uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse">
+    <div uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse">
       <div class="panel-body">
         <div class="container-fluid">
           <div class="row">

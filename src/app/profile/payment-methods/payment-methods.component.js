@@ -5,53 +5,15 @@ import modalTemplate from './payment-method/forms/add-payment-method/modal.tpl';
 import modalController from './payment-method/forms/add-payment-method/modal';
 import SessionModalWindowTemplate from 'common/services/session/sessionModalWindow.tpl';
 
-class PaymentMethodsController{
+class PaymentMethodsController {
 
   /* @ngInject */
-  constructor($uibModal){
+  constructor($uibModal) {
     this.$uibModal = $uibModal;
     this.paymentMethod = 'bankAccount';
-    this.paymentMethods = [
-      {
-        address: {
-          locality: 'Orlando FL',
-          postal_code: '12043',
-          street_address: '123 Test street drive'
-        },
-        card_number: '4444444444442222',
-        cardholder_name: 'Denys Fedotov',
-        description: 'My debit card',
-        expiry_month: '07',
-        expiry_year: '2019'
-      },
-      {
-        address: {
-          locality: 'Orlando FL',
-          postal_code: '84043',
-          street_address: '123 test street'
-        },
-        card_number: '5555444444443333',
-        cardholder_name: 'Denys Fedotov',
-        description: 'My credit card',
-        expiry_month: '07',
-        expiry_year: '2019'
-      },
-      {
-        address: {
-          locality: 'Orlando FL',
-          postal_code: '84043',
-          street_address: '123 test street'
-        },
-        card_number: '5555444444444354',
-        cardholder_name: 'Denys Fedotov',
-        description: 'My bank account',
-        expiry_month: '07',
-        expiry_year: '2099'
-      }
-    ];
+    this.paymentMethods = JSON.parse('[{"self":{"type":"cru.creditcards.named-credit-card","uri":"/paymentmethods/crugive/giydcobvha=","href":"https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcobvha="},"links":[{"rel":"list","type":"elasticpath.collections.links","uri":"/paymentmethods/crugive","href":"https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"},{"rel":"creditcard","type":"cru.creditcards.named-credit-card","uri":"/creditcards/paymentmethods/crugive/giydcobvha=","href":"https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydcobvha="}],"card-number":"1111","card-type":"Visa","cardholder-name":"Test Card","expiry-month":"11","expiry-year":"2019","$$hashKey":"object:25"},{"self":{"type":"elasticpath.bankaccounts.bank-account","uri":"/paymentmethods/crugive/giydcmzyge=","href":"https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcmzyge="},"links":[{"rel":"list","type":"elasticpath.collections.links","uri":"/paymentmethods/crugive","href":"https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"},{"rel":"bankaccount","type":"elasticpath.bankaccounts.bank-account","uri":"/bankaccounts/paymentmethods/crugive/giydcmzyge=","href":"https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcmzyge="}],"account-type":"Checking","bank-name":"Wells Fargo","display-account-number":"9191","encrypted-account-number":"0001AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG//4Bc22fr/WvoFWUj5s07DDnjgdz2ft2l2Q/bmWUhGnQjvIV3SQyqWUpjZ8h3CRJylJC6DKbwpvfADsz52evqFRxeon0c/T0JD/KVSdASg3bGLZ3RL4KOmlL3aO9oyg+hfjPB/fTkXArJP+KSxYidNsu0tBmZoOrKJqRDU0xjf4qSzZSWiSi35Raif8X1rOvgTPXYEC4dv8d/vTIzZtxTgBd7BQx","routing-number":"121042882","$$hashKey":"object:26"}]');
   }
-
-  addPaymentMethod(){
+  addPaymentMethod() {
     this.$uibModal.open({
       templateUrl: modalTemplate.name,
       windowClass: 'account-management',
