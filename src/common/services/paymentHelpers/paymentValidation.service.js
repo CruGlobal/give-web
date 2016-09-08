@@ -1,19 +1,17 @@
 import angular from 'angular';
 import _ from 'lodash';
-import 'angular-environment';
 import appConfig from 'common/app.config';
 import toString from 'lodash/toString';
 import capitalize from 'lodash/capitalize';
 
-import ccpService from 'common/services/ccp.service';
+import ccpService from './ccp.service';
 
 let serviceName = 'paymentValidationService';
 
 class PaymentValidation {
 
   /*@ngInject*/
-  constructor(envService, ccpService){
-    this.envService = envService;
+  constructor(ccpService){
     this.ccpService = ccpService;
 
     this.loadCcp();
@@ -68,7 +66,6 @@ class PaymentValidation {
 
 export default angular
   .module(serviceName, [
-    'environment',
     appConfig.name,
     ccpService.name
   ])

@@ -1,6 +1,6 @@
 import 'babel/external-helpers';
 import angular from 'angular';
-import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/finally';
 
 import appConfig from 'common/app.config';
 
@@ -29,6 +29,7 @@ class CheckoutController{
     this.designationsService = designationsService;
 
     this.checkoutStep = 'contact';
+    this.loadingCartData = true;
 
     this.loadCart();
   }
@@ -40,6 +41,9 @@ class CheckoutController{
 
   loadCart(){
     this.cartService.get()
+      .finally(()=> {
+        this.loadingCartData = false;
+      })
       .subscribe((data) => {
         this.cartData = data;
       });

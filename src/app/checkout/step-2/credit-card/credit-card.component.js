@@ -9,10 +9,10 @@ import displayAddressComponent from 'common/components/display-address/display-a
 
 import showErrors from 'common/filters/showErrors.filter';
 
-import paymentValidationService from 'common/services/paymentValidation.service';
+import paymentValidationService from 'common/services/paymentHelpers/paymentValidation.service';
 import orderService from 'common/services/api/order.service';
 import geographiesService from 'common/services/api/geographies.service';
-import ccpService from 'common/services/ccp.service';
+import ccpService from 'common/services/paymentHelpers/ccp.service';
 
 import template from './credit-card.tpl';
 
