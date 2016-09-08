@@ -26,6 +26,7 @@ class SearchResultsController {
     this.searchParams.keyword = params.q;
     this.searchParams.first_name = params.fName;
     this.searchParams.last_name = params.lName;
+    this.showAdvancedSearch = !params.q && !params.fName && !params.lName;
     this.searchParams.type = params.type;
 
     this.requestSearch();
@@ -44,13 +45,15 @@ class SearchResultsController {
       this.searchResults = ministries;
       this.loadingResults = false;
     }else{
-      if(this.searchParams.keyword || this.searchParams.first_name || this.searchParams.last_name){
+      if((this.searchParams.keyword && !this.searchParams.type) ||
+        (this.searchParams.type === 'people' && (this.searchParams.first_name || this.searchParams.last_name))){
         this.designationsService.productSearch(this.searchParams)
           .subscribe((results) => {
             this.searchResults = results;
             this.loadingResults = false;
           });
       }else{
+        this.searchResults = null;
         this.loadingResults = false;
       }
     }
