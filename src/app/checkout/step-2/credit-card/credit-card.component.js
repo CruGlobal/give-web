@@ -131,10 +131,10 @@ class CreditCardController {
           },
           (error) => {
             this.$log.error('Error saving credit card or billing address info', error);
-            this.onSave({success: false});
+            this.onSave({success: false, error: error.data});
           });
     }else{
-      this.onSave({success: false});
+      this.onSave({success: false, error: 'Invalid payment information'});
     }
   }
 }
