@@ -1,3 +1,4 @@
+<loading-overlay ng-if="$ctrl.submitted"></loading-overlay>
 <div class="modal-header">
   <div class="container-fluid">
     <div class="row">
@@ -60,13 +61,7 @@
           </div>
         </div>
       </div><!-- credit card form -->
-      <!-- loading -->
-      <div class="loading-wrap" ng-if="$ctrl.submitted">
-        <span class="loading loading1"></span>
-        <span class="loading loading2"></span>
-        <span class="loading loading3"></span>
-        <span class="loading loading4"></span>
-      </div><!-- loading -->
+
       <div class="mb0">
         <div class="row">
           <div class="col-md-12 text-right">
