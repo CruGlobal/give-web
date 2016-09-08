@@ -1,7 +1,7 @@
 import angular from 'angular';
 import creditCard from 'app/checkout/step-2/credit-card/credit-card.component';
 import bankAccount from 'app/checkout/step-2/bank-account/bank-account.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component.js'
+import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component.js';
 
 let controllerName = 'modal';
 
