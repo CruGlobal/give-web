@@ -5,7 +5,7 @@ import module from './payment-icon.component';
 describe('payment-method', function() {
   beforeEach(angular.mock.module(module.name));
   let self = {};
-  let envService = {read:angular.noop}
+  let envService = {read:angular.noop};
 
   beforeEach(inject(function($rootScope, $componentController) {
     var $scope = $rootScope.$new();
