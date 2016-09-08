@@ -11,26 +11,31 @@ describe('thank you', () => {
   var self = {};
 
   beforeEach(inject(($componentController) => {
+    self.mockPurchase = {
+      donorDetails: {
+        'mailing-address': {
+          'street-address': '123 Mailing St'
+        }
+      },
+      paymentMeans: {
+        self: {
+          type: "elasticpath.purchases.purchase.paymentmeans"
+        },
+        'billing-address': {
+          address: {
+            'street-address': '123 Billing St'
+          }
+        }
+      }
+    };
+
     self.controller = $componentController(module.name, {
       orderService: {
         retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt=',
         formatAddressForTemplate: (address) => address
       },
       purchasesService: {
-        getPurchase: () => Observable.of({
-          donorDetails: {
-            'mailing-address': {
-              'street-address': '123 Test St'
-            }
-          },
-          paymentMeans: {
-            'billing-address': {
-              addresss: {
-                'street-address': '123 Test St'
-              }
-            }
-          }
-        })
+        getPurchase: () => Observable.of(self.mockPurchase)
       },
       profileService: {
         getEmail: () => Observable.of('someperson@someaddress.com')
@@ -54,17 +59,22 @@ describe('thank you', () => {
       expect(self.controller.purchase).toEqual({
         donorDetails: {
           'mailing-address': {
-            'street-address': '123 Test St'
+            'street-address': '123 Mailing St'
           }
         },
         paymentMeans: {
+          self: {
+            type: "elasticpath.purchases.purchase.paymentmeans"
+          },
           'billing-address': {
-            addresss: {
-              'street-address': '123 Test St'
+            address: {
+              'street-address': '123 Billing St'
             }
           }
         }
       });
+      expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
+      expect(self.controller.billingAddress).toEqual({'street-address': '123 Billing St'});
     });
     it('should not request purchase data if lastPurchaseLink is not defined', () => {
       spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').and.callFake(() => undefined);
@@ -72,6 +82,31 @@ describe('thank you', () => {
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).not.toHaveBeenCalled();
       expect(self.controller.purchase).not.toBeDefined();
+    });
+    it('should not try to parse the billing address if it is not a credit card payment', () => {
+      spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
+      self.mockPurchase.paymentMeans.self.type = 'elasticpath.bankaccountpurchases.payment-means-bank-account';
+      self.controller.loadLastPurchase();
+      expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
+      expect(self.controller.purchase).toEqual({
+        donorDetails: {
+          'mailing-address': {
+            'street-address': '123 Mailing St'
+          }
+        },
+        paymentMeans: {
+          self: {
+            type: "elasticpath.bankaccountpurchases.payment-means-bank-account"
+          },
+          'billing-address': {
+            address: {
+              'street-address': '123 Billing St'
+            }
+          }
+        }
+      });
+      expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
+      expect(self.controller.billingAddress).toBeUndefined();
     });
   });
   describe('loadEmail', () => {
