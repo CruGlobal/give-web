@@ -12,12 +12,13 @@
           </div>
         </div>
         <div class="row">
-          <div ng-repeat="(index,paymentMethod) in $ctrl.paymentMethods" class="panel-group panel-collapse">
-            <payment-method model="paymentMethod"></payment-method>
+          <div ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
+            <bank-account model="paymentMethod" ng-if="!$ctrl.isCard(paymentMethod)"></bank-account>
+            <credit-card  model="paymentMethod" ng-if="$ctrl.isCard(paymentMethod)"></credit-card>
           </div>
         </div>
       </div>
     </div>
-    
+
   </div>
 </div>

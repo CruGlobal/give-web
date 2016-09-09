@@ -1,16 +1,20 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './payment-method.component';
+import module from './bank-account.component';
 
-describe('payment-method', function() {
+describe('bank account payment method', function() {
   beforeEach(angular.mock.module(module.name));
-  var self = {};
+  var self = {},
+      envService = {
+        read: angular.noop
+      };
 
   beforeEach(inject(function($rootScope, $componentController) {
     var $scope = $rootScope.$new();
 
     self.controller = $componentController(module.name, {
-      $scope: $scope
+      $scope: $scope,
+      envService: envService
     });
   }));
 
@@ -18,18 +22,10 @@ describe('payment-method', function() {
     expect(self.controller).toBeDefined();
   });
 
-  it('should return last 4 digits of card number', () => {
-    self.controller.model = {
-      card_number: '4444444444442222'
-    };
-    expect(self.controller.getLastFourDigits()).toBe('2222');
-  });
-
   it('should return expiration date', () => {
-    self.controller.model = {
-      expiry_month: '05',
-      expiry_year: '2019'
-    };
+    self.controller.model = {};
+    self.controller.model['expiry-month'] = '05';
+    self.controller.model['expiry-year'] = '2019';
     expect(self.controller.getExpiration()).toBe('05/2019');
   });
 

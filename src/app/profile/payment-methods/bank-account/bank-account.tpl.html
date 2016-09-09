@@ -4,10 +4,10 @@
         <div class="row">
           <div class="col-md-8">
             <p>
-              <img class="hidden-xs payment-icon" ng-src="{{$ctrl.imgDomain}}/assets/img/{{$ctrl.getImage()}}.png"/>
-              <span class="payment-nickname">{{ $ctrl.getPaymentNickName() }}</span>
-              ending in ****{{ $ctrl.getLastFourDigits() }}
-              <span class="payment-expiration">EXPIRES {{ $ctrl.getExpiration() }}</span>
+              <img class="hidden-xs payment-icon" ng-src="{{$ctrl.imgDomain}}/assets/img/icon-bank.png"/>
+              <span class="payment-nickname">{{ $ctrl.model['bank-name'] }}</span>
+              ending in ****{{ $ctrl.model['display-account-number'] }}
+              <span ng-if="$ctrl.isCard()" class="payment-expiration">EXPIRES {{ $ctrl.getExpiration() }}</span>
             </p>
           </div>
           <div class="col-md-4 text-right payment-details-link">
@@ -23,12 +23,12 @@
           <div class="row">
             <div class="col-md-4">
               <p class="section-title mb0">Name of card</p>
-              <p>{{$ctrl.model.cardholder_name}}</p>
+              <p>{{$ctrl.model['cardholder-name']}}</p>
             </div>
 
             <div class="col-md-5">
               <p class="section-title mb0">Nickname</p>
-              <p>{{$ctrl.model.description}}</p>
+              <p>?</p> <!-- NOT SURE WHAT GOES HERE -->
             </div>
 
             <div class="col-md-3 text-right">
@@ -41,16 +41,6 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-12 pt">
-              <p class="section-title mb0">Billing address</p>
-              <p>{{$ctrl.model.cardholder_name}}
-                <br>
-                {{$ctrl.model.address.street_address}}
-                <br>
-                {{$ctrl.model.address.locality + ' ' + $ctrl.model.address.postal_code}}</p>
-            </div>
-          </div>
         </div>
       </div>
       <!-- <reocuring-gifts></reocuring-gifts>  -->
