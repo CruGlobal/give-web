@@ -60,7 +60,8 @@ class SearchResultsController {
   }
 
   exploreSearch(){
-    this.$window.location.href = 'https://www.cru.org/content/cru/us/en/search.' + encodeURIComponent(this.searchParams.keyword) + '.html';
+    var term = this.searchParams.keyword || this.searchParams.first_name + ' ' + this.searchParams.last_name;
+    this.$window.location.href = 'https://www.cru.org/content/cru/us/en/search.' + encodeURIComponent(term) + '.html';
   }
 }
 
