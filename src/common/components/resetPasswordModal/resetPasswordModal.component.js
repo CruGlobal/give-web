@@ -37,6 +37,12 @@ class ResetPasswordModalController {
     this.setPristine();
   }
 
+  $onDestroy() {
+    angular.forEach( ['e', 'k'], ( key ) => {
+      this.$location.search( key, null );
+    } );
+  }
+
   resetPassword() {
     if ( !this.form.$valid ) {
       return;
@@ -50,7 +56,7 @@ class ResetPasswordModalController {
         this.isLoading = false;
         this.passwordChanged = true;
         // Remove modal name and modal params on success
-        this.modalState.name(null);
+        this.modalState.name( null );
         this.$location.search( 'e', null );
         this.$location.search( 'k', null );
       }, ( error ) => {

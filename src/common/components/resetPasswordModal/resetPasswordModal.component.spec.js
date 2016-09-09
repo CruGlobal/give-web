@@ -47,6 +47,15 @@ describe( 'resetPasswordModal', function () {
     } );
   } );
 
+  describe( '$onDestroy', () => {
+    it( 'removes query params', () => {
+      spyOn( $ctrl.$location, 'search' );
+      $ctrl.$onDestroy();
+      expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'e', null );
+      expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'k', null );
+    } );
+  } );
+
   describe( 'resetPassword', () => {
     let deferred;
     beforeEach( inject( function ( _$q_ ) {
