@@ -5,7 +5,7 @@ import ccp from 'common/lib/ccp';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import module from './ccp.service.js';
+import module from './ccp.service';
 
 describe('ccp service', () => {
   beforeEach(angular.mock.module(module.name));

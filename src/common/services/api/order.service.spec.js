@@ -7,11 +7,12 @@ import 'rxjs/add/observable/of';
 import module from './order.service';
 
 import cartResponse from 'common/services/api/fixtures/cortex-cart-paymentmethodinfo-forms.fixture.js';
-import paymentMethodResponse from 'common/services/api/fixtures/cortex-paymentmethod.fixture.js';
-import purchaseFormResponse from 'common/services/api/fixtures/cortex-purchaseform.fixture.js';
+import paymentMethodResponse from 'common/services/api/fixtures/cortex-order-paymentmethod.fixture.js';
+import paymentMethodSelectorResponse from 'common/services/api/fixtures/cortex-order-paymentmethod-selector.fixture.js';
+import purchaseFormResponse from 'common/services/api/fixtures/cortex-order-purchaseform.fixture.js';
 import donorDetailsResponse from 'common/services/api/fixtures/cortex-donordetails.fixture.js';
 import billingAddressResponse from 'common/services/api/fixtures/cortex-billing-address.fixture.js';
-import needInfoResponse from 'common/services/api/fixtures/cortex-needinfo.fixture.js';
+import needInfoResponse from 'common/services/api/fixtures/cortex-order-needinfo.fixture.js';
 import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
 
 describe('order service', () => {
@@ -96,7 +97,6 @@ describe('order service', () => {
           },
           otherStuff: 'is also here'
         }
-
       ).respond(200, 'somedata');
       self.orderService.updateDonorDetails({
           "self": {
@@ -125,7 +125,7 @@ describe('order service', () => {
     it('should send a request to save the email', () => {
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/emails/crugive',
-        { email: 'someemail@somedomain.com' }
+        {email: 'someemail@somedomain.com'}
       ).respond(200, 'somedata');
       self.orderService.addEmail('someemail@somedomain.com')
         .subscribe((data) => {
@@ -141,7 +141,7 @@ describe('order service', () => {
         .respond(200, cartResponse);
     }
 
-    function initiateRequest(){
+    function initiateRequest() {
       self.orderService.getPaymentMethodForms()
         .subscribe((data) => {
           expect(data).toEqual(cartResponseZoomMapped);
@@ -208,6 +208,128 @@ describe('order service', () => {
       self.orderService.paymentMethodForms = cartResponseZoomMapped;
 
       self.orderService.addCreditCardPayment(paymentInfo)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('getExistingPaymentMethods', () => {
+    let expectedResponse = [{
+      "self": {
+        "type": "elasticpath.bankaccounts.bank-account",
+        "uri": "/paymentmethods/crugive/giydcmzyge=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcmzyge="
+      },
+      "links": [{
+        "rel": "list",
+        "type": "elasticpath.collections.links",
+        "uri": "/paymentmethods/crugive",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
+      }, {
+        "rel": "bankaccount",
+        "type": "elasticpath.bankaccounts.bank-account",
+        "uri": "/bankaccounts/paymentmethods/crugive/giydcmzyge=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcmzyge="
+      }],
+      "account-type": "Checking",
+      "bank-name": "First Bank",
+      "display-account-number": "6548",
+      "encrypted-account-number": "FAecKEPeUdW6KjbHo/na/hXlAS9OjZR51dlBgKKInf2mJh4bSP9WMvsKfAAL1rW7o6P9Rmx87dp0rDz0NArbWGIdsYeoFVOaIATzQqAe4ECuy0gfHcDva26HmgriGqRWkWPDeQvEdU9jENu0XKskxAjk2sBLJOHhoTCi8+LTLUrNwu40CSdT/PGNK8/lnO27wTZDPmc221xJ6hzB/F+0sRRvJhWky2oxA491MG+SRk7lWhccqSq5KtrijfA88Ebb/EivnsSJwqZgv/WNIP2u/V3dsMF1YRtyEsEAkmgxCCYBye2TT5ehIVOChQdlUbHxF+z/izrmn+0u2IYXvyX4dw==",
+      "routing-number": "121042882",
+      "chosen": true,
+      "selectAction": "/paymentmethods/crugive/giydcmzyge=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq="
+    }, {
+      "self": {
+        "type": "elasticpath.bankaccounts.bank-account",
+        "uri": "/paymentmethods/crugive/giydcnzyga=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcnzyga="
+      },
+      "links": [{
+        "rel": "list",
+        "type": "elasticpath.collections.links",
+        "uri": "/paymentmethods/crugive",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
+      }, {
+        "rel": "bankaccount",
+        "type": "elasticpath.bankaccounts.bank-account",
+        "uri": "/bankaccounts/paymentmethods/crugive/giydcnzyga=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga="
+      }],
+      "account-type": "Savings",
+      "bank-name": "2nd Bank",
+      "display-account-number": "3456",
+      "encrypted-account-number": "",
+      "routing-number": "021000021",
+      "selectAction": "/paymentmethods/crugive/giydcnzyga=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq="
+    }, {
+      "self": {
+        "type": "cru.creditcards.named-credit-card",
+        "uri": "/paymentmethods/crugive/giydembug4=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydembug4="
+      },
+      "links": [{
+        "rel": "list",
+        "type": "elasticpath.collections.links",
+        "uri": "/paymentmethods/crugive",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
+      }, {
+        "rel": "creditcard",
+        "type": "cru.creditcards.named-credit-card",
+        "uri": "/creditcards/paymentmethods/crugive/giydembug4=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydembug4="
+      }],
+      "card-number": "1111",
+      "card-type": "Visa",
+      "cardholder-name": "Test Card",
+      "expiry-month": "11",
+      "expiry-year": "2019",
+      "selectAction": "/paymentmethods/crugive/giydembug4=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq="
+    }];
+
+    it('should load a user\'s existing payment methods', () => {
+      self.$httpBackend.expectGET(
+        'https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+      ).respond(200, paymentMethodSelectorResponse);
+
+      self.orderService.getExistingPaymentMethods()
+        .subscribe((data) => {
+          expect(data).toEqual(expectedResponse);
+        });
+
+      self.$httpBackend.flush();
+    });
+    it('should load a user\'s existing payment methods even if there is no chosen one', () => {
+      // Move the payment method in chosen to be one of the choices for this test
+      paymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._choice.push(paymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen[0]);
+      delete paymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen;
+
+      self.$httpBackend.expectGET(
+        'https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+      ).respond(200, paymentMethodSelectorResponse);
+
+      // Since there is no chosen element, this payment method should not be marked as chosen
+      delete expectedResponse[0].chosen;
+
+      self.orderService.getExistingPaymentMethods()
+        .subscribe((data) => {
+          expect(data).toEqual(expectedResponse);
+        });
+
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('selectPaymentMethod', () => {
+    it('should post the URI of the selected payment method for cortex to select it', () => {
+      self.$httpBackend.expectPOST(
+        'https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydembug4=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq=',
+        {}
+      ).respond(200, 'success');
+
+      self.orderService.selectPaymentMethod('/paymentmethods/crugive/giydembug4=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq=')
         .subscribe((data) => {
           expect(data).toEqual('success');
         });
@@ -412,7 +534,7 @@ describe('order service', () => {
           expect(data).toEqual(['email-info', 'billing-address-info', 'payment-method-info']);
         });
       self.$httpBackend.flush();
-      expect(self.$log.error.logs[0]).toEqual([ 'The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', ['email-info', 'billing-address-info', 'payment-method-info'] ]);
+      expect(self.$log.error.logs[0]).toEqual(['The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', ['email-info', 'billing-address-info', 'payment-method-info']]);
     });
     it('should return undefined and not log anything if there are no errors', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, undefined);

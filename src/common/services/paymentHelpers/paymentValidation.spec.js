@@ -4,7 +4,7 @@ import ccp from 'common/lib/ccp';
 import { ccpStagingKey } from 'common/app.constants';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import module from './paymentValidation.service.js';
+import module from './paymentValidation.service';
 
 describe('payment validation service', () => {
   beforeEach(angular.mock.module(module.name));

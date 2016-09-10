@@ -45,8 +45,11 @@ class CheckoutController{
         this.loadingCartData = false;
       })
       .subscribe((data) => {
-        this.cartData = data;
-      });
+          this.cartData = data;
+        },
+        (error) => {
+          this.$log.error("Error loading cart", error);
+        });
   }
 }
 

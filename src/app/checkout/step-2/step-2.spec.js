@@ -31,6 +31,28 @@ describe('checkout', () => {
       });
     });
 
+    describe('handleExistingPaymentLoading', () => {
+      it('should set flags for the view if payment methods exist', () => {
+        expect(self.controller.loadingPaymentMethods).toEqual(true);
+        self.controller.handleExistingPaymentLoading(true, true);
+        expect(self.controller.existingPaymentMethods).toEqual(true);
+        expect(self.controller.loadingPaymentMethods).toEqual(false);
+      });
+      it('should set flags for the view if payment methods do not exist', () => {
+        expect(self.controller.loadingPaymentMethods).toEqual(true);
+        self.controller.handleExistingPaymentLoading(true, false);
+        expect(self.controller.existingPaymentMethods).toEqual(false);
+        expect(self.controller.loadingPaymentMethods).toEqual(false);
+      });
+      it('should set flags for the view if requesting payment methods fails', () => {
+        expect(self.controller.loadingPaymentMethods).toEqual(true);
+        self.controller.handleExistingPaymentLoading(false, undefined, 'some error');
+        expect(self.controller.existingPaymentMethods).toEqual(false);
+        expect(self.controller.loadingPaymentMethods).toEqual(false);
+        expect(self.controller.$log.warn.logs[0]).toEqual(['Error loading existing payment methods', 'some error']);
+      });
+    });
+
     describe('onSave', () => {
       it('should set submitted to false if save was unsuccessful', () => {
         self.controller.submitted = true;
