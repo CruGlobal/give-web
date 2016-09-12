@@ -40,7 +40,9 @@ class ThankYouController{
       .subscribe((data) => {
         this.purchase = data;
         this.mailingAddress = this.orderService.formatAddressForTemplate(this.purchase.donorDetails['mailing-address']);
-        this.billingAddress = this.orderService.formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
+        if(this.purchase.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'){ //only credit card type has billing address
+          this.billingAddress = this.orderService.formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
+        }
       });
   }
 

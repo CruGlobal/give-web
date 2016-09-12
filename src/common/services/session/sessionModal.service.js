@@ -8,7 +8,7 @@ import sessionModalWindowTemplate from './sessionModalWindow.tpl';
 let serviceName = 'sessionModalService';
 
 /*@ngInject*/
-function SessionModalService( $uibModal, $location, modalStateService ) {
+function SessionModalService( $uibModal, modalStateService ) {
 
   function openModal( type, options ) {
     type = angular.isDefined( type ) ? type : 'sign-in';
@@ -27,12 +27,8 @@ function SessionModalService( $uibModal, $location, modalStateService ) {
       .open( modalOptions )
       .result
       .finally( () => {
-        // Clear the modal name and params when modals close
+        // Clear the modal name when modals close
         modalStateService.name( null );
-        let params = $location.search();
-        angular.forEach( params, ( value, key ) => {
-          $location.search( key, null );
-        } );
       } );
   }
 

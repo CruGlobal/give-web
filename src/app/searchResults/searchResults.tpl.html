@@ -16,7 +16,7 @@
           <div class="col-xs-12 col-sm-10 col-sm-offset-1">
             <form method="get" action="/search-results.html">
               <div class="input-group is-search-main">
-                <input type="search" class="form-control" placeholder="Search for..." name="q">
+                <input type="search" class="form-control" placeholder="Search for..." name="q" value="{{$ctrl.searchParams.keyword}}">
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="submit" translate>Search</button>
                 </span>
@@ -45,15 +45,15 @@
               <div class="col-sm-12 col-md-3">
                 <div class="is-advanced">
                   <form method="get" action="/search-results.html">
-                    <h4 translate>Advanced Search <button type="button" class="btn btn-subtle pull-right visible-xs visible-sm is-toggle" ng-click="$ctrl.showAdvancedSearch = !$ctrl.showAdvancedSearch"><i class="fa fa-bars"></i></button></h4>
+                    <h4 translate>Search <button type="button" class="btn btn-subtle pull-right visible-xs visible-sm is-toggle" ng-click="$ctrl.showAdvancedSearch = !$ctrl.showAdvancedSearch"><i class="fa fa-bars"></i></button></h4>
 
                     <div class="is-toggle-wrap" ng-class="{'open': $ctrl.showAdvancedSearch}">
                       <div class="is-widget">
                         <ul class="list-unstyled is-type-links">
-                          <li ng-class="{'active': !$ctrl.searchParams.type}">
+                          <li ng-if="$ctrl.searchParams.keyword" ng-class="{'active': !$ctrl.searchParams.type}">
                             <a href="" ng-click="$ctrl.requestSearch('')" translate>All Giving Opportunities</a>
                           </li>
-                          <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
+                          <li ng-class="{'active': $ctrl.searchParams.type === 'people' || (!$ctrl.searchParams.type && !$ctrl.searchParams.keyword)}">
                             <a href="" ng-click="$ctrl.requestSearch('people')" translate>People</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'ministries'}">
@@ -65,7 +65,7 @@
                         </ul>
                       </div>
 
-                      <div ng-if="$ctrl.searchParams.type === '' || $ctrl.searchParams.type === 'people'">
+                      <div ng-if="$ctrl.searchParams.type === 'people'">
                         <div class="form-group">
                           <label translate>First Name</label>
                           <input type="text" class="form-control input-subtle" name="fName" value="{{$ctrl.searchParams.first_name}}">
@@ -77,6 +77,13 @@
                         </div>
                       </div>
 
+                      <div ng-if="!$ctrl.searchParams.type">
+                        <div class="form-group">
+                          <label translate>Name</label>
+                          <input type="text" class="form-control input-subtle" name="keyword" value="{{$ctrl.searchParams.keyword}}">
+                        </div>
+                      </div>
+
                       <input type="hidden" name="type" value="{{$ctrl.searchParams.type}}">
                       <button class="btn btn-primary btn-block" type="submit" translate>Search</button>
                     </div>
@@ -85,14 +92,23 @@
               </div>
 
               <div class="col-md-9 col-sm-12">
-                <div class="" ng-if="$ctrl.searchParams.type === 'people' && !$ctrl.searchParams.keyword && !$ctrl.searchParams.first_name && !$ctrl.searchParams.last_name">
-                  <h3 translate>Search for a person below.</h3>
+                <div class="" ng-if="$ctrl.searchParams.type === 'people' && !$ctrl.searchResults">
+                  <p translate>
+                    Your giving has helped us become the largest mission agency in the world. Hundreds of thousands of
+                    people hear the good news of God's love because of the work of our many staff members and missions
+                    trip participants. They depend on the consistent financial support of partners like you to stay in the missions field.
+                  </p>
+                  <p translate>You can search our staff by first or last name.</p>
                 </div>
 
-                <div ng-if="$ctrl.searchResults && !$ctrl.searchResults.length">
+                <div ng-if="$ctrl.searchResults && !$ctrl.searchResults.length && $ctrl.searchParams.type !== 'featured'">
                   <p translate>Your search did not find any results. Please try again.</p>
                   <p translate>If you are uncertain of the exact spelling, enter the first few letters and avoid searching by nicknames.
                     If you still cannot find a staff member you are looking for, you can call 1-888-278-7233 for assistance.</p>
+                </div>
+
+                <div ng-if="$ctrl.searchResults && $ctrl.searchParams.type === 'featured'">
+                  <h3 translate>Featured Opportunities haven't been loaded yet.</h3>
                 </div>
 
                 <div class="is-row clearfix" ng-repeat="r in $ctrl.searchResults">
