@@ -23,21 +23,21 @@ function SessionModalService( $uibModal, modalStateService ) {
         state: () => type
       }
     }, options );
-    return $uibModal
-      .open( modalOptions )
-      .result
+    let modalInstance = $uibModal.open( modalOptions );
+    modalInstance.result
       .finally( () => {
         // Clear the modal name when modals close
         modalStateService.name( null );
       } );
+    return modalInstance;
   }
 
   return {
     open:           openModal,
-    signIn:         () => openModal( 'sign-in' ),
-    signUp:         () => openModal( 'sign-up' ),
-    forgotPassword: () => openModal( 'forgot-password' ),
-    resetPassword:  () => openModal( 'reset-password', {backdrop: 'static'} )
+    signIn:         () => openModal( 'sign-in' ).result,
+    signUp:         () => openModal( 'sign-up' ).result,
+    forgotPassword: () => openModal( 'forgot-password' ).result,
+    resetPassword:  () => openModal( 'reset-password', {backdrop: 'static'} ).result
   };
 }
 

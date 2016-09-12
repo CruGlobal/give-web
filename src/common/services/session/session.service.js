@@ -10,6 +10,11 @@ import 'rxjs/add/operator/map';
 import appConfig from 'common/app.config';
 
 let serviceName = 'sessionService';
+export let Roles = {
+  public:     'PUBLIC',
+  identified: 'IDENTIFIED',
+  registered: 'REGISTERED'
+};
 
 /*@ngInject*/
 function session( $cookies, $rootScope, $http, $timeout, envService ) {
@@ -145,16 +150,16 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
 
   function currentRole() {
     if ( angular.isDefined( session.token_hash ) ) {
-      if ( session.token_hash.role === 'PUBLIC' ) {
-        return 'PUBLIC';
+      if ( session.token_hash.role === Roles.public ) {
+        return Roles.public;
       }
       // Expired cookies are undefined
       if ( angular.isUndefined( $cookies.get( 'give-session' ) ) ) {
-        return 'IDENTIFIED';
+        return Roles.identified;
       }
       return session.token_hash.role;
     }
-    return 'PUBLIC';
+    return Roles.public;
   }
 
   function casApiUrl( path ) {
