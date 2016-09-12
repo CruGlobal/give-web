@@ -12,9 +12,10 @@ import appConfig from 'common/app.config';
 let serviceName = 'sessionService';
 
 /*@ngInject*/
-function session( $cookies, $rootScope, $http, envService ) {
+function session( $cookies, $rootScope, $http, $timeout, envService ) {
   var session = {},
-    sessionSubject = new BehaviorSubject( session );
+    sessionSubject = new BehaviorSubject( session ),
+    sessionTimeout;
 
   // Set initial session on load
   updateCurrentSession( $cookies.get( 'cortex-session' ) );
@@ -110,14 +111,36 @@ function session( $cookies, $rootScope, $http, envService ) {
 
   /* Private Methods */
   function updateCurrentSession( encoded_value ) {
-    var cortexSession = {};
+    let cortexSession = {};
     if ( angular.isDefined( encoded_value ) ) {
       cortexSession = jwtDecode( encoded_value );
     }
+    // Set expiration timeout
+    setSessionTimeout();
     // Copy new session into current session object
     angular.copy( cortexSession, session );
     // Update sessionSubject with new value
     sessionSubject.next( session );
+  }
+
+  function setSessionTimeout() {
+    let encodedSession = $cookies.get( 'give-session' );
+    // Cancel current session timeout
+    if ( angular.isDefined( sessionTimeout ) ) {
+      $timeout.cancel( sessionTimeout );
+      sessionTimeout = undefined;
+    }
+    // Decode give-session cookie and set timeout based on expiration
+    if ( angular.isDefined( encodedSession ) ) {
+      let giveSession = jwtDecode( encodedSession ),
+        timeout = new Date( giveSession.exp * 1000 ) - Date.now();
+      if ( timeout > 0 ) {
+        sessionTimeout = $timeout( timeout );
+        sessionTimeout.then( () => {
+          updateCurrentSession( $cookies.get( 'cortex-session' ) );
+        } );
+      }
+    }
   }
 
   function currentRole() {
