@@ -1,9 +1,11 @@
 import angular from 'angular';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 import toString from 'lodash/toString';
 import map from 'lodash/map';
+import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 
 import cortexApiService from '../cortexApi.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
@@ -100,6 +102,37 @@ class Order{
       });
   }
 
+  getExistingPaymentMethods(){
+    return this.cortexApiService.get({
+        path: ['carts', this.cortexApiService.scope, 'default'],
+        zoom: {
+          choices: 'order:paymentmethodinfo:selector:choice[],order:paymentmethodinfo:selector:choice:description',
+          chosen: 'order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        }
+      })
+      .map((selector) => {
+        let paymentMethods = selector.choices;
+        if(selector.chosen) {
+          selector.chosen.description.chosen = true;
+          paymentMethods.unshift(selector.chosen);
+        }
+        return map(paymentMethods, (paymentMethod) => {
+          paymentMethod.description.selectAction = paymentMethod.self.uri;
+          return paymentMethod.description;
+        });
+      })
+      .map((paymentMethods) => {
+        return sortPaymentMethods(paymentMethods);
+      });
+  }
+
+  selectPaymentMethod(uri){
+    return this.cortexApiService.post({
+      path: uri,
+      data: {}
+    });
+  }
+
   addBillingAddress(billingAddress){
     billingAddress.address = this.formatAddressForCortex(billingAddress.address);
     return this.cortexApiService.post({
@@ -110,11 +143,11 @@ class Order{
 
   getBillingAddress(){
     return this.cortexApiService.get({
-      path: ['carts', this.cortexApiService.scope, 'default'],
-      zoom: {
-        billingAddress: 'order:billingaddressinfo:billingaddress'
-      }
-    })
+        path: ['carts', this.cortexApiService.scope, 'default'],
+        zoom: {
+          billingAddress: 'order:billingaddressinfo:billingaddress'
+        }
+      })
       .map((data) => {
         data.billingAddress.address = this.formatAddressForTemplate(data.billingAddress.address);
         return data.billingAddress;
@@ -183,11 +216,11 @@ class Order{
 
   checkErrors(){
     return this.cortexApiService.get({
-      path: ['carts', this.cortexApiService.scope, 'default'],
-      zoom: {
-        needInfo: 'order:needinfo[]'
-      }
-    })
+        path: ['carts', this.cortexApiService.scope, 'default'],
+        zoom: {
+          needInfo: 'order:needinfo[]'
+        }
+      })
       .map((data) => {
         let needInfo = data.needInfo;
         let errors = map(needInfo, 'name');

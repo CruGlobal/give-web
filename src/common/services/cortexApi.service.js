@@ -65,12 +65,11 @@ class CortexApi {
     return this.http(request);
   }
 
-  serializePath( path){
+  serializePath(path){
     if(angular.isArray(path)){
-      return '/' + path.join('/');
-    }else{
-      return path.charAt(0) === '/' ? path : '/' + path;
+      path = path.join('/');
     }
+    return path.charAt(0) === '/' ? path : '/' + path;
   }
 }
 

@@ -151,8 +151,11 @@ describe('cortex api service', () => {
   });
 
   describe('serializePath', () => {
-    it('should take an array of strings and join them with slashes', () => {
+    it('should take an array of strings and join them with slashes and prepend a slash if the first item doesn\'t have one', () => {
       expect(self.cortexApiService.serializePath(['one', 'two', 'three'])).toEqual('/one/two/three');
+    });
+    it('should take an array of strings and join them with slashes and not prepend a slash if the first item has one', () => {
+      expect(self.cortexApiService.serializePath(['/one', 'two', 'three'])).toEqual('/one/two/three');
     });
     it('should take a string and prepend a slash to the front if it doesn\'t exist', () => {
       expect(self.cortexApiService.serializePath('one/two/three')).toEqual('/one/two/three');

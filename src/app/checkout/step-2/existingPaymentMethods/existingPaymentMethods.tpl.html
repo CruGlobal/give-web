@@ -1,0 +1,19 @@
+<div class="panel panel-default tab-toggle">
+  <div class="panel-title panel-heading" translate>Your Payment Methods</div>
+  <div class="panel-body">
+    <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods">
+      <label>
+        <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod.selectAction" required>
+        <payment-method-display payment-method="paymentMethod"></payment-method-display>
+      </label>
+    </div>
+
+    <div class="mt">
+      <button type="button" class="btn btn-default btn-xs" ng-click=""><!-- TODO: show modal -->
+        <i class="fa fa-plus"></i>
+        <span translate>Add New Payment Method</span>
+      </button>
+      <small>(doesn't work yet)</small><!-- TODO: remove this -->
+    </div>
+  </div><!-- // panel-body -->
+</div>

@@ -1,5 +1,7 @@
 import angular from 'angular';
 import 'rxjs/add/operator/pluck';
+import 'rxjs/add/operator/map';
+import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 
 import cortexApiService from '../cortexApi.service';
 
@@ -21,6 +23,19 @@ class Profile{
       })
       .pluck('email')
       .pluck('email');
+  }
+
+  getPaymentMethods(){
+    return this.cortexApiService.get({
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          paymentMethods: 'paymentmethods:element[]'
+        }
+      })
+      .pluck('paymentMethods')
+      .map((paymentMethods) => {
+        return sortPaymentMethods(paymentMethods);
+      });
   }
 }
 
