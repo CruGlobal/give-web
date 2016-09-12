@@ -13,11 +13,12 @@ let componentName = 'cart';
 class CartController {
 
   /* @ngInject */
-  constructor( $window, cartService, sessionService, productModalService ) {
+  constructor( $window, envService, cartService, sessionService, productModalService ) {
     this.$window = $window;
     this.productModalService = productModalService;
     this.cartService = cartService;
     this.sessionService = sessionService;
+    this.imgDomainDesignation = envService.read('imgDomainDesignation');
   }
 
   $onInit() {

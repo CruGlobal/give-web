@@ -13,11 +13,12 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor($window, $location, designationsService) {
+  constructor($window, $location, envService, designationsService) {
     this.$window = $window;
     this.$location = $location;
     this.designationsService = designationsService;
     this.searchParams = {};
+    this.imgDomainDesignation = envService.read('imgDomainDesignation');
   }
 
   $onInit(){

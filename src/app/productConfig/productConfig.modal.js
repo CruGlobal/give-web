@@ -22,7 +22,7 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, itemConfig, isEdit ) {
+  constructor( $location, $uibModalInstance, envService, designationsService, cartService, modalStateService, gettext, productData, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
@@ -32,6 +32,7 @@ class ModalInstanceCtrl {
     this.itemConfig = itemConfig;
     this.isEdit = isEdit;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
+    this.imgDomainDesignation = envService.read('imgDomainDesignation');
 
     if ( this.isEdit ) {
       this.submitLabel = gettext( 'Update Gift' );

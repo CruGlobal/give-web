@@ -14,10 +14,11 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(orderService, $window, $log){
+  constructor(orderService, $window, $log, envService){
     this.orderService = orderService;
     this.$window = $window;
     this.$log = $log;
+    this.imgDomainDesignation = envService.read('imgDomainDesignation');
   }
 
   $onInit(){
