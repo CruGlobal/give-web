@@ -95,6 +95,8 @@ describe('checkout', () => {
           expect(size(self.formController.cardNumber.$parsers)).toEqual(2);
           expect(size(self.formController.cardNumber.$validators)).toEqual(4);
 
+          expect(size(self.formController.expiryMonth.$validators)).toEqual(2);
+
           expect(size(self.formController.securityCode.$parsers)).toEqual(2);
           expect(size(self.formController.securityCode.$validators)).toEqual(3);
         });
@@ -275,7 +277,7 @@ describe('checkout', () => {
 
       describe('initializeExpirationDateOptions', () => {
         it('should generate a range of credit card expiration years for the view dropdown', () => {
-          jasmine.clock().mockDate(new Date(2012, 11, 31));
+          jasmine.clock().mockDate(new Date(2012, 11, 31)); // Dec 31 2012
           self.controller.initializeExpirationDateOptions();
           expect(self.controller.expirationDateYears).toEqual([
             2012,
@@ -308,10 +310,11 @@ describe('checkout', () => {
           expect(self.formController.$valid).toEqual(false);
         });
         it('should be valid if all of the inputs are valid', () => {
+          jasmine.clock().mockDate(new Date(2012, 11, 31)); // Dec 31 2012
           self.formController.cardNumber.$setViewValue('4111111111111111');
           self.formController.cardholderName.$setViewValue('Person Name');
           self.formController.expiryMonth.$setViewValue('12');
-          self.formController.expiryYear.$setViewValue('19');
+          self.formController.expiryYear.$setViewValue('2012');
           self.formController.securityCode.$setViewValue('1234');
           expect(self.formController.$valid).toEqual(true);
         });
@@ -357,6 +360,18 @@ describe('checkout', () => {
             expect(self.formController.expiryMonth.$valid).toEqual(true);
             self.formController.expiryMonth.$setViewValue('06');
             expect(self.formController.expiryMonth.$valid).toEqual(true);
+            self.formController.expiryMonth.$setViewValue('12');
+            expect(self.formController.expiryMonth.$valid).toEqual(true);
+          });
+          it('should be invalid if it is expired',  () => {
+            jasmine.clock().mockDate(new Date(2012, 11, 31)); // Dec 31 2012
+            self.formController.expiryMonth.$setViewValue('11');
+            self.formController.expiryYear.$setViewValue('2012');
+            expect(self.formController.expiryMonth.$valid).toEqual(false);
+          });
+          it('should be valid if it the current month',  () => {
+            jasmine.clock().mockDate(new Date(2012, 11, 31)); // Dec 31 2012
+            self.formController.expiryYear.$setViewValue('2012');
             self.formController.expiryMonth.$setViewValue('12');
             expect(self.formController.expiryMonth.$valid).toEqual(true);
           });
