@@ -70,6 +70,19 @@ class CreditCardController {
     this.creditCardPaymentForm.cardNumber.$validators.maxlength = number => toString(number).length <= 16;
     this.creditCardPaymentForm.cardNumber.$validators.cardNumber = this.paymentValidationService.validateCardNumber();
 
+    this.creditCardPaymentForm.expiryMonth.$validators.expired = expiryMonth => {
+      let currentDate = new Date();
+      let chosenYear = parseInt(this.creditCardPayment.expiryYear);
+      let chosenMonth = parseInt(expiryMonth);
+      return !this.creditCardPayment.expiryYear ||
+        chosenYear > currentDate.getFullYear() ||
+        chosenYear === currentDate.getFullYear() && chosenMonth >= currentDate.getMonth() + 1;
+    };
+    this.creditCardPaymentForm.expiryYear.$viewChangeListeners.push(() => {
+      // Revalidate expiryMonth after expiryYear changes
+      this.creditCardPaymentForm.expiryMonth.$validate();
+    });
+
     this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
     this.creditCardPaymentForm.securityCode.$validators.minlength = number => toString(number).length >= 3;
     this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
