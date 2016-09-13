@@ -69,6 +69,7 @@ Request data that will be passed on to Angular's `$http` service.
 ##### `followLocation`
 If this key is set to `true`, a query parameter will be added to tell Cortex to followLocation. From the [Cortex docs](https://touchpoint-developers.elasticpath.com/1.16.0/API-Reference/Follow-Location):
 > The FollowLocation query parameter reduces the number of requests required when performing POST operations. FollowLocation instructs Cortex to retrieve the resource referenced in the Location header and return it in the response body which eliminates the need to make another call to retrieve the resource. FollowLocation can also be used with zoom to further reduce the number of HTTP requests required.
+
 ##### `zoom`
 This parameter accepts standard cortex zoom parameters but helps with mapping them to useful JSON objects.
 This key takes an object where the values are cortex zoom strings. The keys are used to name the keys in the returned object where the data corresponding to each zoom string is located.
