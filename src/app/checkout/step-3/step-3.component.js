@@ -6,6 +6,7 @@ import displayAddressComponent from 'common/components/display-address/display-a
 
 import orderService from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
+import desigSrcDirective from 'common/directives/desigSrc.directive';
 
 import template from './step-3.tpl';
 
@@ -112,7 +113,8 @@ export default angular
     template.name,
     displayAddressComponent.name,
     orderService.name,
-    capitalizeFilter.name
+    capitalizeFilter.name,
+    desigSrcDirective.name
   ])
   .component(componentName, {
     controller: Step3Controller,
