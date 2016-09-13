@@ -29,7 +29,7 @@
                   <tbody>
                     <tr class="giftsum-gift-row" ng-repeat="i in $ctrl.cartData.items">
                       <td class="td-gift">
-                        <img ng-src="{{$ctrl.imgDomainDesignation}}/bin/crugive/image?thumbnailDesigNumber={{i.designationNumber}}" class="giftsum-profile pull-left">
+                        <img desig-src="{{i.designationNumber}}" class="giftsum-profile pull-left">
                         <span class="giftsum-person giftsum-title"><a ng-href="/{{i.designationNumber}}">{{i.displayName}}</a></span>
                         <span class="giftsum-accountnum giftsum-detail">#{{i.designationNumber}}</span>
                       </td>

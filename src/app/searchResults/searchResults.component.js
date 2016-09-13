@@ -5,6 +5,7 @@ import designationsService from 'common/services/api/designations.service';
 import productConfigComponent from 'app/productConfig/productConfig.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import ministries from './searchResults.ministries';
+import desigSrcDirective from 'common/directives/desigSrc.directive';
 
 import template from './searchResults.tpl';
 
@@ -13,12 +14,11 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor($window, $location, envService, designationsService) {
+  constructor($window, $location, designationsService) {
     this.$window = $window;
     this.$location = $location;
     this.designationsService = designationsService;
     this.searchParams = {};
-    this.imgDomainDesignation = envService.read('imgDomainDesignation');
   }
 
   $onInit(){
@@ -72,7 +72,8 @@ export default angular
     commonModule.name,
     designationsService.name,
     productConfigComponent.name,
-    loadingOverlay.name
+    loadingOverlay.name,
+    desigSrcDirective.name
   ] )
   .component( componentName, {
     controller:  SearchResultsController,

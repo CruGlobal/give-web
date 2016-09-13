@@ -5,6 +5,7 @@ import cartService from 'common/services/api/cart.service';
 import sessionService from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
+import desigSrcDirective from 'common/directives/desigSrc.directive';
 
 import template from './cart.tpl';
 
@@ -13,12 +14,11 @@ let componentName = 'cart';
 class CartController {
 
   /* @ngInject */
-  constructor( $window, envService, cartService, sessionService, productModalService ) {
+  constructor( $window, cartService, sessionService, productModalService ) {
     this.$window = $window;
     this.productModalService = productModalService;
     this.cartService = cartService;
     this.sessionService = sessionService;
-    this.imgDomainDesignation = envService.read('imgDomainDesignation');
   }
 
   $onInit() {
@@ -69,7 +69,8 @@ export default angular
     appConfig.name,
     cartService.name,
     productModalService.name,
-    sessionService.name
+    sessionService.name,
+    desigSrcDirective.name
   ] )
   .component( componentName, {
     controller:  CartController,

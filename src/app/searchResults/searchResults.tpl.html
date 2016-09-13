@@ -113,7 +113,7 @@
 
                 <div class="is-row clearfix" ng-repeat="r in $ctrl.searchResults">
                   <a ng-href="/{{r.designationNumber}}" class="is-row-thumb">
-                    <img ng-src="{{$ctrl.imgDomainDesignation}}/bin/crugive/image?thumbnailDesigNumber={{r.designationNumber}}">
+                    <img desig-src="{{r.designationNumber}}">
                   </a>
                   <div class="is-row-meta">
                     <a ng-href="/{{r.designationNumber}}">

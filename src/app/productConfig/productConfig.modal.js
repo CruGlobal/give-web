@@ -9,6 +9,7 @@ import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import modalStateService from 'common/services/modalState.service';
+import desigSrcDirective from 'common/directives/desigSrc.directive';
 
 let controllerName = 'productConfigController';
 export let giveGiftParams = {
@@ -22,7 +23,7 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, envService, designationsService, cartService, modalStateService, gettext, productData, itemConfig, isEdit ) {
+  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
@@ -32,7 +33,6 @@ class ModalInstanceCtrl {
     this.itemConfig = itemConfig;
     this.isEdit = isEdit;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
-    this.imgDomainDesignation = envService.read('imgDomainDesignation');
 
     if ( this.isEdit ) {
       this.submitLabel = gettext( 'Update Gift' );
@@ -148,6 +148,7 @@ export default angular
     loadingOverlay.name,
     designationsService.name,
     cartService.name,
-    modalStateService.name
+    modalStateService.name,
+    desigSrcDirective.name
   ] )
   .controller( controllerName, ModalInstanceCtrl );
