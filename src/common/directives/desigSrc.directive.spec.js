@@ -14,6 +14,6 @@ describe( 'desigSrc', function () {
   } ) );
 
   it( 'is src set', () => {
-    expect( img.attr('src').includes('thumbnailDesigNumber=' + desigNum) ).toEqual( true );
+    expect( img.attr('src') ).toContain( 'thumbnailDesigNumber=' + desigNum );
   } );
 } );
