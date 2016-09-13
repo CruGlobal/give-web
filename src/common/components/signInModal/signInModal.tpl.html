@@ -1,6 +1,6 @@
 <div class="col-md-12 col-xs-12">
   <p ng-if="$ctrl.identified" class="text-center">
-    <strong translate>Welcome back, {{$ctrl.session.first_name}} {{$ctrl.session.last_name}}!</strong>
+    <strong translate>Welcome back, {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}!</strong>
   </p>
   <sign-in-form on-success="$ctrl.onSuccess()"></sign-in-form>
   <p class="text-center" ng-class="{'mt mb0': $ctrl.identified}">
@@ -8,7 +8,7 @@
     <a href ng-click="$ctrl.onStateChange({state: 'forgot-password'})" translate>Reset It</a>
   </p>
   <p class="text-center" ng-if="$ctrl.identified">
-    <span translate>Not {{$ctrl.session.first_name}} {{$ctrl.session.last_name}}?</span>
+    <span translate>Not {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}?</span>
     <a href ng-click="$ctrl.signOut()" translate>Sign Out</a>
   </p>
   <div class="form-group" ng-if="!$ctrl.identified">

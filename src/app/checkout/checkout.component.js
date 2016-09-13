@@ -15,6 +15,9 @@ import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
 import commonModule from 'common/common.module';
 
+import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
+import {Roles} from 'common/services/session/session.service';
+
 import template from './checkout.tpl';
 
 let componentName = 'checkout';
@@ -22,16 +25,27 @@ let componentName = 'checkout';
 class CheckoutController{
 
   /* @ngInject */
-  constructor($window, $log, cartService, designationsService){
+  constructor($window, $log, cartService, designationsService, sessionEnforcerService){
     this.$log = $log;
     this.$window = $window;
     this.cartService = cartService;
     this.designationsService = designationsService;
-
+    this.sessionEnforcerService = sessionEnforcerService;
     this.checkoutStep = 'contact';
     this.loadingCartData = true;
+  }
 
+  $onInit() {
+    this.enforcerId = this.sessionEnforcerService([Roles.public, Roles.registered], () => {
+      this.loadCart();
+    }, () => {
+      this.$window.location = 'cart.html';
+    });
     this.loadCart();
+  }
+
+  $onDestroy() {
+    this.sessionEnforcerService.cancel(this.enforcerId);
   }
 
   changeStep(newStep){
@@ -65,6 +79,7 @@ export default angular
     cartSummary.name,
     cartService.name,
     designationsService.name,
+    sessionEnforcerService.name,
     showErrors.name
   ])
   .component(componentName, {

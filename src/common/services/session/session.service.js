@@ -10,11 +10,17 @@ import 'rxjs/add/operator/map';
 import appConfig from 'common/app.config';
 
 let serviceName = 'sessionService';
+export let Roles = {
+  public:     'PUBLIC',
+  identified: 'IDENTIFIED',
+  registered: 'REGISTERED'
+};
 
 /*@ngInject*/
-function session( $cookies, $rootScope, $http, envService ) {
+function session( $cookies, $rootScope, $http, $timeout, envService ) {
   var session = {},
-    sessionSubject = new BehaviorSubject( session );
+    sessionSubject = new BehaviorSubject( session ),
+    sessionTimeout;
 
   // Set initial session on load
   updateCurrentSession( $cookies.get( 'cortex-session' ) );
@@ -110,28 +116,50 @@ function session( $cookies, $rootScope, $http, envService ) {
 
   /* Private Methods */
   function updateCurrentSession( encoded_value ) {
-    var cortexSession = {};
+    let cortexSession = {};
     if ( angular.isDefined( encoded_value ) ) {
       cortexSession = jwtDecode( encoded_value );
     }
+    // Set expiration timeout
+    setSessionTimeout();
     // Copy new session into current session object
     angular.copy( cortexSession, session );
     // Update sessionSubject with new value
     sessionSubject.next( session );
   }
 
+  function setSessionTimeout() {
+    let encodedSession = $cookies.get( 'give-session' );
+    // Cancel current session timeout
+    if ( angular.isDefined( sessionTimeout ) ) {
+      $timeout.cancel( sessionTimeout );
+      sessionTimeout = undefined;
+    }
+    // Decode give-session cookie and set timeout based on expiration
+    if ( angular.isDefined( encodedSession ) ) {
+      let giveSession = jwtDecode( encodedSession ),
+        timeout = new Date( giveSession.exp * 1000 ) - Date.now();
+      if ( timeout > 0 ) {
+        sessionTimeout = $timeout( timeout );
+        sessionTimeout.then( () => {
+          updateCurrentSession( $cookies.get( 'cortex-session' ) );
+        } );
+      }
+    }
+  }
+
   function currentRole() {
     if ( angular.isDefined( session.token_hash ) ) {
-      if ( session.token_hash.role === 'PUBLIC' ) {
-        return 'PUBLIC';
+      if ( session.token_hash.role === Roles.public ) {
+        return Roles.public;
       }
       // Expired cookies are undefined
       if ( angular.isUndefined( $cookies.get( 'give-session' ) ) ) {
-        return 'IDENTIFIED';
+        return Roles.identified;
       }
       return session.token_hash.role;
     }
-    return 'PUBLIC';
+    return Roles.public;
   }
 
   function casApiUrl( path ) {
