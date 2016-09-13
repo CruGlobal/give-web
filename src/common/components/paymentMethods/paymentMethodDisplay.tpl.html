@@ -1,11 +1,11 @@
 <span ng-switch="$ctrl.paymentMethod.self.type">
   <span ng-switch-when="cru.creditcards.named-credit-card">
     <span ng-switch="$ctrl.paymentMethod['card-type']">
-      <img class="method-logo hidden-xs" src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png" ng-switch-when="American Express"/>
-      <img class="method-logo hidden-xs" src="{{$ctrl.imgDomain}}/assets/img/cc-icons/discover-curved-128px.png" ng-switch-when="Discover"/>
-      <img class="method-logo hidden-xs" src="{{$ctrl.imgDomain}}/assets/img/cc-icons/mastercard-curved-128px.png" ng-switch-when="Mastercard"/>
-      <img class="method-logo hidden-xs" src="{{$ctrl.imgDomain}}/assets/img/cc-icons/visa-curved-128px.png" ng-switch-when="Visa"/>
-      <img class="method-logo hidden-xs" src="{{$ctrl.imgDomain}}/assets/img/cc-icons/diners-curved-128px.png" ng-switch-when="Diners Club"/>
+      <img class="method-logo hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png" ng-switch-when="American Express"/>
+      <img class="method-logo hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/discover-curved-128px.png" ng-switch-when="Discover"/>
+      <img class="method-logo hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/mastercard-curved-128px.png" ng-switch-when="MasterCard"/>
+      <img class="method-logo hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/visa-curved-128px.png" ng-switch-when="Visa"/>
+      <img class="method-logo hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/diners-curved-128px.png" ng-switch-when="Diners Club"/>
     </span>
     <strong>{{$ctrl.paymentMethod['card-type']}}</strong>
     <span translate>ends in ****{{$ctrl.paymentMethod['card-number']}}</span>

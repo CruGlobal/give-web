@@ -2,9 +2,12 @@ import angular from 'angular';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 import toString from 'lodash/toString';
 import map from 'lodash/map';
+import omit from 'lodash/omit';
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 
 import cortexApiService from '../cortexApi.service';
@@ -92,6 +95,7 @@ class Order{
   }
 
   addCreditCardPayment(paymentInfo){
+    paymentInfo = omit(paymentInfo, 'ccv');
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
         return this.cortexApiService.post({
@@ -100,6 +104,20 @@ class Order{
           followLocation: true
         });
       });
+  }
+
+  addPaymentMethod(paymentInfo){
+    if(paymentInfo.bankAccount){
+      return this.addBankAccountPayment(paymentInfo.bankAccount);
+    }else if(paymentInfo.creditCard){
+      return this.addCreditCardPayment(paymentInfo.creditCard)
+        .combineLatest(this.addBillingAddress(paymentInfo.billingAddress))
+        .do(() => {
+          this.storeCardSecurityCode(paymentInfo.creditCard.ccv);
+        });
+    }else{
+      return Observable.throw('Error adding payment method. The data passed to orderService.addPaymentMethod did not contain bankAccount or creditCard data');
+    }
   }
 
   getExistingPaymentMethods(){

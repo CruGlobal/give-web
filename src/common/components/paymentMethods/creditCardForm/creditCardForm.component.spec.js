@@ -7,7 +7,7 @@ import { ccpStagingKey } from 'common/app.constants';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import module from './credit-card.component';
+import module from './creditCardForm.component.js';
 
 import countriesResponse from 'common/services/api/fixtures/cortex-countries.fixture.js';
 import donorDetailsResponse from 'common/services/api/fixtures/cortex-donordetails.fixture.js';

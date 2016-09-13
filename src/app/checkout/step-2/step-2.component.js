@@ -1,8 +1,9 @@
 import angular from 'angular';
 
-import bankAccount from './bank-account/bank-account.component';
-import creditCard from './credit-card/credit-card.component';
+import addNewPaymentMethod from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.component';
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
+
+import orderService from 'common/services/api/order.service';
 
 import template from './step-2.tpl';
 
@@ -11,19 +12,13 @@ let componentName = 'checkoutStep2';
 class Step2Controller{
 
   /* @ngInject */
-  constructor($log, envService){
+  constructor($log, orderService){
     this.$log = $log;
+    this.orderService = orderService;
 
-    this.paymentType = 'bankAccount';
     this.submitted = false;
-    this.imgDomain = envService.read('imgDomain');
     this.loadingPaymentMethods = true;
-    this.existingPaymentMethods = false;
-  }
-
-  changePaymentType(type){
-    this.paymentType = type;
-    this.submitted = false;
+    this.existingPaymentMethods = true;
   }
 
   handleExistingPaymentLoading(success, hasExistingPaymentMethods, error){
@@ -36,8 +31,17 @@ class Step2Controller{
     this.loadingPaymentMethods = false;
   }
 
-  onSave(success){
-    if(success){
+  onSubmit(success, data){
+    if(success && data){
+      this.orderService.addPaymentMethod(data)
+        .subscribe(() => {
+            this.changeStep({newStep: 'review'});
+          },
+          (error) => {
+            this.$log.error('Error saving payment method', error);
+            this.submitted = false;
+          });
+    }else if(success){
       this.changeStep({newStep: 'review'});
     }else{
       this.submitted = false;
@@ -48,9 +52,9 @@ class Step2Controller{
 export default angular
   .module(componentName, [
     template.name,
-    bankAccount.name,
-    creditCard.name,
-    existingPaymentMethods.name
+    addNewPaymentMethod.name,
+    existingPaymentMethods.name,
+    orderService.name
   ])
   .component(componentName, {
     controller: Step2Controller,

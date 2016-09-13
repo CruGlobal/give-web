@@ -1,23 +1,24 @@
 import angular from 'angular';
+import 'angular-environment';
 import 'angular-messages';
 import toString from 'lodash/toString';
+
 import showErrors from 'common/filters/showErrors.filter';
+
 import paymentValidationService from 'common/services/paymentHelpers/paymentValidation.service';
-import orderService from 'common/services/api/order.service';
 import ccpService from 'common/services/paymentHelpers/ccp.service';
 
-import template from './bank-account.tpl';
+import template from './bankAccountForm.tpl';
 
-let componentName = 'checkoutBankAccount';
+let componentName = 'bankAccountForm';
 
 class BankAccountController{
 
   /* @ngInject */
-  constructor($scope, $log, envService, paymentValidationService, orderService, ccpService){
+  constructor($scope, $log, envService, paymentValidationService, ccpService){
     this.$scope = $scope;
     this.$log = $log;
     this.paymentValidationService = paymentValidationService;
-    this.orderService = orderService;
     this.ccpService = ccpService;
 
     this.imgDomain = envService.read('imgDomain');
@@ -73,21 +74,19 @@ class BankAccountController{
     this.bankPaymentForm.$setSubmitted();
     if(this.bankPaymentForm.$valid){
       let ccpAccountNumber = new (this.ccp.BankAccountNumber)(this.bankPayment.accountNumber);
-      this.orderService.addBankAccountPayment({
-          'account-type': this.bankPayment.accountType,
-          'bank-name': this.bankPayment.bankName,
-          'encrypted-account-number': ccpAccountNumber.encrypt(),
-          'routing-number': this.bankPayment.routingNumber
-        })
-        .subscribe(() => {
-            this.onSave({success: true});
-          },
-          (error) => {
-            this.$log.error('Error saving bank payment info', error);
-            this.onSave({success: false});
-          });
+      this.onSubmit({
+        success: true,
+        data: {
+          bankAccount: {
+            'account-type': this.bankPayment.accountType,
+            'bank-name': this.bankPayment.bankName,
+            'encrypted-account-number': ccpAccountNumber.encrypt(),
+            'routing-number': this.bankPayment.routingNumber
+          }
+        }
+      });
     }else{
-      this.onSave({success: false});
+      this.onSubmit({success: false});
     }
   }
 
@@ -96,10 +95,10 @@ class BankAccountController{
 export default angular
   .module(componentName, [
     template.name,
+    'environment',
     'ngMessages',
     showErrors.name,
     paymentValidationService.name,
-    orderService.name,
     ccpService.name
   ])
   .component(componentName, {
@@ -107,6 +106,6 @@ export default angular
     templateUrl: template.name,
     bindings: {
       submitted: '<',
-      onSave: '&'
+      onSubmit: '&'
     }
   });

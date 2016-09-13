@@ -6,7 +6,7 @@ import { ccpStagingKey } from 'common/app.constants';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import module from './bank-account.component';
+import module from './bankAccountForm.component.js';
 
 describe('checkout', () => {
   describe('step 2', () => {
