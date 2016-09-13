@@ -1,4 +1,5 @@
 import angular from 'angular';
+import appConfig from 'common/app.config';
 
 let directiveName = 'desigSrc';
 
@@ -14,5 +15,8 @@ function desigSrc(envService) {
 }
 
 export default angular
-  .module( directiveName, [] )
+  .module( directiveName, [
+    'environment',
+    appConfig.name
+  ] )
   .directive( directiveName, desigSrc );
