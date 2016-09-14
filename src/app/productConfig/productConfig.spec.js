@@ -57,7 +57,7 @@ describe( 'productConfig', function () {
       expect( $ctrl.$window.location.href ).toEqual( '' );
       resultDeferred.resolve();
       $rootScope.$digest();
-      expect( $ctrl.$window.location.href ).toEqual( 'cart.html' );
+      expect( $ctrl.$window.location.href ).toEqual( '/cart.html' );
     } );
   } );
 } );
