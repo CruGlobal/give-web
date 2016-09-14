@@ -21,12 +21,12 @@ System.config({
   map: {
     "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
     "angular": "github:angular/bower-angular@1.5.8",
-    "angular-bootstrap": "npm:angular-bootstrap-npm@0.14.3",
     "angular-cookies": "github:angular/bower-angular-cookies@1.5.8",
     "angular-environment": "npm:angular-environment@1.0.4",
     "angular-gettext": "github:rubenv/angular-gettext@2.3.6",
     "angular-messages": "github:angular/bower-angular-messages@1.5.8",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.8",
+    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.3",
     "angular-ui-router": "github:angular-ui/ui-router@0.3.1",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",

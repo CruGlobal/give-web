@@ -1,5 +1,5 @@
 import angular from 'angular';
-import 'angular-bootstrap';
+import 'angular-ui-bootstrap';
 import modalStateService from 'common/services/modalState.service';
 import sessionModalController from './sessionModal.controller';
 import sessionModalTemplate from './sessionModal.tpl';
