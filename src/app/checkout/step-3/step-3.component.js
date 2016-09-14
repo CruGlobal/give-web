@@ -66,12 +66,12 @@ class Step3Controller{
   checkErrors(){
     this.orderService.checkErrors()
       .subscribe((data) => {
-        this.errors = data;
+        this.needinfoErrors = data;
       });
   }
 
   canSubmitOrder(){
-    let enableSubmitBtn = !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.errors);
+    let enableSubmitBtn = !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.needinfoErrors);
     this.onSubmitBtnChangeState({
       $event: {
         enabled: enableSubmitBtn
@@ -81,6 +81,7 @@ class Step3Controller{
   }
 
   submitOrder(){
+    delete this.submissionError;
     this.submittingOrder = true;
 
     let submitRequest;
@@ -102,8 +103,7 @@ class Step3Controller{
         this.submittingOrder = false;
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
-        // TODO: show error message
-        this.errors = [error];
+        this.submissionError = error;
       });
   }
 }

@@ -29,7 +29,6 @@ describe('checkout', () => {
             getBillingAddress: () => Observable.of({ address: 'billing address' }),
             checkErrors: () => Observable.of(['email-info']),
             submit: () => Observable.of('called submit'),
-            submitWithCcv: (ccv) => Observable.of('called submit with a CCV of' + ccv),
             retrieveCardSecurityCode: () => self.storedCcv,
             clearCardSecurityCode: () => {}
           },
@@ -132,7 +131,7 @@ describe('checkout', () => {
     describe('checkErrors', () => {
       it('should load any needinfo errors', () => {
         self.controller.checkErrors();
-        expect(self.controller.errors).toEqual(['email-info']);
+        expect(self.controller.needinfoErrors).toEqual(['email-info']);
         self.controller.$log.assertEmpty();
       });
     });
@@ -143,7 +142,7 @@ describe('checkout', () => {
         self.controller.donorDetails = config.donorDetails;
         self.controller.bankAccountPaymentDetails = config.bankAccountPaymentDetails;
         self.controller.creditCardPaymentDetails = config.creditCardPaymentDetails;
-        self.controller.errors = config.errors;
+        self.controller.needinfoErrors = config.needinfoErrors;
         expect(self.controller.canSubmitOrder()).toEqual(config.outcome);
         expect(self.controller.onSubmitBtnChangeState).toHaveBeenCalledWith({
           $event: {
@@ -158,7 +157,7 @@ describe('checkout', () => {
           donorDetails: {},
           bankAccountPaymentDetails: {},
           creditCardPaymentDetails: undefined,
-          errors: undefined,
+          needinfoErrors: undefined,
           outcome: true
         });
       });
@@ -168,7 +167,7 @@ describe('checkout', () => {
           donorDetails: {},
           bankAccountPaymentDetails: undefined,
           creditCardPaymentDetails: {},
-          errors: undefined,
+          needinfoErrors: undefined,
           outcome: true
         });
       });
@@ -178,7 +177,7 @@ describe('checkout', () => {
           donorDetails: {},
           bankAccountPaymentDetails: {},
           creditCardPaymentDetails: undefined,
-          errors: [],
+          needinfoErrors: [],
           outcome: false
         });
       });
@@ -188,7 +187,7 @@ describe('checkout', () => {
           donorDetails: {},
           bankAccountPaymentDetails: undefined,
           creditCardPaymentDetails: undefined,
-          errors: undefined,
+          needinfoErrors: undefined,
           outcome: false
         });
       });
@@ -198,7 +197,7 @@ describe('checkout', () => {
           donorDetails: {},
           bankAccountPaymentDetails: {},
           creditCardPaymentDetails: undefined,
-          errors: undefined,
+          needinfoErrors: undefined,
           outcome: false
         });
       });
@@ -208,7 +207,7 @@ describe('checkout', () => {
           donorDetails: undefined,
           bankAccountPaymentDetails: {},
           creditCardPaymentDetails: undefined,
-          errors: undefined,
+          needinfoErrors: undefined,
           outcome: false
         });
       });
@@ -217,7 +216,6 @@ describe('checkout', () => {
     describe('submitOrder', () => {
       beforeEach(() => {
         spyOn(self.controller.orderService, 'submit').and.callThrough();
-        spyOn(self.controller.orderService, 'submitWithCcv').and.callThrough();
         spyOn(self.controller.orderService, 'clearCardSecurityCode');
       });
 
@@ -232,6 +230,16 @@ describe('checkout', () => {
         expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
         expect(self.controller.$window.location.href).toEqual('thank-you.html');
       });
+      it('should handle an error submitting an order with a bank account', () => {
+        self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving bank account'));
+        self.controller.bankAccountPaymentDetails = {};
+        self.controller.submitOrder();
+        expect(self.controller.orderService.submit).toHaveBeenCalled();
+        expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'error saving bank account']);
+        expect(self.controller.$window.location.href).toEqual('checkout.html');
+        expect(self.controller.submissionError).toEqual('error saving bank account');
+      });
       it('should submit the order with a CCV if paying with a credit card', () => {
         self.controller.creditCardPaymentDetails = {};
         self.storedCcv = '1234';
@@ -240,22 +248,33 @@ describe('checkout', () => {
         expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
         expect(self.controller.$window.location.href).toEqual('thank-you.html');
       });
+      it('should handle an error submitting an order with a credit card', () => {
+        self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving credit card'));
+        self.controller.creditCardPaymentDetails = {};
+        self.storedCcv = '1234';
+        self.controller.submitOrder();
+        expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
+        expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'error saving credit card']);
+        expect(self.controller.$window.location.href).toEqual('checkout.html');
+        expect(self.controller.submissionError).toEqual('error saving credit card');
+      });
       it('should throw an error if paying with a credit card and the CCV is missing', () => {
         self.controller.creditCardPaymentDetails = {};
         self.controller.submitOrder();
         expect(self.controller.orderService.submit).not.toHaveBeenCalled();
-        expect(self.controller.orderService.submitWithCcv).not.toHaveBeenCalled();
         expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly']);
         expect(self.controller.$window.location.href).toEqual('checkout.html');
+        expect(self.controller.submissionError).toEqual('Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly');
       });
       it('should throw an error if neither bank account or credit card details are loaded', () => {
         self.controller.submitOrder();
         expect(self.controller.orderService.submit).not.toHaveBeenCalled();
-        expect(self.controller.orderService.submitWithCcv).not.toHaveBeenCalled();
         expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'Current payment type is unknown']);
         expect(self.controller.$window.location.href).toEqual('checkout.html');
+        expect(self.controller.submissionError).toEqual('Current payment type is unknown');
       });
     });
   });

@@ -1,9 +1,20 @@
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.errors">
-  <p ng-repeat="error in $ctrl.errors" ng-switch="error">
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.needinfoErrors || $ctrl.submissionError">
+  <p ng-repeat="error in $ctrl.needinfoErrors" ng-switch="error">
     <span ng-switch-when="email-info" translate>There was an issue with your email. Please verify that it is correct.</span>
     <span ng-switch-when="payment-method-info" translate>There was an issue with your payment. Please verify that all your payment information is correct.</span>
     <span ng-switch-when="billing-address-info" translate>There was an issue with your billing address. Please verify that your billing address is correct.</span>
-    <span ng-switch-default translate>There was an unknown error. Please verify all your info, try refreshing the page, and, if you are still seeing this message, contact support.</span>
+    <span ng-switch-default translate>There was an unknown error indicating that the order is still missing data. Please verify all your info, try refreshing the page, and, if you are still seeing this message, contact support.</span>
+  </p>
+  <p ng-if="$ctrl.submissionError" ng-switch="$ctrl.submissionError">
+    <span ng-switch-when="Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly" translate>
+      There was an error submitting your credit card's security code (CCV). Your session may have expired before it was sent. Try changing your payment method and saving your credit card again.
+    </span>
+    <span ng-switch-when="Current payment type is unknown" translate>
+      There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, contact support.
+    </span>
+    <span ng-switch-default translate>
+      There was an unknown error submitting your order. Please verify all your info and try again. If you are still seeing this message, contact support.
+    </span>
   </p>
 </div>
 <div class="mb">
