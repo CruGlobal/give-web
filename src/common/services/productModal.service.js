@@ -1,5 +1,5 @@
 import angular from 'angular';
-import 'angular-bootstrap';
+import 'angular-ui-bootstrap';
 import designationsService from 'common/services/api/designations.service';
 import templateModal from 'app/productConfig/productConfigModal.tpl';
 import modalController from 'app/productConfig/productConfig.modal';
