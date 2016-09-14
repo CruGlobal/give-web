@@ -25,6 +25,7 @@ class Step2Controller{
     if(success){
       this.existingPaymentMethods = hasExistingPaymentMethods;
     }else{
+      this.existingPaymentMethods = false;
       this.$log.warn('Error loading existing payment methods', error);
       //TODO: should we show the user that there was an error or should we let them just add a new payment method
     }

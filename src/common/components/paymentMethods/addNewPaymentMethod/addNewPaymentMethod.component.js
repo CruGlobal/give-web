@@ -25,9 +25,6 @@ class AddNewPaymentMethodController{
 
   onChildSubmit(success, data){
     this.onSubmit({success: success, data: data});
-    if(!success){
-      this.onSubmit({success: false});
-    }
   }
 }
 

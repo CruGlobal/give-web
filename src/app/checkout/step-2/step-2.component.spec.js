@@ -1,5 +1,9 @@
 import angular from 'angular';
 import 'angular-mocks';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
+
 import module from './step-2.component';
 
 describe('checkout', () => {
@@ -7,29 +11,12 @@ describe('checkout', () => {
     beforeEach(angular.mock.module(module.name));
     var self = {};
 
-    beforeEach(inject(function($rootScope, $componentController) {
-      var $scope = $rootScope.$new();
-
-      self.controller = $componentController(module.name, {
-          $scope: $scope
-        },
+    beforeEach(inject(function($componentController) {
+      self.controller = $componentController(module.name, {},
         {
           changeStep: () => {}
         });
     }));
-
-    describe('changePaymentType', () => {
-      it('should set the payment type and set submitted to false', () => {
-        self.controller.submitted = true;
-        self.controller.changePaymentType('creditCard');
-        expect(self.controller.paymentType).toBe('creditCard');
-        expect(self.controller.submitted).toBe(false);
-        self.controller.submitted = true;
-        self.controller.changePaymentType('bankAccount');
-        expect(self.controller.paymentType).toBe('bankAccount');
-        expect(self.controller.submitted).toBe(false);
-      });
-    });
 
     describe('handleExistingPaymentLoading', () => {
       it('should set flags for the view if payment methods exist', () => {
@@ -53,16 +40,31 @@ describe('checkout', () => {
       });
     });
 
-    describe('onSave', () => {
+    describe('onSubmit', () => {
+      it('should save payment data when success is true and data is defined', () => {
+        spyOn(self.controller, 'changeStep');
+        spyOn(self.controller.orderService, 'addPaymentMethod').and.callFake(() => Observable.of(''));
+        self.controller.onSubmit(true, {bankAccount: {}});
+        expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
+        expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
+      });
+      it('should handle an error saving payment data', () => {
+        spyOn(self.controller, 'changeStep');
+        spyOn(self.controller.orderService, 'addPaymentMethod').and.callFake(() => Observable.throw('some error'));
+        self.controller.onSubmit(true, {bankAccount: {}});
+        expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
+        expect(self.controller.submitted).toEqual(false);
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error saving payment method', 'some error']);
+      });
+      it('should call changeStep if save was successful and there was no data (assumes another component saved the data)', () => {
+        spyOn(self.controller, 'changeStep');
+        self.controller.onSubmit(true);
+        expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
+      });
       it('should set submitted to false if save was unsuccessful', () => {
         self.controller.submitted = true;
-        self.controller.onSave(false);
-        expect(self.controller.submitted).toBe(false);
-      });
-      it('should call changeStep if save was successful', () => {
-        spyOn(self.controller, 'changeStep');
-        self.controller.onSave(true);
-        expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
+        self.controller.onSubmit(false);
+        expect(self.controller.submitted).toEqual(false);
       });
     });
   });
