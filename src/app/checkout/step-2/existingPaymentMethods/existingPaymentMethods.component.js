@@ -66,8 +66,12 @@ class ExistingPaymentMethodsController {
       size: 'large new-payment-method-modal',
       backdrop: 'static', // Disables closing on click
       resolve: {
+        submissionError: this.submissionError,
         onSubmit: () => this.onSubmit
       }
+    });
+    this.addNewPaymentMethodModal.result.then(null, () => {
+      this.onSubmit({success: false, error: ''}); // To clear the submissionErrors object in step 2
     });
   }
 
@@ -84,7 +88,7 @@ class ExistingPaymentMethodsController {
         },
         (error) => {
           this.$log.error('Error selecting payment method', error);
-          this.onSubmit({success: false});
+          this.onSubmit({success: false, error: error});
         });
   }
 }
@@ -103,6 +107,7 @@ export default angular
     templateUrl: template.name,
     bindings: {
       submitted: '<',
+      submissionError: '<',
       onSubmit: '&',
       onLoad: '&'
     }
