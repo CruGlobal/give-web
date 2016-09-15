@@ -10,23 +10,23 @@ import displayAddressComponent from 'common/components/display-address/display-a
 import showErrors from 'common/filters/showErrors.filter';
 
 import paymentValidationService from 'common/services/paymentHelpers/paymentValidation.service';
-import orderService from 'common/services/api/order.service';
 import geographiesService from 'common/services/api/geographies.service';
+import orderService from 'common/services/api/order.service';
 import ccpService from 'common/services/paymentHelpers/ccp.service';
 
-import template from './credit-card.tpl';
+import template from './creditCardForm.tpl';
 
-let componentName = 'checkoutCreditCard';
+let componentName = 'creditCardForm';
 
 class CreditCardController {
 
   /* @ngInject */
-  constructor($scope, $log, paymentValidationService, orderService, geographiesService, ccpService) {
+  constructor($scope, $log, paymentValidationService, geographiesService, orderService, ccpService) {
     this.$scope = $scope;
     this.$log = $log;
     this.paymentValidationService = paymentValidationService;
-    this.orderService = orderService;
     this.geographiesService = geographiesService;
+    this.orderService = orderService;
     this.ccpService = ccpService;
 
     this.creditCardPayment = {};
@@ -130,24 +130,21 @@ class CreditCardController {
           'given-name': 'none'
         }
       };
-
-      this.orderService.addCreditCardPayment({
-          'card-number': ccpCreditCardNumber.encrypt(),
-          'cardholder-name': this.creditCardPayment.cardholderName,
-          'expiry-month': this.creditCardPayment.expiryMonth,
-          'expiry-year': this.creditCardPayment.expiryYear
-        })
-        .combineLatest(this.orderService.addBillingAddress(billingAddress))
-        .subscribe(() => {
-            this.orderService.storeCardSecurityCode(ccpSecurityCode.encrypt());
-            this.onSave({success: true});
+      this.onSubmit({
+        success: true,
+        data: {
+          creditCard: {
+            'card-number': ccpCreditCardNumber.encrypt(),
+            'cardholder-name': this.creditCardPayment.cardholderName,
+            'expiry-month': this.creditCardPayment.expiryMonth,
+            'expiry-year': this.creditCardPayment.expiryYear,
+            ccv: ccpSecurityCode.encrypt()
           },
-          (error) => {
-            this.$log.error('Error saving credit card or billing address info', error);
-            this.onSave({success: false});
-          });
+          billingAddress: billingAddress
+        }
+      });
     }else{
-      this.onSave({success: false});
+      this.onSubmit({success: false});
     }
   }
 }
@@ -159,8 +156,8 @@ export default angular
     displayAddressComponent.name,
     showErrors.name,
     paymentValidationService.name,
-    orderService.name,
     geographiesService.name,
+    orderService.name,
     ccpService.name
   ])
   .component(componentName, {
@@ -168,6 +165,6 @@ export default angular
     templateUrl: template.name,
     bindings: {
       submitted: '<',
-      onSave: '&'
+      onSubmit: '&'
     }
   });

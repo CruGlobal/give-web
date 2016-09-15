@@ -15,7 +15,7 @@ describe('checkout', () => {
       beforeEach(inject(($componentController) => {
         self.controller = $componentController(module.name, {}, {
           onLoad: jasmine.createSpy('onLoad'),
-          onSave: jasmine.createSpy('onSave')
+          onSubmit: jasmine.createSpy('onSubmit')
         });
       }));
 
@@ -115,12 +115,12 @@ describe('checkout', () => {
         it('should save the selected payment', () => {
           spyOn(self.controller.orderService, 'selectPaymentMethod').and.callFake(() => Observable.of('success'));
           self.controller.selectPayment();
-          expect(self.controller.onSave).toHaveBeenCalledWith({success: true});
+          expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
         });
         it('should handle a failed request to save the selected payment', () => {
           spyOn(self.controller.orderService, 'selectPaymentMethod').and.callFake(() => Observable.throw('some error'));
           self.controller.selectPayment();
-          expect(self.controller.onSave).toHaveBeenCalledWith({success: false});
+          expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false});
           expect(self.controller.$log.error.logs[0]).toEqual(['Error selecting payment method', 'some error']);
         });
       });

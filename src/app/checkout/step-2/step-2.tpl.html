@@ -6,39 +6,13 @@
     <span class="loading loading4"></span>
   </div>
 </div>
-<div ng-show="!$ctrl.loadingPaymentMethods">
+<div ng-show="!$ctrl.loadingPaymentMethods"><!-- ng-show allows checkout-existing-payment-methods component to be instantiated to check for existingPaymentMethods -->
   <div ng-if="!$ctrl.existingPaymentMethods">
-    <div class="mb_x">
-      <div class="row">
-        <div class="col-md-6">
-          <button class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('bankAccount')" ng-class="{'on': $ctrl.paymentType === 'bankAccount'}">
-            Bank Account
-            <img ng-src="{{$ctrl.imgDomain}}/assets/img/icon-bank.png" alt="Bank Account Icon"/>
-          </button>
-        </div>
-        <div class="col-md-6">
-          <button class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('creditCard')" ng-class="{'on': $ctrl.paymentType === 'creditCard'}">
-            Credit Card
-            <img ng-src="{{$ctrl.imgDomain}}/assets/img/icon-cc.png" alt="Credit Card Icon"/>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-indiv cart-tab show" ng-if="$ctrl.paymentType === 'bankAccount'">
-
-      <checkout-bank-account submitted="$ctrl.submitted" on-save="$ctrl.onSave(success)"></checkout-bank-account>
-
-    </div>
-    <div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
-
-      <checkout-credit-card submitted="$ctrl.submitted" on-save="$ctrl.onSave(success)"></checkout-credit-card>
-
-    </div>
+    <add-new-payment-method submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)"></add-new-payment-method>
   </div>
 
-  <div ng-show="$ctrl.existingPaymentMethods">
-    <checkout-existing-payment-methods payment-methods="$ctrl.paymentMethods" submitted="$ctrl.submitted" on-save="$ctrl.onSave(success)" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"></checkout-existing-payment-methods>
+  <div ng-if="$ctrl.existingPaymentMethods">
+    <checkout-existing-payment-methods submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success)" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"></checkout-existing-payment-methods>
   </div>
 </div>
 

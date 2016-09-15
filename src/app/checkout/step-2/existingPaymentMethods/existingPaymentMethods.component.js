@@ -62,11 +62,11 @@ class ExistingPaymentMethodsController {
   selectPayment(){
     this.orderService.selectPaymentMethod(this.selectedPaymentMethod)
       .subscribe(() => {
-          this.onSave({success: true});
+          this.onSubmit({success: true});
         },
         (error) => {
           this.$log.error('Error selecting payment method', error);
-          this.onSave({success: false});
+          this.onSubmit({success: false});
         });
   }
 }
@@ -82,9 +82,8 @@ export default angular
     controller: ExistingPaymentMethodsController,
     templateUrl: template.name,
     bindings: {
-      paymentMethods: '<',
       submitted: '<',
-      onSave: '&',
+      onSubmit: '&',
       onLoad: '&'
     }
   });

@@ -196,12 +196,16 @@ describe('order service', () => {
         'card-type': 'VISA',
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
-        'expiry-year': '12'
+        'expiry-year': '12',
+        ccv: 'someEncryptedCCV...'
       };
+
+      let paymentInfoWithoutCCV = angular.copy(paymentInfo);
+      delete paymentInfoWithoutCCV.ccv;
 
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
-        paymentInfo
+        paymentInfoWithoutCCV
       ).respond(200, 'success');
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -213,6 +217,72 @@ describe('order service', () => {
         });
 
       self.$httpBackend.flush();
+    });
+  });
+
+  describe('addPaymentMethod', () => {
+    it('should save a new bank account payment method', () => {
+      spyOn(self.orderService,'addBankAccountPayment').and.callFake(() => Observable.of('success'));
+      let paymentInfo = {
+        'account-type': 'checking',
+        'bank-name': 'First Bank',
+        'display-account-number': '************9012',
+        'encrypted-account-number': '**fake*encrypted**123456789012**',
+        'routing-number': '123456789'
+      };
+      self.orderService.addPaymentMethod({
+        bankAccount: paymentInfo
+      }).subscribe((data) => {
+        expect(data).toEqual('success');
+      });
+      expect(self.orderService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo);
+    });
+    it('should save a new credit card payment method', () => {
+      spyOn(self.orderService,'addCreditCardPayment').and.callFake(() => Observable.of('credit card success'));
+      spyOn(self.orderService,'addBillingAddress').and.callFake(() => Observable.of('billing address success'));
+      spyOn(self.orderService,'storeCardSecurityCode');
+      let paymentInfo = {
+        'card-number': '**fake*encrypted**1234567890123456**',
+        'card-type': 'VISA',
+        'cardholder-name': 'Test Name',
+        'expiry-month': '06',
+        'expiry-year': '12',
+        ccv: 'someEncryptedCCV...'
+      };
+      let billingAddress = {
+        address: {
+          'country-name': 'US',
+          'street-address': '123 First St',
+          'extended-address': 'Apt 123',
+          'locality': 'Sacramento',
+          'postal-code': '12345',
+          'region': 'CA'
+        },
+        name: {
+          'family-name': 'Lname',
+          'given-name': 'Fname'
+        }
+      };
+      self.orderService.addPaymentMethod({
+        creditCard: paymentInfo,
+        billingAddress: billingAddress
+      }).subscribe((data) => {
+        expect(data).toEqual(['credit card success', 'billing address success']);
+      });
+      expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo);
+      expect(self.orderService.addBillingAddress).toHaveBeenCalledWith(billingAddress);
+      expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('someEncryptedCCV...');
+    });
+    it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
+      self.orderService.addPaymentMethod({
+          billingAddress: {}
+        })
+        .subscribe(() => {
+            fail('the addPaymentMethod Observable completed successfully when it should have thrown an error');
+          },
+          (error) => {
+            expect(error).toEqual('Error adding payment method. The data passed to orderService.addPaymentMethod did not contain bankAccount or creditCard data');
+          });
     });
   });
 
