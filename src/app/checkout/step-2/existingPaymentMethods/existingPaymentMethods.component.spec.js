@@ -27,6 +27,16 @@ describe('checkout', () => {
         });
       });
 
+      describe('$onDestroy', () => {
+        it('should close the addNewPaymentMethodModal if opened', () => {
+          self.controller.addNewPaymentMethodModal = {
+            close: jasmine.createSpy('close')
+          };
+          self.controller.$onDestroy();
+          expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+        });
+      });
+
       describe('loadPaymentMethods', () => {
         it('should finish with no existing payment methods if the session role is not REGISTERED', () => {
           spyOn(self.controller.sessionService, 'getRole').and.callFake(() => 'IDENTIFIED');
@@ -87,6 +97,16 @@ describe('checkout', () => {
           ];
           self.controller.selectDefaultPaymentMethod();
           expect(self.controller.selectedPaymentMethod).toEqual('first uri');
+        });
+      });
+
+      describe('openAddNewPaymentMethodModal', () => {
+        it('should open the addNewPaymentMethod modal', () => {
+          spyOn(self.controller.$uibModal, 'open').and.callThrough();
+          self.controller.openAddNewPaymentMethodModal();
+          expect(self.controller.$uibModal.open).toHaveBeenCalled();
+          expect(self.controller.addNewPaymentMethodModal).toBeDefined();
+          expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()).toEqual(self.controller.onSubmit);
         });
       });
 

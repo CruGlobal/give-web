@@ -1,7 +1,9 @@
 import angular from 'angular';
 import find from 'lodash/find';
+import 'angular-ui-bootstrap';
 
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
+import addNewPaymentMethodModal from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.modal.component';
 
 import orderService from 'common/services/api/order.service';
 import sessionService from 'common/services/session/session.service';
@@ -13,14 +15,19 @@ let componentName = 'checkoutExistingPaymentMethods';
 class ExistingPaymentMethodsController {
 
   /* @ngInject */
-  constructor($log, orderService, sessionService) {
+  constructor($log, orderService, sessionService, $uibModal) {
     this.$log = $log;
     this.orderService = orderService;
     this.sessionService = sessionService;
+    this.$uibModal = $uibModal;
   }
 
   $onInit(){
     this.loadPaymentMethods();
+  }
+
+  $onDestroy(){
+    this.addNewPaymentMethodModal && this.addNewPaymentMethodModal.close();
   }
 
   loadPaymentMethods(){
@@ -53,6 +60,17 @@ class ExistingPaymentMethodsController {
     }
   }
 
+  openAddNewPaymentMethodModal(){
+    this.addNewPaymentMethodModal = this.$uibModal.open({
+      component: 'addNewPaymentMethodModal',
+      size: 'large new-payment-method-modal',
+      backdrop: 'static', // Disables closing on click
+      resolve: {
+        onSubmit: () => this.onSubmit
+      }
+    });
+  }
+
   $onChanges(changes) {
     if (changes.submitted.currentValue === true) {
       this.selectPayment();
@@ -74,7 +92,9 @@ class ExistingPaymentMethodsController {
 export default angular
   .module(componentName, [
     template.name,
+    'ui.bootstrap',
     paymentMethodDisplay.name,
+    addNewPaymentMethodModal.name,
     orderService.name,
     sessionService.name
   ])

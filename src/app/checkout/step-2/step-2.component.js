@@ -41,6 +41,7 @@ class Step2Controller{
           (error) => {
             this.$log.error('Error saving payment method', error);
             this.submitted = false;
+            //TODO: add error handling
           });
     }else if(success){
       this.changeStep({newStep: 'review'});

@@ -1,0 +1,13 @@
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="text-center border-bottom-small" translate>Add Payment Method</h3>
+      <add-new-payment-method submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)"></add-new-payment-method>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.submitted = true" translate>Add Payment Method</button>
+  <button type="button" class="btn btn-default" ng-click="$ctrl.dismiss()" translate>Cancel &amp; Return</button>
+</div>
+
