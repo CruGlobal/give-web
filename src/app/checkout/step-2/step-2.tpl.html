@@ -12,7 +12,7 @@
   </div>
 
   <div ng-if="$ctrl.existingPaymentMethods">
-    <checkout-existing-payment-methods submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success)" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"></checkout-existing-payment-methods>
+    <checkout-existing-payment-methods submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"></checkout-existing-payment-methods>
   </div>
 </div>
 
