@@ -15,7 +15,7 @@
     </small>
   </span>
   <span ng-switch-when="elasticpath.bankaccounts.bank-account">
-    <img class="method-logo hidden-xs" src="{{$ctrl.imgDomain}}/assets/img/cc-icons/bank-curved-128px.png" /><!-- TODO: get bank icon -->
+    <img class="method-logo hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/bank-curved-128px.png" />
     <strong>
       {{$ctrl.paymentMethod['bank-name']}}
       -
