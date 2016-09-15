@@ -11,10 +11,6 @@ class AccountBenefitsController {
     this.$log = $log;
     this.sessionModalService = sessionModalService;
   }
-
-  $onChanges( changesObj ) {
-    console.log( changesObj );
-  }
 }
 
 export default angular

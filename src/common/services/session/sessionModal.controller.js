@@ -6,6 +6,7 @@ import resetPasswordModal from 'common/components/resetPasswordModal/resetPasswo
 import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPasswordModal.component';
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component';
 import registerAccountModal from 'common/components/registerAccountModal/registerAccountModal.component';
+import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component';
 
 let controllerName = 'sessionModalController';
 
@@ -51,6 +52,7 @@ export default angular
     resetPasswordModal.name,
     forgotPasswordModal.name,
     userMatchModal.name,
-    registerAccountModal.name
+    registerAccountModal.name,
+    accountBenefitsModal.name
   ] )
   .controller( controllerName, SessionModalController );

@@ -40,6 +40,7 @@ function SessionModalService( $uibModal, modalStateService ) {
     resetPassword:   () => openModal( 'reset-password', {backdrop: 'static'} ).result,
     userMatch:       () => openModal( 'user-match' ).result,
     registerAccount: () => openModal( 'register-account' ).result,
+    accountBenefits: () => openModal( 'account-benefits' ).result,
   };
 }
 
