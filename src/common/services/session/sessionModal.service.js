@@ -33,11 +33,13 @@ function SessionModalService( $uibModal, modalStateService ) {
   }
 
   return {
-    open:           openModal,
-    signIn:         () => openModal( 'sign-in' ).result,
-    signUp:         () => openModal( 'sign-up' ).result,
-    forgotPassword: () => openModal( 'forgot-password' ).result,
-    resetPassword:  () => openModal( 'reset-password', {backdrop: 'static'} ).result
+    open:            openModal,
+    signIn:          () => openModal( 'sign-in' ).result,
+    signUp:          () => openModal( 'sign-up' ).result,
+    forgotPassword:  () => openModal( 'forgot-password' ).result,
+    resetPassword:   () => openModal( 'reset-password', {backdrop: 'static'} ).result,
+    userMatch:       () => openModal( 'user-match' ).result,
+    registerAccount: () => openModal( 'register-account' ).result,
   };
 }
 

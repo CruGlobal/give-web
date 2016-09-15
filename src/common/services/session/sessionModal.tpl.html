@@ -1,44 +1,58 @@
-<div class="modal-header">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="border-bottom-small">
-          <button type="button"
-                  class="close"
-                  aria-label="Close"
-                  ng-click="$ctrl.onCancel()">
-            <span aria-hidden="true">×</span>
-          </button>
-          <h3 class="text-center">{{$ctrl.modalTitle | translate}}</h3>
+<div style="position: relative">
+  <div class="modal-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="border-bottom-small">
+            <button type="button"
+                    class="close"
+                    aria-label="Close"
+                    ng-click="$ctrl.onCancel()">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h3 class="text-center">{{$ctrl.modalTitle | translate}}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body pt0">
+    <div class="container-fluid" tabindex="-1" role="dialog">
+      <div class="row">
+
+        <div ng-switch="$ctrl.state">
+          <forgot-password-modal ng-switch-when="forgot-password"
+                                 modal-title="$ctrl.modalTitle"
+                                 on-state-change="$ctrl.stateChanged(state)">
+          </forgot-password-modal>
+          <reset-password-modal ng-switch-when="reset-password"
+                                modal-title="$ctrl.modalTitle"
+                                on-state-change="$ctrl.stateChanged(state)">
+          </reset-password-modal>
+          <sign-up-modal ng-switch-when="sign-up"
+                         modal-title="$ctrl.modalTitle"
+                         on-state-change="$ctrl.stateChanged(state)"
+                         on-success="$ctrl.onSignUpSuccess()">
+          </sign-up-modal>
+          <sign-in-modal ng-switch-when="sign-in"
+                         modal-title="$ctrl.modalTitle"
+                         on-state-change="$ctrl.stateChanged(state)"
+                         on-success="$ctrl.onSignInSuccess()">
+          </sign-in-modal>
+          <user-match-modal ng-switch-when="user-match"
+                            modal-title="$ctrl.modalTitle"
+                            on-state-change="$ctrl.stateChanged(state)"
+                            on-success="$ctrl.onSignUpSuccess()"
+                            set-loading="$ctrl.setLoading(loading)">
+          </user-match-modal>
+          <user-match-modal ng-switch-when="register-account"
+                            modal-title="$ctrl.modalTitle"
+                            on-state-change="$ctrl.stateChanged(state)"
+                            on-success="$ctrl.onSignUpSuccess()">
+          </user-match-modal>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="modal-body pt0">
-  <div class="container-fluid" tabindex="-1" role="dialog">
-    <div class="row">
-
-      <div ng-switch="$ctrl.state">
-        <forgot-password-modal ng-switch-when="forgot-password"
-                               modal-title="$ctrl.modalTitle"
-                               on-state-change="$ctrl.stateChanged(state)">
-        </forgot-password-modal>
-        <reset-password-modal ng-switch-when="reset-password"
-                              modal-title="$ctrl.modalTitle"
-                              on-state-change="$ctrl.stateChanged(state)">
-        </reset-password-modal>
-        <sign-up-modal ng-switch-when="sign-up"
-                       modal-title="$ctrl.modalTitle"
-                       on-state-change="$ctrl.stateChanged(state)"
-                       on-success="$ctrl.onSignUpSuccess()">
-        </sign-up-modal>
-        <sign-in-modal ng-switch-when="sign-in"
-                       modal-title="$ctrl.modalTitle"
-                       on-state-change="$ctrl.stateChanged(state)"
-                       on-success="$ctrl.onSignInSuccess()">
-        </sign-in-modal>
-      </div>
-    </div>
-  </div>
-</div>
+<loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>
