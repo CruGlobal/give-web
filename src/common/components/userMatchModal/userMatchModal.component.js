@@ -19,8 +19,8 @@ class UserMatchModalController {
   $onInit() {
     this.setLoading( {loading: true} );
     this.modalTitle = this.gettext( 'Activate your Account' );
-    this.verificationService.getContacts().subscribe( ( data ) => {
-      this.contacts = data.contacts;
+    this.verificationService.getContacts().subscribe( ( contacts ) => {
+      this.contacts = contacts;
       this.changeMatchState( 'identity' );
     } );
   }

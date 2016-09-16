@@ -14,7 +14,8 @@ function VerificationService( cortexApiService ) {
         zoom: {
           contacts: 'element[]'
         }
-      } );
+      } )
+      .pluck( 'contacts' );
   }
 
   function selectContact( contact ) {
@@ -30,7 +31,7 @@ function VerificationService( cortexApiService ) {
       .get( {
         path: ['verifyregistrations', cortexApiService.scope, 'form']
       } )
-      .pluck( 'verification-questions' )
+      .pluck( 'verification-questions' );
   }
 
   function thatIsNotMe() {
@@ -38,6 +39,7 @@ function VerificationService( cortexApiService ) {
       .post( {
         path: ['verifyregistrations', cortexApiService.scope],
         data: {'that-is-not-me': 'true'},
+        followLocation: true
       } );
   }
 
