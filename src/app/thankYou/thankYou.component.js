@@ -10,6 +10,10 @@ import capitalizeFilter from 'common/filters/capitalize.filter';
 import orderService from 'common/services/api/order.service';
 import purchasesService from 'common/services/api/purchases.service';
 import profileService from 'common/services/api/profile.service';
+import sessionService from 'common/services/session/session.service';
+import sessionModalService from 'common/services/session/sessionModal.service';
+
+import {Roles} from 'common/services/session/session.service';
 
 import template from './thankYou.tpl';
 
@@ -18,10 +22,12 @@ let componentName = 'thankYou';
 class ThankYouController{
 
   /* @ngInject */
-  constructor(orderService, purchasesService, profileService, $log){
+  constructor(orderService, purchasesService, profileService, sessionService, sessionModalService, $log){
     this.orderService = orderService;
     this.purchasesService = purchasesService;
     this.profileService = profileService;
+    this.sessionService = sessionService;
+    this.sessionModalService = sessionModalService;
     this.$log = $log;
   }
 
@@ -42,6 +48,12 @@ class ThankYouController{
         this.mailingAddress = this.orderService.formatAddressForTemplate(this.purchase.donorDetails['mailing-address']);
         if(this.purchase.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'){ //only credit card type has billing address
           this.billingAddress = this.orderService.formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
+        }
+        // Display Account Benefits Modal when GUEST checkout
+        if(this.sessionService.getRole() === Roles.public) {
+          this.sessionModalService.accountBenefits().then(() => {
+            this.sessionModalService.userMatch();
+          });
         }
       });
   }
@@ -64,7 +76,9 @@ export default angular
     capitalizeFilter.name,
     orderService.name,
     purchasesService.name,
-    profileService.name
+    profileService.name,
+    sessionService.name,
+    sessionModalService.name
   ])
   .component(componentName, {
     controller: ThankYouController,

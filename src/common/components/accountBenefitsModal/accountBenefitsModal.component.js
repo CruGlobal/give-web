@@ -14,6 +14,10 @@ class AccountBenefitsModalController {
   $onInit() {
     this.modalTitle = this.gettext( 'Register Your Account for Online Access' );
   }
+
+  registerAccount() {
+    this.onStateChange( {state: 'sign-in'} );
+  }
 }
 
 export default angular

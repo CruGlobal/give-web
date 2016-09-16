@@ -45,7 +45,7 @@ function VerificationService( cortexApiService ) {
     return cortexApiService
       .post( {
         path:           ['verifyregistrations', cortexApiService.scope],
-        data:           {'verification-answers': answers},
+        data:           {'verification-questions': answers, 'that-is-not-me': 'false'},
         followLocation: true
       } );
   }
@@ -55,7 +55,7 @@ function VerificationService( cortexApiService ) {
     selectContact: selectContact,
     getQuestions:  getQuestions,
     submitAnswers: submitAnswers,
-    thatIsNotMe: thatIsNotMe
+    thatIsNotMe:   thatIsNotMe
   };
 }
 
