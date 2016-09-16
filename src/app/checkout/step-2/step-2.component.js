@@ -2,6 +2,7 @@ import angular from 'angular';
 
 import addNewPaymentMethod from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.component';
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
+import loadingComponent from 'common/components/loading/loading.component';
 
 import orderService from 'common/services/api/order.service';
 
@@ -60,6 +61,7 @@ export default angular
     template.name,
     addNewPaymentMethod.name,
     existingPaymentMethods.name,
+    loadingComponent.name,
     orderService.name
   ])
   .component(componentName, {

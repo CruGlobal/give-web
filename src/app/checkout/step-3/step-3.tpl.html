@@ -44,12 +44,7 @@
             {{$ctrl.donorDetails['organization-name']}}
           </div>
           <display-address address="$ctrl.donorDetails.mailingAddress"></display-address>
-          <div class="loading-wrap" ng-if="!$ctrl.donorDetails">
-            <span class="loading loading1"></span>
-            <span class="loading loading2"></span>
-            <span class="loading loading3"></span>
-            <span class="loading loading4"></span>
-          </div>
+          <loading ng-if="!$ctrl.donorDetails"></loading>
         </div>
       </div>
     </div>
@@ -115,12 +110,7 @@
               </div>
             </div>
           </div>
-          <div class="loading-wrap" ng-if="!$ctrl.bankAccountPaymentDetails && !$ctrl.creditCardPaymentDetails">
-            <span class="loading loading1"></span>
-            <span class="loading loading2"></span>
-            <span class="loading loading3"></span>
-            <span class="loading loading4"></span>
-          </div>
+          <loading ng-if="!$ctrl.bankAccountPaymentDetails && !$ctrl.creditCardPaymentDetails"></loading>
         </div>
       </div>
     </div>

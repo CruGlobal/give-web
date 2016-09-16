@@ -9,6 +9,8 @@ import step2 from './step-2/step-2.component';
 import step3 from './step-3/step-3.component';
 import cartSummary from './cart-summary/cart-summary.component';
 import help from './help/help.component';
+import loadingComponent from 'common/components/loading/loading.component';
+
 import showErrors from 'common/filters/showErrors.filter';
 
 import cartService from 'common/services/api/cart.service';
@@ -80,7 +82,8 @@ export default angular
     cartService.name,
     designationsService.name,
     sessionEnforcerService.name,
-    showErrors.name
+    showErrors.name,
+    loadingComponent.name
   ])
   .component(componentName, {
     controller: CheckoutController,

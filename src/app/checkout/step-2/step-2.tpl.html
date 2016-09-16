@@ -1,11 +1,7 @@
-<div class="row" ng-if="$ctrl.loadingPaymentMethods">
-  <div class="loading-wrap margin-top">
-    <span class="loading loading1"></span>
-    <span class="loading loading2"></span>
-    <span class="loading loading3"></span>
-    <span class="loading loading4"></span>
-  </div>
+<div style="position: relative">
+  <loading ng-if="$ctrl.loadingPaymentMethods"></loading>
 </div>
+
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.error || $ctrl.loadingExistingPaymentError">
   <p ng-if="$ctrl.loadingExistingPaymentError" ng-switch="$ctrl.loadingExistingPaymentError">
     <span ng-switch-default translate>

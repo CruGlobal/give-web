@@ -4,6 +4,8 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import find from 'lodash/find';
 
+import loadingComponent from 'common/components/loading/loading.component';
+
 import orderService from 'common/services/api/order.service';
 import geographiesService from 'common/services/api/geographies.service';
 
@@ -72,6 +74,7 @@ export default angular
   .module(componentName, [
     template.name,
     'ngMessages',
+    loadingComponent.name,
     orderService.name,
     geographiesService.name
   ])
