@@ -6,6 +6,7 @@ import sessionService from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
+import loadingComponent from 'common/components/loading/loading.component';
 
 import template from './cart.tpl';
 
@@ -63,9 +64,10 @@ class CartController {
 }
 
 export default angular
-  .module( componentName, [
-    commonModule.name,
+  .module(componentName, [
     template.name,
+    commonModule.name,
+    loadingComponent.name,
     appConfig.name,
     cartService.name,
     productModalService.name,

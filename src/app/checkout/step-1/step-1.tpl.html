@@ -1,11 +1,4 @@
-<div class="row" ng-if="!$ctrl.donorDetails">
-  <div class="loading-wrap margin-top">
-    <span class="loading loading1"></span>
-    <span class="loading loading2"></span>
-    <span class="loading loading3"></span>
-    <span class="loading loading4"></span>
-  </div>
-</div>
+<loading ng-if="!$ctrl.donorDetails"></loading>
 
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError">
   <p>{{$ctrl.submissionError | translate}}</p>

@@ -3,6 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
+import loadingComponent from 'common/components/loading/loading.component';
 
 import orderService from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
@@ -112,6 +113,7 @@ export default angular
   .module(componentName, [
     template.name,
     displayAddressComponent.name,
+    loadingComponent.name,
     orderService.name,
     capitalizeFilter.name,
     desigSrcDirective.name

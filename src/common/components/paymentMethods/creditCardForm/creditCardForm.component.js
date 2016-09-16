@@ -6,6 +6,7 @@ import range from 'lodash/range';
 import 'rxjs/add/operator/combineLatest';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
+import loadingComponent from 'common/components/loading/loading.component';
 
 import showErrors from 'common/filters/showErrors.filter';
 
@@ -154,6 +155,7 @@ export default angular
     template.name,
     'ngMessages',
     displayAddressComponent.name,
+    loadingComponent.name,
     showErrors.name,
     paymentValidationService.name,
     geographiesService.name,
