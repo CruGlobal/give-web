@@ -3,6 +3,7 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/toPromise';
 
 import module from './existingPaymentMethods.component';
 
@@ -12,7 +13,9 @@ describe('checkout', () => {
       beforeEach(angular.mock.module(module.name));
       var self = {};
 
-      beforeEach(inject(($componentController) => {
+      beforeEach(inject(($componentController, $timeout) => {
+        self.$timeout = $timeout;
+
         self.controller = $componentController(module.name, {}, {
           onLoad: jasmine.createSpy('onLoad'),
           onSubmit: jasmine.createSpy('onSubmit')
@@ -108,6 +111,13 @@ describe('checkout', () => {
           expect(self.controller.addNewPaymentMethodModal).toBeDefined();
           expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()).toEqual(self.controller.onSubmit);
         });
+        it('should call onSubmit to clear submissionErrors when the modal closes', () => {
+          spyOn(self.controller.$uibModal, 'open').and.returnValue({ result: Observable.throw('').toPromise() });
+          self.controller.openAddNewPaymentMethodModal();
+          self.$timeout(() => {
+            expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false, error: ''});
+          }, 0);
+        });
       });
 
       describe('$onChanges', () => {
@@ -140,7 +150,7 @@ describe('checkout', () => {
         it('should handle a failed request to save the selected payment', () => {
           spyOn(self.controller.orderService, 'selectPaymentMethod').and.callFake(() => Observable.throw('some error'));
           self.controller.selectPayment();
-          expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false});
+          expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false, error: 'some error'});
           expect(self.controller.$log.error.logs[0]).toEqual(['Error selecting payment method', 'some error']);
         });
       });

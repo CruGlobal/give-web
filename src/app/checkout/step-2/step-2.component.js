@@ -19,6 +19,7 @@ class Step2Controller{
     this.submitted = false;
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
+    this.submissionError = {error: ''};
   }
 
   handleExistingPaymentLoading(success, hasExistingPaymentMethods, error){
@@ -27,12 +28,14 @@ class Step2Controller{
     }else{
       this.existingPaymentMethods = false;
       this.$log.warn('Error loading existing payment methods', error);
-      //TODO: should we show the user that there was an error or should we let them just add a new payment method
+      this.loadingExistingPaymentError = error;
     }
     this.loadingPaymentMethods = false;
   }
 
-  onSubmit(success, data){
+  onSubmit(success, data, error){
+    this.submissionError.error = '';
+
     if(success && data){
       this.orderService.addPaymentMethod(data)
         .subscribe(() => {
@@ -41,12 +44,13 @@ class Step2Controller{
           (error) => {
             this.$log.error('Error saving payment method', error);
             this.submitted = false;
-            //TODO: add error handling
+            this.submissionError.error = error.data;
           });
     }else if(success){
       this.changeStep({newStep: 'review'});
     }else{
       this.submitted = false;
+      this.submissionError.error = error;
     }
   }
 }

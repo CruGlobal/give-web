@@ -37,6 +37,7 @@ describe('checkout', () => {
         expect(self.controller.existingPaymentMethods).toEqual(false);
         expect(self.controller.loadingPaymentMethods).toEqual(false);
         expect(self.controller.$log.warn.logs[0]).toEqual(['Error loading existing payment methods', 'some error']);
+        expect(self.controller.loadingExistingPaymentError).toEqual('some error');
       });
     });
 
@@ -50,11 +51,12 @@ describe('checkout', () => {
       });
       it('should handle an error saving payment data', () => {
         spyOn(self.controller, 'changeStep');
-        spyOn(self.controller.orderService, 'addPaymentMethod').and.callFake(() => Observable.throw('some error'));
+        spyOn(self.controller.orderService, 'addPaymentMethod').and.callFake(() => Observable.throw({ data: 'some error' }));
         self.controller.onSubmit(true, {bankAccount: {}});
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
         expect(self.controller.submitted).toEqual(false);
-        expect(self.controller.$log.error.logs[0]).toEqual(['Error saving payment method', 'some error']);
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error saving payment method', { data: 'some error' }]);
+        expect(self.controller.submissionError.error).toEqual('some error');
       });
       it('should call changeStep if save was successful and there was no data (assumes another component saved the data)', () => {
         spyOn(self.controller, 'changeStep');
@@ -63,8 +65,9 @@ describe('checkout', () => {
       });
       it('should set submitted to false if save was unsuccessful', () => {
         self.controller.submitted = true;
-        self.controller.onSubmit(false);
+        self.controller.onSubmit(false, undefined, 'some error');
         expect(self.controller.submitted).toEqual(false);
+        expect(self.controller.submissionError.error).toEqual('some error');
       });
     });
   });
