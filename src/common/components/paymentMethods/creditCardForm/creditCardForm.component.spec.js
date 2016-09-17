@@ -130,7 +130,7 @@ describe('credit card form', () => {
   describe('loadDonorDetails', () => {
     it('should get the donor\'s details', () => {
       spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of('some details'));
-      self.controller.loadDonorDetails('US');
+      self.controller.loadDonorDetails();
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
       expect(self.controller.donorDetails).toEqual('some details');
     });
