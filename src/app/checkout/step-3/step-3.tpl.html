@@ -158,10 +158,11 @@
                 Submit Your Gift
               </button>
             </div>
-              <span class="giftsum-line" ng-repeat="t in $ctrl.cartData.frequencyTotals">
-                Your {{t.frequency}} Gift Total:
-                <strong>{{t.total}}</strong>
-              </span>
+            <span class="giftsum-line" ng-repeat="t in $ctrl.cartData.frequencyTotals" ng-switch="t.frequency">
+              <span ng-switch-when="Annually" translate>Annual Gift Total:</span>
+              <span ng-switch-default translate>{{t.frequency}} Gift Total:</span>
+              <strong>{{t.total}}</strong>
+            </span>
           </td>
         </tr>
         </tfoot>
