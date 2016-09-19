@@ -52,11 +52,7 @@
                         <div class="checkout-cta pull-right">
                           <a href ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
                         </div>
-                        <span class="giftsum-line" ng-repeat="t in $ctrl.cartData.frequencyTotals" ng-switch="t.frequency">
-                          <span ng-switch-when="Annually" translate>Annual Gift Total:</span>
-                          <span ng-switch-default translate>{{t.frequency}} Gift Total:</span>
-                          <strong>{{t.total}}</strong>
-                        </span>
+                        <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
                       </td>
                     </tr>
                   </tfoot>
