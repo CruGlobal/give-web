@@ -135,14 +135,7 @@
                             <tfoot>
                             <tr>
                               <td class="text-right" colspan="2">
-                                <span class="giftsum-line" translate>
-                                  Single Gift Total: <strong>{{$ctrl.purchase.rawData['monetary-total'][0].display}}</strong>
-                                </span>
-                                <span class="giftsum-line" ng-repeat="rate in $ctrl.purchase.rateTotals" ng-switch="rate.recurrence.display">
-                                  <span ng-switch-when="Annually" translate>Annual Gift Total:</span>
-                                  <span ng-switch-default translate>{{rate.recurrence.display}} Gift Total:</span>
-                                  <strong>{{rate.cost.display}}</strong>
-                                </span>
+                                <display-rate-totals rate-totals="$ctrl.rateTotals"></display-rate-totals>
                               </td>
                             </tr>
                             </tfoot>

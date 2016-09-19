@@ -1,9 +1,12 @@
 import 'babel/external-helpers';
 import angular from 'angular';
+import concat from 'lodash/concat';
+import map from 'lodash/map';
 
 import accountBenefits from './accountBenefits/accountBenefits.component';
 import help from '../checkout/help/help.component';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
+import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 
 import capitalizeFilter from 'common/filters/capitalize.filter';
 
@@ -54,6 +57,20 @@ class ThankYouController{
             this.sessionModalService.userMatch();
           });
         }
+
+        // Map rate totals to match format from order endpoint
+        this.rateTotals = concat(
+          [{
+            frequency: 'Single',
+            total: this.purchase.rawData['monetary-total'][0].display
+          }],
+          map(this.purchase.rateTotals, (rateTotal) => {
+            return {
+              frequency: rateTotal.recurrence.display,
+              total: rateTotal.cost.display
+            };
+          })
+        );
       });
   }
 
@@ -72,6 +89,7 @@ export default angular
     accountBenefits.name,
     help.name,
     displayAddressComponent.name,
+    displayRateTotals.name,
     capitalizeFilter.name,
     orderService.name,
     purchasesService.name,

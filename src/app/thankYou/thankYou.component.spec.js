@@ -27,6 +27,22 @@ describe('thank you', () => {
             'street-address': '123 Billing St'
           }
         }
+      },
+      rateTotals: [{
+        cost: {
+          display: '$20.00'
+        },
+        recurrence: {
+          display: 'Monthly'
+        }
+      }],
+      rawData: {
+        'monetary-total': [
+          {
+            display: '$50.00'
+          }
+        ]
+
       }
     };
 
@@ -57,26 +73,19 @@ describe('thank you', () => {
       spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
-      expect(self.controller.purchase).toEqual({
-        donorDetails: {
-          'mailing-address': {
-            'street-address': '123 Mailing St'
-          },
-          'registration-state': 'MATCHED'
-        },
-        paymentMeans: {
-          self: {
-            type: "elasticpath.purchases.purchase.paymentmeans"
-          },
-          'billing-address': {
-            address: {
-              'street-address': '123 Billing St'
-            }
-          }
-        }
-      });
+      expect(self.controller.purchase).toEqual(self.mockPurchase);
       expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
       expect(self.controller.billingAddress).toEqual({'street-address': '123 Billing St'});
+      expect(self.controller.rateTotals).toEqual([
+        {
+          frequency: 'Single',
+          total: '$50.00'
+        },
+        {
+          frequency: 'Monthly',
+          total: '$20.00'
+        }
+      ]);
     });
     it('should not request purchase data if lastPurchaseLink is not defined', () => {
       spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').and.callFake(() => undefined);
@@ -90,24 +99,7 @@ describe('thank you', () => {
       self.mockPurchase.paymentMeans.self.type = 'elasticpath.bankaccountpurchases.payment-means-bank-account';
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
-      expect(self.controller.purchase).toEqual({
-        donorDetails: {
-          'mailing-address': {
-            'street-address': '123 Mailing St'
-          },
-          'registration-state': 'MATCHED'
-        },
-        paymentMeans: {
-          self: {
-            type: "elasticpath.bankaccountpurchases.payment-means-bank-account"
-          },
-          'billing-address': {
-            address: {
-              'street-address': '123 Billing St'
-            }
-          }
-        }
-      });
+      expect(self.controller.purchase).toEqual(self.mockPurchase);
       expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
       expect(self.controller.billingAddress).toBeUndefined();
     });
