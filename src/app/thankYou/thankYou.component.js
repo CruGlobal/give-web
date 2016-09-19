@@ -13,8 +13,6 @@ import profileService from 'common/services/api/profile.service';
 import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 
-import {Roles} from 'common/services/session/session.service';
-
 import template from './thankYou.tpl';
 
 let componentName = 'thankYou';
@@ -22,11 +20,10 @@ let componentName = 'thankYou';
 class ThankYouController{
 
   /* @ngInject */
-  constructor(orderService, purchasesService, profileService, sessionService, sessionModalService, $log){
+  constructor(orderService, purchasesService, profileService, sessionModalService, $log){
     this.orderService = orderService;
     this.purchasesService = purchasesService;
     this.profileService = profileService;
-    this.sessionService = sessionService;
     this.sessionModalService = sessionModalService;
     this.$log = $log;
   }
@@ -50,8 +47,8 @@ class ThankYouController{
           this.billingAddress = this.orderService.formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
         }
 
-        // Display Account Benefits Modal when GUEST checkout
-        if(this.sessionService.getRole() === Roles.public || this.purchase.donorDetails['registration-state'] !== 'COMPLETED') {
+        // Display Account Benefits Modal when registration-state is NEW or MATCHED
+        if(this.purchase.donorDetails['registration-state'] !== 'COMPLETED') {
           this.sessionModalService.accountBenefits().then(() => {
             //TODO: Do we need to check donormatches again after sign in/up?
             this.sessionModalService.userMatch();

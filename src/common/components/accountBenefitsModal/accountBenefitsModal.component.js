@@ -21,7 +21,7 @@ class AccountBenefitsModalController {
 
   registerAccount() {
     if ( this.sessionService.getRole() === Roles.registered ) {
-      // No need to sign if if we already are
+      // No need to sign in if we already are
       this.onSuccess();
     }
     else {

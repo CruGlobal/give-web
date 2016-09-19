@@ -12,14 +12,14 @@ class AccountBenefitsController {
   constructor( sessionModalService, sessionService ) {
     this.sessionModalService = sessionModalService;
     this.sessionService = sessionService;
-    this.hasUserMatch = false;
+    this.isVisible = false;
   }
 
   $onChanges( changes ) {
     // donorDetails is undefined initially
     if ( changes.donorDetails && angular.isDefined( changes.donorDetails.currentValue ) ) {
       // Show account benefits if registration state is NEW or MATCHED
-      this.hasUserMatch = this.donorDetails['registration-state'] !== 'COMPLETED';
+      this.isVisible = changes.donorDetails.currentValue['registration-state'] !== 'COMPLETED';
     }
   }
 
@@ -28,7 +28,7 @@ class AccountBenefitsController {
       this.sessionModalService.userMatch();
     }
     else {
-      this.sessionModalService.userMatch().then( () => {
+      this.sessionModalService.signIn().then( () => {
         //TODO: Do we need to check donormatches again after sign in/up?
         this.sessionModalService.userMatch();
       } );

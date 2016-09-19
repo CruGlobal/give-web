@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './accountBenefitsModal.component';
+import {Roles} from 'common/services/session/session.service';
 
 describe( 'accountBenefitsModal', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -27,6 +28,12 @@ describe( 'accountBenefitsModal', function () {
   } );
 
   describe( 'registerAccount()', () => {
+    it( 'call onSuccess if role is registered', () => {
+      spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( Roles.registered );
+      $ctrl.registerAccount();
+      expect( $ctrl.onSuccess ).toHaveBeenCalled();
+    } );
+
     it( 'changes state to \'sign-in\'', () => {
       $ctrl.registerAccount();
       expect( $ctrl.onStateChange ).toHaveBeenCalledWith( {state: 'sign-in'} );
