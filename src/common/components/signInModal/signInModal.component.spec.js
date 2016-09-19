@@ -2,6 +2,8 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './signInModal.component';
 
+import {Roles} from 'common/services/session/session.service';
+
 describe( 'signInModal', function () {
   beforeEach( angular.mock.module( module.name ) );
   let $ctrl, bindings;
@@ -22,7 +24,7 @@ describe( 'signInModal', function () {
   describe( '$onInit', () => {
     describe( 'with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
+        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( Roles.registered );
         $ctrl.session.email = 'professorx@xavier.edu';
         $ctrl.$onInit();
       } );
@@ -33,9 +35,9 @@ describe( 'signInModal', function () {
         expect( $ctrl.identified ).toEqual( true );
       } );
     } );
-    describe( 'with \'GUEST\' cortex-session', () => {
+    describe( 'with \'PUBLIC\' cortex-session', () => {
       beforeEach( () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'GUEST' );
+        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue(  Roles.public );
         $ctrl.$onInit();
       } );
 
