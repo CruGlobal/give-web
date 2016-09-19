@@ -1,28 +1,51 @@
 import angular from 'angular';
 import sessionModalService from 'common/services/session/sessionModal.service';
-import verificationService from 'common/services/api/verification.service';
+import sessionService from 'common/services/session/session.service';
 import template from './accountBenefits.tpl';
+
+import {Roles} from 'common/services/session/session.service';
 
 let componentName = 'accountBenefits';
 
 class AccountBenefitsController {
   /* @ngInject */
-  constructor( $log, sessionModalService ) {
-    this.$log = $log;
+  constructor( sessionModalService, sessionService ) {
     this.sessionModalService = sessionModalService;
+    this.sessionService = sessionService;
+    this.hasUserMatch = false;
+  }
+
+  $onChanges( changes ) {
+    // donorDetails is undefined initially
+    if ( changes.donorDetails && angular.isDefined( changes.donorDetails.currentValue ) ) {
+      // Show account benefits if registration state is NEW or MATCHED
+      this.hasUserMatch = this.donorDetails['registration-state'] !== 'COMPLETED';
+    }
+  }
+
+  doUserMatch() {
+    if ( this.sessionService.getRole() === Roles.registered ) {
+      this.sessionModalService.userMatch();
+    }
+    else {
+      this.sessionModalService.userMatch().then( () => {
+        //TODO: Do we need to check donormatches again after sign in/up?
+        this.sessionModalService.userMatch();
+      } );
+    }
   }
 }
 
 export default angular
   .module( componentName, [
     sessionModalService.name,
-    template.name,
-    verificationService.name
+    sessionService.name,
+    template.name
   ] )
   .component( componentName, {
     controller:  AccountBenefitsController,
     templateUrl: template.name,
     bindings:    {
-      purchase: '<'
+      donorDetails: '<'
     }
   } );

@@ -135,7 +135,7 @@ describe( 'userMatchModal', function () {
     } );
 
     describe( 'no more questions', () => {
-      it( 'proceeds to success', () => {
+      it( 'proceeds to success on submitAnswers success', () => {
         spyOn( $ctrl.verificationService, 'submitAnswers' ).and.returnValue( Observable.of( {} ) );
         $ctrl.questions = [];
 
@@ -149,6 +149,18 @@ describe( 'userMatchModal', function () {
           answer: 'answer'
         }] );
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success' );
+      } );
+
+      it( 'proceeds to success-failure on submitAnswers failure', () => {
+        spyOn( $ctrl.verificationService, 'submitAnswers' ).and.returnValue( Observable.throw( {} ) );
+        $ctrl.questions = [];
+
+        $ctrl.onQuestionAnswer( 'key', 'answer' );
+        expect( $ctrl.verificationService.submitAnswers ).toHaveBeenCalledWith( [{key: 'a', answer: 'a'}, {
+          key:    'key',
+          answer: 'answer'
+        }] );
+        expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success-failure' );
       } );
     } );
   } );

@@ -21,5 +21,11 @@
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>
   </div>
+  <div ng-switch-when="success-failure">
+    <p translate>Your account is now activated.</p>
+    <p>
+      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
+    </p>
+  </div>
   <div ng-switch-default style="height: 100px;"></div>
 </div>

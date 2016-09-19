@@ -49,9 +49,11 @@ class ThankYouController{
         if(this.purchase.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'){ //only credit card type has billing address
           this.billingAddress = this.orderService.formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
         }
+
         // Display Account Benefits Modal when GUEST checkout
-        if(this.sessionService.getRole() === Roles.public) {
+        if(this.sessionService.getRole() === Roles.public || this.purchase.donorDetails['registration-state'] !== 'COMPLETED') {
           this.sessionModalService.accountBenefits().then(() => {
+            //TODO: Do we need to check donormatches again after sign in/up?
             this.sessionModalService.userMatch();
           });
         }
