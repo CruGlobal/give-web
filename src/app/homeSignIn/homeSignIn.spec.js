@@ -88,4 +88,12 @@ describe('home sign in', function() {
       expect( $ctrl.sessionModalService.signUp ).toHaveBeenCalled();
     } );
   });
+
+  describe( 'forgotPassword', () => {
+    it( 'opens forgotPassword Modal', () => {
+      spyOn( $ctrl.sessionModalService, 'forgotPassword' );
+      $ctrl.forgotPassword();
+      expect( $ctrl.sessionModalService.forgotPassword ).toHaveBeenCalled();
+    } );
+  });
 });

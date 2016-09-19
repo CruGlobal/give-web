@@ -206,8 +206,7 @@
                         name="addressCountry" required
                         ng-model="$ctrl.donorDetails.mailingAddress.country"
                         ng-options="v.name as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
-                        ng-change="$ctrl.refreshRegions($ctrl.donorDetails.mailingAddress.country)"
-                        ng-init="$ctrl.refreshRegions($ctrl.donorDetails.mailingAddress.country)">
+                        ng-change="$ctrl.refreshRegions($ctrl.donorDetails.mailingAddress.country)">
                 </select>
                 <div role="alert" ng-messages="$ctrl.detailsForm.addressCountry.$error" ng-if="($ctrl.detailsForm.addressCountry | showErrors)">
                   <div class="help-block" ng-message="required" translate>You must select a country</div>

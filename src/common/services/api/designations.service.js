@@ -3,7 +3,6 @@ import JSONPath from 'common/lib/jsonPath';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
 
 import cortexApiService from '../cortexApi.service';
 

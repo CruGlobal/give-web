@@ -22,7 +22,44 @@ class Step1Controller{
     this.orderService = orderService;
     this.geographiesService = geographiesService;
 
-    this.init();
+    this.donorDetails = {
+      mailingAddress: {
+        country: 'US'
+      }
+    };
+  }
+
+  $onInit(){
+    this.loadDonorDetails();
+    this.loadCountries();
+  }
+
+  loadDonorDetails(){
+    this.orderService.getDonorDetails()
+      .subscribe((data) => {
+        if(data['donor-type'] === ''){
+          data['donor-type'] = 'Household';
+        }
+        this.donorDetails = data;
+      });
+  }
+
+  loadCountries(){
+    this.geographiesService.getCountries()
+      .subscribe((data) => {
+        this.countries = data;
+        this.refreshRegions(this.donorDetails.mailingAddress.country);
+      });
+  }
+
+  refreshRegions(country){
+    country = find(this.countries, {name: country});
+    if(!country){ return; }
+
+    this.geographiesService.getRegions(country)
+      .subscribe((data) => {
+        this.regions = data;
+      });
   }
 
   submitDetails(){
@@ -41,31 +78,6 @@ class Step1Controller{
         this.$log.warn('Error saving donor contact info', error);
         this.submissionError = error.data;
         this.$window.scrollTo(0, 0);
-      });
-  }
-
-  refreshRegions(country){
-    country = find(this.countries, {name: country});
-    if(!country){ return; }
-
-    this.geographiesService.getRegions(country)
-      .subscribe((data) => {
-        this.regions = data;
-      });
-  }
-
-  init(){
-    this.orderService.getDonorDetails()
-      .subscribe((data) => {
-        if(data['donor-type'] === ''){
-          data['donor-type'] = 'Household';
-        }
-        this.donorDetails = data;
-      });
-
-    this.geographiesService.getCountries()
-      .subscribe((data) => {
-        this.countries = data;
       });
   }
 }
