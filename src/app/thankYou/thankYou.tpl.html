@@ -12,7 +12,8 @@
                   </h2>
 
                   <p translate>
-                    We are processing your gift now. We'll send an email confirmation to to <strong>{{$ctrl.email}}</strong> as well as a tax-deductible receipt by postal mail.
+                    We are processing your gift now. We'll send an email confirmation to
+                    <strong>{{$ctrl.email}}</strong> as well as a tax-deductible receipt by postal mail.
                   </p>
 
                   <p translate>
@@ -156,7 +157,7 @@
         </div>
 
         <div class="col-md-4">
-          <account-benefits></account-benefits>
+          <account-benefits donor-details="$ctrl.purchase.donorDetails"></account-benefits>
         </div>
 
         <div class="col-md-4 hidden-xs hidden-sm">

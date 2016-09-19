@@ -86,6 +86,22 @@ describe( 'sessionModalService', function () {
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'reset-password' );
     } );
   } );
+
+  describe( 'userMatch', () => {
+    it( 'should open userMatch modal', () => {
+      sessionModalService.userMatch();
+      expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
+      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'user-match' );
+    } );
+  } );
+
+  describe( 'registerAccount', () => {
+    it( 'should open registerAccount modal', () => {
+      sessionModalService.registerAccount();
+      expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
+      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'register-account' );
+    } );
+  } );
 } );
 
 describe( 'sessionModalService module config', () => {

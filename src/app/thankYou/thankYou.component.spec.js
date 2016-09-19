@@ -15,7 +15,8 @@ describe('thank you', () => {
       donorDetails: {
         'mailing-address': {
           'street-address': '123 Mailing St'
-        }
+        },
+        'registration-state': 'MATCHED'
       },
       paymentMeans: {
         self: {
@@ -60,7 +61,8 @@ describe('thank you', () => {
         donorDetails: {
           'mailing-address': {
             'street-address': '123 Mailing St'
-          }
+          },
+          'registration-state': 'MATCHED'
         },
         paymentMeans: {
           self: {
@@ -92,7 +94,8 @@ describe('thank you', () => {
         donorDetails: {
           'mailing-address': {
             'street-address': '123 Mailing St'
-          }
+          },
+          'registration-state': 'MATCHED'
         },
         paymentMeans: {
           self: {
@@ -107,6 +110,25 @@ describe('thank you', () => {
       });
       expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
       expect(self.controller.billingAddress).toBeUndefined();
+    });
+
+    describe('accounts benefits modal', () => {
+      let deferred, $rootScope;
+      beforeEach(inject((_$q_, _$rootScope_) => {
+        deferred = _$q_.defer();
+        $rootScope = _$rootScope_;
+        spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
+        spyOn(self.controller.sessionModalService, 'accountBenefits').and.returnValue(deferred.promise);
+        spyOn(self.controller.sessionModalService, 'userMatch');
+      }));
+
+      it( 'should show accountBenefits modal on matched user', () => {
+        self.controller.loadLastPurchase();
+        expect(self.controller.sessionModalService.accountBenefits).toHaveBeenCalled();
+        deferred.resolve();
+        $rootScope.$digest();
+        expect(self.controller.sessionModalService.userMatch).toHaveBeenCalled();
+      });
     });
   });
   describe('loadEmail', () => {
