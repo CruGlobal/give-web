@@ -7,7 +7,9 @@ var paths = require('../paths');
 
 gulp.task('minify-css', function () {
   return gulp.src(paths.outputCss)
-    .pipe($.cleanCss())
+    .pipe($.cleanCss({
+      keepSpecialComments: 0
+    }))
     .pipe($.concat('give.min.css'))
     .pipe(gulp.dest(paths.output));
 });
