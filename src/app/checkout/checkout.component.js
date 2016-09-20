@@ -38,10 +38,13 @@ class CheckoutController{
   }
 
   $onInit() {
-    this.enforcerId = this.sessionEnforcerService([Roles.public, Roles.registered], () => {
-      this.loadCart();
-    }, () => {
-      this.$window.location = 'cart.html';
+    this.enforcerId = this.sessionEnforcerService([Roles.public, Roles.registered], {
+      'sign-in': () => {
+        this.loadCart();
+      },
+      cancel: () => {
+        this.$window.location = 'cart.html';
+      }
     });
     this.loadCart();
   }
