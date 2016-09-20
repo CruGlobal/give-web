@@ -101,7 +101,7 @@ describe('credit card form', () => {
       self.controller.loadDonorDetails();
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
       expect(self.controller.donorDetails).toEqual('some details');
-      expect(self.controller.billingAddress).toEqual({ isMailingAddress: true, country: 'US', streetAddress: '', extendedAddress: '', locality: '', region: '', postalCode: '' });
+      expect(self.controller.billingAddress).toEqual(jasmine.objectContaining({ isMailingAddress: true, country: 'US', streetAddress: '', extendedAddress: '', locality: '', region: '', postalCode: '' }));
     });
   });
 
