@@ -20,12 +20,14 @@ class ManageGivingController {
 
   $onInit() {
     // Enforce 'REGISTERED' role view access manage-giving
-    this.enforcerId = this.sessionEnforcerService( [Roles.registered], () => {
-      // Re-authentication success
-      this.loadProfile();
-    }, () => {
-      // Re-authentication failure
-      this.$window.location = '/cart.html';
+    this.enforcerId = this.sessionEnforcerService( [Roles.registered], {
+      'sign-in': () => {
+        // Re-authentication success
+        this.loadProfile();
+      }, cancel: () => {
+        // Re-authentication failure
+        this.$window.location = '/cart.html';
+      }
     } );
     this.loadProfile();
   }
