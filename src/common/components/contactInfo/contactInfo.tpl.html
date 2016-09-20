@@ -40,7 +40,13 @@
         <div class="col-sm-4">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label translate>First Name</label>
-            <input type="text" class="form-control  form-control-subtle" name="nameGivenName" ng-model="$ctrl.donorDetails['name']['given-name']" required ng-maxlength="50">
+            <input type="text"
+                   class="form-control  form-control-subtle"
+                   name="nameGivenName"
+                   ng-model="$ctrl.donorDetails['name']['given-name']"
+                   required
+                   ng-maxlength="50"
+                   ng-disabled="$ctrl.nameFieldsDisabled">
             <div role="alert" ng-messages="$ctrl.detailsForm.nameGivenName.$error" ng-if="($ctrl.detailsForm.nameGivenName | showErrors)">
               <div class="help-block" ng-message="required" translate>You must enter a first name</div>
               <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
@@ -50,7 +56,11 @@
         <div class="col-sm-2">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.nameMiddleInitial | showErrors)}">
             <label translate>MI</label>
-            <input type="text" class="form-control  form-control-subtle" name="nameMiddleInitial" ng-model="$ctrl.donorDetails['name']['middle-initial']" ng-maxlength="50">
+            <input type="text"
+                   class="form-control  form-control-subtle"
+                   name="nameMiddleInitial"
+                   ng-model="$ctrl.donorDetails['name']['middle-initial']"
+                   ng-maxlength="50">
             <div role="alert" ng-messages="$ctrl.detailsForm.nameMiddleInitial.$error" ng-if="($ctrl.detailsForm.nameMiddleInitial | showErrors)">
               <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
             </div>
@@ -59,7 +69,13 @@
         <div class="col-sm-4">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameFamilyName | showErrors)}">
             <label translate>Last Name</label>
-            <input type="text" class="form-control  form-control-subtle" name="nameFamilyName" ng-model="$ctrl.donorDetails['name']['family-name']" required ng-maxlength="50">
+            <input type="text"
+                   class="form-control  form-control-subtle"
+                   name="nameFamilyName"
+                   ng-model="$ctrl.donorDetails['name']['family-name']"
+                   required
+                   ng-maxlength="50"
+                   ng-disabled="$ctrl.nameFieldsDisabled">
             <div role="alert" ng-messages="$ctrl.detailsForm.nameFamilyName.$error" ng-if="($ctrl.detailsForm.nameFamilyName | showErrors)">
               <div class="help-block" ng-message="required" translate>You must enter a last name</div>
               <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
@@ -138,7 +154,12 @@
               <div class="col-sm-4">
                 <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
                   <label translate>First Name</label>
-                  <input type="text" class="form-control  form-control-subtle" name="spouseGivenName" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" ng-maxlength="50">
+                  <input type="text"
+                         class="form-control  form-control-subtle"
+                         name="spouseGivenName"
+                         ng-model="$ctrl.donorDetails['spouse-name']['given-name']"
+                         ng-maxlength="50"
+                         ng-disabled="$ctrl.spouseNameFieldsDisabled">
                   <div role="alert" ng-messages="$ctrl.detailsForm.spouseGivenName.$error" ng-if="($ctrl.detailsForm.spouseGivenName | showErrors)">
                     <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
                   </div>
@@ -156,7 +177,12 @@
               <div class="col-sm-4">
                 <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseFamilyName | showErrors)}">
                   <label translate>Last Name</label>
-                  <input type="text" class="form-control  form-control-subtle" name="spouseFamilyName" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" ng-maxlength="50">
+                  <input type="text"
+                         class="form-control  form-control-subtle"
+                         name="spouseFamilyName"
+                         ng-model="$ctrl.donorDetails['spouse-name']['family-name']"
+                         ng-maxlength="50"
+                         ng-disabled="$ctrl.spouseNameFieldsDisabled">
                   <div role="alert" ng-messages="$ctrl.detailsForm.spouseFamilyName.$error" ng-if="($ctrl.detailsForm.spouseFamilyName | showErrors)">
                     <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
                   </div>
@@ -199,7 +225,6 @@
         </div>
       </div>
       <address-form address="$ctrl.donorDetails.mailingAddress" parent-form="$ctrl.detailsForm"></address-form>
-      </div>
-    </div> <!-- // mb -->
+    </div>
   </form>
 </div>

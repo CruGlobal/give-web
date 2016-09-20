@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-messages';
+import get from 'lodash/get';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 
@@ -43,6 +44,8 @@ class Step1Controller{
           data['donor-type'] = 'Household';
         }
         this.donorDetails = data;
+        this.nameFieldsDisabled = !!get(this.donorDetails, ['name', 'given-name']) || !!get(this.donorDetails, ['name', 'family-name']);
+        this.spouseNameFieldsDisabled = !!get(this.donorDetails, ['spouse-name', 'given-name']) || !!get(this.donorDetails, ['spouse-name', 'family-name']);
       });
   }
 
