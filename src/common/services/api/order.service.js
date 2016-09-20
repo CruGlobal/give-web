@@ -13,6 +13,9 @@ import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort
 import cortexApiService from '../cortexApi.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
 
+import formatAddressForCortex from '../addressHelpers/formatAddressForCortex';
+import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
+
 let serviceName = 'orderService';
 
 class Order{
@@ -35,7 +38,7 @@ class Order{
       })
       .map((data) => {
         let donorDetails = data.donorDetails;
-        donorDetails.mailingAddress = this.formatAddressForTemplate(donorDetails['mailing-address']);
+        donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address']);
         delete donorDetails['mailing-address'];
 
         // Default country to US
@@ -50,7 +53,7 @@ class Order{
 
   updateDonorDetails(details){
     details = angular.copy(details);
-    details['mailing-address'] = this.formatAddressForCortex(details.mailingAddress);
+    details['mailing-address'] = formatAddressForCortex(details.mailingAddress);
     delete details.mailingAddress;
 
     return this.cortexApiService.put({
@@ -152,7 +155,7 @@ class Order{
   }
 
   addBillingAddress(billingAddress){
-    billingAddress.address = this.formatAddressForCortex(billingAddress.address);
+    billingAddress.address = formatAddressForCortex(billingAddress.address);
     return this.cortexApiService.post({
       path: ['addresses', this.cortexApiService.scope],
       data: billingAddress
@@ -167,47 +170,9 @@ class Order{
         }
       })
       .map((data) => {
-        data.billingAddress.address = this.formatAddressForTemplate(data.billingAddress.address);
+        data.billingAddress.address = formatAddressForTemplate(data.billingAddress.address);
         return data.billingAddress;
       });
-  }
-
-  formatAddressForCortex(address){
-    let isUsAddress = address.country === 'US' || ''; // Becomes true or empty string
-    let internationalAddressLines = [
-      address.streetAddress,
-      address.extendedAddress,
-      address.intAddressLine3,
-      address.intAddressLine4
-    ];
-    return {
-      'country-name': address.country,
-      'street-address': isUsAddress ? address.streetAddress : internationalAddressLines.join('||'),
-      'extended-address': isUsAddress && address.extendedAddress,
-      'locality': isUsAddress && address.locality,
-      'postal-code': isUsAddress && address.postalCode,
-      'region': isUsAddress && address.region
-    };
-  }
-
-  formatAddressForTemplate(address){
-    let output = {
-      country: address['country-name']
-    };
-    if(output.country === 'US'){
-      output.streetAddress = address['street-address'];
-      output.extendedAddress = address['extended-address'];
-      output.locality = address['locality'];
-      output.region = address['region'];
-      output.postalCode = address['postal-code'];
-    }else{
-      let intAddress = address['street-address'].split('||');
-      output.streetAddress = intAddress[0];
-      output.extendedAddress = intAddress[1];
-      output.intAddressLine3 = intAddress[2];
-      output.intAddressLine4 = intAddress[3];
-    }
-    return output;
   }
 
   getCurrentPayment(){
