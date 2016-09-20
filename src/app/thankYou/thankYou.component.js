@@ -15,6 +15,7 @@ import purchasesService from 'common/services/api/purchases.service';
 import profileService from 'common/services/api/profile.service';
 import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
+import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 
 import template from './thankYou.tpl';
 
@@ -45,9 +46,9 @@ class ThankYouController{
     this.purchasesService.getPurchase(lastPurchaseLink)
       .subscribe((data) => {
         this.purchase = data;
-        this.mailingAddress = this.orderService.formatAddressForTemplate(this.purchase.donorDetails['mailing-address']);
+        this.mailingAddress = formatAddressForTemplate(this.purchase.donorDetails['mailing-address']);
         if(this.purchase.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'){ //only credit card type has billing address
-          this.billingAddress = this.orderService.formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
+          this.billingAddress = formatAddressForTemplate(this.purchase.paymentMeans['billing-address'].address);
         }
 
         // Display Account Benefits Modal when registration-state is NEW or MATCHED

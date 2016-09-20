@@ -48,8 +48,7 @@ describe('thank you', () => {
 
     self.controller = $componentController(module.name, {
       orderService: {
-        retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt=',
-        formatAddressForTemplate: (address) => address
+        retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt='
       },
       purchasesService: {
         getPurchase: () => Observable.of(self.mockPurchase)
@@ -74,8 +73,8 @@ describe('thank you', () => {
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
       expect(self.controller.purchase).toEqual(self.mockPurchase);
-      expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
-      expect(self.controller.billingAddress).toEqual({'street-address': '123 Billing St'});
+      expect(self.controller.mailingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Mailing St'}));
+      expect(self.controller.billingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Billing St'}));
       expect(self.controller.rateTotals).toEqual([
         {
           frequency: 'Single',
@@ -100,7 +99,7 @@ describe('thank you', () => {
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
       expect(self.controller.purchase).toEqual(self.mockPurchase);
-      expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
+      expect(self.controller.mailingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Mailing St'}));
       expect(self.controller.billingAddress).toBeUndefined();
     });
 
