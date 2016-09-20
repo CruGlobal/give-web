@@ -5,13 +5,15 @@ import modalStateModule from 'common/services/modalState.service';
 
 describe( 'sessionModalService', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let sessionModalService, $uibModal;
+  let sessionModalService, $uibModal, counter = 0;
 
   beforeEach( inject( function ( _sessionModalService_, _$uibModal_ ) {
     sessionModalService = _sessionModalService_;
     $uibModal = _$uibModal_;
     // Spy On $uibModal.open and return mock object
-    spyOn( $uibModal, 'open' ).and.returnValue( {result: {finally: angular.noop}} );
+    spyOn( $uibModal, 'open' ).and.callFake( () => {
+      return {result: {finally: angular.noop}, dismiss: angular.noop, uniq: counter++}
+    } );
   } ) );
 
   it( 'should be defined', () => {
@@ -24,10 +26,11 @@ describe( 'sessionModalService', function () {
     } );
 
     it( 'should open \'sign-in\' by default', () => {
-      sessionModalService.open();
+      let modal = sessionModalService.open();
       expect( $uibModal.open ).toHaveBeenCalled();
       expect( $uibModal.open.calls.count() ).toEqual( 1 );
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'sign-in' );
+      expect( modal ).toEqual( sessionModalService.currentModal() );
     } );
 
     it( 'should allow options', () => {
@@ -52,6 +55,20 @@ describe( 'sessionModalService', function () {
         $rootScope.$digest();
         expect( modalStateService.name ).toHaveBeenCalledWith( null );
       } );
+    } );
+
+    it( 'should only allow 1 modal at a time', () => {
+      sessionModalService.open();
+      let result = sessionModalService.open();
+      expect( result ).toEqual( false );
+      expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
+    } );
+
+    it( 'can replace existing modal', () => {
+      let modalA = sessionModalService.open();
+      let modalB = sessionModalService.open( 'sign-up', {}, true );
+      expect( sessionModalService.currentModal() ).not.toEqual( modalA );
+      expect( sessionModalService.currentModal() ).toEqual( modalB );
     } );
   } );
 
