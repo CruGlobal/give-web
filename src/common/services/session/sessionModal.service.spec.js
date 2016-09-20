@@ -12,7 +12,7 @@ describe( 'sessionModalService', function () {
     $uibModal = _$uibModal_;
     // Spy On $uibModal.open and return mock object
     spyOn( $uibModal, 'open' ).and.callFake( () => {
-      return {result: {finally: angular.noop}, dismiss: angular.noop, uniq: counter++}
+      return {result: {finally: angular.noop}, dismiss: angular.noop, uniq: counter++};
     } );
   } ) );
 
