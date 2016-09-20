@@ -2,12 +2,11 @@ import angular from 'angular';
 import 'angular-messages';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
-import find from 'lodash/find';
 
 import loadingComponent from 'common/components/loading/loading.component';
+import addressForm from 'common/components/addressForm/addressForm.component';
 
 import orderService from 'common/services/api/order.service';
-import geographiesService from 'common/services/api/geographies.service';
 
 import template from './contactInfo.tpl';
 
@@ -16,10 +15,9 @@ let componentName = 'contactInfo';
 class Step1Controller{
 
   /* @ngInject */
-  constructor($log, orderService, geographiesService){
+  constructor($log, orderService){
     this.$log = $log;
     this.orderService = orderService;
-    this.geographiesService = geographiesService;
 
     this.donorDetails = {
       mailingAddress: {
@@ -30,7 +28,6 @@ class Step1Controller{
 
   $onInit(){
     this.loadDonorDetails();
-    this.loadCountries();
   }
 
   $onChanges(changes) {
@@ -46,24 +43,6 @@ class Step1Controller{
           data['donor-type'] = 'Household';
         }
         this.donorDetails = data;
-      });
-  }
-
-  loadCountries(){
-    this.geographiesService.getCountries()
-      .subscribe((data) => {
-        this.countries = data;
-        this.refreshRegions(this.donorDetails.mailingAddress.country);
-      });
-  }
-
-  refreshRegions(country){
-    country = find(this.countries, {name: country});
-    if(!country){ return; }
-
-    this.geographiesService.getRegions(country)
-      .subscribe((data) => {
-        this.regions = data;
       });
   }
 
@@ -96,8 +75,8 @@ export default angular
     template.name,
     'ngMessages',
     loadingComponent.name,
-    orderService.name,
-    geographiesService.name
+    addressForm.name,
+    orderService.name
   ])
   .component(componentName, {
     controller: Step1Controller,
