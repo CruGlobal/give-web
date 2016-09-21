@@ -22,10 +22,7 @@
       <tfoot>
         <tr>
           <td colspan="2" class="text-right">
-            <span class="giftsum-line" ng-repeat="t in $ctrl.cartData.frequencyTotals">
-              Your {{t.frequency}} Gift Total:
-              <strong>{{t.total}}</strong>
-            </span>
+            <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
           </td>
         </tr>
         <tr>

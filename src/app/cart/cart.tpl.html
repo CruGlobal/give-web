@@ -8,12 +8,7 @@
           <div class="panel">
             <div class="panel-body">
               <h3 class="panel-name" translate>Your Gift Cart</h3>
-              <div class="loading-wrap" ng-if="!$ctrl.cartData">
-                <span class="loading loading1"></span>
-                <span class="loading loading2"></span>
-                <span class="loading loading3"></span>
-                <span class="loading loading4"></span>
-              </div>
+              <loading ng-if="!$ctrl.cartData"></loading>
               <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
                 Your cart is empty
               </p>
@@ -57,10 +52,7 @@
                         <div class="checkout-cta pull-right">
                           <a href ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
                         </div>
-                        <span class="giftsum-line" ng-repeat="t in $ctrl.cartData.frequencyTotals">
-                          Your {{t.frequency}} Gift Total:
-                          <strong>{{t.total}}</strong>
-                        </span>
+                        <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
                       </td>
                     </tr>
                   </tfoot>

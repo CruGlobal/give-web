@@ -4,6 +4,9 @@ import signInModal from 'common/components/signInModal/signInModal.component';
 import signUpModal from 'common/components/signUpModal/signUpModal.component';
 import resetPasswordModal from 'common/components/resetPasswordModal/resetPasswordModal.component';
 import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPasswordModal.component';
+import userMatchModal from 'common/components/userMatchModal/userMatchModal.component';
+import registerAccountModal from 'common/components/registerAccountModal/registerAccountModal.component';
+import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component';
 
 let controllerName = 'sessionModalController';
 
@@ -13,6 +16,7 @@ class SessionModalController {
   constructor( $uibModalInstance, sessionService, state ) {
     this.$uibModalInstance = $uibModalInstance;
     this.sessionService = sessionService;
+    this.isLoading = false;
     this.stateChanged( state );
   }
 
@@ -35,6 +39,10 @@ class SessionModalController {
   onCancel() {
     this.$uibModalInstance.dismiss( 'cancel' );
   }
+
+  setLoading( loading ) {
+    this.isLoading = !!loading;
+  }
 }
 
 export default angular
@@ -42,6 +50,9 @@ export default angular
     signInModal.name,
     signUpModal.name,
     resetPasswordModal.name,
-    forgotPasswordModal.name
+    forgotPasswordModal.name,
+    userMatchModal.name,
+    registerAccountModal.name,
+    accountBenefitsModal.name
   ] )
   .controller( controllerName, SessionModalController );

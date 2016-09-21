@@ -8,9 +8,19 @@ import sessionModalWindowTemplate from './sessionModalWindow.tpl';
 let serviceName = 'sessionModalService';
 
 /*@ngInject*/
-function SessionModalService( $uibModal, modalStateService ) {
+function SessionModalService( $uibModal, $log, modalStateService ) {
+  let currentModal;
 
-  function openModal( type, options ) {
+  function openModal( type, options, replace ) {
+    if ( angular.isDefined( currentModal ) ) {
+      if ( replace === true ) {
+        currentModal.dismiss( 'replaced' );
+      }
+      else {
+        $log.error( 'Attempted to open more than 1 modal' );
+        return false;
+      }
+    }
     type = angular.isDefined( type ) ? type : 'sign-in';
     options = angular.isObject( options ) ? options : {};
     var modalOptions = angular.merge( {}, {
@@ -23,21 +33,28 @@ function SessionModalService( $uibModal, modalStateService ) {
         state: () => type
       }
     }, options );
-    let modalInstance = $uibModal.open( modalOptions );
-    modalInstance.result
+    currentModal = $uibModal.open( modalOptions );
+    currentModal.result
       .finally( () => {
         // Clear the modal name when modals close
         modalStateService.name( null );
+
+        // Destroy current modal
+        currentModal = undefined;
       } );
-    return modalInstance;
+    return currentModal;
   }
 
   return {
-    open:           openModal,
-    signIn:         () => openModal( 'sign-in' ).result,
-    signUp:         () => openModal( 'sign-up' ).result,
-    forgotPassword: () => openModal( 'forgot-password' ).result,
-    resetPassword:  () => openModal( 'reset-password', {backdrop: 'static'} ).result
+    open:            openModal,
+    currentModal:    () => currentModal,
+    signIn:          () => openModal( 'sign-in' ).result,
+    signUp:          () => openModal( 'sign-up' ).result,
+    forgotPassword:  () => openModal( 'forgot-password' ).result,
+    resetPassword:   () => openModal( 'reset-password', {backdrop: 'static'} ).result,
+    userMatch:       () => openModal( 'user-match', {backdrop: 'static'} ).result,
+    registerAccount: () => openModal( 'register-account', {size: ''} ).result,
+    accountBenefits: () => openModal( 'account-benefits' ).result
   };
 }
 

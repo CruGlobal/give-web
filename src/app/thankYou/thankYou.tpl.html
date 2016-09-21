@@ -12,7 +12,8 @@
                   </h2>
 
                   <p translate>
-                    We are processing your gift now. We'll send an email confirmation to to <strong>{{$ctrl.email}}</strong> as well as a tax-deductible receipt by postal mail.
+                    We are processing your gift now. We'll send an email confirmation to
+                    <strong>{{$ctrl.email}}</strong> as well as a tax-deductible receipt by postal mail.
                   </p>
 
                   <p translate>
@@ -134,12 +135,7 @@
                             <tfoot>
                             <tr>
                               <td class="text-right" colspan="2">
-                                <span class="giftsum-line" ng-repeat="rate in $ctrl.purchase.rateTotals" translate>
-                                  Your {{rate.recurrence.display}} Gift Total: <strong>{{rate.cost.display}}</strong>
-                                </span>
-                                <span class="giftsum-line" translate>
-                                  Your Single Total: <strong>{{$ctrl.purchase.rawData['monetary-total'][0].display}}</strong>
-                                </span>
+                                <display-rate-totals rate-totals="$ctrl.rateTotals"></display-rate-totals>
                               </td>
                             </tr>
                             </tfoot>
@@ -156,7 +152,7 @@
         </div>
 
         <div class="col-md-4">
-          <account-benefits></account-benefits>
+          <account-benefits donor-details="$ctrl.purchase.donorDetails"></account-benefits>
         </div>
 
         <div class="col-md-4 hidden-xs hidden-sm">

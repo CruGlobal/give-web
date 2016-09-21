@@ -5,6 +5,8 @@ import sessionService from 'common/services/session/session.service';
 import signInForm from 'common/components/signInForm/signInForm.component';
 import template from './signInModal.tpl';
 
+import {Roles} from 'common/services/session/session.service';
+
 let componentName = 'signInModal';
 
 class SignInModalController {
@@ -18,7 +20,7 @@ class SignInModalController {
 
   $onInit() {
     this.modalTitle = this.gettext( 'Sign In' );
-    if ( includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() ) ) {
+    if ( includes( [Roles.identified, Roles.registered], this.sessionService.getRole() ) ) {
       this.identified = true;
       this.username = this.session.email;
     }

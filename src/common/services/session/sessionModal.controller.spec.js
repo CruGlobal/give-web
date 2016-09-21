@@ -7,7 +7,7 @@ describe( 'sessionModalController', function () {
   let $ctrl, uibModalInstance, state;
 
   beforeEach( inject( function ( $controller, ) {
-    uibModalInstance = jasmine.createSpyObj('uibModalInstance', ['close', 'dismiss']);
+    uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
     state = 'sign-in';
     $ctrl = $controller( module.name, {
       $uibModalInstance: uibModalInstance,
@@ -52,6 +52,14 @@ describe( 'sessionModalController', function () {
     it( 'should dismiss modal with \'cancel\'', () => {
       $ctrl.onCancel();
       expect( uibModalInstance.dismiss ).toHaveBeenCalledWith( 'cancel' );
+    } );
+  } );
+
+  describe( '$ctrl.setLoading()', () => {
+    it( 'should set isLoading', () => {
+      expect( $ctrl.isLoading ).toEqual( false );
+      $ctrl.setLoading( true );
+      expect( $ctrl.isLoading ).toEqual( true );
     } );
   } );
 } );

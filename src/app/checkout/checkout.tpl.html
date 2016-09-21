@@ -1,21 +1,15 @@
 <div class="screenContent">
   <div class="container container-edge-small container-edge-extrasmall">
     <div class="container">
-      <div class="loading-wrap" ng-if="$ctrl.loadingCartData">
-        <span class="loading loading1"></span>
-        <span class="loading loading2"></span>
-        <span class="loading loading3"></span>
-        <span class="loading loading4"></span>
-      </div>
-
-      <div class="row" ng-if="!$ctrl.loadingCartData && !$ctrl.cartData.items.length">
+      <div class="row" ng-if="!$ctrl.cartData.items.length">
         <div class="col-md-12">
           <div class="panel">
             <div class="panel-body">
+              <loading ng-if="$ctrl.loadingCartData"></loading>
               <div class="alert alert-warning" role="alert" ng-if="$ctrl.cartData && !$ctrl.cartData.items.length">
-              <p translate>Your cart is empty</p>
-            </div>
-              <div class="alert alert-danger" role="alert" ng-if="!$ctrl.cartData">
+                <p translate>Your cart is empty</p>
+              </div>
+              <div class="alert alert-danger" role="alert" ng-if="!$ctrl.loadingCartData && !$ctrl.cartData">
                 <p translate>There was an error loading your cart</p>
               </div>
             </div>

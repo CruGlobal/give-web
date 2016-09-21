@@ -1,16 +1,17 @@
 import angular from 'angular';
 import 'angular-messages';
 import toString from 'lodash/toString';
-import find from 'lodash/find';
 import range from 'lodash/range';
+import defaults from 'lodash/defaults';
 import 'rxjs/add/operator/combineLatest';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
+import addressForm from 'common/components/addressForm/addressForm.component';
+import loadingComponent from 'common/components/loading/loading.component';
 
 import showErrors from 'common/filters/showErrors.filter';
 
 import paymentValidationService from 'common/services/paymentHelpers/paymentValidation.service';
-import geographiesService from 'common/services/api/geographies.service';
 import orderService from 'common/services/api/order.service';
 import ccpService from 'common/services/paymentHelpers/ccp.service';
 
@@ -21,11 +22,10 @@ let componentName = 'creditCardForm';
 class CreditCardController {
 
   /* @ngInject */
-  constructor($scope, $log, paymentValidationService, geographiesService, orderService, ccpService) {
+  constructor($scope, $log, paymentValidationService, orderService, ccpService) {
     this.$scope = $scope;
     this.$log = $log;
     this.paymentValidationService = paymentValidationService;
-    this.geographiesService = geographiesService;
     this.orderService = orderService;
     this.ccpService = ccpService;
 
@@ -40,7 +40,6 @@ class CreditCardController {
     this.loadCcp();
     this.waitForFormInitialization();
     this.loadDonorDetails();
-    this.loadCountries();
     this.initializeExpirationDateOptions();
   }
 
@@ -88,28 +87,11 @@ class CreditCardController {
     this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
   }
 
-  loadCountries(){
-    this.geographiesService.getCountries()
-      .subscribe((data) => {
-        this.countries = data;
-        this.refreshRegions(this.billingAddress.country);
-      });
-  }
-
-  refreshRegions(countryCode){
-    let country = find(this.countries, {name: countryCode});
-    if(!country){ return; }
-
-    this.geographiesService.getRegions(country)
-      .subscribe((data) => {
-        this.regions = data;
-      });
-  }
-
   loadDonorDetails(){
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         this.donorDetails = data;
+        defaults(this.billingAddress, this.donorDetails.mailingAddress);
       });
   }
 
@@ -154,9 +136,10 @@ export default angular
     template.name,
     'ngMessages',
     displayAddressComponent.name,
+    addressForm.name,
+    loadingComponent.name,
     showErrors.name,
     paymentValidationService.name,
-    geographiesService.name,
     orderService.name,
     ccpService.name
   ])

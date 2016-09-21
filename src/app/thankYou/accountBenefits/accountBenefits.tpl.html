@@ -1,4 +1,4 @@
-<div class="panel">
+<div class="panel" ng-if="$ctrl.isVisible">
   <div class="panel-body">
     <h3 class="panel-name" translate>Register Your Account for Online Access</h3>
     <p translate>Benefits of registering for an account include:</p>
@@ -9,6 +9,6 @@
       <li translate>Manage your recurring gifts</li>
       <li translate>Change your bank account or credit card information</li>
     </ul>
-    <button class="btn btn-primary btn-block" ng-click="$ctrl.sessionModalService.signUp()" translate>Register Your Account</button><!-- TODO: perform user match -->
+    <button class="btn btn-primary btn-block" ng-click="$ctrl.doUserMatch()" translate>Register Your Account</button>
   </div>
 </div>

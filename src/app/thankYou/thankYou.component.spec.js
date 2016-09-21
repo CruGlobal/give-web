@@ -15,7 +15,8 @@ describe('thank you', () => {
       donorDetails: {
         'mailing-address': {
           'street-address': '123 Mailing St'
-        }
+        },
+        'registration-state': 'MATCHED'
       },
       paymentMeans: {
         self: {
@@ -26,13 +27,28 @@ describe('thank you', () => {
             'street-address': '123 Billing St'
           }
         }
+      },
+      rateTotals: [{
+        cost: {
+          display: '$20.00'
+        },
+        recurrence: {
+          display: 'Monthly'
+        }
+      }],
+      rawData: {
+        'monetary-total': [
+          {
+            display: '$50.00'
+          }
+        ]
+
       }
     };
 
     self.controller = $componentController(module.name, {
       orderService: {
-        retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt=',
-        formatAddressForTemplate: (address) => address
+        retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt='
       },
       purchasesService: {
         getPurchase: () => Observable.of(self.mockPurchase)
@@ -56,25 +72,19 @@ describe('thank you', () => {
       spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
-      expect(self.controller.purchase).toEqual({
-        donorDetails: {
-          'mailing-address': {
-            'street-address': '123 Mailing St'
-          }
+      expect(self.controller.purchase).toEqual(self.mockPurchase);
+      expect(self.controller.mailingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Mailing St'}));
+      expect(self.controller.billingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Billing St'}));
+      expect(self.controller.rateTotals).toEqual([
+        {
+          frequency: 'Single',
+          total: '$50.00'
         },
-        paymentMeans: {
-          self: {
-            type: "elasticpath.purchases.purchase.paymentmeans"
-          },
-          'billing-address': {
-            address: {
-              'street-address': '123 Billing St'
-            }
-          }
+        {
+          frequency: 'Monthly',
+          total: '$20.00'
         }
-      });
-      expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
-      expect(self.controller.billingAddress).toEqual({'street-address': '123 Billing St'});
+      ]);
     });
     it('should not request purchase data if lastPurchaseLink is not defined', () => {
       spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').and.callFake(() => undefined);
@@ -88,25 +98,28 @@ describe('thank you', () => {
       self.mockPurchase.paymentMeans.self.type = 'elasticpath.bankaccountpurchases.payment-means-bank-account';
       self.controller.loadLastPurchase();
       expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
-      expect(self.controller.purchase).toEqual({
-        donorDetails: {
-          'mailing-address': {
-            'street-address': '123 Mailing St'
-          }
-        },
-        paymentMeans: {
-          self: {
-            type: "elasticpath.bankaccountpurchases.payment-means-bank-account"
-          },
-          'billing-address': {
-            address: {
-              'street-address': '123 Billing St'
-            }
-          }
-        }
-      });
-      expect(self.controller.mailingAddress).toEqual({'street-address': '123 Mailing St'});
+      expect(self.controller.purchase).toEqual(self.mockPurchase);
+      expect(self.controller.mailingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Mailing St'}));
       expect(self.controller.billingAddress).toBeUndefined();
+    });
+
+    describe('accounts benefits modal', () => {
+      let deferred, $rootScope;
+      beforeEach(inject((_$q_, _$rootScope_) => {
+        deferred = _$q_.defer();
+        $rootScope = _$rootScope_;
+        spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
+        spyOn(self.controller.sessionModalService, 'accountBenefits').and.returnValue(deferred.promise);
+        spyOn(self.controller.sessionModalService, 'userMatch');
+      }));
+
+      it( 'should show accountBenefits modal on matched user', () => {
+        self.controller.loadLastPurchase();
+        expect(self.controller.sessionModalService.accountBenefits).toHaveBeenCalled();
+        deferred.resolve();
+        $rootScope.$digest();
+        expect(self.controller.sessionModalService.userMatch).toHaveBeenCalled();
+      });
     });
   });
   describe('loadEmail', () => {

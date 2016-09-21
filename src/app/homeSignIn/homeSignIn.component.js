@@ -20,11 +20,7 @@ class HomeSignInController {
 
   $onInit() {
     this.isSigningIn = false;
-    this.showSignInForm = true;
-
-    if ( includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() ) ) {
-      this.showSignInForm = false;
-    }
+    this.showSignInForm = !includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() );
   }
 
   signIn() {
