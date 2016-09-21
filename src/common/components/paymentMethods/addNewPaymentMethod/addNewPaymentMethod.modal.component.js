@@ -1,6 +1,7 @@
 import angular from 'angular';
 
 import addNewPaymentMethod from './addNewPaymentMethod.component';
+import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component.js';
 
 import template from './addNewPaymentMethod.modal.tpl';
 
@@ -22,7 +23,8 @@ class AddNewPaymentMethodModalController {
 export default angular
   .module(componentName, [
     template.name,
-    addNewPaymentMethod.name
+    addNewPaymentMethod.name,
+    loadingOverlay.name
   ])
   .component(componentName, {
     controller: AddNewPaymentMethodModalController,

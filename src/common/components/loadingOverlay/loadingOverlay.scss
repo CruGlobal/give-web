@@ -10,6 +10,7 @@
   width: calc(100% + 20px);
   height: calc(100% + 20px);
   background-color: rgba(255, 255, 255, 0.7);
+  z-index: 1;
 }
 
 .loading-background > .loading-wrap {

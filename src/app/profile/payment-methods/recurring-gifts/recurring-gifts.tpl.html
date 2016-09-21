@@ -1,0 +1,33 @@
+<div class="panel-body">
+  <div class="container-fluid">
+    <div class="row">
+      <h4 class="pl--">Recurring Gifts Using This Payment Method:</h4>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-striped-dark borderless">
+          <thead>
+            <tr>
+              <th class="section-title">Person or Ministry</th>
+              <th class="section-title">Amount</th>
+              <th class="section-title">Frequency</th>
+              <th class="section-title">Next Gift</th>
+              <th class="section-title"></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="gift in $ctrl.gifts">
+              <td>{{ gift['donation-lines'][0]['designation-name'] }}</td>
+              <td>${{ gift['donation-lines'][0]['amount'] }}</td> <!-- not sure how to get an appropriate currency symbol TODO: add currency symbol dynamically -->
+              <td>{{ gift['rate']['recurrence']['interval'] }}</td>
+              <td>{{ $ctrl.getNextGiftDate(gift) }}</td>
+              <td>
+                <a>Edit</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
