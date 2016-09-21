@@ -54,23 +54,24 @@ describe( 'checkout', function () {
     } );
     it( 'initializes the component', () => {
       expect( self.controller.sessionEnforcerService ).toHaveBeenCalledWith(
-        [Roles.public, Roles.registered],
-        jasmine.any( Function ),
-        jasmine.any( Function )
+        [Roles.public, Roles.registered], jasmine.objectContaining( {
+          'sign-in': jasmine.any( Function ),
+          cancel:    jasmine.any( Function )
+        } )
       );
       expect( self.controller.loadCart ).toHaveBeenCalled();
     } );
 
     describe( 'sessionEnforcerService success', () => {
       it( 'executes success callback', () => {
-        self.controller.sessionEnforcerService.calls.argsFor( 0 )[1]();
+        self.controller.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
         expect( self.controller.loadCart ).toHaveBeenCalledTimes( 2 );
       } );
     } );
 
     describe( 'sessionEnforcerService failure', () => {
       it( 'executes failure callback', () => {
-        self.controller.sessionEnforcerService.calls.argsFor( 0 )[2]();
+        self.controller.sessionEnforcerService.calls.argsFor( 0 )[1]['cancel']();
         expect( self.controller.$window.location ).toEqual( 'cart.html' );
       } );
     } );

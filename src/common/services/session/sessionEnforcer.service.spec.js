@@ -32,43 +32,48 @@ describe( 'sessionEnforcerService', function () {
       expect( sessionModalService.open ).not.toHaveBeenCalled();
     } );
 
-    it( 'accepts success and failure callbacks', () => {
+    it( 'accepts \'sign-in\', \'cancel\' and \'change\' callbacks', () => {
       expect( sessionEnforcerService(
-        [Roles.public, Roles.registered],
-        ()=> {
-        },
-        ()=> {
+        [Roles.public, Roles.registered], {
+          'sign-in': () => {
+          },
+          cancel:    () => {
+          },
+          change:    () => {
+          }
         }
       ) ).toEqual( jasmine.any( String ) );
       expect( sessionModalService.open ).not.toHaveBeenCalled();
     } );
 
     describe( 'does not include current role', () => {
-      let success, failure, $rootScope;
+      let signIn, cancel, change, $rootScope;
       beforeEach( inject( function ( _$rootScope_ ) {
         $rootScope = _$rootScope_;
-        success = jasmine.createSpy( 'success' );
-        failure = jasmine.createSpy( 'failure' );
-        sessionEnforcerService( [Roles.registered], success, failure );
+        signIn = jasmine.createSpy( 'success' );
+        cancel = jasmine.createSpy( 'failure' );
+        change = jasmine.createSpy( 'change' );
+        sessionEnforcerService( [Roles.registered], {'sign-in': signIn, cancel: cancel, change: change} );
       } ) );
 
-      it( 'opens sign-in modal', () => {
+      it( 'opens sign-in modal and calls \'change\' callback', () => {
+        expect( change ).toHaveBeenCalledWith( Roles.public );
         expect( sessionModalService.open ).toHaveBeenCalledWith( 'sign-in', {backdrop: 'static', keyboard: false} );
       } );
 
       describe( 'sign-in success', () => {
-        it( 'calls success callback', () => {
+        it( 'calls \'sign-in\' callback', () => {
           deferred.resolve();
           $rootScope.$digest();
-          expect( success ).toHaveBeenCalled();
+          expect( signIn ).toHaveBeenCalled();
         } );
       } );
 
       describe( 'sign-in canceled', () => {
-        it( 'calls failure callback', () => {
+        it( 'calls \'cancel\' callback', () => {
           deferred.reject();
           $rootScope.$digest();
-          expect( failure ).toHaveBeenCalled();
+          expect( cancel ).toHaveBeenCalled();
         } );
       } );
     } );

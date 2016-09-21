@@ -1,6 +1,7 @@
 import angular from 'angular';
 import includes from 'lodash/includes';
 import filter from 'lodash/filter';
+import pick from 'lodash/pick';
 import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 
@@ -10,14 +11,11 @@ let serviceName = 'sessionEnforcerService';
 function SessionEnforcerService( sessionService, sessionModalService ) {
   let enforcers = {};
 
-  function enforceRoles( roles, success, failure ) {
+  function enforceRoles( roles, callbacks ) {
     if ( !angular.isArray( roles ) ) return false;
+    callbacks = angular.isDefined( callbacks ) ? callbacks : {};
     let id = Date.now().toString();
-    enforcers[id] = {
-      roles:   roles,
-      success: angular.isFunction( success ) ? success : angular.noop,
-      failure: angular.isFunction( failure ) ? failure : angular.noop
-    };
+    enforcers[id] = angular.merge( {}, {roles: roles}, pick( callbacks, ['sign-in', 'cancel', 'change'] ) );
 
     // Enforce new roles on current session
     sessionChanged();
@@ -41,16 +39,20 @@ function SessionEnforcerService( sessionService, sessionModalService ) {
         return !includes( enforcer.roles, role );
       } );
     if ( enforced.length ) {
+      angular.forEach( enforced, ( enforcer ) => {
+        if ( angular.isFunction( enforcer['change'] ) ) enforcer['change']( role );
+      } );
+
       sessionModalService
         .open( 'sign-in', {backdrop: 'static', keyboard: false} )
         .result
         .then( () => {
           angular.forEach( enforced, ( enforcer ) => {
-            enforcer.success();
+            if ( angular.isFunction( enforcer['sign-in'] ) ) enforcer['sign-in']();
           } );
         }, () => {
           angular.forEach( enforced, ( enforcer ) => {
-            enforcer.failure();
+            if ( angular.isFunction( enforcer['cancel'] ) ) enforcer['cancel']();
           } );
         } );
     }
