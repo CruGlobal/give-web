@@ -29,7 +29,7 @@ class Profile{
     return this.cortexApiService.get({
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
-          paymentMethods: 'paymentmethods:element[],paymentmethods:element:creditcard'
+          paymentMethods: 'paymentmethods:element[],paymentmethods:element:bankaccount,paymentmethods:element:bankaccount:element,paymentmethods:element:creditcard,paymentmethods:element:creditcard:element'
         }
       })
       .pluck('paymentMethods')

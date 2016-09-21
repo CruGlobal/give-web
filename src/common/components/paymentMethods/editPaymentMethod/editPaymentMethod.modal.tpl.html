@@ -1,0 +1,35 @@
+<loading-overlay ng-if="$ctrl.submitted"></loading-overlay>
+<div class="modal-body account-management">
+  <div class="row">
+    <div class="col-sm-12">
+      <button ng-click="$ctrl.dismiss()" type="button" class="close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h3 class="text-center border-bottom-small" translate>Edit Payment Method</h3>
+      <div class="alert alert-danger" role="alert" ng-if="$ctrl.resolve.submissionError.error">
+        <p ng-if="$ctrl.resolve.submissionError.error" ng-switch="$ctrl.resolve.submissionError.error">
+          <span ng-switch-default translate>
+            There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
+          </span>
+        </p>
+      </div>
+      <div class="panel panel-default panel-with-gray-background">
+        <div class="panel-body">
+          <p>
+            <i class="fa fa-cc-{{$ctrl.getIcon()}}" aria-hidden="true"></i>
+            <span class="payment-nickname">{{$ctrl.getNickname()}}</span>
+            ending in ****{{$ctrl.getAccountNumber()}}
+          </p>
+        </div>
+      </div>
+      <edit-payment-method
+        payment-type="$ctrl.resolve.paymentType"
+        submitted="$ctrl.submitted"
+        on-submit="$ctrl.onSubmit(success, data)"></edit-payment-method>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.submitted = true" translate>Add Payment Method</button>
+  <button type="button" class="btn btn-default" ng-click="$ctrl.dismiss()" translate>Cancel &amp; Return</button>
+</div>

@@ -1,0 +1,13 @@
+
+<div class="tab-indiv cart-tab show" ng-if="$ctrl.paymentType === 'bankAccount'">
+  <bank-account-form
+    model="'payment method data'"
+    submitted="$ctrl.submitted"
+    on-submit="$ctrl.onSubmit(success, data)"></bank-account-form>
+</div>
+<div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
+  <credit-card-form
+    model="'payment method data'"
+    submitted="$ctrl.submitted"
+    on-submit="$ctrl.onSubmit(success, data)"></credit-card-form>
+</div>

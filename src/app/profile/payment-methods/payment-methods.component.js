@@ -4,7 +4,6 @@ import recurringGiftsComponent from './recurring-gifts/recurring-gifts.component
 import creditCard from './credit-card/credit-card.component';
 import bankAccount from './bank-account/bank-account.component';
 import profileService from 'common/services/api/profile.service';
-import SessionModalWindowTemplate from 'common/services/session/sessionModalWindow.tpl';
 import addNewPaymentMethodModal from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.modal.component';
 import orderService from 'common/services/api/order.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
@@ -23,6 +22,7 @@ class PaymentMethodsController {
 
   $onDestroy(){
     this.addNewPaymentMethodModal.close();
+    this.editNewPaymentMethodModal.close();
   }
 
   $onInit(){
@@ -31,6 +31,7 @@ class PaymentMethodsController {
       .subscribe(
         data => {
           this.paymentMethods = data;
+          console.log(data)
           this.loading = false;
         },
         error => {
@@ -46,23 +47,22 @@ class PaymentMethodsController {
       backdrop: 'static', // Disables closing on click
       resolve: {
         onSubmit: () => this.onSubmit,
-        orderService: () => this.orderService
+        orderService: () => this.orderService,
+        submissionError: () => {error: ''}
       }
     });
   }
 
   onSubmit(e) {
-    console.log(e);
     if(e.data) {
-      this.submitted = true;
       this.orderService.addPaymentMethod(e.data)
         .subscribe(
           () => {
-            this.submitted = false;
             console.log('success');
           },
           (error) => {
             this.$log.error('Error adding payment method', error);
+            this.submissionError.error = error.data;
           });
     }
   }
