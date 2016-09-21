@@ -17,7 +17,7 @@ class Profile {
     this.cortexApiService = cortexApiService;
   }
 
-  getManageGivingProfile() {
+  getGivingProfile() {
     return this.cortexApiService
       .get( {
         path: ['profiles', this.cortexApiService.scope, 'default'],
@@ -37,10 +37,11 @@ class Profile {
           name:       (spouse['given-name']) ?
                         `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
                         `${donor['given-name']} ${donor['family-name']}`,
-          email:      data.emailAddress.email,
-          phone:      phone['phone-number'],
-          address:    formatAddressForTemplate( data.mailingAddress.address ),
-          yearToDate: data.yearToDate['year-to-date-amount']
+          email:      angular.isDefined( data.emailAddress ) ? data.emailAddress.email : undefined,
+          phone:      angular.isDefined( phone ) ? phone['phone-number'] : undefined,
+          address:    angular.isDefined( data.mailingAddress ) ?
+                        formatAddressForTemplate( data.mailingAddress.address ) : undefined,
+          yearToDate: angular.isDefined( data.yearToDate ) ? data.yearToDate['year-to-date-amount'] : undefined
         };
       } );
   }

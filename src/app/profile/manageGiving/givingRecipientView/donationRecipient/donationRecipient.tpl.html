@@ -1,0 +1,94 @@
+<div class="panel panel-margin-bottom recent-recipient-row">
+  <div class="panel-body">
+
+    <!-- Recipient Row -->
+    <div class="row">
+      <div class="col-md-2 col-full-height col-sm-12 col-xs-12 mb">
+        <img class="full-width" desig-src="{{$ctrl.recipient['designation-number']}}">
+      </div>
+      <div class="col-sm-12 col-md-7 col-full-height">
+        <h4 class="mb0">{{$ctrl.recipient['designation-name']}}</h4>
+        <small>#{{$ctrl.recipient['designation-number']}}</small>
+
+        <div class="row">
+          <div class="col-sm-3 col-md-3">
+            <div class="form-group mb0">
+              <label translate>Year-to-date:</label>
+              <ul class="list-unstyled list-recurring">
+                <li>
+                  <h4>{{$ctrl.recipient['year-to-date-amount'] | currency:'$'}}</h4>
+                  <span class="meta">{{$ctrl.currentDate | date:'mediumDate'}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-3 col-md-3">
+            <div class="form-group mb0" ng-if="$ctrl.recipient['mostrecentdonation']">
+              <label translate>Most Recent:</label>
+              <ul class="list-unstyled list-recurring">
+                <li>
+                  <h4>{{$ctrl.recipient['mostrecentdonation']['historical-donation-line']['amount'] | currency:'$'}}</h4>
+                  <span class="meta">{{$ctrl.recipient['mostrecentdonation']['historical-donation-line']['transaction-date']['display-value'] | date:'mediumDate'}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-4 col-md-4">
+            <!--
+            <div class="form-group mb0">
+              <label translate>Recurring Gifts:</label>
+              <ul class="list-unstyled list-recurring">
+                <li>
+                  <h4 translate>$1350.00 Monthly</h4>
+                  <span class="meta" translate>Next Gift: Jul 6, 2016</span>
+                </li>
+                <li>
+                  <h4>$1350.00 Daily</h4>
+                  <span class="meta" translate>Next Gift: Aug 6, 2016</span>
+                </li>
+              </ul>
+            </div>
+            -->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4 col-md-3 col-full-height split-row">
+        <button type="button"
+                class="btn btn-primary btn-block split-col-left"
+                ng-click="$ctrl.giveNewGift()"
+                translate>Give a New Gift
+        </button>
+        <button type="button"
+                class="btn btn-subtle btn-block mt- collapse-indicator split-col-right"
+                ng-class="{collapsed: !$ctrl.showDetails}"
+                ng-click="$ctrl.toggleDetails()"
+                translate>Details
+        </button>
+      </div>
+    </div>
+
+    <div class="mt" ng-class="{collapse: !$ctrl.showDetails}">
+      <h4 class="border-top-small pl--" translate>Recent Gift History</h4>
+      <div ng-if="$ctrl.isLoading" style="position: relative;">
+        <loading></loading>
+      </div>
+      <div class="table-responsive" ng-if="!$ctrl.isLoading">
+        <div ng-if="!$ctrl.details" translate>No Gift History</div>
+        <table class="table table-striped table-payment-history" ng-if="$ctrl.details">
+          <thead>
+          <tr>
+            <th class="date" translate>Date</th>
+            <th class="amount" translate>Amount</th>
+            <th class="method" translate>Payment Method</th>
+            <th class="status" translate>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="gift in $ctrl.details" gift-detail="gift"></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
