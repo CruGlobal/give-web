@@ -4,13 +4,14 @@ import givingRecipientView from './givingRecipientView/givingRecipientView.compo
 import givingMonthlyView from './givingMonthlyView/givingMonthlyView.component';
 import includes from 'lodash/includes';
 import loadingComponent from 'common/components/loading/loading.component';
+import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import profileService from 'common/services/api/profile.service';
 import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
-import template from './manageGiving.tpl';
+import template from './yourGiving.tpl';
 
 import {Roles} from 'common/services/session/session.service';
 
-let componentName = 'manageGiving';
+let componentName = 'yourGiving';
 
 export const queryParams = {
   view: 'view'
@@ -18,7 +19,7 @@ export const queryParams = {
 
 export const givingViews = ['recipient', 'monthly'];
 
-class ManageGivingController {
+class YourGivingController {
 
   /* @ngInject */
   constructor( $window, $location, sessionEnforcerService, profileService ) {
@@ -69,6 +70,10 @@ class ManageGivingController {
     }
     this.$location.search( queryParams.view, this.view );
   }
+
+  setViewLoading( loading ) {
+    this.viewLoading = loading;
+  }
 }
 export default angular
   .module( componentName, [
@@ -76,11 +81,12 @@ export default angular
     givingRecipientView.name,
     givingMonthlyView.name,
     loadingComponent.name,
+    loadingOverlay.name,
     profileService.name,
     sessionEnforcerService.name,
     template.name
   ] )
   .component( componentName, {
-    controller:  ManageGivingController,
+    controller:  YourGivingController,
     templateUrl: template.name
   } );

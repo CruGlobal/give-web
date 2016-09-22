@@ -47,7 +47,7 @@
 
       <div class="panel panel-margin-bottom">
         <div class="panel-body">
-          <div class="row">
+          <div class="row" style="position: relative;">
             <div class="col-sm-12">
               <h3 translate>Your Giving</h3>
             </div>
@@ -84,13 +84,14 @@
                 </ul>
               </div>
             </div>
+            <loading-overlay ng-if="$ctrl.viewLoading"></loading-overlay>
           </div>
         </div>
       </div>
 
-      <div ng-switch="$ctrl.view">
-        <giving-recipient-view ng-switch-when="recipient"></giving-recipient-view>
-        <giving-monthly-view ng-switch-when="monthly"></giving-monthly-view>
+      <div ng-switch="$ctrl.view" style="position: relative;">
+        <giving-recipient-view ng-switch-when="recipient" set-loading="$ctrl.setViewLoading(loading)"></giving-recipient-view>
+        <giving-monthly-view ng-switch-when="monthly" set-loading="$ctrl.setViewLoading(loading)"></giving-monthly-view>
       </div>
 
     </div>

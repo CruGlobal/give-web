@@ -17,12 +17,15 @@ class GivingRecipientView {
   }
 
   loadRecipients( year, month ) {
-    this.isLoading = true;
+    this.setLoading( {loading: true} );
     if ( angular.isDefined( this.subscriber ) ) this.subscriber.unsubscribe();
-    this.subscriber = this.donationsService.getRecipients(2015).subscribe( ( recipients ) => {
+    this.subscriber = this.donationsService.getRecipients( 2015 ).subscribe( ( recipients ) => {
       delete this.subscriber;
       this.recipients = recipients;
-      this.isLoading = false;
+      this.setLoading( {loading: false} );
+    }, () => {
+      // todo: error loading recipients
+      this.setLoading( {loading: false} );
     } );
   }
 }
@@ -36,6 +39,7 @@ export default angular
     controller:  GivingRecipientView,
     templateUrl: template.name,
     bindings:    {
-      filters: '<'
+      filters:    '<',
+      setLoading: '&'
     }
   } );
