@@ -11,8 +11,11 @@ class editPaymentMethodController{
 
   /* @ngInject */
   constructor(envService){
-    this.submitted = false;
     this.imgDomain = envService.read('imgDomain');
+  }
+
+  onSubmit(success, data){
+    console.log(data)
   }
 
 }
@@ -29,7 +32,6 @@ export default angular
     bindings: {
       model: '<',
       paymentType: '<',
-      submitted: '<',
-      onSubmit: '&'
+      submitted: '<'
     }
   });

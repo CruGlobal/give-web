@@ -23,10 +23,9 @@
         </div>
       </div>
       <edit-payment-method
+        submitted='$ctrl.submitted'
         model="$ctrl.resolve.model"
-        payment-type="$ctrl.resolve.paymentType"
-        submitted="$ctrl.submitted"
-        on-submit="$ctrl.onSubmit(success, data)"></edit-payment-method>
+        payment-type="$ctrl.resolve.paymentType"></edit-payment-method>
     </div>
   </div>
 </div>
