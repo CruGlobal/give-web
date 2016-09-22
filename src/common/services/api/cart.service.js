@@ -115,7 +115,7 @@ function cart(cortexApiService){
     data.quantity = 1;
 
     return cortexApiService.post({
-      path: ['itemfieldlineitems', 'items', cortexApiService.scope, id],
+      path: ['itemfieldlineitem', 'items', cortexApiService.scope, id],
       data: data
     });
   }
