@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-messages';
 import toString from 'lodash/toString';
 import range from 'lodash/range';
-import defaults from 'lodash/defaults';
+import assign from 'lodash/assign';
 import 'rxjs/add/operator/combineLatest';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
@@ -91,7 +91,7 @@ class CreditCardController {
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         this.donorDetails = data;
-        defaults(this.billingAddress, this.donorDetails.mailingAddress);
+        assign(this.billingAddress, this.donorDetails.mailingAddress);
       });
   }
 
