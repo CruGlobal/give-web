@@ -27,6 +27,7 @@ export default angular
     controller: editPaymentMethodController,
     templateUrl: template.name,
     bindings: {
+      model: '<',
       paymentType: '<',
       submitted: '<',
       onSubmit: '&'

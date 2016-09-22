@@ -15,10 +15,8 @@ class AddNewPaymentMethodModalController {
   }
 
   onSubmit(success, data){
-    if(data) {
-      this.resolve.onSubmit({success: success, data: data});
-      this.submitted = false;
-    }
+    this.resolve.onSubmit({success: success, data: data});
+    this.submitted = false;
   }
 }
 

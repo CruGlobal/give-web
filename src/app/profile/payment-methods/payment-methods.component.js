@@ -27,11 +27,10 @@ class PaymentMethodsController {
 
   $onInit(){
     this.loading = true;
-    this.profileService.getPaymentMethods()
+    this.profileService.getPaymentMethodsWithDonations()
       .subscribe(
         data => {
           this.paymentMethods = data;
-          console.log(data)
           this.loading = false;
         },
         error => {

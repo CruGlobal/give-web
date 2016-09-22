@@ -37,6 +37,7 @@ class CreditCardController {
   }
 
   $onInit(){
+    this.populateData();
     this.loadCcp();
     this.waitForFormInitialization();
     this.loadDonorDetails();
@@ -54,6 +55,17 @@ class CreditCardController {
       .subscribe((ccp) => {
         this.ccp = ccp;
       });
+  }
+
+  populateData(){
+    if(!this.model) return;
+    this.creditCardPayment = {
+      cardNumber: '**** **** **** '+this.model['card-number'],
+      cardholderName: this.model['cardholder-name'],
+      expiryMonth: this.model['expiry-month'],
+      expiryYear: this.model['expiry-year']*1,
+      securityCode: '***',
+    }
   }
 
   waitForFormInitialization() {
@@ -147,6 +159,7 @@ export default angular
     controller: CreditCardController,
     templateUrl: template.name,
     bindings: {
+      model: '<',
       submitted: '<',
       onSubmit: '&'
     }

@@ -23,6 +23,7 @@
         </div>
       </div>
       <edit-payment-method
+        model="$ctrl.resolve.model"
         payment-type="$ctrl.resolve.paymentType"
         submitted="$ctrl.submitted"
         on-submit="$ctrl.onSubmit(success, data)"></edit-payment-method>
