@@ -8,6 +8,7 @@ import values from 'lodash/values';
 import escapeRegExp from 'lodash/escapeRegExp';
 import forEach from 'lodash/forEach';
 import cloneDeep from 'lodash/cloneDeep';
+import upperFirst from 'lodash/upperFirst';
 
 let serviceName = 'hateoasHelperService';
 
@@ -22,9 +23,9 @@ class HateoasHelper {
     if(isArray(path)){
       path = path.join('[0]._');
     }
-    let objectPath = '_' + path;
 
-    let elementArray = get(response, objectPath);
+    let elementArray = get(response, '_' + path); // Try finding it with a underscore
+    elementArray = elementArray || get(response, path); // Try finding it without a underscore
     return !elementArray || zoomIsArray ? elementArray : elementArray[0];
   }
 
@@ -52,15 +53,28 @@ class HateoasHelper {
   }
 
   mapChildZoomElements(element, parentZoomString, childZoomStrings){
-    element = cloneDeep(element);
+    // Clone element so we can keep searching the original element
+    let newElement = cloneDeep(element);
+
+    // setup the parentZoomString as a regex so we can strip it from the children
     let commonPrefixRegex = new RegExp('^' + escapeRegExp(this.stripArrayIndicators(parentZoomString)) + ':');
+
+    // Add each child zoom string into parent object
     forEach(childZoomStrings, (zoomString) => {
+      // strip parentZoomString from child zoom string
       zoomString = zoomString.replace(commonPrefixRegex, '');
       let path = this.stripArrayIndicators(zoomString).split(':');
-      element[path.join('')] = this.getElement(element, path, this.hasArrayIndicators(zoomString)); //TODO: could do camel case key name instead of joining with spaces
-      delete element['_' + path[0]];
+      // Camel case the new key
+      let newKey = map(path, (pathItem, index) => {
+        return index === 0 ? pathItem : upperFirst(pathItem);
+      }).join('');
+      newElement[newKey] = this.getElement(element, path, this.hasArrayIndicators(zoomString));
+      if(path[0] !== newKey){
+        delete newElement[path[0]]; // Delete original non-underscored key if it exists
+      }
+      delete newElement['_' + path[0]];// Delete original underscored key if it exists
     });
-    return element;
+    return newElement;
   }
 
   stripArrayIndicators(zoomString){
