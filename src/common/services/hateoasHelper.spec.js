@@ -158,6 +158,15 @@ describe('HATEOAS helper service', function() {
             someKey: 'someValue'
           }
         ],
+        paymentmeans: [
+          {
+            _creditcard: [
+              {
+                someKey: 'someValue'
+              }
+            ]
+          }
+        ],
         paymentmeansCreditcard: {
           someKey: 'someValue'
         }

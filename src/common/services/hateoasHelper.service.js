@@ -69,9 +69,6 @@ class HateoasHelper {
         return index === 0 ? pathItem : upperFirst(pathItem);
       }).join('');
       newElement[newKey] = this.getElement(element, path, this.hasArrayIndicators(zoomString));
-      if(path[0] !== newKey){
-        delete newElement[path[0]]; // Delete original non-underscored key if it exists
-      }
       delete newElement['_' + path[0]];// Delete original underscored key if it exists
     });
     return newElement;
