@@ -38,6 +38,9 @@ describe('HATEOAS helper service', function() {
       cartResponse._order.push('item 2');
       expect(self.hateoasHelperService.getElement(cartResponse, 'order', true)).toEqual([cartResponse._order[0], 'item 2']);
     });
+    it('should try the path without a prefixed underscore if it couldn\'t find the path with an underscore', () => {
+      expect(self.hateoasHelperService.getElement({ test: ['some value'] }, 'test')).toEqual('some value');
+    });
     it('should return undefined for an unknown element', () => {
       expect(self.hateoasHelperService.getElement(cartResponse, ['order', 'nonexistent'])).toBeUndefined();
     });
@@ -130,10 +133,19 @@ describe('HATEOAS helper service', function() {
           {
             someKey: 'someValue'
           }
+        ],
+        paymentmeans: [
+          {
+            _creditcard: [
+              {
+                someKey: 'someValue'
+              }
+            ]
+          }
         ]
       };
       this.zoomString = 'lineitems:element';
-      this.childZoomStrings = ['lineitems:element:code', 'lineitems:element:rates[]'];
+      this.childZoomStrings = ['lineitems:element:code', 'lineitems:element:rates[]', 'lineitems:element:paymentmeans:creditcard'];
     });
 
     it('should take an element and map the child zoom strings to keys', () => {
@@ -145,7 +157,10 @@ describe('HATEOAS helper service', function() {
           {
             someKey: 'someValue'
           }
-        ]
+        ],
+        paymentmeansCreditcard: {
+          someKey: 'someValue'
+        }
       });
     });
     it('should return undefined if the zoom isn\'t found', () => {
@@ -159,6 +174,15 @@ describe('HATEOAS helper service', function() {
         _rates: [
           {
             someKey: 'someValue'
+          }
+        ],
+        paymentmeans: [
+          {
+            _creditcard: [
+              {
+                someKey: 'someValue'
+              }
+            ]
           }
         ],
         code2: undefined,
