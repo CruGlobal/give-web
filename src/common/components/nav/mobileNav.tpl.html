@@ -1,0 +1,158 @@
+<div class="mobile-nav-wrap" ng-class="{'on': $ctrl.mobileNavOpen}">
+  <div id="mobile-header">
+    <div id="mobile-logo"></div>
+
+    <div id="sign-in-section">
+      <sign-in-button id="sign-in"></sign-in-button>
+
+      <div id="mobile-nav-icon" ng-click="$ctrl.toggleMenu()" ng-class="{'open': $ctrl.mobileNavOpen}">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="mobile-navigation" ng-class="{'open': $ctrl.mobileNavOpen, 'hidden': !$ctrl.mobileNavOpen}" ng-init="mobileTab = 'nav'">
+    <ul class="menu-icons nav nav-tabs" role="tablist">
+      <li role="presentation" ng-class="{'active': mobileTab === 'nav'}">
+        <a href="" ng-click="mobileTab = 'nav'; $ctrl.mobileMenuLevel[0] = ($ctrl.mobileMenuLevel[0] > 0 ? $ctrl.mobileMenuLevel[0] - 1 : 0);">
+          <img class="menu-icon-navigation"
+               ng-src="{{$ctrl.imgDomain + '/assets/img/' + ($ctrl.mobileMenuLevel[0] > 0 ? 'mobile-menu-back-icon.png' : 'mobile-menu-hamburger-icon.png')}}">
+        </a>
+      </li>
+      <li role="presentation" ng-class="{'active': mobileTab === 'search'}">
+        <a href="" ng-click="mobileTab = 'search'">
+          <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-search-icon.png">
+        </a>
+      </li>
+      <li role="presentation" ng-class="{'active': mobileTab === 'location'}">
+        <a href="" ng-click="mobileTab = 'location'">
+          <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-location-icon.png">
+        </a>
+      </li>
+      <li role="presentation" ng-class="{'active': mobileTab === 'global'}">
+        <a href="" ng-click="mobileTab = 'global'">
+          <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-globe-icon.png">
+        </a>
+      </li>
+      <li role="presentation" ng-class="{'active': mobileTab === 'cart'}">
+        <a href="" ng-click="mobileTab = 'cart'">
+          <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-cart-icon.png">
+        </a>
+      </li>
+      <li role="presentation" ng-class="{'active': mobileTab === 'more'}">
+        <a href="" ng-click="mobileTab = 'more'">
+          <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-ellipsis-icon.png">
+        </a>
+      </li>
+    </ul>
+
+
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'nav'">
+        <div class="main-menu-container">
+          <ul class="main-menu" id="main-menu" ng-style="{'left': (($ctrl.mobileMenuLevel[0] * -100) + '%')}">
+            <li ng-repeat="i in $ctrl.menuStructure" ng-class="{'has-children': i.children.length}" ng-if="!i.hideInNav">
+              <a ng-href="{{i.path}}" ng-if="!i.children.length">{{i.title}}</a>
+              <a ng-if="i.children.length" ng-click="$ctrl.mobileMenuLevel = [1, $index]">{{i.title}}</a>
+
+              <ul ng-if="$ctrl.mobileMenuLevel[1] === $index">
+                <li ng-repeat="i in i.children" ng-class="{'has-children': i.children.length}" ng-if="!i.hideInNav">
+                  <a ng-href="{{i.path}}" ng-if="!i.children.length">{{i.title}}</a>
+                  <a ng-if="i.children.length" ng-click="$ctrl.mobileMenuLevel[0] = 2; $ctrl.mobileMenuLevel[2] = $index;">{{i.title}}</a>
+
+                  <ul ng-if="$ctrl.mobileMenuLevel[2] === $index">
+                    <li ng-repeat="i in i.children" ng-if="!i.hideInNav">
+                      <a ng-href="{{i.path}}">{{i.title}}</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'search'">
+        <form id="mob-search">
+          <div class="form-group">
+            <input type="text" class="form-control form-control-subtle text-center" name="mob-search" placeholder="ENTER KEYWORDS">
+          </div>
+        </form>
+      </div>
+      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'location'">
+        <form id="mob-nearme">
+          <div class="form-group">
+            <input type="text" class="form-control form-control-subtle text-center" name="mob-nearme" placeholder="FIND CRU NEAR ME">
+          </div>
+        </form>
+      </div>
+      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'global'">
+        <div class="main-menu-container">
+          <ul class="main-menu main-menu-global global-menu">
+            <li class="has-children">Africa
+              <ul>
+                <li><a href="#">Ethiopia</a></li>
+                <li><a href="#">Ghana</a></li>
+                <li><a href="#">Kenya</a></li>
+                <li><a href="#">Nigeria</a></li>
+                <li><a href="#">Nigeria</a></li>
+              </ul>
+            </li>
+            <li class="has-children">Asia
+              <ul>
+                <li><a href="#">Armenia</a></li>
+                <li><a href="#">Hong Kong</a></li>
+                <li><a href="#">India</a></li>
+                <li><a href="#">Japan</a></li>
+                <li><a href="#">Macau</a></li>
+                <li><a href="#">Nepal</a></li>
+                <li><a href="#">Pakistan</a></li>
+                <li><a href="#">Singapore</a></li>
+                <li><a href="#">South Korea</a></li>
+                <li><a href="#">Taiwan</a></li>
+                <li><a href="#">Thailand</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'cart'" ng-init="$ctrl.loadCart()">
+        <div class="container-fluid" id="mob-cart">
+          <div class="row row-no-spacing">
+            <div class="col-xs-12">
+              <div style="height:100px;" class="repeating-row" ng-if="!$ctrl.cartData">
+                <loading></loading>
+              </div>
+              <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
+                Your cart is empty
+              </p>
+
+              <div class="repeating-row select-recipient-row" ng-repeat="i in $ctrl.cartData.items">
+                <div class="col-xs-3">
+                  <img desig-src="{{i.designationNumber}}">
+                </div>
+                <div class="col-xs-9">
+                  <p class="title">{{i.displayName}}</p>
+                  <p class="title">#{{i.designationNumber}}</p>
+                  <p class="price">{{i.price}}</p>
+                </div>
+              </div>
+
+              <a href="/checkout.html" class="btn btn-primary checkout" ng-if="$ctrl.cartData.items.length">Checkout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'more'">
+        <ul id="mob-more">
+          <li><img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-book-icon.png">Shop Books</li>
+          <li><img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-phone-icon.png">Apps</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mobile-nav-overlay" ng-class="{'on': $ctrl.mobileNavOpen}"></div>
