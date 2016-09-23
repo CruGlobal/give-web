@@ -97,11 +97,18 @@ describe('credit card form', () => {
 
   describe('loadDonorDetails', () => {
     it('should get the donor\'s details', () => {
-      spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of('some details'));
+      let donorDetails = {
+        "donor-type": "Household",
+        mailingAddress: {
+          country: 'CA',
+          streetAddress: '123 Some Street'
+        }
+      };
+      spyOn(self.controller.orderService, 'getDonorDetails').and.returnValue(Observable.of(donorDetails));
       self.controller.loadDonorDetails();
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
-      expect(self.controller.donorDetails).toEqual('some details');
-      expect(self.controller.billingAddress).toEqual(jasmine.objectContaining({ isMailingAddress: true, country: 'US', streetAddress: '', extendedAddress: '', locality: '', region: '', postalCode: '' }));
+      expect(self.controller.donorDetails).toEqual(donorDetails);
+      expect(self.controller.billingAddress).toEqual(jasmine.objectContaining({ isMailingAddress: true, country: 'CA', streetAddress: '123 Some Street'}));
     });
   });
 
