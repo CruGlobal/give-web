@@ -8,7 +8,7 @@ class LoadingController{
 
   /* @ngInject */
   constructor(){
-
+    this.inline = false;
   }
 }
 
@@ -18,5 +18,8 @@ export default angular
   ])
   .component(componentName, {
     controller: LoadingController,
-    templateUrl: template.name
+    templateUrl: template.name,
+    bindings: {
+      inline: '@'
+    }
   });
