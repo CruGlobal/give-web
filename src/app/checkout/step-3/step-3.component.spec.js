@@ -1,9 +1,11 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './step-3.component';
-
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+
+import {existingPaymentMethodFlag} from 'common/services/api/order.service';
+
+import module from './step-3.component';
 
 describe('checkout', () => {
   describe('step 3', () => {
@@ -250,7 +252,7 @@ describe('checkout', () => {
       });
       it('should submit the order without a CCV if paying with an existing credit card', () => {
         self.controller.creditCardPaymentDetails = {};
-        self.storedCcv = 'existing payment method';
+        self.storedCcv = existingPaymentMethodFlag;
         self.controller.submitOrder();
         expect(self.controller.orderService.submit).toHaveBeenCalledWith();
         expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();

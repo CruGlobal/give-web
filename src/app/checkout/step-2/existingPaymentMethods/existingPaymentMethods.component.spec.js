@@ -5,6 +5,8 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/toPromise';
 
+import {existingPaymentMethodFlag} from 'common/services/api/order.service';
+
 import module from './existingPaymentMethods.component';
 
 describe('checkout', () => {
@@ -153,7 +155,7 @@ describe('checkout', () => {
           self.controller.selectPayment();
           expect(self.controller.orderService.selectPaymentMethod).toHaveBeenCalledWith(self.controller.selectedPaymentMethod);
           expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
-          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith('existing payment method');
+          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(existingPaymentMethodFlag);
         });
         it('should handle a failed request to save the selected payment', () => {
           self.controller.orderService.selectPaymentMethod.and.returnValue(Observable.throw('some error'));
