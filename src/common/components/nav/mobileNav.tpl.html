@@ -58,6 +58,8 @@
               <a ng-href="{{i.path}}" ng-if="!i.children.length">{{i.title}}</a>
               <a ng-if="i.children.length" ng-click="$ctrl.mobileMenuLevel = [1, $index]">{{i.title}}</a>
 
+              <nav-mobile-level></nav-mobile-level>
+
               <ul ng-if="$ctrl.mobileMenuLevel[1] === $index">
                 <li ng-repeat="i in i.children" ng-class="{'has-children': i.children.length}" ng-if="!i.hideInNav">
                   <a ng-href="{{i.path}}" ng-if="!i.children.length">{{i.title}}</a>

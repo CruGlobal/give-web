@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import cartService from 'common/services/api/cart.service';
 import loadingComponent from 'common/components/loading/loading.component';
 import signInButton from 'common/components/signInButton/signInButton.component';
+import mobileNavLevelComponent from './navMobileLevel.component';
 
 import mobileTemplate from './mobileNav.tpl';
 
@@ -62,7 +63,8 @@ export default angular
     mobileTemplate.name,
     cartService.name,
     loadingComponent.name,
-    signInButton.name
+    signInButton.name,
+    mobileNavLevelComponent.name
   ])
   .component(componentName, {
     controller: NavController,
