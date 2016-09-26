@@ -63,12 +63,14 @@ class ThankYouController{
         this.rateTotals = concat(
           [{
             frequency: 'Single',
-            total: this.purchase.rawData['monetary-total'][0].display
+            total: this.purchase.rawData['monetary-total'][0].display,
+            amount: this.purchase.rawData['monetary-total'][0].amount
           }],
           map(this.purchase.rateTotals, (rateTotal) => {
             return {
               frequency: rateTotal.recurrence.display,
-              total: rateTotal.cost.display
+              total: rateTotal.cost.display,
+              amount: rateTotal.cost.amount
             };
           })
         );

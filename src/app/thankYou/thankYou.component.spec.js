@@ -30,7 +30,8 @@ describe('thank you', () => {
       },
       rateTotals: [{
         cost: {
-          display: '$20.00'
+          display: '$20.00',
+          amount: 20
         },
         recurrence: {
           display: 'Monthly'
@@ -39,7 +40,8 @@ describe('thank you', () => {
       rawData: {
         'monetary-total': [
           {
-            display: '$50.00'
+            display: '$50.00',
+            amount: 50
           }
         ]
 
@@ -78,11 +80,13 @@ describe('thank you', () => {
       expect(self.controller.rateTotals).toEqual([
         {
           frequency: 'Single',
-          total: '$50.00'
+          total: '$50.00',
+          amount: 50
         },
         {
           frequency: 'Monthly',
-          total: '$20.00'
+          total: '$20.00',
+          amount: 20
         }
       ]);
     });
