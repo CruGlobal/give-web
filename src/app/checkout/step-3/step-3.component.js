@@ -91,7 +91,11 @@ class Step3Controller{
       submitRequest = this.orderService.submit();
     }else if(this.creditCardPaymentDetails){
       let encryptedCcv = this.orderService.retrieveCardSecurityCode();
-      submitRequest = encryptedCcv ? this.orderService.submit(encryptedCcv) : Observable.throw('Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly');
+      if(encryptedCcv === 'existing payment method'){
+        submitRequest = this.orderService.submit();
+      }else{
+        submitRequest = encryptedCcv ? this.orderService.submit(encryptedCcv) : Observable.throw('Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly');
+      }
     }else{
       submitRequest = Observable.throw('Current payment type is unknown');
     }

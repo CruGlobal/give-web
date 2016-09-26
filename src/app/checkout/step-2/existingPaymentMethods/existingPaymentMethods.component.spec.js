@@ -142,15 +142,24 @@ describe('checkout', () => {
       });
 
       describe('selectPayment', () => {
+        beforeEach(() => {
+          spyOn(self.controller.orderService, 'selectPaymentMethod');
+          spyOn(self.controller.orderService, 'storeCardSecurityCode');
+        });
+
         it('should save the selected payment', () => {
-          spyOn(self.controller.orderService, 'selectPaymentMethod').and.callFake(() => Observable.of('success'));
+          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account' } };
+          self.controller.orderService.selectPaymentMethod.and.returnValue(Observable.of('success'));
           self.controller.selectPayment();
+          expect(self.controller.orderService.selectPaymentMethod).toHaveBeenCalledWith(self.controller.selectedPaymentMethod);
           expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
+          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith('existing payment method');
         });
         it('should handle a failed request to save the selected payment', () => {
-          spyOn(self.controller.orderService, 'selectPaymentMethod').and.callFake(() => Observable.throw('some error'));
+          self.controller.orderService.selectPaymentMethod.and.returnValue(Observable.throw('some error'));
           self.controller.selectPayment();
           expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false, error: 'some error'});
+          expect(self.controller.orderService.storeCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error selecting payment method', 'some error']);
         });
       });

@@ -84,6 +84,7 @@ class ExistingPaymentMethodsController {
   selectPayment(){
     this.orderService.selectPaymentMethod(this.selectedPaymentMethod)
       .subscribe(() => {
+          this.orderService.storeCardSecurityCode('existing payment method');
           this.onSubmit({success: true});
         },
         (error) => {

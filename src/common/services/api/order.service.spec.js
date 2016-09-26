@@ -580,6 +580,11 @@ describe('order service', () => {
       self.orderService.storeCardSecurityCode(encryptedCcv);
       expect(self.$window.sessionStorage.getItem('ccv')).toEqual(encryptedCcv);
     });
+    it('should allow \'existing payment method\' to be stored', () => {
+      let encryptedCcv = 'existing payment method';
+      self.orderService.storeCardSecurityCode(encryptedCcv);
+      expect(self.$window.sessionStorage.getItem('ccv')).toEqual(encryptedCcv);
+    });
     it('should throw an error when it looks like the security code is unencrypted (has less than 50 chars)', () => {
       expect(() => self.orderService.storeCardSecurityCode('1234')).toThrowError('The CCV should be encrypted and the provided CCV looks like it is too short to be encrypted correctly');
     });

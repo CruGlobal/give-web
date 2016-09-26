@@ -248,6 +248,14 @@ describe('checkout', () => {
         expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
         expect(self.controller.$window.location.href).toEqual('thank-you.html');
       });
+      it('should submit the order without a CCV if paying with an existing credit card', () => {
+        self.controller.creditCardPaymentDetails = {};
+        self.storedCcv = 'existing payment method';
+        self.controller.submitOrder();
+        expect(self.controller.orderService.submit).toHaveBeenCalledWith();
+        expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
+        expect(self.controller.$window.location.href).toEqual('thank-you.html');
+      });
       it('should handle an error submitting an order with a credit card', () => {
         self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving credit card'));
         self.controller.creditCardPaymentDetails = {};

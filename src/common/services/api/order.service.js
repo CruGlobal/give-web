@@ -230,7 +230,7 @@ class Order{
   }
 
   storeCardSecurityCode(encryptedCcv){
-    if(toString(encryptedCcv).length > 50){
+    if(encryptedCcv === 'existing payment method' || toString(encryptedCcv).length > 50){
       this.sessionStorage.setItem('ccv', encryptedCcv);
     }else{
       throw new Error('The CCV should be encrypted and the provided CCV looks like it is too short to be encrypted correctly');
