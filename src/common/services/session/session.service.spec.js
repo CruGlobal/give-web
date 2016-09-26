@@ -4,6 +4,8 @@ import module from './session.service';
 import {cortexSession} from './fixtures/cortex-session';
 import {giveSession} from './fixtures/give-session';
 
+import {Roles, Sessions} from './session.service';
+
 describe( 'session service', function () {
   beforeEach( angular.mock.module( module.name ) );
   let self = {};
@@ -16,7 +18,7 @@ describe( 'session service', function () {
   } ) );
 
   afterEach( () => {
-    ['cortex-session', 'give-session', 'cru-session'].forEach( ( name ) => {
+    [Sessions.cortex, Sessions.give, Sessions.cru].forEach( ( name ) => {
       self.$cookies.remove( name );
     } );
   } );
@@ -32,7 +34,7 @@ describe( 'session service', function () {
 
     describe( 'session with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        self.$cookies.put( 'cortex-session', cortexSession.registered );
+        self.$cookies.put( Sessions.cortex, cortexSession.registered );
         // Force digest so scope session watchers pick up changes.
         self.$rootScope.$digest();
       } );
@@ -47,14 +49,14 @@ describe( 'session service', function () {
           "email":      "professorx@xavier.edu",
           "token_hash": {
             "access_token": "1a0e2d05-5999-4fd6-a06f-f43c1b2ea8b0",
-            "role":         "REGISTERED"
+            "role":         Roles.registered
           }
         } );
       } );
 
       describe( 'change to \'IDENTIFIED\' cortex-session', () => {
         beforeEach( () => {
-          self.$cookies.put( 'cortex-session', cortexSession.identified );
+          self.$cookies.put( Sessions.cortex, cortexSession.identified );
           // Force digest so scope session watchers pick up changes.
           self.$rootScope.$digest();
         } );
@@ -69,7 +71,7 @@ describe( 'session service', function () {
             "email":      "professorx@xavier.edu",
             "token_hash": {
               "access_token": "1a0e2d05-5999-4fd6-a06f-f43c1b2ea8b0",
-              "role":         "IDENTIFIED"
+              "role":         Roles.identified
             }
           } );
         } );
@@ -89,53 +91,53 @@ describe( 'session service', function () {
     } );
 
     it( 'returns \'PUBLIC\' if no session exists', () => {
-      expect( self.sessionService.getRole() ).toEqual( 'PUBLIC' );
+      expect( self.sessionService.getRole() ).toEqual( Roles.public );
     } );
 
     describe( 'with \'PUBLIC\' cortex-session', () => {
       beforeEach( () => {
-        self.$cookies.put( 'cortex-session', cortexSession.public );
+        self.$cookies.put( Sessions.cortex, cortexSession.public );
         // Force digest so scope session watchers pick up changes.
         self.$rootScope.$digest();
       } );
 
       it( 'returns \'PUBLIC\'', () => {
-        expect( self.sessionService.getRole() ).toEqual( 'PUBLIC' );
+        expect( self.sessionService.getRole() ).toEqual( Roles.public );
       } );
     } );
 
     describe( 'with \'IDENTIFIED\' cortex-session', () => {
       beforeEach( () => {
-        self.$cookies.put( 'cortex-session', cortexSession.identified );
+        self.$cookies.put( Sessions.cortex, cortexSession.identified );
         // Force digest so scope session watchers pick up changes.
         self.$rootScope.$digest();
       } );
 
       it( 'returns \'IDENTIFIED\'', () => {
-        expect( self.sessionService.getRole() ).toEqual( 'IDENTIFIED' );
+        expect( self.sessionService.getRole() ).toEqual( Roles.identified );
       } );
     } );
 
     describe( 'getRole with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        self.$cookies.put( 'cortex-session', cortexSession.registered );
+        self.$cookies.put( Sessions.cortex, cortexSession.registered );
         // Force digest so scope session watchers pick up changes.
         self.$rootScope.$digest();
       } );
 
       it( 'returns \'IDENTIFIED\' with expired give-session', () => {
-        expect( self.sessionService.getRole() ).toEqual( 'IDENTIFIED' );
+        expect( self.sessionService.getRole() ).toEqual( Roles.identified );
       } );
 
       describe( 'with \'REGISTERED\' give-session', () => {
         beforeEach( () => {
-          self.$cookies.put( 'give-session', giveSession );
+          self.$cookies.put( Sessions.give, giveSession );
           // Force digest so scope session watchers pick up changes.
           self.$rootScope.$digest();
         } );
 
         it( 'returns \'REGISTERED\'', () => {
-          expect( self.sessionService.getRole() ).toEqual( 'REGISTERED' );
+          expect( self.sessionService.getRole() ).toEqual( Roles.registered );
         } );
       } );
     } );
