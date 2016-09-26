@@ -25,6 +25,18 @@ describe('contactInfo', function() {
       self.controller.$onInit();
       expect(self.controller.loadDonorDetails).toHaveBeenCalled();
     });
+    it('if not a public user, it should hide the title', () => {
+      spyOn(self.controller, 'loadDonorDetails');
+      spyOn(self.controller.sessionService, 'getRole').and.returnValue('REGISTERED');
+      self.controller.$onInit();
+      expect(self.controller.showTitle).toEqual(false);
+    });
+    it('if a public user, it should show the title', () => {
+      spyOn(self.controller, 'loadDonorDetails');
+      spyOn(self.controller.sessionService, 'getRole').and.returnValue('PUBLIC');
+      self.controller.$onInit();
+      expect(self.controller.showTitle).toEqual(true);
+    });
   });
 
   describe('$onChanges', () => {

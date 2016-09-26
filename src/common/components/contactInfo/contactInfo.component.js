@@ -8,6 +8,7 @@ import loadingComponent from 'common/components/loading/loading.component';
 import addressForm from 'common/components/addressForm/addressForm.component';
 
 import orderService from 'common/services/api/order.service';
+import sessionService, {Roles} from 'common/services/session/session.service';
 
 import template from './contactInfo.tpl';
 
@@ -16,9 +17,10 @@ let componentName = 'contactInfo';
 class Step1Controller{
 
   /* @ngInject */
-  constructor($log, orderService){
+  constructor($log, orderService, sessionService){
     this.$log = $log;
     this.orderService = orderService;
+    this.sessionService = sessionService;
 
     this.donorDetails = {
       mailingAddress: {
@@ -29,6 +31,7 @@ class Step1Controller{
 
   $onInit(){
     this.loadDonorDetails();
+    this.showTitle = this.sessionService.getRole() === Roles.public;
   }
 
   $onChanges(changes) {
@@ -79,7 +82,8 @@ export default angular
     'ngMessages',
     loadingComponent.name,
     addressForm.name,
-    orderService.name
+    orderService.name,
+    sessionService.name
   ])
   .component(componentName, {
     controller: Step1Controller,
