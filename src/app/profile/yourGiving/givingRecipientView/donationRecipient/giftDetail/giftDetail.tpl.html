@@ -2,7 +2,7 @@
 <td class="amount">{{$ctrl.gift['historical-donation-line']['amount'] | currency:'$'}}</td>
 <td class="method">
   <div class="radio-method">
-    <payment-method-display payment-method=""></payment-method-display>
+    <payment-method-display payment-method="$ctrl.gift['paymentmethod']"></payment-method-display>
   </div>
 </td>
 <td class="status status-pending"

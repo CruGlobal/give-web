@@ -12,14 +12,14 @@ class GivingRecipientView {
     this.donationsService = donationsService;
   }
 
-  $onChanges( change ) {
+  $onChanges() {
     this.loadRecipients();
   }
 
   loadRecipients( year, month ) {
     this.setLoading( {loading: true} );
     if ( angular.isDefined( this.subscriber ) ) this.subscriber.unsubscribe();
-    this.subscriber = this.donationsService.getRecipients( 2015 ).subscribe( ( recipients ) => {
+    this.subscriber = this.donationsService.getRecipients( year, month ).subscribe( ( recipients ) => {
       delete this.subscriber;
       this.recipients = recipients;
       this.setLoading( {loading: false} );

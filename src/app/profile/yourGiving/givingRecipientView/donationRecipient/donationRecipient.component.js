@@ -19,6 +19,9 @@ class DonationRecipient {
     this.currentDate = new Date();
   }
 
+  $onInit() {
+  }
+
   toggleDetails() {
     this.showDetails = !this.showDetails;
     //Load details if we haven't already
@@ -36,6 +39,7 @@ class DonationRecipient {
     this.productModalService.configureProduct( this.recipient['designation-number'] );
   }
 }
+
 export default angular
   .module( componentName, [
     desigSrc.name,

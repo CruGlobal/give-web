@@ -7,6 +7,7 @@ import loadingComponent from 'common/components/loading/loading.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import profileService from 'common/services/api/profile.service';
 import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
+import sessionService from 'common/services/session/session.service';
 import template from './yourGiving.tpl';
 
 import {Roles} from 'common/services/session/session.service';
@@ -22,11 +23,12 @@ export const givingViews = ['recipient', 'monthly'];
 class YourGivingController {
 
   /* @ngInject */
-  constructor( $window, $location, sessionEnforcerService, profileService ) {
+  constructor( $window, $location, sessionEnforcerService, profileService, sessionService ) {
     this.$window = $window;
     this.$location = $location;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
+    this.sessionService = sessionService;
   }
 
   $onInit() {
@@ -40,8 +42,15 @@ class YourGivingController {
         this.$window.location = '/cart.html';
       }
     } );
-    this.loadProfile();
+
     this.setGivingView();
+    if ( this.sessionService.getRole() == Roles.registered ) {
+      // Only load profile when REGISTERED role, otherwise sessionEnforcer will load it when users signs in
+      this.loadProfile();
+    }
+    else {
+      this.profileLoading = true;
+    }
   }
 
   $onDestroy() {
@@ -49,7 +58,7 @@ class YourGivingController {
     this.sessionEnforcerService.cancel( this.enforcerId );
 
     // Remove query params
-    angular.forEach( this.VIEWS, function ( value ) {
+    angular.forEach( queryParams, ( value ) => {
       this.$location.search( value, null );
     } );
   }
@@ -84,6 +93,7 @@ export default angular
     loadingOverlay.name,
     profileService.name,
     sessionEnforcerService.name,
+    sessionService.name,
     template.name
   ] )
   .component( componentName, {

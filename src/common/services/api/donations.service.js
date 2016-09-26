@@ -1,7 +1,5 @@
 import angular from 'angular';
 import 'rxjs/add/operator/pluck';
-// import 'rxjs/add/operator/map';
-// import sortBy from 'lodash/sortBy';
 
 import cortexApiService from '../cortexApi.service';
 
@@ -19,7 +17,7 @@ function DonationsService( cortexApiService ) {
       .get( {
         path: path,
         zoom: {
-          recipients: 'element[],element:mostrecentdonation'
+          recipients: 'element[],element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement[]'
         }
       } )
       .pluck( 'recipients' );
@@ -30,7 +28,7 @@ function DonationsService( cortexApiService ) {
       .get( {
         path: recipient.self.uri,
         zoom: {
-          details: 'element[],element:paymentmethod,element:recurringdonationelement'
+          details: 'element[],element:paymentmethod'
         }
       } )
       .pluck( 'details' );
