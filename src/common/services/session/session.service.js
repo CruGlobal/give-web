@@ -16,19 +16,26 @@ export let Roles = {
   registered: 'REGISTERED'
 };
 
+export let Sessions = {
+  cortex: 'cortex-session',
+  give:   'give-session',
+  cru:    'cru-session'
+};
+
 /*@ngInject*/
 function session( $cookies, $rootScope, $http, $timeout, envService ) {
-  var session = {},
+  let session = {},
     sessionSubject = new BehaviorSubject( session ),
-    sessionTimeout;
+    sessionTimeout,
+    maximumTimeout = 30 * 1000;
 
   // Set initial session on load
-  updateCurrentSession( $cookies.get( 'cortex-session' ) );
+  updateCurrentSession( $cookies.get( Sessions.cortex ) );
 
   // Watch cortex-session cookie for changes and update existing session variable
   // This only detects changes made by $http or other angular services, not the browser expiring the cookie.
   // eslint-disable-next-line angular/on-watch
-  $rootScope.$watch( () => $cookies.get( 'cortex-session' ), updateCurrentSession );
+  $rootScope.$watch( () => $cookies.get( Sessions.cortex ), updateCurrentSession );
 
   // Return sessionService public interface
   return {
@@ -121,15 +128,14 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
       cortexSession = jwtDecode( encoded_value );
     }
     // Set expiration timeout
-    setSessionTimeout();
+    setSessionTimeout( $cookies.get( Sessions.give ) );
     // Copy new session into current session object
     angular.copy( cortexSession, session );
     // Update sessionSubject with new value
     sessionSubject.next( session );
   }
 
-  function setSessionTimeout() {
-    let encodedSession = $cookies.get( 'give-session' );
+  function setSessionTimeout( encodedSession ) {
     // Cancel current session timeout
     if ( angular.isDefined( sessionTimeout ) ) {
       $timeout.cancel( sessionTimeout );
@@ -140,11 +146,23 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
       let giveSession = jwtDecode( encodedSession ),
         timeout = new Date( giveSession.exp * 1000 ) - Date.now();
       if ( timeout > 0 ) {
-        sessionTimeout = $timeout( timeout );
+        sessionTimeout = $timeout( timeout < maximumTimeout ? timeout : maximumTimeout );
         sessionTimeout.then( () => {
-          updateCurrentSession( $cookies.get( 'cortex-session' ) );
+          sessionTimeoutCallback();
         } );
       }
+    }
+  }
+
+  function sessionTimeoutCallback() {
+    let encodedSession = $cookies.get( Sessions.give );
+    sessionTimeout = undefined;
+    if ( angular.isUndefined( encodedSession ) ) {
+      // Give session has expired
+      updateCurrentSession( $cookies.get( Sessions.cortex ) );
+    }
+    else {
+      setSessionTimeout( encodedSession );
     }
   }
 
@@ -154,7 +172,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
         return Roles.public;
       }
       // Expired cookies are undefined
-      if ( angular.isUndefined( $cookies.get( 'give-session' ) ) ) {
+      if ( angular.isUndefined( $cookies.get( Sessions.give ) ) ) {
         return Roles.identified;
       }
       return session.token_hash.role;
