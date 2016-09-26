@@ -5,7 +5,7 @@ import 'angular-ui-bootstrap';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 import addNewPaymentMethodModal from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.modal.component';
 
-import orderService from 'common/services/api/order.service';
+import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
 import sessionService from 'common/services/session/session.service';
 
 import template from './existingPaymentMethods.tpl';
@@ -84,6 +84,7 @@ class ExistingPaymentMethodsController {
   selectPayment(){
     this.orderService.selectPaymentMethod(this.selectedPaymentMethod)
       .subscribe(() => {
+          this.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
           this.onSubmit({success: true});
         },
         (error) => {

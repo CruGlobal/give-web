@@ -16,6 +16,8 @@ import hateoasHelperService from 'common/services/hateoasHelper.service';
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex';
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
 
+export const existingPaymentMethodFlag = 'existing_payment_method';
+
 let serviceName = 'orderService';
 
 class Order{
@@ -230,7 +232,7 @@ class Order{
   }
 
   storeCardSecurityCode(encryptedCcv){
-    if(toString(encryptedCcv).length > 50){
+    if(encryptedCcv === existingPaymentMethodFlag || toString(encryptedCcv).length > 50){
       this.sessionStorage.setItem('ccv', encryptedCcv);
     }else{
       throw new Error('The CCV should be encrypted and the provided CCV looks like it is too short to be encrypted correctly');
