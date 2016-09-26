@@ -5,9 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  top: -10px;
-  left: -10px;
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
   background-color: rgba(255, 255, 255, 0.7);
+  z-index: 2;
 }
