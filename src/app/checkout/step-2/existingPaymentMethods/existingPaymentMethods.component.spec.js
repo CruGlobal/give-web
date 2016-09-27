@@ -32,24 +32,57 @@ describe('checkout', () => {
         });
       });
 
-      describe('$onDestroy', () => {
-        it('should close the addNewPaymentMethodModal if opened', () => {
-          self.controller.addNewPaymentMethodModal = {
-            close: jasmine.createSpy('close')
-          };
-          self.controller.$onDestroy();
-          expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+      describe('$onChanges', () => {
+        it('should call selectPayment when called with a mock change object', () => {
+          spyOn(self.controller, 'selectPayment');
+          self.controller.$onChanges({
+            submitted: {
+              currentValue: true
+            }
+          });
+          expect(self.controller.selectPayment).toHaveBeenCalled();
+        });
+        it('should not call selectPayment when submitted hasn\'t changed to true', () => {
+          spyOn(self.controller, 'selectPayment');
+          self.controller.$onChanges({
+            submitted: {
+              currentValue: false
+            }
+          });
+          expect(self.controller.selectPayment).not.toHaveBeenCalled();
+        });
+        it('should call loadPaymentMethods when called with a mock change object', () => {
+          spyOn(self.controller, 'loadPaymentMethods');
+          self.controller.$onChanges({
+            submitSuccess: {
+              currentValue: true
+            }
+          });
+          expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
+        });
+        it('should not call loadPaymentMethods when submitSuccess hasn\'t changed to true', () => {
+          spyOn(self.controller, 'loadPaymentMethods');
+          self.controller.$onChanges({
+            submitSuccess: {
+              currentValue: false
+            }
+          });
+          expect(self.controller.loadPaymentMethods).not.toHaveBeenCalled();
         });
       });
 
       describe('loadPaymentMethods', () => {
-        it('should finish with no existing payment methods if the session role is not REGISTERED', () => {
-          spyOn(self.controller.sessionService, 'getRole').and.callFake(() => 'IDENTIFIED');
-          self.controller.loadPaymentMethods();
-          expect(self.controller.onLoad).toHaveBeenCalledWith({success: true, hasExistingPaymentMethods: false});
+        beforeEach(() => {
+          self.controller.addNewPaymentMethodModal = {
+            close: jasmine.createSpy('close')
+          };
         });
+
+        afterEach(() => {
+          expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+        });
+
         it('should load existing payment methods successfully if any exist', () => {
-          spyOn(self.controller.sessionService, 'getRole').and.callFake(() => 'REGISTERED');
           spyOn(self.controller.orderService, 'getExistingPaymentMethods').and.callFake(() => Observable.of(['first payment method']));
           spyOn(self.controller, 'selectDefaultPaymentMethod');
           self.controller.loadPaymentMethods();
@@ -58,7 +91,6 @@ describe('checkout', () => {
           expect(self.controller.onLoad).toHaveBeenCalledWith({success: true, hasExistingPaymentMethods: true});
         });
         it('should try load existing payment methods even if none exist', () => {
-          spyOn(self.controller.sessionService, 'getRole').and.callFake(() => 'REGISTERED');
           spyOn(self.controller.orderService, 'getExistingPaymentMethods').and.callFake(() => Observable.of([]));
           spyOn(self.controller, 'selectDefaultPaymentMethod');
           self.controller.loadPaymentMethods();
@@ -67,7 +99,6 @@ describe('checkout', () => {
           expect(self.controller.onLoad).toHaveBeenCalledWith({success: true, hasExistingPaymentMethods: false});
         });
         it('should handle a failure loading payment methods', () => {
-          spyOn(self.controller.sessionService, 'getRole').and.callFake(() => 'REGISTERED');
           spyOn(self.controller.orderService, 'getExistingPaymentMethods').and.callFake(() => Observable.throw('some error'));
           spyOn(self.controller, 'selectDefaultPaymentMethod');
           self.controller.loadPaymentMethods();
@@ -111,7 +142,10 @@ describe('checkout', () => {
           self.controller.openAddNewPaymentMethodModal();
           expect(self.controller.$uibModal.open).toHaveBeenCalled();
           expect(self.controller.addNewPaymentMethodModal).toBeDefined();
-          expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()).toEqual(self.controller.onSubmit);
+
+          // Test calling onSubmit
+          self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()({ success: true, data: 'some data' });
+          expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: true, data: 'some data', stayOnStep: true });
         });
         it('should call onSubmit to clear submissionErrors when the modal closes', () => {
           spyOn(self.controller.$uibModal, 'open').and.returnValue({ result: Observable.throw('').toPromise() });
@@ -119,27 +153,6 @@ describe('checkout', () => {
           self.$timeout(() => {
             expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false, error: ''});
           }, 0);
-        });
-      });
-
-      describe('$onChanges', () => {
-        it('should call selectPayment when called with a mock change object', () => {
-          spyOn(self.controller, 'selectPayment');
-          self.controller.$onChanges({
-            submitted: {
-              currentValue: true
-            }
-          });
-          expect(self.controller.selectPayment).toHaveBeenCalled();
-        });
-        it('should not call selectPayment when submitted hasn\'t changed to true', () => {
-          spyOn(self.controller, 'selectPayment');
-          self.controller.$onChanges({
-            submitted: {
-              currentValue: false
-            }
-          });
-          expect(self.controller.selectPayment).not.toHaveBeenCalled();
         });
       });
 

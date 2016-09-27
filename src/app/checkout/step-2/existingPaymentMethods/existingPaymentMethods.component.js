@@ -6,7 +6,6 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import addNewPaymentMethodModal from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.modal.component';
 
 import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
-import sessionService from 'common/services/session/session.service';
 
 import template from './existingPaymentMethods.tpl';
 
@@ -15,10 +14,9 @@ let componentName = 'checkoutExistingPaymentMethods';
 class ExistingPaymentMethodsController {
 
   /* @ngInject */
-  constructor($log, orderService, sessionService, $uibModal) {
+  constructor($log, orderService, $uibModal) {
     this.$log = $log;
     this.orderService = orderService;
-    this.sessionService = sessionService;
     this.$uibModal = $uibModal;
   }
 
@@ -26,27 +24,30 @@ class ExistingPaymentMethodsController {
     this.loadPaymentMethods();
   }
 
-  $onDestroy(){
-    this.addNewPaymentMethodModal && this.addNewPaymentMethodModal.close();
+  $onChanges(changes) {
+    if (changes.submitted && changes.submitted.currentValue === true) {
+      this.selectPayment();
+    }
+    if (changes.submitSuccess && changes.submitSuccess.currentValue === true) {
+      this.loadPaymentMethods();
+    }
   }
 
   loadPaymentMethods(){
-    if(this.sessionService.getRole() === 'REGISTERED') {
-      this.orderService.getExistingPaymentMethods()
-        .subscribe((data) => {
-          if (data.length > 0) {
-            this.paymentMethods = data;
-            this.selectDefaultPaymentMethod();
-            this.onLoad({success: true, hasExistingPaymentMethods: true});
-          }else{
-            this.onLoad({success: true, hasExistingPaymentMethods: false});
-          }
-        }, (error) => {
-          this.onLoad({success: false, error: error});
-        });
-    }else{
-      this.onLoad({success: true, hasExistingPaymentMethods: false});
-    }
+    this.orderService.getExistingPaymentMethods()
+      .subscribe((data) => {
+        if (data.length > 0) {
+          this.paymentMethods = data;
+          this.selectDefaultPaymentMethod();
+          this.onLoad({success: true, hasExistingPaymentMethods: true});
+        }else{
+          this.onLoad({success: true, hasExistingPaymentMethods: false});
+        }
+        this.addNewPaymentMethodModal && this.addNewPaymentMethodModal.close();
+      }, (error) => {
+        this.onLoad({success: false, error: error});
+        this.addNewPaymentMethodModal && this.addNewPaymentMethodModal.close();
+      });
   }
 
   selectDefaultPaymentMethod(){
@@ -67,18 +68,15 @@ class ExistingPaymentMethodsController {
       backdrop: 'static', // Disables closing on click
       resolve: {
         submissionError: this.submissionError,
-        onSubmit: () => this.onSubmit
+        onSubmit: () => (params) => {
+          params.stayOnStep = true;
+          this.onSubmit(params);
+        }
       }
     });
     this.addNewPaymentMethodModal.result.then(null, () => {
       this.onSubmit({success: false, error: ''}); // To clear the submissionErrors object in step 2
     });
-  }
-
-  $onChanges(changes) {
-    if (changes.submitted.currentValue === true) {
-      this.selectPayment();
-    }
   }
 
   selectPayment(){
@@ -100,8 +98,7 @@ export default angular
     'ui.bootstrap',
     paymentMethodDisplay.name,
     addNewPaymentMethodModal.name,
-    orderService.name,
-    sessionService.name
+    orderService.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,
@@ -109,6 +106,7 @@ export default angular
     bindings: {
       submitted: '<',
       submissionError: '<',
+      submitSuccess: '<',
       onSubmit: '&',
       onLoad: '&'
     }
