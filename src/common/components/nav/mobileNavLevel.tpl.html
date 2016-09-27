@@ -1,8 +1,8 @@
 <li ng-repeat="i in $ctrl.structure" ng-class="{'has-children': i.children.length}">
   <a ng-href="{{i.path}}" ng-if="!i.children.length">{{i.title}}</a>
-  <a ng-if="i.children.length" ng-click="$ctrl.level = $ctrl.level + 1; $ctrl.activeSubMenu = $index;">{{i.title}}</a>
+  <a ng-if="i.children.length" ng-click="$ctrl.path.push(i.path.split('/').pop());">{{i.title}}</a>
 
   <ul>
-    <nav-mobile-level ng-if="$ctrl.activeSubMenu === $index" structure="i.children" level="$ctrl.level"></nav-mobile-level>
+    <nav-mobile-level ng-if="$ctrl.path[$ctrl.level] === i.path.split('/').pop()" structure="i.children" level="$ctrl.level + 1" path="$ctrl.path"></nav-mobile-level>
   </ul>
 </li>

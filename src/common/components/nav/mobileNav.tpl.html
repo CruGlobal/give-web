@@ -17,9 +17,9 @@
   <div id="mobile-navigation" ng-class="{'open': $ctrl.mobileNavOpen, 'hidden': !$ctrl.mobileNavOpen}" ng-init="mobileTab = 'nav'">
     <ul class="menu-icons nav nav-tabs" role="tablist">
       <li role="presentation" ng-class="{'active': mobileTab === 'nav'}">
-        <a href="" ng-click="mobileTab = 'nav'; $ctrl.mobileMenuLevel = ($ctrl.mobileMenuLevel > 0 ? $ctrl.mobileMenuLevel - 1 : 0);">
+        <a href="" ng-click="mobileTab = 'nav'; ($ctrl.mobileMenuPath.length ? $ctrl.mobileMenuPath.pop() : $ctrl.mobileMenuPath = []);">
           <img class="menu-icon-navigation"
-               ng-src="{{$ctrl.imgDomain + '/assets/img/' + ($ctrl.mobileMenuLevel > 0 ? 'mobile-menu-back-icon.png' : 'mobile-menu-hamburger-icon.png')}}">
+               ng-src="{{$ctrl.imgDomain + '/assets/img/' + ($ctrl.mobileMenuPath.length > 0 ? 'mobile-menu-back-icon.png' : 'mobile-menu-hamburger-icon.png')}}">
         </a>
       </li>
       <li role="presentation" ng-class="{'active': mobileTab === 'search'}">
@@ -53,8 +53,8 @@
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'nav'">
         <div class="main-menu-container">
-          <ul class="main-menu" ng-style="{'left': (($ctrl.mobileMenuLevel * -100) + '%')}">
-            <nav-mobile-level structure="$ctrl.menuStructure" level="$ctrl.mobileMenuLevel"></nav-mobile-level>
+          <ul class="main-menu" ng-style="{'left': (($ctrl.mobileMenuPath.length * -100) + '%')}">
+            <nav-mobile-level structure="$ctrl.menuStructure" level="0" path="$ctrl.mobileMenuPath"></nav-mobile-level>
           </ul>
         </div>
       </div>

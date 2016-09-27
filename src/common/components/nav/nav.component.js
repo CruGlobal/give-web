@@ -25,6 +25,11 @@ class NavController{
   }
 
   $onInit() {
+    this.mobileMenuPath = [];
+
+    // pre-set menu path like below
+    // this.mobileMenuPath = ['opportunities', 'mission-trips', 'summer', 'explore', 'getting-a-job'];
+
     this.getNav().subscribe((structure) => {
       this.menuStructure = structure;
     });
@@ -54,6 +59,7 @@ class NavController{
         let menuStructure = replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org'});
         menuStructure.push({
           title: 'Give',
+          path: '/give',
           children: replacePathDeep(jsonStructure['/content/give/us/en'], {path: 'https://give.cru.org'})
         });
 

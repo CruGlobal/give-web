@@ -21,6 +21,7 @@ export default angular
     templateUrl: template.name,
     bindings: {
       structure: '<',
-      level: '='
+      path: '=',
+      level: '<'
     }
   });
