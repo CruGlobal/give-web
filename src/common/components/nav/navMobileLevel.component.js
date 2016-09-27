@@ -14,8 +14,13 @@ class NavController{
 
 export default angular
   .module(componentName, [
+    template.name
   ])
   .component(componentName, {
     controller: NavController,
-    templateUrl: template.name
+    templateUrl: template.name,
+    bindings: {
+      structure: '<',
+      level: '='
+    }
   });

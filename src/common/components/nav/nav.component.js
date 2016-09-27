@@ -1,4 +1,6 @@
 import angular from 'angular';
+import transform from 'lodash/transform';
+import isObject from 'lodash/isObject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -37,8 +39,25 @@ class NavController{
       }
     }))
       .map((response) => {
-        let structure = angular.fromJson(response.data.jsonStructure);
-        return structure['/content/cru/us/en'];
+        let replacePathDeep = function(obj, keysMap) {
+          let replacePath = function(obj) {
+            return transform(obj, function(result, value, key) {
+              var newValue = keysMap[key] ? (keysMap[key] + value) : value;
+              result[key] = isObject(value) ? replacePath(value) : newValue;
+            });
+          };
+
+          return replacePath(obj);
+        };
+
+        let jsonStructure = angular.fromJson(response.data.jsonStructure);
+        let menuStructure = replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org'});
+        menuStructure.push({
+          title: 'Give',
+          children: replacePathDeep(jsonStructure['/content/give/us/en'], {path: 'https://give.cru.org'})
+        });
+
+        return menuStructure;
       });
   }
 

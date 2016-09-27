@@ -32,4 +32,15 @@ describe( 'nav', function () {
     expect( $document[0].body.className ).toContain('body-scroll-lock');
   });
 
+  it('to modify paths', () => {
+    $httpBackend.expectGET('/assets/nav.json').respond(200, navStructure);
+    $ctrl.getNav().subscribe((structure) => {
+      expect( structure[0].path ).toContain( 'https://www.cru.org/' );
+
+      let giveMenu = structure[structure.length - 1];
+      expect( giveMenu.title ).toEqual( 'Give' );
+      expect( giveMenu.children[0].path ).toContain( 'https://give.cru.org/' );
+    });
+    $httpBackend.flush();
+  });
 } );
