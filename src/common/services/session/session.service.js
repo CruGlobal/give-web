@@ -127,43 +127,51 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
     if ( angular.isDefined( encoded_value ) ) {
       cortexSession = jwtDecode( encoded_value );
     }
-    // Set expiration timeout
-    setSessionTimeout( $cookies.get( Sessions.give ) );
+
+    // Set give-session expiration timeout if defined
+    let timeout = giveSessionExpiration();
+    if ( angular.isDefined( timeout ) ) setSessionTimeout( timeout );
+
     // Copy new session into current session object
     angular.copy( cortexSession, session );
+
     // Update sessionSubject with new value
     sessionSubject.next( session );
   }
 
-  function setSessionTimeout( encodedSession ) {
+  function setSessionTimeout( timeout ) {
     // Cancel current session timeout
     if ( angular.isDefined( sessionTimeout ) ) {
       $timeout.cancel( sessionTimeout );
       sessionTimeout = undefined;
     }
-    // Decode give-session cookie and set timeout based on expiration
-    if ( angular.isDefined( encodedSession ) ) {
-      let giveSession = jwtDecode( encodedSession ),
-        timeout = new Date( giveSession.exp * 1000 ) - Date.now();
-      if ( timeout > 0 ) {
-        sessionTimeout = $timeout( timeout < maximumTimeout ? timeout : maximumTimeout );
-        sessionTimeout.then( () => {
-          sessionTimeoutCallback();
-        } );
+
+    // Set sessionTimeout for MIN(maximumTimeout, timeout)
+    sessionTimeout = $timeout( timeout < maximumTimeout ? timeout : maximumTimeout );
+    sessionTimeout.then( () => {
+      sessionTimeout = undefined;
+      let expiration = giveSessionExpiration();
+      if ( angular.isUndefined( expiration ) ) {
+        // Give session has expired
+        updateCurrentSession( $cookies.get( Sessions.cortex ) );
+      } else {
+        setSessionTimeout( expiration );
       }
-    }
+    } );
   }
 
-  function sessionTimeoutCallback() {
-    let encodedSession = $cookies.get( Sessions.give );
-    sessionTimeout = undefined;
-    if ( angular.isUndefined( encodedSession ) ) {
-      // Give session has expired
-      updateCurrentSession( $cookies.get( Sessions.cortex ) );
+  function giveSessionExpiration() {
+    let encodedGiveSession = $cookies.get( Sessions.give );
+    // Give session has expired if not defined
+    if ( angular.isUndefined( encodedGiveSession ) ) return undefined;
+    let giveSession = jwtDecode( encodedGiveSession ),
+      timeout = new Date( giveSession.exp * 1000 ) - Date.now();
+    if ( timeout <= 0 ) {
+      // Give session still exists but has expired (some browsers may not delete expired cookies)
+      $cookies.remove( Sessions.give, {path: '/', domain: '.cru.org'} );
+      return undefined;
     }
-    else {
-      setSessionTimeout( encodedSession );
-    }
+    return timeout;
   }
 
   function currentRole() {
