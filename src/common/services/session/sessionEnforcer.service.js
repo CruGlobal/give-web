@@ -9,7 +9,7 @@ let serviceName = 'sessionEnforcerService';
 
 /*@ngInject*/
 function SessionEnforcerService( sessionService, sessionModalService ) {
-  let enforcers = {};
+  let enforcers = {}, modal;
 
   function enforceRoles( roles, callbacks ) {
     if ( !angular.isArray( roles ) ) return false;
@@ -43,18 +43,23 @@ function SessionEnforcerService( sessionService, sessionModalService ) {
         if ( angular.isFunction( enforcer['change'] ) ) enforcer['change']( role );
       } );
 
-      sessionModalService
-        .open( 'sign-in', {backdrop: 'static', keyboard: false} )
-        .result
-        .then( () => {
-          angular.forEach( enforced, ( enforcer ) => {
-            if ( angular.isFunction( enforcer['sign-in'] ) ) enforcer['sign-in']();
+      if ( angular.isUndefined( modal ) ) {
+        modal = sessionModalService.open( 'sign-in', {backdrop: 'static', keyboard: false} );
+        modal.result
+          .then( () => {
+            angular.forEach( enforced, ( enforcer ) => {
+              if ( angular.isFunction( enforcer['sign-in'] ) ) enforcer['sign-in']();
+            } );
+          }, () => {
+            angular.forEach( enforced, ( enforcer ) => {
+              if ( angular.isFunction( enforcer['cancel'] ) ) enforcer['cancel']();
+            } );
           } );
-        }, () => {
-          angular.forEach( enforced, ( enforcer ) => {
-            if ( angular.isFunction( enforcer['cancel'] ) ) enforcer['cancel']();
+        modal.result
+          .finally( () => {
+            modal = undefined;
           } );
-        } );
+      }
     }
   }
 

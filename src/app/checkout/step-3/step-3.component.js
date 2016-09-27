@@ -6,7 +6,7 @@ import displayAddressComponent from 'common/components/display-address/display-a
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 import loadingComponent from 'common/components/loading/loading.component';
 
-import orderService from 'common/services/api/order.service';
+import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 
@@ -91,7 +91,11 @@ class Step3Controller{
       submitRequest = this.orderService.submit();
     }else if(this.creditCardPaymentDetails){
       let encryptedCcv = this.orderService.retrieveCardSecurityCode();
-      submitRequest = encryptedCcv ? this.orderService.submit(encryptedCcv) : Observable.throw('Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly');
+      if(encryptedCcv === existingPaymentMethodFlag){
+        submitRequest = this.orderService.submit();
+      }else{
+        submitRequest = encryptedCcv ? this.orderService.submit(encryptedCcv) : Observable.throw('Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly');
+      }
     }else{
       submitRequest = Observable.throw('Current payment type is unknown');
     }

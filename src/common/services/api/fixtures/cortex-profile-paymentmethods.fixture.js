@@ -1,8 +1,8 @@
 export default {
   "self": {
     "type": "elasticpath.profiles.profile",
-    "uri": "/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=paymentmethods:element",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=paymentmethods:element"
+    "uri": "/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=paymentmethods:element,paymentmethods:element:bankaccount,paymentmethods:element:creditcard",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=paymentmethods:element,paymentmethods:element:bankaccount,paymentmethods:element:creditcard"
   },
   "links": [{
     "rel": "addresses",
@@ -11,16 +11,23 @@ export default {
     "uri": "/addresses/crugive",
     "href": "https://cortex-gateway-stage.cru.org/cortex/addresses/crugive"
   }, {
-    "rel": "historicaldonations",
-    "type": "elasticpath.donations.historical-donation",
-    "uri": "/donations/historical/crugive/recipient/recent",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/recent"
+    "rel": "addspousedetails",
+    "rev": "profile",
+    "type": "elasticpath.collections.links",
+    "uri": "/donordetails/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=/spousedetails",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=/spousedetails"
   }, {
     "rel": "emails",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/emails/crugive",
     "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive"
+  }, {
+    "rel": "givingdashboard",
+    "rev": "profile",
+    "type": "elasticpath.collections.links",
+    "uri": "/giving/crugive",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/giving/crugive"
   }, {
     "rel": "paymentmethods",
     "rev": "profile",
@@ -29,6 +36,7 @@ export default {
     "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
   }, {
     "rel": "phonenumbers",
+    "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/phonenumbers/crugive",
     "href": "https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive"
@@ -48,8 +56,8 @@ export default {
     "_element": [{
       "self": {
         "type": "cru.creditcards.named-credit-card",
-        "uri": "/paymentmethods/crugive/giydembug4=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydembug4="
+        "uri": "/paymentmethods/crugive/giydgmrrhe=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydgmrrhe="
       },
       "links": [{
         "rel": "list",
@@ -59,36 +67,46 @@ export default {
       }, {
         "rel": "creditcard",
         "type": "cru.creditcards.named-credit-card",
-        "uri": "/creditcards/paymentmethods/crugive/giydembug4=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydembug4="
+        "uri": "/creditcards/paymentmethods/crugive/giydgmrrhe=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydgmrrhe="
       }],
-      "card-number": "1111",
-      "card-type": "Visa",
-      "cardholder-name": "Test Card",
-      "expiry-month": "11",
-      "expiry-year": "2019"
-    }, {
-      "self": {
-        "type": "elasticpath.bankaccounts.bank-account",
-        "uri": "/paymentmethods/crugive/giydcmzyge=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcmzyge="
-      },
-      "links": [{
-        "rel": "list",
-        "type": "elasticpath.collections.links",
-        "uri": "/paymentmethods/crugive",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
-      }, {
-        "rel": "bankaccount",
-        "type": "elasticpath.bankaccounts.bank-account",
-        "uri": "/bankaccounts/paymentmethods/crugive/giydcmzyge=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcmzyge="
+      "_creditcard": [{
+        "self": {
+          "type": "cru.creditcards.named-credit-card",
+          "uri": "/creditcards/paymentmethods/crugive/giydgmrrhe=",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydgmrrhe="
+        },
+        "links": [{
+          "rel": "paymentmethod",
+          "uri": "/paymentmethods/crugive/giydgmrrhe=",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydgmrrhe="
+        }, {
+          "rel": "creditcard",
+          "type": "cru.creditcards.named-credit-card",
+          "uri": "/creditcards/paymentmethods/crugive/giydgmrrhe=",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydgmrrhe="
+        }],
+        "address": {
+          "country-name": "US",
+          "extended-address": "",
+          "locality": "Sacramento",
+          "postal-code": "12345",
+          "region": "CA",
+          "street-address": "123 Some Street"
+        },
+        "card-number": "1118",
+        "card-type": "MasterCard",
+        "cardholder-name": "Test Person",
+        "description": "Mastercard Test Card",
+        "expiry-month": "08",
+        "expiry-year": "2020",
+        "status": "Active"
       }],
-      "account-type": "Checking",
-      "bank-name": "First Bank",
-      "display-account-number": "1874",
-      "encrypted-account-number": "FAecKEPeUdW6KjbHo/na/hXlAS9OjZR51dlBgKKInf2mJh4bSP9WMvsKfAAL1rW7o6P9Rmx87dp0rDz0NArbWGIdsYeoFVOaIATzQqAe4ECuy0gfHcDva26HmgriGqRWkWPDeQvEdU9jENu0XKskxAjk2sBLJOHhoTCi8+LTLUrNwu40CSdT/PGNK8/lnO27wTZDPmc221xJ6hzB/F+0sRRvJhWky2oxA491MG+SRk7lWhccqSq5KtrijfA88Ebb/EivnsSJwqZgv/WNIP2u/V3dsMF1YRtyEsEAkmgxCCYBye2TT5ehIVOChQdlUbHxF+z/izrmn+0u2IYXvyX4dw==",
-      "routing-number": "121042882"
+      "card-number": "1118",
+      "card-type": "MasterCard",
+      "cardholder-name": "Test Person",
+      "expiry-month": "08",
+      "expiry-year": "2020"
     }, {
       "self": {
         "type": "elasticpath.bankaccounts.bank-account",
@@ -105,6 +123,28 @@ export default {
         "type": "elasticpath.bankaccounts.bank-account",
         "uri": "/bankaccounts/paymentmethods/crugive/giydcnzyga=",
         "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga="
+      }],
+      "_bankaccount": [{
+        "self": {
+          "type": "elasticpath.bankaccounts.bank-account",
+          "uri": "/bankaccounts/paymentmethods/crugive/giydcnzyga=",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga="
+        },
+        "links": [{
+          "rel": "paymentmethod",
+          "uri": "/paymentmethods/crugive/giydcnzyga=",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcnzyga="
+        }, {
+          "rel": "bankaccount",
+          "type": "elasticpath.bankaccounts.bank-account",
+          "uri": "/bankaccounts/paymentmethods/crugive/giydcnzyga=",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga="
+        }],
+        "account-type": "Savings",
+        "bank-name": "2nd Bank",
+        "display-account-number": "3456",
+        "encrypted-account-number": "",
+        "routing-number": "021000021"
       }],
       "account-type": "Savings",
       "bank-name": "2nd Bank",
