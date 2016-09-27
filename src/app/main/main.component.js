@@ -13,6 +13,7 @@ import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
 import homeSignInComponent from '../homeSignIn/homeSignIn.component';
+import designationEditorComponent from '../designationEditor/designationEditor.component';
 
 import template from './main.tpl';
 
@@ -47,6 +48,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     .state('search-results', {
       url: "/search-results.html",
       template: '<search-results></search-results>'
+    })
+    .state('designation-editor', {
+      url: "/designation-editor.html",
+      templateUrl: 'app/designationEditor/designationEditor.tpl.html'
     });
 
   $locationProvider.html5Mode(true);
@@ -66,6 +71,7 @@ export default angular
     signInComponent.name,
     searchResultsComponent.name,
     homeSignInComponent.name,
+    designationEditorComponent.name,
     'ui.router'
   ])
   .config(routingConfig)
