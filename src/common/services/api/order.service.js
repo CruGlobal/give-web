@@ -134,7 +134,7 @@ class Order{
         }
       })
       .map((selector) => {
-        let paymentMethods = selector.choices;
+        let paymentMethods = selector.choices || [];
         if(selector.chosen) {
           selector.chosen.description.chosen = true;
           paymentMethods.unshift(selector.chosen);

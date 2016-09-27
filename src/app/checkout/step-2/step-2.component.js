@@ -34,13 +34,18 @@ class Step2Controller{
     this.loadingPaymentMethods = false;
   }
 
-  onSubmit(success, data, error){
+  onSubmit(success, data, error, stayOnStep){
     this.submissionError.error = '';
+    this.submitSuccess = false;
 
     if(success && data){
       this.orderService.addPaymentMethod(data)
         .subscribe(() => {
+          if(stayOnStep){
+            this.submitSuccess = true;
+          }else{
             this.changeStep({newStep: 'review'});
+          }
           },
           (error) => {
             this.$log.error('Error saving payment method', error);
