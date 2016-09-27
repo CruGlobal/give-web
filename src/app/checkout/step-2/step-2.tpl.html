@@ -23,7 +23,7 @@
   </div>
 
   <div ng-if="$ctrl.existingPaymentMethods">
-    <checkout-existing-payment-methods submitted="$ctrl.submitted" submission-error="$ctrl.submissionError" on-submit="$ctrl.onSubmit(success, data, error)" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"></checkout-existing-payment-methods>
+    <checkout-existing-payment-methods submitted="$ctrl.submitted" submission-error="$ctrl.submissionError" on-submit="$ctrl.onSubmit(success, data, error, stayOnStep)" submit-success="$ctrl.submitSuccess" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"></checkout-existing-payment-methods>
   </div>
 </div>
 

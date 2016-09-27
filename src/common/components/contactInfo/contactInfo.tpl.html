@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <form novalidate ng-submit="$ctrl.submitDetails();" name="$ctrl.detailsForm">
+  <form novalidate ng-keyup="$event.key === 'Enter' && $ctrl.submitDetails()" name="$ctrl.detailsForm">
     <div class="mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>Your Information</h4>
 

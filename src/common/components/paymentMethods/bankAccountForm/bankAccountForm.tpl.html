@@ -1,4 +1,4 @@
-<form novalidate name="$ctrl.bankPaymentForm">
+<form novalidate name="$ctrl.bankPaymentForm" ng-keyup="$event.key === 'Enter' && $ctrl.savePayment()">
 
   <div class="mb_x">
 
