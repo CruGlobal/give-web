@@ -25,14 +25,18 @@ describe('payment validation service', () => {
     self.paymentValidationService = paymentValidationService;
   }));
 
-  describe('validateRoutingNumber', () => {
+ describe('validateRoutingNumber', () => {
     it('should return true for valid routing numbers', () => {
       expect(self.paymentValidationService.validateRoutingNumber()(267084131)).toEqual(true);
       expect(self.paymentValidationService.validateRoutingNumber()('021300420')).toEqual(true);
       expect(self.paymentValidationService.validateRoutingNumber()('043318092')).toEqual(true);
       expect(self.paymentValidationService.validateRoutingNumber()(122038251)).toEqual(true);
+      expect(self.paymentValidationService.validateRoutingNumber()(300000001)).toEqual(true);
     });
     it('should return false for invalid routing numbers', () => {
+      expect(self.paymentValidationService.validateRoutingNumber()('000000000')).toEqual(false); // sum of 0
+      expect(self.paymentValidationService.validateRoutingNumber()(400000008)).toEqual(false); // number that starts above 3 with a valid checksum
+      expect(self.paymentValidationService.validateRoutingNumber()(800000006)).toEqual(false); // number that starts above 3 with a valid checksum
       expect(self.paymentValidationService.validateRoutingNumber()(267084132)).toEqual(false);
       expect(self.paymentValidationService.validateRoutingNumber()(121300420)).toEqual(false);
       expect(self.paymentValidationService.validateRoutingNumber()(943318092)).toEqual(false);
