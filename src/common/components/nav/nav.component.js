@@ -11,7 +11,7 @@ import mobileNavLevelComponent from './navMobileLevel.component';
 
 import mobileTemplate from './mobileNav.tpl';
 
-let componentName = 'nav';
+let componentName = 'cruNav';
 
 class NavController{
 
