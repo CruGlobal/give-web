@@ -103,7 +103,7 @@
                   <div class="form-group">
                     <label>Will start on</label>
                     <div class="form-group">
-                      {{$ctrl.drawDate | date:'MMMM d, yyyy'}}
+                      {{$ctrl.donationStartDate($ctrl.itemConfig['recurring-day-of-month']) | date:'MMMM d, yyyy'}}
                     </div>
                   </div>
                 </div>

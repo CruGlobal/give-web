@@ -7,12 +7,13 @@ import {giveGiftParams} from './productConfig.modal';
 
 describe( 'product config modal', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let $ctrl, uibModalInstance, productData, itemConfig, itemConfigForm, $location;
+  let $ctrl, uibModalInstance, productData, nextDrawDate, itemConfig, itemConfigForm, $location;
 
   beforeEach( inject( function ( _$location_, _$httpBackend_ ) {
     $location = _$location_;
     uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
     productData = {};
+    nextDrawDate = {"next-draw-date": "2016-10-01"};
     itemConfig = {
       amount: 85
     };
@@ -26,7 +27,7 @@ describe( 'product config modal', function () {
       } )
     };
 
-    _$httpBackend_.expectGET('https://cortex-gateway-stage.cru.org/cortex/nextdrawdate').respond(200, {"next-draw-date": "2016-10-01"});
+    // _$httpBackend_.expectGET('https://cortex-gateway-stage.cru.org/cortex/nextdrawdate').respond(200, );
   } ) );
 
   describe( 'isEdit = true', () => {
@@ -34,6 +35,7 @@ describe( 'product config modal', function () {
       $ctrl = _$controller_( module.name, {
         $uibModalInstance: uibModalInstance,
         productData:       productData,
+        nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
         isEdit:            true
       } );
@@ -91,6 +93,7 @@ describe( 'product config modal', function () {
       $ctrl = _$controller_( module.name, {
         $uibModalInstance: uibModalInstance,
         productData:       productData,
+        nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
         isEdit:            false
       } );

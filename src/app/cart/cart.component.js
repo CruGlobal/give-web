@@ -59,19 +59,6 @@ class CartController {
   checkout() {
     this.$window.location.href = this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html';
   }
-
-  donationStartDate( config ) {
-    if(config['gift-start']){
-      return config['gift-start'];
-    }
-
-    config['gift-start'] = '...';
-    this.cartService.giftStartDate( config['recurring-day-of-month'] ).subscribe( ( giftStartDate ) => {
-      config['gift-start'] = giftStartDate;
-    });
-
-    return config['gift-start'];
-  }
 }
 
 export default angular

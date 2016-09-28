@@ -22,13 +22,14 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, itemConfig, isEdit ) {
+  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.modalStateService = modalStateService;
     this.productData = productData;
+    this.nextDrawDate = nextDrawDate;
     this.itemConfig = itemConfig;
     this.isEdit = isEdit;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
@@ -43,8 +44,6 @@ class ModalInstanceCtrl {
     if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
       this.customAmount = this.itemConfig.amount;
     }
-
-    this.calculateDonationStartDate();
   }
 
   initializeParams() {
@@ -100,8 +99,6 @@ class ModalInstanceCtrl {
 
   changeStartDay( day ) {
     if ( !this.isEdit ) this.$location.search( giveGiftParams.day, day );
-
-    this.calculateDonationStartDate();
   }
 
   addToCart() {
@@ -135,13 +132,10 @@ class ModalInstanceCtrl {
     } );
   }
 
-  calculateDonationStartDate(){
-    let day = this.itemConfig['recurring-day-of-month'];
+  donationStartDate(day){
     if(!day){ return; }
 
-    this.cartService.giftStartDate( day ).subscribe( ( drawDate ) => {
-      this.drawDate = drawDate;
-    });
+    return this.cartService.giftStartDate( this.nextDrawDate, day );
   }
 }
 
