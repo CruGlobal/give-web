@@ -1,5 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 import module from './nav.component';
 
 import navStructure from 'common/components/nav/fixtures/nav.fixture';
@@ -9,7 +11,8 @@ describe( 'nav', function () {
   let $ctrl, $httpBackend, $document;
 
   beforeEach( inject( function ( _$componentController_, _$document_, _$httpBackend_ ) {
-    $ctrl = _$componentController_( module.name );
+    $ctrl = _$componentController_( module.name,
+      {$window: {location: {href: 'cart.html'}}} );
     $httpBackend = _$httpBackend_;
     $document = _$document_;
   } ) );
@@ -42,5 +45,17 @@ describe( 'nav', function () {
       expect( giveMenu.children[0].path ).toContain( 'https://give.cru.org/' );
     });
     $httpBackend.flush();
+  });
+
+  it('to load cart data', () => {
+    spyOn( $ctrl.cartService, 'get' ).and.callFake( () => Observable.of( {} ) );
+
+    $ctrl.loadCart();
+    expect( $ctrl.cartData ).toEqual( {} );
+  });
+
+  it('to redirect on search', () => {
+    $ctrl.cruSearch('hello');
+    expect( $ctrl.$window.location.href ).toContain( 'search.hello.html');
   });
 } );

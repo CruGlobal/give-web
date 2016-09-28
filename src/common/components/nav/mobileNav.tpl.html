@@ -59,16 +59,16 @@
         </div>
       </div>
       <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'search'">
-        <form id="mob-search">
+        <form id="mob-search" ng-submit="$ctrl.cruSearch(mobileSearchTerm)">
           <div class="form-group">
-            <input type="text" class="form-control form-control-subtle text-center" name="mob-search" placeholder="ENTER KEYWORDS">
+            <input type="text" class="form-control form-control-subtle text-center" ng-model="mobileSearchTerm" placeholder="ENTER KEYWORDS">
           </div>
         </form>
       </div>
       <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'location'">
-        <form id="mob-nearme">
+        <form id="mob-nearme" method="get" action="https://www.cru.org/locator/colleges.html">
           <div class="form-group">
-            <input type="text" class="form-control form-control-subtle text-center" name="mob-nearme" placeholder="FIND CRU NEAR ME">
+            <input type="text" class="form-control form-control-subtle text-center" name="q" placeholder="FIND CRU NEAR ME">
           </div>
         </form>
       </div>

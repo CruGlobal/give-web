@@ -16,9 +16,10 @@ let componentName = 'nav';
 class NavController{
 
   /* @ngInject */
-  constructor($http, $document, envService, cartService){
+  constructor($http, $document, $window, envService, cartService){
     this.$http = $http;
     this.$document = $document;
+    this.$window = $window;
     this.cartService = cartService;
     this.imgDomain = envService.read('imgDomain');
     this.navFeed = envService.read('navFeed');
@@ -68,7 +69,7 @@ class NavController{
   }
 
   loadCart() {
-    return this.cartService.get()
+    this.cartService.get()
       .subscribe( ( data ) => {
         this.cartData = data;
       } );
@@ -79,6 +80,10 @@ class NavController{
 
     var body = angular.element(this.$document[0].body);
     body.toggleClass('body-scroll-lock');
+  }
+
+  cruSearch(term){
+    this.$window.location.href = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
   }
 }
 
