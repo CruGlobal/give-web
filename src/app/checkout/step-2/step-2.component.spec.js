@@ -44,14 +44,22 @@ describe('checkout', () => {
     describe('onSubmit', () => {
       it('should save payment data when success is true and data is defined', () => {
         spyOn(self.controller, 'changeStep');
-        spyOn(self.controller.orderService, 'addPaymentMethod').and.callFake(() => Observable.of(''));
+        spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.of(''));
         self.controller.onSubmit(true, {bankAccount: {}});
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
       });
+      it('should save payment data and not change step when success is true, data is defined, and stayOnStep is true', () => {
+        spyOn(self.controller, 'changeStep');
+        spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.of(''));
+        self.controller.onSubmit(true, {bankAccount: {}}, undefined, true);
+        expect(self.controller.changeStep).not.toHaveBeenCalled();
+        expect(self.controller.submitSuccess).toEqual(true);
+        expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
+      });
       it('should handle an error saving payment data', () => {
         spyOn(self.controller, 'changeStep');
-        spyOn(self.controller.orderService, 'addPaymentMethod').and.callFake(() => Observable.throw({ data: 'some error' }));
+        spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'some error' }));
         self.controller.onSubmit(true, {bankAccount: {}});
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
         expect(self.controller.submitted).toEqual(false);

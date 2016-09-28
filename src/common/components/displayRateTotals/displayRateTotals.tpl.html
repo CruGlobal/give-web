@@ -1,4 +1,4 @@
-<span class="giftsum-line" ng-repeat="rateTotal in $ctrl.rateTotals" ng-switch="rateTotal.frequency">
+<span class="giftsum-line" ng-repeat="rateTotal in $ctrl.rateTotals" ng-switch="rateTotal.frequency" ng-if="rateTotal.amount > 0">
   <span ng-switch-when="Annually" translate>Annual Gift Total:</span>
   <span ng-switch-default translate>{{rateTotal.frequency}} Gift Total:</span>
   <strong>{{rateTotal.total}}</strong>
