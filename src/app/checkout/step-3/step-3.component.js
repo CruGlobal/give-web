@@ -5,6 +5,7 @@ import 'rxjs/add/observable/throw';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 import loadingComponent from 'common/components/loading/loading.component';
+import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 
 import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
@@ -74,6 +75,7 @@ class Step3Controller{
 
   canSubmitOrder(){
     let enableSubmitBtn = !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.needinfoErrors);
+    enableSubmitBtn = enableSubmitBtn && !this.submittingOrder;
     this.onSubmitBtnChangeState({
       $event: {
         enabled: enableSubmitBtn
@@ -84,7 +86,9 @@ class Step3Controller{
 
   submitOrder(){
     delete this.submissionError;
-    this.submittingOrder = true;
+    // Prevent multiple submissions
+    if(this.submittingOrder) return;
+    this.onSubmittingOrder({value: true});
 
     let submitRequest;
     if(this.bankAccountPaymentDetails){
@@ -100,13 +104,13 @@ class Step3Controller{
       submitRequest = Observable.throw('Current payment type is unknown');
     }
     submitRequest.subscribe(() => {
-        this.submittingOrder = false;
+        this.onSubmittingOrder({value: false});
         this.orderService.clearCardSecurityCode();
         this.onSubmitted();
         this.$window.location.href = 'thank-you.html';
       },
       (error) => {
-        this.submittingOrder = false;
+        this.onSubmittingOrder({value: false});
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
         this.submissionError = error;
@@ -122,7 +126,8 @@ export default angular
     loadingComponent.name,
     orderService.name,
     capitalizeFilter.name,
-    desigSrcDirective.name
+    desigSrcDirective.name,
+    loadingOverlay.name
   ])
   .component(componentName, {
     controller: Step3Controller,
@@ -132,6 +137,8 @@ export default angular
       cartData: '<',
       submit: '<',
       onSubmitBtnChangeState: '&',
-      onSubmitted: '&'
+      onSubmitted: '&',
+      onSubmittingOrder: '&',
+      submittingOrder: '<'
     }
   });

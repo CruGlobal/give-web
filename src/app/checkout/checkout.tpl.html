@@ -68,6 +68,8 @@
                                    cart-data="$ctrl.cartData"
                                    submit="$ctrl.submittedOrder"
                                    on-submit-btn-change-state="$ctrl.enableSubmitOrderBtn = $event.enabled"
+                                   on-submitting-order="$ctrl.submittingOrder = value"
+                                   submitting-order="$ctrl.submittingOrder"
                                    on-submitted="$ctrl.submittedOrder = false">
                   </checkout-step-3>
 
@@ -80,7 +82,8 @@
           <checkout-cart-summary cart-data="$ctrl.cartData"
                                  show-submit-btn="$ctrl.checkoutStep === 'review'"
                                  enable-submit-btn="$ctrl.enableSubmitOrderBtn"
-                                 on-submit="$ctrl.submittedOrder = true">
+                                 on-submit="$ctrl.submittedOrder = true"
+                                 submitting-order="$ctrl.submittingOrder">
           </checkout-cart-summary>
         </div>
         <div class="col-md-4 hidden-xs hidden-sm">
