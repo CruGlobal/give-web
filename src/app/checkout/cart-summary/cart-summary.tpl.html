@@ -1,5 +1,5 @@
 <div class="panel">
-  <div class="panel-body">
+  <div class="panel-body" style="position: relative;">
     <h3 class="panel-name" translate>Cart Summary</h3>
     <table class="table giftsum-table giftsum-table-cart">
       <thead>
@@ -33,5 +33,6 @@
         </tr>
       </tfoot>
     </table>
+    <loading-overlay ng-if="$ctrl.submittingOrder"></loading-overlay>
   </div>
 </div>
