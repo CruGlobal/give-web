@@ -16,7 +16,6 @@ export let giveGiftParams = {
   designation: 'd',
   amount:      '$',
   frequency:   'f',
-  month:       'mm',
   day:         'dd'
 };
 
@@ -44,6 +43,8 @@ class ModalInstanceCtrl {
     if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
       this.customAmount = this.itemConfig.amount;
     }
+
+    this.calculateDonationStartDate();
   }
 
   initializeParams() {
@@ -66,12 +67,8 @@ class ModalInstanceCtrl {
       }
     }
 
-    if ( params.hasOwnProperty( giveGiftParams.month ) ) {
-      this.itemConfig['start-month'] = params[giveGiftParams.month];
-    }
-
     if ( params.hasOwnProperty( giveGiftParams.day ) ) {
-      this.itemConfig['start-day'] = params[giveGiftParams.day];
+      this.itemConfig['recurring-day-of-month'] = params[giveGiftParams.day];
     }
   }
 
@@ -101,12 +98,10 @@ class ModalInstanceCtrl {
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
   }
 
-  changeStartMonth( month ) {
-    if ( !this.isEdit ) this.$location.search( giveGiftParams.month, month );
-  }
-
   changeStartDay( day ) {
     if ( !this.isEdit ) this.$location.search( giveGiftParams.day, day );
+
+    this.calculateDonationStartDate();
   }
 
   addToCart() {
@@ -134,11 +129,19 @@ class ModalInstanceCtrl {
       } );
   }
 
-  daysInMonth( month ) {
-    var daysInMonth = new Date( 2001, month, 0 ).getDate();
-    return range( 1, daysInMonth + 1 ).map( function ( n ) {
+  daysInMonth() {
+    return range( 1, 29 ).map( function ( n ) {
       return n.toString();
     } );
+  }
+
+  calculateDonationStartDate(){
+    let day = this.itemConfig['recurring-day-of-month'];
+    if(!day){ return; }
+
+    this.cartService.giftStartDate( day ).subscribe( ( drawDate ) => {
+      this.drawDate = drawDate;
+    });
   }
 }
 

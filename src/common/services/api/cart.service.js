@@ -12,7 +12,8 @@ function cart(cortexApiService){
     get: get,
     addItem: addItem,
     updateItem: updateItem,
-    deleteItem: deleteItem
+    deleteItem: deleteItem,
+    giftStartDate: giftStartDate
   };
 
   function get() {
@@ -53,7 +54,7 @@ function cart(cortexApiService){
           var itemResource = JSONPath.query(element, "$._availability[0].links[0].uri")[0];
           itemResource = itemResource ? btoa(itemResource) : '';
 
-          frequencyTitle = (!frequencyInterval || frequencyInterval === 'NA') ? frequencyTitle = 'Single' : frequencyTitle;
+          frequencyTitle = (!frequencyInterval || frequencyInterval === 'NA') ? 'Single' : frequencyTitle;
 
           items.push({
             uri: itemResource,
@@ -132,6 +133,23 @@ function cart(cortexApiService){
   function deleteItem(uri){
     return cortexApiService.delete({
       path: uri
+    });
+  }
+
+  function giftStartDate(day){
+    return cortexApiService.get({
+      path: ['nextdrawdate'],
+      cache: true
+    }).map((data) => {
+      let drawDate = data['next-draw-date'].split('-');
+      drawDate = new Date(drawDate[0], (drawDate[1] - 1), drawDate[2]);
+
+      let selectedDate = new Date(drawDate.getFullYear(), drawDate.getMonth(), day);
+      if(selectedDate < drawDate){
+        selectedDate.setMonth(selectedDate.getMonth() + 1);
+      }
+
+      return selectedDate;
     });
   }
 }

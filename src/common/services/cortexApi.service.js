@@ -35,6 +35,7 @@ class CortexApi {
         url: this.envService.read('apiUrl') + '/cortex' + this.serializePath(config.path),
         params: config.params,
         data: config.data,
+        cache: config.cache,
         withCredentials: true
       }))
       .map((response) => {

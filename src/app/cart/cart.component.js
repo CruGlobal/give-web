@@ -60,8 +60,17 @@ class CartController {
     this.$window.location.href = this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html';
   }
 
-  donationStartDate( month, day ) {
-    return new Date( 0, Number( month ) - 1, Number( day ) );
+  donationStartDate( config ) {
+    if(config['gift-start']){
+      return config['gift-start'];
+    }
+
+    config['gift-start'] = '...';
+    this.cartService.giftStartDate( config['recurring-day-of-month'] ).subscribe( ( giftStartDate ) => {
+      config['gift-start'] = giftStartDate;
+    });
+
+    return config['gift-start'];
   }
 }
 

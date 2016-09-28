@@ -64,7 +64,7 @@ describe( 'productModalService', function () {
         deferred.resolve();
         $rootScope.$digest();
         expect( modalStateService.name ).toHaveBeenCalledWith( null );
-        expect( $location.search ).toHaveBeenCalledTimes( 5 );
+        expect( $location.search ).toHaveBeenCalledTimes( 4 );
       } );
     } );
   } );
