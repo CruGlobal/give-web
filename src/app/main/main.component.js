@@ -4,8 +4,7 @@ import 'angular-ui-router';
 
 import appConfig from 'common/app.config';
 
-import primaryNavComponent from './nav/primary/primary-nav.component';
-import subNavComponent from './nav/sub/sub-nav.component';
+import commonModule from 'common/common.module';
 import cartComponent from '../cart/cart.component';
 import checkoutComponent from '../checkout/checkout.component';
 import thankYouComponent from '../thankYou/thankYou.component';
@@ -57,8 +56,7 @@ export default angular
   .module(componentName, [
     template.name,
     appConfig.name,
-    primaryNavComponent.name,
-    subNavComponent.name,
+    commonModule.name,
     cartComponent.name,
     checkoutComponent.name,
     thankYouComponent.name,
