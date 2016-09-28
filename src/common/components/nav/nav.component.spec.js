@@ -38,6 +38,7 @@ describe( 'nav', function () {
   it('to modify paths', () => {
     $httpBackend.expectGET('/assets/nav.json').respond(200, navStructure);
     $ctrl.getNav().subscribe((structure) => {
+      structure = structure.main;
       expect( structure[0].path ).toContain( 'https://www.cru.org/' );
 
       let giveMenu = structure[structure.length - 1];

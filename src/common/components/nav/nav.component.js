@@ -26,10 +26,13 @@ class NavController{
   }
 
   $onInit() {
-    this.mobileMenuPath = [];
+    this.mobileMenuPath = {
+      main: [],
+      global: []
+    };
 
     // pre-set menu path like below
-    // this.mobileMenuPath = ['opportunities', 'mission-trips', 'summer', 'explore', 'getting-a-job'];
+    // this.mobileMenuPath.main = ['opportunities', 'mission-trips', 'summer', 'explore', 'getting-a-job'];
 
     this.getNav().subscribe((structure) => {
       this.menuStructure = structure;
@@ -57,8 +60,13 @@ class NavController{
         };
 
         let jsonStructure = angular.fromJson(response.data.jsonStructure);
-        let menuStructure = replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org'});
-        menuStructure.push({
+        let menuStructure = {
+          main: replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org'}),
+          global: jsonStructure['/content/cru/us/en/global']
+        };
+
+        //add give to main nav
+        menuStructure.main.push({
           title: 'Give',
           path: '/give',
           children: replacePathDeep(jsonStructure['/content/give/us/en'], {path: 'https://give.cru.org'})

@@ -17,9 +17,9 @@
   <div id="mobile-navigation" ng-class="{'open': $ctrl.mobileNavOpen, 'hidden': !$ctrl.mobileNavOpen}" ng-init="mobileTab = 'nav'">
     <ul class="menu-icons nav nav-tabs" role="tablist">
       <li role="presentation" ng-class="{'active': mobileTab === 'nav'}">
-        <a href="" ng-click="mobileTab = 'nav'; ($ctrl.mobileMenuPath.length ? $ctrl.mobileMenuPath.pop() : $ctrl.mobileMenuPath = []);">
+        <a href="" ng-click="mobileTab = 'nav'; ($ctrl.mobileMenuPath.main.length ? $ctrl.mobileMenuPath.main.pop() : $ctrl.mobileMenuPath.main = []);">
           <img class="menu-icon-navigation"
-               ng-src="{{$ctrl.imgDomain + '/assets/img/' + ($ctrl.mobileMenuPath.length > 0 ? 'mobile-menu-back-icon.png' : 'mobile-menu-hamburger-icon.png')}}">
+               ng-src="{{$ctrl.imgDomain + '/assets/img/' + ($ctrl.mobileMenuPath.main.length > 0 ? 'mobile-menu-back-icon.png' : 'mobile-menu-hamburger-icon.png')}}">
         </a>
       </li>
       <li role="presentation" ng-class="{'active': mobileTab === 'search'}">
@@ -33,7 +33,7 @@
         </a>
       </li>
       <li role="presentation" ng-class="{'active': mobileTab === 'global'}">
-        <a href="" ng-click="mobileTab = 'global'">
+        <a href="" ng-click="mobileTab = 'global'; $ctrl.mobileMenuPath.global = [];">
           <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-globe-icon.png">
         </a>
       </li>
@@ -53,8 +53,8 @@
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'nav'">
         <div class="main-menu-container">
-          <ul class="main-menu" ng-style="{'left': (($ctrl.mobileMenuPath.length * -100) + '%')}">
-            <nav-mobile-level structure="$ctrl.menuStructure" level="0" path="$ctrl.mobileMenuPath"></nav-mobile-level>
+          <ul class="main-menu" ng-style="{'left': (($ctrl.mobileMenuPath.main.length * -100) + '%')}">
+            <nav-mobile-level structure="$ctrl.menuStructure.main" level="0" path="$ctrl.mobileMenuPath.main"></nav-mobile-level>
           </ul>
         </div>
       </div>
@@ -74,31 +74,8 @@
       </div>
       <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'global'">
         <div class="main-menu-container">
-          <ul class="main-menu main-menu-global global-menu">
-            <li class="has-children">Africa
-              <ul>
-                <li><a href="#">Ethiopia</a></li>
-                <li><a href="#">Ghana</a></li>
-                <li><a href="#">Kenya</a></li>
-                <li><a href="#">Nigeria</a></li>
-                <li><a href="#">Nigeria</a></li>
-              </ul>
-            </li>
-            <li class="has-children">Asia
-              <ul>
-                <li><a href="#">Armenia</a></li>
-                <li><a href="#">Hong Kong</a></li>
-                <li><a href="#">India</a></li>
-                <li><a href="#">Japan</a></li>
-                <li><a href="#">Macau</a></li>
-                <li><a href="#">Nepal</a></li>
-                <li><a href="#">Pakistan</a></li>
-                <li><a href="#">Singapore</a></li>
-                <li><a href="#">South Korea</a></li>
-                <li><a href="#">Taiwan</a></li>
-                <li><a href="#">Thailand</a></li>
-              </ul>
-            </li>
+          <ul class="main-menu main-menu-global global-menu" ng-style="{'left': (($ctrl.mobileMenuPath.global.length * -100) + '%')}">
+            <nav-mobile-level structure="$ctrl.menuStructure.global" level="0" path="$ctrl.mobileMenuPath.global"></nav-mobile-level>
           </ul>
         </div>
       </div>
