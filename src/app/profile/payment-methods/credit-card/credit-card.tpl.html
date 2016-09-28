@@ -1,0 +1,53 @@
+  <div class="panel panel-default panel-with-gray-background">
+    <div class="panel-heading" role="tab">
+      <div ng-class="{'collapsed': $ctrl.isCollapsed}" class="payment-summary-link p- collapse-indicator-row" role="button">
+        <div class="row">
+          <div class="col-md-8">
+            <p>
+              <img class="hidden-xs payment-icon" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/{{$ctrl.getImage()}}-curved-128px.png"/>
+              <span class="payment-nickname">{{ $ctrl.model['card-type'] }}</span>
+              ending in ****{{ $ctrl.model['card-number'] }}
+              <span class="payment-expiration">EXPIRES {{ $ctrl.getExpiration() }}</span>
+            </p>
+          </div>
+          <div class="col-md-4 text-right payment-details-link">
+            <button ng-click="$ctrl.isCollapsed = !$ctrl.isCollapsed" class="btn trigger">Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div uib-collapse="$ctrl.isCollapsed" role="tabpanel" class="panel-collapse">
+      <div class="panel-body">
+        <div class="container-fluid">
+          <div class="row">
+
+            <div class="col-sm-6 col-md-4">
+              <p class="section-title mb0">Name of card</p>
+              <p>{{$ctrl.model['cardholder-name']}}</p>
+            </div>
+
+            <div class="col-sm-6 col-md-4"></div>
+
+            <div class="col-sm-5 col-md-4 text-right split-row">
+              <p>
+                <a class="btn btn-default btn-block" ng-click="$ctrl.editPaymentMethod()">Edit Payment Method</a>
+              </p>
+              <p>
+                <a class="btn btn-default btn-block" ng-click="$ctrl.deletePaymentMethod()">Delete Payment Method</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 pt">
+              <p class="section-title mb0">Billing address</p>
+              <display-address address="$ctrl.formattedAddress"></display-address>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <recurring-gifts gifts="$ctrl.gifts"></recurring-gifts>
+    </div>
+  </div>

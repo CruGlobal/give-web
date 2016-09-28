@@ -49,6 +49,19 @@ class Profile{
         return sortPaymentMethods(paymentMethods);
       });
   }
+
+  getPaymentMethodsWithDonations(){
+    return this.cortexApiService.get({
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          paymentMethods: 'paymentmethods:element[],paymentmethods:element:bankaccount,paymentmethods:element:bankaccount:element,paymentmethods:element:creditcard,paymentmethods:element:creditcard:element'
+        }
+      })
+      .pluck('paymentMethods')
+      .map((paymentMethods) => {
+        return sortPaymentMethods(paymentMethods);
+      });
+  }
 }
 
 export default angular

@@ -1,22 +1,31 @@
 <loading-overlay ng-if="$ctrl.submitted"></loading-overlay>
-<div class="modal-body">
+<div class="modal-body account-management">
   <div class="row">
     <div class="col-sm-12">
-      <button ng-click="$ctrl.dismiss()" type="button" class="close" aria-label="Close">
+      <button ng-click="$ctrl.dismiss()" type="button" class="close">
         <span aria-hidden="true">×</span>
       </button>
-      <h3 class="text-center border-bottom-small" translate>Add Payment Method</h3>
+      <h3 class="text-center border-bottom-small" translate>Edit Payment Method</h3>
       <div class="alert alert-danger" role="alert" ng-if="$ctrl.resolve.submissionError.error">
         <p ng-if="$ctrl.resolve.submissionError.error" ng-switch="$ctrl.resolve.submissionError.error">
-          <span ng-switch-when="Invalid routing number" translate>
-            The routing number you entered does not seem to be valid. Please verify that it is correct.
-          </span>
           <span ng-switch-default translate>
             There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
           </span>
         </p>
       </div>
-      <add-new-payment-method submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)"></add-new-payment-method>
+      <div class="panel panel-default panel-with-gray-background">
+        <div class="panel-body">
+          <p>
+            <i class="fa fa-cc-{{$ctrl.getIcon()}}" aria-hidden="true"></i>
+            <span class="payment-nickname">{{$ctrl.getNickname()}}</span>
+            ending in ****{{$ctrl.getAccountNumber()}}
+          </p>
+        </div>
+      </div>
+      <edit-payment-method
+        submitted='$ctrl.submitted'
+        model="$ctrl.resolve.model"
+        payment-type="$ctrl.resolve.paymentType"></edit-payment-method>
     </div>
   </div>
 </div>

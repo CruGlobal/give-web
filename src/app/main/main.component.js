@@ -1,17 +1,21 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
+import 'angular-animate';
 
 import appConfig from 'common/app.config';
 
 import commonModule from 'common/common.module';
 import cartComponent from '../cart/cart.component';
+import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
+import profileComponent from '../profile/profile.component';
 import checkoutComponent from '../checkout/checkout.component';
 import thankYouComponent from '../thankYou/thankYou.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
 import homeSignInComponent from '../homeSignIn/homeSignIn.component';
+
 
 import template from './main.tpl';
 
@@ -20,7 +24,12 @@ let componentName = 'main';
 class MainController{
 
   /* @ngInject */
-  constructor(){
+  constructor($location){
+    this.$location = $location;
+  }
+
+  designationSearch(searchString){
+    this.$location.path('search-results.' + searchString + '.html');
   }
 }
 
@@ -38,6 +47,14 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     .state('checkout', {
       url: "/checkout.html",
       template: '<checkout></checkout>'
+    })
+    .state('profile', {
+      url: "/profile.html",
+      template: '<profile></profile>'
+    })
+    .state('payment-methods', {
+      url: "/profile/payment-methods.html",
+      template: '<payment-methods></payment-methods>'
     })
     .state('thank-you', {
       url: "/thank-you.html",
@@ -59,12 +76,15 @@ export default angular
     commonModule.name,
     cartComponent.name,
     checkoutComponent.name,
+    paymentMethodsComponent.name,
+    profileComponent.name,
     thankYouComponent.name,
     productConfigComponent.name,
     signInComponent.name,
     searchResultsComponent.name,
     homeSignInComponent.name,
-    'ui.router'
+    'ui.router',
+    'ngAnimate'
   ])
   .config(routingConfig)
   .component(componentName, {
