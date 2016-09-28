@@ -28,6 +28,7 @@ class PaymentValidation {
     return (routingNumber) => {
       routingNumber = toString(routingNumber);
       let digits = routingNumber.split('');
+      if(digits[0] > 3) return false; // Added to match EP validation https://github.com/CruGlobal/give-ep-extensions/blob/develop/cortex/resources/bank-account-resource/src/main/java/com/elasticpath/extensions/rest/resource/bankaccounts/validator/BankAccountValidator.java#L57
       let multipliers = [3, 7, 1, 3, 7, 1, 3, 7, 1];
 
       let sum = _(_.zip(digits, multipliers))
@@ -35,7 +36,7 @@ class PaymentValidation {
           return array[0] * array[1];
         })
         .sum();
-      return sum % 10 === 0;
+      return sum !== 0 && sum % 10 === 0;
     };
   }
 
