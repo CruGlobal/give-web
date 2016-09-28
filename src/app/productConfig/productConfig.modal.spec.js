@@ -9,7 +9,7 @@ describe( 'product config modal', function () {
   beforeEach( angular.mock.module( module.name ) );
   let $ctrl, uibModalInstance, productData, nextDrawDate, itemConfig, itemConfigForm, $location;
 
-  beforeEach( inject( function ( _$location_, _$httpBackend_ ) {
+  beforeEach( inject( function ( _$location_ ) {
     $location = _$location_;
     uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
     productData = {};
@@ -26,8 +26,6 @@ describe( 'product config modal', function () {
         $ctrl.itemConfigForm.$dirty = true;
       } )
     };
-
-    // _$httpBackend_.expectGET('https://cortex-gateway-stage.cru.org/cortex/nextdrawdate').respond(200, );
   } ) );
 
   describe( 'isEdit = true', () => {
