@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-gettext';
+import 'angular-ordinal';
 
 import indexOf from 'lodash/indexOf';
 import range from 'lodash/range';
@@ -142,6 +143,7 @@ class ModalInstanceCtrl {
 export default angular
   .module( controllerName, [
     'gettext',
+    'ordinal',
     loadingOverlay.name,
     designationsService.name,
     cartService.name,

@@ -99,7 +99,7 @@
                     <div class="form-group">
                       <select class="form-control form-control-subtle"
                               ng-model="$ctrl.itemConfig['recurring-day-of-month']"
-                              ng-options="o as o for o in $ctrl.daysInMonth()"
+                              ng-options="o as (o | ordinal) for o in $ctrl.daysInMonth()"
                               ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'])">
                       </select>
                     </div>

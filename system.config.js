@@ -26,6 +26,7 @@ System.config({
     "angular-gettext": "github:rubenv/angular-gettext@2.3.6",
     "angular-messages": "github:angular/bower-angular-messages@1.5.8",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.8",
+    "angular-ordinal": "npm:angular-ordinal@2.1.3",
     "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.3",
     "angular-ui-router": "github:angular-ui/ui-router@0.3.1",
     "babel": "npm:babel-core@5.8.38",
@@ -86,6 +87,9 @@ System.config({
       "kind-of": "npm:kind-of@3.0.4",
       "longest": "npm:longest@1.0.1",
       "repeat-string": "npm:repeat-string@1.5.4"
+    },
+    "npm:angular-ordinal@2.1.3": {
+      "ordinal-number-suffix": "npm:ordinal-number-suffix@0.1.1"
     },
     "npm:assert@1.4.1": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
