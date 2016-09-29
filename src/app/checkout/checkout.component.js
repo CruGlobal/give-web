@@ -27,13 +27,13 @@ let componentName = 'checkout';
 class CheckoutController{
 
   /* @ngInject */
-  constructor($window, $log, cartService, designationsService, sessionEnforcerService){
+  constructor($window, $location, $log, cartService, designationsService, sessionEnforcerService){
     this.$log = $log;
     this.$window = $window;
+    this.$location = $location;
     this.cartService = cartService;
     this.designationsService = designationsService;
     this.sessionEnforcerService = sessionEnforcerService;
-    this.checkoutStep = 'contact';
     this.loadingCartData = true;
   }
 
@@ -47,15 +47,23 @@ class CheckoutController{
       }
     });
     this.loadCart();
+    this.initStepParam();
   }
 
   $onDestroy() {
     this.sessionEnforcerService.cancel(this.enforcerId);
   }
 
+  initStepParam(){
+    this.checkoutStep = this.$location.search().step || 'contact';
+    this.$location.search('step', this.checkoutStep);
+    this.$location.replace();
+  }
+
   changeStep(newStep){
     this.$window.scrollTo(0, 0);
     this.checkoutStep = newStep;
+    this.$location.search('step', this.checkoutStep);
   }
 
   loadCart(){
