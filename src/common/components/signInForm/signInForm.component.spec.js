@@ -79,5 +79,21 @@ describe( 'signInForm', function () {
       expect( $ctrl.errorMessage ).toEqual( 'Error Signing In' );
       expect( $ctrl.isSigningIn ).toEqual( false );
     } );
+
+    it( 'has unknown error signing in', () => {
+      deferred.reject( {} );
+      $rootScope.$digest();
+      expect( bindings.onFailure ).toHaveBeenCalled();
+      expect( $ctrl.errorMessage ).toEqual( 'An error has occurred signing in. Please try again.' );
+      expect( $ctrl.isSigningIn ).toEqual( false );
+    });
+
+    it( 'has missing error signing in', () => {
+      deferred.reject( {data: null} );
+      $rootScope.$digest();
+      expect( bindings.onFailure ).toHaveBeenCalled();
+      expect( $ctrl.errorMessage ).toEqual( 'An error has occurred signing in. Please try again.' );
+      expect( $ctrl.isSigningIn ).toEqual( false );
+    });
   } );
 } );

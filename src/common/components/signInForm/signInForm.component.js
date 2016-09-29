@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-gettext';
 import includes from 'lodash/includes';
 
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
@@ -11,8 +12,9 @@ let componentName = 'signInForm';
 class SignInFormController {
 
   /* @ngInject */
-  constructor( sessionService ) {
+  constructor( sessionService, gettext ) {
     this.sessionService = sessionService;
+    this.gettext = gettext;
   }
 
   $onInit() {
@@ -32,7 +34,9 @@ class SignInFormController {
         this.onSuccess();
       }, ( error ) => {
         this.isSigningIn = false;
-        this.errorMessage = error.data.error;
+        this.errorMessage = (angular.isUndefined( error.data ) || error.data === null) ?
+          this.gettext( 'An error has occurred signing in. Please try again.' ) :
+          error.data.error;
         this.onFailure();
       } );
   }
@@ -42,7 +46,8 @@ export default angular
   .module( componentName, [
     template.name,
     sessionService.name,
-    loadingOverlay.name
+    loadingOverlay.name,
+    'gettext'
   ] )
   .component( componentName, {
     controller:  SignInFormController,
