@@ -150,7 +150,7 @@ describe( 'product config modal', function () {
         $ctrl.changeAmount( 100 );
         expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
         expect( $ctrl.itemConfig.amount ).toEqual( 100 );
-        expect( $ctrl.customAmount ).toEqual( '' );
+        expect( $ctrl.customAmount ).not.toBeDefined();
         expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.amount, 100 );
       } );
     } );
