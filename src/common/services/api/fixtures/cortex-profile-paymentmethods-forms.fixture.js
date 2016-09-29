@@ -1,8 +1,8 @@
 export default {
   "self": {
     "type": "elasticpath.profiles.profile",
-    "uri": "/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentmethods:element",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentmethods:element"
+    "uri": "/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform"
   },
   "links": [{
     "rel": "addresses",
@@ -59,56 +59,53 @@ export default {
     "href": "https://cortex-gateway-stage.cru.org/cortex/wishlists/crugive"
   }],
   "_selfservicepaymentmethods": [{
-    "_element": [{
-      "self": {
-        "type": "cru.creditcards.named-credit-card",
-        "uri": "/selfservicepaymentmethods/crugive/giydgnrxgm=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydgnrxgm="
-      },
-      "links": [{
-        "rel": "list",
-        "uri": "/selfservicepaymentmethods/crugive",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive"
-      }, {
-        "rel": "recurringgifts",
-        "uri": "/donations/recurring/crugive/paymentmethods/giydgnrxgm=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydgnrxgm="
-      }],
-      "address": {
-        "country-name": "US",
-        "extended-address": "",
-        "locality": "Sacramento",
-        "postal-code": "12345",
-        "region": "CA",
-        "street-address": "123 First St"
-      },
-      "card-number": "1111",
-      "card-type": "Visa",
-      "cardholder-name": "Test Card",
-      "description": "Visa - 1111",
-      "expiry-month": "11",
-      "expiry-year": "2019"
-    }, {
+    "_createbankaccountform": [{
       "self": {
         "type": "elasticpath.bankaccounts.bank-account",
-        "uri": "/selfservicepaymentmethods/crugive/giydcnzyga=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydcnzyga="
+        "uri": "/bankaccounts/selfservicepaymentmethods/crugive/form",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive/form"
       },
       "links": [{
-        "rel": "list",
+        "rel": "createbankaccountaction",
+        "uri": "/bankaccounts/selfservicepaymentmethods/crugive",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive"
+      }, {
+        "rel": "selfservicepaymentmethods",
         "uri": "/selfservicepaymentmethods/crugive",
         "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive"
-      }, {
-        "rel": "recurringgifts",
-        "uri": "/donations/recurring/crugive/paymentmethods/giydcnzyga=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydcnzyga="
       }],
-      "account-type": "Savings",
-      "bank-name": "2nd Bank",
-      "description": "2nd Bank - 3456",
-      "display-account-number": "3456",
+      "account-type": "",
+      "bank-name": "",
       "encrypted-account-number": "",
-      "routing-number": "021000021"
+      "routing-number": ""
+    }],
+    "_createcreditcardform": [{
+      "self": {
+        "type": "cru.creditcards.named-credit-card",
+        "uri": "/creditcards/selfservicepaymentmethods/crugive/form",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive/form"
+      },
+      "links": [{
+        "rel": "createcreditcardaction",
+        "uri": "/creditcards/selfservicepaymentmethods/crugive",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive"
+      }, {
+        "rel": "selfservicepaymentmethods",
+        "uri": "/selfservicepaymentmethods/crugive",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive"
+      }],
+      "address": {
+        "country-name": "",
+        "extended-address": "",
+        "locality": "",
+        "postal-code": "",
+        "region": "",
+        "street-address": ""
+      },
+      "card-number": "",
+      "cardholder-name": "",
+      "expiry-month": "",
+      "expiry-year": ""
     }]
   }],
   "family-name": "Lname",

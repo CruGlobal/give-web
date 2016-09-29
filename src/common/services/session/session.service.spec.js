@@ -4,41 +4,49 @@ import module from './session.service';
 import {cortexSession} from './fixtures/cortex-session';
 import {giveSession} from './fixtures/give-session';
 
-describe( 'session service', function () {
-  beforeEach( angular.mock.module( module.name ) );
-  let self = {};
+import {Roles, Sessions} from './session.service';
 
-  beforeEach( inject( function ( sessionService, $httpBackend, $cookies, $rootScope ) {
-    self.sessionService = sessionService;
-    self.$httpBackend = $httpBackend;
-    self.$cookies = $cookies;
-    self.$rootScope = $rootScope;
+describe( 'session service', function () {
+  beforeEach( angular.mock.module( function ( $provide ) {
+    $provide.decorator( '$timeout', function ( $delegate ) {
+      return jasmine.createSpy( '$timeout', $delegate ).and.callThrough();
+    } );
+  } ) );
+
+  beforeEach( angular.mock.module( module.name ) );
+  let sessionService, $httpBackend, $cookies, $rootScope;
+
+  beforeEach( inject( function ( _sessionService_, _$httpBackend_, _$cookies_, _$rootScope_ ) {
+    sessionService = _sessionService_;
+    $httpBackend = _$httpBackend_;
+    $cookies = _$cookies_;
+    $rootScope = _$rootScope_;
   } ) );
 
   afterEach( () => {
-    ['cortex-session', 'give-session', 'cru-session'].forEach( ( name ) => {
-      self.$cookies.remove( name );
+    [Sessions.cortex, Sessions.give, Sessions.cru].forEach( ( name ) => {
+      $cookies.remove( name );
     } );
   } );
 
   it( 'to be defined', () => {
-    expect( self.sessionService ).toBeDefined();
+    expect( sessionService ).toBeDefined();
   } );
 
   describe( 'session', () => {
     it( 'to be defined', () => {
-      expect( self.sessionService.session ).toBeDefined();
+      expect( sessionService.session ).toBeDefined();
     } );
 
     describe( 'session with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        self.$cookies.put( 'cortex-session', cortexSession.registered );
+        $cookies.put( Sessions.cortex, cortexSession.registered );
         // Force digest so scope session watchers pick up changes.
-        self.$rootScope.$digest();
+        $rootScope.$digest();
       } );
 
       it( 'have properties', () => {
-        expect( self.sessionService.session ).toEqual( {
+        expect( sessionService.session ).toEqual( {
           "exp":        1477232207,
           "iat":        1472221008,
           "sub":        "cas|873f88fa-327b-b95d-7d7a-7add211a9b64",
@@ -47,20 +55,20 @@ describe( 'session service', function () {
           "email":      "professorx@xavier.edu",
           "token_hash": {
             "access_token": "1a0e2d05-5999-4fd6-a06f-f43c1b2ea8b0",
-            "role":         "REGISTERED"
+            "role":         Roles.registered
           }
         } );
       } );
 
       describe( 'change to \'IDENTIFIED\' cortex-session', () => {
         beforeEach( () => {
-          self.$cookies.put( 'cortex-session', cortexSession.identified );
+          $cookies.put( Sessions.cortex, cortexSession.identified );
           // Force digest so scope session watchers pick up changes.
-          self.$rootScope.$digest();
+          $rootScope.$digest();
         } );
 
         it( 'reflects changes', () => {
-          expect( self.sessionService.session ).toEqual( {
+          expect( sessionService.session ).toEqual( {
             "exp":        1477232207,
             "iat":        1472221008,
             "sub":        "cas|873f88fa-327b-b95d-7d7a-7add211a9b64",
@@ -69,7 +77,7 @@ describe( 'session service', function () {
             "email":      "professorx@xavier.edu",
             "token_hash": {
               "access_token": "1a0e2d05-5999-4fd6-a06f-f43c1b2ea8b0",
-              "role":         "IDENTIFIED"
+              "role":         Roles.identified
             }
           } );
         } );
@@ -79,63 +87,63 @@ describe( 'session service', function () {
 
   describe( 'sessionSubject', ()=> {
     it( 'to be defined', () => {
-      expect( self.sessionService.sessionSubject ).toBeDefined();
+      expect( sessionService.sessionSubject ).toBeDefined();
     } );
   } );
 
   describe( 'getRole', () => {
     it( 'to be defined', () => {
-      expect( self.sessionService.getRole ).toBeDefined();
+      expect( sessionService.getRole ).toBeDefined();
     } );
 
     it( 'returns \'PUBLIC\' if no session exists', () => {
-      expect( self.sessionService.getRole() ).toEqual( 'PUBLIC' );
+      expect( sessionService.getRole() ).toEqual( Roles.public );
     } );
 
     describe( 'with \'PUBLIC\' cortex-session', () => {
       beforeEach( () => {
-        self.$cookies.put( 'cortex-session', cortexSession.public );
+        $cookies.put( Sessions.cortex, cortexSession.public );
         // Force digest so scope session watchers pick up changes.
-        self.$rootScope.$digest();
+        $rootScope.$digest();
       } );
 
       it( 'returns \'PUBLIC\'', () => {
-        expect( self.sessionService.getRole() ).toEqual( 'PUBLIC' );
+        expect( sessionService.getRole() ).toEqual( Roles.public );
       } );
     } );
 
     describe( 'with \'IDENTIFIED\' cortex-session', () => {
       beforeEach( () => {
-        self.$cookies.put( 'cortex-session', cortexSession.identified );
+        $cookies.put( Sessions.cortex, cortexSession.identified );
         // Force digest so scope session watchers pick up changes.
-        self.$rootScope.$digest();
+        $rootScope.$digest();
       } );
 
       it( 'returns \'IDENTIFIED\'', () => {
-        expect( self.sessionService.getRole() ).toEqual( 'IDENTIFIED' );
+        expect( sessionService.getRole() ).toEqual( Roles.identified );
       } );
     } );
 
     describe( 'getRole with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        self.$cookies.put( 'cortex-session', cortexSession.registered );
+        $cookies.put( Sessions.cortex, cortexSession.registered );
         // Force digest so scope session watchers pick up changes.
-        self.$rootScope.$digest();
+        $rootScope.$digest();
       } );
 
       it( 'returns \'IDENTIFIED\' with expired give-session', () => {
-        expect( self.sessionService.getRole() ).toEqual( 'IDENTIFIED' );
+        expect( sessionService.getRole() ).toEqual( Roles.identified );
       } );
 
       describe( 'with \'REGISTERED\' give-session', () => {
         beforeEach( () => {
-          self.$cookies.put( 'give-session', giveSession );
+          $cookies.put( Sessions.give, giveSession );
           // Force digest so scope session watchers pick up changes.
-          self.$rootScope.$digest();
+          $rootScope.$digest();
         } );
 
         it( 'returns \'REGISTERED\'', () => {
-          expect( self.sessionService.getRole() ).toEqual( 'REGISTERED' );
+          expect( sessionService.getRole() ).toEqual( Roles.registered );
         } );
       } );
     } );
@@ -143,77 +151,158 @@ describe( 'session service', function () {
 
   describe( 'signIn', () => {
     it( 'makes http request to cas/login', () => {
-      self.$httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/login', {
+      $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/login', {
         username: 'user@example.com',
         password: 'hello123'
       } ).respond( 200, 'success' );
-      self.sessionService
+      sessionService
         .signIn( 'user@example.com', 'hello123' )
         .subscribe( ( data ) => {
           expect( data ).toEqual( 'success' );
         } );
-      self.$httpBackend.flush();
+      $httpBackend.flush();
     } );
   } );
 
   describe( 'signUp', () => {
     it( 'makes http request to cas/register', () => {
-      self.$httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/register', {
+      $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/register', {
         email:     'professorx@xavier.edu',
         password:  'Cerebro123',
         firstName: 'Charles',
         lastName:  'Xavier'
       } ).respond( 200, {} );
-      self.sessionService
+      sessionService
         .signUp( 'professorx@xavier.edu', 'Cerebro123', 'Charles', 'Xavier' )
         .subscribe( ( data ) => {
           expect( data ).toEqual( {} );
         } );
-      self.$httpBackend.flush();
+      $httpBackend.flush();
     } );
   } );
 
   describe( 'signOut', () => {
     it( 'makes http request to cas/logout', () => {
-      self.$httpBackend.expectDELETE( 'https://cortex-gateway-stage.cru.org/cas/logout' )
+      $httpBackend.expectDELETE( 'https://cortex-gateway-stage.cru.org/cas/logout' )
         .respond( 200, {} );
-      self.sessionService
+      sessionService
         .signOut()
         .then( ( response ) => {
           expect( response.data ).toEqual( {} );
         } );
-      self.$httpBackend.flush();
+      $httpBackend.flush();
     } );
   } );
 
   describe( 'forgotPassword', () => {
     it( 'makes http request to cas/send_forgot_password_email', () => {
-      self.$httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/send_forgot_password_email', {
+      $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/send_forgot_password_email', {
         email:            'professorx@xavier.edu',
         passwordResetUrl: 'http://example.com/index.html?theme=cru#reset-password'
       } ).respond( 200, {} );
-      self.sessionService
+      sessionService
         .forgotPassword( 'professorx@xavier.edu', 'http://example.com/index.html?theme=cru#reset-password' )
         .subscribe( ( data ) => {
           expect( data ).toEqual( {} );
         } );
-      self.$httpBackend.flush();
+      $httpBackend.flush();
     } );
   } );
 
   describe( 'resetPassword', () => {
     it( 'makes http request to cas/reset_password', () => {
-      self.$httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/reset_password', {
+      $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/reset_password', {
         email:    'professorx@xavier.edu',
         password: 'Cerebro123',
         resetKey: 'abc123def456'
       } ).respond( 200, {} );
-      self.sessionService
+      sessionService
         .resetPassword( 'professorx@xavier.edu', 'Cerebro123', 'abc123def456' )
         .subscribe( ( data ) => {
           expect( data ).toEqual( {} );
         } );
-      self.$httpBackend.flush();
+      $httpBackend.flush();
+    } );
+  } );
+
+  describe( 'session expiration', () => {
+    let $timeout;
+    beforeEach( inject( ( _$timeout_ ) => {
+      $timeout = _$timeout_;
+      jasmine.clock().install();
+      jasmine.clock().mockDate( new Date( 2016, 1, 1 ) );
+    } ) );
+
+    afterEach( () => {
+      $timeout.verifyNoPendingTasks();
+      jasmine.clock().uninstall();
+    } );
+
+    describe( 'undefined \'give-session\'', () => {
+      beforeEach( () => {
+        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $rootScope.$digest();
+      } );
+
+      it( 'does not set sessionTimeout', () => {
+        expect( $timeout ).not.toHaveBeenCalled();
+      } );
+    } );
+
+    describe( '\'give-session\' with 10 seconds until expiration', () => {
+      beforeEach( () => {
+        // Encode cookie as JWT
+        $cookies.put( Sessions.give, '.' + btoa( angular.toJson( {
+            exp: Math.round( Date.now() / 1000 ) + 10
+          } ) ) + '.' );
+        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $rootScope.$digest();
+      } );
+
+      it( 'sets sessionTimeout', () => {
+        expect( $timeout ).toHaveBeenCalledWith( 10000 );
+        jasmine.clock().tick( 10001 );
+        $timeout.flush( 10001 );
+        expect( $timeout ).toHaveBeenCalledTimes( 1 );
+      } );
+    } );
+
+    describe( '\'give-session\' with 45 seconds until expiration', () => {
+      beforeEach( () => {
+        // Encode cookie as JWT
+        $cookies.put( Sessions.give, '.' + btoa( angular.toJson( {
+            exp: Math.round( Date.now() / 1000 ) + 45
+          } ) ) + '.' );
+        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $rootScope.$digest();
+      } );
+
+      it( 'sets sessionTimeout twice', () => {
+        expect( $timeout ).toHaveBeenCalledWith( 30000 );
+        jasmine.clock().tick( 30001 );
+        $timeout.flush( 30001 );
+        expect( $timeout ).toHaveBeenCalledWith( 14999 );
+        jasmine.clock().tick( 15000 );
+        $timeout.flush( 15000 );
+        expect( $timeout ).toHaveBeenCalledTimes( 2 );
+      } );
+
+      describe( '\'cortex-session\' updated', () => {
+        beforeEach( () => {
+          spyOn( $timeout, 'cancel' ).and.callThrough();
+          jasmine.clock().tick( 10000 );
+          $timeout.flush( 10000 );
+          $cookies.put( Sessions.cortex, cortexSession.identified );
+          $rootScope.$digest();
+        } );
+
+        it( 'cancels existing sessionTimeout', () => {
+          expect( $timeout.cancel ).toHaveBeenCalled();
+          jasmine.clock().tick( 90000 );
+          $timeout.flush( 90000 );
+          expect( $timeout ).toHaveBeenCalledTimes( 2 );
+        } );
+      } );
     } );
   } );
 } );

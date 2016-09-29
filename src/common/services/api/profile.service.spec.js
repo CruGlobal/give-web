@@ -1,10 +1,19 @@
 import angular from 'angular';
 import 'angular-mocks';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 
 import module from './profile.service';
 
 import emailsResponse from 'common/services/api/fixtures/cortex-profile-emails.fixture.js';
 import paymentmethodsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods.fixture.js';
+import paymentmethodsFormsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods-forms.fixture.js';
+
+let paymentmethodsFormsResponseZoomMapped = {
+  bankAccount: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createbankaccountform[0],
+  creditCard: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createcreditcardform[0],
+  rawData: paymentmethodsFormsResponse
+};
 
 describe('profile service', () => {
   beforeEach(angular.mock.module(module.name));
@@ -34,89 +43,166 @@ describe('profile service', () => {
 
   describe('getPaymentMethods', () => {
     it('should load the user\'s saved payment methods', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=paymentmethods:element,paymentmethods:element:bankaccount,paymentmethods:element:creditcard')
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element')
         .respond(200, paymentmethodsResponse);
       self.profileService.getPaymentMethods()
         .subscribe((data) => {
-          expect(data).toEqual([{
-            "self": {
-              "type": "elasticpath.bankaccounts.bank-account",
-              "uri": "/bankaccounts/paymentmethods/crugive/giydcnzyga=",
-              "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga="
-            },
-            "links": [{
-              "rel": "paymentmethod",
-              "uri": "/paymentmethods/crugive/giydcnzyga=",
-              "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcnzyga="
-            }, {
-              "rel": "bankaccount",
-              "type": "elasticpath.bankaccounts.bank-account",
-              "uri": "/bankaccounts/paymentmethods/crugive/giydcnzyga=",
-              "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga="
-            }],
-            "account-type": "Savings",
-            "bank-name": "2nd Bank",
-            "display-account-number": "3456",
-            "encrypted-account-number": "",
-            "routing-number": "021000021"
-          }, {
-            "self": {
-              "type": "cru.creditcards.named-credit-card",
-              "uri": "/creditcards/paymentmethods/crugive/giydgmrrhe=",
-              "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydgmrrhe="
-            },
-            "links": [{
-              "rel": "paymentmethod",
-              "uri": "/paymentmethods/crugive/giydgmrrhe=",
-              "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydgmrrhe="
-            }, {
-              "rel": "creditcard",
-              "type": "cru.creditcards.named-credit-card",
-              "uri": "/creditcards/paymentmethods/crugive/giydgmrrhe=",
-              "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydgmrrhe="
-            }],
-            "address": {
-              "country-name": "US",
-              "extended-address": "",
-              "locality": "Sacramento",
-              "postal-code": "12345",
-              "region": "CA",
-              "street-address": "123 Some Street"
-            },
-            "card-number": "1118",
-            "card-type": "MasterCard",
-            "cardholder-name": "Test Person",
-            "description": "Mastercard Test Card",
-            "expiry-month": "08",
-            "expiry-year": "2020",
-            "status": "Active"
-          }]);
+          expect(data).toEqual([
+            paymentmethodsResponse._selfservicepaymentmethods[0]._element[1],
+            paymentmethodsResponse._selfservicepaymentmethods[0]._element[0]
+          ]);
         });
       self.$httpBackend.flush();
     });
-    it('should log an error if a payment method type isn\'t recognized', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=paymentmethods:element,paymentmethods:element:bankaccount,paymentmethods:element:creditcard')
-        .respond(200, {
-          _paymentmethods: [{
-            _element: [{
-              self: {
-                type: 'unknown'
-              }
-            }]
-          }]
-        });
-      self.profileService.getPaymentMethods()
+  });
+
+  describe('getPaymentMethodForms', () => {
+    function setupRequest() {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform')
+        .respond(200, paymentmethodsFormsResponse);
+    }
+
+    function initiateRequest() {
+      self.profileService.getPaymentMethodForms()
         .subscribe((data) => {
-          expect(data).toEqual([{
-            self: {
-              type: 'unknown'
-            },
-            bankaccount: undefined,
-            creditcard: undefined
-          }]);
+          expect(data).toEqual(paymentmethodsFormsResponseZoomMapped);
         });
+    }
+
+    it('should send a request to get the payment form links', () => {
+      setupRequest();
+      initiateRequest();
       self.$httpBackend.flush();
-      expect(self.profileService.$log.error.logs[0]).toEqual(['Unable to recognize the type of this payment method', 'unknown']);
+    });
+
+    it('should use the cached response if called a second time', () => {
+      setupRequest();
+      initiateRequest();
+      self.$httpBackend.flush();
+      initiateRequest();
+    });
+  });
+
+  describe('addBankAccountPayment', () => {
+    it('should send a request to save the bank account payment info', () => {
+      let paymentInfo = {
+        'account-type': 'checking',
+        'bank-name': 'First Bank',
+        'display-account-number': '************9012',
+        'encrypted-account-number': '**fake*encrypted**123456789012**',
+        'routing-number': '123456789'
+      };
+
+      self.$httpBackend.expectPOST(
+        'https://cortex-gateway-stage.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive?followLocation=true',
+        paymentInfo
+      ).respond(200, 'success');
+
+      // cache getPaymentForms response to avoid another http request while testing
+      self.profileService.paymentMethodForms = paymentmethodsFormsResponseZoomMapped;
+
+      self.profileService.addBankAccountPayment(paymentInfo)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('addCreditCardPayment', () => {
+    it('should send a request to save the credit card payment info', () => {
+      let paymentInfo = {
+        address: {
+          'country-name': 'US',
+          'extended-address': '',
+          'locality': 'Sacramento',
+          'postal-code': '12345',
+          'region': 'CA',
+          'street-address': '123 First St'
+        },
+        'card-number': '**fake*encrypted**1234567890123456**',
+        'card-type': 'VISA',
+        'cardholder-name': 'Test Name',
+        'expiry-month': '06',
+        'expiry-year': '12',
+        ccv: 'someEncryptedCCV...'
+      };
+
+      let paymentInfoWithoutCCV = angular.copy(paymentInfo);
+      delete paymentInfoWithoutCCV.ccv;
+
+      self.$httpBackend.expectPOST(
+        'https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
+        paymentInfoWithoutCCV
+      ).respond(200, 'success');
+
+      // cache getPaymentForms response to avoid another http request while testing
+      self.profileService.paymentMethodForms = paymentmethodsFormsResponseZoomMapped;
+
+      self.profileService.addCreditCardPayment(paymentInfo)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('addPaymentMethod', () => {
+    it('should save a new bank account payment method', () => {
+      spyOn(self.profileService,'addBankAccountPayment').and.returnValue(Observable.of('success'));
+      let paymentInfo = {
+        'account-type': 'checking',
+        'bank-name': 'First Bank',
+        'display-account-number': '************9012',
+        'encrypted-account-number': '**fake*encrypted**123456789012**',
+        'routing-number': '123456789'
+      };
+      self.profileService.addPaymentMethod({
+        bankAccount: paymentInfo
+      }).subscribe((data) => {
+        expect(data).toEqual('success');
+      });
+      expect(self.profileService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo);
+    });
+    it('should save a new credit card payment method', () => {
+      spyOn(self.profileService,'addCreditCardPayment').and.returnValue(Observable.of('credit card success'));
+
+      let paymentInfo = {
+        address: {
+          'country-name': 'US',
+          'extended-address': '',
+          'locality': 'Sacramento',
+          'postal-code': '12345',
+          'region': 'CA',
+          'street-address': '123 First St'
+        },
+        'card-number': '**fake*encrypted**1234567890123456**',
+        'card-type': 'VISA',
+        'cardholder-name': 'Test Name',
+        'expiry-month': '06',
+        'expiry-year': '12',
+        ccv: 'someEncryptedCCV...'
+      };
+
+      self.profileService.addPaymentMethod({
+        creditCard: paymentInfo
+      }).subscribe((data) => {
+        expect(data).toEqual('credit card success');
+      });
+      expect(self.profileService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo);
+    });
+    it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
+      self.profileService.addPaymentMethod({
+          billingAddress: {}
+        })
+        .subscribe(() => {
+            fail('the addPaymentMethod Observable completed successfully when it should have thrown an error');
+          },
+          (error) => {
+            expect(error).toEqual('Error adding payment method. The data passed to profileService.addPaymentMethod did not contain bankAccount or creditCard data');
+          });
     });
   });
 });
