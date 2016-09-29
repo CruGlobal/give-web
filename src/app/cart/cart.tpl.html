@@ -31,8 +31,8 @@
                       <td class="td-frequency">
                         <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
                         <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'">
-                          <translate>Starts on:</translate>
-                          {{$ctrl.donationStartDate(i.config['start-month'], i.config['start-day']) | date:'MMM d'}}
+                          <span translate>Starts on:</span>
+                          {{i.giftStartDate | date:'mediumDate'}}
                         </span>
                       </td>
                       <td class="td-amount">
@@ -52,7 +52,9 @@
                         <div class="checkout-cta pull-right">
                           <a href ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
                         </div>
-                        <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
+                        <div class="checkout-cart-summary pull-right">
+                          <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
+                        </div>
                       </td>
                     </tr>
                   </tfoot>

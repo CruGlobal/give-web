@@ -93,38 +93,23 @@
             </h4>
             <div class="panel-body pt0">
               <div class="row">
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label translate>Month</label>
-                    <div class="form-group">
-                      <select class="form-control form-control-subtle"
-                              ng-model="$ctrl.itemConfig['start-month']"
-                              ng-change="$ctrl.changeStartMonth($ctrl.itemConfig['start-month'])">
-                        <option value="01" translate>January</option>
-                        <option value="02" translate>February</option>
-                        <option value="03" translate>March</option>
-                        <option value="04" translate>April</option>
-                        <option value="05" translate>May</option>
-                        <option value="06" translate>June</option>
-                        <option value="07" translate>July</option>
-                        <option value="08" translate>August</option>
-                        <option value="09" translate>September</option>
-                        <option value="10" translate>October</option>
-                        <option value="11" translate>November</option>
-                        <option value="12" translate>December</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
                 <div class="col-sm-2">
                   <div class="form-group">
                     <label translate>Day</label>
                     <div class="form-group">
                       <select class="form-control form-control-subtle"
-                              ng-model="$ctrl.itemConfig['start-day']"
-                              ng-options="o as o for o in $ctrl.daysInMonth($ctrl.itemConfig['start-month'])"
-                              ng-change="$ctrl.changeStartDay($ctrl.itemConfig['start-day'])">
+                              ng-model="$ctrl.itemConfig['recurring-day-of-month']"
+                              ng-options="o as (o | ordinal) for o in $ctrl.daysInMonth()"
+                              ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'])">
                       </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label translate>Will start on</label>
+                    <div class="form-group">
+                      {{$ctrl.donationStartDate($ctrl.itemConfig['recurring-day-of-month']) | date:'mediumDate'}}
                     </div>
                   </div>
                 </div>

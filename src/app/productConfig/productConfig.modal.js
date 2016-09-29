@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-gettext';
+import 'angular-ordinal';
 
 import indexOf from 'lodash/indexOf';
 import range from 'lodash/range';
@@ -16,20 +17,20 @@ export let giveGiftParams = {
   designation: 'd',
   amount:      '$',
   frequency:   'f',
-  month:       'mm',
   day:         'dd'
 };
 
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, itemConfig, isEdit ) {
+  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.modalStateService = modalStateService;
     this.productData = productData;
+    this.nextDrawDate = nextDrawDate;
     this.itemConfig = itemConfig;
     this.isEdit = isEdit;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
@@ -66,12 +67,8 @@ class ModalInstanceCtrl {
       }
     }
 
-    if ( params.hasOwnProperty( giveGiftParams.month ) ) {
-      this.itemConfig['start-month'] = params[giveGiftParams.month];
-    }
-
     if ( params.hasOwnProperty( giveGiftParams.day ) ) {
-      this.itemConfig['start-day'] = params[giveGiftParams.day];
+      this.itemConfig['recurring-day-of-month'] = params[giveGiftParams.day];
     }
   }
 
@@ -99,10 +96,6 @@ class ModalInstanceCtrl {
   changeCustomAmount( amount ) {
     this.itemConfig.amount = amount;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
-  }
-
-  changeStartMonth( month ) {
-    if ( !this.isEdit ) this.$location.search( giveGiftParams.month, month );
   }
 
   changeStartDay( day ) {
@@ -134,17 +127,23 @@ class ModalInstanceCtrl {
       } );
   }
 
-  daysInMonth( month ) {
-    var daysInMonth = new Date( 2001, month, 0 ).getDate();
-    return range( 1, daysInMonth + 1 ).map( function ( n ) {
+  daysInMonth() {
+    return range( 1, 29 ).map( function ( n ) {
       return n.toString();
     } );
+  }
+
+  donationStartDate(day){
+    if(!day){ return; }
+
+    return this.cartService.giftStartDate( this.nextDrawDate, day );
   }
 }
 
 export default angular
   .module( controllerName, [
     'gettext',
+    'ordinal',
     loadingOverlay.name,
     designationsService.name,
     cartService.name,

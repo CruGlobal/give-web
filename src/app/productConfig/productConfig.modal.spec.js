@@ -7,12 +7,13 @@ import {giveGiftParams} from './productConfig.modal';
 
 describe( 'product config modal', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let $ctrl, uibModalInstance, productData, itemConfig, itemConfigForm, $location;
+  let $ctrl, uibModalInstance, productData, nextDrawDate, itemConfig, itemConfigForm, $location;
 
   beforeEach( inject( function ( _$location_ ) {
     $location = _$location_;
     uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
     productData = {};
+    nextDrawDate = {"next-draw-date": "2016-10-01"};
     itemConfig = {
       amount: 85
     };
@@ -32,6 +33,7 @@ describe( 'product config modal', function () {
       $ctrl = _$controller_( module.name, {
         $uibModalInstance: uibModalInstance,
         productData:       productData,
+        nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
         isEdit:            true
       } );
@@ -84,12 +86,12 @@ describe( 'product config modal', function () {
         [giveGiftParams.designation]: '0123456',
         [giveGiftParams.amount]:      '150',
         [giveGiftParams.frequency]:   'QUARTERLY',
-        [giveGiftParams.month]:       '09',
         [giveGiftParams.day]:         '21'
       } );
       $ctrl = _$controller_( module.name, {
         $uibModalInstance: uibModalInstance,
         productData:       productData,
+        nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
         isEdit:            false
       } );
@@ -112,8 +114,7 @@ describe( 'product config modal', function () {
         expect( $ctrl.itemConfig.amount ).toEqual( 150 );
         expect( $ctrl.customAmount ).toEqual( 150 );
         expect( $ctrl.changeFrequency ).toHaveBeenCalled();
-        expect( $ctrl.itemConfig['start-month'] ).toEqual( '09' );
-        expect( $ctrl.itemConfig['start-day'] ).toEqual( '21' );
+        expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '21' );
       } );
     } );
 
@@ -162,13 +163,6 @@ describe( 'product config modal', function () {
       } );
     } );
 
-    describe( 'changeStartMonth()', () => {
-      it( 'sets month query param', () => {
-        $ctrl.changeStartMonth( '03' );
-        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.month, '03' );
-      } );
-    } );
-
     describe( 'changeStartDay()', () => {
       it( 'sets day query param', () => {
         $ctrl.changeStartDay( '11' );
@@ -177,10 +171,8 @@ describe( 'product config modal', function () {
     } );
 
     describe( 'daysInMonth', () => {
-      it( 'returns days in a month (year = 2001)', () => {
-        expect( $ctrl.daysInMonth( '01' ).length ).toEqual( 31 );
-        expect( $ctrl.daysInMonth( '02' ).length ).toEqual( 28 );
-        expect( $ctrl.daysInMonth( '04' ).length ).toEqual( 30 );
+      it( 'returns days in a month', () => {
+        expect( $ctrl.daysInMonth( ).length ).toEqual( 28 );
       } );
     } );
 
