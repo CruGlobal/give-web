@@ -17,38 +17,15 @@ describe( 'checkout', function () {
     } );
   } ) );
 
-  describe( 'changeStep', () => {
-    it( 'should scroll to top and change the checkout step', () => {
-      self.controller.changeStep( 'review' );
-      expect( self.controller.$window.scrollTo ).toHaveBeenCalledWith( 0, 0 );
-      expect( self.controller.checkoutStep ).toEqual( 'review' );
-    } );
-  } );
-
-  describe( 'loadCart', () => {
-    it( 'should load the card data', () => {
-      spyOn( self.controller.cartService, 'get' ).and.callFake( () => Observable.of( 'cartData' ) );
-      self.controller.loadCart();
-      expect( self.controller.loadingCartData ).toEqual( false );
-      expect( self.controller.cartData ).toEqual( 'cartData' );
-    } );
-    it( 'should still set loading to false on an error', () => {
-      spyOn( self.controller.cartService, 'get' ).and.callFake( () => Observable.throw( 'some error' ) );
-      self.controller.loadCart();
-      expect( self.controller.loadingCartData ).toEqual( false );
-      expect( self.controller.$log.error.logs[0] ).toEqual( ['Error loading cart', 'some error'] );
-    } );
-  } );
-
   it( 'to be defined', function () {
     expect( self.controller ).toBeDefined();
-    expect( self.controller.checkoutStep ).toEqual( 'contact' );
     expect( self.controller.loadingCartData ).toEqual( true );
   } );
 
   describe( '$onInit()', () => {
     beforeEach( () => {
       spyOn( self.controller, 'loadCart' );
+      spyOn( self.controller, 'initStepParam' );
       spyOn( self.controller, 'sessionEnforcerService' );
       self.controller.$onInit();
     } );
@@ -60,6 +37,7 @@ describe( 'checkout', function () {
         } )
       );
       expect( self.controller.loadCart ).toHaveBeenCalled();
+      expect( self.controller.initStepParam ).toHaveBeenCalled();
     } );
 
     describe( 'sessionEnforcerService success', () => {
@@ -83,6 +61,53 @@ describe( 'checkout', function () {
       self.controller.enforcerId = '1234567890';
       self.controller.$onDestroy();
       expect( self.controller.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
+    } );
+  } );
+
+  describe( 'initStepParam()', () => {
+    beforeEach(() => {
+      spyOn( self.controller.$location, 'search' ).and.callThrough();
+      spyOn( self.controller.$location, 'replace');
+    });
+
+    it( 'should set the default step', () => {
+      self.controller.initStepParam();
+      expect( self.controller.checkoutStep ).toEqual( 'contact' );
+      expect( self.controller.$location.search).toHaveBeenCalledWith( 'step', 'contact');
+      expect( self.controller.$location.replace).toHaveBeenCalled();
+    } );
+
+    it( 'should load the  step from the query param', () => {
+      self.controller.$location.search( 'step', 'payment' );
+      self.controller.initStepParam();
+      expect( self.controller.checkoutStep ).toEqual( 'payment' );
+      expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'payment' );
+      expect( self.controller.$location.replace ).toHaveBeenCalled();
+    } );
+  } );
+
+  describe( 'changeStep', () => {
+    it( 'should scroll to top and change the checkout step', () => {
+      spyOn( self.controller.$location, 'search' );
+      self.controller.changeStep( 'review' );
+      expect( self.controller.$window.scrollTo ).toHaveBeenCalledWith( 0, 0 );
+      expect( self.controller.checkoutStep ).toEqual( 'review' );
+      expect( self.controller.$location.search).toHaveBeenCalledWith( 'step', 'review' );
+    } );
+  } );
+
+  describe( 'loadCart', () => {
+    it( 'should load the card data', () => {
+      spyOn( self.controller.cartService, 'get' ).and.returnValue( Observable.of( 'cartData' ) );
+      self.controller.loadCart();
+      expect( self.controller.loadingCartData ).toEqual( false );
+      expect( self.controller.cartData ).toEqual( 'cartData' );
+    } );
+    it( 'should still set loading to false on an error', () => {
+      spyOn( self.controller.cartService, 'get' ).and.returnValue( Observable.throw( 'some error' ) );
+      self.controller.loadCart();
+      expect( self.controller.loadingCartData ).toEqual( false );
+      expect( self.controller.$log.error.logs[0] ).toEqual( ['Error loading cart', 'some error'] );
     } );
   } );
 } );
