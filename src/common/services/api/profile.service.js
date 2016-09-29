@@ -1,4 +1,6 @@
 import angular from 'angular';
+import pick from 'lodash/pick';
+import find from 'lodash/find';
 import omit from 'lodash/omit';
 import map from 'lodash/map';
 import {Observable} from 'rxjs/Observable';
@@ -16,7 +18,7 @@ import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate
 
 let serviceName = 'profileService';
 
-class Profile{
+class Profile {
 
   /*@ngInject*/
   constructor($log, cortexApiService, hateoasHelperService){
@@ -25,13 +27,42 @@ class Profile{
     this.hateoasHelperService = hateoasHelperService;
   }
 
-  getEmail(){
-    return this.cortexApiService.get({
+  getGivingProfile() {
+    return this.cortexApiService
+      .get( {
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
-          email: 'emails:element'
+          mailingAddress: 'addresses:mailingaddress',
+          emailAddress:   'emails:element',
+          phoneNumbers:   'phonenumbers:element[]',
+          spouse:         'addspousedetails',
+          yearToDate:     'givingdashboard:yeartodateamount'
         }
-      })
+      } )
+      .map( ( data ) => {
+        let donor = pick( data.rawData, ['family-name', 'given-name'] ),
+          spouse = pick( data.spouse, ['given-name'] ),
+          phone = find( data.phoneNumbers, {primary: true} );
+        return {
+          name:       (spouse['given-name']) ?
+                        `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
+                        `${donor['given-name']} ${donor['family-name']}`,
+          email:      angular.isDefined( data.emailAddress ) ? data.emailAddress.email : undefined,
+          phone:      angular.isDefined( phone ) ? phone['phone-number'] : undefined,
+          address:    angular.isDefined( data.mailingAddress ) ?
+                        formatAddressForTemplate( data.mailingAddress.address ) : undefined,
+          yearToDate: angular.isDefined( data.yearToDate ) ? data.yearToDate['year-to-date-amount'] : undefined
+        };
+      } );
+  }
+
+  getEmail(){
+    return this.cortexApiService.get({
+      path: ['profiles', this.cortexApiService.scope, 'default'],
+      zoom: {
+        email: 'emails:element'
+      }
+    })
       .pluck('email')
       .pluck('email');
   }
@@ -54,7 +85,6 @@ class Profile{
         return sortPaymentMethods(paymentMethods);
       });
   }
-
 
   getPaymentMethodForms(){
     if(this.paymentMethodForms){
@@ -129,7 +159,6 @@ class Profile{
         return data;
       });
   }
-
 }
 
 export default angular

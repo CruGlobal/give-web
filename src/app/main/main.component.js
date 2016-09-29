@@ -12,6 +12,7 @@ import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
 import homeSignInComponent from '../homeSignIn/homeSignIn.component';
+import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
 
 import template from './main.tpl';
 
@@ -43,6 +44,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       url: "/thank-you.html",
       template: '<thank-you></thank-you>'
     })
+    .state('your-giving', {
+      url: "/your-giving.html",
+      template: '<your-giving></your-giving>'
+    })
     .state('search-results', {
       url: "/search-results.html",
       template: '<search-results></search-results>'
@@ -60,6 +65,7 @@ export default angular
     cartComponent.name,
     checkoutComponent.name,
     thankYouComponent.name,
+    yourGivingComponent.name,
     productConfigComponent.name,
     signInComponent.name,
     searchResultsComponent.name,

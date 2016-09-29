@@ -4,15 +4,14 @@ import omit from 'lodash/omit';
 import assign from 'lodash/assign';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-
 import module from './profile.service';
 
-import emailsResponse from 'common/services/api/fixtures/cortex-profile-emails.fixture.js';
-import paymentmethodsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods.fixture.js';
-import paymentmethodsFormsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods-forms.fixture.js';
-import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
-
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
+import emailsResponse from './fixtures/cortex-profile-emails.fixture.js';
+import givingProfileResponse from './fixtures/cortex-profile-giving.fixture';
+import paymentmethodsResponse from './fixtures/cortex-profile-paymentmethods.fixture.js';
+import paymentmethodsFormsResponse from './fixtures/cortex-profile-paymentmethods-forms.fixture.js';
+import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
 
 let paymentmethodsFormsResponseZoomMapped = {
   bankAccount: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createbankaccountform[0],
@@ -198,6 +197,36 @@ describe('profile service', () => {
 
       self.$httpBackend.flush();
     });
+  });
+
+  describe('getGivingProfile', () => {
+    it( 'should load the giving profile with spouse', () => {
+      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+        .respond( 200, givingProfileResponse );
+
+      self.profileService.getGivingProfile().subscribe( ( profile ) => {
+        expect( profile ).toEqual( jasmine.objectContaining( {
+          name:       'Mark & Judith Tubbs',
+          email:      'mt@example.com',
+          address:    jasmine.any( Object ),
+          phone:      '(909) 337-2433',
+          yearToDate: 0
+        } ) );
+      } );
+      self.$httpBackend.flush();
+    } );
+
+    it( 'should load the giving profile without spouse', () => {
+      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+        .respond( 200, omit( givingProfileResponse, ['_addspousedetails', '_emails', '_givingdashboard', '_phonenumbers', '_addresses'] ) );
+
+      self.profileService.getGivingProfile().subscribe( ( profile ) => {
+        expect( profile ).toEqual( jasmine.objectContaining( {
+          name: 'Mark Tubbs', email: undefined, address: undefined, phone: undefined, yearToDate: undefined
+        } ) );
+      } );
+      self.$httpBackend.flush();
+    } );
   });
 
   describe('addPaymentMethod', () => {

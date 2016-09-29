@@ -1,0 +1,99 @@
+<div class="screenContent" tabindex="-1" role="dialog">
+  <div class="container">
+    <div class="col-md-12">
+
+      <div class="row row-eq-height break-flex-at-549 mb">
+        <div class="col-md-8  col-sm-6 col-xs-12">
+          <div class="panel panel-full-height">
+            <div class="panel-body">
+              <loading ng-if="$ctrl.profileLoading"></loading>
+              <div class="row" ng-if="!$ctrl.profileLoading">
+                <div class="col-md-6">
+                  <h3 class="mb0 font-weight-mild">{{$ctrl.profile.name}}</h3>
+                  <p translate>Account #<a href="https://jira.cru.org/browse/EP-1305"><strong>TODO:</strong> EP-1305</a></p>
+                  <div class="">
+                    <p class="mb0" translate>Year-to-Date Giving</p>
+                    <h3 class="m0 font-weight-mild">{{$ctrl.profile.yearToDate | currency:'$'}}</h3>
+                    <p translate>As of {{$ctrl.currentDate | date:'shortDate'}}</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label ng-if="$ctrl.profile.address" translate>Mailing Address:</label>
+                    <display-address address="$ctrl.profile.address"></display-address>
+                  </div>
+                  <div class="form-group mb0">
+                    <label ng-if="$ctrl.profile.phone" translate>Contact Phone:</label>
+                    <p class="mb0">{{$ctrl.profile.phone}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4  col-sm-6 col-xs-12">
+          <div class="panel panel-full-height">
+            <div class="panel-body">
+              <!-- Giving Control -->
+              <a class="btn btn-block btn-primary" data-toggle="modal" data-target="#addPaymentMethodManageGiving" translate>Edit Your Recurring Gifts</a>
+              <a class="btn btn-block btn-primary mb- mt-" data-toggle="modal" data-target="#giveOneTime" translate>Give a 1-Time Gift</a>
+              <a class="btn btn-block btn-primary" data-toggle="modal" data-target="#whatTodDoManageGiving" translate>Stop or Restart a Gift</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel panel-margin-bottom" ng-if="!$ctrl.profileLoading">
+        <div class="panel-body">
+          <div class="row" style="position: relative;">
+            <div class="col-sm-12">
+              <h3 translate>Your Giving</h3>
+            </div>
+
+            <div class="col-xs-9 col-sm-9">
+              <div class="btn-group" role="group" aria-label="...">
+                <button type="button"
+                        class="btn btn-default"
+                        ng-class="{active: $ctrl.view == 'recipient'}"
+                        ng-click="$ctrl.setGivingView('recipient')">
+                  <span class="visible-xs" translate>By Recipient</span>
+                  <span class="hidden-xs" translate>Recipient View</span>
+                </button>
+                <button type="button"
+                        class="btn btn-default"
+                        ng-class="{active: $ctrl.view == 'monthly'}"
+                        ng-click="$ctrl.setGivingView('monthly')">
+                  <span class="visible-xs" translate>By Month</span>
+                  <span class="hidden-xs" translate>Monthly View</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-xs-3 col-sm-3">
+              <!-- Filters -->
+              <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="hidden-xs" translate>Filters <span class="caret"></span></span>
+                  <span class="visible-xs"><span class="fa fa-filter"></span></span>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                  <li><a href="#" translate>Your Recent Gifts</a></li>
+                  <li><a href="#" translate>All Gifts</a></li>
+                </ul>
+              </div>
+            </div>
+            <loading-overlay ng-if="$ctrl.viewLoading"></loading-overlay>
+          </div>
+        </div>
+      </div>
+
+      <div ng-switch="$ctrl.view" style="position: relative;">
+        <giving-recipient-view ng-switch-when="recipient" set-loading="$ctrl.setViewLoading(loading)"></giving-recipient-view>
+        <giving-monthly-view ng-switch-when="monthly" set-loading="$ctrl.setViewLoading(loading)"></giving-monthly-view>
+      </div>
+
+    </div>
+  </div>
+</div>
