@@ -93,7 +93,7 @@ class ModalInstanceCtrl {
   changeAmount( amount ) {
     this.itemConfigForm.$setDirty();
     this.itemConfig.amount = amount;
-    this.customAmount = '';
+    this.customAmount = undefined;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
   }
 
