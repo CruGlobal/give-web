@@ -45,6 +45,10 @@ class ModalInstanceCtrl {
     if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
       this.customAmount = this.itemConfig.amount;
     }
+
+    if(!this.itemConfig['recurring-day-of-month'] && nextDrawDate) {
+      this.itemConfig['recurring-day-of-month'] = Number(nextDrawDate.split('-')[2]).toString();
+    }
   }
 
   initializeParams() {
@@ -89,7 +93,7 @@ class ModalInstanceCtrl {
   changeAmount( amount ) {
     this.itemConfigForm.$setDirty();
     this.itemConfig.amount = amount;
-    this.customAmount = '';
+    this.customAmount = undefined;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
   }
 

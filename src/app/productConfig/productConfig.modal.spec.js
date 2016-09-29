@@ -13,7 +13,7 @@ describe( 'product config modal', function () {
     $location = _$location_;
     uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
     productData = {};
-    nextDrawDate = {"next-draw-date": "2016-10-01"};
+    nextDrawDate = '2016-10-01';
     itemConfig = {
       amount: 85
     };
@@ -150,7 +150,7 @@ describe( 'product config modal', function () {
         $ctrl.changeAmount( 100 );
         expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
         expect( $ctrl.itemConfig.amount ).toEqual( 100 );
-        expect( $ctrl.customAmount ).toEqual( '' );
+        expect( $ctrl.customAmount ).not.toBeDefined();
         expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.amount, 100 );
       } );
     } );
@@ -224,4 +224,21 @@ describe( 'product config modal', function () {
       } );
     } );
   } );
+
+  describe( 'no query params', () => {
+    beforeEach(inject(function (_$controller_) {
+      $ctrl = _$controller_(module.name, {
+        $uibModalInstance: uibModalInstance,
+        productData: productData,
+        nextDrawDate: nextDrawDate,
+        itemConfig: itemConfig,
+        isEdit: false
+      });
+      $ctrl.itemConfigForm = itemConfigForm;
+    }));
+
+    it( 'set default gift start day', () => {
+      expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '1' );
+    } );
+  });
 } );
