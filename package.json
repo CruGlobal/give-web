@@ -66,6 +66,7 @@
     "dependencies": {
       "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
       "angular": "github:angular/bower-angular@^1.5.8",
+      "angular-animate": "github:angular/bower-angular-animate@^1.5.8",
       "angular-cookies": "github:angular/bower-angular-cookies@^1.5.8",
       "angular-environment": "npm:angular-environment@^1.0.4",
       "angular-gettext": "github:rubenv/angular-gettext@^2.3.4",
@@ -76,6 +77,7 @@
       "jsencrypt": "npm:jsencrypt@^2.3.1",
       "jwt-decode": "github:auth0/jwt-decode@^2.1.0",
       "lodash": "npm:lodash@^4.14.2",
+      "querystring": "github:jspm/nodelibs-querystring@^0.1.0",
       "rollbar-browser": "npm:rollbar-browser@^1.9.1",
       "rxjs": "npm:rxjs@^5.0.0-beta.11",
       "stacktrace-js": "npm:stacktrace-js@^1.3.1"

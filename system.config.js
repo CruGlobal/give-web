@@ -21,6 +21,7 @@ System.config({
   map: {
     "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
     "angular": "github:angular/bower-angular@1.5.8",
+    "angular-animate": "github:angular/bower-angular-animate@1.5.8",
     "angular-cookies": "github:angular/bower-angular-cookies@1.5.8",
     "angular-environment": "npm:angular-environment@1.0.4",
     "angular-gettext": "github:rubenv/angular-gettext@2.3.6",
@@ -37,10 +38,14 @@ System.config({
     "lodash": "npm:lodash@4.15.0",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
+    "querystring": "github:jspm/nodelibs-querystring@0.1.0",
     "rollbar-browser": "npm:rollbar-browser@1.9.1",
     "rxjs": "npm:rxjs@5.0.0-beta.11",
     "stacktrace-js": "npm:stacktrace-js@1.3.1",
     "systemjs-babel-build": "npm:systemjs-plugin-babel@0.0.13/systemjs-babel-browser.js",
+    "github:angular/bower-angular-animate@1.5.8": {
+      "angular": "github:angular/bower-angular@1.5.8"
+    },
     "github:angular/bower-angular-cookies@1.5.8": {
       "angular": "github:angular/bower-angular@1.5.8"
     },
@@ -67,6 +72,9 @@ System.config({
     },
     "github:jspm/nodelibs-process@0.1.2": {
       "process": "npm:process@0.11.8"
+    },
+    "github:jspm/nodelibs-querystring@0.1.0": {
+      "querystring": "npm:querystring@0.2.0"
     },
     "github:jspm/nodelibs-stream@0.1.0": {
       "stream-browserify": "npm:stream-browserify@1.0.0"

@@ -1,0 +1,28 @@
+<loading-overlay ng-if="$ctrl.loading"></loading-overlay>
+<div class="screenContent account-management">
+  <div class="container container-edge-small container-edge-extrasmall">
+    <div class="panel pane-margin-bottom">
+      <div class="panel-body">
+
+        <div class="row pb">
+          <div class="col-md-6">
+            <h3>Your Payment Methods</h3>
+          </div>
+          <div class="col-md-6 text-right">
+            <a class="btn btn-primary" ng-click="$ctrl.addPaymentMethod()">Add New Payment Method</a>
+          </div>
+        </div>
+        <div ng-if="$ctrl.paymentMethods" class="row">
+          <div ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
+            <bank-account model="paymentMethod" ng-if="!$ctrl.isCard(paymentMethod)"></bank-account>
+            <credit-card  model="paymentMethod" ng-if="$ctrl.isCard(paymentMethod)"></credit-card>
+          </div>
+        </div>
+        <div ng-if="$ctrl.error" class="error">
+          {{$ctrl.error}}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
