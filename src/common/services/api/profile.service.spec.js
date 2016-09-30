@@ -45,11 +45,21 @@ describe('profile service', () => {
     it('should load the user\'s saved payment methods', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element')
         .respond(200, paymentmethodsResponse);
+
+      let expectedPaymentMethods = angular.copy(paymentmethodsResponse._selfservicepaymentmethods[0]._element);
+      expectedPaymentMethods[0].address = {
+        country: 'US',
+        streetAddress: '123 First St',
+        extendedAddress: '',
+        locality: 'Sacramento',
+        region: 'CA',
+        postalCode: '12345'
+      };
       self.profileService.getPaymentMethods()
         .subscribe((data) => {
           expect(data).toEqual([
-            paymentmethodsResponse._selfservicepaymentmethods[0]._element[1],
-            paymentmethodsResponse._selfservicepaymentmethods[0]._element[0]
+            expectedPaymentMethods[1],
+            expectedPaymentMethods[0]
           ]);
         });
       self.$httpBackend.flush();
@@ -111,15 +121,43 @@ describe('profile service', () => {
   });
 
   describe('addCreditCardPayment', () => {
-    it('should send a request to save the credit card payment info', () => {
+    it('should send a request to save the credit card payment info with no billing address', () => {
+      let paymentInfo = {
+        'card-number': '**fake*encrypted**1234567890123456**',
+        'card-type': 'VISA',
+        'cardholder-name': 'Test Name',
+        'expiry-month': '06',
+        'expiry-year': '12',
+        ccv: 'someEncryptedCCV...'
+      };
+
+      let paymentInfoWithoutCCV = angular.copy(paymentInfo);
+      delete paymentInfoWithoutCCV.ccv;
+
+      self.$httpBackend.expectPOST(
+        'https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
+        paymentInfoWithoutCCV
+      ).respond(200, 'success');
+
+      // cache getPaymentForms response to avoid another http request while testing
+      self.profileService.paymentMethodForms = paymentmethodsFormsResponseZoomMapped;
+
+      self.profileService.addCreditCardPayment(paymentInfo)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+
+      self.$httpBackend.flush();
+    });
+    it('should send a request to save the credit card payment info with a billing address', () => {
       let paymentInfo = {
         address: {
-          'country-name': 'US',
-          'extended-address': '',
-          'locality': 'Sacramento',
-          'postal-code': '12345',
-          'region': 'CA',
-          'street-address': '123 First St'
+          country: 'US',
+          streetAddress: '123 First St',
+          extendedAddress: 'Apt 123',
+          locality: 'Sacramento',
+          postalCode: '12345',
+          region: 'CA'
         },
         'card-number': '**fake*encrypted**1234567890123456**',
         'card-type': 'VISA',
@@ -131,6 +169,14 @@ describe('profile service', () => {
 
       let paymentInfoWithoutCCV = angular.copy(paymentInfo);
       delete paymentInfoWithoutCCV.ccv;
+      paymentInfoWithoutCCV.address = {
+        'country-name': 'US',
+        'street-address': '123 First St',
+        'extended-address': 'Apt 123',
+        'locality': 'Sacramento',
+        'postal-code': '12345',
+        'region': 'CA'
+      };
 
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
