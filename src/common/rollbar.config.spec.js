@@ -23,7 +23,8 @@ describe('rollbarConfig', () => {
         debug: jasmine.createSpy('debug'),
         info: jasmine.createSpy('info'),
         warning: jasmine.createSpy('warning'),
-        error: jasmine.createSpy('error')
+        error: jasmine.createSpy('error'),
+        configure: jasmine.createSpy('configure')
       };
       module.rollbar.init = () => self.rollbarSpies;
 
@@ -119,6 +120,26 @@ describe('rollbarConfig', () => {
         done();
       });
     });
+
+    describe('updateRollbarPerson', () => {
+      it('should add person info to the rollbar configuration', () => {
+        module.updateRollbarPerson({
+          sub: 'cas|12345',
+          first_name: 'Fname',
+          last_name: 'Lname',
+          email: 'someone@email.com'
+        });
+        expect(self.rollbarSpies.configure).toHaveBeenCalledWith( {
+          payload: {
+            person: {
+              id: 'cas|12345',
+              username: 'Fname Lname',
+              email: 'someone@email.com'
+            }
+          }
+        } );
+      } );
+    } );
   });
 
   describe('formatStacktraceForRollbar', () => {
