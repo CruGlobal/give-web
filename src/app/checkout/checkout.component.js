@@ -27,10 +27,11 @@ let componentName = 'checkout';
 class CheckoutController{
 
   /* @ngInject */
-  constructor($window, $location, $log, cartService, designationsService, sessionEnforcerService){
+  constructor($window, $location, $rootScope, $log, cartService, designationsService, sessionEnforcerService){
     this.$log = $log;
     this.$window = $window;
     this.$location = $location;
+    this.$rootScope = $rootScope;
     this.cartService = cartService;
     this.designationsService = designationsService;
     this.sessionEnforcerService = sessionEnforcerService;
@@ -52,12 +53,15 @@ class CheckoutController{
 
   $onDestroy() {
     this.sessionEnforcerService.cancel(this.enforcerId);
+    this.$locationChangeSuccessListener && this.$locationChangeSuccessListener();
   }
 
   initStepParam(){
-    this.checkoutStep = this.$location.search().step || 'contact';
-    this.$location.search('step', this.checkoutStep);
+    this.changeStep(this.$location.search().step || 'contact');
     this.$location.replace();
+    this.$locationChangeSuccessListener = this.$locationChangeSuccessListener || this.$rootScope.$on('$locationChangeSuccess', () => {
+      this.initStepParam();
+    });
   }
 
   changeStep(newStep){

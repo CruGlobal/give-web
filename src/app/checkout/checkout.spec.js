@@ -62,6 +62,11 @@ describe( 'checkout', function () {
       self.controller.$onDestroy();
       expect( self.controller.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
     } );
+    it( 'unsubscribes from $locationChangeSuccess', () => {
+      self.controller.$locationChangeSuccessListener = jasmine.createSpy( '$locationChangeSuccessListener' );
+      self.controller.$onDestroy();
+      expect( self.controller.$locationChangeSuccessListener ).toHaveBeenCalled();
+    } );
   } );
 
   describe( 'initStepParam()', () => {
@@ -77,12 +82,20 @@ describe( 'checkout', function () {
       expect( self.controller.$location.replace).toHaveBeenCalled();
     } );
 
-    it( 'should load the  step from the query param', () => {
+    it( 'should load the step from the query param', () => {
       self.controller.$location.search( 'step', 'payment' );
       self.controller.initStepParam();
       expect( self.controller.checkoutStep ).toEqual( 'payment' );
       expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'payment' );
       expect( self.controller.$location.replace ).toHaveBeenCalled();
+    } );
+
+    it( 'should watch the url and update the state', () => {
+      self.controller.initStepParam();
+      spyOn(self.controller, 'initStepParam');
+      self.controller.$location.search( 'step', 'payment' );
+      self.controller.$rootScope.$digest();
+      expect( self.controller.initStepParam ).toHaveBeenCalled();
     } );
   } );
 
