@@ -1,5 +1,6 @@
 import angular from 'angular';
 import omit from 'lodash/omit';
+import map from 'lodash/map';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
@@ -9,6 +10,9 @@ import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort
 
 import cortexApiService from '../cortexApi.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
+
+import formatAddressForCortex from '../addressHelpers/formatAddressForCortex';
+import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
 
 let serviceName = 'profileService';
 
@@ -41,9 +45,16 @@ class Profile{
       })
       .pluck('paymentMethods')
       .map((paymentMethods) => {
+        paymentMethods = map(paymentMethods, (paymentMethod) => {
+          if(paymentMethod.address){
+            paymentMethod.address = formatAddressForTemplate(paymentMethod.address);
+          }
+          return paymentMethod;
+        });
         return sortPaymentMethods(paymentMethods);
       });
   }
+
 
   getPaymentMethodForms(){
     if(this.paymentMethodForms){
@@ -75,6 +86,9 @@ class Profile{
 
   addCreditCardPayment(paymentInfo){
     paymentInfo = omit(paymentInfo, 'ccv');
+    if(paymentInfo.address) {
+      paymentInfo.address = formatAddressForCortex(paymentInfo.address);
+    }
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
         return this.cortexApiService.post({

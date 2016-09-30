@@ -146,13 +146,6 @@ describe('credit card form', () => {
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         creditCard: {
-          'card-number': jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
-          'cardholder-name': 'Person Name',
-          'expiry-month': 12,
-          'expiry-year': 19,
-          ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
-        },
-        billingAddress: {
           address: {
             isMailingAddress: false,
             streetAddress: '123 First St',
@@ -161,10 +154,11 @@ describe('credit card form', () => {
             postalCode: '12345',
             region: 'CA'
           },
-          name: {
-            'family-name': 'none',
-            'given-name': 'none'
-          }
+          'card-number': jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
+          'cardholder-name': 'Person Name',
+          'expiry-month': 12,
+          'expiry-year': 19,
+          ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
         }
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({
@@ -173,7 +167,7 @@ describe('credit card form', () => {
       });
       expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);
     });
-    it('should use the mailing address for the billing address if that checkbox is checked', () => {
+    it('should not send a billing address if the Same as Mailing Address box is checked as the api will use the mailing address there', () => {
       self.controller.creditCardPayment = {
         cardNumber: '4111111111111111',
         cardholderName: 'Person Name',
@@ -181,37 +175,18 @@ describe('credit card form', () => {
         expiryYear: 19,
         securityCode: '123'
       };
-      self.controller.donorDetails.mailingAddress = {
-        streetAddress: '1234 Second St',
-        extendedAddress: 'Apt 123',
-        locality: 'Sacramento',
-        postalCode: '12345',
-        region: 'CA'
-      };
       self.controller.billingAddress.isMailingAddress = true;
       self.formController.$valid = true;
       self.controller.savePayment();
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         creditCard: {
+          address: undefined,
           'card-number': jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
           'cardholder-name': 'Person Name',
           'expiry-month': 12,
           'expiry-year': 19,
           ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
-        },
-        billingAddress: {
-          address: {
-            streetAddress: '1234 Second St',
-            extendedAddress: 'Apt 123',
-            locality: 'Sacramento',
-            postalCode: '12345',
-            region: 'CA'
-          },
-          name: {
-            'family-name': 'none',
-            'given-name': 'none'
-          }
         }
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});

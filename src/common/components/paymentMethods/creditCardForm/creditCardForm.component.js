@@ -105,24 +105,17 @@ class CreditCardController {
     if(this.creditCardPaymentForm.$valid){
       let ccpCreditCardNumber = new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber);
       let ccpSecurityCode = new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode);
-      let billingAddress = {
-        address: this.billingAddress.isMailingAddress ? this.donorDetails.mailingAddress : this.billingAddress,
-        name: { //TODO: do we need to ask for and send the billing addressee? It seems to be required
-          'family-name': 'none',
-          'given-name': 'none'
-        }
-      };
       this.onSubmit({
         success: true,
         data: {
           creditCard: {
+            address: this.billingAddress.isMailingAddress ? undefined : this.billingAddress,
             'card-number': ccpCreditCardNumber.encrypt(),
             'cardholder-name': this.creditCardPayment.cardholderName,
             'expiry-month': this.creditCardPayment.expiryMonth,
             'expiry-year': this.creditCardPayment.expiryYear,
             ccv: ccpSecurityCode.encrypt()
-          },
-          billingAddress: billingAddress
+          }
         }
       });
     }else{
