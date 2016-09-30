@@ -201,15 +201,16 @@ describe('profile service', () => {
 
   describe('getGivingProfile', () => {
     it( 'should load the giving profile with spouse', () => {
-      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
         .respond( 200, givingProfileResponse );
 
       self.profileService.getGivingProfile().subscribe( ( profile ) => {
         expect( profile ).toEqual( jasmine.objectContaining( {
-          name:       'Mark & Judith Tubbs',
+          name:       'Mark & Julia Tubbs',
           email:      'mt@example.com',
           address:    jasmine.any( Object ),
           phone:      '(909) 337-2433',
+          donorNumber: '447072430',
           yearToDate: 0
         } ) );
       } );
@@ -217,12 +218,12 @@ describe('profile service', () => {
     } );
 
     it( 'should load the giving profile without spouse', () => {
-      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
-        .respond( 200, omit( givingProfileResponse, ['_addspousedetails', '_emails', '_givingdashboard', '_phonenumbers', '_addresses'] ) );
+      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+        .respond( 200, omit( givingProfileResponse, ['_addspousedetails', '_emails', '_givingdashboard', '_phonenumbers', '_addresses', '_donordetails'] ) );
 
       self.profileService.getGivingProfile().subscribe( ( profile ) => {
         expect( profile ).toEqual( jasmine.objectContaining( {
-          name: 'Mark Tubbs', email: undefined, address: undefined, phone: undefined, yearToDate: undefined
+          name: 'Mark Tubbs', email: undefined, address: undefined, phone: undefined, yearToDate: undefined, donorNumber: undefined
         } ) );
       } );
       self.$httpBackend.flush();

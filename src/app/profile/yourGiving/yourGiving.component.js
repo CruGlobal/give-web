@@ -1,4 +1,7 @@
 import angular from 'angular';
+import 'angular-ui-bootstrap';
+import range from 'lodash/range';
+import map from 'lodash/map';
 import displayAddress from 'common/components/display-address/display-address.component';
 import givingRecipientView from './givingRecipientView/givingRecipientView.component';
 import givingMonthlyView from './givingMonthlyView/givingMonthlyView.component';
@@ -23,12 +26,13 @@ export const givingViews = ['recipient', 'monthly'];
 class YourGivingController {
 
   /* @ngInject */
-  constructor( $window, $location, sessionEnforcerService, profileService, sessionService ) {
+  constructor( $window, $location, $filter, sessionEnforcerService, profileService, sessionService ) {
     this.$window = $window;
     this.$location = $location;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.sessionService = sessionService;
+    this.dateFilter = $filter( 'date' );
   }
 
   $onInit() {
@@ -42,6 +46,20 @@ class YourGivingController {
         this.$window.location = '/cart.html';
       }
     } );
+
+    let year = new Date().getFullYear();
+    this.years = range( year, year - 11 );
+    this.months = map( range( 0, 12 ), ( value ) => {
+      return {
+        month: value + 1,
+        label: this.dateFilter( new Date( year, value, 3 ), 'MMMM' )
+      };
+    } );
+    this.recipientFilter = 'recent';
+    this.monthlyFilter = {
+      year:  year,
+      month: this.months[new Date().getMonth()]
+    };
 
     this.setGivingView();
     if ( this.sessionService.getRole() == Roles.registered ) {
@@ -94,7 +112,8 @@ export default angular
     profileService.name,
     sessionEnforcerService.name,
     sessionService.name,
-    template.name
+    template.name,
+    'ui.bootstrap'
   ] )
   .component( componentName, {
     controller:  YourGivingController,

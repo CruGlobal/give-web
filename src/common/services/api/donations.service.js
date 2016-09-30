@@ -8,10 +8,9 @@ let serviceName = 'donationsService';
 /*@ngInject*/
 function DonationsService( cortexApiService ) {
 
-  function getRecipients( year, month ) {
+  function getRecipients( year ) {
     let path = ['donations', 'historical', cortexApiService.scope, 'recipient'];
     path.push( angular.isDefined( year ) ? year : 'recent' );
-    if ( angular.isDefined( year ) && angular.isDefined( month ) ) path.push( month );
 
     return cortexApiService
       .get( {

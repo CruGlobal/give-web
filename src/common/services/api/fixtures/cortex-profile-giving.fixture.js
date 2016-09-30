@@ -1,8 +1,8 @@
 export default {
   "self":              {
     "type": "elasticpath.profiles.profile",
-    "uri":  "/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi=?zoom=addresses:mailingaddress,addspousedetails,emails:element,givingdashboard:yeartodateamount,phonenumbers:element",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi=?zoom=addresses:mailingaddress,addspousedetails,emails:element,givingdashboard:yeartodateamount,phonenumbers:element"
+    "uri":  "/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi=?zoom=addresses:mailingaddress,addspousedetails,donordetails,emails:element,givingdashboard:yeartodateamount,phonenumbers:element",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi=?zoom=addresses:mailingaddress,addspousedetails,donordetails,emails:element,givingdashboard:yeartodateamount,phonenumbers:element"
   },
   "links":             [{
     "rel":  "addresses",
@@ -10,6 +10,11 @@ export default {
     "type": "elasticpath.collections.links",
     "uri":  "/addresses/crugive",
     "href": "https://cortex-gateway-stage.cru.org/cortex/addresses/crugive"
+  }, {
+    "rel":  "donordetails",
+    "type": "elasticpath.donordetails.donor",
+    "uri":  "/donordetails/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi=",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi="
   }, {
     "rel":  "addspousedetails",
     "rev":  "profile",
@@ -45,6 +50,12 @@ export default {
     "type": "elasticpath.collections.links",
     "uri":  "/purchases/crugive",
     "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive"
+  }, {
+    "rel":  "selfservicepaymentmethods",
+    "rev":  "profile",
+    "type": "elasticpath.collections.links",
+    "uri":  "/selfservicepaymentmethods/crugive",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive"
   }, {
     "rel":  "wishlists",
     "rev":  "profile",
@@ -95,10 +106,55 @@ export default {
       "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi="
     }],
     "family-name":    "Tubbs",
-    "given-name":     "Judith",
-    "middle-initial": "",
+    "given-name":     "Julia",
+    "middle-initial": "Q",
     "suffix":         "",
-    "title":          ""
+    "title":          "Mrs"
+  }],
+  "_donordetails":     [{
+    "self":               {
+      "type": "elasticpath.donordetails.donor",
+      "uri":  "/donordetails/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi=",
+      "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi="
+    },
+    "links":              [{
+      "rel":  "profile",
+      "rev":  "donordetails",
+      "type": "elasticpath.profiles.profile",
+      "uri":  "/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi=",
+      "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/mi2dozrtga2gmljxgbrdiljume4tiljzgvtgkljxgq2dkobygnqtsy3ggi="
+    }, {
+      "rel":  "donormatchesform",
+      "uri":  "/donormatches/crugive/form",
+      "href": "https://cortex-gateway-stage.cru.org/cortex/donormatches/crugive/form"
+    }],
+    "donor-number":       "447072430",
+    "donor-type":         "Household",
+    "mailing-address":    {
+      "country-name":     "US",
+      "extended-address": "",
+      "locality":         "Post Falls",
+      "postal-code":      "83854-6674",
+      "region":           "ID",
+      "street-address":   "2100 N Palisades Dr"
+    },
+    "name":               {
+      "family-name":    "Tubbs",
+      "given-name":     "Mark",
+      "middle-initial": "L",
+      "suffix":         "",
+      "title":          "Mr"
+    },
+    "organization-name":  "",
+    "phone-number":       "(909) 337-2433",
+    "registration-state": "COMPLETED",
+    "spouse-name":        {
+      "family-name":    "Tubbs",
+      "given-name":     "Julia",
+      "middle-initial": "Q",
+      "suffix":         "",
+      "title":          "Mrs"
+    }
   }],
   "_emails":           [{
     "_element": [{

@@ -19,9 +19,6 @@ class DonationRecipient {
     this.currentDate = new Date();
   }
 
-  $onInit() {
-  }
-
   toggleDetails() {
     this.showDetails = !this.showDetails;
     //Load details if we haven't already

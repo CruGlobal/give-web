@@ -1,0 +1,66 @@
+import angular from 'angular';
+import 'angular-mocks';
+import module from './donationRecipient.component';
+import {ReplaySubject} from 'rxjs';
+
+describe( 'your giving', function () {
+  describe( 'giving recipient view', () => {
+    describe( 'donation recipient', () => {
+      beforeEach( angular.mock.module( module.name ) );
+      let $ctrl;
+
+      beforeEach( inject( ( _$componentController_ ) => {
+        $ctrl = _$componentController_( module.name, {}, {
+          recipient: {}
+        } );
+      } ) );
+
+      it( 'to be defined', function () {
+        expect( $ctrl ).toBeDefined();
+        expect( $ctrl.donationsService ).toBeDefined();
+        expect( $ctrl.productModalService ).toBeDefined();
+        expect( $ctrl.showDetails ).toEqual( false );
+        expect( $ctrl.detailsLoaded ).toEqual( false );
+        expect( $ctrl.currentDate ).toEqual( jasmine.any( Date ) );
+      } );
+
+      describe( 'toggleDetails', () => {
+        let subject;
+        beforeEach( () => {
+          subject = new ReplaySubject( [] );
+          spyOn( $ctrl.donationsService, 'getRecipientDetails' ).and.callFake( () => subject );
+        } );
+
+        it( 'shows the details section', () => {
+          $ctrl.recipient = 'a';
+          $ctrl.toggleDetails();
+          expect( $ctrl.donationsService.getRecipientDetails ).toHaveBeenCalledWith( 'a' );
+          expect( $ctrl.showDetails ).toEqual( true );
+          expect( $ctrl.isLoading ).toEqual( true );
+          subject.next( ['a', 'b'] );
+          expect( $ctrl.details ).toEqual( ['a', 'b'] );
+          expect( $ctrl.isLoading ).toEqual( false );
+          expect( $ctrl.detailsLoaded ).toEqual( true );
+        } );
+
+        it( 'doesnt load details a second time', () => {
+          $ctrl.detailsLoaded = true;
+          $ctrl.toggleDetails();
+          expect( $ctrl.donationsService.getRecipientDetails ).not.toHaveBeenCalled();
+        } );
+      } );
+
+      describe( 'giveNewGift()', () => {
+        beforeEach( () => {
+          spyOn( $ctrl.productModalService, 'configureProduct' );
+        } );
+
+        it( 'displays productConfig modal', () => {
+          $ctrl.recipient = {'designation-number': '01234567'};
+          $ctrl.giveNewGift();
+          expect( $ctrl.productModalService.configureProduct ).toHaveBeenCalledWith( '01234567' );
+        } );
+      } );
+    } );
+  } );
+} );

@@ -32,6 +32,7 @@ class Profile {
       .get( {
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
+          donorDetails:   'donordetails',
           mailingAddress: 'addresses:mailingaddress',
           emailAddress:   'emails:element',
           phoneNumbers:   'phonenumbers:element[]',
@@ -44,14 +45,15 @@ class Profile {
           spouse = pick( data.spouse, ['given-name'] ),
           phone = find( data.phoneNumbers, {primary: true} );
         return {
-          name:       (spouse['given-name']) ?
-                        `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
-                        `${donor['given-name']} ${donor['family-name']}`,
-          email:      angular.isDefined( data.emailAddress ) ? data.emailAddress.email : undefined,
-          phone:      angular.isDefined( phone ) ? phone['phone-number'] : undefined,
-          address:    angular.isDefined( data.mailingAddress ) ?
-                        formatAddressForTemplate( data.mailingAddress.address ) : undefined,
-          yearToDate: angular.isDefined( data.yearToDate ) ? data.yearToDate['year-to-date-amount'] : undefined
+          name:        (spouse['given-name']) ?
+                         `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
+                         `${donor['given-name']} ${donor['family-name']}`,
+          donorNumber: angular.isDefined( data.donorDetails ) ? data.donorDetails['donor-number'] : undefined,
+          email:       angular.isDefined( data.emailAddress ) ? data.emailAddress.email : undefined,
+          phone:       angular.isDefined( phone ) ? phone['phone-number'] : undefined,
+          address:     angular.isDefined( data.mailingAddress ) ?
+                         formatAddressForTemplate( data.mailingAddress.address ) : undefined,
+          yearToDate:  angular.isDefined( data.yearToDate ) ? data.yearToDate['year-to-date-amount'] : undefined
         };
       } );
   }

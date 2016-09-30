@@ -12,19 +12,23 @@ class GivingRecipientView {
     this.donationsService = donationsService;
   }
 
-  $onChanges() {
-    this.loadRecipients();
+  $onChanges( changes ) {
+    if ( angular.isDefined( changes.filter ) ) {
+      this.loadRecipients( changes.filter.currentValue == 'recent' ? undefined : changes.filter.currentValue );
+    }
   }
 
-  loadRecipients( year, month ) {
+  loadRecipients( year ) {
     this.setLoading( {loading: true} );
+    this.recipients = [];
     if ( angular.isDefined( this.subscriber ) ) this.subscriber.unsubscribe();
-    this.subscriber = this.donationsService.getRecipients( year, month ).subscribe( ( recipients ) => {
+    this.subscriber = this.donationsService.getRecipients( year ).subscribe( ( recipients ) => {
       delete this.subscriber;
       this.recipients = recipients;
       this.setLoading( {loading: false} );
     }, () => {
       // todo: error loading recipients
+      delete this.subscriber;
       this.setLoading( {loading: false} );
     } );
   }
@@ -39,7 +43,7 @@ export default angular
     controller:  GivingRecipientView,
     templateUrl: template.name,
     bindings:    {
-      filters:    '<',
+      filter:     '<',
       setLoading: '&'
     }
   } );

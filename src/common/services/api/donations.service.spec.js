@@ -3,6 +3,7 @@ import 'angular-mocks';
 import module from './donations.service';
 
 import recipientResponse from './fixtures/cortex-donations-recipient.fixture';
+import recipientDetailsResponse from './fixtures/cortex-donations-recipient-details.fixture';
 
 describe( 'donations service', () => {
   beforeEach( angular.mock.module( module.name ) );
@@ -18,22 +19,12 @@ describe( 'donations service', () => {
     $httpBackend.verifyNoOutstandingRequest();
   } );
 
-  describe( 'getRecipients( year, month )', () => {
-    it( 'should load recent when missing year and month', () => {
+  describe( 'getRecipients( year )', () => {
+    it( 'should load recent when missing year', () => {
       $httpBackend
         .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/recent?zoom=element,element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients().subscribe( ( recipients ) => {
-        expect( recipients ).toEqual( jasmine.any( Array ) );
-      } );
-      $httpBackend.flush();
-    } );
-
-    it( 'should load recipients by month/year', () => {
-      $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/2015/9?zoom=element,element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement' )
-        .respond( 200, recipientResponse );
-      donationsService.getRecipients( 2015, 9 ).subscribe( ( recipients ) => {
         expect( recipients ).toEqual( jasmine.any( Array ) );
       } );
       $httpBackend.flush();
@@ -45,6 +36,18 @@ describe( 'donations service', () => {
         .respond( 200, recipientResponse );
       donationsService.getRecipients( 2015 ).subscribe( ( recipients ) => {
         expect( recipients ).toEqual( jasmine.any( Array ) );
+      } );
+      $httpBackend.flush();
+    } );
+  } );
+
+  describe( 'getRecipientDetails( recipient )', () => {
+    it( 'should load recipient details', () => {
+      $httpBackend
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipientsummary/a5ufc43nkb2htqvrlu6vg3lsmtbkkus5ijjh2ob2ykxuyprsykytqrwcuhbl6vlzinix2mdrn5lt2mklo4=?zoom=element,element:paymentmethod' )
+        .respond( 200, recipientDetailsResponse );
+      donationsService.getRecipientDetails( {self: {uri: '/donations/historical/crugive/recipientsummary/a5ufc43nkb2htqvrlu6vg3lsmtbkkus5ijjh2ob2ykxuyprsykytqrwcuhbl6vlzinix2mdrn5lt2mklo4='}} ).subscribe( ( details ) => {
+        expect( details ).toEqual( jasmine.any( Array ) );
       } );
       $httpBackend.flush();
     } );
