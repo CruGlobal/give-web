@@ -17,6 +17,8 @@ import ccpService from 'common/services/paymentHelpers/ccp.service';
 
 import template from './creditCardForm.tpl';
 
+import formatAddressForCortex from 'common/services/addressHelpers/formatAddressForCortex';
+
 let componentName = 'creditCardForm';
 
 class CreditCardController {
@@ -116,13 +118,13 @@ class CreditCardController {
         success: true,
         data: {
           creditCard: {
+            address: formatAddressForCortex(billingAddress.address),
             'card-number': ccpCreditCardNumber.encrypt(),
             'cardholder-name': this.creditCardPayment.cardholderName,
             'expiry-month': this.creditCardPayment.expiryMonth,
             'expiry-year': this.creditCardPayment.expiryYear,
             ccv: ccpSecurityCode.encrypt()
-          },
-          billingAddress: billingAddress
+          }
         }
       });
     }else{
