@@ -8,6 +8,8 @@ import 'rxjs/add/observable/of';
 
 import module from './creditCardForm.component';
 
+import formatAddressForCortex from 'common/services/addressHelpers/formatAddressForCortex';
+
 import donorDetailsResponse from 'common/services/api/fixtures/cortex-donordetails.fixture.js';
 
 describe('credit card form', () => {
@@ -127,6 +129,7 @@ describe('credit card form', () => {
     });
     it('should send a request to save the credit card payment and billing address info', () => {
       self.controller.creditCardPayment = {
+        'address': formatAddressForCortex(self.controller.billingAddress),
         cardNumber: '4111111111111111',
         cardholderName: 'Person Name',
         expiryMonth: 12,
@@ -146,25 +149,12 @@ describe('credit card form', () => {
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         creditCard: {
+          'address': formatAddressForCortex(self.controller.billingAddress),
           'card-number': jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
           'cardholder-name': 'Person Name',
           'expiry-month': 12,
           'expiry-year': 19,
           ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
-        },
-        billingAddress: {
-          address: {
-            isMailingAddress: false,
-            streetAddress: '123 First St',
-            extendedAddress: 'Apt 123',
-            locality: 'Sacramento',
-            postalCode: '12345',
-            region: 'CA'
-          },
-          name: {
-            'family-name': 'none',
-            'given-name': 'none'
-          }
         }
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({
@@ -174,13 +164,6 @@ describe('credit card form', () => {
       expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);
     });
     it('should use the mailing address for the billing address if that checkbox is checked', () => {
-      self.controller.creditCardPayment = {
-        cardNumber: '4111111111111111',
-        cardholderName: 'Person Name',
-        expiryMonth: 12,
-        expiryYear: 19,
-        securityCode: '123'
-      };
       self.controller.donorDetails.mailingAddress = {
         streetAddress: '1234 Second St',
         extendedAddress: 'Apt 123',
@@ -188,30 +171,26 @@ describe('credit card form', () => {
         postalCode: '12345',
         region: 'CA'
       };
+      self.controller.creditCardPayment = {
+        address: formatAddressForCortex(self.controller.donorDetails.mailingAddress),
+        cardNumber: '4111111111111111',
+        cardholderName: 'Person Name',
+        expiryMonth: 12,
+        expiryYear: 19,
+        securityCode: '123'
+      };
       self.controller.billingAddress.isMailingAddress = true;
       self.formController.$valid = true;
       self.controller.savePayment();
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         creditCard: {
+          'address': formatAddressForCortex(self.controller.donorDetails.mailingAddress),
           'card-number': jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
           'cardholder-name': 'Person Name',
           'expiry-month': 12,
           'expiry-year': 19,
           ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
-        },
-        billingAddress: {
-          address: {
-            streetAddress: '1234 Second St',
-            extendedAddress: 'Apt 123',
-            locality: 'Sacramento',
-            postalCode: '12345',
-            region: 'CA'
-          },
-          name: {
-            'family-name': 'none',
-            'given-name': 'none'
-          }
         }
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
