@@ -50,7 +50,7 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     })
     .state('designation-editor', {
       url: "/designation-editor.html",
-      templateUrl: 'app/designationEditor/designationEditor.tpl.html'
+      template: '<designation-editor></designation-editor>'
     });
 
   $locationProvider.html5Mode(true);

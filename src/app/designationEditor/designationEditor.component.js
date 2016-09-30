@@ -8,19 +8,19 @@ let componentName = 'designationEditor';
 class DesignationEditorController {
 
   /* @ngInject */
-  constructor( ) {
-    this.phone = '(123) 456-7890';
+  constructor( envService ) {
+    this.imgDomain = envService.read('imgDomain');
   }
 
 }
 
 export default angular
   .module( componentName, [
+    'environment',
     commonModule.name,
     template.name
   ] )
   .component( componentName, {
     controller:  DesignationEditorController,
-    template: '<ng-transclude></ng-transclude>',
-    transclude: true
+    templateUrl: template.name
   } );
