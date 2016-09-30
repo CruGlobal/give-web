@@ -7,6 +7,8 @@ import {BehaviorSubject} from 'rxjs';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 
+import { updateRollbarPerson } from 'common/rollbar.config.js';
+
 import appConfig from 'common/app.config';
 
 let serviceName = 'sessionService';
@@ -137,6 +139,8 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
 
     // Update sessionSubject with new value
     sessionSubject.next( session );
+
+    updateRollbarPerson( session );
   }
 
   function setSessionTimeout( timeout ) {
