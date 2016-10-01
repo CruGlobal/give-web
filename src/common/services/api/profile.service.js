@@ -109,6 +109,27 @@ class Profile{
     }
   }
 
+  getPurchase(uri){
+    return this.cortexApiService.get({
+      path: uri,
+      zoom: {
+        donorDetails: 'donordetails',
+        paymentMeans: 'paymentmeans:element',
+        lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
+        rateTotals: 'ratetotals:element[]'
+      }
+    })
+      .map((data) => {
+        data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address']);
+        delete data.donorDetails['mailing-address'];
+        if(data.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'){ //only credit card type has billing address
+          data.paymentMeans.address = formatAddressForTemplate(data.paymentMeans['billing-address'].address);
+          delete data.paymentMeans['billing-address'];
+        }
+        return data;
+      });
+  }
+
 }
 
 export default angular

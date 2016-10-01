@@ -8,7 +8,7 @@ function formatAddressForTemplate( address ) {
     output.locality = address['locality'];
     output.region = address['region'];
     output.postalCode = address['postal-code'];
-  } else {
+  } else if(address['street-address']){
     let intAddress = address['street-address'].split( '||' );
     output.streetAddress = intAddress[0];
     output.extendedAddress = intAddress[1];
