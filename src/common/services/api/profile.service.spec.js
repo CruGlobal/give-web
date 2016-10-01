@@ -1,5 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
+import omit from 'lodash/omit';
+import assign from 'lodash/assign';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
@@ -8,6 +10,9 @@ import module from './profile.service';
 import emailsResponse from 'common/services/api/fixtures/cortex-profile-emails.fixture.js';
 import paymentmethodsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods.fixture.js';
 import paymentmethodsFormsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods-forms.fixture.js';
+import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
+
+import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
 
 let paymentmethodsFormsResponseZoomMapped = {
   bankAccount: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createbankaccountform[0],
@@ -249,6 +254,42 @@ describe('profile service', () => {
           (error) => {
             expect(error).toEqual('Error adding payment method. The data passed to profileService.addPaymentMethod did not contain bankAccount or creditCard data');
           });
+    });
+  });
+
+  describe('getPurchase', () => {
+    it('should load the purchase specified by the uri', () => {
+      let modifiedPurchaseResponse = angular.copy(purchaseResponse);
+
+      let expectedPurchaseData = {
+        donorDetails: modifiedPurchaseResponse._donordetails[0],
+        paymentMeans: modifiedPurchaseResponse._paymentmeans[0]._element[0],
+        lineItems: [
+          assign(omit(modifiedPurchaseResponse._lineitems[0]._element[0], ['_code', '_rate']), {
+            code: modifiedPurchaseResponse._lineitems[0]._element[0]._code[0],
+            rate: modifiedPurchaseResponse._lineitems[0]._element[0]._rate[0]
+          }),
+          assign(omit(modifiedPurchaseResponse._lineitems[0]._element[1], ['_code', '_rate']), {
+            code: modifiedPurchaseResponse._lineitems[0]._element[1]._code[0],
+            rate: modifiedPurchaseResponse._lineitems[0]._element[1]._rate[0]
+          })
+        ],
+        rateTotals: modifiedPurchaseResponse._ratetotals[0]._element,
+        rawData: purchaseResponse
+      };
+
+      expectedPurchaseData.donorDetails.mailingAddress = formatAddressForTemplate(expectedPurchaseData.donorDetails['mailing-address']);
+      delete expectedPurchaseData.donorDetails['mailing-address'];
+      expectedPurchaseData.paymentMeans.address = formatAddressForTemplate(expectedPurchaseData.paymentMeans['billing-address'].address);
+      delete expectedPurchaseData.paymentMeans['billing-address'];
+
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanbt=?zoom=donordetails,paymentmeans:element,lineitems:element,lineitems:element:code,lineitems:element:rate,ratetotals:element')
+        .respond(200, purchaseResponse);
+      self.profileService.getPurchase('/purchases/crugive/giydanbt=')
+        .subscribe((data) => {
+          expect(data).toEqual(expectedPurchaseData);
+        });
+      self.$httpBackend.flush();
     });
   });
 });

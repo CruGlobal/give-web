@@ -3,6 +3,7 @@ import 'angular-mocks';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 
 import module from './thankYou.component.js';
 
@@ -13,7 +14,7 @@ describe('thank you', () => {
   beforeEach(inject(($componentController) => {
     self.mockPurchase = {
       donorDetails: {
-        'mailing-address': {
+        'mailingAddress': {
           'street-address': '123 Mailing St'
         },
         'registration-state': 'MATCHED'
@@ -22,10 +23,8 @@ describe('thank you', () => {
         self: {
           type: "elasticpath.purchases.purchase.paymentmeans"
         },
-        'billing-address': {
-          address: {
-            'street-address': '123 Billing St'
-          }
+        address: {
+          'street-address': '123 Billing St'
         }
       },
       rateTotals: [{
@@ -52,10 +51,8 @@ describe('thank you', () => {
       orderService: {
         retrieveLastPurchaseLink: () => '/purchases/crugive/iiydanbt='
       },
-      purchasesService: {
-        getPurchase: () => Observable.of(self.mockPurchase)
-      },
       profileService: {
+        getPurchase: () => Observable.of(self.mockPurchase),
         getEmail: () => Observable.of('someperson@someaddress.com')
       }
     });
@@ -71,12 +68,10 @@ describe('thank you', () => {
 
   describe('loadLastPurchase', () => {
     it('should load all data from the last completed purchase', () => {
-      spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
+      spyOn(self.controller.profileService, 'getPurchase').and.callThrough();
       self.controller.loadLastPurchase();
-      expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
+      expect(self.controller.profileService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
       expect(self.controller.purchase).toEqual(self.mockPurchase);
-      expect(self.controller.mailingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Mailing St'}));
-      expect(self.controller.billingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Billing St'}));
       expect(self.controller.rateTotals).toEqual([
         {
           frequency: 'Single',
@@ -89,22 +84,24 @@ describe('thank you', () => {
           amount: 20
         }
       ]);
+      expect(self.controller.loading).toEqual(false);
+      expect(self.controller.loadingError).toBeUndefined();
     });
     it('should not request purchase data if lastPurchaseLink is not defined', () => {
       spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').and.callFake(() => undefined);
-      spyOn(self.controller.purchasesService, 'getPurchase');
+      spyOn(self.controller.profileService, 'getPurchase');
       self.controller.loadLastPurchase();
-      expect(self.controller.purchasesService.getPurchase).not.toHaveBeenCalled();
+      expect(self.controller.profileService.getPurchase).not.toHaveBeenCalled();
       expect(self.controller.purchase).not.toBeDefined();
+      expect(self.controller.loading).toEqual(false);
+      expect(self.controller.loadingError).toEqual('lastPurchaseLink missing');
     });
-    it('should not try to parse the billing address if it is not a credit card payment', () => {
-      spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
-      self.mockPurchase.paymentMeans.self.type = 'elasticpath.bankaccountpurchases.payment-means-bank-account';
+    it('should handle an api error', () => {
+      spyOn(self.controller.profileService, 'getPurchase').and.returnValue(Observable.throw('some error'));
       self.controller.loadLastPurchase();
-      expect(self.controller.purchasesService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
-      expect(self.controller.purchase).toEqual(self.mockPurchase);
-      expect(self.controller.mailingAddress).toEqual(jasmine.objectContaining({'streetAddress': '123 Mailing St'}));
-      expect(self.controller.billingAddress).toBeUndefined();
+      expect(self.controller.purchase).not.toBeDefined();
+      expect(self.controller.loading).toEqual(false);
+      expect(self.controller.loadingError).toEqual('api error');
     });
 
     describe('accounts benefits modal', () => {
@@ -112,7 +109,7 @@ describe('thank you', () => {
       beforeEach(inject((_$q_, _$rootScope_) => {
         deferred = _$q_.defer();
         $rootScope = _$rootScope_;
-        spyOn(self.controller.purchasesService, 'getPurchase').and.callThrough();
+        spyOn(self.controller.profileService, 'getPurchase').and.callThrough();
         spyOn(self.controller.sessionModalService, 'accountBenefits').and.returnValue(deferred.promise);
         spyOn(self.controller.sessionModalService, 'userMatch');
       }));
