@@ -36,6 +36,9 @@ describe('credit card payment methods', function() {
     };
     self.controller.model['expiry-year'] = '2019';
     self.controller.model['card-type'] = 'American Express';
+    self.controller.model['recurringgifts'] = {
+      donations: []
+    };
   });
 
   it('to be defined', () => {
@@ -59,8 +62,13 @@ describe('credit card payment methods', function() {
     expect(self.controller.getImage()).toBe('american-express');
   });
 
-  it('should call modal', () => {
+  it('should call Edit Modal', () => {
     self.controller.editPaymentMethod();
+    expect(self.controller.$uibModal.open).toHaveBeenCalled();
+  });
+
+  it('should call Delete Modal', () => {
+    self.controller.deletePaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
   });
 

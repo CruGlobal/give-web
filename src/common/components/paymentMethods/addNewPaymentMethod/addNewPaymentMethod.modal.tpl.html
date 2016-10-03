@@ -1,29 +1,53 @@
-<loading-overlay ng-if="$ctrl.resolve.submitted"></loading-overlay>
-<div class="modal-body">
-  <div class="row">
-    <div class="col-sm-12">
-      <button ng-click="$ctrl.dismiss()" type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button>
-      <h3 class="text-center border-bottom-small" translate>Add Payment Method</h3>
-      <div class="alert alert-danger" role="alert" ng-if="$ctrl.resolve.submissionError.error">
-        <p ng-if="$ctrl.resolve.submissionError.error" ng-switch="$ctrl.resolve.submissionError.error">
-          <span ng-switch-when="Invalid routing number" translate>
-            The routing number you entered does not seem to be valid. Please verify that it is correct.
-          </span>
-          <span ng-switch-when="This credit card already exists." translate>
-            This credit card already exists. Please use a different credit card.
-          </span>
-          <span ng-switch-default translate>
-            There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
-          </span>
-        </p>
+<div class="account-management">
+
+  <div class="modal-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="border-bottom-small">
+            <button type="button"
+                    class="close"
+                    aria-label="Close"
+                    ng-click="$ctrl.dismiss()">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h3 class="text-center">Add Payment Method</h3>
+          </div>
+        </div>
       </div>
-      <add-new-payment-method submitted="$ctrl.resolve.submitted" on-submit="$ctrl.onSubmit(success, data)"></add-new-payment-method>
     </div>
   </div>
+
+  <div class="modal-body pt0">
+    <div class="container-fluid" tabindex="-1" role="dialog">
+      <div class="row">
+        <div class="col-md-12 col-xs-12">
+          <div class="alert alert-danger" role="alert" ng-if="$ctrl.resolve.submissionError.error">
+            <p ng-if="$ctrl.resolve.submissionError.error" ng-switch="$ctrl.resolve.submissionError.error">
+              <span ng-switch-when="Invalid routing number" translate>
+                The routing number you entered does not seem to be valid. Please verify that it is correct.
+              </span>
+              <span ng-switch-when="This credit card already exists." translate>
+                This credit card already exists. Please use a different credit card.
+              </span>
+              <span ng-switch-default translate>
+                There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
+              </span>
+            </p>
+          </div>
+          <add-new-payment-method submitted="$ctrl.resolve.submitted" on-submit="$ctrl.onSubmit(success, data)"></add-new-payment-method>
+          <div class="mb0">
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <a class="btn btn-default mr-" ng-click="$ctrl.dismiss()" translate>Cancel</a>
+                <a class="btn btn-primary" ng-click="$ctrl.resolve.submitted = true" translate>Add Payment Method</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.resolve.submitted = true" translate>Add Payment Method</button>
-  <button type="button" class="btn btn-default" ng-click="$ctrl.dismiss()" translate>Cancel &amp; Return</button>
-</div>
+<loading-overlay ng-if="$ctrl.resolve.submitted"></loading-overlay>

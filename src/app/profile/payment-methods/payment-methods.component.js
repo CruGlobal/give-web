@@ -6,6 +6,7 @@ import bankAccount from './bank-account/bank-account.component';
 import profileService from 'common/services/api/profile.service';
 import addNewPaymentMethodModal from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.modal.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 
 class PaymentMethodsController {
 
@@ -48,15 +49,16 @@ class PaymentMethodsController {
   addPaymentMethod() {
     this.addNewPaymentMethodModal = this.$uibModal.open({
       component: 'addNewPaymentMethodModal',
-      size: 'large new-payment-method-modal',
+      size: 'new-payment-method-modal',
       backdrop: 'static',
+      windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         onSubmit: () => this.onSubmit,
         profileService: () => this.profileService,
         submitted: false,
         submissionError: this.submissionError,
         log: this.log,
-        parent: this
+        parentComponent: this
       }
     });
     this.addNewPaymentMethodModal.result.then(() => {
@@ -70,13 +72,13 @@ class PaymentMethodsController {
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
           this.submitted = false;
-          this.parent.addNewPaymentMethodModal.close();
+          this.parentComponent.addNewPaymentMethodModal.close();
         },
-          (error) => {
-            this.submitted = false;
-            this.submissionError.error = error.data;
-            this.log.error('error.data',error)
-          });
+        (error) => {
+          this.submitted = false;
+          this.submissionError.error = error.data;
+          this.log.error('error.data',error)
+        });
     } else if(!e.success) {
       this.submitted = false;
     }
@@ -94,6 +96,7 @@ export default angular
     template.name,
     recurringGiftsComponent.name,
     addNewPaymentMethodModal.name,
+    giveModalWindowTemplate.name,
     bankAccount.name,
     creditCard.name,
     loadingOverlay.name

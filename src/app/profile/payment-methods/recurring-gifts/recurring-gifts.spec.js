@@ -22,7 +22,7 @@ describe('payment method recurring gifts', function() {
     let data = {};
     expect(self.controller.getNextGiftDate(data)).toBe(false);
     data['recurring-day-of-month'] = '25';
-    // im not sure how to test this function without duplicationg its functionality into here =))
+    // im not sure how to test this function without duplicating its functionality into here =))
     expect(self.controller.getNextGiftDate(data).indexOf('25/') != -1).toBe(true);
   });
 });

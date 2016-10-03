@@ -49,7 +49,8 @@ class CreditCardController{
       backdrop: 'static',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
-        uri: () => this.model.self.uri
+        paymentMethod: () => this.model,
+        paymentMethodsList: () => this.paymentMethods
       }
     });
   }
@@ -71,6 +72,7 @@ export default angular
     controller: CreditCardController,
     templateUrl: template.name,
     bindings: {
-      model: '<'
+      model: '<',
+      paymentMethods: '<'
     }
   });

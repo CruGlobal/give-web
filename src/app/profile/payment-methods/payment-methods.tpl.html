@@ -14,8 +14,14 @@
         </div>
         <div ng-if="$ctrl.paymentMethods" class="row">
           <div ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
-            <bank-account model="paymentMethod" ng-if="!$ctrl.isCard(paymentMethod)"></bank-account>
-            <credit-card  model="paymentMethod" ng-if="$ctrl.isCard(paymentMethod)"></credit-card>
+            <bank-account
+              ng-if="!$ctrl.isCard(paymentMethod)"
+              model="paymentMethod"
+              paymentMethods="$ctrl.paymentMethods"></bank-account>
+            <credit-card
+              ng-if="$ctrl.isCard(paymentMethod)"
+              model="paymentMethod"
+              paymentMethods="$ctrl.paymentMethods"></credit-card>
           </div>
         </div>
         <div ng-if="$ctrl.error" class="error">

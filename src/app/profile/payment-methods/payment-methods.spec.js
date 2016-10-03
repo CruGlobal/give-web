@@ -6,10 +6,25 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-fdescribe('payment methods', function() {
+describe('payment methods', function() {
   beforeEach(angular.mock.module(module.name));
-  let self = {},
-      uibModal = jasmine.createSpyObj('$uibModal', ['open']);
+  var fakeModal = function() {
+    return {
+      result: {
+        then: function(confirmCallback) {
+          this.confirmCallback = confirmCallback;
+        }
+      },
+      close: () => {
+        this.result.confirmCallback();
+      }
+    };
+  };
+
+  let self = {};
+  let uibModal = jasmine.createSpyObj('$uibModal', ['open','close']);
+
+  uibModal.open.and.callFake(fakeModal);
 
   beforeEach(inject(function($rootScope, $componentController) {
     var $scope = $rootScope.$new();
@@ -18,9 +33,11 @@ fdescribe('payment methods', function() {
       $scope: $scope,
       $uibModal: uibModal,
       profileService: {
-        getPaymentMethodsWithDonations: angular.noop
+        getPaymentMethodsWithDonations: angular.noop,
+        addPaymentMethod: angular.noop
       }
     });
+
   }));
 
   it('to be defined', () => {
@@ -34,12 +51,15 @@ fdescribe('payment methods', function() {
   });
 
   it('should handle and error of loading payment methods on $onInit()', () => {
-    spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.throw({ data: 'some error' }));
+    spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.throw({
+      data: 'some error'
+    }));
     self.controller.$onInit();
     expect(self.controller.error).toBe('Failed retrieving payment methods');
   })
 
-  it('should open a modal', () => {
+  it('should open add Payment Method Modal', () => {
+    spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of('data'));
     self.controller.addPaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
   });
@@ -49,7 +69,32 @@ fdescribe('payment methods', function() {
       success: true,
       data: 'som data'
     };
-    self.controller.onSubmit(e);
     spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of('data'));
+    self.controller.addNewPaymentMethodModal = jasmine.createSpyObj('addNewPaymentMethodModal',['close']);
+
+    self.controller.parentComponent = self.controller;
+    self.controller.onSubmit(e);
+    expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+  });
+
+  it('should fail adding payment method and show error message', () => {
+    let e = {
+      success: true,
+      data: 'some data'
+    };
+    spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.throw({
+      data: 'some error'
+    }));
+    self.controller.onSubmit(e);
+    expect(self.controller.submissionError.error).toBe('some error');
+  });
+
+  it('should not submit', ()=> {
+    let e = {
+      success: false
+    };
+    spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of('data'));
+    self.controller.onSubmit(e);
+    expect(self.controller.submitted).toBe(false);
   })
 });
