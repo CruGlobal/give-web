@@ -159,7 +159,7 @@
                          name="spouseGivenName"
                          ng-model="$ctrl.donorDetails['spouse-name']['given-name']"
                          ng-maxlength="50"
-                         ng-disabled="$ctrl.spouseNameFieldsDisabled">
+                         ng-disabled="$ctrl.nameFieldsDisabled">
                   <div role="alert" ng-messages="$ctrl.detailsForm.spouseGivenName.$error" ng-if="($ctrl.detailsForm.spouseGivenName | showErrors)">
                     <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
                   </div>
@@ -182,7 +182,7 @@
                          name="spouseFamilyName"
                          ng-model="$ctrl.donorDetails['spouse-name']['family-name']"
                          ng-maxlength="50"
-                         ng-disabled="$ctrl.spouseNameFieldsDisabled">
+                         ng-disabled="$ctrl.nameFieldsDisabled">
                   <div role="alert" ng-messages="$ctrl.detailsForm.spouseFamilyName.$error" ng-if="($ctrl.detailsForm.spouseFamilyName | showErrors)">
                     <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
                   </div>
