@@ -116,12 +116,12 @@ describe( 'your giving', function () {
 
   describe( 'setGivingView( name )', () => {
     it( 'sets view based on url query param', () => {
-      spyOn( $ctrl.$location, 'search' ).and.returnValue( {[queryParams.view]: 'monthly'} );
+      spyOn( $ctrl.$location, 'search' ).and.returnValue( {[queryParams.view]: 'historical'} );
 
       $ctrl.setGivingView();
       expect( $ctrl.$location.search ).toHaveBeenCalled();
-      expect( $ctrl.view ).toEqual( 'monthly' );
-      expect( $ctrl.$location.search ).toHaveBeenCalledWith( queryParams.view, 'monthly' );
+      expect( $ctrl.view ).toEqual( 'historical' );
+      expect( $ctrl.$location.search ).toHaveBeenCalledWith( queryParams.view, 'historical' );
     } );
 
     it( 'sets view to \'recipient\' if name missing', () => {
@@ -136,9 +136,9 @@ describe( 'your giving', function () {
     it( 'sets view', () => {
       spyOn( $ctrl.$location, 'search' ).and.returnValue( {} );
 
-      $ctrl.setGivingView( 'monthly' );
-      expect( $ctrl.view ).toEqual( 'monthly' );
-      expect( $ctrl.$location.search ).toHaveBeenCalledWith( queryParams.view, 'monthly' );
+      $ctrl.setGivingView( 'historical' );
+      expect( $ctrl.view ).toEqual( 'historical' );
+      expect( $ctrl.$location.search ).toHaveBeenCalledWith( queryParams.view, 'historical' );
     } );
   } );
 

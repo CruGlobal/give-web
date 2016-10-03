@@ -1,33 +1,33 @@
 import angular from 'angular';
-import donationRecipient from './donationRecipient/donationRecipient.component';
+import historicalGift from './historicalGift/historicalGift.component';
 import donationsService from 'common/services/api/donations.service';
-import template from './givingRecipientView.tpl';
+import template from './historicalView.tpl';
 
-let componentName = 'givingRecipientView';
+let componentName = 'historicalView';
 
-class GivingRecipientView {
+class HistoricalView {
 
   /* @ngInject */
   constructor( donationsService ) {
     this.donationsService = donationsService;
   }
 
-  $onChanges( changes ) {
-    if ( angular.isDefined( changes.filter ) ) {
-      this.loadRecipients( changes.filter.currentValue == 'recent' ? undefined : changes.filter.currentValue );
+  $onChanges() {
+    if ( angular.isDefined( this.year ) && angular.isDefined( this.month ) ) {
+      this.loadGifts( this.year, this.month.month );
     }
   }
 
-  loadRecipients( year ) {
+  loadGifts( year, month ) {
     this.setLoading( {loading: true} );
-    this.recipients = [];
+    this.historicalGifts = [];
     if ( angular.isDefined( this.subscriber ) ) this.subscriber.unsubscribe();
-    this.subscriber = this.donationsService.getRecipients( year ).subscribe( ( recipients ) => {
+    this.subscriber = this.donationsService.getHistoricalGifts( year, month ).subscribe( ( historicalGifts ) => {
       delete this.subscriber;
-      this.recipients = recipients;
+      this.historicalGifts = historicalGifts;
       this.setLoading( {loading: false} );
     }, () => {
-      // todo: error loading recipients
+      // todo: error loading historical gifts
       delete this.subscriber;
       this.setLoading( {loading: false} );
     } );
@@ -35,15 +35,16 @@ class GivingRecipientView {
 }
 export default angular
   .module( componentName, [
-    donationRecipient.name,
+    historicalGift.name,
     donationsService.name,
     template.name
   ] )
   .component( componentName, {
-    controller:  GivingRecipientView,
+    controller:  HistoricalView,
     templateUrl: template.name,
     bindings:    {
-      filter:     '<',
+      year:       '<',
+      month:      '<',
       setLoading: '&'
     }
   } );

@@ -1,11 +1,11 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './giftDetail.component';
+import module from './recipientDetail.component';
 
 describe( 'your giving', function () {
-  describe( 'giving recipient view', () => {
-    describe( 'donation recipient', () => {
-      describe( 'gift detail', () => {
+  describe( 'recipient view', () => {
+    describe( 'recipient gift', () => {
+      describe( 'recipient detail', () => {
         beforeEach( angular.mock.module( module.name ) );
         let $compile, $rootScope;
 
@@ -17,7 +17,7 @@ describe( 'your giving', function () {
         it( 'inserts the giftDetail template', () => {
           let scope = $rootScope.$new();
           scope.gift = {a: 'a'};
-          let element = $compile( '<tr gift-detail="gift"></tr>' )( scope );
+          let element = $compile( '<tr recipient-detail="gift"></tr>' )( scope );
           $rootScope.$digest();
           expect( element.children().length ).toEqual( 4 );
         } );

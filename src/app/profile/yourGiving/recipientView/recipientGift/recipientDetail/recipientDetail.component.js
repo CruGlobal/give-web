@@ -1,10 +1,10 @@
 import angular from 'angular';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
-import template from './giftDetail.tpl';
+import template from './recipientDetail.tpl';
 
-let componentName = 'giftDetail';
+let componentName = 'recipientDetail';
 
-class GiftDetail {
+class RecipientDetail {
 
   /* @ngInject */
   constructor() {
@@ -24,6 +24,6 @@ export default angular
         gift: `<${componentName}`
       },
       controllerAs:     '$ctrl',
-      controller:       GiftDetail
+      controller:       RecipientDetail
     };
   } );

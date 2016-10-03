@@ -1,11 +1,11 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './donationRecipient.component';
+import module from './recipientGift.component';
 import {ReplaySubject} from 'rxjs';
 
 describe( 'your giving', function () {
-  describe( 'giving recipient view', () => {
-    describe( 'donation recipient', () => {
+  describe( 'recipient view', () => {
+    describe( 'recipient gift', () => {
       beforeEach( angular.mock.module( module.name ) );
       let $ctrl;
 
@@ -58,7 +58,7 @@ describe( 'your giving', function () {
         it( 'displays productConfig modal', () => {
           $ctrl.recipient = {'designation-number': '01234567'};
           $ctrl.giveNewGift();
-          expect( $ctrl.productModalService.configureProduct ).toHaveBeenCalledWith( '01234567' );
+          expect( $ctrl.productModalService.configureProduct ).toHaveBeenCalledWith( '01234567', jasmine.any(Object) );
         } );
       } );
     } );

@@ -1,12 +1,12 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './givingRecipientView.component';
+import module from './recipientView.component';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
 describe( 'your giving', function () {
-  describe( 'giving recipient view', () => {
+  describe( 'recipient view', () => {
     beforeEach( angular.mock.module( module.name ) );
     let $ctrl;
 

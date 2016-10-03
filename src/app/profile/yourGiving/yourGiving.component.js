@@ -3,8 +3,8 @@ import 'angular-ui-bootstrap';
 import range from 'lodash/range';
 import map from 'lodash/map';
 import displayAddress from 'common/components/display-address/display-address.component';
-import givingRecipientView from './givingRecipientView/givingRecipientView.component';
-import givingMonthlyView from './givingMonthlyView/givingMonthlyView.component';
+import recipientView from './recipientView/recipientView.component';
+import historicalView from './historicalView/historicalView.component';
 import includes from 'lodash/includes';
 import loadingComponent from 'common/components/loading/loading.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
@@ -21,7 +21,7 @@ export const queryParams = {
   view: 'view'
 };
 
-export const givingViews = ['recipient', 'monthly'];
+export const givingViews = ['recipient', 'historical'];
 
 class YourGivingController {
 
@@ -56,7 +56,7 @@ class YourGivingController {
       };
     } );
     this.recipientFilter = 'recent';
-    this.monthlyFilter = {
+    this.historicalFilter = {
       year:  year,
       month: this.months[new Date().getMonth()]
     };
@@ -105,8 +105,8 @@ class YourGivingController {
 export default angular
   .module( componentName, [
     displayAddress.name,
-    givingRecipientView.name,
-    givingMonthlyView.name,
+    recipientView.name,
+    historicalView.name,
     loadingComponent.name,
     loadingOverlay.name,
     profileService.name,

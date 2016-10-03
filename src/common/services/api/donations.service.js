@@ -33,7 +33,19 @@ function DonationsService( cortexApiService ) {
       .pluck( 'details' );
   }
 
+  function getHistoricalGifts( year, month ) {
+    return cortexApiService
+      .get( {
+        path: ['donations', 'historical', cortexApiService.scope, year, month],
+        zoom: {
+          gifts: 'element[],element:paymentmethod,element:recurringdonationelement'
+        }
+      } )
+      .pluck( 'gifts' );
+  }
+
   return {
+    getHistoricalGifts:  getHistoricalGifts,
     getRecipients:       getRecipients,
     getRecipientDetails: getRecipientDetails
   };

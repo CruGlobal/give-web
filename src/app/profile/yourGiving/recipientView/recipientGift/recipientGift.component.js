@@ -1,14 +1,14 @@
 import angular from 'angular';
 import desigSrc from 'common/directives/desigSrc.directive';
 import donationsService from 'common/services/api/donations.service';
-import giftDetail from './giftDetail/giftDetail.component';
+import recipientDetail from './recipientDetail/recipientDetail.component';
 import loadingComponent from 'common/components/loading/loading.component';
 import productModalService from 'common/services/productModal.service';
-import template from './donationRecipient.tpl';
+import template from './recipientGift.tpl';
 
-let componentName = 'donationRecipient';
+let componentName = 'recipientGift';
 
-class DonationRecipient {
+class RecipientGift {
 
   /* @ngInject */
   constructor( donationsService, productModalService ) {
@@ -33,7 +33,7 @@ class DonationRecipient {
   }
 
   giveNewGift() {
-    this.productModalService.configureProduct( this.recipient['designation-number'] );
+    this.productModalService.configureProduct( this.recipient['designation-number'], {amount: 50} );
   }
 }
 
@@ -41,13 +41,13 @@ export default angular
   .module( componentName, [
     desigSrc.name,
     donationsService.name,
-    giftDetail.name,
     loadingComponent.name,
     productModalService.name,
+    recipientDetail.name,
     template.name
   ] )
   .component( componentName, {
-    controller:  DonationRecipient,
+    controller:  RecipientGift,
     templateUrl: template.name,
     bindings:    {
       recipient: '<'

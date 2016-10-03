@@ -65,8 +65,8 @@
                   </button>
                   <button type="button"
                           class="btn btn-default"
-                          ng-class="{active: $ctrl.view == 'monthly'}"
-                          ng-click="$ctrl.setGivingView('monthly')">
+                          ng-class="{active: $ctrl.view == 'historical'}"
+                          ng-click="$ctrl.setGivingView('historical')">
                     <span class="visible-xs" translate>By Month</span>
                     <span class="hidden-xs" translate>Monthly View</span>
                   </button>
@@ -89,28 +89,28 @@
                 </div>
 
                 <div class="btn-group">
-                  <div class="btn-group" uib-dropdown role="group" ng-if="$ctrl.view == 'monthly'">
+                  <div class="btn-group" uib-dropdown role="group" ng-if="$ctrl.view == 'historical'">
                     <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
-                      {{$ctrl.monthlyFilter.year}}
+                      {{$ctrl.historicalFilter.year}}
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu">
                       <li ng-repeat="year in $ctrl.years"
-                          ng-class="{active: $ctrl.monthlyFilter.year == year}">
-                        <a ng-click="$ctrl.monthlyFilter.year = year">{{year}}</a>
+                          ng-class="{active: $ctrl.historicalFilter.year == year}">
+                        <a ng-click="$ctrl.historicalFilter.year = year">{{year}}</a>
                       </li>
                     </ul>
                   </div>
 
-                  <div class="btn-group" uib-dropdown role="group" ng-if="$ctrl.view == 'monthly'">
+                  <div class="btn-group" uib-dropdown role="group" ng-if="$ctrl.view == 'historical'">
                     <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
-                      {{$ctrl.monthlyFilter.month.label}}
+                      {{$ctrl.historicalFilter.month.label}}
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu">
                       <li ng-repeat="month in $ctrl.months"
-                          ng-class="{active: $ctrl.monthlyFilter.month == month}">
-                        <a ng-click="$ctrl.monthlyFilter.month = month">{{month.label}}</a>
+                          ng-class="{active: $ctrl.historicalFilter.month == month}">
+                        <a ng-click="$ctrl.historicalFilter.month = month">{{month.label}}</a>
                       </li>
                     </ul>
                   </div>
@@ -124,15 +124,16 @@
         </div>
       </div>
 
-      <div ng-switch="$ctrl.view" style="position: relative;">
-        <giving-recipient-view ng-switch-when="recipient"
+      <div ng-switch="$ctrl.view">
+        <recipient-view ng-switch-when="recipient"
                                set-loading="$ctrl.setViewLoading(loading)"
                                filter="$ctrl.recipientFilter">
-        </giving-recipient-view>
-        <giving-monthly-view ng-switch-when="monthly"
+        </recipient-view>
+        <historical-view ng-switch-when="historical"
                              set-loading="$ctrl.setViewLoading(loading)"
-                             filter="$ctrl.monthlyFilter">
-        </giving-monthly-view>
+                             year="$ctrl.historicalFilter.year"
+                             month="$ctrl.historicalFilter.month">
+        </historical-view>
       </div>
 
     </div>
