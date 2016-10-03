@@ -26,11 +26,4 @@ export default angular
       controllerAs:     '$ctrl',
       controller:       GiftDetail
     };
-  } )
-  .component( `${componentName}2`, {
-    controller:  GiftDetail,
-    templateUrl: template.name,
-    bindings:    {
-      gift: '<'
-    }
   } );
