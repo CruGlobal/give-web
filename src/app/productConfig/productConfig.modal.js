@@ -5,6 +5,7 @@ import 'angular-ordinal';
 import indexOf from 'lodash/indexOf';
 import range from 'lodash/range';
 import find from 'lodash/find';
+import omit from 'lodash/omit';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
@@ -109,25 +110,24 @@ class ModalInstanceCtrl {
   }
 
   addToCart() {
+    this.giftSubmitted = false;
+    this.submittingGift = false;
     if ( !this.itemConfigForm.$valid ) {
       return;
     }
+    if ( this.isEdit && !this.itemConfigForm.$dirty ) {
+      this.$uibModalInstance.close( {isUpdated: false} );
+      return;
+    }
     this.submittingGift = true;
-    this.giftSubmitted = false;
     this.cartService
-      .addItem( this.productData.id, this.itemConfig )
+      .addItem( this.productData.id, this.productData.frequency === 'NA' ? omit(this.itemConfig, 'recurring-day-of-month') : this.itemConfig )
       .subscribe( () => {
         if ( this.isEdit ) {
-          if ( this.itemConfigForm.$dirty ) {
-            this.$uibModalInstance.close( {isUpdated: true} );
-          }
-          else {
-            this.$uibModalInstance.close( {isUpdated: false} );
-          }
-        } else {
-          this.submittingGift = false;
-          this.giftSubmitted = true;
+          this.$uibModalInstance.close( {isUpdated: true} );
         }
+        this.submittingGift = false;
+        this.giftSubmitted = true;
       }, () => {
         this.submittingGift = false;
       } );
