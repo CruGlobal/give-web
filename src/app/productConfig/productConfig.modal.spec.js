@@ -147,10 +147,13 @@ describe( 'product config modal', function () {
 
     describe( 'changeAmount()', () => {
       it( 'sets itemConfig amount', () => {
+        $ctrl.itemConfigForm.amount = jasmine.createSpyObj( 'amount', ['$setViewValue', '$render'] );
         $ctrl.changeAmount( 100 );
         expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
         expect( $ctrl.itemConfig.amount ).toEqual( 100 );
         expect( $ctrl.customAmount ).not.toBeDefined();
+        expect( $ctrl.itemConfigForm.amount.$setViewValue ).toHaveBeenCalledWith( undefined, 'change' );
+        expect( $ctrl.itemConfigForm.amount.$render ).toHaveBeenCalled();
         expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.amount, 100 );
       } );
     } );
@@ -172,7 +175,7 @@ describe( 'product config modal', function () {
 
     describe( 'daysInMonth', () => {
       it( 'returns days in a month', () => {
-        expect( $ctrl.daysInMonth( ).length ).toEqual( 28 );
+        expect( $ctrl.daysInMonth().length ).toEqual( 28 );
       } );
     } );
 
