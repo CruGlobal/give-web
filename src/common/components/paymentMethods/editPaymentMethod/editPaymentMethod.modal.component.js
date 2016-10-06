@@ -36,12 +36,7 @@ class editPaymentMethodModalController{
       : 'bank';
   }
 
-  onSubmit(success, data){
-    if(data) {
-      this.resolve.onSubmit({success: success, data: data});
-      this.submitted = false;
-    }
-  }
+  updatePaymentMethod(){}
 }
 
 export default angular

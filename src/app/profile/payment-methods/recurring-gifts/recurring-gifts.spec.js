@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './recurring-gifts.component';
 
-describe('payment method recurring gifts', function() {
+describe('recurringGiftsController', function() {
   beforeEach(angular.mock.module(module.name));
   let self = {};
 
@@ -14,8 +14,32 @@ describe('payment method recurring gifts', function() {
     });
   }));
 
+  it('should call BuildGifts()', () => {
+    spyOn(self.controller, 'buildGifts');
+    self.controller.$onInit();
+    expect(self.controller.buildGifts).toHaveBeenCalled();
+  });
+
   it('to be defined', () => {
     expect(self.controller).toBeDefined();
+  });
+
+  it('should return an array of gifts', () => {
+    self.controller.gifts = [
+      {
+        'rate': {},
+        'recurring-day-of-month': '',
+        'donation-lines': [{},{}]
+      },
+      {
+        'rate': {},
+        'recurring-day-of-month': '',
+        'donation-lines': [{},{}]
+      }
+    ];
+
+    self.controller.buildGifts();
+    expect(self.controller.gifts.length).toBe(4);
   });
 
   it('should give next gift date', () => {
@@ -25,4 +49,6 @@ describe('payment method recurring gifts', function() {
     // im not sure how to test this function without duplicating its functionality into here =))
     expect(self.controller.getNextGiftDate(data).indexOf('25/') != -1).toBe(true);
   });
+
+
 });

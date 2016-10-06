@@ -52,7 +52,7 @@ describe('credit card payment methods', function() {
     self.controller.model['creditcard'] = undefined;
     self.controller.$onInit();
     expect(self.controller.formattedAddress).toBe(false);
-  })
+  });
 
   it('should return expiration date', () => {
     expect(self.controller.getExpiration()).toBe('05/2019');
@@ -72,5 +72,11 @@ describe('credit card payment methods', function() {
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
   });
 
-
+  it('should destroy modal instances if they exist', () => {
+    self.controller.deletePaymentMethodModal = jasmine.createSpyObj('deletePaymentMethodModal', ['dismiss']);
+    self.controller.editPaymentMethodModal = jasmine.createSpyObj('editPaymentMethodModal', ['dismiss']);
+    self.controller.$onDestroy();
+    expect(self.controller.deletePaymentMethodModal.dismiss).toHaveBeenCalled();
+    expect(self.controller.editPaymentMethodModal.dismiss).toHaveBeenCalled();
+  });
 });

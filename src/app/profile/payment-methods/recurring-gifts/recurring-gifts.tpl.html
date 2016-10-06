@@ -17,9 +17,9 @@
 
           <tbody>
             <tr ng-repeat="gift in $ctrl.gifts">
-              <td>{{ gift['donation-lines'][0]['designation-name'] }}</td>
-              <td>${{ gift['donation-lines'][0]['amount'] }}</td> <!-- not sure how to get an appropriate currency symbol TODO: add currency symbol dynamically -->
-              <td>{{ gift['rate']['recurrence']['interval'] }}</td>
+              <td>{{ gift['designation-name'] }}</td>
+              <td>${{ gift['amount'] | currency }}</td>
+              <td>{{ gift.rate.recurrence.interval }}</td>
               <td>{{ $ctrl.getNextGiftDate(gift) }}</td>
               <td>
                 <a>Edit</a>

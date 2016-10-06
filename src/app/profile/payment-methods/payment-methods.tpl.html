@@ -17,11 +17,11 @@
             <bank-account
               ng-if="!$ctrl.isCard(paymentMethod)"
               model="paymentMethod"
-              paymentMethods="$ctrl.paymentMethods"></bank-account>
+              payment-methods-list="$ctrl.paymentMethods"></bank-account>
             <credit-card
               ng-if="$ctrl.isCard(paymentMethod)"
               model="paymentMethod"
-              paymentMethods="$ctrl.paymentMethods"></credit-card>
+              payment-methods-list="$ctrl.paymentMethods"></credit-card>
           </div>
         </div>
         <div ng-if="$ctrl.error" class="error">

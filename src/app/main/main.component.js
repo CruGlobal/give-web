@@ -1,6 +1,7 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
+import 'angular-animate';
 
 import appConfig from 'common/app.config';
 
@@ -16,8 +17,6 @@ import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
 import profileComponent from '../profile/profile.component';
 
 import template from './main.tpl';
-
-import ngAnimate from 'angular-animate'
 
 let componentName = 'main';
 

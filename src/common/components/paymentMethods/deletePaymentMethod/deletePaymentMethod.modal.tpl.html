@@ -33,21 +33,35 @@
               </div>
             </div>
 
+            <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.error">
+              <p ng-switch="$ctrl.submissionError.error">
+                <span ng-switch-when="Invalid routing number" translate>
+                  The routing number you entered does not seem to be valid. Please verify that it is correct.
+                </span>
+                <span ng-switch-when="This credit card already exists." translate>
+                  This credit card already exists. Please use a different credit card.
+                </span>
+                <span ng-switch-default translate>
+                  There was an unknown error processing your request. Please verify all your info and try again. If you are still seeing this message, contact support.
+                </span>
+              </p>
+            </div>
+
             <ng-switch on="$ctrl.view">
 
               <div class="mb" ng-switch-when="manageDonations">
                 <h4 class="border-bottom-small  visible">Recurring Gifts Using this Payment Method</h4>
 
-                <div ng-repeat="gift in $ctrl.recurringGifts" class="row repeating-row user-profile">
+                <div ng-repeat="gift in $ctrl.buildGifts($ctrl.resolve.paymentMethod._recurringgifts[0].donations)" class="row repeating-row user-profile">
                   <div class="col-sm-3 col-md-3 mb">
                     <img class="full-width" src="http://placehold.it/550x310">
                   </div>
                   <div class="col-sm-9 col-md-9">
-                    <h4 class="recipient-name">{{gift['donation-lines'][0]['designation-name']}}</h4>
-                    <span class="modal-meta mb-">#{{gift['donation-lines'][0]['designation-number']}}</span>
+                    <h4 class="recipient-name">{{gift['designation-name']}}</h4>
+                    <span class="modal-meta mb-">#{{gift['designation-number']}}</span>
 
                     <p class="gift-summary">{{
-                      gift['donation-lines'][0]['amount'] | currency}} {{gift.rate.recurrence.interval}}
+                      gift['amount'] | currency}} {{gift.rate.recurrence.interval}}
                     </p>
                     <p class="start-date">{{$ctrl.getRecurrence(gift)}}</p>
                   </div>
@@ -56,16 +70,16 @@
                 <div class="mb border-bottom-small">
                   <h4 class="visible">Select an action for these recurring gifts:</h4>
                   <div class="form-group">
-                    <label ng-if="$ctrl.paymentMethods.length" class="radio u-textTransformNone radio-inline">
+                    <label ng-if="$ctrl.filteredPaymentMethods.length" class="radio u-textTransformNone radio-inline">
                       <input ng-model="$ctrl.deleteOption" value="1" type="radio" name="optradio" checked="">Move gifts to a different payment method
                       <select
-                        ng-model="$ctrl.form.newPaymentMethod"
-                        ng-options="o.self.uri as $ctrl.getPaymentMethodOptionLabel(o) for o in $ctrl.resolve.paymentMethodsList"
+                        ng-model="$ctrl.selectedPaymentMethod"
+                        ng-options="o.self.uri as $ctrl.getPaymentMethodOptionLabel(o) for o in $ctrl.filteredPaymentMethods"
                         class="form-control form-control-subtle">
                       </select>
                     </label>
                     <label class="radio u-textTransformNone">
-                      <input ng-model="$ctrl.deleteOption" value="2" type="radio" name="optradio" checked="{{$ctrl.paymentMethods.length==0}}">Move gifts to new payment method
+                      <input ng-model="$ctrl.deleteOption" value="2" type="radio" name="optradio" checked="{{$ctrl.filteredPaymentMethods.length==0}}">Move gifts to new payment method
                     </label>
                     <label class="radio u-textTransformNone">
                       <input ng-model="$ctrl.deleteOption" value="3" type="radio" name="optradio">Stop recurring gifts
@@ -85,19 +99,6 @@
               </div>
 
               <div class="mb" ng-switch-when="addPaymentMethod">
-                <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.error">
-                  <p ng-switch="$ctrl.submissionError.error">
-                    <span ng-switch-when="Invalid routing number" translate>
-                      The routing number you entered does not seem to be valid. Please verify that it is correct.
-                    </span>
-                    <span ng-switch-when="This credit card already exists." translate>
-                      This credit card already exists. Please use a different credit card.
-                    </span>
-                    <span ng-switch-default translate>
-                      There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
-                    </span>
-                  </p>
-                </div>
                 <add-new-payment-method submitted="$ctrl.submitted" on-submit="$ctrl.savePaymentMethod(success, data)"></add-new-payment-method>
                 <div class="mb0">
                   <div class="row">
@@ -136,7 +137,7 @@
                     <div class="col-md-12 text-right">
                       <a ng-if="$ctrl.confirmText" class="btn btn-primary" ng-click="$ctrl.changeView(true)">Back</a>
                       <a ng-if="!$ctrl.confirmText" class="btn btn-default mr-" ng-click="$ctrl.dismiss()">Cancel</a>
-                      <a class="btn btn-primary" ng-click="$ctrl.deletePaymentMethod()">Confirm Delete</a>
+                      <a class="btn btn-primary" ng-click="$ctrl.onSubmit()">Confirm Delete</a>
                     </div>
                   </div>
                 </div>

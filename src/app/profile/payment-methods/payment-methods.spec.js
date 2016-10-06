@@ -56,7 +56,7 @@ describe('payment methods', function() {
     }));
     self.controller.$onInit();
     expect(self.controller.error).toBe('Failed retrieving payment methods');
-  })
+  });
 
   it('should open add Payment Method Modal', () => {
     spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of('data'));
@@ -96,5 +96,5 @@ describe('payment methods', function() {
     spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of('data'));
     self.controller.onSubmit(e);
     expect(self.controller.submitted).toBe(false);
-  })
+  });
 });

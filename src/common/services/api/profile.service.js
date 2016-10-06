@@ -109,13 +109,21 @@ class Profile {
     return this.cortexApiService.get({
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
-          paymentMethods: 'selfservicepaymentmethods:element[],selfservicepaymentmethods:element:recurringgifts'
+          paymentMethods: 'selfservicepaymentmethods:element[]',
+          recurringGifts: 'selfservicepaymentmethods:element:recurringgifts'
         }
       })
       .pluck('paymentMethods')
       .map((paymentMethods) => {
         return sortPaymentMethods(paymentMethods);
       });
+  }
+
+  updateRecurringGifts(recurringGifts){
+    return this.cortexApiService.put({
+      path: recurringGifts.self.uri,
+      data: recurringGifts
+    });
   }
 
   getPaymentMethodForms(){

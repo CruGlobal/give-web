@@ -27,7 +27,7 @@ describe('profile', function() {
       self.controller.$onInit();
       self.controller.queryParams = {
         '?view': 'payment-methods'
-      }
+      };
     } );
     it( 'initializes the component', () => {
       expect( self.controller.sessionEnforcerService ).toHaveBeenCalledWith(

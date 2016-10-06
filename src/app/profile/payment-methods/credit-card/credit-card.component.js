@@ -14,12 +14,12 @@ class CreditCardController{
     this.isCollapsed = true;
     this.$uibModal = $uibModal;
     this.imgDomain = envService.read('imgDomain');
+    this.submissionError = {error: ''};
   }
 
   $onInit(){
     let address = this.model.creditcard ? this.model.creditcard.address : false;
     this.formattedAddress = address ? formatAddressForTemplate(address) : false;
-    this.gifts = this.model.recurringgifts.donations;
   }
 
   getExpiration(){
@@ -34,11 +34,12 @@ class CreditCardController{
     this.editPaymentMethodModal = this.$uibModal.open({
       component: 'editPaymentMethodModal',
       windowTemplateUrl: giveModalWindowTemplate.name,
+      size: 'lg',
       resolve: {
         model: () => this.model,
         paymentType: () => 'creditCard',
         onSubmit: () => this.onSubmit,
-        submissionError: () => {error: ''}
+        submissionError: () => this.submissionError
       }
     });
   }
@@ -50,9 +51,14 @@ class CreditCardController{
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         paymentMethod: () => this.model,
-        paymentMethodsList: () => this.paymentMethods
+        paymentMethodsList: () => this.paymentMethodsList
       }
     });
+  }
+
+  $onDestroy(){
+    this.deletePaymentMethodModal ? this.deletePaymentMethodModal.dismiss() : false;
+    this.editPaymentMethodModal ? this.editPaymentMethodModal.dismiss() : false;
   }
 
 }
@@ -73,6 +79,6 @@ export default angular
     templateUrl: template.name,
     bindings: {
       model: '<',
-      paymentMethods: '<'
+      paymentMethodsList: '<'
     }
   });

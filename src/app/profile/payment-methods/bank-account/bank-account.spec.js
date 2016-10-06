@@ -31,9 +31,22 @@ describe('bank account payment method', function() {
     expect(self.controller.getExpiration()).toBe('05/2019');
   });
 
-  it('should call modal', () => {
+  it('should call edit modal', () => {
     self.controller.editPaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
+  });
+
+  it('should call delete modal', () => {
+    self.controller.deletePaymentMethod();
+    expect(self.controller.$uibModal.open).toHaveBeenCalled();
+  });
+
+  it('should destroy modal instances if they exist', () => {
+    self.controller.deletePaymentMethodModal = jasmine.createSpyObj('deletePaymentMethodModal', ['dismiss']);
+    self.controller.editPaymentMethodModal = jasmine.createSpyObj('editPaymentMethodModal', ['dismiss']);
+    self.controller.$onDestroy();
+    expect(self.controller.deletePaymentMethodModal.dismiss).toHaveBeenCalled();
+    expect(self.controller.editPaymentMethodModal.dismiss).toHaveBeenCalled();
   });
 
 });

@@ -1,10 +1,29 @@
 import angular from 'angular';
 import template from './recurring-gifts.tpl';
+import forEach from 'lodash/forEach';
 
 class recurringGiftsController{
 
   /* @ngInject */
   constructor(){}
+
+  $onInit(){
+    this.buildGifts();
+  }
+
+  buildGifts(){
+    var gifts = [];
+    forEach(this.gifts,(gift) => {
+      var rate = gift.rate,
+          day = gift['recurring-day-of-month'];
+      forEach(gift['donation-lines'], (donationLine) => {
+        donationLine['rate'] = rate;
+        donationLine['recurring-day-of-month'] = day;
+        gifts = gifts.concat(donationLine);
+      });
+    });
+    this.gifts = gifts;
+  }
 
   getNextGiftDate(gift){
     if(!gift['recurring-day-of-month']) return false;

@@ -1,47 +1,72 @@
-<loading-overlay ng-if="$ctrl.submitted"></loading-overlay>
-<div class="modal-body account-management">
-  <div class="container-fluid ">
-    <div class="row">
-      <div class="col-sm-12">
-        <button ng-click="$ctrl.dismiss()" type="button" class="close">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h3 class="text-center border-bottom-small" translate>Edit Payment Method</h3>
-        <div class="alert alert-danger" role="alert" ng-if="$ctrl.resolve.submissionError.error">
-          <p ng-if="$ctrl.resolve.submissionError.error" ng-switch="$ctrl.resolve.submissionError.error">
-            <span ng-switch-default translate>
-              There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
-            </span>
-          </p>
-        </div>
-        <div class="panel panel-default panel-with-gray-background">
-          <div class="panel-body">
-            <p>
-              <i class="fa fa-cc-{{$ctrl.getIcon()}}" aria-hidden="true"></i>
-              <span class="payment-nickname">{{$ctrl.getNickname()}}</span>
-              ending in ****{{$ctrl.getAccountNumber()}}
-            </p>
+<div class="account-management">
+  <div class="modal-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="border-bottom-small">
+            <button type="button"
+                    class="close"
+                    aria-label="Close"
+                    ng-click="$ctrl.dismiss()">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h3 class="text-center">Edit Payment Method</h3>
           </div>
         </div>
-
-          <div class="tab-indiv cart-tab show" ng-if="$ctrl.resolve.paymentType === 'bankAccount'">
-            <bank-account-form
-              submitted="$ctrl.submitted"
-              model="$ctrl.resolve.model"
-              on-submit="$ctrl.onSubmit(success, data)"></bank-account-form>
-          </div>
-          <div class="tab-org cart-tab show" ng-if="$ctrl.resolve.paymentType === 'creditCard'">
-            <credit-card-form
-              submitted="$ctrl.submitted"
-              model="$ctrl.model"
-              on-submit="$ctrl.onSubmit(success, data)"></credit-card-form>
-          </div>
-
       </div>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.submitted = true" translate>Add Payment Method</button>
-      <button type="button" class="btn btn-default" ng-click="$ctrl.dismiss()" translate>Cancel &amp; Return</button>
+  </div>
+
+  <div class="modal-body pt0">
+    <div class="container-fluid" tabindex="-1" role="dialog">
+      <div class="row">
+        <div class="col-md-12 col-xs-12">
+          <div class="alert alert-danger" role="alert" ng-if="$ctrl.resolve.submissionError.error">
+            <p ng-if="$ctrl.resolve.submissionError.error" ng-switch="$ctrl.resolve.submissionError.error">
+              <span ng-switch-when="Invalid routing number" translate>
+                The routing number you entered does not seem to be valid. Please verify that it is correct.
+              </span>
+              <span ng-switch-when="This credit card already exists." translate>
+                This credit card already exists. Please use a different credit card.
+              </span>
+              <span ng-switch-default translate>
+                There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
+              </span>
+            </p>
+          </div>
+          <div class="panel panel-default panel-with-gray-background">
+            <div class="panel-body">
+              <p>
+                <i class="fa fa-cc-{{$ctrl.getIcon()}}" aria-hidden="true"></i>
+                <span class="payment-nickname">{{$ctrl.getNickname()}}</span>
+                ending in ****{{$ctrl.getAccountNumber()}}
+              </p>
+            </div>
+          </div>
+            <div class="tab-indiv cart-tab show" ng-if="$ctrl.resolve.paymentType === 'bankAccount'">
+              <bank-account-form
+                submitted="$ctrl.submitted"
+                model="$ctrl.resolve.model"
+                on-submit="$ctrl.onSubmit(success, data)"></bank-account-form>
+            </div>
+            <div class="tab-org cart-tab show" ng-if="$ctrl.resolve.paymentType === 'creditCard'">
+              <credit-card-form
+                submitted="$ctrl.submitted"
+                model="$ctrl.model"
+                on-submit="$ctrl.onSubmit(success, data)"></credit-card-form>
+            </div>
+            <div class="mb0">
+              <div class="row">
+                <div class="col-md-12 text-right">
+                  <a class="btn btn-default mr-" ng-click="$ctrl.dismiss()">Cancel</a>
+                  <a class="btn btn-primary" ng-click="$ctrl.updatePaymentMethod()">Save Changes</a>
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
     </div>
   </div>
 </div>
+<loading-overlay ng-if="$ctrl.loading"></loading-overlay>
