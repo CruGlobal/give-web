@@ -262,7 +262,8 @@ export default angular
   .module(componentName, [
     template.name,
     loadingOverlay.name,
-    addNewPaymentMethod.name
+    addNewPaymentMethod.name,
+    profileService.name
   ])
   .component(componentName, {
     controller: deletePaymentMethodModalController,

@@ -97,7 +97,8 @@ export default angular
     giveModalWindowTemplate.name,
     bankAccount.name,
     creditCard.name,
-    loadingOverlay.name
+    loadingOverlay.name,
+    profileService.name
   ])
   .component(componentName, {
     controller: PaymentMethodsController,
