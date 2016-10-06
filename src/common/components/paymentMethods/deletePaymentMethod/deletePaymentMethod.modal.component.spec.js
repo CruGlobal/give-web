@@ -220,7 +220,7 @@ describe( 'delete payment method modal', function () {
           'uri': 'uri'
         }
       }];
-    })
+    });
     it('move donations around in the local list after a successfull deletion', () => {
       self.controller.selectedPaymentMethod = 'uri';
       self.controller.resolve.paymentMethodsList.push(self.controller.resolve.paymentMethod);

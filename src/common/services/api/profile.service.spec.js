@@ -365,8 +365,8 @@ describe('profile service', () => {
           expect(data).toEqual('success');
         });
       self.$httpBackend.flush();
-    })
-  })
+    });
+  });
 
   describe('getPurchase', () => {
     it('should load the purchase specified by the uri', () => {

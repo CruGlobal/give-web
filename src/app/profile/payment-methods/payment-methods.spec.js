@@ -6,13 +6,13 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-fdescribe('payment methods', function() {
+describe('payment methods', function() {
   beforeEach(angular.mock.module(module.name));
   var fakeModal = function() {
     return {
       result: {
         then: function(confirmCallback) {
-          this.confirmCallback = confirmCallback;
+          confirmCallback();
         }
       }
     };
@@ -59,7 +59,7 @@ fdescribe('payment methods', function() {
     spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of('data'));
     self.controller.addPaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
-    self.controller.onSubmit = () => {return 'here'};
+    self.controller.onSubmit = () => {return 'here';};
     expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('here');
   });
 
@@ -77,9 +77,14 @@ fdescribe('payment methods', function() {
   });
 
   it('should reload payment methods on modal close', () => {
-    // uibModal.open.and.returnValue({ result: Observable.data('data').toPromise() });
+    spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of('data'));
     self.controller.addPaymentMethod();
-    log(self.controller)
+    let callback = () => {
+      self.controller.loadPaymentMethods();
+    } ;
+    spyOn(self.controller,'loadPaymentMethods');
+    self.controller.addNewPaymentMethodModal.result.then(callback);
+    expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
   });
 
   it('should fail adding payment method and show error message', () => {
@@ -102,6 +107,7 @@ fdescribe('payment methods', function() {
 
   it('should return true if payment method is a card', () => {
     expect(self.controller.isCard({'card-number': '2222'})).toBe(true);
+    expect(self.controller.isCard({'bank': '2222'})).toBe(false);
   });
 
   it('should not submit', ()=> {
