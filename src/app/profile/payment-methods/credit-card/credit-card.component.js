@@ -36,10 +36,10 @@ class CreditCardController{
       windowTemplateUrl: giveModalWindowTemplate.name,
       size: 'lg',
       resolve: {
-        model: () => this.model,
-        paymentType: () => 'creditCard',
+        model: this.model,
+        paymentType: 'creditCard',
         onSubmit: () => this.onSubmit,
-        submissionError: () => this.submissionError
+        submissionError: this.submissionError
       }
     });
   }
@@ -50,8 +50,8 @@ class CreditCardController{
       backdrop: 'static',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
-        paymentMethod: () => this.model,
-        paymentMethodsList: () => this.paymentMethodsList
+        paymentMethod: this.model,
+        paymentMethodsList: this.paymentMethodsList
       }
     });
   }

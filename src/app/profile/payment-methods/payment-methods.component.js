@@ -52,7 +52,7 @@ class PaymentMethodsController {
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         onSubmit: () => this.onSubmit,
-        profileService: () => this.profileService,
+        profileService: this.profileService,
         submitted: false,
         submissionError: this.submissionError,
         log: this.log,

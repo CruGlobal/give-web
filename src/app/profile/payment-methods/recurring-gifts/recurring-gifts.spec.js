@@ -38,8 +38,7 @@ describe('recurringGiftsController', function() {
       }
     ];
 
-    self.controller.buildGifts();
-    expect(self.controller.gifts.length).toBe(4);
+    expect(self.controller.buildGifts().length).toBe(4);
   });
 
   it('should give next gift date', () => {

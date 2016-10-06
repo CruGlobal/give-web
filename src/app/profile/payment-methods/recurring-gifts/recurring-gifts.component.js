@@ -22,18 +22,17 @@ class recurringGiftsController{
         gifts = gifts.concat(donationLine);
       });
     });
-    this.gifts = gifts;
+    return gifts;
   }
 
   getNextGiftDate(gift){
+    // TODO: just realized that there are Qaterly and Annually options of display
     if(!gift['recurring-day-of-month']) return false;
     let date = new Date();
     let dayOfGiving = gift['recurring-day-of-month']*1;
     let happensThisMonth = date.getDate() < dayOfGiving ? true : false;
     date.setDate(dayOfGiving);
-    if(!happensThisMonth) {
-      date.setMonth(date.getMonth()+1);
-    }
+    !happensThisMonth ? date.setMonth(date.getMonth()+1) : false;
     return date.getDate() + '/' + (date.getMonth()+1) +'/' +date.getFullYear();
   }
 

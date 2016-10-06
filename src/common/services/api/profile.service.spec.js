@@ -355,6 +355,19 @@ describe('profile service', () => {
     });
   });
 
+  describe('deletePaymentMethod', () => {
+    it('should delete payment method', () => {
+      let uri = '/uri';
+      self.$httpBackend.expectDELETE('https://cortex-gateway-stage.cru.org/cortex'+uri)
+        .respond(200, 'success');
+      self.profileService.deletePaymentMethod(uri)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+      self.$httpBackend.flush();
+    })
+  })
+
   describe('getPurchase', () => {
     it('should load the purchase specified by the uri', () => {
       let modifiedPurchaseResponse = angular.copy(purchaseResponse);

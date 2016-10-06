@@ -47,6 +47,7 @@ describe('bank account payment method', function() {
     self.controller.$onDestroy();
     expect(self.controller.deletePaymentMethodModal.dismiss).toHaveBeenCalled();
     expect(self.controller.editPaymentMethodModal.dismiss).toHaveBeenCalled();
+
   });
 
 });

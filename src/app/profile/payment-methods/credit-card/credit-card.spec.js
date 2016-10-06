@@ -2,15 +2,33 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from 'app/profile/payment-methods/credit-card/credit-card.component.js';
 
-describe('credit card payment methods', function() {
+describe('credit card payment methods', function () {
   beforeEach(angular.mock.module(module.name));
   var self = {},
-      envService = {
-        read: angular.noop
-      },
-      uibModal = jasmine.createSpyObj('$uibModal', ['open']);
+    envService = {
+      read: angular.noop
+    },
+    uibModal = jasmine.createSpyObj('$uibModal', ['open']),
+    model = {
+      'expiry-month': '05',
+      'expiry-year': '2019',
+      'card-type': 'American Express',
+      'creditcard': {
+        'address': {
+          'country-name': 'US',
+          'street-address': '123',
+          'extended-address': '',
+          'locality': 'SLC',
+          'region': 'UT',
+          'postal-code': '44444'
+        },
+        'recurringgifts': {
+          'donations': []
+        }
+      }
+    };
 
-  beforeEach(inject(function($rootScope, $componentController) {
+  beforeEach(inject(function ($rootScope, $componentController) {
     var $scope = $rootScope.$new();
 
     self.controller = $componentController(module.name, {
@@ -22,23 +40,7 @@ describe('credit card payment methods', function() {
   }));
 
   beforeEach(() => {
-    self.controller.model = {};
-    self.controller.model['expiry-month'] = '05';
-    self.controller.model['creditcard'] = {
-      'address': {
-        'country-name': 'US',
-        'street-address': '123',
-        'extended-address': '',
-        'locality': 'SLC',
-        'region': 'UT',
-        'postal-code': '44444'
-      }
-    };
-    self.controller.model['expiry-year'] = '2019';
-    self.controller.model['card-type'] = 'American Express';
-    self.controller.model['recurringgifts'] = {
-      donations: []
-    };
+    self.controller.model = model;
   });
 
   it('to be defined', () => {

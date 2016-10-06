@@ -6,7 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-describe('payment methods', function() {
+fdescribe('payment methods', function() {
   beforeEach(angular.mock.module(module.name));
   var fakeModal = function() {
     return {
@@ -14,9 +14,6 @@ describe('payment methods', function() {
         then: function(confirmCallback) {
           this.confirmCallback = confirmCallback;
         }
-      },
-      close: () => {
-        this.result.confirmCallback();
       }
     };
   };
@@ -62,12 +59,14 @@ describe('payment methods', function() {
     spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of('data'));
     self.controller.addPaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
+    self.controller.onSubmit = () => {return 'here'};
+    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('here');
   });
 
   it('should add payment method', () => {
     let e = {
       success: true,
-      data: 'som data'
+      data: 'some data'
     };
     spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of('data'));
     self.controller.addNewPaymentMethodModal = jasmine.createSpyObj('addNewPaymentMethodModal',['close']);
@@ -75,6 +74,12 @@ describe('payment methods', function() {
     self.controller.parentComponent = self.controller;
     self.controller.onSubmit(e);
     expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+  });
+
+  it('should reload payment methods on modal close', () => {
+    // uibModal.open.and.returnValue({ result: Observable.data('data').toPromise() });
+    self.controller.addPaymentMethod();
+    log(self.controller)
   });
 
   it('should fail adding payment method and show error message', () => {
@@ -87,6 +92,16 @@ describe('payment methods', function() {
     }));
     self.controller.onSubmit(e);
     expect(self.controller.submissionError.error).toBe('some error');
+  });
+
+  it('should close modal on component destroy', ()=>{
+    self.controller.addNewPaymentMethodModal = jasmine.createSpyObj('self.controller.addNewPaymentMethodModal', ['close']);
+    self.controller.$onDestroy();
+    expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+  });
+
+  it('should return true if payment method is a card', () => {
+    expect(self.controller.isCard({'card-number': '2222'})).toBe(true);
   });
 
   it('should not submit', ()=> {
