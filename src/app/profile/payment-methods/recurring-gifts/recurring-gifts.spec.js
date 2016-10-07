@@ -46,7 +46,7 @@ describe('recurringGiftsController', function() {
     expect(self.controller.getNextGiftDate(data)).toBe(false);
     data['recurring-day-of-month'] = '25';
     // im not sure how to test this function without duplicating its functionality into here =))
-    expect(self.controller.getNextGiftDate(data).indexOf('25/') != -1).toBe(true);
+    expect(self.controller.getNextGiftDate(data)).toBeTruthy();
   });
 
 

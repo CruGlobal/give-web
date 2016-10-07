@@ -27,9 +27,9 @@ class BankAccountController{
       windowTemplateUrl: giveModalWindowTemplate.name,
       size: 'lg',
       resolve: {
-        model: this.model,
-        paymentType: 'bankAccount',
-        submissionError: this.submissionError
+        model: () => this.model,
+        paymentType: () => 'bankAccount',
+        submissionError: () => this.submissionError
       }
     });
   }
@@ -40,8 +40,8 @@ class BankAccountController{
       backdrop: 'static',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
-        paymentMethod: this.model,
-        paymentMethodsList: this.paymentMethodsList
+        paymentMethod: () => this.model,
+        paymentMethodsList: () => this.paymentMethodsList
       }
     });
   }

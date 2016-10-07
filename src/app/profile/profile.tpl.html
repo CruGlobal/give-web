@@ -1,4 +1,4 @@
 <a href="/profile.html?view=payment-methods">Payment Methods</a>
-<ng-switch on="$ctrl.queryParams['?view']">
+<ng-switch on="$ctrl.$location.search().view">
   <payment-methods ng-switch-when="payment-methods"></payment-methods>
 </ng-switch>

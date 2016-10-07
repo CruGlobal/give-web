@@ -157,25 +157,35 @@ describe( 'delete payment method modal', function () {
 
   } );
 
-  describe( 'getRecurrence()', () => {
+  describe( 'getRecurrenceDate()', () => {
     it( 'returns recurrence text', () => {
       let gift = {
-        'rate': {
-          'recurrence': {
-            'interval': ''
-          }
-        },
         'next-draw-date': {
           'display-value': '2016-07-14'
         },
         'recurring-day-of-month': '15'
       };
-      gift.rate.recurrence.interval = 'Annually';
-      expect(self.controller.getRecurrence(gift)).toBe('On July 15th of each year');
-      gift.rate.recurrence.interval = 'Quaterly';
-      expect(self.controller.getRecurrence(gift)).toBe('On the 15th day of each January, April, July and October');
-      gift.rate.recurrence.interval = 'Monthly';
-      expect(self.controller.getRecurrence(gift)).toBe('On the 15th day of each month');
+      let date = new Date(gift['next-draw-date']['display-value']);
+      expect(self.controller.getRecurrenceDate(gift)).toEqual(date);
+    } );
+  } );
+
+  describe( 'getQuarterMonths', () => {
+    it( 'should 4 months of the year that payment go through', () => {
+      let gift = {
+        'next-draw-date': {
+          'display-value': '2016-07-14'
+        },
+        'recurring-day-of-month': '15'
+      };
+      expect(self.controller.getQuarterMonths(gift)).toEqual([
+        'January',
+        'April',
+        'July',
+        'October'
+      ]);
+      self.controller.quarterMonths = 'foo';
+      expect(self.controller.getQuarterMonths(gift)).toEqual('foo');
     } );
   } );
 

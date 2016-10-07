@@ -25,6 +25,7 @@ class deletePaymentMethodModalController {
     this.submissionError = {
       error: ''
     };
+    this.monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   }
 
   $onInit() {
@@ -79,36 +80,29 @@ class deletePaymentMethodModalController {
     return this.resolve.paymentMethod['card-type'] ? 'cc-'+this.resolve.paymentMethod['card-type'].toLowerCase() : 'bank';
   }
 
-  getRecurrence(gift){
-    var date = new Date(gift['next-draw-date']['display-value']),
-        month = date.getMonth()*1,
-        monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        text='';
-
-    switch(gift.rate.recurrence.interval){
-      case 'Quaterly':
-        var months = [];
-
-        for(let i=0;i<4;i++){
-          months.push(month);
-          month+=3;
-          month = month > 11 ? month - 12 : month;
-        }
-        months.sort((a,b) => {
-          return a-b;
-        });
-        text = `On the ${gift['recurring-day-of-month']}th day of each ${monthNames[months[0]]}, ${monthNames[months[1]]}, ${monthNames[months[2]]} and ${monthNames[months[3]]}`;
-      break;
-      case 'Monthly':
-        text = `On the ${gift['recurring-day-of-month']}th day of each month`;
-      break;
-      case 'Annually':
-        text = `On ${monthNames[month]} ${gift['recurring-day-of-month']}th of each year`;
-      break;
-    }
-
-    return text;
+  getRecurrenceDate(gift){
+    return new Date(gift['next-draw-date']['display-value']);
   }
+
+  getQuarterMonths(gift){
+    if(this.quarterMonths) return this.quarterMonths;
+    let month = this.getRecurrenceDate(gift).getMonth()*1;
+    let months = [];
+    for(let i=0;i<4;i++){
+      months.push(month);
+      month+=3;
+      month = month > 11 ? month - 12 : month;
+    }
+    months.sort((a,b) => {
+      return a-b;
+    });
+    forEach(months, (item,index)=>{
+      months[index] = this.monthNames[item];
+    });
+    this.quarterMonths = months;
+    return this.quarterMonths;
+  }
+
 
   buildGifts(recurringGifts){
     var gifts = [];
@@ -138,9 +132,8 @@ class deletePaymentMethodModalController {
     }
   }
   moveDonations(){
-    let isExistingPaymentMethod = this.resolve.paymentMethodsList.length > this.filteredPaymentMethods.length
-      ? true
-      : false;
+    let isExistingPaymentMethod;
+    isExistingPaymentMethod = this.resolve.paymentMethodsList.length > this.filteredPaymentMethods.length;
     //move donations from old to new PM
     let selectedPaymentMethod = find(this.filteredPaymentMethods, (item) => {
       return this.selectedPaymentMethod == item.self.uri;

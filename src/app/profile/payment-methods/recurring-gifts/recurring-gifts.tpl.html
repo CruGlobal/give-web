@@ -20,7 +20,7 @@
               <td>{{ gift['designation-name'] }}</td>
               <td>{{ gift['amount'] | currency }}</td>
               <td>{{ gift.rate.recurrence.interval }}</td>
-              <td>{{ $ctrl.getNextGiftDate(gift) }}</td>
+              <td>{{ $ctrl.getNextGiftDate(gift) | date:'mediumDate'}}</td>
               <td>
                 <a>Edit</a>
               </td>

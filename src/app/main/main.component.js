@@ -1,7 +1,6 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
-import 'angular-animate';
 
 import appConfig from 'common/app.config';
 
@@ -77,8 +76,7 @@ export default angular
     searchResultsComponent.name,
     homeSignInComponent.name,
     profileComponent.name,
-    'ui.router',
-    'ngAnimate'
+    'ui.router'
   ])
   .config(routingConfig)
   .component(componentName, {

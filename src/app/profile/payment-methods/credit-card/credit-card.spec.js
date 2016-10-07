@@ -35,6 +35,8 @@ describe('credit card payment methods', function () {
       $scope: $scope,
       envService: envService,
       $uibModal: uibModal
+    },{
+      'paymentMethodsList': [{}]
     });
 
   }));
@@ -67,11 +69,28 @@ describe('credit card payment methods', function () {
   it('should call Edit Modal', () => {
     self.controller.editPaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
+    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.model()).toEqual({
+      'expiry-month': '05',
+      'expiry-year': '2019',
+      'card-type': 'American Express',
+      'creditcard': undefined
+    });
+    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.paymentType()).toBe('creditCard');
+    self.controller.onSubmit = () => 'hello';
+    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('hello');
+    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.submissionError()).toEqual({ error: '' });
   });
 
   it('should call Delete Modal', () => {
     self.controller.deletePaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
+    expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethod()).toEqual({
+      'expiry-month': '05',
+      'expiry-year': '2019',
+      'card-type': 'American Express',
+      'creditcard': undefined
+    });
+    expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethodsList().length).toBe(1);
   });
 
   it('should destroy modal instances if they exist', () => {

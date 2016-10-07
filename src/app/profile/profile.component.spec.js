@@ -13,7 +13,14 @@ describe('profile', function() {
 
     self.controller = $componentController(module.name, {
       $scope: $scope,
-      $window: {}
+      $window: {},
+      $location: {
+        'search': () => {
+          return {
+            view: 'payment-methods'
+          };
+        }
+      }
     });
   }));
 
@@ -25,9 +32,6 @@ describe('profile', function() {
     beforeEach( () => {
       spyOn( self.controller, 'sessionEnforcerService' );
       self.controller.$onInit();
-      self.controller.queryParams = {
-        '?view': 'payment-methods'
-      };
     } );
     it( 'initializes the component', () => {
       expect( self.controller.sessionEnforcerService ).toHaveBeenCalledWith(
