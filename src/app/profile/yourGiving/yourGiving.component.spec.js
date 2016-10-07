@@ -150,4 +150,15 @@ describe( 'your giving', function () {
       expect( $ctrl.viewLoading ).toEqual( false );
     } );
   } );
+
+  describe( 'openEditRecurringGiftsModal', () => {
+    it( 'should open the modal', () => {
+      spyOn($ctrl.$uibModal, 'open').and.returnValue({ result: { then: jasmine.createSpy('then') } });
+      $ctrl.openEditRecurringGiftsModal();
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( { component: 'editRecurringGiftsModal' } ) );
+      expect( $ctrl.recurringGiftsUpdateSuccess).toEqual(false);
+      $ctrl.editRecurringGiftsModal.result.then.calls.first().args[0](); // Execute close modal promise success function
+      expect( $ctrl.recurringGiftsUpdateSuccess).toEqual(true);
+    } );
+  } );
 } );

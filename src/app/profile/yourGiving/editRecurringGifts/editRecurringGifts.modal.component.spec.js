@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-import module from './editRecurringGifts.modal.component.js';
+import module from './editRecurringGifts.modal.component';
 
 describe('edit recurring gifts modal', () => {
   beforeEach(angular.mock.module(module.name));

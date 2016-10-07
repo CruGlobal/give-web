@@ -5,7 +5,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/toPromise';
 
-import module from './addUpdatePaymentMethod.component.js';
+import module from './addUpdatePaymentMethod.component';
 
 describe('editRecurringGiftsModal', () => {
   describe('step 0 addUpdatePaymentMethod', () => {

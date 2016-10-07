@@ -2,12 +2,15 @@ import angular from 'angular';
 import 'angular-ui-bootstrap';
 import range from 'lodash/range';
 import map from 'lodash/map';
+import includes from 'lodash/includes';
+
 import displayAddress from 'common/components/display-address/display-address.component';
 import recipientView from './recipientView/recipientView.component';
 import historicalView from './historicalView/historicalView.component';
-import includes from 'lodash/includes';
 import loadingComponent from 'common/components/loading/loading.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.modal.component';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
 import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
 import sessionService from 'common/services/session/session.service';
@@ -26,9 +29,10 @@ export const givingViews = ['recipient', 'historical'];
 class YourGivingController {
 
   /* @ngInject */
-  constructor( $window, $location, $filter, sessionEnforcerService, profileService, sessionService ) {
+  constructor( $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService ) {
     this.$window = $window;
     this.$location = $location;
+    this.$uibModal = $uibModal;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.sessionService = sessionService;
@@ -101,6 +105,19 @@ class YourGivingController {
   setViewLoading( loading ) {
     this.viewLoading = loading;
   }
+
+  openEditRecurringGiftsModal() {
+    this.recurringGiftsUpdateSuccess = false;
+    this.editRecurringGiftsModal = this.$uibModal.open({
+      component: 'editRecurringGiftsModal',
+      backdrop: 'static', // Disables closing on click
+      windowTemplateUrl: giveModalWindowTemplate.name
+    });
+    this.editRecurringGiftsModal.result.then(() => {
+      this.recurringGiftsUpdateSuccess = true;
+    });
+  }
+
 }
 export default angular
   .module( componentName, [
@@ -109,6 +126,8 @@ export default angular
     historicalView.name,
     loadingComponent.name,
     loadingOverlay.name,
+    editRecurringGiftsModal.name,
+    giveModalWindowTemplate.name,
     profileService.name,
     sessionEnforcerService.name,
     sessionService.name,
