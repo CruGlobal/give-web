@@ -1,0 +1,55 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+          <h3>Add a Payment Method</h3>
+          <p>You must have at least one valid payment method to continue. Please add one below.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid" tabindex="-1" role="dialog">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.error">
+          <p ng-if="$ctrl.submissionError.error" ng-switch="$ctrl.submissionError.error">
+          <span ng-switch-when="Invalid routing number" translate>
+            The routing number you entered does not seem to be valid. Please verify that it is correct.
+          </span>
+          <span ng-switch-default translate>
+            There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
+          </span>
+          </p>
+        </div>
+        <add-new-payment-method submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)"></add-new-payment-method>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6" ng-switch="$ctrl.canGoBack">
+      <a class="btn btn-default"
+         ng-click="$ctrl.dismiss()"
+         ng-switch-when="false"
+         translate>
+        Cancel
+      </a>
+      <a class="btn btn-default"
+         ng-click="$ctrl.previous()"
+         ng-switch-when="true"
+         translate>
+        Back
+      </a>
+    </div>
+    <div class="col-xs-6 text-right">
+      <a class="btn btn-primary" ng-click="$ctrl.submitted = true">Add and Continue</a>
+    </div>
+  </div>
+</div>
