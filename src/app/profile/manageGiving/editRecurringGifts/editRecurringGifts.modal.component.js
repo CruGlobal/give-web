@@ -2,6 +2,7 @@ import angular from 'angular';
 import some from 'lodash/some';
 
 import loadingComponent from 'common/components/loading/loading.component';
+import step0AddUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
 
 import profileService from 'common/services/api/profile.service';
 
@@ -55,6 +56,10 @@ class EditRecurringGiftsModalController {
         this.paymentMethod = paymentMethod;
         this.state = 'step0AddUpdatePaymentMethod';
         break;
+      case 'step0AddUpdatePaymentMethod':
+        this.paymentMethod = paymentMethod;
+        this.state = 'step1EditRecurringGifts';
+        break;
       case 'step1EditRecurringGifts':
         this.recurringGiftChanges = recurringGiftChanges;
         if(this.hasRecentRecipients){
@@ -96,9 +101,6 @@ class EditRecurringGiftsModalController {
       case 'step2AddRecentRecipients':
         this.state = 'step1EditRecurringGifts';
         break;
-      case 'step1EditRecurringGifts':
-        this.state = 'step1EditRecurringGifts';
-        break;
     }
   }
 
@@ -108,6 +110,7 @@ export default angular
   .module(componentName, [
     template.name,
     loadingComponent.name,
+    step0AddUpdatePaymentMethod.name,
     profileService.name
   ])
   .component(componentName, {

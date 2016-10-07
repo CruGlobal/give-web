@@ -61,7 +61,7 @@
     ng-switch-when="step0PaymentMethodList"
     payment-methods="$ctrl.paymentMethods"
     dismiss="$ctrl.dismiss()"
-    next="$ctrl.next(paymentMethod)">
+    next="$ctrl.next(paymentMethod)">step0PaymentMethodList
   </step-0-payment-method-list>
 
   <step-0-add-update-payment-method
@@ -70,7 +70,7 @@
     can-go-back="$ctrl.hasPaymentMethods"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next()">
+    next="$ctrl.next(paymentMethod)">step0AddUpdatePaymentMethod
   </step-0-add-update-payment-method>
 
   <step-1-edit-recurring-gifts
@@ -78,8 +78,7 @@
     payment-methods="$ctrl.paymentMethods"
     recurring-gift-changes="$ctrl.recurringGiftChanges"
     dismiss="$ctrl.dismiss()"
-    previous="$ctrl.previous()"
-    next="$ctrl.next(changes)">
+    next="$ctrl.next(changes)">step1EditRecurringGifts
   </step-1-edit-recurring-gifts>
 
   <step-2-add-recent-recipients
