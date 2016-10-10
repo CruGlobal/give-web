@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-gettext';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+import profileService from 'common/services/api/profile.service';
 import verificationService from 'common/services/api/verification.service';
 import userMatchIdentity from './userMatchIdentity/userMatchIdentity.component';
 import userMatchQuestion from './userMatchQuestion/userMatchQuestion.component';
@@ -11,17 +12,26 @@ let componentName = 'userMatchModal';
 class UserMatchModalController {
 
   /* @ngInject */
-  constructor( gettext, verificationService ) {
+  constructor( gettext, profileService, verificationService ) {
     this.gettext = gettext;
+    this.profileService = profileService;
     this.verificationService = verificationService;
   }
 
   $onInit() {
     this.setLoading( {loading: true} );
     this.modalTitle = this.gettext( 'Activate your Account' );
-    this.verificationService.getContacts().subscribe( ( contacts ) => {
-      this.contacts = contacts;
-      this.changeMatchState( 'identity' );
+    this.profileService.getDonorDetails().subscribe( ( donorDetails ) => {
+      if ( angular.isDefined( donorDetails['registration-state'] ) ) {
+        if ( donorDetails['registration-state'] === 'COMPLETED' ) {
+          this.changeMatchState( 'success' );
+        } else {
+          this.verificationService.getContacts().subscribe( ( contacts ) => {
+            this.contacts = contacts;
+            this.changeMatchState( 'identity' );
+          } );
+        }
+      }
     } );
   }
 
@@ -91,6 +101,7 @@ export default angular
     'gettext',
     verificationService.name,
     loadingOverlay.name,
+    profileService.name,
     template.name,
     userMatchIdentity.name,
     userMatchQuestion.name

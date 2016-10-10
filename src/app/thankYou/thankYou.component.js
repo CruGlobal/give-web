@@ -51,7 +51,6 @@ class ThankYouController{
           // Display Account Benefits Modal when registration-state is NEW or MATCHED
           if(this.purchase.donorDetails['registration-state'] !== 'COMPLETED') {
             this.sessionModalService.accountBenefits().then(() => {
-              //TODO: Do we need to check donormatches again after sign in/up?
               this.sessionModalService.userMatch();
             });
           }

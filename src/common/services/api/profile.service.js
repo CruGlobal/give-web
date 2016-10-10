@@ -58,6 +58,17 @@ class Profile {
       } );
   }
 
+  getDonorDetails() {
+    return this.cortexApiService
+      .get( {
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          donorDetails:   'donordetails'
+        }
+      } )
+      .pluck( 'donorDetails' );
+  }
+
   getEmail(){
     return this.cortexApiService.get({
       path: ['profiles', this.cortexApiService.scope, 'default'],
