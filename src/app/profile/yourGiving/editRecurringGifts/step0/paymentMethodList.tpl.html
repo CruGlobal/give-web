@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+          <h3 translate>No valid payment methods found</h3>
+          <p translate>None of your payment methods are currently valid. Please update or add one below.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid" tabindex="-1" role="dialog">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods">
+          <label>
+            <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" required>
+            <payment-method-display payment-method="paymentMethod"></payment-method-display>
+          </label>
+        </div>
+
+        <div class="mt">
+          <button type="button" class="btn btn-default btn-xs" ng-click="$ctrl.next()">
+            <i class="fa fa-plus"></i>
+            <span translate>Add New Payment Method</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6">
+      <a class="btn btn-default"
+         ng-click="$ctrl.dismiss()"
+         translate>
+        Cancel
+      </a>
+    </div>
+    <div class="col-xs-6 text-right">
+      <a class="btn btn-primary" ng-click="$ctrl.next({ paymentMethod: $ctrl.selectedPaymentMethod })" translate>Update Payment Method</a>
+    </div>
+  </div>
+</div>
