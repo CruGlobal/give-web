@@ -3,6 +3,7 @@ import some from 'lodash/some';
 
 import loadingComponent from 'common/components/loading/loading.component';
 import step0AddUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
+import step0paymentMethodList from './step0/paymentMethodList.component';
 
 import profileService from 'common/services/api/profile.service';
 
@@ -101,6 +102,12 @@ class EditRecurringGiftsModalController {
       case 'step2AddRecentRecipients':
         this.state = 'step1EditRecurringGifts';
         break;
+
+      // Can't go from step 1 to step 0 as the user has a valid payment method by this point. As a result we don't need a case to transition from it
+
+      case 'step0AddUpdatePaymentMethod':
+        this.state = 'step0PaymentMethodList';
+        break;
     }
   }
 
@@ -111,6 +118,7 @@ export default angular
     template.name,
     loadingComponent.name,
     step0AddUpdatePaymentMethod.name,
+    step0paymentMethodList.name,
     profileService.name
   ])
   .component(componentName, {

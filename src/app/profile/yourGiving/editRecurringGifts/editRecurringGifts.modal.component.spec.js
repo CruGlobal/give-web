@@ -208,10 +208,10 @@ describe('edit recurring gifts modal', () => {
       self.controller.previous();
       expect(self.controller.state).toEqual('step1EditRecurringGifts');
     });
-    it('should transition from step1EditRecurringGifts to step1EditRecurringGifts', () => {
-      self.controller.state = 'step1EditRecurringGifts';
+    it('should transition from step0AddUpdatePaymentMethod to step0PaymentMethodList', () => {
+      self.controller.state = 'step0AddUpdatePaymentMethod';
       self.controller.previous();
-      expect(self.controller.state).toEqual('step1EditRecurringGifts');
+      expect(self.controller.state).toEqual('step0PaymentMethodList');
     });
   });
 });
