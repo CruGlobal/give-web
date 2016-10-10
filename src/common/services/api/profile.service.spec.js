@@ -8,6 +8,7 @@ import module from './profile.service';
 
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
 import emailsResponse from './fixtures/cortex-profile-emails.fixture.js';
+import donorDetailsResponse from './fixtures/cortex-profile-donordetails.fixture';
 import givingProfileResponse from './fixtures/cortex-profile-giving.fixture';
 import paymentmethodsResponse from './fixtures/cortex-profile-paymentmethods.fixture.js';
 import paymentmethodsFormsResponse from './fixtures/cortex-profile-paymentmethods-forms.fixture.js';
@@ -318,6 +319,18 @@ describe('profile service', () => {
       self.profileService.getPurchase('/purchases/crugive/giydanbt=')
         .subscribe((data) => {
           expect(data).toEqual(expectedPurchaseData);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('getDonorDetails', () => {
+    it('should load the user\'s donorDetails', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails')
+        .respond(200, donorDetailsResponse);
+      self.profileService.getDonorDetails()
+        .subscribe((donorDetails) => {
+          expect(donorDetails).toEqual(donorDetailsResponse['_donordetails'][0]);
         });
       self.$httpBackend.flush();
     });
