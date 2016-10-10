@@ -1,5 +1,8 @@
+import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-bootstrap';
+import appConfig from 'common/app.config';
+import commonModule from 'common/common.module';
 import range from 'lodash/range';
 import map from 'lodash/map';
 import includes from 'lodash/includes';
@@ -121,6 +124,8 @@ class YourGivingController {
 }
 export default angular
   .module( componentName, [
+    appConfig.name,
+    commonModule.name,
     displayAddress.name,
     recipientView.name,
     historicalView.name,
