@@ -12,6 +12,7 @@ describe('payment methods', function() {
     return {
       result: {
         then: function(confirmCallback) {
+          this.paymentMethods = [];
           confirmCallback();
         }
       }
@@ -23,16 +24,16 @@ describe('payment methods', function() {
 
   uibModal.open.and.callFake(fakeModal);
 
-  beforeEach(inject(function($rootScope, $componentController) {
+  beforeEach(inject(function($rootScope, $componentController, $timeout) {
     var $scope = $rootScope.$new();
-
     self.controller = $componentController(module.name, {
       $scope: $scope,
       $uibModal: uibModal,
       profileService: {
         getPaymentMethodsWithDonations: angular.noop,
         addPaymentMethod: angular.noop
-      }
+      },
+      $timeout: $timeout
     });
 
   }));
@@ -42,9 +43,9 @@ describe('payment methods', function() {
   });
 
   it('should load payment methods on $onInit()', () => {
-    spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of('data'));
+    spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of([{},{}]));
     self.controller.$onInit();
-    expect(self.controller.paymentMethods).toBe('data');
+    expect(self.controller.paymentMethods).toEqual([{},{}]);
   });
 
   it('should handle and error of loading payment methods on $onInit()', () => {
@@ -56,7 +57,7 @@ describe('payment methods', function() {
   });
 
   it('should open add Payment Method Modal', () => {
-    spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of('data'));
+    self.controller.paymentMethods = [{},{}];
     self.controller.addPaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
     self.controller.onSubmit = () => {return 'here';};
@@ -76,15 +77,14 @@ describe('payment methods', function() {
     expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
   });
 
-  it('should reload payment methods on modal close', () => {
-    spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of('data'));
+  it('should update payment methods list on modal close', () => {
+    self.controller.paymentMethods = [{},{}];
     self.controller.addPaymentMethod();
-    let callback = () => {
-      self.controller.loadPaymentMethods();
-    } ;
-    spyOn(self.controller,'loadPaymentMethods');
+    let callback = () => {};
     self.controller.addNewPaymentMethodModal.result.then(callback);
-    expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
+    expect(self.controller.paymentMethods.length).toBe(3);
+    self.controller.$timeout.flush();
+    expect(self.controller.successMessage.show).toBe(false);
   });
 
   it('should fail adding payment method and show error message', () => {
@@ -108,6 +108,14 @@ describe('payment methods', function() {
   it('should return true if payment method is a card', () => {
     expect(self.controller.isCard({'card-number': '2222'})).toBe(true);
     expect(self.controller.isCard({'bank': '2222'})).toBe(false);
+  });
+
+  it('should do stuff onDelete()', () => {
+    self.controller.onDelete();
+    expect(self.controller.successMessage.show).toBe(true);
+    expect(self.controller.successMessage.type).toBe('paymentMethodDeleted');
+    self.controller.$timeout.flush();
+    expect(self.controller.successMessage.show).toBe(false);
   });
 
   it('should not submit', ()=> {

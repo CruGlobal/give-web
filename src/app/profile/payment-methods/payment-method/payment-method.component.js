@@ -1,16 +1,15 @@
 import angular from 'angular';
-import template from './bank-account.tpl';
+import template from './payment-method.tpl';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
+import recurringGiftsComponent from '../recurring-gifts/recurring-gifts.component';
 import editPaymentMethodModal from 'common/components/paymentMethods/editPaymentMethod/editPaymentMethod.modal.component';
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
-import recurringGiftsComponent from '../recurring-gifts/recurring-gifts.component';
 
-
-class BankAccountController{
+class PaymentMethodController{
 
   /* @ngInject */
-  constructor(envService, $uibModal){
+  constructor(envService,$uibModal){
     this.isCollapsed = true;
     this.$uibModal = $uibModal;
     this.imgDomain = envService.read('imgDomain');
@@ -21,14 +20,17 @@ class BankAccountController{
     return `${this.model['expiry-month']}/${this.model['expiry-year']}`;
   }
 
+  isCard(){
+    return this.model['card-number'] ? true : false;
+  }
+
   editPaymentMethod() {
     this.editPaymentMethodModal = this.$uibModal.open({
       component: 'editPaymentMethodModal',
       windowTemplateUrl: giveModalWindowTemplate.name,
-      size: 'lg',
       resolve: {
         model: () => this.model,
-        paymentType: () => 'bankAccount',
+        onSubmit: () => this.onSubmit,
         submissionError: () => this.submissionError
       }
     });
@@ -44,30 +46,39 @@ class BankAccountController{
         paymentMethodsList: () => this.paymentMethodsList
       }
     });
+    this.deletePaymentMethodModal.result.then(() => {
+      this.onDelete();
+    });
   }
 
   $onDestroy(){
-    this.deletePaymentMethodModal ? this.deletePaymentMethodModal.dismiss() : false;
-    this.editPaymentMethodModal ? this.editPaymentMethodModal.dismiss() : false;
+    if(this.deletePaymentMethodModal) {
+      this.deletePaymentMethodModal.dismiss();
+    }
+    if(this.editPaymentMethodModal){
+      this.editPaymentMethodModal.dismiss();
+    }
   }
 
 }
 
-let componentName = 'bankAccount';
+let componentName = 'paymentMethod';
 
 export default angular
   .module(componentName, [
     template.name,
     displayAddressComponent.name,
+    recurringGiftsComponent.name,
     editPaymentMethodModal.name,
     deletePaymentMethodModal.name,
-    recurringGiftsComponent.name
+    giveModalWindowTemplate.name
   ])
   .component(componentName, {
-    controller: BankAccountController,
+    controller: PaymentMethodController,
     templateUrl: template.name,
     bindings: {
       model: '<',
-      paymentMethodsList: '<'
+      paymentMethodsList: '<',
+      onDelete: '&'
     }
   });

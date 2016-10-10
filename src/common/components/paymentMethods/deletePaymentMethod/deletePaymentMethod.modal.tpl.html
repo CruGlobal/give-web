@@ -23,13 +23,7 @@
 
             <div ng-if="$ctrl.view != 'addPaymentMethod'" class="panel panel-default bg-danger">
               <div class="panel-body">
-                <p>
-                  <span class="payment-icon">
-                    <i class="fa fa-{{$ctrl.getIcon()}}" aria-hidden="true"></i>
-                  </span>
-                  <span class="payment-nickname">{{$ctrl.getPaymentMethodName()}}</span>
-                  ending in ****{{$ctrl.getPaymentMethodLastFourDigits()}}
-                </p>
+                <payment-method-display payment-method="$ctrl.resolve.paymentMethod" with-fa-icons></payment-method-display>
               </div>
             </div>
 
@@ -89,7 +83,7 @@
                       </select>
                     </label>
                     <label class="radio u-textTransformNone">
-                      <input ng-model="$ctrl.deleteOption" value="2" type="radio" name="optradio" checked="{{$ctrl.filteredPaymentMethods.length==0}}">Move gifts to new payment method
+                      <input ng-model="$ctrl.deleteOption" value="2" type="radio" name="optradio" checked="{{$ctrl.filteredPaymentMethods.length==0}}">Move gifts to a new payment method
                     </label>
                     <label class="radio u-textTransformNone">
                       <input ng-model="$ctrl.deleteOption" value="3" type="radio" name="optradio">Stop recurring gifts

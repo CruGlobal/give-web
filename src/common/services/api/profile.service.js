@@ -115,6 +115,12 @@ class Profile {
       })
       .pluck('paymentMethods')
       .map((paymentMethods) => {
+        paymentMethods = map(paymentMethods, (paymentMethod) => {
+          if(paymentMethod.address){
+            paymentMethod.address = formatAddressForTemplate(paymentMethod.address);
+          }
+          return paymentMethod;
+        });
         return sortPaymentMethods(paymentMethods);
       });
   }

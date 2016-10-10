@@ -3,6 +3,7 @@ import angular from 'angular';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component.js';
 import profileService from 'common/services/api/profile.service.js';
 import addNewPaymentMethod from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.component';
+import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 
 import template from './deletePaymentMethod.modal.tpl';
 import remove from 'lodash/remove';
@@ -74,10 +75,6 @@ class deletePaymentMethodModalController {
 
   getPaymentMethodOptionLabel(paymentMethod){
     return (paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ending in ****' + (paymentMethod['display-account-number'] || paymentMethod['card-number']);
-  }
-
-  getIcon(){
-    return this.resolve.paymentMethod['card-type'] ? 'cc-'+this.resolve.paymentMethod['card-type'].toLowerCase() : 'bank';
   }
 
   getRecurrenceDate(gift){
@@ -256,7 +253,8 @@ export default angular
     template.name,
     loadingOverlay.name,
     addNewPaymentMethod.name,
-    profileService.name
+    profileService.name,
+    paymentMethodDisplay.name
   ])
   .component(componentName, {
     controller: deletePaymentMethodModalController,

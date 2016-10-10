@@ -12,6 +12,10 @@ class PaymentMethodDisplayController{
   constructor(envService){
     this.imgDomain = envService.read('imgDomain');
   }
+
+  getIcon(){
+    return this.paymentMethod['card-type'] ? 'cc-'+this.paymentMethod['card-type'].toLowerCase() : 'bank';
+  }
 }
 
 export default angular
@@ -24,6 +28,7 @@ export default angular
     controller: PaymentMethodDisplayController,
     templateUrl: template.name,
     bindings: {
-      paymentMethod: '<'
+      paymentMethod: '<',
+      withFaIcons: '@'
     }
   });

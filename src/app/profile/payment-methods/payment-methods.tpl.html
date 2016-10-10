@@ -1,6 +1,10 @@
-<loading-overlay ng-if="$ctrl.loading"></loading-overlay>
 <div class="screenContent account-management">
   <div class="container container-edge-small container-edge-extrasmall">
+    <div ng-switch="$ctrl.successMessage.type" ng-class="{fade: !$ctrl.successMessage.show}" class="alert alert-success" role="alert">
+      <span ng-switch-when="paymentMethodAdded" translate>Payment method has been successfully added.</span>
+      <span ng-switch-when="paymentMethodDeleted" translate>Payment method has been successfully deleted.</span>
+      <span ng-switch-when="paymentMethodUpdated" translate>Payment method has been successfully updated.</span>
+    </div>
     <div class="panel pane-margin-bottom">
       <div class="panel-body">
 
@@ -12,16 +16,10 @@
             <a class="btn btn-primary" ng-click="$ctrl.addPaymentMethod()">Add New Payment Method</a>
           </div>
         </div>
-        <div ng-if="$ctrl.paymentMethods" class="row">
-          <div ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
-            <bank-account
-              ng-if="!$ctrl.isCard(paymentMethod)"
-              model="paymentMethod"
-              payment-methods-list="$ctrl.paymentMethods"></bank-account>
-            <credit-card
-              ng-if="$ctrl.isCard(paymentMethod)"
-              model="paymentMethod"
-              payment-methods-list="$ctrl.paymentMethods"></credit-card>
+        <div class="row" style="position: relative">
+          <loading-overlay ng-if="$ctrl.loading"></loading-overlay>
+          <div ng-if="$ctrl.paymentMethods" ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
+            <payment-method model="paymentMethod" payment-methods-list="$ctrl.paymentMethods" on-delete="$ctrl.onDelete()"></payment-method>
           </div>
         </div>
         <div ng-if="$ctrl.error" class="error">

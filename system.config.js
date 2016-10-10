@@ -38,7 +38,6 @@ System.config({
     "lodash": "npm:lodash@4.15.0",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
-    "querystring": "github:jspm/nodelibs-querystring@0.1.0",
     "rollbar-browser": "npm:rollbar-browser@1.9.1",
     "rxjs": "npm:rxjs@5.0.0-beta.11",
     "stacktrace-js": "npm:stacktrace-js@1.3.1",
@@ -72,9 +71,6 @@ System.config({
     },
     "github:jspm/nodelibs-process@0.1.2": {
       "process": "npm:process@0.11.8"
-    },
-    "github:jspm/nodelibs-querystring@0.1.0": {
-      "querystring": "npm:querystring@0.2.0"
     },
     "github:jspm/nodelibs-stream@0.1.0": {
       "stream-browserify": "npm:stream-browserify@1.0.0"

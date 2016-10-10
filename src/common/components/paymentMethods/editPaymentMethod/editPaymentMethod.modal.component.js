@@ -19,21 +19,21 @@ class editPaymentMethodModalController{
   }
 
   getAccountNumber(){
-    return this.resolve.paymentType == 'creditCard'
-      ? this.resolve.model['card-number']
-      : this.resolve.model['display-account-number'];
+    return this.resolve.model['card-number'] || this.resolve.model['display-account-number'];
   }
 
   getNickname(){
-    return this.resolve.paymentType == 'creditCard'
-      ? this.resolve.model['card-type']
-      : this.resolve.model['bank-name'] + ' Account';
+    return this.resolve.model['card-type'] || this.resolve.model['bank-name'] + ' Account';
   }
 
   getIcon(){
-    return this.resolve.paymentType == 'creditCard'
+    return this.resolve.model['card-type']
       ? this.resolve.model['card-type'].replace(' ','-').toLowerCase()
       : 'bank';
+  }
+
+  isCard(){
+    return this.resolve.model['card-type'] ? true : false;
   }
 
   updatePaymentMethod(){}

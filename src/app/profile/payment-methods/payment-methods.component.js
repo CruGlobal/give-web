@@ -1,27 +1,31 @@
 import angular from 'angular';
 import template from './payment-methods.tpl';
 import recurringGiftsComponent from './recurring-gifts/recurring-gifts.component';
-import creditCard from './credit-card/credit-card.component';
 import profileService from 'common/services/api/profile.service.js';
-import bankAccount from './bank-account/bank-account.component';
+import paymentMethod from './payment-method/payment-method.component';
 import addNewPaymentMethodModal from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.modal.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
+import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 
 class PaymentMethodsController {
 
   /* @ngInject */
-  constructor($uibModal, profileService, $log) {
+  constructor($uibModal, profileService, $log, $timeout) {
     this.log = $log;
     this.$uibModal = $uibModal;
     this.paymentMethod = 'bankAccount';
     this.profileService = profileService;
     this.loading = false;
     this.submissionError = {error: ''};
+    this.successMessage = { show: false };
+    this.$timeout = $timeout;
   }
 
   $onDestroy(){
-    this.addNewPaymentMethodModal.close();
+    if(this.addNewPaymentMethodModal) {
+      this.addNewPaymentMethodModal.close();
+    }
   }
 
   $onInit(){
@@ -48,7 +52,7 @@ class PaymentMethodsController {
     this.addNewPaymentMethodModal = this.$uibModal.open({
       component: 'addNewPaymentMethodModal',
       backdrop: 'static',
-      size: 'lg',
+      size: 'new-payment-method-modal',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         onSubmit: () => this.onSubmit,
@@ -59,18 +63,24 @@ class PaymentMethodsController {
         parentComponent: this
       }
     });
-    this.addNewPaymentMethodModal.result.then(() => {
-      this.loading = true;
-      this.loadPaymentMethods();
+    this.addNewPaymentMethodModal.result.then((data) => {
+      this.successMessage = {
+        show: true,
+        type: 'paymentMethodAdded'
+      };
+      this.paymentMethods.push(data);
+      this.$timeout(()=>{
+        this.successMessage.show = false;
+      },60000);
     });
   }
 
   onSubmit(e) {
     if(e.data) {
       this.profileService.addPaymentMethod(e.data)
-        .subscribe(() => {
+        .subscribe((data) => {
           this.submitted = false;
-          this.parentComponent.addNewPaymentMethodModal.close();
+          this.parentComponent.addNewPaymentMethodModal.close(data);
         },
         (error) => {
           this.submitted = false;
@@ -80,6 +90,14 @@ class PaymentMethodsController {
     } else if(!e.success) {
       this.submitted = false;
     }
+  }
+
+  onDelete(){
+    this.successMessage.show = true;
+    this.successMessage.type = 'paymentMethodDeleted';
+    this.$timeout(()=>{
+      this.successMessage.show = false;
+    },60000);
   }
 
   isCard(paymentMethod) {
@@ -95,10 +113,10 @@ export default angular
     recurringGiftsComponent.name,
     addNewPaymentMethodModal.name,
     giveModalWindowTemplate.name,
-    bankAccount.name,
-    creditCard.name,
+    paymentMethod.name,
     loadingOverlay.name,
-    profileService.name
+    profileService.name,
+    paymentMethodDisplay.name
   ])
   .component(componentName, {
     controller: PaymentMethodsController,

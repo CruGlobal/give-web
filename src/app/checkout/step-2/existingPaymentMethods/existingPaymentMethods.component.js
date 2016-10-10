@@ -65,7 +65,7 @@ class ExistingPaymentMethodsController {
   openPaymentMethodFormModal(){
     this.paymentMethodFormModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
-      size: 'lg',
+      size: 'new-payment-method-modal',
       backdrop: 'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {

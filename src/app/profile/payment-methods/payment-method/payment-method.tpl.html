@@ -3,12 +3,7 @@
       <div ng-class="{'collapsed': $ctrl.isCollapsed}" class="payment-summary-link p- collapse-indicator-row" role="button">
         <div class="row">
           <div class="col-md-8">
-            <p>
-              <img class="hidden-xs payment-icon" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/{{$ctrl.getImage()}}-curved-128px.png"/>
-              <span class="payment-nickname">{{ $ctrl.model['card-type'] }}</span>
-              ending in ****{{ $ctrl.model['card-number'] }}
-              <span class="payment-expiration">EXPIRES {{ $ctrl.getExpiration() }}</span>
-            </p>
+            <payment-method-display payment-method="$ctrl.model"></payment-method-display>
           </div>
           <div class="col-md-4 text-right payment-details-link">
             <button class="btn trigger">Details</button>
@@ -22,9 +17,21 @@
         <div class="container-fluid">
           <div class="row">
 
-            <div class="col-sm-6 col-md-4">
+            <div ng-if="$ctrl.isCard()" class="col-sm-6 col-md-4">
               <p class="section-title mb0">Name of card</p>
               <p>{{$ctrl.model['cardholder-name']}}</p>
+            </div>
+
+            <div ng-if="!$ctrl.isCard()">
+              <div class="col-sm-6 col-md-4">
+                <p class="section-title mb0">Bank Name</p>
+                <p>{{$ctrl.model['bank-name']}}</p>
+              </div>
+
+              <div class="col-sm-6 col-md-4">
+                <p class="section-title mb0">Account Type</p>
+                <p>{{$ctrl.model['account-type']}}</p>
+              </div>
             </div>
 
             <div class="col-sm-6 col-md-4"></div>
@@ -39,10 +46,21 @@
             </div>
           </div>
 
-          <div ng-if="$ctrl.formattedAddres" class="row">
+          <div ng-if="$ctrl.isCard() && $ctrl.model.address" class="row">
             <div class="col-md-12 pt">
               <p class="section-title mb0">Billing address</p>
-              <display-address address="$ctrl.formattedAddress"></display-address>
+              <display-address address="$ctrl.model.address"></display-address>
+            </div>
+          </div>
+
+          <div ng-if="!$ctrl.isCard()" class="row pt">
+            <div class="col-sm-6 col-md-4">
+              <p class="section-title mb0">Account Number</p>
+              <p>***********{{$ctrl.model['display-account-number']}}</p>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <p class="section-title mb0">Routing Number</p>
+              <p>{{$ctrl.model['routing-number']}}</p>
             </div>
           </div>
         </div>

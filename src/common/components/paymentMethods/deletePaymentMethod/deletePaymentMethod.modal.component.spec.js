@@ -143,20 +143,6 @@ describe( 'delete payment method modal', function () {
 
   } );
 
-  describe( 'getIcon()', () => {
-    it( 'returns umage url path part', () => {
-      self.controller.resolve.paymentMethod['card-type'] = undefined;
-      self.controller.resolve.paymentMethod['bank-name'] = 'Moral Bank';
-      expect( self.controller.getIcon()).toBe('bank');
-
-      self.controller.resolve.paymentMethod['bank-name'] = undefined;
-      self.controller.resolve.paymentMethod['card-type'] = 'Visa';
-
-      expect( self.controller.getIcon()).toBe('cc-visa');
-    } );
-
-  } );
-
   describe( 'getRecurrenceDate()', () => {
     it( 'returns recurrence text', () => {
       let gift = {
