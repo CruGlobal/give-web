@@ -1,6 +1,10 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var historyApiFallback = require('connect-history-api-fallback');
+var proxy = require('proxy-middleware'), url = require('url');
+
+var proxyOptions = url.parse('https://give-stage2.cru.org/bin');
+proxyOptions.route = '/bin';
 
 gulp.task('serve', ['watch'], function (done) {
   browserSync({
@@ -18,7 +22,8 @@ gulp.task('serve', ['watch'], function (done) {
               return '/src/assets/' + context.match[1];
             }}
           ]
-        })
+        }),
+        proxy(proxyOptions)
       ]
     }
   }, done);

@@ -8,8 +8,16 @@ let componentName = 'designationEditor';
 class DesignationEditorController {
 
   /* @ngInject */
-  constructor( envService ) {
+  constructor( $http, envService ) {
     this.imgDomain = envService.read('imgDomain');
+    this.designationSecurityEndpoint = '/bin/crugive/designation-security.html';
+
+    $http.get(this.designationSecurityEndpoint, {
+      params: {
+        designationNumber: ''
+      },
+      withCredentials: true
+    });
   }
 
 }
