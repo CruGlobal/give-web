@@ -16,21 +16,40 @@ function RegisterAccountService( $q, orderService, sessionService, sessionModalS
     // 1. Sign In/Up
     // 2. Get Contact Info
     // 3. User Match
-    let registered = $q.defer(), session = $q.defer();
+    let registeredDeferred = $q.defer(),
+      sessionDeferred = $q.defer(),
+      donorDetailsDeferred = $q.defer();
 
     // Resolved when a session is established
-    session.promise.then( () => {
-      // We have a session, gather contact information
+    sessionDeferred.promise.then( () => {
+      // Check donordetails, it's possible we are already registered
+      orderService.getDonorDetails().subscribe( ( donorDetails ) => {
+        if ( donorDetails['registration-state'] === 'COMPLETED' ) {
+          // Registration is complete, resolve the workflow
+          registeredDeferred.resolve();
+        }
+        else {
+          // Proceed to 'register-account' modal by resolving the donorDetails
+          donorDetailsDeferred.resolve();
+        }
+      }, () => {
+        // Failed to get donorDetails, proceed to 'register-account'
+        donorDetailsDeferred.resolve();
+      } );
+    } );
+
+    // Resolved when donorDetails is not COMPLETED
+    donorDetailsDeferred.promise.then( () => {
       // 2. Get Contact Info
       sessionModalService.open( 'register-account', {size: '', backdrop: 'static'} ).result.then( () => {
         // 3. User Match
         sessionModalService.open( 'user-match', {backdrop: 'static'} ).result.then( () => {
-          registered.resolve();
+          registeredDeferred.resolve();
         }, () => {
-          registered.reject();
+          registeredDeferred.reject();
         } );
       }, () => {
-        registered.reject();
+        registeredDeferred.reject();
       } );
     } );
 
@@ -38,31 +57,20 @@ function RegisterAccountService( $q, orderService, sessionService, sessionModalS
     // 1. Sign In/Up
     if ( sessionService.getRole() !== Roles.registered ) {
       sessionModalService.open( 'sign-in', {backdrop: 'static'} ).result.then( () => {
-        // Check donordetails, it's possible we are already registered
-        orderService.getDonorDetails().subscribe( ( donorDetails ) => {
-          if ( donorDetails['registration-state'] === 'COMPLETED' ) {
-            // Registration is complete, resolve the workflow
-            registered.resolve();
-          }
-          else {
-            // Proceed to 'register-account' modal by resolving the session
-            session.resolve();
-          }
-        }, () => {
-          // Failed to get donorDetails, proceed to 'register-account'
-          session.resolve();
-        } );
+        // Sign In/Up success - resolve the session
+        sessionDeferred.resolve();
       }, () => {
-        // Failed sign-in/up
-        registered.reject();
+        // Sign-In/Up Cancelled/Failed - reject registerAccount
+        registeredDeferred.reject();
       } );
     }
     else {
-      session.resolve();
+      // Already Signed In - resolve the session
+      sessionDeferred.resolve();
     }
 
     // Resolved when entire register flow is completed, rejected otherwise.
-    return registered.promise;
+    return registeredDeferred.promise;
   }
 
   return registerAccount;

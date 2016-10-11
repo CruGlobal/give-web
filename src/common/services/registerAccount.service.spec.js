@@ -55,7 +55,7 @@ describe( 'registerAccountService', function () {
         registerAccountService();
         $rootScope.$digest();
         expect( sessionModalService.open ).not.toHaveBeenCalledWith( 'sign-in', jasmine.any( Object ) );
-        expect( sessionModalService.open ).toHaveBeenCalledWith( 'register-account', jasmine.any( Object ) );
+        expect( orderService.getDonorDetails ).toHaveBeenCalled();
       } );
     } );
 
