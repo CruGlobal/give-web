@@ -2,6 +2,8 @@ import angular from 'angular';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import {Sessions} from 'common/services/session/session.service';
+import {cortexSession} from 'common/services/session/fixtures/cortex-session';
 
 import module from './contactInfo.component.js';
 
@@ -62,7 +64,7 @@ describe('contactInfo', function() {
     it('should disable name fields if the user\'s registration state is completed', () => {
       let donorDetails = {
         'donor-type': 'Organization',
-        name: {
+        'name': {
           'given-name': 'Joe',
           'family-name': 'Smith'
         },
@@ -70,6 +72,7 @@ describe('contactInfo', function() {
           'given-name': 'Julie',
           'family-name': 'Smith'
         },
+        'email': 'joe.smith@example.com',
         'registration-state': 'COMPLETED'
       };
       spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of(donorDetails));
@@ -83,6 +86,42 @@ describe('contactInfo', function() {
       self.controller.loadDonorDetails();
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
       expect(self.controller.donorDetails).toEqual({ 'donor-type': 'Household' });
+    });
+
+    describe('pre-populate from session', () => {
+      let $cookies;
+      beforeEach(inject((_$cookies_, $rootScope) => {
+        $cookies = _$cookies_;
+        $cookies.put(Sessions.cortex, cortexSession.registered);
+        $rootScope.$digest();
+      }));
+
+      afterEach( () => {
+        $cookies.remove( Sessions.cortex );
+      } );
+
+      it('should set given, family and name to session values', () => {
+        spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({
+          'donor-type': 'Household',
+          'name': {
+            'given-name': '',
+            'family-name': ''
+          },
+          'email': undefined,
+          'registration-state': 'NEW'
+        }));
+        self.controller.loadDonorDetails();
+        expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
+        expect(self.controller.donorDetails).toEqual({
+          'donor-type': 'Household',
+          'name': {
+            'given-name': 'Charles',
+            'family-name': 'Xavier'
+          },
+          'email': 'professorx@xavier.edu',
+          'registration-state': 'NEW'
+        });
+      })
     });
   });
 

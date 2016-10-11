@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-messages';
+import includes from 'lodash/includes';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 
@@ -47,6 +48,18 @@ class Step1Controller{
         }
         this.donorDetails = data;
         this.nameFieldsDisabled = this.donorDetails['registration-state'] === 'COMPLETED';
+        if(!this.nameFieldsDisabled && includes([Roles.registered, Roles.identified], this.sessionService.getRole())) {
+          // Pre-populate first, last and email from session if missing from donorDetails
+          if(!this.donorDetails['name']['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
+            this.donorDetails['name']['given-name'] = this.sessionService.session.first_name;
+          }
+          if(!this.donorDetails['name']['family-name'] && angular.isDefined(this.sessionService.session.last_name)) {
+            this.donorDetails['name']['family-name'] = this.sessionService.session.last_name;
+          }
+          if(angular.isUndefined(this.donorDetails['email']) && angular.isDefined(this.sessionService.session.email)) {
+            this.donorDetails['email'] = this.sessionService.session.email;
+          }
+        }
       });
   }
 
