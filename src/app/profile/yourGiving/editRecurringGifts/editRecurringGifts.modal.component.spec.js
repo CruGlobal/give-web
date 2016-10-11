@@ -26,6 +26,9 @@ describe('edit recurring gifts modal', () => {
   });
 
   describe('loadPaymentMethods', () => {
+    beforeEach(() => {
+      jasmine.clock().mockDate(new Date(2015, 0, 10));
+    });
     it('should handle bank accounts', () => {
       let paymentMethods = [{
         self: {
@@ -47,7 +50,8 @@ describe('edit recurring gifts modal', () => {
         self: {
           type: 'cru.creditcards.named-credit-card'
         },
-        status: 'Active'
+        'expiry-month': '01',
+        'expiry-year': '2015'
       }];
       spyOn(self.controller.profileService, 'getPaymentMethods').and.returnValue(Observable.of(paymentMethods));
       spyOn(self.controller, 'next');
@@ -63,7 +67,9 @@ describe('edit recurring gifts modal', () => {
       let paymentMethods = [{
         self: {
           type: 'cru.creditcards.named-credit-card'
-        }
+        },
+        'expiry-month': '12',
+        'expiry-year': '2014'
       }];
       spyOn(self.controller.profileService, 'getPaymentMethods').and.returnValue(Observable.of(paymentMethods));
       spyOn(self.controller, 'next');
