@@ -30,7 +30,7 @@ class EditRecurringGiftsModalController {
         this.paymentMethods = data;
         this.hasPaymentMethods = this.paymentMethods && this.paymentMethods.length > 0;
         this.hasValidPaymentMethods = some(this.paymentMethods, (paymentMethod) => {
-          return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || paymentMethod.status === 'Active';
+          return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || ( parseInt(paymentMethod['expiry-month']) > (new Date()).getMonth() && parseInt(paymentMethod['expiry-year']) >= (new Date()).getFullYear() );
         });
         this.next();
       }, (error) => {
