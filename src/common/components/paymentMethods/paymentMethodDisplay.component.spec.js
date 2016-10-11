@@ -15,15 +15,4 @@ describe('paymentMethodDisplay', function() {
     expect(self.controller).toBeDefined();
     expect(self.controller.imgDomain).toEqual('');
   });
-
-  describe('getIcon()', () => {
-    it('should return and icon', () => {
-      self.controller.paymentMethod = {
-        'card-type': 'American Express'
-      };
-      expect(self.controller.getIcon()).toBe('cc-american express');
-      self.controller.paymentMethod = {};
-      expect(self.controller.getIcon()).toBe('bank');
-    });
-  });
 });
