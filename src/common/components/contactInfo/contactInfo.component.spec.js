@@ -121,7 +121,7 @@ describe('contactInfo', function() {
           'email': 'professorx@xavier.edu',
           'registration-state': 'NEW'
         });
-      })
+      });
     });
   });
 
