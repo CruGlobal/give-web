@@ -3,7 +3,7 @@
     <div id="mobile-logo"></div>
 
     <div id="sign-in-section">
-      <sign-in-button id="sign-in"></sign-in-button>
+      <div id="sign-in" ng-if="!$ctrl.isSignedIn" ng-click="$ctrl.signIn()" translate>Sign In</div>
 
       <div id="mobile-nav-icon" ng-click="$ctrl.toggleMenu()" ng-class="{'open': $ctrl.mobileNavOpen}">
         <span></span>
