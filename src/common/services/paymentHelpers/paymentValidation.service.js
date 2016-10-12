@@ -43,7 +43,7 @@ class PaymentValidation {
   validateCardNumber(){
     return (cardNumber) => {
       cardNumber = toString(cardNumber);
-      return (new this.ccp.CardNumber(cardNumber)).validate() === null;
+      return this.ccp && (new this.ccp.CardNumber(cardNumber)).validate() === null;
     };
   }
 

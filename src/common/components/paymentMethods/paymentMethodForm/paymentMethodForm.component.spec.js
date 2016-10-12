@@ -1,8 +1,8 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './addNewPaymentMethod.component.js';
+import module from './paymentMethodForm.component.js';
 
-describe('addNewPaymentMethod', () => {
+describe('paymentMethodForm', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
@@ -12,6 +12,22 @@ describe('addNewPaymentMethod', () => {
         onSubmit: () => {}
       });
   }));
+
+  describe('$onInit', () => {
+    it('should keep bankAccount as the default payment method if paymentMethod does not exists', () => {
+      self.controller.paymentMethod = undefined;
+      self.controller.$onInit();
+      expect(self.controller.paymentType).toEqual('bankAccount');
+    });
+    it('should choose the correct payment method type from the paymentMethod if it exists', () => {
+      self.controller.paymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account' } };
+      self.controller.$onInit();
+      expect(self.controller.paymentType).toEqual('bankAccount');
+      self.controller.paymentMethod = { self: { type: 'cru.creditcards.named-credit-card' } };
+      self.controller.$onInit();
+      expect(self.controller.paymentType).toEqual('creditCard');
+    });
+  });
 
   describe('changePaymentType', () => {
     beforeEach(() => {

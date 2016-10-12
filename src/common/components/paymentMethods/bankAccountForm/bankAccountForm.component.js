@@ -23,16 +23,31 @@ class BankAccountController{
 
     this.imgDomain = envService.read('imgDomain');
     this.bankPayment = {
-      accountType: null //TODO: should this be selected by default?
+      accountType: 'Checking'
     };
 
+  }
+
+  $onInit(){
     this.loadCcp();
+    this.initExistingPaymentMethod();
     this.waitForFormInitialization();
   }
 
   $onChanges(changes){
     if(changes.submitted.currentValue === true){
       this.savePayment();
+    }
+  }
+
+  initExistingPaymentMethod(){
+    if(this.paymentMethod){
+      this.bankPayment = {
+        accountType: this.paymentMethod['account-type'],
+        bankName: this.paymentMethod['bank-name'],
+        accountNumberPlaceholder: this.paymentMethod['display-account-number'],
+        routingNumber: this.paymentMethod['routing-number']
+      };
     }
   }
 
@@ -56,7 +71,7 @@ class BankAccountController{
     this.bankPaymentForm.routingNumber.$validators.routingNumber = this.paymentValidationService.validateRoutingNumber();
 
     this.bankPaymentForm.accountNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.bankPaymentForm.accountNumber.$validators.minlength = number => toString(number).length >= 2;
+    this.bankPaymentForm.accountNumber.$validators.minlength = number => this.paymentMethod && !number || toString(number).length >= 2;
     this.bankPaymentForm.accountNumber.$validators.maxlength = number => toString(number).length <= 17;
     this.bankPaymentForm.accountNumber.$viewChangeListeners.push(() => {
       // Revalidate verifyAccountNumber after accountNumber changes
@@ -73,14 +88,14 @@ class BankAccountController{
   savePayment(){
     this.bankPaymentForm.$setSubmitted();
     if(this.bankPaymentForm.$valid){
-      let ccpAccountNumber = new (this.ccp.BankAccountNumber)(this.bankPayment.accountNumber);
+      let ccpAccountNumber = this.paymentMethod && !this.bankPayment.accountNumber ? '' : new (this.ccp.BankAccountNumber)(this.bankPayment.accountNumber).encrypt();
       this.onSubmit({
         success: true,
         data: {
           bankAccount: {
             'account-type': this.bankPayment.accountType,
             'bank-name': this.bankPayment.bankName,
-            'encrypted-account-number': ccpAccountNumber.encrypt(),
+            'encrypted-account-number': ccpAccountNumber,
             'routing-number': this.bankPayment.routingNumber
           }
         }
@@ -106,6 +121,7 @@ export default angular
     templateUrl: template.name,
     bindings: {
       submitted: '<',
+      paymentMethod: '<',
       onSubmit: '&'
     }
   });

@@ -8,6 +8,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 
 import cortexApiService from '../cortexApi.service';
@@ -46,13 +47,13 @@ class Profile {
           phone = find( data.phoneNumbers, {primary: true} );
         return {
           name:        (spouse['given-name']) ?
-                         `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
-                         `${donor['given-name']} ${donor['family-name']}`,
+            `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
+            `${donor['given-name']} ${donor['family-name']}`,
           donorNumber: angular.isDefined( data.donorDetails ) ? data.donorDetails['donor-number'] : undefined,
           email:       angular.isDefined( data.emailAddress ) ? data.emailAddress.email : undefined,
           phone:       angular.isDefined( phone ) ? phone['phone-number'] : undefined,
           address:     angular.isDefined( data.mailingAddress ) ?
-                         formatAddressForTemplate( data.mailingAddress.address ) : undefined,
+            formatAddressForTemplate( data.mailingAddress.address ) : undefined,
           yearToDate:  angular.isDefined( data.yearToDate ) ? data.yearToDate['year-to-date-amount'] : undefined
         };
       } );
@@ -66,16 +67,21 @@ class Profile {
           donorDetails:   'donordetails'
         }
       } )
-      .pluck( 'donorDetails' );
+      .pluck( 'donorDetails' )
+      .map((donorDetails) => {
+        donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address']);
+        delete donorDetails['mailing-address'];
+        return donorDetails;
+      });
   }
 
   getEmail(){
     return this.cortexApiService.get({
-      path: ['profiles', this.cortexApiService.scope, 'default'],
-      zoom: {
-        email: 'emails:element'
-      }
-    })
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          email: 'emails:element'
+        }
+      })
       .pluck('email')
       .pluck('email');
   }
@@ -152,16 +158,34 @@ class Profile {
     }
   }
 
+
+  updatePaymentMethod(originalPaymentInfo, paymentInfo){
+    if(paymentInfo.bankAccount){
+      paymentInfo = paymentInfo.bankAccount;
+    }else if(paymentInfo.creditCard){
+      paymentInfo = paymentInfo.creditCard;
+      if(paymentInfo.address) {
+        paymentInfo.address = formatAddressForCortex(paymentInfo.address);
+      }
+    }else{
+      return Observable.throw('Error updating payment method. The data passed to profileService.updatePaymentMethod did not contain bankAccount or creditCard data.');
+    }
+    return this.cortexApiService.put({
+      path: originalPaymentInfo.self.uri,
+      data: paymentInfo
+    });
+  }
+
   getPurchase(uri){
     return this.cortexApiService.get({
-      path: uri,
-      zoom: {
-        donorDetails: 'donordetails',
-        paymentMeans: 'paymentmeans:element',
-        lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
-        rateTotals: 'ratetotals:element[]'
-      }
-    })
+        path: uri,
+        zoom: {
+          donorDetails: 'donordetails',
+          paymentMeans: 'paymentmeans:element',
+          lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
+          rateTotals: 'ratetotals:element[]'
+        }
+      })
       .map((data) => {
         data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address']);
         delete data.donorDetails['mailing-address'];

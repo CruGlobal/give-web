@@ -1,0 +1,47 @@
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.error">
+  <p ng-switch="$ctrl.submissionError.error">
+    <span ng-switch-when="Invalid routing number" translate>
+      The routing number you entered does not seem to be valid. Please verify that it is correct.
+    </span>
+    <span ng-switch-when="This credit card already exists." translate>
+      This credit card already exists. Please use a different credit card.
+    </span>
+    <span ng-switch-default translate>
+      There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
+    </span>
+  </p>
+</div>
+
+<div class="panel panel-default panel-with-gray-background" ng-if="$ctrl.paymentMethod">
+  <div class="panel-body">
+    <payment-method-display payment-method="$ctrl.paymentMethod"></payment-method-display>
+  </div>
+</div>
+
+<div class="mb_x" ng-if="!$ctrl.paymentMethod">
+  <div class="row">
+    <div class="col-md-6">
+      <button class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('bankAccount')" ng-class="{'on': $ctrl.paymentType === 'bankAccount'}">
+        Bank Account
+        <img ng-src="{{$ctrl.imgDomain}}/assets/img/icon-bank.png" alt="Bank Account Icon"/>
+      </button>
+    </div>
+    <div class="col-md-6">
+      <button class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('creditCard')" ng-class="{'on': $ctrl.paymentType === 'creditCard'}">
+        Credit Card
+        <img ng-src="{{$ctrl.imgDomain}}/assets/img/icon-cc.png" alt="Credit Card Icon"/>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="tab-indiv cart-tab show" ng-if="$ctrl.paymentType === 'bankAccount'">
+
+  <bank-account-form submitted="$ctrl.submitted" on-submit="$ctrl.onChildSubmit(success, data)" payment-method="$ctrl.paymentMethod"></bank-account-form>
+
+</div>
+<div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
+
+  <credit-card-form submitted="$ctrl.submitted" on-submit="$ctrl.onChildSubmit(success, data)" payment-method="$ctrl.paymentMethod" mailing-address="$ctrl.mailingAddress"></credit-card-form>
+
+</div>

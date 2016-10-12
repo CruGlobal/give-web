@@ -1,0 +1,19 @@
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="text-center border-bottom-small">
+        <span ng-if="!$ctrl.resolve.paymentMethod" translate>Add New Payment Method</span>
+        <span ng-if="$ctrl.resolve.paymentMethod" translate>Edit Payment Method</span>
+      </h3>
+      <payment-method-form submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.resolve.submissionError" payment-method="$ctrl.resolve.paymentMethod" mailing-address="$ctrl.resolve.mailingAddress"></payment-method-form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.submitted = true" translate>
+    <span ng-if="!$ctrl.resolve.paymentMethod" translate>Add Payment Method</span>
+    <span ng-if="$ctrl.resolve.paymentMethod" translate>Update Payment Method</span>
+  </button>
+  <button type="button" class="btn btn-default" ng-click="$ctrl.dismiss()" translate>Cancel &amp; Return</button>
+</div>
+

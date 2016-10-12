@@ -35,6 +35,18 @@ describe('bank account form', () => {
     self.formController = self.controller.bankPaymentForm;
   }));
 
+  describe('$onInit', () => {
+    it('should call the necessary initialization functions', () => {
+      spyOn(self.controller, 'loadCcp');
+      spyOn(self.controller, 'initExistingPaymentMethod');
+      spyOn(self.controller, 'waitForFormInitialization');
+      self.controller.$onInit();
+      expect(self.controller.loadCcp).toHaveBeenCalled();
+      expect(self.controller.initExistingPaymentMethod).toHaveBeenCalled();
+      expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
+    });
+  });
+
   describe('$onChanges', () => {
     it('should call savePayment when called directly with a mock change object', () => {
       spyOn(self.controller, 'savePayment');
@@ -50,6 +62,32 @@ describe('bank account form', () => {
       self.outerScope.submitted = true;
       self.outerScope.$apply();
       expect(self.controller.savePayment).toHaveBeenCalled();
+    });
+  });
+
+  describe('initExistingPaymentMethod', () => {
+    it('should populate the bankPayment fields if a paymentMethod is present', () => {
+      self.controller.paymentMethod = {
+        'account-type': 'Checking',
+        'bank-name': 'Some Bank',
+        'display-account-number': '1234',
+        'routing-number': '021000021'
+      };
+      self.controller.initExistingPaymentMethod();
+      expect(self.controller.bankPayment).toEqual({
+        accountType: 'Checking',
+        bankName: 'Some Bank',
+        accountNumberPlaceholder: '1234',
+        routingNumber: '021000021'
+      });
+    });
+  });
+
+  describe('loadCcp', () => {
+    it('should load ccp', () => {
+    spyOn(self.controller.ccpService, 'get').and.returnValue(Observable.of('ccp object'));
+      self.controller.loadCcp();
+      expect(self.controller.ccp).toEqual('ccp object');
     });
   });
 
@@ -106,6 +144,28 @@ describe('bank account form', () => {
           "account-type": "checking",
           "bank-name": "First Bank",
           "encrypted-account-number": jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
+          "routing-number": "123456789"
+        }
+      };
+      expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
+      expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);
+    });
+    it('should send a request to save the bank account payment info with an existing payment method where the accountNumber is empty', () => {
+      self.controller.paymentMethod = {};
+      self.controller.bankPayment = {
+        accountType: 'checking',
+        bankName: 'First Bank',
+        routingNumber: '123456789',
+        accountNumber: ''
+      };
+      self.formController.$valid = true;
+      self.controller.savePayment();
+      expect(self.formController.$setSubmitted).toHaveBeenCalled();
+      let expectedData = {
+        bankAccount: {
+          "account-type": "checking",
+          "bank-name": "First Bank",
+          "encrypted-account-number": '',
           "routing-number": "123456789"
         }
       };
@@ -197,6 +257,13 @@ describe('bank account form', () => {
         expect(self.formController.accountNumber.$valid).toEqual(false);
         expect(self.formController.accountNumber.$error.required).toEqual(true);
       });
+      it('should be valid if the field is empty and an existing payment method is present',  () => {
+        self.controller.paymentMethod = {};
+        self.formController.accountNumber.$setViewValue('');
+        expect(self.formController.accountNumber.$valid).toEqual(true);
+        expect(self.formController.accountNumber.$error.required).toBeUndefined();
+        expect(self.formController.accountNumber.$error.minlength).toBeUndefined();
+      });
       it('should not be valid if there are less than 2 digits',  () => {
         self.formController.accountNumber.$setViewValue('1');
         expect(self.formController.accountNumber.$valid).toEqual(false);
@@ -222,10 +289,16 @@ describe('bank account form', () => {
       });
     });
     describe('verifyAccountNumber input', () => {
-      it('should not be valid if the field is empty',  () => {
+      it('should not be valid if the field is empty and accountNumber is valid',  () => {
+        self.formController.accountNumber.$setViewValue('1234567890123456');
         self.formController.verifyAccountNumber.$setViewValue('');
         expect(self.formController.verifyAccountNumber.$valid).toEqual(false);
         expect(self.formController.verifyAccountNumber.$error.required).toEqual(true);
+      });
+      it('should be valid if the field is empty and accountNumber is empty (using existing payment method)',  () => {
+        self.controller.paymentMethod = {};
+        expect(self.formController.verifyAccountNumber.$valid).toEqual(true);
+        expect(self.formController.verifyAccountNumber.$error.required).toBeUndefined();
       });
       it('should be valid if the account numbers match',  () => {
         self.formController.accountNumber.$setViewValue('1234567890123456');

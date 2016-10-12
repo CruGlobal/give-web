@@ -18,6 +18,23 @@ describe('checkout', () => {
         });
     }));
 
+    describe('$onInit', () => {
+      it('should call loadDonorDetails', () => {
+        spyOn(self.controller, 'loadDonorDetails');
+        self.controller.$onInit();
+        expect(self.controller.loadDonorDetails).toHaveBeenCalled();
+      });
+    });
+
+    describe('loadDonorDetails', () => {
+      it('should load mailing address', () => {
+        spyOn(self.controller.orderService, 'getDonorDetails').and.returnValue(Observable.of({ mailingAddress: { streetAddress: 'Some street address'} }));
+        self.controller.loadDonorDetails();
+        expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
+        expect(self.controller.mailingAddress).toEqual({ streetAddress: 'Some street address'});
+      });
+    });
+
     describe('handleExistingPaymentLoading', () => {
       it('should set flags for the view if payment methods exist', () => {
         expect(self.controller.loadingPaymentMethods).toEqual(true);
