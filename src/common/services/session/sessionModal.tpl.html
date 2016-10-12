@@ -48,7 +48,8 @@
           <register-account-modal ng-switch-when="register-account"
                                   modal-title="$ctrl.modalTitle"
                                   on-state-change="$ctrl.stateChanged(state)"
-                                  on-success="$ctrl.onSignUpSuccess()">
+                                  on-success="$ctrl.onSignUpSuccess()"
+                                  on-cancel="$ctrl.onCancel()">
           </register-account-modal>
           <account-benefits-modal ng-switch-when="account-benefits"
                                   modal-title="$ctrl.modalTitle"

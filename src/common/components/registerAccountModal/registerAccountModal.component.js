@@ -21,10 +21,10 @@ class RegisterAccountModalController {
     this.modalTitle = this.gettext( 'Your Contact Information' );
   }
 
-  onSubmit(success){
-    if(success){
+  onSubmit( success ) {
+    if ( success ) {
       this.onSuccess();
-    }else{
+    } else {
       this.submitted = false;
     }
   }
@@ -43,6 +43,7 @@ export default angular
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',
-      onSuccess:     '&'
+      onSuccess:     '&',
+      onCancel:      '&'
     }
   } );

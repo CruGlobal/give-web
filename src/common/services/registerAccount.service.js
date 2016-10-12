@@ -42,6 +42,7 @@ function RegisterAccountService( $q, orderService, sessionService, sessionModalS
     donorDetailsDeferred.promise.then( () => {
       // 2. Get Contact Info
       sessionModalService.open( 'register-account', {size: '', backdrop: 'static'} ).result.then( () => {
+        // TODO: after contact info, we may need to POST donormatches form
         // 3. User Match
         sessionModalService.open( 'user-match', {backdrop: 'static'} ).result.then( () => {
           registeredDeferred.resolve();
