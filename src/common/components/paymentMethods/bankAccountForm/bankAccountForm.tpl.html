@@ -19,10 +19,10 @@
         <div class="form-group form-group-default form-group-inline" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}">
           <label class="label-block">Account Type</label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="checking" required> Checking <span class="hidden-md">Account</span>
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Checking" required> Checking <span class="hidden-md">Account</span>
           </label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="savings" required> Savings <span class="hidden-md">Account</span>
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Savings" required> Savings <span class="hidden-md">Account</span>
           </label>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountType.$error" ng-if="($ctrl.bankPaymentForm.accountType | showErrors)">
             <div class="help-block" ng-message="required" translate>You must choose an account type</div>
