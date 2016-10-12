@@ -141,11 +141,11 @@ describe('edit recurring gifts modal', () => {
       expect(self.controller.state).toEqual('step0AddUpdatePaymentMethod');
     });
 
-    it('should transition from step0AddUpdatePaymentMethod to step1EditRecurringGifts', () => {
+    it('should transition from step0AddUpdatePaymentMethod to step1EditRecurringGifts by reloading the payment methods', () => {
+      spyOn(self.controller, 'loadPaymentMethods');
       self.controller.state = 'step0AddUpdatePaymentMethod';
-      self.controller.next('payment method');
-      expect(self.controller.paymentMethod).toEqual('payment method');
-      expect(self.controller.state).toEqual('step1EditRecurringGifts');
+      self.controller.next();
+      expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
     });
 
     it('should transition from step1EditRecurringGifts to step2AddRecentRecipients', () => {

@@ -58,8 +58,7 @@ class EditRecurringGiftsModalController {
         this.state = 'step0AddUpdatePaymentMethod';
         break;
       case 'step0AddUpdatePaymentMethod':
-        this.paymentMethod = paymentMethod;
-        this.state = 'step1EditRecurringGifts';
+        this.loadPaymentMethods();
         break;
       case 'step1EditRecurringGifts':
         this.recurringGiftChanges = recurringGiftChanges;

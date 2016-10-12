@@ -3,7 +3,7 @@ import find from 'lodash/find';
 import 'angular-ui-bootstrap';
 
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
-import addNewPaymentMethodModal from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.modal.component';
+import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 
 import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
 
@@ -43,10 +43,10 @@ class ExistingPaymentMethodsController {
         }else{
           this.onLoad({success: true, hasExistingPaymentMethods: false});
         }
-        this.addNewPaymentMethodModal && this.addNewPaymentMethodModal.close();
+        this.paymentMethodFormModal && this.paymentMethodFormModal.close();
       }, (error) => {
         this.onLoad({success: false, error: error});
-        this.addNewPaymentMethodModal && this.addNewPaymentMethodModal.close();
+        this.paymentMethodFormModal && this.paymentMethodFormModal.close();
       });
   }
 
@@ -61,20 +61,21 @@ class ExistingPaymentMethodsController {
     }
   }
 
-  openAddNewPaymentMethodModal(){
-    this.addNewPaymentMethodModal = this.$uibModal.open({
-      component: 'addNewPaymentMethodModal',
+  openPaymentMethodFormModal(){
+    this.paymentMethodFormModal = this.$uibModal.open({
+      component: 'paymentMethodFormModal',
       size: 'large new-payment-method-modal',
       backdrop: 'static', // Disables closing on click
       resolve: {
         submissionError: this.submissionError,
+        mailingAddress: this.mailingAddress,
         onSubmit: () => (params) => {
           params.stayOnStep = true;
           this.onSubmit(params);
         }
       }
     });
-    this.addNewPaymentMethodModal.result.then(null, () => {
+    this.paymentMethodFormModal.result.catch(() => {
       this.onSubmit({success: false, error: ''}); // To clear the submissionErrors object in step 2
     });
   }
@@ -97,7 +98,7 @@ export default angular
     template.name,
     'ui.bootstrap',
     paymentMethodDisplay.name,
-    addNewPaymentMethodModal.name,
+    paymentMethodFormModal.name,
     orderService.name
   ])
   .component(componentName, {
@@ -107,6 +108,7 @@ export default angular
       submitted: '<',
       submissionError: '<',
       submitSuccess: '<',
+      mailingAddress: '<',
       onSubmit: '&',
       onLoad: '&'
     }
