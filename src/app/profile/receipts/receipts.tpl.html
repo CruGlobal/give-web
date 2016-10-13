@@ -1,0 +1,78 @@
+<div class="screenContent" tabindex="-1" role="dialog">
+  <div class="container">
+    <div class="col-md-12">
+
+      <div class="panel panel-margin-bottom">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Receipts</h3>
+
+              <form ng-if="$ctrl.receipts && $ctrl.receipts.length" class="form-inline mt">
+                <div class="form-group">
+                  <span class="pr-">View My Gifts:</span>
+                </div>
+                <div class="input-group">
+                  <div class="btn-group">
+                    <button ng-click="$ctrl.toggle = !$ctrl.toggle" class="btn btn-default dropdown-toggle">
+                      <span class="hidden-xs">{{$ctrl.showYear}} <span class="caret"></span></span>
+                      <span class="visible-xs"><span class="fa fa-filter"></span></span>
+                    </button>
+                    <ul ng-show="$ctrl.toggle" ng-click="$ctrl.toggle = false" class="dropdown-menu" style="display: block">
+                      <li ng-repeat="year in $ctrl.years">
+                        <a ng-click="$ctrl.setYear(year)" href="">{{year}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+          <div class="row mt">
+            <loading-overlay ng-if="$ctrl.loading"></loading-overlay>
+            <div ng-if="$ctrl.receipts && $ctrl.receipts.length" class="col-md-12">
+              <div class="table-responsive">
+                <table class="table table-striped table-striped-dark borderless">
+                  <thead>
+                  <tr>
+                    <td>Receipt Date</td>
+                    <td>Amount</td>
+                    <td>Gift Details</td>
+                    <td></td>
+                  </tr>
+                  </thead>
+
+                  <tbody>
+                  <tr ng-repeat="receipt in filtered = ($ctrl.receipts | filterByYear:$ctrl.showYear) | limitTo: $ctrl.maxShow">
+                    <td>{{receipt['transaction-date']['display-value']}}</td>
+                    <td>{{receipt['total-amount'] | currency}}</td>
+                    <td>{{receipt['designation-names'].join(' ,')}}</td>
+                    <td>
+                      <p class="mb0">#{{receipt['transaction-number']}}</p>
+                      <a class="u-textWeight-semiBold" href="{{receipt['pdf-link']['href']}}" target="_blank">View PDF</a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div ng-if="$ctrl.receipts && $ctrl.receipts.length == 0">
+            Receipts will be available after we have processed your first gift.
+          </div>
+          <div class="row mt">
+            <div class="col-xs-12">
+              <button
+                ng-if="$ctrl.maxShow < filtered.length"
+                ng-click="$ctrl.maxShow = $ctrl.maxShow + $ctrl.step"
+                class="btn btn-default center-block ps_x">Load More</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

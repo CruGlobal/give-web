@@ -44,10 +44,27 @@ function DonationsService( cortexApiService ) {
       .pluck( 'gifts' );
   }
 
+  function getReceipts( data ) {
+    return cortexApiService
+      .post( {
+        path: '/receipts/items',
+        followLocation: true,
+        data: data
+      } )
+      .map( (response) => {
+        angular.forEach(response['receipt-summaries'], (item, index) => {
+          item['pdf-link'] = response['links'][index+1];
+        });
+        return response;
+      })
+      .pluck( 'receipt-summaries' );
+  }
+
   return {
     getHistoricalGifts:  getHistoricalGifts,
     getRecipients:       getRecipients,
-    getRecipientDetails: getRecipientDetails
+    getRecipientDetails: getRecipientDetails,
+    getReceipts:         getReceipts
   };
 }
 
