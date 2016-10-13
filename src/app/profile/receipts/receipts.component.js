@@ -22,7 +22,6 @@ class ReceiptsController {
     this.showYear = '';
     this.maxShow = this.step = 25;
     this.retrievingError = '';
-    this.toggle = false;
   }
 
   $onInit() {
@@ -44,7 +43,7 @@ class ReceiptsController {
 
     let data = {
       'end-date': {
-        'display-value': currentYear + '-' + ((today.getMonth()*1)+1) + '-' + today.getDate()
+
       },
       'start-date': {
         'display-value': currentYear - 10 + '-' + ((today.getMonth()*1)+1) + '-' + today.getDate()
@@ -67,7 +66,7 @@ class ReceiptsController {
         },
         error => {
           this.loading = false;
-          this.retrievingError = 'Failed retrieving receipts';
+          this.retrievingError = 'Failed retrieving receipts.';
           this.$log.error(this.retrievingError,error);
         }
       );

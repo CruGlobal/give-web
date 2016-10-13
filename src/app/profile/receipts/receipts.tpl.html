@@ -1,7 +1,9 @@
 <div class="screenContent" tabindex="-1" role="dialog">
   <div class="container">
     <div class="col-md-12">
-
+      <div ng-if="$ctrl.retrievingError" class="alert alert-danger" role="alert">
+        <span>{{$ctrl.retrievingError}}</span>
+      </div>
       <div class="panel panel-margin-bottom">
         <div class="panel-body">
           <div class="row">
