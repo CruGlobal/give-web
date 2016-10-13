@@ -13,12 +13,12 @@
                   <span class="pr-">View My Gifts:</span>
                 </div>
                 <div class="input-group">
-                  <div class="btn-group">
-                    <button ng-click="$ctrl.toggle = !$ctrl.toggle" class="btn btn-default dropdown-toggle">
+                  <div class="btn-group" uib-dropdown>
+                    <button ng-click="$ctrl.toggle = !$ctrl.toggle" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
                       <span class="hidden-xs">{{$ctrl.showYear}} <span class="caret"></span></span>
                       <span class="visible-xs"><span class="fa fa-filter"></span></span>
                     </button>
-                    <ul ng-show="$ctrl.toggle" ng-click="$ctrl.toggle = false" class="dropdown-menu" style="display: block">
+                    <ul ng-click="$ctrl.toggle = false" class="dropdown-menu" uib-dropdown-menu>
                       <li ng-repeat="year in $ctrl.years">
                         <a ng-click="$ctrl.setYear(year)" href="">{{year}}</a>
                       </li>
