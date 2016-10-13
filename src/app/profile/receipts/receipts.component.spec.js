@@ -92,7 +92,7 @@ describe('profile', function() {
       }));
       self.controller.getReceipts();
       expect(self.controller.donationsService.getReceipts).toHaveBeenCalled();
-      expect(self.controller.retrievingError).toBe('Failed retrieving receipts');
+      expect(self.controller.retrievingError).toBe('Failed retrieving receipts.');
     }) ;
   } );
 
