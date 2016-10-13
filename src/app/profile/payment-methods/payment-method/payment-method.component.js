@@ -5,15 +5,31 @@ import recurringGiftsComponent from '../recurring-gifts/recurring-gifts.componen
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
+import profileService from 'common/services/api/profile.service';
+
+let componentName = 'paymentMethod';
 
 class PaymentMethodController{
 
   /* @ngInject */
-  constructor(envService,$uibModal){
+  constructor(envService, $uibModal, profileService){
     this.isCollapsed = true;
     this.$uibModal = $uibModal;
+    this.profileService = profileService;
     this.imgDomain = envService.read('imgDomain');
     this.submissionError = {error: ''};
+    this.submitted = false;
+  }
+
+  $onInit(){
+    this.loadDonorDetails();
+  }
+
+  loadDonorDetails() {
+    this.profileService.getDonorDetails()
+      .subscribe((data) => {
+        this.mailingAddress = data.mailingAddress;
+      });
   }
 
   getExpiration(){
@@ -30,11 +46,29 @@ class PaymentMethodController{
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         paymentMethod: () => this.model,
-        mailingAddress: () => {}, // TODO: load this from donor details
+        mailingAddress: () => this.mailingAddress,
         onSubmit: () => this.onSubmit,
-        submissionError: () => this.submissionError
+        submitted: () => this.submitted,
+        submissionError: () => this.submissionError,
+        profileService: () => this.profileService
       }
     });
+    this.editPaymentMethodModal.result.then(() => {
+      this.editPaymentMethodModal.close();
+    });
+  }
+
+  onSubmit(e){
+    if(e.success && e.data) {
+      this.submitted = true;
+      this.profileService.updatePaymentMethod(this.paymentMethod, e.data)
+        .subscribe(null,
+          error => {
+            this.submissionError.error = error.data;
+            this.submitted = false;
+          }
+        )
+    }
   }
 
   deletePaymentMethod(){
@@ -63,8 +97,6 @@ class PaymentMethodController{
 
 }
 
-let componentName = 'paymentMethod';
-
 export default angular
   .module(componentName, [
     template.name,
@@ -72,7 +104,8 @@ export default angular
     recurringGiftsComponent.name,
     paymentMethodFormModal.name,
     deletePaymentMethodModal.name,
-    giveModalWindowTemplate.name
+    giveModalWindowTemplate.name,
+    profileService.name
   ])
   .component(componentName, {
     controller: PaymentMethodController,

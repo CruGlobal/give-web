@@ -6,6 +6,9 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
+import {Roles} from 'common/services/session/session.service';
+import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
+
 describe('payment methods', function() {
   beforeEach(angular.mock.module(module.name));
   var fakeModal = function() {
@@ -31,8 +34,11 @@ describe('payment methods', function() {
       $uibModal: uibModal,
       profileService: {
         getPaymentMethodsWithDonations: angular.noop,
-        addPaymentMethod: angular.noop
+        addPaymentMethod: angular.noop,
+        getDonorDetails: angular.noop
       },
+      $location: {},
+      $window: {},
       $timeout: $timeout
     });
 
@@ -42,9 +48,42 @@ describe('payment methods', function() {
     expect(self.controller).toBeDefined();
   });
 
+  describe( '$onInit()', () => {
+    beforeEach( () => {
+      spyOn( self.controller, 'sessionEnforcerService' );
+      self.controller.$onInit();
+    } );
+    it( 'initializes the component', () => {
+      expect( self.controller.sessionEnforcerService ).toHaveBeenCalledWith(
+        [Roles.registered], jasmine.objectContaining( {
+          'sign-in': jasmine.any( Function ),
+          cancel:    jasmine.any( Function )
+        } )
+      );
+    } );
+
+    describe( 'sessionEnforcerService success', () => {
+      it( 'executes success callback', () => {
+        spyOn(self.controller, 'loadDonorDetails');
+        spyOn(self.controller, 'loadPaymentMethods');
+        self.controller.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
+        expect(self.controller.loadDonorDetails).toHaveBeenCalled();
+        expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
+      } );
+    } );
+
+    describe( 'sessionEnforcerService failure', () => {
+      it( 'executes failure callback', () => {
+        self.controller.sessionEnforcerService.calls.argsFor( 0 )[1]['cancel']();
+        expect( self.controller.$window.location ).toEqual( '/' );
+      } );
+    } );
+
+  } );
+
   it('should load payment methods on $onInit()', () => {
     spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.of([{},{}]));
-    self.controller.$onInit();
+    self.controller.loadPaymentMethods();
     expect(self.controller.paymentMethods).toEqual([{},{}]);
   });
 
@@ -52,8 +91,14 @@ describe('payment methods', function() {
     spyOn(self.controller.profileService, 'getPaymentMethodsWithDonations').and.returnValue(Observable.throw({
       data: 'some error'
     }));
-    self.controller.$onInit();
-    expect(self.controller.error).toBe('Failed retrieving payment methods');
+    self.controller.loadPaymentMethods();
+    expect(self.controller.error).toBe('Failed retrieving payment methods.');
+  });
+
+  it('should get donor details', () => {
+    spyOn(self.controller.profileService, 'getDonorDetails').and.returnValue(Observable.of({mailingAddress: 'address'}));
+    self.controller.loadDonorDetails();
+    expect(self.controller.mailingAddress).toBe('address');
   });
 
   it('should open add Payment Method Modal', () => {

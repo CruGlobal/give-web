@@ -7,11 +7,13 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
+import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
+import {Roles} from 'common/services/session/session.service';
 
 class PaymentMethodsController {
 
   /* @ngInject */
-  constructor($uibModal, profileService, $log, $timeout) {
+  constructor($uibModal, profileService, sessionEnforcerService, $log, $timeout, $window, $location) {
     this.log = $log;
     this.$uibModal = $uibModal;
     this.paymentMethod = 'bankAccount';
@@ -20,6 +22,9 @@ class PaymentMethodsController {
     this.submissionError = {error: ''};
     this.successMessage = { show: false };
     this.$timeout = $timeout;
+    this.$window = $window;
+    this.$location = $location;
+    this.sessionEnforcerService = sessionEnforcerService;
   }
 
   $onDestroy(){
@@ -29,8 +34,23 @@ class PaymentMethodsController {
   }
 
   $onInit(){
-    this.loading = true;
-    this.loadPaymentMethods();
+    this.enforcerId = this.sessionEnforcerService([Roles.registered], {
+      'sign-in': () => {
+        this.loading = true;
+        this.loadPaymentMethods();
+        this.loadDonorDetails();
+      },
+      cancel: () => {
+        this.$window.location = '/';
+      }
+    });
+  }
+
+  loadDonorDetails() {
+    this.profileService.getDonorDetails()
+      .subscribe((data) => {
+        this.mailingAddress = data.mailingAddress;
+      });
   }
 
   loadPaymentMethods() {
@@ -42,7 +62,7 @@ class PaymentMethodsController {
         },
         error => {
           this.loading = false;
-          this.error = 'Failed retrieving payment methods';
+          this.error = 'Failed retrieving payment methods.';
           this.log.error(this.error, error);
         }
       );
@@ -77,6 +97,7 @@ class PaymentMethodsController {
 
   onSubmit(e) {
     if(e.data) {
+      this.submitted = true;
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
           this.submitted = false;
@@ -116,7 +137,8 @@ export default angular
     paymentMethod.name,
     loadingOverlay.name,
     profileService.name,
-    paymentMethodDisplay.name
+    paymentMethodDisplay.name,
+    sessionEnforcerService.name
   ])
   .component(componentName, {
     controller: PaymentMethodsController,

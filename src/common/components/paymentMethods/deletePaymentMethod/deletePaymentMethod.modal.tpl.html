@@ -7,8 +7,8 @@
             <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
               <span aria-hidden="true">×</span>
             </button>
-            <h3 ng-if="$ctrl.view != 'addPaymentMethod'" class="text-center">Delete Payment Method</h3>
-            <h3 ng-if="$ctrl.view == 'addPaymentMethod'" class="text-center">Add Payment Method</h3>
+            <h3 ng-if="$ctrl.view != 'addPaymentMethod'" class="text-center" translate>Delete Payment Method</h3>
+            <h3 ng-if="$ctrl.view == 'addPaymentMethod'" class="text-center" translate>Add Payment Method</h3>
           </div>
         </div>
       </div>
@@ -27,24 +27,10 @@
               </div>
             </div>
 
-            <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.error">
-              <p ng-switch="$ctrl.submissionError.error">
-                <span ng-switch-when="Invalid routing number" translate>
-                  The routing number you entered does not seem to be valid. Please verify that it is correct.
-                </span>
-                <span ng-switch-when="This credit card already exists." translate>
-                  This credit card already exists. Please use a different credit card.
-                </span>
-                <span ng-switch-default translate>
-                  There was an unknown error processing your request. Please verify all your info and try again. If you are still seeing this message, contact support.
-                </span>
-              </p>
-            </div>
-
             <ng-switch on="$ctrl.view">
 
               <div class="mb" ng-switch-when="manageDonations">
-                <h4 class="border-bottom-small  visible">Recurring Gifts Using this Payment Method</h4>
+                <h4 class="border-bottom-small visible" translate>Recurring Gifts Using this Payment Method</h4>
 
                 <div ng-repeat="gift in $ctrl.buildGifts($ctrl.resolve.paymentMethod._recurringgifts[0].donations)" class="row repeating-row user-profile">
                   <div class="col-sm-3 col-md-3 mb">
@@ -72,10 +58,10 @@
                 </div>
 
                 <div class="mb border-bottom-small">
-                  <h4 class="visible">Select an action for these recurring gifts:</h4>
+                  <h4 class="visible" translate>Select an action for these recurring gifts:</h4>
                   <div class="form-group">
                     <label ng-if="$ctrl.filteredPaymentMethods.length" class="radio u-textTransformNone radio-inline">
-                      <input ng-model="$ctrl.deleteOption" value="1" type="radio" name="optradio" checked="">Move gifts to a different payment method
+                      <input ng-model="$ctrl.deleteOption" value="1" type="radio" name="optradio" translate>Move gifts to a different payment method
                       <select
                         ng-model="$ctrl.selectedPaymentMethod"
                         ng-options="o.self.uri as $ctrl.getPaymentMethodOptionLabel(o) for o in $ctrl.filteredPaymentMethods"
@@ -83,10 +69,10 @@
                       </select>
                     </label>
                     <label class="radio u-textTransformNone">
-                      <input ng-model="$ctrl.deleteOption" value="2" type="radio" name="optradio" checked="{{$ctrl.filteredPaymentMethods.length==0}}">Move gifts to a new payment method
+                      <input ng-model="$ctrl.deleteOption" value="2" type="radio" name="optradio" checked="{{$ctrl.filteredPaymentMethods.length==0}}" translate>Move gifts to a new payment method
                     </label>
                     <label class="radio u-textTransformNone">
-                      <input ng-model="$ctrl.deleteOption" value="3" type="radio" name="optradio">Stop recurring gifts
+                      <input ng-model="$ctrl.deleteOption" value="3" type="radio" name="optradio" translate>Stop recurring gifts
                     </label>
                   </div>
                 </div>
@@ -94,8 +80,8 @@
                 <div class="mb0">
                   <div class="row">
                     <div class="col-md-12 text-right">
-                      <a class="btn btn-default mr-" ng-click="$ctrl.dismiss()">Cancel</a>
-                      <a class="btn btn-primary" ng-click="$ctrl.changeView()">Continue</a>
+                      <a class="btn btn-default mr-" ng-click="$ctrl.dismiss()" translate>Cancel</a>
+                      <a class="btn btn-primary" ng-click="$ctrl.changeView()" translate>Continue</a>
                     </div>
                   </div>
                 </div>
@@ -107,7 +93,7 @@
                 <div class="mb0">
                   <div class="row">
                     <div class="col-md-12 text-right">
-                      <a class="btn btn-primary" ng-click="$ctrl.changeView(true)">Back</a>
+                      <a class="btn btn-primary" ng-click="$ctrl.changeView(true)" translate>Back</a>
                       <a class="btn btn-primary" ng-click="$ctrl.submitted = true" translate>Add Payment Method</a>
                     </div>
                   </div>
@@ -119,16 +105,16 @@
                   <div class="col-sm-12">
                     <ng-switch on="$ctrl.confirmText">
                       <p>
-                        <small ng-switch-when="withTransfer">
+                        <small ng-switch-when="withTransfer" translate>
                           You are deleting this payment method from your profile and moving all future recurring gifts previously associated with this payment method to
                           <strong>{{$ctrl.getPaymentMethodName(true)}} ending in ****{{$ctrl.getPaymentMethodLastFourDigits(true)}}</strong>. Please click "Confirm Changes &amp; Delete" below to remove this payment method and move recurring gifts, or click "Back" to select a different option.
                         </small>
-                        <small ng-switch-when="withOutTransfer">
+                        <small ng-switch-when="withOutTransfer" translate>
                           You are deleting this payment method from your profile and
                           <strong>stopping all future recurring gifts</strong>
                           associated with this payment method. Please click "confirm delete" below to delete this payment method and stop associated recurring gifts, or click "Back" to select a different option.
                         </small>
-                        <small ng-switch-default>
+                        <small ng-switch-default translate>
                           If you do not want this payment method to be displayed in your list of payment options, click "Confirm Delete" below
                         </small>
                       </p>
