@@ -35,7 +35,7 @@ class BankAccountController{
   }
 
   $onChanges(changes){
-    if(changes.submitted.currentValue === true){
+    if(changes.submitted && changes.submitted.currentValue === true){
       this.savePayment();
     }
   }

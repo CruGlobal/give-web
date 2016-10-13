@@ -66,7 +66,7 @@ class PaymentMethodsController {
         error => {
           this.loading = false;
           this.error = 'Failed retrieving payment methods.';
-          this.log.error(this.error, error);
+          this.log.error('Failed retrieving payment methods', error);
         }
       );
   }
@@ -75,15 +75,11 @@ class PaymentMethodsController {
     this.paymentMethodFormModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
       backdrop: 'static',
-      size: 'new-payment-method-modal',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
-        onSubmit: () => this.onSubmit,
-        profileService: this.profileService,
-        submitted: false,
+        mailingAddress: this.mailingAddress,
         submissionError: this.submissionError,
-        log: this.log,
-        parentComponent: this
+        onSubmit: () => params => this.onSubmit(params)
       }
     });
     this.paymentMethodFormModal.result.then((data) => {
@@ -100,19 +96,14 @@ class PaymentMethodsController {
 
   onSubmit(e) {
     if(e.data) {
-      this.submitted = true;
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
-          this.submitted = false;
-          this.parentComponent.paymentMethodFormModal.close(data);
-        },
-        (error) => {
-          this.submitted = false;
-          this.submissionError.error = error.data;
-          this.log.error('error.data',error);
-        });
-    } else if(!e.success) {
-      this.submitted = false;
+            this.paymentMethodFormModal.close(data);
+          },
+          (error) => {
+            this.submissionError.error = error.data;
+            this.log.error('error.data',error);
+          });
     }
   }
 

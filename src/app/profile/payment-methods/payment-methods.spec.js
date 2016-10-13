@@ -164,12 +164,12 @@ describe('payment methods', function() {
     expect(self.controller.successMessage.show).toBe(false);
   });
 
-  it('should not submit', ()=> {
+  it('should not try to add a payment method if success if false', ()=> {
     let e = {
       success: false
     };
-    spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of('data'));
+    spyOn(self.controller.profileService, 'addPaymentMethod');
     self.controller.onSubmit(e);
-    expect(self.controller.submitted).toBe(false);
+    expect(self.controller.profileService.addPaymentMethod).not.toHaveBeenCalled();
   });
 });
