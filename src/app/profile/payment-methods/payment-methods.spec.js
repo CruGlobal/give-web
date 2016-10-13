@@ -7,7 +7,6 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
 import {Roles} from 'common/services/session/session.service';
-import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
 
 describe('payment methods', function() {
   beforeEach(angular.mock.module(module.name));

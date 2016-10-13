@@ -67,7 +67,7 @@ class PaymentMethodController{
             this.submissionError.error = error.data;
             this.submitted = false;
           }
-        )
+        );
     }
   }
 
