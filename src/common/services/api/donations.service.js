@@ -44,10 +44,21 @@ function DonationsService( cortexApiService ) {
       .pluck( 'gifts' );
   }
 
+  function getNextGiftDate(gift){
+    if(!gift['recurring-day-of-month']) return false;
+    let date = new Date();
+    let dayOfGiving = gift['recurring-day-of-month']*1;
+    let happensThisMonth = date.getDate() < dayOfGiving ? true : false;
+    date.setDate(dayOfGiving);
+    !happensThisMonth ? date.setMonth(date.getMonth()+1) : false;
+    return date;
+  }
+
   return {
     getHistoricalGifts:  getHistoricalGifts,
     getRecipients:       getRecipients,
-    getRecipientDetails: getRecipientDetails
+    getRecipientDetails: getRecipientDetails,
+    getNextGiftDate:     getNextGiftDate
   };
 }
 

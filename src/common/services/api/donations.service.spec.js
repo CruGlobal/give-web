@@ -65,4 +65,15 @@ describe( 'donations service', () => {
       $httpBackend.flush();
     } );
   } );
+
+  describe( 'getNextGiftDate( data )', () => {
+    it('should give next gift date', () => {
+      let data = {};
+      expect(donationsService.getNextGiftDate(data)).toBe(false);
+      data['recurring-day-of-month'] = '25';
+      // im not sure how to test this function without duplicating its functionality into here =))
+      expect(donationsService.getNextGiftDate(data)).toBeTruthy();
+    });
+  });
+
 } );

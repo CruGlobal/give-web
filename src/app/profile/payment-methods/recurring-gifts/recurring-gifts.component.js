@@ -1,11 +1,14 @@
 import angular from 'angular';
 import template from './recurring-gifts.tpl';
 import forEach from 'lodash/forEach';
+import donationsService from 'common/services/api/donations.service';
 
 class recurringGiftsController{
 
   /* @ngInject */
-  constructor(){}
+  constructor(donationsService){
+    this.donationsService = donationsService;
+  }
 
   $onInit(){
     this.buildGifts();
@@ -25,23 +28,14 @@ class recurringGiftsController{
     return gifts;
   }
 
-  getNextGiftDate(gift){
-    if(!gift['recurring-day-of-month']) return false;
-    let date = new Date();
-    let dayOfGiving = gift['recurring-day-of-month']*1;
-    let happensThisMonth = date.getDate() < dayOfGiving ? true : false;
-    date.setDate(dayOfGiving);
-    !happensThisMonth ? date.setMonth(date.getMonth()+1) : false;
-    return date;
-  }
-
 }
 
 let componentName = 'recurringGifts';
 
 export default angular
   .module(componentName, [
-    template.name
+    template.name,
+    donationsService.name
   ])
   .component(componentName, {
     controller: recurringGiftsController,

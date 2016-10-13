@@ -50,7 +50,11 @@ describe('payment methods', function() {
   describe( '$onInit()', () => {
     beforeEach( () => {
       spyOn( self.controller, 'sessionEnforcerService' );
+      spyOn(self.controller, 'loadDonorDetails');
+      spyOn(self.controller, 'loadPaymentMethods');
       self.controller.$onInit();
+      expect(self.controller.loadDonorDetails).toHaveBeenCalled();
+      expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
     } );
     it( 'initializes the component', () => {
       expect( self.controller.sessionEnforcerService ).toHaveBeenCalledWith(
@@ -63,8 +67,6 @@ describe('payment methods', function() {
 
     describe( 'sessionEnforcerService success', () => {
       it( 'executes success callback', () => {
-        spyOn(self.controller, 'loadDonorDetails');
-        spyOn(self.controller, 'loadPaymentMethods');
         self.controller.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
         expect(self.controller.loadDonorDetails).toHaveBeenCalled();
         expect(self.controller.loadPaymentMethods).toHaveBeenCalled();

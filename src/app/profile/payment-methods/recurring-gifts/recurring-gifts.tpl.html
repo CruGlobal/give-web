@@ -11,7 +11,6 @@
               <th class="section-title">Amount</th>
               <th class="section-title">Frequency</th>
               <th class="section-title">Next Gift</th>
-              <th class="section-title"></th>
             </tr>
           </thead>
 
@@ -20,10 +19,7 @@
               <td>{{ gift['designation-name'] }}</td>
               <td>{{ gift['amount'] | currency }}</td>
               <td>{{ gift.rate.recurrence.interval }}</td>
-              <td>{{ $ctrl.getNextGiftDate(gift) | date:'mediumDate'}}</td>
-              <td>
-                <a>Edit</a>
-              </td>
+              <td>{{ $ctrl.donationsService.getNextGiftDate(gift) | date:'mediumDate'}}</td>
             </tr>
           </tbody>
         </table>

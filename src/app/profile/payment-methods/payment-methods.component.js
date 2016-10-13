@@ -44,6 +44,9 @@ class PaymentMethodsController {
         this.$window.location = '/';
       }
     });
+    this.loading = true;
+    this.loadPaymentMethods();
+    this.loadDonorDetails();
   }
 
   loadDonorDetails() {
