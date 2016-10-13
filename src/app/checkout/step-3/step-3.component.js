@@ -27,7 +27,6 @@ class Step3Controller{
   $onInit(){
     this.loadDonorDetails();
     this.loadCurrentPayment();
-    this.loadBillingAddress();
     this.checkErrors();
   }
 
@@ -56,13 +55,6 @@ class Step3Controller{
         }else{
           this.$log.error('Error loading current payment info: current payment type is unknown');
         }
-      });
-  }
-
-  loadBillingAddress(){
-    this.orderService.getBillingAddress()
-      .subscribe((data) => {
-        this.billingAddress = data.address;
       });
   }
 

@@ -1,24 +1,78 @@
 import angular from 'angular';
+import pick from 'lodash/pick';
+import find from 'lodash/find';
 import omit from 'lodash/omit';
+import map from 'lodash/map';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 
 import cortexApiService from '../cortexApi.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
 
+import formatAddressForCortex from '../addressHelpers/formatAddressForCortex';
+import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
+
 let serviceName = 'profileService';
 
-class Profile{
+class Profile {
 
   /*@ngInject*/
   constructor($log, cortexApiService, hateoasHelperService){
     this.$log = $log;
     this.cortexApiService = cortexApiService;
     this.hateoasHelperService = hateoasHelperService;
+  }
+
+  getGivingProfile() {
+    return this.cortexApiService
+      .get( {
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          donorDetails:   'donordetails',
+          mailingAddress: 'addresses:mailingaddress',
+          emailAddress:   'emails:element',
+          phoneNumbers:   'phonenumbers:element[]',
+          spouse:         'addspousedetails',
+          yearToDate:     'givingdashboard:yeartodateamount'
+        }
+      } )
+      .map( ( data ) => {
+        let donor = pick( data.rawData, ['family-name', 'given-name'] ),
+          spouse = pick( data.spouse, ['given-name'] ),
+          phone = find( data.phoneNumbers, {primary: true} );
+        return {
+          name:        (spouse['given-name']) ?
+            `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
+            `${donor['given-name']} ${donor['family-name']}`,
+          donorNumber: angular.isDefined( data.donorDetails ) ? data.donorDetails['donor-number'] : undefined,
+          email:       angular.isDefined( data.emailAddress ) ? data.emailAddress.email : undefined,
+          phone:       angular.isDefined( phone ) ? phone['phone-number'] : undefined,
+          address:     angular.isDefined( data.mailingAddress ) ?
+            formatAddressForTemplate( data.mailingAddress.address ) : undefined,
+          yearToDate:  angular.isDefined( data.yearToDate ) ? data.yearToDate['year-to-date-amount'] : undefined
+        };
+      } );
+  }
+
+  getDonorDetails() {
+    return this.cortexApiService
+      .get( {
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          donorDetails:   'donordetails'
+        }
+      } )
+      .pluck( 'donorDetails' )
+      .map((donorDetails) => {
+        donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address']);
+        delete donorDetails['mailing-address'];
+        return donorDetails;
+      });
   }
 
   getEmail(){
@@ -41,6 +95,12 @@ class Profile{
       })
       .pluck('paymentMethods')
       .map((paymentMethods) => {
+        paymentMethods = map(paymentMethods, (paymentMethod) => {
+          if(paymentMethod.address){
+            paymentMethod.address = formatAddressForTemplate(paymentMethod.address);
+          }
+          return paymentMethod;
+        });
         return sortPaymentMethods(paymentMethods);
       });
   }
@@ -75,6 +135,9 @@ class Profile{
 
   addCreditCardPayment(paymentInfo){
     paymentInfo = omit(paymentInfo, 'ccv');
+    if(paymentInfo.address) {
+      paymentInfo.address = formatAddressForCortex(paymentInfo.address);
+    }
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
         return this.cortexApiService.post({
@@ -95,6 +158,44 @@ class Profile{
     }
   }
 
+
+  updatePaymentMethod(originalPaymentInfo, paymentInfo){
+    if(paymentInfo.bankAccount){
+      paymentInfo = paymentInfo.bankAccount;
+    }else if(paymentInfo.creditCard){
+      paymentInfo = paymentInfo.creditCard;
+      if(paymentInfo.address) {
+        paymentInfo.address = formatAddressForCortex(paymentInfo.address);
+      }
+    }else{
+      return Observable.throw('Error updating payment method. The data passed to profileService.updatePaymentMethod did not contain bankAccount or creditCard data.');
+    }
+    return this.cortexApiService.put({
+      path: originalPaymentInfo.self.uri,
+      data: paymentInfo
+    });
+  }
+
+  getPurchase(uri){
+    return this.cortexApiService.get({
+        path: uri,
+        zoom: {
+          donorDetails: 'donordetails',
+          paymentMeans: 'paymentmeans:element',
+          lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
+          rateTotals: 'ratetotals:element[]'
+        }
+      })
+      .map((data) => {
+        data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address']);
+        delete data.donorDetails['mailing-address'];
+        if(data.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'){ //only credit card type has billing address
+          data.paymentMeans.address = formatAddressForTemplate(data.paymentMeans['billing-address'].address);
+          delete data.paymentMeans['billing-address'];
+        }
+        return data;
+      });
+  }
 }
 
 export default angular

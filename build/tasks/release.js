@@ -55,7 +55,8 @@ gulp.task('bundle', function () {
     'app/productConfig/productConfig.component',
     'app/signIn/signIn.component',
     'app/searchResults/searchResults.component',
-    'app/homeSignIn/homeSignIn.component'
+    'app/homeSignIn/homeSignIn.component',
+    'app/profile/yourGiving/yourGiving.component'
   ];
   var commonFilesForBundles = '(' + bundles.join(' & ') + ')';
   return $.jspmBuild({
@@ -86,6 +87,9 @@ gulp.task('bundle', function () {
         },
         { src: 'app/homeSignIn/homeSignIn.component - ' + commonFilesForBundles,
           dst: 'homeSignIn.js'
+        },
+        { src: 'app/profile/yourGiving/yourGiving.component - ' + commonFilesForBundles,
+          dst: 'yourGiving.js'
         }
       ]
     })

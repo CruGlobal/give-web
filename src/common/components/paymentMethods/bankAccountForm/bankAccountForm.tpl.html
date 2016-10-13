@@ -19,10 +19,10 @@
         <div class="form-group form-group-default form-group-inline" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}">
           <label class="label-block">Account Type</label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="checking" required> Checking <span class="hidden-md">Account</span>
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Checking" required> Checking <span class="hidden-md hide-modal">Account</span>
           </label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="savings" required> Savings <span class="hidden-md">Account</span>
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Savings" required> Savings <span class="hidden-md hide-modal">Account</span>
           </label>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountType.$error" ng-if="($ctrl.bankPaymentForm.accountType | showErrors)">
             <div class="help-block" ng-message="required" translate>You must choose an account type</div>
@@ -47,7 +47,7 @@
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountNumber | showErrors)}">
           <label>Account #</label>
-          <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" required>
+          <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountNumber.$error" ng-if="($ctrl.bankPaymentForm.accountNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter an account number</div>
             <div class="help-block" ng-message="minlength" translate>This account number must contain 2 or more digits</div>
@@ -58,7 +58,7 @@
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)}">
           <label>Retype Account #</label>
-          <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" ng-model="$ctrl.bankPayment.verifyAccountNumber" required>
+          <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" ng-model="$ctrl.bankPayment.verifyAccountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="$ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error" ng-if="($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must retype your account number</div>
             <div class="help-block" ng-message="verifyAccountNumber" translate>Your account numbers do not match</div>

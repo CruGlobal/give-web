@@ -1,0 +1,109 @@
+<div ng-switch="$ctrl.state">
+  <div class="modal-header" ng-if="$ctrl.state === 'loading' || $ctrl.state === 'error'"><!-- TODO: use ng-switch-when-separator="|" in Angular 1.5.9 -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="border-bottom-small">
+            <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+            <h3>Checking Payment Methods</h3>
+            <p>You must have at least one valid payment method to continue</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-body" ng-switch-when="loading">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-xs-12">
+          <div class="text-center" translate>
+            Loading payment information...
+            <loading inline="true"></loading>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-body" ng-switch-when="error">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-xs-12">
+          <div class="text-center" translate>
+            <div class="alert alert-danger">
+              <p class="text-left" translate>There was an error loading your payment methods.</p>
+              <p class="text-left" translate>You can try loading them again or continue and add a new payment method.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer" ng-switch-when="error">
+    <div class="row row-no-spacing">
+      <div class="col-xs-6">
+        <a class="btn btn-default"
+           ng-click="$ctrl.dismiss()"
+           translate>
+          Cancel
+        </a>
+      </div>
+      <div class="col-xs-6 text-right">
+        <a class="btn btn-primary" ng-click="$ctrl.loadPaymentMethods()">Retry</a>
+        <a class="btn btn-default" ng-click="$ctrl.next()">Continue</a>
+      </div>
+    </div>
+  </div>
+
+
+  <step-0-payment-method-list
+    ng-switch-when="step0PaymentMethodList"
+    payment-methods="$ctrl.paymentMethods"
+    dismiss="$ctrl.dismiss()"
+    next="$ctrl.next(paymentMethod)">step0PaymentMethodList
+  </step-0-payment-method-list>
+
+  <step-0-add-update-payment-method
+    ng-switch-when="step0AddUpdatePaymentMethod"
+    payment-method="$ctrl.paymentMethod"
+    can-go-back="$ctrl.hasPaymentMethods"
+    dismiss="$ctrl.dismiss()"
+    previous="$ctrl.previous()"
+    next="$ctrl.next(paymentMethod)">step0AddUpdatePaymentMethod
+  </step-0-add-update-payment-method>
+
+  <step-1-edit-recurring-gifts
+    ng-switch-when="step1EditRecurringGifts"
+    payment-methods="$ctrl.paymentMethods"
+    recurring-gift-changes="$ctrl.recurringGiftChanges"
+    dismiss="$ctrl.dismiss()"
+    next="$ctrl.next(changes)">step1EditRecurringGifts
+  </step-1-edit-recurring-gifts>
+
+  <step-2-add-recent-recipients
+    ng-switch-when="step2AddRecentRecipients"
+    additions="$ctrl.additions"
+    dismiss="$ctrl.dismiss()"
+    previous="$ctrl.previous()"
+    next="$ctrl.next(additions)">
+  </step-2-add-recent-recipients>
+
+  <step-3-configure-recent-recipients
+    ng-switch-when="step3ConfigureRecentRecipients"
+    payment-methods="$ctrl.paymentMethods"
+    additions="$ctrl.additions"
+    dismiss="$ctrl.dismiss()"
+    previous="$ctrl.previous()"
+    next="$ctrl.next(additions)">
+  </step-3-configure-recent-recipients>
+
+  <step-4-confirm
+    ng-switch-when="step4Confirm"
+    recurring-gift-changes="$ctrl.recurringGiftChanges"
+    additions="$ctrl.additions"
+    dismiss="$ctrl.dismiss()"
+    previous="$ctrl.previous()"
+    next="$ctrl.next()">
+  </step-4-confirm>
+</div>

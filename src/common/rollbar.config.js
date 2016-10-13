@@ -5,6 +5,8 @@ import map from 'lodash/map';
 import defaults from 'lodash/defaults';
 import get from 'lodash/get';
 
+let Rollbar;
+
 /* @ngInject */
 function rollbarConfig(envServiceProvider, $provide) {
   let rollbarConfig = {
@@ -15,7 +17,7 @@ function rollbarConfig(envServiceProvider, $provide) {
     enabled: !envServiceProvider.is('development'), // Disable rollbar in development environment
     transform: transformRollbarPayload
   };
-  let Rollbar = rollbar.init(rollbarConfig);
+  Rollbar = rollbar.init(rollbarConfig);
 
   /* @ngInject */
   $provide.decorator('$log', ($delegate) => {
@@ -90,8 +92,26 @@ function transformRollbarPayload(payload){
   return payload;
 }
 
+function updateRollbarPerson(session){
+  let person = {};
+  if(session){
+    person = {
+      id: session.sub,
+      username: session.first_name + ' ' + session.last_name,
+      email: session.email
+    };
+  }
+
+  Rollbar.configure({
+    payload: {
+      person: person
+    }
+  });
+}
+
 export {
   rollbarConfig as default,
+  updateRollbarPerson,
   rollbar, // For mocking during testing
   stacktrace, // For mocking during testing,
   formatStacktraceForRollbar, // To test this function separately

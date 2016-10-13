@@ -8,11 +8,11 @@ import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate
 import module, {existingPaymentMethodFlag} from './order.service';
 
 import cartResponse from 'common/services/api/fixtures/cortex-cart-paymentmethodinfo-forms.fixture.js';
-import paymentMethodResponse from 'common/services/api/fixtures/cortex-order-paymentmethod.fixture.js';
+import paymentMethodBankAccountResponse from 'common/services/api/fixtures/cortex-order-paymentmethod-bankaccount.fixture.js';
+import paymentMethodCreditCardResponse from 'common/services/api/fixtures/cortex-order-paymentmethod-creditcard.fixture.js';
 import paymentMethodSelectorResponse from 'common/services/api/fixtures/cortex-order-paymentmethod-selector.fixture.js';
 import purchaseFormResponse from 'common/services/api/fixtures/cortex-order-purchaseform.fixture.js';
 import donorDetailsResponse from 'common/services/api/fixtures/cortex-donordetails.fixture.js';
-import billingAddressResponse from 'common/services/api/fixtures/cortex-billing-address.fixture.js';
 import needInfoResponse from 'common/services/api/fixtures/cortex-order-needinfo.fixture.js';
 import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
 
@@ -191,7 +191,7 @@ describe('order service', () => {
   });
 
   describe('addCreditCardPayment', () => {
-    it('should send a request to save the credit card payment info', () => {
+    it('should send a request to save the credit card payment info with no billing address', () => {
       let paymentInfo = {
         'card-number': '**fake*encrypted**1234567890123456**',
         'card-type': 'VISA',
@@ -219,11 +219,55 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
+    it('should send a request to save the credit card payment info with a billing address', () => {
+      let paymentInfo = {
+        address: {
+          country: 'US',
+          streetAddress: '123 First St',
+          extendedAddress: 'Apt 123',
+          locality: 'Sacramento',
+          postalCode: '12345',
+          region: 'CA'
+        },
+        'card-number': '**fake*encrypted**1234567890123456**',
+        'card-type': 'VISA',
+        'cardholder-name': 'Test Name',
+        'expiry-month': '06',
+        'expiry-year': '12',
+        ccv: 'someEncryptedCCV...'
+      };
+
+      let paymentInfoWithoutCCV = angular.copy(paymentInfo);
+      delete paymentInfoWithoutCCV.ccv;
+      paymentInfoWithoutCCV.address = {
+        'country-name': 'US',
+        'street-address': '123 First St',
+        'extended-address': 'Apt 123',
+        'locality': 'Sacramento',
+        'postal-code': '12345',
+        'region': 'CA'
+      };
+
+      self.$httpBackend.expectPOST(
+        'https://cortex-gateway-stage.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
+        paymentInfoWithoutCCV
+      ).respond(200, 'success');
+
+      // cache getPaymentForms response to avoid another http request while testing
+      self.orderService.paymentMethodForms = cartResponseZoomMapped;
+
+      self.orderService.addCreditCardPayment(paymentInfo)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+
+      self.$httpBackend.flush();
+    });
   });
 
   describe('addPaymentMethod', () => {
     it('should save a new bank account payment method', () => {
-      spyOn(self.orderService,'addBankAccountPayment').and.callFake(() => Observable.of('success'));
+      spyOn(self.orderService,'addBankAccountPayment').and.returnValue(Observable.of('success'));
       let paymentInfo = {
         'account-type': 'checking',
         'bank-name': 'First Bank',
@@ -239,18 +283,9 @@ describe('order service', () => {
       expect(self.orderService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo);
     });
     it('should save a new credit card payment method', () => {
-      spyOn(self.orderService,'addCreditCardPayment').and.callFake(() => Observable.of('credit card success'));
-      spyOn(self.orderService,'addBillingAddress').and.callFake(() => Observable.of('billing address success'));
+      spyOn(self.orderService,'addCreditCardPayment').and.returnValue(Observable.of('credit card success'));
       spyOn(self.orderService,'storeCardSecurityCode');
       let paymentInfo = {
-        'card-number': '**fake*encrypted**1234567890123456**',
-        'card-type': 'VISA',
-        'cardholder-name': 'Test Name',
-        'expiry-month': '06',
-        'expiry-year': '12',
-        ccv: 'someEncryptedCCV...'
-      };
-      let billingAddress = {
         address: {
           'country-name': 'US',
           'street-address': '123 First St',
@@ -259,19 +294,19 @@ describe('order service', () => {
           'postal-code': '12345',
           'region': 'CA'
         },
-        name: {
-          'family-name': 'Lname',
-          'given-name': 'Fname'
-        }
+        'card-number': '**fake*encrypted**1234567890123456**',
+        'card-type': 'VISA',
+        'cardholder-name': 'Test Name',
+        'expiry-month': '06',
+        'expiry-year': '12',
+        ccv: 'someEncryptedCCV...'
       };
       self.orderService.addPaymentMethod({
-        creditCard: paymentInfo,
-        billingAddress: billingAddress
+        creditCard: paymentInfo
       }).subscribe((data) => {
-        expect(data).toEqual(['credit card success', 'billing address success']);
+        expect(data).toEqual('credit card success');
       });
       expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo);
-      expect(self.orderService.addBillingAddress).toHaveBeenCalledWith(billingAddress);
       expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('someEncryptedCCV...');
     });
     it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
@@ -431,100 +466,34 @@ describe('order service', () => {
     });
   });
 
-  describe('addBillingAddress', () => {
-    it('should send a request to save the new billing address', () => {
-      self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/addresses/crugive',
-        {
-          address: {
-            'country-name': 'US',
-            'street-address': '123 First St',
-            'extended-address': 'Apt 123',
-            'locality': 'Sacramento',
-            'postal-code': '12345',
-            'region': 'CA'
-          },
-          name: {
-            'family-name': 'Lname',
-            'given-name': 'Fname'
-          }
-        }
-      ).respond(200, 'success');
-
-      self.orderService.addBillingAddress({
-          address: {
-            country: 'US',
-            streetAddress: '123 First St',
-            extendedAddress: 'Apt 123',
-            locality: 'Sacramento',
-            postalCode: '12345',
-            region: 'CA'
-          },
-          name: {
-            'family-name': 'Lname',
-            'given-name': 'Fname'
-          }
-        })
-        .subscribe((data) => {
-          expect(data).toEqual('success');
-        });
-
-      self.$httpBackend.flush();
-    });
-  });
-
-  describe('getBillingAddress', () => {
-    it('should send a request to save the new billing address', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:billingaddressinfo:billingaddress')
-        .respond(200, billingAddressResponse);
-
-      self.orderService.getBillingAddress()
-        .subscribe((data) => {
-          expect(data).toEqual({
-            self: {
-              type: 'elasticpath.addresses.address',
-              uri: '/addresses/crugive/gm4dkyldmuzgkljwgbqtmljuha2dqllcge4dsljqge4gembzmvtdczbrme=',
-              href: 'https://cortex-gateway-stage.cru.org/cortex/addresses/crugive/gm4dkyldmuzgkljwgbqtmljuha2dqllcge4dsljqge4gembzmvtdczbrme='
-            },
-            links: [{
-              rel: 'profile',
-              rev: 'addresses',
-              type: 'elasticpath.profiles.profile',
-              uri: '/profiles/crugive/gjqwinrxmfrgillemi2wkljumqzteljzmfsgellcmqzdmojqgyzdoyjsga=',
-              href: 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gjqwinrxmfrgillemi2wkljumqzteljzmfsgellcmqzdmojqgyzdoyjsga='
-            }, {
-              rel: 'list',
-              type: 'elasticpath.collections.links',
-              uri: '/addresses/crugive',
-              href: 'https://cortex-gateway-stage.cru.org/cortex/addresses/crugive'
-            }],
-            address: {
-              country: 'US',
-              streetAddress: '123 Asdf St',
-              extendedAddress: 'Apt 45',
-              locality: 'State',
-              region: 'AL',
-              postalCode: '12345'
-            },
-            name: {
-              'family-name': 'none',
-              'given-name': 'none'
-            }
-          });
-        });
-
-      self.$httpBackend.flush();
-    });
-  });
-
   describe('getCurrentPayment', () => {
     it('should retrieve the current payment details', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
-        .respond(200, paymentMethodResponse);
+        .respond(200, paymentMethodBankAccountResponse);
 
       self.orderService.getCurrentPayment()
         .subscribe((data) => {
-          expect(data).toEqual(paymentMethodResponse._order[0]._paymentmethodinfo[0]._paymentmethod[0]);
+          expect(data).toEqual(paymentMethodBankAccountResponse._order[0]._paymentmethodinfo[0]._paymentmethod[0]);
+        });
+
+      self.$httpBackend.flush();
+    });
+    it('should retrieve the current payment details with a billing address', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
+        .respond(200, paymentMethodCreditCardResponse);
+
+      let expectedPaymentInfo = angular.copy(paymentMethodCreditCardResponse._order[0]._paymentmethodinfo[0]._paymentmethod[0]);
+      expectedPaymentInfo.address = {
+        country: 'US',
+        extendedAddress: '',
+        locality: 'Sacramento',
+        postalCode: '12345',
+        region: 'CA',
+        streetAddress: '1234 First Street'
+      };
+      self.orderService.getCurrentPayment()
+        .subscribe((data) => {
+          expect(data).toEqual(expectedPaymentInfo);
         });
 
       self.$httpBackend.flush();
@@ -566,7 +535,7 @@ describe('order service', () => {
   describe('submit', () => {
     beforeEach(() => {
       // Avoid another http request while testing
-      spyOn(self.orderService, 'getPurchaseForm').and.callFake(() => Observable.of(purchaseFormResponseZoomMapped));
+      spyOn(self.orderService, 'getPurchaseForm').and.returnValue(Observable.of(purchaseFormResponseZoomMapped));
     });
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(

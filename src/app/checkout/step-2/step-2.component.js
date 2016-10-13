@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import addNewPaymentMethod from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.component';
+import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
 import loadingComponent from 'common/components/loading/loading.component';
 
@@ -21,6 +21,17 @@ class Step2Controller{
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
     this.submissionError = {error: ''};
+  }
+
+  $onInit(){
+    this.loadDonorDetails();
+  }
+
+  loadDonorDetails(){
+    this.orderService.getDonorDetails()
+      .subscribe((data) => {
+        this.mailingAddress = data.mailingAddress;
+      });
   }
 
   handleExistingPaymentLoading(success, hasExistingPaymentMethods, error){
@@ -64,7 +75,7 @@ class Step2Controller{
 export default angular
   .module(componentName, [
     template.name,
-    addNewPaymentMethod.name,
+    paymentMethodForm.name,
     existingPaymentMethods.name,
     loadingComponent.name,
     orderService.name

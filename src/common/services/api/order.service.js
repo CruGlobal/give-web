@@ -101,6 +101,9 @@ class Order{
 
   addCreditCardPayment(paymentInfo){
     paymentInfo = omit(paymentInfo, 'ccv');
+    if(paymentInfo.address) {
+      paymentInfo.address = formatAddressForCortex(paymentInfo.address);
+    }
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
         return this.cortexApiService.post({
@@ -116,7 +119,6 @@ class Order{
       return this.addBankAccountPayment(paymentInfo.bankAccount);
     }else if(paymentInfo.creditCard){
       return this.addCreditCardPayment(paymentInfo.creditCard)
-        .combineLatest(this.addBillingAddress(paymentInfo.billingAddress))
         .do(() => {
           this.storeCardSecurityCode(paymentInfo.creditCard.ccv);
         });
@@ -156,36 +158,19 @@ class Order{
     });
   }
 
-  addBillingAddress(billingAddress){
-    billingAddress.address = formatAddressForCortex(billingAddress.address);
-    return this.cortexApiService.post({
-      path: ['addresses', this.cortexApiService.scope],
-      data: billingAddress
-    });
-  }
-
-  getBillingAddress(){
-    return this.cortexApiService.get({
-        path: ['carts', this.cortexApiService.scope, 'default'],
-        zoom: {
-          billingAddress: 'order:billingaddressinfo:billingaddress'
-        }
-      })
-      .map((data) => {
-        data.billingAddress.address = formatAddressForTemplate(data.billingAddress.address);
-        return data.billingAddress;
-      });
-  }
-
   getCurrentPayment(){
     return this.cortexApiService.get({
         path: ['carts', this.cortexApiService.scope, 'default'],
         zoom: {
-          paymentmethod: 'order:paymentmethodinfo:paymentmethod'
+          paymentMethod: 'order:paymentmethodinfo:paymentmethod'
         }
       })
+      .pluck('paymentMethod')
       .map((data) => {
-        return data.paymentmethod;
+        if(data.address){
+          data.address = formatAddressForTemplate(data.address);
+        }
+        return data;
       });
   }
 

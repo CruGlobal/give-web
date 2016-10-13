@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+          <div ng-if="!$ctrl.paymentMethod">
+            <h3>Add a Payment Method</h3>
+            <p>You must have at least one valid payment method to continue. Please add one below.</p>
+          </div>
+          <div ng-if="$ctrl.paymentMethod">
+            <h3>Edit your Payment Method</h3>
+            <p>You must have at least one valid payment method to continue. Please update it below.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid" tabindex="-1" role="dialog">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <payment-method-form submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)" payment-method="$ctrl.paymentMethod" submission-error="$ctrl.submissionError" mailing-address="$ctrl.mailingAddress"></payment-method-form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6" ng-switch="$ctrl.canGoBack">
+      <a class="btn btn-default"
+         ng-click="$ctrl.dismiss()"
+         ng-switch-when="false"
+         translate>
+        Cancel
+      </a>
+      <a class="btn btn-default"
+         ng-click="$ctrl.previous()"
+         ng-switch-when="true"
+         translate>
+        Back
+      </a>
+    </div>
+    <div class="col-xs-6 text-right">
+      <a class="btn btn-primary" ng-click="$ctrl.submitted = true">Add and Continue</a>
+    </div>
+  </div>
+</div>

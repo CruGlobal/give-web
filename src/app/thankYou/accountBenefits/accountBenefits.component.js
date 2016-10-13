@@ -29,7 +29,6 @@ class AccountBenefitsController {
     }
     else {
       this.sessionModalService.signIn().then( () => {
-        //TODO: Do we need to check donormatches again after sign in/up?
         this.sessionModalService.userMatch();
       } );
     }

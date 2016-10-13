@@ -28,7 +28,6 @@ describe('checkout', () => {
           orderService: {
             getDonorDetails: () => Observable.of('donor details'),
             getCurrentPayment: () => Observable.of(self.loadedPayment),
-            getBillingAddress: () => Observable.of({ address: 'billing address' }),
             checkErrors: () => Observable.of(['email-info']),
             submit: () => Observable.of('called submit'),
             retrieveCardSecurityCode: () => self.storedCcv,
@@ -52,12 +51,10 @@ describe('checkout', () => {
       it('should load needed info', () => {
         spyOn(self.controller, 'loadDonorDetails');
         spyOn(self.controller, 'loadCurrentPayment');
-        spyOn(self.controller, 'loadBillingAddress');
         spyOn(self.controller, 'checkErrors');
         self.controller.$onInit();
         expect(self.controller.loadDonorDetails).toHaveBeenCalled();
         expect(self.controller.loadCurrentPayment).toHaveBeenCalled();
-        expect(self.controller.loadBillingAddress).toHaveBeenCalled();
         expect(self.controller.checkErrors).toHaveBeenCalled();
       });
     });
@@ -121,14 +118,6 @@ describe('checkout', () => {
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined();
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info: current payment type is unknown']);
-      });
-    });
-
-    describe('loadBillingAddress', () => {
-      it('should load donor details', () => {
-        self.controller.loadBillingAddress();
-        expect(self.controller.billingAddress).toEqual('billing address');
-        self.controller.$log.assertEmpty();
       });
     });
 

@@ -28,13 +28,30 @@ describe( 'userMatchModal', function () {
       spyOn( $ctrl.verificationService, 'getContacts' ).and.returnValue( Observable.of( [] ) );
       spyOn( $ctrl, 'changeMatchState' );
     } );
-    it( 'initializes the component', () => {
-      $ctrl.$onInit();
-      expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
-      expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
-      expect( $ctrl.verificationService.getContacts ).toHaveBeenCalled();
-      expect( $ctrl.contacts ).toEqual( jasmine.any( Array ) );
-      expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'identity' );
+
+    describe( 'donorDetails registration-state=\'COMPLETED\'', () => {
+      it( 'does not load contacts', () => {
+        spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.of( {'registration-state': 'COMPLETED'} ) );
+        $ctrl.$onInit();
+        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+        expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
+        expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
+        expect( $ctrl.verificationService.getContacts ).not.toHaveBeenCalled();
+        expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success' );
+      } );
+    } );
+
+    describe( 'donorDetails registration-state=\'MATCHED\'', () => {
+      it( 'initializes the component', () => {
+        spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.of( {'registration-state': 'MATCHED'} ) );
+        $ctrl.$onInit();
+        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+        expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
+        expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
+        expect( $ctrl.verificationService.getContacts ).toHaveBeenCalled();
+        expect( $ctrl.contacts ).toEqual( jasmine.any( Array ) );
+        expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'identity' );
+      } );
     } );
   } );
 

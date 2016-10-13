@@ -12,7 +12,6 @@ import loadingComponent from 'common/components/loading/loading.component';
 import showErrors from 'common/filters/showErrors.filter';
 
 import paymentValidationService from 'common/services/paymentHelpers/paymentValidation.service';
-import orderService from 'common/services/api/order.service';
 import ccpService from 'common/services/paymentHelpers/ccp.service';
 
 import template from './creditCardForm.tpl';
@@ -22,30 +21,45 @@ let componentName = 'creditCardForm';
 class CreditCardController {
 
   /* @ngInject */
-  constructor($scope, $log, paymentValidationService, orderService, ccpService) {
+  constructor($scope, $log, paymentValidationService, ccpService) {
     this.$scope = $scope;
     this.$log = $log;
     this.paymentValidationService = paymentValidationService;
-    this.orderService = orderService;
     this.ccpService = ccpService;
 
-    this.creditCardPayment = {};
-    this.billingAddress = {
-      isMailingAddress: true,
-      country: 'US'
+    this.useMailingAddress = true;
+    this.creditCardPayment = {
+      address:{
+        country: 'US'
+      }
     };
   }
 
   $onInit(){
     this.loadCcp();
+    this.initExistingPaymentMethod();
     this.waitForFormInitialization();
-    this.loadDonorDetails();
     this.initializeExpirationDateOptions();
   }
 
   $onChanges(changes) {
-    if (changes.submitted.currentValue === true) {
+    if (changes.submitted && changes.submitted.currentValue === true) {
       this.savePayment();
+    }
+  }
+
+  initExistingPaymentMethod(){
+    if(this.paymentMethod){
+      this.creditCardPayment = {
+        address: this.paymentMethod.address,
+        cardNumberPlaceholder: this.paymentMethod['card-number'],
+        cardholderName: this.paymentMethod['cardholder-name'],
+        expiryMonth: this.paymentMethod['expiry-month'],
+        expiryYear: parseInt(this.paymentMethod['expiry-year'])
+      };
+      this.useMailingAddress = false;
+    } else {
+      assign(this.creditCardPayment.address, this.mailingAddress);
     }
   }
 
@@ -65,9 +79,9 @@ class CreditCardController {
 
   addCustomValidators() {
     this.creditCardPaymentForm.cardNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.creditCardPaymentForm.cardNumber.$validators.minlength = number => toString(number).length >= 13;
+    this.creditCardPaymentForm.cardNumber.$validators.minlength = number => this.paymentMethod && !number || toString(number).length >= 13;
     this.creditCardPaymentForm.cardNumber.$validators.maxlength = number => toString(number).length <= 16;
-    this.creditCardPaymentForm.cardNumber.$validators.cardNumber = this.paymentValidationService.validateCardNumber();
+    this.creditCardPaymentForm.cardNumber.$validators.cardNumber = number => this.paymentMethod && !number || this.paymentValidationService.validateCardNumber();
 
     this.creditCardPaymentForm.expiryMonth.$validators.expired = expiryMonth => {
       let currentDate = new Date();
@@ -83,46 +97,31 @@ class CreditCardController {
     });
 
     this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.creditCardPaymentForm.securityCode.$validators.minlength = number => toString(number).length >= 3;
+    this.creditCardPaymentForm.securityCode.$validators.minlength = number => this.paymentMethod && !this.creditCardPayment.cardNumber || toString(number).length >= 3;
     this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
-  }
-
-  loadDonorDetails(){
-    this.orderService.getDonorDetails()
-      .subscribe((data) => {
-        this.donorDetails = data;
-        assign(this.billingAddress, this.donorDetails.mailingAddress);
-      });
   }
 
   initializeExpirationDateOptions(){
     let currentYear = (new Date()).getFullYear();
-    this.expirationDateYears = range(currentYear, currentYear + 20);
+    this.expirationDateYears = range(currentYear, currentYear + 10);
   }
 
   savePayment(){
     this.creditCardPaymentForm.$setSubmitted();
     if(this.creditCardPaymentForm.$valid){
-      let ccpCreditCardNumber = new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber);
-      let ccpSecurityCode = new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode);
-      let billingAddress = {
-        address: this.billingAddress.isMailingAddress ? this.donorDetails.mailingAddress : this.billingAddress,
-        name: { //TODO: do we need to ask for and send the billing addressee? It seems to be required
-          'family-name': 'none',
-          'given-name': 'none'
-        }
-      };
+      let ccpCreditCardNumber = this.paymentMethod && !this.creditCardPayment.cardNumber ? this.paymentMethod['card-number'] : new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber).encrypt();
+      let ccpSecurityCode = this.paymentMethod && !this.creditCardPayment.cardNumber ? null : new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode).encrypt();
       this.onSubmit({
         success: true,
         data: {
           creditCard: {
-            'card-number': ccpCreditCardNumber.encrypt(),
+            address: this.useMailingAddress ? undefined : this.creditCardPayment.address,
+            'card-number': ccpCreditCardNumber,
             'cardholder-name': this.creditCardPayment.cardholderName,
             'expiry-month': this.creditCardPayment.expiryMonth,
             'expiry-year': this.creditCardPayment.expiryYear,
-            ccv: ccpSecurityCode.encrypt()
-          },
-          billingAddress: billingAddress
+            ccv: ccpSecurityCode
+          }
         }
       });
     }else{
@@ -140,7 +139,6 @@ export default angular
     loadingComponent.name,
     showErrors.name,
     paymentValidationService.name,
-    orderService.name,
     ccpService.name
   ])
   .component(componentName, {
@@ -148,6 +146,8 @@ export default angular
     templateUrl: template.name,
     bindings: {
       submitted: '<',
+      paymentMethod: '<',
+      mailingAddress: '<',
       onSubmit: '&'
     }
   });

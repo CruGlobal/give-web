@@ -2,28 +2,20 @@
   <loading ng-if="$ctrl.loadingPaymentMethods"></loading>
 </div>
 
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.error || $ctrl.loadingExistingPaymentError">
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingExistingPaymentError">
   <p ng-if="$ctrl.loadingExistingPaymentError" ng-switch="$ctrl.loadingExistingPaymentError">
     <span ng-switch-default translate>
       We ran into a problem trying to load your saved payment methods. Please enter your payment details below. Sorry for the inconvenience.
     </span>
   </p>
-  <p ng-if="$ctrl.submissionError.error" ng-switch="$ctrl.submissionError.error">
-    <span ng-switch-when="Invalid routing number" translate>
-      The routing number you entered does not seem to be valid. Please verify that it is correct.
-    </span>
-    <span ng-switch-default translate>
-      There was an unknown error saving your payment. Please verify all your info and try again. If you are still seeing this message, contact support.
-    </span>
-  </p>
 </div>
 <div ng-show="!$ctrl.loadingPaymentMethods"><!-- ng-show allows checkout-existing-payment-methods component to be instantiated to check for existingPaymentMethods -->
   <div ng-if="!$ctrl.existingPaymentMethods">
-    <add-new-payment-method submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)"></add-new-payment-method>
+    <payment-method-form submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.submissionError" mailing-address="$ctrl.mailingAddress"></payment-method-form>
   </div>
 
   <div ng-if="$ctrl.existingPaymentMethods">
-    <checkout-existing-payment-methods submitted="$ctrl.submitted" submission-error="$ctrl.submissionError" on-submit="$ctrl.onSubmit(success, data, error, stayOnStep)" submit-success="$ctrl.submitSuccess" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"></checkout-existing-payment-methods>
+    <checkout-existing-payment-methods submitted="$ctrl.submitted" submission-error="$ctrl.submissionError" on-submit="$ctrl.onSubmit(success, data, error, stayOnStep)" submit-success="$ctrl.submitSuccess" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)" mailing-address="$ctrl.mailingAddress"></checkout-existing-payment-methods>
   </div>
 </div>
 

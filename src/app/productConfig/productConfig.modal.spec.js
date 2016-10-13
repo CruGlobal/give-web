@@ -3,6 +3,8 @@ import 'angular-mocks';
 import module from './productConfig.modal';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 import {giveGiftParams} from './productConfig.modal';
 
 describe( 'product config modal', function () {
@@ -47,35 +49,55 @@ describe( 'product config modal', function () {
     } );
 
     describe( 'addToCart()', () => {
-      let $rootScope, deferred;
-      beforeEach( inject( function ( _$q_, _$rootScope_ ) {
-        $rootScope = _$rootScope_;
-        deferred = _$q_.defer();
-        spyOn( $ctrl.cartService, 'addItem' ).and.callFake( () => Observable.from( deferred.promise ) );
-      } ) );
+      beforeEach( () => {
+        spyOn( $ctrl.cartService, 'addItem' ).and.returnValue( Observable.of( 'addToCart success' ) );
+        $ctrl.productData.id = 'some id';
+      } );
 
-      describe( 'addItem success', () => {
-        beforeEach( () => {
-          $ctrl.addToCart();
-        } );
+      it( 'should do nothing on invalid form', () => {
+        $ctrl.itemConfigForm.$valid = false;
+        $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(false);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).not.toHaveBeenCalled();
+        expect( uibModalInstance.close ).not.toHaveBeenCalled();
+      } );
 
-        describe( 'form $dirty state = true', () => {
-          it( 'closes modal', () => {
-            $ctrl.itemConfigForm.$dirty = true;
-            deferred.resolve();
-            $rootScope.$digest();
-            expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: true} );
-          } );
-        } );
+      it( 'should close modal as not updated if form is not dirty', () => {
+        $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(false);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).not.toHaveBeenCalled();
+        expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: false} );
+      } );
 
-        describe( 'form $dirty state = false', () => {
-          it( 'closes modal', () => {
-            $ctrl.itemConfigForm.$dirty = false;
-            deferred.resolve();
-            $rootScope.$digest();
-            expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: false} );
-          } );
-        } );
+      it( 'should submit a gift successfully', () => {
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(true);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 85, 'recurring-day-of-month': '1' });
+        expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: true} );
+      } );
+
+      it( 'should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.productData.frequency = 'NA';
+        $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(true);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 85 });
+        expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: true} );
+      } );
+
+      it( 'should handle an error submitting a gift', () => {
+        $ctrl.cartService.addItem.and.returnValue(Observable.throw('error'));
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(false);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 85, 'recurring-day-of-month': '1' });
+        expect( uibModalInstance.close ).not.toHaveBeenCalled();
       } );
     } );
   } );
@@ -147,10 +169,13 @@ describe( 'product config modal', function () {
 
     describe( 'changeAmount()', () => {
       it( 'sets itemConfig amount', () => {
+        $ctrl.itemConfigForm.amount = jasmine.createSpyObj( 'amount', ['$setViewValue', '$render'] );
         $ctrl.changeAmount( 100 );
         expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
         expect( $ctrl.itemConfig.amount ).toEqual( 100 );
         expect( $ctrl.customAmount ).not.toBeDefined();
+        expect( $ctrl.itemConfigForm.amount.$setViewValue ).toHaveBeenCalledWith( undefined, 'change' );
+        expect( $ctrl.itemConfigForm.amount.$render ).toHaveBeenCalled();
         expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.amount, 100 );
       } );
     } );
@@ -172,55 +197,68 @@ describe( 'product config modal', function () {
 
     describe( 'daysInMonth', () => {
       it( 'returns days in a month', () => {
-        expect( $ctrl.daysInMonth( ).length ).toEqual( 28 );
+        expect( $ctrl.daysInMonth().length ).toEqual( 28 );
+      } );
+    } );
+
+    describe( 'donationStartDate', () => {
+      it( 'should return the gift start date from the cartService', () => {
+        spyOn($ctrl.cartService, 'giftStartDate').and.returnValue(new Date(2016, 0, 1));
+        expect( $ctrl.donationStartDate(5) ).toEqual( new Date(2016, 0, 1) );
+        expect( $ctrl.cartService.giftStartDate ).toHaveBeenCalledWith('2016-10-01', 5);
       } );
     } );
 
     describe( 'addToCart()', () => {
-      let $rootScope, deferred;
-      beforeEach( inject( function ( _$q_, _$rootScope_ ) {
-        $rootScope = _$rootScope_;
-        deferred = _$q_.defer();
-        spyOn( $ctrl.cartService, 'addItem' ).and.callFake( () => Observable.from( deferred.promise ) );
-      } ) );
+      beforeEach( () => {
+        spyOn( $ctrl.cartService, 'addItem' ).and.returnValue( Observable.of( 'addToCart success' ) );
+        $ctrl.productData.id = 'some id';
+      } );
 
-      it( 'does nothing on invalid form', () => {
+      it( 'should do nothing on invalid form', () => {
         $ctrl.itemConfigForm.$valid = false;
         $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(false);
+        expect($ctrl.submittingGift).toEqual(false);
         expect( $ctrl.cartService.addItem ).not.toHaveBeenCalled();
+        expect( uibModalInstance.close ).not.toHaveBeenCalled();
       } );
 
-      it( 'calls cartService.addItem', () => {
+      it( 'should still submit the gift if the form is not dirty', () => {
         $ctrl.addToCart();
-        expect( $ctrl.submittingGift ).toEqual( true );
-        expect( $ctrl.giftSubmitted ).toEqual( false );
-        expect( $ctrl.cartService.addItem ).toHaveBeenCalled();
+        expect($ctrl.giftSubmitted).toEqual(true);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 150, 'recurring-day-of-month': '21' });
+        expect( uibModalInstance.close ).not.toHaveBeenCalled();
       } );
 
-      describe( 'addItem success', () => {
-        beforeEach( () => {
-          $ctrl.addToCart();
-          deferred.resolve();
-          $rootScope.$digest();
-        } );
-
-        it( 'works', () => {
-          expect( $ctrl.submittingGift ).toEqual( false );
-          expect( $ctrl.giftSubmitted ).toEqual( true );
-        } );
+      it( 'should submit a gift successfully', () => {
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(true);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 150, 'recurring-day-of-month': '21' });
+        expect( uibModalInstance.close ).not.toHaveBeenCalled();
       } );
 
-      describe( 'addItem error', () => {
-        beforeEach( () => {
-          $ctrl.addToCart();
-          deferred.reject();
-          $rootScope.$digest();
-        } );
+      it( 'should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.productData.frequency = 'NA';
+        $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(true);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 150 });
+        expect( uibModalInstance.close ).not.toHaveBeenCalled();
+      } );
 
-        it( 'works', () => {
-          expect( $ctrl.submittingGift ).toEqual( false );
-          expect( $ctrl.giftSubmitted ).toEqual( false );
-        } );
+      it( 'should handle an error submitting a gift', () => {
+        $ctrl.cartService.addItem.and.returnValue(Observable.throw('error'));
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.addToCart();
+        expect($ctrl.giftSubmitted).toEqual(false);
+        expect($ctrl.submittingGift).toEqual(false);
+        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 150, 'recurring-day-of-month': '21' });
+        expect( uibModalInstance.close ).not.toHaveBeenCalled();
       } );
     } );
   } );

@@ -1,0 +1,124 @@
+<header id="desktop-navigation" class="gh-desk-nav">
+  <div class="container">
+
+    <a href="" title="Cru" class="gh-desk-logo"></a>
+
+    <ul class="gh-desk-nav-tree col-level-1">
+      <li ng-repeat="menuItem in $ctrl.menuStructure.main" ng-class="{'has-children': menuItem.children.length, 'open-menu': $ctrl.mobileMenuPath.main[0] === menuItem.path.split('/').pop()}"
+          ng-mouseover="$ctrl.mobileMenuPath.main[0] = menuItem.path.split('/').pop()" ng-mouseleave="$ctrl.mobileMenuPath.main = []">
+        <a ng-href="{{menuItem.path}}" ng-if="!menuItem.children.length">{{menuItem.title}}</a>
+        <a href="" ng-if="menuItem.children.length">{{menuItem.title}}</a>
+
+        <div class="children-container" ng-if="menuItem.children.length">
+          <ul class="col-level-2 on">
+            <li ng-class="{'has-children': menuItem.children.length}" ng-repeat="menuItem in menuItem.children"
+                ng-mouseover="menuItem.children.length && ($ctrl.mobileMenuPath.main[1] = menuItem.path.split('/').pop())"
+                ng-mouseleave="$ctrl.mobileMenuPath.main.pop()">
+              <a ng-href="{{menuItem.path}}" ng-if="!menuItem.children.length">{{menuItem.title}}</a>
+              <a href="" ng-if="menuItem.children.length">{{menuItem.title}}</a>
+
+              <ul class="col-level-3" ng-class="{'on': $ctrl.mobileMenuPath.main[1] === menuItem.path.split('/').pop()}">
+                <li ng-repeat="menuItem in menuItem.children">
+                  <a ng-href="{{menuItem.path}}">{{menuItem.title}}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <div class="gh-desk-promo"
+               ng-class="{'gh-offset-2': $ctrl.mobileMenuPath.main.length === 1, 'gh-offset-3': $ctrl.mobileMenuPath.main.length === 2}">
+            Promo Bucket
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="search-sign-in-wrapper">
+      <div class="ellipsis">
+        <div uib-dropdown>
+          <a uib-dropdown-toggle></a>
+          <ul class="pull-right" uib-dropdown-menu>
+            <span class="triangle"></span>
+            <li class="menu nav-near-me"><a href="" translate>Find Cru Near Me</a></li>
+            <li class="menu nav-globe"><a href="" translate>Cru Around the World</a></li>
+            <li class="menu nav-books"><a href="" translate>Shop Books</a></li>
+            <li class="menu nav-apps"><a href="" translate>Apps</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sign-in" ng-if="!$ctrl.isSignedIn" ng-click="$ctrl.signIn()" translate>Sign In</div>
+      <div class="signed-in" ng-if="$ctrl.isSignedIn">
+        <div uib-dropdown>
+          <a uib-dropdown-toggle>{{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}</a>
+          <ul class="pull-right" uib-dropdown-menu>
+            <span class="triangle"></span>
+            <li class="nav-edit-profile"><a href="profile.html" translate>Edit Profile</a></li>
+            <li class="nav-sign-out"><a href="" ng-click="$ctrl.signOut()" translate>Sign Out</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cart">
+        <div uib-dropdown on-toggle="open && $ctrl.loadCart()">
+          <a uib-dropdown-toggle></a>
+          <div class="pull-right" uib-dropdown-menu>
+            <span class="triangle"></span>
+            <div class="container-fluid">
+              <div class="row row-no-spacing">
+                <div class="col-xs-12">
+                  <div class="desktop-cart-list">
+
+                    <div style="height:100px;" class="repeating-row" ng-if="!$ctrl.cartData">
+                      <loading></loading>
+                    </div>
+                    <p class="text-center" ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
+                      Your cart is empty
+                    </p>
+
+                    <div class="repeating-row select-recipient-row" ng-repeat="i in $ctrl.cartData.items">
+                      <div class="col-xs-3">
+                        <img desig-src="{{i.designationNumber}}">
+                      </div>
+                      <div class="col-xs-9">
+                        <p class="title">{{i.displayName}}</p>
+                        <p class="title">#{{i.designationNumber}}</p>
+                        <p class="price">{{i.price}}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="repeating-row select-recipient-row sub-total" ng-if="$ctrl.cartData.items.length">
+                    <div class="col-xs-6">
+                      <p>{{$ctrl.cartData.items.length}} Items</p>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                      <p>Subtotal {{$ctrl.cartData.cartTotal | currency:'$'}}</p>
+                    </div>
+                  </div>
+
+                  <a href="/checkout.html" class="btn btn-primary checkout" ng-if="$ctrl.cartData.items.length" translate>Checkout</a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-icon"
+           ng-class="{'search-icon-on': $ctrl.desktopSearch, 'search-icon-off': !$ctrl.desktopSearch}"
+           ng-click="$ctrl.toggleMenu()"></div>
+    </div>
+  </div>
+</header>
+
+<div class="search sub-nav-open open" ng-if="$ctrl.desktopSearch">
+  <div class="container">
+    <form id="search" ng-submit="$ctrl.cruSearch(mobileSearchTerm)">
+      <div class="form-group">
+        <input type="text" class="search-input" ng-model="mobileSearchTerm" placeholder="search">
+      </div>
+    </form>
+  </div>
+</div>
