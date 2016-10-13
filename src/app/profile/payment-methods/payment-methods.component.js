@@ -3,7 +3,7 @@ import template from './payment-methods.tpl';
 import recurringGiftsComponent from './recurring-gifts/recurring-gifts.component';
 import profileService from 'common/services/api/profile.service.js';
 import paymentMethod from './payment-method/payment-method.component';
-import addNewPaymentMethodModal from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.modal.component';
+import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
@@ -23,8 +23,8 @@ class PaymentMethodsController {
   }
 
   $onDestroy(){
-    if(this.addNewPaymentMethodModal) {
-      this.addNewPaymentMethodModal.close();
+    if(this.paymentMethodFormModal) {
+      this.paymentMethodFormModal.close();
     }
   }
 
@@ -49,8 +49,8 @@ class PaymentMethodsController {
   }
 
   addPaymentMethod() {
-    this.addNewPaymentMethodModal = this.$uibModal.open({
-      component: 'addNewPaymentMethodModal',
+    this.paymentMethodFormModal = this.$uibModal.open({
+      component: 'paymentMethodFormModal',
       backdrop: 'static',
       size: 'new-payment-method-modal',
       windowTemplateUrl: giveModalWindowTemplate.name,
@@ -63,7 +63,7 @@ class PaymentMethodsController {
         parentComponent: this
       }
     });
-    this.addNewPaymentMethodModal.result.then((data) => {
+    this.paymentMethodFormModal.result.then((data) => {
       this.successMessage = {
         show: true,
         type: 'paymentMethodAdded'
@@ -80,7 +80,7 @@ class PaymentMethodsController {
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
           this.submitted = false;
-          this.parentComponent.addNewPaymentMethodModal.close(data);
+          this.parentComponent.paymentMethodFormModal.close(data);
         },
         (error) => {
           this.submitted = false;
@@ -111,7 +111,7 @@ export default angular
   .module(componentName, [
     template.name,
     recurringGiftsComponent.name,
-    addNewPaymentMethodModal.name,
+    paymentMethodFormModal.name,
     giveModalWindowTemplate.name,
     paymentMethod.name,
     loadingOverlay.name,

@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component.js';
 import profileService from 'common/services/api/profile.service.js';
-import addNewPaymentMethod from 'common/components/paymentMethods/addNewPaymentMethod/addNewPaymentMethod.component';
+import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 
 import template from './deletePaymentMethod.modal.tpl';
@@ -252,7 +252,7 @@ export default angular
   .module(componentName, [
     template.name,
     loadingOverlay.name,
-    addNewPaymentMethod.name,
+    paymentMethodForm.name,
     profileService.name,
     paymentMethodDisplay.name
   ])

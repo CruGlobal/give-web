@@ -2,7 +2,7 @@ import angular from 'angular';
 import template from './payment-method.tpl';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import recurringGiftsComponent from '../recurring-gifts/recurring-gifts.component';
-import editPaymentMethodModal from 'common/components/paymentMethods/editPaymentMethod/editPaymentMethod.modal.component';
+import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 
@@ -26,10 +26,11 @@ class PaymentMethodController{
 
   editPaymentMethod() {
     this.editPaymentMethodModal = this.$uibModal.open({
-      component: 'editPaymentMethodModal',
+      component: 'paymentMethodFormModal',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
-        model: () => this.model,
+        paymentMethod: () => this.model,
+        mailingAddress: () => {}, // TODO: load this from donor details
         onSubmit: () => this.onSubmit,
         submissionError: () => this.submissionError
       }
@@ -69,7 +70,7 @@ export default angular
     template.name,
     displayAddressComponent.name,
     recurringGiftsComponent.name,
-    editPaymentMethodModal.name,
+    paymentMethodFormModal.name,
     deletePaymentMethodModal.name,
     giveModalWindowTemplate.name
   ])

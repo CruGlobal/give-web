@@ -70,18 +70,18 @@ describe('payment methods', function() {
       data: 'some data'
     };
     spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of('data'));
-    self.controller.addNewPaymentMethodModal = jasmine.createSpyObj('addNewPaymentMethodModal',['close']);
+    self.controller.paymentMethodFormModal = jasmine.createSpyObj('paymentMethodFormModal',['close']);
 
     self.controller.parentComponent = self.controller;
     self.controller.onSubmit(e);
-    expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+    expect(self.controller.paymentMethodFormModal.close).toHaveBeenCalled();
   });
 
   it('should update payment methods list on modal close', () => {
     self.controller.paymentMethods = [{},{}];
     self.controller.addPaymentMethod();
     let callback = () => {};
-    self.controller.addNewPaymentMethodModal.result.then(callback);
+    self.controller.paymentMethodFormModal.result.then(callback);
     expect(self.controller.paymentMethods.length).toBe(3);
     self.controller.$timeout.flush();
     expect(self.controller.successMessage.show).toBe(false);
@@ -100,9 +100,9 @@ describe('payment methods', function() {
   });
 
   it('should close modal on component destroy', ()=>{
-    self.controller.addNewPaymentMethodModal = jasmine.createSpyObj('self.controller.addNewPaymentMethodModal', ['close']);
+    self.controller.paymentMethodFormModal = jasmine.createSpyObj('self.controller.paymentMethodFormModal', ['close']);
     self.controller.$onDestroy();
-    expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+    expect(self.controller.paymentMethodFormModal.close).toHaveBeenCalled();
   });
 
   it('should return true if payment method is a card', () => {

@@ -88,12 +88,12 @@ describe('PaymentMethodComponent', function () {
     self.controller.model = modelCC;
     self.controller.editPaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
-    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.model()).toEqual(modelCC);
+    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.paymentMethod()).toEqual(modelCC);
 
     self.controller.model = modelEFT;
     self.controller.editPaymentMethod();
     expect(self.controller.$uibModal.open).toHaveBeenCalled();
-    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.model()).toEqual(modelEFT);
+    expect(self.controller.$uibModal.open.calls.first().args[0].resolve.paymentMethod()).toEqual(modelEFT);
 
     self.controller.onSubmit = () => 'hello';
     expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('hello');
