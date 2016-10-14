@@ -3,6 +3,8 @@ import 'rxjs/add/operator/pluck';
 
 import cortexApiService from '../cortexApi.service';
 
+import find from 'lodash/find';
+
 let serviceName = 'donationsService';
 
 /*@ngInject*/
@@ -52,8 +54,11 @@ function DonationsService( cortexApiService ) {
         data: data
       } )
       .map( (response) => {
-        angular.forEach(response['receipt-summaries'], (item, index) => {
-          item['pdf-link'] = response['links'][index+1];
+        angular.forEach(response['receipt-summaries'], (item) => {
+          let link = find(response.links, (r) => {
+            return r.uri.indexOf(item['transaction-number']) != -1;
+          });
+          item['pdf-link'] = link;
         });
         return response;
       })
