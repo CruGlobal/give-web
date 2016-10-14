@@ -56,7 +56,7 @@ function VerificationService( cortexApiService ) {
     return cortexApiService
       .post( {
         path: ['donormatches', cortexApiService.scope],
-        data: {},
+        data: {}
       } );
   }
 

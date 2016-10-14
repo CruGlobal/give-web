@@ -177,7 +177,7 @@ describe( 'registerAccountService', function () {
               } );
             } );
 
-            describe( 'postDonorMatches success', () => {
+            describe( 'postDonorMatches failure', () => {
               it( 'registerAccount should fail', ( done ) => {
                 donorMatchesPromise.reject();
                 result.then( () => {
