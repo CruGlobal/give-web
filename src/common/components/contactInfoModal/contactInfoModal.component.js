@@ -5,11 +5,11 @@ import contactInfoComponent from 'common/components/contactInfo/contactInfo.comp
 
 import sessionService from 'common/services/session/session.service';
 
-import template from './registerAccountModal.tpl';
+import template from './contactInfoModal.tpl';
 
-let componentName = 'registerAccountModal';
+let componentName = 'contactInfoModal';
 
-class RegisterAccountModalController {
+class contactInfoModalController {
 
   /* @ngInject */
   constructor( gettext, sessionService ) {
@@ -38,7 +38,7 @@ export default angular
     template.name
   ] )
   .component( componentName, {
-    controller:  RegisterAccountModalController,
+    controller:  contactInfoModalController,
     templateUrl: template.name,
     bindings:    {
       modalTitle:    '=',
