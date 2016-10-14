@@ -18,10 +18,10 @@ class recurringGiftsController{
     var gifts = [];
     forEach(this.gifts,(gift) => {
       var rate = gift.rate,
-          day = gift['recurring-day-of-month'];
+          date = gift['next-draw-date'];
       forEach(gift['donation-lines'], (donationLine) => {
         donationLine['rate'] = rate;
-        donationLine['recurring-day-of-month'] = day;
+        donationLine['next-draw-date'] = date;
         gifts = gifts.concat(donationLine);
       });
     });

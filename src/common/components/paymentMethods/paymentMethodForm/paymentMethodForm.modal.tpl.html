@@ -1,4 +1,4 @@
-<loading-overlay ng-if="$ctrl.submitted"></loading-overlay>
+<loading-overlay ng-if="$ctrl.resolve.submitted"></loading-overlay>
 
 <div class="modal-header">
   <div class="container-fluid">
@@ -25,13 +25,13 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <payment-method-form submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.resolve.submissionError" payment-method="$ctrl.resolve.paymentMethod" mailing-address="$ctrl.resolve.mailingAddress"></payment-method-form>
+        <payment-method-form submitted="$ctrl.resolve.submitted" on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.resolve.submissionError" payment-method="$ctrl.resolve.paymentMethod" mailing-address="$ctrl.resolve.mailingAddress"></payment-method-form>
       </div>
     </div>
 
     <div class="row">
       <div class="col-xs-12">
-        <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.submitted = true" translate>
+        <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.resolve.submitted = true" translate>
           <span ng-if="!$ctrl.resolve.paymentMethod" translate>Add Payment Method</span>
           <span ng-if="$ctrl.resolve.paymentMethod" translate>Update Payment Method</span>
         </button>

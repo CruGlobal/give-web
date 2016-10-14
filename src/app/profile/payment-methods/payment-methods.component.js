@@ -7,7 +7,7 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
-import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
+import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
 
 class PaymentMethodsController {
@@ -24,6 +24,7 @@ class PaymentMethodsController {
     this.$timeout = $timeout;
     this.$window = $window;
     this.$location = $location;
+    this.submitted = false;
     this.sessionEnforcerService = sessionEnforcerService;
   }
 
@@ -35,15 +36,15 @@ class PaymentMethodsController {
 
   $onInit(){
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
-      'sign-in': () => {
+      [EnforcerCallbacks.signIn]: () => {
         this.loading = true;
         this.loadPaymentMethods();
         this.loadDonorDetails();
       },
-      cancel: () => {
+      [EnforcerCallbacks.cancel]: () => {
         this.$window.location = '/';
       }
-    });
+    }, EnforcerModes.donor);
     this.loading = true;
     this.loadPaymentMethods();
     this.loadDonorDetails();
@@ -60,13 +61,14 @@ class PaymentMethodsController {
     this.profileService.getPaymentMethodsWithDonations()
       .subscribe(
         data => {
+          this.submissionError.error = '';
           this.loading = false;
           this.paymentMethods = data;
         },
         error => {
           this.loading = false;
-          this.error = 'Failed retrieving payment methods.';
-          this.log.error('Failed retrieving payment methods', error);
+          this.submissionError.error = 'Failed retrieving payment methods.';
+          this.log.error(this.submissionError.error, error);
         }
       );
   }
@@ -79,6 +81,7 @@ class PaymentMethodsController {
       resolve: {
         mailingAddress: this.mailingAddress,
         submissionError: this.submissionError,
+        submitted: this.submitted,
         onSubmit: () => params => this.onSubmit(params)
       }
     });
@@ -95,7 +98,7 @@ class PaymentMethodsController {
   }
 
   onSubmit(e) {
-    if(e.data) {
+    if(e.success && e.data) {
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
             this.paymentMethodFormModal.close(data);
@@ -104,6 +107,8 @@ class PaymentMethodsController {
             this.submissionError.error = error.data;
             this.log.error('error.data',error);
           });
+    } else {
+      this.submitted = false;
     }
   }
 
