@@ -36,7 +36,7 @@ describe( 'registerAccountService', function () {
       switch ( type ) {
         case 'sign-in':
           return {result: signInPromise.promise};
-        case 'register-account':
+        case 'contact-info':
           return {result: registerAccountPromise.promise};
         case 'user-match':
           return {result: userMatchPromise.promise};
@@ -118,7 +118,7 @@ describe( 'registerAccountService', function () {
           it( 'rejects the promise', () => {
             donorDetailsPromise.reject();
             $rootScope.$digest();
-            expect( sessionModalService.open ).toHaveBeenCalledWith( 'register-account', jasmine.any( Object ) );
+            expect( sessionModalService.open ).toHaveBeenCalledWith( 'contact-info', jasmine.any( Object ) );
           } );
         } );
 
@@ -127,12 +127,12 @@ describe( 'registerAccountService', function () {
             donorDetailsPromise.resolve( {'registration-state': 'NEW'} );
           } );
 
-          it( 'should show register-account modal', () => {
+          it( 'should show contact-info modal', () => {
             $rootScope.$digest();
-            expect( sessionModalService.open ).toHaveBeenCalledWith( 'register-account', jasmine.any( Object ) );
+            expect( sessionModalService.open ).toHaveBeenCalledWith( 'contact-info', jasmine.any( Object ) );
           } );
 
-          describe( '\'register-account\' modal success', () => {
+          describe( '\'contact-info\' modal success', () => {
             beforeEach( () => {
               registerAccountPromise.resolve();
             } );
@@ -190,7 +190,7 @@ describe( 'registerAccountService', function () {
             } );
           } );
 
-          describe( '\'register-account\' modal failure/cancel', () => {
+          describe( '\'contact-info\' modal failure/cancel', () => {
             beforeEach( () => {
               registerAccountPromise.reject();
             } );

@@ -29,11 +29,11 @@ function RegisterAccountService( $q, orderService, sessionService, sessionModalS
           registeredDeferred.resolve();
         }
         else {
-          // Proceed to 'register-account' modal by resolving the donorDetails
+          // Proceed to 'contact-info' modal by resolving the donorDetails
           donorDetailsDeferred.resolve();
         }
       }, () => {
-        // Failed to get donorDetails, proceed to 'register-account'
+        // Failed to get donorDetails, proceed to 'contact-info'
         donorDetailsDeferred.resolve();
       } );
     } );
@@ -41,7 +41,7 @@ function RegisterAccountService( $q, orderService, sessionService, sessionModalS
     // Resolved when donorDetails is not COMPLETED
     donorDetailsDeferred.promise.then( () => {
       // 2. Get Contact Info
-      sessionModalService.open( 'register-account', {size: '', backdrop: 'static'} ).result.then( () => {
+      sessionModalService.open( 'contact-info', {size: '', backdrop: 'static'} ).result.then( () => {
         verificationService.postDonorMatches().subscribe( () => {
           // 3. User Match
           sessionModalService.open( 'user-match', {backdrop: 'static'} ).result.then( () => {
