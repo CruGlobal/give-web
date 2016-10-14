@@ -40,7 +40,7 @@ class ReceiptsController {
     this.loading = true;
     let endDate = this.currentYear == this.today.getFullYear()
       ? year + '-' + (this.today.getMonth()+1) + '-' + this.today.getDate()
-      : year + year + '-12-31';
+      : year + '-12-31';
 
     let data = {
       'end-date': {
