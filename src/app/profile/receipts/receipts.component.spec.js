@@ -20,7 +20,6 @@ describe( 'ReceiptsComponent', function () {
     expect( $ctrl.$window ).toBeDefined();
     expect( $ctrl.$location ).toBeDefined();
     expect( $ctrl.sessionEnforcerService ).toBeDefined();
-    expect( $ctrl.sessionService ).toBeDefined();
   } );
 
   describe( '$onInit()', () => {
