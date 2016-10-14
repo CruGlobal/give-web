@@ -1,12 +1,12 @@
 import angular from 'angular';
 
-import addNewPaymentMethod from './addNewPaymentMethod.component';
+import paymentMethodForm from './paymentMethodForm.component.js';
 
-import template from './addNewPaymentMethod.modal.tpl';
+import template from './paymentMethodForm.modal.tpl';
 
-let componentName = 'addNewPaymentMethodModal';
+let componentName = 'paymentMethodFormModal';
 
-class AddNewPaymentMethodModalController {
+class PaymentMethodFormModalController {
 
   /* @ngInject */
   constructor() {
@@ -22,10 +22,10 @@ class AddNewPaymentMethodModalController {
 export default angular
   .module(componentName, [
     template.name,
-    addNewPaymentMethod.name
+    paymentMethodForm.name
   ])
   .component(componentName, {
-    controller: AddNewPaymentMethodModalController,
+    controller: PaymentMethodFormModalController,
     templateUrl: template.name,
     bindings: {
       resolve: '<',

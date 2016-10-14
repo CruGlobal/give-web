@@ -288,6 +288,39 @@ describe('profile service', () => {
     });
   });
 
+  describe('updatePaymentMethod', () => {
+    it('should update a bank account', () => {
+      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/paymentUri',
+        { 'bank-name': 'Some Bank' }
+      ).respond(200, null);
+      self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { bankAccount: { 'bank-name': 'Some Bank' } })
+        .subscribe(null, () => fail());
+      self.$httpBackend.flush();
+    });
+    it('should update a credit card', () => {
+      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/paymentUri',
+        { 'cardholder-name': 'Some Person', address: { 'street-address': 'Some Address||||||', 'extended-address': '', locality: '', 'postal-code': '', region: ''} }
+      ).respond(200, null);
+      self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { creditCard: { 'cardholder-name': 'Some Person', address: { streetAddress: 'Some Address' } } })
+        .subscribe(null, () => fail());
+      self.$httpBackend.flush();
+    });
+    it('should update a credit card with no billing address (api will use mailing address)', () => {
+      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/paymentUri',
+        { 'cardholder-name': 'Some Person' }
+      ).respond(200, null);
+      self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { creditCard: { 'cardholder-name': 'Some Person', address: undefined } })
+        .subscribe(null, () => fail());
+      self.$httpBackend.flush();
+    });
+    it('should handle a missing bank account or credit card', () => {
+      self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, {})
+        .subscribe(() => fail(), (error) => {
+          expect(error).toEqual('Error updating payment method. The data passed to profileService.updatePaymentMethod did not contain bankAccount or creditCard data.');
+        });
+    });
+  });
+
   describe('getPurchase', () => {
     it('should load the purchase specified by the uri', () => {
       let modifiedPurchaseResponse = angular.copy(purchaseResponse);
@@ -328,9 +361,13 @@ describe('profile service', () => {
     it('should load the user\'s donorDetails', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails')
         .respond(200, donorDetailsResponse);
+
+      let expectedDonorDetails = angular.copy(donorDetailsResponse['_donordetails'][0]);
+      expectedDonorDetails.mailingAddress = formatAddressForTemplate(expectedDonorDetails['mailing-address']);
+      expectedDonorDetails = omit(expectedDonorDetails, 'mailing-address');
       self.profileService.getDonorDetails()
         .subscribe((donorDetails) => {
-          expect(donorDetails).toEqual(donorDetailsResponse['_donordetails'][0]);
+          expect(donorDetails).toEqual(expectedDonorDetails);
         });
       self.$httpBackend.flush();
     });

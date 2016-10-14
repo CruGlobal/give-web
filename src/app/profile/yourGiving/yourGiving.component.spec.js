@@ -44,9 +44,9 @@ describe( 'your giving', function () {
           [Roles.registered], jasmine.objectContaining( {
             'sign-in': jasmine.any( Function ),
             cancel:    jasmine.any( Function )
-          } )
+          } ), 'donor'
         );
-        expect( $ctrl.setGivingView ).toHaveBeenCalled();
+        expect( $ctrl.setGivingView ).not.toHaveBeenCalled();
         expect( $ctrl.profileLoading ).toEqual( true );
         expect( $ctrl.loadProfile ).not.toHaveBeenCalled();
       } );
@@ -61,10 +61,9 @@ describe( 'your giving', function () {
           [Roles.registered], jasmine.objectContaining( {
             'sign-in': jasmine.any( Function ),
             cancel:    jasmine.any( Function )
-          } )
+          } ), 'donor'
         );
-        expect( $ctrl.setGivingView ).toHaveBeenCalled();
-        expect( $ctrl.loadProfile ).toHaveBeenCalled();
+        expect( $ctrl.loadProfile ).not.toHaveBeenCalled();
       } );
     } );
 
@@ -75,6 +74,7 @@ describe( 'your giving', function () {
         $ctrl.$onInit();
         $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
         expect( $ctrl.loadProfile ).toHaveBeenCalledTimes( 1 );
+        expect( $ctrl.setGivingView ).toHaveBeenCalled();
       } );
     } );
 
@@ -153,12 +153,12 @@ describe( 'your giving', function () {
 
   describe( 'openEditRecurringGiftsModal', () => {
     it( 'should open the modal', () => {
-      spyOn($ctrl.$uibModal, 'open').and.returnValue({ result: { then: jasmine.createSpy('then') } });
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: jasmine.createSpy( 'then' )}} );
       $ctrl.openEditRecurringGiftsModal();
-      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( { component: 'editRecurringGiftsModal' } ) );
-      expect( $ctrl.recurringGiftsUpdateSuccess).toEqual(false);
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'editRecurringGiftsModal'} ) );
+      expect( $ctrl.recurringGiftsUpdateSuccess ).toEqual( false );
       $ctrl.editRecurringGiftsModal.result.then.calls.first().args[0](); // Execute close modal promise success function
-      expect( $ctrl.recurringGiftsUpdateSuccess).toEqual(true);
+      expect( $ctrl.recurringGiftsUpdateSuccess ).toEqual( true );
     } );
   } );
 } );

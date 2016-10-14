@@ -1,13 +1,14 @@
 import angular from 'angular';
 
+import paymentMethodDisplay from '../paymentMethodDisplay.component';
 import bankAccountForm from '../bankAccountForm/bankAccountForm.component';
 import creditCardForm from '../creditCardForm/creditCardForm.component';
 
-import template from './addNewPaymentMethod.tpl';
+import template from './paymentMethodForm.tpl';
 
-let componentName = 'addNewPaymentMethod';
+let componentName = 'paymentMethodForm';
 
-class AddNewPaymentMethodController{
+class PaymentMethodFormController{
 
   /* @ngInject */
   constructor($log, envService){
@@ -16,6 +17,12 @@ class AddNewPaymentMethodController{
     this.paymentType = 'bankAccount';
     this.submitted = false;
     this.imgDomain = envService.read('imgDomain');
+  }
+
+  $onInit(){
+    if(this.paymentMethod){
+      this.paymentType = this.paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' ? 'bankAccount' : 'creditCard';
+    }
   }
 
   changePaymentType(type){
@@ -31,14 +38,18 @@ class AddNewPaymentMethodController{
 export default angular
   .module(componentName, [
     template.name,
+    paymentMethodDisplay.name,
     bankAccountForm.name,
     creditCardForm.name
   ])
   .component(componentName, {
-    controller: AddNewPaymentMethodController,
+    controller: PaymentMethodFormController,
     templateUrl: template.name,
     bindings: {
       submitted: '<',
+      paymentMethod: '<',
+      mailingAddress: '<',
+      submissionError: '<',
       onSubmit: '&'
     }
   });

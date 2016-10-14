@@ -1,8 +1,8 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './addNewPaymentMethod.modal.component.js';
+import module from './paymentMethodForm.modal.component.js';
 
-describe('addNewPaymentMethodModal', () => {
+describe('paymentMethodFormModal', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 

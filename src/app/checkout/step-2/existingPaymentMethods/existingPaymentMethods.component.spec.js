@@ -73,13 +73,13 @@ describe('checkout', () => {
 
       describe('loadPaymentMethods', () => {
         beforeEach(() => {
-          self.controller.addNewPaymentMethodModal = {
+          self.controller.paymentMethodFormModal = {
             close: jasmine.createSpy('close')
           };
         });
 
         afterEach(() => {
-          expect(self.controller.addNewPaymentMethodModal.close).toHaveBeenCalled();
+          expect(self.controller.paymentMethodFormModal.close).toHaveBeenCalled();
         });
 
         it('should load existing payment methods successfully if any exist', () => {
@@ -136,12 +136,12 @@ describe('checkout', () => {
         });
       });
 
-      describe('openAddNewPaymentMethodModal', () => {
-        it('should open the addNewPaymentMethod modal', () => {
+      describe('openPaymentMethodFormModal', () => {
+        it('should open the paymentMethodForm modal', () => {
           spyOn(self.controller.$uibModal, 'open').and.callThrough();
-          self.controller.openAddNewPaymentMethodModal();
+          self.controller.openPaymentMethodFormModal();
           expect(self.controller.$uibModal.open).toHaveBeenCalled();
-          expect(self.controller.addNewPaymentMethodModal).toBeDefined();
+          expect(self.controller.paymentMethodFormModal).toBeDefined();
 
           // Test calling onSubmit
           self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()({ success: true, data: 'some data' });
@@ -149,7 +149,7 @@ describe('checkout', () => {
         });
         it('should call onSubmit to clear submissionErrors when the modal closes', () => {
           spyOn(self.controller.$uibModal, 'open').and.returnValue({ result: Observable.throw('').toPromise() });
-          self.controller.openAddNewPaymentMethodModal();
+          self.controller.openPaymentMethodFormModal();
           self.$timeout(() => {
             expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false, error: ''});
           }, 0);

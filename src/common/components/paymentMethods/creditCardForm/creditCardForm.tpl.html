@@ -8,7 +8,7 @@
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardNumber | showErrors)}">
           <label translate>Card #</label>
-          <input type="text" name="cardNumber" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardNumber" required>
+          <input type="text" name="cardNumber" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardNumber" ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}" ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber">
           <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="($ctrl.creditCardPaymentForm.cardNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter a card number</div>
             <div class="help-block" ng-message="minlength" translate>This card number must contain at least 13 digits</div>
@@ -71,7 +71,7 @@
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors)}">
           <label translate>CVV Code</label>
-          <input type="text" name="securityCode" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" required>
+          <input type="text" name="securityCode" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode"ng-attr-placeholder="{{$ctrl.paymentMethod ? '****' : ''}}" ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber">
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the security code</div>
             <div class="help-block" ng-message="minlength" translate>The security code must be at least 3 digits</div>
@@ -86,28 +86,31 @@
 
     <div class="">
       <label class="checkbox-inline">
-        <input type="checkbox" ng-model="$ctrl.billingAddress.isMailingAddress"> Same as Mailing Address
+        <input type="checkbox" ng-model="$ctrl.useMailingAddress"> Same as Mailing Address
       </label>
     </div>
 
-    <div class="billing-address-new-wrap mt- on" id="address-billing-current" ng-if="$ctrl.billingAddress.isMailingAddress">
+    <div class="billing-address-new-wrap mt- on" id="address-billing-current" ng-if="$ctrl.useMailingAddress">
       <div class="panel panel-default">
         <div class="panel-body">
-          <h4 class="panel-title  border-bottom-small  visible">Billing Address</h4>
-          <display-address address="$ctrl.donorDetails.mailingAddress"></display-address>
+          <h4 class="panel-title  border-bottom-small  visible" translate>Billing Address</h4>
+          <display-address address="$ctrl.mailingAddress"></display-address>
           <div style="position: relative">
-            <loading ng-if="!$ctrl.donorDetails"></loading>
+            <loading ng-if="!$ctrl.mailingAddress"></loading>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="billing-address-wrap mt-" id="address-billing-new" ng-if="!$ctrl.billingAddress.isMailingAddress" style="display: block"><!-- TODO: fix CSS so display: block isn't needed -->
+    <div class="billing-address-wrap mt-" id="address-billing-new" ng-if="!$ctrl.useMailingAddress" style="display: block"><!-- TODO: fix CSS so display: block isn't needed -->
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="mb">
-            <h4 class="panel-title  border-bottom-small  visible">New Billing Address</h4>
-            <address-form address="$ctrl.billingAddress" parent-form="$ctrl.creditCardPaymentForm"></address-form>
+            <h4 class="panel-title  border-bottom-small  visible">
+              <span ng-if="!$ctrl.paymentMethod" translate>New</span>
+              <span translate>Billing Address</span>
+            </h4>
+            <address-form address="$ctrl.creditCardPayment.address" parent-form="$ctrl.creditCardPaymentForm"></address-form>
           </div>
         </div>
       </div>

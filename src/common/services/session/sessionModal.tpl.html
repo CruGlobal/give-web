@@ -45,11 +45,12 @@
                             on-success="$ctrl.onSignUpSuccess()"
                             set-loading="$ctrl.setLoading(loading)">
           </user-match-modal>
-          <register-account-modal ng-switch-when="register-account"
-                                  modal-title="$ctrl.modalTitle"
-                                  on-state-change="$ctrl.stateChanged(state)"
-                                  on-success="$ctrl.onSignUpSuccess()">
-          </register-account-modal>
+          <contact-info-modal ng-switch-when="contact-info"
+                              modal-title="$ctrl.modalTitle"
+                              on-state-change="$ctrl.stateChanged(state)"
+                              on-success="$ctrl.onSignUpSuccess()"
+                              on-cancel="$ctrl.onCancel()">
+          </contact-info-modal>
           <account-benefits-modal ng-switch-when="account-benefits"
                                   modal-title="$ctrl.modalTitle"
                                   on-state-change="$ctrl.stateChanged(state)"
