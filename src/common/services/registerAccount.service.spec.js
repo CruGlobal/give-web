@@ -11,23 +11,27 @@ describe( 'registerAccountService', function () {
     sessionModalService,
     sessionService,
     orderService,
+    veritifcationService,
     $rootScope,
     signInPromise,
     userMatchPromise,
     donorDetailsPromise,
     registerAccountPromise,
+    donorMatchesPromise,
     result;
 
-  beforeEach( inject( function ( _registerAccountService_, _sessionModalService_, _sessionService_, _orderService_, _$q_, _$rootScope_ ) {
+  beforeEach( inject( function ( _registerAccountService_, _sessionModalService_, _sessionService_, _orderService_, _verificationService_, _$q_, _$rootScope_ ) {
     registerAccountService = jasmine.createSpy( 'registerAccountService', _registerAccountService_ ).and.callThrough();
     sessionModalService = _sessionModalService_;
     sessionService = _sessionService_;
     orderService = _orderService_;
+    veritifcationService = _verificationService_;
     $rootScope = _$rootScope_;
     signInPromise = _$q_.defer();
     userMatchPromise = _$q_.defer();
     donorDetailsPromise = _$q_.defer();
     registerAccountPromise = _$q_.defer();
+    donorMatchesPromise = _$q_.defer();
     spyOn( sessionModalService, 'open' ).and.callFake( ( type ) => {
       switch ( type ) {
         case 'sign-in':
@@ -39,6 +43,7 @@ describe( 'registerAccountService', function () {
       }
     } );
     spyOn( orderService, 'getDonorDetails' ).and.callFake( () => Observable.from( donorDetailsPromise.promise ) );
+    spyOn( veritifcationService, 'postDonorMatches' ).and.callFake( () => Observable.from( donorMatchesPromise.promise ) );
   } ) );
 
   it( 'should be defined', () => {
@@ -132,26 +137,49 @@ describe( 'registerAccountService', function () {
               registerAccountPromise.resolve();
             } );
 
-            it( 'should show \'user-match\' modal', () => {
+            it( 'should call postDonorMatches', () => {
               $rootScope.$digest();
-              expect( sessionModalService.open ).toHaveBeenCalledWith( 'user-match', jasmine.any( Object ) );
+              expect( veritifcationService.postDonorMatches ).toHaveBeenCalled();
             } );
 
-            describe( '\'user-match\' success', () => {
-              it( 'registerAccount to complete successfully', ( done ) => {
-                userMatchPromise.resolve();
-                result.then( () => {
-                  done();
-                }, () => {
-                  done( new Error( 'registerAccount should succeed.' ) );
-                } );
+            describe( 'postDonorMatches success', () => {
+              beforeEach( () => {
+                donorMatchesPromise.resolve();
+              } );
+
+              it( 'should show \'user-match\' modal', () => {
                 $rootScope.$digest();
+                expect( sessionModalService.open ).toHaveBeenCalledWith( 'user-match', jasmine.any( Object ) );
+              } );
+
+              describe( '\'user-match\' success', () => {
+                it( 'registerAccount to complete successfully', ( done ) => {
+                  userMatchPromise.resolve();
+                  result.then( () => {
+                    done();
+                  }, () => {
+                    done( new Error( 'registerAccount should succeed.' ) );
+                  } );
+                  $rootScope.$digest();
+                } );
+              } );
+
+              describe( '\'user-match\' failure/cancel', () => {
+                it( 'registerAccount should fail', ( done ) => {
+                  userMatchPromise.reject();
+                  result.then( () => {
+                    done( new Error( 'registerAccount should not succeed.' ) );
+                  }, () => {
+                    done();
+                  } );
+                  $rootScope.$digest();
+                } );
               } );
             } );
 
-            describe( '\'user-match\' failure/cancel', () => {
+            describe( 'postDonorMatches success', () => {
               it( 'registerAccount should fail', ( done ) => {
-                userMatchPromise.reject();
+                donorMatchesPromise.reject();
                 result.then( () => {
                   done( new Error( 'registerAccount should not succeed.' ) );
                 }, () => {

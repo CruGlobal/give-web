@@ -2,15 +2,15 @@ import angular from 'angular';
 import orderService from 'common/services/api/order.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import sessionService from 'common/services/session/session.service';
+import verificationService from 'common/services/api/verification.service';
 
 import {Roles} from 'common/services/session/session.service';
 
 let serviceName = 'registerAccountService';
 
 /*@ngInject*/
-function RegisterAccountService( $q, orderService, sessionService, sessionModalService ) {
+function RegisterAccountService( $q, orderService, sessionService, sessionModalService, verificationService ) {
 
-// angular.element(document.querySelector('body')).injector().get('registerAccountService')().then(function() {console.log('success');}, function() {console.log('failure')});
   function registerAccount() {
     // Register Account Modal is a multi-step process.
     // 1. Sign In/Up
@@ -42,10 +42,13 @@ function RegisterAccountService( $q, orderService, sessionService, sessionModalS
     donorDetailsDeferred.promise.then( () => {
       // 2. Get Contact Info
       sessionModalService.open( 'register-account', {size: '', backdrop: 'static'} ).result.then( () => {
-        // TODO: after contact info, we may need to POST donormatches form and fetch donorDetails again.
-        // 3. User Match
-        sessionModalService.open( 'user-match', {backdrop: 'static'} ).result.then( () => {
-          registeredDeferred.resolve();
+        verificationService.postDonorMatches().subscribe( () => {
+          // 3. User Match
+          sessionModalService.open( 'user-match', {backdrop: 'static'} ).result.then( () => {
+            registeredDeferred.resolve();
+          }, () => {
+            registeredDeferred.reject();
+          } );
         }, () => {
           registeredDeferred.reject();
         } );
@@ -81,6 +84,7 @@ export default angular
   .module( serviceName, [
     orderService.name,
     sessionModalService.name,
-    sessionService.name
+    sessionService.name,
+    verificationService.name
   ] )
   .service( serviceName, RegisterAccountService );
