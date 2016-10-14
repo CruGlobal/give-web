@@ -9,7 +9,7 @@ function Capitalize(){
     let filteredReceipts = filter(receipts, (item) => {
       return item['transaction-date']['display-value'].indexOf(showYear) != -1;
     });
-    return(filteredReceipts);
+    return filteredReceipts;
   };
 }
 

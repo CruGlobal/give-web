@@ -10,18 +10,18 @@
             <div class="col-md-12">
               <h3>Receipts</h3>
 
-              <form ng-if="$ctrl.receipts && $ctrl.receipts.length" class="form-inline mt">
+              <form class="form-inline mt">
                 <div class="form-group">
-                  <span class="pr-">View My Gifts:</span>
+                  <span class="pr-">View My Receipts:</span>
                 </div>
                 <div class="input-group">
                   <div class="btn-group" uib-dropdown>
                     <button ng-click="$ctrl.toggle = !$ctrl.toggle" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
-                      <span class="hidden-xs">{{$ctrl.showYear}} <span class="caret"></span></span>
+                      <span class="hidden-xs">{{$ctrl.currentYear}} <span class="caret"></span></span>
                       <span class="visible-xs"><span class="fa fa-filter"></span></span>
                     </button>
                     <ul ng-click="$ctrl.toggle = false" class="dropdown-menu" uib-dropdown-menu>
-                      <li ng-repeat="year in $ctrl.years">
+                      <li ng-repeat="year in $ctrl.getListYears()">
                         <a ng-click="$ctrl.setYear(year)" href="">{{year}}</a>
                       </li>
                     </ul>
@@ -62,7 +62,7 @@
             </div>
           </div>
           <div ng-if="$ctrl.receipts && $ctrl.receipts.length == 0">
-            Receipts will be available after we have processed your first gift.
+            You don't have any receipts for {{$ctrl.currentYear}}.
           </div>
           <div class="row mt">
             <div class="col-xs-12">

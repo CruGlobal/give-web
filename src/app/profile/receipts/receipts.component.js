@@ -18,8 +18,6 @@ class ReceiptsController {
     this.$window = $window;
     this.$log = $log;
     this.loading = false;
-    this.years = [];
-    this.showYear = '';
     this.maxShow = this.step = 25;
     this.retrievingError = '';
   }
@@ -27,41 +25,43 @@ class ReceiptsController {
   $onInit() {
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       'sign-in': () => {
-        this.$window.location = '/receipts.html';
+        this.today = new Date();
+        this.currentYear = this.today.getFullYear();
+        this.getReceipts(this.currentYear,true);
       },
       cancel: () => {
-        this.$window.location = 'cart.html';
+        this.$window.location = '/';
       }
     });
-    this.getReceipts();
+    this.today = new Date();
+    this.currentYear = this.today.getFullYear();
+    this.getReceipts(this.currentYear,true);
   }
 
-  getReceipts(){
+  getReceipts(year, tryPreviousYear){
     this.loading = true;
-    let today = new Date();
-    let currentYear = today.getFullYear()*1;
 
     let data = {
       'end-date': {
-
+        'display-value': year + '-' + (this.today.getMonth()+1) + '-' + this.today.getDate()
       },
       'start-date': {
-        'display-value': currentYear - 10 + '-' + ((today.getMonth()*1)+1) + '-' + today.getDate()
+        'display-value': year + '-01-01'
       }
     };
     this.donationsService.getReceipts(data)
       .subscribe(
         data => {
-          angular.forEach(data,(item) => {
-            let year = item['transaction-date']['display-value'].split('-').shift();
-            this.years.push(year*1);
-          });
+          this.retrievingError = '';
           this.receipts = data;
-          this.years = sortBy(uniq(this.years), (item) => {
-            return item;
-          });
-          this.years = this.years.reverse();
-          this.showYear = this.latestYear = this.years[0];
+          //if there are no receipts in the current year try previous year
+          if(this.receipts.length == 0 && tryPreviousYear) {
+            this.currentYear = this.currentYear - 1;
+            this.getReceipts(this.currentYear);
+            return;
+          }
+          // if no receipts were found for the past two years, set current year back to 2016
+          this.currentYear = this.receipts.length == 0 ? this.today.getFullYear() : this.currentYear;
           this.loading = false;
         },
         error => {
@@ -73,8 +73,17 @@ class ReceiptsController {
   }
 
   setYear(year){
-    this.showYear = year;
     this.maxShow = this.step;
+    this.currentYear = year;
+    this.getReceipts(year);
+  }
+
+  getListYears(){
+    let list = [];
+    for(let i=0;i<10;i++){
+      list.push(this.today.getFullYear() - i);
+    }
+    return list;
   }
 
   $onDestroy() {
