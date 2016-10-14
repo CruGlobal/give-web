@@ -45,24 +45,27 @@ class PaymentMethodController{
       component: 'paymentMethodFormModal',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
-        paymentMethod: () => this.model,
-        mailingAddress: () => this.mailingAddress,
-        onSubmit: () => this.onSubmit,
-        submitted: () => this.submitted,
-        submissionError: () => this.submissionError,
-        profileService: () => this.profileService
+        paymentMethod: this.model,
+        mailingAddress: this.mailingAddress,
+        submitted: this.submitted,
+        submissionError: this.submissionError,
+        onSubmit: () => params => this.onSubmit(params)
       }
-    });
-    this.editPaymentMethodModal.result.then(() => {
-      this.editPaymentMethodModal.close();
     });
   }
 
   onSubmit(e){
     if(e.success && e.data) {
       this.submitted = true;
-      this.profileService.updatePaymentMethod(this.paymentMethod, e.data)
-        .subscribe(null,
+      this.profileService.updatePaymentMethod(this.model, e.data)
+        .subscribe(() => {
+            let editedData = e.data.creditCard || e.data.bankAccount;
+            this.submitted = false;
+            this.editPaymentMethodModal.close();
+            for(let key in editedData){
+              this.model[key] = editedData[key];
+            }
+          },
           error => {
             this.submissionError.error = error.data;
             this.submitted = false;

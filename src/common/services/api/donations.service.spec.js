@@ -70,9 +70,18 @@ describe( 'donations service', () => {
     it('should give next gift date', () => {
       let data = {};
       expect(donationsService.getNextGiftDate(data)).toBe(false);
+      jasmine.clock().install();
+      var baseDate = new Date(2013, 9, 23);
+      jasmine.clock().mockDate(baseDate);
+
       data['recurring-day-of-month'] = '25';
-      // im not sure how to test this function without duplicating its functionality into here =))
-      expect(donationsService.getNextGiftDate(data)).toBeTruthy();
+      var newDate = new Date(2013,9,25);
+      expect(donationsService.getNextGiftDate(data)).toEqual(newDate);
+
+      data['recurring-day-of-month'] = '5';
+      newDate = new Date(2013,10,5);
+      expect(donationsService.getNextGiftDate(data)).toEqual(newDate);
+      jasmine.clock().uninstall();
     });
   });
 

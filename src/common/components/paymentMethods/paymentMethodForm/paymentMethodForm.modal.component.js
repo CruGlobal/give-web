@@ -16,7 +16,6 @@ class PaymentMethodFormModalController {
 
   onSubmit(success, data){
     this.resolve.onSubmit({success: success, data: data});
-    this.submitted = false;
   }
 }
 

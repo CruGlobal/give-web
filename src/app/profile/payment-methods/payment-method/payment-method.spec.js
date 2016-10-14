@@ -125,21 +125,15 @@ describe('PaymentMethodComponent', function () {
 
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
-      expect(self.controller.$uibModal.open.calls.first().args[0].resolve.paymentMethod()).toEqual(modelCC);
 
       self.controller.model = modelEFT;
       self.controller.editPaymentMethod();
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
-      expect(self.controller.$uibModal.open.calls.first().args[0].resolve.paymentMethod()).toEqual(modelEFT);
 
       self.controller.onSubmit = () => 'hello';
       spyOn(self.controller.profileService, 'getDonorDetails').and.returnValue(Observable.of({mailingAddress: 'address'}));
       self.controller.$onInit();
       expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('hello');
-      expect(self.controller.$uibModal.open.calls.first().args[0].resolve.submissionError()).toEqual({ error: '' });
-      expect(self.controller.$uibModal.open.calls.first().args[0].resolve.mailingAddress()).toBe('address');
-      expect(self.controller.$uibModal.open.calls.first().args[0].resolve.submitted()).toBe(false);
-      expect(self.controller.$uibModal.open.calls.first().args[0].resolve.profileService()).toBeTruthy();
     });
   });
 
@@ -160,6 +154,16 @@ describe('PaymentMethodComponent', function () {
       }));
       self.controller.onSubmit({success:true, data: {}});
       expect(self.controller.submissionError.error).toBe('some error');
+    });
+
+    it('should edit payment method', () => {
+      self.controller.editPaymentMethodModal = {
+        close: jasmine.createSpy('close')
+      };
+      spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.of('data'));
+      self.controller.onSubmit({success:true, data: {creditCard:{'card-number': '0000'}}});
+      expect(self.controller.model['card-number']).toBe('0000');
+      expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
     });
   });
 
