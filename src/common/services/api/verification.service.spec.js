@@ -82,4 +82,14 @@ describe( 'verification service', () => {
       $httpBackend.flush();
     } );
   } );
+
+  describe( 'postDonorMatches()', () => {
+    it( 'posts donor matches form', () => {
+      $httpBackend
+        .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/donormatches/crugive', {} )
+        .respond( 200, {} );
+      verificationService.postDonorMatches();
+      $httpBackend.flush();
+    } );
+  } );
 } );

@@ -37,8 +37,8 @@ function VerificationService( cortexApiService ) {
   function thatIsNotMe() {
     return cortexApiService
       .post( {
-        path: ['verifyregistrations', cortexApiService.scope],
-        data: {'that-is-not-me': 'true'},
+        path:           ['verifyregistrations', cortexApiService.scope],
+        data:           {'that-is-not-me': 'true'},
         followLocation: true
       } );
   }
@@ -52,12 +52,21 @@ function VerificationService( cortexApiService ) {
       } );
   }
 
+  function postDonorMatches() {
+    return cortexApiService
+      .post( {
+        path: ['donormatches', cortexApiService.scope],
+        data: {},
+      } );
+  }
+
   return {
-    getContacts:   getContacts,
-    selectContact: selectContact,
-    getQuestions:  getQuestions,
-    submitAnswers: submitAnswers,
-    thatIsNotMe:   thatIsNotMe
+    getContacts:      getContacts,
+    selectContact:    selectContact,
+    getQuestions:     getQuestions,
+    submitAnswers:    submitAnswers,
+    thatIsNotMe:      thatIsNotMe,
+    postDonorMatches: postDonorMatches
   };
 }
 
