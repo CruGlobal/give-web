@@ -3,7 +3,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './receipts.filter';
 
-fdescribe('filterByYear filter', () => {
+describe('filterByYear filter', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {},
       receipts = [

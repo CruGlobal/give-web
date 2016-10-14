@@ -3,10 +3,8 @@ import template from './receipts.tpl';
 import donationsService from 'common/services/api/donations.service';
 import filterByYear from './receipts.filter';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
-import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
+import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
-import uniq from 'lodash/uniq';
-import sortBy from 'lodash/sortBy';
 
 class ReceiptsController {
 
@@ -24,15 +22,15 @@ class ReceiptsController {
 
   $onInit() {
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
-      'sign-in': () => {
+      [EnforcerCallbacks.signIn]: () => {
         this.today = new Date();
         this.currentYear = this.today.getFullYear();
         this.getReceipts(this.currentYear,true);
       },
-      cancel: () => {
+      [EnforcerCallbacks.cancel]: () => {
         this.$window.location = '/';
       }
-    });
+    }, EnforcerModes.donor);
     this.today = new Date();
     this.currentYear = this.today.getFullYear();
     this.getReceipts(this.currentYear,true);
