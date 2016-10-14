@@ -25,7 +25,7 @@ describe( 'userMatchModal', function () {
 
   describe( '$onInit', () => {
     beforeEach( () => {
-      spyOn( $ctrl.verificationService, 'getContacts' ).and.returnValue( Observable.of( [] ) );
+      spyOn( $ctrl.verificationService, 'getContacts' ).and.callFake( () => Observable.of( [] ) );
       spyOn( $ctrl, 'changeMatchState' );
     } );
 
@@ -42,14 +42,31 @@ describe( 'userMatchModal', function () {
     } );
 
     describe( 'donorDetails registration-state=\'MATCHED\'', () => {
-      it( 'initializes the component', () => {
+      beforeEach( () => {
         spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.of( {'registration-state': 'MATCHED'} ) );
+      } );
+      describe( 'getContacts has selected contact', () => {
+        it( 'initializes the component and proceeds to \'activate\'', () => {
+          let contacts = [{name: 'Charles Xavier', selected: false}, {name: 'Bruce Bannr', selected: true}];
+          $ctrl.verificationService.getContacts.and.callFake( () => Observable.of( contacts ) );
+          $ctrl.$onInit();
+          expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+          expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
+          expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
+          expect( $ctrl.verificationService.getContacts ).toHaveBeenCalled();
+          expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'activate' );
+        } );
+      } );
+
+      it( 'initializes the component and proceeds to \'identity\'', () => {
+        let contacts = [{name: 'Charles Xavier', selected: false}, {name: 'Bruce Bannr', selected: false}];
+        $ctrl.verificationService.getContacts.and.callFake( () => Observable.of( contacts ) );
         $ctrl.$onInit();
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
         expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
         expect( $ctrl.verificationService.getContacts ).toHaveBeenCalled();
-        expect( $ctrl.contacts ).toEqual( jasmine.any( Array ) );
+        expect( $ctrl.contacts ).toEqual( contacts );
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'identity' );
       } );
     } );

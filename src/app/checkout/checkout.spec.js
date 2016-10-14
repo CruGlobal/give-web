@@ -36,14 +36,14 @@ describe( 'checkout', function () {
           cancel:    jasmine.any( Function )
         } )
       );
-      expect( self.controller.loadCart ).toHaveBeenCalled();
+      expect( self.controller.loadCart ).not.toHaveBeenCalled();
       expect( self.controller.initStepParam ).toHaveBeenCalled();
     } );
 
     describe( 'sessionEnforcerService success', () => {
       it( 'executes success callback', () => {
         self.controller.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
-        expect( self.controller.loadCart ).toHaveBeenCalledTimes( 2 );
+        expect( self.controller.loadCart ).toHaveBeenCalled();
       } );
     } );
 
@@ -70,16 +70,16 @@ describe( 'checkout', function () {
   } );
 
   describe( 'initStepParam()', () => {
-    beforeEach(() => {
+    beforeEach( () => {
       spyOn( self.controller.$location, 'search' ).and.callThrough();
-      spyOn( self.controller.$location, 'replace');
-    });
+      spyOn( self.controller.$location, 'replace' );
+    } );
 
     it( 'should set the default step', () => {
       self.controller.initStepParam();
       expect( self.controller.checkoutStep ).toEqual( 'contact' );
-      expect( self.controller.$location.search).toHaveBeenCalledWith( 'step', 'contact');
-      expect( self.controller.$location.replace).toHaveBeenCalled();
+      expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'contact' );
+      expect( self.controller.$location.replace ).toHaveBeenCalled();
     } );
 
     it( 'should load the step from the query param', () => {
@@ -92,7 +92,7 @@ describe( 'checkout', function () {
 
     it( 'should watch the url and update the state', () => {
       self.controller.initStepParam();
-      spyOn(self.controller, 'initStepParam');
+      spyOn( self.controller, 'initStepParam' );
       self.controller.$location.search( 'step', 'payment' );
       self.controller.$rootScope.$digest();
       expect( self.controller.initStepParam ).toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe( 'checkout', function () {
       self.controller.changeStep( 'review' );
       expect( self.controller.$window.scrollTo ).toHaveBeenCalledWith( 0, 0 );
       expect( self.controller.checkoutStep ).toEqual( 'review' );
-      expect( self.controller.$location.search).toHaveBeenCalledWith( 'step', 'review' );
+      expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'review' );
     } );
   } );
 

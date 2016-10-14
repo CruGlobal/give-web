@@ -6,6 +6,7 @@ import verificationService from 'common/services/api/verification.service';
 import userMatchIdentity from './userMatchIdentity/userMatchIdentity.component';
 import userMatchQuestion from './userMatchQuestion/userMatchQuestion.component';
 import template from './userMatchModal.tpl';
+import find from 'lodash/find';
 
 let componentName = 'userMatchModal';
 
@@ -27,8 +28,13 @@ class UserMatchModalController {
           this.changeMatchState( 'success' );
         } else {
           this.verificationService.getContacts().subscribe( ( contacts ) => {
-            this.contacts = contacts;
-            this.changeMatchState( 'identity' );
+            if ( find( contacts, {selected: true} ) ) {
+              this.changeMatchState( 'activate' );
+            }
+            else {
+              this.contacts = contacts;
+              this.changeMatchState( 'identity' );
+            }
           } );
         }
       }

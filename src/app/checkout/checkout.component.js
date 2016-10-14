@@ -17,7 +17,7 @@ import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
 import commonModule from 'common/common.module';
 
-import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
+import sessionEnforcerService, {EnforcerCallbacks} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
 
 import template from './checkout.tpl';
@@ -40,14 +40,13 @@ class CheckoutController{
 
   $onInit() {
     this.enforcerId = this.sessionEnforcerService([Roles.public, Roles.registered], {
-      'sign-in': () => {
+      [EnforcerCallbacks.signIn]: () => {
         this.loadCart();
       },
-      cancel: () => {
+      [EnforcerCallbacks.cancel]: () => {
         this.$window.location = 'cart.html';
       }
     });
-    this.loadCart();
     this.initStepParam();
   }
 

@@ -1,9 +1,9 @@
 import angular from 'angular';
 import 'angular-mocks';
 
-import module from './registerAccountModal.component';
+import module from './contactInfoModal.component';
 
-describe('registerAccountModal', function() {
+describe('contactInfoModal', function() {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
