@@ -112,11 +112,11 @@ describe( 'sessionModalService', function () {
     } );
   } );
 
-  describe( 'registerAccount', () => {
-    it( 'should open registerAccount modal', () => {
-      sessionModalService.registerAccount();
+  describe( 'contactInfo', () => {
+    it( 'should open contactInfo modal', () => {
+      sessionModalService.contactInfo();
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'register-account' );
+      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'contact-info' );
     } );
   } );
 } );
