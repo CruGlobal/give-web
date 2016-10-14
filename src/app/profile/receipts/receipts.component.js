@@ -38,10 +38,13 @@ class ReceiptsController {
 
   getReceipts(year, tryPreviousYear){
     this.loading = true;
+    let endDate = this.currentYear == this.today.getFullYear()
+      ? year + '-' + (this.today.getMonth()+1) + '-' + this.today.getDate()
+      : year + year + '-12-31';
 
     let data = {
       'end-date': {
-        'display-value': year + '-' + (this.today.getMonth()+1) + '-' + this.today.getDate()
+        'display-value': endDate
       },
       'start-date': {
         'display-value': year + '-01-01'

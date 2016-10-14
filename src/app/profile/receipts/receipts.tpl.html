@@ -48,7 +48,7 @@
 
                   <tbody>
                   <tr ng-repeat="receipt in filtered = ($ctrl.receipts | filterByYear:$ctrl.showYear) | limitTo: $ctrl.maxShow">
-                    <td>{{receipt['transaction-date']['display-value']}}</td>
+                    <td>{{receipt['transaction-date']['display-value'] | date:'mediumDate'}}</td>
                     <td>{{receipt['total-amount'] | currency}}</td>
                     <td>{{receipt['designation-names'].join(' ,')}}</td>
                     <td>
