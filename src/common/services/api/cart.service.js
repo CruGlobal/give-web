@@ -5,28 +5,26 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 
 import cortexApiService from '../cortexApi.service';
+import giftDatesService from '../giftHelpers/giftDates.service';
 
 let serviceName = 'cartService';
 
-/*@ngInject*/
-function cart(cortexApiService){
-  return {
-    get: get,
-    addItem: addItem,
-    updateItem: updateItem,
-    deleteItem: deleteItem,
-    getNextDrawDate: getNextDrawDate,
-    giftStartDate: giftStartDate
-  };
+class Cart {
 
-  function get() {
-    return Observable.forkJoin(cortexApiService.get({
-        path: ['carts', cortexApiService.scope, 'default'],
+  /*@ngInject*/
+  constructor(cortexApiService, giftDatesService){
+    this.cortexApiService = cortexApiService;
+    this.giftDatesService = giftDatesService;
+  }
+
+  get() {
+    return Observable.forkJoin(this.cortexApiService.get({
+        path: ['carts', this.cortexApiService.scope, 'default'],
         params: {
           zoom: 'lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,lineitems:element:itemfields'
         }
-      }), getNextDrawDate())
-      .map(([cartResponse, nextDrawDateResponse]) => {
+      }), this.giftDatesService.getNextDrawDate())
+      .map(([cartResponse, nextDrawDate]) => {
         if (!cartResponse || !cartResponse._lineitems) {
           return {};
         }
@@ -37,7 +35,7 @@ function cart(cortexApiService){
         var rateTotals = JSONPath.query(cartResponse, "$._ratetotals[0]._element")[0];
 
         if (elements){
-          angular.forEach(elements, function(element) {
+          angular.forEach(elements, element => {
             var displayName = JSONPath.query(element, "$._item[0]._definition[0]['display-name']")[0];
             var frequencyInterval = JSONPath.query(element, "$._rate[0].recurrence.interval")[0];
             var frequencyTitle = JSONPath.query(element, "$._rate[0].recurrence.display")[0];
@@ -69,7 +67,7 @@ function cart(cortexApiService){
               frequency: frequencyTitle,
               amount: itemAmount,
               designationNumber: designationNumber,
-              giftStartDate: frequencyTitle !== 'Single' ? giftStartDate(nextDrawDateResponse, itemConfig['recurring-day-of-month']) : null
+              giftStartDate: frequencyTitle !== 'Single' ? this.giftDatesService.startDate(itemConfig['recurring-day-of-month'], nextDrawDate) : null
             });
           });
         }
@@ -92,7 +90,7 @@ function cart(cortexApiService){
 
         // total frequency for monthly | annually ...
         if (rateTotals){
-          angular.forEach(rateTotals, function(element) {
+          angular.forEach(rateTotals, element => {
             var recurrenceDisplay = JSONPath.query(element, "$.recurrence.display")[0];
             var cost = JSONPath.query(element, "$.cost.display")[0];
             var amount = JSONPath.query(element, "$.cost.amount")[0];
@@ -117,54 +115,25 @@ function cart(cortexApiService){
       });
   }
 
-  function addItem(id, data){
+  addItem(id, data){
     data.quantity = 1;
 
-    return cortexApiService.post({
-      path: ['itemfieldslineitem', 'items', cortexApiService.scope, id],
+    return this.cortexApiService.post({
+      path: ['itemfieldslineitem', 'items', this.cortexApiService.scope, id],
       data: data
     });
   }
 
-  function updateItem(uri){
-    return cortexApiService.post({
-      path: uri,
-      data: {
-        quantity: 1
-      }
-    });
-  }
-
-  function deleteItem(uri){
-    return cortexApiService.delete({
+  deleteItem(uri){
+    return this.cortexApiService.delete({
       path: uri
     });
-  }
-
-  function getNextDrawDate(){
-    return cortexApiService.get({
-      path: ['nextdrawdate'],
-      cache: true
-    }).map((data) => {
-      return data['next-draw-date'];
-    });
-  }
-
-  function giftStartDate(nextDrawDate, day){
-    let drawDate = nextDrawDate.split('-');
-    drawDate = new Date(drawDate[0], (drawDate[1] - 1), drawDate[2]);
-
-    let selectedDate = new Date(drawDate.getFullYear(), drawDate.getMonth(), day);
-    if(selectedDate < drawDate){
-      selectedDate.setMonth(selectedDate.getMonth() + 1);
-    }
-
-    return selectedDate;
   }
 }
 
 export default angular
   .module(serviceName, [
-    cortexApiService.name
+    cortexApiService.name,
+    giftDatesService.name
   ])
-  .factory(serviceName, cart);
+  .service(serviceName, Cart);
