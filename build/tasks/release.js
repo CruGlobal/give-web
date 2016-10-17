@@ -56,7 +56,8 @@ gulp.task('bundle', function () {
     'app/signIn/signIn.component',
     'app/searchResults/searchResults.component',
     'app/homeSignIn/homeSignIn.component',
-    'app/profile/yourGiving/yourGiving.component'
+    'app/profile/yourGiving/yourGiving.component',
+    'app/profile/receipts/receipts.component'
   ];
   var commonFilesForBundles = '(' + bundles.join(' & ') + ')';
   return $.jspmBuild({
@@ -90,6 +91,9 @@ gulp.task('bundle', function () {
         },
         { src: 'app/profile/yourGiving/yourGiving.component - ' + commonFilesForBundles,
           dst: 'yourGiving.js'
+        },
+        { src: 'app/profile/receipts/receipts.component - ' + commonFilesForBundles,
+          dst: 'receipts.js'
         }
       ]
     })

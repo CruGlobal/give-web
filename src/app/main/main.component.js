@@ -13,7 +13,9 @@ import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
 import homeSignInComponent from '../homeSignIn/homeSignIn.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
+
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
+import receiptsComponent from '../profile/receipts/receipts.component';
 
 import template from './main.tpl';
 
@@ -53,6 +55,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       url: "/profile/payment-methods.html",
       template: '<payment-methods></payment-methods>'
     })
+    .state('receipts', {
+      url: "/receipts.html",
+      template: '<receipts></receipts>'
+    })
     .state('search-results', {
       url: "/search-results.html",
       template: '<search-results></search-results>'
@@ -76,6 +82,7 @@ export default angular
     searchResultsComponent.name,
     homeSignInComponent.name,
     paymentMethodsComponent.name,
+    receiptsComponent.name,
     'ui.router'
   ])
   .config(routingConfig)
