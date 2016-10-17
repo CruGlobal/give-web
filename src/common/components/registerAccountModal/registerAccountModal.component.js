@@ -100,6 +100,8 @@ class RegisterAccountModalController {
   }
 
   setModalSize( size ) {
+    // Modal size is unchangeable after initialization. This allows us to fetch the dialogs scope and change it.
+    // eslint-disable-next-line angular/document-service
     let scope = angular.element( document.getElementsByClassName( 'modal-dialog' ) ).scope();
     scope.size = size;
   }

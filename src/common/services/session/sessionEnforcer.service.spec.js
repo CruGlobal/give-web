@@ -161,7 +161,7 @@ describe( 'sessionEnforcerService', function () {
 
     describe( '\'donor\' mode', () => {
       let signIn, cancel, change, $rootScope, orderService;
-      beforeEach( inject( function ( _$rootScope_, _orderService_, _$q_ ) {
+      beforeEach( inject( function ( _$rootScope_, _orderService_ ) {
         $rootScope = _$rootScope_;
         orderService = _orderService_;
         signIn = jasmine.createSpy( 'success' );
