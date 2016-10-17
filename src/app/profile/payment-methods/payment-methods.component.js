@@ -81,7 +81,6 @@ class PaymentMethodsController {
       resolve: {
         mailingAddress: this.mailingAddress,
         submissionError: this.submissionError,
-        submitted: this.submitted,
         onSubmit: () => params => this.onSubmit(params)
       }
     });
@@ -101,14 +100,16 @@ class PaymentMethodsController {
     if(e.success && e.data) {
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
+            this.submissionError.loading = false;
             this.paymentMethodFormModal.close(data);
           },
           (error) => {
+            this.submissionError.loading = false;
             this.submissionError.error = error.data;
             this.log.error('error.data',error);
           });
     } else {
-      this.submitted = false;
+      this.submissionError.loading = false;
     }
   }
 
