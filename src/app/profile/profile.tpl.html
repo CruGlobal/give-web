@@ -7,172 +7,24 @@
             <h2 class="mb_x">Your Profile</h2>
             <div class="row mb_x">
               <div class="col-lg-10 col-lg-offset-1">
+
                 <div class="row">
                   <div class="col-md-6 col-lg-6 mb">
                     <h4 class="panel-title  border-bottom-small visible">Your Name</h4>
-
-                    <ul class="list-unstyled">
-
-                      <li>
-
-                        <div class="form-group is-required person-row">
-                          <i class="fa fa-lock"></i>
-                          <select class="form-control form-control-subtle prefix">
-                            <option>Mr.</option>
-                            <option>Mrs.</option>
-                            <option>Dr.</option>
-                          </select>
-
-                          <input type="text" class="form-control  form-control-subtle first" disabled="" value="Joshua">
-                          <input type="text" class="form-control  form-control-subtle middle" value="T">
-                          <input type="text" class="form-control  form-control-subtle last" disabled="" value="Starcher">
-
-                          <select class="form-control form-control-subtle suffix">
-                            <option></option>
-                            <option>Jr.</option>
-                            <option>III</option>
-                          </select>
-                        </div>
-
-                      </li>
-
-                      <li>
-
-                        <div class="form-group is-required person-row">
-                          <i class="fa fa-lock"></i>
-                          <select class="form-control form-control-subtle prefix">
-                            <option>Mr.</option>
-                            <option>Mrs.</option>
-                            <option>Dr.</option>
-                          </select>
-
-                          <input type="text" class="form-control  form-control-subtle first" disabled="" value="Joshua">
-                          <input type="text" class="form-control  form-control-subtle middle" value="T">
-                          <input type="text" class="form-control  form-control-subtle last" disabled="" value="Starcher">
-
-                          <select class="form-control form-control-subtle suffix">
-                            <option></option>
-                            <option>Jr.</option>
-                            <option>III</option>
-                          </select>
-                        </div>
-
-                      </li>
-
-                      <li>
-                        <strong>To change your first or last name, <a href="mailto:mail@cru.org">contact support.</a></strong>
-                      </li>
-
-                    </ul>
-
-
-                    <h4 class="panel-title  border-bottom-small visible mt">Email Addresses</h4>
-
-                    <div class="form-group is-required">
-                      <label>(Spouse 1) Email</label>
-                      <input type="email" name="email1" class="form-control  form-control-subtle">
-                    </div>
-
-                    <div class="form-group is-required">
-                      <label>(Spouse 2) Email</label>
-                      <input type="email" name="email2" class="form-control  form-control-subtle">
-                    </div>
-
-                    <h4 class="panel-title  border-bottom-small visible mt">Phone Numbers</h4>
-
-                    <div class="form-group is-required phone-row">
-                      <select class="form-control form-control-subtle">
-                        <option>Home</option>
-                      </select>
-                      <input type="email" class="form-control  form-control-subtle">
-                      <select class="form-control form-control-subtle">
-                        <option>Amanda</option>
-                      </select>
-                    </div>
-
-                    <div class="form-group is-required phone-row">
-                      <select class="form-control form-control-subtle">
-                        <option>Home</option>
-                      </select>
-                      <input type="email" class="form-control  form-control-subtle">
-                      <select class="form-control form-control-subtle">
-                        <option>Amanda</option>
-                      </select>
-                    </div>
-
-                    <a href="" class="">+ Add Another Phone Number</a>
-
-
+                    <contact-info></contact-info>
                   </div>
-
                   <div class="col-md-6 col-lg-5 col-lg-offset-1">
                     <h4 class="panel-title  border-bottom-small visible">Your Mailing Address</h4>
-
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div class="form-group is-required">
-                          <label>Country</label>
-                          <div class="form-group">
-                            <select class="form-control  form-control-subtle" id="suffix">
-                              <option>Peoples Republic of China</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div class="form-group is-required">
-                          <label>Address</label>
-                          <input type="text" name="address1" class="form-control  form-control-subtle">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div class="form-group is-required">
-                          <input type="text" name="address2" class="form-control  form-control-subtle">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div class="form-group is-required">
-                          <label>City</label>
-                          <input type="text" class="form-control  form-control-subtle">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <div class="form-group is-required">
-                          <label>State</label>
-                          <div class="form-group">
-                            <select class="form-control  form-control-subtle" id="suffix">
-                              <option></option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="form-group is-required">
-                          <label>Zip / Postal Code</label>
-                          <input type="text" class="form-control  form-control-subtle">
-                        </div>
-                      </div>
-                    </div>                  </div>
-
+                    <address-form></address-form>
+                  </div>
                 </div>
 
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="border-bottom-small"></div>
-                    <button type="submit" class="btn btn-primary btn-lg pull-right">
-                      Update My Profile
-                    </button>
+                    <button type="submit" class="btn btn-primary btn-lg pull-right">Update My Profile</button>
                   </div>
                 </div>
-
 
               </div>
             </div>
