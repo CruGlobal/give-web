@@ -12,6 +12,7 @@ import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
+import desktopSubNavComponent from './desktopSubNav.component';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
@@ -52,13 +53,6 @@ class NavController{
       this.menuStructure = structure;
       this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
     });
-
-    if(this.menuType === 'desktop'){
-      angular.element(this.$window).bind('scroll', function() {
-        let subNavigation = document.getElementById('sub-navigation');
-        subNavigation.className = window.scrollY > subNavigation.offsetTop ? 'out' : '';
-      });
-    }
 
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
   }
@@ -164,7 +158,8 @@ export default angular
     loadingComponent.name,
     sessionService.name,
     sessionModalService.name,
-    mobileNavLevelComponent.name
+    mobileNavLevelComponent.name,
+    desktopSubNavComponent.name
   ])
   .component(componentName, {
     controller: NavController,
