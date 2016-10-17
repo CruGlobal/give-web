@@ -13,6 +13,7 @@ import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
 import homeSignInComponent from '../homeSignIn/homeSignIn.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
+import profileComponent from '../profile/profile.component';
 
 import template from './main.tpl';
 
@@ -51,6 +52,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     .state('search-results', {
       url: "/search-results.html",
       template: '<search-results></search-results>'
+    })
+    .state('profile', {
+      url: "/profile.html",
+      template: '<profile></profile>'
     });
 
   $locationProvider.html5Mode(true);
@@ -70,6 +75,7 @@ export default angular
     signInComponent.name,
     searchResultsComponent.name,
     homeSignInComponent.name,
+    profileComponent.name,
     'ui.router'
   ])
   .config(routingConfig)
