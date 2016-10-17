@@ -13,6 +13,7 @@ import historicalView from './historicalView/historicalView.component';
 import loadingComponent from 'common/components/loading/loading.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.modal.component';
+import stopStartRecurringGiftsModal from './stopStartRecurringGifts/stopStartRecurringGifts.modal.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
@@ -114,6 +115,13 @@ class YourGivingController {
     });
   }
 
+  openStopStartRecurringGiftsModal() {
+    this.stopStartRecurringGiftsModal = this.$uibModal.open({
+      component: 'stopStartRecurringGiftsModal',
+      backdrop: 'static',
+      windowTemplateUrl: giveModalWindowTemplate.name
+    });
+  }
 }
 export default angular
   .module( componentName, [
@@ -125,6 +133,7 @@ export default angular
     loadingComponent.name,
     loadingOverlay.name,
     editRecurringGiftsModal.name,
+    stopStartRecurringGiftsModal.name,
     giveModalWindowTemplate.name,
     profileService.name,
     sessionEnforcerService.name,

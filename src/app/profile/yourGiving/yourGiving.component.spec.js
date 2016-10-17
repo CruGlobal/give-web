@@ -161,4 +161,12 @@ describe( 'your giving', function () {
       expect( $ctrl.recurringGiftsUpdateSuccess ).toEqual( true );
     } );
   } );
+
+  describe( 'openStopStartRecurringGiftsModal', () => {
+    it( 'should open the modal', () => {
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: jasmine.createSpy( 'then' )}} );
+      $ctrl.openStopStartRecurringGiftsModal();
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'stopStartRecurringGiftsModal'} ) );
+    } );
+  } );
 } );
