@@ -37,6 +37,7 @@ class ReceiptsController {
   }
 
   getReceipts(year, tryPreviousYear){
+    this.retrievingError = '';
     this.loading = true;
     let endDate = this.currentYear == this.today.getFullYear()
       ? year + '-' + (this.today.getMonth()+1) + '-' + this.today.getDate()
@@ -61,7 +62,7 @@ class ReceiptsController {
             this.getReceipts(this.currentYear);
             return;
           }
-          // if no receipts were found for the past two years, set current year back to 2016
+          // if no receipts were found for the past two years, reset currentYear to actual current year
           this.currentYear = this.receipts.length == 0 ? this.today.getFullYear() : this.currentYear;
           this.loading = false;
         },
