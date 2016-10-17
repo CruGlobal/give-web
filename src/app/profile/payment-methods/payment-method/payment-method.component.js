@@ -18,7 +18,6 @@ class PaymentMethodController{
     this.profileService = profileService;
     this.imgDomain = envService.read('imgDomain');
     this.submissionError = {error: ''};
-    this.submitted = false;
   }
 
   $onInit(){
@@ -47,7 +46,6 @@ class PaymentMethodController{
       resolve: {
         paymentMethod: this.model,
         mailingAddress: this.mailingAddress,
-        submitted: this.submitted,
         submissionError: this.submissionError,
         onSubmit: () => params => this.onSubmit(params)
       }
@@ -60,7 +58,7 @@ class PaymentMethodController{
       this.profileService.updatePaymentMethod(this.model, e.data)
         .subscribe(() => {
             let editedData = e.data.creditCard || e.data.bankAccount;
-            this.submitted = false;
+            this.submissionError.loading = false;
             this.editPaymentMethodModal.close();
             for(let key in editedData){
               this.model[key] = editedData[key];
@@ -71,6 +69,8 @@ class PaymentMethodController{
             this.submitted = false;
           }
         );
+    } else {
+      this.submissionError.loading = false;
     }
   }
 

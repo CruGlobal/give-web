@@ -165,6 +165,11 @@ describe('PaymentMethodComponent', function () {
       expect(self.controller.model['card-number']).toBe('0000');
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
     });
+
+    it('should not submit', () => {
+      self.controller.onSubmit({success:false, data: {}});
+      expect(self.controller.submissionError.loading).toBe(false);
+    });
   });
 
   describe('$onDestroy()', () => {
