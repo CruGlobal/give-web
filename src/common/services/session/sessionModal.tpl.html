@@ -56,6 +56,12 @@
                                   on-state-change="$ctrl.stateChanged(state)"
                                   on-success="$ctrl.onSignUpSuccess()">
           </account-benefits-modal>
+          <register-account-modal ng-switch-when="register-account"
+                                  modal-title="$ctrl.modalTitle"
+                                  on-success="$ctrl.onSignUpSuccess()"
+                                  on-cancel="$ctrl.onCancel()"
+                                  set-loading="$ctrl.setLoading(loading)">
+          </register-account-modal>
         </div>
       </div>
     </div>

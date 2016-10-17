@@ -54,7 +54,8 @@ function SessionModalService( $uibModal, $log, modalStateService ) {
     resetPassword:   () => openModal( 'reset-password', {backdrop: 'static'} ).result,
     userMatch:       () => openModal( 'user-match', {backdrop: 'static'} ).result,
     contactInfo:     () => openModal( 'contact-info', {size: '', backdrop: 'static'} ).result,
-    accountBenefits: () => openModal( 'account-benefits' ).result
+    accountBenefits: () => openModal( 'account-benefits' ).result,
+    registerAccount: () => openModal( 'register-account', {backdrop: 'static', keyboard: false} ).result
   };
 }
 
