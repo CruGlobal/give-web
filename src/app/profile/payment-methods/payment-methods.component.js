@@ -24,7 +24,6 @@ class PaymentMethodsController {
     this.$timeout = $timeout;
     this.$window = $window;
     this.$location = $location;
-    this.submitted = false;
     this.sessionEnforcerService = sessionEnforcerService;
   }
 

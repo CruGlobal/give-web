@@ -54,7 +54,6 @@ class PaymentMethodController{
 
   onSubmit(e){
     if(e.success && e.data) {
-      this.submitted = true;
       this.profileService.updatePaymentMethod(this.model, e.data)
         .subscribe(() => {
             let editedData = e.data.creditCard || e.data.bankAccount;
@@ -65,8 +64,8 @@ class PaymentMethodController{
             }
           },
           error => {
+            this.submissionError.loading = false;
             this.submissionError.error = error.data;
-            this.submitted = false;
           }
         );
     } else {
