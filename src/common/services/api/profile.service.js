@@ -105,6 +105,33 @@ class Profile {
       });
   }
 
+  getPaymentMethodsWithDonations(){
+    return this.cortexApiService.get({
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          paymentMethods: 'selfservicepaymentmethods:element[]',
+          recurringGifts: 'selfservicepaymentmethods:element:recurringgifts'
+        }
+      })
+      .pluck('paymentMethods')
+      .map((paymentMethods) => {
+        paymentMethods = map(paymentMethods, (paymentMethod) => {
+          if(paymentMethod.address){
+            paymentMethod.address = formatAddressForTemplate(paymentMethod.address);
+          }
+          return paymentMethod;
+        });
+        return sortPaymentMethods(paymentMethods);
+      });
+  }
+
+  updateRecurringGifts(recurringGifts){
+    return this.cortexApiService.put({
+      path: recurringGifts.self.uri,
+      data: recurringGifts
+    });
+  }
+
   getPaymentMethodForms(){
     if(this.paymentMethodForms){
       return Observable.of(this.paymentMethodForms);
@@ -158,7 +185,6 @@ class Profile {
     }
   }
 
-
   updatePaymentMethod(originalPaymentInfo, paymentInfo){
     if(paymentInfo.bankAccount){
       paymentInfo = paymentInfo.bankAccount;
@@ -173,6 +199,12 @@ class Profile {
     return this.cortexApiService.put({
       path: originalPaymentInfo.self.uri,
       data: paymentInfo
+    });
+  }
+
+  deletePaymentMethod(uri){
+    return this.cortexApiService.delete({
+      path: uri
     });
   }
 

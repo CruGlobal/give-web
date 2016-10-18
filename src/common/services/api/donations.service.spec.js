@@ -78,4 +78,5 @@ describe( 'donations service', () => {
       $httpBackend.flush();
     } );
   } );
+
 } );

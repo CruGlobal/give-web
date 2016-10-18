@@ -37,11 +37,11 @@
 
 <div class="tab-indiv cart-tab show" ng-if="$ctrl.paymentType === 'bankAccount'">
 
-  <bank-account-form submitted="$ctrl.submitted" on-submit="$ctrl.onChildSubmit(success, data)" payment-method="$ctrl.paymentMethod"></bank-account-form>
+  <bank-account-form submitted="$ctrl.submissionError.loading" on-submit="$ctrl.onChildSubmit(success, data)" payment-method="$ctrl.paymentMethod"></bank-account-form>
 
 </div>
 <div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
 
-  <credit-card-form submitted="$ctrl.submitted" on-submit="$ctrl.onChildSubmit(success, data)" payment-method="$ctrl.paymentMethod" mailing-address="$ctrl.mailingAddress"></credit-card-form>
+  <credit-card-form submitted="$ctrl.submissionError.loading" on-submit="$ctrl.onChildSubmit(success, data)" payment-method="$ctrl.paymentMethod" mailing-address="$ctrl.mailingAddress"></credit-card-form>
 
 </div>
