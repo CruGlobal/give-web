@@ -23,6 +23,7 @@ class deletePaymentMethodModalController {
     this.filteredPaymentMethods = [];
     this.confirmText = '';
     this.submitted = false;
+    this.deleteOption = 0;
     this.submissionError = {
       error: ''
     };
@@ -56,7 +57,8 @@ class deletePaymentMethodModalController {
   }
 
   setView(){
-    this.view = this.resolve.paymentMethod._recurringgifts[0].donations.length ? 'manageDonations' : 'confirm';
+    this.hasRecurrinGifts = this.resolve.paymentMethod._recurringgifts[0].donations.length != 0;
+    this.view = this.hasRecurrinGifts ? 'manageDonations' : 'confirm';
   }
 
   getPaymentMethodName(newPaymentMethod){
@@ -118,7 +120,7 @@ class deletePaymentMethodModalController {
   }
 
   getPaymentMethods(){
-    if(this.resolve.paymentMethodsList){
+    if(this.resolve.paymentMethodsList && this.hasRecurrinGifts){
       // filtered payment methods for the drop down. List excludes payment method that is being deleted
       this.filteredPaymentMethods = this.resolve.paymentMethodsList.slice();
       remove(this.filteredPaymentMethods,(item) => {
@@ -224,7 +226,7 @@ class deletePaymentMethodModalController {
     this.profileService.deletePaymentMethod(this.resolve.paymentMethod.self.uri)
       .subscribe(() => {
         this.loading = false;
-        this.deleteOption == '3' ? this.removePaymentMethodFromList() : this.moveDonations();
+        this.deleteOption == '3' || !this.hasRecurrinGifts ? this.removePaymentMethodFromList() : this.moveDonations();
         this.close();
       },(error) => {
         this.loading = false;
@@ -242,6 +244,9 @@ class deletePaymentMethodModalController {
       return;
       case '3':
         this.stopRecurringGifts();
+      return;
+      default:
+        this.deletePaymentMethod();
       return;
     }
   }

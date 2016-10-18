@@ -17,7 +17,6 @@ class Step2Controller{
     this.$log = $log;
     this.orderService = orderService;
 
-    this.submitted = false;
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
     this.submissionError = {error: ''};
@@ -57,16 +56,16 @@ class Step2Controller{
           }else{
             this.changeStep({newStep: 'review'});
           }
-          },
-          (error) => {
-            this.$log.error('Error saving payment method', error);
-            this.submitted = false;
-            this.submissionError.error = error.data;
-          });
+        },
+        (error) => {
+          this.$log.error('Error saving payment method', error);
+          this.submissionError.loading = false;
+          this.submissionError.error = error.data;
+        });
     }else if(success){
       this.changeStep({newStep: 'review'});
     }else{
-      this.submitted = false;
+      this.submissionError.loading = false;
       this.submissionError.error = error;
     }
   }

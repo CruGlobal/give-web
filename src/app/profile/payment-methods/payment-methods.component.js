@@ -88,6 +88,7 @@ class PaymentMethodsController {
         show: true,
         type: 'paymentMethodAdded'
       };
+      data['_recurringgifts'] = [{donations: []}];
       this.paymentMethods.push(data);
       this.$timeout(()=>{
         this.successMessage.show = false;

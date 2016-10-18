@@ -41,6 +41,7 @@ class ExistingPaymentMethodsController {
           this.paymentMethods = data;
           this.selectDefaultPaymentMethod();
           this.onLoad({success: true, hasExistingPaymentMethods: true});
+          this.submissionError.loading = false;
         }else{
           this.onLoad({success: true, hasExistingPaymentMethods: false});
         }

@@ -14,7 +14,7 @@ describe( 'PaymentMethodsComponent', function () {
       result: {
         then: function(confirmCallback) {
           this.paymentMethods = [];
-          confirmCallback();
+          confirmCallback({});
         }
       }
     };

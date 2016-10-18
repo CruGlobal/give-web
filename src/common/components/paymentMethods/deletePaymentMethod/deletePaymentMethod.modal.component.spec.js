@@ -53,7 +53,10 @@ describe( 'delete payment method modal', function () {
     it( 'initializes the component', () => {
       spyOn( self.controller, 'setView' );
       spyOn( self.controller, 'getPaymentMethods' );
+
       self.controller.$onInit();
+
+      self.controller.hasRecurrinGifts = true;
       expect( self.controller.setView ).toHaveBeenCalled();
       expect( self.controller.getPaymentMethods ).toHaveBeenCalled();
     } );
@@ -83,6 +86,7 @@ describe( 'delete payment method modal', function () {
 
     describe( 'setView()', () => {
       it( 'should set initial view depending on existing of recurring gifts', () => {
+        self.controller.resolve.paymentMethod._recurringgifts[0].donations = [{}];
         self.controller.setView();
         expect( self.controller.view ).toEqual( 'manageDonations' );
         self.controller.resolve.paymentMethod._recurringgifts[0].donations = [];
@@ -204,6 +208,7 @@ describe( 'delete payment method modal', function () {
         }]
       };
       self.controller.resolve.paymentMethodsList = [self.controller.resolve.paymentMethod, anotherPaymentMethod];
+      self.controller.hasRecurrinGifts = true;
       self.controller.getPaymentMethods();
       expect(self.controller.filteredPaymentMethods.length).toBe(1);
     } );
@@ -320,7 +325,8 @@ describe( 'delete payment method modal', function () {
 
       spyOn(self.controller.profileService, 'deletePaymentMethod').and.returnValue(Observable.of('data'));
       spyOn(self.controller, 'moveDonations');
-      self.controller.deleteOption = '2';
+      self.controller.deleteOption = '1';
+      self.controller.hasRecurrinGifts = true;
       self.controller.deletePaymentMethod();
       expect(self.controller.profileService.deletePaymentMethod).toHaveBeenCalled();
       expect(self.controller.moveDonations).toHaveBeenCalled();
@@ -350,13 +356,19 @@ describe( 'delete payment method modal', function () {
     it('should call different functions depending on delete option', function () {
       spyOn(self.controller, 'moveDonationsToNewPaymentMethod');
       spyOn(self.controller, 'stopRecurringGifts');
-      self.controller.deleteOption = '3';
+      spyOn(self.controller, 'deletePaymentMethod');
+
+      self.controller.deleteOption = '0';
       self.controller.onSubmit();
-      expect(self.controller.stopRecurringGifts).toHaveBeenCalled();
+      expect(self.controller.deletePaymentMethod).toHaveBeenCalled();
 
       self.controller.deleteOption = '1';
       self.controller.onSubmit();
       expect(self.controller.moveDonationsToNewPaymentMethod).toHaveBeenCalled();
+
+      self.controller.deleteOption = '3';
+      self.controller.onSubmit();
+      expect(self.controller.stopRecurringGifts).toHaveBeenCalled();
     });
 
   } );
