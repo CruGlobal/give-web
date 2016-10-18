@@ -1,0 +1,27 @@
+<div ng-switch="$ctrl.state">
+  <sign-in-modal ng-switch-when="sign-in"
+                 modal-title="$ctrl.modalTitle"
+                 on-state-change="$ctrl.stateChanged(state)"
+                 on-success="$ctrl.onIdentitySuccess()">
+  </sign-in-modal>
+  <sign-up-modal ng-switch-when="sign-up"
+                 modal-title="$ctrl.modalTitle"
+                 on-state-change="$ctrl.stateChanged(state)"
+                 on-success="$ctrl.onIdentitySuccess()">
+  </sign-up-modal>
+  <forgot-password-modal ng-switch-when="forgot-password"
+                         modal-title="$ctrl.modalTitle"
+                         on-state-change="$ctrl.stateChanged(state)">
+  </forgot-password-modal>
+  <contact-info-modal ng-switch-when="contact-info"
+                      modal-title="$ctrl.modalTitle"
+                      on-success="$ctrl.onContactInfoSuccess()"
+                      on-cancel="$ctrl.onCancel()">
+  </contact-info-modal>
+  <user-match-modal ng-switch-when="user-match"
+                    modal-title="$ctrl.modalTitle"
+                    on-success="$ctrl.onUserMatchSuccess()"
+                    set-loading="$ctrl.setLoading(loading)">
+  </user-match-modal>
+  <div ng-switch-default style="height: 100px;"></div>
+</div>
