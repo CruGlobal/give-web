@@ -1,7 +1,4 @@
-<div style="position: relative">
-  <loading ng-if="$ctrl.loadingPaymentMethods"></loading>
-</div>
-
+<loading-overlay ng-if="$ctrl.loadingPaymentMethods || $ctrl.submissionError.loading"></loading-overlay>
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingExistingPaymentError">
   <p ng-if="$ctrl.loadingExistingPaymentError" ng-switch="$ctrl.loadingExistingPaymentError">
     <span ng-switch-default translate>
@@ -11,11 +8,11 @@
 </div>
 <div ng-show="!$ctrl.loadingPaymentMethods"><!-- ng-show allows checkout-existing-payment-methods component to be instantiated to check for existingPaymentMethods -->
   <div ng-if="!$ctrl.existingPaymentMethods">
-    <payment-method-form submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.submissionError" mailing-address="$ctrl.mailingAddress"></payment-method-form>
+    <payment-method-form on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.submissionError" mailing-address="$ctrl.mailingAddress"></payment-method-form>
   </div>
 
   <div ng-if="$ctrl.existingPaymentMethods">
-    <checkout-existing-payment-methods submission-error="$ctrl.submissionError" on-submit="$ctrl.onSubmit(success, data, error, stayOnStep)" submit-success="$ctrl.submitSuccess" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)" mailing-address="$ctrl.mailingAddress"></checkout-existing-payment-methods>
+    <checkout-existing-payment-methods submitted="$ctrl.submitted" submission-error="$ctrl.submissionError" on-submit="$ctrl.onSubmit(success, data, error, stayOnStep)" submit-success="$ctrl.submitSuccess" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)" mailing-address="$ctrl.mailingAddress"></checkout-existing-payment-methods>
   </div>
 </div>
 

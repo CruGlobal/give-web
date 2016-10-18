@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
-import loadingComponent from 'common/components/loading/loading.component';
+import loadingOverlayComponent from 'common/components/loadingOverlay/loadingOverlay.component';
 
 import orderService from 'common/services/api/order.service';
 
@@ -76,7 +76,7 @@ export default angular
     template.name,
     paymentMethodForm.name,
     existingPaymentMethods.name,
-    loadingComponent.name,
+    loadingOverlayComponent.name,
     orderService.name
   ])
   .component(componentName, {

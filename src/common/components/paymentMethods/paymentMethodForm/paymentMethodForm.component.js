@@ -46,7 +46,6 @@ export default angular
     controller: PaymentMethodFormController,
     templateUrl: template.name,
     bindings: {
-      submitted: '<',
       paymentMethod: '<',
       mailingAddress: '<',
       submissionError: '<',
