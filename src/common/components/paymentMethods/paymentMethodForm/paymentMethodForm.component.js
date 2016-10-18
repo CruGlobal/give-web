@@ -15,7 +15,6 @@ class PaymentMethodFormController{
     this.$log = $log;
 
     this.paymentType = 'bankAccount';
-    this.submitted = false;
     this.imgDomain = envService.read('imgDomain');
   }
 
