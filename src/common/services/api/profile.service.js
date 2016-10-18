@@ -86,6 +86,16 @@ class Profile {
       .pluck('email');
   }
 
+  getPhoneNumbers(){
+    return this.cortexApiService.get({
+        path: ['phonenumbers', this.cortexApiService.scope],
+        zoom: {
+          phoneNumbers: 'element[]'
+        }
+      })
+      .pluck('phoneNumbers');
+  }
+
   getPaymentMethods(){
     return this.cortexApiService.get({
         path: ['profiles', this.cortexApiService.scope, 'default'],

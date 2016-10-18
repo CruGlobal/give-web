@@ -11,104 +11,94 @@
                 <div class="row">
                   <div class="col-md-6 col-lg-6 mb">
                     <h4 class="panel-title  border-bottom-small visible">Your Name</h4>
+                    <div style="position: relative">
+                      <loading-overlay ng-if="$ctrl.donorDetialsLoading"></loading-overlay>
+                      <ul class="list-unstyled">
+                        <li>
+                          <div class="form-group is-required person-row">
+                            <i class="fa fa-lock"></i>
+                            <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
+                              <option value="Mr" translate>Mr.</option>
+                              <option value="Mrs" translate>Mrs.</option>
+                              <option value="Dr" translate>Dr.</option>
+                            </select>
 
-                    <ul class="list-unstyled">
-                      <li>
-                        <div class="form-group is-required person-row">
-                          <i class="fa fa-lock"></i>
-                          <select class="form-control form-control-subtle prefix">
-                            <option>Mr.</option>
-                            <option>Mrs.</option>
-                            <option>Dr.</option>
-                          </select>
+                            <input type="text" class="form-control  form-control-subtle first" disabled value="{{$ctrl.donorDetails.name['given-name']}}">
+                            <input type="text" class="form-control  form-control-subtle middle" disabled value="{{$ctrl.donorDetails.name['middle-initial']}}">
+                            <input type="text" class="form-control  form-control-subtle last" disabled value="{{$ctrl.donorDetails.name['family-name']}}">
 
-                          <input type="text" class="form-control  form-control-subtle first" disabled="" value="Joshua">
-                          <input type="text" class="form-control  form-control-subtle middle" value="T">
-                          <input type="text" class="form-control  form-control-subtle last" disabled="" value="Starcher">
+                            <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
+                              <option></option>
+                              <option value="Jr" translate>Jr.</option>
+                              <option value="III" translate>III</option>
+                            </select>
+                          </div>
+                        </li>
 
-                          <select class="form-control form-control-subtle suffix">
-                            <option></option>
-                            <option>Jr.</option>
-                            <option>III</option>
-                          </select>
-                        </div>
-                      </li>
+                        <li ng-if="$ctrl.donorDetails['spouse-name']">
+                          <div class="form-group is-required person-row">
+                            <i class="fa fa-lock"></i>
+                            <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails['spouse-name'].title">
+                              <option value="Mr" translate>Mr.</option>
+                              <option value="Mrs" translate>Mrs.</option>
+                              <option value="Dr" translate>Dr.</option>
+                            </select>
 
-                      <li>
-                        <div class="form-group is-required person-row">
-                          <i class="fa fa-lock"></i>
-                          <select class="form-control form-control-subtle prefix">
-                            <option>Mr.</option>
-                            <option>Mrs.</option>
-                            <option>Dr.</option>
-                          </select>
+                            <input type="text" class="form-control  form-control-subtle first" disabled value="{{$ctrl.donorDetails['spouse-name']['given-name']}}">
+                            <input type="text" class="form-control  form-control-subtle middle" disabled value="{{$ctrl.donorDetails['spouse-name']['middle-initial']}}">
+                            <input type="text" class="form-control  form-control-subtle last" disabled value="{{$ctrl.donorDetails['spouse-name']['family-name']}}">
 
-                          <input type="text" class="form-control  form-control-subtle first" disabled="" value="Joshua">
-                          <input type="text" class="form-control  form-control-subtle middle" value="T">
-                          <input type="text" class="form-control  form-control-subtle last" disabled="" value="Starcher">
+                            <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
+                              <option></option>
+                              <option value="Jr" translate>Jr.</option>
+                              <option value="III" translate>III</option>
+                            </select>
+                          </div>
+                        </li>
 
-                          <select class="form-control form-control-subtle suffix">
-                            <option></option>
-                            <option>Jr.</option>
-                            <option>III</option>
-                          </select>
-                        </div>
-                      </li>
+                        <li>
+                          <strong translate>To change your name, please email us at <a href="mailto:egift@cru.org?subject=Name change request">eGift@cru.org</a> or call us at <a href="tel:(888)278-7233">(888)278-7233</a> from 9:00 a.m. to 5:00 p.m. ET, Monday-Friday.</strong>
+                        </li>
 
-                      <li>
-                        <strong>To change your first or last name, <a href="mailto:mail@cru.org">contact support.</a></strong>
-                      </li>
-
-                    </ul>
-                    
-                    <h4 class="panel-title  border-bottom-small visible mt">Email Addresses</h4>
-
-                    <div class="form-group is-required">
-                      <label>(Spouse 1) Email</label>
-                      <input type="email" name="email1" class="form-control  form-control-subtle">
+                      </ul>
                     </div>
 
-                    <div class="form-group is-required">
-                      <label>(Spouse 2) Email</label>
-                      <input type="email" name="email2" class="form-control  form-control-subtle">
+                    <h4 class="panel-title  border-bottom-small visible mt">Email Address</h4>
+
+                    <div class="form-group is-required" style="position:relative;">
+                      <loading-overlay ng-if="$ctrl.emailLoading"></loading-overlay>
+                      <label translate>{{$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']}} Email</label>
+                      <input type="email" name="email1" class="form-control  form-control-subtle" value="{{$ctrl.email}}">
                     </div>
 
                     <h4 class="panel-title  border-bottom-small visible mt">Phone Numbers</h4>
 
-                    <div class="form-group is-required phone-row">
-                      <select class="form-control form-control-subtle">
-                        <option>Home</option>
-                      </select>
-                      <input type="email" class="form-control  form-control-subtle">
-                      <select class="form-control form-control-subtle">
-                        <option>Amanda</option>
-                      </select>
+                    <div style="position: relative">
+                      <loading-overlay ng-if="$ctrl.phonesLoading"></loading-overlay>
+                      <div ng-repeat = "phone in $ctrl.phoneNumbers" class="form-group is-required phone-row">
+                        <select class="form-control form-control-subtle" ng-model="phone['phone-number-type']">
+                          <option translate>Home</option>
+                          <option translate>Mobile</option>
+                        </select>
+                        <input type="email" class="form-control  form-control-subtle" value="{{phone['phone-number']}}">
+                        <select class="form-control form-control-subtle" ng-model="phone.primary" ng-options="(item?'Primary':'Secondary') for item in [true, false]"></select>
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                      </div>
+                      <a href="" ng-click="$ctrl.addPhoneNumber()" translate>+ Add Another Phone Number</a>
                     </div>
-
-                    <div class="form-group is-required phone-row">
-                      <select class="form-control form-control-subtle">
-                        <option>Home</option>
-                      </select>
-                      <input type="email" class="form-control  form-control-subtle">
-                      <select class="form-control form-control-subtle">
-                        <option>Amanda</option>
-                      </select>
-                    </div>
-
-                    <a href="" class="">+ Add Another Phone Number</a>
-
 
                   </div>
-                  <div class="col-md-6 col-lg-5 col-lg-offset-1">
-                    <h4 class="panel-title  border-bottom-small visible">Your Mailing Address</h4>
-                    <address-form></address-form>
+                  <div class="col-md-6 col-lg-5 col-lg-offset-1" style="position: relative;">
+                    <loading-overlay ng-if="$ctrl.donorDetialsLoading"></loading-overlay>
+                    <h4 class="panel-title  border-bottom-small visible" translate>Your Mailing Address</h4>
+                    <address-form address="$ctrl.donorDetails.mailingAddress"></address-form>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="border-bottom-small"></div>
-                    <button type="submit" class="btn btn-primary btn-lg pull-right">Update My Profile</button>
+                    <button type="submit" class="btn btn-primary btn-lg pull-right" translate>Update My Profile</button>
                   </div>
                 </div>
 
