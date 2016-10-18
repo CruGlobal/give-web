@@ -5,6 +5,7 @@ import module from './donations.service';
 import historicalResponse from './fixtures/cortex-donations-historical.fixture';
 import recipientResponse from './fixtures/cortex-donations-recipient.fixture';
 import recipientDetailsResponse from './fixtures/cortex-donations-recipient-details.fixture';
+import receiptsResponse from './fixtures/cortex-donations-receipts.fixture';
 
 describe( 'donations service', () => {
   beforeEach( angular.mock.module( module.name ) );
@@ -61,6 +62,18 @@ describe( 'donations service', () => {
         .respond( 200, historicalResponse );
       donationsService.getHistoricalGifts( 2016, 9 ).subscribe( ( historicalGifts ) => {
         expect( historicalGifts ).toEqual( jasmine.any( Array ) );
+      } );
+      $httpBackend.flush();
+    } );
+  } );
+
+  describe( 'getReceipts( data )', () => {
+    it( 'should load receipts', () => {
+      $httpBackend
+        .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/receipts/items?followLocation=true' )
+        .respond( 200, receiptsResponse );
+      donationsService.getReceipts( {} ).subscribe( ( receipts ) => {
+        expect( receipts ).toEqual( jasmine.any( Array ) );
       } );
       $httpBackend.flush();
     } );
