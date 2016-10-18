@@ -11,15 +11,7 @@ describe( 'sessionEnforcerService', function () {
   let sessionEnforcerService,
     sessionModalService,
     sessionService,
-    deferred,
-    registerAccountService;
-
-  beforeEach( () => {
-    registerAccountService = jasmine.createSpy( 'registerAccountService' );
-    angular.mock.module( ( $provide ) => {
-      $provide.value( 'registerAccountService', registerAccountService );
-    } );
-  } );
+    deferred;
 
   beforeEach( inject( function ( _sessionEnforcerService_, _sessionModalService_, _sessionService_, _$q_ ) {
     sessionEnforcerService = _sessionEnforcerService_;
@@ -168,16 +160,14 @@ describe( 'sessionEnforcerService', function () {
     } );
 
     describe( '\'donor\' mode', () => {
-      let signIn, cancel, change, $rootScope, orderService, registerAccountPromise;
-      beforeEach( inject( function ( _$rootScope_, _orderService_, _$q_ ) {
+      let signIn, cancel, change, $rootScope, orderService;
+      beforeEach( inject( function ( _$rootScope_, _orderService_ ) {
         $rootScope = _$rootScope_;
         orderService = _orderService_;
         signIn = jasmine.createSpy( 'success' );
         cancel = jasmine.createSpy( 'failure' );
         change = jasmine.createSpy( 'change' );
         spyOn( orderService, 'getDonorDetails' ).and.callFake( () => Observable.of( {'registration-state': 'NEW'} ) );
-        registerAccountPromise = _$q_.defer();
-        registerAccountService.and.callFake( () => registerAccountPromise.promise );
       } ) );
 
       describe( 'does not include current role', () => {
@@ -189,7 +179,10 @@ describe( 'sessionEnforcerService', function () {
           }, EnforcerModes.donor );
 
           expect( change ).toHaveBeenCalledWith( Roles.public );
-          expect( registerAccountService ).toHaveBeenCalled();
+          expect( sessionModalService.open ).toHaveBeenCalledWith( 'register-account', {
+            backdrop: 'static',
+            keyboard: false
+          } );
         } );
       } );
 
@@ -211,12 +204,15 @@ describe( 'sessionEnforcerService', function () {
             $rootScope.$digest();
             expect( orderService.getDonorDetails ).toHaveBeenCalled();
             expect( change ).toHaveBeenCalledWith( Roles.registered );
-            expect( registerAccountService ).toHaveBeenCalled();
+            expect( sessionModalService.open ).toHaveBeenCalledWith( 'register-account', {
+              backdrop: 'static',
+              keyboard: false
+            } );
           } );
 
           describe( 'register account success', () => {
             it( 'calls \'sign-in\' callback', () => {
-              registerAccountPromise.resolve();
+              deferred.resolve();
               $rootScope.$digest();
               expect( signIn ).toHaveBeenCalled();
             } );
@@ -224,7 +220,7 @@ describe( 'sessionEnforcerService', function () {
 
           describe( 'register account canceled', () => {
             it( 'calls \'cancel\' callback', () => {
-              registerAccountPromise.reject();
+              deferred.reject();
               $rootScope.$digest();
               expect( cancel ).toHaveBeenCalled();
             } );
@@ -246,7 +242,10 @@ describe( 'sessionEnforcerService', function () {
 
             expect( orderService.getDonorDetails ).toHaveBeenCalled();
             expect( change ).toHaveBeenCalledWith( Roles.registered );
-            expect( registerAccountService ).toHaveBeenCalled();
+            expect( sessionModalService.open ).toHaveBeenCalledWith( 'register-account', {
+              backdrop: 'static',
+              keyboard: false
+            } );
           } );
 
           it( 'opens registerAccount modal', () => {
@@ -260,7 +259,10 @@ describe( 'sessionEnforcerService', function () {
             expect( signIn ).not.toHaveBeenCalled();
             expect( change ).not.toHaveBeenCalled();
             expect( cancel ).not.toHaveBeenCalled();
-            expect( registerAccountService ).toHaveBeenCalled();
+            expect( sessionModalService.open ).toHaveBeenCalledWith( 'register-account', {
+              backdrop: 'static',
+              keyboard: false
+            } );
           } );
         } );
       } );
@@ -282,7 +284,7 @@ describe( 'sessionEnforcerService', function () {
           expect( orderService.getDonorDetails ).toHaveBeenCalled();
           expect( signIn ).toHaveBeenCalled();
           expect( change ).not.toHaveBeenCalled();
-          expect( registerAccountService ).not.toHaveBeenCalled();
+          expect( sessionModalService.open ).not.toHaveBeenCalled();
         } );
 
         it( 'does not open registerAccount modal', () => {
@@ -292,7 +294,7 @@ describe( 'sessionEnforcerService', function () {
           expect( orderService.getDonorDetails ).toHaveBeenCalled();
           expect( signIn ).not.toHaveBeenCalled();
           expect( change ).not.toHaveBeenCalled();
-          expect( registerAccountService ).not.toHaveBeenCalled();
+          expect( sessionModalService.open ).not.toHaveBeenCalled();
         } );
       } );
     } );

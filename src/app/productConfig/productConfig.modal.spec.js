@@ -195,20 +195,6 @@ describe( 'product config modal', function () {
       } );
     } );
 
-    describe( 'daysInMonth', () => {
-      it( 'returns days in a month', () => {
-        expect( $ctrl.daysInMonth().length ).toEqual( 28 );
-      } );
-    } );
-
-    describe( 'donationStartDate', () => {
-      it( 'should return the gift start date from the cartService', () => {
-        spyOn($ctrl.cartService, 'giftStartDate').and.returnValue(new Date(2016, 0, 1));
-        expect( $ctrl.donationStartDate(5) ).toEqual( new Date(2016, 0, 1) );
-        expect( $ctrl.cartService.giftStartDate ).toHaveBeenCalledWith('2016-10-01', 5);
-      } );
-    } );
-
     describe( 'addToCart()', () => {
       beforeEach( () => {
         spyOn( $ctrl.cartService, 'addItem' ).and.returnValue( Observable.of( 'addToCart success' ) );
