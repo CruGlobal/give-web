@@ -174,7 +174,8 @@ describe( 'registerAccountModal', function () {
     } );
   } );
 
-  describe( 'setModalSize( size )', () => {
+  // eslint-disable-next-line jasmine/no-disabled-tests
+  xdescribe( 'setModalSize( size )', () => {
     let scope = {size: 'lg'};
     beforeEach( () => {
       spyOn( angular, 'element' ).and.callFake( () => {
