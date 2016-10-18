@@ -23,23 +23,23 @@ class ProfileController{
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
         // Authentication success
-        this.loadProfile();
+        this.loadDonorDetails();
       },
       [EnforcerCallbacks.cancel]: () => {
         // Authentication failure
         this.$window.location = '/';
       }
     }, EnforcerModes.donor);
-    this.loadProfile();
+    this.loadDonorDetails();
   }
 
-  loadProfile() {
+  loadDonorDetails() {
     this.loading = true;
     this.profileService.getDonorDetails()
       .subscribe(
-        profile => {
-          console.log(profile);
-          this.profile = profile;
+        donorDetails => {
+          console.log(donorDetails);
+          this.donorDetails = donorDetails;
           this.loading = false;
         },
         error => {
