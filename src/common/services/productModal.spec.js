@@ -4,21 +4,21 @@ import module from './productModal.service';
 
 describe( 'productModalService', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let productModalService, designationsService, cartService, $uibModal, $rootScope;
+  let productModalService, designationsService, giftDatesService, $uibModal, $rootScope;
 
   // eslint-disable-next-line no-undef
   installPromiseMatchers();
 
-  beforeEach( inject( function ( _productModalService_, _designationsService_, _cartService_, _$uibModal_, _$rootScope_, _$q_ ) {
+  beforeEach( inject( function ( _productModalService_, _designationsService_, _giftDatesService_, _$uibModal_, _$rootScope_, _$q_ ) {
     productModalService = _productModalService_;
     designationsService = _designationsService_;
-    cartService = _cartService_;
+    giftDatesService = _giftDatesService_;
     $uibModal = _$uibModal_;
     $rootScope = _$rootScope_;
     // Spy On $uibModal.open and return mock object
     spyOn( $uibModal, 'open' ).and.returnValue( {result: {finally: angular.noop}} );
     spyOn( designationsService, 'productLookup' ).and.returnValue( {toPromise: () => _$q_.defer().promise} );
-    spyOn( cartService, 'getNextDrawDate' ).and.returnValue( {toPromise: () => _$q_.defer().promise} );
+    spyOn( giftDatesService, 'getNextDrawDate' ).and.returnValue( {toPromise: () => _$q_.defer().promise} );
   } ) );
 
   it( 'should be defined', () => {
