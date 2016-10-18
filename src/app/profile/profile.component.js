@@ -6,18 +6,16 @@ import profileService from 'common/services/api/profile.service';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
 
-import orderService from 'common/services/api/order.service';
-
 let componentName = 'profile';
 
 class ProfileController{
 
-  constructor( $window, $location, sessionEnforcerService, profileService, orderService ) {
+  constructor( $window, $location, $log, sessionEnforcerService, profileService ) {
     this.$window = $window;
+    this.$log = $log;
     this.$location = $location;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
-    this.orderService = orderService;
   }
 
   $onInit() {
@@ -25,21 +23,30 @@ class ProfileController{
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
         // Authentication success
-        this.loadDonorDetails();
+        this.loadProfile();
       },
       [EnforcerCallbacks.cancel]: () => {
         // Authentication failure
         this.$window.location = '/';
       }
     }, EnforcerModes.donor);
-    this.loadDonorDetails();
+    this.loadProfile();
   }
 
-  loadDonorDetails(){
-    this.orderService.getDonorDetails()
-      .subscribe((data) => {
-        this.mailingAddress = data.mailingAddress;
-      });
+  loadProfile() {
+    this.loading = true;
+    this.profileService.getDonorDetails()
+      .subscribe(
+        profile => {
+          console.log(profile);
+          this.profile = profile;
+          this.loading = false;
+        },
+        error => {
+          this.error = 'Failed loading profile information.';
+          this.$log.error(this.error, error.data);
+        }
+      );
   }
 }
 
