@@ -91,7 +91,8 @@ class Profile {
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
           paymentMethods: 'selfservicepaymentmethods:element[]'
-        }
+        },
+        cache: true
       })
       .pluck('paymentMethods')
       .map((paymentMethods) => {
