@@ -12,7 +12,7 @@ import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
-import desktopSubNavComponent from './desktopSubNav.component';
+import desktopSubNavDirective from './desktopSubNav.directive';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
@@ -159,7 +159,7 @@ export default angular
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
-    desktopSubNavComponent.name
+    desktopSubNavDirective.name
   ])
   .component(componentName, {
     controller: NavController,
