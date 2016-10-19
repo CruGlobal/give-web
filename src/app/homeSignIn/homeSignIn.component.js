@@ -13,7 +13,9 @@ let componentName = 'homeSignIn';
 class HomeSignInController {
 
   /* @ngInject */
-  constructor(sessionService, sessionModalService) {
+  constructor($window, sessionService, sessionModalService) {
+    this.$window = $window;
+
     this.sessionService = sessionService;
     this.sessionModalService = sessionModalService;
   }
@@ -32,6 +34,7 @@ class HomeSignInController {
       .subscribe( () => {
         this.isSigningIn = false;
         this.showSignInForm = false;
+        this.$window.location.href = 'your-giving.html';
       }, ( error ) => {
         this.isSigningIn = false;
         this.errorMessage = error.data.error;
