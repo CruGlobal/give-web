@@ -79,6 +79,17 @@ describe( 'nav', function () {
     });
     $httpBackend.flush();
   });
+
+  describe( '$onInit()', () => {
+    beforeEach( () => {
+      spyOn( $ctrl, 'getNav' ).and.returnValue(Observable.of([]));
+      $ctrl.$onInit();
+    } );
+
+    it( 'getNav', () => {
+      expect( $ctrl.getNav ).toHaveBeenCalled();
+    } );
+  } );
 } );
 
 
