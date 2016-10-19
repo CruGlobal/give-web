@@ -76,6 +76,7 @@ describe('checkout', () => {
           self.controller.paymentMethodFormModal = {
             close: jasmine.createSpy('close')
           };
+          self.controller.submissionError = {};
         });
 
         afterEach(() => {

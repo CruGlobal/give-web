@@ -1,7 +1,4 @@
-<div style="position: relative">
-  <loading ng-if="$ctrl.loadingPaymentMethods"></loading>
-</div>
-
+<loading-overlay ng-if="$ctrl.loadingPaymentMethods || $ctrl.submissionError.loading"></loading-overlay>
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingExistingPaymentError">
   <p ng-if="$ctrl.loadingExistingPaymentError" ng-switch="$ctrl.loadingExistingPaymentError">
     <span ng-switch-default translate>
@@ -11,7 +8,7 @@
 </div>
 <div ng-show="!$ctrl.loadingPaymentMethods"><!-- ng-show allows checkout-existing-payment-methods component to be instantiated to check for existingPaymentMethods -->
   <div ng-if="!$ctrl.existingPaymentMethods">
-    <payment-method-form submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.submissionError" mailing-address="$ctrl.mailingAddress"></payment-method-form>
+    <payment-method-form on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.submissionError" mailing-address="$ctrl.mailingAddress"></payment-method-form>
   </div>
 
   <div ng-if="$ctrl.existingPaymentMethods">
@@ -25,7 +22,7 @@
       <button class="btn btn-default" ng-click="$ctrl.changeStep({newStep: 'contact'})">Previous Step</button>
     </div>
     <div class="col-sm-5 col-sm-offset-2">
-      <button class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = true">Continue to Review &amp; Submit</button>
+      <button class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = $ctrl.submissionError.loading = true">Continue to Review &amp; Submit</button>
       <button class="btn btn-link btn-block visible-xs" ng-click="$ctrl.changeStep({newStep: 'contact'})"><i class="fa fa-angle-left"></i> Previous Step</button>
     </div>
   </div>

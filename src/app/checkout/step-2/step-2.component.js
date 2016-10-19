@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
-import loadingComponent from 'common/components/loading/loading.component';
+import loadingOverlayComponent from 'common/components/loadingOverlay/loadingOverlay.component';
 
 import orderService from 'common/services/api/order.service';
 
@@ -17,7 +17,6 @@ class Step2Controller{
     this.$log = $log;
     this.orderService = orderService;
 
-    this.submitted = false;
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
     this.submissionError = {error: ''};
@@ -57,16 +56,16 @@ class Step2Controller{
           }else{
             this.changeStep({newStep: 'review'});
           }
-          },
-          (error) => {
-            this.$log.error('Error saving payment method', error);
-            this.submitted = false;
-            this.submissionError.error = error.data;
-          });
+        },
+        (error) => {
+          this.$log.error('Error saving payment method', error);
+          this.submissionError.loading = false;
+          this.submissionError.error = error.data;
+        });
     }else if(success){
       this.changeStep({newStep: 'review'});
     }else{
-      this.submitted = false;
+      this.submissionError.loading = false;
       this.submissionError.error = error;
     }
   }
@@ -77,7 +76,7 @@ export default angular
     template.name,
     paymentMethodForm.name,
     existingPaymentMethods.name,
-    loadingComponent.name,
+    loadingOverlayComponent.name,
     orderService.name
   ])
   .component(componentName, {

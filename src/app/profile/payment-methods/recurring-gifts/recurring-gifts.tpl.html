@@ -1,0 +1,29 @@
+<div class="panel-body">
+  <div class="container-fluid">
+    <div class="row">
+      <h4 class="pl--">Recurring Gifts Using This Payment Method:</h4>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-striped-dark borderless">
+          <thead>
+            <tr>
+              <th class="section-title">Person or Ministry</th>
+              <th class="section-title">Amount</th>
+              <th class="section-title">Frequency</th>
+              <th class="section-title">Next Gift</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="gift in $ctrl.buildGifts()">
+              <td>{{ gift['designation-name'] }}</td>
+              <td>{{ gift['amount'] | currency }}</td>
+              <td>{{ gift.rate.recurrence.interval }}</td>
+              <td>{{ gift['next-draw-date']['display-value'] | date:'mediumDate'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
