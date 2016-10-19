@@ -1,8 +1,8 @@
 import angular from 'angular';
 
-import template from './desktopSubNav.tpl';
+import template from './subNav.tpl';
 
-let directiveName = 'desktopSubNav';
+let directiveName = 'cruSubNav';
 
 /* @ngInject */
 function desktopSubNav($window) {

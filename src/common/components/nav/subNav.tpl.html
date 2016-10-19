@@ -9,7 +9,7 @@
       </li>
     </ul>
 
-    <ul class="sub-nav">
+    <ul class="sub-nav" ng-class="{'mobile-sub-nav': $ctrl.menuType === 'mobile'}">
       <li ng-repeat="menuItem in $ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].children">
         <a ng-href="{{menuItem.path}}">{{menuItem.title}}</a>
       </li>

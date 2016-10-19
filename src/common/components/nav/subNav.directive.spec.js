@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './desktopSubNav.directive';
+import module from './subNav.directive';
 
 describe( 'desktopSubNav', function () {
   beforeEach( angular.mock.module( module.name ) );

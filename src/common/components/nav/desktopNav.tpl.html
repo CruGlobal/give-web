@@ -1,4 +1,4 @@
-<header id="desktop-navigation" class="gh-desk-nav">
+<header id="desktop-navigation" class="gh-desk-nav" ng-init="$ctrl.toggleMenu()">
   <div class="container">
 
     <a href="/" title="Cru" class="gh-desk-logo"></a>
@@ -108,14 +108,14 @@
         </div>
       </div>
 
-      <span class="search-icon" ng-click="$ctrl.toggleMenu()">
+      <span class="search-icon" ng-click="$ctrl.toggleMenu(!$ctrl.desktopSearch)">
         <span ng-class="{'search-icon-on': $ctrl.desktopSearch, 'search-icon-off': !$ctrl.desktopSearch}"></span>
       </span>
     </div>
   </div>
 </header>
 
-<desktop-sub-nav ng-if="$ctrl.subMenuStructure.length"></desktop-sub-nav>
+<cru-sub-nav ng-if="$ctrl.subMenuStructure.length"></cru-sub-nav>
 
 <div class="search sub-nav-open open" ng-if="$ctrl.desktopSearch">
   <div class="container">
