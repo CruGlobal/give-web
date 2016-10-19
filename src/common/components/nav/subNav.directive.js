@@ -5,7 +5,7 @@ import template from './subNav.tpl';
 let directiveName = 'cruSubNav';
 
 /* @ngInject */
-function desktopSubNav($window) {
+function cruSubNav($window) {
   return {
     restrict: 'E',
     templateUrl: template.name,
@@ -24,4 +24,4 @@ export default angular
   .module( directiveName, [
     template.name
   ] )
-  .directive( directiveName, desktopSubNav );
+  .directive( directiveName, cruSubNav );
