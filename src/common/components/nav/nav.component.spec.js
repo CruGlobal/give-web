@@ -32,11 +32,18 @@ describe( 'nav', function () {
     $httpBackend.flush();
   });
 
-  it('to toggle menu', () => {
+  it('to show menu', () => {
     $ctrl.toggleMenu(true);
     expect( $ctrl.mobileNavOpen ).toEqual( true );
     expect( $ctrl.desktopSearch ).toEqual( true );
     expect( $document[0].body.className ).toContain('body-scroll-lock');
+  });
+
+  it('to hide menu', () => {
+    $ctrl.toggleMenu(false);
+    expect( $ctrl.mobileNavOpen ).toEqual( false );
+    expect( $ctrl.desktopSearch ).toEqual( false );
+    expect( $document[0].body.className ).not.toContain('body-scroll-lock');
   });
 
   it('to modify paths', () => {
