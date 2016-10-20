@@ -14,7 +14,7 @@ describe( 'nav', function () {
     $ctrl = _$componentController_( module.name,
       {$window: {
         location: {href: 'cart.html'},
-        screen: {width: 600}
+        innerWidth: 600
     }} );
     $httpBackend = _$httpBackend_;
     $document = _$document_;
@@ -32,11 +32,18 @@ describe( 'nav', function () {
     $httpBackend.flush();
   });
 
-  it('to toggle menu', () => {
-    $ctrl.toggleMenu();
+  it('to show menu', () => {
+    $ctrl.toggleMenu(true);
     expect( $ctrl.mobileNavOpen ).toEqual( true );
     expect( $ctrl.desktopSearch ).toEqual( true );
     expect( $document[0].body.className ).toContain('body-scroll-lock');
+  });
+
+  it('to hide menu', () => {
+    $ctrl.toggleMenu(false);
+    expect( $ctrl.mobileNavOpen ).toEqual( false );
+    expect( $ctrl.desktopSearch ).toEqual( false );
+    expect( $document[0].body.className ).not.toContain('body-scroll-lock');
   });
 
   it('to modify paths', () => {
@@ -65,7 +72,7 @@ describe( 'nav', function () {
   });
 
   it('to load mobile nav on small screens', () => {
-    $ctrl.$onInit();
+    $ctrl.setMenuTemplate();
     expect( $ctrl.templateUrl ).toContain( 'mobile');
   });
 

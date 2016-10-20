@@ -1,11 +1,14 @@
-<div class="mobile-nav-wrap" ng-class="{'on': $ctrl.mobileNavOpen}">
+<div class="mobile-nav-wrap" ng-class="{'on': $ctrl.mobileNavOpen}" ng-init="$ctrl.toggleMenu()">
   <div id="mobile-header">
     <div id="mobile-logo"></div>
 
     <div id="sign-in-section">
-      <div id="sign-in" ng-if="!$ctrl.isSignedIn" ng-click="$ctrl.signIn()" translate>Sign In</div>
+      <div id="sign-in">
+        <span ng-if="!$ctrl.isSignedIn" ng-click="$ctrl.signIn()" translate>Sign In</span>
+        <span ng-if="$ctrl.isSignedIn" ng-click="$ctrl.signOut()" translate>Sign Out</span>
+      </div>
 
-      <div id="mobile-nav-icon" ng-click="$ctrl.toggleMenu()" ng-class="{'open': $ctrl.mobileNavOpen}">
+      <div id="mobile-nav-icon" ng-click="$ctrl.toggleMenu(!$ctrl.mobileNavOpen)" ng-class="{'open': $ctrl.mobileNavOpen}">
         <span></span>
         <span></span>
         <span></span>
@@ -115,5 +118,7 @@
     </div>
   </div>
 </div>
+
+<cru-sub-nav ng-if="$ctrl.subMenuStructure.length"></cru-sub-nav>
 
 <div class="mobile-nav-overlay" ng-class="{'on': $ctrl.mobileNavOpen}"></div>

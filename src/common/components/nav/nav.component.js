@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'ng-resize';
 import transform from 'lodash/transform';
 import isObject from 'lodash/isObject';
 import includes from 'lodash/includes';
@@ -12,7 +13,7 @@ import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
-import desktopSubNavDirective from './desktopSubNav.directive';
+import subNavDirective from './subNav.directive';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
@@ -22,7 +23,7 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($http, $document, $window, envService, cartService, sessionService, sessionModalService){
+  constructor($scope, $http, $document, $window, envService, cartService, sessionService, sessionModalService){
     this.$http = $http;
     this.$document = $document;
     this.$window = $window;
@@ -33,12 +34,11 @@ class NavController{
 
     this.imgDomain = envService.read('imgDomain');
     this.navFeed = envService.read('navFeed');
-
-    this.menuType = this.$window.screen && this.$window.screen.width < 991 ? 'mobile' : 'desktop';
-    this.templateUrl = this.menuType === 'mobile' ? mobileTemplate.name : desktopTemplate.name;
   }
 
   $onInit() {
+    this.setMenuTemplate();
+
     this.menuPath = {
       main: [],
       sub: [],
@@ -59,6 +59,11 @@ class NavController{
 
   $onDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  setMenuTemplate() {
+    this.menuType = this.$window.innerWidth < 991 ? 'mobile' : 'desktop';
+    this.templateUrl = this.menuType === 'mobile' ? mobileTemplate.name : desktopTemplate.name;
   }
 
   signIn() {
@@ -103,7 +108,7 @@ class NavController{
 
         let jsonStructure = angular.fromJson(response.data.jsonStructure);
         let menuStructure = {
-          main: replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org'}),
+          main: replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org', featuredPath: 'https://www.cru.org'}),
           global: jsonStructure['/content/cru/us/en/global']
         };
 
@@ -136,12 +141,16 @@ class NavController{
       } );
   }
 
-  toggleMenu(){
-    this.mobileNavOpen = !this.mobileNavOpen;
-    this.desktopSearch = !this.desktopSearch;
+  toggleMenu(value){
+    this.mobileNavOpen = value;
+    this.desktopSearch = value;
 
     var body = angular.element(this.$document[0].body);
-    body.toggleClass('body-scroll-lock');
+    if(value){
+      body.addClass('body-scroll-lock');
+    }else{
+      body.removeClass('body-scroll-lock');
+    }
   }
 
   cruSearch(term){
@@ -152,6 +161,7 @@ class NavController{
 export default angular
   .module(componentName, [
     'environment',
+    'ngResize',
     mobileTemplate.name,
     desktopTemplate.name,
     cartService.name,
@@ -159,9 +169,9 @@ export default angular
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
-    desktopSubNavDirective.name
+    subNavDirective.name
   ])
   .component(componentName, {
     controller: NavController,
-    template: '<ng-include src="$ctrl.templateUrl"></ng-include>'
+    template: '<ng-include src="$ctrl.templateUrl" ng-resize="$ctrl.setMenuTemplate()"></ng-include>'
   });
