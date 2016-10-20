@@ -1,0 +1,8 @@
+/*------------------------------------*\
+    #MIXINS/OPACITY
+\*------------------------------------*/
+
+@mixin opacity($opacity) {
+    filter: unquote("progid:DXImageTransform.Microsoft.Alpha(Opacity=#{round($opacity * 100)})");
+    opacity: $opacity;
+}

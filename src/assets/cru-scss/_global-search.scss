@@ -1,0 +1,142 @@
+/*------------------------------------*\
+    #GLOBAL-SEARCH
+\*------------------------------------*/
+
+$search-height: 32px;
+
+.actionNav {
+    .globalSearch {
+        float: right;
+        margin: 0 18px 0 0;
+        //height: $action-nav-height;
+        margin-right: 0;
+        border: 0;
+        box-shadow: none;
+
+        @include mq($nav-break-max, max) {
+            height: auto;
+            width: 100%;
+        }
+    }
+
+    .btn-group > .btn:first-child {
+        @include mq($nav-break-max, max) {
+            width: 88%;
+        }
+    }
+}
+
+.globalSearch .input-form {
+    width: 100%;
+}
+
+.navbar-form .form-group {
+    @include mq($nav-break-max, max) {
+        vertical-align: initial;
+        width: 100%;
+    }
+}
+
+.globalSearch-form .input-group {
+    display: inline-table;
+    vertical-align: middle;
+    margin-top: quarter($base-spacing-unit);
+
+    @include mq($nav-break-max, max) {
+        margin-top: 0;
+    }
+}
+
+.btn-group,
+.globalSearch-form .globalSearch-input {
+    @include mq($nav-break-max, max) {
+        width: 100%;
+    }
+}
+
+.globalSearch-input,
+.globalSearch-button {
+    height: $search-height;
+}
+
+.globalSearch-input {
+    padding: 0 8px;
+    font-size: $base-font-size;
+    border-width: 1px;
+
+    @include mq($nav-break-min) {
+        min-width: 200px;
+    }
+}
+
+.globalSearch-button {
+    padding: 0 12px;
+    line-height: $search-height;
+    vertical-align: middle;
+
+    border-width: 1px;
+    border-color: #ccc;
+
+    @include mq($nav-break-max, max) {
+        background-color: #f4f4f4;
+    }
+
+    @include mq($nav-break-min) {
+        padding: 0 8px;
+    }
+}
+
+
+/**
+ * #SEARCH RESULTS
+ */
+
+.globalSearch-resultsTitle {
+    padding: 0 half($base-spacing-unit) $base-spacing-unit;
+    margin-bottom: $base-spacing-unit;
+    border-bottom: 1px solid #ddd;
+}
+
+.globalSearch-resultsLink {
+
+    padding: half($base-spacing-unit);
+
+    p {
+        color: $colorText;
+    }
+
+    &:hover {
+        text-decoration: none;
+        background-color: #f2f2f2;
+    }
+}
+
+/**
+ * #OFF-CANVAS GLOBAL SEARCH
+ */
+
+.navbar-form .input-group .form-control {
+    @include mq($nav-break-max, max) {
+        width: 224px;
+    }
+}
+
+.navbar-form {
+    @include mq($nav-break-max, max) {
+        padding: 0 15px;
+    }
+}
+
+.globalSearch-form .globalSearch-dropdown {
+    @include mq($nav-break-max, max) {
+        width: 252px;
+    }
+}
+
+.searchlink {
+    font-size: 85%;
+}
+
+.searchlink.selected {
+    background-color: #f5f5f5;
+}

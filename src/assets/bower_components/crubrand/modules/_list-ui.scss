@@ -1,0 +1,29 @@
+/*------------------------------------*\
+    #LIST-UI
+\*------------------------------------*/
+
+.listUi,
+%listUi,
+.listUi-item,
+%listUi-item {
+    border: 0 solid $gray-light;
+}
+
+.listUi,
+%listUi {
+    margin:  0;
+    padding: 0;
+    list-style: none;
+    border-top-width: 1px;
+
+    > li {
+        @extend %listUi-item;
+    }
+
+}
+
+.listUi-item,
+%listUi-item {
+    padding: $base-spacing-unit;
+    border-bottom-width: $base-spacing-unit;
+}

@@ -1,0 +1,86 @@
+// Give Specific Styles
+$colorGrayscale-sand: #f4f4f4;
+$colorGrayscale-pebble: #f0f0f0;
+$colorGrayscale-stone: #e7e7e7;
+$colorGrayscale-rock: #b9b9b9;
+$colorGrayscale-slate: #909b9c;
+
+.btn-default-border{
+	border-color: #666062;
+	background: transparent;
+	color: colorCru-gray;
+	&.border0{
+		border: none;
+	}
+	&.border1{
+		border-width: 1px;
+	}
+	&.border2{
+		border-width: 2px;
+	}
+	&.border3{
+		border-width: 3px;
+	}
+}
+
+
+.form-control-subtle {
+    background-color: #fff;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 2px;
+    padding-top: 7px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 4px;
+    overflow: hidden;
+    -webkit-transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease;
+}
+
+.form-control-subtle.active{
+		border-color: rgba(0,0,0,0.1) !important;
+		background-color: #f0f0f0;
+	}
+
+.form-group label:not(.error) {
+		letter-spacing: 1px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.form-control-subtle .form-control {
+    border: none;
+    height: 25px;
+    min-height: 25px;
+    padding: 0;
+    margin-top: -4px;
+    background: none;
+}
+
+.progress {
+    overflow: hidden;
+    height: 4px;
+    margin-bottom: 29px;
+    background-color: #f5f5f5;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0);
+}
+
+.progress-bar {
+    float: left;
+    width: 0%;
+    height: 100%;
+    font-size: 12px;
+    line-height: 29px;
+    color: #fff;
+    text-align: center;
+    background-color: #f9b625;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0);
+    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+    -webkit-transition: width 0.6s ease;
+    -o-transition: width 0.6s ease;
+    transition: width 0.6s ease;
+}

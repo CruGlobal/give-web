@@ -1,0 +1,34 @@
+/*------------------------------------*\
+    #FOOTER
+\*------------------------------------*/
+
+.globalFooter .section-divider {
+    border-color: $colorCru-gold;
+}
+
+.globalFooter-nav {
+    padding-bottom: $base-spacing-unit;
+}
+
+.globalFooter-link {
+    color: #353535;
+    padding-right: 7px;
+    padding-left: 7px;
+
+    &:hover,
+    &:focus {
+        background-color: transparent;
+        text-decoration: underline;
+    }
+}
+
+.globalFooter-copy {
+    padding-bottom: $base-spacing-unit;
+    font-size: 128%;
+}
+
+.icon--cruGlobal {
+    text-align: left;
+    text-indent: -9999em;
+    overflow: hidden;
+}

@@ -1,0 +1,37 @@
+/*------------------------------------*\
+    #LAYOUT
+\*------------------------------------*/
+
+.layoutSingleColumn,
+%layoutSingleColumn {
+    width: auto;
+
+    margin-left: 20px;
+    margin-right: 20px;
+    clear: both;
+
+    @include mq(680px) {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @include mq(680px) {
+        width: 640px;
+    }
+
+    @include mq(800px) {
+        width: 700px;
+	}
+}
+
+.layoutSingleColumn--extend {
+    @extend %layoutSingleColumn;
+
+    @include mq(1024px) {
+        width: 880px;
+    }
+}
+
+.layoutSingleColumn--wide {
+    max-width: 1100px;
+}

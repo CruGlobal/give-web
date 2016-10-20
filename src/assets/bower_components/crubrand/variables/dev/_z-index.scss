@@ -1,0 +1,143 @@
+/*------------------------------------*\
+    #Z-INDEX
+\*------------------------------------*/
+
+$zIndex-1:   100;
+$zIndex-2:   200;
+$zIndex-3:   300;
+$zIndex-4:   400;
+$zIndex-5:   500;
+$zIndex-6:   600;
+$zIndex-7:   700;
+$zIndex-8:   800;
+$zIndex-9:   900;
+$zIndex-10:  1000;
+
+.form-control-feedback 2
+
+.btn-group > .btn:hover, .btn-group > .btn:focus, .btn-group > .btn:active, .btn-group > .btn.active,
+.btn-group-vertical > .btn:hover,
+.btn-group-vertical > .btn:focus,
+.btn-group-vertical > .btn:active,
+.btn-group-vertical > .btn.active {
+z-index: 2; }
+
+.input-group .form-control {
+z-index: 2;}
+
+.input-group-btn > .btn:hover, .input-group-btn > .btn:focus, .input-group-btn > .btn:active {
+z-index: 2; } 
+
+.pagination .active a, .pagination .active a:hover, .pagination .active a:focus,
+.pagination .active span,
+.pagination .active span:hover,
+.pagination .active span:focus {
+  z-index: 2;
+}
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+  z-index: 2;
+}
+
+$zIndex2--form-control-feedback: $zIndex-2;
+$zIndex2--form-control:          $zIndex-2;
+$zIndex2--form-control-btn:      $zIndex-2;
+$zIndex2--pagination:            $zIndex-2;
+$zIndex2--list-group-item:       $zIndex-2;
+
+.carousel-control .icon-prev,
+.carousel-control .icon-next,
+.carousel-control .glyphicon-chevron-left,
+.carousel-control .glyphicon-chevron-right {
+  z-index: 5;
+}
+$zIndex3--carousel-control-item: $zIndex3;
+
+.carousel-caption {
+    z-index: 10;
+}
+      
+.carousel-indicators {
+    z-index: 15;
+}
+
+.dropdown-menu 1000
+.navbar-static-top {
+z-index: 1000;
+}
+
+.dropdown-backdrop {
+  z-index: 990; } 300
+
+.navbar-fixed-top,
+.navbar-fixed-bottom {
+z-index: 1030; } 500
+
+.modal {
+  z-index: 1040; 700
+} 
+
+.tooltip {
+  z-index: 1070; 900
+}
+  
+  .popover {
+    z-index: 1060; 700
+}
+
+/**
+ * Z-Index Applications
+ */
+$zIndex-1--screenForeground:        $zIndex-1;
+$zIndex-1--followUpVisibility:      $zIndex-1;
+$zIndex-1--prlWelcome:              $zIndex-1;
+$zIndex-1--appImageDropdown:        $zIndex-1;
+$zIndex-1--surfaceUnder:            $zIndex-1;
+$zIndex-1--blockGroup:              $zIndex-1;
+ 
+$zIndex-2--surfaceOver:             $zIndex-2;
+$zIndex-2--imagePickerControl:      $zIndex-2;
+$zIndex-2--collectionCardButton:    $zIndex-2;
+$zIndex-2--blockGroupButtonGroup:   $zIndex-2;
+$zIndex-2--blockGroupFocused:       $zIndex-2;
+$zIndex-2--blockGroupOverlay:       $zIndex-2;
+
+form-control
+ 
+$zIndex-3--caption:                 $zIndex-3;
+$zIndex-3--blockInsertControl:      $zIndex-3;
+ 
+$zIndex-5--figureOverlay:           $zIndex-5;
+$zIndex-5--highlightMenu:           $zIndex-5;
+$zIndex-5--metabar:                 $zIndex-5;
+$zIndex-5--profileAvatar:           $zIndex-5;
+$zIndex-5--noteRecommendations:     $zIndex-5;
+$zIndex-5--collectionLogo:          $zIndex-5;
+ 
+$zIndex-6--matterLogo:              $zIndex-6;
+$zIndex-6--editorSidebar:           $zIndex-6;
+$zIndex-6--navOverlay:              $zIndex-6;
+ 
+$zIndex-7--nav:                     $zIndex-7;
+ 
+$zIndex-8--transitioningContainer:  $zIndex-8;
+$zIndex-8--panel:                   $zIndex-8;
+$zIndex-8--butterBar:               $zIndex-8;
+$zIndex-8--loadingBar:              $zIndex-8;
+$zIndex-8--zoomOverlay:             $zIndex-8;
+ 
+$zIndex-9--zoomOverlayTarget:       $zIndex-9;
+$zIndex-9--navOverlayTouch:         $zIndex-9;
+$zIndex-9--overlay:                 $zIndex-9;
+$zIndex-9--dialog:                  $zIndex-9;
+$zIndex-9--tooltip:                 $zIndex-9;
+ 
+$zIndex-10--dev:                    $zIndex-10;
+ 
+ 
+// Z-Index Mobile-Notes
+// --------------------------------------------------
+$zIndex-5--mobileNotesOverlay:    $zIndex-5;
+$zIndex-6--mobileNotesHighlight:  $zIndex-6;
+$zIndex-7--mobileNotesContainer:  $zIndex-7;
+$zIndex-8--mobileNotesDismiss:    $zIndex-8;

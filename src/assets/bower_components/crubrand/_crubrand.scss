@@ -1,0 +1,231 @@
+@charset "UTF-8";
+
+/*------------------------------------*\
+    CRUBRAND
+\*------------------------------------*/
+/**
+ * Here lies the custom styles for Cru.org. These styles have been
+ * built on top of our front-end framework: brackets.css.
+ *
+ * Be sure read the warning before continuing to edit or add any new
+ * styles. In addition, be sure to change the variables to turn off
+ * demo mode and debug mode before pushing to production.
+ *
+ */
+
+
+
+
+
+/*------------------------------------*\
+ #CONTENTS
+\*------------------------------------*/
+/**
+ * CONTENTS............You’re reading it!
+ * WARNING.............There be rocks ahead
+ * IMPORTS.............Begin importing the sections below
+ *
+ * TOOLS...............Functions that allow for some fun math
+ * MIXINS..............A series of useful mixins for the project
+ *** /ALERTS...........
+ *** /ANIMATIONS.......
+ *** /BORDER_RADIUS....
+ *** /BOX-MODEL........
+ *** /BUTTONS..........
+ *** /CENTER-BLOCK.....
+ *** /CLEARFIX.........
+ *** /FORMS............
+ *** /GRID-SETUP.......
+ *** /IMAGES...........
+ *** /LINKS............
+ *** /MEDIA-QUERY......
+ *** /MESSAGES.........
+ *** /OPACITY..........
+ *** /PANELS...........
+ *** /PREFIX...........
+ *** /SIZING...........
+ *** /SPACING..........Do not implement this at the moment
+ *** /TEXT.............
+ *** /WIDTHS...........
+ * NORMALIZE...........normalize.css
+ * RESTART.............Set some defaults
+ * CLEARFIX............
+ * SHARED..............Shared declarations
+ *
+ * BASE................High-level elements like `html`, `body`, etc.
+ * HEADINGS............Double-stranded heading hierarchy
+ * PARAGRAPHS..........
+ * QUOTES..............
+ * LISTS...............
+ * IMAGES..............
+ * TABLES..............
+ * FORMS...............
+ *
+ * GRIDS...............Fluid, proportional and nestable grids
+ * BUTTONS.............Use the beautons micro library
+ * ISLAND..............Boxed off content
+ * NAVS................Simple abstraction to put a list in horizontal nav mode
+ * PAGINATION..........Very stripped back, basic paginator
+ * BREADCRUMB..........Simple breadcrumb trail object
+ * MEDIA...............Media object
+ *
+ * HELPERS.............A series of helper classes to use arbitrarily
+ * DEBUG...............Enable to add visual flags for debugging purposes
+ *
+ * FONT................Set up the primary font
+ * COLORS..............Set base colors and variables for easy use
+ *
+ * PAGE................Overall page settings and foundation
+ * LAYOUTS.............Primary widths and wrappers
+ *
+ * TEXT................Text element settings for articles, etc.
+ * BUTTONS.............Cru specific buttons, extends brackets.css
+ * TABLES..............Cru specific tables, extends brackets.css
+ * FORMS...............Cru specific forms, extends brackets.css
+ * VIDEO...............
+ * IMAGES..............
+ * HEADER..............
+ * FOOTER..............
+ * SOCIAL..............Site and post specific social media
+ * SITE-SEARCH.........Primary site search, extends the header
+ * NAVIGATION..........Praimry site nav, extends the header
+ * DROPDOWNS...........Dropdown views for large screens, extends the navigation
+ * OFF-CANVAS..........Off canvas nav for small screens, extends the navigation
+ *
+ * CAMPUS-LOCATOR......
+ * COUNTRY-LIST........
+ * SLIDER..............Primary site slider. For now only on homepage
+ * POST................Basic post stylings for articles
+ * POST-IMAGES.........Image handling in posts, etc, extends the post
+ * PAGE-SUBNAV.........Additional navigation for community/landing pages
+ *
+ * ANIMATIONS..........Site-wide animation handling
+ * UTILITIES...........A series of helper classes to use arbitrarily
+ * DEBUG...............Enable to add visual flags for debugging purposes
+ */
+
+/*------------------------------------*\
+  #WARNING
+\*------------------------------------*/
+/**
+ * Custom styles for cru.org are meant to be place in the elements folder.
+ * They should be as specific to cru as possible and mainly ui related.
+ *
+ */
+
+
+
+
+
+/*------------------------------------*\
+ #IMPORTS
+\*------------------------------------*/
+@import "generic/bourbon/bourbon";
+
+// Core variables and mixins
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+
+@import "generic/tools";
+@import "settings";
+@import "overrides";
+@import "generic/mixins";
+
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
+
+// Reset and dependencies
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/normalize";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/print";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/glyphicons";
+
+/**
+ * Crubrand Overrides to Bootstrap Files
+ */
+@import "bootstrap-variations/scaffolding";
+@import "bootstrap-variations/type";
+
+/**
+ * Crubrand Base Files
+ */
+@import "base/images";
+@import "base/figcaption";
+@import "base/quotes";
+
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/grid";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/tables";
+
+
+/* Crubrand variation of bootstrap's forms and buttons */
+@import "bootstrap-variations/forms";
+@import "bootstrap-variations/buttons";
+
+
+// Components
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/component-animations";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/dropdowns";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/button-groups";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/input-groups";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/navs";
+
+
+/* Crubrand variation of bootstrap's navbar */
+@import "bootstrap-variations/navbar";
+
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/breadcrumbs";
+
+/* Crubrand variation of bootstrap's pagination */
+@import "bootstrap-variations/pagination";
+
+
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/pager";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/labels";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/badges";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/jumbotron";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/thumbnails";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/alerts";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/progress-bars";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/media";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/list-group";
+
+@import "bootstrap-variations/panels";
+
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-embed";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/wells";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/close";
+
+//@import "bootstrap-variations/media";
+
+
+/**
+ * Crubrand Modules
+ */
+@import "modules/buttons";
+@import "modules/cru-logo";
+@import "modules/cruicons";
+@import "modules/layout";
+@import "modules/list-bare";
+@import "modules/list-inline";
+@import "modules/list-block";
+@import "modules/list-ui";
+@import "modules/pagination";
+@import "modules/pullquotes";
+
+/**
+ * Bootstrap Components w/ JavaScript
+ */
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/modals";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/tooltip";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/popovers";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/carousel";
+
+/**
+ * Bootstrap Utility Classes
+ */
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/utilities";
+@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-utilities";
+
+
+/**
+ * Crubrand Overrides
+ */
+@import "generic/utilities";
+@import "generic/spacing";

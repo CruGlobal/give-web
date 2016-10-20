@@ -1,0 +1,159 @@
+/*------------------------------------*\
+    $POST-IMAGES
+\*------------------------------------*/
+
+.postArticle figure {
+    @include clearfix;
+
+    position: relative;
+    outline: 0;
+
+    > img {
+        width: 100%;
+    }
+}
+
+/**
+ * Main image captions. Place the .image-credit within this.
+ * Pulls the caption to the left of the image for wide screens
+ * and centers it for smaller screens.
+ */
+.imageCaption {
+    @extend %mt--;
+    position: relative;
+    left: 0;
+    width: 100%;
+    text-align: center;
+
+    &.default {
+        @include mq(1164px) {
+            position: absolute;
+            top: 0;
+            left: -172px;
+            width: 150px;
+            margin-top: 0;
+            text-align: right;
+            line-height: 1.6;
+
+            &:before {
+                content: "";
+                display: block;
+                width: 25%;
+                margin-left: 75%;
+                margin-bottom: 10px;
+                border-top: 1px solid #ddd;
+            }
+        }
+    }
+}
+
+.image-credit {
+    display: block;
+    font-size: 80%;
+    color: #666062;
+}
+
+/*figure*/
+.image--insetLeft {
+    width: 100%;
+    clear: both;
+
+    @include mq(981px) {
+        width: 50%;
+        float: left;
+        margin-top: 10px;
+        margin-right: $base-spacing-unit;
+        margin-bottom: 10px;
+    }
+
+    > .imageCaption {
+        @include mq(1164px) {
+            position: absolute;
+            left: -172px;
+            width: 150px;
+            top: 0;
+            text-align: right;
+            margin-top: 0;
+            line-height: 1.6;
+
+            &:before {
+                width: 25%;
+                margin-left: 75%;
+                border-top: 1px solid #ddd;
+                display: block;
+                content: "";
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
+
+/*figure*/
+.image--legacy,
+.image--insetRight,
+%image--insetRight {
+    width: 100%;
+    clear: both;
+
+    @include mq(981px) {
+        width: 46%;
+        float: right;
+        margin: 10px 0 10px ($base-spacing-unit * 1.25);
+    }
+
+    > .imageCaption {
+        @include mq(1164px) {
+            position: absolute;
+            left: 379px;
+            width: 150px;
+            top: 0;
+            text-align: left;
+            margin-top: 0;
+            line-height: 1.6;
+
+            &:before {
+                width: 25%;
+                border-top: 1px solid #ddd;
+                display: block;
+                content: "";
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
+
+/*figure*/
+.image--outsetLeft {
+    width: 100%;
+    clear: both;
+
+    @include mq(981px) {
+        float: left;
+        margin-top: 10px;
+        margin-right: $base-spacing-unit;
+        margin-bottom: 10px;
+        width: 75%;
+        margin-left: -100px;
+        margin: 10px $base-spacing-unit 10px -100px;
+    }
+}
+
+/*figure*/
+.image--outsetCenter {
+    @include mq(981px) {
+        margin-left: -100px;
+        margin-right: -100px;
+    }
+
+    > .imageCaption {
+        position: relative;
+        width: 100%;
+        text-align: center;
+        left: 0;
+        margin: 10px auto 0;
+
+        &:before {
+            content: none;
+        }
+    }
+}

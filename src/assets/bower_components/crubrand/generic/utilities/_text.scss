@@ -1,0 +1,85 @@
+/*------------------------------------*\
+    #TEXT UTILITIES
+\*------------------------------------*/
+
+/**
+ * Horizontal text alignment
+ */
+
+.u-textCenter, %u-textCenter { text-align: center !important; }
+.u-textLeft, %u-textLeft     { text-align: left !important; }
+.u-textRight, %u-textRight   { text-align: right !important; }
+
+/**
+ * Word breaking
+ *
+ * Break strings when their length exceeds the width of their container.
+ */
+.u-textBreak, %u-textBreak { word-wrap: break-word !important; }
+
+/**
+ * Inherit the ancestor's text color.
+ */
+.u-textInheritColor, %u-textInheritColor { color: inherit !important; }
+
+/**
+ * Enables font kerning in all browsers.
+ * http://blog.typekit.com/2014/02/05/kerning-on-the-web/
+ *
+ * 1. Chrome (not Windows), Firefox, Safari 6+, iOS, Android
+ * 2. Chrome (not Windows), Firefox, IE 10+
+ * 3. Safari 7 and future browsers
+ */
+.u-textKern, %u-textKern {
+  text-rendering: optimizeLegibility; /* 1 */
+  font-feature-settings: "kern" 1; /* 2 */
+  font-kerning: normal; /* 3 */
+}
+
+/**
+ * Prevent whitespace wrapping
+ */
+.u-textNoWrap, %u-textNoWrap { white-space: nowrap !important; }
+
+/**
+ * Text truncation
+ *
+ * Prevent text from wrapping onto multiple lines, and truncate with an
+ * ellipsis.
+ *
+ * 1. Ensure that the node has a maximum width after which truncation can
+ *    occur.
+ * 2. Fix for IE 8/9 if `word-wrap: break-word` is in effect on ancestor
+ *    nodes.
+ */
+.u-textTruncate, %u-textTruncate {
+  max-width: 100%; /* 1 */
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  word-wrap: normal !important; /* 2 */
+}
+
+
+
+/**
+ * Text Sizing
+ */
+.u-textSize-small, %u-textSize-small { font-size: $fontSize-small !important; }
+
+
+
+/**
+ * Font weights
+ */
+.u-textWeight-light, %u-textWeight-light         { font-weight: $fontWeight1 !important; }
+.u-textWeight-semiLight, %u-textWeight-semiLight { font-weight: $fontWeight3 !important; }
+.u-textWeight-normal, %u-textWeight-normal       { font-weight: $fontWeight4 !important; }
+.u-textWeight-semiBold, %u-textWeight-semiBold   { font-weight: $fontWeight5 !important; }
+.u-textWeight-bold, %u-textWeight-bold           { font-weight: $fontWeight6 !important; }
+
+
+/**
+ * Apply capital case to an element (usually a `strong`).
+ */
+.u-textCaps, %u-textCaps { text-transform: uppercase !important; }

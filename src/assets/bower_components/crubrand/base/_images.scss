@@ -1,0 +1,19 @@
+/*------------------------------------*\
+    #IMAGES
+\*------------------------------------*/
+
+img {
+    @include img-responsive();
+}
+
+/**
+ * This is a hack to force iframes inside panels to fit the full width.
+ */
+.panel-body iframe {
+    display: block;
+    max-width: 100%;
+    
+    @include mq(400px, max) {
+        height: auto;
+    }
+}

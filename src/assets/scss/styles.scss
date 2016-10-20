@@ -1,0 +1,38 @@
+/**
+ * CUT HERE
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+ 
+@import '../cru-scss/cru';
+
+/**
+ * END CUT HERE
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+
+// Give Site Front End
+@import '../bower_components/slick-carousel/slick/slick.scss';
+@import 'slickstyle';
+@import 'tabs';
+@import 'give';
+@import 'form';
+@import 'cart';
+@import 'checkout';
+@import 'gift-config';
+@import 'modal';
+@import 'account_management';
+@import 'slider';
+@import 'homepage';
+@import 'search';
+@import 'mobile';
+@import 'mobile-navigation';
+@import 'desktop_navigation';
+
+// ********** This fonts scss file is only needed for gh-pages to correct relative links to be able to use icons both remote and local. ********** //
+@import 'fonts';
+// **********  //
+
+// *********** NOT FOR PRODUCTION -- JUST FOR CRU GIVE SITE
+@import 'not-for-production';
+// *********** //

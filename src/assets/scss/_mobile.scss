@@ -1,0 +1,37 @@
+.m-noFloat {
+  @include respond-to(supertiny) {
+    float: none !important;
+  }  
+}
+
+.panel-body {
+  @include respond-to(extrasmall) {
+    padding: $gutter*.6666;
+  }
+}
+
+.container-width {
+  max-width: 1170px;
+  margin: 0 auto;
+}
+
+.container-margin {
+  @media screen and (max-width: 1170px) {
+    padding-left: 15px;
+    padding-right: 15px;    
+  }
+}
+
+#sub-navigation .sub-nav.mobile-sub-nav {
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  li a {
+    line-height: 25px;
+    &.active {
+      padding-top: 3px;
+      padding-bottom: 2px;
+      line-height: 18px;
+      border-bottom: $colorCru-gold 1px solid;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+/*------------------------------------*\
+    #BASE
+\*------------------------------------*/
+.outerWrap {
+    overflow: hidden;
+
+    @include backface-visibility(hidden);
+}
+
+.innerWrap {
+    @include transition(transform 0.35s ease);
+}
+
+.screenContent {
+    @include mq($nav-break-min) {
+        padding-top: ($base-spacing-unit * 1.25);
+    }
+}

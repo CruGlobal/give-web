@@ -1,0 +1,82 @@
+/*------------------------------------*\
+    #IE-ARTICLE
+\*------------------------------------*/
+
+.campus-locator-form,
+.tile-large-curated-list {
+    @include clearfix;
+
+    .masonry__item {
+        background-color: #fff;
+        margin-bottom: $base-spacing-unit;
+        border: 1px solid #ddd;
+    }
+
+    .panel {
+        border-color: transparent;
+    }
+}
+
+.post-article,
+.post-article.panel p,
+.post-article.panel ul {
+    @include mq(700px) {
+        letter-spacing: 0.01rem;
+        /* Calculate a unitless line-height based on 31px */
+        line-height: ceil(21px / 31px)* (31px / 21px);
+        @include font-size(21px, false);
+    }
+}
+
+.post-article p,
+.post-article ul {
+    margin-bottom: $base-spacing-unit;
+}
+
+
+.post-article li {
+    margin-bottom: $base-spacing-unit / 2;
+}
+
+.post-article figure {
+    position: relative;
+    outline: 0;
+    margin-bottom: $base-spacing-unit;
+}
+
+.post-title {
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    word-wrap: break-word;
+}
+
+
+.post-meta {
+    color: #666062;
+    line-height: 1.6;
+    margin-bottom: $base-spacing-unit / 2;
+
+    @include font-size(16px, false);
+}
+
+.accent + .accent:before,
+a + .phone + .accent:before,
+.accent + .phone:before,
+a + .phone + .phone:before {
+    content: "\2013";
+    margin-left: rem(12px);
+    margin-right: rem(12px);
+}
+
+.post-nav {
+    width: 46%;
+    float: right;
+    margin: 10px 0 10px ($base-spacing-unit * 1.25);
+
+    padding-left: $base-spacing-unit / 1.25;
+    border-left: 1px solid $colorCru-gray;
+
+    li {
+        margin-bottom: 0;
+    }
+}

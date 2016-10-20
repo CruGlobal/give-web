@@ -1,0 +1,41 @@
+/*------------------------------------*\
+    #PAGINATION
+\*------------------------------------*/
+
+.pagination li {
+    display: inline-block;
+    margin-bottom: half($base-spacing-unit);
+}
+
+/**
+ * This is to override bootstraps specifity of pagiation. Normally this
+ * level of nesting would not be allowed.
+ */
+ .pagination-secondary li a {
+     @include button-variant($btn-secondary-color, $btn-secondary-bg, $btn-secondary-border);
+ }
+
+ .pagination-subtle li a {
+     @include button-variant($btn-subtle-color, $btn-subtle-bg, $btn-subtle-border);
+ }
+
+.pagination__prev {
+    float: left;
+}
+
+.pagination__next {
+    float: right;
+}
+
+.pagination__prev a:before,
+.pagination__next a:after {
+    font-size: 20px;
+}
+
+.pagination__prev a:before {
+    content: "\00AB" "\00A0";
+}
+
+.pagination__next a:after {
+    content: "\00A0" "\00BB";
+}

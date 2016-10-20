@@ -1,0 +1,406 @@
+$border-radius: 4px;
+
+#give-hero {
+  .hero-image {
+    background: url(/assets/images/give-hero-placeholder.jpg) 50%;
+    background-size: cover;
+    position: relative;
+    height: 430px;
+  }
+
+  .hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 75%;
+
+    h1 {
+      color: $colorCru-gold;
+      font-weight: 400;
+      font-size: 40px;
+      margin-bottom: 0;
+    }
+
+    h4 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    h4, p {
+      color: $colorCru-white;
+    }
+
+    form {
+      button.submit-search {
+        /* Discover more button BG: */
+        background: #F9B625;
+        border-radius: $border-radius;
+        height: 46px;
+        line-height: 43px;
+        padding: 0 50px;
+        font-size: 20px;
+      }
+      .input-group {
+        max-width: 345px;
+        margin-left: auto;
+        margin-right: auto;
+
+        input {
+          border-radius: $border-radius 0 0 $border-radius;
+          border-right-width: 0;
+          box-shadow: none;
+          border: none;
+          line-height: 22px;
+          padding: 0 13px;
+          height: 50px;
+        }
+
+        button {
+          background-color: #fff;
+          border: none;
+          box-shadow: none;
+          border-radius: 0 $border-radius $border-radius 0;
+          padding: 14px;
+          line-height: 22px;
+
+          i {
+            color: $colorCru-gray;
+          }
+        }
+      }
+    }
+  }
+
+  .hero-leads {
+    margin-top: -30px;
+    position: relative;
+
+    @media screen and (max-width: 720px) {
+      margin-top: 0;
+      background: url(/assets/images/intern-ops.jpg) 50% 50%;
+      background-size: cover;
+    }
+
+    .hero-lead-first, 
+    .hero-lead-second, 
+    .hero-lead-third {
+      float: left;
+      width: 33.333333333%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+
+      @media screen and (max-width: 720px) {
+        width: 100%;
+        border-bottom: 1px solid #333;
+      }
+
+
+      h3 {
+        font-size: 20px;
+        color: $colorCru-white;
+        padding-top: $gutter*.5;
+      }
+
+      a {
+        display: block;
+        padding-top: 30px;
+        height: 220px;
+        transition: .25s all;
+        text-decoration: none;
+
+        @media screen and (max-width: 860px) {
+          height: 185px;
+          padding-top: 15px;
+        }
+
+        @media screen and (max-width: 720px) {
+          height: 60px;
+          padding-top: 0;
+          line-height: 60px;
+          h3 {
+            line-height: 60px;
+            padding: 0;
+          }
+        }
+
+        &:hover {
+          padding-top: 0;
+        }
+
+        .image-container {
+          background-color: #ccc;
+          background-size: cover;
+          background-position: 50%;
+          height: 100%;
+          text-align: center;
+          transition: .25s all;
+
+          @media screen and (max-width: 720px) {
+            background: rgba(0,0,0,.8);
+          }
+
+        }
+      }
+    }
+    .hero-lead-first {
+      .image-container {
+        background-image: url(/assets/images/people.jpg);
+      }
+    }
+    .hero-lead-second .image-container {
+      background-image: url(/assets/images/ministry.jpg);
+    }
+    .hero-lead-third {
+      .image-container {
+        background-image: url(/assets/images/featured-opportunities.jpg);
+      }
+    }
+
+  }
+}
+
+#give-featured {
+  background: $colorCru-white;
+}
+
+.give-featured-col {
+  @media only screen and (max-width: 720px) {
+    width: 100%;
+  }
+}
+
+.sign-in-slider-col {
+  @media only screen and (max-width: 720px) {
+    width: 100%;
+  }
+}
+
+.panel-give-featured {
+  box-shadow: none;
+  max-width: 290px;
+
+  @media only screen and (max-width: 720px) {
+    max-width: none;
+  }
+
+  .panel-header {
+    background: $colorCru-mid-gray;
+    color: $colorCru-white;
+    border: 1px solid $colorCru-mid-gray;
+    border-radius: $border-radius $border-radius 0 0;
+    padding-left: 20px;
+
+    h3 {
+      font-weight: 500;
+      font-size: 20px;
+      margin: 0 0 .25em;    
+    }
+  }
+
+  .panel-body {
+    border: 1px solid $colorGrayscale-pebble;
+    border-top: none;
+    padding: 20px;
+    p {
+      line-height: 1.45em;
+    }
+    @media screen and (max-width: 850px) {
+      h3 {font-size: 22px; font-weight: 500;}
+      p:nth-last-child(2) {
+        display: block;
+      }  
+    }
+  }
+
+  .give-featured-image {
+    margin-bottom: $gutter*.5;
+    img {
+      width: 100%;
+      @media screen and (max-width: 840px) {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+.form-give-home-signin {
+
+  @media screen and (max-width: 991px) {
+    display: none;
+  }
+
+  .form-group {
+    &:not(:last-child) {
+      margin-right: $gutter/2;
+    }
+
+    > input, button[type=submit] {
+      border-radius: $border-radius;
+    }
+
+    &.input-widths {
+      width: 200px;
+      @media screen and (max-width: 1200px) {
+        width: 165px;
+      }
+    }
+
+    > input[type=text],
+    > input[type=password] {
+      width: 100%;
+    }
+  }
+
+  .form-heading {
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  button[type=submit] {
+    background-color: $colorCru-white;
+    border-color: $colorCru-gold;
+    width: 150px;
+    &:hover {
+      background-color: $colorCru-gold;
+      color: $colorCru-white;
+    }
+    @media screen and (max-width: 1200px) {
+      width: auto;
+    }
+  }
+
+  .home-self-service {
+    line-height: 1.1em;
+    a {
+      color: $colorText;
+    }
+  }
+
+  @media only screen and (max-width: 720px) {
+    display: none;
+  }
+}
+
+#give-integrity {
+  padding-top: $gutter*2;
+  padding-bottom: $gutter*2;
+
+  h1, p {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 36px;
+    color: $colorCru-gray;
+    font-weight: 600;
+  }
+
+  .integrity-opener {
+    @media screen and (max-width: 550px) {
+      br {
+        display: none;
+      }
+    }
+  }
+
+  .integrity-col {
+    line-height: 1.35em;
+    &:before {
+      height: 100px;
+      background: no-repeat center center;
+      background-size: 70px;
+      content: "";
+      display: block;
+    }
+
+    @media only screen and (max-width: 560px) {
+      width: 100%;
+    }
+  }
+
+  .win:before {
+    background-image: url("/assets/images/win.png");
+  }
+  .build:before {
+    background-image: url("/assets/images/build.png");
+  }
+  .send:before {
+    background-image: url("/assets/images/send.png");
+  }
+}
+
+#give-credibility {
+  padding-top: $gutter*2;
+  padding-bottom: $gutter*2;
+  background: $colorCru-white;
+
+  h4 {
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+
+    .credibility-security {
+      width: 65%;
+    }
+
+    .trust {
+      width: 35%;
+
+    }
+
+  .credibility-col {
+    float: left;
+
+    p {
+      line-height: 1.625;
+    }
+
+    h4 {
+      margin-bottom: 5px;
+    }
+
+    @media screen and (max-width: 550px) {
+      text-align: center;
+    }
+
+    .credibility-seal {
+      width: 15%;
+      float: right;
+      margin-left: 30px; 
+      margin-right: 30px;
+      @media screen and (max-width: 550px) {
+        float: none;
+        display: block;
+        width: 100px;
+        margin: 0 auto 15px auto;
+      }
+    }
+
+    .credibility,
+    .security {
+      margin-bottom: $gutter;
+      p {
+        width: 75%;
+        @media screen and (max-width: 550px) {
+          width: auto;
+        }
+      }
+
+      h4 {
+        width: 80%;
+        margin-bottom: 5px;
+        @media screen and (max-width: 550px) {
+          width: auto;
+        }
+      }
+    }
+
+    @media screen and (max-width: 991px) {
+      float: none;
+      width: 100% !important;
+    }
+  }  
+}
