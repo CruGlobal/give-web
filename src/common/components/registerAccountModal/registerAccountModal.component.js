@@ -99,13 +99,14 @@ class RegisterAccountModalController {
     this.setLoading( {loading: false} );
   }
 
-  // TODO: Fix this ($provide or css class manipulation) angular.element.scope() always returns undefined when debugInfo is disabled.
-  // eslint-disable-next-line no-unused-vars
   setModalSize( size ) {
-    // Modal size is unchangeable after initialization. This allows us to fetch the dialogs scope and change it.
+    // Modal size is unchangeable after initialization. This fetches the modal and changes the size classes.
     // eslint-disable-next-line angular/document-service
-    // let scope = angular.element( document.getElementsByClassName( 'modal-dialog' ) ).scope();
-    // scope.size = size;
+    let modal = angular.element( document.getElementsByClassName( 'modal-dialog' ) );
+    modal.removeClass( 'modal-sm modal-md modal-lg' );
+    if ( angular.isDefined( size ) ) {
+      modal.addClass( `modal-${size}` );
+    }
   }
 }
 
