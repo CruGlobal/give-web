@@ -123,19 +123,19 @@
 @import "generic/bourbon/bourbon";
 
 // Core variables and mixins
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
 
 @import "generic/tools";
 @import "settings";
 @import "overrides";
 @import "generic/mixins";
 
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 
 // Reset and dependencies
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/normalize";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/print";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/glyphicons";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/print";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
 
 /**
  * Crubrand Overrides to Bootstrap Files
@@ -150,8 +150,8 @@
 @import "base/figcaption";
 @import "base/quotes";
 
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/grid";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/tables";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
 
 
 /* Crubrand variation of bootstrap's forms and buttons */
@@ -160,37 +160,37 @@
 
 
 // Components
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/component-animations";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/dropdowns";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/button-groups";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/input-groups";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/navs";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/dropdowns";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navs";
 
 
 /* Crubrand variation of bootstrap's navbar */
 @import "bootstrap-variations/navbar";
 
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/breadcrumbs";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs";
 
 /* Crubrand variation of bootstrap's pagination */
 @import "bootstrap-variations/pagination";
 
 
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/pager";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/labels";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/badges";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/jumbotron";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/thumbnails";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/alerts";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/progress-bars";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/media";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/list-group";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/pager";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/labels";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/badges";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/alerts";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/media";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/list-group";
 
 @import "bootstrap-variations/panels";
 
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-embed";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/wells";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/close";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/wells";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";
 
 //@import "bootstrap-variations/media";
 
@@ -212,16 +212,16 @@
 /**
  * Bootstrap Components w/ JavaScript
  */
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/modals";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/tooltip";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/popovers";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/carousel";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/modals";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/popovers";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/carousel";
 
 /**
  * Bootstrap Utility Classes
  */
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/utilities";
-@import "../bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-utilities";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
 
 
 /**

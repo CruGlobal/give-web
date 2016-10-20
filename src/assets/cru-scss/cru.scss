@@ -117,89 +117,89 @@
  $IMPORTS
 \*------------------------------------*/
 // Core variables and mixins
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
 
-@import "../bower_components/crubrand/generic/tools";
-@import "../bower_components/crubrand/settings";
-@import "../bower_components/crubrand/overrides";
+@import "../crubrand/generic/tools";
+@import "../crubrand/settings";
+@import "../crubrand/overrides";
 
 @import "cru-settings";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 
-@import "../bower_components/crubrand/generic/mixins";
-@import "../bower_components/crubrand/generic/bourbon/bourbon";
+@import "../crubrand/generic/mixins";
+@import "../crubrand/generic/bourbon/bourbon";
 
 // Reset and dependencies
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/normalize";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/print";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/glyphicons";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/print";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
 
 // Core CSS
-@import "../bower_components/crubrand/bootstrap-variations/scaffolding";
-@import "../bower_components/crubrand/bootstrap-variations/type";
+@import "../crubrand/bootstrap-variations/scaffolding";
+@import "../crubrand/bootstrap-variations/type";
 
-@import "../bower_components/crubrand/base/figcaption";
-@import "../bower_components/crubrand/base/quotes";
+@import "../crubrand/base/figcaption";
+@import "../crubrand/base/quotes";
 
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/grid";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/tables";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
 
-@import "../bower_components/crubrand/bootstrap-variations/forms";
-@import "../bower_components/crubrand/bootstrap-variations/buttons";
+@import "../crubrand/bootstrap-variations/forms";
+@import "../crubrand/bootstrap-variations/buttons";
 
 // Cru Buttons
-@import "../bower_components/crubrand/modules/buttons";
+@import "../crubrand/modules/buttons";
 
-@import "../bower_components/crubrand/base/images";
+@import "../crubrand/base/images";
 
 // Components
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/component-animations";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
 @import "bootstrap-replacement/dropdowns";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/button-groups";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/input-groups";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
 @import "bootstrap-replacement/navs";
 
 
-@import "../bower_components/crubrand/modules/list-bare";
-// @import "../bower_components/crubrand/modules/list-decimal";
-@import "../bower_components/crubrand/modules/list-block";
-@import "../bower_components/crubrand/modules/list-inline";
-@import "../bower_components/crubrand/modules/list-ui";
+@import "../crubrand/modules/list-bare";
+// @import "../crubrand/modules/list-decimal";
+@import "../crubrand/modules/list-block";
+@import "../crubrand/modules/list-inline";
+@import "../crubrand/modules/list-ui";
 
 @import "bootstrap-replacement/navbar";
 
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/breadcrumbs";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs";
 
-@import "../bower_components/crubrand/bootstrap-variations/pagination";
-@import "../bower_components/crubrand/modules/pagination";
+@import "../crubrand/bootstrap-variations/pagination";
+@import "../crubrand/modules/pagination";
 
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/pager";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/labels";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/badges";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/jumbotron";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/thumbnails";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/alerts";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/progress-bars";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/media";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/list-group";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/pager";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/labels";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/badges";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/alerts";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/media";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/list-group";
 
-@import "../bower_components/crubrand/bootstrap-variations/panels";
+@import "../crubrand/bootstrap-variations/panels";
 
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-embed";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/wells";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/close";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/wells";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";
 
 // Components w/ JavaScript
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/modals";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/tooltip";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/popovers";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/carousel";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/modals";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/popovers";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/carousel";
 
-@import "../bower_components/crubrand/modules/cru-logo";
+@import "../crubrand/modules/cru-logo";
 
 @import "cruicons";
 
-@import "../bower_components/crubrand/modules/pullquotes";
+@import "../crubrand/modules/pullquotes";
 
 @import "base";
 @import "header";
@@ -217,7 +217,7 @@
 @import "navigation-off-canvas";
 @import "partial-benefits";
 
-@import "../bower_components/crubrand/modules/layout";
+@import "../crubrand/modules/layout";
 
 @import "slider";
 @import "article";
@@ -238,11 +238,11 @@
 
 @import "js-states";
 
-@import "../bower_components/crubrand/generic/spacing";
-@import "../bower_components/crubrand/generic/helpers";
-@import "../bower_components/crubrand/generic/utilities";
+@import "../crubrand/generic/spacing";
+@import "../crubrand/generic/helpers";
+@import "../crubrand/generic/utilities";
 
 // Utility classes
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/utilities";
-@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-utilities";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
 @import "shame";
