@@ -68,6 +68,28 @@ describe( 'nav', function () {
     $ctrl.$onInit();
     expect( $ctrl.templateUrl ).toContain( 'mobile');
   });
+
+  it('to build sub nav structure', () => {
+    $httpBackend.expectGET('/assets/nav.json').respond(200, navStructure);
+    $ctrl.getNav().subscribe((structure) => {
+      let subMenuStructure = $ctrl.makeSubNav(structure.main, ['communities', 'campus']);
+
+      expect( subMenuStructure.length ).toEqual( 2 );
+      expect( subMenuStructure[0].path ).toContain( '/communities' );
+    });
+    $httpBackend.flush();
+  });
+
+  describe( '$onInit()', () => {
+    beforeEach( () => {
+      spyOn( $ctrl, 'getNav' ).and.returnValue(Observable.of([]));
+      $ctrl.$onInit();
+    } );
+
+    it( 'getNav', () => {
+      expect( $ctrl.getNav ).toHaveBeenCalled();
+    } );
+  } );
 } );
 
 
