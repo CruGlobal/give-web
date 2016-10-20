@@ -1,4 +1,5 @@
 import angular from 'angular';
+import moment from 'moment';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -36,7 +37,7 @@ describe('cart service', () => {
           expect(self.cartService.giftDatesService.getNextDrawDate).toHaveBeenCalled();
           expect(data.items.length).toEqual(3);
           expect(data.items[0].designationNumber).toEqual('0358433');
-          expect(data.items[1].giftStartDate).toEqual(new Date(2016, 9, 9));
+          expect(data.items[1].giftStartDate.toString()).toEqual(moment('2016-10-09').toString());
 
           expect(data.cartTotal).toEqual(50);
           expect(data.frequencyTotals).toEqual([
