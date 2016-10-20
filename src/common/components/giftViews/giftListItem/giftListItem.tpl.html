@@ -14,13 +14,13 @@
     <label ng-switch-when="checkbox">{{$ctrl.selectLabel}}
       <input type="checkbox"
              name="selectedGift"
-             ng-model="$ctrl.gift.$$selectedGift"
-             ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: $ctrl.gift.$$selectedGift})">
+             ng-model="$ctrl.gift._selectedGift"
+             ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: $ctrl.gift._selectedGift})">
     </label>
     <label ng-switch-when="radio">{{$ctrl.selectLabel}}
       <input type="radio"
              name="selectedGift"
-             ng-model="$ctrl.gift.$$selectedGift"
+             ng-model="$ctrl.gift._selectedGift"
              ng-value="true"
              ng-change="$ctrl.onSelected({gift: $ctrl.gift, selected: true})">
     </label>
