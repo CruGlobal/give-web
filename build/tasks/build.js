@@ -31,7 +31,7 @@ gulp.task('html', function () {
 });
 
 gulp.task('scss', function () {
-  return gulp.src('src/assets/scss/styles.scss')
+  return gulp.src(paths.scss)
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
     .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
