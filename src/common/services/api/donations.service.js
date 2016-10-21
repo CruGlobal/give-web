@@ -1,6 +1,7 @@
 import angular from 'angular';
 import map from 'lodash/map';
 import flatMap from 'lodash/flatMap';
+import omit from 'lodash/omit';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/pluck';
@@ -54,54 +55,63 @@ function DonationsService( cortexApiService, profileService ) {
   function getReceipts( data ) {
     return cortexApiService
       .post( {
-        path: '/receipts/items',
+        path:           '/receipts/items',
         followLocation: true,
-        data: data
+        data:           data
       } )
-      .map( (response) => {
-        angular.forEach(response['receipt-summaries'], (item) => {
-          let link = find(response.links, (r) => {
-            return r.uri.indexOf(item['transaction-number']) != -1;
-          });
+      .map( ( response ) => {
+        angular.forEach( response['receipt-summaries'], ( item ) => {
+          let link = find( response.links, ( r ) => {
+            return r.uri.indexOf( item['transaction-number'] ) != -1;
+          } );
           item['pdf-link'] = link;
-        });
+        } );
         return response;
-      })
+      } )
       .pluck( 'receipt-summaries' );
   }
 
   function getRecurringGifts() {
     return Observable.forkJoin(
       cortexApiService.get( {
-          path: ['profiles', cortexApiService.scope, 'default'],
-          zoom: {
-            gifts: 'givingdashboard:managerecurringdonations'
-          }
-        } )
+        path: ['profiles', cortexApiService.scope, 'default'],
+        zoom: {
+          gifts: 'givingdashboard:managerecurringdonations'
+        }
+      } )
         .pluck( 'gifts' ),
       profileService.getPaymentMethods()
-      )
-      .map(([gifts, paymentMethods]) => {
-        return flatMap(gifts.donations, donation => {
-          return map(donation['donation-lines'], donationLine => {
+    )
+      .map( ( [gifts, paymentMethods] ) => {
+        return flatMap( gifts.donations, donation => {
+          return map( donation['donation-lines'], donationLine => {
             donationLine.rate = donation.rate;
             donationLine['recurring-day-of-month'] = donation['recurring-day-of-month'];
             donationLine['next-draw-date'] = donation['next-draw-date'];
-            donationLine.paymentMethod = find(paymentMethods, (paymentMethod) => {
-              return donationLine['payment-method-id'] === paymentMethod.self.uri.split('/').pop();
-            });
+            donationLine.paymentMethod = find( paymentMethods, ( paymentMethod ) => {
+              return donationLine['payment-method-id'] === paymentMethod.self.uri.split( '/' ).pop();
+            } );
             return donationLine;
-          });
-        });
-      });
+          } );
+        } );
+      } );
+  }
+
+  function updateRecurringGifts( gifts ) {
+    gifts = angular.isArray( gifts ) ? gifts : [gifts];
+    return cortexApiService.put( {
+      path: ['donations', 'recurring', cortexApiService.scope, 'active'],
+      data: {donations: map( gifts, ( gift ) => omit( gift, ['_selectedGift', 'paymentMethod'] ) )}
+    } );
   }
 
   return {
-    getHistoricalGifts:  getHistoricalGifts,
-    getRecipients:       getRecipients,
-    getRecipientDetails: getRecipientDetails,
-    getReceipts:         getReceipts,
-    getRecurringGifts: getRecurringGifts
+    getHistoricalGifts:   getHistoricalGifts,
+    getRecipients:        getRecipients,
+    getRecipientDetails:  getRecipientDetails,
+    getReceipts:          getReceipts,
+    getRecurringGifts:    getRecurringGifts,
+    updateRecurringGifts: updateRecurringGifts
   };
 }
 
