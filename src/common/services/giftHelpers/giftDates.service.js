@@ -3,17 +3,14 @@ import moment from 'moment';
 import range from 'lodash/range';
 import map from 'lodash/map';
 import toString from 'lodash/toString';
-import 'rxjs/add/operator/pluck';
-
-import cortexApiService from '../cortexApi.service';
 
 let serviceName = 'giftDatesService';
 
 class Profile {
 
   /*@ngInject*/
-  constructor(cortexApiService){
-    this.cortexApiService = cortexApiService;
+  constructor(){
+
   }
 
   possibleTransactionDays() {
@@ -29,14 +26,6 @@ class Profile {
     });
     months.push('and ' + months.pop());
     return months.join(', ');
-  }
-
-  getNextDrawDate(){
-    return this.cortexApiService.get({
-        path: ['nextdrawdate'],
-        cache: true
-      })
-      .pluck('next-draw-date');
   }
 
   // Given a transactionDay, find the next occurrence of that day on or after nextDrawDate
@@ -65,6 +54,6 @@ class Profile {
 
 export default angular
   .module(serviceName, [
-    cortexApiService.name
+
   ])
   .service(serviceName, Profile);

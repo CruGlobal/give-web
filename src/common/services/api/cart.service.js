@@ -5,6 +5,7 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 
 import cortexApiService from '../cortexApi.service';
+import commonService from './common.service';
 import giftDatesService from '../giftHelpers/giftDates.service';
 
 let serviceName = 'cartService';
@@ -12,8 +13,9 @@ let serviceName = 'cartService';
 class Cart {
 
   /*@ngInject*/
-  constructor(cortexApiService, giftDatesService){
+  constructor(cortexApiService, commonService, giftDatesService){
     this.cortexApiService = cortexApiService;
+    this.commonService = commonService;
     this.giftDatesService = giftDatesService;
   }
 
@@ -23,7 +25,7 @@ class Cart {
         params: {
           zoom: 'lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,lineitems:element:itemfields'
         }
-      }), this.giftDatesService.getNextDrawDate())
+      }), this.commonService.getNextDrawDate())
       .map(([cartResponse, nextDrawDate]) => {
         if (!cartResponse || !cartResponse._lineitems) {
           return {};
@@ -134,6 +136,7 @@ class Cart {
 export default angular
   .module(serviceName, [
     cortexApiService.name,
+    commonService.name,
     giftDatesService.name
   ])
   .service(serviceName, Cart);

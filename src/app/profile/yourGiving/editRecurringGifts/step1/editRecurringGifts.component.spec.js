@@ -29,7 +29,7 @@ describe('editRecurringGiftsModal', () => {
     describe('loadGifts', () => {
       it('should load gifts', () => {
         spyOn(self.controller.donationsService, 'getRecurringGifts').and.returnValue(Observable.of('gifts response'));
-        spyOn(self.controller.giftDatesService, 'getNextDrawDate').and.returnValue(Observable.of('nextDrawDate response'));
+        spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.of('nextDrawDate response'));
         self.controller.loadGifts();
         expect(self.controller.loading).toEqual(false);
         expect(self.controller.loadingError).toEqual(false);
@@ -38,7 +38,7 @@ describe('editRecurringGiftsModal', () => {
       });
       it('should handle an error loading gifts', () => {
         spyOn(self.controller.donationsService, 'getRecurringGifts').and.returnValue(Observable.throw('gifts error'));
-        spyOn(self.controller.giftDatesService, 'getNextDrawDate').and.returnValue(Observable.throw('nextDrawDate error'));
+        spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.throw('nextDrawDate error'));
         self.controller.loadGifts();
         expect(self.controller.loading).toEqual(false);
         expect(self.controller.loadingError).toEqual(true);
