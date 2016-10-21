@@ -10,7 +10,7 @@ import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import modalStateService from 'common/services/modalState.service';
-import giftDatesService from 'common/services/giftHelpers/giftDates.service';
+import {possibleTransactionDays, startDate} from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 
@@ -25,13 +25,15 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, giftDatesService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
+  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.modalStateService = modalStateService;
-    this.giftDatesService = giftDatesService;
+    this.possibleTransactionDays = possibleTransactionDays;
+    this.startDate = startDate;
+
     this.productData = productData;
     this.nextDrawDate = nextDrawDate;
     this.itemConfig = itemConfig;
@@ -144,7 +146,6 @@ export default angular
     designationsService.name,
     cartService.name,
     modalStateService.name,
-    giftDatesService.name,
     desigSrcDirective.name,
     showErrors.name
   ] )
