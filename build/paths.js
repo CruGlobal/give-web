@@ -5,6 +5,7 @@ module.exports = {
   json: 'src/**/*.json',
   templates: 'src/**/*.html',
   scss: ['src/app/**/*.scss', 'src/common/**/*.scss'],
+  scssWatch: ['src/**/*.scss'],
   srcDir: 'src/',
   output: 'dist/',
   outputCss: 'dist/**/*.css',
