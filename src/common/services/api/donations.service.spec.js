@@ -130,4 +130,95 @@ describe( 'donations service', () => {
       $httpBackend.flush();
     } );
   } );
+
+  describe( 'updateRecurringGifts' , () => {
+    let gift;
+    beforeEach(() => {
+      gift = {
+        amount: 25,
+        _selectedGift: true,
+        'designation-name': 'David and Margo Neibling (0105987)',
+        'designation-number': '0105987',
+        'donation-line-row-id': '1-GVVEB6',
+        'donation-line-status': 'Standard',
+        'payment-method-id': 'giydcnzyga=',
+        'updated-donation-line-status': '',
+        'updated-payment-method-id': '',
+        'updated-rate': {recurrence: {interval: ''}},
+        'updated-recurring-day-of-month': '',
+        'updated-start-month': '',
+        'updated-start-year': '',
+        rate: {recurrence: {interval: 'Monthly'}},
+        'recurring-day-of-month': '15',
+        'next-draw-date': {'display-value': '2016-01-15', value: 1452816000000},
+        paymentMethod: {"account-type": "Savings"}
+      };
+    });
+
+    it('should update a recurring gift', () => {
+      $httpBackend
+        .expectPUT( 'https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/active', {donations: [{
+          amount: 25,
+          'designation-name': 'David and Margo Neibling (0105987)',
+          'designation-number': '0105987',
+          'donation-line-row-id': '1-GVVEB6',
+          'donation-line-status': 'Standard',
+          'payment-method-id': 'giydcnzyga=',
+          'updated-donation-line-status': '',
+          'updated-payment-method-id': '',
+          'updated-rate': {recurrence: {interval: ''}},
+          'updated-recurring-day-of-month': '',
+          'updated-start-month': '',
+          'updated-start-year': '',
+          rate: {recurrence: {interval: 'Monthly'}},
+          'recurring-day-of-month': '15',
+          'next-draw-date': {'display-value': '2016-01-15', value: 1452816000000}
+        }]} )
+        .respond( 204, {} );
+
+      donationsService.updateRecurringGifts(gift).subscribe(() => {});
+      $httpBackend.flush();
+    });
+
+    it('should update recurring gifts', () => {
+      $httpBackend
+        .expectPUT( 'https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/active', {donations: [{
+          amount: 25,
+          'designation-name': 'David and Margo Neibling (0105987)',
+          'designation-number': '0105987',
+          'donation-line-row-id': '1-GVVEB6',
+          'donation-line-status': 'Standard',
+          'payment-method-id': 'giydcnzyga=',
+          'updated-donation-line-status': '',
+          'updated-payment-method-id': '',
+          'updated-rate': {recurrence: {interval: ''}},
+          'updated-recurring-day-of-month': '',
+          'updated-start-month': '',
+          'updated-start-year': '',
+          rate: {recurrence: {interval: 'Monthly'}},
+          'recurring-day-of-month': '15',
+          'next-draw-date': {'display-value': '2016-01-15', value: 1452816000000}
+        }, {
+          amount: 25,
+          'designation-name': 'David and Margo Neibling (0105987)',
+          'designation-number': '0105987',
+          'donation-line-row-id': '1-GVVEB6',
+          'donation-line-status': 'Standard',
+          'payment-method-id': 'giydcnzyga=',
+          'updated-donation-line-status': '',
+          'updated-payment-method-id': '',
+          'updated-rate': {recurrence: {interval: ''}},
+          'updated-recurring-day-of-month': '',
+          'updated-start-month': '',
+          'updated-start-year': '',
+          rate: {recurrence: {interval: 'Monthly'}},
+          'recurring-day-of-month': '15',
+          'next-draw-date': {'display-value': '2016-01-15', value: 1452816000000}
+        } ]} )
+        .respond( 204, {} );
+
+      donationsService.updateRecurringGifts([gift, gift]).subscribe(() => {});
+      $httpBackend.flush();
+    });
+  } );
 } );
