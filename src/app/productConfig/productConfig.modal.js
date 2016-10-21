@@ -12,6 +12,7 @@ import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.comp
 import modalStateService from 'common/services/modalState.service';
 import giftDatesService from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
+import showErrors from 'common/filters/showErrors.filter';
 
 let controllerName = 'productConfigController';
 export let giveGiftParams = {
@@ -144,6 +145,7 @@ export default angular
     cartService.name,
     modalStateService.name,
     giftDatesService.name,
-    desigSrcDirective.name
+    desigSrcDirective.name,
+    showErrors.name
   ] )
   .controller( controllerName, ModalInstanceCtrl );
