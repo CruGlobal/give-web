@@ -98,7 +98,7 @@ $promo-width: 200px;
   .gh-desk-promo {
     background-color: $colorGrayscale-stone;
     display: block;
-    width: 200px;
+    width: 260px;
     height: 300px;
     float: right;
     right: 0;
@@ -146,7 +146,7 @@ $promo-width: 200px;
   }
   .col-level-3 {
     background-color: $colorGrayscale-pebble;
-    border-right: 1px solid $colorCru-white;
+    border-right: none;
     display: none;
     left: $col-width;
     padding-top: $gutter*.35;
