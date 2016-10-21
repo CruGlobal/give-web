@@ -19,7 +19,6 @@ System.config({
   },
 
   map: {
-    "CruGlobal/Give_Front-end": "github:CruGlobal/Give_Front-end@master",
     "angular": "github:angular/bower-angular@1.5.8",
     "angular-animate": "github:angular/bower-angular-animate@1.5.8",
     "angular-cookies": "github:angular/bower-angular-cookies@1.5.8",

@@ -1,0 +1,36 @@
+html{
+  background-color: #fcfcfc;
+}
+.btn{
+  text-transform: none;
+  //font-size:.7rem;
+  //padding:4px 25px;
+  letter-spacing: .025em;
+}
+
+.panel {
+    margin-bottom: 29px;
+    background-color: #fff;
+    border: none;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  }
+
+  .masonry__item .panel:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+::selection {
+  background: $colorCru-gold; /* WebKit/Blink Browsers */
+  color: $colorText
+}
+::-moz-selection {
+  background: $colorCru-gold; /* Gecko Browsers */
+  color: $colorText
+}
+
+h1{
+  line-height: 1.25em;
+}

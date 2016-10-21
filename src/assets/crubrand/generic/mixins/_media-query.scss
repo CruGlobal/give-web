@@ -1,0 +1,30 @@
+/*------------------------------------*\
+    #MIXINS/MEDIA-QUERY
+\*------------------------------------*/
+
+/**
+ * Media query for easy breakpoint. Use pixel width with or without units
+ * and it will convert to em 
+ */
+$query-unit: 16px;
+
+/**
+ * Set $query1: max for a max-qidth query, defaults to min-width
+ */
+@mixin mq($point, $query1: min, $query2: width, $ie9: false) {
+    @if $ie9 == true{
+        .lt-ie9 & {
+            @content;
+        }
+   
+        @media screen and (#{$query1}-#{$query2}: strip-units($point) / strip-units($query-unit) + em) {
+            @content;
+        }
+    } 
+    
+    @else {
+        @media screen and (#{$query1}-#{$query2}: strip-units($point) / strip-units($query-unit) + em) {
+            @content;
+        }
+    }
+}

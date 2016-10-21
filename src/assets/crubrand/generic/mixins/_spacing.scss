@@ -1,0 +1,69 @@
+/*------------------------------------*\
+    #MIXINS/SPACING
+\*------------------------------------*/
+
+/**
+ *  Calculates any number of margins and paddings in one swoop
+ * 
+ * Running this is as easy 
+ * @include vertical-calc(1, 12) {}
+ *
+ * DO NOT USE AT THE MOMENT
+ */
+$base-vertical-grid: $base-spacing-unit / 4;
+
+@mixin vertical-calc($from: 1, $to: 12, $grid: $base-vertical-grid) {
+    @if $from >= 1 and $to <= 12 {
+        @for $i from $from through $to {
+            
+            .mt#{$i}
+            %mt#{$i}, {
+                // scss-lint:disable DuplicateProperty 
+                margin-top: ($grid * $i);
+                margin-top: ($grid * $i)/$rem-base + rem;
+                @content;
+                // scss-lint:enable DuplicateProperty 
+            }
+
+            .mb#{$i},
+            %mb#{$i} {
+                // scss-lint:disable DuplicateProperty 
+                margin-bottom: ($grid * $i);
+                margin-bottom: ($grid * $i)/$rem-base + rem;
+                @content;
+                // scss-lint:enable DuplicateProperty 
+            }
+
+            .mtb#{$i},
+            %mtb#{$i} {
+                @extend %mt#{$i};
+                @extend %mb#{$i};
+            }
+
+            .pt#{$i},
+            %pt#{$i} {
+                // scss-lint:disable DuplicateProperty 
+                padding-top: ($grid * $i);
+                padding-top: ($grid * $i)/$rem-base + rem;
+                @content;
+                // scss-lint:enable DuplicateProperty 
+            }
+
+            .pb#{$i},
+            %pb#{$i} {
+                // scss-lint:disable DuplicateProperty 
+                padding-bottom: ($grid * $i);
+                padding-bottom: ($grid * $i)/$rem-base + rem;
+                @content;
+                // scss-lint:enable DuplicateProperty 	
+            }
+
+            .ptb#{$i},
+            %ptb#{$i} {
+                @extend %pt#{$i};
+                @extend %pb#{$i};
+            }
+            
+        }
+    }
+}

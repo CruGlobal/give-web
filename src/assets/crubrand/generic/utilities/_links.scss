@@ -1,0 +1,36 @@
+/*------------------------------------*\
+    #LINK UTILITIES
+\*------------------------------------*/
+
+/**
+ * Clean link
+ *
+ * A link without any text-decoration at all.
+ */
+
+.u-linkClean,
+%u-linkClean {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration: none !important;
+    }
+}
+
+/**
+ * Block-level link
+ *
+ * Combination of traits commonly used in vertical navigation lists.
+ */
+
+.u-linkBlock,
+%u-linkBlock{
+    &,
+    &:hover,
+    &:focus,
+    &:active{
+        display: block !important;
+        text-decoration: none !important;
+    }
+}

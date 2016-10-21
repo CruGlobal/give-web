@@ -1,0 +1,22 @@
+// ********** This scss file is only needed for gh-pages to correct relative links to be able to use icons both remote and local. ********** //
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url("/assets/fonts/glyphicons-halflings-regular.eot");
+  src: url("/assets/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("/assets/fonts/glyphicons-halflings-regular.woff") format("woff"), url("/assets/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+
+  @font-face {
+    font-family: "cruicons";
+    src: url("/assets/fonts/cruicons.eot?13550619");
+    src: url("/assets/fonts/cruicons.eot?13550619#iefix") format("embedded-opentype"), url("/assets/fonts/cruicons.woff?13550619") format("woff"), url("/assets/fonts/cruicons.ttf?13550619") format("truetype"), url("/assets/fonts/cruicons.svg?13550619#cruicons") format("svg");
+    font-weight: normal;
+    font-style: normal; }
+  /* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+  /* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+  /*
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+      font-family: 'cruicons';
+      src: url('../font/cruicons.svg?54093663#cruicons') format('svg');
+    }
+  } */

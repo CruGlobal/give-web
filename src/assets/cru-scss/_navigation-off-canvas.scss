@@ -1,0 +1,16 @@
+/*------------------------------------*\
+    #NAVIGATION-OFF-CANVAS
+\*------------------------------------*/
+.siteNav > .nav-item,
+.siteNav > .nav-item > .primary-link {
+    @include mq($nav-break-max, max) {
+        display: block;
+        width: 100%;
+    }
+}
+
+.siteNav > .nav-item {
+    @include mq($nav-break-max, max) {
+        border-bottom: 1px solid #333;
+    }
+}

@@ -1,0 +1,333 @@
+$headerHeight: 51px;
+
+
+.is-open--lunchMenu body {
+    overflow: hidden;
+    -webkit-overflow-scrolling: none;
+    max-height: 100%;
+}
+
+.globalNavigation {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $colorGrayscale-pebble;
+    display: inline-block;
+    vertical-align: top;
+    //height: $headerHeight;
+
+    @include mq(896px) {
+        width: 90%;
+        position: relative;
+        display: none;
+    }
+}
+
+.lunchMenu-open {
+     text-transform: uppercase;
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #3a3a3a;
+    margin: 0;
+    padding: 0 18px;
+
+    @include animation-duration(1s);
+    @include animation-timing-function(ease-in-out);
+
+    @include mq(840px) {
+        display: none;
+    }
+
+    .is-open--lunchMenu & {
+        display: none;
+    }
+
+    span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: $headerHeight;
+    }
+}
+
+.lunchMenu-close {
+    text-transform: uppercase;
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #3a3a3a;
+    margin: 0;
+    padding: 0 18px;
+    display: none;
+
+    .is-open--lunchMenu & {
+        display: block;
+    }
+
+    span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: $headerHeight;
+    }
+}
+
+.lunchMenu {
+    position: fixed;
+    z-index: -100;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: $headerHeight 0 25px;
+    background: #fff;
+    overflow-x: hidden;
+    -ms-overflow-style: none;
+    visibility: hidden;
+
+    @include opacity(0);
+    @include backface-visibility(hidden);
+    @include transition(opacity 0.2s ease);
+
+    .is-open--lunchMenu & {
+        visibility: visible;
+        z-index: 1000;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+
+        @include opacity(1);
+    }
+
+    .btn-group {
+        width: 100%;
+    }
+
+    .btn-group,
+    .listBlock,
+    .globalSearch-form {
+        @include transition-delay(0.25s);
+    }
+}
+
+.lunchMenu-link {
+    width: 100%;
+    padding: 0 18px;
+    line-height: 60px;
+    border: 1px solid transparent;
+    border-bottom-color: #e7e7e7;
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: $colorText;
+
+
+    .has-submenu{
+        //border-top-color: #e7e7e7;
+        color: $colorText;
+        background: $colorGrayscale-stone;
+    }
+
+    .dropdownWrap:first-of-type &{
+        //border-top-color: #e7e7e7;
+        color: $colorText;
+        background: $colorGrayscale-stone;
+    }
+}
+
+.dropdownWrap .lunchMenu-link--primary {
+    width: 85%;
+}
+/**
+.globalSearch-form {
+    height: 62px;
+
+    @include mq(839px, max) {
+        width: 100%;
+    }
+
+    .form-group,
+    .globalSearch-btn {
+        float: left;
+    }
+
+    .form-group {
+        @include mq(839px, max) {
+            width: 85%;
+        }
+    }
+
+    .globalSearch-btn {
+        @include mq(839px, max) {
+            width: 15%;
+            height: 62px
+        }
+    }
+
+    .form-group .globalSearch-input {
+        @include mq(839px, max) {
+            width: 100%;
+            height: 62px;
+            background-color: #f4f4f4;
+            box-shadow: none;
+        }
+    }
+}
+*/
+.globalSearch-form{
+
+    .form-group {
+        width: 100%;
+        vertical-align: middle;
+    }
+
+    &,
+    .globalSearch-item {
+        height: 62px;
+    }
+
+    .globalSearch-item {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .globalSearch-input {
+        width: 70%;
+        font-size: 20px;
+        padding: 0 18px;
+        box-shadow: none;
+
+        @include mq(550px) {
+            width: 80%;
+        }
+    }
+
+    .globalSearch-btn,
+    .globalSearch-select {
+        width: 15%;
+        border-left: 1px solid #e7e7e7;
+        border-color: rgba(216, 216, 216, 0.35);
+
+        @include mq(550px) {
+            width: 10%;
+        }
+    }
+
+    .globalSearch-select {
+        text-indent: -9999px;
+        background-position: center center;
+        box-shadow: none;
+
+        @include appearance(none);
+    }
+}
+
+.lunchMenu {
+    .dropdownWrap {
+        > .dropdown {
+            overflow: hidden;
+        }
+    }
+
+    .dropdown {
+        visibility: hidden;
+        height: 0;
+        max-height: 0;
+
+        @include opacity(0);
+    }
+
+    .dropdownWrap > .dropdown.is-open {
+        overflow: initial;
+        border-bottom: 1px solid #e7e7e7
+    }
+
+    .dropdown.is-open {
+        height: auto;
+        max-height: 100%;
+        visibility: visible;
+
+        @include opacity(1);
+    }
+}
+
+
+.dropdown .nav-item {
+    padding: 6px 18px;
+    text-transform: none;
+    font-weight: 400;
+
+    &:active,
+    &:focus,
+    &:hover{
+        background-color: #f7f7f7
+    }
+}
+
+.dropdown-actionBtn {
+    position: relative;
+    display:  inline-block;
+
+    span {
+        position: relative;
+        top: 15px;
+        float: right;
+
+        &:before {
+            @include transition(rotate 0.2s ease);
+            @include transform(rotate(90deg));
+        }
+
+        &:before,
+        &:after {
+            position: absolute;
+            right: 0;
+            content: '';
+            width: 15px;
+            height: 2px;
+            background-color: #000;
+            display: block;
+        }
+    }
+
+    .is-open--dropdown & {
+        span {
+            &:before {
+                @include transform(rotate(0));
+            }
+        }
+    }
+}
+
+.lunchMenu-icon {
+    background-position: center right;
+    padding-right: 60px;
+}
+
+.lunchMenu .actionBtn {
+    height: 60px;
+    border-radius: 0;
+}
+
+.globalSearch-choices {
+    visibility: hidden;
+    width: 100%;
+    font-size: 19px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,0.15);
+    height: 0;
+
+    @include opacity(0);
+    @include transition(height 0.25s ease);
+    @include box-shadow(0 6px 12px rgba(0,0,0,0.175));
+
+    &.is-open--searchChoices {
+        position: absolute;
+        visibility: visible;
+        z-index: 1000;
+        height: 90px;
+        @include transition(height 0.25s ease);
+        @include opacity(1);
+
+    }
+}

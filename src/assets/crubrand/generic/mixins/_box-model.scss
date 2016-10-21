@@ -1,0 +1,14 @@
+/*------------------------------------*\
+    #MIXINS/BOX-MODEL
+\*------------------------------------*/
+    
+/**
+ * Box Sizing
+ */
+@mixin box-sizing($boxmodel) {
+    // scss-lint:disable VendorPrefixes Indentation
+    -webkit-box-sizing: $boxmodel;
+       -moz-box-sizing: $boxmodel;
+            box-sizing: $boxmodel;
+    // scss-lint:enable VendorPrefixes Indentation 
+}

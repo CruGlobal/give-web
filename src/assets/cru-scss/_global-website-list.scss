@@ -1,0 +1,183 @@
+.globalWebsites--is-open {
+    padding-top: 0;
+    overflow-x: hidden;
+    background-image: url("../images/globalWebsites--small.jpg");
+
+    @include mq(480px) {
+        background-image: url("../images/globalWebsites--medium.jpg");
+    }
+
+    @include mq(720px) {
+        background-image: url("../images/globalWebsites--large.jpg");
+    }
+
+    @include mq(1024px) {
+        background-image: url("../images/globalWebsites--huge.jpg");
+    }
+
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: top center;
+
+    .navToggle {
+        color: $colorCru-white;
+        z-index: 900;
+
+        &:hover {
+            color: $colorCru-white;
+        }
+    }
+}
+
+.globalButton {
+
+    @include mq($nav-break-min, max) {
+        position: absolute !important;
+        top: 15px;
+        left: 15px;
+    }
+
+    @include mq($nav-break-min) {
+        float: right !important;
+    }
+}
+
+.globalWebsites-sidebar {
+
+    //margin-bottom: 999999em;
+    margin-left: 25px;
+    padding-bottom: 999999em;
+    position: relative;
+    padding-top: 36px;
+    background: rgba(0, 0, 0, 0.25);
+
+    @include mq(550px, max) {
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-left: 0;
+    }
+}
+
+.globalWebsites-continents {
+    margin-bottom: 999999em;
+    margin-left: 25px;
+    padding-bottom: 999999em;
+    position: relative;
+    padding-top: 36px;
+    //background: rgba(0,0,0,.5);
+
+    @include mq(550px, max) {
+        display: none;
+    }
+
+    @include mq(992px, max) {
+        margin-bottom: 0;
+        padding-top: 36px;
+        padding-bottom: 0;
+        margin-left: 0;
+    }
+
+    li {
+        border-top: 1px solid $colorCru-gray;
+        display: block;
+    }
+
+    a {
+        color: $colorGrayscale-rock;
+
+        &:hover {
+            color: $colorCru-gold;
+            font-weight: $fontWeight5;
+
+        }
+    }
+
+    > .active > a {
+        color: $colorCru-gold;
+        font-weight: $fontWeight5;
+
+
+    }
+
+}
+
+.globalWebsites-countries {
+    padding-top: 64px !important;
+
+    h1 {
+        color: $colorGrayscale-pebble;
+    }
+
+    p {
+        line-height: 1.9em;
+
+        a {
+            color: $colorGrayscale-rock;
+
+            &:hover,
+            &:active {
+                color: $colorCru-white;
+            }
+        }
+    }
+
+    a {
+        color: $colorGrayscale-rock;
+        text-decoration: none;
+
+        &:hover,
+        &:active {
+            color: $colorCru-white;
+        }
+    }
+
+    > .country {
+        display: block;
+        color: $colorGrayscale-pebble;
+        font-size: 20px;
+        letter-spacing: 0.0025em;
+        font-weight: 600;
+        padding: 9px 0;
+    }
+}
+
+.globalWebsites-website {
+
+    a {
+        color: $colorGrayscale-rock;
+
+        &:hover {
+            color: $colorCru-white;
+            text-decoration: underline;
+        }
+    }
+
+    span {
+        padding-bottom: 30px;
+    }
+
+    > .active > a {
+        color: $colorCru-blueBright;
+        font-weight: $fontWeight5;
+    }
+}
+
+
+
+
+.website {
+    border-left: 1px solid $colorCru-gray;
+    padding-left: 20px;
+    padding-bottom: 4px;
+}
+
+
+.globalWebsites-country {
+    display: block;
+    font-size: 3em;
+    font-weight: 100;
+    line-height: 60px;
+    padding: 9px 0;
+    letter-spacing: 0.025em;
+}

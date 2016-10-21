@@ -1,0 +1,39 @@
+/*------------------------------------*\
+    #LIST-INLINE
+\*------------------------------------*/
+
+/**
+ * The list-inline object simply displays a list of items in one line.
+ */
+
+// Predefine the variables below in order to alter and enable specific features.
+$listInlineDelimitCharacter:   ",\00A0" !default;
+
+.listInline,
+%listInline {
+    margin:  0;
+    padding: 0;
+    list-style: none;
+
+    > li,
+    > li > a {
+        display: inline-block;
+    }
+}
+
+/**
+ * Comma delimited list to semantically mark up lists of tags, etc.
+ *
+ * N.B. This component requires that you remove the whitespace between LIs.
+ *      The simplest (and valid) way to achieve this is by omitting the
+ *      closing `</li>` tag.
+ */
+
+.listInline--delimited,
+%listInline--delimited {
+    > li + li {
+        &:before {
+            content: "#{$listInlineDelimitCharacter}";
+        }
+    }
+}

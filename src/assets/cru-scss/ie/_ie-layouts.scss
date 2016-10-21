@@ -1,0 +1,37 @@
+/*------------------------------------*\
+    $IE-LAYOUTS
+\*------------------------------------*/
+
+.page-content {
+    padding-top: ($base-spacing-unit * 1.25);
+}
+
+.base-layout,
+%base-layout {
+    width: auto;
+
+    margin-left: auto;
+    margin-right: auto;
+    clear: both;
+}
+
+.layoutSingleColumn,
+%layoutSingleColumn {
+
+    @extend %base-layout;
+    width: 700px;
+}
+
+.layoutSingleColumn--extend {
+    @extend %base-layout;
+    width: 880px;
+}
+
+.layoutSingleColumn--wide {
+    @extend %base-layout;
+    max-width: 980px;
+}
+
+hr {
+    clear: both;
+}

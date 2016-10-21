@@ -1,0 +1,84 @@
+/*------------------------------------*\
+    $IE-NAVIGATION
+\*------------------------------------*/
+
+$site-nav-height: ($header-height - $gold-bar-size) / 2;
+$action-nav-height: ($header-height - $gold-bar-size) / 2;
+
+.globalNavigation {
+    z-index: 1031;
+    position: absolute;
+
+    top: 3px;
+    right: 0;
+    width: 882px;
+    height: 100%;
+    // scss-lint:disable DuplicateProperty
+    height: 144px;
+    // scss-lint:enable DuplicateProperty
+
+    background-color: transparent;
+    overflow: visible;
+
+    border: 0;
+}
+
+.siteNav,
+.actionNav {
+    display: inline-block;
+    width: auto;
+    position: absolute;
+    right: 0;
+}
+
+.siteNav {
+    height: $site-nav-height;
+    bottom: 18px;
+
+    .nav-link {
+        height: $site-nav-height;
+        line-height: $site-nav-height;
+        padding: 0 18px;
+
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: #404040;
+            color: $colorCru-gold;
+        }
+
+        text-align: center;
+    }
+}
+
+.actionNav {
+    top: 22px;
+    width: 50%;
+    height: $action-nav-height;
+}
+
+.nav-link {
+    position: relative;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.75;
+    letter-spacing: 0.04em;
+    color: #3a3a3a;
+    vertical-align: middle;
+}
+
+.primary-link {
+    text-align: left;
+    max-height: 100%;
+    font-weight: 400;
+    font-size: 15px;
+    padding: 0 18px;
+    letter-spacing: 0.9px;
+    vertical-align: middle;
+    color: $colorText;
+
+    .icon-down-arrow {
+        float: right;
+        display: none;
+    }
+}

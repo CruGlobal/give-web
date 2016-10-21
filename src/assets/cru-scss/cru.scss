@@ -1,0 +1,248 @@
+@charset "UTF-8";
+
+/*------------------------------------*\
+    Cru
+\*------------------------------------*/
+/**
+ * Here lies the custom styles for Cru.org.
+ *
+ */
+
+
+
+
+
+/*------------------------------------*\
+ #CONTENTS
+\*------------------------------------*/
+/**
+ * CONTENTS............You’re reading it!
+ * WARNING.............There be rocks ahead
+ * IMPORTS.............Begin importing the sections below
+ *
+ * TOOLS...............Functions that allow for some fun math
+ * MIXINS..............A series of useful mixins for the project
+ *** /ALERTS...........
+ *** /ANIMATIONS.......
+ *** /BORDER_RADIUS....
+ *** /BOX-MODEL........
+ *** /BUTTONS..........
+ *** /CENTER-BLOCK.....
+ *** /CLEARFIX.........
+ *** /FORMS............
+ *** /GRID-SETUP.......
+ *** /IMAGES...........
+ *** /LINKS............
+ *** /MEDIA-QUERY......
+ *** /MESSAGES.........
+ *** /OPACITY..........
+ *** /PANELS...........
+ *** /PREFIX...........
+ *** /SIZING...........
+ *** /SPACING..........Do not implement this at the moment
+ *** /TEXT.............
+ *** /WIDTHS...........
+ * NORMALIZE...........normalize.css
+ * RESTART.............Set some defaults
+ * CLEARFIX............
+ * SHARED..............Shared declarations
+ *
+ * BASE................High-level elements like `html`, `body`, etc.
+ * HEADINGS............Double-stranded heading hierarchy
+ * PARAGRAPHS..........
+ * QUOTES..............
+ * LISTS...............
+ * IMAGES..............
+ * TABLES..............
+ * FORMS...............
+ *
+ * GRIDS...............Fluid, proportional and nestable grids
+ * BUTTONS.............Use the beautons micro library
+ * ISLAND..............Boxed off content
+ * NAVS................Simple abstraction to put a list in horizontal nav mode
+ * PAGINATION..........Very stripped back, basic paginator
+ * BREADCRUMB..........Simple breadcrumb trail object
+ * MEDIA...............Media object
+ *
+ * HELPERS.............A series of helper classes to use arbitrarily
+ * DEBUG...............Enable to add visual flags for debugging purposes
+ *
+ * FONT................Set up the primary font
+ * COLORS..............Set base colors and variables for easy use
+ *
+ * PAGE................Overall page settings and foundation
+ * LAYOUTS.............Primary widths and wrappers
+ *
+ * TEXT................Text element settings for articles, etc.
+ * BUTTONS.............Cru specific buttons, extends brackets.css
+ * TABLES..............Cru specific tables, extends brackets.css
+ * FORMS...............Cru specific forms, extends brackets.css
+ * VIDEO...............
+ * IMAGES..............
+ * HEADER..............
+ * FOOTER..............
+ * SOCIAL..............Site and post specific social media
+ * SITE-SEARCH.........Primary site search, extends the header
+ * NAVIGATION..........Praimry site nav, extends the header
+ * DROPDOWNS...........Dropdown views for large screens, extends the navigation
+ * OFF-CANVAS..........Off canvas nav for small screens, extends the navigation
+ *
+ * CAMPUS-LOCATOR......
+ * COUNTRY-LIST........
+ * SLIDER..............Primary site slider. For now only on homepage
+ * POST................Basic post stylings for articles
+ * POST-IMAGES.........Image handling in posts, etc, extends the post
+ * PAGE-SUBNAV.........Additional navigation for community/landing pages
+ * GLOBAL-WEBSITE-LIST.Cru.org specific list of countries with websites
+ *
+ * ANIMATIONS..........Site-wide animation handling
+ * UTILITIES...........A series of helper classes to use arbitrarily
+ * DEBUG...............Enable to add visual flags for debugging purposes
+ */
+
+/*------------------------------------*\
+  $WARNING
+\*------------------------------------*/
+/**
+ * Custom styles for cru.org are meant to be place in the elements folder.
+ * They should be as specific to cru as possible and mainly ui related.
+ *
+ */
+
+
+
+
+
+/*------------------------------------*\
+ $IMPORTS
+\*------------------------------------*/
+// Core variables and mixins
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+
+@import "../crubrand/generic/tools";
+@import "../crubrand/settings";
+@import "../crubrand/overrides";
+
+@import "cru-settings";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+@import "../crubrand/generic/mixins";
+@import "../crubrand/generic/bourbon/bourbon";
+
+// Reset and dependencies
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/print";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
+
+// Core CSS
+@import "../crubrand/bootstrap-variations/scaffolding";
+@import "../crubrand/bootstrap-variations/type";
+
+@import "../crubrand/base/figcaption";
+@import "../crubrand/base/quotes";
+
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
+
+@import "../crubrand/bootstrap-variations/forms";
+@import "../crubrand/bootstrap-variations/buttons";
+
+// Cru Buttons
+@import "../crubrand/modules/buttons";
+
+@import "../crubrand/base/images";
+
+// Components
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
+@import "bootstrap-replacement/dropdowns";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
+@import "bootstrap-replacement/navs";
+
+
+@import "../crubrand/modules/list-bare";
+// @import "../crubrand/modules/list-decimal";
+@import "../crubrand/modules/list-block";
+@import "../crubrand/modules/list-inline";
+@import "../crubrand/modules/list-ui";
+
+@import "bootstrap-replacement/navbar";
+
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs";
+
+@import "../crubrand/bootstrap-variations/pagination";
+@import "../crubrand/modules/pagination";
+
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/pager";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/labels";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/badges";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/alerts";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/media";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/list-group";
+
+@import "../crubrand/bootstrap-variations/panels";
+
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/wells";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";
+
+// Components w/ JavaScript
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/modals";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/popovers";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/carousel";
+
+@import "../crubrand/modules/cru-logo";
+
+@import "cruicons";
+
+@import "../crubrand/modules/pullquotes";
+
+@import "base";
+@import "header";
+@import "tabbed-mega";
+//@import "ui-updates";
+@import "mobile";
+@import "animate";
+//@import "supernav";
+@import "global-nav";
+//@import "subnav";
+@import "action-buttons";
+@import "global-search";
+@import "global-buttons";
+//@import "navigation-dropdowns";
+@import "navigation-off-canvas";
+@import "partial-benefits";
+
+@import "../crubrand/modules/layout";
+
+@import "slider";
+@import "article";
+@import "summer-missions";
+@import "communities";
+@import "campus-locator";
+@import "post-images";
+@import "more-stories";
+@import "tiles";
+@import "social-media";
+@import "sign-in";
+@import "footer";
+@import "global-website-list";
+
+@import "tabs";
+@import "global-changes";
+@import "responsive";
+
+@import "js-states";
+
+@import "../crubrand/generic/spacing";
+@import "../crubrand/generic/helpers";
+@import "../crubrand/generic/utilities";
+
+// Utility classes
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
+@import "shame";

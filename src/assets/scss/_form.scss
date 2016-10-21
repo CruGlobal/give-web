@@ -1,0 +1,143 @@
+
+.form-group.has-error {
+  .form-control {
+    box-shadow: inset 0px 0px 0px 1px $state-danger-text;
+  }
+  label {
+    color: $state-danger-text;
+    font-weight: 600;
+    &:before {
+      content: "\f071";
+      display: inline-block;
+      font-family: "fontawesome";
+      margin-right: 6px;
+    }
+  }
+}
+
+.form-group.has-success {
+  .form-control {
+    box-shadow: inset 0px 0px 0px 1px $colorHelper-success;
+  }
+  label {
+    color: $colorHelper-success;
+    &:before {
+      content: "\f00c";
+      display: inline-block;
+      font-family: "fontawesome";
+      margin-right: 6px;
+    }
+  }
+}
+
+.is-required {
+  label {
+    &:after {
+      content: "*";
+      display: inline-block;
+      font-size: 115%;
+      font-family: "fontawesome";
+      margin-left: 6px;
+    }
+  }
+  input[type=text],
+  input[type=number],
+  input[type=password],
+  input[type=email],
+  input[type=search],
+  input[type=url],
+  input[type=tel],
+  select {
+  }
+}
+
+.form-group {
+  label:not(.error) {
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  span {
+    // removed to resolve EP-1182
+    //font-weight: normal;
+  }
+}
+
+.phone-row {
+  position: relative;
+  select.form-control-subtle {
+    display: inline-block !important;
+    width: 23%;
+    margin-right: -4px;
+  }
+  input[type=email] {
+    display: inline-block !important;
+    width: 50% !important;
+    margin: 0 1% 0 2% !important;
+    vertical-align: bottom;
+  }
+  a {
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    color: $colorHelper-wanger;
+    .fa {font-size: 18px;}
+  }
+}
+
+.person-row {
+  select.form-control-subtle {
+    display: inline-block !important;
+    width: 12%;
+  }
+  input[type=name] {
+    display: inline-block !important;
+    width: 50% !important;
+    margin: 0 1% 0 2% !important;
+    vertical-align: bottom;
+  }
+  select.prefix {
+    @include respond-to(extrasmall) {
+      padding-left: 0;
+      padding-right: 0;
+      margin-bottom: 5px;
+    }
+  }
+  input.first {
+    width: 30%;
+    @include respond-to(extrasmall) {
+      width: 73%;
+      margin-bottom: 5px;
+    }
+  }
+  input.last {
+    width: 30%;
+    @include respond-to(extrasmall) {
+      width: 60%;
+    }
+  }
+  input.middle {
+    width: 8%;
+    padding: 3px;
+    @include respond-to(extrasmall) {
+      width: 12%;
+      margin-left: 14px;
+    }
+  }
+  input.first,
+  input.last,
+  input.middle {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+}
+
+.help-block {
+  font-size: 85%;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.btn:focus, .btn:active:focus { outline: none;  -webkit-appearance: none; }

@@ -1,0 +1,86 @@
+/*------------------------------------*\
+    #ARTICLE
+\*------------------------------------*/
+
+.postArticle {
+    &,
+    &.panel p,
+    &.panel ul {
+        @include mq(700px) {
+            letter-spacing: 0.01rem;
+            /* Calculate a unitless line-height based on 31px */
+            line-height: ceil(21px / 31px)* (31px / 21px);
+            @include font-size(21px, false);
+        }
+    }
+
+    p,
+    ul {
+        margin-bottom: $base-spacing-unit;
+    }
+
+    li {
+        margin-bottom: $base-spacing-unit / 2;
+    }
+
+    figure {
+        position: relative;
+        outline: 0;
+        margin-bottom: $base-spacing-unit;
+        /* Ooyala video embedcode covers the top navigation w/o the z-index reference */
+        z-index: 0;
+    }
+}
+
+.postArticle-title {
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    word-wrap: break-word;
+}
+
+
+.postArticle-meta {
+    color: #666062;
+    line-height: 1.6;
+    margin-bottom: $base-spacing-unit / 2;
+
+    @include font-size(16px, false);
+}
+
+.accent + .accent:before,
+a + .phone + .accent:before,
+.accent + .phone:before,
+a + .phone + .phone:before {
+    content: "\2013";
+    margin-left: rem(12px);
+    margin-right: rem(12px);
+}
+
+.postArticle-details {
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+
+.postArticle-nav {
+    @extend %image--insetRight;
+
+    @include mq(980px, max) {
+        margin-bottom: $base-spacing-unit;
+        padding-top: $base-spacing-unit / 2;
+
+        border-top: 1px solid $colorCru-gray;
+        border-bottom: 1px solid $colorCru-gray;
+    }
+
+    @include mq(981px) {
+        padding-left: $base-spacing-unit / 1.25;
+
+        border-left: 1px solid $colorCru-gray;
+    }
+
+    li {
+        margin-bottom: 0;
+    }
+}

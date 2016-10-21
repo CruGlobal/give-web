@@ -1,0 +1,28 @@
+/*------------------------------------*\
+    #FEATURED STORIES
+\*------------------------------------*/
+
+.readNext {
+    padding-bottom: $base-spacing-unit;
+}
+
+.readNext-link {
+    padding: $base-spacing-unit;
+    color: inherit;
+
+    @include font-size(16.625px, false);
+    @include transition(0.25s ease);
+
+    &:hover {
+        background-color: #f2f2f2;
+    }
+}
+
+.icon--readNext:after {
+    @extend %icon-right-circle:before;
+
+    color: $colorCru-gold;
+    font-family: "cruicons";
+    padding-left: 10px;
+    font-size: 18px;
+}

@@ -1,0 +1,53 @@
+/*------------------------------------*\
+    $UTILITIES
+\*------------------------------------*/
+/**
+ * A series of helper classes to use arbitrarily. Only use a helper class if an
+ * element/component doesn’t already have a class to which you could apply this
+ * styling, e.g. if you need to float `.main-nav` left then add `float:left;` to
+ * that ruleset as opposed to adding the `.float--left` class to the markup.
+ *
+ */
+
+@import "utilities/align";
+@import "utilities/display";
+@import "utilities/layout";
+@import "utilities/links";
+@import "utilities/position";
+@import "utilities/text";
+
+// scss-lint:disable SingleLinePerProperty, SingleLinePerSelector, SpaceBeforeBrace
+
+/**
+ * Add a help cursor to any element that gives the user extra information on
+ * `:hover`.
+ */
+.informative, 
+%informative {
+    cursor: help !important;
+}
+
+/**
+ * Add a right-angled quote to links that imply movement, e.g.:
+ *
+   <a href=# class=go>Read more</a>
+ *
+ */
+.go:after, 
+%go:after {
+    content: "\00A0" "\00BB"  !important;
+}
+
+
+/**
+ * Apply capital case to an element (usually a `strong`).
+ */
+.caps, 
+%caps {
+    text-transform: uppercase !important;
+}
+
+.basic-transition, 
+%basic-transition { 
+    @include transition(250ms ease);
+}

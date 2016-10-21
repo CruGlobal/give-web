@@ -1,0 +1,202 @@
+$slider-height: 396px;
+$slider-break-min: 1000px;
+
+.main-slider {
+    width: 706px;
+    margin: 0 auto;
+}
+
+.silderWrapper {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: $base-spacing-unit;
+}
+
+.sliderControl {
+    position: absolute;
+
+    top: 25%;
+    bottom: 0;
+
+    display: block;
+
+    height: 50%;
+    min-width: 55px;
+    min-height: 60px;
+    width: 100px;
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    z-index: 3;
+
+    i {
+
+        color: #ccc;
+
+        @include transition-property(left);
+    }
+
+    &:hover {
+        .sliderControl-btn {
+            width: 64px;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        i {
+            color: $colorCru-white;
+        }
+    }
+}
+
+.slider {
+    position: relative;
+    height: 396px;
+    @include clearfix;
+}
+
+.slider-item {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+}
+
+.slider-item,
+.slider-link {
+    display: block;
+}
+
+.slider-link {
+    position: relative;
+    height: 100%;
+}
+
+/**
+ * At bat
+ */
+.slider1 {
+    left: 0;
+    z-index: 1;
+}
+
+/**
+ * On Deck
+ */
+.slider2 {
+    left: 100%;
+}
+
+/**
+ * Last up
+ */
+.slider0 {
+    right: 500%;
+}
+
+/**
+ * In the hole
+ */
+.slider3 {
+    right: 500%;
+}
+
+
+.slider4, // changed from slider5 to slider4
+.slider5, // changed from slider6 to slider5
+.slider6, // changed from slider7 to slider6
+.slider7 { // changed from slider8 to slider7
+    right: 500%;
+}
+
+.slider-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+
+    width: 100%;
+    height: 100%;
+
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    -ms-behavior: url("/backgroundsize.min.htc");
+}
+
+.article-details {
+    position: absolute;
+    padding: 0;
+    width: 100%;
+
+    bottom: -10px;
+
+    background-color: #000;
+
+    h3 {
+        display: block;
+        margin: 0;
+        padding: 13px 14px 6px;
+        line-height: 1.25em;
+        min-height: 2.5em;
+
+        color: $colorCru-white;
+
+        &:hover {
+            color: #ccc;
+        }
+    }
+}
+
+.slider1,
+.slider2 { //changed from slider2 to slider1 and slider3 to slider2
+    .article-details {
+        bottom: 0;
+    }
+}
+
+
+.sliderControl--prev {
+    left: 0;
+
+    .sliderControl-btn {
+        left: 0;
+    }
+
+    &:hover {
+        i {
+            left: -0.4em;
+        }
+    }
+}
+
+.sliderControl--next {
+    right: 0;
+
+    .sliderControl-btn {
+        right: 0;
+    }
+
+    &:hover {
+        i {
+            right: -0.4em;
+        }
+    }
+}
+
+.sliderControl-btn {
+    position: absolute;
+    top: 50%;
+    width: 48px;
+    height: 60px;
+    margin-top: -30px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 2.2em;
+
+    color: $colorCru-white;
+
+    background-color: #222;
+}

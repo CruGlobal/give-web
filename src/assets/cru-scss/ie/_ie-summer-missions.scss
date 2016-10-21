@@ -1,0 +1,22 @@
+/*------------------------------------*\
+    #SUMMER-MISSIONS
+\*------------------------------------*/
+
+.pageNav {
+    position: relative;
+    top: 73px;
+    z-index: 1;
+    text-align: center;
+}
+
+.post-article .pageNav {
+    top: $base-spacing-unit;
+}
+
+.summerMissions .post-nav li {
+    display: block;
+}
+
+.summerMissions-map {
+    height: 500px;
+}

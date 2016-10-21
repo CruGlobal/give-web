@@ -1,0 +1,10 @@
+/*------------------------------------*\
+    #FIGCAPTION
+\*------------------------------------*/
+
+figcaption {
+    line-height: 1.6;
+    margin: 5px 0 15px;
+    margin: 0.26316rem 0 0.78947rem;
+    @include font-size(14px, false);
+}
