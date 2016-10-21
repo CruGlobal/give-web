@@ -9,5 +9,5 @@ function changed(event) {
 gulp.task('watch', ['build'], function () {
   gulp.watch([ paths.source ], [ '', browserSync.reload ]).on('change', changed); //Removing the empty string seems to run all tasks...
   gulp.watch([ paths.html ], [ 'html', browserSync.reload ]).on('change', changed);
-  gulp.watch([ paths.scss ], [ 'scss' ]).on('change', changed);
+  gulp.watch([ paths.scssWatch ], [ 'scss' ]).on('change', changed);
 });
