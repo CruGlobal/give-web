@@ -79,6 +79,7 @@
       "jsencrypt": "npm:jsencrypt@^2.3.1",
       "jwt-decode": "github:auth0/jwt-decode@^2.1.0",
       "lodash": "npm:lodash@^4.14.2",
+      "moment": "npm:moment@^2.15.1",
       "ng-resize": "npm:ng-resize@^1.2.0",
       "rollbar-browser": "npm:rollbar-browser@^1.9.1",
       "rxjs": "npm:rxjs@^5.0.0-beta.11",
