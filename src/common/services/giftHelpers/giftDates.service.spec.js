@@ -47,18 +47,6 @@ describe('giftDates service', () => {
     });
   });
 
-  describe('getNextDrawDate', () => {
-    it('should get next draw date', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/nextdrawdate')
-        .respond(200, {"next-draw-date": "2016-10-01"});
-      self.giftDatesService.getNextDrawDate().subscribe(date => {
-        expect(date).toEqual('2016-10-01');
-      });
-
-      self.$httpBackend.flush();
-    });
-  });
-
   describe('startDate', () => {
     it('should calculate gift start date', () => {
       expect(self.giftDatesService.startDate('10', '2017-01-02').toString()).toEqual(moment('2017-01-10').toString());

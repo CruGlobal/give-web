@@ -8,7 +8,7 @@ import giftUpdate from 'common/components/giftViews/giftUpdate/giftUpdate.compon
 import loading from 'common/components/loading/loading.component';
 
 import donationsService from 'common/services/api/donations.service';
-import giftDatesService from 'common/services/giftHelpers/giftDates.service';
+import commonService from 'common/services/api/common.service';
 
 import template from './editRecurringGifts.tpl';
 
@@ -17,10 +17,10 @@ let componentName = 'step1EditRecurringGifts';
 class EditRecurringGiftsController {
 
   /* @ngInject */
-  constructor($log, donationsService, giftDatesService) {
+  constructor($log, donationsService, commonService) {
     this.$log = $log;
     this.donationsService = donationsService;
-    this.giftDatesService = giftDatesService;
+    this.commonService = commonService;
   }
 
   $onInit(){
@@ -30,7 +30,7 @@ class EditRecurringGiftsController {
   loadGifts(){
     this.loading = true;
     this.loadingError = false;
-    Observable.forkJoin(this.donationsService.getRecurringGifts(), this.giftDatesService.getNextDrawDate())
+    Observable.forkJoin(this.donationsService.getRecurringGifts(), this.commonService.getNextDrawDate())
       .subscribe(([gifts, nextDrawDate]) => {
           this.recurringGifts = gifts;
           this.nextDrawDate = nextDrawDate;
@@ -63,7 +63,7 @@ export default angular
     giftUpdate.name,
     loading.name,
     donationsService.name,
-    giftDatesService.name
+    commonService.name
   ])
   .component(componentName, {
     controller: EditRecurringGiftsController,

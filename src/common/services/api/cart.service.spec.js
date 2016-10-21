@@ -29,12 +29,12 @@ describe('cart service', () => {
           'lineitems:element:rate,lineitems:element:total,ratetotals:element,total,lineitems:element:itemfields')
         .respond(200, cartResponse);
 
-      spyOn(self.cartService.giftDatesService, 'getNextDrawDate').and.returnValue(Observable.of('2016-10-01'));
+      spyOn(self.cartService.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2016-10-01'));
 
       self.cartService.get()
         .subscribe((data) => {
           //verify response
-          expect(self.cartService.giftDatesService.getNextDrawDate).toHaveBeenCalled();
+          expect(self.cartService.commonService.getNextDrawDate).toHaveBeenCalled();
           expect(data.items.length).toEqual(3);
           expect(data.items[0].designationNumber).toEqual('0358433');
           expect(data.items[1].giftStartDate.toString()).toEqual(moment('2016-10-09').toString());
