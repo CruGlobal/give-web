@@ -6,17 +6,16 @@ import 'rxjs/add/operator/map';
 
 import cortexApiService from '../cortexApi.service';
 import commonService from './common.service';
-import giftDatesService from '../giftHelpers/giftDates.service';
+import {startDate} from '../giftHelpers/giftDates.service';
 
 let serviceName = 'cartService';
 
 class Cart {
 
   /*@ngInject*/
-  constructor(cortexApiService, commonService, giftDatesService){
+  constructor(cortexApiService, commonService){
     this.cortexApiService = cortexApiService;
     this.commonService = commonService;
-    this.giftDatesService = giftDatesService;
   }
 
   get() {
@@ -69,7 +68,7 @@ class Cart {
               frequency: frequencyTitle,
               amount: itemAmount,
               designationNumber: designationNumber,
-              giftStartDate: frequencyTitle !== 'Single' ? this.giftDatesService.startDate(itemConfig['recurring-day-of-month'], nextDrawDate) : null
+              giftStartDate: frequencyTitle !== 'Single' ? startDate(itemConfig['recurring-day-of-month'], nextDrawDate) : null
             });
           });
         }
@@ -136,7 +135,6 @@ class Cart {
 export default angular
   .module(serviceName, [
     cortexApiService.name,
-    commonService.name,
-    giftDatesService.name
+    commonService.name
   ])
   .service(serviceName, Cart);

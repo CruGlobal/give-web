@@ -1,6 +1,6 @@
 import angular from 'angular';
-import moment from 'moment';
 import 'angular-mocks';
+import moment from 'moment';
 
 import module from './giftUpdate.component';
 
@@ -235,12 +235,12 @@ describe('giftUpdate', () => {
 
   describe('initStartMonth', () => {
     it('should use transaction day and nextDrawDate to default updated start month and year', () => {
-      spyOn(self.controller.giftDatesService, 'startDate').and.returnValue(moment('2015-07-05'));
+      spyOn(self.controller, 'startDate').and.returnValue(moment('2015-07-05'));
       spyOn(self.controller, 'startMonthModel');
       self.controller.gift['updated-recurring-day-of-month'] = '05';
       self.controller.nextDrawDate = '2015-07-03';
       self.controller.initStartMonth();
-      expect(self.controller.giftDatesService.startDate).toHaveBeenCalledWith('05', '2015-07-03');
+      expect(self.controller.startDate).toHaveBeenCalledWith('05', '2015-07-03');
       expect(self.controller.startMonthModel).toHaveBeenCalledWith('07');
     });
   });

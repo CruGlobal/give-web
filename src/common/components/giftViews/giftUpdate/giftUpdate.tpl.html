@@ -38,7 +38,7 @@
         <label translate>Transaction Day</label>
         <select class="form-control form-control-subtle"
                 ng-model="$ctrl.transactionDayModel"
-                ng-options="o as (o | ordinal) for o in $ctrl.giftDatesService.possibleTransactionDays()"
+                ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
                 ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'])">
         </select>
       </div>
@@ -53,15 +53,15 @@
     <div class="form-group mb0">
       <label class="radio">
         <input type="radio" ng-model="$ctrl.startMonthModel" ng-value="$ctrl.giftDatesService.startDate($ctrl.transactionDayModel(), $ctrl.nextDrawDate).format('M')">
-        {{ $ctrl.giftDatesService.quarterlyMonths($ctrl.transactionDayModel(), $ctrl.nextDrawDate) }}
+        {{ $ctrl.quarterlyMonths($ctrl.transactionDayModel(), $ctrl.nextDrawDate) }}
       </label>
       <label class="radio">
         <input type="radio" ng-model="$ctrl.startMonthModel" ng-value="$ctrl.giftDatesService.startDate($ctrl.transactionDayModel(), $ctrl.nextDrawDate, 1).format('M')">
-        {{ $ctrl.giftDatesService.quarterlyMonths($ctrl.transactionDayModel(), $ctrl.nextDrawDate, 1) }}
+        {{ $ctrl.quarterlyMonths($ctrl.transactionDayModel(), $ctrl.nextDrawDate, 1) }}
       </label>
       <label class="radio">
         <input type="radio" ng-model="$ctrl.startMonthModel" ng-value="$ctrl.giftDatesService.startDate($ctrl.transactionDayModel(), $ctrl.nextDrawDate, 2).format('M')">
-        {{ $ctrl.giftDatesService.quarterlyMonths($ctrl.transactionDayModel(), $ctrl.nextDrawDate, 2) }}
+        {{ $ctrl.quarterlyMonths($ctrl.transactionDayModel(), $ctrl.nextDrawDate, 2) }}
       </label>
     </div>
   </div>

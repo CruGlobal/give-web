@@ -1,7 +1,7 @@
 import angular from 'angular';
 import moment from 'moment';
 
-import giftDatesService from 'common/services/giftHelpers/giftDates.service';
+import {startMonth, startDate, quarterlyMonths, possibleTransactionDays} from 'common/services/giftHelpers/giftDates.service';
 
 import template from './giftUpdate.tpl';
 
@@ -10,8 +10,10 @@ let componentName = 'giftUpdate';
 class GiftUpdateController {
 
   /* @ngInject */
-  constructor(giftDatesService) {
-    this.giftDatesService = giftDatesService;
+  constructor() {
+    this.startDate = startDate;
+    this.quarterlyMonths = quarterlyMonths;
+    this.possibleTransactionDays = possibleTransactionDays;
     this.possibleMonths = moment.months();
   }
 
@@ -65,7 +67,7 @@ class GiftUpdateController {
 
   startMonthModel(value){
     if(value){
-      let updatedStartDate = moment(this.giftDatesService.startMonth(this.transactionDayModel(), value, this.nextDrawDate));
+      let updatedStartDate = moment(startMonth(this.transactionDayModel(), value, this.nextDrawDate));
       if(updatedStartDate.isSame(this.gift['next-draw-date']['display-value'], 'month')){
         this.clearStartDate();
       }else {
@@ -84,7 +86,7 @@ class GiftUpdateController {
   }
 
   initStartMonth(){
-    this.startMonthModel(this.giftDatesService.startDate(this.transactionDayModel(), this.nextDrawDate).format('MM'));
+    this.startMonthModel(this.startDate(this.transactionDayModel(), this.nextDrawDate).format('MM'));
   }
 
   clearStartDate(){
@@ -95,8 +97,7 @@ class GiftUpdateController {
 
 export default angular
   .module(componentName, [
-    template.name,
-    giftDatesService.name
+    template.name
   ])
   .component(componentName, {
     controller: GiftUpdateController,
