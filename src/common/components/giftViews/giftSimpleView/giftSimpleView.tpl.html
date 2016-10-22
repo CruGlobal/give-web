@@ -1,5 +1,0 @@
-<h5 class="mt-- mb0">{{$ctrl.gift['amount'] | currency}} {{$ctrl.gift.rate.recurrence.interval}}</h5>
-<div ng-switch="$ctrl.gift.rate.recurrence.interval">
-  <small ng-switch-when="Monthly" translate>On the {{$ctrl.gift['recurring-day-of-month'] | ordinal}} day of each month</small>
-  <!-- TODO: Other intervals -->
-</div>
