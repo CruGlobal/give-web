@@ -1,20 +1,21 @@
 import angular from 'angular';
 import map from 'lodash/map';
 import flatMap from 'lodash/flatMap';
-import omit from 'lodash/omit';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/pluck';
 
 import cortexApiService from '../cortexApi.service';
 import profileService from './profile.service';
+import commonService from './common.service';
+import RecurringGiftModel from 'common/models/recurringGift.model';
 
 import find from 'lodash/find';
 
 let serviceName = 'donationsService';
 
 /*@ngInject*/
-function DonationsService( cortexApiService, profileService ) {
+function DonationsService( cortexApiService, profileService, commonService ) {
 
   function getRecipients( year ) {
     let path = ['donations', 'historical', cortexApiService.scope, 'recipient'];
@@ -80,18 +81,16 @@ function DonationsService( cortexApiService, profileService ) {
         }
       } )
         .pluck( 'gifts' ),
+      commonService.getNextDrawDate(),
       profileService.getPaymentMethods()
     )
-      .map( ( [gifts, paymentMethods] ) => {
+      .map( ( [gifts, nextDrawDate, paymentMethods] ) => {
         return flatMap( gifts.donations, donation => {
           return map( donation['donation-lines'], donationLine => {
             donationLine.rate = donation.rate;
             donationLine['recurring-day-of-month'] = donation['recurring-day-of-month'];
             donationLine['next-draw-date'] = donation['next-draw-date'];
-            donationLine.paymentMethod = find( paymentMethods, ( paymentMethod ) => {
-              return donationLine['payment-method-id'] === paymentMethod.self.uri.split( '/' ).pop();
-            } );
-            return donationLine;
+            return new RecurringGiftModel(donationLine, nextDrawDate, paymentMethods);
           } );
         } );
       } );
@@ -101,7 +100,7 @@ function DonationsService( cortexApiService, profileService ) {
     gifts = angular.isArray( gifts ) ? gifts : [gifts];
     return cortexApiService.put( {
       path: ['donations', 'recurring', cortexApiService.scope, 'active'],
-      data: {donations: map( gifts, ( gift ) => omit( gift, ['_selectedGift', 'paymentMethod'] ) )}
+      data: {donations: { 'donation-lines': map(gifts, 'toObject') } }
     } );
   }
 
@@ -118,6 +117,7 @@ function DonationsService( cortexApiService, profileService ) {
 export default angular
   .module( serviceName, [
     cortexApiService.name,
-    profileService.name
+    profileService.name,
+    commonService.name
   ] )
   .factory( serviceName, DonationsService );

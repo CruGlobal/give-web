@@ -1,10 +1,10 @@
 import angular from 'angular';
 import 'angular-mocks';
 
-import module from './giftSimpleView.component';
+import module from './giftDetailsView.component';
 
 describe( 'giftViews', () => {
-  describe( 'giftSimpleView', () => {
+  describe( 'giftDetailsView', () => {
     beforeEach( angular.mock.module( module.name ) );
     let $ctrl;
 

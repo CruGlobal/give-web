@@ -151,8 +151,8 @@ describe('edit recurring gifts modal', () => {
     it('should transition from step1EditRecurringGifts to step2AddRecentRecipients', () => {
       self.controller.state = 'step1EditRecurringGifts';
       self.controller.hasRecentRecipients = true;
-      self.controller.next(undefined, 'gift changes');
-      expect(self.controller.recurringGiftChanges).toEqual('gift changes');
+      self.controller.next(undefined, 'modified gifts');
+      expect(self.controller.recurringGifts).toEqual('modified gifts');
       expect(self.controller.state).toEqual('step2AddRecentRecipients');
     });
 
