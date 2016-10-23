@@ -8,7 +8,7 @@ install:
 script:
   - gulp lint
   - gulp test
-  - gulp release
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "dev" ]); then gulp release; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 cache:

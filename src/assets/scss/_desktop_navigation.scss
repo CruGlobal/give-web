@@ -1,4 +1,4 @@
-$col-width: 260px;
+$col-width: 280px;
 $menu-container-height: 300px;
 $promo-width: 200px;
 
@@ -17,6 +17,10 @@ $promo-width: 200px;
     &:after {
       clear: both;
     }
+  }
+
+  .container {
+    position: relative;
   }
 
   &.padded {
@@ -46,7 +50,7 @@ $promo-width: 200px;
     list-style: none;
     margin: 0;
     padding-top: 40px;
-    position: relative;
+    position: static;
     z-index: 10;
 
     li {
@@ -80,7 +84,7 @@ $promo-width: 200px;
       }
     }
     > li.open-menu .children-container {
-      padding-right: $promo-width;
+      background: $colorGrayscale-pebble;
       display: block;
     }
   }
@@ -94,9 +98,10 @@ $promo-width: 200px;
   .gh-desk-promo {
     background-color: $colorGrayscale-stone;
     display: block;
-    width: 200px;
+    width: 260px;
     height: 300px;
-    float: left;
+    float: right;
+    right: 0;
     position: absolute;
   }
 
@@ -126,12 +131,13 @@ $promo-width: 200px;
     li {
       > a {
         line-height: 1.35em;
+        padding-right: 28px;
       }
     }
 
     .has-children {
       filter: grayscale(100%);
-      background: url("/assets/img/desktop-nav-arrow.png") no-repeat right 20px center;
+      background: url("/assets/img/desktop-nav-arrow.png") no-repeat right 15px center;
       background-size: 7px;
       &:hover {
         filter: grayscale(0%);
@@ -140,7 +146,7 @@ $promo-width: 200px;
   }
   .col-level-3 {
     background-color: $colorGrayscale-pebble;
-    border-right: 1px solid $colorCru-white;
+    border-right: none;
     display: none;
     left: $col-width;
     padding-top: $gutter*.35;
@@ -156,8 +162,12 @@ $promo-width: 200px;
   }
 
   .children-container {
+    background: $colorGrayscale-pebble;
+    left: 0;
     position: absolute;
+    width: 100%;
     display: none;
+    z-index: 100;
   }
 
 

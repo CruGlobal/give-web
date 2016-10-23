@@ -35,6 +35,7 @@ System.config({
     "jsencrypt": "npm:jsencrypt@2.3.1",
     "jwt-decode": "github:auth0/jwt-decode@2.1.0",
     "lodash": "npm:lodash@4.15.0",
+    "moment": "npm:moment@2.15.1",
     "ng-resize": "npm:ng-resize@1.2.0",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
