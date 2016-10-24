@@ -1,34 +1,36 @@
 <cru-nav></cru-nav>
-<a href="cart.html">Cart</a>
-<a href="sign-in.html">Sign-In</a>
-<a href="profile/payment-methods.html">Payment Methods</a>
-<a href="checkout.html">Checkout</a>
-<a href="thank-you.html">Thank You</a>
-<a href="your-giving.html">Your Giving</a>
+
+<ul class="list-inline container">
+  <li><a href="cart.html">Cart</a></li>
+  <li><a href="sign-in.html">Sign-In</a></li>
+  <li><a href="profile/payment-methods.html">Payment Methods</a></li>
+  <li><a href="checkout.html">Checkout</a></li>
+  <li><a href="thank-you.html">Thank You</a></li>
+  <li><a href="your-giving.html">Your Giving</a></li>
+</ul>
+
 <ui-view></ui-view>
 
 <div class="test">
-    <div class="container container-edge-small container-edge-extrasmall">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="panel">
-              <div class="panel-body">
-                <h3 class="panel-name">Debug tools</h3>
-                <form method="get" action="/search-results.html">
-                  <div class="input-group">
-                    <input class="search-field form-control designationSearch-input" name="q" placeholder="Designation Search" type="text">
-                    <div class="input-group-btn">
-                      <button class="globalSearch-button  btn  btn-subtle" value="Go" type="submit"> <i class="icon-search"></i> </button>
-                    </div>
-                  </div>
-                </form>
-
-                <home-sign-in></home-sign-in>
+  <div class="container container-edge-small container-edge-extrasmall">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel">
+          <div class="panel-body">
+            <h3 class="panel-name">Debug tools</h3>
+            <form method="get" action="/search-results.html">
+              <div class="input-group">
+                <input class="search-field form-control designationSearch-input" name="q" placeholder="Designation Search" type="text">
+                <div class="input-group-btn">
+                  <button class="globalSearch-button  btn  btn-subtle" value="Go" type="submit"> <i class="icon-search"></i> </button>
+                </div>
               </div>
-            </div>
+            </form>
+
+            <home-sign-in></home-sign-in>
           </div>
         </div>
       </div>
+    </div>
   </div>
 </div>

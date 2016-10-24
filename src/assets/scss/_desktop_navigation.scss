@@ -103,6 +103,23 @@ $promo-width: 200px;
     float: right;
     right: 0;
     position: absolute;
+    padding: 0;
+    margin: 0;
+
+    a {
+      margin: 0;
+      padding: 0 !important;
+      line-height: 0;
+      
+      img {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+        max-width: 100%;
+      }
+    }
   }
 
   .gh-offset-2 {
@@ -175,6 +192,9 @@ $promo-width: 200px;
     margin-top: 8px;
     float: right;
     width: 250px;
+    position: absolute;
+    right: 0;
+    z-index: 0;
 
     .cart {
       float: right;
@@ -182,7 +202,7 @@ $promo-width: 200px;
       background: url("/assets/img/desktop-cart.png") no-repeat;
       background-size: 20px 20px;
       width: 20px;
-      height: 20px;
+      height: 22px;
       cursor: pointer;
 
       .dropdown {
@@ -279,6 +299,7 @@ $promo-width: 200px;
       font-weight: 600;
       line-height: 1.2;
       text-align: right;
+      line-height: 22px;
     }
 
     .sign-in {
@@ -358,7 +379,7 @@ $promo-width: 200px;
       background: url("/assets/img/search-ellipsis-grey.png") no-repeat right 22px top;
       background-size: 4px 20px;
       width: 60px;
-      height: 40px;
+      height: 22px;
       cursor: pointer;
 
       &:hover {
@@ -464,7 +485,10 @@ $promo-width: 200px;
     display: block;
     background-size: 20px 20px;
     height: 20px;
-    width: 100%;
+    width: 40px;
+    right: 0;
+    position: absolute;
+    top: 40px;
   }
 
   .search-icon-off {
