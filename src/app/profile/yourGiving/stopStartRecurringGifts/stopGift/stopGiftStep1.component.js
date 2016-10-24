@@ -4,7 +4,7 @@ import find from 'lodash/find';
 import filter from 'lodash/filter';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
-import giftSimpleView from 'common/components/giftViews/giftSimpleView/giftSimpleView.component';
+import giftSummaryView from 'common/components/giftViews/giftSummaryView/giftSummaryView.component';
 
 let componentName = 'stopGiftStep1';
 
@@ -33,7 +33,7 @@ export default angular
   .module( componentName, [
     template.name,
     giftListItem.name,
-    giftSimpleView.name
+    giftSummaryView.name
   ] )
   .component( componentName, {
       controller:  StopGiftStep1Controller,

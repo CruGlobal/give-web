@@ -5,6 +5,7 @@ import loadingComponent from 'common/components/loading/loading.component';
 import step0AddUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
 import step0paymentMethodList from './step0/paymentMethodList.component';
 import step1EditRecurringGifts from './step1/editRecurringGifts.component';
+import step4ConfirmRecurringGifts from './step4/confirmRecurringGifts.component';
 
 import profileService from 'common/services/api/profile.service';
 
@@ -41,7 +42,7 @@ class EditRecurringGiftsModalController {
       });
   }
 
-  next(paymentMethod, recurringGiftChanges, additions){
+  next(paymentMethod, recurringGifts, additions){
     switch(this.state){
       case 'loading':
         if(this.hasValidPaymentMethods){
@@ -63,7 +64,7 @@ class EditRecurringGiftsModalController {
         this.loadPaymentMethods();
         break;
       case 'step1EditRecurringGifts':
-        this.recurringGiftChanges = recurringGiftChanges;
+        this.recurringGifts = recurringGifts;
         if(this.hasRecentRecipients){
           this.state = 'step2AddRecentRecipients';
         }else{
@@ -121,6 +122,7 @@ export default angular
     step0AddUpdatePaymentMethod.name,
     step0paymentMethodList.name,
     step1EditRecurringGifts.name,
+    step4ConfirmRecurringGifts.name,
     profileService.name
   ])
   .component(componentName, {
