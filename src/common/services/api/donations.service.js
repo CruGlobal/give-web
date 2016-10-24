@@ -1,6 +1,7 @@
 import angular from 'angular';
 import map from 'lodash/map';
 import flatMap from 'lodash/flatMap';
+import groupBy from 'lodash/groupBy';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/pluck';
@@ -87,10 +88,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .map( ( [gifts, nextDrawDate, paymentMethods] ) => {
         return flatMap( gifts.donations, donation => {
           return map( donation['donation-lines'], donationLine => {
-            donationLine.rate = donation.rate;
-            donationLine['recurring-day-of-month'] = donation['recurring-day-of-month'];
-            donationLine['next-draw-date'] = donation['next-draw-date'];
-            return new RecurringGiftModel(donationLine, nextDrawDate, paymentMethods);
+            return new RecurringGiftModel(donationLine, donation, nextDrawDate, paymentMethods);
           } );
         } );
       } );
@@ -98,9 +96,21 @@ function DonationsService( cortexApiService, profileService, commonService ) {
 
   function updateRecurringGifts( gifts ) {
     gifts = angular.isArray( gifts ) ? gifts : [gifts];
+    let groupedGifts = groupBy(gifts, 'parentDonation["donation-row-id"]');
+    let donations = map(groupedGifts, (lines, donationId) => {
+      return {
+        'donation-lines': map(lines, 'toObject'),
+        'donation-status': lines[0].parentDonation['donation-status'],
+        'effective-status': lines[0].parentDonation['effective-status'],
+        rate: lines[0].parentDonation.rate,
+        'donation-row-id': donationId
+      };
+    });
     return cortexApiService.put( {
       path: ['donations', 'recurring', cortexApiService.scope, 'active'],
-      data: {donations: { 'donation-lines': map(gifts, 'toObject') } }
+      data: {
+        donations: donations
+      }
     } );
   }
 
