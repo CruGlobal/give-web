@@ -103,6 +103,23 @@ $promo-width: 200px;
     float: right;
     right: 0;
     position: absolute;
+    padding: 0;
+    margin: 0;
+
+    a {
+      margin: 0;
+      padding: 0 !important;
+      line-height: 0;
+      
+      img {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+        max-width: 100%;
+      }
+    }
   }
 
   .gh-offset-2 {
