@@ -5,7 +5,7 @@ import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.comp
 import profileService from 'common/services/api/profile.service.js';
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
-import giftDatesService from 'common/services/giftHelpers/giftDates.service';
+import {quarterlyMonths} from 'common/services/giftHelpers/giftDates.service';
 
 import template from './deletePaymentMethod.modal.tpl';
 import remove from 'lodash/remove';
@@ -17,10 +17,11 @@ let componentName = 'deletePaymentMethodModal';
 class deletePaymentMethodModalController {
 
   /* @ngInject */
-  constructor(profileService, giftDatesService, $log) {
+  constructor(profileService, $log) {
     this.profileService = profileService;
-    this.giftDatesService = giftDatesService;
     this.$log = $log;
+    this.quarterlyMonths = quarterlyMonths;
+
     this.loading = false;
     this.view = '';
     this.filteredPaymentMethods = [];
@@ -242,7 +243,6 @@ export default angular
     loadingOverlay.name,
     paymentMethodForm.name,
     profileService.name,
-    giftDatesService.name,
     paymentMethodDisplay.name
   ])
   .component(componentName, {
