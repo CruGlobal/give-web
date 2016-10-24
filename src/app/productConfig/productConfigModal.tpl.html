@@ -42,17 +42,22 @@
             <!--</div>-->
 
             <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
-              <label class="btn btn-radio" ng-click="$ctrl.changeAmount(a)" ng-class="{'active': $ctrl.itemConfig.amount === a}" ng-repeat-start="a in $ctrl.selectableAmounts">
+              <label class="btn btn-radio"
+                     ng-click="$ctrl.changeAmount(a)"
+                     ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
+                     ng-repeat-start="a in $ctrl.selectableAmounts">
                 <span class="number">${{a}}</span>
               </label>
               <span ng-repeat-end></span>
-              <label class="btn btn-default-form u-textLeft custom-amount">
+              <label
+                ng-class="{active: $ctrl.customInputActive}"
+                class="btn btn-default-form u-textLeft custom-amount">
                 <div class="form-group form-group-default u-inline">
                   <input class="form-control form-control-subtle number"
-                         type="number"
                          name="amount"
                          ng-model="$ctrl.customAmount"
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                         ng-focus="$ctrl.customInputActive = true;"
                          ng-min="1"
                          ng-max="10000000"
                          ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">

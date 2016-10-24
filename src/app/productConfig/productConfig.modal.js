@@ -99,9 +99,8 @@ class ModalInstanceCtrl {
     this.itemConfigForm.$setDirty();
     this.itemConfig.amount = amount;
     this.customAmount = undefined;
-    this.itemConfigForm.amount.$setViewValue( undefined, 'change' );
-    this.itemConfigForm.amount.$render();
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
+    this.customInputActive = false;
   }
 
   changeCustomAmount( amount ) {
