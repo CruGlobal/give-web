@@ -5,7 +5,6 @@ import find from 'lodash/find';
 import pick from 'lodash/pick';
 import values from 'lodash/values';
 import orderService from 'common/services/api/order.service';
-import registerAccountService from 'common/services/registerAccount.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 
@@ -23,7 +22,7 @@ export const EnforcerModes = {
 };
 
 /*@ngInject*/
-function SessionEnforcerService( orderService, registerAccountService, sessionService, sessionModalService ) {
+function SessionEnforcerService( orderService, sessionService, sessionModalService ) {
   let enforcers = {}, modal;
 
   /**
@@ -46,9 +45,9 @@ function SessionEnforcerService( orderService, registerAccountService, sessionSe
     let id = Date.now().toString();
     // Build enforcer object
     enforcers[id] = angular.merge( {}, {
-      id:    id,
+      id: id,
       roles: roles,
-      mode:  mode
+      mode: mode
     }, pick( callbacks, values( EnforcerCallbacks ) ) );
 
     // initialize the enforcer
@@ -99,9 +98,10 @@ function SessionEnforcerService( orderService, registerAccountService, sessionSe
       } );
 
       if ( angular.isUndefined( modal ) ) {
-        modal = find( enforced, {mode: EnforcerModes.donor} ) ?
-          registerAccountService() :
-          sessionModalService.open( 'sign-in', {backdrop: 'static', keyboard: false} ).result;
+        modal = sessionModalService.open( find( enforced, {mode: EnforcerModes.donor} ) ? 'register-account' : 'sign-in', {
+          backdrop: 'static',
+          keyboard: false
+        } ).result;
         modal.then( () => {
           angular.forEach( enforced, ( enforcer ) => {
             if ( angular.isFunction( enforcer[EnforcerCallbacks.signIn] ) ) enforcer[EnforcerCallbacks.signIn]();
@@ -156,7 +156,6 @@ function SessionEnforcerService( orderService, registerAccountService, sessionSe
 export default angular
   .module( serviceName, [
     orderService.name,
-    registerAccountService.name,
     sessionService.name,
     sessionModalService.name
   ] )

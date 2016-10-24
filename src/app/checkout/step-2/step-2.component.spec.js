@@ -59,6 +59,9 @@ describe('checkout', () => {
     });
 
     describe('onSubmit', () => {
+      beforeEach(() => {
+        self.controller.submissionError = {};
+      });
       it('should save payment data when success is true and data is defined', () => {
         spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.of(''));
@@ -79,7 +82,7 @@ describe('checkout', () => {
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'some error' }));
         self.controller.onSubmit(true, {bankAccount: {}});
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
-        expect(self.controller.submitted).toEqual(false);
+        expect(self.controller.submissionError.loading).toEqual(false);
         expect(self.controller.$log.error.logs[0]).toEqual(['Error saving payment method', { data: 'some error' }]);
         expect(self.controller.submissionError.error).toEqual('some error');
       });
@@ -89,9 +92,9 @@ describe('checkout', () => {
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
       });
       it('should set submitted to false if save was unsuccessful', () => {
-        self.controller.submitted = true;
+        self.controller.submissionError.loading = true;
         self.controller.onSubmit(false, undefined, 'some error');
-        expect(self.controller.submitted).toEqual(false);
+        expect(self.controller.submissionError.loading).toEqual(false);
         expect(self.controller.submissionError.error).toEqual('some error');
       });
     });

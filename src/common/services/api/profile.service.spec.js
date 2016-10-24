@@ -7,12 +7,15 @@ import 'rxjs/add/observable/of';
 import module from './profile.service';
 
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
+
 import emailsResponse from './fixtures/cortex-profile-emails.fixture.js';
 import donorDetailsResponse from './fixtures/cortex-profile-donordetails.fixture';
 import givingProfileResponse from './fixtures/cortex-profile-giving.fixture';
 import paymentmethodsResponse from './fixtures/cortex-profile-paymentmethods.fixture.js';
 import paymentmethodsFormsResponse from './fixtures/cortex-profile-paymentmethods-forms.fixture.js';
+import paymentmethodsWithDonationsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods-with-donations.fixture.js';
 import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
+import phoneNumbersResponse from 'common/services/api/fixtures/cortex-profile-phonenumbers.fixture.js';
 
 let paymentmethodsFormsResponseZoomMapped = {
   bankAccount: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createbankaccountform[0],
@@ -66,6 +69,38 @@ describe('profile service', () => {
             expectedPaymentMethods[1],
             expectedPaymentMethods[0]
           ]);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('getPaymentMethodsWithDonations', () => {
+    it('should load the user\'s saved payment methods with donations', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts')
+        .respond(200, paymentmethodsWithDonationsResponse);
+      self.profileService.getPaymentMethodsWithDonations()
+        .subscribe((data) => {
+          expect(data).toEqual([
+            paymentmethodsWithDonationsResponse._selfservicepaymentmethods[0]._element[0],
+            paymentmethodsWithDonationsResponse._selfservicepaymentmethods[0]._element[1]
+          ]);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('updateRecurringGifts', () => {
+    it('should update recurring gifts', () => {
+      let recurringGifts = {
+        self: {
+          uri: '/donations/recurring/crugive/paymentmethods/giydimjygq='
+        }
+      };
+      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex'+recurringGifts.self.uri)
+        .respond(200, 'success');
+      self.profileService.updateRecurringGifts(recurringGifts)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
         });
       self.$httpBackend.flush();
     });
@@ -321,6 +356,19 @@ describe('profile service', () => {
     });
   });
 
+  describe('deletePaymentMethod', () => {
+    it('should delete payment method', () => {
+      let uri = '/uri';
+      self.$httpBackend.expectDELETE('https://cortex-gateway-stage.cru.org/cortex'+uri)
+        .respond(200, 'success');
+      self.profileService.deletePaymentMethod(uri)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
   describe('getPurchase', () => {
     it('should load the purchase specified by the uri', () => {
       let modifiedPurchaseResponse = angular.copy(purchaseResponse);
@@ -368,6 +416,34 @@ describe('profile service', () => {
       self.profileService.getDonorDetails()
         .subscribe((donorDetails) => {
           expect(donorDetails).toEqual(expectedDonorDetails);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('getPhoneNumbers', () => {
+    it('should load the user\'s phonenumbers', () => {
+      let response = [{
+        self: {
+          type: 'elasticpath.phonenumbers.phone-number',
+          uri: '/phonenumbers/crugive/gewtetbqirevq=',
+          href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/gewtetbqirevq='
+        }
+        ,
+        links: [{
+          rel: 'list',
+          type: 'elasticpath.collections.links',
+          uri: '/phonenumbers/crugive',
+          href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive'
+        }
+        ],
+        locked: false, 'phone-number': '(518) 882-1307', 'phone-number-type': 'Home', primary: true
+      }];
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive?zoom=element')
+        .respond(200, phoneNumbersResponse);
+      self.profileService.getPhoneNumbers()
+        .subscribe((donorDetails) => {
+          expect(donorDetails).toEqual(response);
         });
       self.$httpBackend.flush();
     });

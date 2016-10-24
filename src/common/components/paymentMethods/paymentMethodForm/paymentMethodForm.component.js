@@ -15,7 +15,6 @@ class PaymentMethodFormController{
     this.$log = $log;
 
     this.paymentType = 'bankAccount';
-    this.submitted = false;
     this.imgDomain = envService.read('imgDomain');
   }
 
@@ -46,7 +45,6 @@ export default angular
     controller: PaymentMethodFormController,
     templateUrl: template.name,
     bindings: {
-      submitted: '<',
       paymentMethod: '<',
       mailingAddress: '<',
       submissionError: '<',

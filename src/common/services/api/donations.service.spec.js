@@ -1,17 +1,23 @@
 import angular from 'angular';
 import 'angular-mocks';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+
 import module from './donations.service';
 
 import historicalResponse from './fixtures/cortex-donations-historical.fixture';
 import recipientResponse from './fixtures/cortex-donations-recipient.fixture';
 import recipientDetailsResponse from './fixtures/cortex-donations-recipient-details.fixture';
+import receiptsResponse from './fixtures/cortex-donations-receipts.fixture';
+import recurringGiftsResponse from './fixtures/cortex-donations-recurring-gifts.fixture';
 
 describe( 'donations service', () => {
   beforeEach( angular.mock.module( module.name ) );
-  let donationsService, $httpBackend;
+  let donationsService, profileService, $httpBackend;
 
-  beforeEach( inject( ( _donationsService_, _$httpBackend_ ) => {
+  beforeEach( inject( ( _donationsService_, _profileService_, _$httpBackend_ ) => {
     donationsService = _donationsService_;
+    profileService = _profileService_;
     $httpBackend = _$httpBackend_;
   } ) );
 
@@ -62,6 +68,65 @@ describe( 'donations service', () => {
       donationsService.getHistoricalGifts( 2016, 9 ).subscribe( ( historicalGifts ) => {
         expect( historicalGifts ).toEqual( jasmine.any( Array ) );
       } );
+      $httpBackend.flush();
+    } );
+  } );
+
+  describe( 'getReceipts( data )', () => {
+    it( 'should load receipts', () => {
+      $httpBackend
+        .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/receipts/items?followLocation=true' )
+        .respond( 200, receiptsResponse );
+      donationsService.getReceipts( {} ).subscribe( ( receipts ) => {
+        expect( receipts ).toEqual( jasmine.any( Array ) );
+      } );
+      $httpBackend.flush();
+    } );
+  } );
+
+  describe( 'getRecurringGifts()', () => {
+    it( 'should load recurring gifts', () => {
+      let paymentMethod = {
+        "self": {
+          "type": "elasticpath.bankaccounts.bank-account",
+          "uri": "/selfservicepaymentmethods/crugive/giydcnzyga=",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydcnzyga="
+        },
+        "account-type": "Savings",
+        "bank-name": "2nd Bank",
+        "description": "2nd Bank - 3456",
+        "display-account-number": "3456",
+        "encrypted-account-number": "",
+        "routing-number": "021000021"
+      };
+      spyOn( profileService, 'getPaymentMethods' ).and.returnValue( Observable.of([ paymentMethod ]) );
+
+      $httpBackend
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:managerecurringdonations' )
+        .respond( 200, recurringGiftsResponse );
+
+      donationsService.getRecurringGifts().subscribe( gifts => {
+        expect( gifts ).toEqual( [
+          {
+            amount: 25,
+            'designation-name': 'David and Margo Neibling (0105987)',
+            'designation-number': '0105987',
+            'donation-line-row-id': '1-GVVEB6',
+            'donation-line-status': 'Standard',
+            'payment-method-id': 'giydcnzyga=',
+            'updated-donation-line-status': '',
+            'updated-payment-method-id': '',
+            'updated-rate': {recurrence: {interval: ''}},
+            'updated-recurring-day-of-month': '',
+            'updated-start-month': '',
+            'updated-start-year': '',
+            rate: {recurrence: {interval: 'Monthly'}},
+            'recurring-day-of-month': '15',
+            'next-draw-date': {'display-value': '2016-01-15', value: 1452816000000},
+            paymentMethod: paymentMethod
+          }
+        ] );
+      });
       $httpBackend.flush();
     } );
   } );
