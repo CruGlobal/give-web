@@ -1,0 +1,87 @@
+/*------------------------------------*\
+ #TOOLS
+\*------------------------------------*/
+/**
+ * We will begin by importing functions that will be used in the
+ * framework. There is no need to change any of these functions
+ */
+$rem-base: 16px !default;
+
+@function strip-units($num) {
+    @return $num / ($num * 0 + 1);
+}
+
+/**
+ * This allows us to use the rem-calc mixin for shorthand 
+ * conversions.
+ */
+// scss-lint:disable NameFormat 
+@function parseInt($n) { /* 2 */
+    @return $n / ($n * 0 + 1);
+}
+// scss-lint:enable NameFormat
+
+@function convert-to-rem($value, $base-value: $rem-base) {
+    $value: strip-units($value) / strip-units($base-value) * 1rem;
+    
+    // scss-lint:disable ZeroUnit
+    @if ($value == 0rem) { 
+        $value: 0; 
+    } // Turn 0rem into 0
+    // scss-lint:enable ZeroUnit
+    
+    @return $value;
+}
+
+@function rem-calc($values, $base-value: $rem-base) {
+    $max: length($values);
+    
+    @if $max == 1 { 
+        @return convert-to-rem(nth($values, 1), $base-value); 
+    }
+    
+    // scss-lint:disable NameFormat 
+    $remValues: ();
+    
+    @for $i from 1 through $max {
+        $remValues: append($remValues, convert-to-rem(nth($values, $i), $base-value));
+    }
+    
+    @return $remValues;
+    // scss-lint:enable NameFormat 
+}
+
+@function em-calc($values) {
+    @return rem-calc($values);
+}
+
+@function quarter($value) {
+    @return round($value / 4);
+}
+
+@function half($value) {
+    @return round($value / 2);
+}
+
+@function double($value) {
+    @return round($value * 2);
+}
+
+@function quadruple($value) {
+    @return round($value * 4);
+}
+
+/**
+ * Use this em function instead of the other
+ */
+@function em($value, $context: $rem-base) {
+    $value: strip-units($value) / strip-units($context) * 1em;
+    
+    // scss-lint:disable ZeroUnit
+    @if ($value == 0em) { 
+        $value: 0; 
+    }
+    // scss-lint:enable ZeroUnit
+    
+    @return $value;
+}

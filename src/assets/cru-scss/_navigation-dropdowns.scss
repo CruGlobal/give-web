@@ -1,0 +1,111 @@
+/*------------------------------------*\
+    #NAVIGATION-DROPDOWNS
+\*------------------------------------*/
+
+.has-dropdown > .dropdown {
+    background-color: #404040;
+    color: #fff;
+    width: 100% !important;
+   // padding-left: $base-spacing-unit;
+    //padding-right: $base-spacing-unit;
+    font-size: 80%;
+
+    overflow: hidden;
+    max-height: 0;
+    height: 0;
+    opacity: 0;
+
+    //@include backface-visibility(hidden);
+    @include perspective(1000);
+
+    //@include transition(opacity, height, padding 0s .2s ease);
+    //@include transition(opacity, height, padding .3s .2s ease);
+
+    @include mq($nav-break-min) {
+        position: fixed;
+        left: 0;
+    }
+
+    @include mq($nav-break-max, max) {
+        padding: 0;
+    }
+}
+
+.has-dropdown:hover > .dropdown {
+    @include mq($nav-break-min) {
+
+        padding-top: $base-spacing-unit;
+        padding-bottom: half($base-spacing-unit);
+
+        overflow: visible;
+        max-height: 600px;
+        height: auto;
+        opacity: 1;
+
+        //@include transition(opacity, height, padding 0s .2s ease);
+        @include box-shadow(0 1px 1px rgba(6, 8, 8, 0.1));
+    }
+}
+
+/*
+.dropdown-list {
+    width: 100%;
+    height: 315px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+}
+*/
+
+.dropdown-listBlock {
+    background-color: #333;
+
+    @include mq($nav-break-min) {
+        margin-bottom: 15px;
+        padding: 15px;
+    }
+}
+
+.dropdown-link--primary,
+.dropdown-listBlock {
+    display: block;
+    text-align: left;
+    background: #333;
+    color: #f9b625;
+    border-radius: 3px;
+    padding-left: 0.45313rem;
+    padding-right: 0.45313rem;
+}
+
+
+.dropdown-link {
+    @include transition(all 0.1s ease-in-out);
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        background: #f9b625;
+        color: #333;
+    }
+}
+
+
+.dropdown-listItem {
+    @include mq($nav-break-max, max) {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+.dropdown-link--secondary {
+    padding-left: 0.90625rem;
+    padding-right: 0.90625rem;
+    margin: 0;
+    text-align: left;
+    color: #fff;
+}
+
+.dropdown-link--text {
+    color: $colorText;
+}

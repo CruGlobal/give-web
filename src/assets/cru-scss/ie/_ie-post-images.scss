@@ -1,0 +1,69 @@
+/*------------------------------------*\
+    $IE-POST-IMAGES
+\*------------------------------------*/
+
+.post-article figure {
+    @include clearfix;
+
+    position: relative;
+    outline: 0;
+
+    > img {
+        width: 100%;
+    }
+}
+
+/**
+ * Main image captions. Place the .image-credit within this.
+ * Pulls the caption to the left of the image for wide screens
+ * and centers it for smaller screens.
+ */
+.imageCaption {
+    @extend %mt--;
+
+    position: relative;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.image-credit {
+    @extend %u-textSize-small;
+
+    display: block;
+    color: #666062;
+}
+
+/*figure*/
+.image--insetLeft {
+    width: 50%;
+    float: left;
+    margin-top: 10px;
+    margin-right: $base-spacing-unit;
+    margin-bottom: 10px;
+    clear: both;
+}
+
+/*figure*/
+.image--legacy,
+.image--insetRight,
+%image--insetRight {
+    width: 46%;
+    float: right;
+    margin: 10px 0 10px ($base-spacing-unit * 1.25);
+    clear: both;
+}
+
+/*figure*/
+.image--outsetLeft {
+    float: left;
+    width: 75%;
+    margin: 10px $base-spacing-unit 10px -100px;
+    clear: both;
+}
+
+/*figure*/
+.image--outsetCenter {
+    margin-left: -100px;
+    margin-right: -100px;
+}

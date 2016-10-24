@@ -6,6 +6,7 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 
 import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 
 import template from './existingPaymentMethods.tpl';
 
@@ -40,6 +41,7 @@ class ExistingPaymentMethodsController {
           this.paymentMethods = data;
           this.selectDefaultPaymentMethod();
           this.onLoad({success: true, hasExistingPaymentMethods: true});
+          this.submissionError.loading = false;
         }else{
           this.onLoad({success: true, hasExistingPaymentMethods: false});
         }
@@ -64,8 +66,8 @@ class ExistingPaymentMethodsController {
   openPaymentMethodFormModal(){
     this.paymentMethodFormModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
-      size: 'large new-payment-method-modal',
       backdrop: 'static', // Disables closing on click
+      windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         submissionError: this.submissionError,
         mailingAddress: this.mailingAddress,
@@ -99,6 +101,7 @@ export default angular
     'ui.bootstrap',
     paymentMethodDisplay.name,
     paymentMethodFormModal.name,
+    giveModalWindowTemplate.name,
     orderService.name
   ])
   .component(componentName, {

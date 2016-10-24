@@ -1,0 +1,50 @@
+$xxs: 550px;
+$xs: 768px;
+$sm: 992px;
+$md: 1200px;
+
+@mixin respond-to($media) {
+  @if $media == supertiny {
+    @media only screen and (max-width: $xxs) { @content; }
+  }
+  @else if $media == extrasmall {
+    @media only screen and (max-width: $xs) { @content; }
+  }
+  @else if $media == small {
+    @media only screen and (min-width: $xs + 1) and (max-width: $sm - 1) { @content; }
+  }
+  @else if $media == medium {
+    @media only screen and (min-width: $sm + 1) and (max-width: $md - 1) { @content; }
+  }
+  @else if $media == large {
+    @media only screen and (min-width: $md) { @content; }
+  }
+}
+
+.container-edge-small {
+	@include respond-to(small) {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+.container-edge-extrasmall {
+	@include respond-to(extrasmall) {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+.image-responsive-center {
+	margin: 0 1.5em;
+	@include respond-to(small) {
+		display: inline-block;
+		text-align: center;
+		float: none !important;
+	}
+	@include respond-to(extrasmall) {
+		display: inline-block;
+		text-align: center;
+		float: none !important;
+	}
+}

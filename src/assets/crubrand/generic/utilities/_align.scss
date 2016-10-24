@@ -1,0 +1,34 @@
+/*------------------------------------*\
+    #ALIGN UTILITIES
+\*------------------------------------*/
+
+// scss-lint:disable SingleLinePerProperty, SingleLinePerSelector, SpaceBeforeBrace
+
+/**
+ * Text alignment
+ */
+.u-textLeft,   %u-textLeft   { text-align: left !important; }
+.u-textCenter, %u-textCenter { text-align: center !important; }
+.u-textRight,  %u-textRight  { text-align: right !important; }
+
+
+/**
+ * Vertical alignment utilities
+ * Depends on an appropriate `display` value.
+ */
+
+.u-alignBaseline {
+  vertical-align: baseline !important;
+}
+
+.u-alignBottom {
+  vertical-align: bottom !important;
+}
+
+.u-alignMiddle {
+  vertical-align: middle !important;
+}
+
+.u-alignTop {
+  vertical-align: top !important;
+}

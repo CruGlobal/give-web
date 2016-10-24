@@ -1,0 +1,177 @@
+/*------------------------------------*\
+    #SOCIAL-MEDIA
+\*------------------------------------*/
+
+/**
+ * Homepage social media like buttons wrapper
+ */
+.socialWrap {
+    background-color: #fff;
+    padding-left: half($base-spacing-unit);
+    padding-right: half($base-spacing-unit);
+}
+
+/**
+ * Hacks for homepage like icons
+ */
+.fb-like {
+    height: 20px;
+    margin-top: 11px;
+}
+
+.fb_iframe_widget span {
+    vertical-align: top !important;
+}
+
+// scss-lint:disable QualifyingElement
+.fb-comments,
+.fb-comments iframe[style],
+.fb-comments span {
+    width: 100% !important;
+}
+// scss-lint:enable QualifyingElement
+
+.twitter-share-button,
+.twitter-tweet-button,
+.twitter-count-horizontal {
+    width: 85px !important;
+}
+
+/**
+* Force Facebook feed to be responsive
+*/
+.fb_iframe_widget {
+    max-width: 100% !important;
+}
+
+
+/**
+* Footer Social Media Icons
+*/
+.socialIcon {
+    padding: half($base-spacing-unit);
+    @include font-size(26px);
+}
+
+.socialIcon--facebook {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        color: #666061;
+    }
+}
+
+.socialIcon--gplus {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        color: #666061;
+    }
+}
+.socialIcon--instagram {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        color: #666061;
+    }
+}
+.socialIcon--linkedin {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        color: #666061;
+    }
+}
+.socialIcon--pinterest {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        color: #666061;
+    }
+}
+.socialIcon--tumblr {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        color: #666061;
+    }
+}
+.socialIcon--twitter {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        color: #666061;
+    }
+}
+.socialIcon--vine {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        color: #666061;
+    }
+}
+
+/**
+.social-shares {
+    @extend %listInline;
+
+    li {
+        display: inline-block;
+        margin-bottom: quarter($base-spacing-unit);
+    }
+}
+
+.social-shares .twitter-share-button,
+.social-shares .twitter-tweet-button,
+.social-shares .twitter-count-horizontal {
+    width: 85px !important;
+}
+
+.social-shares .share-alt {
+    position: relative;
+    top: -5px;
+}
+
+.follow-button a>span {
+    margin-top: 100px;
+}
+
+.position--relative,
+.social-shares .fb-like,
+.page-subnav {
+    position: relative;
+}
+
+.social-shares div:not(:first-child) {
+    position: relative;
+    z-index: 1;
+}
+
+.social-shares .fb-like,
+.social-shares .fb_iframe_widget iframe {
+    width: 450px !important;
+    position: relative;
+    top: 0;
+}
+
+.post__body .social-shares .fb-like,
+.post__body .social-shares .fb_iframe_widget iframe {
+    vertical-align: top;
+
+    //margin-top: -1px;
+    margin-top: -6px;
+}
+
+.social-shares .fb-like {
+    width: 80px !important;
+}
+
+*/

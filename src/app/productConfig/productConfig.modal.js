@@ -3,7 +3,6 @@ import 'angular-gettext';
 import 'angular-ordinal';
 
 import indexOf from 'lodash/indexOf';
-import range from 'lodash/range';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
 
@@ -11,7 +10,9 @@ import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import modalStateService from 'common/services/modalState.service';
+import giftDatesService from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
+import showErrors from 'common/filters/showErrors.filter';
 
 let controllerName = 'productConfigController';
 export let giveGiftParams = {
@@ -24,12 +25,13 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
+  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, giftDatesService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
     this.$location = $location;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.modalStateService = modalStateService;
+    this.giftDatesService = giftDatesService;
     this.productData = productData;
     this.nextDrawDate = nextDrawDate;
     this.itemConfig = itemConfig;
@@ -132,18 +134,6 @@ class ModalInstanceCtrl {
         this.submittingGift = false;
       } );
   }
-
-  daysInMonth() {
-    return range( 1, 29 ).map( function ( n ) {
-      return n.toString();
-    } );
-  }
-
-  donationStartDate(day){
-    if(!day){ return; }
-
-    return this.cartService.giftStartDate( this.nextDrawDate, day );
-  }
 }
 
 export default angular
@@ -154,6 +144,8 @@ export default angular
     designationsService.name,
     cartService.name,
     modalStateService.name,
-    desigSrcDirective.name
+    giftDatesService.name,
+    desigSrcDirective.name,
+    showErrors.name
   ] )
   .controller( controllerName, ModalInstanceCtrl );

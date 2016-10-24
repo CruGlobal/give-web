@@ -1,9 +1,10 @@
 import angular from 'angular';
-import some from 'lodash/some';
+import filter from 'lodash/filter';
 
 import loadingComponent from 'common/components/loading/loading.component';
 import step0AddUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
 import step0paymentMethodList from './step0/paymentMethodList.component';
+import step1EditRecurringGifts from './step1/editRecurringGifts.component';
 
 import profileService from 'common/services/api/profile.service';
 
@@ -29,9 +30,10 @@ class EditRecurringGiftsModalController {
       .subscribe((data) => {
         this.paymentMethods = data;
         this.hasPaymentMethods = this.paymentMethods && this.paymentMethods.length > 0;
-        this.hasValidPaymentMethods = some(this.paymentMethods, (paymentMethod) => {
+        this.validPaymentMethods = filter(this.paymentMethods, (paymentMethod) => {
           return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || ( parseInt(paymentMethod['expiry-month']) > (new Date()).getMonth() && parseInt(paymentMethod['expiry-year']) >= (new Date()).getFullYear() );
         });
+        this.hasValidPaymentMethods = this.validPaymentMethods && this.validPaymentMethods.length > 0;
         this.next();
       }, (error) => {
         this.state = 'error';
@@ -118,6 +120,7 @@ export default angular
     loadingComponent.name,
     step0AddUpdatePaymentMethod.name,
     step0paymentMethodList.name,
+    step1EditRecurringGifts.name,
     profileService.name
   ])
   .component(componentName, {

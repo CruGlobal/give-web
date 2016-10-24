@@ -30,14 +30,14 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         imgDomain: '//give-static-stage.cru.org',
         imgDomainDesignation: '',
         ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current',
-        navFeed: '/etc/cru.json'
+        navFeed: '/content/cru/us/en/cru-nav.json'
       },
       production: {
         apiUrl: 'https://cortex-gateway.cru.org',
         imgDomain: '//give-static-stage.cru.org',
         imgDomainDesignation: '',
         ccpKeyUrl: 'https://ccp.ccci.org/api/v1/rest/client-encryption-keys/current',
-        navFeed: '/etc/cru.json'
+        navFeed: '/content/cru/us/en/cru-nav.json'
       }
     }
   });

@@ -1,0 +1,5 @@
+.no-csstransforms3d .globalNavigation {
+    @include mq($nav-break-max, max) {
+        right: -100%;
+    }
+}

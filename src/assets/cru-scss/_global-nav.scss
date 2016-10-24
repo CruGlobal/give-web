@@ -1,0 +1,194 @@
+/////////
+@media screen and (max-width: 895px) {
+    #userActions {
+        display: none !important;
+    }
+}
+
+.global-nav{
+    display: inline-flex;
+    position: absolute;
+    top: 3px;
+    right: 0;
+    background: none;
+
+}
+
+.userAction--signup a{
+  text-transform: none;
+  font-weight: 500;
+  font-size: 75%;
+  z-index: 1;
+ text-transform: uppercase;
+ letter-spacing: .1;
+ background: #fff;
+     border-right: solid 1px #f7f7f7;
+
+     &:hover{
+                    color: #007398 !important;
+         background: #fff;
+  -webkit-transition: color .15s ease;
+  -o-transition: color .15s ease;
+  transition: color .15s ease;
+                }
+
+ }
+
+.userAction--signup {
+     text-align: right !important;
+      float: left;
+
+ }
+.userAction__link a{
+  height: 36px;
+  line-height: 36px;
+  color: #3f5666;
+  //font-size: 90%;
+  padding: 0 16px;
+  overflow: hidden;
+
+
+
+
+                &:hover{
+                    color: #007398 !important;
+  -webkit-transition: color .15s ease;
+  -o-transition: color .15s ease;
+  transition: color .15s ease;
+                    text-decoration: underline;
+                }
+            }
+
+.userAction--global a{
+  text-transform: none;
+  font-weight: 500;
+  font-size: 75%;
+  z-index: 1;
+ text-transform: uppercase;
+ letter-spacing: .1;
+ //background: #f2f2f2 ;
+     //border-right: solid 1px #f7f7f7;
+    color: #3f5666;
+     text-align: right !important;
+  float: left;
+  padding-left: 38px;
+  padding-right: 10px;
+    padding-top: 8px;
+  padding-bottom: 8px;
+
+
+     &:hover{
+                    color: #ffffff !important;
+         //background: #3f5666;
+  -webkit-transition: color .15s ease;
+  -o-transition: color .15s ease;
+  transition: color .15s ease;
+                    text-decoration: none;
+                }
+
+ }
+
+
+.global__button{
+ background-image: url(../images/earth94.svg);
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: 12px;
+  border: none;
+  /* height: 45px; */
+  /* width: 55px; */
+  margin-left: 14px;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background-color: #f4f4f4;
+  float: left;
+
+        &:hover{
+                background-image: url(../images/earth94-white.svg);
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: 11px;
+  border: none;
+  /* height: 45px; */
+  /* width: 55px; */
+  margin-left: 14px;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background-color: #3f5666;
+  float: left;
+            color: #fff !important;
+            }    }
+
+
+.icon--cart{
+ background-image: url(../images/earth94.png);
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: 12px;
+  border: none;
+
+  margin-left: 14px;
+  background-color: #f4f4f4;
+  float: left;
+
+        }
+
+
+.userAction--cart a{
+  text-transform: none;
+  font-weight: 500;
+  font-size: 75%;
+  z-index: 1;
+ text-transform: uppercase;
+ letter-spacing: .1;
+ //background: #fff;
+     //border-right: solid 1px #f7f7f7;
+
+     &:hover{
+                    color: #007398 !important;
+         //background: #fff;
+  -webkit-transition: color .15s ease;
+  -o-transition: color .15s ease;
+  transition: color .15s ease;
+                }
+
+ }
+
+.userAction--cart {
+     background-image: url(../images/cart.svg);
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position-x: 14px;
+      background-position-y: 38%;
+
+     text-align: right !important;
+      float: left;
+    padding-left: 24px;
+
+ }
+
+
+
+
+
+
+//////////// headroom.js stuff ////////////
+
+
+   .headroom {position: fixed;top: 0;left: 0;right: 0;transition: all .4s ease-in-out;}
+    .headroom--unpinned {top: -130px;}
+    .headroom--pinned {top: 0;}
+
+.header-fixed-top{
+    z-index: 9999;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  position: -o-sticky;
+  top: 0;
+}

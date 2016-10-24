@@ -13,13 +13,12 @@ import historicalView from './historicalView/historicalView.component';
 import loadingComponent from 'common/components/loading/loading.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.modal.component';
+import stopStartRecurringGiftsModal from './stopStartRecurringGifts/stopStartRecurringGifts.modal.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
-import sessionEnforcerService from 'common/services/session/sessionEnforcer.service';
-import sessionService from 'common/services/session/session.service';
+import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
+import sessionService, {Roles} from 'common/services/session/session.service';
 import template from './yourGiving.tpl';
-
-import {Roles} from 'common/services/session/session.service';
 
 let componentName = 'yourGiving';
 
@@ -43,16 +42,18 @@ class YourGivingController {
   }
 
   $onInit() {
-    // Enforce 'REGISTERED' role view access manage-giving
+    // Enforce donor role view access manage-giving
     this.enforcerId = this.sessionEnforcerService( [Roles.registered], {
-      'sign-in': () => {
-        // Re-authentication success
+      [EnforcerCallbacks.signIn]: () => {
+        // Authentication success
+        this.setGivingView();
         this.loadProfile();
-      }, cancel: () => {
-        // Re-authentication failure
+      },
+      [EnforcerCallbacks.cancel]: () => {
+        // Authentication failure
         this.$window.location = '/cart.html';
       }
-    } );
+    }, EnforcerModes.donor );
 
     let year = new Date().getFullYear();
     this.years = range( year, year - 11 );
@@ -68,14 +69,7 @@ class YourGivingController {
       month: this.months[new Date().getMonth()]
     };
 
-    this.setGivingView();
-    if ( this.sessionService.getRole() == Roles.registered ) {
-      // Only load profile when REGISTERED role, otherwise sessionEnforcer will load it when users signs in
-      this.loadProfile();
-    }
-    else {
-      this.profileLoading = true;
-    }
+    this.profileLoading = true;
   }
 
   $onDestroy() {
@@ -121,6 +115,13 @@ class YourGivingController {
     });
   }
 
+  openStopStartRecurringGiftsModal() {
+    this.stopStartRecurringGiftsModal = this.$uibModal.open({
+      component: 'stopStartRecurringGiftsModal',
+      backdrop: 'static',
+      windowTemplateUrl: giveModalWindowTemplate.name
+    });
+  }
 }
 export default angular
   .module( componentName, [
@@ -132,6 +133,7 @@ export default angular
     loadingComponent.name,
     loadingOverlay.name,
     editRecurringGiftsModal.name,
+    stopStartRecurringGiftsModal.name,
     giveModalWindowTemplate.name,
     profileService.name,
     sessionEnforcerService.name,

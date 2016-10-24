@@ -1,0 +1,94 @@
+/*------------------------------------*\
+    #MIXINS/SIZING
+\*------------------------------------*/
+
+/**
+ * Can handle shorthand calculations
+ * Do not change the variable set
+ * http://hugogiraudel.com/2013/03/18/ultimate-rem-mixin/
+ */
+// scss-lint:disable NameFormat 
+$sizeValue: strip-units(16px);
+// scss-lint:enable NameFormat 
+
+@mixin rem-calc($property, $values) {
+    $px : (); /* 3 */
+    $rem: (); /* 3 */
+
+    @each $value in $values { /* 4 */
+
+        @if $value == 0 or $value == auto { /* 5 */
+            $px : append($px , $value);
+            $rem: append($rem, $value);
+        }
+
+        @else { 
+            // scss-lint:disable NameFormat 
+            $unit: unit($value);    /* 6 */
+            $val: parseInt($value); /* 6 */
+
+            @if $unit == "px" {  /* 7 */
+                $px : append($px, $value);
+                $rem: append($rem, ($val / $sizeValue + rem));
+            }
+
+            @if $unit == "rem" { /* 7 */
+                $px : append($px, ($val * $sizeValue + px));
+                $rem: append($rem, $value);
+            }
+            // scss-lint:enable NameFormat 
+        }
+    }
+  
+    @if $px == $rem {     /* 8 */
+        #{$property}: $px;  /* 9 */
+    } 
+    
+    @else {
+        #{$property}: $px;  /* 9 */
+        #{$property}: $rem; /* 9 */
+    }
+}
+
+@mixin rem($property, $size-value) {
+    #{$property}: strip-units($size-value) * 1px;
+    #{$property}: strip-units($size-value / $base-font-size) * 1rem;
+}
+
+@mixin em($property, $size-value) {
+    #{$property}: strip-units($size-value / 16) * 1em;
+}
+
+
+/**
+ * Space elements by an amount based on your magic number. Pass in the property
+ * to be indented as a paramater, e.g.:
+ *
+ * pre {
+ *    @include spacing(padding-left);
+ * }
+ */
+@mixin spacing($property) {
+    #{$property}: $base-spacing-unit;
+    #{$property}: $base-spacing-ratio + rem;
+}
+
+@mixin double-spacing($property) {
+    #{$property}: double($base-spacing-unit);
+    #{$property}: double($base-spacing-ratio) + rem;
+}
+
+@mixin half-spacing($property) {
+    #{$property}: half($base-spacing-unit);
+    #{$property}: half($base-spacing-ratio) + rem;
+}
+
+@mixin quarter-spacing($property) {
+    #{$property}: quarter($base-spacing-unit);
+    #{$property}: quarter($base-spacing-ratio) + rem;
+}
+
+@mixin eighth-spacing($property) {
+    #{$property}: eighth($base-spacing-unit);
+    #{$property}: eighth($base-spacing-ratio) + rem;
+}

@@ -1,0 +1,58 @@
+/*------------------------------------*\
+    #TILES
+\*------------------------------------*/
+
+.panel-link {
+    &,
+    &:hover {
+        color: $colorText;
+    }
+
+    &:hover {
+        h3 {
+            text-decoration: none;
+        }
+    }
+}
+
+.panel-title {
+    &,
+    &:hover {
+        color: $colorText;
+        text-decoration: none;
+    }
+}
+
+.panel p,
+.panel-body > ul {
+    font-size: 100%;
+}
+
+
+.panel-body > ul {
+    padding-left: $base-spacing-unit;
+    list-style: none;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.panel-body > ul li {
+    text-indent: -0.5em;
+
+    &:before {
+        content: "\002022";
+        color: $colorCru-gold;
+        display: inline-block;
+        width: 0.5em;
+    }
+}
+
+.panel-img {
+    width: 100%;
+}
+
+.panel-body p:last-child {
+    margin-bottom: 0;
+}

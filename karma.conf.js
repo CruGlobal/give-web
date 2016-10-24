@@ -13,7 +13,7 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['PhantomJS'],
-    browserNoActivityTimeout: 30000,
+    browserNoActivityTimeout: 90000,
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -28,6 +28,7 @@ module.exports = function(config) {
     colors: true,
 
     // list of files / patterns to load in the browser
+
     files: [
       'node_modules/jasmine-promise-matchers/dist/jasmine-promise-matchers.js',
       'src/**/*.spec.js'

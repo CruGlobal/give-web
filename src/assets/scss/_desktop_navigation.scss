@@ -1,0 +1,518 @@
+$col-width: 280px;
+$menu-container-height: 300px;
+$promo-width: 200px;
+
+#desktop-navigation {
+  background-color: $colorCru-white;
+  border-top: 4px solid $colorCru-gold;
+  display: block;
+  height: 80px;
+
+  + #container {
+    &:before,
+    &:after {
+      content: " "; // 1
+      display: table; // 2
+    }
+    &:after {
+      clear: both;
+    }
+  }
+
+  .container {
+    position: relative;
+  }
+
+  &.padded {
+    margin-bottom: 80px;
+  }
+
+  .gh-desk-logo {
+    background: url("/assets/img/cru-logo.png") no-repeat;
+    background-size: contain;
+    width: 87px;
+    height: 54px;
+    float: left;
+    margin-top: 11px;
+  }
+
+  ul {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .gh-desk-nav-tree { // level 1
+    display: table;
+    padding: 0;
+    width: auto;
+    height: 100% !important;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding-top: 40px;
+    position: static;
+    z-index: 10;
+
+    li {
+      display: block;
+      width: 100%;
+      height: auto;
+
+      a {
+        display: block;
+        padding: 5px 16px;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 14px;
+        color: $colorText;
+        text-decoration: none;
+
+        &:hover {
+          color: $colorCru-gold;
+        }
+      }
+    }
+  }
+
+  .col-level-1 {
+    > li {
+      float: left;
+      width: auto;
+      > a {
+        padding-top: 6px;
+        padding-bottom: 5px;
+      }
+    }
+    > li.open-menu .children-container {
+      background: $colorGrayscale-pebble;
+      display: block;
+    }
+  }
+
+  .col-level-1,
+  .col-level-2,
+  .col-level-3 {
+    height: $menu-container-height;
+  }
+
+  .gh-desk-promo {
+    background-color: $colorGrayscale-stone;
+    display: block;
+    width: 260px;
+    height: 300px;
+    float: right;
+    right: 0;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+
+    a {
+      margin: 0;
+      padding: 0 !important;
+      line-height: 0;
+      
+      img {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+
+  .gh-offset-2 {
+    margin-left: $col-width;
+  }
+
+  .gh-offset-3 {
+    margin-left: $col-width*2;
+  }
+
+  .col-level-2 {
+    display: none;
+    padding-top: $gutter*.35;
+    padding-bottom: $gutter*.35;
+    &.on {
+      display: block;
+      position: relative;
+      top: 0;
+      left: 0;
+      background-color: $colorGrayscale-pebble;
+      width: $col-width;
+      float: left;
+      border-right: 1px solid $colorCru-white;
+    }
+
+    li {
+      > a {
+        line-height: 1.35em;
+        padding-right: 28px;
+      }
+    }
+
+    .has-children {
+      filter: grayscale(100%);
+      background: url("/assets/img/desktop-nav-arrow.png") no-repeat right 15px center;
+      background-size: 7px;
+      &:hover {
+        filter: grayscale(0%);
+      }
+    }
+  }
+  .col-level-3 {
+    background-color: $colorGrayscale-pebble;
+    border-right: none;
+    display: none;
+    left: $col-width;
+    padding-top: $gutter*.35;
+    padding-bottom: $gutter*.35;
+    position: relative;
+    top: -49px;
+    width: $col-width;
+    &.on {
+      display: block;
+      position: absolute;
+      top: 0;
+    }
+  }
+
+  .children-container {
+    background: $colorGrayscale-pebble;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    display: none;
+    z-index: 100;
+  }
+
+
+  .search-sign-in-wrapper {
+    margin-top: 8px;
+    float: right;
+    width: 250px;
+    position: absolute;
+    right: 0;
+    z-index: 0;
+
+    .cart {
+      float: right;
+      margin-right: 30px;
+      background: url("/assets/img/desktop-cart.png") no-repeat;
+      background-size: 20px 20px;
+      width: 20px;
+      height: 22px;
+      cursor: pointer;
+
+      .dropdown {
+        height: 100%;
+        a {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .dropdown-menu {
+        border: none;
+        background: $colorGrayscale-pebble;
+        position: relative;
+        top: 16px;
+        left: 10px;
+        padding: 0;
+        width: 360px;
+        margin: 0;
+
+        .desktop-cart-list {
+          overflow-y: auto;
+          max-height: 250px;
+        }
+
+        .triangle {
+          background: transparent url("/assets/img/menu-triangle.png") no-repeat right top;
+          width: 100%;
+          height: 12px;
+          background-size: 12px 6px;
+          display: block;
+          position: absolute;
+          top: -6px;
+          left: -14px;
+
+          //TODO: Triangle not showing up correctly
+          z-index: 10;
+        }
+
+        .repeating-row {
+          background-color: $colorGrayscale-stone;
+          padding: 15px 0px;
+          border-top: 1px solid $colorCru-white;
+
+          &:first-child {
+            border-top: 0;
+          }
+
+          img {
+            min-height: 40px;
+          }
+
+          p {
+            margin: 0 0 7.5px;
+          }
+
+          &.sub-total {
+            text-transform: uppercase;
+            font-weight: 600;
+            margin: 0;
+            padding: $gutter*.35 0;
+            p {
+              padding: 0;
+              margin: 0;
+            }
+          }
+        }
+
+        .title {
+          color: $colorCru-gray;
+          font-weight: 600;
+        }
+
+        .price {
+          font-weight: 600;
+          margin-bottom: 0 !important;
+        }
+
+        .checkout {
+          width: 100%;
+          border-radius: 0;
+          text-transform: uppercase;
+          padding-top: 10px;
+          padding-bottom: 10px;
+        }
+      }
+    }
+
+    .sign-in, .signed-in {
+      float: right;
+      text-transform: uppercase;
+      color: $colorGrayscale-slate;
+      font-weight: 600;
+      line-height: 1.2;
+      text-align: right;
+      line-height: 22px;
+    }
+
+    .sign-in {
+      cursor: pointer;
+    }
+
+    .signed-in {
+      .dropdown {
+        a {
+          color: $colorCru-gold;
+          cursor: pointer;
+        }
+      }
+
+      .dropdown-menu {
+        width: 160px;
+        background-color: $colorGrayscale-pebble;
+        position: absolute;
+        top: 30px;
+        border: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          padding: 0;
+          border-bottom: 1px solid #fff;
+
+          &:last-child {
+            border: none;
+          }
+
+          &:hover {
+            background-color: $colorCru-white;
+          }
+
+          a {
+            color: $colorGrayscale-black;
+            background: transparent;
+            font-weight: 500;
+            font-size: 14px;
+            padding-left: 45px;
+            padding-top: 7.5px;
+            padding-bottom: 7.5px;
+          }
+        }
+
+        .triangle {
+          background: transparent url("/assets/img/menu-triangle.png") no-repeat right top;
+          width: 100%;
+          height: 12px;
+          position: absolute;
+          top: -6px;
+          left: -80px;
+          background-size: 12px 6px;
+        }
+      }
+
+      .nav-edit-profile {
+        background: url(/assets/img/desktop-edit-profile-off.png) no-repeat 13px center;
+        background-size: 16px 20px;
+        &:hover {
+          background-image: url("/assets/img/desktop-edit-profile.png");
+        }
+      }
+
+      .nav-sign-out {
+        background: url(/assets/img/desktop-sign-out-off.png) no-repeat 13px center;
+        background-size: 16px 20px;
+        &:hover {
+          background-image: url("/assets/img/desktop-sign-out.png");
+        }
+      }
+    }
+
+    .ellipsis {
+      float: right;
+      background: url("/assets/img/search-ellipsis-grey.png") no-repeat right 22px top;
+      background-size: 4px 20px;
+      width: 60px;
+      height: 22px;
+      cursor: pointer;
+
+      &:hover {
+        background-image: url("/assets/img/search-ellipsis-gold.png");
+      }
+
+      .dropdown {
+        height: 100%;
+
+        a {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .dropdown-menu {
+        border: none;
+        background: $colorGrayscale-pebble;
+        position: relative;
+        top: -2px;
+        left: -2px;
+        padding: 0;
+
+        .triangle {
+          background: transparent url("/assets/img/menu-triangle.png") no-repeat right top;
+          width: 100%;
+          height: 12px;
+          position: absolute;
+          top: -6px;
+          left: -16px;
+          background-size: 12px 6px;
+        }
+      }
+
+      .menu {
+        padding: 0;
+        text-transform: uppercase;
+        border-bottom: 1px solid $colorCru-white;
+
+        &:last-child {
+          border: none;
+        }
+
+        &:hover {
+          background-color: $colorCru-white;
+          color: $colorCru-gold;
+        }
+
+        a {
+          color: #666;
+          background: transparent;
+          font-weight: 500;
+          font-size: 14px;
+          padding-left: $gutter*1.5;
+          padding-top: $gutter*.25;
+          padding-bottom: $gutter*.25;
+
+          &:hover {
+            color: $colorCru-gold;
+            background: transparent;
+          }
+        }
+      }
+    }
+
+
+    .nav-near-me {
+      background: url("/assets/img/mobile-menu-location-icon-off.png") no-repeat 13px center;
+      background-size: 16px 20px;
+      &:hover {
+        background-image: url("/assets/img/mobile-menu-location-icon-on.png");
+      }
+    }
+
+    .nav-globe {
+      background: url("/assets/img/mobile-menu-globe-icon-off.png") no-repeat 11px center;
+      background-size: 20px;
+      &:hover {
+        background-image: url("/assets/img/mobile-menu-globe-icon-on.png");
+      }
+    }
+
+    .nav-books {
+      background: url("/assets/img/mobile-menu-book-icon-off.png") no-repeat 13px center;
+      background-size: 16px;
+      &:hover {
+        background-image: url("/assets/img/mobile-menu-book-icon-on.png");
+      }
+    }
+
+    .nav-apps {
+      background: url("/assets/img/mobile-menu-phone-icon-off.png") no-repeat 14px center;
+      background-size: 14px;
+      &:hover {
+        background-image: url("/assets/img/mobile-menu-phone-icon-on.png");
+      }
+    }
+  }
+
+  .search-icon {
+    clear: both;
+    display: block;
+    background-size: 20px 20px;
+    height: 20px;
+    width: 40px;
+    right: 0;
+    position: absolute;
+    top: 40px;
+  }
+
+  .search-icon-off {
+    background: url("/assets/img/desktop-search.png") no-repeat right 14px center;
+    background-size: 20px 20px;
+    height: 20px;
+    width: 40px;
+    display: inline-block;
+    float: right;
+  }
+
+  .search-icon-on {
+    background: url("/assets/img/desktop-search-close.png") no-repeat right 14px center;
+    background-size: 20px 20px;
+    height: 20px;
+    width: 40px;
+    display: inline-block;
+    float: right;
+  }
+
+  .search-icon-on, .search-icon-off {
+    cursor: pointer;
+  }
+}
+
+@import "desktop-sub-navigation";
+@import "desktop_search";

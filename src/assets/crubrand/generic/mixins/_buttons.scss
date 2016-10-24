@@ -1,0 +1,59 @@
+/*------------------------------------*\
+    #MIXINS/BUTTONS
+\*------------------------------------*/
+
+/**
+ * Button Varients
+ */
+@mixin btn($background, $border, $color: inherit) {
+    background-color: $background;
+    border-color: $border;
+    
+    color: $color;
+
+    &:active,
+    &.active {
+        background-image: none;
+    }
+    // scss-lint:disable QualifyingElement
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        &,
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+            background-color: $background;
+            border-color: $border;
+            cursor: not-allowed;
+            pointer-events: none; // Future-proof disabling of clicks
+        }
+    }
+    // scss-lint:enable QualifyingElement
+}
+
+/**
+ * Button Effects: use with btn
+ */
+@mixin btn-effects($background, $border, $color: inherit) {
+    &:hover,
+    &:focus,
+    &:active,
+    &.active,
+    .open &.dropdown-toggle {
+        background-color: $background;
+        border-color: $border;
+        color: $color;
+    }
+}
+
+/**
+ * Button Sizes
+ */
+@mixin button-size($padding-vertical, $padding-horizontal, $font-size, $line-height, $border-radius) {
+    padding: $padding-vertical $padding-horizontal;
+    font-size: $font-size;
+    line-height: $line-height;
+    border-radius: $border-radius;
+}

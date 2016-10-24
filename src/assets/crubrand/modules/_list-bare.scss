@@ -1,0 +1,13 @@
+/*------------------------------------*\
+    #LIST-BARE
+\*------------------------------------*/
+
+/**
+ * The list-bare module simply removes any indents and bullet points from lists.
+ */
+.listBare,
+%listBare {
+    margin:  0;
+    padding: 0;
+    list-style: none;
+}

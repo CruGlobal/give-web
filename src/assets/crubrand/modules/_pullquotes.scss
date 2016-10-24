@@ -1,0 +1,27 @@
+/*------------------------------------*\
+    #PULLQUOTES
+\*------------------------------------*/
+
+.pullquote {
+    border-left-color: transparent;
+    margin: 48px 0;
+    text-align: center;
+    padding-left: 0;
+
+    @include transition(margin, 0.1s);
+    
+    @include mq(501px) {
+        margin: 48px -10px;
+    }
+
+    @include mq(1001px) {
+        margin: 48px -100px;
+    }
+
+    em, 
+    strong {
+        font-weight: 500;
+        font-style: normal;
+        font-size: 110%;
+    }
+}

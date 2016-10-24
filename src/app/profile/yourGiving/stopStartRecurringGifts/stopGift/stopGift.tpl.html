@@ -1,0 +1,9 @@
+<div ng-switch="$ctrl.step">
+  <div style="height: 100px;" ng-switch-default></div>
+  <stop-gift-step-1 ng-switch-when="step-1"
+                    gifts="$ctrl.gifts"
+                    on-select-gifts="$ctrl.selectGifts(selectedGifts)"
+                    cancel="$ctrl.cancel()"
+                    previous="$ctrl.previous()">
+  </stop-gift-step-1>
+</div>

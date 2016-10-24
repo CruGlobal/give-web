@@ -1,0 +1,63 @@
+/*------------------------------------*\
+    #BUTTONS
+\*------------------------------------*/
+/**
+ * Button types are modifiers not children and should be using the
+ * `--` naming convention. However, they have been written this way
+ * to match Bootstraps convention. Hopefully this will change in the
+ * future. 
+ */
+
+
+.btn-secondary {
+  @include button-variant($btn-secondary-color, $btn-secondary-bg, $btn-secondary-border);
+}
+.btn-third {
+  color: #007398 !important;
+  background-color: #fff !important;
+  border-color: #007398 !important; 
+  width:49%;
+}
+
+.btn-subtle {
+    color: $btn-subtle-color;
+    background-color: $btn-subtle-bg;
+    border-color: $btn-subtle-border;
+    background-color: rgba(229,229,229,0.35);
+    border-color: rgba(216,216,216,0.35);
+
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+        color: $btn-subtle-state-color;
+        background-color: $btn-subtle-state-bg;
+        border-color: $btn-subtle-state-border;
+    }
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+      background-image: none;
+    }
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      &,
+      &:hover,
+      &:focus,
+      &.focus,
+      &:active,
+      &.active {
+          background-color: #666062;
+          border-color: #595455;
+      }
+    }
+
+    .badge {
+        color: #e9e9e9;
+        color: rgba(229,229,229,0.35);
+        background-color: #6d6e71;
+    }
+}

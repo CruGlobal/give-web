@@ -1,0 +1,59 @@
+.nav-is-open {
+    .outerWrap {
+        min-height: 100%;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .innerWrap {
+        @include mq($nav-break-max, max) {
+            @include translate3d(em(-$off-canvas-width), 0, 0);
+        }
+    }
+}
+
+.globalNavigation.is-open {
+    @include mq($nav-break-max, max) {
+        right: 0;
+        overflow: hidden;
+    }
+}
+
+.siteNav.is-active {
+    .has-dropdown > .dropdown {
+        @include transition(all 0.25s ease-in);
+    }
+}
+
+.has-dropdown > .dropdown.is-open {
+    overflow: initial;
+}
+
+.dropdown.is-collapsed {
+    height: 0;
+    visibility: hidden;
+    @include opacity(0);
+}
+
+.dropdown.is-open {
+    height: auto;
+    max-height: 100%;
+    visibility: visible;
+    @include opacity(1);
+}
+
+.primary-link.is-active {
+    &,
+    &:focus,
+    &:active {
+        color: $colorCru-gold;
+        background-color: #404040;
+    }
+
+    .icon-down-arrow {
+        @include mq($nav-break-max, max) {
+            &:before {
+                content: "\e80c";
+            }
+        }
+    }
+}

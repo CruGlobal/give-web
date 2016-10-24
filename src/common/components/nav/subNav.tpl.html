@@ -1,0 +1,22 @@
+<div id="sub-navigation">
+  <div class="container">
+    <a href="/" title="Cru" class="sub-nav-logo"></a>
+
+
+    <ul class="breadcrumbs">
+      <li ng-repeat="menuItem in $ctrl.subMenuStructure">
+        <a ng-href="{{menuItem.path}}">{{menuItem.title}}</a>
+      </li>
+    </ul>
+
+    <ul class="sub-nav" ng-class="{'mobile-sub-nav': $ctrl.menuType === 'mobile'}">
+      <li ng-repeat="menuItem in $ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].children">
+        <a ng-href="{{menuItem.path}}">{{menuItem.title}}</a>
+      </li>
+    </ul>
+
+    <div class="sub-nav-search-icon" ng-click="$ctrl.toggleMenu()">
+      <span ng-class="{'search-icon-on': $ctrl.desktopSearch, 'search-icon-off': !$ctrl.desktopSearch}"></span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+/*------------------------------------*\
+    $HEADER
+\*------------------------------------*/
+
+$header-height: 84px;
+
+body {
+    @include mq($nav-break-min) {
+        //padding-top: $header-height;
+    }
+}
+
+.siteHeader {
+    height: $header-height;
+    z-index: 1000;
+    @include mq($nav-break-max, max) {
+        position: relative;
+    }
+}
+
+.logo {
+  background: url("//www.cru.org/images/cru-logo.svg") no-repeat center center;
+
+    float: left;
+    width: 24%;
+    height: 100%;
+    max-height: $header-height;
+    display: inline-block;
+
+    @include mq(520px) {
+        width: 15%;
+    }
+
+    @include mq(840px) {
+        width: 10%;
+    }
+}
+
+
+.navToggle {
+    text-transform: none;
+    position: absolute;
+    right: 0;
+    top: 22px;
+    color: #3a3a3a;
+    margin: 0;
+    padding: 0 18px;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorCru-gold;
+        text-decoration: none;
+    }
+
+    @include mq($nav-break-min) {
+        display: none;
+    }
+}
+
+.navToggle-item {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: $header-height - $gold-bar-size;
+}
+
+.navToggle--close {
+    color: $colorCru-gray;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorCru-gold;
+    }
+}
+
+#sticky {
+    width: 100%;
+    z-index: 1;
+   }

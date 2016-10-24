@@ -1,0 +1,112 @@
+/*------------------------------------*\
+    #CRU SETTINGS
+\*------------------------------------*/
+$font-size-base:          16px;
+$rem-base:                $font-size-base;
+
+/**
+ * Spacing Variables
+ */
+$enable-margins:          true;
+$enable-margins--tiny:    true;
+$enable-margins--small:   true;
+$enable-margins--large:   true;
+$enable-margins--huge:    false;
+$enable-margins--none:    true;
+
+
+$enable-paddings:         true;
+$enable-paddings--tiny:   true;
+$enable-paddings--small:  true;
+$enable-paddings--large:  true;
+$enable-paddings--huge:   false;
+$enable-paddings--none:   true;
+
+
+/**
+ * Navigation and Off-Canvas
+ */
+$off-canvas-width: 280px;
+$nav-break-min: 896px;
+$nav-break-max: $nav-break-min - 1;
+
+$gold-bar-size: 3px;
+
+
+/*------------------------------------*\
+    #VARIABLES/COLORS
+\*------------------------------------*/
+
+/**
+ * Cru Colors
+ */
+$colorCru-gold:       #f9b625;
+$colorCru-gray:       #666062;
+$colorCru-white:      #fff;
+$colorCru-orange:     #dd7d1b;
+$colorCru-blueDeep:   #007398;
+$colorCru-blueBright: #3eb1c8;
+
+
+/**
+ * Type
+ */
+$colorText:         #3a3a3a;
+$colorText--muted:  #67747c;
+$colorText--washed: #abbabf ; // Uppercase and bold
+$colorText--link:   $colorCru-blueDeep;
+
+
+/**
+ * Hightlight
+ */
+$colorHighlight-info:    $brand-info;
+$colorHighlight-success: $brand-success;
+$colorHighlight-warning: $brand-warning;
+$colorHighlight-danger:  $brand-danger;
+
+
+/**
+ * Grayscale
+ *
+ * Light --> Dark
+ */
+$colorGrayscale-background: #f7f7f7;
+$colorGrayscale-sand:   #f4f4f4;
+$colorGrayscale-pebble: #f0f0f0;
+$colorGrayscale-stone:  #e7e7e7;
+$colorGrayscale-rock:   #b9b9b9;
+$colorGrayscale-slate:  #909b9c;
+$colorGrayscale-black:  #000;
+
+$hr-color: rgba(0,0,0,0.15); // #e9e9e9
+
+
+/**
+ * Social Media
+ */
+$facebook:   #3b5999;
+$instagram:  #3f729b;
+$pinterest:  #cc2127;
+$googleplus: #dd4b39;
+$twitter:    #55acee;
+
+
+/**
+ * Framework
+ */
+$color-primary:   $colorCru-gold;
+$color-secondary: $colorCru-gray;
+
+$brand-primary:   $color-primary;
+
+
+
+
+
+/**
+ * #USAGE
+ */
+
+ $btn--subtle-bg:     $colorGrayscale-sand;
+ $btn--subtle-border: $colorGrayscale-stone;

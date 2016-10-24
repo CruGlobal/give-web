@@ -1,7 +1,9 @@
 import angular from 'angular';
+import 'ng-resize';
 import transform from 'lodash/transform';
 import isObject from 'lodash/isObject';
 import includes from 'lodash/includes';
+import find from 'lodash/find';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -11,6 +13,7 @@ import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
+import subNavDirective from './subNav.directive';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
@@ -20,7 +23,7 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($http, $document, $window, envService, cartService, sessionService, sessionModalService){
+  constructor($scope, $http, $document, $window, envService, cartService, sessionService, sessionModalService){
     this.$http = $http;
     this.$document = $document;
     this.$window = $window;
@@ -34,25 +37,33 @@ class NavController{
   }
 
   $onInit() {
-    this.mobileMenuPath = {
+    this.setMenuTemplate();
+
+    this.menuPath = {
       main: [],
+      sub: [],
       global: []
     };
 
     // pre-set menu path like below
-    // this.mobileMenuPath.main = ['opportunities', 'mission-trips', 'summer', 'explore', 'getting-a-job'];
+    // this.menuPath.main = ['opportunities', 'mission-trips', 'summer', 'explore', 'getting-a-job'];
+    // this.menuPath.sub = ['communities', 'campus'];
 
     this.getNav().subscribe((structure) => {
       this.menuStructure = structure;
+      this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
     });
 
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
-
-    this.templateUrl = this.$window.screen && this.$window.screen.width < 991 ? mobileTemplate.name : desktopTemplate.name;
   }
 
   $onDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  setMenuTemplate() {
+    this.menuType = this.$window.innerWidth < 991 ? 'mobile' : 'desktop';
+    this.templateUrl = this.menuType === 'mobile' ? mobileTemplate.name : desktopTemplate.name;
   }
 
   signIn() {
@@ -97,7 +108,7 @@ class NavController{
 
         let jsonStructure = angular.fromJson(response.data.jsonStructure);
         let menuStructure = {
-          main: replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org'}),
+          main: replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org', featuredPath: 'https://www.cru.org'}),
           global: jsonStructure['/content/cru/us/en/global']
         };
 
@@ -112,6 +123,16 @@ class NavController{
       });
   }
 
+  makeSubNav(structure, path){
+    let subNav = [];
+    angular.forEach(path, function(p, index){
+      let children = index ? subNav[index - 1].children : structure;
+      subNav[index] = find(children, function(item) { return item.path.split('/').pop() === p; });
+    });
+
+    return subNav;
+  }
+
   loadCart() {
     this.cartData = null;
     this.cartService.get()
@@ -120,12 +141,16 @@ class NavController{
       } );
   }
 
-  toggleMenu(){
-    this.mobileNavOpen = !this.mobileNavOpen;
-    this.desktopSearch = !this.desktopSearch;
+  toggleMenu(value){
+    this.mobileNavOpen = value;
+    this.desktopSearch = value;
 
     var body = angular.element(this.$document[0].body);
-    body.toggleClass('body-scroll-lock');
+    if(value){
+      body.addClass('body-scroll-lock');
+    }else{
+      body.removeClass('body-scroll-lock');
+    }
   }
 
   cruSearch(term){
@@ -136,15 +161,17 @@ class NavController{
 export default angular
   .module(componentName, [
     'environment',
+    'ngResize',
     mobileTemplate.name,
     desktopTemplate.name,
     cartService.name,
     loadingComponent.name,
     sessionService.name,
     sessionModalService.name,
-    mobileNavLevelComponent.name
+    mobileNavLevelComponent.name,
+    subNavDirective.name
   ])
   .component(componentName, {
     controller: NavController,
-    template: '<ng-include src="$ctrl.templateUrl"></ng-include>'
+    template: '<ng-include src="$ctrl.templateUrl" ng-resize="$ctrl.setMenuTemplate()"></ng-include>'
   });

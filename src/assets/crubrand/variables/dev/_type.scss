@@ -1,0 +1,134 @@
+N = normal
+I = italic
+4 = normal font-weight
+7 = bold font-weight
+
+$fontWeight1: 100;
+$fontWeight2: 200;
+$fontWeight3: 300;
+$fontWeight4: 400;
+$fontWeight5: 500;
+$fontWeight6: 600;
+$fontWeight7: 700;
+$fontWeight8: 800;
+$fontWeight9: 900;
+
+$fontStyleN: normal;
+$fontStyleI: italic;
+
+
+$lineHeight-tightest:;
+$lineHeight-tighter:;
+$lineHeight-tight:;
+$lineHeight-base:;
+$lineHeight-loose:;
+$lineHeight-looser:;
+
+$fontSize-smallest: 12px;
+$fontSize-smaller:  14px;
+$fontSize-small:    16px;
+$fontSize-base:     19px;
+$fontSize-large:    21px;
+$fontSize-larger:   24px;
+
+$letterSpacing-tight:  em(-0.64px);
+$letterSpacing-normal: em(-0.32px);
+$letterSpacing-loose:  em(1.6px);
+$letterSpacing-looser: em(3.2px);
+
+
+/**
+ * Normal
+ */
+@mixin fontN1() {
+    font-style: $fontStyleN;
+    font-weight: $fontWeight1;
+}
+
+@mixin fontN2() {
+    font-style: $fontStyleN;
+    font-weight: $fontWeight2;
+}
+
+@mixin fontN3() {
+    font-style: $fontStyleN;  
+    font-weight: $fontWeight3;
+}
+
+@mixin fontN4() {
+    font-style: $fontStyleN;
+    font-weight: $fontWeight4;
+}
+
+@mixin fontN5() {
+    font-style: $fontStyleN;
+    font-weight: $fontWeight5;
+}
+
+@mixin fontN6() {
+    font-style: $fontStyleN;
+    font-weight: $fontWeight6;
+}
+
+@mixin fontN7() {
+    font-style: $fontStyleN;    
+    font-weight: $fontWeight7;
+}
+
+@mixin fontN8() {
+    font-style: $fontStyleN;
+    font-weight: $fontWeight8;
+}
+
+@mixin fontN9() {
+    font-style: $fontStyleN;
+    font-weight: $fontWeight9;
+}
+
+/**
+ * Italics
+ */
+@mixin fontI1() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight1;
+}
+
+@mixin fontI2() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight2;
+}
+
+@mixin fontI3() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight3;
+}
+
+@mixin fontI4() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight4;
+}
+
+@mixin fontI5() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight5;
+}
+
+@mixin fontI6() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight6;
+}
+
+@mixin fontI7() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight7;
+}
+
+@mixin fontI8() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight8;
+}
+
+@mixin fontI9() {
+    font-style: $fontStyleI;
+    font-weight: $fontWeight9;
+}

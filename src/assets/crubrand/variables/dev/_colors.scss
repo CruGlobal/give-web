@@ -1,0 +1,47 @@
+/*------------------------------------*\
+ #COLORS
+\*------------------------------------*/
+
+/**
+ * Cru Colors
+ */
+$color-gold:            #f9b625;
+$color-gray:            #666062;
+$color-white:           #fff;
+$color-orange:          #dd7d1b;
+$color-blueDeep:        #007398;
+$color-blueBright:      #3eb1c8;
+
+$color-background:      #f7f7f7;
+$color-text:            #3a3a3a;
+$color-black:           #000;
+
+
+/**
+ * Helpers
+ */
+$color-info:            $brand-info;
+$color-success:         $brand-success;
+$color-warning:         $brand-warning;
+$color-danger:          $brand-danger;
+
+
+/**
+ * Grayscale
+ */
+
+$color-background:      #f7f7f7;
+$color-text:            #3a3a3a;
+$color-black:           #000;
+
+
+
+
+/**
+ * Framework
+ */
+$color-primary:         $color-gold;
+$color-secondary:       $color-gray;
+$color-third:			$color-blueDeep;
+
+$brand-primary:         $color-primary;
