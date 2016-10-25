@@ -15,7 +15,8 @@ describe( 'your giving', () => {
         donationsService = _donationsService_;
         $ctrl = $componentController( module.name, {}, {
           changeState: jasmine.createSpy( 'changeState' ),
-          setLoading:  jasmine.createSpy( 'setLoading' )
+          setLoading:  jasmine.createSpy( 'setLoading' ),
+          complete:    jasmine.createSpy( 'complete' )
         } );
       } ) );
 
@@ -55,6 +56,14 @@ describe( 'your giving', () => {
             expect( $ctrl.changeState ).toHaveBeenCalledWith( {state: 'step-0'} );
           } );
         } );
+        describe( 'current step \'step-2\'', () => {
+          it( 'changes step to \'step-1\'', () => {
+            $ctrl.step = 'step-2';
+            $ctrl.previous();
+            expect( $ctrl.step ).toEqual( 'step-1' );
+            expect( $ctrl.changeState ).not.toHaveBeenCalled();
+          } );
+        } );
       } );
 
       describe( 'loadRecurringGifts()', () => {
@@ -75,6 +84,22 @@ describe( 'your giving', () => {
           $ctrl.selectGifts( ['c', 'd'] );
           expect( $ctrl.selectedGifts ).toEqual( ['c', 'd'] );
           expect( $ctrl.setStep ).toHaveBeenCalledWith( 'step-2' );
+        } );
+      } );
+
+      describe( 'confirmChanges()', () => {
+        beforeEach( () => {
+          spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).and.returnValue( Observable.of( {} ) );
+          $ctrl.selectedGifts = [{a: 'a'}];
+        } );
+        it( 'updates recurring gifts', () => {
+          $ctrl.confirmChanges();
+          expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+          expect( $ctrl.donationsService.updateRecurringGifts ).toHaveBeenCalledWith( [{
+            a:                  'a',
+            donationLineStatus: 'Cancelled'
+          }] );
+          expect( $ctrl.complete ).toHaveBeenCalled();
         } );
       } );
     } );

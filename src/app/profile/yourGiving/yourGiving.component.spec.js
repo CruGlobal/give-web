@@ -167,6 +167,9 @@ describe( 'your giving', function () {
       spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: jasmine.createSpy( 'then' )}} );
       $ctrl.openStopStartRecurringGiftsModal();
       expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'stopStartRecurringGiftsModal'} ) );
+      expect( $ctrl.stopStartGiftsSuccess ).toEqual( false );
+      $ctrl.stopStartRecurringGiftsModal.result.then.calls.first().args[0](); // Execute close modal promise success function
+      expect( $ctrl.stopStartGiftsSuccess ).toEqual( true );
     } );
   } );
 } );

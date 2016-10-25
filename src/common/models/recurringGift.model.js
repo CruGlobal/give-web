@@ -43,6 +43,14 @@ export default class RecurringGiftModel {
     } );
   }
 
+  set donationLineStatus(value){
+    this.gift['updated-donation-line-status'] = value !== this.gift['donation-line-status'] ? value : '';
+  }
+
+  get donationLineStatus(){
+    return this.gift['updated-donation-line-status'] || this.gift['donation-line-status'];
+  }
+
   get frequency() {
     return this.gift['updated-rate']['recurrence']['interval'] || this.parentDonation['rate']['recurrence']['interval'];
   }

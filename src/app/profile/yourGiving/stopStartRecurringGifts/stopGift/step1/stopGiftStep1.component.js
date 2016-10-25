@@ -11,7 +11,7 @@ let componentName = 'stopGiftStep1';
 class StopGiftStep1Controller {
 
   /* @ngInject */
-  constructor(  ) {
+  constructor() {
     this.find = find;
   }
 
@@ -46,5 +46,4 @@ export default angular
         setLoading:    '&'
       }
     }
-  )
-;
+  );

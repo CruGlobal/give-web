@@ -17,10 +17,8 @@ class StopStartRecurringGiftsModalController {
   }
 
   changeState( state ) {
-    switch ( state ) {
-      default:
-        this.state = state;
-    }
+    if ( state !== 'step-0' ) this.giftAction = state;
+    this.state = state;
   }
 
   setLoading( loading ) {
