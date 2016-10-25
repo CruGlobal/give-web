@@ -117,6 +117,30 @@ describe('recurringGift model', () => {
     });
   });
 
+  describe('donationLineStatus setter', () => {
+    it('should update donation-line-status', () => {
+      giftModel.donationLineStatus = 'Cancelled';
+      expect(giftModel.gift['donation-line-status']).toEqual('Standard');
+      expect(giftModel.gift['updated-donation-line-status']).toEqual('Cancelled');
+    });
+    it('should clear updated donation-line-status if it is the same as the original', () => {
+      giftModel.gift['updated-donation-line-status'] = 'Cancelled';
+      giftModel.donationLineStatus = 'Standard';
+      expect(giftModel.gift['donation-line-status']).toEqual('Standard');
+      expect(giftModel.gift['updated-donation-line-status']).toEqual('');
+    });
+  });
+
+  describe('donationLineStatus getter', () => {
+    it('should return \'updated-donation-line-status\' if set', () => {
+      giftModel.gift['updated-donation-line-status'] = 'Cancelled';
+      expect(giftModel.donationLineStatus).toEqual('Cancelled');
+    });
+    it('should return \'donation-line-status\'', () => {
+      expect(giftModel.donationLineStatus).toEqual('Standard');
+    });
+  });
+
   describe('frequency getter', () => {
     it('should load frequency if it hasn\'t been updated', () => {
       expect(giftModel.frequency).toEqual('Monthly');
