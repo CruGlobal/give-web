@@ -89,10 +89,9 @@ $promo-width: 200px;
     }
   }
 
-  .col-level-1,
   .col-level-2,
   .col-level-3 {
-    height: $menu-container-height;
+    min-height: $menu-container-height;
   }
 
   .gh-desk-promo {
