@@ -3,11 +3,11 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import module from './stopGift.component';
+import module from './redirectGift.component';
 
 describe( 'your giving', () => {
   describe( 'stopStartRecurringGiftsModal', () => {
-    describe( 'stopGift', () => {
+    describe( 'redirectGift', () => {
       beforeEach( angular.mock.module( module.name ) );
       let $ctrl, donationsService;
 
@@ -78,28 +78,12 @@ describe( 'your giving', () => {
         } );
       } );
 
-      describe( 'selectGifts( selectedGifts )', () => {
-        it( 'sets selectedGifts and moves to \'step-2\'', () => {
+      describe( 'selectGift( gift )', () => {
+        it( 'sets selectedGift and moves to \'step-2\'', () => {
           spyOn( $ctrl, 'setStep' );
-          $ctrl.selectGifts( ['c', 'd'] );
-          expect( $ctrl.selectedGifts ).toEqual( ['c', 'd'] );
+          $ctrl.selectGift( 'c' );
+          expect( $ctrl.selectedGift ).toEqual( 'c' );
           expect( $ctrl.setStep ).toHaveBeenCalledWith( 'step-2' );
-        } );
-      } );
-
-      describe( 'confirmChanges()', () => {
-        beforeEach( () => {
-          spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).and.returnValue( Observable.of( {} ) );
-          $ctrl.selectedGifts = [{a: 'a'}];
-        } );
-        it( 'updates recurring gifts', () => {
-          $ctrl.confirmChanges();
-          expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
-          expect( $ctrl.donationsService.updateRecurringGifts ).toHaveBeenCalledWith( [{
-            a:                  'a',
-            donationLineStatus: 'Cancelled'
-          }] );
-          expect( $ctrl.complete ).toHaveBeenCalled();
         } );
       } );
     } );

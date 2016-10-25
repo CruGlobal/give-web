@@ -1,15 +1,12 @@
 import angular from 'angular';
-import template from './stopGift.tpl';
-import map from 'lodash/map';
+import template from './redirectGift.tpl';
 
 import donationsService from 'common/services/api/donations.service';
+import redirectGiftStep1 from './step1/redirectGiftStep1.component';
 
-import stopGiftStep1 from './step1/stopGiftStep1.component';
-import stopGiftStep2 from './step2/stopGiftStep2.component';
+let componentName = 'redirectGift';
 
-let componentName = 'stopGift';
-
-class StopGiftController {
+class RedirectGiftController {
 
   /* @ngInject */
   constructor( donationsService ) {
@@ -44,19 +41,9 @@ class StopGiftController {
     } );
   }
 
-  selectGifts( selectedGifts ) {
-    this.selectedGifts = selectedGifts;
+  selectGift( gift ) {
+    this.selectedGift = gift;
     this.setStep( 'step-2' );
-  }
-
-  confirmChanges() {
-    this.setLoading( {loading: true} );
-    this.donationsService.updateRecurringGifts( map( this.selectedGifts, ( gift ) => {
-      gift.donationLineStatus = 'Cancelled';
-      return gift;
-    } ) ).subscribe( () => {
-      this.complete();
-    } );
   }
 }
 
@@ -64,11 +51,10 @@ export default angular
   .module( componentName, [
     template.name,
     donationsService.name,
-    stopGiftStep1.name,
-    stopGiftStep2.name
+    redirectGiftStep1.name
   ] )
   .component( componentName, {
-      controller:  StopGiftController,
+      controller:  RedirectGiftController,
       templateUrl: template.name,
       bindings:    {
         changeState: '&',

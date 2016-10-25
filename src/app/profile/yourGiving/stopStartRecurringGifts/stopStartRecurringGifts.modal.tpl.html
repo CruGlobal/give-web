@@ -1,13 +1,20 @@
 <div ng-switch="$ctrl.state" style="position: relative;">
   <stop-start-step-0 ng-switch-when="step-0"
-                     gift-action="$ctrl.state"
+                     gift-action="$ctrl.giftAction"
                      change-state="$ctrl.changeState(state)"
                      cancel="$ctrl.dismiss()">
   </stop-start-step-0>
   <stop-gift ng-switch-when="stop"
              change-state="$ctrl.changeState(state)"
              cancel="$ctrl.dismiss()"
+             complete="$ctrl.close()"
              set-loading="$ctrl.setLoading(loading)">
   </stop-gift>
+  <redirect-gift ng-switch-when="redirect"
+                 change-state="$ctrl.changeState(state)"
+                 cancel="$ctrl.dismiss()"
+                 complete="$ctrl.close()"
+                 set-loading="$ctrl.setLoading(loading)">
+  </redirect-gift>
   <loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>
 </div>
