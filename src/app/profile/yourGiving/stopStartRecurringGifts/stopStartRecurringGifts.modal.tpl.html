@@ -10,5 +10,11 @@
              complete="$ctrl.close()"
              set-loading="$ctrl.setLoading(loading)">
   </stop-gift>
+  <redirect-gift ng-switch-when="redirect"
+                 change-state="$ctrl.changeState(state)"
+                 cancel="$ctrl.dismiss()"
+                 complete="$ctrl.close()"
+                 set-loading="$ctrl.setLoading(loading)">
+  </redirect-gift>
   <loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>
 </div>
