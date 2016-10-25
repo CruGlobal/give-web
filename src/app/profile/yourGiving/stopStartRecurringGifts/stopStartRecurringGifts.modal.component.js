@@ -17,7 +17,7 @@ class StopStartRecurringGiftsModalController {
   }
 
   changeState( state ) {
-    if ( state !== 'setp-0' ) this.giftAction = state;
+    if ( state !== 'step-0' ) this.giftAction = state;
     this.state = state;
   }
 
