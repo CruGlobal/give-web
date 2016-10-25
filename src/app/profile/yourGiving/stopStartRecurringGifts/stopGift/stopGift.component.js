@@ -1,9 +1,11 @@
 import angular from 'angular';
 import template from './stopGift.tpl';
+import map from 'lodash/map';
 
 import donationsService from 'common/services/api/donations.service';
 
-import stopGiftStep1 from './stopGiftStep1.component';
+import stopGiftStep1 from './step1/stopGiftStep1.component';
+import stopGiftStep2 from './step2/stopGiftStep2.component';
 
 let componentName = 'stopGift';
 
@@ -25,6 +27,9 @@ class StopGiftController {
 
   previous() {
     switch ( this.step ) {
+      case 'step-2':
+        this.step = 'step-1';
+        break;
       case 'step-1':
       default:
         this.changeState( {state: 'step-0'} );
@@ -43,13 +48,24 @@ class StopGiftController {
     this.selectedGifts = selectedGifts;
     this.setStep( 'step-2' );
   }
+
+  confirmChanges() {
+    this.setLoading( {loading: true} );
+    this.donationsService.updateRecurringGifts( map( this.selectedGifts, ( gift ) => {
+      gift.donationLineStatus = 'Cancelled';
+      return gift;
+    } ) ).subscribe( () => {
+      this.complete();
+    } );
+  }
 }
 
 export default angular
   .module( componentName, [
     template.name,
     donationsService.name,
-    stopGiftStep1.name
+    stopGiftStep1.name,
+    stopGiftStep2.name
   ] )
   .component( componentName, {
       controller:  StopGiftController,
@@ -57,7 +73,8 @@ export default angular
       bindings:    {
         changeState: '&',
         cancel:      '&',
-        setLoading:  '&'
+        setLoading:  '&',
+        complete:    '&'
       }
     }
   );
