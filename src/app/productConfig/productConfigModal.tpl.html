@@ -73,7 +73,7 @@
           <div class="panel-body">
             <div data-toggle="buttons">
               <label class="btn btn-radio btn-wide"
-                     ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder"
+                     ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
                      ng-if="f.name !== 'SEMIANNUAL'"
                      ng-class="{'active': f.name === $ctrl.productData.frequency}"
                      ng-click="$ctrl.changeFrequency(f)">
@@ -99,7 +99,7 @@
                     <div class="form-group">
                       <select class="form-control form-control-subtle"
                               ng-model="$ctrl.itemConfig['recurring-day-of-month']"
-                              ng-options="o as (o | ordinal) for o in $ctrl.giftDatesService.possibleTransactionDays()"
+                              ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
                               ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'])">
                       </select>
                     </div>
@@ -109,7 +109,7 @@
                   <div class="form-group">
                     <label translate>Your gift will start on</label>
                     <div class="form-group">
-                      {{$ctrl.giftDatesService.startDate( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.nextDrawDate ) | date:'mediumDate'}}
+                      {{$ctrl.startDate( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.nextDrawDate ).format('ll')}}
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 language: node_js
-node_js: node
+node_js: "6"
 before_install:
   - npm install jspm
   - ./node_modules/.bin/jspm config registries.github.auth $JSPM_GITHUB_AUTH_TOKEN
@@ -8,7 +8,7 @@ install:
 script:
   - gulp lint
   - gulp test
-  - gulp release
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "dev" ]); then gulp release; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 cache:

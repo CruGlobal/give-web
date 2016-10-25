@@ -1,0 +1,88 @@
+<form novalidate name="$ctrl.giftForm">
+  <div class="row mt-">
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label translate>Amount</label>
+        <input type="number"
+               class="form-control form-control-subtle"
+               ng-model="$ctrl.gift.amount"
+               ng-min="1"
+               ng-max="10000000"
+               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label translate>Payment Method</label>
+        <select class="form-control  form-control-subtle"
+                ng-model="$ctrl.gift.paymentMethodId"
+                ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['card-number'])) for paymentMethod in $ctrl.paymentMethods" >
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label translate>Frequency</label>
+        <select class="form-control  form-control-subtle"
+                ng-model="$ctrl.gift.frequency">
+          <option value="Monthly" translate>Monthly</option>
+          <option value="Quarterly" translate>Quarterly</option>
+          <option value="Annual" translate>Annually</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label translate>Transaction Day</label>
+        <select class="form-control form-control-subtle"
+                ng-model="$ctrl.gift.transactionDay"
+                ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()">
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="$ctrl.gift.frequency === 'Quarterly'">
+    <p>You have selected <strong>quarterly</strong> as a frequency.
+      Please tell us in which months you would like your quarterly gifts to be made
+    </p>
+
+    <div class="form-group">
+      <label class="radio">
+        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.nextDrawDate).format('M')">
+        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.nextDrawDate) }}
+      </label>
+      <label class="radio">
+        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.nextDrawDate, 1).format('M')">
+        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.nextDrawDate, 1) }}
+      </label>
+      <label class="radio">
+        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.nextDrawDate, 2).format('M')">
+        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.nextDrawDate, 2) }}
+      </label>
+    </div>
+  </div>
+
+  <div ng-if="$ctrl.gift.frequency === 'Annual'">
+    <p>You have selected <strong>annually</strong> as a frequency.
+      Please tell us in which months you would like your annual gifts to be made
+    </p>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <select class="form-control  form-control-subtle"
+                  ng-model="$ctrl.gift.startMonth"
+                  ng-options="(idx*1+1).toString() as month for (idx, month) in $ctrl.possibleMonths">
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="mb0">
+    <span translate>Next gift will be on</span>
+    <strong>{{$ctrl.gift.nextGiftDate.format('ll')}}</strong>
+  </p>
+</form>

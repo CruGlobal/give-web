@@ -1,0 +1,70 @@
+/*------------------------------------*\
+    #NAVIGATION-DROPDOWNS
+\*------------------------------------*/
+
+.has-dropdown > .dropdown {
+    background-color: #404040;
+    color: #fff;
+    width: 100% !important;
+   // padding-left: $base-spacing-unit;
+    //padding-right: $base-spacing-unit;
+    font-size: 80%;
+
+    overflow: hidden;
+    max-height: 0;
+    height: 0;
+    opacity: 0;
+
+    position: fixed;
+    left: 0;
+}
+
+.has-dropdown:hover > .dropdown {
+    padding-top: $base-spacing-unit;
+    padding-bottom: half($base-spacing-unit);
+
+    overflow: visible;
+    max-height: 600px;
+    height: auto;
+    opacity: 1;
+}
+
+.dropdown-listBlock {
+    background-color: #333;
+
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+.dropdown-link--primary,
+.dropdown-listBlock {
+    display: block;
+    text-align: left;
+    background: #333;
+    color: #f9b625;
+    border-radius: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+.dropdown-link {
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        background: #f9b625;
+        color: #333;
+    }
+}
+
+.dropdown-link--secondary {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0;
+    text-align: left;
+    color: #fff;
+}
+
+.dropdown-link--text {
+    color: $colorText;
+}

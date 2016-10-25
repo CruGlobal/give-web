@@ -1,0 +1,58 @@
+// Cart Specific Styles
+.giftsum-actions {
+  text-align: right;
+  width: 20%;
+  .btn-giftsum-action {
+    color: inherit;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+}
+
+
+.giftsum-table {
+  margin-bottom: 0;
+  th {
+    font-size: .9em;
+    text-transform: uppercase;
+    font-weight: 200;
+  }
+  .giftsum-gift-row {
+    td {
+      padding-top: 30px;
+      padding-bottom: 30px;
+    }
+    .giftsum-profile {
+      width: 90px;
+      height: auto;
+      margin-right: 15px;
+    }
+    .giftsum-title {
+      display: block;
+    }
+    .giftsum-detail {
+      display: block;
+      font-size: .75em;
+      font-family: $data-font;
+    }
+    .giftsum-actions {
+      font-size: .8em;
+      text-transform: uppercase;
+    }
+    .giftsum-about {
+      font-family: $data-font;
+    }
+  }
+  tfoot {
+    tr td {
+      padding-top: 40px;
+      vertical-align: middle;
+    }
+  }
+  .giftsum-line {
+    display: block;
+    strong {
+      font-family: $data-font;
+    }
+  }
+}

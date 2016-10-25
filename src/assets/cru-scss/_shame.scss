@@ -1,0 +1,36 @@
+/*------------------------------------*\
+    #SHAME
+\*------------------------------------*/
+
+.btn {
+    @include mq(419px, max) {
+        white-space: initial;
+    }
+}
+
+.fb_iframe_widget iframe,
+.fb_iframe_widget span {
+    max-width: 100%;
+}
+
+
+.overflow--hidden,
+.overflow--hide {
+    overflow: hidden;
+}
+
+.position--b0 {
+    bottom: 0;
+}
+
+.position--r0 {
+    right: 0;
+}
+
+.position--l0 {
+    left: 0;
+}
+
+.opaque {
+    opacity: 1;
+}

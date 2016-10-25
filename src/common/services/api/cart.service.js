@@ -5,16 +5,17 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 
 import cortexApiService from '../cortexApi.service';
-import giftDatesService from '../giftHelpers/giftDates.service';
+import commonService from './common.service';
+import {startDate} from '../giftHelpers/giftDates.service';
 
 let serviceName = 'cartService';
 
 class Cart {
 
   /*@ngInject*/
-  constructor(cortexApiService, giftDatesService){
+  constructor(cortexApiService, commonService){
     this.cortexApiService = cortexApiService;
-    this.giftDatesService = giftDatesService;
+    this.commonService = commonService;
   }
 
   get() {
@@ -23,7 +24,7 @@ class Cart {
         params: {
           zoom: 'lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,lineitems:element:itemfields'
         }
-      }), this.giftDatesService.getNextDrawDate())
+      }), this.commonService.getNextDrawDate())
       .map(([cartResponse, nextDrawDate]) => {
         if (!cartResponse || !cartResponse._lineitems) {
           return {};
@@ -67,7 +68,7 @@ class Cart {
               frequency: frequencyTitle,
               amount: itemAmount,
               designationNumber: designationNumber,
-              giftStartDate: frequencyTitle !== 'Single' ? this.giftDatesService.startDate(itemConfig['recurring-day-of-month'], nextDrawDate) : null
+              giftStartDate: frequencyTitle !== 'Single' ? startDate(itemConfig['recurring-day-of-month'], nextDrawDate) : null
             });
           });
         }
@@ -134,6 +135,6 @@ class Cart {
 export default angular
   .module(serviceName, [
     cortexApiService.name,
-    giftDatesService.name
+    commonService.name
   ])
   .service(serviceName, Cart);

@@ -61,7 +61,7 @@
     ng-switch-when="step0PaymentMethodList"
     payment-methods="$ctrl.paymentMethods"
     dismiss="$ctrl.dismiss()"
-    next="$ctrl.next(paymentMethod)">step0PaymentMethodList
+    next="$ctrl.next(paymentMethod)">
   </step-0-payment-method-list>
 
   <step-0-add-update-payment-method
@@ -70,15 +70,15 @@
     can-go-back="$ctrl.hasPaymentMethods"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(paymentMethod)">step0AddUpdatePaymentMethod
+    next="$ctrl.next(paymentMethod)">
   </step-0-add-update-payment-method>
 
   <step-1-edit-recurring-gifts
     ng-switch-when="step1EditRecurringGifts"
-    payment-methods="$ctrl.paymentMethods"
-    recurring-gift-changes="$ctrl.recurringGiftChanges"
+    payment-methods="$ctrl.validPaymentMethods"
+    recurring-gifts="$ctrl.recurringGifts"
     dismiss="$ctrl.dismiss()"
-    next="$ctrl.next(changes)">step1EditRecurringGifts
+    next="$ctrl.next(null, recurringGifts)">
   </step-1-edit-recurring-gifts>
 
   <step-2-add-recent-recipients
@@ -86,7 +86,7 @@
     additions="$ctrl.additions"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(additions)">
+    next="$ctrl.next(null, null, additions)">
   </step-2-add-recent-recipients>
 
   <step-3-configure-recent-recipients
@@ -95,12 +95,12 @@
     additions="$ctrl.additions"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(additions)">
+    next="$ctrl.next(null, null, additions)">
   </step-3-configure-recent-recipients>
 
   <step-4-confirm
     ng-switch-when="step4Confirm"
-    recurring-gift-changes="$ctrl.recurringGiftChanges"
+    recurring-gifts="$ctrl.recurringGifts"
     additions="$ctrl.additions"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"

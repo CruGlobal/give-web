@@ -1,10 +1,7 @@
-<form class="form-inline form-give-home-signin mt pb border-bottom-small text-center" ng-submit="$ctrl.signIn()" name="$ctrl.signInForm" ng-if="$ctrl.showSignInForm">
+<form class="form-inline form-give-home-signin mt pb border-bottom-small" ng-submit="$ctrl.signIn()" name="$ctrl.signInForm" ng-if="$ctrl.showSignInForm">
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage | translate}}</div>
 
-  <div class="form-group">
-    <span class="btn btn-default form-heading hidden-sm hidden-md">Existing Users</span>
-  </div>
-  <div class="form-group">
+  <div class="form-group input-widths">
     <input type="email"
            ng-disabled="$ctrl.isSigningIn"
            ng-model="$ctrl.username"
@@ -13,7 +10,7 @@
            autocomplete="off"
            required>
   </div>
-  <div class="form-group">
+  <div class="form-group input-widths">
     <input type="password"
            class="form-control form-control-subtle"
            placeholder="{{'Password'|translate}}"
@@ -32,7 +29,3 @@
 
   <loading-overlay ng-if="$ctrl.isSigningIn"></loading-overlay>
 </form>
-
-<div class="mt pb border-bottom-small text-center" ng-if="!$ctrl.showSignInForm" translate>
-  Welcome, {{$ctrl.sessionService.session.first_name}}!
-</div>

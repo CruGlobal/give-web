@@ -18,46 +18,37 @@ describe( 'stopStartRecurringGiftsModal', () => {
 
   describe( '$onInit()', () => {
     it( 'initializes the component', () => {
-      spyOn( $ctrl, 'next' );
+      spyOn( $ctrl, 'changeState' );
       $ctrl.$onInit();
-      expect( $ctrl.next ).toHaveBeenCalled();
+      expect( $ctrl.changeState ).toHaveBeenCalledWith( 'step-0' );
     } );
   } );
 
-  describe( 'next()', () => {
-    describe( 'undefined state', () => {
-      it( 'transitions to \'step-0\'', () => {
-        $ctrl.next();
-        expect( $ctrl.state ).toEqual( 'step-0' );
-      } );
+  describe( 'changeState( state )', () => {
+    beforeEach( () => {
+      $ctrl.state = 'step-0';
     } );
 
-    describe( '\'step-0\' state', () => {
-      beforeEach( () => {
-        $ctrl.state = 'step-0';
-      } );
+    it( 'changes state', () => {
+      $ctrl.changeState( 'stop' );
+      expect( $ctrl.state ).toEqual( 'stop' );
+      expect( $ctrl.giftAction ).toEqual( 'stop' );
+    } );
 
-      it( 'transitions to \'stop-step-1\'', () => {
-        $ctrl.next( 'stop' );
-        expect( $ctrl.state ).toEqual( 'stop-step-1' );
-        expect( $ctrl.giftAction ).toEqual( 'stop' );
-      } );
-
-      it( 'stay on \'step-0\'', () => {
-        $ctrl.next();
-        expect( $ctrl.state ).toEqual( 'step-0' );
-        expect( $ctrl.giftAction ).not.toBeDefined();
-      } );
+    it( 'changes state to \'step-0\'', () => {
+      $ctrl.changeState( 'step-0' );
+      expect( $ctrl.state ).toEqual( 'step-0' );
     } );
   } );
 
-  describe( 'previous()', () => {
-    it( 'transitions to \'step-0\'', () => {
-      angular.forEach( ['restart-step-1', 'change-step-1', 'redirect-step-1', 'stop-step-1'], ( state ) => {
-        $ctrl.state = state;
-        $ctrl.previous();
-        expect( $ctrl.state ).toEqual( 'step-0' );
-      } );
+  describe( 'setLoading( loading )', () => {
+    it( 'sets isLoading to true', () => {
+      $ctrl.setLoading( true );
+      expect( $ctrl.isLoading ).toEqual( true );
+    } );
+    it( 'sets isLoading to false', () => {
+      $ctrl.setLoading( false );
+      expect( $ctrl.isLoading ).toEqual( false );
     } );
   } );
 } );

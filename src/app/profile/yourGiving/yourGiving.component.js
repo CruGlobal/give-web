@@ -116,10 +116,14 @@ class YourGivingController {
   }
 
   openStopStartRecurringGiftsModal() {
+    this.stopStartGiftsSuccess = false;
     this.stopStartRecurringGiftsModal = this.$uibModal.open({
       component: 'stopStartRecurringGiftsModal',
       backdrop: 'static',
       windowTemplateUrl: giveModalWindowTemplate.name
+    });
+    this.stopStartRecurringGiftsModal.result.then(() => {
+      this.stopStartGiftsSuccess = true;
     });
   }
 }

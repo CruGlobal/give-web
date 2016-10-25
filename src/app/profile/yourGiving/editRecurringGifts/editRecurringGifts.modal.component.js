@@ -1,9 +1,11 @@
 import angular from 'angular';
-import some from 'lodash/some';
+import filter from 'lodash/filter';
 
 import loadingComponent from 'common/components/loading/loading.component';
 import step0AddUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
 import step0paymentMethodList from './step0/paymentMethodList.component';
+import step1EditRecurringGifts from './step1/editRecurringGifts.component';
+import step4ConfirmRecurringGifts from './step4/confirmRecurringGifts.component';
 
 import profileService from 'common/services/api/profile.service';
 
@@ -29,9 +31,10 @@ class EditRecurringGiftsModalController {
       .subscribe((data) => {
         this.paymentMethods = data;
         this.hasPaymentMethods = this.paymentMethods && this.paymentMethods.length > 0;
-        this.hasValidPaymentMethods = some(this.paymentMethods, (paymentMethod) => {
+        this.validPaymentMethods = filter(this.paymentMethods, (paymentMethod) => {
           return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || ( parseInt(paymentMethod['expiry-month']) > (new Date()).getMonth() && parseInt(paymentMethod['expiry-year']) >= (new Date()).getFullYear() );
         });
+        this.hasValidPaymentMethods = this.validPaymentMethods && this.validPaymentMethods.length > 0;
         this.next();
       }, (error) => {
         this.state = 'error';
@@ -39,7 +42,7 @@ class EditRecurringGiftsModalController {
       });
   }
 
-  next(paymentMethod, recurringGiftChanges, additions){
+  next(paymentMethod, recurringGifts, additions){
     switch(this.state){
       case 'loading':
         if(this.hasValidPaymentMethods){
@@ -61,7 +64,7 @@ class EditRecurringGiftsModalController {
         this.loadPaymentMethods();
         break;
       case 'step1EditRecurringGifts':
-        this.recurringGiftChanges = recurringGiftChanges;
+        this.recurringGifts = recurringGifts;
         if(this.hasRecentRecipients){
           this.state = 'step2AddRecentRecipients';
         }else{
@@ -118,6 +121,8 @@ export default angular
     loadingComponent.name,
     step0AddUpdatePaymentMethod.name,
     step0paymentMethodList.name,
+    step1EditRecurringGifts.name,
+    step4ConfirmRecurringGifts.name,
     profileService.name
   ])
   .component(componentName, {

@@ -160,25 +160,6 @@ describe( 'delete payment method modal', function () {
     } );
   } );
 
-  describe( 'getQuarterMonths', () => {
-    it( 'should 4 months of the year that payment go through', () => {
-      let gift = {
-        'next-draw-date': {
-          'display-value': '2016-07-14'
-        },
-        'recurring-day-of-month': '15'
-      };
-      expect(self.controller.getQuarterMonths(gift)).toEqual([
-        'January',
-        'April',
-        'July',
-        'October'
-      ]);
-      self.controller.quarterMonths = 'foo';
-      expect(self.controller.getQuarterMonths(gift)).toEqual('foo');
-    } );
-  } );
-
   describe( 'buildGifts()' , () => {
     it('should return an array of gifts', () => {
       self.controller.resolve.paymentMethod['_recurringgifts'] = [{

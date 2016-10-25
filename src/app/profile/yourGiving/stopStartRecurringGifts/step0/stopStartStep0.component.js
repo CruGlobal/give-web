@@ -18,8 +18,8 @@ export default angular
     controller:  StopStartStep0Controller,
     templateUrl: template.name,
     bindings:    {
-      giftAction: '<',
-      next:   '&',
-      cancel: '&'
+      giftAction:  '<',
+      changeState: '&',
+      cancel:      '&'
     }
   } );

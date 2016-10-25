@@ -1,19 +1,22 @@
 import angular from 'angular';
 import map from 'lodash/map';
 import flatMap from 'lodash/flatMap';
+import groupBy from 'lodash/groupBy';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/pluck';
 
 import cortexApiService from '../cortexApi.service';
 import profileService from './profile.service';
+import commonService from './common.service';
+import RecurringGiftModel from 'common/models/recurringGift.model';
 
 import find from 'lodash/find';
 
 let serviceName = 'donationsService';
 
 /*@ngInject*/
-function DonationsService( cortexApiService, profileService ) {
+function DonationsService( cortexApiService, profileService, commonService ) {
 
   function getRecipients( year ) {
     let path = ['donations', 'historical', cortexApiService.scope, 'recipient'];
@@ -54,60 +57,77 @@ function DonationsService( cortexApiService, profileService ) {
   function getReceipts( data ) {
     return cortexApiService
       .post( {
-        path: '/receipts/items',
+        path:           '/receipts/items',
         followLocation: true,
-        data: data
+        data:           data
       } )
-      .map( (response) => {
-        angular.forEach(response['receipt-summaries'], (item) => {
-          let link = find(response.links, (r) => {
-            return r.uri.indexOf(item['transaction-number']) != -1;
-          });
+      .map( ( response ) => {
+        angular.forEach( response['receipt-summaries'], ( item ) => {
+          let link = find( response.links, ( r ) => {
+            return r.uri.indexOf( item['transaction-number'] ) != -1;
+          } );
           item['pdf-link'] = link;
-        });
+        } );
         return response;
-      })
+      } )
       .pluck( 'receipt-summaries' );
   }
 
   function getRecurringGifts() {
     return Observable.forkJoin(
       cortexApiService.get( {
-          path: ['profiles', cortexApiService.scope, 'default'],
-          zoom: {
-            gifts: 'givingdashboard:managerecurringdonations'
-          }
-        } )
+        path: ['profiles', cortexApiService.scope, 'default'],
+        zoom: {
+          gifts: 'givingdashboard:managerecurringdonations'
+        }
+      } )
         .pluck( 'gifts' ),
+      commonService.getNextDrawDate(),
       profileService.getPaymentMethods()
-      )
-      .map(([gifts, paymentMethods]) => {
-        return flatMap(gifts.donations, donation => {
-          return map(donation['donation-lines'], donationLine => {
-            donationLine.rate = donation.rate;
-            donationLine['recurring-day-of-month'] = donation['recurring-day-of-month'];
-            donationLine['next-draw-date'] = donation['next-draw-date'];
-            donationLine.paymentMethod = find(paymentMethods, (paymentMethod) => {
-              return donationLine['payment-method-id'] === paymentMethod.self.uri.split('/').pop();
-            });
-            return donationLine;
-          });
-        });
-      });
+    )
+      .map( ( [gifts, nextDrawDate, paymentMethods] ) => {
+        return flatMap( gifts.donations, donation => {
+          return map( donation['donation-lines'], donationLine => {
+            return new RecurringGiftModel(donationLine, donation, nextDrawDate, paymentMethods);
+          } );
+        } );
+      } );
+  }
+
+  function updateRecurringGifts( gifts ) {
+    gifts = angular.isArray( gifts ) ? gifts : [gifts];
+    let groupedGifts = groupBy(gifts, 'parentDonation["donation-row-id"]');
+    let donations = map(groupedGifts, (lines, donationId) => {
+      return {
+        'donation-lines': map(lines, 'toObject'),
+        'donation-status': lines[0].parentDonation['donation-status'],
+        'effective-status': lines[0].parentDonation['effective-status'],
+        rate: lines[0].parentDonation.rate,
+        'donation-row-id': donationId
+      };
+    });
+    return cortexApiService.put( {
+      path: ['donations', 'recurring', cortexApiService.scope, 'active'],
+      data: {
+        donations: donations
+      }
+    } );
   }
 
   return {
-    getHistoricalGifts:  getHistoricalGifts,
-    getRecipients:       getRecipients,
-    getRecipientDetails: getRecipientDetails,
-    getReceipts:         getReceipts,
-    getRecurringGifts: getRecurringGifts
+    getHistoricalGifts:   getHistoricalGifts,
+    getRecipients:        getRecipients,
+    getRecipientDetails:  getRecipientDetails,
+    getReceipts:          getReceipts,
+    getRecurringGifts:    getRecurringGifts,
+    updateRecurringGifts: updateRecurringGifts
   };
 }
 
 export default angular
   .module( serviceName, [
     cortexApiService.name,
-    profileService.name
+    profileService.name,
+    commonService.name
   ] )
   .factory( serviceName, DonationsService );

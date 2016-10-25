@@ -1,0 +1,39 @@
+.search {
+  display: none;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+
+  &.open {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    height: 144px;
+    z-index: 5;
+    width: 100%;
+    overflow: hidden;
+    background-color: $colorGrayscale-pebble;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    input {
+      width: 100%;
+      font-size: 36px;
+      text-transform: uppercase;
+      text-align: center;
+      font-weight: 600;
+      color: $colorGrayscale-slate;
+      background: transparent;
+      border: none;
+      outline: none;
+
+      &.black-text {
+        color: #626062;
+      }
+    }
+
+    &.sub-nav-open {
+      position: fixed !important;
+      top: 80px !important;
+    }
+  }
+}

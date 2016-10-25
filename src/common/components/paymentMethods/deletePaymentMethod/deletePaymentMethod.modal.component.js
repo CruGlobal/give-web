@@ -1,9 +1,11 @@
 import angular from 'angular';
+import moment from 'moment';
 
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component.js';
 import profileService from 'common/services/api/profile.service.js';
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
+import {quarterlyMonths} from 'common/services/giftHelpers/giftDates.service';
 
 import template from './deletePaymentMethod.modal.tpl';
 import remove from 'lodash/remove';
@@ -18,6 +20,8 @@ class deletePaymentMethodModalController {
   constructor(profileService, $log) {
     this.profileService = profileService;
     this.$log = $log;
+    this.quarterlyMonths = quarterlyMonths;
+
     this.loading = false;
     this.view = '';
     this.filteredPaymentMethods = [];
@@ -27,7 +31,7 @@ class deletePaymentMethodModalController {
     this.submissionError = {
       error: ''
     };
-    this.monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    this.monthNames = moment.months();
   }
 
   $onInit() {
@@ -82,26 +86,6 @@ class deletePaymentMethodModalController {
   getRecurrenceDate(gift){
     return new Date(gift['next-draw-date']['display-value']);
   }
-
-  getQuarterMonths(gift){
-    if(this.quarterMonths) return this.quarterMonths;
-    let month = this.getRecurrenceDate(gift).getMonth()*1;
-    let months = [];
-    for(let i=0;i<4;i++){
-      months.push(month);
-      month+=3;
-      month = month > 11 ? month - 12 : month;
-    }
-    months.sort((a,b) => {
-      return a-b;
-    });
-    forEach(months, (item,index)=>{
-      months[index] = this.monthNames[item];
-    });
-    this.quarterMonths = months;
-    return this.quarterMonths;
-  }
-
 
   buildGifts(recurringGifts){
     var gifts = [];

@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-ui-bootstrap';
 import designationsService from 'common/services/api/designations.service';
-import giftDatesService from 'common/services/giftHelpers/giftDates.service';
+import commonService from 'common/services/api/common.service';
 import templateModal from 'app/productConfig/productConfigModal.tpl';
 import modalController from 'app/productConfig/productConfig.modal';
 import modalStateService from 'common/services/modalState.service';
@@ -10,7 +10,7 @@ import {giveGiftParams} from 'app/productConfig/productConfig.modal';
 let serviceName = 'productModalService';
 
 /*@ngInject*/
-function ProductModalService( $uibModal, $location, designationsService, giftDatesService, modalStateService ) {
+function ProductModalService( $uibModal, $location, designationsService, commonService, modalStateService ) {
   let modalOpen = false;
 
   function configureProduct( code, config, isEdit ) {
@@ -30,7 +30,7 @@ function ProductModalService( $uibModal, $location, designationsService, giftDat
             return designationsService.productLookup( code ).toPromise();
           },
           nextDrawDate: function(){
-            return giftDatesService.getNextDrawDate().toPromise();
+            return commonService.getNextDrawDate().toPromise();
           },
           itemConfig:  () => config,
           isEdit:      () => isEdit
@@ -57,7 +57,7 @@ export default angular
   .module( serviceName, [
     'ui.bootstrap',
     designationsService.name,
-    giftDatesService.name,
+    commonService.name,
     modalController.name,
     modalStateService.name,
     templateModal.name

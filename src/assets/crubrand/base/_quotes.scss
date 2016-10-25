@@ -1,0 +1,43 @@
+/*------------------------------------*\
+    #QUOTES
+\*------------------------------------*/
+
+q,
+blockquote:not(.pullquote) em {
+    quotes:"“" "”";
+
+    &:before {
+        content: "“";
+        content: open-quote;
+    }
+
+    &:after {
+        content: "“";
+        content: close-quote;
+    }
+
+    q:before {
+        content: "“";
+        content: open-quote;
+    }
+
+    q:after {
+        content: "“";
+        content: close-quote;
+    }
+
+    /**
+     * If an element opens with an inline quote, let’s hang that.
+     */
+    &.opener {
+        display: inline-block;
+        
+        text-indent: -0.22em;
+    }
+	
+    &:first-child {
+        display: inline-block;
+        
+        text-indent: 0;
+    }
+}

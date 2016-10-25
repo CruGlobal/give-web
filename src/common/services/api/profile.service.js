@@ -78,8 +78,12 @@ class Profile {
   getProfileDonorDetails() {
     return this.cortexApiService
       .get( {
-        path: ['selfservicedonordetails', 'profile', this.cortexApiService.scope]
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          donorDetails: 'selfservicedonordetails'
+        }
       })
+      .pluck('donorDetails');
   }
 
   updateProfileDonorDetails(donorDetails) {

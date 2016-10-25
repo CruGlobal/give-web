@@ -1,0 +1,116 @@
+/*------------------------------------*\
+    #SIGN-IN
+\*------------------------------------*/
+
+// Middle Dot - Useful to seperate links or other text elements.
+
+.middleDot {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+
+// Vertical Divider
+
+.verticalDivider {
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 50%;
+        display: block;
+
+        border-left: 1px solid $hr-border;
+        border-color: rgba(0,0,0,0.15);
+    }
+
+    @include mq(991, max) {
+        
+        &:before {
+            right: 0;
+            top: 50%;
+            width: 100%;
+            border-left: 0;
+        
+            border-top: 1px solid $hr-border;
+            border-color: rgba(0,0,0,0.15);
+        }
+    }
+}
+
+.verticalDivider-text {
+    display: block;
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-weight: 800;
+    font-style: italic;
+
+    background-color: $colorGrayscale-background;
+
+    @include mq(991, max) {
+        padding-left:  $base-spacing-unit / 2;
+        padding-right:  $base-spacing-unit / 2;
+    }
+}
+
+.verticalDivider--signIn {
+  	margin-top: 39px;
+
+	&,
+	&:before {
+		height: 132px;
+	} 
+
+    @include mq(991, max) {
+        margin-top: $base-spacing-unit;
+        margin-bottom: $base-spacing-unit;
+
+		&,
+		&:before {
+			height: $base-spacing-unit;
+		} 
+    }
+}
+
+
+// Social Media Sign-In
+
+.socialSignIn {
+  	margin-top: 39px;
+
+    @include mq(991, max) {
+  		margin-top: 0px;
+    }
+}
+
+.socialSignIn .icon-facebook,
+.socialSignIn .icon-gplus,
+.socialSignIn .icon-twitter {
+
+	&:before {
+		float: left;
+		width: 0;
+		margin: 0;
+		line-height: inherit;
+	}
+}
+
+.btnSocialSignIn {
+  	margin-bottom: 8px;
+}
+
+.errorInput {
+    border: 1px solid $colorHighlight-danger;
+}
+
+.errorText {
+    color: $colorHighlight-danger;
+}

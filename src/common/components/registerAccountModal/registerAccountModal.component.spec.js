@@ -174,23 +174,23 @@ describe( 'registerAccountModal', function () {
     } );
   } );
 
-  // eslint-disable-next-line jasmine/no-disabled-tests
-  xdescribe( 'setModalSize( size )', () => {
-    let scope = {size: 'lg'};
+  describe( 'setModalSize( size )', () => {
+    let modal;
     beforeEach( () => {
-      spyOn( angular, 'element' ).and.callFake( () => {
-        return {scope: () => scope};
-      } );
+      modal = jasmine.createSpyObj( 'modal', ['addClass', 'removeClass'] );
+      spyOn( angular, 'element' ).and.returnValue( modal );
     } );
 
     it( 'sets size to \'sm\'', () => {
       $ctrl.setModalSize( 'sm' );
-      expect( scope.size ).toEqual( 'sm' );
+      expect( modal.removeClass ).toHaveBeenCalledWith( 'modal-sm modal-md modal-lg' );
+      expect( modal.addClass ).toHaveBeenCalledWith( 'modal-sm' );
     } );
 
     it( 'sets size missing param', () => {
       $ctrl.setModalSize();
-      expect( scope.size ).toEqual( undefined );
+      expect( modal.removeClass ).toHaveBeenCalledWith( 'modal-sm modal-md modal-lg' );
+      expect( modal.addClass ).not.toHaveBeenCalled();
     } );
   } );
 } );

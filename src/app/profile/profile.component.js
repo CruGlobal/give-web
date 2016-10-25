@@ -50,6 +50,7 @@ class ProfileController {
     this.profileService.getProfileDonorDetails()
       .subscribe(
         donorDetails => {
+          console.log(donorDetails);
           this.donorDetails = donorDetails;
           this.donorDetialsLoading = false;
         },
@@ -63,10 +64,12 @@ class ProfileController {
 
   updateDonorDetails(){
     this.donorDetialsLoading = true;
+    console.log(this.donorDetails);
     this.profileService.updateProfileDonorDetails(this.donorDetails)
       .subscribe(
         () => {
           this.donorDetialsLoading = false;
+          this.donorDetailsForm.$setPristine();
         },
         error => {
           this.donorDetialsLoading = false;

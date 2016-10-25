@@ -1,0 +1,200 @@
+/*------------------------------------*\
+    #SPACING
+\*------------------------------------*/
+
+/**
+ * Margin and padding helper classes.
+ *
+ * `.(m|p)(t|r|b|L|e|s)(-|+|0) {}` = margin/padding top/right/bottom/left/ends/sides less/more/none
+ */
+
+// scss-lint:disable SingleLinePerProperty SingleLinePerSelector SpaceBeforeBrace
+
+@if ($enable-margins == true) {
+
+    /**
+     * Add margins.
+     */
+    .m,  %m   { margin:        $base-margin !important; }
+    .mt, %mt  { margin-top:    $base-margin !important; }
+    .mr, %mr  { margin-right:  $base-margin !important; }
+    .mb, %mb  { margin-bottom: $base-margin !important; }
+    .ml, %ml  { margin-left:   $base-margin !important; }
+    .me, %me  { margin-top:    $base-margin !important; margin-bottom: $base-margin !important; }
+    .ms, %ms  { margin-right:  $base-margin !important; margin-left:   $base-margin !important; }
+
+}
+
+
+@if ($enable-margins--tiny == true) {
+
+    /**
+     * Tiny margins.
+     */
+    .m--,  %m--   { margin:        quarter($base-margin) !important; }
+    .mt--, %mt--  { margin-top:    quarter($base-margin) !important; }
+    .mr--, %mr--  { margin-right:  quarter($base-margin) !important; }
+    .mb--, %mb--  { margin-bottom: quarter($base-margin) !important; }
+    .ml--, %ml--  { margin-left:   quarter($base-margin) !important; }
+    .ms--, %ms--  { margin-top:    quarter($base-margin) !important; margin-bottom: quarter($base-margin) !important; }
+    .me--, %me--  { margin-right:  quarter($base-margin) !important; margin-left:   quarter($base-margin) !important; }
+}
+
+
+@if ($enable-margins--small == true) {
+
+    /**
+    * Small margins.
+    */
+    .m-,  %m-   { margin:        half($base-margin) !important; }
+    .mt-, %mt-  { margin-top:    half($base-margin) !important; }
+    .mr-, %mr-  { margin-right:  half($base-margin) !important; }
+    .mb-, %mb-  { margin-bottom: half($base-margin) !important; }
+    .ml-, %ml-  { margin-left:   half($base-margin) !important; }
+    .me-, %me-  { margin-top:    half($base-margin) !important; margin-bottom: half($base-margin) !important; }
+    .ms-, %ms-  { margin-right:  half($base-margin) !important; margin-left:   half($base-margin) !important; }
+
+}
+
+
+@if ($enable-margins--large == true) {
+
+    /**
+     * Large Margins.
+     */
+    .m_x,  %m_x   { margin:        double($base-margin) !important;  }
+    .mt_x, %mt_x  { margin-top:    double($base-margin) !important;  }
+    .mr_x, %mr_x  { margin-right:  double($base-margin) !important;  }
+    .mb_x, %mb_x  { margin-bottom: double($base-margin) !important;  }
+    .ml_x, %ml_x  { margin-left:   double($base-margin) !important;  }
+    .me_x, %me_x  { margin-top:    double($base-margin) !important; margin-bottom:  double($base-margin) !important; }
+    .ms_x, %ms_x  { margin-right:  double($base-margin) !important; margin-left:    double($base-margin) !important; }
+}
+
+
+@if ($enable-margins--huge == true) {
+
+    /**
+     * Huge Margins.
+     */
+    .m_xx,  %m_xx   { margin:        quadruple($base-margin) !important;  }
+    .mt_xx, %mt_xx  { margin-top:    quadruple($base-margin) !important;  }
+    .mr_xx, %mr_xx  { margin-right:  quadruple($base-margin) !important;  }
+    .mb_xx, %mb_xx  { margin-bottom: quadruple($base-margin) !important;  }
+    .ml_xx, %ml_xx  { margin-left:   quadruple($base-margin) !important;  }
+    .ms_xx, %ms_xx  { margin-top:    quadruple($base-margin) !important; margin-bottom: quadruple($base-margin) !important; }
+    .me_xx, %me_xx  { margin-right:  quadruple($base-margin) !important; margin-left:   quadruple($base-margin) !important; }
+
+}
+
+
+@if ($enable-margins--none == true) {
+
+    /**
+     * Remove margins.
+     */
+    .m0,  %m0   { margin:        0 !important; }
+    .mt0, %mt0  { margin-top:    0 !important; }
+    .mr0, %mr0  { margin-right:  0 !important; }
+    .mb0, %mb0  { margin-bottom: 0 !important; }
+    .ml0, %ml0  { margin-left:   0 !important; }
+    .me0, %me0  { margin-top:    0 !important; margin-bottom: 0 !important; }
+    .ms0, %ms0  { margin-right:  0 !important; margin-left:   0 !important; }
+
+}
+
+
+
+
+
+@if ($enable-paddings == true) {
+
+    /**
+     * Add paddings.
+     */
+    .p,  %p   { padding:        $base-padding !important; }
+    .pt, %pt  { padding-top:    $base-padding !important; }
+    .pr, %pr  { padding-right:  $base-padding !important; }
+    .pb, %pb  { padding-bottom: $base-padding !important; }
+    .pl, %pl  { padding-left:   $base-padding !important; }
+    .pe, %pe  { padding-top:    $base-padding !important; padding-bottom: $base-padding !important; }
+    .ps, %ps  { padding-right:  $base-padding !important; padding-left:   $base-padding !important; }
+
+}
+
+@if ($enable-paddings--tiny == true) {
+
+	/**
+     * Tiny paddings.
+     */
+    .p--,  %p--   { padding:        quarter($base-padding) !important; }
+    .pt--, %pt--  { padding-top:    quarter($base-padding) !important; }
+    .pr--, %pr--  { padding-right:  quarter($base-padding) !important; }
+    .pb--, %pb--  { padding-bottom: quarter($base-padding) !important; }
+    .pl--, %pl--  { padding-left:   quarter($base-padding) !important; }
+    .pe--, %pe--  { padding-top:    quarter($base-padding) !important; padding-bottom: quarter($base-padding) !important; }
+    .ps--, %ps--  { padding-right:  quarter($base-padding) !important; padding-left:   quarter($base-padding) !important; }
+
+}
+
+@if ($enable-paddings--small == true) {
+
+    /**
+     * Small paddings.
+     */
+    .p-,  %p-   { padding:        half($base-padding) !important; }
+    .pt-, %pt-  { padding-top:    half($base-padding) !important; }
+    .pr-, %pr-  { padding-right:  half($base-padding) !important; }
+    .pb-, %pb-  { padding-bottom: half($base-padding) !important; }
+    .pl-, %pl-  { padding-left:   half($base-padding) !important; }
+    .pe-, %pe-  { padding-top:    half($base-padding) !important; padding-bottom: half($base-padding) !important; }
+    .ps-, %ps-  { padding-right:  half($base-padding) !important; padding-left:   half($base-padding) !important; }
+
+}
+
+@if ($enable-paddings--large == true) {
+
+    /**
+     * Large paddings.
+     */
+    .p_x,  %p_x   { padding:        double($base-padding) !important; }
+    .pt_x, %pt_x  { padding-top:    double($base-padding) !important; }
+    .pr_x, %pr_x  { padding-right:  double($base-padding) !important; }
+    .pb_x, %pb_x  { padding-bottom: double($base-padding) !important; }
+    .pl_x, %pl_x  { padding-left:   double($base-padding) !important; }
+    .pe_x, %pe_x  { padding-top:    double($base-padding) !important; padding-bottom: double($base-padding) !important; }
+    .ps_x, %ps_x  { padding-right:  double($base-padding) !important; padding-left:   double($base-padding) !important; }
+
+}
+
+@if ($enable-paddings--huge == true) {
+
+    /**
+     * Huge paddings.
+     */
+    .p_xx,  %p_xx   { padding:        quadruple($base-padding) !important; }
+    .pt_xx, %pt_xx  { padding-top:    quadruple($base-padding) !important; }
+    .pr_xx, %pr_xx  { padding-right:  quadruple($base-padding) !important; }
+    .pb_xx, %pb_xx  { padding-bottom: quadruple($base-padding) !important; }
+    .pl_xx, %pl_xx  { padding-left:   quadruple($base-padding) !important; }
+    .pe_xx, %pe_xx  { padding-top:    quadruple($base-padding) !important; padding-bottom: quadruple($base-padding) !important; }
+    .ps_xx, %ps_xx  { padding-right:  quadruple($base-padding) !important; padding-left:   quadruple($base-padding) !important; }
+
+}
+
+@if ($enable-paddings--none == true) {
+
+    /**
+     * Remove paddings.
+     */
+    .p0,   %p0   { padding:        0 !important; }
+    .pt0,  %pt0  { padding-top:    0 !important; }
+    .pr0,  %pr0  { padding-right:  0 !important; }
+    .pb0,  %pb0  { padding-bottom: 0 !important; }
+    .pl0,  %pl0  { padding-left:   0 !important; }
+    .pe0,  %pe0  { padding-top:    0 !important; padding-bottom: 0 !important; }
+    .ps0,  %ps0  { padding-right:  0 !important; padding-left:   0 !important; }
+
+}
+
+// scss-lint:enable SingleLinePerProperty SingleLinePerSelector SpaceBeforeBrace

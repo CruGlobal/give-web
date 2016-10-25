@@ -48,7 +48,7 @@
                         On the {{gift['recurring-day-of-month']}}th day of each month
                       </span>
                       <span ng-switch-when="Quarterly" translate>
-                        On the {{gift['recurring-day-of-month']}}th day of each {{$ctrl.getQuarterMonths(gift)[0]}}, {{$ctrl.getQuarterMonths(gift)[1]}}, {{$ctrl.getQuarterMonths(gift)[2]}} and {{$ctrl.getQuarterMonths(gift)[3]}}
+                        On the {{gift['recurring-day-of-month']}}th day of {{$ctrl.quarterlyMonths(null, gift['next-draw-date'])}}
                       </span>
                       <span ng-switch-when="Annually" translate>
                         On {{$ctrl.monthNames[$ctrl.getRecurrenceDate(gift).getMonth()*1]}} {{gift['recurring-day-of-month']}}th of each year
