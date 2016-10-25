@@ -30,6 +30,39 @@ describe( 'product config modal', function () {
     };
   } ) );
 
+  describe('handlePatternValidation', () => {
+    beforeEach( inject( function ( _$controller_ ) {
+      $ctrl = _$controller_( module.name, {
+        $uibModalInstance: uibModalInstance,
+        productData:       productData,
+        nextDrawDate:      nextDrawDate,
+        itemConfig:        itemConfig,
+        isEdit:            true
+      } );
+      $ctrl.itemConfigForm = itemConfigForm;
+    } ) );
+
+    describe('$onInit()', () => {
+      it('should create pattern validation handler', () => {
+        $ctrl.$onInit();
+        expect($ctrl.handlePatternValidation).toBeDefined();
+      });
+    });
+
+    describe('handlePatternValidation', () => {
+      it('should validate number', () => {
+        $ctrl.customInputActive = true;
+        $ctrl.$onInit();
+        let validation = $ctrl.handlePatternValidation;
+        expect(validation.test('43')).toBe(true);
+        expect(validation.test('43.')).toBe(false);
+        expect(validation.test('0.4')).toBe(false);
+        expect(validation.test('4.444')).toBe(false);
+      });
+    });
+
+  });
+
   describe( 'isEdit = true', () => {
     beforeEach( inject( function ( _$controller_ ) {
       $ctrl = _$controller_( module.name, {
@@ -91,7 +124,7 @@ describe( 'product config modal', function () {
       } );
 
       it( 'should handle an error submitting a gift', () => {
-        $ctrl.cartService.addItem.and.returnValue(Observable.throw('error'));
+        $ctrl.cartService.addItem.and.returnValue(Observable.throw({data: 'error'}));
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.addToCart();
         expect($ctrl.giftSubmitted).toEqual(false);
@@ -169,13 +202,10 @@ describe( 'product config modal', function () {
 
     describe( 'changeAmount()', () => {
       it( 'sets itemConfig amount', () => {
-        $ctrl.itemConfigForm.amount = jasmine.createSpyObj( 'amount', ['$setViewValue', '$render'] );
         $ctrl.changeAmount( 100 );
         expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
         expect( $ctrl.itemConfig.amount ).toEqual( 100 );
-        expect( $ctrl.customAmount ).not.toBeDefined();
-        expect( $ctrl.itemConfigForm.amount.$setViewValue ).toHaveBeenCalledWith( undefined, 'change' );
-        expect( $ctrl.itemConfigForm.amount.$render ).toHaveBeenCalled();
+        expect( $ctrl.customAmount ).toBe('');
         expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.amount, 100 );
       } );
     } );
@@ -265,4 +295,5 @@ describe( 'product config modal', function () {
       expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '1' );
     } );
   });
+
 } );

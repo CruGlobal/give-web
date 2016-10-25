@@ -21,11 +21,19 @@
   <button class="btn btn-success" ng-click="$dismiss()">Keep Browsing</button>
 </div>
 
+
 <form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.addToCart()" ng-if="!$ctrl.giftSubmitted">
   <div class="modal-body pt0 p">
     <div class="container-fluid">
       <div class="panel panel-default panel-plain mt">
         <div class="panel panel-default give-modal-panel">
+
+          <div ng-if="$ctrl.error" ng-switch="$ctrl.error.indexOf('already in the cart') !== -1" class="alert" role="alert"
+               ng-class="{'alert-warning': $ctrl.error.indexOf('already in the cart') !== -1, 'alert-danger': $ctrl.error.indexOf('already in the cart') === -1}">
+            <span ng-switch-when="true" translate>This gift has already been added. Please proceed to checkout.</span>
+            <span ng-switch-when="false" translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact support.</span>
+          </div>
+
           <h4 class="panel-title border-bottom-small" translate>
             Gift Amount
           </h4>
@@ -55,18 +63,18 @@
                 <div class="form-group form-group-default u-inline">
                   <input class="form-control form-control-subtle number"
                          name="amount"
+                         type="text"
+                         step="1"
+                         ng-required="$ctrl.customInputActive"
                          ng-model="$ctrl.customAmount"
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-focus="$ctrl.customInputActive = true;"
-                         ng-min="1"
-                         ng-max="10000000"
-                         ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                         ng-pattern="$ctrl.handlePatternValidation">
                 </div>
               </label>
               <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-                <div class="help-block" ng-message="min" translate>Amount must be at least $1.00</div>
-                <div class="help-block" ng-message="max" translate>Amount must be less than $10,000,000.00</div>
-                <div class="help-block" ng-message="pattern" translate>Amount must be a valid number with no more than 2 decimal places</div>
+                <div class="help-block" ng-message="pattern" translate>Amount must be a valid number with no more than 2 decimal places between $1.00 and $10,000,000.00</div>
+                <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
               </div>
             </div>
           </div><!-- // panel-body -->

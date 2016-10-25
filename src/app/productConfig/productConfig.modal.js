@@ -49,11 +49,27 @@ class ModalInstanceCtrl {
 
     if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
       this.customAmount = this.itemConfig.amount;
+      this.customInputActive = true;
     }
 
     if(!this.itemConfig['recurring-day-of-month'] && nextDrawDate) {
       this.itemConfig['recurring-day-of-month'] = Number(nextDrawDate.split('-')[2]).toString();
     }
+  }
+
+  $onInit() {
+    this.handlePatternValidation = (() => {
+      var regex = /^[0-9]+(\.[0-9]{1,2})?$/;
+      return {
+        test: (value) => {
+          if(this.customInputActive) {
+            let patternMatched = regex.test(value);
+            let numberIsWithingRange = value*1.0 >= 1 && value*1.0 <= 10000000;
+            return patternMatched && numberIsWithingRange;
+          }
+        }
+      };
+    })();
   }
 
   initializeParams() {
@@ -98,7 +114,7 @@ class ModalInstanceCtrl {
   changeAmount( amount ) {
     this.itemConfigForm.$setDirty();
     this.itemConfig.amount = amount;
-    this.customAmount = undefined;
+    this.customAmount = '';
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
     this.customInputActive = false;
   }
@@ -131,7 +147,8 @@ class ModalInstanceCtrl {
         }
         this.submittingGift = false;
         this.giftSubmitted = true;
-      }, () => {
+      }, (error) => {
+        this.error = error.data;
         this.submittingGift = false;
       } );
   }
