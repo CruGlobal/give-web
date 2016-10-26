@@ -16,8 +16,16 @@ export default class RecurringGiftModel {
     return this.gift['designation-name'];
   }
 
+  set designationName(value) {
+    this.gift['designation-name'] = value;
+  }
+
   get designationNumber() {
     return this.gift['designation-number'];
+  }
+
+  set designationNumber(value) {
+    this.gift['designation-number'] = value;
   }
 
   get amount(){
