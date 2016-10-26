@@ -88,7 +88,7 @@
           <div class="panel-body">
             <div data-toggle="buttons">
               <label class="btn btn-radio btn-wide"
-                     ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder"
+                     ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
                      ng-if="f.name !== 'SEMIANNUAL'"
                      ng-class="{'active': f.name === $ctrl.productData.frequency}"
                      ng-click="$ctrl.changeFrequency(f)">

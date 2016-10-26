@@ -62,7 +62,7 @@ class NavController{
   }
 
   setMenuTemplate() {
-    this.menuType = this.$window.innerWidth < 991 ? 'mobile' : 'desktop';
+    this.menuType = this.$window.innerWidth <= 991 ? 'mobile' : 'desktop';
     this.templateUrl = this.menuType === 'mobile' ? mobileTemplate.name : desktopTemplate.name;
   }
 

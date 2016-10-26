@@ -21,7 +21,7 @@
   <user-match-modal ng-switch-when="user-match"
                     modal-title="$ctrl.modalTitle"
                     on-success="$ctrl.onUserMatchSuccess()"
-                    set-loading="$ctrl.setLoading(loading)">
+                    set-loading="$ctrl.setLoading({loading: loading})">
   </user-match-modal>
   <div ng-switch-default style="height: 100px;"></div>
 </div>

@@ -20,7 +20,12 @@ describe('recurringGift model', () => {
         'updated-rate': {recurrence: {interval: ''}},
         'updated-recurring-day-of-month': '',
         'updated-start-month': '',
-        'updated-start-year': '',
+        'updated-start-year': ''
+      },
+      {
+        'donation-row-id': '1-K0LPOL',
+        'donation-status': 'Active',
+        'effective-status': "Active",
         rate: {recurrence: {interval: 'Monthly'}},
         'recurring-day-of-month': '15',
         'next-draw-date': {'display-value': '2015-05-06', value: 1430895600}
@@ -112,6 +117,30 @@ describe('recurringGift model', () => {
     });
   });
 
+  describe('donationLineStatus setter', () => {
+    it('should update donation-line-status', () => {
+      giftModel.donationLineStatus = 'Cancelled';
+      expect(giftModel.gift['donation-line-status']).toEqual('Standard');
+      expect(giftModel.gift['updated-donation-line-status']).toEqual('Cancelled');
+    });
+    it('should clear updated donation-line-status if it is the same as the original', () => {
+      giftModel.gift['updated-donation-line-status'] = 'Cancelled';
+      giftModel.donationLineStatus = 'Standard';
+      expect(giftModel.gift['donation-line-status']).toEqual('Standard');
+      expect(giftModel.gift['updated-donation-line-status']).toEqual('');
+    });
+  });
+
+  describe('donationLineStatus getter', () => {
+    it('should return \'updated-donation-line-status\' if set', () => {
+      giftModel.gift['updated-donation-line-status'] = 'Cancelled';
+      expect(giftModel.donationLineStatus).toEqual('Cancelled');
+    });
+    it('should return \'donation-line-status\'', () => {
+      expect(giftModel.donationLineStatus).toEqual('Standard');
+    });
+  });
+
   describe('frequency getter', () => {
     it('should load frequency if it hasn\'t been updated', () => {
       expect(giftModel.frequency).toEqual('Monthly');
@@ -130,12 +159,10 @@ describe('recurringGift model', () => {
 
     it('should update frequency', () => {
       giftModel.frequency = 'Quarterly';
-      expect(giftModel.gift['rate']['recurrence']['interval']).toEqual('Monthly');
       expect(giftModel.gift['updated-rate']['recurrence']['interval']).toEqual('Quarterly');
     });
     it('should clear updated frequency if it is the same as the original', () => {
       giftModel.frequency = 'Monthly';
-      expect(giftModel.gift['rate']['recurrence']['interval']).toEqual('Monthly');
       expect(giftModel.gift['updated-rate']['recurrence']['interval']).toEqual('');
     });
     it('should init start date when updated to a non monthly value', () => {
@@ -151,14 +178,14 @@ describe('recurringGift model', () => {
       expect(giftModel.initStartMonth).not.toHaveBeenCalled();
     });
     it('should clear start date when changed back to the original value and transaction day is unchanged', () => {
-      giftModel.gift['rate']['recurrence']['interval'] = 'Quarterly';
+      giftModel.parentDonation['rate']['recurrence']['interval'] = 'Quarterly';
       giftModel.gift['updated-recurring-day-of-month'] = '';
       giftModel.frequency = 'Quarterly';
       expect(giftModel.clearStartDate).toHaveBeenCalled();
       expect(giftModel.initStartMonth).not.toHaveBeenCalled();
     });
     it('should init start date when changed back to the original value and but transaction day is changed', () => {
-      giftModel.gift['rate']['recurrence']['interval'] = 'Quarterly';
+      giftModel.parentDonation['rate']['recurrence']['interval'] = 'Quarterly';
       giftModel.gift['updated-recurring-day-of-month'] = '10';
       giftModel.frequency = 'Quarterly';
       expect(giftModel.clearStartDate).not.toHaveBeenCalled();
@@ -184,12 +211,10 @@ describe('recurringGift model', () => {
 
     it('should update transaction day', () => {
       giftModel.transactionDay = '11';
-      expect(giftModel.gift['recurring-day-of-month']).toEqual('15');
       expect(giftModel.gift['updated-recurring-day-of-month']).toEqual('11');
     });
     it('should clear updated transaction day if it is the same as the original', () => {
       giftModel.transactionDay = '15';
-      expect(giftModel.gift['recurring-day-of-month']).toEqual('15');
       expect(giftModel.gift['updated-recurring-day-of-month']).toEqual('');
     });
     it('should clear start date when frequency is Monthly', () => {
@@ -199,14 +224,14 @@ describe('recurringGift model', () => {
       expect(giftModel.initStartMonth).not.toHaveBeenCalled();
     });
     it('should clear start date when frequency was Monthly and the frequency is unchanged', () => {
-      giftModel.gift['rate']['recurrence']['interval'] = 'Monthly';
+      giftModel.parentDonation['rate']['recurrence']['interval'] = 'Monthly';
       giftModel.gift['updated-rate']['recurrence']['interval'] = '';
       giftModel.transactionDay = '15';
       expect(giftModel.clearStartDate).toHaveBeenCalled();
       expect(giftModel.initStartMonth).not.toHaveBeenCalled();
     });
     it('should clear start date when the frequency is unchanged and transaction day is unchanged', () => {
-      giftModel.gift['rate']['recurrence']['interval'] = 'Quarterly';
+      giftModel.parentDonation['rate']['recurrence']['interval'] = 'Quarterly';
       giftModel.gift['updated-rate']['recurrence']['interval'] = '';
       giftModel.transactionDay = '15';
       expect(giftModel.clearStartDate).toHaveBeenCalled();
@@ -219,7 +244,7 @@ describe('recurringGift model', () => {
       expect(giftModel.clearStartDate).not.toHaveBeenCalled();
     });
     it('should init start date when transaction day is changed', () => {
-      giftModel.gift['rate']['recurrence']['interval'] = 'Quarterly';
+      giftModel.parentDonation['rate']['recurrence']['interval'] = 'Quarterly';
       giftModel.gift['updated-rate']['recurrence']['interval'] = '';
       giftModel.transactionDay = 11;
       expect(giftModel.clearStartDate).not.toHaveBeenCalled();
@@ -344,6 +369,18 @@ describe('recurringGift model', () => {
   describe('toObject getter', () => {
     it('should return the object to send to the api', () => {
       expect(giftModel.toObject).toEqual(giftModel.gift);
+    });
+  });
+
+  describe('clone', () => {
+    it('creates a copy of the gift', () => {
+      giftModel.amount = 500;
+      let clone = giftModel.clone();
+      expect(clone instanceof RecurringGiftModel).toEqual(true);
+      expect(clone).toEqual(giftModel);
+      clone.donationLineStatus = 'Cancelled';
+      expect(clone.amount).toEqual(giftModel.amount);
+      expect(clone.donationLineStatus).not.toEqual(giftModel.donationLineStatus);
     });
   });
 });

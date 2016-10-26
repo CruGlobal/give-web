@@ -32,6 +32,12 @@ describe( 'stopStartRecurringGiftsModal', () => {
     it( 'changes state', () => {
       $ctrl.changeState( 'stop' );
       expect( $ctrl.state ).toEqual( 'stop' );
+      expect( $ctrl.giftAction ).toEqual( 'stop' );
+    } );
+
+    it( 'changes state to \'step-0\'', () => {
+      $ctrl.changeState( 'step-0' );
+      expect( $ctrl.state ).toEqual( 'step-0' );
     } );
   } );
 
