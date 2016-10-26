@@ -1,0 +1,60 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" ng-click="$ctrl.cancel()" aria-label="{{'Close' | translate}}">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h3 translate>Search Missionairies and Ministries</h3>
+          <p translate>Enter the name or account number of the recipient you would like to give to:</p>
+          <form class="mt" name="$ctrl.searchForm">
+            <div class="form-group">
+              <input type="text" class="form-control form-control-subtle" ng-model="$ctrl.search" ng-change="$ctrl.doSearch()">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row row-no-spacing">
+      <div class="col-xs-12" style="position: relative; min-height: 50px;" ng-switch="$ctrl.searchState">
+        <form name="$ctrl.resultsForm" ng-switch-when="results">
+          <div class="repeating-row select-recipient-row" ng-repeat="result in $ctrl.results">
+            <gift-list-item gift="result"
+                            selectable="radio"
+                            select-label="{{'Select' | translate}}"
+                            on-selected="$ctrl.resultSelected(result)">
+            </gift-list-item>
+          </div>
+        </form>
+        <div ng-switch-when="no-results" translate>No search results found.</div>
+        <loading-overlay ng-switch-when="searching"></loading-overlay>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6">
+      <button type="button"
+              class="btn btn-default"
+              ng-click="$ctrl.previous()"
+              translate>Back
+      </button>
+    </div>
+    <div class="col-xs-6 text-right">
+      <button type="button"
+              class="btn btn-primary"
+              ng-click="$ctrl.selectResult()"
+              ng-disabled="!$ctrl.find($ctrl.results, {_selectedGift: true})"
+              translate>Continue
+      </button>
+    </div>
+  </div>
+</div>
