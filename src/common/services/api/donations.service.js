@@ -73,18 +73,28 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .pluck( 'receipt-summaries' );
   }
 
+  function getRecentRecipients(){
+    return cortexApiService.get( {
+        path: ['profiles', cortexApiService.scope, 'default'],
+        zoom: {
+          recentGifts: 'givingdashboard:recentdonations:element[]'
+        }
+      } )
+      .pluck( 'recentGifts' );
+  }
+
   function getRecurringGifts() {
     return Observable.forkJoin(
       cortexApiService.get( {
-        path: ['profiles', cortexApiService.scope, 'default'],
-        zoom: {
-          gifts: 'givingdashboard:managerecurringdonations'
-        }
-      } )
+          path: ['profiles', cortexApiService.scope, 'default'],
+          zoom: {
+            gifts: 'givingdashboard:managerecurringdonations'
+          }
+        } )
         .pluck( 'gifts' ),
-      commonService.getNextDrawDate(),
-      profileService.getPaymentMethods()
-    )
+        commonService.getNextDrawDate(),
+        profileService.getPaymentMethods()
+      )
       .map( ( [gifts, nextDrawDate, paymentMethods] ) => {
         return flatMap( gifts.donations, donation => {
           return map( donation['donation-lines'], donationLine => {
@@ -114,13 +124,25 @@ function DonationsService( cortexApiService, profileService, commonService ) {
     } );
   }
 
+  function addRecurringGifts( gifts ) {
+    gifts = angular.isArray( gifts ) ? gifts : [gifts];
+    return cortexApiService.post( {
+      path: ['donations', 'recurring', cortexApiService.scope],
+      data: {
+        'donation-lines': map(gifts, 'toObject')
+      }
+    } );
+  }
+
   return {
     getHistoricalGifts:   getHistoricalGifts,
     getRecipients:        getRecipients,
     getRecipientDetails:  getRecipientDetails,
     getReceipts:          getReceipts,
+    getRecentRecipients:  getRecentRecipients,
     getRecurringGifts:    getRecurringGifts,
-    updateRecurringGifts: updateRecurringGifts
+    updateRecurringGifts: updateRecurringGifts,
+    addRecurringGifts:    addRecurringGifts
   };
 }
 

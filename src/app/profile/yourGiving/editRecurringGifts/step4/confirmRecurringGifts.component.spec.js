@@ -31,30 +31,45 @@ describe('editRecurringGiftsModal', () => {
         ];
         self.controller.$onInit();
         expect(self.controller.recurringGiftChanges).toEqual([ self.controller.recurringGifts[0] ]);
+        expect(self.controller.hasChanges).toEqual(true);
+      });
+      it('should set hasChanges to true if there are additions', () => {
+        self.controller.additions = ['addition 1'];
+        self.controller.$onInit();
+        expect(self.controller.hasChanges).toEqual(true);
+      });
+      it('should set hasChanges to false if there are no recurring gift changes or additions', () => {
+        self.controller.$onInit();
+        expect(self.controller.hasChanges).toEqual(false);
       });
     });
 
     describe('saveChanges', () => {
       it('should update gifts', () => {
         self.controller.recurringGiftChanges = [{ testGift: 3 }];
-        spyOn(self.controller.donationsService, 'updateRecurringGifts').and.returnValue(Observable.of('gifts response'));
+        self.controller.additions = [{ testGift: 4 }];
+        spyOn(self.controller.donationsService, 'updateRecurringGifts').and.returnValue(Observable.of('update gifts response'));
+        spyOn(self.controller.donationsService, 'addRecurringGifts').and.returnValue(Observable.of('add gifts response'));
         self.controller.saveChanges();
         expect(self.controller.donationsService.updateRecurringGifts).toHaveBeenCalledWith([{ testGift: 3 }]);
+        expect(self.controller.donationsService.addRecurringGifts).toHaveBeenCalledWith([{ testGift: 4 }]);
         expect(self.controller.next).toHaveBeenCalled();
         expect(self.controller.savingError).toEqual('');
       });
       it('should handle an error updating gifts', () => {
-        spyOn(self.controller.donationsService, 'updateRecurringGifts').and.returnValue(Observable.throw({ data: 'gifts error' }));
+        self.controller.recurringGiftChanges = [ {} ];
+        spyOn(self.controller.donationsService, 'updateRecurringGifts').and.returnValue(Observable.throw({ data: 'update gifts error' }));
         self.controller.saveChanges();
-        expect(self.controller.savingError).toEqual('gifts error');
-        expect(self.controller.$log.error.logs[0]).toEqual(['Error updating recurring gifts', { data: 'gifts error' }]);
+        expect(self.controller.savingError).toEqual('update gifts error');
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error updating/adding recurring gifts', { data: 'update gifts error' }]);
         expect(self.controller.saving).toEqual(false);
       });
       it('should handle an unknown error updating gifts', () => {
-        spyOn(self.controller.donationsService, 'updateRecurringGifts').and.returnValue(Observable.throw({}));
+        self.controller.additions = [ {} ];
+        spyOn(self.controller.donationsService, 'addRecurringGifts').and.returnValue(Observable.throw({}));
         self.controller.saveChanges();
         expect(self.controller.savingError).toEqual('unknown');
-        expect(self.controller.$log.error.logs[0]).toEqual(['Error updating recurring gifts', {}]);
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error updating/adding recurring gifts', {}]);
         expect(self.controller.saving).toEqual(false);
       });
     });
