@@ -40,17 +40,15 @@
   a:focus {text-decoration: none;}
 
   .sub-nav-search-icon {
-    background: url(/assets/img/desktop-search.png) no-repeat center;
-    background-size: 20px 20px;
-    right: 30px;
+    right: 20px;
     bottom: 13px;
     cursor: pointer;
     display: block;
     opacity: 0;
     height: 20px;
+    width: 20px;
     position: absolute;
     transition: .15s all;
-    width: 20px;
 
     &:before,
     &:after {
@@ -60,24 +58,22 @@
     &:after {
       clear: both;
     }
+    span {
+      background-size: 20px 20px;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+      height: 20px;
+      width: 20px;
+    }
   }
 
   .search-icon-off {
-    background: url("/assets/img/desktop-search.png") no-repeat right 14px center;
-    background-size: 20px 20px;
-    height: 20px;
-    width: 40px;
-    display: inline-block;
-    float: right;
+    background-image: url("/assets/img/desktop-search.png");
   }
 
   .search-icon-on {
-    background: url("/assets/img/desktop-search-close.png") no-repeat right 14px center;
-    background-size: 20px 20px;
-    height: 20px;
-    width: 40px;
-    display: inline-block;
-    float: right;
+    background-image: url("/assets/img/desktop-search-close.png");
   }
 
   .sub-nav-logo {
