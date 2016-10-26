@@ -126,4 +126,8 @@ export default class RecurringGiftModel {
   get toObject(){
     return this.gift;
   }
+
+  clone() {
+    return angular.copy(this, Object.create(this));
+  }
 }
