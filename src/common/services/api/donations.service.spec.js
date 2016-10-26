@@ -12,6 +12,7 @@ import recipientResponse from './fixtures/cortex-donations-recipient.fixture';
 import recipientDetailsResponse from './fixtures/cortex-donations-recipient-details.fixture';
 import receiptsResponse from './fixtures/cortex-donations-receipts.fixture';
 import recurringGiftsResponse from './fixtures/cortex-donations-recurring-gifts.fixture';
+import recentRecipientsResponse from './fixtures/cortex-donations-recent-recipients.fixture';
 
 describe( 'donations service', () => {
   beforeEach( angular.mock.module( module.name ) );
@@ -83,6 +84,28 @@ describe( 'donations service', () => {
       donationsService.getReceipts( {} ).subscribe( ( receipts ) => {
         expect( receipts ).toEqual( jasmine.any( Array ) );
       } );
+      $httpBackend.flush();
+    } );
+  } );
+
+  describe( 'getRecentRecipients', () => {
+    it( 'should load recent recipients', () => {
+      $httpBackend
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:recentdonations:element' )
+        .respond( 200, recentRecipientsResponse );
+      donationsService.getRecentRecipients()
+        .subscribe( ( recentRecipients ) => {
+          expect( recentRecipients ).toEqual( [
+            jasmine.objectContaining( {
+              "designation-name": "Mike and Becky Crandall (0104878)",
+              "designation-number": "0104878"
+            } ),
+            jasmine.objectContaining( {
+              "designation-name": "David and Margo Neibling (0105987)",
+              "designation-number": "0105987"
+            } )
+          ]);
+        } );
       $httpBackend.flush();
     } );
   } );
@@ -246,6 +269,46 @@ describe( 'donations service', () => {
         .respond( 204, {} );
 
       donationsService.updateRecurringGifts([gift, gift]).subscribe(() => {});
+      $httpBackend.flush();
+    });
+  } );
+
+  describe( 'addRecurringGifts' , () => {
+    let gift;
+    beforeEach(() => {
+      gift = new RecurringGiftModel(
+        {
+          'designation-name': 'David and Margo Neibling (0105987)',
+          'designation-number': '0105987',
+          'updated-amount': 25
+        }
+      );
+    });
+
+    it('should update a recurring gift', () => {
+      $httpBackend
+        .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive', {
+          'donation-lines': [
+            gift.toObject
+          ]
+        } )
+        .respond( 204, {} );
+
+      donationsService.addRecurringGifts(gift).subscribe(() => {});
+      $httpBackend.flush();
+    });
+
+    it('should update recurring gifts', () => {
+      $httpBackend
+        .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive', {
+          'donation-lines': [
+            gift.toObject,
+            gift.toObject
+          ]
+        } )
+        .respond( 204, {} );
+
+      donationsService.addRecurringGifts([ gift, gift ]).subscribe(() => {});
       $httpBackend.flush();
     });
   } );

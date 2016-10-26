@@ -28,22 +28,19 @@ describe('editRecurringGiftsModal', () => {
     describe('loadGifts', () => {
       it('should load gifts', () => {
         spyOn(self.controller.donationsService, 'getRecurringGifts').and.returnValue(Observable.of('gifts response'));
-        spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.of('nextDrawDate response'));
         self.controller.loadGifts();
         expect(self.controller.loading).toEqual(false);
         expect(self.controller.loadingError).toEqual(false);
         expect(self.controller.recurringGifts).toEqual('gifts response');
-        expect(self.controller.nextDrawDate).toEqual('nextDrawDate response');
       });
       it('should handle an error loading gifts', () => {
         spyOn(self.controller.donationsService, 'getRecurringGifts').and.returnValue(Observable.throw('gifts error'));
-        spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.throw('nextDrawDate error'));
         self.controller.loadGifts();
         expect(self.controller.loading).toEqual(false);
         expect(self.controller.loadingError).toEqual(true);
         expect(self.controller.recurringGifts).toBeUndefined();
         expect(self.controller.nextDrawDate).toBeUndefined();
-        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading recurring gifts or nextDrawDate', 'gifts error']);
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading recurring gifts', 'gifts error']);
       });
     });
   });
