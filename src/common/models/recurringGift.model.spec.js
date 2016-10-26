@@ -46,9 +46,23 @@ describe('recurringGift model', () => {
     });
   });
 
+  describe('designationName setter', () => {
+    it('should set the name', () => {
+      giftModel.designationName = 'Lex Luthor';
+      expect(giftModel.gift['designation-name']).toEqual('Lex Luthor');
+    });
+  });
+
   describe('designationNumber getter', () => {
     it('should return the designation number', () => {
       expect(giftModel.designationNumber).toEqual('0105987');
+    });
+  });
+
+  describe('designationNumber setter', () => {
+    it('should set the designation number', () => {
+      giftModel.designationNumber = '0123456';
+      expect(giftModel.gift['designation-number']).toEqual('0123456');
     });
   });
 
