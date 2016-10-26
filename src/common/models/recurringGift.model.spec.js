@@ -371,4 +371,16 @@ describe('recurringGift model', () => {
       expect(giftModel.toObject).toEqual(giftModel.gift);
     });
   });
+
+  describe('clone', () => {
+    it('creates a copy of the gift', () => {
+      giftModel.amount = 500;
+      let clone = giftModel.clone();
+      expect(clone instanceof RecurringGiftModel).toEqual(true);
+      expect(clone).toEqual(giftModel);
+      clone.donationLineStatus = 'Cancelled';
+      expect(clone.amount).toEqual(giftModel.amount);
+      expect(clone.donationLineStatus).not.toEqual(giftModel.donationLineStatus);
+    });
+  });
 });
