@@ -112,6 +112,9 @@
                             <div role="alert" ng-messages="$ctrl.phoneNumberForms[i].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[i].phoneNumber | showErrors)">
                               <div class="help-block" ng-message="required" translate>You must enter a phone number</div>
                             </div>
+                            <select class="form-control form-control-subtle">
+                              <option>Amanda</option>
+                            </select>
                             <a href="" ng-click="$ctrl.deletePhoneNumber(phone, $ctrl.phoneNumberForms[i])"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
                           </form>
                         </div>

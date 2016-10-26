@@ -190,6 +190,7 @@ class ProfileController {
 
   deletePhoneNumber(phone, form) {
     phone.delete = true;
+    if(!form) return;
     if(phone.self) { // set existing phone number for a deletion
       form.$setDirty();
     } else { // reset validations
