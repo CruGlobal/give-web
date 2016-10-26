@@ -9,9 +9,9 @@ import {giveGiftParams} from './productConfig.modal';
 
 describe( 'product config modal', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let $ctrl, uibModalInstance, productData, nextDrawDate, itemConfig, itemConfigForm, $location;
+  let $ctrl, uibModalInstance, productData, nextDrawDate, itemConfig, itemConfigForm, $location, $scope;
 
-  beforeEach( inject( function ( _$location_ ) {
+  beforeEach( inject( function ( _$location_, $rootScope ) {
     $location = _$location_;
     uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
     productData = {};
@@ -28,6 +28,8 @@ describe( 'product config modal', function () {
         $ctrl.itemConfigForm.$dirty = true;
       } )
     };
+    $scope = $rootScope.$new();
+
   } ) );
 
   describe('handlePatternValidation', () => {
@@ -37,27 +39,59 @@ describe( 'product config modal', function () {
         productData:       productData,
         nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
-        isEdit:            true
+        isEdit:            true,
+        $scope:            $scope
+
       } );
       $ctrl.itemConfigForm = itemConfigForm;
     } ) );
 
     describe('$onInit()', () => {
-      it('should create pattern validation handler', () => {
+      it('should call waitForFormInitialization()', () => {
+        spyOn( $ctrl, 'waitForFormInitialization');
         $ctrl.$onInit();
-        expect($ctrl.handlePatternValidation).toBeDefined();
+        expect($ctrl.waitForFormInitialization).toHaveBeenCalled();
       });
     });
 
-    describe('handlePatternValidation', () => {
-      it('should validate number', () => {
-        $ctrl.customInputActive = true;
-        $ctrl.$onInit();
-        let validation = $ctrl.handlePatternValidation;
-        expect(validation.test('43')).toBe(true);
-        expect(validation.test('43.')).toBe(false);
-        expect(validation.test('0.4')).toBe(false);
-        expect(validation.test('4.444')).toBe(false);
+    describe('waitForFormInitialization()', () => {
+      it('should wait for the form to become available and then call addCustomValidators()', () => {
+        spyOn($ctrl, 'addCustomValidators');
+        $ctrl.waitForFormInitialization();
+        $ctrl.creditCardPaymentForm = {};
+        $ctrl.$scope.$apply();
+        expect($ctrl.addCustomValidators).toHaveBeenCalled();
+      });
+    });
+
+    describe('addCustomValidators()', () => {
+      it('should create validators', () => {
+        $ctrl.itemConfigForm.amount = {
+          $validators: {}
+        };
+        $ctrl.addCustomValidators();
+        expect($ctrl.itemConfigForm.amount.$validators.minimum('1')).toBe(true);
+        expect($ctrl.itemConfigForm.amount.$validators.minimum('0.9')).toBe(false);
+
+        expect($ctrl.itemConfigForm.amount.$validators.maximum('9999999.99')).toBe(true);
+        expect($ctrl.itemConfigForm.amount.$validators.maximum('10000000')).toBe(false);
+
+        expect($ctrl.itemConfigForm.amount.$validators.pattern('4.4')).toBe(true);
+        expect($ctrl.itemConfigForm.amount.$validators.pattern('4.')).toBe(false);
+        expect($ctrl.itemConfigForm.amount.$validators.pattern('4.235')).toBe(false);
+
+      });
+
+      it('should pass validation in any \'bad\' case', () => {
+        $ctrl.itemConfigForm.amount = {
+          $validators: {}
+        };
+        $ctrl.customInputActive = false;
+        $ctrl.addCustomValidators();
+        expect($ctrl.itemConfigForm.amount.$validators.minimum('0.3')).toBe(true);
+        expect($ctrl.itemConfigForm.amount.$validators.minimum('dlksfjs')).toBe(true);
+        expect($ctrl.itemConfigForm.amount.$validators.maximum('4542452454524.99')).toBe(true);
+        expect($ctrl.itemConfigForm.amount.$validators.pattern('1.214')).toBe(true);
       });
     });
 
@@ -70,7 +104,8 @@ describe( 'product config modal', function () {
         productData:       productData,
         nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
-        isEdit:            true
+        isEdit:            true,
+        $scope:            $scope
       } );
       $ctrl.itemConfigForm = itemConfigForm;
     } ) );
@@ -148,7 +183,8 @@ describe( 'product config modal', function () {
         productData:       productData,
         nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
-        isEdit:            false
+        isEdit:            false,
+        $scope:            $scope
       } );
       $ctrl.itemConfigForm = itemConfigForm;
     } ) );
@@ -283,10 +319,11 @@ describe( 'product config modal', function () {
     beforeEach(inject(function (_$controller_) {
       $ctrl = _$controller_(module.name, {
         $uibModalInstance: uibModalInstance,
-        productData: productData,
-        nextDrawDate: nextDrawDate,
-        itemConfig: itemConfig,
-        isEdit: false
+        productData:       productData,
+        nextDrawDate:      nextDrawDate,
+        itemConfig:        itemConfig,
+        isEdit:            false,
+        $scope:            $scope
       });
       $ctrl.itemConfigForm = itemConfigForm;
     }));

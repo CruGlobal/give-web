@@ -25,8 +25,9 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
+  constructor( $location, $scope, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
     this.$location = $location;
+    this.$scope = $scope;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
@@ -58,18 +59,29 @@ class ModalInstanceCtrl {
   }
 
   $onInit() {
-    this.handlePatternValidation = (() => {
-      var regex = /^[0-9]+(\.[0-9]{1,2})?$/;
-      return {
-        test: (value) => {
-          if(this.customInputActive) {
-            let patternMatched = regex.test(value);
-            let numberIsWithingRange = value*1.0 >= 1 && value*1.0 <= 10000000;
-            return patternMatched && numberIsWithingRange;
-          }
-        }
-      };
-    })();
+    this.waitForFormInitialization();
+  }
+
+  waitForFormInitialization() {
+    let unregister = this.$scope.$watch('$ctrl.itemConfigForm', () => {
+      if(this.itemConfigForm) {
+        unregister();
+        this.addCustomValidators();
+      }
+    });
+  }
+
+  addCustomValidators() {
+    this.itemConfigForm.amount.$validators.minimum = value => {
+      return this.customInputActive ? (value*1.0 >= 1) : true;
+    };
+    this.itemConfigForm.amount.$validators.maximum = value => {
+      return this.customInputActive ? (value*1.0 < 10000000) : true;
+    };
+    this.itemConfigForm.amount.$validators.pattern = value => {
+      var regex = /^([0-9]*)(\.[0-9]{1,2})?$/;
+      return this.customInputActive ? (regex.test(value)) : true;
+    };
   }
 
   initializeParams() {
@@ -109,6 +121,7 @@ class ModalInstanceCtrl {
     } );
     this.productData.frequency = product.name;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.frequency, product.name );
+
   }
 
   changeAmount( amount ) {

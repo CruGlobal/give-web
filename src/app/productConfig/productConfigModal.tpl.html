@@ -30,7 +30,7 @@
 
           <div ng-if="$ctrl.error" ng-switch="$ctrl.error.indexOf('already in the cart') !== -1" class="alert" role="alert"
                ng-class="{'alert-warning': $ctrl.error.indexOf('already in the cart') !== -1, 'alert-danger': $ctrl.error.indexOf('already in the cart') === -1}">
-            <span ng-switch-when="true" translate>This gift has already been added. Please proceed to checkout.</span>
+            <span ng-switch-when="true" translate>You already have this gift in your cart.</span>
             <span ng-switch-when="false" translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact support.</span>
           </div>
 
@@ -69,12 +69,14 @@
                          ng-model="$ctrl.customAmount"
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-focus="$ctrl.customInputActive = true;"
-                         ng-pattern="$ctrl.handlePatternValidation">
+                         required>
                 </div>
               </label>
               <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-                <div class="help-block" ng-message="pattern" translate>Amount must be a valid number with no more than 2 decimal places between $1.00 and $10,000,000.00</div>
+                <div class="help-block" ng-message="pattern" translate>Amount must be a valid number</div>
                 <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+                <div class="help-block" ng-message="minimum" translate>Amount must be more than $1.00</div>
+                <div class="help-block" ng-message="maximum" translate>Amount must be less than $10,000,000.00</div>
               </div>
             </div>
           </div><!-- // panel-body -->
@@ -165,7 +167,8 @@
       <button class="btn btn-default btn-md btn-block-xs" type="button" ng-click="$dismiss()" translate>Cancel &amp; Return</button>
     </div>
     <div class="col-md-6 col-sm-6 text-right">
-      <button class="btn btn-md btn-primary btn-block-xs" type="submit">{{$ctrl.submitLabel|translate}}</button>
+      <button ng-if="!$ctrl.error" class="btn btn-md btn-primary btn-block-xs" type="submit">{{$ctrl.submitLabel|translate}}</button>
+      <button ng-if="$ctrl.error && $ctrl.error.indexOf('already in the cart') !== -1" ng-click="$close(); $ctrl.$location.path('/cart')" class="btn btn-md btn-primary btn-block-xs" type="submit" translate>View Cart</button>
     </div>
   </div>
 </form>
