@@ -4,10 +4,10 @@
       <div class="col-md-12">
 
         <div ng-if="$ctrl.donorDetailsError || $ctrl.emailAddressError || $ctrl.phoneNumberError || $ctrl.mailingAddressError" class="alert alert-danger" role="alert">
-          <span>{{$ctrl.donorDetailsError}}</span>
-          <span>{{$ctrl.emailAddressError}}</span>
-          <span>{{$ctrl.phoneNumberError}}</span>
-          <span>{{$ctrl.mailingAddressError}}</span>
+          <p>{{$ctrl.donorDetailsError}}</p>
+          <p>{{$ctrl.emailAddressError}}</p>
+          <p>{{$ctrl.phoneNumberError}}</p>
+          <p>{{$ctrl.mailingAddressError}}</p>
         </div>
 
         <div class="panel panel-margin-bottom">
@@ -23,7 +23,7 @@
                     <h4 class="panel-title  border-bottom-small visible">Your Name</h4>
                     <div style="position: relative">
                       <loading-overlay ng-if="$ctrl.donorDetialsLoading"></loading-overlay>
-                      <form name="$ctrl.donorDetailsForm">
+                      <form name="$ctrl.donorDetailsForm" novalidate>
                         <ul class="list-unstyled">
                         <li>
                           <div class="form-group is-required person-row">
@@ -80,18 +80,33 @@
                     </div>
 
                     <!--Email Address-->
-                    <h4 class="panel-title  border-bottom-small visible mt">Email Address</h4>
+                    <h4 class="panel-title  border-bottom-small visible mt">Email Addresses</h4>
 
                     <div class="form-group is-required" ng-class="{'has-error': ($ctrl.emailAddressForm.donorsEmail | showErrors)}" style="position:relative;">
                       <loading-overlay ng-if="$ctrl.emailLoading"></loading-overlay>
-                      <form name="$ctrl.emailAddressForm">
-                        <label translate>{{$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']}} Email</label>
-                        <input type="email" name="donorsEmail" class="form-control  form-control-subtle" ng-model="$ctrl.email" maxlength="100" required>
-                        <div role="alert" ng-messages="$ctrl.emailAddressForm.donorsEmail.$error" ng-if="($ctrl.emailAddressForm.donorsEmail | showErrors)">
-                          <div class="help-block" ng-message="required" translate>You must enter an email address</div>
-                          <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
-                          <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
+                      <form name="$ctrl.emailAddressForm" novalidate>
+
+                        <div class="form-group">
+                          <label translate>{{$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']}} Email</label>
+                          <input type="email" name="donorsEmail" class="form-control  form-control-subtle" ng-model="$ctrl.email" maxlength="100" required>
+                          <div role="alert" ng-messages="$ctrl.emailAddressForm.donorsEmail.$error" ng-if="($ctrl.emailAddressForm.donorsEmail | showErrors)">
+                            <div class="help-block" ng-message="required" translate>You must enter an email address</div>
+                            <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
+                            <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
+                          </div>
                         </div>
+
+                        <div class="form-group">
+                          <label translate>{{$ctrl.donorDetails['spouse-name']['given-name'] + ' ' + $ctrl.donorDetails['spouse-name']['family-name']}} Email</label>
+                          <input type="email" name="donorsEmail" class="form-control  form-control-subtle" ng-model="$ctrl.email" maxlength="100" required>
+                          <a href="" ng-click="$ctrl.deleteSpouseEmail()"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                          <div role="alert" ng-messages="$ctrl.emailAddressForm.donorsEmail.$error" ng-if="($ctrl.emailAddressForm.donorsEmail | showErrors)">
+                            <div class="help-block" ng-message="required" translate>You must enter an email address</div>
+                            <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
+                            <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
+                          </div>
+                        </div>
+
                       </form>
                     </div>
 
@@ -100,8 +115,8 @@
 
                     <div style="position: relative">
                       <loading-overlay ng-if="$ctrl.phonesLoading"></loading-overlay>
-                        <div ng-repeat="(i, phone) in $ctrl.phoneNumbers" ng-class="{'has-error': ($ctrl.phoneNumberForms[i].phoneNumber | showErrors)}" class="form-group is-required phone-row" >
-                          <form name="$ctrl.phoneNumberForms[{{i}}]" ng-hide="phone.delete">
+                        <div ng-repeat="phone in $ctrl.phoneNumbers" ng-class="{'has-error': ($ctrl.phoneNumberForms[i].phoneNumber | showErrors)}" class="form-group is-required phone-row" >
+                          <form name="$ctrl.phoneNumberForms[{{$index}}]" ng-hide="phone.delete" novalidate>
                             <select name="phoneNumberType" class="form-control form-control-subtle" ng-model="phone['phone-number-type']">
                               <option translate>Home</option>
                               <option translate>Mobile</option>
@@ -109,16 +124,17 @@
                               <option translate>Unknown</option>
                             </select>
                             <input name="phoneNumber" type="tel" class="form-control form-control-subtle" ng-model="phone['phone-number']" required maxlength="20">
-                            <div role="alert" ng-messages="$ctrl.phoneNumberForms[i].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[i].phoneNumber | showErrors)">
+                            <div role="alert" ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)">
                               <div class="help-block" ng-message="required" translate>You must enter a phone number</div>
                             </div>
-                            <select class="form-control form-control-subtle">
-                              <option>Amanda</option>
+                            <select class="form-control form-control-subtle" ng-disabled="!$ctrl.donorDetails['spouse-name']">
+                              <option>{{$ctrl.donorDetails.name['given-name']}}</option>
+                              <option ng-if="$ctrl.donorDetails['spouse-name']">{{$ctrl.donorDetails['spouse-name']['given-name']}}</option>
                             </select>
-                            <a href="" ng-click="$ctrl.deletePhoneNumber(phone, $ctrl.phoneNumberForms[i])"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                            <a href="" ng-click="$ctrl.deletePhoneNumber(phone, $index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
                           </form>
                         </div>
-                      <a href="" ng-click="$ctrl.addPhoneNumber()" translate>+ Add Another Phone Number</a>
+                      <a href="" ng-click="$ctrl.addPhoneNumber()" translate>+ Add Phone Number</a>
                     </div>
 
                   </div>
@@ -126,7 +142,7 @@
 
                     <!--Mailing Address-->
                     <h4 class="panel-title  border-bottom-small visible" translate>Your Mailing Address</h4>
-                    <form name="$ctrl.mailingAddressForm" style="position: relative;">
+                    <form name="$ctrl.mailingAddressForm" style="position: relative;" novalidate>
                       <loading-overlay ng-if="$ctrl.mailingAddressLoading"></loading-overlay>
                       <address-form ng-if="$ctrl.mailingAddress" address="$ctrl.mailingAddress.address" parent-form="$ctrl.mailingAddressForm"></address-form>
                     </form>

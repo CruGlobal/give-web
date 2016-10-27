@@ -18,6 +18,7 @@ class ProfileController {
 
   constructor($window, $location, $log, sessionEnforcerService, profileService) {
     this.$window = $window;
+    console.log(angular.FormController);
     this.$log = $log;
     this.$location = $location;
     this.sessionEnforcerService = sessionEnforcerService;
@@ -50,7 +51,6 @@ class ProfileController {
     this.profileService.getProfileDonorDetails()
       .subscribe(
         donorDetails => {
-          console.log(donorDetails);
           this.donorDetails = donorDetails;
           this.donorDetialsLoading = false;
         },
@@ -64,7 +64,6 @@ class ProfileController {
 
   updateDonorDetails(){
     this.donorDetialsLoading = true;
-    console.log(this.donorDetails);
     this.profileService.updateProfileDonorDetails(this.donorDetails)
       .subscribe(
         () => {
@@ -115,6 +114,10 @@ class ProfileController {
       );
   }
 
+  deleteSpouseEmail(){
+
+  }
+
   loadPhoneNumbers() {
     this.phonesLoading = true;
     this.profileService.getPhoneNumbers()
@@ -137,6 +140,7 @@ class ProfileController {
       'phone-number-type': 'Mobile',
       'primary': false
     });
+    console.log(this.phoneNumberForms);
   }
 
   updatePhoneNumbers(){
@@ -188,14 +192,14 @@ class ProfileController {
     });
   }
 
-  deletePhoneNumber(phone, form) {
+  deletePhoneNumber(phone, index) {
+    console.log(this.phoneNumberForms[index]);
     phone.delete = true;
-    if(!form) return;
     if(phone.self) { // set existing phone number for a deletion
-      form.$setDirty();
+      this.phoneNumberForms[index].$setDirty();
     } else { // reset validations
-      form.$setValidity();
-      form.$setPristine();
+      this.phoneNumberForms[index].$setValidity();
+      this.phoneNumberForms[index].$setPristine();
     }
   }
 
@@ -240,7 +244,13 @@ class ProfileController {
             let mailingAddress = find(data.links, (link) => {
               return link.rel == 'mailingaddress';
             });
-            this.loadMailingAddress(mailingAddress.uri);
+            if(mailingAddress) {
+              this.loadMailingAddress(mailingAddress.uri);
+            } else {
+              this.mailingAddressLoading = false;
+              this.mailingAddressError = 'Failed loading mailing address.';
+              this.$log.error(this.mailingAddressError, error.data);
+            };
           }
         },
         error => {
