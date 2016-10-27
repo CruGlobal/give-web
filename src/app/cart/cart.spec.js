@@ -60,11 +60,8 @@ describe('cart', function() {
       self.controller.callback = () => {
         return {
           result: {
-            then: (result) => {
-              result.isUpdated = self.controller.isUpdated;
-              if(result.isUpdated) {
-                self.controller.loadCart();
-              }
+            then: function(callback) {
+              callback({isUpdated: true});
             }
           }
         };
@@ -75,17 +72,12 @@ describe('cart', function() {
 
     it('should call a modal and reload cart of successful edit', () => {
       self.controller.isUpdated = true;
+
       self.controller.editItem({});
       expect(self.controller.productModalService.configureProduct).toHaveBeenCalled();
       expect(self.controller.loadCart).toHaveBeenCalled();
     });
 
-    it('should call a modal and not reload cart of successful edit', () => {
-      self.controller.isUpdated = false;
-      self.controller.editItem({});
-      expect(self.controller.productModalService.configureProduct).toHaveBeenCalled();
-      expect(self.controller.loadCart).not.toHaveBeenCalled();
-    });
   });
 
   describe('checkout()', () => {
