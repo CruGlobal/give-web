@@ -1,10 +1,9 @@
 import moment from 'moment';
 import range from 'lodash/range';
 import map from 'lodash/map';
-import toString from 'lodash/toString';
 
 export function possibleTransactionDays() {
-  return range( 1, 29 ).map( toString );
+  return range( 1, 29 ).map((i) => (`0${i}`).slice(-2));
 }
 
 // Generate a string of 4 months based on transactionDay and nextDrawDate
