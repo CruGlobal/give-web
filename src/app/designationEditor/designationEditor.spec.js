@@ -281,10 +281,6 @@ describe( 'Designation Editor', function () {
   });
 
   describe('save', () => {
-    beforeEach(inject((_$q_) => {
-
-    }));
-
     it( 'should save designation content', () => {
       $httpBackend.expectPOST(designationConstants.saveEndpoint).respond(200);
       $ctrl.designationContent = designationSecurityResponse;
