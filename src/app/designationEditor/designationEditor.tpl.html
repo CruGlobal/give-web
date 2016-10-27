@@ -3,76 +3,85 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-sm-6  col-xs-12">
-
-          <!-- Default panel contents -->
-          <h2 title="Staff #5564666" class="mb0">
-
-            Jean Deaux
-            <a class="edit-trigger edit-trigger-text inline"><i class="fa fa-pencil"></i></a>
+          <h2 class="mb0">
+            {{$ctrl.designationContent.title}}
+            <a class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()">
+              <i class="fa fa-pencil"></i>
+            </a>
           </h2>
-          <p class="mt0">#5552424</p>
-
+          <p class="mt0">#{{$ctrl.designationContent.designationNumber}}</p>
         </div>
+
         <div class="col-sm-6  col-xs-12 text-right">
-          <!-- Editing Buttons -->
-          <button type="button" class="btn btn-secondary">
+          <button type="button" class="btn btn-secondary" ng-click="$ctrl.save()">
             Done Editing
           </button>
-          <button type="button" class="btn btn-default">
+
+          <button type="button" class="btn btn-default" ng-click="$ctrl.editPageOptions()">
             Page Options
           </button>
 
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary">
-            Give a Gift
-          </button>
-          <!-- \\ Button trigger modal -->
+          <product-config product-code="{{$ctrl.designationContent.designationNumber}}" button-label="Give a Gift"></product-config>
         </div>
       </div>
     </div>
   </div>
   <div class="panel panel-margin-bottom">
     <div class="panel-cover-wrap">
-      <div href="">
+      <div href="" ng-click="$ctrl.selectPhoto('coverPhoto', $ctrl.designationContent.coverPhoto)">
         <div class="edit-trigger"><i class="fa fa-camera"></i></div>
-        <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png" class="panel-cover-image">
+        <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
+             ng-if="!$ctrl.photoUrl($ctrl.designationContent.coverPhoto)"
+             class="panel-cover-image">
+        <img ng-src="{{$ctrl.imgDomainDesignation + $ctrl.photoUrl($ctrl.designationContent.coverPhoto).cover}}"
+             ng-if="$ctrl.photoUrl($ctrl.designationContent.coverPhoto)"
+             class="panel-cover-image">
       </div>
     </div>
     <div class="panel-body">
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
-          <div href="" class="pull-right secondary-detail ml mb hidden-xs">
+          <div href="" class="pull-right secondary-detail ml mb hidden-xs"
+               ng-click="$ctrl.selectPhoto('secondaryPhoto', $ctrl.designationContent.secondaryPhoto)">
             <div class="edit-trigger"><i class="fa fa-camera"></i></div>
-            <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png" class="">
+
+            <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
+                 ng-if="!$ctrl.photoUrl($ctrl.designationContent.secondaryPhoto)">
+            <img ng-src="{{$ctrl.imgDomainDesignation + $ctrl.photoUrl($ctrl.designationContent.secondaryPhoto).secondary}}"
+                 ng-if="$ctrl.photoUrl($ctrl.designationContent.secondaryPhoto)">
           </div>
 
 
 
-          <h4>
-            <a class="edit-trigger edit-trigger-text"><i class="fa fa-pencil"></i></a>
-            Great Spiritual Need
-          </h4>
-          <p>Vestibulum id ligula porta felis euismod semper. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Maecenas faucibus mollis interdum. Donec id elit non mi porta gravida at eget metus.</p>
-          <p>Vestibulum id ligula porta felis euismod semper. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Maecenas faucibus mollis interdum. Donec id elit non mi porta gravida at eget metus.</p>
-          <p class="signature-wrap">
-            <a class="edit-trigger edit-trigger-text"><i class="fa fa-pencil"></i></a>
-            <img src="/assets/img/signature.png" class="signature-image">
-          </p>
+          <div>
+            <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editText('paragraphText')">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <div ng-bind-html="$ctrl.designationContent.paragraphText"></div>
+          </div>
+
+
+          <!--<p class="signature-wrap">-->
+            <!--<a class="edit-trigger edit-trigger-text"><i class="fa fa-pencil"></i></a>-->
+            <!--<img ng-src="{{$ctrl.imgDomain}}/assets/img/signature.png" class="signature-image">-->
+          <!--</p>-->
+
           <p>
-            <a class="edit-trigger edit-trigger-text"><i class="fa fa-pencil"></i></a>
-            Vestibulum id ligula porta felis euismod semper. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Maecenas faucibus mollis interdum. Donec id elit non mi porta gravida at eget metus.
+            <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editWebsite()"><i class="fa fa-pencil"></i></a>
+            <label class="product-website-link">
+              Website: <a ng-href="{{$ctrl.designationContent.websiteURL}}" target="_blank">
+              {{$ctrl.designationContent.websiteURL}}
+            </a>
+            </label>
           </p>
+
           <p>
-            <a class="edit-trigger edit-trigger-text"><i class="fa fa-pencil"></i></a>
-            <label class="product-website-link">Website: <a href="">http://www.google.com/</a></label>
-          </p>
-          <p>
-            <button type="button" class="btn btn-primary btn-lg">
-              Give a Gift
-            </button>
+            <product-config product-code="{{$ctrl.designationContent.designationNumber}}" button-label="Give a Gift"></product-config>
           </p>
         </div>
       </div>
     </div>
   </div>
+
+  <loading-overlay ng-if="$ctrl.loadingOverlay"></loading-overlay>
 </div>

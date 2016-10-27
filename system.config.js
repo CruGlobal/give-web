@@ -27,6 +27,7 @@ System.config({
     "angular-messages": "github:angular/bower-angular-messages@1.5.8",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.8",
     "angular-ordinal": "npm:angular-ordinal@2.1.3",
+    "angular-sanitize": "github:angular/bower-angular-sanitize@1.5.8",
     "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.3",
     "angular-ui-router": "github:angular-ui/ui-router@0.3.1",
     "babel": "npm:babel-core@5.8.38",
@@ -43,6 +44,7 @@ System.config({
     "rxjs": "npm:rxjs@5.0.0-beta.11",
     "stacktrace-js": "npm:stacktrace-js@1.3.1",
     "systemjs-babel-build": "npm:systemjs-plugin-babel@0.0.13/systemjs-babel-browser.js",
+    "textangular": "npm:textangular@1.5.12",
     "github:angular/bower-angular-animate@1.5.8": {
       "angular": "github:angular/bower-angular@1.5.8"
     },
@@ -53,6 +55,9 @@ System.config({
       "angular": "github:angular/bower-angular@1.5.8"
     },
     "github:angular/bower-angular-mocks@1.5.8": {
+      "angular": "github:angular/bower-angular@1.5.8"
+    },
+    "github:angular/bower-angular-sanitize@1.5.8": {
       "angular": "github:angular/bower-angular@1.5.8"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
@@ -527,6 +532,11 @@ System.config({
     },
     "npm:supports-color@2.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:textangular@1.5.12": {
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "rangy": "npm:rangy@1.3.0",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:through2@2.0.1": {
       "process": "github:jspm/nodelibs-process@0.1.2",

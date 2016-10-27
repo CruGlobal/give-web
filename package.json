@@ -75,6 +75,7 @@
       "angular-gettext": "github:rubenv/angular-gettext@^2.3.4",
       "angular-messages": "github:angular/bower-angular-messages@^1.5.8",
       "angular-ordinal": "npm:angular-ordinal@^2.1.3",
+      "angular-sanitize": "github:angular/bower-angular-sanitize@^1.5.8",
       "angular-ui-bootstrap": "npm:angular-ui-bootstrap@^2.1.3",
       "angular-ui-router": "github:angular-ui/ui-router@^0.3.1",
       "jsencrypt": "npm:jsencrypt@^2.3.1",
@@ -84,7 +85,8 @@
       "ng-resize": "npm:ng-resize@^1.2.0",
       "rollbar-browser": "npm:rollbar-browser@^1.9.1",
       "rxjs": "npm:rxjs@^5.0.0-beta.11",
-      "stacktrace-js": "npm:stacktrace-js@^1.3.1"
+      "stacktrace-js": "npm:stacktrace-js@^1.3.1",
+      "textangular": "npm:textangular@^1.5.2"
     },
     "devDependencies": {
       "angular-mocks": "github:angular/bower-angular-mocks@^1.5.8",
