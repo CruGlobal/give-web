@@ -25,8 +25,9 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
+  constructor( $location, $scope, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
     this.$location = $location;
+    this.$scope = $scope;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
@@ -49,11 +50,38 @@ class ModalInstanceCtrl {
 
     if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
       this.customAmount = this.itemConfig.amount;
+      this.customInputActive = true;
     }
 
     if(!this.itemConfig['recurring-day-of-month'] && nextDrawDate) {
       this.itemConfig['recurring-day-of-month'] = Number(nextDrawDate.split('-')[2]).toString();
     }
+  }
+
+  $onInit() {
+    this.waitForFormInitialization();
+  }
+
+  waitForFormInitialization() {
+    let unregister = this.$scope.$watch('$ctrl.itemConfigForm', () => {
+      if(this.itemConfigForm) {
+        unregister();
+        this.addCustomValidators();
+      }
+    });
+  }
+
+  addCustomValidators() {
+    this.itemConfigForm.amount.$validators.minimum = value => {
+      return this.customInputActive ? (value*1.0 >= 1) : true;
+    };
+    this.itemConfigForm.amount.$validators.maximum = value => {
+      return this.customInputActive ? (value*1.0 < 10000000) : true;
+    };
+    this.itemConfigForm.amount.$validators.pattern = value => {
+      var regex = /^([0-9]*)(\.[0-9]{1,2})?$/;
+      return this.customInputActive ? (regex.test(value)) : true;
+    };
   }
 
   initializeParams() {
@@ -93,15 +121,15 @@ class ModalInstanceCtrl {
     } );
     this.productData.frequency = product.name;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.frequency, product.name );
+
   }
 
   changeAmount( amount ) {
     this.itemConfigForm.$setDirty();
     this.itemConfig.amount = amount;
-    this.customAmount = undefined;
-    this.itemConfigForm.amount.$setViewValue( undefined, 'change' );
-    this.itemConfigForm.amount.$render();
+    this.customAmount = '';
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
+    this.customInputActive = false;
   }
 
   changeCustomAmount( amount ) {
@@ -132,7 +160,8 @@ class ModalInstanceCtrl {
         }
         this.submittingGift = false;
         this.giftSubmitted = true;
-      }, () => {
+      }, (error) => {
+        this.error = error.data;
         this.submittingGift = false;
       } );
   }
