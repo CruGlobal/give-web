@@ -71,7 +71,10 @@
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary pull-right"
-          ng-click="$close($ctrl.parentDesignationNumber, $ctrl.suggestedAmounts)">
+          ng-click="$close({
+            parentDesignationNumber: $ctrl.parentDesignationNumber,
+            suggestedAmounts: $ctrl.suggestedAmounts
+          })">
     Save &amp; Close
   </button>
   <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>

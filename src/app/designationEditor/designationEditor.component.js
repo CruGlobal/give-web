@@ -4,13 +4,13 @@ import 'angular-ui-bootstrap';
 import find from 'lodash/find';
 
 import commonModule from 'common/common.module';
-import sessionService from 'common/services/session/session.service';
-import sessionModalService from 'common/services/session/sessionModal.service';
+import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
+import sessionService, {Roles} from 'common/services/session/session.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 
 import titleModalController from './titleModal/title.modal';
 import pageOptionsModalController from './pageOptionsModal/pageOptions.modal';
-import photoModalController from './photoModal/photoModal.modal';
+import photoModalController from './photoModal/photo.modal';
 import textEditorModalController from './textEditorModal/textEditor.modal';
 import websiteModalController from './websiteModal/website.modal';
 
@@ -21,46 +21,51 @@ import photoModalTemplate from './photoModal/photoModal.tpl';
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl';
 import websiteModalTemplate from './websiteModal/websiteModal.tpl';
 
-const designationSecurityEndpoint = '/bin/crugive/designation-security';
-const designationImagesEndpoint = '/bin/crugive/image';
-const saveEndpoint = '/bin/crugive/upsert';
+import designationConstants from './designationEditor.constants';
 
 let componentName = 'designationEditor';
 
 class DesignationEditorController {
 
   /* @ngInject */
-  constructor( $http, $q, $uibModal, $location, envService, sessionService, sessionModalService ) {
+  constructor( $http, $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService ) {
     this.sessionService = sessionService;
-    this.sessionModalService = sessionModalService;
+    this.sessionEnforcerService = sessionEnforcerService;
     this.imgDomain = envService.read('imgDomain');
     this.imgDomainDesignation = envService.read('imgDomainDesignation');
+    this.$location = $location;
     this.$http = $http;
     this.$q = $q;
     this.$uibModal = $uibModal;
-
-    this.designationNumber = $location.search().d;
+    this.$window = $window;
   }
 
   $onInit() {
-    if(this.sessionService.getRole() !== 'REGISTERED'){
-      this.sessionModalService
-        .signIn()
-        .then( () => {
-          this.getDesignationContent();
-        } );
-    }else{
-      this.getDesignationContent();
-    }
+    this.designationNumber = this.$location.search().d;
+
+    this.enforcerId = this.sessionEnforcerService( [Roles.registered], {
+      [EnforcerCallbacks.signIn]: () => {
+        this.getDesignationContent();
+      },
+      [EnforcerCallbacks.cancel]: () => {
+        // Authentication failure
+        this.$window.location = '/';
+      }
+    }, EnforcerModes.session );
+  }
+
+  $onDestroy() {
+    // Destroy enforcer
+    this.sessionEnforcerService.cancel( this.enforcerId );
   }
 
   getDesignationContent() {
     if(!this.designationNumber){ return; }
     this.loadingOverlay = true;
 
-    this.$q.all([
+    return this.$q.all([
       //get designation content
-      this.$http.get(designationSecurityEndpoint, {
+      this.$http.get(designationConstants.designationSecurityEndpoint, {
         params: {
           designationNumber: this.designationNumber
         },
@@ -70,7 +75,7 @@ class DesignationEditorController {
       }),
 
       //get designation photos
-      this.$http.get(designationImagesEndpoint, {
+      this.$http.get(designationConstants.designationImagesEndpoint, {
         params: {
           designationNumber: this.designationNumber
         },
@@ -121,9 +126,9 @@ class DesignationEditorController {
       }
     };
     this.$uibModal.open( modalOptions ).result
-      .then( (parentDesignationNumber) => {
-        this.designationContent.parentDesignationNumber = parentDesignationNumber;
-        // this.designationContent.suggestedAmounts = suggestedAmounts;
+      .then( (data) => {
+        this.designationContent.parentDesignationNumber = data.parentDesignationNumber;
+        this.designationContent.suggestedAmounts = data.suggestedAmounts;
       });
   }
 
@@ -182,11 +187,13 @@ class DesignationEditorController {
   }
 
   save() {
-    this.$http.post(saveEndpoint, this.designationContent, {
+    return this.$http.post(designationConstants.saveEndpoint, this.designationContent, {
       withCredentials: true
     }).then(() => {
+      this.saveStatus = 'success';
       alert('Changes saved.');
     }, () => {
+      this.saveStatus = 'failure';
       alert('An error has occurred.');
     });
   }
@@ -198,7 +205,7 @@ export default angular
     'ngSanitize',
     commonModule.name,
     sessionService.name,
-    sessionModalService.name,
+    sessionEnforcerService.name,
     loadingOverlay.name,
     template.name,
 
