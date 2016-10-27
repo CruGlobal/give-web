@@ -42,7 +42,6 @@ describe( 'product config modal', function () {
         isEdit:            true,
         $scope:            $scope,
         uri:               'uri'
-
       } );
       $ctrl.itemConfigForm = itemConfigForm;
     } ) );
@@ -108,6 +107,7 @@ describe( 'product config modal', function () {
         isEdit:            true,
         $scope:            $scope,
         uri:               'uri'
+
       } );
       $ctrl.itemConfigForm = itemConfigForm;
     } ) );

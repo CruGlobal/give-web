@@ -158,6 +158,10 @@ class ModalInstanceCtrl {
           this.giftSubmitted = true;
         }
         this.submittingGift = false;
+<<<<<<< HEAD
+=======
+        this.giftSubmitted = true;
+>>>>>>> 53ab1503f001f53e8d39b16cee4f3b29cb3bc261
       }, (error) => {
         this.error = error.data;
         this.submittingGift = false;

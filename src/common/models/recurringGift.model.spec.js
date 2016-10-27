@@ -20,7 +20,8 @@ describe('recurringGift model', () => {
         'updated-rate': {recurrence: {interval: ''}},
         'updated-recurring-day-of-month': '',
         'updated-start-month': '',
-        'updated-start-year': ''
+        'updated-start-year': '',
+        'updated-designation-number': ''
       },
       {
         'donation-row-id': '1-K0LPOL',
@@ -46,9 +47,23 @@ describe('recurringGift model', () => {
     });
   });
 
+  describe('designationName setter', () => {
+    it('should set the name', () => {
+      giftModel.designationName = 'Lex Luthor';
+      expect(giftModel.gift['designation-name']).toEqual('Lex Luthor');
+    });
+  });
+
   describe('designationNumber getter', () => {
     it('should return the designation number', () => {
       expect(giftModel.designationNumber).toEqual('0105987');
+    });
+  });
+
+  describe('designationNumber setter', () => {
+    it('should set the designation number', () => {
+      giftModel.designationNumber = '0123456';
+      expect(giftModel.gift['designation-number']).toEqual('0123456');
     });
   });
 
@@ -364,6 +379,10 @@ describe('recurringGift model', () => {
       giftModel.gift['updated-donation-line-status'] = 'Cancelled';
       expect(giftModel.hasChanges()).toEqual(true);
     });
+    it('should return true if designation number has been updated', () => {
+      giftModel.gift['updated-designation-number'] = '1234567';
+      expect(giftModel.hasChanges()).toEqual(true);
+    });
   });
 
   describe('toObject getter', () => {
@@ -381,6 +400,22 @@ describe('recurringGift model', () => {
       clone.donationLineStatus = 'Cancelled';
       expect(clone.amount).toEqual(giftModel.amount);
       expect(clone.donationLineStatus).not.toEqual(giftModel.donationLineStatus);
+    });
+  });
+
+  describe('setDefaults', () => {
+    it('should set default values for a new gift', () => {
+      expect(giftModel.setDefaults().toObject).toEqual(jasmine.objectContaining({
+        'updated-designation-number': giftModel.gift['designation-number'],
+        'updated-amount': 50,
+        'updated-payment-method-id': 'giydgnrxgm=',
+        'updated-rate': {
+          'recurrence': {
+            'interval': 'Monthly'
+          }
+        }
+      }));
+      expect(giftModel._paymentMethod).toEqual(giftModel.paymentMethods[0]);
     });
   });
 });

@@ -10,14 +10,46 @@ export default class RecurringGiftModel {
     this.parentDonation = parentDonation;
     this.nextDrawDate = nextDrawDate;
     this.paymentMethods = paymentMethods;
+
+    this.initializeEmptyFields();
+  }
+
+  initializeEmptyFields(){
+    if(!this.gift['updated-rate']){
+      this.gift['updated-rate'] = {
+        recurrence: {
+          interval: ''
+        }
+      };
+    }
+    if(!this.parentDonation){
+      this.parentDonation = {
+        rate: {
+          recurrence: {
+            interval: ''
+          }
+        },
+        'next-draw-date': {
+          'display-value': ''
+        }
+      };
+    }
   }
 
   get designationName() {
     return this.gift['designation-name'];
   }
 
+  set designationName(value) {
+    this.gift['designation-name'] = value;
+  }
+
   get designationNumber() {
     return this.gift['designation-number'];
+  }
+
+  set designationNumber(value) {
+    this.gift['designation-number'] = value;
   }
 
   get amount(){
@@ -39,8 +71,8 @@ export default class RecurringGiftModel {
 
   get paymentMethod(){
     return this._paymentMethod = this._paymentMethod || find( this.paymentMethods, ( paymentMethod ) => {
-      return this.paymentMethodId === paymentMethod.self.uri.split( '/' ).pop();
-    } );
+        return this.paymentMethodId === paymentMethod.self.uri.split( '/' ).pop();
+      } );
   }
 
   set donationLineStatus(value){
@@ -120,7 +152,8 @@ export default class RecurringGiftModel {
       this.gift['updated-recurring-day-of-month'] !== '' ||
       this.gift['updated-start-month'] !== '' ||
       this.gift['updated-start-year'] !== '' ||
-      this.gift['updated-donation-line-status'] !== '';
+      this.gift['updated-donation-line-status'] !== '' ||
+      this.gift['updated-designation-number'] !== '';
   }
 
   get toObject(){
@@ -129,5 +162,15 @@ export default class RecurringGiftModel {
 
   clone() {
     return angular.copy(this, Object.create(this));
+  }
+
+  setDefaults(){
+    this.gift['updated-designation-number'] = this.gift['designation-number'];
+    this.gift['updated-amount'] = 50;
+    this._paymentMethod = this.paymentMethods[0];
+    this.gift['updated-payment-method-id'] = this._paymentMethod.self.uri.split( '/' ).pop();
+    this.gift['updated-rate']['recurrence']['interval'] = 'Monthly';
+    this.gift['updated-recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
+    return this;
   }
 }
