@@ -75,8 +75,8 @@
               <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
                 <div class="help-block" ng-message="pattern" translate>Amount must be a valid number</div>
                 <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
-                <div class="help-block" ng-message="minimum" translate>Amount must be more than $1.00</div>
-                <div class="help-block" ng-message="maximum" translate>Amount must be less than $10,000,000.00</div>
+                <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+                <div class="help-block" ng-message="maximum" translate>Amount must be less than {{ 10000000 | currency }}</div>
               </div>
             </div>
           </div><!-- // panel-body -->
