@@ -3,6 +3,7 @@ import template from './stopStartRecurringGifts.modal.tpl';
 
 import stopStartStep0 from './step0/stopStartStep0.component';
 import stopGift from './stopGift/stopGift.component';
+import redirectGift from './redirectGift/redirectGift.component';
 
 let componentName = 'stopStartRecurringGiftsModal';
 
@@ -17,10 +18,8 @@ class StopStartRecurringGiftsModalController {
   }
 
   changeState( state ) {
-    switch ( state ) {
-      default:
-        this.state = state;
-    }
+    if ( state !== 'step-0' ) this.giftAction = state;
+    this.state = state;
   }
 
   setLoading( loading ) {
@@ -32,7 +31,8 @@ export default angular
   .module( componentName, [
     template.name,
     stopStartStep0.name,
-    stopGift.name
+    stopGift.name,
+    redirectGift.name
   ] )
   .component( componentName, {
     controller:  StopStartRecurringGiftsModalController,

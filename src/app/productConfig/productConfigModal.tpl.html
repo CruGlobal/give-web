@@ -21,11 +21,19 @@
   <button class="btn btn-success" ng-click="$dismiss()">Keep Browsing</button>
 </div>
 
+
 <form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.addToCart()" ng-if="!$ctrl.giftSubmitted">
   <div class="modal-body pt0 p">
     <div class="container-fluid">
       <div class="panel panel-default panel-plain mt">
         <div class="panel panel-default give-modal-panel">
+
+          <div ng-if="$ctrl.error" ng-switch="$ctrl.error.indexOf('already in the cart') !== -1" class="alert" role="alert"
+               ng-class="{'alert-warning': $ctrl.error.indexOf('already in the cart') !== -1, 'alert-danger': $ctrl.error.indexOf('already in the cart') === -1}">
+            <span ng-switch-when="true" translate>You already have this gift in your cart.</span>
+            <span ng-switch-when="false" translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact support.</span>
+          </div>
+
           <h4 class="panel-title border-bottom-small" translate>
             Gift Amount
           </h4>
@@ -42,26 +50,33 @@
             <!--</div>-->
 
             <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
-              <label class="btn btn-radio" ng-click="$ctrl.changeAmount(a)" ng-class="{'active': $ctrl.itemConfig.amount === a}" ng-repeat-start="a in $ctrl.selectableAmounts">
+              <label class="btn btn-radio"
+                     ng-click="$ctrl.changeAmount(a)"
+                     ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
+                     ng-repeat-start="a in $ctrl.selectableAmounts">
                 <span class="number">${{a}}</span>
               </label>
               <span ng-repeat-end></span>
-              <label class="btn btn-default-form u-textLeft custom-amount">
+              <label
+                ng-class="{active: $ctrl.customInputActive}"
+                class="btn btn-default-form u-textLeft custom-amount">
                 <div class="form-group form-group-default u-inline">
                   <input class="form-control form-control-subtle number"
-                         type="number"
                          name="amount"
+                         type="text"
+                         step="1"
+                         ng-required="$ctrl.customInputActive"
                          ng-model="$ctrl.customAmount"
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
-                         ng-min="1"
-                         ng-max="10000000"
-                         ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                         ng-focus="$ctrl.customInputActive = true;"
+                         required>
                 </div>
               </label>
               <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-                <div class="help-block" ng-message="min" translate>Amount must be at least $1.00</div>
-                <div class="help-block" ng-message="max" translate>Amount must be less than $10,000,000.00</div>
-                <div class="help-block" ng-message="pattern" translate>Amount must be a valid number with no more than 2 decimal places</div>
+                <div class="help-block" ng-message="pattern" translate>Amount must be a valid number</div>
+                <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+                <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+                <div class="help-block" ng-message="maximum" translate>Amount must be less than {{ 10000000 | currency }}</div>
               </div>
             </div>
           </div><!-- // panel-body -->
@@ -73,7 +88,7 @@
           <div class="panel-body">
             <div data-toggle="buttons">
               <label class="btn btn-radio btn-wide"
-                     ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder"
+                     ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
                      ng-if="f.name !== 'SEMIANNUAL'"
                      ng-class="{'active': f.name === $ctrl.productData.frequency}"
                      ng-click="$ctrl.changeFrequency(f)">
@@ -99,7 +114,7 @@
                     <div class="form-group">
                       <select class="form-control form-control-subtle"
                               ng-model="$ctrl.itemConfig['recurring-day-of-month']"
-                              ng-options="o as (o | ordinal) for o in $ctrl.giftDatesService.possibleTransactionDays()"
+                              ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
                               ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'])">
                       </select>
                     </div>
@@ -109,7 +124,7 @@
                   <div class="form-group">
                     <label translate>Your gift will start on</label>
                     <div class="form-group">
-                      {{$ctrl.giftDatesService.startDate( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.nextDrawDate ).format('ll')}}
+                      {{$ctrl.startDate( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.nextDrawDate ).format('ll')}}
                     </div>
                   </div>
                 </div>
@@ -152,7 +167,8 @@
       <button class="btn btn-default btn-md btn-block-xs" type="button" ng-click="$dismiss()" translate>Cancel &amp; Return</button>
     </div>
     <div class="col-md-6 col-sm-6 text-right">
-      <button class="btn btn-md btn-primary btn-block-xs" type="submit">{{$ctrl.submitLabel|translate}}</button>
+      <button ng-if="!$ctrl.error" class="btn btn-md btn-primary btn-block-xs" type="submit">{{$ctrl.submitLabel|translate}}</button>
+      <button ng-if="$ctrl.error && $ctrl.error.indexOf('already in the cart') !== -1" ng-click="$close(); $ctrl.$location.path('/cart')" class="btn btn-md btn-primary btn-block-xs" type="submit" translate>View Cart</button>
     </div>
   </div>
 </form>

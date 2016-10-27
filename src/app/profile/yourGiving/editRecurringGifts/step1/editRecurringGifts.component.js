@@ -1,10 +1,9 @@
 import angular from 'angular';
-import filter from 'lodash/filter';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
-import giftUpdate from 'common/components/giftViews/giftUpdate/giftUpdate.component';
+import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
 import loading from 'common/components/loading/loading.component';
 
 import donationsService from 'common/services/api/donations.service';
@@ -28,31 +27,21 @@ class EditRecurringGiftsController {
   }
 
   loadGifts(){
-    this.loading = true;
-    this.loadingError = false;
-    Observable.forkJoin(this.donationsService.getRecurringGifts(), this.commonService.getNextDrawDate())
-      .subscribe(([gifts, nextDrawDate]) => {
-          this.recurringGifts = gifts;
-          this.nextDrawDate = nextDrawDate;
-          this.loading = false;
-        },
-        (error) => {
-          this.$log.error('Error loading recurring gifts or nextDrawDate', error);
-          this.loading = false;
-          this.loadingError = true;
-        });
-  }
-
-  processChanges() {
-    let recurringGiftChanges = filter(this.recurringGifts, gift => {
-      return gift['updated-amount'] !== '' ||
-        gift['updated-payment-method-id'] !== '' ||
-        gift['updated-rate']['recurrence']['interval'] !== '' ||
-        gift['updated-recurring-day-of-month'] !== '' ||
-        gift['updated-start-month'] !== '' ||
-        gift['updated-start-year'] !== '';
-    });
-    this.next({ recurringGiftChanges: recurringGiftChanges });
+    if(!this.recurringGifts){
+      this.loading = true;
+      this.loadingError = false;
+      Observable.forkJoin(this.donationsService.getRecurringGifts(), this.commonService.getNextDrawDate())
+        .subscribe(([gifts, nextDrawDate]) => {
+            this.recurringGifts = gifts;
+            this.nextDrawDate = nextDrawDate;
+            this.loading = false;
+          },
+          (error) => {
+            this.$log.error('Error loading recurring gifts or nextDrawDate', error);
+            this.loading = false;
+            this.loadingError = true;
+          });
+    }
   }
 }
 
@@ -60,7 +49,7 @@ export default angular
   .module(componentName, [
     template.name,
     giftListItem.name,
-    giftUpdate.name,
+    giftUpdateView.name,
     loading.name,
     donationsService.name,
     commonService.name
@@ -69,6 +58,7 @@ export default angular
     controller: EditRecurringGiftsController,
     templateUrl: template.name,
     bindings: {
+      recurringGifts: '<',
       paymentMethods: '<',
       dismiss: '&',
       next: '&'

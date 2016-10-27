@@ -1,13 +1,17 @@
 import angular from 'angular';
-import template from './giftSimpleView.tpl';
 import 'angular-ordinal';
 
-let componentName = 'giftSimpleView';
+import {quarterlyMonths} from 'common/services/giftHelpers/giftDates.service';
 
-class GiftSimpleViewController {
+import template from './giftSummaryView.tpl';
+
+let componentName = 'giftSummaryView';
+
+class GiftSummaryViewController {
 
   /* @ngInject */
   constructor() {
+    this.quarterlyMonths = quarterlyMonths;
   }
 }
 
@@ -17,7 +21,7 @@ export default angular
     'ordinal'
   ] )
   .component( componentName, {
-    controller:  GiftSimpleViewController,
+    controller:  GiftSummaryViewController,
     templateUrl: template.name,
     bindings:    {
       gift: '<'

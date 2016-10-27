@@ -23,7 +23,7 @@ export default angular
       'selectInput': '?label'
     },
     bindings:    {
-      gift:        '<',
+      gift:        '=',
       selectable:  '@',
       selectLabel: '@',
       onSelected:  '&'
