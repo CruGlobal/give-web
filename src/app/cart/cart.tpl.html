@@ -8,7 +8,7 @@
           <div class="panel">
             <div class="panel-body">
               <h3 class="panel-name" translate>Your Gift Cart</h3>
-              <loading ng-if="!$ctrl.cartData"></loading>
+              <loading-overlay ng-if="$ctrl.loading"></loading-overlay>
               <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
                 Your cart is empty
               </p>

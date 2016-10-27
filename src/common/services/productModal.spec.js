@@ -42,12 +42,13 @@ describe( 'productModalService', function () {
     } );
 
     it( 'should pass through itemConfig and isEditing', () => {
-      productModalService.configureProduct( '0987654', {amount: 100}, true );
+      productModalService.configureProduct( '0987654', {amount: 100}, true, 'uri' );
       $rootScope.$digest();
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.itemConfig() ).toEqual( {amount: 100} );
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.isEdit() ).toEqual( true );
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.productData() ).toBePromise();
+      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.uri() ).toBe('uri');
     } );
 
     describe( 'modal closes', () => {

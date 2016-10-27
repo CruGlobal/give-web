@@ -22,7 +22,7 @@
 </div>
 
 
-<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.addToCart()" ng-if="!$ctrl.giftSubmitted">
+<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.isEdit ? $ctrl.updateGift() : $ctrl.addToCart()" ng-if="!$ctrl.giftSubmitted">
   <div class="modal-body pt0 p">
     <div class="container-fluid">
       <div class="panel panel-default panel-plain mt">
@@ -73,7 +73,7 @@
                 </div>
               </label>
               <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-                <div class="help-block" ng-message="pattern" translate>Amount must be a valid number</div>
+                <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
                 <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
                 <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
                 <div class="help-block" ng-message="maximum" translate>Amount must be less than {{ 10000000 | currency }}</div>
