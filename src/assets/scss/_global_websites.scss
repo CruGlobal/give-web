@@ -1,0 +1,21 @@
+.globalWebsites--is-open {
+  font-size: 1.1875em;
+  height: auto;
+}
+
+.globalWebsites-sidebar {
+  padding-bottom: 0;
+}
+
+.globalWebsites-continents {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+
+
+/***** TESTING *****/
+.globalWebsites--is-open {
+  background-image: url(https://www.cru.org/images/globalWebsites--huge.jpg);
+  /* > main {display: none;} */
+}
