@@ -1,21 +1,44 @@
-.globalWebsites--is-open {
+/* .globalWebsites--is-open {
   font-size: 1.1875em;
   height: auto;
-}
+} */
 
-.globalWebsites-sidebar {
+/* .globalWebsites-sidebar {
   padding-bottom: 0;
-}
+  margin-left: 0;
+} */
 
-.globalWebsites-continents {
+/* .globalWebsites-continents {
   padding-bottom: 0;
   margin-bottom: 0;
-}
+} */
+
+/* #js-globalWebsites {
+  position: static;
+  .navToggle {
+    color: $colorCru-white;
+    z-index: 900;
+    position: fixed;
+    backface-visibility: hidden;
+    display: block;
+  }
+} */
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 /***** TESTING *****/
 .globalWebsites--is-open {
   background-image: url(https://www.cru.org/images/globalWebsites--huge.jpg);
-  /* > main {display: none;} */
+  > main {display: none;}
 }

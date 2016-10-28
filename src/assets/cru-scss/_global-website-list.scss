@@ -1,4 +1,6 @@
 .globalWebsites--is-open {
+    font-size: 1.1875em;
+    height: auto;
     padding-top: 0;
     overflow-x: hidden;
     background-image: url("../images/globalWebsites--small.jpg");
@@ -22,12 +24,17 @@
     .navToggle {
         color: $colorCru-white;
         z-index: 900;
+        position: fixed;
+        backface-visibility: hidden;
+        display: block;
 
         &:hover {
             color: $colorCru-white;
         }
     }
 }
+
+#js-globalWebsites > .container-fluid {padding-left: 10px;}
 
 .globalButton {
 
@@ -44,39 +51,22 @@
 
 .globalWebsites-sidebar {
 
-    //margin-bottom: 999999em;
-    margin-left: 25px;
-    padding-bottom: 999999em;
     position: relative;
-    padding-top: 36px;
+    padding-top: 72px;
+    padding-left: 2.12%;
+    padding-right: 2.12%;
     background: rgba(0, 0, 0, 0.25);
 
-    @include mq(550px, max) {
-        margin-bottom: 0;
-        padding-top: 0;
-        padding-bottom: 0;
-        margin-left: 0;
-    }
+    /* @include mq(1000px, max) {
+        padding-left: 15px;
+        padding-right: 15px;
+    } */
 }
 
 .globalWebsites-continents {
-    margin-bottom: 999999em;
-    margin-left: 25px;
-    padding-bottom: 999999em;
-    position: relative;
-    padding-top: 36px;
-    //background: rgba(0,0,0,.5);
-
-    @include mq(550px, max) {
-        display: none;
-    }
-
-    @include mq(992px, max) {
-        margin-bottom: 0;
-        padding-top: 36px;
-        padding-bottom: 0;
-        margin-left: 0;
-    }
+    width: 16.66667%;
+    position: fixed;
+    backface-visibility: hidden;
 
     li {
         border-top: 1px solid $colorCru-gray;
@@ -85,12 +75,16 @@
 
     a {
         color: $colorGrayscale-rock;
+        line-height: 1.1em;
+        padding: 12px 10px !important;
+        display: inline-block;
 
         &:hover {
             color: $colorCru-gold;
             font-weight: $fontWeight5;
-
+            text-decoration: none;
         }
+        &:focus {text-decoration: none;}
     }
 
     > .active > a {
@@ -103,7 +97,13 @@
 }
 
 .globalWebsites-countries {
+    padding-left: 44px;
     padding-top: 64px !important;
+
+    li {
+        margin-bottom: 14.5px;
+        &:last-of-type {margin-bottom: 0;}
+    }
 
     h1 {
         color: $colorGrayscale-pebble;
@@ -111,15 +111,7 @@
 
     p {
         line-height: 1.9em;
-
-        a {
-            color: $colorGrayscale-rock;
-
-            &:hover,
-            &:active {
-                color: $colorCru-white;
-            }
-        }
+        margin-bottom: 0;
     }
 
     a {
@@ -132,13 +124,15 @@
         }
     }
 
-    > .country {
+    .globalWebsites-country-header {
         display: block;
         color: $colorGrayscale-pebble;
         font-size: 20px;
         letter-spacing: 0.0025em;
         font-weight: 600;
         padding: 9px 0;
+        margin-bottom: 14.5px;
+        line-height: 100%;
     }
 }
 
@@ -163,15 +157,15 @@
     }
 }
 
-
-
-
 .website {
     border-left: 1px solid $colorCru-gray;
     padding-left: 20px;
-    padding-bottom: 4px;
+    padding-bottom: 3px;
+    display: none;
+    margin-top: 6px;
+    margin-left: 29px;
+    margin-bottom: 14px;
 }
-
 
 .globalWebsites-country {
     display: block;

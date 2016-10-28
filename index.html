@@ -17,10 +17,8 @@
       <!-- @if ENV='prod' !>
       <link rel="stylesheet" href="give.min.css" type="text/css">
       <!-- @endif -->
-
-      <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   </head>
-  <body ng-cloak ng-app="main" class="">
+  <body ng-cloak ng-app="main" class="globalWebsites--is-open">
 
     <noscript>
       <div class="deprecation-warning">
@@ -32,299 +30,288 @@
 
     <main></main>
 
-    <script>
-      jQuery('.ellipsis .nav-globe a').click(function(e) {
-        e.preventDefault();
-        jQuery('body').addClass('globalWebsites--is-open');
-        jQuery('#js-globalWebsites').removeClass('u-hidden');
-      });
-      jQuery('#js-globalWebsites .navToggle').click(function(e) {
-        e.preventDefault();
-        jQuery('body').removeClass('globalWebsites--is-open');
-        jQuery('#js-globalWebsites').addClass('u-hidden');
-      });
-    </script>
-
-    <div class="js-globalWebsites u-posStatic u-hidden" id="js-globalWebsites">
-      <a href="#" class="navToggle u-block js-globalButton--close u-posFixed"><span class="navToggle-item">Close</span><i class="navToggle-item icon-cancel-circled"></i></a>
-      <div class="row mr0 row-eq-height">
-        <div id="js-globalWebsites-continents" class="globalWebsites-sidebar col-md-3 col-sm-3 hidden-xs">
-          <ul class="nav  listBare  col-md-2  globalWebsites-continents  u-posFixed" role="tablist"> 
-            <li class="active"><a href="#africa">Africa</a></li> 
-            <li class=""><a href="#asia">Asia</a></li> 
-            <li class=""><a href="#europe">Europe</a></li> 
-            <li class=""><a href="#north-america">North America</a></li> 
-            <li class=""><a href="#oceania">Oceania</a></li> 
-            <li class=""><a href="#south-america">South America</a></li> 
-          </ul>
-        </div>
-        <div class="globalWebsites-countries  col-md-6  col-sm-6  ml"> 
-          <h5 id="africa" class="country">Africa</h5> 
-          <ul class="listBare  pb_x"> 
+    <div class="u-posStatic" id="js-globalWebsites">
+      <a href="#" class="navToggle js-globalButton--close"><span class="navToggle-item">Close</span><i class="navToggle-item icon-cancel-circled"></i></a>
+      <div class="container-fluid">
+        <div class="row mr0 ml0 row-eq-height">
+          <div class="globalWebsites-sidebar col-sm-3 hidden-xs">
+            <ul class="listBare globalWebsites-continents" role="tablist"> 
+              <li class="active"><a href="#africa">Africa</a></li> 
+              <li class=""><a href="#asia">Asia</a></li> 
+              <li class=""><a href="#europe">Europe</a></li> 
+              <li class=""><a href="#north-america">North America</a></li> 
+              <li class=""><a href="#oceania">Oceania</a></li> 
+              <li class=""><a href="#south-america">South America</a></li> 
+            </ul>
+          </div>
+          <div class="globalWebsites-countries col-sm-6">
+            <ul id="africa" class="listBare pb_x">
+              <li class="globalWebsites-country-header">Africa</li>
               <li>
-                <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Ethiopia</a></p>
-                <a class="ml website js-globalWebsites-link u-hidden" href="https://www.cru.org/communities/locations/africa/ethiopia.html" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Ethiopia', 'https://www.cru.org/communities/locations/africa/ethiopia.html', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Great Commission Ministry</span></a>
+                <a class="globalWebsites-country" href="#">Ethiopia</a>
+                <a class="website" href="https://www.cru.org/communities/locations/africa/ethiopia.html" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Ethiopia', 'https://www.cru.org/communities/locations/africa/ethiopia.html', {'nonInteraction': 1});"><span class="icon--readNext">Great Commission Ministry</span></a>
               </li> 
               <li>
-                <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Ghana</a></p>
-                <a class="ml website js-globalWebsites-link u-hidden" href="http://www.gcmgh.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Ghana', 'http://www.gcmgh.org', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Great Commission Movement of Ghana</span></a>
+                <a class="globalWebsites-country" href="#">Ghana</a>
+                <a class="website" href="http://www.gcmgh.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Ghana', 'http://www.gcmgh.org', {'nonInteraction': 1});"><span class="icon--readNext">Great Commission Movement of Ghana</span></a>
               </li> 
               <li>
-                <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Kenya</a></p>
-                <a class="ml website js-globalWebsites-link u-hidden" href="http://www.lmkenya.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Kenya', 'http://www.lmkenya.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> The Life Ministry</span></a>
+                <a class="globalWebsites-country" href="#">Kenya</a>
+                <a class="website" href="http://www.lmkenya.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Kenya', 'http://www.lmkenya.org/', {'nonInteraction': 1});"><span class="icon--readNext">The Life Ministry</span></a>
               </li> 
               <li>
-                <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Nigeria</a></p>
-                <a class="ml website js-globalWebsites-link u-hidden" href="http://gcmnigeria.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Nigeria', 'http://gcmnigeria.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Great Commission Movement of Nigeria</span></a>
+                <a class="globalWebsites-country" href="#">Nigeria</a>
+                <a class="website" href="http://gcmnigeria.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Nigeria', 'http://gcmnigeria.org/', {'nonInteraction': 1});"><span class="icon--readNext">Great Commission Movement of Nigeria</span></a>
               </li> 
               <li>
-                <p><a class="globalWebsites-country js-globalWebsites-country" href="#">South Africa</a></p>
-                <a class="ml website js-globalWebsites-link u-hidden" href="http://www.cccsa.org.za/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'South Africa', 'http://www.cccsa.org.za/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Campus Crusade for Christ South Africa</span></a>
+                <a class="globalWebsites-country" href="#">South Africa</a>
+                <a class="website" href="http://www.cccsa.org.za/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'South Africa', 'http://www.cccsa.org.za/', {'nonInteraction': 1});"><span class="icon--readNext">Campus Crusade for Christ South Africa</span></a>
               </li> 
-          </ul> 
-          <h5 id="asia" class="country">Asia</h5> 
-          <ul class="listBare  pb_x"> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Armenia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://nlarmenia.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Armenia', 'http://nlarmenia.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Life Agape</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Hong Kong</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.hkccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Hong Kong', 'http://www.hkccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Hong Kong Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">India</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://campuscrusade.in" target="_blank" onclick="ga('send', 'event', 'globalLink', 'India', 'http://campuscrusade.in', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> India Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Japan</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.japanccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Japan', 'http://www.japanccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Japan Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Macau</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://macauccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Macau', 'http://macauccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Christian Sheun Tao Church Hong Kong &amp; Macau District Union Association</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Malaysia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.mccc.org.my/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Malaysia', 'http://www.mccc.org.my/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Malaysia Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Nepal</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.nepalccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Nepal', 'http://www.nepalccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Nepal Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Pakistan</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.pakccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Pakistan', 'http://www.pakccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Pakistan Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Philippines</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://movementlife.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Philippines', 'http://movementlife.org', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Philippine Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Singapore</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://cru.org.sg" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Singapore', 'http://cru.org.sg', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Singapore</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">South Korea</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://kccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'South Korea', 'http://kccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Korea Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Taiwan</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.tccc.org.tw/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Taiwan', 'http://www.tccc.org.tw/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Chinese Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Thailand</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://thailandccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Thailand', 'http://thailandccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Thailand Campus Crusade for Christ</span></a>
-            </li> 
-          </ul> 
-          <h5 id="europe" class="country">Europe</h5> 
-          <ul class="listBare  pb_x"> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Albania</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.albaniaccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Albania', 'http://www.albaniaccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Albania &amp; Kosovo Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Austria</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agapeoesterreich.at" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Austria', 'http://agapeoesterreich.at', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Österreich</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Bulgaria</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://drupal.agapebg.org/main/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Bulgaria', 'http://drupal.agapebg.org/main/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Bulgaria</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Estonia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agape.ee" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Estonia', 'http://agape.ee', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Eesti</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Finland</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.kansanraamattuseura.fi" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Finland', 'http://www.kansanraamattuseura.fi', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Kansan Raamattuseuran Säätiö</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">France</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.agapefrance.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'France', 'http://www.agapefrance.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape France</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Germany</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.campus-d.de" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Germany', 'http://www.campus-d.de', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Campus für Christus</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Greece</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agape.gr" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Greece', 'http://agape.gr', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Greece</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Hungary</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://timoteus.hu" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Hungary', 'http://timoteus.hu', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Hungary</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Ireland</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.agape.ie" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Ireland', 'http://www.agape.ie', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Ireland</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Italy</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.agapeitalia.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Italy', 'http://www.agapeitalia.org', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Italia</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Kosovo</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.albaniaccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Kosovo', 'http://www.albaniaccc.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Albania &amp; Kosovo Campus Crusade for Christ</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Latvia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agape.lv" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Latvia', 'http://agape.lv', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Latvija</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Lithuania</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agape.lt" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Lithuania', 'http://agape.lt', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agapé Lietuva</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Macedonia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://studentskiodgovori.com/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Macedonia', 'http://studentskiodgovori.com/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Studentski Odgovori</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Netherlands</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agape.nl" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Netherlands', 'http://agape.nl', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Nederland</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Poland</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://rnz.org.pl/index/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Poland', 'http://rnz.org.pl/index/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Christian Movement Mt28</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Portugal</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agapeportugal.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Portugal', 'http://agapeportugal.org', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Portugal</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Romania</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.romanianharvest.ro/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Romania', 'http://www.romanianharvest.ro/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Romania</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Russia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.newliferussia.ru" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Russia', 'http://www.newliferussia.ru', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> New Life</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Slovenia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://vsakstudent.si/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Slovenia', 'http://vsakstudent.si/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> New Life</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Spain</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agape.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Spain', 'http://agape.org', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape España</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Sweden</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.agapesverige.se/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Sweden', 'http://www.agapesverige.se/ ', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape Sverige</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Switzerland</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.cfc.ch/nc/home.html" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Switzerland', 'http://www.cfc.ch/nc/home.html', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Campus für Christus Schweiz</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">UK</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://agape.org.uk" target="_blank" onclick="ga('send', 'event', 'globalLink', 'UK', 'http://agape.org.uk', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Agape UK</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Ukraine</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://ufcmission.org/en/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Ukraine', 'http://ufcmission.org/en/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Ukraine for Christ</span></a>
-            </li> 
-          </ul> 
-          <h5 id="north-america" class="country">North America</h5> 
-          <ul class="listBare  pb_x"> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Barbados</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://crucaribbean.org/barbados/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Barbados', 'http://crucaribbean.org/barbados/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Caribbean</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Canada</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://powertochange.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Canada', 'http://powertochange.org', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Power to Change</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Curacao</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://crucaribbean.org/curacao/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Curacao', 'http://crucaribbean.org/curacao/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Caribbean</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Haiti</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://crucaribbean.org/hati/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Haiti', 'http://crucaribbean.org/hati/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Caribbean</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Jamaica</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://crucaribbean.org/jamaica/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Jamaica', 'http://crucaribbean.org/jamaica/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Caribbean</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Mexico</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://vidaestudiantil.com/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Mexico', 'http://vidaestudiantil.com/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Vida Estudiantil</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Panama</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://vidaestudiantilpanama.tumblr.com/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Panama', 'http://vidaestudiantilpanama.tumblr.com/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Vida Estudiantil</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Puerto Rico</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://crucaribbean.org/puerto-rico/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Puerto Rico', 'http://crucaribbean.org/puerto-rico/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Caribbean</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Trinidad &amp; Tobago</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://crucaribbean.org/trindad-tobago/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Trinidad &amp; Tobago', 'http://crucaribbean.org/trindad-tobago/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Caribbean</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">United States</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.cru.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'United States', 'http://www.cru.org', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru</span></a>
-            </li> 
-          </ul> 
-          <h5 id="oceania" class="country">Oceania</h5> 
-          <ul class="listBare  pb_x"> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Australia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.powertochange.org.au/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Australia', 'http://www.powertochange.org.au/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Power to Change</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">New Zealand</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.tandem.org.nz/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'New Zealand', 'http://www.tandem.org.nz/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Tandem</span></a>
-            </li> 
-          </ul> 
-          <h5 id="south-america" class="country">South America</h5> 
-          <ul class="listBare  pb_x"> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Argentina</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.cruargentina.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Argentina', 'http://www.cruargentina.org', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Argentina</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Brazil</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://alfaeomega.org.br/site/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Brazil', 'http://alfaeomega.org.br/site/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Alfa e Ômega</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Chile</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.vidaestudiantil.cl/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Chile', 'http://www.vidaestudiantil.cl/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Chile</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Colombia</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://www.vidaparacolombia.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Colombia', 'http://www.vidaparacolombia.org/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Vida Para Colombia</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Paraguay</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="https://cruzadapy.wordpress.com/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Paraguay', 'https://cruzadapy.wordpress.com/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cruzada Estudiantil y Profesional para Cristo</span></a>
-            </li> 
-            <li>
-              <p><a class="globalWebsites-country js-globalWebsites-country" href="#">Suriname</a></p>
-              <a class="ml website js-globalWebsites-link u-hidden" href="http://crucaribbean.org/suriname/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Suriname', 'http://crucaribbean.org/suriname/', {'nonInteraction': 1});"><span class="globalWebsites-website icon--readNext"> Cru Caribbean</span></a>
-            </li> 
-          </ul> 
+            </ul>
+            <ul id="asia" class="listBare pb_x">
+              <li class="globalWebsites-country-header">Asia</li>
+              <li>
+                <a class="globalWebsites-country" href="#">Armenia</a>
+                <a class="website" href="http://nlarmenia.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Armenia', 'http://nlarmenia.org/', {'nonInteraction': 1});"><span class="icon--readNext">Life Agape</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Hong Kong</a>
+                <a class="website" href="http://www.hkccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Hong Kong', 'http://www.hkccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Hong Kong Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">India</a>
+                <a class="website" href="http://campuscrusade.in" target="_blank" onclick="ga('send', 'event', 'globalLink', 'India', 'http://campuscrusade.in', {'nonInteraction': 1});"><span class="icon--readNext">India Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Japan</a>
+                <a class="website" href="http://www.japanccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Japan', 'http://www.japanccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Japan Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Macau</a>
+                <a class="website" href="http://macauccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Macau', 'http://macauccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Christian Sheun Tao Church Hong Kong &amp; Macau District Union Association</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Malaysia</a>
+                <a class="website" href="http://www.mccc.org.my/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Malaysia', 'http://www.mccc.org.my/', {'nonInteraction': 1});"><span class="icon--readNext">Malaysia Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Nepal</a>
+                <a class="website" href="http://www.nepalccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Nepal', 'http://www.nepalccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Nepal Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Pakistan</a>
+                <a class="website" href="http://www.pakccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Pakistan', 'http://www.pakccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Pakistan Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Philippines</a>
+                <a class="website" href="http://movementlife.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Philippines', 'http://movementlife.org', {'nonInteraction': 1});"><span class="icon--readNext">Philippine Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Singapore</a>
+                <a class="website" href="http://cru.org.sg" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Singapore', 'http://cru.org.sg', {'nonInteraction': 1});"><span class="icon--readNext">Cru Singapore</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">South Korea</a>
+                <a class="website" href="http://kccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'South Korea', 'http://kccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Korea Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Taiwan</a>
+                <a class="website" href="http://www.tccc.org.tw/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Taiwan', 'http://www.tccc.org.tw/', {'nonInteraction': 1});"><span class="icon--readNext">Chinese Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Thailand</a>
+                <a class="website" href="http://thailandccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Thailand', 'http://thailandccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Thailand Campus Crusade for Christ</span></a>
+              </li> 
+            </ul>
+            <ul id="europe" class="listBare pb_x">
+              <li class="globalWebsites-country-header">Europe</li>
+              <li>
+                <a class="globalWebsites-country" href="#">Albania</a>
+                <a class="website" href="http://www.albaniaccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Albania', 'http://www.albaniaccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Albania &amp; Kosovo Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Austria</a>
+                <a class="website" href="http://agapeoesterreich.at" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Austria', 'http://agapeoesterreich.at', {'nonInteraction': 1});"><span class="icon--readNext">Agape Österreich</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Bulgaria</a>
+                <a class="website" href="http://drupal.agapebg.org/main/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Bulgaria', 'http://drupal.agapebg.org/main/', {'nonInteraction': 1});"><span class="icon--readNext">Agape Bulgaria</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Estonia</a>
+                <a class="website" href="http://agape.ee" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Estonia', 'http://agape.ee', {'nonInteraction': 1});"><span class="icon--readNext">Agape Eesti</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Finland</a>
+                <a class="website" href="http://www.kansanraamattuseura.fi" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Finland', 'http://www.kansanraamattuseura.fi', {'nonInteraction': 1});"><span class="icon--readNext">Kansan Raamattuseuran Säätiö</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">France</a>
+                <a class="website" href="http://www.agapefrance.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'France', 'http://www.agapefrance.org/', {'nonInteraction': 1});"><span class="icon--readNext">Agape France</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Germany</a>
+                <a class="website" href="http://www.campus-d.de" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Germany', 'http://www.campus-d.de', {'nonInteraction': 1});"><span class="icon--readNext">Campus für Christus</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Greece</a>
+                <a class="website" href="http://agape.gr" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Greece', 'http://agape.gr', {'nonInteraction': 1});"><span class="icon--readNext">Agape Greece</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Hungary</a>
+                <a class="website" href="http://timoteus.hu" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Hungary', 'http://timoteus.hu', {'nonInteraction': 1});"><span class="icon--readNext">Cru Hungary</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Ireland</a>
+                <a class="website" href="http://www.agape.ie" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Ireland', 'http://www.agape.ie', {'nonInteraction': 1});"><span class="icon--readNext">Agape Ireland</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Italy</a>
+                <a class="website" href="http://www.agapeitalia.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Italy', 'http://www.agapeitalia.org', {'nonInteraction': 1});"><span class="icon--readNext">Agape Italia</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Kosovo</a>
+                <a class="website" href="http://www.albaniaccc.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Kosovo', 'http://www.albaniaccc.org/', {'nonInteraction': 1});"><span class="icon--readNext">Albania &amp; Kosovo Campus Crusade for Christ</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Latvia</a>
+                <a class="website" href="http://agape.lv" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Latvia', 'http://agape.lv', {'nonInteraction': 1});"><span class="icon--readNext">Agape Latvija</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Lithuania</a>
+                <a class="website" href="http://agape.lt" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Lithuania', 'http://agape.lt', {'nonInteraction': 1});"><span class="icon--readNext">Agapé Lietuva</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Macedonia</a>
+                <a class="website" href="http://studentskiodgovori.com/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Macedonia', 'http://studentskiodgovori.com/', {'nonInteraction': 1});"><span class="icon--readNext">Studentski Odgovori</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Netherlands</a>
+                <a class="website" href="http://agape.nl" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Netherlands', 'http://agape.nl', {'nonInteraction': 1});"><span class="icon--readNext">Agape Nederland</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Poland</a>
+                <a class="website" href="http://rnz.org.pl/index/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Poland', 'http://rnz.org.pl/index/', {'nonInteraction': 1});"><span class="icon--readNext">Christian Movement Mt28</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Portugal</a>
+                <a class="website" href="http://agapeportugal.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Portugal', 'http://agapeportugal.org', {'nonInteraction': 1});"><span class="icon--readNext">Agape Portugal</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Romania</a>
+                <a class="website" href="http://www.romanianharvest.ro/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Romania', 'http://www.romanianharvest.ro/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Romania</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Russia</a>
+                <a class="website" href="http://www.newliferussia.ru" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Russia', 'http://www.newliferussia.ru', {'nonInteraction': 1});"><span class="icon--readNext">New Life</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Slovenia</a>
+                <a class="website" href="http://vsakstudent.si/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Slovenia', 'http://vsakstudent.si/', {'nonInteraction': 1});"><span class="icon--readNext">New Life</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Spain</a>
+                <a class="website" href="http://agape.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Spain', 'http://agape.org', {'nonInteraction': 1});"><span class="icon--readNext">Agape España</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Sweden</a>
+                <a class="website" href="http://www.agapesverige.se/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Sweden', 'http://www.agapesverige.se/ ', {'nonInteraction': 1});"><span class="icon--readNext">Agape Sverige</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Switzerland</a>
+                <a class="website" href="http://www.cfc.ch/nc/home.html" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Switzerland', 'http://www.cfc.ch/nc/home.html', {'nonInteraction': 1});"><span class="icon--readNext">Campus für Christus Schweiz</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">UK</a>
+                <a class="website" href="http://agape.org.uk" target="_blank" onclick="ga('send', 'event', 'globalLink', 'UK', 'http://agape.org.uk', {'nonInteraction': 1});"><span class="icon--readNext">Agape UK</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Ukraine</a>
+                <a class="website" href="http://ufcmission.org/en/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Ukraine', 'http://ufcmission.org/en/', {'nonInteraction': 1});"><span class="icon--readNext">Ukraine for Christ</span></a>
+              </li> 
+            </ul>
+            <ul id="north-america" class="listBare pb_x">
+              <li class="globalWebsites-country-header">North America</li>
+              <li>
+                <a class="globalWebsites-country" href="#">Barbados</a>
+                <a class="website" href="http://crucaribbean.org/barbados/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Barbados', 'http://crucaribbean.org/barbados/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Caribbean</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Canada</a>
+                <a class="website" href="http://powertochange.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Canada', 'http://powertochange.org', {'nonInteraction': 1});"><span class="icon--readNext">Power to Change</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Curacao</a>
+                <a class="website" href="http://crucaribbean.org/curacao/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Curacao', 'http://crucaribbean.org/curacao/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Caribbean</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Haiti</a>
+                <a class="website" href="http://crucaribbean.org/hati/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Haiti', 'http://crucaribbean.org/hati/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Caribbean</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Jamaica</a>
+                <a class="website" href="http://crucaribbean.org/jamaica/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Jamaica', 'http://crucaribbean.org/jamaica/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Caribbean</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Mexico</a>
+                <a class="website" href="http://vidaestudiantil.com/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Mexico', 'http://vidaestudiantil.com/', {'nonInteraction': 1});"><span class="icon--readNext">Vida Estudiantil</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Panama</a>
+                <a class="website" href="http://vidaestudiantilpanama.tumblr.com/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Panama', 'http://vidaestudiantilpanama.tumblr.com/', {'nonInteraction': 1});"><span class="icon--readNext">Vida Estudiantil</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Puerto Rico</a>
+                <a class="website" href="http://crucaribbean.org/puerto-rico/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Puerto Rico', 'http://crucaribbean.org/puerto-rico/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Caribbean</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Trinidad &amp; Tobago</a>
+                <a class="website" href="http://crucaribbean.org/trindad-tobago/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Trinidad &amp; Tobago', 'http://crucaribbean.org/trindad-tobago/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Caribbean</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">United States</a>
+                <a class="website" href="http://www.cru.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'United States', 'http://www.cru.org', {'nonInteraction': 1});"><span class="icon--readNext">Cru</span></a>
+              </li> 
+            </ul>
+            <ul id="oceania" class="listBare pb_x">
+              <li class="globalWebsites-country-header">Oceania</li>
+              <li>
+                <a class="globalWebsites-country" href="#">Australia</a>
+                <a class="website" href="http://www.powertochange.org.au/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Australia', 'http://www.powertochange.org.au/', {'nonInteraction': 1});"><span class="icon--readNext">Power to Change</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">New Zealand</a>
+                <a class="website" href="http://www.tandem.org.nz/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'New Zealand', 'http://www.tandem.org.nz/', {'nonInteraction': 1});"><span class="icon--readNext">Tandem</span></a>
+              </li> 
+            </ul>
+            <ul id="south-america" class="listBare pb_x">
+              <li class="globalWebsites-country-header">South America</li>
+              <li>
+                <a class="globalWebsites-country" href="#">Argentina</a>
+                <a class="website" href="http://www.cruargentina.org" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Argentina', 'http://www.cruargentina.org', {'nonInteraction': 1});"><span class="icon--readNext">Cru Argentina</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Brazil</a>
+                <a class="website" href="http://alfaeomega.org.br/site/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Brazil', 'http://alfaeomega.org.br/site/', {'nonInteraction': 1});"><span class="icon--readNext">Alfa e Ômega</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Chile</a>
+                <a class="website" href="http://www.vidaestudiantil.cl/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Chile', 'http://www.vidaestudiantil.cl/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Chile</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Colombia</a>
+                <a class="website" href="http://www.vidaparacolombia.org/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Colombia', 'http://www.vidaparacolombia.org/', {'nonInteraction': 1});"><span class="icon--readNext">Vida Para Colombia</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Paraguay</a>
+                <a class="website" href="https://cruzadapy.wordpress.com/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Paraguay', 'https://cruzadapy.wordpress.com/', {'nonInteraction': 1});"><span class="icon--readNext">Cruzada Estudiantil y Profesional para Cristo</span></a>
+              </li> 
+              <li>
+                <a class="globalWebsites-country" href="#">Suriname</a>
+                <a class="website" href="http://crucaribbean.org/suriname/" target="_blank" onclick="ga('send', 'event', 'globalLink', 'Suriname', 'http://crucaribbean.org/suriname/', {'nonInteraction': 1});"><span class="icon--readNext">Cru Caribbean</span></a>
+              </li> 
+            </ul> 
+          </div>
         </div>
       </div>
     </div>
