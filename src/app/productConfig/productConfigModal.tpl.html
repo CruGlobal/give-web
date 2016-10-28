@@ -72,11 +72,7 @@
                 </div>
               </label>
               <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-<<<<<<< HEAD
                 <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
-=======
-                <div class="help-block" ng-message="pattern" translate>Amount must be a valid number</div>
->>>>>>> 53ab1503f001f53e8d39b16cee4f3b29cb3bc261
                 <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
                 <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
                 <div class="help-block" ng-message="maximum" translate>Amount must be less than {{ 10000000 | currency }}</div>
