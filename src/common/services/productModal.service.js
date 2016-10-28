@@ -13,7 +13,7 @@ let serviceName = 'productModalService';
 function ProductModalService( $uibModal, $location, designationsService, commonService, modalStateService ) {
   let modalOpen = false;
 
-  function configureProduct( code, config, isEdit ) {
+  function configureProduct( code, config, isEdit, uri ) {
     if ( modalOpen ) {
       return;
     }
@@ -33,7 +33,8 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
             return commonService.getNextDrawDate().toPromise();
           },
           itemConfig:  () => config,
-          isEdit:      () => isEdit
+          isEdit:      () => isEdit,
+          uri:         () => uri
         }
       } );
     modalInstance.result
