@@ -11,7 +11,9 @@ import historicalResponse from './fixtures/cortex-donations-historical.fixture';
 import recipientResponse from './fixtures/cortex-donations-recipient.fixture';
 import recipientDetailsResponse from './fixtures/cortex-donations-recipient-details.fixture';
 import receiptsResponse from './fixtures/cortex-donations-receipts.fixture';
-import recurringGiftsResponse from './fixtures/cortex-donations-recurring-gifts.fixture';
+import activeRecurringGiftsResponse from './fixtures/cortex-donations-recurring-gifts-active.fixture';
+import cancelledRecurringGiftsResponse from './fixtures/cortex-donations-recurring-gifts-cancelled.fixture';
+import multipleRecurringGiftsResponse from './fixtures/cortex-donations-recurring-gifts-multiple.fixture';
 import recentRecipientsResponse from './fixtures/cortex-donations-recent-recipients.fixture';
 
 describe( 'donations service', () => {
@@ -111,8 +113,9 @@ describe( 'donations service', () => {
   } );
 
   describe( 'getRecurringGifts()', () => {
-    it( 'should load recurring gifts', () => {
-      let paymentMethod = {
+    let paymentMethod;
+    beforeEach(() => {
+      paymentMethod = {
         "self": {
           "type": "elasticpath.bankaccounts.bank-account",
           "uri": "/selfservicepaymentmethods/crugive/giydcnzyga=",
@@ -127,10 +130,11 @@ describe( 'donations service', () => {
       };
       spyOn( profileService, 'getPaymentMethods' ).and.returnValue( Observable.of([ paymentMethod ]) );
       spyOn( commonService, 'getNextDrawDate' ).and.returnValue( Observable.of('2015-06-09') );
-
+    });
+    it( 'should load active recurring gifts', () => {
       $httpBackend
         .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:managerecurringdonations' )
-        .respond( 200, recurringGiftsResponse );
+        .respond( 200, activeRecurringGiftsResponse );
 
       donationsService.getRecurringGifts().subscribe( gifts => {
         expect( gifts[0].toObject ).toEqual( {
@@ -159,6 +163,55 @@ describe( 'donations service', () => {
         } );
         expect( gifts[0].paymentMethods ).toEqual( [ paymentMethod ] );
         expect( gifts[0].nextDrawDate ).toEqual( '2015-06-09' );
+      });
+      $httpBackend.flush();
+    } );
+
+    it( 'should load cancelled recurring gifts', () => {
+      $httpBackend
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:cancelledrecurringdonations' )
+        .respond( 200, cancelledRecurringGiftsResponse );
+
+      donationsService.getRecurringGifts('cancelledrecurringdonations').subscribe( gifts => {
+        expect( gifts[0].toObject ).toEqual( {
+          amount: 45,
+          'designation-name': 'Jerry and Pam McCune Jr (0376390)',
+          'designation-number': '0376390',
+          'donation-line-row-id': '1-400ZBN',
+          'donation-line-status': 'Cancelled',
+          'payment-method-id': 'giydcnzyga=',
+          'updated-donation-line-status': '',
+          'updated-payment-method-id': '',
+          'updated-rate': {recurrence: {interval: ''}},
+          'updated-recurring-day-of-month': '',
+          'updated-start-month': '',
+          'updated-start-year': ''
+        } );
+        expect( gifts[0].parentDonation ).toEqual( {
+          'donation-lines': jasmine.any(Array),
+          'donation-row-id': '1-400ZBL',
+          'donation-status': 'Cancelled',
+          'effective-status': 'Cancelled',
+          'next-draw-date': {'display-value': '2016-01-15', value: 1452816000000},
+          rate: {recurrence: {interval: 'Monthly'}},
+          'recurring-day-of-month': '15',
+          'start-date': { 'display-value': '2015-09-29', value: 1443484800000 }
+        } );
+        expect( gifts[0].paymentMethods ).toEqual( [ paymentMethod ] );
+        expect( gifts[0].nextDrawDate ).toEqual( '2015-06-09' );
+      });
+      $httpBackend.flush();
+    } );
+
+    it( 'should load active and cancelled recurring gifts', () => {
+      $httpBackend
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:managerecurringdonations,givingdashboard:cancelledrecurringdonations' )
+        .respond( 200, multipleRecurringGiftsResponse );
+
+      donationsService.getRecurringGifts(['managerecurringdonations', 'cancelledrecurringdonations']).subscribe( gifts => {
+        expect(gifts.length).toEqual(2);
+        expect( gifts[0].toObject['donation-line-status'] ).toEqual( 'Standard' );
+        expect( gifts[1].toObject['donation-line-status'] ).toEqual( 'Cancelled' );
       });
       $httpBackend.flush();
     } );
