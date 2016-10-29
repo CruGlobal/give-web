@@ -1,6 +1,6 @@
 /***** TESTING *****/
 .globalWebsites--is-open {
-  background-image: url(https://www.cru.org/images/globalWebsites--huge.jpg);
+  background-image: url(https://www.cru.org/images/globalWebsites--huge.jpg) !important;
   > main {display: none;}
 }
 
