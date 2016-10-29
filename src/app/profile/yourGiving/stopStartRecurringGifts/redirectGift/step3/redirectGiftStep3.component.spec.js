@@ -24,24 +24,6 @@ describe( 'your giving', () => {
             expect( $ctrl.donationsService ).toBeDefined();
           } );
 
-          describe( '$onInit()', () => {
-            it( 'initializes the component', () => {
-              spyOn( $ctrl, 'loadNextDrawDate' );
-              $ctrl.$onInit();
-              expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
-              expect( $ctrl.loadNextDrawDate ).toHaveBeenCalled();
-            } );
-          } );
-
-          describe( 'loadNextDrawDate()', () => {
-            it( 'loads next draw date and shows component', () => {
-              spyOn( $ctrl.commonService, 'getNextDrawDate' ).and.returnValue( Observable.of( '2020-01-01' ) );
-              $ctrl.loadNextDrawDate();
-              expect( $ctrl.nextDrawDate ).toEqual( '2020-01-01' );
-              expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
-            } );
-          } );
-
           describe( 'submitGift', () => {
             beforeEach( () => {
               $ctrl.hasError = true;

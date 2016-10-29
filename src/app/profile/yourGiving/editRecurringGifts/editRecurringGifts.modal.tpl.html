@@ -75,9 +75,7 @@
 
   <step-1-edit-recurring-gifts
     ng-switch-when="step1EditRecurringGifts"
-    payment-methods="$ctrl.validPaymentMethods"
     recurring-gifts="$ctrl.recurringGifts"
-    next-draw-date="$ctrl.nextDrawDate"
     has-recent-recipients="$ctrl.hasRecentRecipients"
     dismiss="$ctrl.dismiss()"
     next="$ctrl.next(null, recurringGifts)">
@@ -93,8 +91,6 @@
 
   <step-3-configure-recent-recipients
     ng-switch-when="step3ConfigureRecentRecipients"
-    payment-methods="$ctrl.paymentMethods"
-    next-draw-date="$ctrl.nextDrawDate"
     additions="$ctrl.additions"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"

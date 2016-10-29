@@ -18,18 +18,6 @@ class RedirectGiftStep3Controller {
     this.state = 'update';
   }
 
-  $onInit() {
-    this.setLoading( {loading: true} );
-    this.loadNextDrawDate();
-  }
-
-  loadNextDrawDate() {
-    this.commonService.getNextDrawDate().subscribe( ( nextDrawDate ) => {
-      this.nextDrawDate = nextDrawDate;
-      this.setLoading( {loading: false} );
-    } );
-  }
-
   submitGift() {
     this.hasError = false;
     this.setLoading( {loading: true} );

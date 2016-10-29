@@ -16,7 +16,7 @@
         <label translate>Payment Method</label>
         <select class="form-control  form-control-subtle"
                 ng-model="$ctrl.gift.paymentMethodId"
-                ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['card-number'])) for paymentMethod in $ctrl.paymentMethods" >
+                ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['card-number'])) for paymentMethod in $ctrl.gift.paymentMethods" >
         </select>
       </div>
     </div>
@@ -51,16 +51,16 @@
 
     <div class="form-group">
       <label class="radio">
-        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.nextDrawDate).format('M')">
-        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.nextDrawDate) }}
+        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate).format('M')">
+        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate) }}
       </label>
       <label class="radio">
-        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.nextDrawDate, 1).format('M')">
-        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.nextDrawDate, 1) }}
+        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 1).format('M')">
+        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 1) }}
       </label>
       <label class="radio">
-        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.nextDrawDate, 2).format('M')">
-        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.nextDrawDate, 2) }}
+        <input type="radio" ng-model="$ctrl.gift.startMonth" ng-value="$ctrl.startDate($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 2).format('M')">
+        {{ $ctrl.quarterlyMonths($ctrl.gift.transactionDay, $ctrl.gift.nextDrawDate, 2) }}
       </label>
     </div>
   </div>
