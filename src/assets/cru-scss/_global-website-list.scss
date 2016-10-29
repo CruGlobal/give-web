@@ -1,6 +1,23 @@
+/***** TESTING *****/
+.globalWebsites--is-open {
+  background-image: url(https://www.cru.org/images/globalWebsites--huge.jpg);
+  > main {display: none;}
+}
+
+
+
+
+
+
+
+@include mq(767px, max) {
+    #js-globalWebsites {display: none !important;}
+}
+
 .globalWebsites--is-open {
     font-size: 1.1875em;
     height: auto;
+    min-height: 100%;
     padding-top: 0;
     overflow-x: hidden;
     background-image: url("../images/globalWebsites--small.jpg");
@@ -71,6 +88,7 @@
     li {
         border-top: 1px solid $colorCru-gray;
         display: block;
+        &:last-of-type {border-bottom: 1px solid $colorCru-gray;}
     }
 
     a {
@@ -100,11 +118,6 @@
     padding-left: 44px;
     padding-top: 64px !important;
 
-    li {
-        margin-bottom: 14.5px;
-        &:last-of-type {margin-bottom: 0;}
-    }
-
     h1 {
         color: $colorGrayscale-pebble;
     }
@@ -131,7 +144,6 @@
         letter-spacing: 0.0025em;
         font-weight: 600;
         padding: 9px 0;
-        margin-bottom: 14.5px;
         line-height: 100%;
     }
 }
@@ -167,11 +179,13 @@
     margin-bottom: 14px;
 }
 
+$countryHeight: 2em;
+
 .globalWebsites-country {
     display: block;
-    font-size: 3em;
+    font-size: $countryHeight;
     font-weight: 100;
-    line-height: 60px;
+    line-height: $countryHeight * .5;
     padding: 9px 0;
     letter-spacing: 0.025em;
 }
