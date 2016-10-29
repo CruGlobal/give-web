@@ -86,29 +86,38 @@ function DonationsService( cortexApiService, profileService, commonService ) {
 
   function getRecentRecipients() {
     return cortexApiService.get( {
-      path: ['profiles', cortexApiService.scope, 'default'],
-      zoom: {
-        recentGifts: 'givingdashboard:recentdonations:element[]'
-      }
-    } )
+        path: ['profiles', cortexApiService.scope, 'default'],
+        zoom: {
+          recentGifts: 'givingdashboard:recentdonations:element[]'
+        },
+        cache: true
+      } )
       .pluck( 'recentGifts' );
   }
 
-  function getRecurringGifts( recurringGiftsTypes ) {
+  function getRecurringGifts( recurringGiftsTypes, withoutExtraData ) {
     recurringGiftsTypes = angular.isUndefined( recurringGiftsTypes ) ? [RecurringGiftsType.active] : recurringGiftsTypes;
     recurringGiftsTypes = angular.isArray( recurringGiftsTypes ) ? recurringGiftsTypes : [recurringGiftsTypes];
-    return Observable.forkJoin(
+
+    let requests = [
       cortexApiService.get( {
         path: ['profiles', cortexApiService.scope, 'default'],
         zoom: zipObject( recurringGiftsTypes, map( recurringGiftsTypes, ( type ) => `givingdashboard:${type}` ) )
-      } ),
-      commonService.getNextDrawDate(),
-      profileService.getPaymentMethods()
-    )
+      } )
+    ];
+    if(!withoutExtraData){
+      requests.push(commonService.getNextDrawDate());
+      requests.push(profileService.getPaymentMethods());
+    }
+    return Observable.forkJoin(requests)
       .map( ( [data, nextDrawDate, paymentMethods] ) => {
+        if(!withoutExtraData) {
+          RecurringGiftModel.nextDrawDate = nextDrawDate;
+          RecurringGiftModel.paymentMethods = paymentMethods;
+        }
         return flatMap( flatten( map( recurringGiftsTypes, ( type ) => data[type].donations ) ), donation => {
           return map( donation['donation-lines'], donationLine => {
-            return new RecurringGiftModel( donationLine, donation, nextDrawDate, paymentMethods );
+            return new RecurringGiftModel(donationLine, donation);
           } );
         } );
       } );

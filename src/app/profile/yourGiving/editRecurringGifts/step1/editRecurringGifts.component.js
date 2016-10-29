@@ -26,7 +26,7 @@ class EditRecurringGiftsController {
     if(!this.recurringGifts){
       this.loading = true;
       this.loadingError = false;
-      this.donationsService.getRecurringGifts()
+      this.donationsService.getRecurringGifts(undefined, true)
         .subscribe(gifts => {
             this.recurringGifts = gifts;
             this.loading = false;

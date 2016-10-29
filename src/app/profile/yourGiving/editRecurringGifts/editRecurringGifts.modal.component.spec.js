@@ -29,14 +29,6 @@ describe('edit recurring gifts modal', () => {
     });
   });
 
-  describe('loadData', () => {
-    it('should call loadData', () => {
-      spyOn(self.controller, 'loadData');
-      self.controller.$onInit();
-      expect(self.controller.loadData).toHaveBeenCalled();
-    });
-  });
-
   describe('loadPaymentMethods', () => {
     beforeEach(() => {
       jasmine.clock().mockDate(new Date(2015, 0, 10));
@@ -138,24 +130,16 @@ describe('edit recurring gifts modal', () => {
   });
 
   describe('loadRecentRecipients', () => {
-    it('should load recent recipients after paymentMethods are loaded', () => {
-      self.controller.recentRecipientsObservable = Observable.of([ { 'designation-name': 'Staff Member' } ]);
-      self.controller.paymentMethodsObservable = Observable.of({
-        paymentMethods: [ { self: { uri: '/selfservicepaymentmethods/crugive/giydgnrxgm=' } } ],
-        nextDrawDate: '2015-03-25'
-      });
+    it('should load recent recipients', () => {
+      spyOn(self.controller.donationsService, 'getRecentRecipients').and.returnValue(Observable.of([ { 'designation-name': 'Staff Member' } ]));
       self.controller.loadRecentRecipients();
       expect(self.controller.recentRecipients).toEqual([ (new RecurringGiftModel(
-        { 'designation-name': 'Staff Member' },
-        null,
-        '2015-03-25',
-        [ { self: { uri: '/selfservicepaymentmethods/crugive/giydgnrxgm=' } } ]
+        { 'designation-name': 'Staff Member' }
       )).setDefaults() ] );
       expect(self.controller.hasRecentRecipients).toEqual(true);
     });
     it('should handle an error loading recent recipients', () => {
-      self.controller.recentRecipientsObservable = Observable.throw('some error');
-      self.controller.paymentMethodsObservable = Observable.of({});
+      spyOn(self.controller.donationsService, 'getRecentRecipients').and.returnValue(Observable.throw('some error'));
       self.controller.loadRecentRecipients();
       expect(self.controller.recentRecipients).toBeUndefined();
       expect(self.controller.$log.error.logs[0]).toEqual( [ 'Error loading recent recipients', 'some error' ] );
@@ -197,10 +181,10 @@ describe('edit recurring gifts modal', () => {
     });
 
     it('should transition from step0AddUpdatePaymentMethod to step1EditRecurringGifts by reloading the payment methods', () => {
-      spyOn(self.controller, 'loadData');
+      spyOn(self.controller, 'loadPaymentMethods');
       self.controller.state = 'step0AddUpdatePaymentMethod';
       self.controller.next();
-      expect(self.controller.loadData).toHaveBeenCalled();
+      expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
     });
 
     it('should transition from step1EditRecurringGifts to step2AddRecentRecipients', () => {

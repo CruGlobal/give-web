@@ -30,15 +30,15 @@ describe('recurringGift model', () => {
         rate: {recurrence: {interval: 'Monthly'}},
         'recurring-day-of-month': '15',
         'next-draw-date': {'display-value': '2015-05-06', value: 1430895600}
-      },
-      '2015-05-20',
-      [
-        {
-          self: { uri: "/selfservicepaymentmethods/crugive/giydgnrxgm=" },
-          'account-type': 'Savings'
-        }
-      ]
+      }
     );
+    RecurringGiftModel.nextDrawDate = '2015-05-20';
+    RecurringGiftModel.paymentMethods = [
+      {
+        self: { uri: "/selfservicepaymentmethods/crugive/giydgnrxgm=" },
+        'account-type': 'Savings'
+      }
+    ];
   });
 
   describe('designationName getter', () => {
@@ -97,6 +97,10 @@ describe('recurringGift model', () => {
     it('should load payment id if it has been updated', () => {
       giftModel.gift['updated-payment-method-id'] = 'new id';
       expect(giftModel.paymentMethodId).toEqual('new id');
+    });
+    it('should load the first payment method id if one is not set on the gift', () => {
+      giftModel.gift['payment-method-id'] = '';
+      expect(giftModel.paymentMethodId).toEqual('giydgnrxgm=');
     });
   });
 
@@ -330,10 +334,13 @@ describe('recurringGift model', () => {
 
   describe('initStartMonth', () => {
     it('should use transaction day and nextDrawDate to default updated start month and year', () => {
-      giftModel.gift['updated-recurring-day-of-month'] = '05';
-      giftModel.nextDrawDate = '2015-07-03';
+      giftModel.gift['updated-recurring-day-of-month'] = '20';
       giftModel.initStartMonth();
-      expect(giftModel.startMonth).toEqual('7');
+      expect(giftModel.startMonth).toEqual('5');
+
+      giftModel.gift['updated-recurring-day-of-month'] = '19';
+      giftModel.initStartMonth();
+      expect(giftModel.startMonth).toEqual('6');
     });
   });
 
@@ -408,14 +415,12 @@ describe('recurringGift model', () => {
       expect(giftModel.setDefaults().toObject).toEqual(jasmine.objectContaining({
         'updated-designation-number': giftModel.gift['designation-number'],
         'updated-amount': 50,
-        'updated-payment-method-id': 'giydgnrxgm=',
         'updated-rate': {
           'recurrence': {
             'interval': 'Monthly'
           }
         }
       }));
-      expect(giftModel._paymentMethod).toEqual(giftModel.paymentMethods[0]);
     });
   });
 });
