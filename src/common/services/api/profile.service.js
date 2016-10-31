@@ -83,7 +83,7 @@ class Profile {
         }
       })
       .pluck('email')
-      .pluck('email');
+      .map(data => data && data.email);
   }
 
   getPaymentMethods(){
