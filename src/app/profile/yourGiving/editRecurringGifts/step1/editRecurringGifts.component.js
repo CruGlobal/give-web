@@ -26,7 +26,7 @@ class EditRecurringGiftsController {
     if(!this.recurringGifts){
       this.loading = true;
       this.loadingError = false;
-      this.donationsService.getRecurringGifts()
+      this.donationsService.getRecurringGifts(undefined, true)
         .subscribe(gifts => {
             this.recurringGifts = gifts;
             this.loading = false;
@@ -53,8 +53,6 @@ export default angular
     templateUrl: template.name,
     bindings: {
       recurringGifts: '<',
-      paymentMethods: '<',
-      nextDrawDate: '<',
       hasRecentRecipients: '<',
       dismiss: '&',
       next: '&'

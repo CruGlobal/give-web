@@ -35,56 +35,41 @@ class EditRecurringGiftsModalController {
   }
 
   $onInit(){
-    this.loadData();
-  }
-
-  loadData(){
     this.loadPaymentMethods();
     this.loadRecentRecipients();
   }
 
   loadPaymentMethods(){
     this.state = 'loading';
-    this.paymentMethodsObservable = Observable.forkJoin([
+    Observable.forkJoin([
         this.profileService.getPaymentMethods(),
         this.commonService.getNextDrawDate()
       ])
-      .map(([paymentMethods, nextDrawDate]) => {
-        let validPaymentMethods = filter(paymentMethods, (paymentMethod) => {
+      .subscribe(([paymentMethods, nextDrawDate]) => {
+        this.paymentMethods = paymentMethods;
+        this.nextDrawDate = nextDrawDate;
+        this.hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
+        this.validPaymentMethods = filter(paymentMethods, (paymentMethod) => {
           return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || moment({ year: paymentMethod['expiry-year'], month: parseInt(paymentMethod['expiry-month']) - 1}).isSameOrAfter(moment(), 'month');
         });
-        return {
-          paymentMethods: paymentMethods,
-          nextDrawDate: nextDrawDate,
-          hasPaymentMethods: paymentMethods && paymentMethods.length > 0,
-          validPaymentMethods: validPaymentMethods,
-          hasValidPaymentMethods: validPaymentMethods && validPaymentMethods.length > 0
-        };
+        this.hasValidPaymentMethods = this.validPaymentMethods && this.validPaymentMethods.length > 0;
+        RecurringGiftModel.paymentMethods = this.validPaymentMethods;
+        RecurringGiftModel.nextDrawDate = this.nextDrawDate;
+        this.next();
+      }, (error) => {
+        this.state = 'error';
+        this.$log.error('Error loading payment methods', error);
       });
-    this.paymentMethodsObservable.subscribe(data => {
-      this.paymentMethods = data.paymentMethods;
-      this.nextDrawDate = data.nextDrawDate;
-      this.hasPaymentMethods = data.hasPaymentMethods;
-      this.validPaymentMethods = data.validPaymentMethods;
-      this.hasValidPaymentMethods = data.hasValidPaymentMethods;
-      this.next();
-    }, (error) => {
-      this.state = 'error';
-      this.$log.error('Error loading payment methods', error);
-    });
   }
 
   loadRecentRecipients(){
-    this.recentRecipientsObservable = this.recentRecipientsObservable || this.donationsService.getRecentRecipients();
-    Observable.forkJoin(
-      this.recentRecipientsObservable,
-      this.paymentMethodsObservable
-    ).subscribe(([recentRecipients, paymentRequestObj]) => {
-      this.recentRecipients = map(recentRecipients, gift => (new RecurringGiftModel(gift, null, paymentRequestObj.nextDrawDate, paymentRequestObj.paymentMethods)).setDefaults());
-      this.hasRecentRecipients = this.recentRecipients && this.recentRecipients.length > 0;
-    }, (error) => {
-      this.$log.error('Error loading recent recipients', error);
-    });
+    this.donationsService.getRecentRecipients()
+      .subscribe(recentRecipients => {
+        this.recentRecipients = map(recentRecipients, gift => (new RecurringGiftModel(gift)).setDefaults());
+        this.hasRecentRecipients = this.recentRecipients && this.recentRecipients.length > 0;
+      }, (error) => {
+        this.$log.error('Error loading recent recipients', error);
+      });
   }
 
   next(paymentMethod, recurringGifts, additions){
@@ -106,7 +91,7 @@ class EditRecurringGiftsModalController {
         this.state = 'step0AddUpdatePaymentMethod';
         break;
       case 'step0AddUpdatePaymentMethod':
-        this.loadData();
+        this.loadPaymentMethods();
         break;
       case 'step1EditRecurringGifts':
         this.recurringGifts = recurringGifts;

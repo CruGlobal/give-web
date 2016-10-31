@@ -25,8 +25,6 @@ export default angular
     controller: ConfigureRecentRecipientsController,
     templateUrl: template.name,
     bindings: {
-      paymentMethods: '<',
-      nextDrawDate: '<',
       additions: '<',
       dismiss: '&',
       previous: '&',

@@ -5,11 +5,9 @@ import {startMonth, startDate} from 'common/services/giftHelpers/giftDates.servi
 
 export default class RecurringGiftModel {
 
-  constructor(gift, parentDonation, nextDrawDate, paymentMethods) {
+  constructor(gift, parentDonation) {
     this.gift = gift;
     this.parentDonation = parentDonation;
-    this.nextDrawDate = nextDrawDate;
-    this.paymentMethods = paymentMethods;
 
     this.initializeEmptyFields();
   }
@@ -34,6 +32,30 @@ export default class RecurringGiftModel {
         }
       };
     }
+  }
+
+  get nextDrawDate(){
+    return this.constructor.nextDrawDate;
+  }
+
+  static get nextDrawDate(){
+    return this.constructor._nextDrawDate;
+  }
+
+  static set nextDrawDate(nextDrawDate){
+    this.constructor._nextDrawDate = nextDrawDate;
+  }
+
+  get paymentMethods(){
+    return this.constructor.paymentMethods;
+  }
+
+  static get paymentMethods(){
+    return this.constructor._paymentMethods;
+  }
+
+  static set paymentMethods(paymentMethods){
+    this.constructor._paymentMethods = paymentMethods;
   }
 
   get designationName() {
@@ -61,7 +83,7 @@ export default class RecurringGiftModel {
   }
 
   get paymentMethodId(){
-    return this.gift['updated-payment-method-id'] || this.gift['payment-method-id'];
+    return this.gift['updated-payment-method-id'] || this.gift['payment-method-id'] || this.paymentMethods && this.paymentMethods[0].self.uri.split( '/' ).pop();
   }
 
   set paymentMethodId(value){
@@ -167,8 +189,6 @@ export default class RecurringGiftModel {
   setDefaults(){
     this.gift['updated-designation-number'] = this.gift['designation-number'];
     this.gift['updated-amount'] = 50;
-    this._paymentMethod = this.paymentMethods[0];
-    this.gift['updated-payment-method-id'] = this._paymentMethod.self.uri.split( '/' ).pop();
     this.gift['updated-rate']['recurrence']['interval'] = 'Monthly';
     this.gift['updated-recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
     return this;

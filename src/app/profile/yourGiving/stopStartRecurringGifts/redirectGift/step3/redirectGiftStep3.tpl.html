@@ -22,9 +22,9 @@
       <div class="col-xs-12">
         <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError" translate>An error occurred saving changes. You may try again by clicking "Confirm Changes."</div>
         <form name="$ctrl.redirectForm" ng-switch="$ctrl.state">
-          <div class="repeating-row" ng-switch-when="update" ng-if="$ctrl.nextDrawDate">
+          <div class="repeating-row" ng-switch-when="update">
             <gift-list-item gift="$ctrl.gift">
-              <gift-update-view gift="$ctrl.gift" next-draw-date="$ctrl.nextDrawDate" payment-methods="$ctrl.gift.paymentMethods" />
+              <gift-update-view gift="$ctrl.gift" />
             </gift-list-item>
           </div>
           <div class="repeating-row" ng-switch-when="confirm">
