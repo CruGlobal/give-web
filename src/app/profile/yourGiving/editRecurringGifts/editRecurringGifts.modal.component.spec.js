@@ -4,6 +4,8 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
+import RecurringGiftModel from 'common/models/recurringGift.model';
+
 import module from './editRecurringGifts.modal.component';
 
 describe('edit recurring gifts modal', () => {
@@ -18,10 +20,12 @@ describe('edit recurring gifts modal', () => {
   }));
 
   describe('$onInit', () => {
-    it('should call loadPaymentMethods', () => {
+    it('should call loadData', () => {
       spyOn(self.controller, 'loadPaymentMethods');
+      spyOn(self.controller, 'loadRecentRecipients');
       self.controller.$onInit();
       expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
+      expect(self.controller.loadRecentRecipients).toHaveBeenCalled();
     });
   });
 
@@ -36,12 +40,16 @@ describe('edit recurring gifts modal', () => {
         }
       }];
       spyOn(self.controller.profileService, 'getPaymentMethods').and.returnValue(Observable.of(paymentMethods));
+      spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2015-02-04'));
       spyOn(self.controller, 'next');
       self.controller.loadPaymentMethods();
       expect(self.controller.state).toEqual('loading');
       expect(self.controller.profileService.getPaymentMethods).toHaveBeenCalled();
+      expect(self.controller.commonService.getNextDrawDate).toHaveBeenCalled();
       expect(self.controller.paymentMethods).toEqual(paymentMethods);
+      expect(self.controller.nextDrawDate).toEqual('2015-02-04');
       expect(self.controller.hasPaymentMethods).toEqual(true);
+      expect(self.controller.validPaymentMethods).toEqual(paymentMethods);
       expect(self.controller.hasValidPaymentMethods).toEqual(true);
       expect(self.controller.next).toHaveBeenCalled();
     });
@@ -54,12 +62,16 @@ describe('edit recurring gifts modal', () => {
         'expiry-year': '2015'
       }];
       spyOn(self.controller.profileService, 'getPaymentMethods').and.returnValue(Observable.of(paymentMethods));
+      spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2015-02-04'));
       spyOn(self.controller, 'next');
       self.controller.loadPaymentMethods();
       expect(self.controller.state).toEqual('loading');
       expect(self.controller.profileService.getPaymentMethods).toHaveBeenCalled();
+      expect(self.controller.commonService.getNextDrawDate).toHaveBeenCalled();
       expect(self.controller.paymentMethods).toEqual(paymentMethods);
+      expect(self.controller.nextDrawDate).toEqual('2015-02-04');
       expect(self.controller.hasPaymentMethods).toEqual(true);
+      expect(self.controller.validPaymentMethods).toEqual(paymentMethods);
       expect(self.controller.hasValidPaymentMethods).toEqual(true);
       expect(self.controller.next).toHaveBeenCalled();
     });
@@ -72,38 +84,65 @@ describe('edit recurring gifts modal', () => {
         'expiry-year': '2014'
       }];
       spyOn(self.controller.profileService, 'getPaymentMethods').and.returnValue(Observable.of(paymentMethods));
+      spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2015-02-04'));
       spyOn(self.controller, 'next');
       self.controller.loadPaymentMethods();
       expect(self.controller.state).toEqual('loading');
       expect(self.controller.profileService.getPaymentMethods).toHaveBeenCalled();
+      expect(self.controller.commonService.getNextDrawDate).toHaveBeenCalled();
       expect(self.controller.paymentMethods).toEqual(paymentMethods);
+      expect(self.controller.nextDrawDate).toEqual('2015-02-04');
       expect(self.controller.hasPaymentMethods).toEqual(true);
+      expect(self.controller.validPaymentMethods).toEqual([]);
       expect(self.controller.hasValidPaymentMethods).toEqual(false);
       expect(self.controller.next).toHaveBeenCalled();
     });
     it('should handle no payment methods', () => {
       let paymentMethods = [];
       spyOn(self.controller.profileService, 'getPaymentMethods').and.returnValue(Observable.of(paymentMethods));
+      spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2015-02-04'));
       spyOn(self.controller, 'next');
       self.controller.loadPaymentMethods();
       expect(self.controller.state).toEqual('loading');
       expect(self.controller.profileService.getPaymentMethods).toHaveBeenCalled();
-      expect(self.controller.paymentMethods).toEqual(paymentMethods);
+      expect(self.controller.commonService.getNextDrawDate).toHaveBeenCalled();
+      expect(self.controller.paymentMethods).toEqual([]);
+      expect(self.controller.nextDrawDate).toEqual('2015-02-04');
       expect(self.controller.hasPaymentMethods).toEqual(false);
+      expect(self.controller.validPaymentMethods).toEqual([]);
       expect(self.controller.hasValidPaymentMethods).toEqual(false);
       expect(self.controller.next).toHaveBeenCalled();
     });
     it('should handle an error loading payment methods', () => {
-      spyOn(self.controller.profileService, 'getPaymentMethods').and.returnValue(Observable.throw('some error'));
+      spyOn(self.controller.profileService, 'getPaymentMethods').and.returnValue(Observable.throw('some payment method error'));
+      spyOn(self.controller.commonService, 'getNextDrawDate').and.returnValue(Observable.throw('next draw date error'));
       spyOn(self.controller, 'next');
       self.controller.loadPaymentMethods();
       expect(self.controller.state).toEqual('error');
       expect(self.controller.profileService.getPaymentMethods).toHaveBeenCalled();
+      expect(self.controller.commonService.getNextDrawDate).toHaveBeenCalled();
       expect(self.controller.paymentMethods).toBeUndefined();
       expect(self.controller.hasPaymentMethods).toBeUndefined();
       expect(self.controller.hasValidPaymentMethods).toBeUndefined();
       expect(self.controller.next).not.toHaveBeenCalled();
-      expect(self.controller.$log.error.logs[0]).toEqual(['Error loading payment methods', 'some error']);
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error loading payment methods', 'some payment method error']);
+    });
+  });
+
+  describe('loadRecentRecipients', () => {
+    it('should load recent recipients', () => {
+      spyOn(self.controller.donationsService, 'getRecentRecipients').and.returnValue(Observable.of([ { 'designation-name': 'Staff Member' } ]));
+      self.controller.loadRecentRecipients();
+      expect(self.controller.recentRecipients).toEqual([ (new RecurringGiftModel(
+        { 'designation-name': 'Staff Member' }
+      )).setDefaults() ] );
+      expect(self.controller.hasRecentRecipients).toEqual(true);
+    });
+    it('should handle an error loading recent recipients', () => {
+      spyOn(self.controller.donationsService, 'getRecentRecipients').and.returnValue(Observable.throw('some error'));
+      self.controller.loadRecentRecipients();
+      expect(self.controller.recentRecipients).toBeUndefined();
+      expect(self.controller.$log.error.logs[0]).toEqual( [ 'Error loading recent recipients', 'some error' ] );
     });
   });
 

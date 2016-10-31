@@ -9,10 +9,9 @@ describe( 'your giving', () => {
   describe( 'stopStartRecurringGiftsModal', () => {
     describe( 'redirectGift', () => {
       beforeEach( angular.mock.module( module.name ) );
-      let $ctrl, donationsService;
+      let $ctrl;
 
-      beforeEach( inject( ( $componentController, _donationsService_ ) => {
-        donationsService = _donationsService_;
+      beforeEach( inject( ( $componentController ) => {
         $ctrl = $componentController( module.name, {}, {
           changeState: jasmine.createSpy( 'changeState' ),
           setLoading:  jasmine.createSpy( 'setLoading' ),
@@ -22,7 +21,7 @@ describe( 'your giving', () => {
 
       it( 'is defined', () => {
         expect( $ctrl ).toBeDefined();
-        expect( $ctrl.donationsService ).toEqual( donationsService );
+        expect( $ctrl.donationsService ).toBeDefined();
       } );
 
       describe( '$onInit', () => {
@@ -64,6 +63,14 @@ describe( 'your giving', () => {
             expect( $ctrl.changeState ).not.toHaveBeenCalled();
           } );
         } );
+        describe( 'current step \'step-3\'', () => {
+          it( 'changes step to \'step-2\'', () => {
+            $ctrl.step = 'step-3';
+            $ctrl.previous();
+            expect( $ctrl.step ).toEqual( 'step-2' );
+            expect( $ctrl.changeState ).not.toHaveBeenCalled();
+          } );
+        } );
       } );
 
       describe( 'loadRecurringGifts()', () => {
@@ -84,6 +91,22 @@ describe( 'your giving', () => {
           $ctrl.selectGift( 'c' );
           expect( $ctrl.selectedGift ).toEqual( 'c' );
           expect( $ctrl.setStep ).toHaveBeenCalledWith( 'step-2' );
+        } );
+      } );
+
+      describe( 'selectResult( result )', () => {
+        it( 'creates redirectedGift and moves to \'step-3\'', () => {
+          spyOn( $ctrl, 'setStep' );
+          $ctrl.selectedGift = {
+            clone: jasmine.createSpy( 'clone' ).and.returnValue( {
+              designationName:   'Bob',
+              designationNumber: '0123456'
+            } )
+          };
+          $ctrl.selectResult( {designationName: 'Javier', designationNumber: '6543210', _selectedGift: true} );
+          expect( $ctrl.selectedGift.clone ).toHaveBeenCalled();
+          expect( $ctrl.redirectedGift ).toEqual( {designationName: 'Javier', designationNumber: '6543210'} );
+          expect( $ctrl.setStep ).toHaveBeenCalledWith( 'step-3' );
         } );
       } );
     } );

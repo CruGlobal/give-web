@@ -25,7 +25,7 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $scope, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
+  constructor( $location, $scope, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit, uri ) {
     this.$location = $location;
     this.$scope = $scope;
     this.$uibModalInstance = $uibModalInstance;
@@ -39,6 +39,7 @@ class ModalInstanceCtrl {
     this.nextDrawDate = nextDrawDate;
     this.itemConfig = itemConfig;
     this.isEdit = isEdit;
+    this.uri = uri;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
 
     if ( this.isEdit ) {
@@ -147,24 +148,37 @@ class ModalInstanceCtrl {
     if ( !this.itemConfigForm.$valid ) {
       return;
     }
-    if ( this.isEdit && !this.itemConfigForm.$dirty ) {
-      this.$uibModalInstance.close( {isUpdated: false} );
-      return;
-    }
     this.submittingGift = true;
     this.cartService
       .addItem( this.productData.id, this.productData.frequency === 'NA' ? omit(this.itemConfig, 'recurring-day-of-month') : this.itemConfig )
       .subscribe( () => {
         if ( this.isEdit ) {
           this.$uibModalInstance.close( {isUpdated: true} );
+        } else {
+          this.giftSubmitted = true;
         }
         this.submittingGift = false;
-        this.giftSubmitted = true;
       }, (error) => {
         this.error = error.data;
         this.submittingGift = false;
       } );
   }
+
+  updateGift() {
+    this.submittingGift = true;
+    if ( !this.itemConfigForm.$valid ) {
+      return;
+    }
+    if (!this.itemConfigForm.$dirty ) {
+      this.$uibModalInstance.close( {isUpdated: false} );
+      return;
+    }
+    this.cartService.deleteItem( atob( this.uri ) )
+      .subscribe( () => {
+        this.addToCart();
+      } );
+  }
+
 }
 
 export default angular

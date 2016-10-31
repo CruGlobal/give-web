@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+          <h3 translate>You've also given to these recipients recently.</h3>
+          <p translate>Would you like to add them to your recurring gifts?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div ng-repeat="gift in $ctrl.recentRecipients" class="row repeating-row user-profile">
+          <gift-list-item gift="gift" selectable="checkbox"></gift-list-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6">
+      <a class="btn btn-default"
+         ng-click="$ctrl.previous()"
+         translate>
+        Back
+      </a>
+    </div>
+    <div class="col-xs-6 text-right">
+      <button class="btn btn-primary" ng-click="$ctrl.gatherSelections()" translate>Continue</button>
+    </div>
+  </div>
+</div>

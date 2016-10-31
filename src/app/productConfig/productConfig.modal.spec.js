@@ -40,8 +40,8 @@ describe( 'product config modal', function () {
         nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
         isEdit:            true,
-        $scope:            $scope
-
+        $scope:            $scope,
+        uri:               'uri'
       } );
       $ctrl.itemConfigForm = itemConfigForm;
     } ) );
@@ -105,7 +105,9 @@ describe( 'product config modal', function () {
         nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
         isEdit:            true,
-        $scope:            $scope
+        $scope:            $scope,
+        uri:               'uri'
+
       } );
       $ctrl.itemConfigForm = itemConfigForm;
     } ) );
@@ -131,18 +133,10 @@ describe( 'product config modal', function () {
         expect( uibModalInstance.close ).not.toHaveBeenCalled();
       } );
 
-      it( 'should close modal as not updated if form is not dirty', () => {
-        $ctrl.addToCart();
-        expect($ctrl.giftSubmitted).toEqual(false);
-        expect($ctrl.submittingGift).toEqual(false);
-        expect( $ctrl.cartService.addItem ).not.toHaveBeenCalled();
-        expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: false} );
-      } );
-
       it( 'should submit a gift successfully', () => {
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.addToCart();
-        expect($ctrl.giftSubmitted).toEqual(true);
+        expect($ctrl.giftSubmitted).toEqual(false);
         expect($ctrl.submittingGift).toEqual(false);
         expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 85, 'recurring-day-of-month': '1' });
         expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: true} );
@@ -152,7 +146,7 @@ describe( 'product config modal', function () {
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.productData.frequency = 'NA';
         $ctrl.addToCart();
-        expect($ctrl.giftSubmitted).toEqual(true);
+        expect($ctrl.giftSubmitted).toEqual(false);
         expect($ctrl.submittingGift).toEqual(false);
         expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith('some id', { amount: 85 });
         expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: true} );
@@ -168,6 +162,29 @@ describe( 'product config modal', function () {
         expect( uibModalInstance.close ).not.toHaveBeenCalled();
       } );
     } );
+
+    describe(' UpdateGift()', () => {
+      beforeEach(()=>{
+        spyOn( $ctrl.cartService, 'deleteItem' ).and.returnValue( Observable.of( 'done' ) );
+      });
+      it( 'should close modal as not updated if form is not dirty', () => {
+        $ctrl.updateGift();
+        expect( $ctrl.cartService.deleteItem ).not.toHaveBeenCalled();
+      } );
+
+      it( 'should do nothing on invalid form', () => {
+        $ctrl.itemConfigForm.$valid = false;
+        $ctrl.updateGift();
+        expect( $ctrl.cartService.deleteItem ).not.toHaveBeenCalled();
+      } );
+
+      it('should delete an item and update cart', () => {
+        $ctrl.itemConfigForm.$valid = true;
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.updateGift();
+        expect($ctrl.cartService.deleteItem).toHaveBeenCalled();
+      });
+    });
   } );
 
   describe( 'isEdit = false', () => {
@@ -184,7 +201,8 @@ describe( 'product config modal', function () {
         nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
         isEdit:            false,
-        $scope:            $scope
+        $scope:            $scope,
+        uri:               'uri'
       } );
       $ctrl.itemConfigForm = itemConfigForm;
     } ) );
@@ -323,7 +341,8 @@ describe( 'product config modal', function () {
         nextDrawDate:      nextDrawDate,
         itemConfig:        itemConfig,
         isEdit:            false,
-        $scope:            $scope
+        $scope:            $scope,
+        uri:               'uri'
       });
       $ctrl.itemConfigForm = itemConfigForm;
     }));
