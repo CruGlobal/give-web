@@ -166,7 +166,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
           return {
             'designation-name':   recipient.definition['display-name'],
             'designation-number': recipient.code['product-code']
-          }
+          };
         } );
       } );
   }
