@@ -7,6 +7,7 @@ import flatten from 'lodash/flatten';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/pluck';
+import 'rxjs/add/operator/map';
 
 import cortexApiService from '../cortexApi.service';
 import profileService from './profile.service';
@@ -153,15 +154,33 @@ function DonationsService( cortexApiService, profileService, commonService ) {
     } );
   }
 
+  function getSuggestedRecipients() {
+    return cortexApiService.get( {
+      path: ['donations', 'historical', cortexApiService.scope, 'recipient', 'suggested'],
+      zoom: {
+        recipients: 'element[],element:definition,element:code'
+      }
+    } )
+      .map( ( response ) => {
+        return map( response.recipients, ( recipient ) => {
+          return {
+            'designation-name':   recipient.definition['display-name'],
+            'designation-number': recipient.code['product-code']
+          }
+        } );
+      } );
+  }
+
   return {
-    getHistoricalGifts:   getHistoricalGifts,
-    getRecipients:        getRecipients,
-    getRecipientDetails:  getRecipientDetails,
-    getReceipts:          getReceipts,
-    getRecentRecipients:  getRecentRecipients,
-    getRecurringGifts:    getRecurringGifts,
-    updateRecurringGifts: updateRecurringGifts,
-    addRecurringGifts:    addRecurringGifts
+    getHistoricalGifts:     getHistoricalGifts,
+    getRecipients:          getRecipients,
+    getRecipientDetails:    getRecipientDetails,
+    getReceipts:            getReceipts,
+    getRecentRecipients:    getRecentRecipients,
+    getRecurringGifts:      getRecurringGifts,
+    updateRecurringGifts:   updateRecurringGifts,
+    addRecurringGifts:      addRecurringGifts,
+    getSuggestedRecipients: getSuggestedRecipients
   };
 }
 
