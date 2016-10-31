@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './designationEditor.component';
-import designationConstants from './designationEditor.constants';
+import designationConstants from 'common/services/api/designationEditor.constants';
 import {Roles} from 'common/services/session/session.service';
 
 const designationSecurityResponse = {

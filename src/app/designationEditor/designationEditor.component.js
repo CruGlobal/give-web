@@ -7,6 +7,7 @@ import commonModule from 'common/common.module';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+import designationEditorService from 'common/services/api/designationEditor.service';
 
 import titleModalController from './titleModal/title.modal';
 import pageOptionsModalController from './pageOptionsModal/pageOptions.modal';
@@ -21,20 +22,20 @@ import photoModalTemplate from './photoModal/photoModal.tpl';
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl';
 import websiteModalTemplate from './websiteModal/websiteModal.tpl';
 
-import designationConstants from './designationEditor.constants';
-
 let componentName = 'designationEditor';
 
 class DesignationEditorController {
 
   /* @ngInject */
-  constructor( $http, $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService ) {
+  constructor( $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService, designationEditorService ) {
     this.sessionService = sessionService;
     this.sessionEnforcerService = sessionEnforcerService;
+    this.designationEditorService = designationEditorService;
+
     this.imgDomain = envService.read('imgDomain');
     this.imgDomainDesignation = envService.read('imgDomainDesignation');
+
     this.$location = $location;
-    this.$http = $http;
     this.$q = $q;
     this.$uibModal = $uibModal;
     this.$window = $window;
@@ -65,22 +66,12 @@ class DesignationEditorController {
 
     return this.$q.all([
       //get designation content
-      this.$http.get(designationConstants.designationSecurityEndpoint, {
-        params: {
-          designationNumber: this.designationNumber
-        },
-        withCredentials: true
-      }).then((response) => {
+      this.designationEditorService.getContent(this.designationNumber).then((response) => {
         this.designationContent = response.data;
       }),
 
       //get designation photos
-      this.$http.get(designationConstants.designationImagesEndpoint, {
-        params: {
-          designationNumber: this.designationNumber
-        },
-        withCredentials: true
-      }).then((response) => {
+      this.designationEditorService.getPhotos(this.designationNumber).then((response) => {
         this.designationPhotos = response.data;
       })
     ]).then(() => {
@@ -187,9 +178,7 @@ class DesignationEditorController {
   }
 
   save() {
-    return this.$http.post(designationConstants.saveEndpoint, this.designationContent, {
-      withCredentials: true
-    }).then(() => {
+    return this.designationEditorService.save(this.designationContent).then(() => {
       this.saveStatus = 'success';
       alert('Changes saved.');
     }, () => {
@@ -206,6 +195,7 @@ export default angular
     commonModule.name,
     sessionService.name,
     sessionEnforcerService.name,
+    designationEditorService.name,
     loadingOverlay.name,
     template.name,
 
