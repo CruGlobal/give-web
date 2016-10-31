@@ -15,6 +15,7 @@ import activeRecurringGiftsResponse from './fixtures/cortex-donations-recurring-
 import cancelledRecurringGiftsResponse from './fixtures/cortex-donations-recurring-gifts-cancelled.fixture';
 import multipleRecurringGiftsResponse from './fixtures/cortex-donations-recurring-gifts-multiple.fixture';
 import recentRecipientsResponse from './fixtures/cortex-donations-recent-recipients.fixture';
+import suggestedRecipientsResponse from './fixtures/cortex-donations-suggested.fixture';
 
 describe( 'donations service', () => {
   beforeEach( angular.mock.module( module.name ) );
@@ -365,4 +366,38 @@ describe( 'donations service', () => {
       $httpBackend.flush();
     });
   } );
+
+  describe('getSuggestedRecipients', () => {
+    it( 'should load suggested recipients', () => {
+      $httpBackend
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/suggested?zoom=element,element:definition,element:code' )
+        .respond( 200, suggestedRecipientsResponse );
+      donationsService.getSuggestedRecipients()
+        .subscribe( ( suggestedRecipients ) => {
+          expect( suggestedRecipients ).toEqual( [
+            jasmine.objectContaining( {
+              "designation-name": "Steve and Cheryl Bratton",
+              "designation-number": "0478064"
+            } ),
+            jasmine.objectContaining( {
+              "designation-name": "Matthew and Katie Watts",
+              "designation-number": "0449995"
+            } ),
+            jasmine.objectContaining( {
+              "designation-name": "James and Gail Rohland",
+              "designation-number": "0138072"
+            } ),
+            jasmine.objectContaining( {
+              "designation-name": "Aaron and Connie Thomson",
+              "designation-number": "0774533"
+            } ),
+            jasmine.objectContaining( {
+              "designation-name": "Red River Region Bridges",
+              "designation-number": "2781843"
+            } )
+          ]);
+        } );
+      $httpBackend.flush();
+    } );
+  });
 } );
