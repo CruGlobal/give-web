@@ -60,8 +60,20 @@ describe('cart service', () => {
         }
       ).respond(200);
 
-      self.cartService.addItem('<some id>', { amount: 50 });
+      self.cartService.addItem('<some id>', { amount: 50 })
+        .subscribe();
       self.$httpBackend.flush();
+    });
+  });
+
+  describe('editItem', () => {
+    it('should delete the old item and add the new one', () => {
+      spyOn(self.cartService, 'deleteItem').and.returnValue(Observable.of({ data: null }));
+      spyOn(self.cartService, 'addItem').and.returnValue(Observable.of({ data: null }));
+      self.cartService.editItem('<some old id>', '<new id>', { code: '<some code>'})
+        .subscribe();
+      expect(self.cartService.deleteItem).toHaveBeenCalledWith('<some old id>');
+      expect(self.cartService.addItem).toHaveBeenCalledWith('<new id>', { code: '<some code>'});
     });
   });
 
@@ -71,7 +83,8 @@ describe('cart service', () => {
         'https://cortex-gateway-stage.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>'
       ).respond(200);
 
-      self.cartService.deleteItem('itemfieldslineitem/items/crugive/<some id>');
+      self.cartService.deleteItem('itemfieldslineitem/items/crugive/<some id>')
+        .subscribe();
       self.$httpBackend.flush();
     });
   });

@@ -3,6 +3,7 @@ import JSONPath from 'common/lib/jsonPath';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
 
 import cortexApiService from '../cortexApi.service';
 import commonService from './common.service';
@@ -55,7 +56,7 @@ class Cart {
             }
 
             var itemResource = JSONPath.query(element, "$._availability[0].links[0].uri")[0];
-            itemResource = itemResource ? btoa(itemResource) : '';
+            itemResource = itemResource || '';
 
             frequencyTitle = (!frequencyInterval || frequencyInterval === 'NA') ? 'Single' : frequencyTitle;
 
@@ -123,6 +124,11 @@ class Cart {
       path: ['itemfieldslineitem', 'items', this.cortexApiService.scope, id],
       data: data
     });
+  }
+
+  editItem(oldUri, id, data){
+    return this.deleteItem(oldUri)
+      .switchMap(() => this.addItem(id, data));
   }
 
   deleteItem(uri){
