@@ -25,9 +25,10 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $scope, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit, uri ) {
+  constructor( $location, $scope, $log, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit, uri ) {
     this.$location = $location;
     this.$scope = $scope;
+    this.$log = $log;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
@@ -142,43 +143,34 @@ class ModalInstanceCtrl {
     if ( !this.isEdit ) this.$location.search( giveGiftParams.day, day );
   }
 
-  addToCart() {
+  saveGiftToCart() {
     this.giftSubmitted = false;
     this.submittingGift = false;
     if ( !this.itemConfigForm.$valid ) {
       return;
     }
     this.submittingGift = true;
-    this.cartService
-      .addItem( this.productData.id, this.productData.frequency === 'NA' ? omit(this.itemConfig, 'recurring-day-of-month') : this.itemConfig )
-      .subscribe( () => {
-        if ( this.isEdit ) {
-          this.$uibModalInstance.close( {isUpdated: true} );
-        } else {
-          this.giftSubmitted = true;
-        }
-        this.submittingGift = false;
-      }, (error) => {
-        this.error = error.data;
-        this.submittingGift = false;
-      } );
-  }
 
-  updateGift() {
-    this.submittingGift = true;
-    if ( !this.itemConfigForm.$valid ) {
-      return;
-    }
-    if (!this.itemConfigForm.$dirty ) {
-      this.$uibModalInstance.close( {isUpdated: false} );
-      return;
-    }
-    this.cartService.deleteItem( atob( this.uri ) )
-      .subscribe( () => {
-        this.addToCart();
-      } );
-  }
+    let id = this.productData.id;
+    let data = this.productData.frequency === 'NA' ? omit( this.itemConfig, 'recurring-day-of-month' ) : this.itemConfig;
 
+    let savingObservable = this.isEdit ?
+      this.cartService.editItem( this.uri, id, data ) :
+      this.cartService.addItem( id, data );
+
+    savingObservable.subscribe( () => {
+      if ( this.isEdit ) {
+        this.$uibModalInstance.close( {isUpdated: true} );
+      } else {
+        this.giftSubmitted = true;
+      }
+      this.submittingGift = false;
+    }, (error) => {
+      this.error = error.data;
+      this.submittingGift = false;
+      this.$log.error('Error adding or updating item in cart', error);
+    } );
+  }
 }
 
 export default angular

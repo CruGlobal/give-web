@@ -21,7 +21,7 @@
   <button class="btn btn-success" ng-click="$dismiss()">Keep Browsing</button>
 </div>
 
-<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.isEdit ? $ctrl.updateGift() : $ctrl.addToCart()" ng-if="!$ctrl.giftSubmitted">
+<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.saveGiftToCart()" ng-if="!$ctrl.giftSubmitted">
   <div class="modal-body pt0 p">
     <div class="container-fluid">
       <div class="panel panel-default panel-plain mt">
