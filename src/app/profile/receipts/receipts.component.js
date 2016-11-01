@@ -5,6 +5,7 @@ import filterByYear from './receipts.filter';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
+import commonModule from 'common/common.module';
 
 class ReceiptsController {
 
@@ -99,6 +100,7 @@ let componentName = 'receipts';
 export default angular
   .module(componentName, [
     template.name,
+    commonModule.name,
     donationsService.name,
     filterByYear.name,
     loadingOverlay.name,
