@@ -32,6 +32,14 @@
             <gift-details-view gift="gift"></gift-details-view>
           </gift-list-item>
         </div>
+        <div ng-repeat="gift in $ctrl.savedGifts" class="row repeating-row user-profile">
+          <div class="col-xs-12">
+            <p class="text-success" translate>This gift has been successfully saved:</p>
+          </div>
+          <gift-list-item gift="gift">
+            <gift-details-view gift="gift"></gift-details-view>
+          </gift-list-item>
+        </div>
       </div>
     </div>
   </div>
