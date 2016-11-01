@@ -11,7 +11,6 @@ import thankYouComponent from '../thankYou/thankYou.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
-import homeSignInComponent from '../homeSignIn/homeSignIn.component';
 import designationEditorComponent from '../designationEditor/designationEditor.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
 
@@ -85,7 +84,6 @@ export default angular
     productConfigComponent.name,
     signInComponent.name,
     searchResultsComponent.name,
-    homeSignInComponent.name,
     designationEditorComponent.name,
     paymentMethodsComponent.name,
     receiptsComponent.name,

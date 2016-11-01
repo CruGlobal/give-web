@@ -6,6 +6,9 @@ import productModalService from 'common/services/productModal.service';
 import modalStateService from 'common/services/modalState.service';
 import {giveGiftParams} from 'app/productConfig/productConfig.modal';
 
+//include designation edit button component to be included on designation page
+import designationEditButtonComponent from '../designationEditButton/designationEditButton.component';
+
 let componentName = 'productConfig';
 
 class ProductConfigController {
@@ -39,6 +42,7 @@ export default angular
     'ngMessages',
     modalStateService.name,
     productModalService.name,
+    designationEditButtonComponent.name,
     template.name
   ] )
   .component( componentName, {
