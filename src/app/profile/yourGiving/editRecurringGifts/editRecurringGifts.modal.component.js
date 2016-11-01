@@ -63,11 +63,14 @@ class EditRecurringGiftsModalController {
   }
 
   loadRecentRecipients(){
-    this.donationsService.getRecentRecipients()
+    this.loadingRecentRecipients = true;
+    this.donationsService.getSuggestedRecipients()
       .subscribe(recentRecipients => {
         this.recentRecipients = map(recentRecipients, gift => (new RecurringGiftModel(gift)).setDefaults());
         this.hasRecentRecipients = this.recentRecipients && this.recentRecipients.length > 0;
+        this.loadingRecentRecipients = false;
       }, (error) => {
+        this.loadingRecentRecipients = false;
         this.$log.error('Error loading recent recipients', error);
       });
   }
@@ -95,11 +98,7 @@ class EditRecurringGiftsModalController {
         break;
       case 'step1EditRecurringGifts':
         this.recurringGifts = recurringGifts;
-        if(this.hasRecentRecipients){
-          this.state = 'step2AddRecentRecipients';
-        }else{
-          this.state = 'step4Confirm';
-        }
+        this.state = 'step2AddRecentRecipients';
         break;
       case 'step2AddRecentRecipients':
         this.additions = additions;
@@ -135,7 +134,7 @@ class EditRecurringGiftsModalController {
         this.state = 'step1EditRecurringGifts';
         break;
 
-      // Can't go from step 1 to step 0 as the user has a valid payment method by this point. As a result we don't need a case to transition from it
+      // Can't go from step 1 to step 0 as the user has a valid payment method by that point. As a result we don't need a case to transition from it
 
       case 'step0AddUpdatePaymentMethod':
         this.state = 'step0PaymentMethodList';

@@ -131,18 +131,20 @@ describe('edit recurring gifts modal', () => {
 
   describe('loadRecentRecipients', () => {
     it('should load recent recipients', () => {
-      spyOn(self.controller.donationsService, 'getRecentRecipients').and.returnValue(Observable.of([ { 'designation-name': 'Staff Member' } ]));
+      spyOn(self.controller.donationsService, 'getSuggestedRecipients').and.returnValue(Observable.of([ { 'designation-name': 'Staff Member' } ]));
       self.controller.loadRecentRecipients();
       expect(self.controller.recentRecipients).toEqual([ (new RecurringGiftModel(
         { 'designation-name': 'Staff Member' }
       )).setDefaults() ] );
       expect(self.controller.hasRecentRecipients).toEqual(true);
+      expect(self.controller.loadingRecentRecipients).toEqual(false);
     });
     it('should handle an error loading recent recipients', () => {
-      spyOn(self.controller.donationsService, 'getRecentRecipients').and.returnValue(Observable.throw('some error'));
+      spyOn(self.controller.donationsService, 'getSuggestedRecipients').and.returnValue(Observable.throw('some error'));
       self.controller.loadRecentRecipients();
       expect(self.controller.recentRecipients).toBeUndefined();
       expect(self.controller.$log.error.logs[0]).toEqual( [ 'Error loading recent recipients', 'some error' ] );
+      expect(self.controller.loadingRecentRecipients).toEqual(false);
     });
   });
 
@@ -189,17 +191,9 @@ describe('edit recurring gifts modal', () => {
 
     it('should transition from step1EditRecurringGifts to step2AddRecentRecipients', () => {
       self.controller.state = 'step1EditRecurringGifts';
-      self.controller.hasRecentRecipients = true;
       self.controller.next(undefined, 'modified gifts');
       expect(self.controller.recurringGifts).toEqual('modified gifts');
       expect(self.controller.state).toEqual('step2AddRecentRecipients');
-    });
-
-    it('should transition from step1EditRecurringGifts to step4Confirm', () => {
-      self.controller.state = 'step1EditRecurringGifts';
-      self.controller.hasRecentRecipients = false;
-      self.controller.next();
-      expect(self.controller.state).toEqual('step4Confirm');
     });
 
     it('should transition from step2AddRecentRecipients to step3ConfigureRecentRecipients', () => {
