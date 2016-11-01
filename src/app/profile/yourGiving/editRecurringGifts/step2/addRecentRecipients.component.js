@@ -15,7 +15,13 @@ class AddRecentRecipientsController {
   }
 
   $onInit(){
+    if(this.loadedNoRecentRecipients()){
+      this.next();
+    }
+  }
 
+  loadedNoRecentRecipients(){
+    return !this.loadingRecentRecipients && (!this.recentRecipients || this.recentRecipients.length === 0);
   }
 
   gatherSelections(){
@@ -33,6 +39,7 @@ export default angular
     templateUrl: template.name,
     bindings: {
       recentRecipients: '<',
+      loadingRecentRecipients: '<',
       dismiss: '&',
       previous: '&',
       next: '&'

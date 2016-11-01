@@ -16,6 +16,13 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 col-xs-12">
+        <div class="text-center" ng-if="$ctrl.loadingRecentRecipients" translate>
+          Loading recent recipients...
+          <loading inline="true"></loading>
+        </div>
+        <div class="alert alert-warning" role="alert" ng-if="$ctrl.loadedNoRecentRecipients()">
+          <p translate>You don't seem to have any recent recipients. Please continue and review your changes.</p>
+        </div>
         <div ng-repeat="gift in $ctrl.recentRecipients" class="row repeating-row user-profile">
           <gift-list-item gift="gift" selectable="checkbox"></gift-list-item>
         </div>

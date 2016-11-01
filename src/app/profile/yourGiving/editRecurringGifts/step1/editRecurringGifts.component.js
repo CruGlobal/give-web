@@ -53,7 +53,6 @@ export default angular
     templateUrl: template.name,
     bindings: {
       recurringGifts: '<',
-      hasRecentRecipients: '<',
       dismiss: '&',
       next: '&'
     }
