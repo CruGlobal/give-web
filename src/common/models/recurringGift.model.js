@@ -83,7 +83,11 @@ export default class RecurringGiftModel {
   }
 
   get paymentMethodId(){
-    return this.gift['updated-payment-method-id'] || this.gift['payment-method-id'] || this.paymentMethods && this.paymentMethods[0].self.uri.split( '/' ).pop();
+    let paymentMethodId = this.gift['updated-payment-method-id'] || this.gift['payment-method-id'];
+    if(!paymentMethodId){
+      paymentMethodId = this.gift['updated-payment-method-id'] = this.paymentMethods && this.paymentMethods[0] && this.paymentMethods[0].self.uri.split( '/' ).pop();
+    }
+    return paymentMethodId;
   }
 
   set paymentMethodId(value){
