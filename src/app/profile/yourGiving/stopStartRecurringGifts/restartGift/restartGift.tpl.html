@@ -1,0 +1,84 @@
+<div ng-switch="$ctrl.step">
+  <div style="height: 100px;" ng-switch-default></div>
+  <!-- Step 1 -->
+  <suspended-gifts ng-switch-when="suspended"
+                   gifts="$ctrl.suspendedGifts"
+                   cancel="$ctrl.cancel()"
+                   previous="$ctrl.previous()"
+                   next="$ctrl.next(selected)">
+  </suspended-gifts>
+
+  <suggested-recipients ng-switch-when="suggested"
+                        gifts="$ctrl.suggestedRecipients"
+                        cancel="$ctrl.cancel()"
+                        previous="$ctrl.previous()"
+                        next="$ctrl.next(selected)">
+  </suggested-recipients>
+
+  <redirect-gift-step-2 ng-switch-when="search"
+                        on-select-result="$ctrl.next(selected)"
+                        cancel="$ctrl.cancel()"
+                        previous="$ctrl.previous()">
+  </redirect-gift-step-2>
+
+  <!-- Step 2 -->
+  <configure-gifts ng-switch-when="configure"
+                   gifts="$ctrl.gifts"
+                   cancel="$ctrl.cancel()"
+                   previous="$ctrl.previous()"
+                   next="$ctrl.next(null, configured)">
+  </configure-gifts>
+
+  <!-- Step 3 -->
+  <confirm-gifts ng-switch-when="confirm"
+                 gifts="$ctrl.gifts"
+                 cancel="$ctrl.cancel()"
+                 previous="$ctrl.previous()"
+                 next="$ctrl.next()"
+                 set-loading="$ctrl.setLoading({loading: loading})">
+  </confirm-gifts>
+
+  <!-- Loading -->
+  <div ng-switch-when="loading">
+    <div class="modal-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="border-bottom-small">
+              <button type="button" class="close" aria-label="Close" ng-click="$ctrl.cancel()">
+                <span aria-hidden="true">&times;</span></button>
+              <h3 translate>Restart A Gift</h3>
+              <p translate>Loading gift information&hellip;</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div class="container-fluid">
+        <div class="row row-no-spacing">
+          <div class="col-md-12 col-xs-12">
+            <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
+              <p translate>There was an error loading gift information. Please try again, or contact support.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="row row-no-spacing">
+        <div class="col-xs-6">
+          <a class="btn btn-default" translate>Back</a>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button class="btn btn-primary" ng-click="$ctrl.loadPaymentMethods()">
+            <span ng-if="!$ctrl.error" translate>Continue</span>
+            <span ng-if="$ctrl.error" translate>Retry</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

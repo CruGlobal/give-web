@@ -49,7 +49,7 @@ class RedirectGiftStep2Controller {
   }
 
   selectResult() {
-    this.onSelectResult( {result: find( this.results, {_selectedGift: true} )} );
+    this.onSelectResult( {selected: find( this.results, {_selectedGift: true} )} );
   }
 
   resultSelected( result ) {
