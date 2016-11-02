@@ -1,5 +1,5 @@
 import angular from 'angular';
-import 'ng-resize';
+import MobileDetect from 'mobile-detect';
 import transform from 'lodash/transform';
 import isObject from 'lodash/isObject';
 import includes from 'lodash/includes';
@@ -62,8 +62,22 @@ class NavController{
   }
 
   setMenuTemplate() {
-    this.menuType = this.$window.innerWidth <= 991 ? 'mobile' : 'desktop';
+    let md = new MobileDetect(this.$window.navigator ? this.$window.navigator.userAgent : '');
+
+    this.menuType = md.phone() ? 'mobile' : 'desktop';
     this.templateUrl = this.menuType === 'mobile' ? mobileTemplate.name : desktopTemplate.name;
+
+    //set viewport
+    this.changeMetaTag('viewport', this.menuType === 'mobile' ? 'width=device-width, minimum-scale=1.0' : 'width=1024');
+  }
+
+  changeMetaTag(tag, content) {
+    let metas = this.$document[0].getElementsByTagName('meta');
+    for (var i=0; i<metas.length; i++) {
+      if (metas[i].getAttribute('name') && metas[i].getAttribute('name') === tag) {
+        metas[i].setAttribute('content', content);
+      }
+    }
   }
 
   signIn() {
@@ -161,7 +175,6 @@ class NavController{
 export default angular
   .module(componentName, [
     'environment',
-    'ngResize',
     mobileTemplate.name,
     desktopTemplate.name,
     cartService.name,
@@ -173,5 +186,5 @@ export default angular
   ])
   .component(componentName, {
     controller: NavController,
-    template: '<ng-include src="$ctrl.templateUrl" ng-resize="$ctrl.setMenuTemplate()"></ng-include>'
+    template: '<ng-include src="$ctrl.templateUrl"></ng-include>'
   });
