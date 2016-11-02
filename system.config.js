@@ -36,8 +36,8 @@ System.config({
     "jsencrypt": "npm:jsencrypt@2.3.1",
     "jwt-decode": "github:auth0/jwt-decode@2.1.0",
     "lodash": "npm:lodash@4.15.0",
+    "mobile-detect": "npm:mobile-detect@1.3.3",
     "moment": "npm:moment@2.15.1",
-    "ng-resize": "npm:ng-resize@1.2.0",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
     "rollbar-browser": "npm:rollbar-browser@1.9.1",
@@ -356,12 +356,14 @@ System.config({
       "redent": "npm:redent@1.0.0",
       "trim-newlines": "npm:trim-newlines@1.0.0"
     },
+    "npm:mobile-detect@1.3.3": {
+      "child_process": "github:jspm/nodelibs-child_process@0.1.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0"
+    },
     "npm:multipipe@0.1.2": {
       "duplexer2": "npm:duplexer2@0.0.2",
       "stream": "github:jspm/nodelibs-stream@0.1.0"
-    },
-    "npm:ng-resize@1.2.0": {
-      "path": "github:jspm/nodelibs-path@0.1.0"
     },
     "npm:normalize-package-data@2.3.5": {
       "hosted-git-info": "npm:hosted-git-info@2.1.5",
