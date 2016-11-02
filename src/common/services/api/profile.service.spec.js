@@ -16,6 +16,8 @@ import paymentmethodsFormsResponse from './fixtures/cortex-profile-paymentmethod
 import paymentmethodsWithDonationsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods-with-donations.fixture.js';
 import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
 import phoneNumbersResponse from 'common/services/api/fixtures/cortex-profile-phonenumbers.fixture.js';
+import selfserviceDonorDetailsResponse from 'common/services/api/fixtures/cortex-profile-selfservicedonordetails.fixture.js';
+import mailingAddressResponse from 'common/services/api/fixtures/cortex-profile-mailingaddress.fixture.js';
 
 let paymentmethodsFormsResponseZoomMapped = {
   bankAccount: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createbankaccountform[0],
@@ -41,9 +43,9 @@ describe('profile service', () => {
     it('should load the user\'s email', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=emails:element')
         .respond(200, emailsResponse);
-      self.profileService.getEmail()
+      self.profileService.getEmails()
         .subscribe((data) => {
-          expect(data).toEqual('asdf@asdf.com');
+          expect(data).toBeTruthy();
         });
       self.$httpBackend.flush();
     });
@@ -421,31 +423,256 @@ describe('profile service', () => {
     });
   });
 
-  describe('getPhoneNumbers', () => {
-    it('should load the user\'s phonenumbers', () => {
-      let response = [{
+  describe('getProfileDonorDetails', () => {
+    it('should load the user\'s profile donorDetails', () => {
+      let response = {
         self: {
-          type: 'elasticpath.phonenumbers.phone-number',
-          uri: '/phonenumbers/crugive/gewtetbqirevq=',
-          href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/gewtetbqirevq='
-        }
-        ,
-        links: [{
-          rel: 'list',
-          type: 'elasticpath.collections.links',
-          uri: '/phonenumbers/crugive',
-          href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive'
-        }
+          type: 'cru.selfservicedonor.self-service-donor',
+          uri: '/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=',
+          href: 'https://cortex-gateway-stage.cru.org/cortex/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
+        },
+        links: [
+          { rel: 'profile',
+            rev: 'selfservicedonordetails',
+            type: 'elasticpath.profiles.profile',
+            uri: '/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=',
+            href: 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
+          }
         ],
-        locked: false, 'phone-number': '(518) 882-1307', 'phone-number-type': 'Home', primary: true
-      }];
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive?zoom=element')
-        .respond(200, phoneNumbersResponse);
-      self.profileService.getPhoneNumbers()
+        'donor-number': '467023686',
+        name: { 'family-name': 'stin', 'given-name': 'stin', 'middle-initial': '', suffix: '', title: '' },
+        'organization-name': '',
+        'spouse-name': { 'family-name': 'stin', 'given-name': 'stiness', 'middle-initial': '', suffix: 'Jr.', title: 'Mrs' }
+      };
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicedonordetails')
+        .respond(200, selfserviceDonorDetailsResponse);
+      self.profileService.getProfileDonorDetails()
         .subscribe((donorDetails) => {
           expect(donorDetails).toEqual(response);
         });
       self.$httpBackend.flush();
     });
   });
+
+  describe('updateProfileDonorDetails', () => {
+    it('should update user\'s details', () => {
+      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=')
+        .respond(200, 'success');
+      self.profileService.updateProfileDonorDetails({self: {uri:'/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='}})
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+
+  describe('addSpouse', () => {
+    it('should add spouse\'s details', () => {
+      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/selfservicedonordetails/crugive/spousedetails')
+        .respond(200, 'success');
+      self.profileService.addSpouse('/selfservicedonordetails/crugive/spousedetails', {})
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('updateEmail', () => {
+    it('should add spouse\'s details', () => {
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/emails/crugive/spouse?followLocation=true')
+        .respond(200, 'spouse success');
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/emails/crugive/?followLocation=true')
+        .respond(200, 'donor success');
+
+      self.profileService.updateEmail({}, true)
+        .subscribe((data) => {
+          expect(data).toEqual('spouse success');
+        });
+
+      self.profileService.updateEmail({}, false)
+        .subscribe((data) => {
+          expect(data).toEqual('donor success');
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('getPhoneNumbers', () => {
+    it('should load the user\'s phonenumbers', () => {
+      let response = [
+        {
+          self: {
+            type: 'elasticpath.phonenumbers.phone-number',
+            uri: '/phonenumbers/crugive/gewuwmktgjivi=',
+            href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/gewuwmktgjivi='
+          },
+          links: [
+            { rel: 'list',
+              type: 'elasticpath.collections.links',
+              uri: '/phonenumbers/crugive',
+              href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive'
+            }
+          ],
+          locked: false,
+          'phone-number': '(343) 454-3344',
+          'phone-number-type': 'Mobile',
+          primary: false,
+          spouse: false
+        },
+        {
+          self: {
+            type: 'elasticpath.phonenumbers.phone-number',
+            uri: '/phonenumbers/crugive/gewuwmktgjjfq=',
+            href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/gewuwmktgjjfq='
+          },
+          links: [
+            {
+              rel: 'list',
+              type: 'elasticpath.collections.links',
+              uri: '/phonenumbers/crugive',
+              href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive'
+            }
+          ],
+          locked: false,
+          'phone-number': '(565) 777-5656',
+          'phone-number-type': 'Mobile',
+          primary: false,
+          spouse: true
+        }
+      ];
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive?zoom=element,spouse')
+        .respond(200, phoneNumbersResponse);
+      self.profileService.getPhoneNumbers()
+        .subscribe((data) => {
+          expect(data).toEqual(response);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('addPhoneNumber', () => {
+    it('should add phone number', () => {
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/spouse?followLocation=true')
+        .respond(200, 'spouse success');
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/?followLocation=true')
+        .respond(200, 'donor success');
+      let phoneNumber = {
+        spouse: true
+      };
+      self.profileService.addPhoneNumber(phoneNumber)
+        .subscribe((data) => {
+          expect(data).toEqual('spouse success');
+        });
+      phoneNumber.spouse = false;
+      self.profileService.addPhoneNumber(phoneNumber)
+        .subscribe((data) => {
+          expect(data).toEqual('donor success');
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('updatePhoneNumber', () => {
+    it('should update phone number', () => {
+      let phoneNumber = {
+        self: {
+          uri: 'uri'
+        }
+      };
+      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/uri')
+        .respond(200, 'success');
+      self.profileService.updatePhoneNumber(phoneNumber)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('deletePhoneNumber', () => {
+    it('should update phone number', () => {
+      let phoneNumber = {
+        self: {
+          uri: 'uri'
+        }
+      };
+      self.$httpBackend.expectDELETE('https://cortex-gateway-stage.cru.org/cortex/uri')
+        .respond(200, 'success');
+      self.profileService.deletePhoneNumber(phoneNumber)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('getMailingAddress', () => {
+    it('should get mailing address', () => {
+      let response = {
+        self: {
+          type: 'elasticpath.addresses.address',
+          uri: '/addresses/crugive/gewuwmktgjfem=',
+          href: 'https://cortex-gateway-stage.cru.org/cortex/addresses/crugive/gewuwmktgjfem='
+        },
+        links: [
+          {
+            rel: 'profile',
+            rev: 'addresses',
+            type: 'elasticpath.profiles.profile',
+            uri: '/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=',
+            href: 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
+          },
+          {
+            rel: 'list',
+            type: 'elasticpath.collections.links',
+            uri: '/addresses/crugive',
+            href: 'https://cortex-gateway-stage.cru.org/cortex/addresses/crugive'
+          }
+        ],
+        address: {
+          'country-name': 'US',
+          locality: 'Lehi',
+          'postal-code': '88888',
+          region: 'AR', 'street-address': '123 Test street'
+        },
+        name: {}
+      };
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=addresses:mailingaddress')
+        .respond(200, mailingAddressResponse);
+      self.profileService.getMailingAddress()
+        .subscribe((data) => {
+          expect(data).toEqual(response);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+
+  describe('updateMailingAddress', () => {
+    it('should update mailing address', () => {
+      let mailingAddress = {
+        self: {
+          uri: 'uri'
+        },
+        address: {
+          country: 'US',
+          streetAddress: '123 First St',
+          extendedAddress: '',
+          locality: 'Sacramento',
+          region: 'CA',
+          postalCode: '12345'
+        }
+      };
+      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/uri')
+        .respond(200, 'success');
+      self.profileService.updateMailingAddress(mailingAddress)
+        .subscribe((data) => {
+          expect(data).toEqual('success');
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
 });

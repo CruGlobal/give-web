@@ -3,11 +3,15 @@
 
       <div class="col-md-12">
 
-        <div ng-if="$ctrl.donorDetailsError || $ctrl.emailAddressError || $ctrl.phoneNumberError || $ctrl.mailingAddressError" class="alert alert-danger" role="alert">
+        <div ng-if="$ctrl.hasError() && !$ctrl.touched()" class="alert alert-danger" role="alert">
           <p>{{$ctrl.donorDetailsError}}</p>
           <p>{{$ctrl.emailAddressError}}</p>
           <p>{{$ctrl.phoneNumberError}}</p>
           <p>{{$ctrl.mailingAddressError}}</p>
+        </div>
+
+        <div ng-if="$ctrl.success && !$ctrl.touched()" class="alert alert-success" role="alert">
+          <span>Profile information was successfully updated.</span>
         </div>
 
         <div class="panel panel-margin-bottom">
@@ -23,52 +27,66 @@
                     <h4 class="panel-title  border-bottom-small visible">Your Name</h4>
                     <div style="position: relative">
                       <loading-overlay ng-if="$ctrl.donorDetialsLoading"></loading-overlay>
-                      <form name="$ctrl.donorDetailsForm" novalidate>
                         <ul class="list-unstyled">
                         <li>
-                          <div class="form-group is-required person-row">
-                            <i class="fa fa-lock"></i>
-                            <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
-                              <option value="Mr" translate>Mr.</option>
-                              <option value="Mrs" translate>Mrs.</option>
-                              <option value="Dr" translate>Dr.</option>
-                            </select>
+                          <form name="$ctrl.donorDetailsForm" novalidate>
+                            <div class="form-group is-required person-row">
+                              <i class="fa fa-lock"></i>
+                              <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
+                                <option value="Mr" translate>Mr.</option>
+                                <option value="Mrs" translate>Mrs.</option>
+                                <option value="Dr" translate>Dr.</option>
+                              </select>
 
-                            <input type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']">
-                            <input type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails.name['middle-initial']">
-                            <input type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']">
+                              <input type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']">
+                              <input type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails.name['middle-initial']">
+                              <input type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']">
 
-                            <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
-                              <option></option>
-                              <option value="Jr." translate>Jr.</option>
-                              <option value="III" translate>III</option>
-                            </select>
-                          </div>
+                              <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
+                                <option></option>
+                                <option value="Jr." translate>Jr.</option>
+                                <option value="III" translate>III</option>
+                              </select>
+                            </div>
+                          </form>
+                        </li>
+                        <li ng-show="$ctrl.addingSpouse || $ctrl.hasSpouse">
+                          <form name="$ctrl.spouseDetailsForm" novalidate>
+                            <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.spouseDetailsForm | showErrors) }">
+                              <i class="fa fa-lock"></i>
+                              <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails['spouse-name'].title">
+                                <option value="Mr" translate>Mr.</option>
+                                <option value="Mrs" translate>Mrs.</option>
+                                <option value="Dr" translate>Dr.</option>
+                              </select>
+
+                              <input name="spouseName" type="text" class="form-control form-control-subtle first" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" maxlength="20" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
+                              <input name="spouseInitial" type="text" class="form-control form-control-subtle middle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" maxlength="1" ng-disabled="$ctrl.hasSpouse" pattern="[A-Z]">
+                              <input name="spouseLastName" type="text" class="form-control form-control-subtle last" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" maxlength="25" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
+
+                              <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
+                                <option></option>
+                                <option value="Jr." translate>Jr.</option>
+                                <option value="III" translate>III</option>
+                              </select>
+
+                              <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseLastName.$error" ng-if="($ctrl.spouseDetailsForm.spouseLastName | showErrors)">
+                                <div class="help-block" ng-message="minlength" translate>This field must be at least 2 characters</div>
+                              </div>
+                              <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseName.$error" ng-if="($ctrl.spouseDetailsForm.spouseName | showErrors)">
+                                <div class="help-block" ng-message="minlength" translate>This field must be at least 2 characters</div>
+                              </div>
+                              <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseInitial.$error" ng-if="($ctrl.spouseDetailsForm.spouseInitial | showErrors)">
+                                <div class="help-block" ng-message="pattern" translate>This field must be an uppercase letter</div>
+                              </div>
+
+                            </div>
+                          </form>
                         </li>
 
-                        <li ng-if="$ctrl.donorDetails['spouse-name']">
-                          <div class="form-group is-required person-row">
-                            <i class="fa fa-lock"></i>
-                            <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails['spouse-name'].title">
-                              <option value="Mr" translate>Mr.</option>
-                              <option value="Mrs" translate>Mrs.</option>
-                              <option value="Dr" translate>Dr.</option>
-                            </select>
-
-                            <input type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails['spouse-name']['given-name']">
-                            <input type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']">
-                            <input type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails['spouse-name']['family-name']">
-
-                            <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
-                              <option></option>
-                              <option value="Jr." translate>Jr.</option>
-                              <option value="III" translate>III</option>
-                            </select>
-                          </div>
-                        </li>
-
-                        <li ng-if="!$ctrl.donorDetails['spouse-name']">
-                          <a href="" ng-click="$ctrl.addSpouse()" translate>+ Add Your Spouse</a>
+                        <li ng-if="!$ctrl.hasSpouse">
+                          <a ng-if="!$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = true" translate>+ Add Your Spouse</a>
+                          <a ng-if="$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = false" translate>- Remove Spouse</a>
                         </li>
 
                         <li>
@@ -82,31 +100,31 @@
                     <!--Email Address-->
                     <h4 class="panel-title  border-bottom-small visible mt">Email Addresses</h4>
 
-                    <div class="form-group is-required" ng-class="{'has-error': ($ctrl.emailAddressForm.donorsEmail | showErrors)}" style="position:relative;">
+                    <div style="position:relative;">
                       <loading-overlay ng-if="$ctrl.emailLoading"></loading-overlay>
-                      <form name="$ctrl.emailAddressForm" novalidate>
-
-                        <div class="form-group">
+                      <form name="$ctrl.donorEmailForm" novalidate>
+                        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.donorEmailForm.donorsEmail | showErrors)}">
                           <label translate>{{$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']}} Email</label>
-                          <input type="email" name="donorsEmail" class="form-control  form-control-subtle" ng-model="$ctrl.email" maxlength="100" required>
-                          <div role="alert" ng-messages="$ctrl.emailAddressForm.donorsEmail.$error" ng-if="($ctrl.emailAddressForm.donorsEmail | showErrors)">
+                          <input type="email" name="donorsEmail" class="form-control  form-control-subtle" ng-model="$ctrl.donorEmail.email" maxlength="100" required>
+                          <div role="alert" ng-messages="$ctrl.donorEmailForm.$error" ng-if="($ctrl.donorEmailForm.donorsEmail | showErrors)">
                             <div class="help-block" ng-message="required" translate>You must enter an email address</div>
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
                             <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                           </div>
                         </div>
+                      </form>
 
-                        <div class="form-group">
-                          <label translate>{{$ctrl.donorDetails['spouse-name']['given-name'] + ' ' + $ctrl.donorDetails['spouse-name']['family-name']}} Email</label>
-                          <input type="email" name="donorsEmail" class="form-control  form-control-subtle" ng-model="$ctrl.email" maxlength="100" required>
-                          <a href="" ng-click="$ctrl.deleteSpouseEmail()"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
-                          <div role="alert" ng-messages="$ctrl.emailAddressForm.donorsEmail.$error" ng-if="($ctrl.emailAddressForm.donorsEmail | showErrors)">
-                            <div class="help-block" ng-message="required" translate>You must enter an email address</div>
+                      <form name="$ctrl.spouseEmailForm" novalidate ng-if="$ctrl.hasSpouse || $ctrl.addingSpouse">
+                        <div class="form-group" ng-class="{'has-error': ($ctrl.spouseEmailForm.spouseEmail | showErrors)}">
+                          <label translate>
+                            {{$ctrl.hasSpouse ? ($ctrl.donorDetails['spouse-name']['given-name'] + ' ' + $ctrl.donorDetails['spouse-name']['family-name']) : 'Spouse'}} Email
+                          </label>
+                          <input type="email" name="spouseEmail" class="form-control  form-control-subtle" ng-model="$ctrl.spouseEmail.email" maxlength="100">
+                          <div role="alert" ng-messages="$ctrl.spouseEmailForm.spouseEmail.$error" ng-if="($ctrl.spouseEmailForm.spouseEmail | showErrors)">
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
                             <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                           </div>
                         </div>
-
                       </form>
                     </div>
 
@@ -115,7 +133,8 @@
 
                     <div style="position: relative">
                       <loading-overlay ng-if="$ctrl.phonesLoading"></loading-overlay>
-                        <div ng-repeat="phone in $ctrl.phoneNumbers" ng-class="{'has-error': ($ctrl.phoneNumberForms[i].phoneNumber | showErrors)}" class="form-group is-required phone-row" >
+                      <div ng-if="!$ctrl.phonesLoading">
+                        <div ng-repeat="phone in $ctrl.phoneNumbers" ng-class="{'has-error': ($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)}" class="form-group is-required phone-row" >
                           <form name="$ctrl.phoneNumberForms[{{$index}}]" ng-hide="phone.delete" novalidate>
                             <select name="phoneNumberType" class="form-control form-control-subtle" ng-model="phone['phone-number-type']">
                               <option translate>Home</option>
@@ -124,20 +143,19 @@
                               <option translate>Unknown</option>
                             </select>
                             <input name="phoneNumber" type="tel" class="form-control form-control-subtle" ng-model="phone['phone-number']" required maxlength="20">
-                            <div role="alert" ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)">
-                              <div class="help-block" ng-message="required" translate>You must enter a phone number</div>
-                            </div>
-                            <select class="form-control form-control-subtle" ng-disabled="!$ctrl.donorDetails['spouse-name']">
-                              <option>{{$ctrl.donorDetails.name['given-name']}}</option>
-                              <option ng-if="$ctrl.donorDetails['spouse-name']">{{$ctrl.donorDetails['spouse-name']['given-name']}}</option>
-                            </select>
+                            <select ng-model="phone.spouse" ng-change="phone.ownerChanged = !phone.ownerChanged" ng-options="$ctrl.phoneOwner(spouse) for spouse in [true, false]" class="form-control form-control-subtle" ng-disabled="!$ctrl.hasSpouse"></select>
                             <a href="" ng-click="$ctrl.deletePhoneNumber(phone, $index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
                           </form>
+                          <div role="alert" ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)">
+                            <div class="help-block" ng-message="required" translate>You must enter a phone number</div>
+                          </div>
                         </div>
+                      </div>
                       <a href="" ng-click="$ctrl.addPhoneNumber()" translate>+ Add Phone Number</a>
                     </div>
 
                   </div>
+
                   <div class="col-md-5">
 
                     <!--Mailing Address-->
@@ -146,13 +164,15 @@
                       <loading-overlay ng-if="$ctrl.mailingAddressLoading"></loading-overlay>
                       <address-form ng-if="$ctrl.mailingAddress" address="$ctrl.mailingAddress.address" parent-form="$ctrl.mailingAddressForm"></address-form>
                     </form>
+
                   </div>
+
                 </div>
 
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="border-bottom-small"></div>
-                    <button ng-disabled="$ctrl.notReadyToSubmit()" ng-click="$ctrl.onSubmit()" type="submit" class="btn btn-primary btn-lg pull-right" translate>Update My Profile</button>
+                    <button ng-disabled="!$ctrl.touched() || $ctrl.invalid() || $ctrl.loading()" ng-click="$ctrl.onSubmit()" type="submit" class="btn btn-primary btn-lg pull-right" translate>{{$ctrl.loading() ? 'Loading...' : 'Update My Profile'}}</button>
                   </div>
                 </div>
 

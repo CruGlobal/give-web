@@ -93,21 +93,27 @@ class Profile {
     });
   }
 
-  getEmail(){
+  addSpouse(path, data) {
+    return this.cortexApiService.put({
+      path: path,
+      data: data
+    });
+  }
+
+  getEmails(){ // for now zero indexed element is a donor's email and the element with index '1' is spouse's email. TODO: submit ticket to BE team to get rid of 'magic numbers'
     return this.cortexApiService.get({
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
-          email: 'emails:element'
+          emails: 'emails:element[]'
         }
       })
-      .pluck('email')
-      .pluck('email');
+      .pluck('emails');
   }
 
-  updateEmail(data){
+  updateEmail(data, spouse){
     return this.cortexApiService.post({
-        path: ['emails', this.cortexApiService.scope],
-        data: data,
+        path: ['emails', this.cortexApiService.scope, spouse ? 'spouse' : ''],
+        data: {email: data.email},
         followLocation: true
       });
   }
@@ -116,15 +122,27 @@ class Profile {
     return this.cortexApiService.get({
         path: ['phonenumbers', this.cortexApiService.scope],
         zoom: {
-          phoneNumbers: 'element[]'
+          donor: 'element[]',
+          spouse: 'spouse[]'
         }
       })
-      .pluck('phoneNumbers');
+      .map(data => {
+        let phoneNumbers = [];
+        angular.forEach(data.donor, item => {
+          item.spouse = false;
+          phoneNumbers.push(item);
+        });
+        angular.forEach(data.spouse, item => {
+          item.spouse = true;
+          phoneNumbers.push(item);
+        });
+        return phoneNumbers;
+      });
   }
 
   addPhoneNumber(number){
     return this.cortexApiService.post({
-      path: ['phonenumbers', this.cortexApiService.scope],
+      path: ['phonenumbers', this.cortexApiService.scope, number.spouse ? 'spouse' : ''],
       data: number,
       followLocation: true
     });
@@ -143,10 +161,14 @@ class Profile {
     });
   }
 
-  getMailingAddress(uri) {
+  getMailingAddress() {
     return this.cortexApiService.get({
-      path: uri || ['addresses', this.cortexApiService.scope]
-    });
+      path: ['profiles', this.cortexApiService.scope, 'default'],
+      zoom: {
+        mailingAddress: 'addresses:mailingaddress'
+      }
+    })
+    .pluck('mailingAddress');
   }
 
 

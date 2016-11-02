@@ -1,8 +1,8 @@
 export default {
   "self": {
     "type": "elasticpath.profiles.profile",
-    "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=?zoom=emails:element",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=?zoom=emails:element"
+    "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=?zoom=selfservicedonordetails",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=?zoom=selfservicedonordetails"
   },
   "links": [{
     "rel": "addresses",
@@ -68,46 +68,30 @@ export default {
     "uri": "/wishlists/crugive",
     "href": "https://cortex-gateway-stage.cru.org/cortex/wishlists/crugive"
   }],
-  "_emails": [{
-    "_element": [{
-      "self": {
-        "type": "elasticpath.emails.email",
-        "uri": "/emails/crugive/on2gs3saon2gs3romnxw2=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive/on2gs3saon2gs3romnxw2="
-      },
-      "links": [{
-        "rel": "list",
-        "type": "elasticpath.collections.links",
-        "uri": "/emails/crugive",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive"
-      }, {
-        "rel": "profile",
-        "type": "elasticpath.profiles.profile",
-        "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge="
-      }],
-      "email": "stin@stin.com"
-    }, {
-      "self": {
-        "type": "elasticpath.emails.email",
-        "uri": "/emails/crugive/on2gs3tfonzua43unfxc433sm4=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive/on2gs3tfonzua43unfxc433sm4="
-      },
-      "links": [{
-        "rel": "list",
-        "type": "elasticpath.collections.links",
-        "uri": "/emails/crugive",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive"
-      }, {
-        "rel": "profile",
-        "type": "elasticpath.profiles.profile",
-        "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge="
-      }],
-      "email": "stiness@stin.org"
-    }]
+  "_selfservicedonordetails": [{
+    "self": {
+      "type": "cru.selfservicedonor.self-service-donor",
+      "uri": "/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=",
+      "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge="
+    },
+    "links": [{
+      "rel": "profile",
+      "rev": "selfservicedonordetails",
+      "type": "elasticpath.profiles.profile",
+      "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=",
+      "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge="
+    }],
+    "donor-number": "467023686",
+    "name": {"family-name": "stin", "given-name": "stin", "middle-initial": "", "suffix": "", "title": ""},
+    "organization-name": "",
+    "spouse-name": {
+      "family-name": "stin",
+      "given-name": "stiness",
+      "middle-initial": "",
+      "suffix": "Jr.",
+      "title": "Mrs"
+    }
   }],
   "family-name": "stin",
   "given-name": "stin"
 };
-

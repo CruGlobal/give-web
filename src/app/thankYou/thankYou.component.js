@@ -81,9 +81,9 @@ class ThankYouController{
   }
 
   loadEmail(){
-    this.profileService.getEmail()
+    this.profileService.getEmails()
       .subscribe((data) => {
-        this.email = data;
+        this.email = data[0].email;
       });
   }
 
