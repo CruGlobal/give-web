@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-ui-bootstrap';
 import 'ng-resize';
 import transform from 'lodash/transform';
 import isObject from 'lodash/isObject';
@@ -13,6 +14,8 @@ import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
+import globalWebsitesModal from './globalWebsitesModal/globalWebsitesModal.component';
+import globalWebsitesModalWindowTemplate from './globalWebsitesModal/globalWebsitesModalWindow.tpl';
 import subNavDirective from './subNav.directive';
 
 import mobileTemplate from './mobileNav.tpl';
@@ -23,10 +26,11 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($scope, $http, $document, $window, envService, cartService, sessionService, sessionModalService){
+  constructor($http, $document, $window, $uibModal, envService, cartService, sessionService, sessionModalService){
     this.$http = $http;
     this.$document = $document;
     this.$window = $window;
+    this.$uibModal = $uibModal;
 
     this.cartService = cartService;
     this.sessionService = sessionService;
@@ -156,10 +160,19 @@ class NavController{
   cruSearch(term){
     this.$window.location.href = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
   }
+
+  openGlobalWebsitesModal(){
+    this.$uibModal.open({
+      component: 'globalWebsitesModal',
+      backdrop: 'static', // Disables closing on click
+      windowTemplateUrl: globalWebsitesModalWindowTemplate.name
+    });
+  }
 }
 
 export default angular
   .module(componentName, [
+    'ui.bootstrap',
     'environment',
     'ngResize',
     mobileTemplate.name,
@@ -169,6 +182,8 @@ export default angular
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
+    globalWebsitesModal.name,
+    globalWebsitesModalWindowTemplate.name,
     subNavDirective.name
   ])
   .component(componentName, {

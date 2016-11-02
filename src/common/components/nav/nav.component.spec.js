@@ -196,4 +196,16 @@ describe( 'nav signInButton', function () {
       expect( $ctrl.$window.location.reload ).not.toHaveBeenCalled();
     } );
   } );
+
+  describe( 'openGlobalWebsitesModal', () => {
+    it( 'should open the global websites modal', () => {
+      spyOn($ctrl.$uibModal, 'open');
+      $ctrl.openGlobalWebsitesModal();
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( {
+        component: 'globalWebsitesModal',
+        backdrop: 'static',
+        windowTemplateUrl: jasmine.any(String)
+      } );
+    } );
+  } );
 } );
