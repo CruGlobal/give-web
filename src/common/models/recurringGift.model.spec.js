@@ -98,9 +98,10 @@ describe('recurringGift model', () => {
       giftModel.gift['updated-payment-method-id'] = 'new id';
       expect(giftModel.paymentMethodId).toEqual('new id');
     });
-    it('should load the first payment method id if one is not set on the gift', () => {
+    it('should load the first payment method id and set it as updated if one is not set on the gift', () => {
       giftModel.gift['payment-method-id'] = '';
       expect(giftModel.paymentMethodId).toEqual('giydgnrxgm=');
+      expect(giftModel.gift['updated-payment-method-id']).toEqual('giydgnrxgm=');
     });
   });
 

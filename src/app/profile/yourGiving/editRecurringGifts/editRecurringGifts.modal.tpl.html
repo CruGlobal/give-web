@@ -76,7 +76,6 @@
   <step-1-edit-recurring-gifts
     ng-switch-when="step1EditRecurringGifts"
     recurring-gifts="$ctrl.recurringGifts"
-    has-recent-recipients="$ctrl.hasRecentRecipients"
     dismiss="$ctrl.dismiss()"
     next="$ctrl.next(null, recurringGifts)">
   </step-1-edit-recurring-gifts>
@@ -84,6 +83,7 @@
   <step-2-add-recent-recipients
     ng-switch-when="step2AddRecentRecipients"
     recent-recipients="$ctrl.recentRecipients"
+    loading-recent-recipients="$ctrl.loadingRecentRecipients"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)">

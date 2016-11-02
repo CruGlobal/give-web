@@ -14,6 +14,36 @@ describe('editRecurringGiftsModal', () => {
       });
     }));
 
+    describe('$onInit', () => {
+      it('should skip this step if there are no recent recipients', () => {
+        spyOn(self.controller, 'loadedNoRecentRecipients').and.returnValue(false);
+        self.controller.$onInit();
+        expect(self.controller.next).not.toHaveBeenCalled();
+      });
+      it('should not skip this step if there are recent recipients', () => {
+        spyOn(self.controller, 'loadedNoRecentRecipients').and.returnValue(true);
+        self.controller.$onInit();
+        expect(self.controller.next).toHaveBeenCalled();
+      });
+    });
+
+    describe('loadedNoRecentRecipients', () => {
+      it('should return true if finished loading recipients and there are no recent recipients', () => {
+        self.controller.loadingRecentRecipients = false;
+        self.controller.recentRecipients = null;
+        expect(self.controller.loadedNoRecentRecipients()).toEqual(true);
+        self.controller.recentRecipients = [];
+        expect(self.controller.loadedNoRecentRecipients()).toEqual(true);
+      });
+      it('should return false otherwise', () => {
+        self.controller.loadingRecentRecipients = false;
+        self.controller.recentRecipients = ['recipient'];
+        expect(self.controller.loadedNoRecentRecipients()).toEqual(false);
+        self.controller.loadingRecentRecipients = true;
+        expect(self.controller.loadedNoRecentRecipients()).toEqual(false);
+      });
+    });
+
     describe('gatherSelections', () => {
       it('should get all selected gifts and pass them to the next step', () => {
         self.controller.recentRecipients = [ {}, {_selectedGift: true} ];

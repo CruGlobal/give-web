@@ -9,6 +9,7 @@ import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
+import commonModule from 'common/common.module';
 
 class PaymentMethodsController {
 
@@ -131,6 +132,7 @@ let componentName = 'paymentMethods';
 export default angular
   .module(componentName, [
     template.name,
+    commonModule.name,
     recurringGiftsComponent.name,
     paymentMethodFormModal.name,
     giveModalWindowTemplate.name,
