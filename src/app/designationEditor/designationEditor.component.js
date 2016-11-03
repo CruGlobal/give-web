@@ -96,6 +96,7 @@ class DesignationEditorController {
     this.$uibModal.open( modalOptions ).result
       .then( (title) => {
         this.designationContent.title = title;
+        this.save();
       });
   }
 
@@ -120,6 +121,7 @@ class DesignationEditorController {
       .then( (data) => {
         this.designationContent.parentDesignationNumber = data.parentDesignationNumber;
         this.designationContent.suggestedAmounts = data.suggestedAmounts;
+        this.save();
       });
   }
 
@@ -135,8 +137,10 @@ class DesignationEditorController {
         selectedPhoto: () => { return selectedPhoto; }
       }
     };
-    this.$uibModal.open( modalOptions ).result.then( (photo) => {
-      this.designationContent[photoLocation] = photo;
+    this.$uibModal.open( modalOptions ).result.then( (data) => {
+      this.designationContent[photoLocation] = data.selected;
+      this.designationPhotos = data.photos;
+      this.save();
     });
   }
 
@@ -157,6 +161,7 @@ class DesignationEditorController {
     };
     this.$uibModal.open( modalOptions ).result.then( (text) => {
       this.designationContent[field] = text;
+      this.save();
     });
   }
 
@@ -174,15 +179,20 @@ class DesignationEditorController {
     this.$uibModal.open( modalOptions ).result
       .then( (websiteURL) => {
         this.designationContent.websiteURL = websiteURL;
+        this.save();
       });
   }
 
   save() {
+    this.loadingOverlay = true;
+
     return this.designationEditorService.save(this.designationContent).then(() => {
       this.saveStatus = 'success';
-      alert('Changes saved.');
+      this.loadingOverlay = false;
     }, () => {
       this.saveStatus = 'failure';
+      this.loadingOverlay = false;
+
       alert('An error has occurred.');
     });
   }

@@ -30,6 +30,7 @@ System.config({
     "angular-sanitize": "github:angular/bower-angular-sanitize@1.5.8",
     "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.3",
     "angular-ui-router": "github:angular-ui/ui-router@0.3.1",
+    "angular-upload": "npm:angular-upload@1.0.13",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "core-js": "npm:core-js@1.2.7",
@@ -100,6 +101,10 @@ System.config({
     },
     "npm:angular-ordinal@2.1.3": {
       "ordinal-number-suffix": "npm:ordinal-number-suffix@0.1.1"
+    },
+    "npm:angular-upload@1.0.13": {
+      "angular": "npm:angular@1.5.8",
+      "path": "github:jspm/nodelibs-path@0.1.0"
     },
     "npm:assert@1.4.1": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",

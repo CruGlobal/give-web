@@ -3,8 +3,13 @@ var browserSync = require('browser-sync');
 var historyApiFallback = require('connect-history-api-fallback');
 var proxy = require('proxy-middleware'), url = require('url');
 
-var proxyOptions = url.parse('http://uatpub1.aws.cru.org:4503/bin');
-proxyOptions.route = '/bin';
+const aemDomain = 'http://uatpub1.aws.cru.org:4503';
+
+var binProxy = url.parse(aemDomain + '/bin');
+binProxy.route = '/bin';
+
+var contentProxy = url.parse(aemDomain + '/content');
+contentProxy.route = '/content';
 
 gulp.task('serve', ['watch'], function (done) {
   browserSync({
@@ -23,7 +28,8 @@ gulp.task('serve', ['watch'], function (done) {
             }}
           ]
         }),
-        proxy(proxyOptions)
+        proxy(binProxy),
+        proxy(contentProxy)
       ]
     }
   }, done);

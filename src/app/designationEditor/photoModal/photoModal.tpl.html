@@ -7,32 +7,51 @@
 <div class="modal-body">
   <div class="upload-drag-target p mb">
     <div class="form-group text-center">
-      <form method="post" action="/bin/crugive/image" target="_blank" enctype="multipart/form-data">
-        <label>Select a File to Upload</label>
-        <input type="file" name="file" class="form-control">
-        <button type="submit">Upload</button>
-      </form>
+      <div ng-if="!$ctrl.uploading">
+        <label translate>Select a Photo to Upload</label>
+
+        <upload-button
+          class="form-control"
+          url="/bin/crugive/image?designationNumber={{$ctrl.designationNumber}}"
+          accept="image/*"
+          on-upload="$ctrl.uploading = true"
+          on-success="$ctrl.uploadComplete(response)"
+          on-complete="$ctrl.uploading = false"
+        ></upload-button>
+      </div>
+
+      <label ng-if="$ctrl.uploading" translate>Uploading...</label>
     </div>
   </div>
 
-  <div class="give-thumbs-container clearfix">
+  <div class="give-thumbs-container clearfix" ng-if="$ctrl.photos.length">
     <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
-      <a href="" class="cover-thumb-remove"><i class="fa fa-trash-o"></i></a>
+      <a href="" class="cover-thumb-remove" ng-click="$ctrl.deletePhoto(photo.original)">
+        <i class="fa fa-trash-o"></i>
+      </a>
 
       <input type="radio" id="cover-thumb{{$index}}" ng-model="$ctrl.selectedPhoto" ng-value="photo.original">
-      <label for="cover-thumb{{$index}}"><img ng-src="{{$ctrl.imgDomainDesignation + photo.thumbnail}}"></label>
+      <label for="cover-thumb{{$index}}">
+        <img ng-src="{{photo.thumbnail}}">
+      </label>
     </div>
 
     <div class="cover-thumb">
-      <a href="" class="no-cover" ng-click="$close(null)">
+      <a href="" class="no-cover" ng-click="$close({
+        selected: null,
+        photos: $ctrl.photos
+      })">
         <i class="fa fa-ban" aria-hidden="true"></i>
-        <span ng-if="$ctrl.photoLocation === 'coverPhoto'">Remove Cover</span>
-        <span ng-if="$ctrl.photoLocation !== 'coverPhoto'">Remove Photo</span>
+        <span ng-if="$ctrl.photoLocation === 'coverPhoto'" translate>Remove Cover</span>
+        <span ng-if="$ctrl.photoLocation !== 'coverPhoto'" translate>Remove Photo</span>
       </a>
     </div>
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary pull-right" ng-click="$close($ctrl.selectedPhoto)">Add Photo</button>
-  <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+  <button type="button" class="btn btn-primary pull-right" ng-click="$close({
+    selected: $ctrl.selectedPhoto,
+    photos: $ctrl.photos
+  })" translate>Use Photo</button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()" translate>Cancel</button>
 </div>

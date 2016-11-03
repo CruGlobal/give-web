@@ -39,10 +39,11 @@ const designationSecurityResponse = {
 
 describe( 'Designation Editor', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let $rootScope, $ctrl, $httpBackend;
+  let $rootScope, $ctrl, $q, $httpBackend;
 
-  beforeEach( inject( function ( _$rootScope_, _$componentController_, _$httpBackend_ ) {
+  beforeEach( inject( function ( _$rootScope_, _$componentController_, _$httpBackend_, _$q_ ) {
     $httpBackend = _$httpBackend_;
+    $q = _$q_;
     $rootScope = _$rootScope_;
     $ctrl = _$componentController_( module.name,
       {$window: {location: {href: 'designation-editor.html?d=' + designationSecurityResponse.designationNumber}}}
@@ -128,83 +129,137 @@ describe( 'Designation Editor', function () {
     } );
   });
 
-  describe('title modal', () => {
-    let modalPromise;
-    beforeEach(inject((_$q_) => {
-      modalPromise = _$q_.defer();
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
-    }));
+  describe('modals', () => {
+    beforeEach(() => {
+      let savePromise = $q.defer();
+      spyOn( $ctrl, 'save' ).and.returnValue( {result: savePromise.promise} );
+    });
 
-    it( 'should open modal', () => {
-      $ctrl.designationContent = designationSecurityResponse;
+    describe('title modal', () => {
+      let modalPromise;
+      beforeEach(inject((_$q_) => {
+        modalPromise = _$q_.defer();
+        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+      }));
 
-      $ctrl.editTitle();
+      it( 'should open modal', () => {
+        $ctrl.designationContent = designationSecurityResponse;
 
-      expect($ctrl.$uibModal.open).toHaveBeenCalled();
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.receiptTitle()).toEqual(designationSecurityResponse.designationName);
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.giveTitle()).toEqual(designationSecurityResponse.title);
+        $ctrl.editTitle();
 
-      modalPromise.resolve('Title A');
-      $rootScope.$digest();
+        expect($ctrl.$uibModal.open).toHaveBeenCalled();
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.receiptTitle()).toEqual(designationSecurityResponse.designationName);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.giveTitle()).toEqual(designationSecurityResponse.title);
 
-      expect($ctrl.designationContent.title).toEqual('Title A');
-    } );
-  });
+        modalPromise.resolve('Title A');
+        $rootScope.$digest();
 
-  describe('page options modal', () => {
-    let modalPromise;
-    beforeEach(inject((_$q_) => {
-      modalPromise = _$q_.defer();
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
-    }));
+        expect($ctrl.designationContent.title).toEqual('Title A');
+      } );
+    });
 
-    it( 'should open modal', () => {
-      $ctrl.designationContent = designationSecurityResponse;
+    describe('page options modal', () => {
+      let modalPromise;
+      beforeEach(inject((_$q_) => {
+        modalPromise = _$q_.defer();
+        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+      }));
 
-      $ctrl.editPageOptions();
+      it( 'should open modal', () => {
+        $ctrl.designationContent = designationSecurityResponse;
 
-      expect($ctrl.$uibModal.open).toHaveBeenCalled();
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.parentDesignationNumber()).toEqual(designationSecurityResponse.parentDesignationNumber);
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.organizationId()).toEqual(designationSecurityResponse.organizationId);
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts()).toEqual(designationSecurityResponse.suggestedAmounts);
+        $ctrl.editPageOptions();
 
-      modalPromise.resolve({
-        parentDesignationNumber: '000777',
-        suggestedAmounts: []
-      });
-      $rootScope.$digest();
+        expect($ctrl.$uibModal.open).toHaveBeenCalled();
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.parentDesignationNumber()).toEqual(designationSecurityResponse.parentDesignationNumber);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.organizationId()).toEqual(designationSecurityResponse.organizationId);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts()).toEqual(designationSecurityResponse.suggestedAmounts);
 
-      expect($ctrl.designationContent.parentDesignationNumber).toEqual('000777');
-      expect($ctrl.designationContent.suggestedAmounts).toEqual([]);
-    } );
-  });
+        modalPromise.resolve({
+          parentDesignationNumber: '000777',
+          suggestedAmounts: []
+        });
+        $rootScope.$digest();
 
-  describe('photo modal', () => {
-    let modalPromise;
-    beforeEach(inject((_$q_) => {
-      modalPromise = _$q_.defer();
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
-    }));
+        expect($ctrl.designationContent.parentDesignationNumber).toEqual('000777');
+        expect($ctrl.designationContent.suggestedAmounts).toEqual([]);
+      } );
+    });
 
-    it( 'should open modal', () => {
-      let photos = [];
-      let photoLocation = 'coverPhoto';
-      $ctrl.designationContent = designationSecurityResponse;
-      $ctrl.designationPhotos = photos;
+    describe('photo modal', () => {
+      let modalPromise;
+      beforeEach(inject((_$q_) => {
+        modalPromise = _$q_.defer();
+        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+      }));
 
-      $ctrl.selectPhoto(photoLocation, designationSecurityResponse.coverPhoto);
+      it( 'should open modal', () => {
+        let photos = [];
+        let photoLocation = 'coverPhoto';
+        $ctrl.designationContent = designationSecurityResponse;
+        $ctrl.designationPhotos = photos;
 
-      expect($ctrl.$uibModal.open).toHaveBeenCalled();
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber);
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photos()).toEqual(photos);
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photoLocation()).toEqual(photoLocation);
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.selectedPhoto()).toEqual(designationSecurityResponse.coverPhoto);
+        $ctrl.selectPhoto(photoLocation, designationSecurityResponse.coverPhoto);
 
-      modalPromise.resolve(null);
-      $rootScope.$digest();
+        expect($ctrl.$uibModal.open).toHaveBeenCalled();
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photos()).toEqual(photos);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photoLocation()).toEqual(photoLocation);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.selectedPhoto()).toEqual(designationSecurityResponse.coverPhoto);
 
-      expect($ctrl.designationContent.coverPhoto).toEqual(null);
-    } );
+        modalPromise.resolve({
+          selected: null,
+          photos: photos
+        });
+        $rootScope.$digest();
+
+        expect($ctrl.designationContent.coverPhoto).toEqual(null);
+      } );
+    });
+
+    describe('edit text modal', () => {
+      let modalPromise;
+      beforeEach(inject((_$q_) => {
+        modalPromise = _$q_.defer();
+        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+      }));
+
+      it( 'should open modal', () => {
+        $ctrl.designationContent = designationSecurityResponse;
+
+        $ctrl.editText('paragraphText');
+
+        expect($ctrl.$uibModal.open).toHaveBeenCalled();
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.initialText()).toEqual(designationSecurityResponse.paragraphText);
+
+        modalPromise.resolve('Text 123');
+        $rootScope.$digest();
+
+        expect($ctrl.designationContent.paragraphText).toEqual('Text 123');
+      } );
+    });
+
+    describe('edit website modal', () => {
+      let modalPromise;
+      beforeEach(inject((_$q_) => {
+        modalPromise = _$q_.defer();
+        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+      }));
+
+      it( 'should open modal', () => {
+        $ctrl.designationContent = designationSecurityResponse;
+
+        $ctrl.editWebsite();
+
+        expect($ctrl.$uibModal.open).toHaveBeenCalled();
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.initialWebsite()).toEqual(designationSecurityResponse.websiteURL);
+
+        modalPromise.resolve('http://www.cru.org/website');
+        $rootScope.$digest();
+
+        expect($ctrl.designationContent.websiteURL).toEqual('http://www.cru.org/website');
+      } );
+    });
   });
 
   describe('photoUrl', () => {
@@ -233,50 +288,6 @@ describe( 'Designation Editor', function () {
       $ctrl.designationPhotos = photos;
 
       expect($ctrl.photoUrl(photos[0].original)).toEqual(photos[0]);
-    } );
-  });
-
-  describe('edit text modal', () => {
-    let modalPromise;
-    beforeEach(inject((_$q_) => {
-      modalPromise = _$q_.defer();
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
-    }));
-
-    it( 'should open modal', () => {
-      $ctrl.designationContent = designationSecurityResponse;
-
-      $ctrl.editText('paragraphText');
-
-      expect($ctrl.$uibModal.open).toHaveBeenCalled();
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.initialText()).toEqual(designationSecurityResponse.paragraphText);
-
-      modalPromise.resolve('Text 123');
-      $rootScope.$digest();
-
-      expect($ctrl.designationContent.paragraphText).toEqual('Text 123');
-    } );
-  });
-
-  describe('edit website modal', () => {
-    let modalPromise;
-    beforeEach(inject((_$q_) => {
-      modalPromise = _$q_.defer();
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
-    }));
-
-    it( 'should open modal', () => {
-      $ctrl.designationContent = designationSecurityResponse;
-
-      $ctrl.editWebsite();
-
-      expect($ctrl.$uibModal.open).toHaveBeenCalled();
-      expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.initialWebsite()).toEqual(designationSecurityResponse.websiteURL);
-
-      modalPromise.resolve('http://www.cru.org/website');
-      $rootScope.$digest();
-
-      expect($ctrl.designationContent.websiteURL).toEqual('http://www.cru.org/website');
     } );
   });
 
