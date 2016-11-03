@@ -1,0 +1,71 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+            <span aria-hidden="true">&times;</span></button>
+          <h3 translate>Confirm your changes</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row row-no-spacing">
+      <div class="col-md-12 col-xs-12">
+        <div class="alert alert-danger" role="alert" ng-if="$ctrl.error" ng-switch="$ctrl.error">
+          <p ng-switch-default translate>There was an error processing your restarts. Please try again, or contact support.</p>
+        </div>
+        <div ng-repeat="gift in $ctrl.saved" class="repeating-row">
+          <div class="col-xs-12">
+            <p class="text-success" translate>This gift has been successfully restarted:</p>
+          </div>
+          <gift-list-item gift="gift">
+            <gift-details-view gift="gift" />
+          </gift-list-item>
+        </div>
+        <div ng-repeat="gift in $ctrl.updates" class="repeating-row">
+          <div class="col-xs-12" ng-if="$ctrl.error">
+            <p class="text-error" translate>Error processing this restart:</p>
+          </div>
+          <gift-list-item gift="gift">
+            <gift-details-view gift="gift" />
+          </gift-list-item>
+        </div>
+        <div ng-repeat="gift in $ctrl.adds" class="repeating-row">
+          <div class="col-xs-12" ng-if="$ctrl.error">
+            <p class="text-error" translate>Error processing this restart:</p>
+          </div>
+          <gift-list-item gift="gift">
+            <gift-details-view gift="gift" />
+          </gift-list-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer" ng-if="!$ctrl.loading">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6">
+      <a class="btn btn-default"
+         ng-if="$ctrl.error"
+         ng-click="$ctrl.cancel()"
+         translate>
+        Cancel
+      </a>
+      <a class="btn btn-default"
+         ng-if="!$ctrl.error"
+         ng-click="$ctrl.previous()"
+         translate>
+        Back
+      </a>
+    </div>
+    <div class="col-xs-6 text-right">
+      <button class="btn btn-primary" ng-click="$ctrl.processRestarts()" translate>Process Restarts</button>
+    </div>
+  </div>
+</div>

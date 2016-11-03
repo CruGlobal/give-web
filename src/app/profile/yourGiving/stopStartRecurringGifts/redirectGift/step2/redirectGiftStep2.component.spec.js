@@ -91,7 +91,7 @@ describe( 'your giving', () => {
               $ctrl.results[2]._selectedGift = false;
               $ctrl.selectResult();
               expect( $ctrl.onSelectResult ).toHaveBeenCalledWith( {
-                result: {result: 1, _selectedGift: true}
+                selected: {result: 1, _selectedGift: true}
               } );
             } );
           } );

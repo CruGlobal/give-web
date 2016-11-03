@@ -52,9 +52,9 @@ class RedirectGiftController {
     this.setStep( 'step-2' );
   }
 
-  selectResult( result ) {
+  selectResult( selected ) {
     this.redirectedGift = this.selectedGift.clone();
-    angular.forEach( pick( result, ['designationName', 'designationNumber'] ), ( value, key ) => {
+    angular.forEach( pick( selected, ['designationName', 'designationNumber'] ), ( value, key ) => {
       this.redirectedGift[key] = value;
     } );
     this.setStep( 'step-3' );

@@ -4,6 +4,7 @@ import template from './stopStartRecurringGifts.modal.tpl';
 import stopStartStep0 from './step0/stopStartStep0.component';
 import stopGift from './stopGift/stopGift.component';
 import redirectGift from './redirectGift/redirectGift.component';
+import restartGift from './restartGift/restartGift.component';
 
 let componentName = 'stopStartRecurringGiftsModal';
 
@@ -32,7 +33,8 @@ export default angular
     template.name,
     stopStartStep0.name,
     stopGift.name,
-    redirectGift.name
+    redirectGift.name,
+    restartGift.name
   ] )
   .component( componentName, {
     controller:  StopStartRecurringGiftsModalController,
