@@ -23,12 +23,12 @@ System.config({
     "angular-animate": "github:angular/bower-angular-animate@1.5.8",
     "angular-cookies": "github:angular/bower-angular-cookies@1.5.8",
     "angular-environment": "npm:angular-environment@1.0.4",
-    "angular-gettext": "github:rubenv/angular-gettext@2.3.6",
+    "angular-gettext": "github:rubenv/angular-gettext@2.3.8",
     "angular-messages": "github:angular/bower-angular-messages@1.5.8",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.8",
     "angular-ordinal": "npm:angular-ordinal@2.1.3",
     "angular-sanitize": "github:angular/bower-angular-sanitize@1.5.8",
-    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.3",
+    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.2.0",
     "angular-ui-router": "github:angular-ui/ui-router@0.3.1",
     "angular-upload": "npm:angular-upload@1.0.13",
     "babel": "npm:babel-core@5.8.38",
@@ -36,12 +36,12 @@ System.config({
     "core-js": "npm:core-js@1.2.7",
     "jsencrypt": "npm:jsencrypt@2.3.1",
     "jwt-decode": "github:auth0/jwt-decode@2.1.0",
-    "lodash": "npm:lodash@4.15.0",
+    "lodash": "npm:lodash@4.16.6",
     "mobile-detect": "npm:mobile-detect@1.3.3",
-    "moment": "npm:moment@2.15.1",
+    "moment": "npm:moment@2.15.2",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
-    "rollbar-browser": "npm:rollbar-browser@1.9.1",
+    "rollbar-browser": "npm:rollbar-browser@1.9.2",
     "rxjs": "npm:rxjs@5.0.0-rc.3",
     "stacktrace-js": "npm:stacktrace-js@1.3.1",
     "systemjs-babel-build": "npm:systemjs-plugin-babel@0.0.13/systemjs-babel-browser.js",
@@ -97,7 +97,7 @@ System.config({
     "npm:align-text@0.1.4": {
       "kind-of": "npm:kind-of@3.0.4",
       "longest": "npm:longest@1.0.1",
-      "repeat-string": "npm:repeat-string@1.5.4"
+      "repeat-string": "npm:repeat-string@1.6.1"
     },
     "npm:angular-ordinal@2.1.3": {
       "ordinal-number-suffix": "npm:ordinal-number-suffix@0.1.1"
@@ -155,10 +155,12 @@ System.config({
       "wordwrap": "npm:wordwrap@0.0.2"
     },
     "npm:clone-stats@0.0.1": {
-      "fs": "github:jspm/nodelibs-fs@0.1.2"
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:clone@1.0.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "vm": "github:jspm/nodelibs-vm@0.1.0"
     },
     "npm:constants-browserify@0.0.1": {
@@ -174,7 +176,7 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
     "npm:currently-unhandled@0.4.1": {
-      "array-find-index": "npm:array-find-index@1.0.1",
+      "array-find-index": "npm:array-find-index@1.0.2",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:dateformat@1.0.12": {
@@ -182,7 +184,8 @@ System.config({
       "meow": "npm:meow@3.7.0"
     },
     "npm:duplexer2@0.0.2": {
-      "readable-stream": "npm:readable-stream@1.1.14"
+      "readable-stream": "npm:readable-stream@1.1.14",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:error-ex@1.3.0": {
       "is-arrayish": "npm:is-arrayish@0.2.1",
@@ -212,7 +215,7 @@ System.config({
       "sparkles": "npm:sparkles@1.0.0",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
-    "npm:graceful-fs@4.1.6": {
+    "npm:graceful-fs@4.1.10": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "constants": "github:jspm/nodelibs-constants@0.1.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
@@ -283,8 +286,8 @@ System.config({
     "npm:is-builtin-module@1.0.0": {
       "builtin-modules": "npm:builtin-modules@1.1.1"
     },
-    "npm:is-finite@1.0.1": {
-      "number-is-nan": "npm:number-is-nan@1.0.0"
+    "npm:is-finite@1.0.2": {
+      "number-is-nan": "npm:number-is-nan@1.0.1"
     },
     "npm:isarray@1.0.0": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
@@ -306,7 +309,7 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:load-json-file@1.1.0": {
-      "graceful-fs": "npm:graceful-fs@4.1.6",
+      "graceful-fs": "npm:graceful-fs@4.1.10",
       "parse-json": "npm:parse-json@2.2.0",
       "path": "github:jspm/nodelibs-path@0.1.0",
       "pify": "npm:pify@2.3.0",
@@ -344,7 +347,8 @@ System.config({
     "npm:loud-rejection@1.6.0": {
       "currently-unhandled": "npm:currently-unhandled@0.4.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
-      "signal-exit": "npm:signal-exit@3.0.0",
+      "signal-exit": "npm:signal-exit@3.0.1",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:meow@3.7.0": {
@@ -390,7 +394,7 @@ System.config({
       "pinkie-promise": "npm:pinkie-promise@2.0.1"
     },
     "npm:path-type@1.1.0": {
-      "graceful-fs": "npm:graceful-fs@4.1.6",
+      "graceful-fs": "npm:graceful-fs@4.1.10",
       "pify": "npm:pify@2.3.0",
       "pinkie-promise": "npm:pinkie-promise@2.0.1"
     },
@@ -401,7 +405,8 @@ System.config({
       "pinkie": "npm:pinkie@2.0.4"
     },
     "npm:process-nextick-args@1.0.7": {
-      "process": "github:jspm/nodelibs-process@0.1.2"
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:process@0.11.9": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
@@ -447,7 +452,7 @@ System.config({
       "strip-indent": "npm:strip-indent@1.0.1"
     },
     "npm:repeating@2.0.1": {
-      "is-finite": "npm:is-finite@1.0.1"
+      "is-finite": "npm:is-finite@1.0.2"
     },
     "npm:replace-ext@0.0.1": {
       "path": "github:jspm/nodelibs-path@0.1.0"
@@ -455,7 +460,7 @@ System.config({
     "npm:right-align@0.1.3": {
       "align-text": "npm:align-text@0.1.4"
     },
-    "npm:rollbar-browser@1.9.1": {
+    "npm:rollbar-browser@1.9.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "console-polyfill": "npm:console-polyfill@0.2.2",
       "error-stack-parser": "npm:error-stack-parser@1.3.3",
@@ -474,7 +479,7 @@ System.config({
     "npm:semver@5.3.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:signal-exit@3.0.0": {
+    "npm:signal-exit@3.0.1": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "events": "github:jspm/nodelibs-events@0.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
@@ -488,9 +493,10 @@ System.config({
     "npm:spdx-correct@1.0.2": {
       "spdx-license-ids": "npm:spdx-license-ids@1.2.2"
     },
-    "npm:spdx-expression-parse@1.0.2": {
-      "spdx-exceptions": "npm:spdx-exceptions@1.0.5",
-      "spdx-license-ids": "npm:spdx-license-ids@1.2.2"
+    "npm:spdx-expression-parse@1.0.4": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:spdx-license-ids@1.2.2": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
@@ -579,7 +585,7 @@ System.config({
     },
     "npm:validate-npm-package-license@3.0.1": {
       "spdx-correct": "npm:spdx-correct@1.0.2",
-      "spdx-expression-parse": "npm:spdx-expression-parse@1.0.2"
+      "spdx-expression-parse": "npm:spdx-expression-parse@1.0.4"
     },
     "npm:vinyl-sourcemaps-apply@0.2.1": {
       "source-map": "npm:source-map@0.5.6"
