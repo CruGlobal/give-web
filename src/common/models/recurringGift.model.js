@@ -29,6 +29,9 @@ export default class RecurringGiftModel {
         },
         'next-draw-date': {
           'display-value': ''
+        },
+        'start-date': {
+          'display-value': ''
         }
       };
     }
@@ -140,7 +143,7 @@ export default class RecurringGiftModel {
   }
 
   set startMonth(value){
-    let updatedStartDate = moment(startMonth(this.transactionDay, value, this.nextDrawDate));
+    let updatedStartDate = moment(startMonth(this.transactionDay, value, this.nextDrawDate, 0, this.parentDonation['start-date']['display-value']));
     if(updatedStartDate.isSame(this.parentDonation['next-draw-date']['display-value'], 'month') || this.gift['updated-rate']['recurrence']['interval'] === '' && this.gift['updated-recurring-day-of-month'] === '' && moment(this.parentDonation['next-draw-date']['display-value']).format('M') === updatedStartDate.format('M')){
       this.clearStartDate(); // Don't need to update start date if draw date year and month are still correct, or if frequency, transaction day, and start month are unchanged
     }else {
@@ -155,7 +158,7 @@ export default class RecurringGiftModel {
       giftDate = moment({ year: this.gift['updated-start-year'], month: parseInt(this.gift['updated-start-month']) - 1, day: this.transactionDay });
     }else if(this.gift['updated-recurring-day-of-month'] !== ''){
       // We have to take transactionDay into account here when it is modified for monthly gifts since they don't set the updated-start-month/year fields
-      giftDate = startDate(this.transactionDay, this.nextDrawDate);
+      giftDate = startDate(this.transactionDay, this.nextDrawDate, 0, this.parentDonation['start-date']['display-value']);
     }else{
       giftDate = moment(this.parentDonation['next-draw-date']['display-value']);
     }
@@ -163,7 +166,7 @@ export default class RecurringGiftModel {
   }
 
   initStartMonth(){
-    this.startMonth = startDate(this.transactionDay, this.nextDrawDate).format('MM');
+    this.startMonth = startDate(this.transactionDay, this.nextDrawDate, 0, this.parentDonation['start-date']['display-value']).format('MM');
   }
 
   clearStartDate(){

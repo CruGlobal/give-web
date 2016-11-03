@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module, {giftAddedEvent} from './productConfig.modal';
+import moment from 'moment';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/of';
@@ -16,6 +17,7 @@ describe( 'product config modal', function () {
     uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
     productData = {};
     nextDrawDate = '2016-10-01';
+    jasmine.clock().mockDate( moment.utc('2016-10-01').toDate() );
     itemConfig = {
       amount: 85
     };
