@@ -19,7 +19,23 @@
           <p ng-switch-when="Only Active recurring donations can be modified." translate>One of the gifts you are modifying is no longer an active gift. We may have accidentally shown you an inactive gift in a previous step. You may try only editing one gift at a time to determine which gift cannot be changed. If you continue to experience problems, please contact support.</p>
           <p ng-switch-default translate>There was an error saving your gifts. Please check that all the entered information is valid and that you have a good internet connection. If you continue to see this message, please contact support.</p>
         </div>
+        <div class="alert alert-warning" role="alert" ng-if="!$ctrl.hasChanges">
+          <p translate>You don't appear to have made any changes to your recurring gifts. Feel free to go back and make some changes.</p>
+        </div>
         <div ng-repeat="gift in $ctrl.recurringGiftChanges" class="row repeating-row user-profile">
+          <gift-list-item gift="gift">
+            <gift-details-view gift="gift"></gift-details-view>
+          </gift-list-item>
+        </div>
+        <div ng-repeat="gift in $ctrl.additions" class="row repeating-row user-profile">
+          <gift-list-item gift="gift">
+            <gift-details-view gift="gift"></gift-details-view>
+          </gift-list-item>
+        </div>
+        <div ng-repeat="gift in $ctrl.savedGifts" class="row repeating-row user-profile">
+          <div class="col-xs-12">
+            <p class="text-success" translate>This gift has been successfully saved:</p>
+          </div>
           <gift-list-item gift="gift">
             <gift-details-view gift="gift"></gift-details-view>
           </gift-list-item>
@@ -39,7 +55,7 @@
       </a>
     </div>
     <div class="col-xs-6 text-right">
-      <button class="btn btn-primary" ng-click="$ctrl.saveChanges()" ng-disabled="$ctrl.saving">
+      <button class="btn btn-primary" ng-click="$ctrl.saveChanges()" ng-disabled="$ctrl.saving || !$ctrl.hasChanges">
         <span ng-if="!$ctrl.saving" translate>Confirm Changes</span>
         <span ng-if="$ctrl.saving" translate>Saving...</span>
       </button>

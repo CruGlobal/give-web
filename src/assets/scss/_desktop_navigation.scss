@@ -480,32 +480,28 @@ $promo-width: 200px;
   }
 
   .search-icon {
-    clear: both;
     display: block;
-    background-size: 20px 20px;
     height: 20px;
-    width: 40px;
-    right: 0;
+    width: 20px;
+    right: 20px;
     position: absolute;
     top: 40px;
+    span {
+      background-size: 20px 20px;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+      height: 20px;
+      width: 20px;
+    }
   }
 
   .search-icon-off {
-    background: url("/assets/img/desktop-search.png") no-repeat right 14px center;
-    background-size: 20px 20px;
-    height: 20px;
-    width: 40px;
-    display: inline-block;
-    float: right;
+    background-image: url("/assets/img/desktop-search.png");
   }
 
   .search-icon-on {
-    background: url("/assets/img/desktop-search-close.png") no-repeat right 14px center;
-    background-size: 20px 20px;
-    height: 20px;
-    width: 40px;
-    display: inline-block;
-    float: right;
+    background-image: url("/assets/img/desktop-search-close.png");
   }
 
   .search-icon-on, .search-icon-off {

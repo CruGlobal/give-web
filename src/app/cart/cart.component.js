@@ -7,7 +7,7 @@ import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 
-import loadingComponent from 'common/components/loading/loading.component';
+import loadingOverlayComponent from 'common/components/loadingOverlay/loadingOverlay.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 
 import template from './cart.tpl';
@@ -29,29 +29,22 @@ class CartController {
   }
 
   loadCart() {
+    this.loading = true;
     this.cartService.get()
       .subscribe( ( data ) => {
         this.cartData = data;
+        this.loading = false;
       } );
   }
 
-  removeItem( uri ) {
-    this.cartData = null;
-
-    this.cartService.deleteItem( atob( uri ) )
-      .subscribe( () => {
-        this.loadCart();
-      } );
-  }
 
   editItem( item ) {
     this.productModalService
-      .configureProduct( item.code, item.config, true )
+      .configureProduct( item.code, item.config, true, item.uri )
       .result
       .then( ( result ) => {
         if ( result.isUpdated ) {
-          //remove old gift
-          this.removeItem( item.uri );
+          this.loadCart();
         }
       } );
   }
@@ -65,7 +58,7 @@ export default angular
   .module(componentName, [
     template.name,
     commonModule.name,
-    loadingComponent.name,
+    loadingOverlayComponent.name,
     displayRateTotals.name,
     appConfig.name,
     cartService.name,

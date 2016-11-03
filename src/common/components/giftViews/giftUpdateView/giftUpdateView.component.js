@@ -30,8 +30,6 @@ export default angular
     controller: GiftUpdateViewController,
     templateUrl: template.name,
     bindings: {
-      gift: '=',
-      paymentMethods: '<',
-      nextDrawDate: '<'
+      gift: '='
     }
   });

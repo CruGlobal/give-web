@@ -5,6 +5,7 @@ import 'rxjs/add/observable/of';
 import module from './nav.component';
 
 import navStructure from 'common/components/nav/fixtures/nav.fixture';
+const iPhoneUserAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25';
 
 describe( 'nav', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -14,7 +15,9 @@ describe( 'nav', function () {
     $ctrl = _$componentController_( module.name,
       {$window: {
         location: {href: 'cart.html'},
-        innerWidth: 600
+        navigator: {
+          userAgent: iPhoneUserAgent
+        }
     }} );
     $httpBackend = _$httpBackend_;
     $document = _$document_;

@@ -11,6 +11,7 @@ import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.comp
 
 import capitalizeFilter from 'common/filters/capitalize.filter';
 
+import commonModule from 'common/common.module';
 import orderService from 'common/services/api/order.service';
 import profileService from 'common/services/api/profile.service';
 import sessionService from 'common/services/session/session.service';
@@ -92,6 +93,7 @@ class ThankYouController{
 export default angular
   .module(componentName, [
     template.name,
+    commonModule.name,
     accountBenefits.name,
     help.name,
     displayAddressComponent.name,

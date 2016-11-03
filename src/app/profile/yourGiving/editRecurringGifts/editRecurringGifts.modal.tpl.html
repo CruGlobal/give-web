@@ -75,7 +75,6 @@
 
   <step-1-edit-recurring-gifts
     ng-switch-when="step1EditRecurringGifts"
-    payment-methods="$ctrl.validPaymentMethods"
     recurring-gifts="$ctrl.recurringGifts"
     dismiss="$ctrl.dismiss()"
     next="$ctrl.next(null, recurringGifts)">
@@ -83,7 +82,8 @@
 
   <step-2-add-recent-recipients
     ng-switch-when="step2AddRecentRecipients"
-    additions="$ctrl.additions"
+    recent-recipients="$ctrl.recentRecipients"
+    loading-recent-recipients="$ctrl.loadingRecentRecipients"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)">
@@ -91,7 +91,6 @@
 
   <step-3-configure-recent-recipients
     ng-switch-when="step3ConfigureRecentRecipients"
-    payment-methods="$ctrl.paymentMethods"
     additions="$ctrl.additions"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"

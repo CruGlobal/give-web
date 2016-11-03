@@ -20,7 +20,8 @@ describe('recurringGift model', () => {
         'updated-rate': {recurrence: {interval: ''}},
         'updated-recurring-day-of-month': '',
         'updated-start-month': '',
-        'updated-start-year': ''
+        'updated-start-year': '',
+        'updated-designation-number': ''
       },
       {
         'donation-row-id': '1-K0LPOL',
@@ -29,15 +30,15 @@ describe('recurringGift model', () => {
         rate: {recurrence: {interval: 'Monthly'}},
         'recurring-day-of-month': '15',
         'next-draw-date': {'display-value': '2015-05-06', value: 1430895600}
-      },
-      '2015-05-20',
-      [
-        {
-          self: { uri: "/selfservicepaymentmethods/crugive/giydgnrxgm=" },
-          'account-type': 'Savings'
-        }
-      ]
+      }
     );
+    RecurringGiftModel.nextDrawDate = '2015-05-20';
+    RecurringGiftModel.paymentMethods = [
+      {
+        self: { uri: "/selfservicepaymentmethods/crugive/giydgnrxgm=" },
+        'account-type': 'Savings'
+      }
+    ];
   });
 
   describe('designationName getter', () => {
@@ -46,9 +47,23 @@ describe('recurringGift model', () => {
     });
   });
 
+  describe('designationName setter', () => {
+    it('should set the name', () => {
+      giftModel.designationName = 'Lex Luthor';
+      expect(giftModel.gift['designation-name']).toEqual('Lex Luthor');
+    });
+  });
+
   describe('designationNumber getter', () => {
     it('should return the designation number', () => {
       expect(giftModel.designationNumber).toEqual('0105987');
+    });
+  });
+
+  describe('designationNumber setter', () => {
+    it('should set the designation number', () => {
+      giftModel.designationNumber = '0123456';
+      expect(giftModel.gift['designation-number']).toEqual('0123456');
     });
   });
 
@@ -82,6 +97,11 @@ describe('recurringGift model', () => {
     it('should load payment id if it has been updated', () => {
       giftModel.gift['updated-payment-method-id'] = 'new id';
       expect(giftModel.paymentMethodId).toEqual('new id');
+    });
+    it('should load the first payment method id and set it as updated if one is not set on the gift', () => {
+      giftModel.gift['payment-method-id'] = '';
+      expect(giftModel.paymentMethodId).toEqual('giydgnrxgm=');
+      expect(giftModel.gift['updated-payment-method-id']).toEqual('giydgnrxgm=');
     });
   });
 
@@ -315,10 +335,13 @@ describe('recurringGift model', () => {
 
   describe('initStartMonth', () => {
     it('should use transaction day and nextDrawDate to default updated start month and year', () => {
-      giftModel.gift['updated-recurring-day-of-month'] = '05';
-      giftModel.nextDrawDate = '2015-07-03';
+      giftModel.gift['updated-recurring-day-of-month'] = '20';
       giftModel.initStartMonth();
-      expect(giftModel.startMonth).toEqual('7');
+      expect(giftModel.startMonth).toEqual('5');
+
+      giftModel.gift['updated-recurring-day-of-month'] = '19';
+      giftModel.initStartMonth();
+      expect(giftModel.startMonth).toEqual('6');
     });
   });
 
@@ -364,11 +387,41 @@ describe('recurringGift model', () => {
       giftModel.gift['updated-donation-line-status'] = 'Cancelled';
       expect(giftModel.hasChanges()).toEqual(true);
     });
+    it('should return true if designation number has been updated', () => {
+      giftModel.gift['updated-designation-number'] = '1234567';
+      expect(giftModel.hasChanges()).toEqual(true);
+    });
   });
 
   describe('toObject getter', () => {
     it('should return the object to send to the api', () => {
       expect(giftModel.toObject).toEqual(giftModel.gift);
+    });
+  });
+
+  describe('clone', () => {
+    it('creates a copy of the gift', () => {
+      giftModel.amount = 500;
+      let clone = giftModel.clone();
+      expect(clone instanceof RecurringGiftModel).toEqual(true);
+      expect(clone).toEqual(giftModel);
+      clone.donationLineStatus = 'Cancelled';
+      expect(clone.amount).toEqual(giftModel.amount);
+      expect(clone.donationLineStatus).not.toEqual(giftModel.donationLineStatus);
+    });
+  });
+
+  describe('setDefaults', () => {
+    it('should set default values for a new gift', () => {
+      expect(giftModel.setDefaults().toObject).toEqual(jasmine.objectContaining({
+        'updated-designation-number': giftModel.gift['designation-number'],
+        'updated-amount': 50,
+        'updated-rate': {
+          'recurrence': {
+            'interval': 'Monthly'
+          }
+        }
+      }));
     });
   });
 });

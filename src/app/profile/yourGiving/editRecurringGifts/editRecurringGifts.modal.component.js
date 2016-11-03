@@ -1,13 +1,24 @@
 import angular from 'angular';
+import moment from 'moment';
 import filter from 'lodash/filter';
+import map from 'lodash/map';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/map';
 
 import loadingComponent from 'common/components/loading/loading.component';
 import step0AddUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
 import step0paymentMethodList from './step0/paymentMethodList.component';
 import step1EditRecurringGifts from './step1/editRecurringGifts.component';
+import step2AddRecentRecipients from './step2/addRecentRecipients.component';
+import step3ConfigureRecentRecipients from './step3/configureRecentRecipients.component';
 import step4ConfirmRecurringGifts from './step4/confirmRecurringGifts.component';
 
+import RecurringGiftModel from 'common/models/recurringGift.model';
+
 import profileService from 'common/services/api/profile.service';
+import donationsService from 'common/services/api/donations.service';
+import commonService from 'common/services/api/common.service';
 
 import template from './editRecurringGifts.modal.tpl';
 
@@ -16,29 +27,51 @@ let componentName = 'editRecurringGiftsModal';
 class EditRecurringGiftsModalController {
 
   /* @ngInject */
-  constructor($log, profileService) {
+  constructor($log, profileService, donationsService, commonService) {
     this.$log = $log;
     this.profileService = profileService;
+    this.donationsService = donationsService;
+    this.commonService = commonService;
   }
 
   $onInit(){
     this.loadPaymentMethods();
+    this.loadRecentRecipients();
   }
 
   loadPaymentMethods(){
     this.state = 'loading';
-    this.profileService.getPaymentMethods()
-      .subscribe((data) => {
-        this.paymentMethods = data;
-        this.hasPaymentMethods = this.paymentMethods && this.paymentMethods.length > 0;
-        this.validPaymentMethods = filter(this.paymentMethods, (paymentMethod) => {
-          return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || ( parseInt(paymentMethod['expiry-month']) > (new Date()).getMonth() && parseInt(paymentMethod['expiry-year']) >= (new Date()).getFullYear() );
+    Observable.forkJoin([
+        this.profileService.getPaymentMethods(),
+        this.commonService.getNextDrawDate()
+      ])
+      .subscribe(([paymentMethods, nextDrawDate]) => {
+        this.paymentMethods = paymentMethods;
+        this.nextDrawDate = nextDrawDate;
+        this.hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
+        this.validPaymentMethods = filter(paymentMethods, (paymentMethod) => {
+          return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || moment({ year: paymentMethod['expiry-year'], month: parseInt(paymentMethod['expiry-month']) - 1}).isSameOrAfter(moment(), 'month');
         });
         this.hasValidPaymentMethods = this.validPaymentMethods && this.validPaymentMethods.length > 0;
+        RecurringGiftModel.paymentMethods = this.validPaymentMethods;
+        RecurringGiftModel.nextDrawDate = this.nextDrawDate;
         this.next();
       }, (error) => {
         this.state = 'error';
         this.$log.error('Error loading payment methods', error);
+      });
+  }
+
+  loadRecentRecipients(){
+    this.loadingRecentRecipients = true;
+    this.donationsService.getSuggestedRecipients()
+      .subscribe(recentRecipients => {
+        this.recentRecipients = map(recentRecipients, gift => (new RecurringGiftModel(gift)).setDefaults());
+        this.hasRecentRecipients = this.recentRecipients && this.recentRecipients.length > 0;
+        this.loadingRecentRecipients = false;
+      }, (error) => {
+        this.loadingRecentRecipients = false;
+        this.$log.error('Error loading recent recipients', error);
       });
   }
 
@@ -65,11 +98,7 @@ class EditRecurringGiftsModalController {
         break;
       case 'step1EditRecurringGifts':
         this.recurringGifts = recurringGifts;
-        if(this.hasRecentRecipients){
-          this.state = 'step2AddRecentRecipients';
-        }else{
-          this.state = 'step4Confirm';
-        }
+        this.state = 'step2AddRecentRecipients';
         break;
       case 'step2AddRecentRecipients':
         this.additions = additions;
@@ -105,7 +134,7 @@ class EditRecurringGiftsModalController {
         this.state = 'step1EditRecurringGifts';
         break;
 
-      // Can't go from step 1 to step 0 as the user has a valid payment method by this point. As a result we don't need a case to transition from it
+      // Can't go from step 1 to step 0 as the user has a valid payment method by that point. As a result we don't need a case to transition from it
 
       case 'step0AddUpdatePaymentMethod':
         this.state = 'step0PaymentMethodList';
@@ -122,8 +151,12 @@ export default angular
     step0AddUpdatePaymentMethod.name,
     step0paymentMethodList.name,
     step1EditRecurringGifts.name,
+    step2AddRecentRecipients.name,
+    step3ConfigureRecentRecipients.name,
     step4ConfirmRecurringGifts.name,
-    profileService.name
+    profileService.name,
+    donationsService.name,
+    commonService.name
   ])
   .component(componentName, {
     controller: EditRecurringGiftsModalController,

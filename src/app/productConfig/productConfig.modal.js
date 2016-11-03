@@ -25,8 +25,10 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit ) {
+  constructor( $location, $scope, $log, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit, uri ) {
     this.$location = $location;
+    this.$scope = $scope;
+    this.$log = $log;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
@@ -38,6 +40,7 @@ class ModalInstanceCtrl {
     this.nextDrawDate = nextDrawDate;
     this.itemConfig = itemConfig;
     this.isEdit = isEdit;
+    this.uri = uri;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
 
     if ( this.isEdit ) {
@@ -49,11 +52,38 @@ class ModalInstanceCtrl {
 
     if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
       this.customAmount = this.itemConfig.amount;
+      this.customInputActive = true;
     }
 
     if(!this.itemConfig['recurring-day-of-month'] && nextDrawDate) {
       this.itemConfig['recurring-day-of-month'] = Number(nextDrawDate.split('-')[2]).toString();
     }
+  }
+
+  $onInit() {
+    this.waitForFormInitialization();
+  }
+
+  waitForFormInitialization() {
+    let unregister = this.$scope.$watch('$ctrl.itemConfigForm', () => {
+      if(this.itemConfigForm) {
+        unregister();
+        this.addCustomValidators();
+      }
+    });
+  }
+
+  addCustomValidators() {
+    this.itemConfigForm.amount.$validators.minimum = value => {
+      return this.customInputActive ? (value*1.0 >= 1) : true;
+    };
+    this.itemConfigForm.amount.$validators.maximum = value => {
+      return this.customInputActive ? (value*1.0 < 10000000) : true;
+    };
+    this.itemConfigForm.amount.$validators.pattern = value => {
+      var regex = /^([0-9]*)(\.[0-9]{1,2})?$/;
+      return this.customInputActive ? (regex.test(value)) : true;
+    };
   }
 
   initializeParams() {
@@ -93,15 +123,15 @@ class ModalInstanceCtrl {
     } );
     this.productData.frequency = product.name;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.frequency, product.name );
+
   }
 
   changeAmount( amount ) {
     this.itemConfigForm.$setDirty();
     this.itemConfig.amount = amount;
-    this.customAmount = undefined;
-    this.itemConfigForm.amount.$setViewValue( undefined, 'change' );
-    this.itemConfigForm.amount.$render();
+    this.customAmount = '';
     if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
+    this.customInputActive = false;
   }
 
   changeCustomAmount( amount ) {
@@ -113,28 +143,33 @@ class ModalInstanceCtrl {
     if ( !this.isEdit ) this.$location.search( giveGiftParams.day, day );
   }
 
-  addToCart() {
+  saveGiftToCart() {
     this.giftSubmitted = false;
     this.submittingGift = false;
     if ( !this.itemConfigForm.$valid ) {
       return;
     }
-    if ( this.isEdit && !this.itemConfigForm.$dirty ) {
-      this.$uibModalInstance.close( {isUpdated: false} );
-      return;
-    }
     this.submittingGift = true;
-    this.cartService
-      .addItem( this.productData.id, this.productData.frequency === 'NA' ? omit(this.itemConfig, 'recurring-day-of-month') : this.itemConfig )
-      .subscribe( () => {
-        if ( this.isEdit ) {
-          this.$uibModalInstance.close( {isUpdated: true} );
-        }
-        this.submittingGift = false;
+
+    let id = this.productData.id;
+    let data = this.productData.frequency === 'NA' ? omit( this.itemConfig, 'recurring-day-of-month' ) : this.itemConfig;
+
+    let savingObservable = this.isEdit ?
+      this.cartService.editItem( this.uri, id, data ) :
+      this.cartService.addItem( id, data );
+
+    savingObservable.subscribe( () => {
+      if ( this.isEdit ) {
+        this.$uibModalInstance.close( {isUpdated: true} );
+      } else {
         this.giftSubmitted = true;
-      }, () => {
-        this.submittingGift = false;
-      } );
+      }
+      this.submittingGift = false;
+    }, (error) => {
+      this.error = error.data;
+      this.submittingGift = false;
+      this.$log.error('Error adding or updating item in cart', error);
+    } );
   }
 }
 
