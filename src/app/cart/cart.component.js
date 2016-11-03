@@ -37,6 +37,14 @@ class CartController {
       } );
   }
 
+  removeItem( uri ) {
+    this.cartData = null;
+
+    this.cartService.deleteItem( atob( uri ) )
+      .subscribe( () => {
+        this.loadCart();
+      } );
+  }
 
   editItem( item ) {
     this.productModalService
