@@ -42,16 +42,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="amount in $ctrl.suggestedAmounts">
-            <td><input type="number" class="form-control" placeholder="50" min="0"></td>
-            <td><input type="text" class="form-control" placeholder="$50.53 to help 14 refugees"></td>
-            <td><a href="" class="btn-link btn"><i class="fa fa-minus-circle"></i></a></td>
+          <tr ng-repeat="a in $ctrl.suggestedAmounts track by $index">
+            <td><input type="number" class="form-control" placeholder="50" ng-model="a.amount"></td>
+            <td><input type="text" class="form-control" placeholder="$50.53 to help 14 refugees" ng-model="a.description"></td>
+            <td><a href="" class="btn-link btn" ng-click="$ctrl.suggestedAmounts.splice($index, 1)">
+              <i class="fa fa-minus-circle"></i>
+            </a></td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td colspan="3">
-              <a href=""><i class="fa fa-plus-circle"></i> Add another giving amount</a>
+              <a href="" ng-click="$ctrl.suggestedAmounts.push({})"><i class="fa fa-plus-circle"></i> Add another giving amount</a>
             </td>
           </tr>
         </tfoot>
@@ -73,7 +75,7 @@
   <button type="button" class="btn btn-primary pull-right"
           ng-click="$close({
             parentDesignationNumber: $ctrl.parentDesignationNumber,
-            suggestedAmounts: $ctrl.suggestedAmounts
+            suggestedAmounts: $ctrl.transformSuggestedAmounts()
           })">
     Save &amp; Close
   </button>
