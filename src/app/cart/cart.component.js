@@ -40,7 +40,7 @@ class CartController {
   removeItem( uri ) {
     this.cartData = null;
 
-    this.cartService.deleteItem( atob( uri ) )
+    this.cartService.deleteItem( uri )
       .subscribe( () => {
         this.loadCart();
       } );
