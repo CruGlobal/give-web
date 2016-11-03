@@ -10,7 +10,7 @@
           <p>{{$ctrl.mailingAddressError}}</p>
         </div>
 
-        <div ng-if="$ctrl.success && !$ctrl.touched()" class="alert alert-success" role="alert">
+        <div ng-if="$ctrl.success && !$ctrl.touched() && !$ctrl.hasError()" class="alert alert-success" role="alert">
           <span>Profile information was successfully updated.</span>
         </div>
 
@@ -32,6 +32,7 @@
                           <form name="$ctrl.donorDetailsForm" novalidate>
                             <div class="form-group is-required person-row">
                               <i class="fa fa-lock"></i>
+
                               <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
                                 <option value="Mr" translate>Mr.</option>
                                 <option value="Mrs" translate>Mrs.</option>
@@ -47,14 +48,15 @@
                                 <option value="Jr." translate>Jr.</option>
                                 <option value="III" translate>III</option>
                               </select>
+
                             </div>
                           </form>
                         </li>
                         <li ng-show="$ctrl.addingSpouse || $ctrl.hasSpouse">
                           <form name="$ctrl.spouseDetailsForm" novalidate>
-                            <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.spouseDetailsForm | showErrors) }">
+                            <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.spouseDetailsForm.spouseName | showErrors) || ($ctrl.spouseDetailsForm.spouseLastName | showErrors) || ($ctrl.spouseDetailsForm.spouseInitial | showErrors) }">
                               <i class="fa fa-lock"></i>
-                              <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails['spouse-name'].title">
+                              <select name="title" class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails['spouse-name'].title">
                                 <option value="Mr" translate>Mr.</option>
                                 <option value="Mrs" translate>Mrs.</option>
                                 <option value="Dr" translate>Dr.</option>
@@ -64,20 +66,22 @@
                               <input name="spouseInitial" type="text" class="form-control form-control-subtle middle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" maxlength="1" ng-disabled="$ctrl.hasSpouse" pattern="[A-Z]">
                               <input name="spouseLastName" type="text" class="form-control form-control-subtle last" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" maxlength="25" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
 
-                              <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
+                              <select name="suffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
                                 <option></option>
                                 <option value="Jr." translate>Jr.</option>
                                 <option value="III" translate>III</option>
                               </select>
 
                               <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseLastName.$error" ng-if="($ctrl.spouseDetailsForm.spouseLastName | showErrors)">
-                                <div class="help-block" ng-message="minlength" translate>This field must be at least 2 characters</div>
+                                <div class="help-block" ng-message="minlength" translate>Last name must be at least 2 characters</div>
+                                <div class="help-block" ng-message="required" translate>Last name must not be empty</div>
                               </div>
                               <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseName.$error" ng-if="($ctrl.spouseDetailsForm.spouseName | showErrors)">
-                                <div class="help-block" ng-message="minlength" translate>This field must be at least 2 characters</div>
+                                <div class="help-block" ng-message="minlength" translate>First name must be at least 2 characters</div>
+                                <div class="help-block" ng-message="required" translate>First name must not be empty</div>
                               </div>
                               <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseInitial.$error" ng-if="($ctrl.spouseDetailsForm.spouseInitial | showErrors)">
-                                <div class="help-block" ng-message="pattern" translate>This field must be an uppercase letter</div>
+                                <div class="help-block" ng-message="pattern" translate>Initial must be an uppercase letter</div>
                               </div>
 
                             </div>

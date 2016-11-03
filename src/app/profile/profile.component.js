@@ -72,6 +72,11 @@ class ProfileController {
           this.donorDetialsLoading = false;
           this.donorDetailsError = 'Failed updating profile details.';
           this.$log.error(this.donorDetailsError, error.data);
+        },
+        () => {
+          if(this.spouseEmailForm && this.spouseEmailForm.$dirty && this.spouseEmailForm.$valid) {
+            this.updateEmail(true);
+          }
         }
       );
   }
@@ -293,14 +298,17 @@ class ProfileController {
         () => {
           this.addingSpouse = false;
           this.hasSpouse = true;
-          this.donorDetialsLoading = true;
-          if(this.spouseEmailForm && this.spouseEmailForm.$dirty && this.spouseEmailForm.$valid) {
-            this.updateEmail(true);
-          }
+          this.donorDetialsLoading = false;
         },
         error => {
           this.donorDetailsError = 'Failed saving spouse info. ';
           this.$log.error(error.data, this.donorDetailsError);
+          this.donorDetialsLoading = false;
+        },
+        () => {
+          if(this.spouseDetailsForm.title.$dirty || this.spouseDetailsForm.suffix.$dirty) {
+            this.updateDonorDetails();
+          }
         }
       );
   }
@@ -308,7 +316,6 @@ class ProfileController {
   invalid() {
     return this.mailingAddressForm.$invalid ||
       this.donorEmailForm.$invalid ||
-      this.spouseEmailForm.$invalid ||
       this.invalidPhoneNumbers() ||
       this.donorDetailsForm.$invalid ||
       (this.spouseEmailForm ? this.spouseEmailForm.$invalid : false) ||
@@ -333,7 +340,12 @@ class ProfileController {
   }
 
   onSubmit(){
-    if((this.donorDetailsForm.$dirty && this.donorDetailsForm.$valid) || this.spouseDetailsForm && this.spouseDetailsForm.$dirty && this.spouseDetailsForm.$valid && this.hasSpouse) {
+    this.donorDetailsError = '';
+    this.emailAddressError = '';
+    this.phoneNumberError = '';
+    this.mailingAddressError = '';
+    this.success = false;
+    if((this.donorDetailsForm.$dirty && this.donorDetailsForm.$valid && !this.addingSpouse) || (this.spouseDetailsForm.$dirty && this.spouseDetailsForm.$valid && !this.addingSpouse)) {
       this.updateDonorDetails();
     }
     // if spouse is being created we need to make sure that email is created after spouse details are created

@@ -41,7 +41,13 @@ describe( 'ProfileComponent', function () {
         $setPristine: jasmine.createSpy('$setPristine'),
         $dirty: true,
         $invalid: false,
-        $valid: true
+        $valid: true,
+        title: {
+          $dirty: true
+        },
+        suffix: {
+          $dirty: true
+        }
       },
       phoneNumberForms: [{
         $setPristine: jasmine.createSpy('$setPristine'),
@@ -128,11 +134,13 @@ describe( 'ProfileComponent', function () {
   });
 
   describe('updateDonorDetails()', () => {
-    it('should update donor details on', () => {
+    it('should update donor details ', () => {
       spyOn($ctrl.profileService, 'updateProfileDonorDetails').and.returnValue(Observable.of(''));
+      spyOn($ctrl,'updateEmail');
       $ctrl.updateDonorDetails();
       expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalled();
       expect($ctrl.donorDetailsForm.$setPristine).toHaveBeenCalled();
+      expect($ctrl.updateEmail).toHaveBeenCalled();
     });
 
     it('should handle and error of updating donor details', () => {
@@ -429,7 +437,7 @@ describe( 'ProfileComponent', function () {
     it('should update mailing address', () => {
       spyOn($ctrl.profileService, 'updateMailingAddress').and.returnValue(Observable.of('data'));
       $ctrl.updateMailingAddress();
-      expect($ctrl.profileService.updateMailingAddress).toHaveBeenCalled();
+      expect($ctrl.mailingAddressForm.$setPristine).toHaveBeenCalled();
     });
 
     it('should fail updating mailing address', () => {
@@ -453,11 +461,15 @@ describe( 'ProfileComponent', function () {
       };
     });
     it('should save spouse info', () => {
-      spyOn($ctrl,'updateEmail');
+      spyOn($ctrl,'updateDonorDetails');
       spyOn($ctrl.profileService, 'addSpouse').and.returnValue(Observable.of('data'));
       $ctrl.saveSpouse();
       expect($ctrl.profileService.addSpouse).toHaveBeenCalledWith('/donordetails/crugive/spousedetails', $ctrl.donorDetails['spouse-name']);
-      expect($ctrl.updateEmail).toHaveBeenCalled();
+      expect($ctrl.updateDonorDetails).toHaveBeenCalled();
+
+      $ctrl.spouseDetailsForm.title.$dirty = false;
+      $ctrl.saveSpouse();
+      expect($ctrl.updateDonorDetails).toHaveBeenCalled();
     });
 
     it('should handle fail of saving spouse info', () => {
@@ -549,21 +561,20 @@ describe( 'ProfileComponent', function () {
       $ctrl.spouseDetailsForm.$dirty = true;
       $ctrl.mailingAddressForm.$dirty = true;
       $ctrl.phoneNumberForms[0].$dirty = true;
-      $ctrl.addingSpouse = true;
-      $ctrl.hasSpouse = true;
+      $ctrl.addingSpouse = undefined;
       $ctrl.spouseDetailsForm.$valid = true;
       $ctrl.onSubmit();
       expect($ctrl.updateDonorDetails).toHaveBeenCalled();
       expect($ctrl.updateEmail).toHaveBeenCalled();
-      expect($ctrl.saveSpouse).toHaveBeenCalled();
       expect($ctrl.updatePhoneNumbers).toHaveBeenCalled();
       expect($ctrl.updateMailingAddress).toHaveBeenCalled();
 
-      $ctrl.donorDetailsForm.$dirty = false;
-      $ctrl.addingSpouse = false;
+      // $ctrl.donorDetailsForm.$dirty = false;
+      $ctrl.addingSpouse = true;
+      $ctrl.hasSpouse = true;
       $ctrl.onSubmit();
-      expect($ctrl.updateDonorDetails).toHaveBeenCalled();
       expect($ctrl.updateEmail).toHaveBeenCalledWith(true);
+      expect($ctrl.saveSpouse).toHaveBeenCalled();
     });
   });
 
