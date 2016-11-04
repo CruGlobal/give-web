@@ -18,7 +18,8 @@ describe('cart', function() {
       $scope: $scope,
       cartService: {
         get: angular.noop,
-        loadCart: angular.noop
+        loadCart: angular.noop,
+        deleteItem: angular.noop
       },
       productModalService: {
         configureProduct: function (){}
@@ -52,6 +53,16 @@ describe('cart', function() {
       spyOn( self.controller.cartService, 'get' ).and.returnValue( Observable.of( 'data' ) );
       self.controller.loadCart();
       expect(self.controller.cartService.get).toHaveBeenCalled();
+    });
+  });
+
+  describe('removeItem()', () => {
+    it('should remove item from cart', () => {
+      spyOn(self.controller, 'loadCart');
+      spyOn(self.controller.cartService, 'deleteItem' ).and.returnValue( Observable.of( 'data' ) );
+      self.controller.removeItem('hey');
+      expect(self.controller.cartService.deleteItem).toHaveBeenCalledWith('hey');
+      expect(self.controller.loadCart).toHaveBeenCalled();
     });
   });
 
