@@ -138,7 +138,7 @@ describe( 'product config modal', function () {
         $ctrl.saveGiftToCart();
         expect($ctrl.giftSubmitted).toEqual(false);
         expect($ctrl.submittingGift).toEqual(false);
-        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith('uri', 'some id', { amount: 85, 'recurring-day-of-month': '1' });
+        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith('uri', 'some id', { amount: 85, 'recurring-day-of-month': '01' });
         expect( uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: true} );
       } );
 
@@ -158,7 +158,7 @@ describe( 'product config modal', function () {
         $ctrl.saveGiftToCart();
         expect($ctrl.giftSubmitted).toEqual(false);
         expect($ctrl.submittingGift).toEqual(false);
-        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith('uri', 'some id', { amount: 85, 'recurring-day-of-month': '1' });
+        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith('uri', 'some id', { amount: 85, 'recurring-day-of-month': '01' });
         expect( uibModalInstance.close ).not.toHaveBeenCalled();
       } );
     } );
@@ -325,7 +325,7 @@ describe( 'product config modal', function () {
     }));
 
     it( 'set default gift start day', () => {
-      expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '1' );
+      expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '01' );
     } );
   });
 
