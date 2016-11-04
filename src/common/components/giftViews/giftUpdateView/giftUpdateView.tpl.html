@@ -4,11 +4,12 @@
       <div class="form-group">
         <label translate>Amount</label>
         <input type="number"
+               name="amount"
                class="form-control form-control-subtle"
                ng-model="$ctrl.gift.amount"
-               ng-min="1"
-               ng-max="10000000"
-               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+               required
+               ng-change="$ctrl.onChange()"
+               ng-pattern="/^[^!0][0-9]+(\.[0-9]{1,2})?$/">
       </div>
     </div>
     <div class="col-sm-6">
