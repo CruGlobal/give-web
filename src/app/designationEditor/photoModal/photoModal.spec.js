@@ -4,17 +4,19 @@ import module from './photo.modal';
 
 describe('Designation Editor Photo', function() {
   beforeEach(angular.mock.module(module.name));
-  var $ctrl;
+  var $rootScope, $ctrl, $q, $timeout;
 
-  beforeEach(inject(function($rootScope, $controller) {
-    var $scope = $rootScope.$new();
+  beforeEach(inject(function(_$rootScope_, _$controller_, _$q_, _$timeout_) {
+    var $scope = _$rootScope_.$new();
+    $rootScope = _$rootScope_;
+    $timeout = _$timeout_;
+    $q = _$q_;
 
-    $ctrl = $controller( module.name, {
+    $ctrl = _$controller_( module.name, {
       designationNumber: '000555',
       photos: [],
       photoLocation: 'coverPhoto',
       selectedPhoto: '/content/photo1.jpg',
-      envService: { read: () => {} },
       $scope: $scope
     } );
   }));
@@ -28,5 +30,19 @@ describe('Designation Editor Photo', function() {
     expect($ctrl.photoLocation).toEqual('coverPhoto');
     expect($ctrl.selectedPhoto).toEqual('/content/photo1.jpg');
     expect($ctrl.photos).toBeDefined();
+  });
+
+  it('uploadComplete', function() {
+    let getPhotosPromise = $q.defer();
+    spyOn( $ctrl.designationEditorService, 'getPhotos' ).and.returnValue(  getPhotosPromise.promise );
+
+    $ctrl.uploadComplete();
+    $timeout.flush();
+
+    getPhotosPromise.resolve({data: []});
+    $rootScope.$digest();
+
+    expect($ctrl.designationEditorService.getPhotos).toHaveBeenCalled();
+    expect($ctrl.photos).toEqual([]);
   });
 });
