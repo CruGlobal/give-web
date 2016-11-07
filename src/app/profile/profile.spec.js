@@ -317,7 +317,7 @@ describe( 'ProfileComponent', function () {
       }));
       $ctrl.updatePhoneNumbers();
       expect($ctrl.profileService.updatePhoneNumber).toHaveBeenCalled();
-      expect($ctrl.phoneNumberError).toBe('Failed updating phone numbers.');
+      expect($ctrl.phoneNumberError).toBe('Failed updating phone number(s).');
     });
 
     it('should delete phone number', () => {
@@ -350,7 +350,7 @@ describe( 'ProfileComponent', function () {
       }));
       $ctrl.updatePhoneNumbers();
       expect($ctrl.profileService.deletePhoneNumber).toHaveBeenCalled();
-      expect($ctrl.phoneNumberError).toBe('Failed deleting phone numbers.');
+      expect($ctrl.phoneNumberError).toBe('Failed updating phone number(s).');
     });
 
     it('should add phone number', () => {
@@ -382,7 +382,7 @@ describe( 'ProfileComponent', function () {
       }));
       $ctrl.updatePhoneNumbers();
       expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
-      expect($ctrl.phoneNumberError).toBe('Failed adding phone numbers.');
+      expect($ctrl.phoneNumberError).toBe('Failed updating phone number(s).');
     });
 
   });

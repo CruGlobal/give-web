@@ -168,7 +168,10 @@ class Profile {
         mailingAddress: 'addresses:mailingaddress'
       }
     })
-    .pluck('mailingAddress');
+    .map((response) => {
+      response.mailingAddress.address = formatAddressForTemplate(response.mailingAddress.address);
+      return response.mailingAddress;
+    });
   }
 
 

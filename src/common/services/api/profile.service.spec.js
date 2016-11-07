@@ -632,10 +632,12 @@ describe('profile service', () => {
           }
         ],
         address: {
-          'country-name': 'US',
+          country: 'US',
+          streetAddress: '123 Test street',
+          extendedAddress: undefined,
           locality: 'Lehi',
-          'postal-code': '88888',
-          region: 'AR', 'street-address': '123 Test street'
+          region: 'AR',
+          postalCode: '88888'
         },
         name: {}
       };

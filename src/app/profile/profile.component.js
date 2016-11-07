@@ -6,8 +6,8 @@ import profileService from 'common/services/api/profile.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
-import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 import showErrors from 'common/filters/showErrors.filter';
+import {Observable} from 'rxjs/Observable';
 
 import pull from 'lodash/pull';
 
@@ -155,6 +155,7 @@ class ProfileController {
   }
 
   updatePhoneNumbers(){
+    let requests = [];
     for(let i=0;i<this.phoneNumbers.length;i++) {
       let item = this.phoneNumbers[i];
       this.phonesLoading = true;
@@ -169,51 +170,33 @@ class ProfileController {
         });
       }
       if(item.self && item.delete == undefined) { // update existing phone number
-        this.profileService.updatePhoneNumber(item)
-          .subscribe(
-            () => {
-              this.resetPhoneNumberForms();
-              this.success = true;
-              this.phonesLoading = false;
-            },
-            error => {
-              this.phoneNumberError = 'Failed updating phone numbers.';
-              this.$log.error(this.phoneNumberError, error.data);
-              this.phonesLoading = false;
-            }
-          );
+        requests.push(this.profileService.updatePhoneNumber(item));
       } else if(item.self && item.delete) { // delete existing phone number
-        this.profileService.deletePhoneNumber(item)
-          .subscribe(
-            () => {
-              pull(this.phoneNumbers, item);
-              this.resetPhoneNumberForms();
-              this.success = true;
-              this.phonesLoading = false;
-            },
-            error => {
-              this.phoneNumberError = 'Failed deleting phone numbers.';
-              this.$log.error(this.phoneNumberError, error.data);
-              this.phonesLoading = false;
-            }
-          );
-      } else if(!item.self && !item.delete){ // add new phone number
-        this.profileService.addPhoneNumber(item)
-          .subscribe(
-            data => {
-              data.spouse = item.spouse;
-              this.resetPhoneNumberForms();
-              this.success = true;
-              item['phone-number'] = data['phone-number'];
-              this.phonesLoading = false;
-            },
-            error => {
-              this.phoneNumberError = 'Failed adding phone numbers.';
-              this.$log.error(this.phoneNumberError, error.data);
-              this.phonesLoading = false;
-            }
-          );
+        requests.push(this.profileService.deletePhoneNumber(item)
+          .do(() => {
+            pull(this.phoneNumbers, item);
+          })
+        );
+      } else if(!item.self && !item.delete) { // add new phone number
+        requests.push(this.profileService.addPhoneNumber(item)
+          .do((data) => {
+            data.spouse = item.spouse;
+            item['phone-number'] = data['phone-number'];
+          })
+        );
       }
+      Observable.forkJoin(requests)
+        .subscribe(null,
+          error => {
+            this.phoneNumberError = 'Failed updating phone number(s).';
+            this.$log.error(this.phoneNumberError, error.data);
+          },
+          () => {
+            this.resetPhoneNumberForms();
+            this.success = true;
+            this.phonesLoading = false;
+          }
+        );
     }
   }
 
@@ -260,7 +243,6 @@ class ProfileController {
     this.profileService.getMailingAddress()
       .subscribe(
         data => {
-          data.address = formatAddressForTemplate(data.address);
           this.mailingAddress = data;
           this.mailingAddressLoading = false;
         },
