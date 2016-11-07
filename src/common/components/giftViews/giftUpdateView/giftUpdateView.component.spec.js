@@ -3,7 +3,7 @@ import 'angular-mocks';
 
 import module from './giftUpdateView.component';
 
-fdescribe('giftUpdateView', () => {
+describe('giftUpdateView', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
