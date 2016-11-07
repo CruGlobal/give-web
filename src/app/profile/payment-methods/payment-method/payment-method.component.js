@@ -6,6 +6,7 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
+import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 
 let componentName = 'paymentMethod';
 
@@ -40,6 +41,7 @@ class PaymentMethodController{
   }
 
   editPaymentMethod() {
+    this.successMessage.show = false;
     this.editPaymentMethodModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
       windowTemplateUrl: giveModalWindowTemplate.name,
@@ -56,12 +58,23 @@ class PaymentMethodController{
     if(e.success && e.data) {
       this.profileService.updatePaymentMethod(this.model, e.data)
         .subscribe(() => {
-            let editedData = e.data.creditCard || e.data.bankAccount;
-            this.submissionError.loading = false;
-            this.editPaymentMethodModal.close();
+            let editedData = {};
+            if(e.data.creditCard) {
+              editedData = e.data.creditCard;
+              editedData['card-number'] = e.data.paymentMethod.cardNumber ? e.data.paymentMethod.cardNumber.slice(-4) : editedData['card-number'];
+              editedData.address = formatAddressForTemplate(editedData.address);
+            } else {
+              editedData = e.data.bankAccount;
+            }
             for(let key in editedData){
               this.model[key] = editedData[key];
             }
+            this.successMessage = {
+              show: true,
+              type: 'paymentMethodUpdated'
+            };
+            this.submissionError.loading = false;
+            this.editPaymentMethodModal.close();
           },
           error => {
             this.submissionError.loading = false;
@@ -74,6 +87,7 @@ class PaymentMethodController{
   }
 
   deletePaymentMethod(){
+    this.successMessage.show = false;
     this.deletePaymentMethodModal = this.$uibModal.open({
       component: 'deletePaymentMethodModal',
       backdrop: 'static',
@@ -114,6 +128,7 @@ export default angular
     templateUrl: template.name,
     bindings: {
       model: '<',
+      successMessage: '=',
       paymentMethodsList: '<',
       onDelete: '&'
     }
