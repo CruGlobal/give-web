@@ -3,7 +3,7 @@ import 'angular-mocks';
 
 import module from './giftUpdateView.component';
 
-describe('giftUpdateView', () => {
+fdescribe('giftUpdateView', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
@@ -19,9 +19,13 @@ describe('giftUpdateView', () => {
 
   describe('onChange', () => {
     it('should validate amount', () => {
-      self.controller.gift.amount = 0;
+      self.controller.gift = {
+        amount: 0
+      };
+      self.controller.onChange();
       expect(self.controller.gift.amount).toEqual(1);
       self.controller.gift.amount = 10000000015;
+      self.controller.onChange();
       expect(self.controller.gift.amount).toEqual(10000000);
     });
   });
