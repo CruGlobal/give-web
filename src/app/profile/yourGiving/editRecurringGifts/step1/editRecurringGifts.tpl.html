@@ -25,9 +25,9 @@
         <div class="alert alert-warning" role="alert" ng-if="!$ctrl.loading && !$ctrl.loadingError && (!$ctrl.recurringGifts || $ctrl.recurringGifts.length === 0)">
           <p translate>You don't seem to have any recurring gifts to edit. You may click continue to set up a new recurring gift for a person or ministry you have given to recently.</p>
         </div>
-        <div ng-repeat="recurringGift in $ctrl.recurringGifts" class="row repeating-row user-profile">
-          <gift-list-item gift="recurringGift">
-            <gift-update-view gift="recurringGift.gift"></gift-update-view>
+        <div ng-repeat="gift in $ctrl.recurringGifts" class="row repeating-row user-profile">
+          <gift-list-item gift="gift">
+            <gift-update-view gift="gift"></gift-update-view>
           </gift-list-item>
         </div>
       </div>
