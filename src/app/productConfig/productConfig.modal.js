@@ -56,7 +56,7 @@ class ModalInstanceCtrl {
     }
 
     if(!this.itemConfig['recurring-day-of-month'] && nextDrawDate) {
-      this.itemConfig['recurring-day-of-month'] = Number(nextDrawDate.split('-')[2]).toString();
+      this.itemConfig['recurring-day-of-month'] = startDate(null, nextDrawDate).format('DD');
     }
   }
 
