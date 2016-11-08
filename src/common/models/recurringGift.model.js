@@ -75,7 +75,7 @@ export default class RecurringGiftModel {
   }
 
   get amount(){
-    return this.gift['updated-amount'] || this.gift['amount'];
+    return this.gift['updated-amount'] === undefined ? '' : this.gift['updated-amount'] || this.gift['amount'];
   }
 
   set amount(value){

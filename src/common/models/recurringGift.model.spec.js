@@ -75,6 +75,10 @@ describe('recurringGift model', () => {
       giftModel.gift['updated-amount'] = 50;
       expect(giftModel.amount).toEqual(50);
     });
+    it('should load an empty string if updated amount is undefined (ng-model was invalid and set it to undefined)', () => {
+      giftModel.gift['updated-amount'] = undefined;
+      expect(giftModel.amount).toEqual('');
+    });
   });
 
   describe('amount setter', () => {
