@@ -61,11 +61,11 @@ class PaymentMethodController{
             let editedData = {};
             if(e.data.creditCard) {
               editedData = e.data.creditCard;
-              editedData['card-number'] = e.data.paymentMethod.cardNumber ? e.data.paymentMethod.cardNumber.slice(-4) : editedData['card-number'];
+              editedData['card-number'] = e.data.paymentMethodNumber ? e.data.paymentMethodNumber : editedData['card-number'];
               editedData.address = formatAddressForTemplate(editedData.address);
             } else {
               editedData = e.data.bankAccount;
-              editedData['display-account-number'] = e.data.paymentMethod.accountNumber ? e.data.paymentMethod.accountNumber.slice(-4) : editedData['display-account-number'];
+              editedData['display-account-number'] = e.data.paymentMethodNumber ? e.data.paymentMethodNumber : editedData['display-account-number'];
             }
             for(let key in editedData){
               this.model[key] = editedData[key];

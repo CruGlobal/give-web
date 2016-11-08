@@ -156,9 +156,6 @@ describe('PaymentMethodComponent', function () {
         creditCard:{
           'card-number': '0000',
           address: modelCC.address
-        },
-        paymentMethod: {
-          cardNumber: '1234567812345678'
         }
       };
     });
@@ -178,7 +175,7 @@ describe('PaymentMethodComponent', function () {
       };
       spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.of('data'));
       self.controller.onSubmit({success:true, data: self.controller.data});
-      expect(self.controller.model['card-number']).toBe('5678');
+      expect(self.controller.model['card-number']).toBe('0000');
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
 
       self.controller.data.creditCard = undefined;

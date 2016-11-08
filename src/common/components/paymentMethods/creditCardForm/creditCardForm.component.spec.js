@@ -166,20 +166,7 @@ describe('credit card form', () => {
           'expiry-year': 19,
           ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
         },
-        paymentMethod: {
-          address: {
-            streetAddress: '123 First St',
-            extendedAddress: 'Apt 123',
-            locality: 'Sacramento',
-            postalCode: '12345',
-            region: 'CA'
-          },
-          cardNumber: '4111111111111111',
-          cardholderName: 'Person Name',
-          expiryMonth: 12,
-          expiryYear: 19,
-          securityCode: '123'
-        }
+        paymentMethodNumber: '1111'
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({
         success: true,
@@ -208,13 +195,7 @@ describe('credit card form', () => {
           'expiry-year': 19,
           ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
         },
-        paymentMethod: {
-          cardNumber: '4111111111111111',
-          cardholderName: 'Person Name',
-          expiryMonth: 12,
-          expiryYear: 19,
-          securityCode: '123'
-        }
+        paymentMethodNumber: '1111'
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
       expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);
@@ -243,13 +224,7 @@ describe('credit card form', () => {
           'expiry-year': 19,
           ccv: null
         },
-        paymentMethod: {
-          cardNumber: undefined,
-          cardholderName: 'Person Name',
-          expiryMonth: 12,
-          expiryYear: 19,
-          securityCode: '123'
-        }
+        paymentMethodNumber: false
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
       expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);

@@ -122,7 +122,7 @@ class CreditCardController {
             'expiry-year': this.creditCardPayment.expiryYear,
             ccv: ccpSecurityCode
           },
-          paymentMethod: this.creditCardPayment
+          paymentMethodNumber: this.creditCardPayment.cardNumber ? this.creditCardPayment.cardNumber.slice(-4) : false
         }
       });
     }else{
