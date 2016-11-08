@@ -8,6 +8,8 @@ import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/s
 import {Roles} from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/map';
 
 import pull from 'lodash/pull';
 
@@ -127,6 +129,7 @@ class ProfileController {
     this.profileService.getPhoneNumbers()
       .subscribe(
         data => {
+          console.log(data);
           this.phonesLoading = false;
           angular.forEach(data, (item) => {
             item.ownerChanged = false;
@@ -160,6 +163,8 @@ class ProfileController {
       let item = this.phoneNumbers[i];
       this.phonesLoading = true;
 
+      if(this.phoneNumberForms[i] && !this.phoneNumberForms[i].$dirty) continue;
+
       if(item.ownerChanged) { // switch of phone owner (set to delete phone and add it again with new owner)
         item.delete = true;
         this.phoneNumbers.push({
@@ -173,14 +178,13 @@ class ProfileController {
         requests.push(this.profileService.updatePhoneNumber(item));
       } else if(item.self && item.delete) { // delete existing phone number
         requests.push(this.profileService.deletePhoneNumber(item)
-          .do(() => {
+          .map(() => {
             pull(this.phoneNumbers, item);
           })
         );
       } else if(!item.self && !item.delete) { // add new phone number
         requests.push(this.profileService.addPhoneNumber(item)
-          .do((data) => {
-            data.spouse = item.spouse;
+          .map((data) => {
             item['phone-number'] = data['phone-number'];
           })
         );
@@ -190,6 +194,7 @@ class ProfileController {
           error => {
             this.phoneNumberError = 'Failed updating phone number(s).';
             this.$log.error(this.phoneNumberError, error.data);
+            this.phonesLoading = false;
           },
           () => {
             this.resetPhoneNumberForms();
@@ -290,6 +295,8 @@ class ProfileController {
         () => {
           if(this.spouseDetailsForm.title.$dirty || this.spouseDetailsForm.suffix.$dirty) {
             this.updateDonorDetails();
+          } else if(this.spouseEmailForm && this.spouseEmailForm.$dirty && this.spouseEmailForm.$valid) {
+            this.updateEmail(true);
           }
         }
       );
