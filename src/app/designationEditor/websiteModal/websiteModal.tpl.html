@@ -1,0 +1,11 @@
+<div class="modal-body">
+  <div class="form-group">
+    <label>Website Address</label>
+    <input type="text" class="form-control" placeholder="http://" ng-model="$ctrl.website">
+    <span class="help-block">Fill in this field to add a website link.</span>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary pull-right" ng-click="$close($ctrl.website)">Save &amp; Close</button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+</div>

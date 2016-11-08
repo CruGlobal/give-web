@@ -55,7 +55,8 @@
     "run-sequence": "^1.1.5",
     "systemjs": "^0.19.27",
     "systemjs-plugin-babel": "^0.0.13",
-    "vinyl-paths": "^2.1.0"
+    "vinyl-paths": "^2.1.0",
+    "proxy-middleware": "^0.15.0"
   },
   "dependencies": {
     "bootstrap-sass": "3.3.1",
@@ -74,8 +75,10 @@
       "angular-gettext": "github:rubenv/angular-gettext@^2.3.4",
       "angular-messages": "github:angular/bower-angular-messages@^1.5.8",
       "angular-ordinal": "npm:angular-ordinal@^2.1.3",
+      "angular-sanitize": "github:angular/bower-angular-sanitize@^1.5.8",
       "angular-ui-bootstrap": "npm:angular-ui-bootstrap@^2.1.3",
       "angular-ui-router": "github:angular-ui/ui-router@^0.3.1",
+      "angular-upload": "npm:angular-upload@^1.0.13",
       "jsencrypt": "npm:jsencrypt@^2.3.1",
       "jwt-decode": "github:auth0/jwt-decode@^2.1.0",
       "lodash": "npm:lodash@^4.14.2",
@@ -83,7 +86,8 @@
       "moment": "npm:moment@^2.15.1",
       "rollbar-browser": "npm:rollbar-browser@^1.9.1",
       "rxjs": "npm:rxjs@^5.0.0-beta.11",
-      "stacktrace-js": "npm:stacktrace-js@^1.3.1"
+      "stacktrace-js": "npm:stacktrace-js@^1.3.1",
+      "textangular": "npm:textangular@^1.5.2"
     },
     "devDependencies": {
       "angular-mocks": "github:angular/bower-angular-mocks@^1.5.8",

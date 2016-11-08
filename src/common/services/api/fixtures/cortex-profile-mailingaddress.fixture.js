@@ -1,8 +1,8 @@
 export default {
   "self": {
     "type": "elasticpath.profiles.profile",
-    "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=?zoom=emails:element",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=?zoom=emails:element"
+    "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=?zoom=addresses:mailingaddress",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=?zoom=addresses:mailingaddress"
   },
   "links": [{
     "rel": "addresses",
@@ -68,46 +68,35 @@ export default {
     "uri": "/wishlists/crugive",
     "href": "https://cortex-gateway-stage.cru.org/cortex/wishlists/crugive"
   }],
-  "_emails": [{
-    "_element": [{
+  "_addresses": [{
+    "_mailingaddress": [{
       "self": {
-        "type": "elasticpath.emails.email",
-        "uri": "/emails/crugive/on2gs3saon2gs3romnxw2=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive/on2gs3saon2gs3romnxw2="
+        "type": "elasticpath.addresses.address",
+        "uri": "/addresses/crugive/gewuwmktgjfem=",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/addresses/crugive/gewuwmktgjfem="
       },
       "links": [{
-        "rel": "list",
-        "type": "elasticpath.collections.links",
-        "uri": "/emails/crugive",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive"
-      }, {
         "rel": "profile",
+        "rev": "addresses",
         "type": "elasticpath.profiles.profile",
         "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=",
         "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge="
-      }],
-      "email": "stin@stin.com"
-    }, {
-      "self": {
-        "type": "elasticpath.emails.email",
-        "uri": "/emails/crugive/on2gs3tfonzua43unfxc433sm4=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive/on2gs3tfonzua43unfxc433sm4="
-      },
-      "links": [{
+      }, {
         "rel": "list",
         "type": "elasticpath.collections.links",
-        "uri": "/emails/crugive",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive"
-      }, {
-        "rel": "profile",
-        "type": "elasticpath.profiles.profile",
-        "uri": "/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge="
+        "uri": "/addresses/crugive",
+        "href": "https://cortex-gateway-stage.cru.org/cortex/addresses/crugive"
       }],
-      "email": "stiness@stin.org"
+      "address": {
+        "country-name": "US",
+        "locality": "Lehi",
+        "postal-code": "88888",
+        "region": "AR",
+        "street-address": "123 Test street"
+      },
+      "name": {}
     }]
   }],
   "family-name": "stin",
   "given-name": "stin"
 };
-
