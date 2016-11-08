@@ -180,6 +180,13 @@ describe('PaymentMethodComponent', function () {
       self.controller.onSubmit({success:true, data: self.controller.data});
       expect(self.controller.model['card-number']).toBe('5678');
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
+
+      self.controller.data.creditCard = undefined;
+      self.controller.data.bankAccount = {
+        'display-account-number': '9879'
+      };
+      self.controller.onSubmit({success:true, data: self.controller.data});
+      expect(self.controller.model['display-account-number']).toBe('9879');
     });
 
     it('should not submit', () => {
