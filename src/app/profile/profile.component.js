@@ -129,7 +129,6 @@ class ProfileController {
     this.profileService.getPhoneNumbers()
       .subscribe(
         data => {
-          console.log(data);
           this.phonesLoading = false;
           angular.forEach(data, (item) => {
             item.ownerChanged = false;
