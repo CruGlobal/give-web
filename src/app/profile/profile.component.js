@@ -68,6 +68,7 @@ class ProfileController {
         () => {
           this.donorDetialsLoading = false;
           this.donorDetailsForm.$setPristine();
+          this.spouseDetailsForm ? this.spouseDetailsForm.$setPristine() : false;
           this.success = true;
         },
         error => {
