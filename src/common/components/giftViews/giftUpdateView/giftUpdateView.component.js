@@ -17,9 +17,15 @@ class GiftUpdateViewController {
     this.possibleMonths = moment.months();
   }
 
-  $onInit(){
-
+  onChange(){
+    let maxValue = 10000000;
+    if(!this.gift.gift.amount) {
+      this.gift.gift.amount = 1;
+    } else if(this.gift.gift.amount > maxValue) {
+      this.gift.gift.amount = maxValue;
+    }
   }
+
 }
 
 export default angular
