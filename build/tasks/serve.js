@@ -1,6 +1,18 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var historyApiFallback = require('connect-history-api-fallback');
+var proxy = require('proxy-middleware'), url = require('url');
+
+const aemDomain = 'http://uatpub1.aws.cru.org:4503';
+
+var binProxy = url.parse(aemDomain + '/bin');
+binProxy.route = '/bin';
+
+var contentProxy = url.parse(aemDomain + '/content');
+contentProxy.route = '/content';
+
+var etcProxy = url.parse(aemDomain + '/etc');
+etcProxy.route = '/etc';
 
 gulp.task('serve', ['watch'], function (done) {
   browserSync({
@@ -18,7 +30,10 @@ gulp.task('serve', ['watch'], function (done) {
               return '/src/assets/' + context.match[1];
             }}
           ]
-        })
+        }),
+        proxy(binProxy),
+        proxy(contentProxy),
+        proxy(etcProxy)
       ]
     }
   }, done);
