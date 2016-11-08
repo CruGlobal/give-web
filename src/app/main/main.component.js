@@ -11,7 +11,7 @@ import thankYouComponent from '../thankYou/thankYou.component';
 import productConfigComponent from '../productConfig/productConfig.component';
 import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
-import homeSignInComponent from '../homeSignIn/homeSignIn.component';
+import designationEditorComponent from '../designationEditor/designationEditor.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
 import profileComponent from '../profile/profile.component';
 
@@ -67,6 +67,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     .state('profile', {
       url: "/profile.html",
       template: '<profile></profile>'
+    })
+    .state('designation-editor', {
+      url: "/designation-editor.html",
+      template: '<designation-editor></designation-editor>'
     });
 
   $locationProvider.html5Mode(true);
@@ -87,6 +91,7 @@ export default angular
     searchResultsComponent.name,
     homeSignInComponent.name,
     profileComponent.name,
+    designationEditorComponent.name,
     paymentMethodsComponent.name,
     receiptsComponent.name,
     'ui.router'

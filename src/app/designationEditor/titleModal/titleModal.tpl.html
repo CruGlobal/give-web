@@ -1,0 +1,18 @@
+<div class="modal-body">
+  <div class="form-group">
+    <label>Receipt Title</label>
+    <input type="text" class="form-control" ng-model="$ctrl.receiptTitle" disabled>
+    <span class="help-block">
+      <strong>Email <a href="mailto:fds@cru.org">fds@cru.org</a> to update/change.</strong>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label>Give.Cru.org Title</label>
+    <input type="text" class="form-control" ng-model="$ctrl.giveTitle">
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary pull-right" ng-click="$close($ctrl.giveTitle)">Save &amp; Close</button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+</div>
