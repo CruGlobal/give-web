@@ -89,7 +89,6 @@ export default angular
     productConfigComponent.name,
     signInComponent.name,
     searchResultsComponent.name,
-    homeSignInComponent.name,
     profileComponent.name,
     designationEditorComponent.name,
     paymentMethodsComponent.name,
