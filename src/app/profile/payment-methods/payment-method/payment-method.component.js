@@ -65,6 +65,7 @@ class PaymentMethodController{
               editedData.address = formatAddressForTemplate(editedData.address);
             } else {
               editedData = e.data.bankAccount;
+              editedData['display-account-number'] = e.data.paymentMethod.accountNumber ? e.data.paymentMethod.accountNumber.slice(-4) : editedData['display-account-number'];
             }
             for(let key in editedData){
               this.model[key] = editedData[key];

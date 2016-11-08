@@ -145,7 +145,8 @@ describe('bank account form', () => {
           "bank-name": "First Bank",
           "encrypted-account-number": jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
           "routing-number": "123456789"
-        }
+        },
+        paymentMethod: self.controller.bankPayment
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
       expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);
@@ -167,7 +168,8 @@ describe('bank account form', () => {
           "bank-name": "First Bank",
           "encrypted-account-number": '',
           "routing-number": "123456789"
-        }
+        },
+        paymentMethod: self.controller.bankPayment
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
       expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);

@@ -116,6 +116,8 @@ describe('PaymentMethodComponent', function () {
     it('should call Edit Modal', () => {
       self.controller.model = modelCC;
 
+      self.controller.successMessage = {};
+
       let callback = () => {
         self.controller.editPaymentMethodModal.close();
       };
@@ -140,6 +142,7 @@ describe('PaymentMethodComponent', function () {
   describe('deletePaymentMethod()', () => {
     it('should call Delete Modal', () => {
       self.controller.model = modelEFT;
+      self.controller.successMessage = {};
       self.controller.deletePaymentMethod();
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
       expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethod()).toEqual(modelEFT);
@@ -148,11 +151,24 @@ describe('PaymentMethodComponent', function () {
   });
 
   describe('onSubmit()', () => {
+    beforeEach(() => {
+      self.controller.data = {
+        creditCard:{
+          'card-number': '0000',
+          address: modelCC.address
+        },
+        paymentMethod: {
+          cardNumber: '1234567812345678'
+        }
+      };
+    });
+
     it('should throw an error', () => {
       spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.throw({
         data: 'some error'
       }));
-      self.controller.onSubmit({success:true, data: {}});
+      self.controller.successMessage = {};
+      self.controller.onSubmit({success:true, data: self.controller.data});
       expect(self.controller.submissionError.error).toBe('some error');
     });
 
@@ -161,13 +177,13 @@ describe('PaymentMethodComponent', function () {
         close: jasmine.createSpy('close')
       };
       spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.of('data'));
-      self.controller.onSubmit({success:true, data: {creditCard:{'card-number': '0000'}}});
-      expect(self.controller.model['card-number']).toBe('0000');
+      self.controller.onSubmit({success:true, data: self.controller.data});
+      expect(self.controller.model['card-number']).toBe('5678');
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
     });
 
     it('should not submit', () => {
-      self.controller.onSubmit({success:false, data: {}});
+      self.controller.onSubmit({success:false, data: self.controller.data});
       expect(self.controller.submissionError.loading).toBe(false);
     });
   });
