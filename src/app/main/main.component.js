@@ -13,6 +13,7 @@ import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
 import designationEditorComponent from '../designationEditor/designationEditor.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
+import profileComponent from '../profile/profile.component';
 
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
 import receiptsComponent from '../profile/receipts/receipts.component';
@@ -63,6 +64,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       url: "/search-results.html",
       template: '<search-results></search-results>'
     })
+    .state('profile', {
+      url: "/profile.html",
+      template: '<profile></profile>'
+    })
     .state('designation-editor', {
       url: "/designation-editor.html",
       template: '<designation-editor></designation-editor>'
@@ -84,6 +89,7 @@ export default angular
     productConfigComponent.name,
     signInComponent.name,
     searchResultsComponent.name,
+    profileComponent.name,
     designationEditorComponent.name,
     paymentMethodsComponent.name,
     receiptsComponent.name,

@@ -53,7 +53,7 @@ describe('thank you', () => {
       },
       profileService: {
         getPurchase: () => Observable.of(self.mockPurchase),
-        getEmail: () => Observable.of('someperson@someaddress.com')
+        getEmails: () => Observable.of([{email:'someperson@someaddress.com'}])
       }
     });
   }));
