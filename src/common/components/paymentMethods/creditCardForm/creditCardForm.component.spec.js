@@ -165,7 +165,8 @@ describe('credit card form', () => {
           'expiry-month': 12,
           'expiry-year': 19,
           ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
-        }
+        },
+        paymentMethodNumber: '1111'
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({
         success: true,
@@ -193,7 +194,8 @@ describe('credit card form', () => {
           'expiry-month': 12,
           'expiry-year': 19,
           ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
-        }
+        },
+        paymentMethodNumber: '1111'
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
       expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);
@@ -221,7 +223,8 @@ describe('credit card form', () => {
           'expiry-month': 12,
           'expiry-year': 19,
           ccv: null
-        }
+        },
+        paymentMethodNumber: false
       };
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
       expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);

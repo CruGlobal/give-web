@@ -19,7 +19,7 @@
         <div class="row" style="position: relative">
           <loading-overlay ng-if="$ctrl.loading"></loading-overlay>
           <div ng-if="$ctrl.paymentMethods" ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
-            <payment-method model="paymentMethod" payment-methods-list="$ctrl.paymentMethods" on-delete="$ctrl.onDelete()"></payment-method>
+            <payment-method success-message="$ctrl.successMessage" model="paymentMethod" payment-methods-list="$ctrl.paymentMethods" on-delete="$ctrl.onDelete()"></payment-method>
           </div>
         </div>
         <div ng-if="$ctrl.error" class="error">

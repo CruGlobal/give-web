@@ -24,6 +24,7 @@ class PaymentMethodsController {
     this.successMessage = { show: false };
     this.$timeout = $timeout;
     this.$window = $window;
+    this.paymentMethods = [];
     this.$location = $location;
     this.sessionEnforcerService = sessionEnforcerService;
   }
