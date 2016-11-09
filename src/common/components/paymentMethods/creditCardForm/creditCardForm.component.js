@@ -121,7 +121,8 @@ class CreditCardController {
             'expiry-month': this.creditCardPayment.expiryMonth,
             'expiry-year': this.creditCardPayment.expiryYear,
             ccv: ccpSecurityCode
-          }
+          },
+          paymentMethodNumber: this.creditCardPayment.cardNumber ? this.creditCardPayment.cardNumber.slice(-4) : false
         }
       });
     }else{
