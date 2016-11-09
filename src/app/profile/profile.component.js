@@ -367,8 +367,12 @@ export default angular
     profileService.name,
     sessionEnforcerService.name,
     loadingOverlay.name,
+<<<<<<< HEAD
     showErrors.name,
     addressForm.name
+=======
+    showErrors.name
+>>>>>>> 22be9f7c7d891b394157373a821029a83de4205a
   ])
   .component(componentName, {
     controller: ProfileController,
