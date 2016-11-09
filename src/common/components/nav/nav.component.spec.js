@@ -104,8 +104,8 @@ describe( 'nav', function () {
     it( 'getNav', () => {
       expect( $ctrl.getNav ).toHaveBeenCalled();
       expect($ctrl.$rootScope.$on).toHaveBeenCalledWith(giftAddedEvent, jasmine.any(Function));
-      $ctrl.$rootScope.$on.calls.argsFor(0)[1]({a: 'a'}, {b: 'b'});
-      expect($ctrl.giftAddedToCart).toHaveBeenCalledWith({a: 'a'}, {b: 'b'});
+      $ctrl.$rootScope.$on.calls.argsFor(0)[1]();
+      expect($ctrl.giftAddedToCart).toHaveBeenCalled();
     } );
   } );
 
@@ -116,14 +116,13 @@ describe( 'nav', function () {
     });
 
     it('opens and loads cart when giftAdded', () => {
-      $ctrl.giftAddedToCart('a', 'b');
+      $ctrl.giftAddedToCart();
       expect($ctrl.$window.scrollTo).toHaveBeenCalledWith(0,0);
       expect($ctrl.loadCart).toHaveBeenCalled();
       expect($ctrl.cartOpen).toEqual(true);
     });
   });
 } );
-
 
 describe( 'nav signInButton', function () {
   beforeEach( angular.mock.module( module.name ) );

@@ -58,7 +58,7 @@ class NavController{
 
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
 
-    this.$rootScope.$on(giftAddedEvent, (evt, args) => { this.giftAddedToCart(evt, args); });
+    this.$rootScope.$on(giftAddedEvent, () => this.giftAddedToCart() );
   }
 
   $onDestroy() {
@@ -75,8 +75,7 @@ class NavController{
     this.changeMetaTag('viewport', this.menuType === 'mobile' ? 'width=device-width, minimum-scale=1.0' : 'width=1024');
   }
 
-  // eslint-disable-next-line no-unused-vars
-  giftAddedToCart(event, item) {
+  giftAddedToCart() {
     this.$window.scrollTo(0, 0);
     this.loadCart();
     this.cartOpen = true;
