@@ -15,13 +15,7 @@
   </div>
 </div>
 
-<div class="alert alert-success text-center" ng-if="$ctrl.giftSubmitted">
-  <p>Gift has been added to your cart.</p>
-  <button class="btn btn-success" ng-click="$close()">Go to Cart</button>
-  <button class="btn btn-success" ng-click="$dismiss()">Keep Browsing</button>
-</div>
-
-<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.saveGiftToCart()" ng-if="!$ctrl.giftSubmitted">
+<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.saveGiftToCart()">
   <div class="modal-body pt0 p">
     <div class="container-fluid">
       <div class="panel panel-default panel-plain mt">

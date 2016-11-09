@@ -14,6 +14,7 @@ import sessionModalService from 'common/services/session/sessionModal.service';
 import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
 import subNavDirective from './subNav.directive';
+import {giftAddedEvent} from 'app/productConfig/productConfig.modal';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
@@ -23,10 +24,11 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($scope, $http, $document, $window, envService, cartService, sessionService, sessionModalService){
+  constructor($rootScope, $http, $document, $window, envService, cartService, sessionService, sessionModalService){
     this.$http = $http;
     this.$document = $document;
     this.$window = $window;
+    this.$rootScope = $rootScope;
 
     this.cartService = cartService;
     this.sessionService = sessionService;
@@ -55,6 +57,8 @@ class NavController{
     });
 
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
+
+    this.$rootScope.$on(giftAddedEvent, (evt, args) => { this.giftAddedToCart(evt, args); });
   }
 
   $onDestroy() {
@@ -69,6 +73,13 @@ class NavController{
 
     //set viewport
     this.changeMetaTag('viewport', this.menuType === 'mobile' ? 'width=device-width, minimum-scale=1.0' : 'width=1024');
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  giftAddedToCart(event, item) {
+    this.$window.scrollTo(0, 0);
+    this.loadCart();
+    this.cartOpen = true;
   }
 
   changeMetaTag(tag, content) {
