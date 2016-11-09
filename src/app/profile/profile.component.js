@@ -20,6 +20,7 @@ let componentName = 'profile';
 
 class ProfileController {
 
+  /* @ngInject */
   constructor($window, $location, $log, sessionEnforcerService, profileService) {
     this.$window = $window;
     this.$log = $log;
