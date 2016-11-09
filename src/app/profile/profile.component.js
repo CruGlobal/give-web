@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-messages';
 
 import template from './profile.tpl';
 
@@ -366,6 +367,7 @@ export default angular
   .module(componentName, [
     template.name,
     profileService.name,
+    'ngMessages',
     sessionEnforcerService.name,
     loadingOverlay.name,
     showErrors.name,
