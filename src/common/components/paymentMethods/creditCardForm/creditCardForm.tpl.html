@@ -68,7 +68,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-4" ng-hide="$ctrl.paymentMethod">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors)}">
           <label translate>CVV Code</label>
           <input type="text" name="securityCode" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode"ng-attr-placeholder="{{$ctrl.paymentMethod ? '****' : ''}}" ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber">
