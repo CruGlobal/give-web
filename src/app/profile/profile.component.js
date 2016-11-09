@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-messages';
 
 import template from './profile.tpl';
 
@@ -9,6 +10,7 @@ import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/s
 import {Roles} from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
 import {Observable} from 'rxjs/Observable';
+import commonModule from 'common/common.module';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 
@@ -365,10 +367,12 @@ export default angular
   .module(componentName, [
     template.name,
     profileService.name,
+    'ngMessages',
     sessionEnforcerService.name,
     loadingOverlay.name,
     showErrors.name,
-    addressForm.name
+    addressForm.name,
+    commonModule.name
   ])
   .component(componentName, {
     controller: ProfileController,
