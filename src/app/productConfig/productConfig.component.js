@@ -5,6 +5,8 @@ import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
 import modalStateService from 'common/services/modalState.service';
 import {giveGiftParams} from 'app/productConfig/productConfig.modal';
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 //include designation edit button component to be included on designation page
 import designationEditButtonComponent from '../designationEditButton/designationEditButton.component';
@@ -14,8 +16,9 @@ let componentName = 'productConfig';
 class ProductConfigController {
 
   /* @ngInject */
-  constructor( productModalService, $window ) {
+  constructor( productModalService, analyticsFactory, $window ) {
     this.productModalService = productModalService;
+    this.analyticsFactory = analyticsFactory;
     this.$window = $window;
   }
 
@@ -29,6 +32,7 @@ class ProductConfigController {
       .configureProduct( this.productCode, {amount: 50}, false );
     modalInstance.rendered.then( () => {
       this.loadingModal = false;
+      this.analyticsFactory.giveGiftModal(this.productCode);
     } );
     modalInstance.result.then( () => {
       this.$window.location.href = '/cart.html';
@@ -43,7 +47,8 @@ export default angular
     modalStateService.name,
     productModalService.name,
     designationEditButtonComponent.name,
-    template.name
+    template.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  ProductConfigController,

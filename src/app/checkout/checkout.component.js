@@ -20,6 +20,9 @@ import commonModule from 'common/common.module';
 import sessionEnforcerService, {EnforcerCallbacks} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
 
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 import template from './checkout.tpl';
 
 let componentName = 'checkout';
@@ -27,7 +30,7 @@ let componentName = 'checkout';
 class CheckoutController{
 
   /* @ngInject */
-  constructor($window, $location, $rootScope, $log, cartService, designationsService, sessionEnforcerService){
+  constructor($window, $location, $rootScope, $log, cartService, designationsService, sessionEnforcerService, analyticsFactory){
     this.$log = $log;
     this.$window = $window;
     this.$location = $location;
@@ -36,6 +39,7 @@ class CheckoutController{
     this.designationsService = designationsService;
     this.sessionEnforcerService = sessionEnforcerService;
     this.loadingCartData = true;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -76,6 +80,7 @@ class CheckoutController{
       })
       .subscribe((data) => {
           this.cartData = data;
+          this.analyticsFactory.viewCart(data);
         },
         (error) => {
           this.$log.error("Error loading cart", error);
@@ -97,7 +102,8 @@ export default angular
     designationsService.name,
     sessionEnforcerService.name,
     showErrors.name,
-    loadingComponent.name
+    loadingComponent.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: CheckoutController,

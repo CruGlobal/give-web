@@ -10,6 +10,9 @@ import desigSrcDirective from 'common/directives/desigSrc.directive';
 import loadingOverlayComponent from 'common/components/loadingOverlay/loadingOverlay.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 import template from './cart.tpl';
 
 let componentName = 'cart';
@@ -17,11 +20,12 @@ let componentName = 'cart';
 class CartController {
 
   /* @ngInject */
-  constructor( $window, cartService, sessionService, productModalService ) {
+  constructor( $window, cartService, sessionService, productModalService, analyticsFactory ) {
     this.$window = $window;
     this.productModalService = productModalService;
     this.cartService = cartService;
     this.sessionService = sessionService;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -34,6 +38,7 @@ class CartController {
       .subscribe( ( data ) => {
         this.cartData = data;
         this.loading = false;
+        this.analyticsFactory.viewCart(data, 'pageLoad');
       } );
   }
 
@@ -41,6 +46,7 @@ class CartController {
     this.cartData = null;
     this.cartService.deleteItem( uri )
       .subscribe( () => {
+        console.log(uri);
         this.loadCart();
       } );
   }
@@ -71,7 +77,8 @@ export default angular
     cartService.name,
     productModalService.name,
     sessionService.name,
-    desigSrcDirective.name
+    desigSrcDirective.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  CartController,

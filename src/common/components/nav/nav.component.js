@@ -18,12 +18,15 @@ import subNavDirective from './subNav.directive';
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
 
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'cruNav';
 
 class NavController{
 
   /* @ngInject */
-  constructor($scope, $http, $document, $window, envService, cartService, sessionService, sessionModalService){
+  constructor($scope, $http, $document, $window, envService, cartService, sessionService, sessionModalService, analyticsFactory){
     this.$http = $http;
     this.$document = $document;
     this.$window = $window;
@@ -34,6 +37,8 @@ class NavController{
 
     this.imgDomain = envService.read('imgDomain');
     this.navFeed = envService.read('navFeed');
+
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -152,6 +157,7 @@ class NavController{
     this.cartService.get()
       .subscribe( ( data ) => {
         this.cartData = data;
+        this.analyticsFactory.viewCart(data, 'customLink');
       } );
   }
 
@@ -182,7 +188,8 @@ export default angular
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
-    subNavDirective.name
+    subNavDirective.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: NavController,

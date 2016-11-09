@@ -13,6 +13,8 @@ import modalStateService from 'common/services/modalState.service';
 import {possibleTransactionDays, startDate} from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 let controllerName = 'productConfigController';
 export let giveGiftParams = {
@@ -25,7 +27,7 @@ export let giveGiftParams = {
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $scope, $log, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit, uri ) {
+  constructor( $location, $scope, $log, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit, uri, analyticsFactory ) {
     this.$location = $location;
     this.$scope = $scope;
     this.$log = $log;
@@ -42,6 +44,7 @@ class ModalInstanceCtrl {
     this.isEdit = isEdit;
     this.uri = uri;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
+    this.analyticsFactory = analyticsFactory;
 
     if ( this.isEdit ) {
       this.submitLabel = gettext( 'Update Gift' );
@@ -163,6 +166,7 @@ class ModalInstanceCtrl {
         this.$uibModalInstance.close( {isUpdated: true} );
       } else {
         this.giftSubmitted = true;
+        this.analyticsFactory.addToCart(this.itemConfig, this.productData, 'cart modal');
       }
       this.submittingGift = false;
     }, (error) => {
@@ -182,6 +186,7 @@ export default angular
     cartService.name,
     modalStateService.name,
     desigSrcDirective.name,
-    showErrors.name
+    showErrors.name,
+    analyticsFactory.name
   ] )
   .controller( controllerName, ModalInstanceCtrl );

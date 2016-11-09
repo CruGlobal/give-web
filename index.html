@@ -17,6 +17,89 @@
       <!-- @if ENV='prod' !>
       <link rel="stylesheet" href="give.min.css" type="text/css">
       <!-- @endif -->
+
+      <!-- Data layer -->
+      <script>
+        var digitalData = {},
+            pagename = '',
+            delim = ':',
+            path = window.location.pathname,
+            allElements = document.getElementsByTagName('*');
+
+            if (path !== '/') {
+                var extension = ['.html','.htm'];
+
+                for (var i = 0; i < extension.length; i++) {
+                    if (path.indexOf(extension[i]) > -1) {
+                        path = path.split(extension[i]);
+                        path = path.splice(0,1);
+                        path = path.toString();
+
+                        break;
+                    }
+                }
+
+                path = path.split('/');
+
+                if (path[0].length == 0) {
+                    path.shift();
+                }
+
+                // Set pageName
+                digitalData.page = {
+                  pageInfo: {
+                    pageName: 'give' + delim + path.join(delim)
+                  }
+                };
+            } else {
+              // Set pageName
+              digitalData.page.pageInfo = {
+                  pageName: 'give' + delim + 'home'
+              };
+            }
+
+            // Set product category
+            for (var i = 0, n = allElements.length; i < n; i++) {
+                var desigType = allElements[i].getAttribute('designationtype');
+
+                if (desigType !== null) {
+                    digitalData.product = [{
+                        category: {
+                            primaryCategory: 'donation ' + desigType.toLowerCase(),
+                            siebelProductType: 'designation',
+                            organizationId: path[0]
+                        }
+                    }];
+                }
+            }
+
+            // Set site sections
+            digitalData.page.category = {
+                primaryCategory: 'give'
+            };
+
+            if (path.length >= 1) {
+
+                // Check if product page
+                if (/^\d+$/.test(path[0])) {
+                    this.getSetProductCategory(path);
+                    digitalData.page.category.subCategory1 = 'designation detail';
+                } else {
+                    digitalData.page.category.subCategory1 = path[0];
+                }
+
+                if (path.length >= 2) {
+                    digitalData.page.category.subCategory2 = path[1];
+
+                    if (path.length >= 3) {
+                        digitalData.page.category.subCategory3 = path[2];
+                    }
+                }
+
+            }
+      </script>
+
+      <script src="//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-6dd3db02902933d8623718855e23b0ee85dbb1ab-staging.js"></script>
   </head>
   <body ng-cloak ng-app="main">
 
@@ -50,5 +133,6 @@
       (function(){var config={kitId:'bar1avb',scriptTimeout:3000};var h=document.getElementsByTagName("html")[0];h.className+=" wf-loading";var t=setTimeout(function(){h.className=h.className.replace(/(\s|^)wf-loading(\s|$)/g," ");h.className+=" wf-inactive"},config.scriptTimeout);var tk=document.createElement("script"),d=false;tk.src='//use.typekit.net/'+config.kitId+'.js';tk.type="text/javascript";tk.async="true";tk.onload=tk.onreadystatechange=function(){var a=this.readyState;if(d||a&&a!="complete"&&a!="loaded")return;d=true;clearTimeout(t);try{Typekit.load(config)}catch(b){}};var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(tk,s)})();(function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);grunticon(["//www.cru.org/css/bg/icons.data.svg.css","//www.cru.org/css/bg/icons.data.png.css","//www.cru.org/css/bg/icons.fallback.css"]);
     </script>
 
+    <script type="text/javascript">_satellite.pageBottom();</script>
   </body>
 </html>

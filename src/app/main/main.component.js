@@ -13,6 +13,8 @@ import signInComponent from '../signIn/signIn.component';
 import searchResultsComponent from '../searchResults/searchResults.component';
 import designationEditorComponent from '../designationEditor/designationEditor.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
+import analyticsModule from '../analytics/analytics.module';
+import analyticsRun from '../analytics/analytics.run';
 
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
 import receiptsComponent from '../profile/receipts/receipts.component';
@@ -87,7 +89,9 @@ export default angular
     designationEditorComponent.name,
     paymentMethodsComponent.name,
     receiptsComponent.name,
-    'ui.router'
+    'ui.router',
+    analyticsModule.name,
+    analyticsRun.name,
   ])
   .config(routingConfig)
   .component(componentName, {
