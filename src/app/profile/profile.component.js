@@ -4,6 +4,7 @@ import template from './profile.tpl';
 
 import profileService from 'common/services/api/profile.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+import addressForm from 'common/components/addressForm/addressForm.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles} from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
@@ -366,7 +367,8 @@ export default angular
     profileService.name,
     sessionEnforcerService.name,
     loadingOverlay.name,
-    showErrors.name
+    showErrors.name,
+    addressForm.name
   ])
   .component(componentName, {
     controller: ProfileController,
