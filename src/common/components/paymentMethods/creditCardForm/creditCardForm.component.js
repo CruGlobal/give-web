@@ -96,9 +96,11 @@ class CreditCardController {
       this.creditCardPaymentForm.expiryMonth.$validate();
     });
 
-    this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.creditCardPaymentForm.securityCode.$validators.minlength = number => this.paymentMethod && !this.creditCardPayment.cardNumber || toString(number).length >= 3;
-    this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
+    if(!this.paymentMethod) {
+      this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
+      this.creditCardPaymentForm.securityCode.$validators.minlength = number => this.paymentMethod && !this.creditCardPayment.cardNumber || toString(number).length >= 3;
+      this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
+    }
   }
 
   initializeExpirationDateOptions(){
