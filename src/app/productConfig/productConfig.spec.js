@@ -9,7 +9,7 @@ describe( 'productConfig', function () {
   let $ctrl;
 
   beforeEach( inject( function ( _$componentController_ ) {
-    $ctrl = _$componentController_( module.name, {$window: {location: {href: ''}}}, {productCode: '0123456'} );
+    $ctrl = _$componentController_( module.name, {$window: {location: {href: ''}}}, {productCode: '0123456', campaignCode: 'test123'} );
   } ) );
 
   it( 'to be defined', function () {
@@ -41,7 +41,7 @@ describe( 'productConfig', function () {
 
     it( 'opens productConfig modal', () => {
       $ctrl.configModal();
-      expect( productModalService.configureProduct ).toHaveBeenCalledWith( '0123456', {amount: 50}, false );
+      expect( productModalService.configureProduct ).toHaveBeenCalledWith( '0123456', {amount: 50, 'campaign-code': 'test123'}, false );
     } );
 
     it( 'updates after modal rendered', () => {
