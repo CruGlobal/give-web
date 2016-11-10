@@ -25,9 +25,9 @@ describe('designation service', () => {
         keyword: 'steve'
       })
         .subscribe((data) => {
-          expect(data.length).toEqual(searchResponse.response.docs.length);
-          expect(data[0].designationNumber).toEqual(searchResponse.response.docs[0]['productCode']);
-          expect(data[0].name).toEqual(searchResponse.response.docs[0]['productName|en_US|']);
+          expect(data.length).toEqual(searchResponse.hits.hit.length);
+          expect(data[0].designationNumber).toEqual(searchResponse.hits.hit[0]['fields']['designation_number'][0]);
+          expect(data[0].name).toEqual(searchResponse.hits.hit[0]['fields']['description'][0]);
         });
       self.$httpBackend.flush();
     });
