@@ -25,12 +25,18 @@ function designations($http, envService, cortexApiService){
     })).map((response) => {
       var results = [];
 
-      angular.forEach(response.data.response.docs, function(d){
+      angular.forEach(response.data.hits.hit, function(d){
+        var fields = d.fields;
+        var designation_number = fields.designation_number ? fields.designation_number[0] : null;
+        var replacement_designation_number = fields.replacement_designation_number ? fields.replacement_designation_number[0] : null;
+        var description = fields.description ? fields.description[0] : null;
+        var type = fields.designation_type ? fields.designation_type[0] : null;
+
         results.push({
-          designationNumber: d['productCode'],
-          replacementDesignationNumber: d['attribute.replacement_designation_id_st'],
-          name: d['productName|en_US|'],
-          type: d['attribute.designation_type_st']
+          designationNumber: designation_number,
+          replacementDesignationNumber: replacement_designation_number,
+          name: description,
+          type: type
         });
       });
 
