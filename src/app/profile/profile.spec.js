@@ -51,11 +51,13 @@ describe( 'ProfileComponent', function () {
       },
       phoneNumberForms: [{
         $setPristine: jasmine.createSpy('$setPristine'),
-        $setValidity: jasmine.createSpy('$setPristine'),
         $setDirty: jasmine.createSpy('$setPristine'),
         $dirty: true,
         $invalid: false,
-        $valid: true
+        $valid: true,
+        phoneNumber: {
+          $setValidity: jasmine.createSpy('$setPristine')
+        }
       }]
     } );
   } ) );
@@ -393,7 +395,7 @@ describe( 'ProfileComponent', function () {
         delete: false
       };
       $ctrl.deletePhoneNumber(phone, 0);
-      expect($ctrl.phoneNumberForms[0].$setValidity).toHaveBeenCalled();
+      expect($ctrl.phoneNumberForms[0].phoneNumber.$setValidity).toHaveBeenCalled();
       expect($ctrl.phoneNumberForms[0].$setPristine).toHaveBeenCalled();
 
       phone.self = {};
