@@ -62,7 +62,7 @@
       </div>
 
       <div class="cart">
-        <div uib-dropdown on-toggle="open && $ctrl.loadCart()">
+        <div uib-dropdown on-toggle="open && $ctrl.loadCart()" is-open="$ctrl.cartOpen">
           <a uib-dropdown-toggle></a>
           <div class="pull-right" uib-dropdown-menu>
             <span class="triangle"></span>

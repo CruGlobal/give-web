@@ -22,6 +22,8 @@ export let giveGiftParams = {
   day:         'dd'
 };
 
+export let giftAddedEvent = 'giftAddedToCart';
+
 class ModalInstanceCtrl {
 
   /* @ngInject */
@@ -144,7 +146,6 @@ class ModalInstanceCtrl {
   }
 
   saveGiftToCart() {
-    this.giftSubmitted = false;
     this.submittingGift = false;
     if ( !this.itemConfigForm.$valid ) {
       return;
@@ -162,7 +163,8 @@ class ModalInstanceCtrl {
       if ( this.isEdit ) {
         this.$uibModalInstance.close( {isUpdated: true} );
       } else {
-        this.giftSubmitted = true;
+        this.$scope.$emit( giftAddedEvent, {id: id, data: data} );
+        this.$uibModalInstance.dismiss();
       }
       this.submittingGift = false;
     }, (error) => {

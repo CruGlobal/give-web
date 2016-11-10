@@ -7,6 +7,8 @@ import module from './nav.component';
 import navStructure from 'common/components/nav/fixtures/nav.fixture';
 const iPhoneUserAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25';
 
+import {giftAddedEvent} from 'app/productConfig/productConfig.modal';
+
 describe( 'nav', function () {
   beforeEach( angular.mock.module( module.name ) );
   let $ctrl, $httpBackend, $document;
@@ -17,7 +19,8 @@ describe( 'nav', function () {
         location: {href: 'cart.html'},
         navigator: {
           userAgent: iPhoneUserAgent
-        }
+        },
+        scrollTo: jasmine.createSpy('scrollTo')
     }} );
     $httpBackend = _$httpBackend_;
     $document = _$document_;
@@ -93,15 +96,33 @@ describe( 'nav', function () {
   describe( '$onInit()', () => {
     beforeEach( () => {
       spyOn( $ctrl, 'getNav' ).and.returnValue(Observable.of([]));
+      spyOn( $ctrl.$rootScope, '$on' );
+      spyOn($ctrl, 'giftAddedToCart');
       $ctrl.$onInit();
     } );
 
     it( 'getNav', () => {
       expect( $ctrl.getNav ).toHaveBeenCalled();
+      expect($ctrl.$rootScope.$on).toHaveBeenCalledWith(giftAddedEvent, jasmine.any(Function));
+      $ctrl.$rootScope.$on.calls.argsFor(0)[1]();
+      expect($ctrl.giftAddedToCart).toHaveBeenCalled();
     } );
   } );
-} );
 
+  describe( 'giftAddedToCart()', () => {
+    beforeEach(() => {
+      spyOn($ctrl, 'loadCart');
+      $ctrl.cartOpen = false;
+    });
+
+    it('opens and loads cart when giftAdded', () => {
+      $ctrl.giftAddedToCart();
+      expect($ctrl.$window.scrollTo).toHaveBeenCalledWith(0,0);
+      expect($ctrl.loadCart).toHaveBeenCalled();
+      expect($ctrl.cartOpen).toEqual(true);
+    });
+  });
+} );
 
 describe( 'nav signInButton', function () {
   beforeEach( angular.mock.module( module.name ) );
