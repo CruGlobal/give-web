@@ -126,7 +126,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
   }
 
   function downgradeToGuest() {
-    if ( currentRole() !== Roles.identified ) return Observable.throw( 'must be IDENTIFIED' );
+    if ( currentRole() == Roles.public ) return Observable.throw( 'must be IDENTIFIED' );
     return Observable
       .from( $http( {
         method:          'POST',
