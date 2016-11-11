@@ -2,12 +2,14 @@ import 'babel/external-helpers';
 import angular from 'angular';
 import concat from 'lodash/concat';
 import map from 'lodash/map';
+import { Observable } from 'rxjs/Observable';
 
 import accountBenefits from './accountBenefits/accountBenefits.component';
 import help from '../checkout/help/help.component';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import capitalizeFilter from 'common/filters/capitalize.filter';
 
@@ -24,16 +26,18 @@ let componentName = 'thankYou';
 class ThankYouController{
 
   /* @ngInject */
-  constructor(orderService, profileService, sessionModalService, $log){
+  constructor(orderService, profileService, sessionModalService, analyticsFactory, $log){
     this.orderService = orderService;
     this.profileService = profileService;
     this.sessionModalService = sessionModalService;
+    this.analyticsFactory = analyticsFactory;
     this.$log = $log;
   }
 
   $onInit(){
-    this.loadLastPurchase();
-    this.loadEmail();
+    Observable.of(this.loadLastPurchase(), this.loadEmail()).subscribe(null, null, () => {
+      this.analyticsFactory.pageLoaded();
+    });
   }
 
   loadLastPurchase(){
@@ -94,6 +98,7 @@ export default angular
   .module(componentName, [
     template.name,
     commonModule.name,
+    analyticsFactory.name,
     accountBenefits.name,
     help.name,
     displayAddressComponent.name,

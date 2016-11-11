@@ -80,6 +80,7 @@ class CheckoutController{
       })
       .subscribe((data) => {
           this.cartData = data;
+          this.analyticsFactory.pageLoaded();
           this.analyticsFactory.viewCart(data);
         },
         (error) => {

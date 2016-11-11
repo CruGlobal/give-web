@@ -244,6 +244,9 @@ function analyticsFactory() {
             if (/^\d+$/.test(path[0])) {
 
             }
+        },
+        pageLoaded: function() {
+          console.log('Page Load Event');
         }
     }
 }

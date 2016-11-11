@@ -10,7 +10,6 @@ import desigSrcDirective from 'common/directives/desigSrc.directive';
 import loadingOverlayComponent from 'common/components/loadingOverlay/loadingOverlay.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 
-import analyticsModule from 'app/analytics/analytics.module';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './cart.tpl';
@@ -38,15 +37,16 @@ class CartController {
       .subscribe( ( data ) => {
         this.cartData = data;
         this.loading = false;
+        this.analyticsFactory.pageLoaded();
         this.analyticsFactory.viewCart(data, 'pageLoad');
       } );
   }
 
-  removeItem( uri ) {
+  removeItem( uri, designationNumber ) {
     this.cartData = null;
     this.cartService.deleteItem( uri )
       .subscribe( () => {
-        console.log(uri);
+        console.log(designationNumber);
         this.loadCart();
       } );
   }
