@@ -31,24 +31,7 @@
                         <li>
                           <form name="$ctrl.donorDetailsForm" novalidate>
                             <div class="form-group is-required person-row">
-                              <i class="fa fa-lock"></i>
-
-                              <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
-                                <option value="Mr" translate>Mr.</option>
-                                <option value="Mrs" translate>Mrs.</option>
-                                <option value="Dr" translate>Dr.</option>
-                              </select>
-
-                              <input type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']">
-                              <input type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails.name['middle-initial']">
-                              <input type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']">
-
-                              <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
-                                <option></option>
-                                <option value="Jr." translate>Jr.</option>
-                                <option value="III" translate>III</option>
-                              </select>
-
+                              <i class="fa fa-lock"></i><select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title"><option value="Mr" translate>Mr.</option><option value="Mrs" translate>Mrs.</option><option value="Dr" translate>Dr.</option></select><input type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']"><input type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails.name['middle-initial']"><input type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']"><select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix"><option></option><option value="Jr." translate>Jr.</option><option value="III" translate>III</option></select>
                             </div>
                           </form>
                         </li>
