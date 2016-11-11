@@ -225,6 +225,39 @@ describe( 'session service', function () {
     } );
   } );
 
+  describe( 'downgradeToGuest', () => {
+    describe( 'with \'REGISTERED\' role', () => {
+      beforeEach( () => {
+        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $cookies.put( Sessions.give, giveSession );
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest();
+      } );
+
+      it( 'throws error', () => {
+        sessionService.downgradeToGuest().subscribe( angular.noop, ( error ) => {
+          expect( error ).toBeDefined();
+        } );
+      } );
+    } );
+
+    describe( 'with \'IDENTIFIED\' role', () => {
+      beforeEach( () => {
+        $cookies.put( Sessions.cortex, cortexSession.identified );
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest();
+      } );
+
+      it( 'make http request to cas/downgrade', () => {
+        $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/downgrade', {} ).respond( 204, {} );
+        sessionService.downgradeToGuest().subscribe( ( data ) => {
+          expect( data ).toEqual( {} );
+        } );
+        $httpBackend.flush();
+      } );
+    } );
+  } );
+
   describe( 'session expiration', () => {
     let $timeout;
     beforeEach( inject( ( _$timeout_ ) => {
