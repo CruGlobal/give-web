@@ -214,7 +214,7 @@ class ProfileController {
     if(phone.self) { // set existing phone number for a deletion
       this.phoneNumberForms[index].$setDirty();
     } else { // reset validations
-      this.phoneNumberForms[index].$setValidity();
+      this.phoneNumberForms[index].phoneNumber.$setValidity();
       this.phoneNumberForms[index].$setPristine();
     }
   }

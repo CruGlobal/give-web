@@ -26,7 +26,7 @@ class ProductConfigController {
   configModal() {
     this.loadingModal = true;
     let modalInstance = this.productModalService
-      .configureProduct( this.productCode, {amount: 50}, false );
+      .configureProduct( this.productCode, {amount: 50, 'campaign-code': this.campaignCode}, false );
     modalInstance.rendered.then( () => {
       this.loadingModal = false;
     } );
@@ -49,6 +49,7 @@ export default angular
     controller:  ProductConfigController,
     templateUrl: template.name,
     bindings:    {
+      campaignCode: '@',
       productCode: '@',
       buttonLabel: '@',
       buttonSize: '@'

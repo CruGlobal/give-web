@@ -26,10 +26,6 @@
 
   <div class="give-thumbs-container clearfix" ng-if="$ctrl.photos.length">
     <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
-      <a href="" class="cover-thumb-remove" ng-click="$ctrl.deletePhoto(photo.original)">
-        <i class="fa fa-trash-o"></i>
-      </a>
-
       <input type="radio" id="cover-thumb{{$index}}" ng-model="$ctrl.selectedPhoto" ng-value="photo.original">
       <label for="cover-thumb{{$index}}">
         <img ng-src="{{photo.thumbnail}}">
