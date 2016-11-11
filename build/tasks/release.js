@@ -10,7 +10,9 @@ gulp.task('minify-css', function () {
     .pipe($.cleanCss({
       keepSpecialComments: 0
     }))
-    .pipe($.concat('give.min.css'))
+    .pipe($.rename({
+      suffix: '.min'
+    }))
     .pipe(gulp.dest(paths.output));
 });
 
