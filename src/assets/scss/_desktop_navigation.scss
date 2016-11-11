@@ -1,4 +1,4 @@
-$col-width: 280px;
+$col-width: 245px;
 $menu-container-height: 300px;
 $promo-width: 200px;
 
@@ -60,9 +60,9 @@ $promo-width: 200px;
 
       a {
         display: block;
-        padding: 5px 16px;
+        padding: 5px 10px;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 500;
         font-size: 14px;
         color: $colorText;
         text-decoration: none;
@@ -92,33 +92,6 @@ $promo-width: 200px;
   .col-level-2,
   .col-level-3 {
     min-height: $menu-container-height;
-  }
-
-  .gh-desk-promo {
-    background-color: $colorGrayscale-stone;
-    display: block;
-    width: 260px;
-    height: 300px;
-    float: right;
-    right: 0;
-    position: absolute;
-    padding: 0;
-    margin: 0;
-
-    a {
-      margin: 0;
-      padding: 0 !important;
-      line-height: 0;
-      
-      img {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: auto;
-        max-height: 100%;
-        max-width: 100%;
-      }
-    }
   }
 
   .gh-offset-2 {
@@ -179,9 +152,7 @@ $promo-width: 200px;
 
   .children-container {
     background: $colorGrayscale-pebble;
-    left: 0;
     position: absolute;
-    width: 100%;
     display: none;
     z-index: 100;
   }
@@ -374,7 +345,7 @@ $promo-width: 200px;
 
     .ellipsis {
       float: right;
-      background: url("/assets/img/search-ellipsis-grey.png") no-repeat right 22px top;
+      background: url("/assets/img/search-ellipsis-grey.png") no-repeat right 27px top;
       background-size: 4px 20px;
       width: 60px;
       height: 22px;

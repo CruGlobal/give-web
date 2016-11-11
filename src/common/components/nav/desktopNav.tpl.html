@@ -25,12 +25,6 @@
             </li>
           </ul>
 
-          <div class="gh-desk-promo"
-               ng-if="menuItem.imagePath && $ctrl.menuPath.main[0] === menuItem.path.split('/').pop()"
-               ng-class="$ctrl.promoClass"
-               ng-init="$ctrl.promoClass = 'gh-offset-2'">
-            <a ng-href="{{menuItem.featuredPath}}"><img ng-src="{{menuItem.imagePath}}"></a>
-          </div>
         </div>
       </li>
     </ul>
