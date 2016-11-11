@@ -55,8 +55,7 @@ class CreditCardController {
         cardNumberPlaceholder: this.paymentMethod['card-number'],
         cardholderName: this.paymentMethod['cardholder-name'],
         expiryMonth: this.paymentMethod['expiry-month'],
-        expiryYear: parseInt(this.paymentMethod['expiry-year']),
-        securityCode: ''
+        expiryYear: parseInt(this.paymentMethod['expiry-year'])
       };
       this.useMailingAddress = false;
     } else {
@@ -75,6 +74,15 @@ class CreditCardController {
     let unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm', () => {
       unregister();
       this.addCustomValidators();
+    });
+  }
+
+  waitForSecurityCodeInitialization() {
+    let unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
+      unregister();
+      this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
+      this.creditCardPaymentForm.securityCode.$validators.minlength = number => toString(number).length >= 3;
+      this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
     });
   }
 
@@ -97,9 +105,9 @@ class CreditCardController {
       this.creditCardPaymentForm.expiryMonth.$validate();
     });
 
-    this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.creditCardPaymentForm.securityCode.$validators.minlength = number => this.paymentMethod && !this.creditCardPayment.cardNumber || toString(number).length >= 3;
-    this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
+    if(!this.paymentMethod) {
+      this.waitForSecurityCodeInitialization();
+    }
 
   }
 
