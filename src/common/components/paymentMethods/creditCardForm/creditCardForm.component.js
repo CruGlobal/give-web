@@ -55,7 +55,8 @@ class CreditCardController {
         cardNumberPlaceholder: this.paymentMethod['card-number'],
         cardholderName: this.paymentMethod['cardholder-name'],
         expiryMonth: this.paymentMethod['expiry-month'],
-        expiryYear: parseInt(this.paymentMethod['expiry-year'])
+        expiryYear: parseInt(this.paymentMethod['expiry-year']),
+        securityCode: ''
       };
       this.useMailingAddress = false;
     } else {
@@ -96,11 +97,10 @@ class CreditCardController {
       this.creditCardPaymentForm.expiryMonth.$validate();
     });
 
-    if(!this.paymentMethod) {
-      this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
-      this.creditCardPaymentForm.securityCode.$validators.minlength = number => this.paymentMethod && !this.creditCardPayment.cardNumber || toString(number).length >= 3;
-      this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
-    }
+    this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
+    this.creditCardPaymentForm.securityCode.$validators.minlength = number => this.paymentMethod && !this.creditCardPayment.cardNumber || toString(number).length >= 3;
+    this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
+
   }
 
   initializeExpirationDateOptions(){
@@ -112,7 +112,7 @@ class CreditCardController {
     this.creditCardPaymentForm.$setSubmitted();
     if(this.creditCardPaymentForm.$valid){
       let ccpCreditCardNumber = this.paymentMethod && !this.creditCardPayment.cardNumber ? this.paymentMethod['card-number'] : new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber).encrypt();
-      let ccpSecurityCode = this.paymentMethod && !this.creditCardPayment.cardNumber ? null : new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode).encrypt();
+      let ccpSecurityCode = this.paymentMethod ? null : new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode).encrypt();
       this.onSubmit({
         success: true,
         data: {

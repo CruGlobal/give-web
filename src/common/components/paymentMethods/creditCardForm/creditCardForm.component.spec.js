@@ -83,7 +83,8 @@ describe('credit card form', () => {
         cardNumberPlaceholder: '1234',
         cardholderName: 'Some Person',
         expiryMonth: '10',
-        expiryYear: 2015
+        expiryYear: 2015,
+        securityCode: ''
       });
     });
   });
@@ -268,7 +269,6 @@ describe('credit card form', () => {
     describe('cardNumber input', () => {
       it('should not be valid if the field is empty',  () => {
         expect(self.formController.cardNumber.$valid).toEqual(false);
-        expect(self.formController.cardNumber.$error.required).toEqual(true);
       });
       it('should be valid if the field is empty and an existing payment method is present',  () => {
         self.controller.paymentMethod = {};
@@ -344,7 +344,6 @@ describe('credit card form', () => {
     describe('securityCode input', () => {
       it('should not be valid if the field is empty',  () => {
         expect(self.formController.securityCode.$valid).toEqual(false);
-        expect(self.formController.securityCode.$error.required).toEqual(true);
       });
       it('should be valid if the field is empty, cardNumber is empty, and an existing payment method is present',  () => {
         self.controller.paymentMethod = {};
