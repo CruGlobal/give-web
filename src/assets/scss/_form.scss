@@ -87,8 +87,16 @@
   }
 }
 
+.people-fields {
+  > li {
+    .clear {clear: both;}
+  }
+}
+
 .person-row {
   select, input {margin-left: 3px;}
+  select, input, .fa {float: left;}
+  .fa {line-height: 39px;}
   select.form-control-subtle {
     display: inline-block !important;
     width: 12%;
