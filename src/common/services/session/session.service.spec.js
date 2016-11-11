@@ -226,14 +226,7 @@ describe( 'session service', function () {
   } );
 
   describe( 'downgradeToGuest', () => {
-    describe( 'with \'REGISTERED\' role', () => {
-      beforeEach( () => {
-        $cookies.put( Sessions.cortex, cortexSession.registered );
-        $cookies.put( Sessions.give, giveSession );
-        // Force digest so scope session watchers pick up changes.
-        $rootScope.$digest();
-      } );
-
+    describe( 'with \'PUBLIC\' role', () => {
       it( 'throws error', () => {
         sessionService.downgradeToGuest().subscribe( angular.noop, ( error ) => {
           expect( error ).toBeDefined();

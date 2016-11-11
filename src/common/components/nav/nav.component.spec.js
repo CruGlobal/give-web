@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 import module from './nav.component';
 
 import navStructure from 'common/components/nav/fixtures/nav.fixture';
@@ -184,8 +185,11 @@ describe( 'nav signInButton', function () {
     } );
 
     it( 'reloads window on success', () => {
+      spyOn($ctrl, '$timeout').and.callThrough();
       deferred.resolve();
       $rootScope.$digest();
+      expect( $ctrl.$timeout).toHaveBeenCalled();
+      $ctrl.$timeout.flush();
       expect( $ctrl.$window.location.reload ).toHaveBeenCalled();
     } );
 
@@ -197,27 +201,28 @@ describe( 'nav signInButton', function () {
   } );
 
   describe( 'signOut', () => {
-    let deferred;
-    beforeEach( inject( function ( _$q_ ) {
-      deferred = _$q_.defer();
-      spyOn( $ctrl.sessionService, 'signOut' ).and.callFake( () => deferred.promise );
-      $ctrl.signOut();
-    } ) );
-
-    it( 'calls sessionService.signOut', () => {
-      expect( $ctrl.sessionService.signOut ).toHaveBeenCalled();
+    beforeEach( () => {
+      spyOn($ctrl, '$timeout').and.callThrough();
     } );
 
-    it( 'reloads window on success', () => {
-      deferred.resolve();
-      $rootScope.$digest();
-      expect( $ctrl.$window.location.reload ).toHaveBeenCalled();
-    } );
+    describe( 'downgradeToGuest() success', () => {
+      it( 'reloads window', () => {
+        spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue(Observable.of({}));
+        $ctrl.signOut();
+        expect( $ctrl.$timeout).toHaveBeenCalled();
+        $ctrl.$timeout.flush();
+        expect( $ctrl.$window.location.reload ).toHaveBeenCalled();
+      });
+    });
 
-    it( 'does nothing on failure', () => {
-      deferred.reject();
-      $rootScope.$digest();
-      expect( $ctrl.$window.location.reload ).not.toHaveBeenCalled();
-    } );
+    describe( 'downgradeToGuest() failure', () => {
+      it( 'reloads window', () => {
+        spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue(Observable.throw({}));
+        $ctrl.signOut();
+        expect($ctrl.$timeout).toHaveBeenCalled();
+        $ctrl.$timeout.flush();
+        expect( $ctrl.$window.location.reload ).toHaveBeenCalled();
+      });
+    });
   } );
 } );

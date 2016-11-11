@@ -24,11 +24,12 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($rootScope, $http, $document, $window, envService, cartService, sessionService, sessionModalService){
+  constructor($rootScope, $http, $document, $window, $timeout, envService, cartService, sessionService, sessionModalService){
     this.$http = $http;
     this.$document = $document;
     this.$window = $window;
     this.$rootScope = $rootScope;
+    this.$timeout = $timeout;
 
     this.cartService = cartService;
     this.sessionService = sessionService;
@@ -94,16 +95,17 @@ class NavController{
     this.sessionModalService
       .signIn()
       .then( () => {
-        this.$window.location.reload();
+        // use $timeout here as workaround to Firefox bug
+        this.$timeout(this.$window.location.reload);
       } );
   }
 
   signOut() {
-    this.sessionService
-      .signOut()
-      .then( () => {
-        this.$window.location.reload();
-      } );
+    this.sessionService.downgradeToGuest().subscribe( () => {
+      this.$timeout(this.$window.location.reload);
+    }, () => {
+      this.$timeout(this.$window.location.reload);
+    } );
   }
 
   sessionChanged() {
