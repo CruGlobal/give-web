@@ -11,7 +11,8 @@ let componentName = 'stopStartRecurringGiftsModal';
 class StopStartRecurringGiftsModalController {
 
   /* @ngInject */
-  constructor() {
+  constructor($window) {
+    this.$window = $window;
   }
 
   $onInit() {
@@ -19,6 +20,7 @@ class StopStartRecurringGiftsModalController {
   }
 
   changeState( state ) {
+    if( state === 'change') this.$window.location = '/profile/payment-methods.html';
     if ( state !== 'step-0' ) this.giftAction = state;
     this.state = state;
   }
