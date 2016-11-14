@@ -121,6 +121,9 @@
          ng-click="$ctrl.signUp()"
          translate>Sign Up</a>
     </div>
+    <p class="text-center">
+      <span>Already have an account?</span> <a href="" ng-click="$ctrl.onStateChange({state: 'sign-in'})" translate=""><span class="ng-scope">Sign In</span></a>
+    </p>
     <loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>
   </form>
 </div>
