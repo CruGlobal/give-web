@@ -262,11 +262,15 @@ describe('credit card form', () => {
         expect(self.formController.cardNumber.$error.required).toBeUndefined();
         expect(self.formController.cardNumber.$error.minlength).toEqual(true);
       });
-      it('should not be valid if the input is too lond',  () => {
+      it('should not be valid if the input is too long',  () => {
         self.formController.cardNumber.$setViewValue('12345678901234567');
         expect(self.formController.cardNumber.$valid).toEqual(false);
         expect(self.formController.cardNumber.$error.required).toBeUndefined();
         expect(self.formController.cardNumber.$error.maxlength).toEqual(true);
+      });
+      it('should not be valid if it contains an invalid card number',  () => {
+        self.formController.cardNumber.$setViewValue('411111111111111'); // Missing 1 digit
+        expect(self.formController.cardNumber.$valid).toEqual(false);
       });
       it('should be valid if it contains a valid card number',  () => {
         self.formController.cardNumber.$setViewValue('4111111111111111');

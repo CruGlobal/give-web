@@ -1,6 +1,9 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './signIn.component';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 
 describe( 'signIn', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -67,4 +70,20 @@ describe( 'signIn', function () {
     } );
   } );
 
+  describe( 'checkoutAsGuest()', () => {
+    describe( 'downgradeToGuest success', () => {
+      it( 'navigates to checkout', () => {
+        spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue( Observable.of( {} ) );
+        $ctrl.checkoutAsGuest();
+        expect( $ctrl.$window.location.href ).toEqual( 'checkout.html' );
+      } );
+    } );
+    describe( 'downgradeToGuest failure', () => {
+      it( 'navigates to checkout', () => {
+        spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue( Observable.throw( {} ) );
+        $ctrl.checkoutAsGuest();
+        expect( $ctrl.$window.location.href ).toEqual( 'checkout.html' );
+      } );
+    } );
+  } );
 } );

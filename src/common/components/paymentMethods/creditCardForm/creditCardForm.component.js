@@ -90,7 +90,7 @@ class CreditCardController {
     this.creditCardPaymentForm.cardNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
     this.creditCardPaymentForm.cardNumber.$validators.minlength = number => this.paymentMethod && !number || toString(number).length >= 13;
     this.creditCardPaymentForm.cardNumber.$validators.maxlength = number => toString(number).length <= 16;
-    this.creditCardPaymentForm.cardNumber.$validators.cardNumber = number => this.paymentMethod && !number || this.paymentValidationService.validateCardNumber();
+    this.creditCardPaymentForm.cardNumber.$validators.cardNumber = number => this.paymentMethod && !number || this.paymentValidationService.validateCardNumber()(number);
 
     this.creditCardPaymentForm.expiryMonth.$validators.expired = expiryMonth => {
       let currentDate = new Date();
