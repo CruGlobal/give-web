@@ -17,6 +17,7 @@ gulp.task('minify-css', function () {
 gulp.task('inline-systemjs', function () {
   var app = gulp.src([
       './jspm_packages/es6-module-loader.js',
+      './jspm_packages/system-polyfills.js',
       './jspm_packages/system.js',
       './system.config.js',
       'dist/main.js'
@@ -26,6 +27,7 @@ gulp.task('inline-systemjs', function () {
 
   var bundles = gulp.src([
       './jspm_packages/es6-module-loader.js',
+      './jspm_packages/system-polyfills.js',
       './jspm_packages/system.js',
       './system.config.js',
       'dist/common.js'
