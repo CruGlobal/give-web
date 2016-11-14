@@ -27,7 +27,7 @@
                     <h4 class="panel-title  border-bottom-small visible">Your Name</h4>
                     <div style="position: relative">
                       <loading-overlay ng-if="$ctrl.donorDetialsLoading"></loading-overlay>
-                        <ul class="list-unstyled">
+                        <ul class="list-unstyled people-fields">
                         <li>
                           <form name="$ctrl.donorDetailsForm" novalidate>
                             <div class="form-group is-required person-row">
@@ -49,6 +49,7 @@
                                 <option value="III" translate>III</option>
                               </select>
 
+                              <div class="clear"></div>
                             </div>
                           </form>
                         </li>
@@ -71,6 +72,8 @@
                                 <option value="Jr." translate>Jr.</option>
                                 <option value="III" translate>III</option>
                               </select>
+
+                              <div class="clear"></div>
 
                               <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseLastName.$error" ng-if="($ctrl.spouseDetailsForm.spouseLastName | showErrors)">
                                 <div class="help-block" ng-message="minlength" translate>Last name must be at least 2 characters</div>
