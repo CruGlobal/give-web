@@ -8,7 +8,7 @@ import 'rxjs/add/observable/of';
 
 import module from './creditCardForm.component';
 
-fdescribe('credit card form', () => {
+describe('credit card form', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
 
@@ -319,39 +319,36 @@ fdescribe('credit card form', () => {
         expect(self.formController.expiryYear.$valid).toEqual(true);
       });
     });
-    // describe('securityCode input', () => {
-    //    it('should not be valid if the field is empty',  () => {
-    //     expect(self.formController.securityCode.$valid).toEqual(false);
-    //   });
-    //   it('should be valid if the field is empty, cardNumber is empty, and an existing payment method is present',  () => {
-    //     self.controller.paymentMethod = {};
-    //     self.formController.cardNumber.$setViewValue(undefined);
-    //     self.formController.securityCode.$setViewValue(undefined);
-    //     expect(self.formController.securityCode.$valid).toEqual(true);
-    //     expect(self.formController.securityCode.$error.required).toBeUndefined();
-    //     expect(self.formController.securityCode.$error.minlength).toBeUndefined();
-    //   });
-    //   it('should not be valid if it is less than 3 digits',  () => {
-    //     self.formController.securityCode.$setViewValue('12');
-    //     expect(self.formController.securityCode.$valid).toEqual(false);
-    //     expect(self.formController.securityCode.$error.required).toBeUndefined();
-    //     expect(self.formController.securityCode.$error.minlength).toEqual(true);
-    //   });
-    //   it('should not be valid if it is greater than 4 digits',  () => {
-    //     self.formController.securityCode.$setViewValue('12345');
-    //     expect(self.formController.securityCode.$valid).toEqual(false);
-    //     expect(self.formController.securityCode.$error.required).toBeUndefined();
-    //     expect(self.formController.securityCode.$error.maxlength).toEqual(true);
-    //   });
-    //   it('should be valid if it is 3 digits',  () => {
-    //     self.formController.securityCode.$setViewValue('123');
-    //     expect(self.formController.securityCode.$valid).toEqual(true);
-    //   });
-    //   it('should be valid if it is 4 digits',  () => {
-    //     self.formController.securityCode.$setViewValue('1234');
-    //     expect(self.formController.securityCode.$valid).toEqual(true);
-    //   });
-    // });
+    describe('securityCode input', () => {
+      it('should not be valid if the field is empty',  () => {
+        expect(self.formController.securityCode.$valid).toEqual(false);
+      });
+      it('should not exist if existing payment method is present',  () => {
+        self.controller.paymentMethod = {};
+        self.formController.securityCode.$setViewValue('foo');
+        expect(self.formController.securityCode).toBeUndefined();
+      });
+      it('should not be valid if it is less than 3 digits',  () => {
+        self.formController.securityCode.$setViewValue('12');
+        expect(self.formController.securityCode.$valid).toEqual(false);
+        expect(self.formController.securityCode.$error.required).toBeUndefined();
+        expect(self.formController.securityCode.$error.minlength).toEqual(true);
+      });
+      it('should not be valid if it is greater than 4 digits',  () => {
+        self.formController.securityCode.$setViewValue('12345');
+        expect(self.formController.securityCode.$valid).toEqual(false);
+        expect(self.formController.securityCode.$error.required).toBeUndefined();
+        expect(self.formController.securityCode.$error.maxlength).toEqual(true);
+      });
+      it('should be valid if it is 3 digits',  () => {
+        self.formController.securityCode.$setViewValue('123');
+        expect(self.formController.securityCode.$valid).toEqual(true);
+      });
+      it('should be valid if it is 4 digits',  () => {
+        self.formController.securityCode.$setViewValue('1234');
+        expect(self.formController.securityCode.$valid).toEqual(true);
+      });
+    });
 
     describe('initExistingPaymentMethod', () => {
       it('should populate the creditCardPayment fields if a paymentMethod is present', () => {
