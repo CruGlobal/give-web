@@ -14,7 +14,7 @@ import capitalizeFilter from 'common/filters/capitalize.filter';
 import commonModule from 'common/common.module';
 import orderService from 'common/services/api/order.service';
 import profileService from 'common/services/api/profile.service';
-import sessionService from 'common/services/session/session.service';
+import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 
 import template from './thankYou.tpl';
@@ -24,7 +24,9 @@ let componentName = 'thankYou';
 class ThankYouController{
 
   /* @ngInject */
-  constructor(orderService, profileService, sessionModalService, $log){
+  constructor($rootScope, $window, orderService, profileService, sessionModalService, $log){
+    this.$rootScope = $rootScope;
+    this.$window = $window;
     this.orderService = orderService;
     this.profileService = profileService;
     this.sessionModalService = sessionModalService;
@@ -32,8 +34,16 @@ class ThankYouController{
   }
 
   $onInit(){
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
     this.loadLastPurchase();
     this.loadEmail();
+  }
+
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
   }
 
   loadLastPurchase(){

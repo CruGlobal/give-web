@@ -7,6 +7,8 @@ import 'rxjs/add/observable/throw';
 
 import module from './thankYou.component.js';
 
+import {SignOutEvent} from 'common/services/session/session.service';
+
 describe('thank you', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
@@ -54,17 +56,43 @@ describe('thank you', () => {
       profileService: {
         getPurchase: () => Observable.of(self.mockPurchase),
         getEmails: () => Observable.of([{email:'someperson@someaddress.com'}])
-      }
+      },
+      $window: {location: 'thank-you.html'}
     });
   }));
 
   describe('$onInit', () => {
-    it('should call all methods needed to load data for the component', () => {
+    beforeEach(() => {
+      spyOn( self.controller.$rootScope, '$on' );
+      spyOn( self.controller, 'signedOut' );
       spyOn(self.controller, 'loadLastPurchase');
+    });
+    it('should call all methods needed to load data for the component', () => {
       self.controller.$onInit();
+      expect( self.controller.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
+      self.controller.$rootScope.$on.calls.argsFor( 0 )[1]();
+      expect( self.controller.signedOut ).toHaveBeenCalled();
       expect(self.controller.loadLastPurchase).toHaveBeenCalled();
     });
   });
+
+  describe( 'signedOut( event )', () => {
+    describe( 'default prevented', () => {
+      it( 'does nothing', () => {
+        self.controller.signedOut( {defaultPrevented: true} );
+        expect( self.controller.$window.location ).toEqual( 'thank-you.html' );
+      } );
+    } );
+
+    describe( 'default not prevented', () => {
+      it( 'navigates to \'\/\'', () => {
+        let spy = jasmine.createSpy( 'preventDefault' );
+        self.controller.signedOut( {defaultPrevented: false, preventDefault: spy} );
+        expect( spy ).toHaveBeenCalled();
+        expect( self.controller.$window.location ).toEqual( '/' );
+      } );
+    } );
+  } );
 
   describe('loadLastPurchase', () => {
     it('should load all data from the last completed purchase', () => {

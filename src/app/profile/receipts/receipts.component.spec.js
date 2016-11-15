@@ -4,6 +4,7 @@ import module from './receipts.component';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import {SignOutEvent} from 'common/services/session/session.service';
 
 describe( 'ReceiptsComponent', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -20,13 +21,23 @@ describe( 'ReceiptsComponent', function () {
     expect( $ctrl.$window ).toBeDefined();
     expect( $ctrl.$location ).toBeDefined();
     expect( $ctrl.sessionEnforcerService ).toBeDefined();
+    expect( $ctrl.$rootScope ).toBeDefined();
   } );
 
   describe( '$onInit()', () => {
     beforeEach( () => {
       spyOn( $ctrl, 'getReceipts' );
       spyOn( $ctrl, 'sessionEnforcerService' );
+      spyOn( $ctrl.$rootScope, '$on' );
+      spyOn( $ctrl, 'signedOut' );
     } );
+
+    it( 'registers signed-out callback', () => {
+      $ctrl.$onInit();
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
+      $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+      expect( $ctrl.signedOut ).toHaveBeenCalled();
+    });
 
     describe( 'sessionEnforcerService success', () => {
       it( 'executes success callback', () => {
@@ -113,4 +124,21 @@ describe( 'ReceiptsComponent', function () {
     } );
   } );
 
+  describe( 'signedOut( event )', () => {
+    describe( 'default prevented', () => {
+      it( 'does nothing', () => {
+        $ctrl.signedOut( {defaultPrevented: true} );
+        expect( $ctrl.$window.location ).toEqual( 'receipts.html' );
+      } );
+    } );
+
+    describe( 'default not prevented', () => {
+      it( 'navigates to \'\/\'', () => {
+        let spy = jasmine.createSpy( 'preventDefault' );
+        $ctrl.signedOut( {defaultPrevented: false, preventDefault: spy} );
+        expect( spy ).toHaveBeenCalled();
+        expect( $ctrl.$window.location ).toEqual( '/' );
+      } );
+    } );
+  } );
 } );

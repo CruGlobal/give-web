@@ -9,7 +9,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 import cartService from 'common/services/api/cart.service';
-import sessionService from 'common/services/session/session.service';
+import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
@@ -60,6 +60,9 @@ class NavController{
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
 
     this.$rootScope.$on(giftAddedEvent, () => this.giftAddedToCart() );
+    // Register signedOut event on child scope
+    // this basically sets the listener at a lower priority, allowing $rootScope listeners first chance to respond
+    this.$rootScope.$new(true, this.$rootScope).$on(SignOutEvent, (event) => this.signedOut(event) );
   }
 
   $onDestroy() {
@@ -96,16 +99,19 @@ class NavController{
       .signIn()
       .then( () => {
         // use $timeout here as workaround to Firefox bug
-        this.$timeout(this.$window.location.reload);
+        this.$timeout(() => this.$window.location.reload());
       } );
   }
 
   signOut() {
-    this.sessionService.downgradeToGuest().subscribe( () => {
-      this.$timeout(this.$window.location.reload);
-    }, () => {
-      this.$timeout(this.$window.location.reload);
-    } );
+    this.sessionService.downgradeToGuest().subscribe(angular.noop);
+  }
+
+  signedOut( event ) {
+    if(!event.defaultPrevented) {
+      // use $timeout here as workaround to Firefox bug
+      this.$timeout(() => this.$window.location.reload());
+    }
   }
 
   sessionChanged() {

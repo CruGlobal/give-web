@@ -7,7 +7,7 @@ import profileService from 'common/services/api/profile.service';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import addressForm from 'common/components/addressForm/addressForm.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
-import {Roles} from 'common/services/session/session.service';
+import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
 import {Observable} from 'rxjs/Observable';
 import commonModule from 'common/common.module';
@@ -21,10 +21,11 @@ let componentName = 'profile';
 class ProfileController {
 
   /* @ngInject */
-  constructor($window, $location, $log, sessionEnforcerService, profileService) {
+  constructor($rootScope, $window, $location, $log, sessionEnforcerService, profileService) {
     this.$window = $window;
     this.$log = $log;
     this.$location = $location;
+    this.$rootScope = $rootScope;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.phoneNumbers = [];
@@ -44,6 +45,20 @@ class ProfileController {
         this.$window.location = '/';
       }
     }, EnforcerModes.donor);
+
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
+  }
+
+  $onDestroy() {
+    // Destroy enforcer
+    this.sessionEnforcerService.cancel( this.enforcerId );
+  }
+
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
   }
 
   loadDonorDetails() {
