@@ -73,6 +73,7 @@ describe('thank you', () => {
       self.controller.$rootScope.$on.calls.argsFor( 0 )[1]();
       expect( self.controller.signedOut ).toHaveBeenCalled();
       expect(self.controller.loadLastPurchase).toHaveBeenCalled();
+      expect(self.controller.showAccountBenefits).toEqual(true);
     });
   });
 
@@ -133,13 +134,15 @@ describe('thank you', () => {
     });
 
     describe('accounts benefits modal', () => {
-      let deferred, $rootScope;
+      let deferred, $rootScope, userMatch;
       beforeEach(inject((_$q_, _$rootScope_) => {
         deferred = _$q_.defer();
+        userMatch = _$q_.defer();
         $rootScope = _$rootScope_;
         spyOn(self.controller.profileService, 'getPurchase').and.callThrough();
         spyOn(self.controller.sessionModalService, 'accountBenefits').and.returnValue(deferred.promise);
-        spyOn(self.controller.sessionModalService, 'userMatch');
+        spyOn(self.controller.sessionModalService, 'userMatch').and.returnValue(userMatch.promise);
+        self.controller.showAccountBenefits = true;
       }));
 
       it( 'should show accountBenefits modal on matched user', () => {
@@ -147,7 +150,11 @@ describe('thank you', () => {
         expect(self.controller.sessionModalService.accountBenefits).toHaveBeenCalled();
         deferred.resolve();
         $rootScope.$digest();
+        expect(self.controller.showAccountBenefits).toEqual(true);
         expect(self.controller.sessionModalService.userMatch).toHaveBeenCalled();
+        userMatch.resolve();
+        $rootScope.$digest();
+        expect(self.controller.showAccountBenefits).toEqual(false);
       });
     });
   });
