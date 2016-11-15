@@ -22,9 +22,9 @@ class ReceiptsController {
   }
 
   $onInit() {
+    this.today = new Date();
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
-        this.today = new Date();
         this.currentYear = this.today.getFullYear();
         this.getReceipts(this.currentYear,true);
       },
@@ -32,9 +32,6 @@ class ReceiptsController {
         this.$window.location = '/';
       }
     }, EnforcerModes.donor);
-    this.today = new Date();
-    this.currentYear = this.today.getFullYear();
-    this.getReceipts(this.currentYear,true);
   }
 
   getReceipts(year, tryPreviousYear){

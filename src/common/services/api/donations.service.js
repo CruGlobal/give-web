@@ -15,6 +15,7 @@ import commonService from './common.service';
 import RecurringGiftModel from 'common/models/recurringGift.model';
 
 import find from 'lodash/find';
+import filter from 'lodash/filter';
 
 let serviceName = 'donationsService';
 
@@ -74,12 +75,12 @@ function DonationsService( cortexApiService, profileService, commonService ) {
         data:           data
       } )
       .map( ( response ) => {
-        angular.forEach( response['receipt-summaries'], ( item ) => {
-          let link = find( response.links, ( r ) => {
-            return r.uri.indexOf( item['transaction-number'] ) != -1;
-          } );
-          item['pdf-link'] = link;
-        } );
+        let links = filter(response.links, (link) => {
+          return link.rel == 'element';
+        }) || [];
+        for(let i=0; i < links.length; i++) {
+          response['receipt-summaries'][i]['pdf-link'] = links[i];
+        }
         return response;
       } )
       .pluck( 'receipt-summaries' );
