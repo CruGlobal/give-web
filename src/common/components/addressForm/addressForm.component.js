@@ -23,12 +23,12 @@ class AddressFormController {
       .subscribe((data) => {
         this.countries = data;
         if(this.address){
-          this.refreshRegions(this.address.country);
+          this.refreshRegions(this.address.country, true);
         }
       });
   }
 
-  refreshRegions(country){
+  refreshRegions(country, initial = false){
     country = find(this.countries, {name: country});
     if(!country){ return; }
 
@@ -36,6 +36,11 @@ class AddressFormController {
       .subscribe((data) => {
         this.regions = data;
       });
+
+    if(!initial) {
+      this.address.streetAddress = '';
+      this.address.extendedAddress = '';
+    }
   }
 }
 
