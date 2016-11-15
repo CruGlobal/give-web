@@ -30,14 +30,21 @@ gulp.task('html', function () {
     .pipe(gulp.dest(paths.srcDir));
 });
 
-gulp.task('scss', function () {
-  return gulp.src(paths.scss)
-    .pipe($.plumber())
-    .pipe($.sourcemaps.init())
-    .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
-    .pipe($.sass())
-    .pipe($.concat('give.css'))
-    .pipe($.sourcemaps.write("."))
-    .pipe(gulp.dest(paths.output))
-    .pipe($.browserSync.reload({ stream: true }));
+gulp.task('scss', function (cb) {
+  var tasks = [];
+  for (var sheet in paths.scss) {
+    var styles = paths.scss[sheet];
+
+    tasks.push(gulp.src(styles)
+      .pipe($.plumber())
+      .pipe($.sourcemaps.init())
+      .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
+      .pipe($.sass())
+      .pipe($.concat(sheet + '.css'))
+      .pipe($.sourcemaps.write("."))
+      .pipe(gulp.dest(paths.output))
+      .pipe($.browserSync.reload({ stream: true })));
+  }
+
+  return $.all(tasks);
 });
