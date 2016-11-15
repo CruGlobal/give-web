@@ -9,7 +9,7 @@ describe( 'searchResults', function () {
 
   beforeEach( inject( function ( _$componentController_ ) {
     $ctrl = _$componentController_( module.name,
-      {$window: {location: {href: 'search-results.html'}}}
+      {$window: {location: '/search-results.html'}}
     );
   } ) );
 
@@ -63,7 +63,7 @@ describe( 'searchResults', function () {
         keyword: 'steve'
       };
       $ctrl.exploreSearch();
-      expect( $ctrl.$window.location.href ).toEqual( 'https://www.cru.org/content/cru/us/en/search.steve.html' );
+      expect( $ctrl.$window.location ).toEqual( 'https://www.cru.org/content/cru/us/en/search.steve.html' );
     } );
   } );
 

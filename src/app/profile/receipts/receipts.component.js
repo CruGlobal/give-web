@@ -4,18 +4,19 @@ import donationsService from 'common/services/api/donations.service';
 import filterByYear from './receipts.filter';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
-import {Roles} from 'common/services/session/session.service';
+import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
 
 class ReceiptsController {
 
   /* @ngInject */
-  constructor(donationsService,sessionEnforcerService,$location,$window,$log) {
+  constructor($rootScope,donationsService,sessionEnforcerService,$location,$window,$log) {
     this.donationsService = donationsService;
     this.sessionEnforcerService = sessionEnforcerService;
     this.$location = $location;
     this.$window = $window;
     this.$log = $log;
+    this.$rootScope = $rootScope;
     this.loading = false;
     this.maxShow = this.step = 25;
     this.retrievingError = '';
@@ -32,6 +33,8 @@ class ReceiptsController {
         this.$window.location = '/';
       }
     }, EnforcerModes.donor);
+
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
   }
 
   getReceipts(year, tryPreviousYear){
@@ -90,6 +93,12 @@ class ReceiptsController {
     this.sessionEnforcerService.cancel(this.enforcerId);
   }
 
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
+  }
 }
 
 let componentName = 'receipts';

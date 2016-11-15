@@ -26,17 +26,17 @@ class SignInController {
 
   sessionChanged() {
     if ( this.sessionService.getRole() === Roles.registered ) {
-      this.$window.location.href = 'checkout.html';
+      this.$window.location = '/checkout.html';
     }
   }
 
   checkoutAsGuest() {
     this.sessionService.downgradeToGuest().subscribe( {
       error:    () => {
-        this.$window.location.href = 'checkout.html';
+        this.$window.location = '/checkout.html';
       },
       complete: () => {
-        this.$window.location.href = 'checkout.html';
+        this.$window.location = '/checkout.html';
       }
     } );
   }

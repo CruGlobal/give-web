@@ -8,14 +8,15 @@ import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.comp
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
-import {Roles} from 'common/services/session/session.service';
+import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
 
 class PaymentMethodsController {
 
   /* @ngInject */
-  constructor($uibModal, profileService, sessionEnforcerService, $log, $timeout, $window, $location) {
+  constructor($rootScope, $uibModal, profileService, sessionEnforcerService, $log, $timeout, $window, $location) {
     this.log = $log;
+    this.$rootScope = $rootScope;
     this.$uibModal = $uibModal;
     this.paymentMethod = 'bankAccount';
     this.profileService = profileService;
@@ -30,6 +31,9 @@ class PaymentMethodsController {
   }
 
   $onDestroy(){
+    // Destroy enforcer
+    this.sessionEnforcerService.cancel( this.enforcerId );
+
     if(this.paymentMethodFormModal) {
       this.paymentMethodFormModal.close();
     }
@@ -46,6 +50,9 @@ class PaymentMethodsController {
         this.$window.location = '/';
       }
     }, EnforcerModes.donor);
+
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
+
     this.loading = true;
     this.loadPaymentMethods();
     this.loadDonorDetails();
@@ -125,6 +132,13 @@ class PaymentMethodsController {
 
   isCard(paymentMethod) {
     return paymentMethod['card-number'] ? true : false;
+  }
+
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
   }
 }
 

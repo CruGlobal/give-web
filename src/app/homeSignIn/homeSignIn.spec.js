@@ -13,7 +13,7 @@ describe('home sign in', function() {
     $rootScope = _$rootScope_;
 
     $ctrl = _$componentController_( module.name,
-      {$window: {location: {href: '/'}}}
+      {$window: {location: '/'}}
     );
     $cookies = _$cookies_;
   }));
@@ -70,7 +70,7 @@ describe('home sign in', function() {
       $rootScope.$digest();
       expect( $ctrl.showSignInForm ).toEqual(false);
       expect( $ctrl.isSigningIn ).toEqual(false);
-      expect( $ctrl.$window.location.href ).toEqual( 'your-giving.html' );
+      expect( $ctrl.$window.location ).toEqual( '/your-giving.html' );
     } );
 
     it( 'has error signing in', () => {

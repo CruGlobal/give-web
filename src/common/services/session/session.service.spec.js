@@ -4,7 +4,7 @@ import module from './session.service';
 import {cortexSession} from './fixtures/cortex-session';
 import {giveSession} from './fixtures/give-session';
 
-import {Roles, Sessions} from './session.service';
+import {Roles, Sessions, SignOutEvent} from './session.service';
 
 describe( 'session service', function () {
   beforeEach( angular.mock.module( function ( $provide ) {
@@ -85,7 +85,7 @@ describe( 'session service', function () {
     } );
   } );
 
-  describe( 'sessionSubject', ()=> {
+  describe( 'sessionSubject', () => {
     it( 'to be defined', () => {
       expect( sessionService.sessionSubject ).toBeDefined();
     } );
@@ -226,11 +226,16 @@ describe( 'session service', function () {
   } );
 
   describe( 'downgradeToGuest', () => {
+    beforeEach( () => {
+      spyOn( $rootScope, '$broadcast' );
+    } );
+
     describe( 'with \'PUBLIC\' role', () => {
       it( 'throws error', () => {
         sessionService.downgradeToGuest().subscribe( angular.noop, ( error ) => {
           expect( error ).toBeDefined();
         } );
+        expect( $rootScope.$broadcast ).toHaveBeenCalledWith( SignOutEvent );
       } );
     } );
 
@@ -241,10 +246,17 @@ describe( 'session service', function () {
         $rootScope.$digest();
       } );
 
-      it( 'make http request to cas/downgrade', () => {
+      it( 'make http request to cas/downgrade', ( done ) => {
         $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/downgrade', {} ).respond( 204, {} );
         sessionService.downgradeToGuest().subscribe( ( data ) => {
           expect( data ).toEqual( {} );
+        } );
+        $rootScope.$digest();
+        // Observable.finally is fired after the test, this defers until it's called.
+        // eslint-disable-next-line angular/timeout-service
+        setTimeout( () => {
+          expect( $rootScope.$broadcast ).toHaveBeenCalledWith( SignOutEvent );
+          done();
         } );
         $httpBackend.flush();
       } );
