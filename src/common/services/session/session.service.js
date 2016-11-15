@@ -7,6 +7,8 @@ import {BehaviorSubject} from 'rxjs';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/finally';
 
 import {updateRollbarPerson} from 'common/rollbar.config.js';
 
@@ -24,6 +26,8 @@ export let Sessions = {
   give:   'give-session',
   cru:    'cru-session'
 };
+
+export let SignOutEvent = 'SessionSignedOut';
 
 /*@ngInject*/
 function session( $cookies, $rootScope, $http, $timeout, envService ) {
@@ -126,15 +130,19 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
   }
 
   function downgradeToGuest() {
-    if ( currentRole() == Roles.public ) return Observable.throw( 'must be IDENTIFIED' );
-    return Observable
-      .from( $http( {
-        method:          'POST',
-        url:             casApiUrl( '/downgrade' ),
-        withCredentials: true,
-        data:            {}
-      } ) )
-      .map( ( response ) => response.data );
+    let observable = currentRole() == Roles.public ?
+      Observable.throw( 'must be IDENTIFIED' ) :
+      Observable
+        .from( $http( {
+          method:          'POST',
+          url:             casApiUrl( '/downgrade' ),
+          withCredentials: true,
+          data:            {}
+        } ) )
+        .map( ( response ) => response.data );
+    return observable.finally( () => {
+      $rootScope.$broadcast( SignOutEvent );
+    } );
   }
 
   /* Private Methods */

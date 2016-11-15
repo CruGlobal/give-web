@@ -9,7 +9,7 @@ describe( 'productConfig', function () {
   let $ctrl;
 
   beforeEach( inject( function ( _$componentController_ ) {
-    $ctrl = _$componentController_( module.name, {$window: {location: {href: ''}}}, {productCode: '0123456', campaignCode: 'test123'} );
+    $ctrl = _$componentController_( module.name, {$window: {location: ''}}, {productCode: '0123456', campaignCode: 'test123'} );
   } ) );
 
   it( 'to be defined', function () {
@@ -54,10 +54,10 @@ describe( 'productConfig', function () {
 
     it( 'redirects to cart.html', () => {
       $ctrl.configModal();
-      expect( $ctrl.$window.location.href ).toEqual( '' );
+      expect( $ctrl.$window.location ).toEqual( '' );
       resultDeferred.resolve();
       $rootScope.$digest();
-      expect( $ctrl.$window.location.href ).toEqual( '/cart.html' );
+      expect( $ctrl.$window.location ).toEqual( '/cart.html' );
     } );
   } );
 } );

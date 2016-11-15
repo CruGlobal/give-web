@@ -16,8 +16,11 @@ import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.mod
 import stopStartRecurringGiftsModal from './stopStartRecurringGifts/stopStartRecurringGifts.modal.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
-import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
-import sessionService, {Roles} from 'common/services/session/session.service';
+import sessionEnforcerService, {
+  EnforcerCallbacks,
+  EnforcerModes
+} from 'common/services/session/sessionEnforcer.service';
+import sessionService, {Roles, SignOutEvent} from 'common/services/session/session.service';
 import template from './yourGiving.tpl';
 
 let componentName = 'yourGiving';
@@ -31,10 +34,11 @@ export const givingViews = ['recipient', 'historical'];
 class YourGivingController {
 
   /* @ngInject */
-  constructor( $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService ) {
+  constructor( $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService ) {
     this.$window = $window;
     this.$location = $location;
     this.$uibModal = $uibModal;
+    this.$rootScope = $rootScope;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.sessionService = sessionService;
@@ -51,9 +55,11 @@ class YourGivingController {
       },
       [EnforcerCallbacks.cancel]: () => {
         // Authentication failure
-        this.$window.location = '/cart.html';
+        this.$window.location = '/';
       }
     }, EnforcerModes.donor );
+
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
 
     let year = new Date().getFullYear();
     this.years = range( year, year - 11 );
@@ -82,6 +88,13 @@ class YourGivingController {
     } );
   }
 
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
+  }
+
   loadProfile() {
     this.profileLoading = true;
     this.profileService.getGivingProfile().subscribe( ( profile ) => {
@@ -105,26 +118,26 @@ class YourGivingController {
 
   openEditRecurringGiftsModal() {
     this.recurringGiftsUpdateSuccess = false;
-    this.editRecurringGiftsModal = this.$uibModal.open({
-      component: 'editRecurringGiftsModal',
-      backdrop: 'static', // Disables closing on click
+    this.editRecurringGiftsModal = this.$uibModal.open( {
+      component:         'editRecurringGiftsModal',
+      backdrop:          'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate.name
-    });
-    this.editRecurringGiftsModal.result.then(() => {
+    } );
+    this.editRecurringGiftsModal.result.then( () => {
       this.recurringGiftsUpdateSuccess = true;
-    });
+    } );
   }
 
   openStopStartRecurringGiftsModal() {
     this.stopStartGiftsSuccess = false;
-    this.stopStartRecurringGiftsModal = this.$uibModal.open({
-      component: 'stopStartRecurringGiftsModal',
-      backdrop: 'static',
+    this.stopStartRecurringGiftsModal = this.$uibModal.open( {
+      component:         'stopStartRecurringGiftsModal',
+      backdrop:          'static',
       windowTemplateUrl: giveModalWindowTemplate.name
-    });
-    this.stopStartRecurringGiftsModal.result.then(() => {
+    } );
+    this.stopStartRecurringGiftsModal.result.then( () => {
       this.stopStartGiftsSuccess = true;
-    });
+    } );
   }
 }
 export default angular

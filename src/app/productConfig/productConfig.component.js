@@ -31,7 +31,7 @@ class ProductConfigController {
       this.loadingModal = false;
     } );
     modalInstance.result.then( () => {
-      this.$window.location.href = '/cart.html';
+      this.$window.location = '/cart.html';
     } );
   }
 }

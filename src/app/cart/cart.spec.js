@@ -28,9 +28,7 @@ describe('cart', function() {
         getRole: () => {return 'REGISTERED';}
       },
       $window: {
-        location: {
-          href: ''
-        }
+        location: '/cart.html'
       }
     });
 
@@ -94,11 +92,10 @@ describe('cart', function() {
   describe('checkout()', () => {
     it('should return uri', () => {
       self.controller.checkout();
-      expect(self.controller.$window.location.href).toBe('checkout.html');
+      expect(self.controller.$window.location).toBe('/checkout.html');
       self.controller.sessionService.getRole = () => 'foo';
       self.controller.checkout();
-      expect(self.controller.$window.location.href).toBe('sign-in.html');
+      expect(self.controller.$window.location).toBe('/sign-in.html');
     });
   });
-
 });

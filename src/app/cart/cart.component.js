@@ -57,7 +57,7 @@ class CartController {
   }
 
   checkout() {
-    this.$window.location.href = this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html';
+    this.$window.location = this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html';
   }
 }
 

@@ -45,7 +45,7 @@ describe( 'stopStartRecurringGiftsModal', () => {
         location: ''
       };
       $ctrl.changeState( 'change' );
-      expect( $ctrl.$window.location ).toEqual( '/profile/payment-methods.html' );
+      expect( $ctrl.$window.location ).toEqual( '/payment-methods.html' );
     } );
   } );
 
