@@ -6,7 +6,7 @@ module.exports = {
   templates: 'src/**/*.html',
   scss: {
     give: ['src/app/**/*.scss', 'src/common/**/*.scss'],
-    nav: ['src/assets/scss/styles.scss']
+    nav: ['src/assets/scss/global-nav.scss']
   },
   scssWatch: ['src/**/*.scss'],
   srcDir: 'src/',
