@@ -37,6 +37,7 @@ class ThankYouController{
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
     this.loadLastPurchase();
     this.loadEmail();
+    this.showAccountBenefits = true;
   }
 
   signedOut( event ) {
@@ -62,7 +63,10 @@ class ThankYouController{
           // Display Account Benefits Modal when registration-state is NEW or MATCHED
           if(this.purchase.donorDetails['registration-state'] !== 'COMPLETED') {
             this.sessionModalService.accountBenefits().then(() => {
-              this.sessionModalService.userMatch();
+              this.sessionModalService.userMatch().then(() => {
+                // Hide accountBenefits after successful user match
+                this.showAccountBenefits = false;
+              });
             });
           }
 
@@ -97,7 +101,6 @@ class ThankYouController{
         this.email = data[0].email;
       });
   }
-
 }
 
 export default angular
