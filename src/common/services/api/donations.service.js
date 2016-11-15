@@ -76,7 +76,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .map( ( response ) => {
         let links = filter(response.links, (link) => {
           return link.rel == 'element';
-        }) || [];
+        });
         for(let i=0; i < links.length; i++) {
           response['receipt-summaries'][i]['pdf-link'] = links[i];
         }
