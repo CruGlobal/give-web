@@ -23,9 +23,9 @@ class ReceiptsController {
   }
 
   $onInit() {
+    this.today = new Date();
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
-        this.today = new Date();
         this.currentYear = this.today.getFullYear();
         this.getReceipts(this.currentYear,true);
       },
@@ -35,10 +35,6 @@ class ReceiptsController {
     }, EnforcerModes.donor);
 
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
-
-    this.today = new Date();
-    this.currentYear = this.today.getFullYear();
-    this.getReceipts(this.currentYear,true);
   }
 
   getReceipts(year, tryPreviousYear){
