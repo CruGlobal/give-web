@@ -14,7 +14,6 @@ import profileService from './profile.service';
 import commonService from './common.service';
 import RecurringGiftModel from 'common/models/recurringGift.model';
 
-import find from 'lodash/find';
 import filter from 'lodash/filter';
 
 let serviceName = 'donationsService';
