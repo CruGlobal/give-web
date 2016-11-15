@@ -34,7 +34,7 @@ class HomeSignInController {
       .subscribe( () => {
         this.isSigningIn = false;
         this.showSignInForm = false;
-        this.$window.location.href = 'your-giving.html';
+        this.$window.location = '/your-giving.html';
       }, ( error ) => {
         this.isSigningIn = false;
         this.errorMessage = error.data.error;

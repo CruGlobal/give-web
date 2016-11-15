@@ -5,7 +5,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
 import module from './checkout.component';
-import {Roles} from 'common/services/session/session.service';
+import {Roles, SignOutEvent} from 'common/services/session/session.service';
 
 describe( 'checkout', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -13,13 +13,14 @@ describe( 'checkout', function () {
 
   beforeEach( inject( function ( $componentController ) {
     self.controller = $componentController( module.name, {
-      $window: {location: 'checkout.html', scrollTo: jasmine.createSpy( 'scrollTo' )}
+      $window: {location: '/checkout.html', scrollTo: jasmine.createSpy( 'scrollTo' )}
     } );
   } ) );
 
   it( 'to be defined', function () {
     expect( self.controller ).toBeDefined();
     expect( self.controller.loadingCartData ).toEqual( true );
+    expect( self.controller.$rootScope ).toBeDefined();
   } );
 
   describe( '$onInit()', () => {
@@ -27,6 +28,8 @@ describe( 'checkout', function () {
       spyOn( self.controller, 'loadCart' );
       spyOn( self.controller, 'initStepParam' );
       spyOn( self.controller, 'sessionEnforcerService' );
+      spyOn( self.controller.$rootScope, '$on' );
+      spyOn( self.controller, 'signedOut' );
       self.controller.$onInit();
     } );
     it( 'initializes the component', () => {
@@ -38,6 +41,9 @@ describe( 'checkout', function () {
       );
       expect( self.controller.loadCart ).not.toHaveBeenCalled();
       expect( self.controller.initStepParam ).toHaveBeenCalled();
+      expect( self.controller.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
+      self.controller.$rootScope.$on.calls.argsFor( 0 )[1]();
+      expect( self.controller.signedOut ).toHaveBeenCalled();
     } );
 
     describe( 'sessionEnforcerService success', () => {
@@ -50,7 +56,7 @@ describe( 'checkout', function () {
     describe( 'sessionEnforcerService failure', () => {
       it( 'executes failure callback', () => {
         self.controller.sessionEnforcerService.calls.argsFor( 0 )[1]['cancel']();
-        expect( self.controller.$window.location ).toEqual( 'cart.html' );
+        expect( self.controller.$window.location ).toEqual( '/cart.html' );
       } );
     } );
   } );
@@ -96,6 +102,24 @@ describe( 'checkout', function () {
       self.controller.$location.search( 'step', 'payment' );
       self.controller.$rootScope.$digest();
       expect( self.controller.initStepParam ).toHaveBeenCalled();
+    } );
+  } );
+
+  describe( 'signedOut( event )', () => {
+    describe( 'default prevented', () => {
+      it( 'does nothing', () => {
+        self.controller.signedOut( {defaultPrevented: true} );
+        expect( self.controller.$window.location ).toEqual( '/checkout.html' );
+      } );
+    } );
+
+    describe( 'default not prevented', () => {
+      it( 'navigates to \'\/\'', () => {
+        let spy = jasmine.createSpy( 'preventDefault' );
+        self.controller.signedOut( {defaultPrevented: false, preventDefault: spy} );
+        expect( spy ).toHaveBeenCalled();
+        expect( self.controller.$window.location ).toEqual( '/cart.html' );
+      } );
     } );
   } );
 

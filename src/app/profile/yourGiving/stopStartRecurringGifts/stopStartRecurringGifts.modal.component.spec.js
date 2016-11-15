@@ -39,6 +39,14 @@ describe( 'stopStartRecurringGiftsModal', () => {
       $ctrl.changeState( 'step-0' );
       expect( $ctrl.state ).toEqual( 'step-0' );
     } );
+
+    it( 'redirects to payment methods page', () => {
+      $ctrl.$window = {
+        location: ''
+      };
+      $ctrl.changeState( 'change' );
+      expect( $ctrl.$window.location ).toEqual( '/payment-methods.html' );
+    } );
   } );
 
   describe( 'setLoading( loading )', () => {

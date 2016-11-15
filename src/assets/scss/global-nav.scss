@@ -1,0 +1,26 @@
+/*
+This file contains only, sass for Nav related
+items. It is so that Nav can be used on any Cru
+property regardless of the technology used.
+*/
+
+$colorCru-gold:             #f9b625;
+$colorCru-gray:             #666062;
+$colorCru-mid-gray:         #444244;
+$colorCru-white:            #fff;
+
+$colorGrayscale-background: #f7f7f7;
+$colorGrayscale-sand:       #f4f4f4;
+$colorGrayscale-pebble:     #f0f0f0;
+$colorGrayscale-stone:      #e7e7e7;
+$colorGrayscale-rock:       #b9b9b9;
+$colorGrayscale-slate:      #909b9c;
+$colorGrayscale-black:      #000;
+$colorText:                 #3a3a3a;
+
+$sm:                        992px;
+$header-height:             84px;
+$gutter:                    30px;
+
+@import 'mobile-navigation';
+@import 'desktop_navigation';

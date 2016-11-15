@@ -62,7 +62,7 @@ class SearchResultsController {
 
   exploreSearch(){
     var term = this.searchParams.keyword || this.searchParams.first_name + ' ' + this.searchParams.last_name;
-    this.$window.location.href = 'https://www.cru.org/content/cru/us/en/search.' + encodeURIComponent(term) + '.html';
+    this.$window.location = 'https://www.cru.org/content/cru/us/en/search.' + encodeURIComponent(term) + '.html';
   }
 }
 

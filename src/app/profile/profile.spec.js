@@ -4,6 +4,7 @@ import module from './profile.component';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import {SignOutEvent} from 'common/services/session/session.service';
 
 describe( 'ProfileComponent', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -11,7 +12,7 @@ describe( 'ProfileComponent', function () {
 
   beforeEach( inject( ( _$componentController_ ) => {
     $ctrl = _$componentController_( module.name, {
-      $window: {location: ''}
+      $window: {location: '/profile.html'}
     }, {
       donorEmailForm: {
         $setPristine: jasmine.createSpy('$setPristine'),
@@ -67,6 +68,7 @@ describe( 'ProfileComponent', function () {
     expect( $ctrl.$window ).toBeDefined();
     expect( $ctrl.$log ).toBeDefined();
     expect( $ctrl.$location ).toBeDefined();
+    expect( $ctrl.$rootScope ).toBeDefined();
     expect( $ctrl.sessionEnforcerService ).toBeDefined();
     expect( $ctrl.profileService ).toBeDefined();
   } );
@@ -78,6 +80,15 @@ describe( 'ProfileComponent', function () {
       spyOn( $ctrl, 'loadEmail' );
       spyOn( $ctrl, 'loadPhoneNumbers' );
       spyOn( $ctrl, 'sessionEnforcerService' );
+      spyOn( $ctrl.$rootScope, '$on' );
+      spyOn( $ctrl, 'signedOut' );
+    } );
+
+    it( 'adds listener for sign-out event', () => {
+      $ctrl.$onInit();
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
+      $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+      expect( $ctrl.signedOut ).toHaveBeenCalled();
     } );
 
     describe( 'sessionEnforcerService success', () => {
@@ -97,7 +108,34 @@ describe( 'ProfileComponent', function () {
         expect( $ctrl.$window.location ).toEqual( '/' );
       } );
     } );
+  } );
 
+  describe( '$onDestroy()', () => {
+    it( 'cleans up the component', () => {
+      spyOn( $ctrl.sessionEnforcerService, 'cancel' );
+
+      $ctrl.enforcerId = '1234567890';
+      $ctrl.$onDestroy();
+      expect( $ctrl.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
+    } );
+  } );
+
+  describe( 'signedOut( event )', () => {
+    describe( 'default prevented', () => {
+      it( 'does nothing', () => {
+        $ctrl.signedOut( {defaultPrevented: true} );
+        expect( $ctrl.$window.location ).toEqual( '/profile.html' );
+      } );
+    } );
+
+    describe( 'default not prevented', () => {
+      it( 'navigates to \'\/\'', () => {
+        let spy = jasmine.createSpy( 'preventDefault' );
+        $ctrl.signedOut( {defaultPrevented: false, preventDefault: spy} );
+        expect( spy ).toHaveBeenCalled();
+        expect( $ctrl.$window.location ).toEqual( '/' );
+      } );
+    } );
   } );
 
   describe('loadDonorDetails()', () => {

@@ -18,7 +18,7 @@ import designationsService from 'common/services/api/designations.service';
 import commonModule from 'common/common.module';
 
 import sessionEnforcerService, {EnforcerCallbacks} from 'common/services/session/sessionEnforcer.service';
-import {Roles} from 'common/services/session/session.service';
+import {Roles, SignOutEvent} from 'common/services/session/session.service';
 
 import template from './checkout.tpl';
 
@@ -44,9 +44,10 @@ class CheckoutController{
         this.loadCart();
       },
       [EnforcerCallbacks.cancel]: () => {
-        this.$window.location = 'cart.html';
+        this.$window.location = '/cart.html';
       }
     });
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
     this.initStepParam();
   }
 
@@ -61,6 +62,13 @@ class CheckoutController{
     this.$locationChangeSuccessListener = this.$locationChangeSuccessListener || this.$rootScope.$on('$locationChangeSuccess', () => {
       this.initStepParam();
     });
+  }
+
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/cart.html';
+    }
   }
 
   changeStep(newStep){

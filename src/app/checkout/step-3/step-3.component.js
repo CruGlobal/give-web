@@ -99,7 +99,7 @@ class Step3Controller{
         this.onSubmittingOrder({value: false});
         this.orderService.clearCardSecurityCode();
         this.onSubmitted();
-        this.$window.location.href = 'thank-you.html';
+        this.$window.location = '/thank-you.html';
       },
       (error) => {
         this.onSubmittingOrder({value: false});
