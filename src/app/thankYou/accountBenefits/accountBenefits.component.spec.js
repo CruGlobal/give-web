@@ -42,12 +42,14 @@ describe( 'thank you', function () {
       } );
 
       describe( '\'PUBLIC\' role', () => {
-        let deferred, $rootScope;
+        let deferred, $rootScope, userMatch;
         beforeEach( inject( ( _$q_, _$rootScope_ )=> {
           deferred = _$q_.defer();
+          userMatch = _$q_.defer();
           $rootScope = _$rootScope_;
           spyOn( $ctrl.sessionModalService, 'signIn' ).and.returnValue( deferred.promise );
-          spyOn( $ctrl.sessionModalService, 'userMatch' );
+          spyOn( $ctrl.sessionModalService, 'userMatch' ).and.returnValue(userMatch.promise);
+          $ctrl.isVisible = true;
         } ) );
 
         it( 'shows sign in modal, followed by userMatch', () => {
@@ -55,7 +57,11 @@ describe( 'thank you', function () {
           expect( $ctrl.sessionModalService.signIn ).toHaveBeenCalled();
           deferred.resolve();
           $rootScope.$digest();
+          expect( $ctrl.isVisible ).toEqual( true );
           expect( $ctrl.sessionModalService.userMatch ).toHaveBeenCalled();
+          userMatch.resolve();
+          $rootScope.$digest();
+          expect( $ctrl.isVisible ).toEqual( false );
         } );
       } );
     } );

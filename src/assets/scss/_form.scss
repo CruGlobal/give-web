@@ -151,3 +151,11 @@
 }
 
 .btn:focus, .btn:active:focus { outline: none;  -webkit-appearance: none; }
+
+form.new-gift {
+  .input-group-addon {padding: 0;}
+  .btn-link {
+    border-width: 0;
+    padding: 8px 22px;
+  }
+}
