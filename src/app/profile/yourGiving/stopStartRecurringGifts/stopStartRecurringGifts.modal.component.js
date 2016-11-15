@@ -20,7 +20,7 @@ class StopStartRecurringGiftsModalController {
   }
 
   changeState( state ) {
-    if( state === 'change') this.$window.location = '/profile/payment-methods.html';
+    if( state === 'change') this.$window.location = '/payment-methods.html';
     if ( state !== 'step-0' ) this.giftAction = state;
     this.state = state;
   }

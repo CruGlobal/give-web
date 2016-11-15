@@ -57,7 +57,7 @@ describe('thank you', () => {
         getPurchase: () => Observable.of(self.mockPurchase),
         getEmails: () => Observable.of([{email:'someperson@someaddress.com'}])
       },
-      $window: {location: 'thank-you.html'}
+      $window: {location: '/thank-you.html'}
     });
   }));
 
@@ -80,7 +80,7 @@ describe('thank you', () => {
     describe( 'default prevented', () => {
       it( 'does nothing', () => {
         self.controller.signedOut( {defaultPrevented: true} );
-        expect( self.controller.$window.location ).toEqual( 'thank-you.html' );
+        expect( self.controller.$window.location ).toEqual( '/thank-you.html' );
       } );
     } );
 

@@ -46,7 +46,7 @@ describe( 'Designation Editor', function () {
     $q = _$q_;
     $rootScope = _$rootScope_;
     $ctrl = _$componentController_( module.name,
-      {$window: {location: {href: 'designation-editor.html?d=' + designationSecurityResponse.designationNumber}}}
+      {$window: {location: '/designation-editor.html?d=' + designationSecurityResponse.designationNumber}}
     );
   } ) );
 

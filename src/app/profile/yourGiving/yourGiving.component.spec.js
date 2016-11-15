@@ -15,7 +15,7 @@ describe( 'your giving', function () {
 
   beforeEach( inject( ( _$componentController_ ) => {
     $ctrl = _$componentController_( module.name, {
-      $window: {location: 'your-giving.html'}
+      $window: {location: '/your-giving.html'}
     } );
   } ) );
 
@@ -186,7 +186,7 @@ describe( 'your giving', function () {
     describe( 'default prevented', () => {
       it( 'does nothing', () => {
         $ctrl.signedOut( {defaultPrevented: true} );
-        expect( $ctrl.$window.location ).toEqual( 'your-giving.html' );
+        expect( $ctrl.$window.location ).toEqual( '/your-giving.html' );
       } );
     } );
 

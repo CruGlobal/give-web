@@ -186,7 +186,7 @@ class NavController{
   }
 
   cruSearch(term){
-    this.$window.location.href = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
+    this.$window.location = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
   }
 }
 

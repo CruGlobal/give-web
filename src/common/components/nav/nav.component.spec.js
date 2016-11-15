@@ -19,7 +19,7 @@ describe( 'nav', function () {
     $ctrl = _$componentController_( module.name,
       {
         $window: {
-          location:  {href: 'cart.html'},
+          location:  '/',
           navigator: {
             userAgent: iPhoneUserAgent
           },
@@ -78,7 +78,7 @@ describe( 'nav', function () {
 
   it( 'to redirect on search', () => {
     $ctrl.cruSearch( 'hello' );
-    expect( $ctrl.$window.location.href ).toContain( 'search.hello.html' );
+    expect( $ctrl.$window.location ).toContain( 'search.hello.html' );
   } );
 
   it( 'to load mobile nav on small screens', () => {

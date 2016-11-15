@@ -53,7 +53,7 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
       template: '<your-giving></your-giving>'
     })
     .state('payment-methods', {
-      url: "/profile/payment-methods.html",
+      url: "/payment-methods.html",
       template: '<payment-methods></payment-methods>'
     })
     .state('receipts', {

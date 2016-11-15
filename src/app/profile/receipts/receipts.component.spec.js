@@ -12,7 +12,7 @@ describe( 'ReceiptsComponent', function () {
 
   beforeEach( inject( ( _$componentController_ ) => {
     $ctrl = _$componentController_( module.name, {
-      $window: {location: 'receipts.html'}
+      $window: {location: '/receipts.html'}
     } );
   } ) );
 
@@ -128,7 +128,7 @@ describe( 'ReceiptsComponent', function () {
     describe( 'default prevented', () => {
       it( 'does nothing', () => {
         $ctrl.signedOut( {defaultPrevented: true} );
-        expect( $ctrl.$window.location ).toEqual( 'receipts.html' );
+        expect( $ctrl.$window.location ).toEqual( '/receipts.html' );
       } );
     } );
 

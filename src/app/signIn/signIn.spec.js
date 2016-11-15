@@ -11,7 +11,7 @@ describe( 'signIn', function () {
 
   beforeEach( inject( function ( _$componentController_ ) {
     $ctrl = _$componentController_( module.name,
-      {$window: {location: {href: 'sign-in.html'}}}
+      {$window: {location: '/sign-in.html'}}
     );
   } ) );
 
@@ -32,7 +32,7 @@ describe( 'signIn', function () {
 
     it( 'has does not change location', () => {
       expect( $ctrl.sessionChanged ).toHaveBeenCalled();
-      expect( $ctrl.$window.location.href ).toEqual( 'sign-in.html' );
+      expect( $ctrl.$window.location ).toEqual( '/sign-in.html' );
     } );
   } );
 
@@ -49,7 +49,7 @@ describe( 'signIn', function () {
 
     it( 'has does not change location', () => {
       expect( $ctrl.sessionChanged ).toHaveBeenCalled();
-      expect( $ctrl.$window.location.href ).toEqual( 'sign-in.html' );
+      expect( $ctrl.$window.location ).toEqual( '/sign-in.html' );
     } );
   } );
 
@@ -66,7 +66,7 @@ describe( 'signIn', function () {
 
     it( 'navigates to checkout', () => {
       expect( $ctrl.sessionChanged ).toHaveBeenCalled();
-      expect( $ctrl.$window.location.href ).toEqual( 'checkout.html' );
+      expect( $ctrl.$window.location ).toEqual( '/checkout.html' );
     } );
   } );
 
@@ -75,14 +75,14 @@ describe( 'signIn', function () {
       it( 'navigates to checkout', () => {
         spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue( Observable.of( {} ) );
         $ctrl.checkoutAsGuest();
-        expect( $ctrl.$window.location.href ).toEqual( 'checkout.html' );
+        expect( $ctrl.$window.location ).toEqual( '/checkout.html' );
       } );
     } );
     describe( 'downgradeToGuest failure', () => {
       it( 'navigates to checkout', () => {
         spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue( Observable.throw( {} ) );
         $ctrl.checkoutAsGuest();
-        expect( $ctrl.$window.location.href ).toEqual( 'checkout.html' );
+        expect( $ctrl.$window.location ).toEqual( '/checkout.html' );
       } );
     } );
   } );
