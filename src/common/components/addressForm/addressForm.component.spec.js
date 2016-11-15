@@ -55,16 +55,30 @@ describe('addressForm', function() {
     it('should get the list of regions of a given country', () => {
       self.controller.countries = countriesResponse._element;
       spyOn(self.controller.geographiesService, 'getRegions').and.callFake(() => Observable.of(['region1', 'region2']));
-      self.controller.refreshRegions('US');
+      self.controller.refreshRegions('US', true);
       expect(self.controller.geographiesService.getRegions).toHaveBeenCalledWith(find(countriesResponse._element, { name: 'US' }));
       expect(self.controller.regions).toEqual(['region1', 'region2']);
     });
     it('should do nothing if the country doesn\'t exist in the loaded list of countries', () => {
       self.controller.countries = countriesResponse._element;
       spyOn(self.controller.geographiesService, 'getRegions');
-      self.controller.refreshRegions('USA');
+      self.controller.refreshRegions('USA', false);
       expect(self.controller.geographiesService.getRegions).not.toHaveBeenCalled();
       expect(self.controller.regions).toBeUndefined();
+    });
+    it('should clear streetAddress and extendedAddress when switching country', () => {
+      self.controller.countries = countriesResponse._element;
+      self.controller.address = {
+        country: 'VU',
+        streetAddress: '123 W East St.',
+        extendedAddress: 'Apt #123'
+      };
+      spyOn(self.controller.geographiesService, 'getRegions').and.callFake(() => Observable.of(['region1', 'region2']));
+      self.controller.refreshRegions('US');
+      expect(self.controller.geographiesService.getRegions).toHaveBeenCalledWith(find(countriesResponse._element, { name: 'US' }));
+      expect(self.controller.regions).toEqual(['region1', 'region2']);
+      expect(self.controller.address.streetAddress).toEqual('');
+      expect(self.controller.address.extendedAddress).toEqual('');
     });
   });
 });
