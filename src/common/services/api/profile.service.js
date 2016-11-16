@@ -3,6 +3,7 @@ import pick from 'lodash/pick';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
 import map from 'lodash/map';
+import assign from 'lodash/assign';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
@@ -176,7 +177,7 @@ class Profile {
 
 
   updateMailingAddress(mailingAddress){
-    let mailingAddressCopy = Object.assign({}, mailingAddress);
+    let mailingAddressCopy = assign({}, mailingAddress);
     mailingAddressCopy.address = formatAddressForCortex(mailingAddressCopy.address);
     return this.cortexApiService.put({
       path: mailingAddress.self.uri,
