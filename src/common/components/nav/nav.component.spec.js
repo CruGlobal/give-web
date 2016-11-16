@@ -19,7 +19,9 @@ describe( 'nav', function () {
     $ctrl = _$componentController_( module.name,
       {
         $window: {
-          location:  '/',
+          location: {
+            pathname: '/cart.html'
+          },
           navigator: {
             userAgent: iPhoneUserAgent
           },
@@ -93,6 +95,16 @@ describe( 'nav', function () {
 
       expect( subMenuStructure.length ).toEqual( 2 );
       expect( subMenuStructure[0].path ).toContain( '/communities' );
+    } );
+    $httpBackend.flush();
+  } );
+
+  it( 'to build sub nav structure with missing path', () => {
+    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $ctrl.getNav().subscribe( ( structure ) => {
+      let subMenuStructure = $ctrl.makeSubNav( structure.main, ['page', 'that', 'does not', 'exist'] );
+
+      expect( subMenuStructure.length ).toEqual( 0 );
     } );
     $httpBackend.flush();
   } );
