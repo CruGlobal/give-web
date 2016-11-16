@@ -1,5 +1,14 @@
 <div ng-switch="$ctrl.step">
   <div style="height: 100px;" ng-switch-default></div>
+
+  <!-- Step 0 -->
+  <add-payment-method ng-switch-when="add-new-payment-method"
+                      previous="$ctrl.previous()"
+                      next="$ctrl.next(selected)"
+                      payment-methods="$ctrl.paymentMethods"
+                      set-loading="$ctrl.setLoading({loading: loading})">
+  </add-payment-method>
+
   <!-- Step 1 -->
   <suspended-gifts ng-switch-when="suspended"
                    gifts="$ctrl.suspendedGifts"

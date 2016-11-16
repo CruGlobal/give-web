@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <h3 class="text-center">
+            <span translate>Add New Payment Method</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-body pt0">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <payment-method-form mailing-address="$ctrl.mailingAddress"
+                             on-submit="$ctrl.onSubmit(success,data)"
+                             submission-error="$ctrl.submissionError">
+        </payment-method-form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.submissionError.loading = true">
+          <span translate>Add Payment Method</span>
+        </button>
+        <button type="button" class="btn btn-default" ng-click="$ctrl.previous()" translate>Back</button>
+      </div>
+    </div>
+  </div>
+</div>

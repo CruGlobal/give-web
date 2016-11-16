@@ -100,10 +100,7 @@ describe( 'your giving', () => {
             expect( $ctrl.paymentMethods ).toEqual( paymentMethods );
             expect( $ctrl.nextDrawDate ).toEqual( '2015-02-04' );
             expect( $ctrl.hasPaymentMethods ).toEqual( false );
-            expect( $ctrl.validPaymentMethods ).toEqual( [] );
-            expect( $ctrl.hasValidPaymentMethods ).toEqual( false );
-            expect( $ctrl.loadGiftsAndRecipients ).toHaveBeenCalled();
-            expect( $ctrl.setLoading ).not.toHaveBeenCalledWith( {loading: false} );
+            expect( $ctrl.validPaymentMethods ).toBeUndefined();
           } );
         } );
 
@@ -133,6 +130,21 @@ describe( 'your giving', () => {
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
           } );
+        } );
+      } );
+
+      describe( 'onSubmit()', () => {
+        beforeEach( () => {
+          spyOn($ctrl, 'loadGiftsAndRecipients');
+        } );
+        it('should start loading gifts and recipients', () => {
+          $ctrl.onSubmit(true, {data: 'data'});
+          expect($ctrl.loadGiftsAndRecipients).toHaveBeenCalled();
+          expect($ctrl.paymentMethods).toEqual({data:'data'});
+        } );
+        it('should not load anything', () => {
+          $ctrl.onSubmit(false);
+          expect($ctrl.loadGiftsAndRecipients).not.toHaveBeenCalled();
         } );
       } );
 
@@ -504,6 +516,13 @@ describe( 'your giving', () => {
           it( 'calls setState()', () => {
             $ctrl.includeSuggestedRecipients = false;
             $ctrl.includeSuspendedGifts = false;
+            $ctrl.previous();
+            expect( $ctrl.changeState ).toHaveBeenCalledWith( {state: 'step-0'} );
+          } );
+        } );
+        describe( 'step = \'add-new-payment-method\'', () => {
+          it( 'sets step to \'add-new-payment-method\'', () => {
+            $ctrl.step = 'add-new-payment-method';
             $ctrl.previous();
             expect( $ctrl.changeState ).toHaveBeenCalledWith( {state: 'step-0'} );
           } );

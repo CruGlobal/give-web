@@ -19,6 +19,9 @@ import suggestedRecipients from './step1/suggestedRecipients/suggestedRecipients
 import redirectGiftStep2 from '../redirectGift/step2/redirectGiftStep2.component';
 import configureGifts from './step2/configureGifts/configureGifts.component';
 import confirmGifts from './step3/confirmGifts/confirmGifts.component';
+import addPaymentMethod from './step0/addPaymentMethod.component';
+
+import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 
 let componentName = 'restartGift';
 
@@ -51,6 +54,11 @@ class RestartGiftController {
         this.paymentMethods = paymentMethods;
         this.nextDrawDate = nextDrawDate;
         this.hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
+        if(!this.hasPaymentMethods) {
+          this.step = 'add-new-payment-method';
+          this.setLoading( {loading: false} );
+          return;
+        }
         this.validPaymentMethods = filter( paymentMethods, ( paymentMethod ) => {
           return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || moment( {
               year:  paymentMethod['expiry-year'],
@@ -65,6 +73,13 @@ class RestartGiftController {
         this.setLoading( {loading: false} );
         this.error = true;
       } );
+  }
+
+  onSubmit(success, data) {
+    if(success) {
+      this.paymentMethods = data;
+      this.loadGiftsAndRecipients();
+    }
   }
 
   loadGiftsAndRecipients() {
@@ -166,6 +181,9 @@ class RestartGiftController {
       case 'confirm':
         this.step = 'configure';
         break;
+      case 'add-new-payment-method':
+        this.changeState( {state: 'step-0'} );
+        break;
     }
   }
 }
@@ -180,7 +198,9 @@ export default angular
     suggestedRecipients.name,
     redirectGiftStep2.name,
     configureGifts.name,
-    confirmGifts.name
+    confirmGifts.name,
+    paymentMethodForm.name,
+    addPaymentMethod.name
   ] )
   .component( componentName, {
     controller:  RestartGiftController,
