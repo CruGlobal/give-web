@@ -48,9 +48,10 @@ class NavController{
       global: []
     };
 
-    // pre-set menu path like below
-    // this.menuPath.main = ['opportunities', 'mission-trips', 'summer', 'explore', 'getting-a-job'];
-    // this.menuPath.sub = ['communities', 'campus'];
+    // set sub menu path based on url path
+    let path = this.$window.location.pathname ? this.$window.location.pathname.split('/') : [];
+    path.shift();
+    this.menuPath.sub = path;
 
     this.getNav().subscribe((structure) => {
       this.menuStructure = structure;
@@ -158,8 +159,11 @@ class NavController{
   makeSubNav(structure, path){
     let subNav = [];
     angular.forEach(path, function(p, index){
+      if(index && !subNav[index - 1]){ return; }
       let children = index ? subNav[index - 1].children : structure;
-      subNav[index] = find(children, function(item) { return item.path.split('/').pop() === p; });
+
+      let navItem = find(children, function(item) { return item.path.split('/').pop() === p; });
+      if(navItem){ subNav[index] = navItem; }
     });
 
     return subNav;
