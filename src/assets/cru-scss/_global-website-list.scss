@@ -1,15 +1,3 @@
-/***** TESTING *****/
-.globalWebsites--is-open {
-  background-image: url(https://www.cru.org/images/globalWebsites--huge.jpg) !important;
-  > main {display: none;}
-}
-
-
-
-
-
-
-
 @include mq(767px, max) {
     #js-globalWebsites {display: none !important;}
 }
@@ -74,10 +62,6 @@
     padding-right: 2.12%;
     background: rgba(0, 0, 0, 0.25);
 
-    /* @include mq(1000px, max) {
-        padding-left: 15px;
-        padding-right: 15px;
-    } */
 }
 
 .globalWebsites-continents {
