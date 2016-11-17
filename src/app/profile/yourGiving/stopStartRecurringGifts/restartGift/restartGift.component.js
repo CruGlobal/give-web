@@ -1,10 +1,10 @@
 import angular from 'angular';
 import template from './restartGift.tpl';
-import moment from 'moment';
+
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
-import filter from 'lodash/filter';
+
 import map from 'lodash/map';
 import flatten from 'lodash/flatten';
 import values from 'lodash/values';
@@ -19,7 +19,10 @@ import suggestedRecipients from './step1/suggestedRecipients/suggestedRecipients
 import redirectGiftStep2 from '../redirectGift/step2/redirectGiftStep2.component';
 import configureGifts from './step2/configureGifts/configureGifts.component';
 import confirmGifts from './step3/confirmGifts/confirmGifts.component';
-import addPaymentMethod from './step0/addPaymentMethod.component';
+import addUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
+import validPaymentMethods from 'common/services/paymentHelpers/validPaymentMethods';
+import step0PaymentMethodList from 'src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.component';
+
 
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 
@@ -55,17 +58,17 @@ class RestartGiftController {
         this.nextDrawDate = nextDrawDate;
         this.hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
         if(!this.hasPaymentMethods) {
-          this.step = 'add-new-payment-method';
+          this.step = 'add-update-payment-method';
           this.setLoading( {loading: false} );
           return;
         }
-        this.validPaymentMethods = filter( paymentMethods, ( paymentMethod ) => {
-          return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || moment( {
-              year:  paymentMethod['expiry-year'],
-              month: parseInt( paymentMethod['expiry-month'] ) - 1
-            } ).isSameOrAfter( moment(), 'month' );
-        } );
+        this.validPaymentMethods = validPaymentMethods(paymentMethods);
         this.hasValidPaymentMethods = this.validPaymentMethods && this.validPaymentMethods.length > 0;
+        if(!this.hasValidPaymentMethods) {
+          this.step='select-payment-method';
+          this.setLoading( {loading: false} );
+          return;
+        }
         RecurringGiftModel.paymentMethods = this.validPaymentMethods;
         RecurringGiftModel.nextDrawDate = this.nextDrawDate;
         this.loadGiftsAndRecipients();
@@ -73,13 +76,6 @@ class RestartGiftController {
         this.setLoading( {loading: false} );
         this.error = true;
       } );
-  }
-
-  onSubmit(success, data) {
-    if(success) {
-      this.paymentMethods = data;
-      this.loadGiftsAndRecipients();
-    }
   }
 
   loadGiftsAndRecipients() {
@@ -99,7 +95,7 @@ class RestartGiftController {
     } );
   }
 
-  next( selected, configured ) {
+  next( selected, configured, paymentMethod ) {
     this.setLoading( {loading: false} );
     switch ( this.step ) {
       case 'suspended':
@@ -136,6 +132,14 @@ class RestartGiftController {
         break;
       case 'confirm':
         this.complete();
+        break;
+      case 'select-payment-method':
+        this.paymentMethod = paymentMethod;
+        this.step = 'add-update-payment-method';
+        break;
+      case 'add-update-payment-method':
+        this.loadPaymentMethods();
+        this.step = 'suspended';
         break;
       case 'loading':
       default:
@@ -181,7 +185,7 @@ class RestartGiftController {
       case 'confirm':
         this.step = 'configure';
         break;
-      case 'add-new-payment-method':
+      case 'add-update-payment-method':
         this.changeState( {state: 'step-0'} );
         break;
     }
@@ -200,7 +204,8 @@ export default angular
     configureGifts.name,
     confirmGifts.name,
     paymentMethodForm.name,
-    addPaymentMethod.name
+    addUpdatePaymentMethod.name,
+    step0PaymentMethodList.name
   ] )
   .component( componentName, {
     controller:  RestartGiftController,

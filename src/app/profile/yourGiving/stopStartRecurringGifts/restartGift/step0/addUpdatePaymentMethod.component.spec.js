@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-import module from './addPaymentMethod.component';
+import module from './addUpdatePaymentMethod.component';
 
 describe( 'your giving', () => {
   describe('stopStartRecurringGiftsModal', () => {
@@ -44,6 +44,7 @@ describe( 'your giving', () => {
       describe('onSubmit()', () => {
         beforeEach(() => {
           spyOn($ctrl.profileService, 'addPaymentMethod');
+          spyOn($ctrl.profileService, 'updatePaymentMethod');
         });
         it('should add payment method', () => {
           $ctrl.paymentMethods = [];
@@ -68,6 +69,25 @@ describe( 'your giving', () => {
           $ctrl.onSubmit(false, {});
           expect($ctrl.profileService.addPaymentMethod).not.toHaveBeenCalled();
           expect($ctrl.submissionError.loading).toBe(false);
+        });
+
+        it('should update payment method', () => {
+          $ctrl.paymentMethod = {};
+          $ctrl.profileService.updatePaymentMethod.and.returnValue( Observable.of( '' ) );
+          $ctrl.onSubmit(true, {});
+          expect($ctrl.profileService.updatePaymentMethod).toHaveBeenCalledWith({},{});
+          expect($ctrl.setLoading).toHaveBeenCalled();
+          expect($ctrl.next).toHaveBeenCalled();
+        });
+
+        it('should handle error updating payment method', () => {
+          $ctrl.paymentMethod = {};
+          $ctrl.profileService.updatePaymentMethod.and.returnValue( Observable.throw( {data: 'error'} ) );
+          $ctrl.onSubmit(true, {});
+          expect($ctrl.profileService.updatePaymentMethod).toHaveBeenCalled();
+          expect($ctrl.setLoading).toHaveBeenCalled();
+          expect($ctrl.next).not.toHaveBeenCalled();
+          expect($ctrl.submissionError.error).toBe('Failed updating payment method');
         });
       });
 
