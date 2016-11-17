@@ -32,6 +32,7 @@ export default angular
     controller: GiftUpdateViewController,
     templateUrl: template.name,
     bindings: {
-      gift: '='
+      gift: '=',
+      singleGift: '@'
     }
   });

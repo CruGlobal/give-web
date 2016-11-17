@@ -13,6 +13,7 @@ import historicalView from './historicalView/historicalView.component';
 import loadingComponent from 'common/components/loading/loading.component';
 import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.modal.component';
+import giveOneTimeGiftModal from './giveOneTimeGift/giveOneTimeGift.modal.component';
 import stopStartRecurringGiftsModal from './stopStartRecurringGifts/stopStartRecurringGifts.modal.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
@@ -128,6 +129,14 @@ class YourGivingController {
     } );
   }
 
+  openGiveOneTimeGiftModal() {
+    this.$uibModal.open({
+      component: 'giveOneTimeGiftModal',
+      backdrop: 'static', // Disables closing on click
+      windowTemplateUrl: giveModalWindowTemplate.name
+    });
+  }
+
   openStopStartRecurringGiftsModal() {
     this.stopStartGiftsSuccess = false;
     this.stopStartRecurringGiftsModal = this.$uibModal.open( {
@@ -150,6 +159,7 @@ export default angular
     loadingComponent.name,
     loadingOverlay.name,
     editRecurringGiftsModal.name,
+    giveOneTimeGiftModal.name,
     stopStartRecurringGiftsModal.name,
     giveModalWindowTemplate.name,
     profileService.name,

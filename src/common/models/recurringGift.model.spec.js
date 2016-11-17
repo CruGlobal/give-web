@@ -41,6 +41,37 @@ describe('recurringGift model', () => {
     ];
   });
 
+  describe('constructor', () => {
+    it('should call initializeEmptyFields', () => {
+      spyOn(RecurringGiftModel.prototype, 'initializeEmptyFields');
+      new RecurringGiftModel({});
+      expect(RecurringGiftModel.prototype.initializeEmptyFields).toHaveBeenCalled();
+    });
+  });
+
+  describe('initializeEmptyFields', () => {
+    it('should default nested fields if they are undefined', () => {
+      let gift = new RecurringGiftModel({});
+      expect(gift.gift).toEqual({
+        'updated-rate': {
+          recurrence: {
+            interval: ''
+          }
+        }
+      });
+      expect(gift.parentDonation).toEqual({
+        rate: {
+          recurrence: {
+            interval: ''
+          }
+        },
+        'next-draw-date': {
+          'display-value': ''
+        }
+      });
+    });
+  });
+
   describe('designationName getter', () => {
     it('should return the name', () => {
       expect(giftModel.designationName).toEqual('David and Margo Neibling (0105987)');
