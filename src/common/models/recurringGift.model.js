@@ -197,4 +197,10 @@ export default class RecurringGiftModel {
     this.gift['updated-recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
     return this;
   }
+
+  setDefaultsSingleGift(){
+    this.gift['updated-designation-number'] = this.gift['designation-number'];
+    this.gift['updated-amount'] = 50;
+    return this;
+  }
 }

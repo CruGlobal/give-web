@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+          <h3 translate>Give an Extra One-Time Gift</h3>
+          <p translate>How much would you like to give to these recipients?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div ng-repeat="gift in $ctrl.selectedRecipients" class="row repeating-row user-profile">
+          <gift-list-item gift="gift">
+            <gift-update-view gift="gift" single-gift="true"></gift-update-view>
+          </gift-list-item>
+        </div>
+        <div ng-if="!$ctrl.hasSelectedRecipients" class="alert alert-warning" role="alert">
+          <p translate>You have not selected any recipients. You may go back and add a recent recipient or search for other recipients</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6">
+      <button class="btn btn-default"
+         ng-click="$ctrl.previous()"
+         translate>
+        Back
+      </button>
+    </div>
+    <div class="col-xs-6 text-right">
+      <button class="btn btn-primary"
+              ng-click="$ctrl.next({ selectedRecipients: $ctrl.selectedRecipients })"
+              ng-disabled="!$ctrl.hasSelectedRecipients"
+              translate>
+        Add to Cart
+      </button>
+    </div>
+  </div>
+</div>

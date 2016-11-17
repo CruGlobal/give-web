@@ -171,6 +171,14 @@ describe( 'your giving', function () {
     } );
   } );
 
+  describe( 'openGiveOneTimeGiftModal', () => {
+    it( 'should open the modal', () => {
+      spyOn( $ctrl.$uibModal, 'open' );
+      $ctrl.openGiveOneTimeGiftModal();
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'giveOneTimeGiftModal'} ) );
+    } );
+  } );
+
   describe( 'openStopStartRecurringGiftsModal', () => {
     it( 'should open the modal', () => {
       spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: jasmine.createSpy( 'then' )}} );
