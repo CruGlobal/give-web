@@ -102,7 +102,7 @@ class RegisterAccountModalController {
   setModalSize( size ) {
     // Modal size is unchangeable after initialization. This fetches the modal and changes the size classes.
     // eslint-disable-next-line angular/document-service
-    let modal = angular.element( document.getElementsByClassName( 'modal-dialog' ) );
+    let modal = angular.element( document.getElementsByClassName( 'session-modal' ) );
     modal.removeClass( 'modal-sm modal-md modal-lg' );
     if ( angular.isDefined( size ) ) {
       modal.addClass( `modal-${size}` );

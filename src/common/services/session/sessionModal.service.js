@@ -3,7 +3,7 @@ import 'angular-ui-bootstrap';
 import modalStateService from 'common/services/modalState.service';
 import sessionModalController from './sessionModal.controller';
 import sessionModalTemplate from './sessionModal.tpl';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
+import sessionModalWindowTemplate from './sessionModalWindow.tpl';
 
 let serviceName = 'sessionModalService';
 
@@ -28,7 +28,7 @@ function SessionModalService( $uibModal, $log, modalStateService ) {
       controller:        sessionModalController.name,
       controllerAs:      '$ctrl',
       size:              'sm',
-      windowTemplateUrl: giveModalWindowTemplate.name,
+      windowTemplateUrl: sessionModalWindowTemplate.name,
       resolve:           {
         state: () => type
       }
@@ -65,7 +65,7 @@ export default angular
     modalStateService.name,
     sessionModalController.name,
     sessionModalTemplate.name,
-    giveModalWindowTemplate.name
+    sessionModalWindowTemplate.name
   ] )
   .factory( serviceName, SessionModalService )
   .config( function ( modalStateServiceProvider ) {

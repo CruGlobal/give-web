@@ -1,0 +1,38 @@
+<div class="form-group">
+  <input type="text" class="form-control form-control-subtle" ng-model="$ctrl.search" ng-change="$ctrl.onSearchChange()">
+</div>
+<div ng-switch="$ctrl.searchState">
+  <div ng-switch-when="results">
+    <div class="row repeating-row select-recipient-row" ng-repeat="result in $ctrl.results">
+      <gift-list-item gift="result"
+                      selectable="{{$ctrl.selectable}}"
+                      select-label="{{$ctrl.selectLabel}}"
+                      on-selected="$ctrl.gatherSelections(gift)">
+      </gift-list-item>
+    </div>
+  </div>
+  <div ng-switch-when="initial" class="well">
+    <div class="row">
+      <div class="col-xs-2 mt-- text-right text-muted">
+        <i class="fa fa-search fa-2x"></i>
+      </div>
+      <div class="col-xs-10">
+        <p class="mb0" translate>Enter the name or account number of the recipient you would like to give to in the search box above</p>
+      </div>
+    </div>
+  </div>
+  <div ng-switch-when="no-results" class="alert alert-warning" role="alert">
+    <p translate>No search results found.</p>
+  </div>
+  <div ng-switch-when="error" class="alert alert-danger" role="alert">
+    <p>
+      <translate>There was an error loading results.</translate>
+      &nbsp;
+      <a href="" ng-click="$ctrl.onSearchChange()">Retry</a>
+    </p>
+  </div>
+  <div ng-switch-when="searching" class="text-center">
+    <p translate>Loading results...</p>
+    <loading inline="true"></loading>
+  </div>
+</div>
