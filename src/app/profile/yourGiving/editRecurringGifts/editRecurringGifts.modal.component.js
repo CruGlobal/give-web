@@ -1,6 +1,4 @@
 import angular from 'angular';
-import moment from 'moment';
-import filter from 'lodash/filter';
 import map from 'lodash/map';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
@@ -19,6 +17,7 @@ import RecurringGiftModel from 'common/models/recurringGift.model';
 import profileService from 'common/services/api/profile.service';
 import donationsService from 'common/services/api/donations.service';
 import commonService from 'common/services/api/common.service';
+import validPaymentMethods from 'common/services/paymentHelpers/validPaymentMethods';
 
 import template from './editRecurringGifts.modal.tpl';
 
@@ -49,9 +48,7 @@ class EditRecurringGiftsModalController {
         this.paymentMethods = paymentMethods;
         this.nextDrawDate = nextDrawDate;
         this.hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-        this.validPaymentMethods = filter(paymentMethods, (paymentMethod) => {
-          return paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' || moment({ year: paymentMethod['expiry-year'], month: parseInt(paymentMethod['expiry-month']) - 1}).isSameOrAfter(moment(), 'month');
-        });
+        this.validPaymentMethods = validPaymentMethods(paymentMethods);
         this.hasValidPaymentMethods = this.validPaymentMethods && this.validPaymentMethods.length > 0;
         RecurringGiftModel.paymentMethods = this.validPaymentMethods;
         RecurringGiftModel.nextDrawDate = this.nextDrawDate;
