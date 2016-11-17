@@ -79,6 +79,7 @@ describe( 'ReceiptsComponent', function () {
       }];
       spyOn($ctrl.donationsService, 'getReceipts').and.returnValue(Observable.of(receipts));
       $ctrl.$onInit();
+      $ctrl.getReceipts();
       expect($ctrl.donationsService.getReceipts).toHaveBeenCalled();
     } );
 
@@ -86,6 +87,7 @@ describe( 'ReceiptsComponent', function () {
       let receipts = [];
       spyOn($ctrl.donationsService, 'getReceipts').and.returnValue(Observable.of(receipts));
       $ctrl.$onInit();
+      $ctrl.getReceipts('2015',true);
       expect($ctrl.donationsService.getReceipts).toHaveBeenCalledTimes(2);
     } );
 
@@ -94,6 +96,7 @@ describe( 'ReceiptsComponent', function () {
         data: 'some error'
       }));
       $ctrl.$onInit();
+      $ctrl.getReceipts();
       expect($ctrl.donationsService.getReceipts).toHaveBeenCalled();
       expect($ctrl.retrievingError).toBe('Failed retrieving receipts.');
     }) ;
