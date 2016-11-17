@@ -15,6 +15,8 @@ import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
 import subNavDirective from './subNav.directive';
 import {giftAddedEvent} from 'app/productConfig/productConfig.modal';
+import globalWebsitesModalWindowTemplate from './globalWebsitesModal/globalWebsitesModalWindow.tpl';
+import globalWebsitesModal from './globalWebsitesModal/globalWebsitesModal.component';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
@@ -24,9 +26,10 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($rootScope, $http, $document, $window, $timeout, envService, cartService, sessionService, sessionModalService){
+  constructor($rootScope, $http, $document, $window, $uibModal, $timeout, envService, cartService, sessionService, sessionModalService){
     this.$http = $http;
     this.$document = $document;
+    this.$uibModal = $uibModal;
     this.$window = $window;
     this.$rootScope = $rootScope;
     this.$timeout = $timeout;
@@ -192,6 +195,19 @@ class NavController{
   cruSearch(term){
     this.$window.location = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
   }
+
+  openGlobalWebsitesModal(){
+    this.$uibModal.open({
+      component: 'globalWebsitesModal',
+      backdrop: 'static',
+      windowTemplateUrl: globalWebsitesModalWindowTemplate.name,
+      windowClass: 'globalWebsites--is-open',
+      resolve: {
+        menuStructure: this.menuStructure
+      }
+    });
+  }
+
 }
 
 export default angular
@@ -204,7 +220,9 @@ export default angular
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
-    subNavDirective.name
+    subNavDirective.name,
+    globalWebsitesModal.name,
+    globalWebsitesModalWindowTemplate.name
   ])
   .component(componentName, {
     controller: NavController,
