@@ -208,6 +208,10 @@ class NavController{
     });
   }
 
+  checkout() {
+    this.$window.location = this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html';
+  }
+
 }
 
 export default angular

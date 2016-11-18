@@ -93,7 +93,8 @@
                     </div>
                   </div>
 
-                  <a href="/checkout.html" class="btn btn-primary checkout" ng-if="$ctrl.cartData.items.length" translate>Checkout</a>
+                  <a href="/cart.html" class="btn btn-default checkout" ng-if="$ctrl.cartData.items.length" style="width: 50%; float: left;" translate>Cart</a>
+                  <a href="" class="btn btn-primary checkout" ng-if="$ctrl.cartData.items.length" ng-click="$ctrl.checkout()" style="width: 50%; float: right;" translate>Checkout</a>
 
                 </div>
               </div>

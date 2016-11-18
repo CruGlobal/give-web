@@ -268,5 +268,18 @@ describe( 'nav signInButton', function () {
       } );
     } );
 
+    describe( 'checkout', () => {
+      it( 'should redirect to a sign-in', () => {
+        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'GUEST' );
+        $ctrl.checkout();
+        expect($ctrl.$window.location).toBe('/sign-in.html');
+      } );
+      it( 'should redirect to a checkout', () => {
+        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
+        $ctrl.checkout();
+        expect($ctrl.$window.location).toBe('/checkout.html');
+      } );
+    } );
+
   } );
 } );
