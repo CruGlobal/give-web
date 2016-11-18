@@ -21,6 +21,7 @@ $promo-width: 200px;
 
   .container {
     position: relative;
+    min-width: 980px !important;
   }
 
   &.padded {
