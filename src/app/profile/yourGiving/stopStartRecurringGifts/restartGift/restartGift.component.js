@@ -186,7 +186,11 @@ class RestartGiftController {
         this.step = 'configure';
         break;
       case 'add-update-payment-method':
-        this.changeState( {state: 'step-0'} );
+        if(this.hasPaymentMethods) {
+          this.step = 'select-payment-method';
+        } else {
+          this.changeState( {state: 'step-0'} );
+        }
         break;
     }
   }
