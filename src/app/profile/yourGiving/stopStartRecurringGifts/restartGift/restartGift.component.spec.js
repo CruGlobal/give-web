@@ -100,10 +100,27 @@ describe( 'your giving', () => {
             expect( $ctrl.paymentMethods ).toEqual( paymentMethods );
             expect( $ctrl.nextDrawDate ).toEqual( '2015-02-04' );
             expect( $ctrl.hasPaymentMethods ).toEqual( false );
-            expect( $ctrl.validPaymentMethods ).toEqual( [] );
-            expect( $ctrl.hasValidPaymentMethods ).toEqual( false );
-            expect( $ctrl.loadGiftsAndRecipients ).toHaveBeenCalled();
-            expect( $ctrl.setLoading ).not.toHaveBeenCalledWith( {loading: false} );
+            expect( $ctrl.validPaymentMethods ).toBeUndefined();
+          } );
+        } );
+
+
+        describe( 'has payment methods but all are invalid', () => {
+          it( 'should offer to update/add payment method', () => {
+            let paymentMethods = [
+              {
+                self: {
+                  type: ''
+                },
+                'expiry-year': '2000'
+              }
+            ];
+            $ctrl.profileService.getPaymentMethods.and.returnValue( Observable.of( paymentMethods ) );
+            $ctrl.commonService.getNextDrawDate.and.returnValue( Observable.of( '2015-02-04' ) );
+
+            $ctrl.loadPaymentMethods();
+            expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+            expect( $ctrl.step ).toBe('select-payment-method');
           } );
         } );
 
@@ -377,6 +394,18 @@ describe( 'your giving', () => {
           } );
         } );
 
+        describe( 'step = \'add-update-payment-method\'', () => {
+          beforeEach( () => {
+            $ctrl.step = 'add-update-payment-method';
+          } );
+          it( 'sets step to \'suspended\'', () => {
+            spyOn($ctrl, 'loadPaymentMethods');
+            $ctrl.next();
+            expect( $ctrl.loadPaymentMethods ).toHaveBeenCalled();
+            expect( $ctrl.step ).toEqual( 'suspended' );
+          } );
+        } );
+
         describe( 'step = \'confirm\'', () => {
           beforeEach( () => {
             $ctrl.step = 'confirm';
@@ -506,6 +535,20 @@ describe( 'your giving', () => {
             $ctrl.includeSuspendedGifts = false;
             $ctrl.previous();
             expect( $ctrl.changeState ).toHaveBeenCalledWith( {state: 'step-0'} );
+          } );
+        } );
+        describe( 'step = \'add-update-payment-method\'', () => {
+          it( 'sets step to \'add-update-payment-method\'', () => {
+            $ctrl.step = 'add-update-payment-method';
+            $ctrl.previous();
+            expect( $ctrl.changeState ).toHaveBeenCalledWith( {state: 'step-0'} );
+          } );
+        } );
+        describe( 'step = \'select-payment-method\'', () => {
+          it( 'sets step to \'select-payment-method\'', () => {
+            $ctrl.step = 'select-payment-method';
+            $ctrl.next(null,null,'data');
+            expect( $ctrl.paymentMethod ).toBe('data');
           } );
         } );
       } );
