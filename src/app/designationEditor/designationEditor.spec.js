@@ -123,7 +123,7 @@ describe( 'Designation Editor', function () {
         .respond(200, []);
 
       $ctrl.getDesignationContent().then(() => {
-        expect( $ctrl.designationContent ).toEqual(designationSecurityResponse);
+        expect( $ctrl.designationContent ).toBeDefined();
       });
       $httpBackend.flush();
     } );
@@ -203,6 +203,7 @@ describe( 'Designation Editor', function () {
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.campaignPage()).toBeUndefined();
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photos()).toEqual(photos);
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photoLocation()).toEqual(photoLocation);
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.selectedPhoto()).toEqual(designationSecurityResponse.coverPhoto);

@@ -11,19 +11,21 @@ class designationEditorService {
     this.$http = $http;
   }
 
-  getContent(designationNumber) {
+  getContent(designationNumber, campaign) {
     return this.$http.get(designationConstants.designationSecurityEndpoint, {
       params: {
-        designationNumber: designationNumber
+        designationNumber: designationNumber,
+        campaign: campaign
       },
       withCredentials: true
     });
   }
 
-  getPhotos(designationNumber){
+  getPhotos(designationNumber, campaign){
     return this.$http.get(designationConstants.designationImagesEndpoint, {
       params: {
-        designationNumber: designationNumber
+        designationNumber: designationNumber,
+        campaign: campaign
       },
       withCredentials: true
     });
