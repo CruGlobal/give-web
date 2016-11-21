@@ -58,7 +58,15 @@ class NavController{
 
     this.getNav().subscribe((structure) => {
       this.menuStructure = structure;
-      this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
+
+      if(this.$window.location.hostname && this.$window.location.hostname.indexOf('give') !== -1){
+        this.subMenuStructure = [{
+          title: 'Give',
+          children: structure.give
+        }];
+      }else{
+        this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
+      }
     });
 
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
@@ -145,7 +153,8 @@ class NavController{
         let jsonStructure = angular.fromJson(response.data.jsonStructure);
         let menuStructure = {
           main: replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org', featuredPath: 'https://www.cru.org'}),
-          global: jsonStructure['/content/cru/us/en/global']
+          global: jsonStructure['/content/cru/us/en/global'],
+          give: jsonStructure['/content/give/us/en']
         };
 
         //add give to main nav
