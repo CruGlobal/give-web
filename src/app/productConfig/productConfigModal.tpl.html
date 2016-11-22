@@ -31,21 +31,23 @@
             Gift Amount
           </h4>
           <div class="panel-body pt0">
-            <!-- @todo SHOW THIS RADIO SET IF CUSTOM MINISTRY AMOUNTS EXIST -->
-            <!--<div class="radio radio-custom-amount">-->
-            <!--<label><input checked="checked" id="" name="custom_option" type="radio" value="Custom001"> Custom Ministry Option 1</label>-->
-            <!--</div>-->
-            <!--<div class="radio radio-custom-amount">-->
-            <!--<label><input id="" name="custom_option" type="radio" value="Custom002"> Custom Ministry Option 2</label>-->
-            <!--</div>-->
-            <!--<div class="radio radio-custom-amount">-->
-            <!--<label><input id="" name="custom_option" type="radio" value="Custom003"> Custom Ministry Option 3</label>-->
-            <!--</div>-->
+            <div ng-if="$ctrl.suggestedAmounts">
+              <div class="radio radio-custom-amount" ng-repeat="suggested in $ctrl.suggestedAmounts">
+                <label>
+                  <input name="amount"
+                         ng-model="$ctrl.customAmount"
+                         ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                         type="radio"
+                         ng-value="suggested.amount"
+                         required> {{suggested.label}} ({{suggested.amount | currency:'$':2}})
+                </label>
+              </div>
+            </div>
 
-            <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
+            <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}" ng-if="$ctrl.showDefaultAmounts()">
               <label class="btn btn-radio"
                      ng-click="$ctrl.changeAmount(a)"
-                     ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
+                     ng-class="{'active': $ctrl.itemConfig.amount == a && !$ctrl.customInputActive}"
                      ng-repeat-start="a in $ctrl.selectableAmounts">
                 <span class="number">${{a}}</span>
               </label>
@@ -62,6 +64,7 @@
                          ng-model="$ctrl.customAmount"
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-focus="$ctrl.customInputActive = true;"
+                         tabindex="-1"
                          required>
                 </div>
               </label>
@@ -132,21 +135,27 @@
           <div class="panel-body pt0">
             <ul class="list-unstyled">
               <li>
-                <a class="commentLink" href="" ng-click="!$ctrl.itemConfig['recipient-comments'] && (showRecipientComments = !showRecipientComments)" translate>Send a Message to {{$ctrl.productData.displayName}}</a>
+                <a class="commentLink"
+                   href=""
+                   ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
+                   translate>Send a Message to {{$ctrl.productData.displayName}}</a>
                 <textarea class="staff-comments give-modal-comments"
                           rows="3"
                           maxlength="250"
                           ng-model="$ctrl.itemConfig['recipient-comments']"
-                          ng-if="showRecipientComments"
+                          ng-if="$ctrl.showRecipientComments"
                           style="display:block;"></textarea>
               </li>
               <li>
-                <a class="commentLink" href="" ng-click="!$ctrl.itemConfig['donation-services-comments'] && (showDSComments = !showDSComments)" translate>Special Handling Instructions for Processing This Gift</a>
+                <a class="commentLink"
+                   href=""
+                   ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
+                   translate>Special Handling Instructions for Processing This Gift</a>
                 <textarea class="cru-comments give-modal-comments"
                           rows="3"
                           maxlength="250"
                           ng-model="$ctrl.itemConfig['donation-services-comments']"
-                          ng-if="showDSComments"
+                          ng-if="$ctrl.showDSComments"
                           style="display:block;"></textarea>
               </li>
             </ul>
