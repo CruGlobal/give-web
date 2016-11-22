@@ -79,9 +79,9 @@ describe( 'productModalService', function () {
       $httpBackend = _$httpBackend_;
     } ) );
 
-    describe( 'with campaignPage', () => {
+    describe( 'with campaign page', () => {
       beforeEach( () => {
-        productModalService.configureProduct( '0123456', {amount: 50, campaignPage: 9876}, false );
+        productModalService.configureProduct( '0123456', {amount: 50, 'campaign-page': 9876}, false );
         suggestedAmountsFn = $uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts;
       } );
 
@@ -104,7 +104,7 @@ describe( 'productModalService', function () {
         $httpBackend.flush();
       } );
 
-      it( 'invalid campaignPage', () => {
+      it( 'invalid campaign page', () => {
         $httpBackend
           .expectGET( '/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json' )
           .respond( 400, {} );
@@ -116,7 +116,7 @@ describe( 'productModalService', function () {
       } );
     } );
 
-    describe( 'no campaignPage', () => {
+    describe( 'no campaign page', () => {
       it( 'doesn\'t have suggested amounts', () => {
         productModalService.configureProduct( '0123456', {amount: 50}, false );
         suggestedAmountsFn = $uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts;

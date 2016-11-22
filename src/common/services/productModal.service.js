@@ -35,9 +35,9 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
           },
           suggestedAmounts: /*@ngInject*/ function ( $http, $q ) {
             let deferred = $q.defer();
-            if(angular.isDefined(config.campaignPage)) {
+            if(angular.isDefined(config['campaign-page'])) {
               let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
-                path = `/content/give/us/en/campaigns/${c}/${code}/${config.campaignPage}.infinity.json`;
+                path = `/content/give/us/en/campaigns/${c}/${code}/${config['campaign-page']}.infinity.json`;
               $http.get( path ).then( ( data ) => {
                 let suggestedAmounts = [];
                 if ( data.data['jcr:content'] && data.data['jcr:content'].suggestedAmounts ) {
