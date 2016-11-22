@@ -46,7 +46,7 @@ class ModalInstanceCtrl {
     this.isEdit = isEdit;
     this.uri = uri;
     this.suggestedAmounts = suggestedAmounts;
-    this.selectableAmounts = [];
+    this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
   }
 
   $onInit() {
@@ -64,7 +64,6 @@ class ModalInstanceCtrl {
       this.changeCustomAmount(this.customAmount);
     }
     else {
-      this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
       if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
         this.customAmount = this.itemConfig.amount;
         this.customInputActive = true;

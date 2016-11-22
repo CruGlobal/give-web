@@ -47,7 +47,7 @@
             <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}" ng-if="$ctrl.showDefaultAmounts()">
               <label class="btn btn-radio"
                      ng-click="$ctrl.changeAmount(a)"
-                     ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
+                     ng-class="{'active': $ctrl.itemConfig.amount == a && !$ctrl.customInputActive}"
                      ng-repeat-start="a in $ctrl.selectableAmounts">
                 <span class="number">${{a}}</span>
               </label>
@@ -64,6 +64,7 @@
                          ng-model="$ctrl.customAmount"
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-focus="$ctrl.customInputActive = true;"
+                         tabindex="-1"
                          required>
                 </div>
               </label>
