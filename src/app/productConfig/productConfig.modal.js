@@ -75,6 +75,8 @@ class ModalInstanceCtrl {
     }
 
     this.addedCustomValidators = false;
+    this.showRecipientComments = false;
+    this.showDSComments = false;
   }
 
   waitForFormInitialization() {
