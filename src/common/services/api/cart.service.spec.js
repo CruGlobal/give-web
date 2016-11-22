@@ -23,20 +23,49 @@ describe('cart service', () => {
   });
 
   describe('get', () => {
+    beforeEach(() => {
+      spyOn(self.cartService.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2016-10-01'));
+      jasmine.clock().mockDate(moment('2016-09-01').toDate()); // Make sure current date is before next draw date
+    });
+    it('should handle an empty response', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default' +
+          '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
+          'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+          'lineitems:element:itemfields,ratetotals:element,total,total:cost')
+        .respond(200, null);
+
+      self.cartService.get()
+        .subscribe((data) => {
+          expect(data).toEqual({});
+        });
+      self.$httpBackend.flush();
+    });
+    it('should handle a response with no line items', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default' +
+          '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
+          'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+          'lineitems:element:itemfields,ratetotals:element,total,total:cost')
+        .respond(200, {});
+
+      self.cartService.get()
+        .subscribe((data) => {
+          expect(data).toEqual({});
+        });
+      self.$httpBackend.flush();
+    });
     it('should get cart and parse response', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default' +
-          '?zoom=lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,' +
-          'lineitems:element:rate,lineitems:element:total,ratetotals:element,total,lineitems:element:itemfields')
+        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
+        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, cartResponse);
-
-      spyOn(self.cartService.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2016-10-01'));
 
       self.cartService.get()
         .subscribe((data) => {
           //verify response
           expect(self.cartService.commonService.getNextDrawDate).toHaveBeenCalled();
           expect(data.items.length).toEqual(3);
-          expect(data.items[0].designationNumber).toEqual('0358433');
+          expect(data.items[0].designationNumber).toEqual('0354433');
           expect(data.items[1].giftStartDate.toString()).toEqual(moment('2016-10-09').toString());
 
           expect(data.cartTotal).toEqual(50);
@@ -60,7 +89,7 @@ describe('cart service', () => {
         }
       ).respond(200);
 
-      self.cartService.addItem('<some id>', { amount: 50 })
+      self.cartService.addItem('items/crugive/<some id>', { amount: 50 })
         .subscribe();
       self.$httpBackend.flush();
     });

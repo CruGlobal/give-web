@@ -22,6 +22,7 @@ export default {
         "designation_number": ["0559826"],
         "organization_id": ["1-TG-11"],
         "path": ["https://stage.cru.org/content/give/us/en/designations/0/5/5/9/8/0559826.html"],
+        "replacement_designation_number": ["0559827"],
         "secondary_last_name": ["Doe"],
         "secure": ["0"]
       }

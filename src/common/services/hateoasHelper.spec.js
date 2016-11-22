@@ -20,7 +20,19 @@ describe('HATEOAS helper service', function() {
 
   describe('getLink', () => {
     it('should find the uri for a relationship', () => {
-      expect(self.hateoasHelperService.getLink(cartResponse, 'order')).toEqual('/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=');
+      expect(self.hateoasHelperService.getLink(cartResponse, 'order')).toEqual('orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=');
+    });
+    it('should remove the initial slash on the uri', () => {
+      const data = {
+        'links': [ { 'rel': 'testrelation', 'uri': '/some/path' } ]
+      };
+      expect(self.hateoasHelperService.getLink(data, 'testrelation')).toEqual('some/path');
+    });
+    it('should not remove the first char of the uri if it is not a slash', () => {
+      const data = {
+        'links': [ { 'rel': 'testrelation', 'uri': 'some/path' } ]
+      };
+      expect(self.hateoasHelperService.getLink(data, 'testrelation')).toEqual('some/path');
     });
     it('should return undefined for an unknown relationship', () => {
       expect(self.hateoasHelperService.getLink(cartResponse, 'nonexistent')).toBeUndefined();
