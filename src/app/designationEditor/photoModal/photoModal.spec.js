@@ -14,6 +14,7 @@ describe('Designation Editor Photo', function() {
 
     $ctrl = _$controller_( module.name, {
       designationNumber: '000555',
+      campaignPage: '7818',
       photos: [],
       photoLocation: 'coverPhoto',
       selectedPhoto: '/content/photo1.jpg',
