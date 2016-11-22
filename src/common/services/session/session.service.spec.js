@@ -225,7 +225,7 @@ describe( 'session service', function () {
     } );
   } );
 
-  describe( 'downgradeToGuest', () => {
+  describe( 'downgradeToGuest( skipEvent )', () => {
     beforeEach( () => {
       spyOn( $rootScope, '$broadcast' );
     } );
@@ -256,6 +256,29 @@ describe( 'session service', function () {
         // eslint-disable-next-line angular/timeout-service
         setTimeout( () => {
           expect( $rootScope.$broadcast ).toHaveBeenCalledWith( SignOutEvent );
+          done();
+        } );
+        $httpBackend.flush();
+      } );
+    } );
+
+    describe( 'with skipEvent = true', () => {
+      beforeEach( () => {
+        $cookies.put( Sessions.cortex, cortexSession.identified );
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest();
+      } );
+
+      it( 'make http request to cas/downgrade', ( done ) => {
+        $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/downgrade', {} ).respond( 204, {} );
+        sessionService.downgradeToGuest( true ).subscribe( ( data ) => {
+          expect( data ).toEqual( {} );
+        } );
+        $rootScope.$digest();
+        // Observable.finally is fired after the test, this defers until it's called.
+        // eslint-disable-next-line angular/timeout-service
+        setTimeout( () => {
+          expect( $rootScope.$broadcast ).not.toHaveBeenCalled();
           done();
         } );
         $httpBackend.flush();

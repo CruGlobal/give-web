@@ -31,7 +31,7 @@ class SignInController {
   }
 
   checkoutAsGuest() {
-    this.sessionService.downgradeToGuest().subscribe( {
+    this.sessionService.downgradeToGuest( true ).subscribe( {
       error:    () => {
         this.$window.location = '/checkout.html';
       },
