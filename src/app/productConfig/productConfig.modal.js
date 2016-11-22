@@ -5,6 +5,7 @@ import 'angular-ordinal';
 import indexOf from 'lodash/indexOf';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
+import map from 'lodash/map';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
@@ -27,10 +28,11 @@ export let giftAddedEvent = 'giftAddedToCart';
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $location, $scope, $log, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit, uri ) {
+  constructor( $location, $scope, $log, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, suggestedAmounts, itemConfig, isEdit, uri ) {
     this.$location = $location;
     this.$scope = $scope;
     this.$log = $log;
+    this.gettext = gettext;
     this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
@@ -43,31 +45,41 @@ class ModalInstanceCtrl {
     this.itemConfig = itemConfig;
     this.isEdit = isEdit;
     this.uri = uri;
-    this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
-
-    if ( this.isEdit ) {
-      this.submitLabel = gettext( 'Update Gift' );
-    } else {
-      this.submitLabel = gettext( 'Add to Gift Cart' );
-      this.initializeParams();
-    }
-
-    if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
-      this.customAmount = this.itemConfig.amount;
-      this.customInputActive = true;
-    }
-
-    if(!this.itemConfig['recurring-day-of-month'] && nextDrawDate) {
-      this.itemConfig['recurring-day-of-month'] = startDate(null, nextDrawDate).format('DD');
-    }
+    this.suggestedAmounts = suggestedAmounts;
+    this.selectableAmounts = [];
   }
 
   $onInit() {
-    this.waitForFormInitialization();
+    if ( this.isEdit ) {
+      this.submitLabel = this.gettext( 'Update Gift' );
+    } else {
+      this.submitLabel = this.gettext( 'Add to Gift Cart' );
+      this.initializeParams();
+    }
+
+    if( this.suggestedAmounts.length > 0 ) {
+      this.customInputActive = true;
+      this.customAmount = (map(this.suggestedAmounts, 'amount').indexOf(this.itemConfig.amount) === -1) ?
+        this.suggestedAmounts[0].amount : this.itemConfig.amount;
+      this.changeCustomAmount(this.customAmount);
+    }
+    else {
+      this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
+      if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
+        this.customAmount = this.itemConfig.amount;
+        this.customInputActive = true;
+      }
+    }
+
+    if(!this.itemConfig['recurring-day-of-month'] && this.nextDrawDate) {
+      this.itemConfig['recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
+    }
+
+    this.addedCustomValidators = false;
   }
 
   waitForFormInitialization() {
-    let unregister = this.$scope.$watch('$ctrl.itemConfigForm', () => {
+    let unregister = this.$scope.$watch(()=>this.itemConfigForm, () => {
       if(this.itemConfigForm) {
         unregister();
         this.addCustomValidators();
@@ -111,6 +123,17 @@ class ModalInstanceCtrl {
     if ( params.hasOwnProperty( giveGiftParams.day ) ) {
       this.itemConfig['recurring-day-of-month'] = params[giveGiftParams.day];
     }
+  }
+
+  showDefaultAmounts() {
+    if(this.suggestedAmounts.length === 0) {
+      if(!this.addedCustomValidators) {
+        this.waitForFormInitialization();
+        this.addedCustomValidators = true;
+      }
+      return true;
+    }
+    return false;
   }
 
   frequencyOrder( f ) {

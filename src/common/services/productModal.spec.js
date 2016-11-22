@@ -2,12 +2,11 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './productModal.service';
 
+import campaignResponse from './fixtures/campaign.infinity.fixture';
+
 describe( 'productModalService', function () {
   beforeEach( angular.mock.module( module.name ) );
   let productModalService, designationsService, commonService, $uibModal, $rootScope;
-
-  // eslint-disable-next-line no-undef
-  installPromiseMatchers();
 
   beforeEach( inject( function ( _productModalService_, _designationsService_, _commonService_, _$uibModal_, _$rootScope_, _$q_ ) {
     productModalService = _productModalService_;
@@ -49,7 +48,7 @@ describe( 'productModalService', function () {
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.isEdit() ).toEqual( true );
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.productData() ).toBePromise();
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.nextDrawDate() ).toBePromise();
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.uri() ).toBe('uri');
+      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.uri() ).toBe( 'uri' );
     } );
 
     describe( 'modal closes', () => {
@@ -69,6 +68,62 @@ describe( 'productModalService', function () {
         $rootScope.$digest();
         expect( modalStateService.name ).toHaveBeenCalledWith( null );
         expect( $location.search ).toHaveBeenCalledTimes( 4 );
+      } );
+    } );
+  } );
+
+  describe( 'suggestedAmounts() resolve', () => {
+    let suggestedAmountsFn, $injector, $httpBackend;
+    beforeEach( inject( ( _$injector_, _$httpBackend_ ) => {
+      $injector = _$injector_;
+      $httpBackend = _$httpBackend_;
+    } ) );
+
+    describe( 'with campaignPage', () => {
+      beforeEach( () => {
+        productModalService.configureProduct( '0123456', {amount: 50, campaignPage: 9876}, false );
+        suggestedAmountsFn = $uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts;
+      } );
+
+      afterEach( () => {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      } );
+
+      it( 'has suggested amounts', () => {
+        $httpBackend
+          .expectGET( '/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json' )
+          .respond( 200, campaignResponse );
+        $injector.invoke( suggestedAmountsFn )
+          .then( ( suggestedAmounts ) => {
+            expect( suggestedAmounts ).toEqual( [
+              {amount: 100, label: "1000 Bibles"},
+              {amount: 350, label: "45 Bibles"}
+            ] );
+          } );
+        $httpBackend.flush();
+      } );
+
+      it( 'invalid campaignPage', () => {
+        $httpBackend
+          .expectGET( '/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json' )
+          .respond( 400, {} );
+        $injector.invoke( suggestedAmountsFn )
+          .then( ( suggestedAmounts ) => {
+            expect( suggestedAmounts ).toEqual( [] );
+          } );
+        $httpBackend.flush();
+      } );
+    } );
+
+    describe( 'no campaignPage', () => {
+      it( 'doesn\'t have suggested amounts', () => {
+        productModalService.configureProduct( '0123456', {amount: 50}, false );
+        suggestedAmountsFn = $uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts;
+        $injector.invoke( suggestedAmountsFn )
+          .then( ( suggestedAmounts ) => {
+            expect( suggestedAmounts ).toEqual( [] );
+          } );
       } );
     } );
   } );
