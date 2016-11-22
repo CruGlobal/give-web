@@ -152,18 +152,17 @@ class ModalInstanceCtrl {
     }
     this.submittingGift = true;
 
-    let id = this.productData.id;
     let data = this.productData.frequency === 'NA' ? omit( this.itemConfig, 'recurring-day-of-month' ) : this.itemConfig;
 
     let savingObservable = this.isEdit ?
-      this.cartService.editItem( this.uri, id, data ) :
-      this.cartService.addItem( id, data );
+      this.cartService.editItem( this.uri, this.productData.uri, data ) :
+      this.cartService.addItem( this.productData.uri, data );
 
     savingObservable.subscribe( () => {
       if ( this.isEdit ) {
         this.$uibModalInstance.close( {isUpdated: true} );
       } else {
-        this.$scope.$emit( giftAddedEvent, {id: id, data: data} );
+        this.$scope.$emit( giftAddedEvent, {uri: this.productData.uri, data: data} );
         this.$uibModalInstance.dismiss();
       }
       this.submittingGift = false;

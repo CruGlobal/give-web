@@ -43,6 +43,7 @@ class DesignationEditorController {
 
   $onInit() {
     this.designationNumber = this.$location.search().d;
+    this.campaignPage = this.$location.search().campaign;
 
     this.enforcerId = this.sessionEnforcerService( [Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -66,12 +67,13 @@ class DesignationEditorController {
 
     return this.$q.all([
       //get designation content
-      this.designationEditorService.getContent(this.designationNumber).then((response) => {
+      this.designationEditorService.getContent(this.designationNumber, this.campaignPage).then((response) => {
         this.designationContent = response.data;
+        this.designationContent.paragraphText = '';
       }),
 
       //get designation photos
-      this.designationEditorService.getPhotos(this.designationNumber).then((response) => {
+      this.designationEditorService.getPhotos(this.designationNumber, this.campaignPage).then((response) => {
         this.designationPhotos = response.data;
       })
     ]).then(() => {
@@ -132,6 +134,7 @@ class DesignationEditorController {
       controllerAs: '$ctrl',
       resolve: {
         designationNumber: () => { return this.designationContent.designationNumber; },
+        campaignPage: () => { return this.campaignPage; },
         photos: () => { return this.designationPhotos; },
         photoLocation: () => { return photoLocation; },
         selectedPhoto: () => { return selectedPhoto; }

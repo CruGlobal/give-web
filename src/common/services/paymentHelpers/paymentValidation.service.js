@@ -1,5 +1,8 @@
 import angular from 'angular';
-import _ from 'lodash';
+import flow from 'lodash/fp/flow';
+import zip from 'lodash/fp/zip';
+import map from 'lodash/fp/map';
+import sum from 'lodash/fp/sum';
 import appConfig from 'common/app.config';
 import toString from 'lodash/toString';
 import capitalize from 'lodash/capitalize';
@@ -31,12 +34,14 @@ class PaymentValidation {
       if(digits[0] > 3) return false; // Added to match EP validation https://github.com/CruGlobal/give-ep-extensions/blob/develop/cortex/resources/bank-account-resource/src/main/java/com/elasticpath/extensions/rest/resource/bankaccounts/validator/BankAccountValidator.java#L57
       let multipliers = [3, 7, 1, 3, 7, 1, 3, 7, 1];
 
-      let sum = _(_.zip(digits, multipliers))
-        .map((array) => {
+      let checksum = flow([
+        zip,
+        map((array) => {
           return array[0] * array[1];
-        })
-        .sum();
-      return sum !== 0 && sum % 10 === 0;
+        }),
+        sum
+      ])(digits, multipliers);
+      return checksum !== 0 && checksum % 10 === 0;
     };
   }
 

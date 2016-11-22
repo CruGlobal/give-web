@@ -37,7 +37,7 @@
     "gulp-rename": "^1.2.2",
     "jasmine-core": "^2.5.2",
     "jasmine-promise-matchers": "^2.2.0",
-    "jspm": "^0.16.42",
+    "jspm": "^0.16.47",
     "karma": "^1.2.0",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^2.0.0",
@@ -55,7 +55,6 @@
     "require-dir": "^0.3.0",
     "rsvp": "^3.2.1",
     "run-sequence": "^1.1.5",
-    "systemjs": "^0.19.27",
     "systemjs-plugin-babel": "^0.0.13",
     "vinyl-paths": "^2.1.0",
     "proxy-middleware": "^0.15.0"

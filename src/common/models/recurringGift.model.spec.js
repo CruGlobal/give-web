@@ -29,7 +29,8 @@ describe('recurringGift model', () => {
         'effective-status': "Active",
         rate: {recurrence: {interval: 'Monthly'}},
         'recurring-day-of-month': '15',
-        'next-draw-date': {'display-value': '2015-05-06', value: 1430895600}
+        'next-draw-date': {'display-value': '2015-05-06', value: 1430895600},
+        'start-date': {'display-value': '2015-04-06', value: 1428303600}
       }
     );
     RecurringGiftModel.nextDrawDate = '2015-05-20';
@@ -39,6 +40,7 @@ describe('recurringGift model', () => {
         'account-type': 'Savings'
       }
     ];
+    jasmine.clock().mockDate(moment('2015-05-07').toDate());
   });
 
   describe('constructor', () => {
@@ -66,6 +68,9 @@ describe('recurringGift model', () => {
           }
         },
         'next-draw-date': {
+          'display-value': ''
+        },
+        'start-date': {
           'display-value': ''
         }
       });

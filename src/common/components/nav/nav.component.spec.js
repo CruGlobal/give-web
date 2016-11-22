@@ -109,6 +109,16 @@ describe( 'nav', function () {
     $httpBackend.flush();
   } );
 
+  it( 'to build Give sub nav structure', () => {
+    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $ctrl.$window.location.hostname = 'give.cru.org';
+
+    $ctrl.$onInit();
+    $httpBackend.flush();
+
+    expect( $ctrl.subMenuStructure[0].title ).toEqual( 'Give' );
+  } );
+
   describe( '$onInit()', () => {
     let spy;
     beforeEach( () => {
