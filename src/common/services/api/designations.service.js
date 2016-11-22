@@ -1,91 +1,81 @@
 import angular from 'angular';
-import JSONPath from 'common/lib/jsonPath';
+import map from 'lodash/map';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 
 import cortexApiService from '../cortexApi.service';
+import hateoasHelperService from '../hateoasHelper.service';
 
 let serviceName = 'designationsService';
 
-/*@ngInject*/
-function designations($http, envService, cortexApiService){
+class DesignationsService {
 
-  return {
-    productSearch: productSearch,
-    productLookup: productLookup
-  };
+  /*@ngInject*/
+  constructor($http, envService, cortexApiService, hateoasHelperService){
+    this.$http = $http;
+    this.envService = envService;
+    this.cortexApiService = cortexApiService;
+    this.hateoasHelperService = hateoasHelperService;
+  }
 
-  function productSearch(params){
-    return Observable.from($http({
+  productSearch(params){
+    return Observable.from(this.$http({
       method: 'get',
-      url: envService.read('apiUrl') + '/search',
+      url: this.envService.read('apiUrl') + '/search',
       params: params,
       cache: true
     })).map((response) => {
-      var results = [];
-
-      angular.forEach(response.data.hits.hit, function(d){
-        var fields = d.fields;
-        var designation_number = fields.designation_number ? fields.designation_number[0] : null;
-        var replacement_designation_number = fields.replacement_designation_number ? fields.replacement_designation_number[0] : null;
-        var description = fields.description ? fields.description[0] : null;
-        var type = fields.designation_type ? fields.designation_type[0] : null;
-
-        results.push({
-          designationNumber: designation_number,
-          replacementDesignationNumber: replacement_designation_number,
-          name: description,
-          type: type
-        });
+      return map(response.data.hits.hit, (d) => {
+        const fields = d.fields;
+        return {
+          designationNumber: fields.designation_number ? fields.designation_number[0] : null,
+          replacementDesignationNumber: fields.replacement_designation_number ? fields.replacement_designation_number[0] : null,
+          name: fields.description ? fields.description[0] : null,
+          type: fields.designation_type ? fields.designation_type[0] : null
+        };
       });
-
-      return results;
     });
   }
 
-  function productLookup(query, selectQuery){
-    var httpRequest = selectQuery ? cortexApiService.post({
+  productLookup(query, selectQuery){
+    const zoomObj = {
+      code: 'code',
+      definition: 'definition,definition:options:element:selector:chosen:description',
+      choices: 'definition:options:element:selector:choice[],definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction',
+      chosen: 'definition:options:element:selector:chosen,definition:options:element:selector:chosen:description'
+    };
+
+    var httpRequest = selectQuery ? this.cortexApiService.post({
       path: query,
       data: { },
       followLocation: true,
-      params: {
-        zoom: 'code,definition,definition:options:element:selector:choice:description,definition:options:element:selector:chosen:description,definition:options:element:selector:choice:selectaction'
-      }
-    }) : cortexApiService.post({
-      path: ['lookups', cortexApiService.scope, 'items'],
+      zoom: zoomObj
+    }) : this.cortexApiService.post({
+      path: ['lookups', this.cortexApiService.scope, 'items'],
       followLocation: true,
       data: {
         code: query
       },
-      params: {
-        zoom: 'code,definition,definition:options:element:selector:choice:description,definition:options:element:selector:chosen:description,definition:options:element:selector:choice:selectaction'
-      }
+      zoom: zoomObj
     });
 
     return httpRequest.map((data) => {
-      var idUri = JSONPath.query(data, "$._definition[0].links[?(@.rel=='item')]['uri']")[0];
-      var choiceCurrent = JSONPath.query(data, "$._definition[0]._options[0]._element[0]._selector[0]._chosen")[0];
-      var choicesArray = JSONPath.query(data, "$._definition[0]._options[0]._element[0]._selector[0]._choice")[0];
-      var choices = [];
-      angular.forEach(choicesArray.concat(choiceCurrent), function(choice){
-        choices.push({
-          name: JSONPath.query(choice, "$._description[0]['name']")[0],
-          display: JSONPath.query(choice, "$._description[0]['display-name']")[0],
-          selectAction: JSONPath.query(choice, "$._selectaction[0].links[?(@.rel=='selectaction')]['uri']")[0]
-        });
+      const choices = map(data.choices.concat(data.chosen), (choice) => {
+        return {
+          name: choice.description.name,
+          display: choice.description['display-name'],
+          selectAction: choice.selectaction && choice.selectaction.self.uri || ''
+        };
       });
-      var displayName = JSONPath.query(data, "$._definition[0]['display-name']")[0];
-      var code = JSONPath.query(data, "$._code[0].code")[0];
-      var designationNumber = JSONPath.query(data, "$._code[0]['product-code']")[0];
 
       return {
-        id: idUri.split('/').pop(),
+        uri: this.hateoasHelperService.getLink(data.definition, 'item'),
         frequencies: choices,
-        frequency: JSONPath.query(choiceCurrent[0], "$._description[0]['name']")[0],
-        displayName: displayName,
-        code: code,
-        designationNumber: designationNumber
+        frequency: data.chosen.description.name,
+        displayName: data.definition['display-name'],
+        code: data.code.code,
+        designationNumber: data.code['product-code']
       };
     });
   }
@@ -93,6 +83,7 @@ function designations($http, envService, cortexApiService){
 
 export default angular
   .module(serviceName, [
-    cortexApiService.name
+    cortexApiService.name,
+    hateoasHelperService.name
   ])
-  .factory(serviceName, designations);
+  .service(serviceName, DesignationsService);

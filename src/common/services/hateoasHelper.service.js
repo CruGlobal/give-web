@@ -16,7 +16,9 @@ class HateoasHelper {
 
   getLink(response, relationshipName){
     let linkObj = find(response.links, {rel: relationshipName});
-    return linkObj ? linkObj.uri : undefined;
+    return linkObj ?
+      linkObj.uri.replace(/^\//, '') : // remove initial slash
+      undefined;
   }
 
   getElement(response, path, zoomIsArray){
