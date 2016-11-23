@@ -61,7 +61,7 @@
               </div>
             </div>
           </div>
-          <div ng-if="$ctrl.receipts && $ctrl.receipts.length == 0">
+          <div ng-if="!ctrl.loading && $ctrl.receipts && $ctrl.receipts.length == 0">
             You don't have any receipts for {{$ctrl.currentYear}}.
           </div>
           <div class="row mt">
