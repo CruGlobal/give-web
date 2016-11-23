@@ -6,10 +6,12 @@ import loadingComponent from 'common/components/loading/loading.component';
 import step1SelectRecentRecipients from './step1/selectRecentRecipients.component';
 import step1SearchRecipients from './step1/searchRecipients.component';
 import step2EnterAmounts from './step2/enterAmounts.component';
+import {giftAddedEvent} from 'app/productConfig/productConfig.modal';
 
 import RecurringGiftModel from 'common/models/recurringGift.model';
 
 import donationsService from 'common/services/api/donations.service';
+import cartService from 'common/services/api/cart.service';
 
 import template from './giveOneTimeGift.modal.tpl';
 
@@ -18,9 +20,11 @@ let componentName = 'giveOneTimeGiftModal';
 class GiveOneTimeGiftModalController {
 
   /* @ngInject */
-  constructor($log, donationsService) {
+  constructor($scope, $log, donationsService, cartService) {
+    this.$scope = $scope;
     this.$log = $log;
     this.donationsService = donationsService;
+    this.cartService = cartService;
     this.recentRecipients = [];
     this.selectedRecipients = [];
   }
@@ -32,14 +36,14 @@ class GiveOneTimeGiftModalController {
   loadRecentRecipients(){
     this.state = 'loadingRecentRecipients';
     this.donationsService.getRecentRecipients()
-      .subscribe(recentRecipients => {
-        this.recentRecipients = map(recentRecipients, gift => (new RecurringGiftModel(gift)).setDefaultsSingleGift());
-        this.hasRecentRecipients = this.recentRecipients && this.recentRecipients.length > 0;
-        this.next();
-      }, (error) => {
-        this.state = 'errorLoadingRecentRecipients';
-        this.$log.error('Error loading recent recipients', error);
-      });
+     .subscribe(recentRecipients => {
+       this.recentRecipients = map(recentRecipients, gift => (new RecurringGiftModel(gift)).setDefaultsSingleGift());
+       this.hasRecentRecipients = this.recentRecipients && this.recentRecipients.length > 0;
+       this.next();
+     }, (error) => {
+       this.state = 'errorLoadingRecentRecipients';
+       this.$log.error('Error loading recent recipients', error);
+     });
   }
 
   next(selectedRecipients, search, additionalRecipients){
@@ -70,8 +74,7 @@ class GiveOneTimeGiftModalController {
         break;
       case 'step2EnterAmounts':
         this.selectedRecipients = selectedRecipients;
-        // TODO: add gifts to cart and open mini cart
-        this.close();
+        this.addSelectedRecipientsToCart();
         break;
     }
   }
@@ -84,11 +87,45 @@ class GiveOneTimeGiftModalController {
         }else{
           this.state = 'step1SearchRecipients';
         }
+        this.errors = {};
         break;
       case 'step1SearchRecipients':
         this.state = 'step1SelectRecentRecipients';
         break;
     }
+  }
+
+  addSelectedRecipientsToCart(){
+    this.submitted = false;
+    let succededRequests = [];
+    let erroredRequests = [];
+    this.errors = {};
+    this.cartService
+      .bulkAdd(this.selectedRecipients)
+      .subscribe(response => {
+          if(response.error){
+            erroredRequests.push(response);
+          this.$log.error('Error adding a selected one time recipient to cart', response);
+          }else{
+            succededRequests.push(response);
+          }
+        },
+        error => {
+          this.$log.error('Error adding selected one time recipients to cart', error);
+          this.errors.addToCart = true;
+          this.submitted = true;
+        },
+        () => {
+          if(erroredRequests.length === 0){
+            this.$scope.$emit( giftAddedEvent );
+            this.close();
+          }else{
+            this.errors.addToCart = true;
+            this.selectedRecipients = map(erroredRequests, 'configuredDesignation');
+            this.submitted = true;
+          }
+        }
+      );
   }
 
 }
@@ -100,7 +137,8 @@ export default angular
     step1SelectRecentRecipients.name,
     step1SearchRecipients.name,
     step2EnterAmounts.name,
-    donationsService.name
+    donationsService.name,
+    cartService.name
   ])
   .component(componentName, {
     controller: GiveOneTimeGiftModalController,

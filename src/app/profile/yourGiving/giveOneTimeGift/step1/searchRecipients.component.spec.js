@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
+import map from 'lodash/map';
 
 import RecurringGiftModel from 'common/models/recurringGift.model';
 
@@ -28,10 +29,15 @@ describe('giveOneTimeGiftModal', () => {
       it('should call next with the additionalRecipients after having mapped them to a gift model', () => {
         self.controller.additionalRecipients = [ { designationName: 'Name', designationNumber: '0123456' }, { designationName: 'Name 2', designationNumber: '1234567' } ];
         self.controller.gatherSelections();
-        expect(self.controller.next).toHaveBeenCalledWith({ additionalRecipients: [
+        let additionalRecipients = map([
           (new RecurringGiftModel({ 'designation-name': 'Name', 'designation-number': '0123456' })).setDefaultsSingleGift(),
           (new RecurringGiftModel({ 'designation-name': 'Name 2', 'designation-number': '1234567' })).setDefaultsSingleGift()
-        ]});
+        ],
+        recipient => {
+          recipient._selectedGift = true;
+          return recipient;
+        });
+        expect(self.controller.next).toHaveBeenCalledWith({ additionalRecipients: additionalRecipients });
       });
     });
   });

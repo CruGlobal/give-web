@@ -3,6 +3,7 @@ import moment from 'moment';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/empty';
 
 import module from './cart.service';
 
@@ -10,7 +11,7 @@ import cartResponse from 'common/services/api/fixtures/cortex-cart.fixture';
 
 describe('cart service', () => {
   beforeEach(angular.mock.module(module.name));
-  var self = {};
+  let self = {};
 
   beforeEach(inject((cartService, $httpBackend) => {
     self.cartService = cartService;
@@ -29,9 +30,9 @@ describe('cart service', () => {
     });
     it('should handle an empty response', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default' +
-          '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
-          'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
-          'lineitems:element:itemfields,ratetotals:element,total,total:cost')
+        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
+        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, null);
 
       self.cartService.get()
@@ -42,9 +43,9 @@ describe('cart service', () => {
     });
     it('should handle a response with no line items', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default' +
-          '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
-          'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
-          'lineitems:element:itemfields,ratetotals:element,total,total:cost')
+        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
+        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, {});
 
       self.cartService.get()
@@ -115,6 +116,106 @@ describe('cart service', () => {
       self.cartService.deleteItem('itemfieldslineitem/items/crugive/<some id>')
         .subscribe();
       self.$httpBackend.flush();
+    });
+  });
+
+  describe('bulkAdd', () => {
+    beforeEach(() => {
+      spyOn(self.cartService.designationsService, 'bulkLookup');
+    });
+    it('should throw an error if there are no designations found from lookup', () => {
+      self.cartService.designationsService.bulkLookup.and.returnValue(Observable.of({ links: [] }));
+      self.cartService.bulkAdd([{ designationNumber: '0123456' }])
+        .subscribe(
+          () => fail('Observable should have thrown an error'),
+          error => {
+            expect(error).toEqual('No results found during lookup');
+          }
+        );
+    });
+    it('should combine the configured designations with their product uri and call addItemAndReplaceExisting for each designation', () => {
+      self.cartService.designationsService.bulkLookup.and.returnValue(Observable.of({ links: [ { uri: 'uri1'}, { uri: 'uri2'} ] }));
+      spyOn(self.cartService, 'addItemAndReplaceExisting').and.callFake( (cart, uri, configuredDesignation) => Observable.of({ configuredDesignation: configuredDesignation }));
+      let outputValues = [];
+      self.cartService.bulkAdd([{ designationNumber: '0123456' }, { designationNumber: '1234567' }])
+        .subscribe(value => {
+            outputValues.push(value);
+          },
+          () => fail('Observable should not have thrown an error'),
+          () => {
+            expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(jasmine.any(Observable), 'uri1', { designationNumber: '0123456', uri: 'uri1' });
+            expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(jasmine.any(Observable), 'uri2', { designationNumber: '1234567', uri: 'uri2' });
+            expect(outputValues).toEqual([ { configuredDesignation: { designationNumber: '0123456', uri: 'uri1' } }, { configuredDesignation: { designationNumber: '1234567', uri: 'uri2' } } ]);
+          });
+    });
+    it('should provide cart as an observable that only performs a cart request once', () => {
+      self.cartService.designationsService.bulkLookup.and.returnValue(Observable.of({ links: [ { uri: 'uri1'} ] }));
+      spyOn(self.cartService, 'addItemAndReplaceExisting').and.returnValue(Observable.empty());
+      self.cartService.bulkAdd([{ designationNumber: '0123456' }])
+        .subscribe(null,
+          () => fail('Observable should not have thrown an error'),
+          () => {
+            spyOn(self.cartService, 'get').and.returnValue(Observable.empty());
+            const cartObservable = self.cartService.addItemAndReplaceExisting.calls.mostRecent().args[0];
+            cartObservable.subscribe();
+            cartObservable.subscribe();
+            expect(self.cartService.get.calls.count()).toEqual(1);
+          });
+    });
+  });
+  describe('addItemAndReplaceExisting', () => {
+    beforeEach(() => {
+      spyOn(self.cartService, 'addItem').and.returnValue(Observable.of({}));
+      spyOn(self.cartService, 'editItem').and.returnValue(Observable.of({}));
+      this.cartObservable = Observable.of({ items: [ { code: '0123456', uri: 'oldUri'}]});
+    });
+    it('should add items to cart if there are no conflicts', () => {
+      self.cartService.addItemAndReplaceExisting(null, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
+        .subscribe(
+          response => {
+            expect(self.cartService.addItem).toHaveBeenCalledWith('uri1', { amount: 51 });
+            expect(self.cartService.editItem).not.toHaveBeenCalled();
+            expect(response).toEqual({ configuredDesignation: { designationNumber: '0123456', amount: 51, uri: 'uri1' } });
+          },
+          () => fail('Observable should not have thrown an error')
+        );
+    });
+    it('should catch a generic error when adding item', () => {
+      self.cartService.addItem.and.returnValue(Observable.throw('some error'));
+      self.cartService.addItemAndReplaceExisting(null, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
+        .subscribe(
+          response => {
+            expect(self.cartService.addItem).toHaveBeenCalledWith('uri1', { amount: 51 });
+            expect(self.cartService.editItem).not.toHaveBeenCalled();
+            expect(response).toEqual({ error: 'some error', configuredDesignation: { designationNumber: '0123456', amount: 51, uri: 'uri1' } });
+          },
+          () => fail('Observable should not have thrown an error') // We are catching and returning the value with an error key so we know which requests are failing
+        );
+    });
+    it('should catch a conflict in the cart and replace that item', () => {
+      self.cartService.addItem.and.returnValue(Observable.throw({ status: 409 }));
+      self.cartService.addItemAndReplaceExisting(this.cartObservable, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
+        .subscribe(
+          response => {
+            expect(self.cartService.addItem).toHaveBeenCalledWith('uri1', { amount: 51 });
+            expect(self.cartService.editItem).toHaveBeenCalledWith('oldUri', 'uri1', { amount: 51 });
+            expect(response).toEqual({ configuredDesignation: { designationNumber: '0123456', amount: 51, uri: 'uri1' } });
+          },
+          () => fail('Observable should not have thrown an error')
+        );
+    });
+    it('should catch a conflict in the cart and catch an error replacing that item', () => {
+      self.cartService.addItem.and.returnValue(Observable.throw({ status: 409 }));
+      self.cartService.editItem.and.returnValue(Observable.throw('some error'));
+      self.cartService.addItemAndReplaceExisting(this.cartObservable, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
+        .subscribe(
+          response => {
+            expect(self.cartService.addItem).toHaveBeenCalledWith('uri1', { amount: 51 });
+            expect(self.cartService.editItem).toHaveBeenCalledWith('oldUri', 'uri1', { amount: 51 });
+            expect(response).toEqual({ error: 'some error', configuredDesignation: { designationNumber: '0123456', amount: 51, uri: 'uri1' } });
+          },
+          () => fail('Observable should not have thrown an error')
+        );
     });
   });
 });

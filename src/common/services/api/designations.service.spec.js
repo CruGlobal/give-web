@@ -4,6 +4,7 @@ import module from './designations.service';
 
 import searchResponse from 'common/services/api/fixtures/product-search.fixture';
 import lookupResponse from 'common/services/api/fixtures/product-lookup.fixture';
+import bulkLookupResponse from 'common/services/api/fixtures/product-lookup-bulk.fixture';
 
 describe('designation service', () => {
   beforeEach(angular.mock.module(module.name));
@@ -93,8 +94,20 @@ describe('designation service', () => {
       self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:chosen:description,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, lookupResponse);
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
-        .subscribe((data) => {
+        .subscribe(data => {
           expect(data).toEqual(this.expectedResponse);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+  describe('bulkLookup', () => {
+    it('should take an array of designation numbers and return corresponding links for items', () => {
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/lookups/crugive/batches/items?followLocation=true',
+        { codes: ['0123456', '1234567'] })
+        .respond(200, bulkLookupResponse);
+      self.designationsService.bulkLookup(['0123456', '1234567'])
+        .subscribe(data => {
+          expect(data).toEqual(bulkLookupResponse);
         });
       self.$httpBackend.flush();
     });
