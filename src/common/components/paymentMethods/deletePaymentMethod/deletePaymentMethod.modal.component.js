@@ -12,6 +12,8 @@ import remove from 'lodash/remove';
 import find from 'lodash/find';
 import forEach from 'lodash/forEach';
 
+import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
+
 let componentName = 'deletePaymentMethodModal';
 
 class deletePaymentMethodModalController {
@@ -190,6 +192,7 @@ class deletePaymentMethodModalController {
           this.loading = false;
         })
         .subscribe((data) => {
+          data.address = formatAddressForTemplate(data.address);
           this.filteredPaymentMethods.push(data);
           data._recurringgifts = {};
           this.filteredPaymentMethods.push(data);
@@ -202,6 +205,7 @@ class deletePaymentMethodModalController {
           this.$log.error(error.data,error);
         });
     } else if(!success) {
+      this.submissionError.loading = false;
       this.loading = false;
     }
   }

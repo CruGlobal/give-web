@@ -279,6 +279,13 @@ describe( 'delete payment method modal', function () {
       let data = {
         self: {
           uri: ''
+        },
+        address: {
+          streetAddress: '123 First St',
+          extendedAddress: 'Apt 123',
+          locality: 'Sacramento',
+          postalCode: '12345',
+          region: 'CA'
         }
       };
       spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of(data));
