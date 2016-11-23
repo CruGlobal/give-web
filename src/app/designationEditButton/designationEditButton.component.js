@@ -16,7 +16,7 @@ class DesignationEditButtonController {
 
   $onInit() {
     if(this.designationNumber && this.sessionService.getRole() === 'REGISTERED'){
-      this.designationEditorService.getContent(this.designationNumber).then(() => {
+      this.designationEditorService.getContent(this.designationNumber, this.campaignPage).then(() => {
         this.showEditButton = true;
       });
     }
@@ -33,6 +33,7 @@ export default angular
     controller:  DesignationEditButtonController,
     templateUrl: template.name,
     bindings:    {
-      designationNumber: '@'
+      designationNumber: '@',
+      campaignPage: '@'
     }
   } );
