@@ -79,6 +79,16 @@ class DesignationsService {
       };
     });
   }
+
+  bulkLookup(designationNumbers){
+    return this.cortexApiService.post({
+      path: ['lookups', this.cortexApiService.scope, 'batches', 'items'],
+      data: {
+        codes: designationNumbers
+      },
+      followLocation: true
+    });
+  }
 }
 
 export default angular

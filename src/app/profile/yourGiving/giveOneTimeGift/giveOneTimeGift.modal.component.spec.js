@@ -2,15 +2,17 @@ import angular from 'angular';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/throw';
 
 import RecurringGiftModel from 'common/models/recurringGift.model';
+import {giftAddedEvent} from 'app/productConfig/productConfig.modal';
 
 import module from './giveOneTimeGift.modal.component';
 
 describe('giveOneTimeGiftModal', () => {
   beforeEach(angular.mock.module(module.name));
-  var self = {};
+  let self = {};
 
   beforeEach(inject(($componentController) => {
     self.controller = $componentController(module.name, {}, {
@@ -98,11 +100,11 @@ describe('giveOneTimeGiftModal', () => {
     });
 
     it('should transition from step2EnterAmounts, add gifts to cart, close the modal, and open the mini nav cart', () => {
+      spyOn(self.controller, 'addSelectedRecipientsToCart');
       self.controller.state = 'step2EnterAmounts';
       self.controller.next(['confirmed gift']);
       expect(self.controller.selectedRecipients).toEqual(['confirmed gift']);
-      expect(self.controller.close).toHaveBeenCalled();
-      // TODO: test adding gifts to cart and opening the mini cart
+      expect(self.controller.addSelectedRecipientsToCart).toHaveBeenCalled();
     });
   });
 
@@ -123,6 +125,60 @@ describe('giveOneTimeGiftModal', () => {
       self.controller.state = 'step1SearchRecipients';
       self.controller.previous();
       expect(self.controller.state).toEqual('step1SelectRecentRecipients');
+    });
+  });
+
+  describe('addSelectedRecipientsToCart', () => {
+    beforeEach(() => {
+      spyOn(self.controller.cartService, 'bulkAdd');
+      spyOn(self.controller.$scope, '$emit');
+    });
+    it('should add the selected recipients to cart, close the modal, and open the mini cart', () => {
+      self.controller.cartService.bulkAdd.and.returnValue(Observable.from([ { configuredDesignation: { designationNumber: '0123456', amount: 57, uri: 'uri1' } } ]));
+      self.controller.selectedRecipients = [ { designationNumber: '0123456', amount: 57 } ];
+      self.controller.addSelectedRecipientsToCart();
+      expect(self.controller.cartService.bulkAdd).toHaveBeenCalledWith([ { designationNumber: '0123456', amount: 57 } ]);
+      expect(self.controller.$scope.$emit).toHaveBeenCalledWith(giftAddedEvent);
+      expect(self.controller.close).toHaveBeenCalled();
+      expect(self.controller.errors).toEqual({});
+      expect(self.controller.submitted).toEqual(false);
+    });
+    it('should show the recipients that failed to be added to cart to the user', () => {
+      self.controller.cartService.bulkAdd.and.returnValue(Observable.from([
+        { configuredDesignation: { designationNumber: '0123456', amount: 57, uri: 'uri1' } },
+        { error: 'some error', configuredDesignation: { designationNumber: '1234567', amount: 58, uri: 'uri2' } }
+      ]));
+      self.controller.selectedRecipients = [
+        { designationNumber: '0123456', amount: 57 },
+        { designationNumber: '1234567', amount: 58 }
+      ];
+      self.controller.addSelectedRecipientsToCart();
+      expect(self.controller.cartService.bulkAdd).toHaveBeenCalledWith([
+        { designationNumber: '0123456', amount: 57 },
+        { designationNumber: '1234567', amount: 58 }
+      ]);
+      expect(self.controller.$scope.$emit).not.toHaveBeenCalled();
+      expect(self.controller.close).not.toHaveBeenCalled();
+      expect(self.controller.selectedRecipients).toEqual([ { designationNumber: '1234567', amount: 58, uri: 'uri2' } ]);
+      expect(self.controller.errors.addToCart).toEqual(true);
+      expect(self.controller.submitted).toEqual(true);
+      expect(self.controller.$log.error.logs[0]).toEqual([ 'Error adding a selected one time recipient to cart', { error: 'some error', configuredDesignation: { designationNumber: '1234567', amount: 58, uri: 'uri2' } } ]);
+    });
+    it('should handle a generic error that is not gift specific', () => {
+      self.controller.cartService.bulkAdd.and.returnValue(Observable.throw('some error'));
+      self.controller.selectedRecipients = [
+        { designationNumber: '0123456', amount: 57 }
+      ];
+      self.controller.addSelectedRecipientsToCart();
+      expect(self.controller.cartService.bulkAdd).toHaveBeenCalledWith([
+        { designationNumber: '0123456', amount: 57 }
+      ]);
+      expect(self.controller.$scope.$emit).not.toHaveBeenCalled();
+      expect(self.controller.close).not.toHaveBeenCalled();
+      expect(self.controller.selectedRecipients).toEqual([ { designationNumber: '0123456', amount: 57 } ]);
+      expect(self.controller.errors.addToCart).toEqual(true);
+      expect(self.controller.submitted).toEqual(true);
+      expect(self.controller.$log.error.logs[0]).toEqual([ 'Error adding selected one time recipients to cart', 'some error' ]);
     });
   });
 });

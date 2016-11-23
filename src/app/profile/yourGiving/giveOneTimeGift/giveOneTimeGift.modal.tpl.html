@@ -71,6 +71,8 @@
   <step-2-enter-amounts
     ng-switch-when="step2EnterAmounts"
     selected-recipients="$ctrl.selectedRecipients"
+    submitted="$ctrl.submitted"
+    errors="$ctrl.errors"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(selectedRecipients)">

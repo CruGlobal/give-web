@@ -23,7 +23,9 @@ class SelectRecentRecipientsController {
   gatherSelections(){
     this.next({
       additionalRecipients: map(this.additionalRecipients, gift => {
-        return (new RecurringGiftModel({ 'designation-name': gift.designationName, 'designation-number': gift.designationNumber })).setDefaultsSingleGift();
+        let newGift = (new RecurringGiftModel({ 'designation-name': gift.designationName, 'designation-number': gift.designationNumber })).setDefaultsSingleGift();
+        newGift._selectedGift = true;
+        return newGift;
       })
     });
   }
