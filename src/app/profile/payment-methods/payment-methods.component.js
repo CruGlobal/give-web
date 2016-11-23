@@ -10,6 +10,7 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
+import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 
 class PaymentMethodsController {
 
@@ -109,8 +110,10 @@ class PaymentMethodsController {
     if(e.success && e.data) {
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
+            data.address = formatAddressForTemplate(data.address);
             this.submissionError.loading = false;
             this.paymentMethodFormModal.close(data);
+
           },
           (error) => {
             this.submissionError.loading = false;

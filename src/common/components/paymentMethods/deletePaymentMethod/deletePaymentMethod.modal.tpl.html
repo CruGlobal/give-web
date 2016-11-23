@@ -89,12 +89,12 @@
               </div>
 
               <div class="mb" ng-switch-when="addPaymentMethod">
-                <add-new-payment-method submitted="$ctrl.submitted" on-submit="$ctrl.savePaymentMethod(success, data)"></add-new-payment-method>
+                <payment-method-form mailing-address="$ctrl.resolve.mailingAddress" submission-error="$ctrl.submissionError" on-submit="$ctrl.savePaymentMethod(success, data)"></payment-method-form>
                 <div class="mb0">
                   <div class="row">
                     <div class="col-md-12 text-right">
                       <a class="btn btn-primary" ng-click="$ctrl.changeView(true)" translate>Back</a>
-                      <a class="btn btn-primary" ng-click="$ctrl.submitted = true" translate>Add Payment Method</a>
+                      <a class="btn btn-primary" ng-click="$ctrl.submissionError.loading = true" translate>Add Payment Method</a>
                     </div>
                   </div>
                 </div>

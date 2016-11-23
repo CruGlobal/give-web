@@ -117,7 +117,16 @@ describe( 'PaymentMethodsComponent', function () {
         success: true,
         data: 'some data'
       };
-      spyOn($ctrl.profileService, 'addPaymentMethod').and.returnValue(Observable.of('data'));
+      let data = {
+        address: {
+          streetAddress: '123 First St',
+          extendedAddress: 'Apt 123',
+          locality: 'Sacramento',
+          postalCode: '12345',
+          region: 'CA'
+        }
+      };
+      spyOn($ctrl.profileService, 'addPaymentMethod').and.returnValue(Observable.of(data));
       $ctrl.paymentMethodFormModal = jasmine.createSpyObj('paymentMethodFormModal',['close']);
 
       $ctrl.parentComponent = $ctrl;

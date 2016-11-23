@@ -129,7 +129,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
       .map( ( response ) => response.data );
   }
 
-  function downgradeToGuest() {
+  function downgradeToGuest( skipEvent = false ) {
     let observable = currentRole() == Roles.public ?
       Observable.throw( 'must be IDENTIFIED' ) :
       Observable
@@ -140,7 +140,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
           data:            {}
         } ) )
         .map( ( response ) => response.data );
-    return observable.finally( () => {
+    return skipEvent ? observable : observable.finally( () => {
       $rootScope.$broadcast( SignOutEvent );
     } );
   }

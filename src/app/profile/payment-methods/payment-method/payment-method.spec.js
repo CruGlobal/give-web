@@ -143,9 +143,11 @@ describe('PaymentMethodComponent', function () {
     it('should call Delete Modal', () => {
       self.controller.model = modelEFT;
       self.controller.successMessage = {};
+      self.controller.mailingAddress = 'address';
       self.controller.deletePaymentMethod();
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
       expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethod()).toEqual(modelEFT);
+      expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.mailingAddress()).toEqual('address');
       expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethodsList().length).toBe(1);
     });
   });

@@ -95,6 +95,7 @@ class PaymentMethodController{
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         paymentMethod: () => this.model,
+        mailingAddress: () => this.mailingAddress,
         paymentMethodsList: () => this.paymentMethodsList
       }
     });
