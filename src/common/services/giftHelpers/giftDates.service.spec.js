@@ -98,14 +98,27 @@ describe('giftDates service', () => {
       expect(giftDates._earliestValidDate('2017-01-03', '2017-01-02').toString()).toEqual(moment('2017-01-04').toString());
     });
     it('should not use the current date if it is slightly before another date', () => {
-      jasmine.clock().mockDate( moment.utc('2017-01-02 11:59:59').local().toDate() );
+      jasmine.clock().mockDate( moment.utc('2017-01-02 23:59:59').local().toDate() );
       expect(giftDates._earliestValidDate('2017-01-02', '2017-01-03').toString()).toEqual(moment('2017-01-03').toString());
       expect(giftDates._earliestValidDate('2017-01-03', '2017-01-02').toString()).toEqual(moment('2017-01-03').toString());
     });
     it('should not use the next day if the current date is a second before midnight on the same day as another date', () => {
-      jasmine.clock().mockDate( moment.utc('2017-01-03 11:59:59').local().toDate() );
+      jasmine.clock().mockDate( moment.utc('2017-01-03 23:59:59').local().toDate() );
       expect(giftDates._earliestValidDate('2017-01-02', '2017-01-03').toString()).toEqual(moment('2017-01-03').toString());
       expect(giftDates._earliestValidDate('2017-01-03', '2017-01-02').toString()).toEqual(moment('2017-01-03').toString());
+    });
+    it('should move the current date to the next month if it is after the 28th', () => {
+      jasmine.clock().mockDate( moment.utc('2017-01-29 23:59:59').local().toDate() );
+      expect(giftDates._earliestValidDate('2017-01-28', '2017-01-27').toString()).toEqual(moment('2017-02-01').toString());
+      expect(giftDates._earliestValidDate('2017-02-01', '2017-01-02').toString()).toEqual(moment('2017-02-01').toString());
+
+      jasmine.clock().mockDate( moment.utc('2017-01-30 23:59:59').local().toDate() );
+      expect(giftDates._earliestValidDate('2017-01-28', '2017-01-27').toString()).toEqual(moment('2017-02-01').toString());
+      expect(giftDates._earliestValidDate('2017-02-01', '2017-01-02').toString()).toEqual(moment('2017-02-01').toString());
+
+      jasmine.clock().mockDate( moment.utc('2017-12-31 23:59:59').local().toDate() );
+      expect(giftDates._earliestValidDate('2017-12-28', '2017-12-27').toString()).toEqual(moment('2018-01-01').toString());
+      expect(giftDates._earliestValidDate('2017-12-01', '2017-12-02').toString()).toEqual(moment('2018-01-01').toString());
     });
   });
 });
