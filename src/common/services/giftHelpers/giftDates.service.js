@@ -1,7 +1,6 @@
 import moment from 'moment';
 import range from 'lodash/range';
 import map from 'lodash/map';
-import reduce from 'lodash/reduce';
 
 export function possibleTransactionDays() {
   return range( 1, 29 ).map((i) => (`0${i}`).slice(-2));
@@ -44,11 +43,19 @@ export function startMonth(transactionDay, month, nextDrawDate, monthOffset, sta
 }
 
 export function _earliestValidDate(nextDrawDate, startDate){
-  // Find greatest of today's date, nextDrawDate, and startDate
-  let utcGreatest = reduce([nextDrawDate, startDate], (result, date) => {
-    let utcDate = moment.utc(date); // Compare all dates in UTC
-    return result.isBefore(utcDate) ? utcDate : result;
-  }, moment.utc()); // Use today's date in UTC as the starting value to compare with nextDrawDate and startDate
+  let currentDate = moment.utc();
+  // If date is past the 28th of the month (which are invalid transaction days) use the first of the next month
+  if(currentDate.date() > 28){
+    currentDate.add(1, 'months');
+    currentDate.date(1);
+  }
+
+  // Find greatest of today's date, nextDrawDate, and startDate by comparing dates in UTC
+  let utcGreatest = moment.max(
+    currentDate,
+    moment.utc(nextDrawDate),
+    moment.utc(startDate)
+  );
 
   // Toss all timezone info and pretend the date is at midnight in the browser's timezone
   // like the rest of the dates in the app that are used for display only.
