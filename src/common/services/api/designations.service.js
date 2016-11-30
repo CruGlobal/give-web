@@ -26,13 +26,13 @@ class DesignationsService {
       params: params,
       cache: true
     })).map((response) => {
-      return map(response.data.hits.hit, (d) => {
-        const fields = d.fields;
+      return map(response.data.hits, (hit) => {
         return {
-          designationNumber: fields.designation_number ? fields.designation_number[0] : null,
-          replacementDesignationNumber: fields.replacement_designation_number ? fields.replacement_designation_number[0] : null,
-          name: fields.description ? fields.description[0] : null,
-          type: fields.designation_type ? fields.designation_type[0] : null
+          designationNumber: hit.designation_number || null,
+          replacementDesignationNumber: hit.replacement_designation_number || null,
+          name: hit.description || null,
+          type: hit.designation_type || null,
+          facet: hit.facet || null
         };
       });
     });

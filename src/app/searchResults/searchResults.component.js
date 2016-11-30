@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-filter';
 
 import commonModule from 'common/common.module';
 import designationsService from 'common/services/api/designations.service';
@@ -70,6 +71,7 @@ export default angular
   .module( componentName, [
     template.name,
     commonModule.name,
+    'angular.filter',
     designationsService.name,
     productConfigComponent.name,
     loadingOverlay.name,
