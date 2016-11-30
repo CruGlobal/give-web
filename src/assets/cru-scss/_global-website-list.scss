@@ -8,18 +8,18 @@
     min-height: 100%;
     padding-top: 0;
     overflow-x: hidden;
-    background-image: url("../images/globalWebsites--small.jpg");
+    background-image: url("//www.cru.org/images/globalWebsites--small.jpg");
 
     @include mq(480px) {
-        background-image: url("../images/globalWebsites--medium.jpg");
+        background-image: url("//www.cru.org/images/globalWebsites--medium.jpg");
     }
 
     @include mq(720px) {
-        background-image: url("../images/globalWebsites--large.jpg");
+        background-image: url("//www.cru.org/images/globalWebsites--large.jpg");
     }
 
     @include mq(1024px) {
-        background-image: url("../images/globalWebsites--huge.jpg");
+        background-image: url("//www.cru.org/images/globalWebsites--huge.jpg");
     }
 
     background-attachment: fixed;
