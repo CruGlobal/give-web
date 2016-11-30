@@ -11,6 +11,8 @@ import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPas
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component';
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component';
 
+import loading from 'common/components/loading/loading.component';
+
 let componentName = 'registerAccountModal';
 
 class RegisterAccountModalController {
@@ -22,10 +24,11 @@ class RegisterAccountModalController {
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor( orderService, sessionService, verificationService ) {
+  constructor( orderService, sessionService, verificationService, gettext ) {
     this.orderService = orderService;
     this.sessionService = sessionService;
     this.verificationService = verificationService;
+    this.gettext = gettext;
   }
 
   $onInit() {
@@ -41,6 +44,10 @@ class RegisterAccountModalController {
   }
 
   onIdentitySuccess() {
+    // Show loading state
+    this.modalTitle = this.gettext( 'Checking your donor account' );
+    this.stateChanged( 'loading' );
+
     // Success Sign-In/Up, Proceed to Step 2.
     this.getDonorDetails();
   }
@@ -56,7 +63,6 @@ class RegisterAccountModalController {
   }
 
   getDonorDetails() {
-    this.setLoading( {loading: true} );
 
     // Step 2. Fetch Donor Details
     this.orderService.getDonorDetails().subscribe( ( donorDetails ) => {
@@ -120,7 +126,8 @@ export default angular
     signUpModal.name,
     template.name,
     userMatchModal.name,
-    verificationService.name
+    verificationService.name,
+    loading.name
   ] )
   .component( componentName, {
     controller:  RegisterAccountModalController,
