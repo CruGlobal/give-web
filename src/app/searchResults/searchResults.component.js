@@ -56,6 +56,7 @@ class SearchResultsController {
           .subscribe((results) => {
             this.searchResults = results;
             this.loadingResults = false;
+            this.analyticsFactory.search(this.searchParams, results);
             this.analyticsFactory.pageLoaded();
           });
       }else{

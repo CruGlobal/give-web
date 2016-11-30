@@ -7,12 +7,15 @@ import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.
 import giftDetailsView from 'common/components/giftViews/giftDetailsView/giftDetailsView.component';
 import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
 
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'redirectGiftStep3';
 
 class RedirectGiftStep3Controller {
 
   /* @ngInject */
-  constructor( commonService, donationsService ) {
+  constructor( commonService, donationsService, analyticsFactory) {
     this.commonService = commonService;
     this.donationsService = donationsService;
     this.state = 'update';
@@ -23,6 +26,7 @@ class RedirectGiftStep3Controller {
     this.setLoading( {loading: true} );
     this.donationsService.updateRecurringGifts( this.gift ).subscribe( () => {
       this.onComplete();
+      this.analyticsFactory.setEvent('recurring donation redirected');
     }, () => {
       this.hasError = true;
       this.setLoading( {loading: false} );
@@ -46,7 +50,8 @@ export default angular
     donationsService.name,
     giftListItem.name,
     giftDetailsView.name,
-    giftUpdateView.name
+    giftUpdateView.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
       controller:  RedirectGiftStep3Controller,

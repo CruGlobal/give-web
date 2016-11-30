@@ -20,86 +20,16 @@
 
       <!-- Data layer -->
       <script>
-        var digitalData = {},
-            pagename = '',
-            delim = ':',
-            path = window.location.pathname,
-            allElements = document.getElementsByTagName('*');
-
-            if (path !== '/') {
-                var extension = ['.html','.htm'];
-
-                for (var i = 0; i < extension.length; i++) {
-                    if (path.indexOf(extension[i]) > -1) {
-                        path = path.split(extension[i]);
-                        path = path.splice(0,1);
-                        path = path.toString();
-
-                        break;
-                    }
-                }
-
-                path = path.split('/');
-
-                if (path[0].length == 0) {
-                    path.shift();
-                }
-
-                // Set pageName
-                digitalData.page = {
-                  pageInfo: {
-                    pageName: 'give' + delim + path.join(delim)
-                  }
-                };
-            } else {
-              // Set pageName
-              digitalData.page.pageInfo = {
-                  pageName: 'give' + delim + 'home'
-              };
+        digitalData = {
+          page: {
+            attributes: {
+              angularLoaded: 'false'
             }
-
-            // Set product category
-            for (var i = 0, n = allElements.length; i < n; i++) {
-                var desigType = allElements[i].getAttribute('designationtype');
-
-                if (desigType !== null) {
-                    digitalData.product = [{
-                        category: {
-                            primaryCategory: 'donation ' + desigType.toLowerCase(),
-                            siebelProductType: 'designation',
-                            organizationId: path[0]
-                        }
-                    }];
-                }
-            }
-
-            // Set site sections
-            digitalData.page.category = {
-                primaryCategory: 'give'
-            };
-
-            if (path.length >= 1) {
-
-                // Check if product page
-                if (/^\d+$/.test(path[0])) {
-                    this.getSetProductCategory(path);
-                    digitalData.page.category.subCategory1 = 'designation detail';
-                } else {
-                    digitalData.page.category.subCategory1 = path[0];
-                }
-
-                if (path.length >= 2) {
-                    digitalData.page.category.subCategory2 = path[1];
-
-                    if (path.length >= 3) {
-                        digitalData.page.category.subCategory3 = path[2];
-                    }
-                }
-
-            }
+          }
+        };
       </script>
 
-      <script src="//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-6dd3db02902933d8623718855e23b0ee85dbb1ab-staging.js"></script>
+      <script src="//assets.adobedtm.com/3202ba9b02b459ee20779cfcd8e79eaf266be170/satelliteLib-ac300e4666ee0e576a180c6472e47a5a42857a1f-staging.js"></script>
   </head>
   <body ng-cloak ng-app="main">
 

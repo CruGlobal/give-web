@@ -166,7 +166,7 @@ class ModalInstanceCtrl {
         this.$uibModalInstance.close( {isUpdated: true} );
       } else {
         this.giftSubmitted = true;
-        this.analyticsFactory.addToCart(this.itemConfig, this.productData, 'cart modal');
+        this.analyticsFactory.cartAdd(this.itemConfig, this.productData, 'cart modal');
       }
       this.submittingGift = false;
     }, (error) => {

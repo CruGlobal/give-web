@@ -157,7 +157,7 @@ class NavController{
     this.cartService.get()
       .subscribe( ( data ) => {
         this.cartData = data;
-        this.analyticsFactory.viewCart(data, 'customLink');
+        this.analyticsFactory.cartView(data, 'customLink');
       } );
   }
 

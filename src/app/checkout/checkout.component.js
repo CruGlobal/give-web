@@ -62,6 +62,11 @@ class CheckoutController{
   initStepParam(){
     this.changeStep(this.$location.search().step || 'contact');
     this.$location.replace();
+
+    if (this.$location.search().step !== 'contact') {
+      this.analyticsFactory.pageLoaded();
+    }
+
     this.$locationChangeSuccessListener = this.$locationChangeSuccessListener || this.$rootScope.$on('$locationChangeSuccess', () => {
       this.initStepParam();
     });
@@ -80,8 +85,8 @@ class CheckoutController{
       })
       .subscribe((data) => {
           this.cartData = data;
+          this.analyticsFactory.cartView(data);
           this.analyticsFactory.pageLoaded();
-          this.analyticsFactory.viewCart(data);
         },
         (error) => {
           this.$log.error("Error loading cart", error);

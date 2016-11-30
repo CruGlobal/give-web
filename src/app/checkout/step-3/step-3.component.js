@@ -13,15 +13,19 @@ import desigSrcDirective from 'common/directives/desigSrc.directive';
 
 import template from './step-3.tpl';
 
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'checkoutStep3';
 
 class Step3Controller{
 
   /* @ngInject */
-  constructor(orderService, $window, $log){
+  constructor(orderService, $window, $log, analyticsFactory){
     this.orderService = orderService;
     this.$window = $window;
     this.$log = $log;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit(){
@@ -99,6 +103,7 @@ class Step3Controller{
         this.onSubmittingOrder({value: false});
         this.orderService.clearCardSecurityCode();
         this.onSubmitted();
+        this.analyticsFactory.setEvent('purchase');
         this.$window.location.href = 'thank-you.html';
       },
       (error) => {
@@ -119,7 +124,8 @@ export default angular
     orderService.name,
     capitalizeFilter.name,
     desigSrcDirective.name,
-    loadingOverlay.name
+    loadingOverlay.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: Step3Controller,

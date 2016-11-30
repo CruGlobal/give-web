@@ -38,7 +38,7 @@ class CartController {
         this.cartData = data;
         this.loading = false;
         this.analyticsFactory.pageLoaded();
-        this.analyticsFactory.viewCart(data, 'pageLoad');
+        this.analyticsFactory.cartView(data);
       } );
   }
 
@@ -46,7 +46,7 @@ class CartController {
     this.cartData = null;
     this.cartService.deleteItem( uri )
       .subscribe( () => {
-        console.log(designationNumber);
+        this.analyticsFactory.cartRemove(designationNumber);
         this.loadCart();
       } );
   }
