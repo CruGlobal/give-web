@@ -27,27 +27,27 @@ describe('designation service', () => {
           keyword: 'steve'
         })
         .subscribe((data) => {
-          expect(data).toEqual([{
+          expect(data).toEqual([jasmine.objectContaining({
             'designationNumber': '0559826',
             'replacementDesignationNumber': '0559827',
             'name': 'John and Jane Doe',
             'type': 'Staff'
-          }]);
+          })]);
         });
       self.$httpBackend.flush();
     });
     it('should handle undefined fields', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/search?keyword=steve').respond(200, {hits: {hit: [{fields: {}}]}});
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/search?keyword=steve').respond(200, {hits:[{}]});
       self.designationsService.productSearch({
           keyword: 'steve'
         })
         .subscribe((data) => {
-          expect(data).toEqual([{
+          expect(data).toEqual([jasmine.objectContaining({
             designationNumber: null,
             replacementDesignationNumber: null,
             name: null,
             type: null
-          }]);
+          })]);
         });
       self.$httpBackend.flush();
     });

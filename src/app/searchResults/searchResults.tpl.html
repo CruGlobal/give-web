@@ -111,7 +111,13 @@
                   <h3 translate>Featured Opportunities haven't been loaded yet.</h3>
                 </div>
 
-                <div class="is-row clearfix" ng-repeat="r in $ctrl.searchResults">
+                <h3 class="is-results-divider" ng-repeat-start="(k,hits) in $ctrl.searchResults | groupBy:'facet'" ng-switch="k">
+                  <span ng-switch-when="person" translate>People</span>
+                  <span ng-switch-when="ministry" translate>Ministries</span>
+                  <span ng-switch-when="featured" translate>Featured Opportunities</span>
+                </h3>
+
+                <div class="is-row clearfix" ng-repeat-end ng-repeat="r in hits">
                   <a ng-href="/{{r.designationNumber}}" class="is-row-thumb">
                     <img desig-src="{{r.designationNumber}}">
                   </a>
@@ -128,7 +134,6 @@
                   </div>
                 </div>
 
-                <!--<h3 class="is-results-divider" translate>Featured Opportunities</h3>-->
               </div>
             </div>
           </div>
