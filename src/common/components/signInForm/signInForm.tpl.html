@@ -1,5 +1,5 @@
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage | translate}}</div>
-<form class="sign-in-form" name="$ctrl.signInForm" style="position: relative;">
+<form class="sign-in-form loading-overlay-parent" name="$ctrl.signInForm">
   <div class="form-group">
     <label for="username" translate>Email</label>
     <input id="username"
@@ -29,5 +29,7 @@
     ng-disabled="!$ctrl.signInForm.$valid || $ctrl.isSigningIn"
     translate>Sign In
   </button>
-  <loading-overlay ng-if="$ctrl.isSigningIn"></loading-overlay>
+  <loading type="overlay" ng-if="$ctrl.isSigningIn">
+    <translate>Signing you in...</translate>
+  </loading>
 </form>

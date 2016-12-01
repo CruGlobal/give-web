@@ -4,7 +4,6 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 
-import loadingComponent from 'common/components/loading/loading.component';
 import step0AddUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
 import step0paymentMethodList from './step0/paymentMethodList.component';
 import step1EditRecurringGifts from './step1/editRecurringGifts.component';
@@ -144,7 +143,6 @@ class EditRecurringGiftsModalController {
 export default angular
   .module(componentName, [
     template.name,
-    loadingComponent.name,
     step0AddUpdatePaymentMethod.name,
     step0paymentMethodList.name,
     step1EditRecurringGifts.name,

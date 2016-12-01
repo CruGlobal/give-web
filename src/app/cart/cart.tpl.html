@@ -5,10 +5,10 @@
         <div class="col-md-12">
 
           <!-- Cart Summary -->
-          <div class="panel">
+          <div class="panel loading-overlay-parent">
             <div class="panel-body">
               <h3 class="panel-name" translate>Your Gift Cart</h3>
-              <loading-overlay ng-if="$ctrl.loading"></loading-overlay>
+              <loading type="overlay" ng-if="$ctrl.loading"></loading>
               <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
                 Your cart is empty
               </p>

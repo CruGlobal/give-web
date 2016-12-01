@@ -13,7 +13,9 @@
                          modal-title="$ctrl.modalTitle"
                          on-state-change="$ctrl.stateChanged(state)">
   </forgot-password-modal>
-  <loading ng-switch-when="loading" inline="true"></loading>
+  <div ng-switch-when="loading">
+    <loading></loading>
+  </div>
   <contact-info-modal ng-switch-when="contact-info"
                       modal-title="$ctrl.modalTitle"
                       on-success="$ctrl.onContactInfoSuccess()"

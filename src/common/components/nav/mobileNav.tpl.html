@@ -86,8 +86,10 @@
         <div class="container-fluid" id="mob-cart">
           <div class="row row-no-spacing">
             <div class="col-xs-12">
-              <div style="height:100px;" class="repeating-row" ng-if="!$ctrl.cartData">
-                <loading></loading>
+              <div class="repeating-row" ng-if="!$ctrl.cartData">
+                <loading>
+                  <div class="mb--" translate>Loading gifts...</div>
+                </loading>
               </div>
               <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
                 Your cart is empty

@@ -2,7 +2,6 @@ import angular from 'angular';
 import map from 'lodash/map';
 import concat from 'lodash/concat';
 
-import loadingComponent from 'common/components/loading/loading.component';
 import step1SelectRecentRecipients from './step1/selectRecentRecipients.component';
 import step1SearchRecipients from './step1/searchRecipients.component';
 import step2EnterAmounts from './step2/enterAmounts.component';
@@ -133,7 +132,6 @@ class GiveOneTimeGiftModalController {
 export default angular
   .module(componentName, [
     template.name,
-    loadingComponent.name,
     step1SelectRecentRecipients.name,
     step1SearchRecipients.name,
     step2EnterAmounts.name,

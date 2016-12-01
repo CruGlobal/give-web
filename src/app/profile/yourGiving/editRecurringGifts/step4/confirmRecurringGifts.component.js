@@ -9,7 +9,6 @@ import 'rxjs/add/operator/do';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 import giftDetailsView from 'common/components/giftViews/giftDetailsView/giftDetailsView.component';
-import loading from 'common/components/loading/loading.component';
 
 import donationsService from 'common/services/api/donations.service';
 
@@ -70,7 +69,6 @@ export default angular
     template.name,
     giftListItem.name,
     giftDetailsView.name,
-    loading.name,
     donationsService.name
   ])
   .component(componentName, {

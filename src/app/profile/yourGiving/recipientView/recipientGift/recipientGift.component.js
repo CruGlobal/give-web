@@ -2,7 +2,6 @@ import angular from 'angular';
 import desigSrc from 'common/directives/desigSrc.directive';
 import donationsService from 'common/services/api/donations.service';
 import recipientDetail from './recipientDetail/recipientDetail.component';
-import loadingComponent from 'common/components/loading/loading.component';
 import productModalService from 'common/services/productModal.service';
 import template from './recipientGift.tpl';
 
@@ -41,7 +40,6 @@ export default angular
   .module( componentName, [
     desigSrc.name,
     donationsService.name,
-    loadingComponent.name,
     productModalService.name,
     recipientDetail.name,
     template.name

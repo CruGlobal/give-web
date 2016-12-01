@@ -11,7 +11,6 @@ import 'rxjs/add/operator/map';
 import cartService from 'common/services/api/cart.service';
 import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
-import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
 import subNavDirective from './subNav.directive';
 import {giftAddedEvent} from 'app/productConfig/productConfig.modal';
@@ -229,7 +228,6 @@ export default angular
     mobileTemplate.name,
     desktopTemplate.name,
     cartService.name,
-    loadingComponent.name,
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,

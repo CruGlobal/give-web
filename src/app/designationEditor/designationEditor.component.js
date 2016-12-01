@@ -6,7 +6,6 @@ import find from 'lodash/find';
 import commonModule from 'common/common.module';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import designationEditorService from 'common/services/api/designationEditor.service';
 
 import titleModalController from './titleModal/title.modal';
@@ -209,7 +208,6 @@ export default angular
     sessionService.name,
     sessionEnforcerService.name,
     designationEditorService.name,
-    loadingOverlay.name,
     template.name,
 
     titleModalTemplate.name,

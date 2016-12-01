@@ -25,8 +25,8 @@
 
                     <!--Donor Details-->
                     <h4 class="panel-title  border-bottom-small visible">Your Name</h4>
-                    <div style="position: relative">
-                      <loading-overlay ng-if="$ctrl.donorDetialsLoading"></loading-overlay>
+                    <div class="loading-overlay-parent">
+                      <loading type="overlay" ng-if="$ctrl.donorDetialsLoading"></loading>
                         <ul class="list-unstyled people-fields">
                         <li>
                           <form name="$ctrl.donorDetailsForm" novalidate>
@@ -107,8 +107,8 @@
                     <!--Email Address-->
                     <h4 class="panel-title  border-bottom-small visible mt">Email Addresses</h4>
 
-                    <div style="position:relative;">
-                      <loading-overlay ng-if="$ctrl.emailLoading"></loading-overlay>
+                    <div class="loading-overlay-parent">
+                      <loading type="overlay" ng-if="$ctrl.emailLoading"></loading>
                       <form name="$ctrl.donorEmailForm" novalidate>
                         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.donorEmailForm.donorsEmail | showErrors)}">
                           <label translate>{{$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']}} Email</label>
@@ -138,8 +138,8 @@
                     <!--Phone Numbers-->
                     <h4 class="panel-title  border-bottom-small visible mt">Phone Numbers</h4>
 
-                    <div style="position: relative">
-                      <loading-overlay ng-if="$ctrl.phonesLoading"></loading-overlay>
+                    <div class="loading-overlay-parent">
+                      <loading type="overlay" ng-if="$ctrl.phonesLoading"></loading>
                       <div ng-if="!$ctrl.phonesLoading">
                         <div ng-repeat="phone in $ctrl.phoneNumbers" ng-class="{'has-error': ($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)}" class="form-group is-required phone-row" >
                           <form name="$ctrl.phoneNumberForms[{{$index}}]" ng-hide="phone.delete" novalidate>
@@ -167,8 +167,8 @@
 
                     <!--Mailing Address-->
                     <h4 class="panel-title  border-bottom-small visible" translate>Your Mailing Address</h4>
-                    <form name="$ctrl.mailingAddressForm" style="position: relative;" novalidate>
-                      <loading-overlay ng-if="$ctrl.mailingAddressLoading"></loading-overlay>
+                    <form name="$ctrl.mailingAddressForm" class="loading-overlay-parent" novalidate>
+                      <loading type="overlay" ng-if="$ctrl.mailingAddressLoading"></loading>
                       <address-form ng-if="$ctrl.mailingAddress" address="$ctrl.mailingAddress.address" parent-form="$ctrl.mailingAddressForm"></address-form>
                     </form>
 

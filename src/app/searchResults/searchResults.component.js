@@ -4,7 +4,6 @@ import 'angular-filter';
 import commonModule from 'common/common.module';
 import designationsService from 'common/services/api/designations.service';
 import productConfigComponent from 'app/productConfig/productConfig.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import ministries from './searchResults.ministries';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 
@@ -74,7 +73,6 @@ export default angular
     'angular.filter',
     designationsService.name,
     productConfigComponent.name,
-    loadingOverlay.name,
     desigSrcDirective.name
   ] )
   .component( componentName, {

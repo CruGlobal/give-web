@@ -1,4 +1,4 @@
-<div style="position: relative">
+<div class="loading-overlay-parent">
   <div class="modal-header">
     <div class="container-fluid">
       <div class="row">
@@ -66,5 +66,5 @@
       </div>
     </div>
   </div>
+  <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
 </div>
-<loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>

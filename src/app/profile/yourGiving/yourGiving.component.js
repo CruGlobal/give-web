@@ -10,8 +10,6 @@ import includes from 'lodash/includes';
 import displayAddress from 'common/components/display-address/display-address.component';
 import recipientView from './recipientView/recipientView.component';
 import historicalView from './historicalView/historicalView.component';
-import loadingComponent from 'common/components/loading/loading.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.modal.component';
 import giveOneTimeGiftModal from './giveOneTimeGift/giveOneTimeGift.modal.component';
 import stopStartRecurringGiftsModal from './stopStartRecurringGifts/stopStartRecurringGifts.modal.component';
@@ -156,8 +154,6 @@ export default angular
     displayAddress.name,
     recipientView.name,
     historicalView.name,
-    loadingComponent.name,
-    loadingOverlay.name,
     editRecurringGiftsModal.name,
     giveOneTimeGiftModal.name,
     stopStartRecurringGiftsModal.name,

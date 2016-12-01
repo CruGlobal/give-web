@@ -64,9 +64,9 @@
 
     <div class="mt" ng-class="{collapse: !$ctrl.showDetails}">
       <h4 class="border-top-small pl--" translate>Recent Gift History</h4>
-      <div ng-if="$ctrl.isLoading" style="position: relative;">
-        <loading></loading>
-      </div>
+      <loading inline="true" ng-if="$ctrl.isLoading">
+        <translate>Loading gift history...</translate>
+      </loading>
       <div class="table-responsive" ng-if="!$ctrl.isLoading">
         <div ng-if="!$ctrl.details" translate>No Gift History</div>
         <table class="table table-striped table-payment-history" ng-if="$ctrl.details">

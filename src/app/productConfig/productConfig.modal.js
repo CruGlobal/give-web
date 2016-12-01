@@ -9,7 +9,6 @@ import map from 'lodash/map';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import modalStateService from 'common/services/modalState.service';
 import {possibleTransactionDays, startDate} from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
@@ -202,7 +201,6 @@ export default angular
   .module( controllerName, [
     'gettext',
     'ordinal',
-    loadingOverlay.name,
     designationsService.name,
     cartService.name,
     modalStateService.name,
