@@ -258,6 +258,14 @@ $promo-width: 200px;
           text-transform: uppercase;
           padding-top: 10px;
           padding-bottom: 10px;
+          &.btn-default {
+            background-color: $colorCru-gray;
+            color: $colorCru-white;
+            border-color: rgba(darken($colorCru-gray, 5%), 0.35);
+            &:hover {
+              background-color: darken($colorCru-gray, 10%);
+            }
+          }
         }
       }
     }
