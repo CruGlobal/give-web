@@ -1,10 +1,12 @@
-<loading ng-if="!$ctrl.donorDetails"></loading>
 
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError">
   <p>{{$ctrl.submissionError | translate}}</p>
 </div>
 
-<div ng-if="$ctrl.donorDetails">
+<div ng-if="$ctrl.donorDetails" class="loading-overlay-parent">
+  <loading type="overlay" ng-if="!$ctrl.donorDetails">
+    <translate>Checking for existing information...</translate>
+  </loading>
   <div class="mb_x">
     <div class="row">
       <div class="col-md-6">

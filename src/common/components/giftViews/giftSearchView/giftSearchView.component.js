@@ -11,7 +11,6 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
-import loadingComponent from 'common/components/loading/loading.component';
 
 import designationsService from 'common/services/api/designations.service';
 
@@ -89,7 +88,6 @@ export default angular
   .module( componentName, [
     template.name,
     giftListItem.name,
-    loadingComponent.name,
     designationsService.name
   ] )
   .component( componentName, {

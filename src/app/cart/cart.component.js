@@ -7,7 +7,6 @@ import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 
-import loadingOverlayComponent from 'common/components/loadingOverlay/loadingOverlay.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 
 import template from './cart.tpl';
@@ -65,7 +64,6 @@ export default angular
   .module(componentName, [
     template.name,
     commonModule.name,
-    loadingOverlayComponent.name,
     displayRateTotals.name,
     appConfig.name,
     cartService.name,

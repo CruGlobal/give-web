@@ -1,6 +1,5 @@
 import angular from 'angular';
 import 'angular-gettext';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import profileService from 'common/services/api/profile.service';
 import verificationService from 'common/services/api/verification.service';
 import userMatchIdentity from './userMatchIdentity/userMatchIdentity.component';
@@ -106,7 +105,6 @@ export default angular
   .module( componentName, [
     'gettext',
     verificationService.name,
-    loadingOverlay.name,
     profileService.name,
     template.name,
     userMatchIdentity.name,

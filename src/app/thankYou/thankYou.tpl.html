@@ -5,13 +5,13 @@
         <div class="col-md-8">
           <div class="row">
             <div class="col-md-12">
-              <div class="panel">
+              <div class="panel loading-overlay-parent">
                 <div class="panel-body">
                   <h2 class="panel-name" translate>
                     Thank you for Your Gift
                   </h2>
 
-                  <loading-overlay ng-if="$ctrl.loading"></loading-overlay>
+                  <loading type="overlay" ng-if="$ctrl.loading"></loading>
                   <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError" ng-switch="$ctrl.loadingError">
                     <p ng-switch-when="lastPurchaseLink missing" translate>
                       There was an error loading the details for the last purchase. Your session may have expired.

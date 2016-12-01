@@ -1,26 +1,26 @@
 <div class="screenContent">
   <section class="is-top">
-      <div class="container">
-        <h1 ng-if="!$ctrl.searchParams.type || $ctrl.searchParams.type === 'people'">
+    <div class="container">
+      <h1 ng-if="!$ctrl.searchParams.type || $ctrl.searchParams.type === 'people'">
           <span translate ng-if="$ctrl.searchParams.keyword">
             Search Results for <strong>{{$ctrl.searchParams.keyword}}</strong>
           </span>
-          <span translate ng-if="$ctrl.searchParams.first_name || $ctrl.searchParams.last_name">
+        <span translate ng-if="$ctrl.searchParams.first_name || $ctrl.searchParams.last_name">
             Search Results for <strong>{{$ctrl.searchParams.first_name}} {{$ctrl.searchParams.last_name}}</strong>
           </span>
-          <em ng-if="$ctrl.searchResults.length">({{$ctrl.searchResults.length}} results)</em>
-        </h1>
-        <!-- Search Box -->
+        <em ng-if="$ctrl.searchResults.length">({{$ctrl.searchResults.length}} results)</em>
+      </h1>
+      <!-- Search Box -->
 
-        <div class="row">
-          <div class="col-xs-12 col-sm-10 col-sm-offset-1">
-            <form method="get" action="/search-results.html">
-              <div class="input-group is-search-main">
-                <input type="search" class="form-control" placeholder="Search for..." name="q" value="{{$ctrl.searchParams.keyword}}">
-                <span class="input-group-btn">
+      <div class="row">
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+          <form method="get" action="/search-results.html">
+            <div class="input-group is-search-main">
+              <input type="search" class="form-control" placeholder="Search for..." name="q" value="{{$ctrl.searchParams.keyword}}">
+              <span class="input-group-btn">
                   <button class="btn btn-primary" type="submit" translate>Search</button>
                 </span>
-              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -39,7 +39,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="panel">
+        <div class="panel loading-overlay-parent">
           <div class="panel-body">
             <div class="row">
               <div class="col-sm-12 col-md-3">
@@ -137,8 +137,8 @@
               </div>
             </div>
           </div>
+          <loading type="overlay" ng-if="$ctrl.loadingResults"></loading>
         </div>
-        <loading-overlay ng-if="$ctrl.loadingResults"></loading-overlay>
       </div>
     </div>
   </div>

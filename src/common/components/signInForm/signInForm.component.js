@@ -2,7 +2,6 @@ import angular from 'angular';
 import 'angular-gettext';
 import includes from 'lodash/includes';
 
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import sessionService from 'common/services/session/session.service';
 
 import template from './signInForm.tpl';
@@ -46,7 +45,6 @@ export default angular
   .module( componentName, [
     template.name,
     sessionService.name,
-    loadingOverlay.name,
     'gettext'
   ] )
   .component( componentName, {

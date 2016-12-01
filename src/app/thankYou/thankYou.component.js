@@ -7,7 +7,6 @@ import accountBenefits from './accountBenefits/accountBenefits.component';
 import help from '../checkout/help/help.component';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 
 import capitalizeFilter from 'common/filters/capitalize.filter';
 
@@ -111,7 +110,6 @@ export default angular
     help.name,
     displayAddressComponent.name,
     displayRateTotals.name,
-    loadingOverlay.name,
     capitalizeFilter.name,
     orderService.name,
     profileService.name,

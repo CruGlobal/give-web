@@ -1,7 +1,6 @@
 import angular from 'angular';
 import moment from 'moment';
 
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component.js';
 import profileService from 'common/services/api/profile.service.js';
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
@@ -244,7 +243,6 @@ class deletePaymentMethodModalController {
 export default angular
   .module(componentName, [
     template.name,
-    loadingOverlay.name,
     paymentMethodForm.name,
     profileService.name,
     paymentMethodDisplay.name

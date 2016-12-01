@@ -4,7 +4,6 @@ import recurringGiftsComponent from './recurring-gifts/recurring-gifts.component
 import profileService from 'common/services/api/profile.service.js';
 import paymentMethod from './payment-method/payment-method.component';
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
@@ -155,7 +154,6 @@ export default angular
     paymentMethodFormModal.name,
     giveModalWindowTemplate.name,
     paymentMethod.name,
-    loadingOverlay.name,
     profileService.name,
     paymentMethodDisplay.name,
     sessionEnforcerService.name

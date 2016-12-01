@@ -7,7 +7,6 @@ import 'rxjs/add/operator/combineLatest';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import addressForm from 'common/components/addressForm/addressForm.component';
-import loadingComponent from 'common/components/loading/loading.component';
 
 import showErrors from 'common/filters/showErrors.filter';
 
@@ -147,7 +146,6 @@ export default angular
     'ngMessages',
     displayAddressComponent.name,
     addressForm.name,
-    loadingComponent.name,
     showErrors.name,
     paymentValidationService.name,
     ccpService.name

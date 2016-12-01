@@ -1,4 +1,4 @@
-<form class="form-inline form-give-home-signin mt pb border-bottom-small" ng-submit="$ctrl.signIn()" name="$ctrl.signInForm" ng-if="$ctrl.showSignInForm">
+<form class="form-inline form-give-home-signin mt pb border-bottom-small loading-overlay-parent" ng-submit="$ctrl.signIn()" name="$ctrl.signInForm" ng-if="$ctrl.showSignInForm">
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage | translate}}</div>
 
   <div class="form-group input-widths">
@@ -27,5 +27,5 @@
     <a href="" class="u-block" ng-click="$ctrl.signUp()">Create an Account</a>
   </div>
 
-  <loading-overlay ng-if="$ctrl.isSigningIn"></loading-overlay>
+  <loading type="overlay" ng-if="$ctrl.isSigningIn"></loading>
 </form>

@@ -2,7 +2,6 @@ import angular from 'angular';
 import template from './receipts.tpl';
 import donationsService from 'common/services/api/donations.service';
 import filterByYear from './receipts.filter';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
@@ -17,7 +16,7 @@ class ReceiptsController {
     this.$window = $window;
     this.$log = $log;
     this.$rootScope = $rootScope;
-    this.loading = false;
+    this.loading = true;
     this.maxShow = this.step = 25;
     this.retrievingError = '';
   }
@@ -109,7 +108,6 @@ export default angular
     commonModule.name,
     donationsService.name,
     filterByYear.name,
-    loadingOverlay.name,
     sessionEnforcerService.name
   ])
   .component(componentName, {

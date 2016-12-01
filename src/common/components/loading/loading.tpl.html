@@ -1,6 +1,16 @@
-<div ng-class="{ 'loading-wrap' : !$ctrl.inline, 'text-center' : $ctrl.inline }">
-  <span class="loading loading1"></span>
-  <span class="loading loading2"></span>
-  <span class="loading loading3"></span>
-  <span class="loading loading4"></span>
+<div ng-class="{
+        'loading-centered loading-overlay' : $ctrl.type === 'overlay',
+        'loading-centered' : $ctrl.type === 'centered'
+      }">
+  <div>
+    <span ng-class="{ 'mr-' : $ctrl.inline === 'true', 'center-block' : $ctrl.inline !== 'true'  }">
+      <ng-transclude></ng-transclude>
+    </span>
+    <span class="loading-wrap">
+      <span class="loading loading1"></span>
+      <span class="loading loading2"></span>
+      <span class="loading loading3"></span>
+      <span class="loading loading4"></span>
+    </span>
+  </div>
 </div>

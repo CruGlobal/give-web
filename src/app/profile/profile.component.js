@@ -4,7 +4,6 @@ import 'angular-messages';
 import template from './profile.tpl';
 
 import profileService from 'common/services/api/profile.service';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import addressForm from 'common/components/addressForm/addressForm.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
@@ -385,7 +384,6 @@ export default angular
     profileService.name,
     'ngMessages',
     sessionEnforcerService.name,
-    loadingOverlay.name,
     showErrors.name,
     addressForm.name,
     commonModule.name
