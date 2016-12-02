@@ -75,7 +75,7 @@
           </div>
         </form>
       </div>
-      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'global'">
+      <div role="tabpanel" class="tab-pane active" id="mob-global" ng-if="mobileTab === 'global'">
         <div class="main-menu-container">
           <ul class="main-menu main-menu-global global-menu" ng-style="{'left': (($ctrl.menuPath.global.length * -100) + '%')}">
             <nav-mobile-level structure="$ctrl.menuStructure.global" level="0" path="$ctrl.menuPath.global"></nav-mobile-level>
@@ -111,8 +111,16 @@
       </div>
       <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'more'">
         <ul id="mob-more">
-          <li><img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-book-icon.png">Shop Books</li>
-          <li><img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-phone-icon.png">Apps</li>
+          <li>
+            <a href="">
+              <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-book-icon.png">Shop Books
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-phone-icon.png">Apps
+            </a>
+          </li>
         </ul>
       </div>
     </div>
