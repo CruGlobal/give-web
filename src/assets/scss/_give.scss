@@ -729,3 +729,16 @@ img.full-width {
   }
   > div {margin-top: 6px;}
 }
+
+// Responsive alignment. Based off of https://github.com/twbs/bootstrap/blob/v4.0.0-alpha.5/scss/utilities/_text.scss#L11-L19
+@media (min-width: $xs + 1) {
+  .text-sm-left {
+    text-align: left !important;
+  }
+  .text-sm-right {
+    text-align: right !important;
+  }
+  .text-sm-center {
+    text-align: center !important;
+  }
+}
