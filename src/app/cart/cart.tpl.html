@@ -5,10 +5,25 @@
         <div class="col-md-12">
 
           <!-- Cart Summary -->
-          <div class="panel">
+          <div class="panel loading-overlay-parent">
             <div class="panel-body">
-              <h3 class="panel-name" translate>Your Gift Cart</h3>
-              <loading-overlay ng-if="$ctrl.loading"></loading-overlay>
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3 class="panel-name" translate>Your Gift Cart</h3>
+                </div>
+                <div class="col-sm-6 text-right">
+                  <loading inline="true" class="text-right" ng-if="$ctrl.updating">
+                    <translate>Updating cart...</translate>
+                  </loading>
+                </div>
+              </div>
+              <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
+                <p ng-if="$ctrl.error.loading" translate>Error loading your cart. <a href="" ng-click="$ctrl.loadCart()">Retry</a></p>
+                <p ng-if="$ctrl.error.updating" translate>Error loading your updated cart. <a href="" ng-click="$ctrl.loadCart(true)">Retry</a></p>
+              </div>
+              <loading ng-if="$ctrl.loading">
+                <translate>Loading your gifts...</translate>
+              </loading>
               <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
                 Your cart is empty
               </p>
@@ -22,41 +37,53 @@
                   </tr>
                   </thead>
                   <tbody>
-                    <tr class="giftsum-gift-row" ng-repeat="i in $ctrl.cartData.items">
-                      <td class="td-gift">
-                        <img desig-src="{{i.designationNumber}}" class="giftsum-profile pull-left">
-                        <span class="giftsum-person giftsum-title"><a ng-href="/{{i.designationNumber}}">{{i.displayName}}</a></span>
-                        <span class="giftsum-accountnum giftsum-detail">#{{i.designationNumber}}</span>
-                      </td>
-                      <td class="td-frequency">
-                        <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
-                        <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'">
+                  <tr class="giftsum-gift-row" ng-repeat="i in $ctrl.cartData.items">
+                    <td class="td-gift">
+                      <img desig-src="{{i.designationNumber}}" class="giftsum-profile pull-left">
+                      <span class="giftsum-person giftsum-title"><a ng-href="/{{i.designationNumber}}">{{i.displayName}}</a></span>
+                      <span class="giftsum-accountnum giftsum-detail">#{{i.designationNumber}}</span>
+                    </td>
+                    <td class="td-frequency">
+                      <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
+                      <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'">
                           <span translate>Starts on:</span>
                           {{i.giftStartDate.format('ll')}}
                         </span>
-                      </td>
-                      <td class="td-amount">
-                        <span class="giftsum-about giftsum-title">{{i.price}}</span>
-                        <span class="giftsum-detail"><span class=" visible-xs" translate>Gift Amount</span></span>
-                      </td>
-                      <td class="td-actions giftsum-actions">
-                        <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.editItem(i)" translate>Edit</a>
-                        <span class="sep"> | </span>
-                        <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.removeItem(i.uri)" translate>Remove</a>
-                      </td>
-                    </tr>
+                    </td>
+                    <td class="td-amount">
+                      <span class="giftsum-about giftsum-title">{{i.price}}</span>
+                      <span class="giftsum-detail"><span class=" visible-xs" translate>Gift Amount</span></span>
+                    </td>
+                    <td class="td-actions giftsum-actions text-sm-right" ng-if="!i.removing">
+                      <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.editItem(i)" translate>Edit</a>
+                      <span class="sep"> | </span>
+                      <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.removeItem(i)" translate>Remove</a>
+                      <div class="text-danger" role="alert" ng-if="i.removingError">
+                        <span translate>Error removing</span>
+                        <span class="hidden-xs hidden-sm" translate>gift</span>
+                      </div>
+                    </td>
+                    <td class="td-actions giftsum-actions" ng-if="i.removing">
+                      <loading inline="true" class="text-right">
+                        <translate>Removing...</translate>
+                      </loading>
+                    </td>
+                  </tr>
                   </tbody>
                   <tfoot class="mobile-footer-persist">
-                    <tr>
-                      <td colspan="4" class="text-right">
-                        <div class="checkout-cta pull-right">
-                          <a href ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
-                        </div>
-                        <div class="checkout-cart-summary pull-right">
-                          <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
-                        </div>
-                      </td>
-                    </tr>
+                  <tr>
+                    <td colspan="4" class="text-right">
+                      <loading inline="true" class="mb-- text-right" ng-if="$ctrl.updating">
+                        <translate>Updating cart...</translate>
+                      </loading>
+                      <div class="checkout-cta pull-right">
+                        <a href ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
+                      </div>
+                      <div class="checkout-cart-summary pull-right">
+                        <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
+                      </div>
+                    </td>
+                  </tr>
                   </tfoot>
                 </table>
               </form>

@@ -4,7 +4,6 @@ import includes from 'lodash/includes';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 
-import loadingComponent from 'common/components/loading/loading.component';
 import addressForm from 'common/components/addressForm/addressForm.component';
 
 import orderService from 'common/services/api/order.service';
@@ -91,7 +90,6 @@ export default angular
   .module(componentName, [
     template.name,
     'ngMessages',
-    loadingComponent.name,
     addressForm.name,
     orderService.name,
     sessionService.name

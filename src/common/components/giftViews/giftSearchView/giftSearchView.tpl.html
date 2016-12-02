@@ -31,8 +31,9 @@
       <a href="" ng-click="$ctrl.onSearchChange()">Retry</a>
     </p>
   </div>
-  <div ng-switch-when="searching" class="text-center">
-    <p translate>Loading results...</p>
-    <loading inline="true"></loading>
+  <div ng-switch-when="searching">
+    <loading>
+      <translate>Loading results...</translate>
+    </loading>
   </div>
 </div>

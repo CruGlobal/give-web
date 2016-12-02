@@ -11,8 +11,6 @@ import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPas
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component';
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component';
 
-import loading from 'common/components/loading/loading.component';
-
 let componentName = 'registerAccountModal';
 
 class RegisterAccountModalController {
@@ -126,8 +124,7 @@ export default angular
     signUpModal.name,
     template.name,
     userMatchModal.name,
-    verificationService.name,
-    loading.name
+    verificationService.name
   ] )
   .component( componentName, {
     controller:  RegisterAccountModalController,

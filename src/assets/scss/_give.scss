@@ -143,8 +143,6 @@ hr.vertical-divider {
   height: 26px;
   width: 7px;
   border-radius: 10%;
-  background: #eeeeee;
-  border-top-color: #ffffff;
   animation: fade1 1s infinite;
   transition: background .2s;
   vertical-align: middle;
@@ -160,12 +158,6 @@ hr.vertical-divider {
     animation: fade4 1s infinite;
     height: 26px;
   }
-}
-
-.loading-wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
 }
 
 @keyframes fade1 {
@@ -736,4 +728,17 @@ img.full-width {
     &:focus {outline: none;}
   }
   > div {margin-top: 6px;}
+}
+
+// Responsive alignment. Based off of https://github.com/twbs/bootstrap/blob/v4.0.0-alpha.5/scss/utilities/_text.scss#L11-L19
+@media (min-width: $xs + 1) {
+  .text-sm-left {
+    text-align: left !important;
+  }
+  .text-sm-right {
+    text-align: right !important;
+  }
+  .text-sm-center {
+    text-align: center !important;
+  }
 }
