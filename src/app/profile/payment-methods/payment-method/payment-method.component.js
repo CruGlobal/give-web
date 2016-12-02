@@ -7,17 +7,21 @@ import deletePaymentMethodModal from 'common/components/paymentMethods/deletePay
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
 
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'paymentMethod';
 
 class PaymentMethodController{
 
   /* @ngInject */
-  constructor(envService, $uibModal, profileService){
+  constructor(envService, $uibModal, profileService, analyticsFactory){
     this.isCollapsed = true;
     this.$uibModal = $uibModal;
     this.profileService = profileService;
     this.imgDomain = envService.read('imgDomain');
     this.submissionError = {error: ''};
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit(){
@@ -59,6 +63,7 @@ class PaymentMethodController{
             let editedData = e.data.creditCard || e.data.bankAccount;
             this.submissionError.loading = false;
             this.editPaymentMethodModal.close();
+            this.analyticsFactory.setEvent('add payment method');
             for(let key in editedData){
               this.model[key] = editedData[key];
             }
@@ -85,6 +90,7 @@ class PaymentMethodController{
     });
     this.deletePaymentMethodModal.result.then(() => {
       this.onDelete();
+      this.analyticsFactory.setEvent('delete payment method');
     });
   }
 
@@ -107,7 +113,8 @@ export default angular
     paymentMethodFormModal.name,
     deletePaymentMethodModal.name,
     giveModalWindowTemplate.name,
-    profileService.name
+    profileService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: PaymentMethodController,

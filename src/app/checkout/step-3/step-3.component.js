@@ -100,10 +100,10 @@ class Step3Controller{
       submitRequest = Observable.throw('Current payment type is unknown');
     }
     submitRequest.subscribe(() => {
+        this.analyticsFactory.purchase(this.donorDetails, this.cartData);
         this.onSubmittingOrder({value: false});
         this.orderService.clearCardSecurityCode();
         this.onSubmitted();
-        this.analyticsFactory.setEvent('purchase');
         this.$window.location.href = 'thank-you.html';
       },
       (error) => {

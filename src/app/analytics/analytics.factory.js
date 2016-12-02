@@ -1,5 +1,53 @@
-function analyticsFactory() {
+import sessionService from 'common/services/session/session.service';
+
+function analyticsFactory(sessionService) {
     return {
+        buildProductVar: function(cartData) {
+            var item, donationType;
+
+            // Instantiate cart data layer
+            digitalData.cart = {
+                item: []
+            };
+
+            // Build cart data layer
+            digitalData.cart.price = {
+                cartTotal: cartData.cartTotal
+            }
+
+            if (cartData && cartData.items) {
+
+                for (var i = 0; i < cartData.items.length; i++) {
+
+                    // Set donation type
+                    if (cartData.items[i].frequency.toLowerCase() == 'single') {
+                        donationType = 'one-time donation';
+                    } else {
+                        donationType = 'recurring donation';
+                    }
+
+                    item = {
+                        productInfo: {
+                            productID: cartData.items[i].designationNumber
+                        },
+                        price: {
+                            basePrice: cartData.items[i].amount
+                        },
+                        attributes: {
+                            donationType: donationType,
+                            donationFrequency: cartData.items[i].frequency.toLowerCase(),
+                            siebel: {
+                                productType: 'designation',
+                                campaignCode: cartData.items[i].config['campaign-code']
+                            }
+                        }
+                    };
+
+                    digitalData.cart.item.push(item);
+
+                }
+            }
+        },
         cartAdd: function(itemConfig, productData, page) {
             var siteSubSection, donationType,
                 cart = {
@@ -19,12 +67,20 @@ function analyticsFactory() {
                 };
 
             // Set site sub-section
-            if (digitalData.page.category) {
-                digitalData.page.category.subCategory1 = siteSubSection;
-            } else {
-                digitalData.page.category = {
-                    subcategory1: siteSubSection
+            if (typeof digitalData.page !== 'undefined') {
+                if (typeof digitalData.page.category !== 'undefined') {
+                    digitalData.page.category.subCategory1 = siteSubSection;
+                } else {
+                    digitalData.page.category = {
+                        subCategory1: siteSubSection
+                    };
                 }
+            } else {
+                digitalData.page = {
+                    category: {
+                        subcategory1: siteSubSection
+                    }
+                };
             }
 
             // Set donation type
@@ -90,49 +146,8 @@ function analyticsFactory() {
             }
         },
         cartView: function(cartData, callType) {
-            var item, donationType;
-
-            // Instantiate cart data layer
-            digitalData.cart = {
-                item: []
-            };
-
-            // Build cart data layer
-            digitalData.cart.price = {
-                cartTotal: cartData.cartTotal
-            }
-
-            if (cartData && cartData.items) {
-
-                for (var i = 0; i < cartData.items.length; i++) {
-
-                    // Set donation type
-                    if (cartData.items[i].frequency.toLowerCase() == 'single') {
-                        donationType = 'one-time donation';
-                    } else {
-                        donationType = 'recurring donation';
-                    }
-
-                    item = {
-                        productInfo: {
-                            productID: cartData.items[i].designationNumber
-                        },
-                        price: {
-                            basePrice: cartData.items[i].amount
-                        },
-                        attributes: {
-                            donationType: donationType,
-                            donationFrequency: cartData.items[i].frequency.toLowerCase(),
-                            siebel: {
-                                productType: 'designation'
-                            }
-                        }
-                    };
-
-                    digitalData.cart.item.push(item);
-
-                }
-            }
+            // Build products variable
+            this.buildProductVar(cartData);
 
             // Call DTM direct call rule
             if (typeof callType !== 'undefined' && callType == 'customLink') {
@@ -142,11 +157,39 @@ function analyticsFactory() {
                 }
             }
         },
+        editRecurringDonation: function(giftData) {
+            var frequency = '';
+
+            if (giftData && giftData.length) {
+                if (giftData[0].gift.updated-rate.recurrence.interval.length) {
+                    frequency = giftData[0].gift.updated-rate.recurrence.interval.toLowerCase();
+                } else {
+                    frequency = giftData[0].parentDonation.rate.recurrence.interval.toLowerCase();
+                }
+
+                if (typeof digitalData !== 'undefined') {
+                    if (typeof digitalData.recurringGift !== 'undefined') {
+                        digitalData.recurringGift.originalFrequency = frequency;
+                    } else {
+                        digitalData.recurringGift = {
+                            originalFrequency: frequency
+                        }
+                    }
+                } else {
+                    digitalData = {
+                        recurringGift: {
+                            originalFrequency: frequency
+                        }
+                    }
+                }
+            }
+
+            this.pageLoaded();
+        },
         getPath: function() {
             var pagename = '',
                 delim = ':',
-                path = window.location.pathname,
-                queryParams = ['modal','step'];
+                path = window.location.pathname;
 
             if (path !== '/') {
                 var extension = ['.html','.htm'];
@@ -174,30 +217,9 @@ function analyticsFactory() {
                 pagename = 'give' + delim + 'home';
             }
 
-            for (var i = 0; i < queryParams.length; i++) {
-                var paramVal = this.getQueryParam(queryParams[i]);
-            }
-
-            if (paramVal !== null && paramVal.length) {
-                pagename = pagename + delim + paramVal;
-            }
-
             this.setPageNameObj(pagename);
 
             return path;
-        },
-        getQueryParam: function(name) {
-            var url = window.location.href;
-
-            name = name.replace(/[\[\]]/g, '\\$&');
-
-            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                results = regex.exec(url);
-
-            if (!results) return null;
-            if (!results[2]) return '';
-
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));  
         },
         getSetProductCategory: function(path) {
             var allElements = document.getElementsByTagName('*');
@@ -221,6 +243,7 @@ function analyticsFactory() {
             return false;
         },
         giveGiftModal: function(productCode) {
+            console.log('GIFT MODAL');
             var product = [{
                     productInfo: {
                         productID: productCode
@@ -237,46 +260,149 @@ function analyticsFactory() {
             this.pageLoaded();
         },
         pageLoaded: function() {
-            //digitalData = {};
-
             this.getPath();
             this.getSetProductCategory();
             this.setSiteSections();
             
             if (typeof digitalData.page.attributes !== 'undefined') {
-                if (digitalData.page.attributes.angularLoaded == '1') {
-                    digitalData.page.attributes.angularLoaded = '0';
+                if (digitalData.page.attributes.angularLoaded == 'true') {
+                    digitalData.page.attributes.angularLoaded = 'false';
                 } else {
-                    digitalData.page.attributes.angularLoaded = '1';
+                    digitalData.page.attributes.angularLoaded = 'true';
                 }
             } else {
                 digitalData.page.attributes = {
-                    angularLoaded: '0'
+                    angularLoaded: 'true'
                 };
             }
+
+            var angularLoaded = digitalData.page.attributes.angularLoaded;
 
             // Allow time for data layer changes to be consumed & fire image request
             window.setTimeout(function() {
                 s.t();
-            }, 800);
+                s.clearVars();
+                digitalData = {
+                    page: {
+                        attributes: {
+                            angularLoaded: angularLoaded
+                        }
+                    }
+                };
+            }, 1000);
+        },
+        purchase: function(donorDetails, cartData) {
+            // Build cart data layer
+            this.setDonorDetails(donorDetails);
+            this.buildProductVar(cartData);
+
+            var aaProducts = s.setProducts('checkout');
+
+            // Store data for use on following page load
+            localStorage.setItem('aaProducts', aaProducts);
         },
         search: function(params, results) {
             if (typeof params !== 'undefined') {
-                digitalData.page.pageInfo.onsiteSearchTerm = params.keyword;
+                if (typeof digitalData.page !== 'undefined') {
+                    if (typeof digitalData.page.pageInfo !== 'undefined') {
+                        digitalData.page.pageInfo.onsiteSearchTerm = params.keyword;
+                        digitalData.page.pageInfo.onsiteSearchFilter = params.type;
+                    } else {
+                        digitalData.page.pageInfo = {
+                            onsiteSearchTerm: params.keyword,
+                            onsiteSearchFilter: params.type
+                        };
+                    }
+                } else {
+                    digitalData.page = {
+                        pageInfo: {
+                            onsiteSearchTerm: params.keyword,
+                            onsiteSearchFilter: params.type
+                        }
+                    };
+                }
             }
 
-            if (results.length > 0) {
-                digitalData.page.pageInfo.onsiteSearchResults = results.length;
+            if (typeof results !== 'undefined' && results.length > 0) {
+                if (typeof digitalData.page !== 'undefined') {
+                    if (typeof digitalData.page.pageInfo !== 'undefined') {
+                        digitalData.page.pageInfo.onsiteSearchResults = results.length;
+                    } else {
+                        digitalData.page.pageInfo = {
+                            onsiteSearchResults: results.length
+                        };
+                    }
+                } else {
+                    digitalData.page = {
+                        pageInfo: {
+                            onsiteSearchResults: results.length
+                        }
+                    };
+                }
             } else {
                 digitalData.page.pageInfo.onsiteSearchResults = 0;
             }
         },
+        setDonorDetails: function(donorDetails) {
+            var ssoGuid = '',
+                donorType = '',
+                donorAcct = '';
+
+            if (donorDetails) {
+                donorType = donorDetails['donor-type'].toLowerCase();
+                donorAcct = donorDetails['donor-number'].toLowerCase();
+            }
+
+            if (typeof sessionService !== 'undefined') {
+                if (typeof sessionService.session['sub'] !== 'undefined') {
+                    ssoGuid = sessionService.session['sub'].split('|').pop();
+                }
+            }
+
+            if (typeof digitalData.user !== 'undefined') {
+                if (typeof digitalData.user[0].profile !== 'undefined') {
+                    if (typeof digitalData.user[0].profile[0].profileInfo !== 'undefined') {
+                        digitalData.user[0].profile[0].profileInfo.ssoGuid = ssoGuid;
+                        digitalData.user[0].profile[0].profileInfo.donorType = donorType;
+                        digitalData.user[0].profile[0].profileInfo.donorAcct = donorAcct;
+                    } else {
+                        digitalData.user[0].profile[0].profileInfo = {
+                            ssoGuid: ssoGuid,
+                            donorType: donorType,
+                            donorAcct: donorAcct
+                        };
+                    }
+                } else {
+                    digitalData.user[0].profile = [{
+                        profileInfo: {
+                            ssoGuid: ssoGuid,
+                            donorType: donorType,
+                            donorAcct: donorAcct
+                        }
+                    }];
+                }
+            } else {
+                digitalData.user = [{
+                    profile: [{
+                        profileInfo: {
+                            ssoGuid: ssoGuid,
+                            donorType: donorType,
+                            donorAcct: donorAcct
+                        }
+                    }]
+                }];
+            }
+
+            // Store data for use on following page load
+            localStorage.setItem('aaDonorType', digitalData.user[0].profile[0].profileInfo.donorType);
+            localStorage.setItem('aaDonorAcct', digitalData.user[0].profile[0].profileInfo.donorAcct);
+        },
         setEvent: function(eventName) {
             var evt = {
-                eventInfo: {
-                    eventName: eventName
-                }
-            };
+                    eventInfo: {
+                        eventName: eventName
+                    }
+                };
 
             digitalData.event = [];
             digitalData.event.push(evt);
@@ -299,13 +425,33 @@ function analyticsFactory() {
             }
         },
         setSiteSections: function(path) {
+            var primaryCat = 'give';
+
             if (!path) {
                 var path = this.getPath();
             }
 
-            digitalData.page.category = {
-                primaryCategory: 'give'
-            };
+            if (typeof digitalData !== 'undefined') {
+                if (typeof digitalData.page !== 'undefined') {
+                    digitalData.page.category = {
+                        primaryCategory: primaryCat
+                    };
+                } else {
+                    digitalData.page = {
+                        category: {
+                            primaryCategory: primaryCat
+                        }
+                    };
+                }
+            } else {
+                digitalData = {
+                    page: {
+                        category: {
+                            primaryCategory: primaryCat
+                        }
+                    }
+                };
+            }
 
             if (path.length >= 1) {
 

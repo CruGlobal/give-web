@@ -19,6 +19,7 @@ class RedirectGiftStep3Controller {
     this.commonService = commonService;
     this.donationsService = donationsService;
     this.state = 'update';
+    this.analyticsFactory = analyticsFactory;
   }
 
   submitGift() {
@@ -27,6 +28,7 @@ class RedirectGiftStep3Controller {
     this.donationsService.updateRecurringGifts( this.gift ).subscribe( () => {
       this.onComplete();
       this.analyticsFactory.setEvent('recurring donation redirected');
+      this.analyticsFactory.editRecurringDonation(this.gift);
     }, () => {
       this.hasError = true;
       this.setLoading( {loading: false} );

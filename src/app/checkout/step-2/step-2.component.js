@@ -8,18 +8,22 @@ import orderService from 'common/services/api/order.service';
 
 import template from './step-2.tpl';
 
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'checkoutStep2';
 
 class Step2Controller{
 
   /* @ngInject */
-  constructor($log, orderService){
+  constructor($log, orderService, analyticsFactory){
     this.$log = $log;
     this.orderService = orderService;
 
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
     this.submissionError = {error: ''};
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit(){
@@ -77,7 +81,8 @@ export default angular
     paymentMethodForm.name,
     existingPaymentMethods.name,
     loadingOverlayComponent.name,
-    orderService.name
+    orderService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: Step2Controller,

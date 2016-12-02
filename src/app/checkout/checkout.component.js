@@ -63,10 +63,6 @@ class CheckoutController{
     this.changeStep(this.$location.search().step || 'contact');
     this.$location.replace();
 
-    if (this.$location.search().step !== 'contact') {
-      this.analyticsFactory.pageLoaded();
-    }
-
     this.$locationChangeSuccessListener = this.$locationChangeSuccessListener || this.$rootScope.$on('$locationChangeSuccess', () => {
       this.initStepParam();
     });
@@ -76,6 +72,14 @@ class CheckoutController{
     this.$window.scrollTo(0, 0);
     this.checkoutStep = newStep;
     this.$location.search('step', this.checkoutStep);
+
+    if (window.changeStep !== undefined) {
+      if (window.newStep !== newStep) {
+        window.newStep = newStep;
+        this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
+        this.analyticsFactory.pageLoaded();
+      }
+    }
   }
 
   loadCart(){
@@ -84,7 +88,9 @@ class CheckoutController{
         this.loadingCartData = false;
       })
       .subscribe((data) => {
+          window.changeStep = true;
           this.cartData = data;
+          this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
           this.analyticsFactory.cartView(data);
           this.analyticsFactory.pageLoaded();
         },

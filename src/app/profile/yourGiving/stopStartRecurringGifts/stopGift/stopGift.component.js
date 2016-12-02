@@ -7,13 +7,17 @@ import donationsService from 'common/services/api/donations.service';
 import stopGiftStep1 from './step1/stopGiftStep1.component';
 import stopGiftStep2 from './step2/stopGiftStep2.component';
 
+import analyticsModule from 'app/analytics/analytics.module';
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'stopGift';
 
 class StopGiftController {
 
   /* @ngInject */
-  constructor( donationsService ) {
+  constructor( donationsService, analyticsFactory ) {
     this.donationsService = donationsService;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -56,6 +60,8 @@ class StopGiftController {
       return gift;
     } ) ).subscribe( () => {
       this.complete();
+      this.analyticsFactory.setEvent('recurring donation stopped');
+      this.analyticsFactory.editRecurringDonation(this.selectedGifts);
     } );
   }
 }

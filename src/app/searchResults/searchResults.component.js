@@ -44,11 +44,20 @@ class SearchResultsController {
     if(this.searchParams.type === 'featured') {
       this.searchResults = [];
       this.loadingResults = false;
-      this.analyticsFactory.pageLoaded();
+      this.analyticsFactory.search(this.searchParams);
+      this.analyticsFactory.setEvent('search filter');
     }else if(this.searchParams.type === 'ministries'){
       this.searchResults = ministries;
       this.loadingResults = false;
-      this.analyticsFactory.pageLoaded();
+      this.analyticsFactory.search(this.searchParams);
+      this.analyticsFactory.setEvent('search filter');
+    }else if(this.searchParams.type == ''){
+      this.searchParams.type = 'all giving opportunities';
+      this.analyticsFactory.search(this.searchParams);
+      this.analyticsFactory.setEvent('search filter');
+    }else if(this.searchParams.type === 'people' && (!this.searchParams.first_name && !this.searchParams.last_name)) {
+      this.analyticsFactory.search(this.searchParams);
+      this.analyticsFactory.setEvent('search filter');
     }else{
       if((this.searchParams.keyword && !this.searchParams.type) ||
         (this.searchParams.type === 'people' && (this.searchParams.first_name || this.searchParams.last_name))){
