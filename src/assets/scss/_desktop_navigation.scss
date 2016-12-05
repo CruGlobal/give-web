@@ -88,6 +88,14 @@ $promo-width: 200px;
       background: $colorGrayscale-pebble;
       display: block;
     }
+    > li:nth-of-type(5) {
+      .col-level-2, .col-level-3 {
+        width: $col-width - 57px;
+      }
+      .col-level-3 {
+        left: $col-width - 57px;
+      }
+    }
   }
 
   .col-level-2,
