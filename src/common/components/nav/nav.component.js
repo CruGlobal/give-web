@@ -51,8 +51,9 @@ class NavController{
     };
 
     // set sub menu path based on url path
-    let path = this.$window.location.pathname ? this.$window.location.pathname.split('/') : [];
+    let path = this.$window.location.pathname ? this.$window.location.pathname.replace('.html', '').split('/') : [];
     path.shift();
+    this.menuPath.currentPage = path.pop();
     this.menuPath.sub = path;
 
     this.getNav().subscribe((structure) => {
