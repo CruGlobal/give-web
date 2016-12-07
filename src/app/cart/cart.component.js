@@ -59,6 +59,7 @@ class CartController {
     this.cartService.deleteItem( item.uri )
       .subscribe( () => {
           pull(this.cartData.items, item);
+          this.loadCart(true);
         },
         error => {
           this.$log.error('Error deleting item from cart', error);

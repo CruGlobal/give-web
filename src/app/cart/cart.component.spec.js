@@ -96,7 +96,7 @@ describe('cart', () => {
       self.controller.cartService.deleteItem.and.returnValue( Observable.of( 'data' ) );
       self.controller.removeItem(self.controller.cartData.items[0]);
       expect(self.controller.cartService.deleteItem).toHaveBeenCalledWith('uri1');
-      expect(self.controller.loadCart).not.toHaveBeenCalled();
+      expect(self.controller.loadCart).toHaveBeenCalledWith(true);
       expect(self.controller.cartData.items).toEqual([{uri: 'uri2'}]);
     });
     it('should handle an error removing an item', () => {
