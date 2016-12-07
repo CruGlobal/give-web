@@ -68,7 +68,6 @@ class DesignationEditorController {
       //get designation content
       this.designationEditorService.getContent(this.designationNumber, this.campaignPage).then((response) => {
         this.designationContent = response.data;
-        this.designationContent.paragraphText = '';
       }),
 
       //get designation photos
@@ -109,6 +108,9 @@ class DesignationEditorController {
       resolve : {
         parentDesignationNumber: () => {
           return this.designationContent.parentDesignationNumber;
+        },
+        designationType: () => {
+          return this.designationContent.designationType;
         },
         organizationId: () => {
           return this.designationContent.organizationId;

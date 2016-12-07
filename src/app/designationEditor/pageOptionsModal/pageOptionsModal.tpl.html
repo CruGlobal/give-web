@@ -3,16 +3,16 @@
   <ul class="nav nav-tabs" ng-init="tab = 'parentDesignation'">
     <li ng-class="{'active': tab === 'parentDesignation'}">
       <a href="" ng-click="tab = 'parentDesignation'">
-        <span class="xs-hide">Parent </span>Designation
+        <span class="xs-hide">Parent</span> Designation
       </a>
     </li>
-    <li ng-class="{'active': tab === 'givingAmounts'}">
+    <li ng-class="{'active': tab === 'givingAmounts'}" ng-if="$ctrl.designationType === 'Campaign'">
       <a href="" ng-click="tab = 'givingAmounts'">
-        Custom <span class="xs-hide">Giving </span>Amounts
+        Custom <span class="xs-hide">Giving</span> Amounts
       </a>
     </li>
     <li ng-class="{'active': tab === 'other'}">
-      <a href="" ng-click="tab = 'other'">
+      <a href="" ng-click="tab = 'other'" translate>
         Other
       </a>
     </li>
