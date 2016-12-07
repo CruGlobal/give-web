@@ -1,4 +1,4 @@
-$col-width: 245px;
+$col-width: 199px;
 $menu-container-height: 300px;
 $promo-width: 200px;
 
@@ -61,7 +61,7 @@ $promo-width: 200px;
 
       a {
         display: block;
-        padding: 5px 10px;
+        padding: 5px 9px;
         text-transform: uppercase;
         font-weight: 500;
         font-size: 14px;
@@ -87,14 +87,6 @@ $promo-width: 200px;
     > li.open-menu .children-container {
       background: $colorGrayscale-pebble;
       display: block;
-    }
-    > li:nth-of-type(5) {
-      .col-level-2, .col-level-3 {
-        width: $col-width - 57px;
-      }
-      .col-level-3 {
-        left: $col-width - 57px;
-      }
     }
   }
 
