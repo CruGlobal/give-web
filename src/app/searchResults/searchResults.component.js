@@ -22,7 +22,7 @@ class SearchResultsController {
   }
 
   $onInit(){
-    var params = this.$location.search();
+    let params = this.$location.search();
 
     this.searchParams.keyword = params.q;
     this.searchParams.first_name = params.fName;
@@ -30,39 +30,27 @@ class SearchResultsController {
     this.showAdvancedSearch = !params.q && !params.fName && !params.lName;
     this.searchParams.type = params.type;
 
-    this.requestSearch();
+    this.requestSearch(this.searchParams.type);
   }
 
   requestSearch(type){
-    if(angular.isDefined(type)){
-      this.searchParams.type = type;
-    }
+    this.searchParams.type = type;
 
     this.loadingResults = true;
-    if(this.searchParams.type === 'featured') {
-      this.searchResults = [];
-      this.loadingResults = false;
-    }else if(this.searchParams.type === 'ministries'){
-      this.searchResults = ministries;
-      this.loadingResults = false;
-    }else{
-      if((this.searchParams.keyword && !this.searchParams.type) ||
-        (this.searchParams.type === 'people' && (this.searchParams.first_name || this.searchParams.last_name))){
-        this.designationsService.productSearch(this.searchParams)
-          .subscribe((results) => {
-            this.searchResults = results;
-            this.loadingResults = false;
-          });
-      }else{
-        this.searchResults = null;
+    this.designationsService.productSearch(this.searchParams)
+      .subscribe((results) => {
+        if(!results.length && this.searchParams.type === 'ministries'){
+          this.searchResults = ministries;
+        }else{
+          this.searchResults = results;
+        }
         this.loadingResults = false;
-      }
-    }
+      });
   }
 
   exploreSearch(){
     var term = this.searchParams.keyword || this.searchParams.first_name + ' ' + this.searchParams.last_name;
-    this.$window.location = 'https://www.cru.org/content/cru/us/en/search.' + encodeURIComponent(term) + '.html';
+    this.$window.location = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
   }
 }
 
