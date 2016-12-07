@@ -114,11 +114,11 @@
                 </h3>
 
                 <div class="is-row clearfix" ng-repeat-end ng-repeat="r in hits">
-                  <a ng-href="/{{r.designationNumber}}" class="is-row-thumb">
+                  <a ng-href="{{r.path}}" class="is-row-thumb">
                     <img desig-src="{{r.designationNumber}}">
                   </a>
                   <div class="is-row-meta">
-                    <a ng-href="/{{r.designationNumber}}">
+                    <a ng-href="{{r.path}}">
                       <span class="is-row-title">{{r.name}}</span>
                       <span class="is-row-num">#{{r.designationNumber}}</span>
                     </a>
@@ -126,7 +126,7 @@
                   <div class="is-row-actions hidden-xs">
                     <product-config product-code="{{r.designationNumber}}" button-label="Give a Gift" button-size="sm"></product-config>
                     &nbsp;
-                    <a ng-href="/{{r.designationNumber}}" class="btn btn-sm btn-subtle" translate>Details</a>
+                    <a ng-href="{{r.path}}" class="btn btn-sm btn-subtle" translate>Details</a>
                   </div>
                 </div>
 

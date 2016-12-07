@@ -28,6 +28,7 @@ class DesignationsService {
     })).map((response) => {
       return map(response.data.hits, (hit) => {
         return {
+          path: hit.path || null,
           designationNumber: hit.designation_number || null,
           replacementDesignationNumber: hit.replacement_designation_number || null,
           name: hit.title || hit.description || null,
