@@ -51,9 +51,9 @@
                       <div class="is-widget">
                         <ul class="list-unstyled is-type-links">
                           <li ng-if="$ctrl.searchParams.keyword" ng-class="{'active': !$ctrl.searchParams.type}">
-                            <a href="" ng-click="$ctrl.requestSearch('')" translate>All Giving Opportunities</a>
+                            <a href="" ng-click="$ctrl.requestSearch()" translate>All Giving Opportunities</a>
                           </li>
-                          <li ng-class="{'active': $ctrl.searchParams.type === 'people' || (!$ctrl.searchParams.type && !$ctrl.searchParams.keyword)}">
+                          <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
                             <a href="" ng-click="$ctrl.requestSearch('people')" translate>People</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'ministries'}">
@@ -80,7 +80,7 @@
                       <div ng-if="!$ctrl.searchParams.type">
                         <div class="form-group">
                           <label translate>Name</label>
-                          <input type="text" class="form-control input-subtle" name="keyword" value="{{$ctrl.searchParams.keyword}}">
+                          <input type="text" class="form-control input-subtle" name="q" value="{{$ctrl.searchParams.keyword}}">
                         </div>
                       </div>
 
@@ -101,14 +101,10 @@
                   <p translate>You can search our staff by first or last name.</p>
                 </div>
 
-                <div ng-if="$ctrl.searchResults && !$ctrl.searchResults.length && $ctrl.searchParams.type !== 'featured'">
+                <div ng-if="$ctrl.searchResults && !$ctrl.searchResults.length">
                   <p translate>Your search did not find any results. Please try again.</p>
                   <p translate>If you are uncertain of the exact spelling, enter the first few letters and avoid searching by nicknames.
                     If you still cannot find a staff member you are looking for, you can call 1-888-278-7233 for assistance.</p>
-                </div>
-
-                <div ng-if="$ctrl.searchResults && $ctrl.searchParams.type === 'featured'">
-                  <h3 translate>Featured Opportunities haven't been loaded yet.</h3>
                 </div>
 
                 <h3 class="is-results-divider" ng-repeat-start="(k,hits) in $ctrl.searchResults | groupBy:'facet'" ng-switch="k">
