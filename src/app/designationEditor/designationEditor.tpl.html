@@ -4,8 +4,8 @@
       <div class="row">
         <div class="col-sm-6  col-xs-12">
           <h2 class="mb0">
-            {{$ctrl.designationContent.title}}
-            <a class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()">
+            {{$ctrl.designationContent.title || $ctrl.designationContent.designationName}}
+            <a class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()" ng-if="$ctrl.designationContent.designationType === 'Campaign'">
               <i class="fa fa-pencil"></i>
             </a>
           </h2>
@@ -56,7 +56,9 @@
               <i class="fa fa-pencil"></i>
             </a>
             <div ng-bind-html="$ctrl.designationContent.paragraphText"></div>
-            <p ng-if="!$ctrl.designationContent.paragraphText">- Content here -</p>
+            <p ng-if="!$ctrl.designationContent.paragraphText">
+              <i translate>Edit this page and use this space to share with current and potential ministry partners about your vision and calling to Cru.</i>
+            </p>
           </div>
 
           <p class="signature-wrap" ng-if="$ctrl.designationContent.designationType === 'Campaign'">
