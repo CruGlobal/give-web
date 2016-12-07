@@ -50,12 +50,18 @@ export function _earliestValidDate(nextDrawDate, startDate){
     currentDate.date(1);
   }
 
-  // Find greatest of today's date, nextDrawDate, and startDate by comparing dates in UTC
-  let utcGreatest = moment.max(
+  let datesToCompare = [
     currentDate,
-    moment.utc(nextDrawDate),
-    moment.utc(startDate)
-  );
+    moment.utc(nextDrawDate)
+  ];
+
+  // Include start date unless it is not provided
+  if(startDate){
+    datesToCompare.push(moment.utc(startDate));
+  }
+
+  // Find greatest of today's date, nextDrawDate, and startDate by comparing dates in UTC
+  let utcGreatest = moment.max(datesToCompare);
 
   // Toss all timezone info and pretend the date is at midnight in the browser's timezone
   // like the rest of the dates in the app that are used for display only.

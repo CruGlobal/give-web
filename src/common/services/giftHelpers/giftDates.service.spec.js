@@ -120,5 +120,11 @@ describe('giftDates service', () => {
       expect(giftDates._earliestValidDate('2017-12-28', '2017-12-27').toString()).toEqual(moment('2018-01-01').toString());
       expect(giftDates._earliestValidDate('2017-12-01', '2017-12-02').toString()).toEqual(moment('2018-01-01').toString());
     });
+    it('should not use startDate if it is empty', () => {
+      jasmine.clock().mockDate( moment.utc('2017-01-29 23:59:59').local().toDate() );
+      expect(giftDates._earliestValidDate('2017-02-01', '').toString()).toEqual(moment('2017-02-01').toString());
+      expect(giftDates._earliestValidDate('2017-02-01', null).toString()).toEqual(moment('2017-02-01').toString());
+      expect(giftDates._earliestValidDate('2017-02-01').toString()).toEqual(moment('2017-02-01').toString());
+    });
   });
 });
