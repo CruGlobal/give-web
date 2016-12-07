@@ -34,10 +34,10 @@
             </div>
           </div>
           <div class="col-sm-4 col-md-4">
-            <div class="form-group mb0" ng-if="$ctrl.recipient['mostrecentdonationRecurringdonationelement']">
+            <div class="form-group mb0" ng-if="$ctrl.recipient['recurringdonations']['donations'].length">
               <label translate>Recurring Gifts:</label>
               <ul class="list-unstyled list-recurring">
-                <li ng-repeat="recurring in $ctrl.recipient['mostrecentdonationRecurringdonationelement']">
+                <li ng-repeat="recurring in $ctrl.recipient['recurringdonations']['donations']">
                   <h4 translate>{{recurring['donation-lines'][0].amount | currency:'$'}} {{recurring.rate.recurrence.interval}}</h4>
                   <span class="meta" ng-if="recurring['next-draw-date']" translate>Next Gift: {{recurring['next-draw-date']['display-value'] | date:'mediumDate'}}</span>
                 </li>
