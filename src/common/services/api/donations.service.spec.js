@@ -36,7 +36,7 @@ describe( 'donations service', () => {
   describe( 'getRecipients( year )', () => {
     it( 'should load recent when missing year', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/recent?zoom=element,element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement' )
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/recent?zoom=element,element:mostrecentdonation,element:recurringdonations' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients().subscribe( ( recipients ) => {
         expect( recipients ).toEqual( jasmine.any( Array ) );
@@ -46,7 +46,7 @@ describe( 'donations service', () => {
 
     it( 'should load recipients by year', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/2015?zoom=element,element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement' )
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/2015?zoom=element,element:mostrecentdonation,element:recurringdonations' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients( 2015 ).subscribe( ( recipients ) => {
         expect( recipients ).toEqual( jasmine.any( Array ) );

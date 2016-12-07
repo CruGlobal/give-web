@@ -38,7 +38,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .get( {
         path: path,
         zoom: {
-          recipients: 'element[],element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement[]'
+          recipients: 'element[],element:mostrecentdonation,element:recurringdonations'
         }
       } )
       .pluck( 'recipients' );
