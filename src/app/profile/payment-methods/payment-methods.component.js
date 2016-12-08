@@ -15,7 +15,7 @@ class PaymentMethodsController {
 
   /* @ngInject */
   constructor($rootScope, $uibModal, profileService, sessionEnforcerService, $log, $timeout, $window, $location) {
-    this.log = $log;
+    this.$log = $log;
     this.$rootScope = $rootScope;
     this.$uibModal = $uibModal;
     this.paymentMethod = 'bankAccount';
@@ -54,14 +54,14 @@ class PaymentMethodsController {
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
 
     this.loading = true;
-    this.loadPaymentMethods();
-    this.loadDonorDetails();
   }
 
   loadDonorDetails() {
     this.profileService.getDonorDetails()
-      .subscribe((data) => {
+      .subscribe(data => {
         this.mailingAddress = data.mailingAddress;
+      }, error => {
+        this.$log.error('Error loading mailing address for use in profile payment method add payment method modals', error);
       });
   }
 
@@ -76,7 +76,7 @@ class PaymentMethodsController {
         error => {
           this.loading = false;
           this.submissionError.error = 'Failed retrieving payment methods.';
-          this.log.error(this.submissionError.error, error);
+          this.$log.error(this.submissionError.error, error);
         }
       );
   }
@@ -117,7 +117,7 @@ class PaymentMethodsController {
           (error) => {
             this.submissionError.loading = false;
             this.submissionError.error = error.data;
-            this.log.error('error.data',error);
+            this.$log.error('Error adding payment method',error);
           });
     } else {
       this.submissionError.loading = false;

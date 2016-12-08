@@ -21,23 +21,12 @@ class PaymentMethodController{
     this.submissionError = {error: ''};
   }
 
-  $onInit(){
-    this.loadDonorDetails();
-  }
-
-  loadDonorDetails() {
-    this.profileService.getDonorDetails()
-      .subscribe((data) => {
-        this.mailingAddress = data.mailingAddress;
-      });
-  }
-
   getExpiration(){
     return `${this.model['expiry-month']}/${this.model['expiry-year']}`;
   }
 
   isCard(){
-    return this.model['card-number'] ? true : false;
+    return !!this.model['card-number'];
   }
 
   editPaymentMethod() {
@@ -132,6 +121,7 @@ export default angular
       model: '<',
       successMessage: '=',
       paymentMethodsList: '<',
+      mailingAddress: '<',
       onDelete: '&'
     }
   });

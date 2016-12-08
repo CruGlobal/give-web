@@ -101,6 +101,11 @@ describe( 'PaymentMethodsComponent', function () {
       expect($ctrl.mailingAddress).toBe('address');
       expect($ctrl.profileService.getDonorDetails).toHaveBeenCalled();
     });
+    it('should log an error', () => {
+      spyOn($ctrl.profileService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
+      $ctrl.loadDonorDetails();
+      expect($ctrl.$log.error.logs[0]).toEqual(['Error loading mailing address for use in profile payment method add payment method modals', 'some error']);
+    });
   });
 
   describe('addPaymentMethod()', () => {

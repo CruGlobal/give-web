@@ -2,10 +2,10 @@
     <div ng-click="$ctrl.isCollapsed = !$ctrl.isCollapsed" class="panel-heading" role="tab">
       <div ng-class="{'collapsed': $ctrl.isCollapsed}" class="payment-summary-link p- collapse-indicator-row" role="button">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-sm-9">
             <payment-method-display payment-method="$ctrl.model"></payment-method-display>
           </div>
-          <div class="col-md-4 text-right payment-details-link">
+          <div class="col-sm-3 text-right payment-details-link">
             <button class="btn trigger">Details</button>
           </div>
         </div>

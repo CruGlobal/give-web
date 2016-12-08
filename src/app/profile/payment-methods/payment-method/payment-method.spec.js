@@ -79,23 +79,6 @@ describe('PaymentMethodComponent', function () {
     expect(self.controller).toBeDefined();
   });
 
-  describe('$onInit()', () => {
-    it('should call loadDonorDetails', () => {
-      spyOn(self.controller, 'loadDonorDetails');
-      self.controller.$onInit();
-      expect(self.controller.loadDonorDetails).toHaveBeenCalled();
-    });
-  });
-
-  describe('loadDonorDetails()', () => {
-    it('should get donor details', () => {
-      spyOn(self.controller.profileService, 'getDonorDetails').and.returnValue(Observable.of({mailingAddress: 'address'}));
-      self.controller.loadDonorDetails();
-      expect(self.controller.mailingAddress).toBe('address');
-    });
-  });
-
-
   describe('getExpiration()', () => {
     it('should return expiration date', () => {
       self.controller.model = modelCC;
@@ -133,8 +116,6 @@ describe('PaymentMethodComponent', function () {
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
 
       self.controller.onSubmit = () => 'hello';
-      spyOn(self.controller.profileService, 'getDonorDetails').and.returnValue(Observable.of({mailingAddress: 'address'}));
-      self.controller.$onInit();
       expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('hello');
     });
   });
