@@ -109,7 +109,7 @@ class PaymentMethodsController {
     if(e.success && e.data) {
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
-            data.address = formatAddressForTemplate(data.address);
+            data.address = data.address && formatAddressForTemplate(data.address);
             this.submissionError.loading = false;
             this.paymentMethodFormModal.close(data);
 
