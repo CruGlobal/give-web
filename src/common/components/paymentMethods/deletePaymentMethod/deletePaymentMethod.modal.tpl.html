@@ -29,7 +29,7 @@
 
             <ng-switch on="$ctrl.view">
 
-              <div class="mb" ng-switch-when="manageDonations">
+              <div class="mb--" ng-switch-when="manageDonations">
                 <h4 class="border-bottom-small visible" translate>Recurring Gifts Using this Payment Method</h4>
 
                 <div ng-repeat="gift in $ctrl.buildGifts($ctrl.resolve.paymentMethod._recurringgifts[0].donations)" class="row repeating-row user-profile">
@@ -88,7 +88,7 @@
 
               </div>
 
-              <div class="mb" ng-switch-when="addPaymentMethod">
+              <div class="mb--" ng-switch-when="addPaymentMethod">
                 <payment-method-form mailing-address="$ctrl.resolve.mailingAddress" submission-error="$ctrl.submissionError" on-submit="$ctrl.savePaymentMethod(success, data)"></payment-method-form>
                 <div class="mb0">
                   <div class="row">
@@ -100,7 +100,7 @@
                 </div>
               </div>
 
-              <div class="mb-" ng-switch-when="confirm">
+              <div class="mb--" ng-switch-when="confirm">
                 <div class="row">
                   <div class="col-sm-12">
                     <ng-switch on="$ctrl.confirmText">

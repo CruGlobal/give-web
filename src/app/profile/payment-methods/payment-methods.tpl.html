@@ -22,7 +22,7 @@
               <translate>Loading payment methods...</translate>
             </loading>
             <div ng-if="$ctrl.paymentMethods" ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
-              <payment-method success-message="$ctrl.successMessage" model="paymentMethod" payment-methods-list="$ctrl.paymentMethods" on-delete="$ctrl.onDelete()"></payment-method>
+              <payment-method success-message="$ctrl.successMessage" model="paymentMethod" payment-methods-list="$ctrl.paymentMethods" mailing-address="$ctrl.mailingAddress" on-delete="$ctrl.onDelete()"></payment-method>
             </div>
           </div>
         </div>
