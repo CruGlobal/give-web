@@ -46,6 +46,14 @@ describe( 'searchResults', function () {
       $ctrl.requestSearch('ministries');
       expect( $ctrl.searchResults ).toEqual( ministries );
     } );
+
+    it( 'handles error from search results', () => {
+      spyOn( $ctrl.designationsService, 'productSearch' ).and.returnValue( Observable.throw( {} ) );
+
+      $ctrl.$onInit();
+      $ctrl.requestSearch();
+      expect( $ctrl.searchResults ).toEqual( [] );
+    } );
   } );
 
   describe( 'exploreSearch', () => {

@@ -45,6 +45,9 @@ class SearchResultsController {
           this.searchResults = results;
         }
         this.loadingResults = false;
+      }, () => {
+        this.searchResults = [];
+        this.loadingResults = false;
       });
   }
 
