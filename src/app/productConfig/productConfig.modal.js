@@ -13,6 +13,7 @@ import modalStateService from 'common/services/modalState.service';
 import {possibleTransactionDays, startDate} from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
+import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component';
 
 let controllerName = 'productConfigController';
 export let giveGiftParams = {
@@ -21,8 +22,6 @@ export let giveGiftParams = {
   frequency:   'f',
   day:         'dd'
 };
-
-export let giftAddedEvent = 'giftAddedToCart';
 
 class ModalInstanceCtrl {
 
@@ -183,9 +182,10 @@ class ModalInstanceCtrl {
 
     savingObservable.subscribe( () => {
       if ( this.isEdit ) {
+        this.$scope.$emit( cartUpdatedEvent );
         this.$uibModalInstance.close( {isUpdated: true} );
       } else {
-        this.$scope.$emit( giftAddedEvent, {uri: this.productData.uri, data: data} );
+        this.$scope.$emit( giftAddedEvent );
         this.$uibModalInstance.dismiss();
       }
       this.submittingGift = false;

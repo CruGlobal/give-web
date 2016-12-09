@@ -9,6 +9,7 @@ import productModalService from 'common/services/productModal.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
+import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import template from './cart.tpl';
 
@@ -17,7 +18,8 @@ let componentName = 'cart';
 class CartController {
 
   /* @ngInject */
-  constructor( $window, $log, cartService, sessionService, productModalService ) {
+  constructor( $scope, $window, $log, cartService, sessionService, productModalService ) {
+    this.$scope = $scope;
     this.$window = $window;
     this.$log = $log;
     this.productModalService = productModalService;
@@ -60,6 +62,7 @@ class CartController {
       .subscribe( () => {
           pull(this.cartData.items, item);
           this.loadCart(true);
+          this.$scope.$emit( cartUpdatedEvent );
         },
         error => {
           this.$log.error('Error deleting item from cart', error);
