@@ -22,22 +22,19 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         apiUrl: 'https://cortex-gateway-stage.cru.org',
         imgDomain: '',
         imgDomainDesignation: 'https://give-stage2.cru.org',
-        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current',
-        navFeed: '/assets/nav.json'
+        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current'
       },
       staging: {
         apiUrl: 'https://cortex-gateway-stage.cru.org',
         imgDomain: '//give-static-stage.cru.org',
         imgDomainDesignation: '',
-        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current',
-        navFeed: '/content/cru/us/en/cru-nav.json'
+        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current'
       },
       production: {
         apiUrl: 'https://cortex-gateway.cru.org',
         imgDomain: '//give-static-stage.cru.org',
         imgDomainDesignation: '',
-        ccpKeyUrl: 'https://ccp.ccci.org/api/v1/rest/client-encryption-keys/current',
-        navFeed: '/content/cru/us/en/cru-nav.json'
+        ccpKeyUrl: 'https://ccp.ccci.org/api/v1/rest/client-encryption-keys/current'
       }
     }
   });
