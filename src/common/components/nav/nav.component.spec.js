@@ -37,7 +37,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to retrieve json nav feed', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       expect( structure ).toBeDefined();
     } );
@@ -59,7 +59,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to modify paths', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       structure = structure.main;
       expect( structure[0].path ).toContain( 'https://www.cru.org/' );
@@ -89,7 +89,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build sub nav structure', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       let subMenuStructure = $ctrl.makeSubNav( structure.main, ['communities', 'campus'] );
 
@@ -100,7 +100,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build sub nav structure with missing path', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       let subMenuStructure = $ctrl.makeSubNav( structure.main, ['page', 'that', 'does not', 'exist'] );
 
@@ -110,7 +110,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build Give sub nav structure', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.$window.location.hostname = 'give.cru.org';
 
     $ctrl.$onInit();

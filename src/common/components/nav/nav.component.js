@@ -38,7 +38,7 @@ class NavController{
     this.sessionModalService = sessionModalService;
 
     this.imgDomain = envService.read('imgDomain');
-    this.navFeed = envService.read('navFeed');
+    this.navFeed = '/content/cru/us/en/cru-nav.json';
   }
 
   $onInit() {
@@ -134,10 +134,7 @@ class NavController{
   getNav() {
     return Observable.from(this.$http({
       method: 'GET',
-      url: this.navFeed,
-      headers: {
-        'Accept': undefined
-      }
+      url: this.navFeed
     }))
       .map((response) => {
         let replacePathDeep = function(obj, keysMap) {
