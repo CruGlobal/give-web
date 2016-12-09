@@ -62,6 +62,7 @@ class NavController{
       if(this.$window.location.hostname && this.$window.location.hostname.indexOf('give') !== -1){
         this.subMenuStructure = [{
           title: 'Give',
+          path: '/',
           children: structure.give
         }];
       }else{
