@@ -83,6 +83,10 @@ $promo-width: 200px;
         padding-top: 6px;
         padding-bottom: 5px;
       }
+      &.active > a {
+        background: url("/assets/img/menu-selected.png") no-repeat center bottom;
+        background-size: 12px;
+      }
     }
     > li.open-menu .children-container {
       background: $colorGrayscale-pebble;
