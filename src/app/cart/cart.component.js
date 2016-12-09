@@ -1,5 +1,4 @@
 import angular from 'angular';
-import appConfig from 'common/app.config';
 import commonModule from 'common/common.module';
 import pull from 'lodash/pull';
 
@@ -93,7 +92,6 @@ export default angular
     template.name,
     commonModule.name,
     displayRateTotals.name,
-    appConfig.name,
     cartService.name,
     productModalService.name,
     sessionService.name,
