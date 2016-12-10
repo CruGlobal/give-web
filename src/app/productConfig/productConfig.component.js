@@ -14,9 +14,10 @@ let componentName = 'productConfig';
 class ProductConfigController {
 
   /* @ngInject */
-  constructor( productModalService, $window ) {
+  constructor( productModalService, $window, $log ) {
     this.productModalService = productModalService;
     this.$window = $window;
+    this.$log = $log;
   }
 
   $onInit() {
@@ -25,14 +26,22 @@ class ProductConfigController {
 
   configModal() {
     this.loadingModal = true;
+    this.error = false;
     let modalInstance = this.productModalService
       .configureProduct( this.productCode, {amount: 50, 'campaign-code': this.campaignCode}, false );
     modalInstance.rendered.then( () => {
       this.loadingModal = false;
     } );
     modalInstance.result.then( () => {
-      this.$window.location = '/cart.html';
-    } );
+        this.$window.location = '/cart.html';
+      },
+      error => {
+        if(error){
+          this.$log.error('Error opening product config modal', error);
+          this.error = true;
+        }
+        this.loadingModal = false;
+      });
   }
 }
 
