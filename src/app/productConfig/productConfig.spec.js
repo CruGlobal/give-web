@@ -59,6 +59,22 @@ describe( 'productConfig', function () {
       $rootScope.$digest();
       expect( $ctrl.$window.location ).toEqual( '/cart.html' );
     } );
+
+    it( 'should disable loading indicator on dismiss', () => {
+      $ctrl.configModal();
+      resultDeferred.reject();
+      $rootScope.$digest();
+      expect( $ctrl.loadingModal ).toEqual( false );
+    } );
+
+    it( 'should handle an error loading necessary data', () => {
+      $ctrl.configModal();
+      resultDeferred.reject('some error');
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( true );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error opening product config modal', 'some error'] );
+    } );
   } );
 } );
 
