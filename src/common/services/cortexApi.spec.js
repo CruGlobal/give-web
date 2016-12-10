@@ -22,7 +22,7 @@ describe('cortex api service', () => {
       self.cortexApiService.http({
         method: 'GET',
         path: 'test'
-      }).subscribe((data) => {
+      }).subscribe(data => {
         expect(data).toEqual('success');
       });
       self.$httpBackend.flush();
@@ -37,7 +37,7 @@ describe('cortex api service', () => {
           one: 1,
           two: 2
         }
-      }).subscribe((data) => {
+      }).subscribe(data => {
         expect(data).toEqual('success');
       });
       self.$httpBackend.flush();
@@ -49,7 +49,7 @@ describe('cortex api service', () => {
         method: 'GET',
         path: 'test',
         followLocation: true
-      }).subscribe((data) => {
+      }).subscribe(data => {
         expect(data).toEqual('success');
       });
       self.$httpBackend.flush();
@@ -61,10 +61,24 @@ describe('cortex api service', () => {
         method: 'POST',
         path: 'test',
         data: 'testData'
-      }).subscribe((data) => {
+      }).subscribe(data => {
         expect(data).toEqual('success');
       });
       self.$httpBackend.flush();
+    });
+
+    it('should throw an error if path is empty', () => {
+      self.cortexApiService.http({
+        method: 'POST',
+        path: '',
+        data: 'testData'
+      }).subscribe(() => {
+          fail();
+        },
+        error => {
+          expect(error).toEqual('The requested path is empty. cortexApiService is unable to send the request.');
+          expect(self.cortexApiService.$log.error.logs[0]).toEqual(['The requested path is empty. cortexApiService is unable to send the request.']);
+        });
     });
 
     describe('zoom config object', () => {
@@ -88,7 +102,7 @@ describe('cortex api service', () => {
           zoom: {
             nestedData: 'firstlevel:secondlevel'
           }
-        }).subscribe((data) => {
+        }).subscribe(data => {
           expect(data).toEqual({
             nestedData: {
               dataKey: 'dataValue'
@@ -107,7 +121,7 @@ describe('cortex api service', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.get({
         path: 'test'
-      }).subscribe((data) => {
+      }).subscribe(data => {
         expect(data).toEqual('success');
       });
       self.$httpBackend.flush();
@@ -119,7 +133,7 @@ describe('cortex api service', () => {
       self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.post({
         path: 'test'
-      }).subscribe((data) => {
+      }).subscribe(data => {
         expect(data).toEqual('success');
       });
       self.$httpBackend.flush();
@@ -131,7 +145,7 @@ describe('cortex api service', () => {
       self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.put({
         path: 'test'
-      }).subscribe((data) => {
+      }).subscribe(data => {
         expect(data).toEqual('success');
       });
       self.$httpBackend.flush();
@@ -143,7 +157,7 @@ describe('cortex api service', () => {
       self.$httpBackend.expectDELETE('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.delete({
         path: 'test'
-      }).subscribe((data) => {
+      }).subscribe(data => {
         expect(data).toEqual('success');
       });
       self.$httpBackend.flush();

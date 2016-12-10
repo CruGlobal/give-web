@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './productConfig.component';
 import modalStateModule from 'common/services/modalState.service';
-import {giveGiftParams} from 'app/productConfig/productConfig.modal';
+import {giveGiftParams} from './productConfigModal/productConfig.modal.component';
 
 describe( 'productConfig', function () {
   beforeEach( angular.mock.module( module.name ) );
