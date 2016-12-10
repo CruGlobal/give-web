@@ -166,11 +166,14 @@
   </div>
   <div class="modal-footer">
     <div class="col-md-6 col-sm-6">
-      <button class="btn btn-default btn-md btn-block-xs" type="button" ng-click="$dismiss()" translate>Cancel &amp; Return</button>
+      <button class="btn btn-default btn-md btn-block-xs" type="button" ng-click="$ctrl.dismiss()" translate>Cancel &amp; Return</button>
     </div>
     <div class="col-md-6 col-sm-6 text-right">
-      <button ng-if="!$ctrl.error" class="btn btn-md btn-primary btn-block-xs" type="submit">{{$ctrl.submitLabel|translate}}</button>
-      <button ng-if="$ctrl.error && $ctrl.error.indexOf('already in the cart') !== -1" ng-click="$close(); $ctrl.$location.path('/cart')" class="btn btn-md btn-primary btn-block-xs" type="submit" translate>View Cart</button>
+      <button ng-if="!$ctrl.error" class="btn btn-md btn-primary btn-block-xs" type="submit" ng-switch="$ctrl.isEdit">
+        <span ng-switch-when="true" translate>Update Gift</span>
+        <span ng-switch-when="false" translate>Add to Gift Cart</span>
+      </button>
+      <button ng-if="$ctrl.error && $ctrl.error.indexOf('already in the cart') !== -1" ng-click="$ctrl.close(); $ctrl.$location.path('/cart')" class="btn btn-md btn-primary btn-block-xs" type="submit" translate>View Cart</button>
     </div>
   </div>
 </form>
