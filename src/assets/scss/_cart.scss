@@ -167,3 +167,13 @@
   }
 }
 
+
+
+@media screen and (max-width: 549px) {
+    .btn-block-xs {
+        display: block;
+        width: 100%;
+        &.btn-default {margin-bottom: 10px;}
+    }
+}
+
