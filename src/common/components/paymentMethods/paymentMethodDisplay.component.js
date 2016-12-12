@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 'angular-environment';
 import appConfig from 'common/app.config';
 
 import template from './paymentMethodDisplay.tpl';
@@ -17,7 +16,6 @@ class PaymentMethodDisplayController{
 export default angular
   .module(componentName, [
     template.name,
-    'environment',
     appConfig.name
   ])
   .component(componentName, {

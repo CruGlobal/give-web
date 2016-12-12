@@ -60,51 +60,11 @@
       </div>
 
       <div class="cart">
-        <div uib-dropdown on-toggle="open && $ctrl.loadCart()" is-open="$ctrl.cartOpen">
+        <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
           <a uib-dropdown-toggle></a>
           <div class="pull-right" uib-dropdown-menu>
             <span class="triangle"></span>
-            <div class="container-fluid">
-              <div class="row row-no-spacing">
-                <div class="col-xs-12">
-                  <div class="desktop-cart-list">
-
-                    <div class="repeating-row" ng-if="!$ctrl.cartData">
-                      <loading>
-                        <div class="mb--" translate>Loading gifts...</div>
-                      </loading>
-                    </div>
-                    <p class="text-center mt-" ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
-                      Your cart is empty
-                    </p>
-
-                    <div class="repeating-row select-recipient-row" ng-repeat="i in $ctrl.cartData.items">
-                      <div class="col-xs-3">
-                        <img desig-src="{{i.designationNumber}}">
-                      </div>
-                      <div class="col-xs-9">
-                        <p class="title">{{i.displayName}}</p>
-                        <p class="title">#{{i.designationNumber}}</p>
-                        <p class="price">{{i.price}} {{i.frequency}}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="repeating-row select-recipient-row sub-total" ng-if="$ctrl.cartData.items.length">
-                    <div class="col-xs-6">
-                      <p>{{$ctrl.cartData.items.length}} Items</p>
-                    </div>
-                    <div class="col-xs-6 text-right">
-                      <p>Subtotal {{$ctrl.cartData.cartTotal | currency:'$'}}</p>
-                    </div>
-                  </div>
-
-                  <a href="/cart.html" class="btn btn-default checkout" ng-if="$ctrl.cartData.items.length" style="width: 50%; float: left;" translate>Cart</a>
-                  <a href="" class="btn btn-primary checkout" ng-if="$ctrl.cartData.items.length" ng-click="$ctrl.checkout()" style="width: 50%; float: right;" translate>Checkout</a>
-
-                </div>
-              </div>
-            </div>
+            <nav-cart></nav-cart>
           </div>
         </div>
       </div>

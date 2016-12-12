@@ -91,15 +91,25 @@ describe('recurringGift model', () => {
   });
 
   describe('designationNumber getter', () => {
-    it('should return the designation number', () => {
+    it('should return designation-number if it hasn\'t been updated', () => {
       expect(giftModel.designationNumber).toEqual('0105987');
+    });
+    it('should return updated-designation-number if it has been updated', () => {
+      giftModel.gift['updated-designation-number'] = '0123456';
+      expect(giftModel.designationNumber).toEqual('0123456');
     });
   });
 
   describe('designationNumber setter', () => {
-    it('should set the designation number', () => {
-      giftModel.designationNumber = '0123456';
-      expect(giftModel.gift['designation-number']).toEqual('0123456');
+    it('should update designation number', () => {
+      giftModel.designationNumber = '0987654';
+      expect(giftModel.gift['designation-number']).toEqual('0105987');
+      expect(giftModel.gift['updated-designation-number']).toEqual('0987654');
+    });
+    it('should clear updated amount if it is the same as the original', () => {
+      giftModel.designationNumber = '0105987';
+      expect(giftModel.gift['designation-number']).toEqual('0105987');
+      expect(giftModel.gift['updated-designation-number']).toEqual('');
     });
   });
 

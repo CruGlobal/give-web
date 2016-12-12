@@ -1,6 +1,5 @@
 import angular from 'angular';
 import ccp from 'common/lib/ccp';
-import 'angular-environment';
 import appConfig from 'common/app.config';
 import { ccpKey, ccpStagingKey } from 'common/app.constants';
 import {Observable} from 'rxjs/Observable';
@@ -42,7 +41,6 @@ class Ccp {
 
 export default angular
   .module(serviceName, [
-    'environment',
     appConfig.name
   ])
   .service(serviceName, Ccp);

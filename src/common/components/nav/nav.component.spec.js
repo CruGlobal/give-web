@@ -8,7 +8,7 @@ import module from './nav.component';
 import navStructure from 'common/components/nav/fixtures/nav.fixture';
 const iPhoneUserAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25';
 
-import {giftAddedEvent} from 'app/productConfig/productConfig.modal';
+import {giftAddedEvent, cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 import {SignOutEvent} from 'common/services/session/session.service';
 
 describe( 'nav', function () {
@@ -37,7 +37,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to retrieve json nav feed', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       expect( structure ).toBeDefined();
     } );
@@ -59,7 +59,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to modify paths', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       structure = structure.main;
       expect( structure[0].path ).toContain( 'https://www.cru.org/' );
@@ -69,13 +69,6 @@ describe( 'nav', function () {
       expect( giveMenu.children[0].path ).toContain( 'https://give.cru.org/' );
     } );
     $httpBackend.flush();
-  } );
-
-  it( 'to load cart data', () => {
-    spyOn( $ctrl.cartService, 'get' ).and.callFake( () => Observable.of( {} ) );
-
-    $ctrl.loadCart();
-    expect( $ctrl.cartData ).toEqual( {} );
   } );
 
   it( 'to redirect on search', () => {
@@ -89,7 +82,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build sub nav structure', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       let subMenuStructure = $ctrl.makeSubNav( structure.main, ['communities', 'campus'] );
 
@@ -100,7 +93,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build sub nav structure with missing path', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       let subMenuStructure = $ctrl.makeSubNav( structure.main, ['page', 'that', 'does not', 'exist'] );
 
@@ -110,7 +103,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build Give sub nav structure', () => {
-    $httpBackend.expectGET( '/assets/nav.json' ).respond( 200, navStructure );
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.$window.location.hostname = 'give.cru.org';
 
     $ctrl.$onInit();
@@ -145,15 +138,32 @@ describe( 'nav', function () {
 
   describe( 'giftAddedToCart()', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'loadCart' );
       $ctrl.cartOpen = false;
     } );
 
-    it( 'opens and loads cart when giftAdded', () => {
+    it( 'scrolls to top and opens nav cart when giftAdded', () => {
       $ctrl.giftAddedToCart();
       expect( $ctrl.$window.scrollTo ).toHaveBeenCalledWith( 0, 0 );
-      expect( $ctrl.loadCart ).toHaveBeenCalled();
       expect( $ctrl.cartOpen ).toEqual( true );
+    } );
+  } );
+
+  describe( 'cartOpened()', () => {
+    beforeEach( () => {
+      spyOn( $ctrl.$rootScope, '$emit' );
+    } );
+
+    it( 'should send event to load cart if nav cart hasn\'t been opened before', () => {
+      $ctrl.cartOpened();
+      expect( $ctrl.cartOpenedPreviously ).toEqual( true );
+      expect($ctrl.$rootScope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
+    } );
+
+    it( 'should not send event to load cart if nav cart has been opened before', () => {
+      $ctrl.cartOpenedPreviously = true;
+      $ctrl.cartOpened();
+      expect( $ctrl.cartOpenedPreviously ).toEqual( true );
+      expect($ctrl.$rootScope.$emit).not.toHaveBeenCalled();
     } );
   } );
 } );
@@ -277,19 +287,5 @@ describe( 'nav signInButton', function () {
         } );
       } );
     } );
-
-    describe( 'checkout', () => {
-      it( 'should redirect to a sign-in', () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'GUEST' );
-        $ctrl.checkout();
-        expect($ctrl.$window.location).toBe('/sign-in.html');
-      } );
-      it( 'should redirect to a checkout', () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
-        $ctrl.checkout();
-        expect($ctrl.$window.location).toBe('/checkout.html');
-      } );
-    } );
-
   } );
 } );

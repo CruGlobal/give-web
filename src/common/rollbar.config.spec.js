@@ -1,6 +1,5 @@
 import angular from 'angular';
 import 'angular-mocks';
-import 'angular-environment';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';

@@ -3,7 +3,7 @@ var browserSync = require('browser-sync');
 var historyApiFallback = require('connect-history-api-fallback');
 var proxy = require('proxy-middleware'), url = require('url');
 
-const aemDomain = 'http://uatpub1.aws.cru.org:4503';
+const aemDomain = 'https://give-stage2.cru.org';
 
 var binProxy = url.parse(aemDomain + '/bin');
 binProxy.route = '/bin';
