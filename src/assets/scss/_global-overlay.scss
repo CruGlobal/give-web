@@ -1,3 +1,5 @@
+@import '../crubrand/generic/mixins/_media-query';
+
 @include mq(767px, max) {
     #js-globalWebsites {display: none !important;}
 }
