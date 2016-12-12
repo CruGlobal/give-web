@@ -117,18 +117,6 @@
       }
     }
   }
-  .mobile-footer-persist {
-    @include respond-to(extrasmall) {
-      position: fixed;
-      bottom: 0;
-      background: #fff;
-      width: 100%;
-      left: 0;
-      z-index: 100;
-      box-shadow: 0 0 18px rgba(0, 0, 0, 0.35);
-      border: none;
-    }
-  }
   .giftsum-line {
     display: block;
     line-height: 1.5em;
