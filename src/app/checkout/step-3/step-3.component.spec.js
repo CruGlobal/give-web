@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import {existingPaymentMethodFlag} from 'common/services/api/order.service';
+import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import module from './step-3.component';
 
@@ -237,7 +238,11 @@ describe('checkout', () => {
         });
       });
 
-      describe('sumbit single order', () => {
+      describe('submit single order', () => {
+        beforeEach(() => {
+          spyOn(self.controller.$scope, '$emit');
+        });
+
         afterEach(() => {
           expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({value: true});
           expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({value: false});
@@ -250,6 +255,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
           expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a bank account', () => {
           self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving bank account'));
@@ -268,6 +274,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
           expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
           expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should submit the order without a CCV if paying with an existing credit card', () => {
           self.controller.creditCardPaymentDetails = {};
@@ -276,6 +283,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).toHaveBeenCalledWith();
           expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
           expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a credit card', () => {
           self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving credit card'));

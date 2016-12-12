@@ -177,11 +177,10 @@ $promo-width: 200px;
       background-size: 20px 20px;
       width: 20px;
       height: 22px;
-      cursor: pointer;
 
       .dropdown {
         height: 100%;
-        a {
+        & > .dropdown-toggle {
           display: block;
           width: 100%;
           height: 100%;
@@ -198,11 +197,6 @@ $promo-width: 200px;
         width: 360px;
         margin: 0;
 
-        .desktop-cart-list {
-          overflow-y: auto;
-          max-height: 250px;
-        }
-
         .triangle {
           background: transparent url("/assets/img/menu-triangle.png") no-repeat right top;
           width: 100%;
@@ -215,61 +209,6 @@ $promo-width: 200px;
 
           //TODO: Triangle not showing up correctly
           z-index: 10;
-        }
-
-        .repeating-row {
-          background-color: $colorGrayscale-stone;
-          padding: 15px 0px;
-          border-top: 1px solid $colorCru-white;
-
-          &:first-child {
-            border-top: 0;
-          }
-
-          img {
-            min-height: 40px;
-          }
-
-          p {
-            margin: 0 0 7.5px;
-          }
-
-          &.sub-total {
-            text-transform: uppercase;
-            font-weight: 600;
-            margin: 0;
-            padding: $gutter*.35 0;
-            p {
-              padding: 0;
-              margin: 0;
-            }
-          }
-        }
-
-        .title {
-          color: $colorCru-gray;
-          font-weight: 600;
-        }
-
-        .price {
-          font-weight: 600;
-          margin-bottom: 0 !important;
-        }
-
-        .checkout {
-          width: 100%;
-          border-radius: 0;
-          text-transform: uppercase;
-          padding-top: 10px;
-          padding-bottom: 10px;
-          &.btn-default {
-            background-color: $colorCru-gray;
-            color: $colorCru-white;
-            border-color: rgba(darken($colorCru-gray, 5%), 0.35);
-            &:hover {
-              background-color: darken($colorCru-gray, 10%);
-            }
-          }
         }
       }
     }

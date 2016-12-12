@@ -70,11 +70,11 @@ export default class RecurringGiftModel {
   }
 
   get designationNumber() {
-    return this.gift['designation-number'];
+    return this.gift['updated-designation-number'] || this.gift['designation-number'];
   }
 
   set designationNumber(value) {
-    this.gift['designation-number'] = value;
+    this.gift['updated-designation-number'] = value !== this.gift['designation-number'] ? value : '';
   }
 
   get amount(){

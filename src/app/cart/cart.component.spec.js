@@ -6,6 +6,8 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
+import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
+
 describe('cart', () => {
   beforeEach(angular.mock.module(module.name));
   let self = {};
@@ -90,6 +92,9 @@ describe('cart', () => {
   });
 
   describe('removeItem()', () => {
+    beforeEach(() => {
+      spyOn( self.controller.$scope, '$emit' );
+    });
     it('should remove item from cart', () => {
       self.controller.cartData = { items: [{uri: 'uri1'}, {uri: 'uri2'}] };
       spyOn(self.controller, 'loadCart');
@@ -98,6 +103,7 @@ describe('cart', () => {
       expect(self.controller.cartService.deleteItem).toHaveBeenCalledWith('uri1');
       expect(self.controller.loadCart).toHaveBeenCalledWith(true);
       expect(self.controller.cartData.items).toEqual([{uri: 'uri2'}]);
+      expect(self.controller.$scope.$emit).toHaveBeenCalledWith( cartUpdatedEvent );
     });
     it('should handle an error removing an item', () => {
       self.controller.cartData = { items: [{uri: 'uri1'}, {uri: 'uri2'}] };
@@ -106,6 +112,7 @@ describe('cart', () => {
       expect(self.controller.cartService.deleteItem).toHaveBeenCalledWith('uri1');
       expect(self.controller.cartData.items).toEqual([{uri: 'uri1', removingError: true}, {uri: 'uri2'}]);
       expect(self.controller.$log.error.logs[0]).toEqual(['Error deleting item from cart', 'error']);
+      expect(self.controller.$scope.$emit).not.toHaveBeenCalled();
     });
   });
 
