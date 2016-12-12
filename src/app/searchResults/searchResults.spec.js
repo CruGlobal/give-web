@@ -52,7 +52,8 @@ describe( 'searchResults', function () {
 
       $ctrl.$onInit();
       $ctrl.requestSearch();
-      expect( $ctrl.searchResults ).toEqual( [] );
+      expect( $ctrl.searchResults ).toEqual( null );
+      expect( $ctrl.searchError ).toEqual( true );
     } );
   } );
 

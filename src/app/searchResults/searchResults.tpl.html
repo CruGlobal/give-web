@@ -107,6 +107,10 @@
                     If you still cannot find a staff member you are looking for, you can call 1-888-278-7233 for assistance.</p>
                 </div>
 
+                <div ng-if="!$ctrl.searchResults && $ctrl.searchError">
+                  <p translate>An error occurred while processing your search query. Please try again.</p>
+                </div>
+
                 <h3 class="is-results-divider" ng-repeat-start="(k,hits) in $ctrl.searchResults | groupBy:'facet'" ng-switch="k">
                   <span ng-switch-when="person" translate>People</span>
                   <span ng-switch-when="ministry" translate>Ministries</span>

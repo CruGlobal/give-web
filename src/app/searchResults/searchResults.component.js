@@ -37,6 +37,7 @@ class SearchResultsController {
     this.searchParams.type = type;
 
     this.loadingResults = true;
+    this.searchError = false;
     this.designationsService.productSearch(this.searchParams)
       .subscribe((results) => {
         if(!results.length && this.searchParams.type === 'ministries'){
@@ -46,7 +47,8 @@ class SearchResultsController {
         }
         this.loadingResults = false;
       }, () => {
-        this.searchResults = [];
+        this.searchResults = null;
+        this.searchError = true;
         this.loadingResults = false;
       });
   }
