@@ -2,8 +2,6 @@ import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
 
-import appConfig from 'common/app.config';
-
 import commonModule from 'common/common.module';
 import cartComponent from '../cart/cart.component';
 import checkoutComponent from '../checkout/checkout.component';
@@ -80,7 +78,6 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
 export default angular
   .module(componentName, [
     template.name,
-    appConfig.name,
     commonModule.name,
     cartComponent.name,
     checkoutComponent.name,

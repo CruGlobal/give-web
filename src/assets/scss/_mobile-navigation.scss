@@ -293,29 +293,6 @@ $header-height: 84px;
     }
   }
 
-  #mob-cart {
-    .repeating-row {
-      background-color: $colorGrayscale-stone;
-      padding: 30px 15px;
-      border-top: 1px solid $colorCru-white;
-    }
-
-    .title {
-      color: $colorCru-gold;
-      font-weight: 600;
-    }
-
-    .price {
-      font-weight: 600;
-    }
-
-    .checkout {
-      width: 100%;
-      border-radius: 0;
-      text-transform: uppercase;
-    }
-  }
-
   #mob-more {
     background-color: $colorCru-white;
     margin: 0;

@@ -1,6 +1,5 @@
 import angular from 'angular';
 import 'angular-cookies';
-import 'angular-environment';
 import jwtDecode from 'jwt-decode';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs';
@@ -223,7 +222,6 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
 export default angular
   .module( serviceName, [
     'ngCookies',
-    'environment',
     appConfig.name
   ] )
   .factory( serviceName, session );

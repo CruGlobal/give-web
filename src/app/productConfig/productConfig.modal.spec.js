@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module, {giftAddedEvent} from './productConfig.modal';
+import module from './productConfig.modal';
+import {giftAddedEvent, cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 import moment from 'moment';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
@@ -382,6 +383,7 @@ describe( 'product config modal', function () {
         $ctrl.isEdit = true;
         spyOn( $ctrl.cartService, 'editItem' ).and.returnValue( Observable.of( 'editItem success' ) );
         $ctrl.productData.uri = 'items/crugive/<some id>';
+        spyOn( $ctrl.$scope, '$emit' );
         $ctrl.$onInit();
       } );
 
@@ -402,6 +404,7 @@ describe( 'product config modal', function () {
           amount:                   85,
           'recurring-day-of-month': '01'
         } );
+        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
         expect( $ctrl.$uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: true} );
       } );
 
@@ -411,6 +414,7 @@ describe( 'product config modal', function () {
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith( 'uri', 'items/crugive/<some id>', {amount: 85} );
+        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
         expect( $ctrl.$uibModalInstance.close ).toHaveBeenCalledWith( {isUpdated: true} );
       } );
 
@@ -452,7 +456,7 @@ describe( 'product config modal', function () {
           amount:                   85,
           'recurring-day-of-month': '01'
         } );
-        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent, jasmine.any( Object ) );
+        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
         expect( $ctrl.$uibModalInstance.dismiss ).toHaveBeenCalled();
         expect( $ctrl.$uibModalInstance.close ).not.toHaveBeenCalled();
       } );
@@ -465,7 +469,7 @@ describe( 'product config modal', function () {
           amount:                   85,
           'recurring-day-of-month': '01'
         } );
-        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent, jasmine.any( Object ) );
+        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
         expect( $ctrl.$uibModalInstance.dismiss ).toHaveBeenCalled();
         expect( $ctrl.$uibModalInstance.close ).not.toHaveBeenCalled();
       } );
@@ -476,7 +480,7 @@ describe( 'product config modal', function () {
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith( 'items/crugive/<some id>', {amount: 85} );
-        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent, jasmine.any( Object ) );
+        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
         expect( $ctrl.$uibModalInstance.dismiss ).toHaveBeenCalled();
         expect( $ctrl.$uibModalInstance.close ).not.toHaveBeenCalled();
       } );
