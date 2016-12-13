@@ -36,7 +36,7 @@ class ReceiptsController {
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
   }
 
-  getReceipts(year, tryPreviousYear){
+  getReceipts(year, tryPreviousYear = false){
     this.retrievingError = '';
     this.loading = true;
     let endDate = this.currentYear == this.today.getFullYear()
@@ -56,15 +56,14 @@ class ReceiptsController {
         data => {
           this.retrievingError = '';
           this.receipts = data;
+
           //if there are no receipts in the current year try previous year
           if(this.receipts.length == 0 && tryPreviousYear) {
             this.currentYear = this.currentYear - 1;
             this.getReceipts(this.currentYear);
-            return;
+          } else {
+            this.loading = false;
           }
-          // if no receipts were found for the past two years, reset currentYear to actual current year
-          this.currentYear = this.receipts.length == 0 ? this.today.getFullYear() : this.currentYear;
-          this.loading = false;
         },
         error => {
           this.loading = false;
