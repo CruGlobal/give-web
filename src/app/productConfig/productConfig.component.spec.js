@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './productConfig.component';
 import modalStateModule from 'common/services/modalState.service';
-import {giveGiftParams} from 'app/productConfig/productConfig.modal';
+import {giveGiftParams} from './productConfigModal/productConfig.modal.component';
 
 describe( 'productConfig', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -58,6 +58,22 @@ describe( 'productConfig', function () {
       resultDeferred.resolve();
       $rootScope.$digest();
       expect( $ctrl.$window.location ).toEqual( '/cart.html' );
+    } );
+
+    it( 'should disable loading indicator on dismiss', () => {
+      $ctrl.configModal();
+      resultDeferred.reject();
+      $rootScope.$digest();
+      expect( $ctrl.loadingModal ).toEqual( false );
+    } );
+
+    it( 'should handle an error loading necessary data', () => {
+      $ctrl.configModal();
+      resultDeferred.reject('some error');
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( true );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error opening product config modal', 'some error'] );
     } );
   } );
 } );

@@ -4,19 +4,20 @@ import template from './productConfig.tpl';
 import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
 import modalStateService from 'common/services/modalState.service';
-import {giveGiftParams} from 'app/productConfig/productConfig.modal';
+import {giveGiftParams} from './productConfigModal/productConfig.modal.component';
 
 //include designation edit button component to be included on designation page
 import designationEditButtonComponent from '../designationEditButton/designationEditButton.component';
 
-let componentName = 'productConfig';
+const componentName = 'productConfig';
 
 class ProductConfigController {
 
   /* @ngInject */
-  constructor( productModalService, $window ) {
+  constructor( productModalService, $window, $log ) {
     this.productModalService = productModalService;
     this.$window = $window;
+    this.$log = $log;
   }
 
   $onInit() {
@@ -25,14 +26,22 @@ class ProductConfigController {
 
   configModal() {
     this.loadingModal = true;
+    this.error = false;
     let modalInstance = this.productModalService
       .configureProduct( this.productCode, {amount: 50, 'campaign-code': this.campaignCode}, false );
     modalInstance.rendered.then( () => {
       this.loadingModal = false;
     } );
     modalInstance.result.then( () => {
-      this.$window.location = '/cart.html';
-    } );
+        this.$window.location = '/cart.html';
+      },
+      error => {
+        if(error){
+          this.$log.error('Error opening product config modal', error);
+          this.error = true;
+        }
+        this.loadingModal = false;
+      });
   }
 }
 

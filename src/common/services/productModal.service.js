@@ -2,13 +2,11 @@ import angular from 'angular';
 import 'angular-ui-bootstrap';
 import designationsService from 'common/services/api/designations.service';
 import commonService from 'common/services/api/common.service';
-import templateModal from 'app/productConfig/productConfigModal.tpl';
-import modalController from 'app/productConfig/productConfig.modal';
+import productConfigModal, {giveGiftParams} from 'app/productConfig/productConfigModal/productConfig.modal.component';
 import modalStateService from 'common/services/modalState.service';
-import {giveGiftParams} from 'app/productConfig/productConfig.modal';
 import toFinite from 'lodash/toFinite';
 
-let serviceName = 'productModalService';
+const serviceName = 'productModalService';
 
 /*@ngInject*/
 function ProductModalService( $uibModal, $location, designationsService, commonService, modalStateService ) {
@@ -22,12 +20,10 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
     isEdit = !!isEdit;
     let modalInstance = $uibModal
       .open( {
-        templateUrl:  templateModal.name,
-        controller:   modalController.name,
-        controllerAs: '$ctrl',
+        component:    productConfigModal.name,
         size:         'lg give-modal',
         resolve:      {
-          productData: function () {
+          productData: () => {
             return designationsService.productLookup( code ).toPromise();
           },
           nextDrawDate: function () {
@@ -80,10 +76,9 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
 export default angular
   .module( serviceName, [
     'ui.bootstrap',
-    designationsService.name,
     commonService.name,
-    modalController.name,
-    modalStateService.name,
-    templateModal.name
+    designationsService.name,
+    productConfigModal.name,
+    modalStateService.name
   ] )
   .factory( serviceName, ProductModalService );
