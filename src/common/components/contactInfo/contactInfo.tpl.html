@@ -7,7 +7,7 @@
   <loading type="overlay" ng-if="!$ctrl.donorDetails">
     <translate>Checking for existing information...</translate>
   </loading>
-  <div class="mb_x">
+  <div class="mb_x" ng-if="!$ctrl.nameFieldsDisabled">
     <div class="row">
       <div class="col-md-6">
         <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'Household'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'Household'}" translate>Give as an Individual</a>
