@@ -14,9 +14,10 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor($window, $location, designationsService) {
+  constructor($window, $location, $log, designationsService) {
     this.$window = $window;
     this.$location = $location;
+    this.$log = $log;
     this.designationsService = designationsService;
     this.searchParams = {};
   }
@@ -29,6 +30,7 @@ class SearchResultsController {
     this.searchParams.last_name = params.lName;
     this.showAdvancedSearch = !params.q && !params.fName && !params.lName;
     this.searchParams.type = params.type;
+    this.featuredGroupBy = 'startMonth';
 
     this.requestSearch(this.searchParams.type);
   }
@@ -44,12 +46,14 @@ class SearchResultsController {
           this.searchResults = ministries;
         }else{
           this.searchResults = results;
+          console.log(results);
         }
         this.loadingResults = false;
-      }, () => {
+      }, (error) => {
         this.searchResults = null;
         this.searchError = true;
         this.loadingResults = false;
+        this.$log.error('Error loading search results', error);
       });
   }
 
