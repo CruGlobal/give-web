@@ -46,7 +46,6 @@ class SearchResultsController {
           this.searchResults = ministries;
         }else{
           this.searchResults = results;
-          console.log(results);
         }
         this.loadingResults = false;
       }, (error) => {
