@@ -5,6 +5,7 @@ import indexOf from 'lodash/indexOf';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
 import map from 'lodash/map';
+import includes from 'lodash/includes';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
@@ -136,13 +137,24 @@ class ProductConfigModalController {
   }
 
   changeFrequency( product ) {
-    this.designationsService.productLookup( product.selectAction, true ).subscribe( ( data ) => {
-      this.itemConfigForm.$setDirty();
-      this.productData = data;
-    } );
+    this.errorAlreadyInCart = false;
+    this.errorChangingFrequency = false;
+    const lastFrequency = this.productData.frequency;
     this.productData.frequency = product.name;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.frequency, product.name );
-
+    if(product.selectAction) {
+      this.designationsService.productLookup(product.selectAction, true)
+        .subscribe(data => {
+            this.itemConfigForm.$setDirty();
+            this.productData = data;
+          },
+          error => {
+            this.$log.error('Error loading new product when changing frequency', error);
+            this.errorChangingFrequency = true;
+            this.productData.frequency = lastFrequency;
+            if (!this.isEdit) this.$location.search(giveGiftParams.frequency, lastFrequency);
+          });
+    }
   }
 
   changeAmount( amount ) {
@@ -159,11 +171,14 @@ class ProductConfigModalController {
   }
 
   changeStartDay( day ) {
+    this.errorAlreadyInCart = false;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.day, day );
   }
 
   saveGiftToCart() {
     this.submittingGift = false;
+    this.errorAlreadyInCart = false;
+    this.errorSavingGeneric = false;
     if ( !this.itemConfigForm.$valid ) {
       return;
     }
@@ -184,10 +199,14 @@ class ProductConfigModalController {
         this.dismiss();
       }
       this.submittingGift = false;
-    }, (error) => {
-      this.error = error.data;
+    }, error => {
+      if(includes(error.data, 'already in the cart')){
+        this.errorAlreadyInCart = true;
+      }else{
+        this.errorSavingGeneric = true;
+        this.$log.error('Error adding or updating item in cart', error);
+      }
       this.submittingGift = false;
-      this.$log.error('Error adding or updating item in cart', error);
     } );
   }
 }

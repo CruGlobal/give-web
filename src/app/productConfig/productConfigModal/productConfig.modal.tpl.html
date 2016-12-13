@@ -21,11 +21,16 @@
       <div class="panel panel-default panel-plain mt">
         <div class="panel panel-default give-modal-panel">
 
-          <div ng-if="$ctrl.error" ng-switch="$ctrl.error.indexOf('already in the cart') !== -1" class="alert"
-               role="alert"
-               ng-class="{'alert-warning': $ctrl.error.indexOf('already in the cart') !== -1, 'alert-danger': $ctrl.error.indexOf('already in the cart') === -1}">
-            <span ng-switch-when="true" translate>You already have this gift in your cart.</span>
-            <span ng-switch-when="false" translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact support.</span>
+          <div ng-if="$ctrl.errorChangingFrequency" class="alert alert-danger" role="alert">
+            <p translate>There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact support.</p>
+          </div>
+
+          <div ng-if="$ctrl.errorSavingGeneric" role="alert" class="alert alert-danger">
+            <p translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact support.</p>
+          </div>
+
+          <div ng-if="$ctrl.errorAlreadyInCart" class="alert alert-warning" role="alert">
+            <p translate>You already have this gift in your cart.</p>
           </div>
 
           <h4 class="panel-title border-bottom-small" translate>
@@ -188,17 +193,21 @@
       </button>
     </div>
     <div class="col-md-6 col-sm-6 text-right">
-      <button ng-if="!$ctrl.error" class="btn btn-md btn-primary btn-block-xs" type="submit" ng-switch="$ctrl.isEdit"
-              tabindex="-1">
+      <button class="btn btn-md btn-primary btn-block-xs"
+              type="button"
+              tabindex="-1"
+              ng-if="$ctrl.errorAlreadyInCart"
+              ng-click="$ctrl.close(); $ctrl.$location.path('/cart')"
+              translate>
+        View Cart
+      </button>
+      <button class="btn btn-md btn-primary btn-block-xs"
+              type="submit"
+              ng-if="!$ctrl.errorAlreadyInCart"
+              tabindex="-1"
+              ng-switch="$ctrl.isEdit">
         <span ng-switch-when="true" translate>Update Gift</span>
         <span ng-switch-when="false" translate>Add to Gift Cart</span>
-      </button>
-      <button ng-if="$ctrl.error && $ctrl.error.indexOf('already in the cart') !== -1"
-              ng-click="$ctrl.close(); $ctrl.$location.path('/cart')"
-              class="btn btn-md btn-primary btn-block-xs"
-              tabindex="-1"
-              type="submit"
-              translate>View Cart
       </button>
     </div>
   </div>
