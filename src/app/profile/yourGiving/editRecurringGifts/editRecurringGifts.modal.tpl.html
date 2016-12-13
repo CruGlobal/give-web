@@ -1,5 +1,5 @@
 <div ng-switch="$ctrl.state">
-  <div class="modal-header" ng-if="$ctrl.state === 'loading' || $ctrl.state === 'error'"><!-- TODO: use ng-switch-when-separator="|" in Angular 1.5.9 -->
+  <div class="modal-header" ng-switch-when="loading|error" ng-switch-when-separator="|">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12">

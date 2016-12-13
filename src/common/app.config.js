@@ -7,7 +7,7 @@ import 'angular-environment';
 import rollbarConfig from './rollbar.config';
 
 /* @ngInject */
-function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider) {
+function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider) {
   $httpProvider.useApplyAsync(true);
 
   // eslint-disable-next-line angular/module-getter
@@ -55,6 +55,8 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
   } else {
     $logProvider.debugEnabled(true);
   }
+
+  $qProvider.errorOnUnhandledRejections(false);
 }
 
 export default angular.module('appConfig', [
