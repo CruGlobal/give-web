@@ -2,7 +2,7 @@ import 'babel/external-helpers';
 import angular from 'angular';
 import 'rxjs/add/operator/finally';
 
-import appConfig from 'common/app.config';
+import commonModule from 'common/common.module';
 
 import step1 from './step-1/step-1.component';
 import step2 from './step-2/step-2.component';
@@ -14,7 +14,6 @@ import showErrors from 'common/filters/showErrors.filter';
 
 import cartService from 'common/services/api/cart.service';
 import designationsService from 'common/services/api/designations.service';
-import commonModule from 'common/common.module';
 
 import sessionEnforcerService, {EnforcerCallbacks} from 'common/services/session/sessionEnforcer.service';
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
@@ -92,9 +91,8 @@ class CheckoutController{
 
 export default angular
   .module(componentName, [
-    commonModule.name,
     template.name,
-    appConfig.name,
+    commonModule.name,
     step1.name,
     step2.name,
     step3.name,

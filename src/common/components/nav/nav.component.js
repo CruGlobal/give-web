@@ -8,14 +8,14 @@ import find from 'lodash/find';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import cartService from 'common/services/api/cart.service';
 import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import mobileNavLevelComponent from './navMobileLevel.component';
 import subNavDirective from './subNav.directive';
-import {giftAddedEvent} from 'app/productConfig/productConfig.modal';
+import {giftAddedEvent} from 'common/components/nav/navCart/navCart.component';
 import globalWebsitesModalWindowTemplate from './globalWebsitesModal/globalWebsitesModalWindow.tpl';
 import globalWebsitesModal from './globalWebsitesModal/globalWebsitesModal.component';
+import navCart, {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
@@ -25,7 +25,7 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($rootScope, $http, $document, $window, $uibModal, $timeout, envService, cartService, sessionService, sessionModalService){
+  constructor($rootScope, $http, $document, $window, $uibModal, $timeout, envService, sessionService, sessionModalService){
     this.$http = $http;
     this.$document = $document;
     this.$uibModal = $uibModal;
@@ -33,7 +33,6 @@ class NavController{
     this.$rootScope = $rootScope;
     this.$timeout = $timeout;
 
-    this.cartService = cartService;
     this.sessionService = sessionService;
     this.sessionModalService = sessionModalService;
 
@@ -94,8 +93,14 @@ class NavController{
 
   giftAddedToCart() {
     this.$window.scrollTo(0, 0);
-    this.loadCart();
     this.cartOpen = true;
+  }
+
+  cartOpened(){
+    if(!this.cartOpenedPreviously){ // Load cart on initial open only. Events will take care of other reloads
+      this.cartOpenedPreviously = true;
+      this.$rootScope.$emit( cartUpdatedEvent );
+    }
   }
 
   changeMetaTag(tag, content) {
@@ -140,7 +145,7 @@ class NavController{
         let replacePathDeep = function(obj, keysMap) {
           let replacePath = function(obj) {
             return transform(obj, function(result, value, key) {
-              var newValue = keysMap[key] ? (keysMap[key] + value) : value;
+              const newValue = keysMap[key] ? (keysMap[key] + value) : value;
               result[key] = isObject(value) ? replacePath(value) : newValue;
             });
           };
@@ -179,14 +184,6 @@ class NavController{
     return subNav;
   }
 
-  loadCart() {
-    this.cartData = null;
-    this.cartService.get()
-      .subscribe( ( data ) => {
-        this.cartData = data;
-      } );
-  }
-
   toggleMenu(value){
     this.mobileNavOpen = value;
     this.desktopSearch = value;
@@ -214,11 +211,6 @@ class NavController{
       }
     });
   }
-
-  checkout() {
-    this.$window.location = this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html';
-  }
-
 }
 
 export default angular
@@ -226,13 +218,13 @@ export default angular
     'environment',
     mobileTemplate.name,
     desktopTemplate.name,
-    cartService.name,
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
     subNavDirective.name,
     globalWebsitesModal.name,
-    globalWebsitesModalWindowTemplate.name
+    globalWebsitesModalWindowTemplate.name,
+    navCart.name
   ])
   .component(componentName, {
     controller: NavController,

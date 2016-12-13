@@ -8,6 +8,7 @@ import displayRateTotals from 'common/components/displayRateTotals/displayRateTo
 import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
+import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import template from './step-3.tpl';
 
@@ -16,9 +17,10 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(orderService, $window, $log){
+  constructor(orderService, $window, $scope, $log){
     this.orderService = orderService;
     this.$window = $window;
+    this.$scope = $scope;
     this.$log = $log;
   }
 
@@ -97,6 +99,7 @@ class Step3Controller{
         this.onSubmittingOrder({value: false});
         this.orderService.clearCardSecurityCode();
         this.onSubmitted();
+        this.$scope.$emit( cartUpdatedEvent );
         this.$window.location = '/thank-you.html';
       },
       (error) => {
