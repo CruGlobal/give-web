@@ -8,6 +8,7 @@ $colorCru-gold:             #f9b625;
 $colorCru-gray:             #666062;
 $colorCru-mid-gray:         #444244;
 $colorCru-white:            #fff;
+$colorCru-blueBright:       #3eb1c8;
 
 $colorGrayscale-background: #f7f7f7;
 $colorGrayscale-sand:       #f4f4f4;
@@ -21,6 +22,10 @@ $colorText:                 #3a3a3a;
 $sm:                        992px;
 $header-height:             84px;
 $gutter:                    30px;
+
+$query-unit:                16px;
+$nav-break-min:             400px;
+$fontWeight5:               500;
 
 @import 'mobile-navigation';
 @import 'desktop_navigation';
