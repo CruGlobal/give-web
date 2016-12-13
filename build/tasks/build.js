@@ -14,7 +14,7 @@ gulp.task('build', function (callback) {
 
 gulp.task('html', function () {
   return gulp.src(paths.templates)
-    .pipe($.plumber())
+    .pipe($.if(global.suppressErrors, $.plumber()))
     //.pipe($.changed(paths.srcDir, { extension: '.html' })) //TODO: fix this. It doesn't work on travis
     .pipe($.minifyHtml({
       empty: true,
@@ -30,13 +30,13 @@ gulp.task('html', function () {
     .pipe(gulp.dest(paths.srcDir));
 });
 
-gulp.task('scss', function (cb) {
+gulp.task('scss', function () {
   var tasks = [];
   for (var sheet in paths.scss) {
     var styles = paths.scss[sheet];
 
     tasks.push(gulp.src(styles)
-      .pipe($.plumber())
+      .pipe($.if(global.suppressErrors, $.plumber()))
       .pipe($.sourcemaps.init())
       .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
       .pipe($.sass())
