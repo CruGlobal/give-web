@@ -271,38 +271,66 @@ describe( 'product config modal', function () {
 
   describe( 'changeFrequency()', () => {
     beforeEach( () => {
-      spyOn( $ctrl.designationsService, 'productLookup' );
+      spyOn( $ctrl.designationsService, 'productLookup' ).and.returnValue(Observable.of({ frequency: 'NA' }));
+      $ctrl.productData = { frequency: 'MON' };
+      $ctrl.errorAlreadyInCart = true;
     } );
 
     describe( 'isEdit = true', () => {
       beforeEach( () => {
         $ctrl.isEdit = true;
-        $ctrl.designationsService.productLookup.and.returnValue(Observable.of({ data: { frequency: 'NA', name: 'NA', selectAction: undefined } }));
       } );
       it( 'changes product frequency', () => {
         $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
         expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
         expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
+        expect( $ctrl.productData ).toEqual({ frequency: 'NA' });
         expect( $ctrl.$location.search ).not.toHaveBeenCalled();
+        expect( $ctrl.errorChangingFrequency).toEqual(false);
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+      } );
+      it( 'should handle an error changing frequency', () => {
+        $ctrl.designationsService.productLookup.and.returnValue(Observable.throw('some error'));
+        $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
+        expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
+        expect( $ctrl.itemConfigForm.$setDirty ).not.toHaveBeenCalled();
+        expect( $ctrl.productData ).toEqual({ frequency: 'MON' });
+        expect( $ctrl.$location.search ).not.toHaveBeenCalled();
+        expect( $ctrl.errorChangingFrequency).toEqual(true);
+        expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading new product when changing frequency', 'some error']);
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
       } );
     } );
 
     describe( 'isEdit = false', () => {
       beforeEach( () => {
         $ctrl.isEdit = false;
-        $ctrl.designationsService.productLookup.and.returnValue(Observable.of({ data: { frequency: 'NA', name: 'NA', selectAction: undefined } }));
       } );
       it( 'changes product frequency', () => {
         $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
         expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
         expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
         expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.frequency, 'NA' );
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+      } );
+      it( 'should handle an error changing frequency', () => {
+        $ctrl.designationsService.productLookup.and.returnValue(Observable.throw('some error'));
+        $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
+        expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
+        expect( $ctrl.itemConfigForm.$setDirty ).not.toHaveBeenCalled();
+        expect( $ctrl.productData ).toEqual({ frequency: 'MON' });
+        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.frequency, 'NA' );
+        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.frequency, 'MON' );
+        expect( $ctrl.errorChangingFrequency).toEqual(true);
+        expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading new product when changing frequency', 'some error']);
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
       } );
     } );
   } );
 
   describe( 'changeAmount()', () => {
     beforeEach( () => {
+      spyOn($ctrl, 'initializeParams'); // Prevent $onInit from calling $location.search
       $ctrl.$onInit();
     } );
 
@@ -315,7 +343,7 @@ describe( 'product config modal', function () {
         expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
         expect( $ctrl.itemConfig.amount ).toEqual( 100 );
         expect( $ctrl.customAmount ).toBe( '' );
-        expect( $ctrl.$location.search ).not.toHaveBeenCalled;
+        expect( $ctrl.$location.search ).not.toHaveBeenCalled();
       } );
     } );
 
@@ -360,6 +388,9 @@ describe( 'product config modal', function () {
   } );
 
   describe( 'changeStartDay()', () => {
+    beforeEach( () => {
+      $ctrl.errorAlreadyInCart = true;
+    } );
     describe( 'isEdit = true', () => {
       beforeEach( () => {
         $ctrl.isEdit = true;
@@ -367,6 +398,7 @@ describe( 'product config modal', function () {
       it( 'sets day query param', () => {
         $ctrl.changeStartDay( '11' );
         expect( $ctrl.$location.search ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
       } );
     } );
     describe( 'isEdit = false', () => {
@@ -376,11 +408,17 @@ describe( 'product config modal', function () {
       it( 'sets day query param', () => {
         $ctrl.changeStartDay( '11' );
         expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.day, '11' );
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
       } );
     } );
   } );
 
   describe( 'saveGiftToCart()', () => {
+    beforeEach(() => {
+      // Make sure it resets errors
+      $ctrl.errorAlreadyInCart = true;
+      $ctrl.errorSavingGeneric = true;
+    });
     describe( 'isEdit = true', () => {
       beforeEach( () => {
         $ctrl.resolve.isEdit = true;
@@ -397,6 +435,8 @@ describe( 'product config modal', function () {
         expect( $ctrl.cartService.editItem ).not.toHaveBeenCalled();
         expect( $ctrl.close ).not.toHaveBeenCalled();
         expect( $ctrl.dismiss ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
 
       it( 'should submit a gift successfully', () => {
@@ -409,6 +449,8 @@ describe( 'product config modal', function () {
         } );
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
         expect( $ctrl.close ).toHaveBeenCalledWith( {isUpdated: true} );
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
 
       it( 'should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
@@ -419,10 +461,12 @@ describe( 'product config modal', function () {
         expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith( 'uri', 'items/crugive/<some id>', {amount: 85} );
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
         expect( $ctrl.close ).toHaveBeenCalledWith( {isUpdated: true} );
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
 
       it( 'should handle an error submitting a gift', () => {
-        $ctrl.cartService.editItem.and.returnValue( Observable.throw( {data: 'error'} ) );
+        $ctrl.cartService.editItem.and.returnValue( Observable.throw( 'some error' ) );
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
@@ -431,6 +475,24 @@ describe( 'product config modal', function () {
           'recurring-day-of-month': '01'
         } );
         expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(true);
+        expect( $ctrl.$log.error.logs[0]).toEqual(['Error adding or updating item in cart', 'some error' ]);
+      } );
+
+      it( 'should handle an error when saving a duplicate item', () => {
+        $ctrl.cartService.editItem.and.returnValue( Observable.throw( { data: 'Recurring gift to designation: 0671540 on draw day: 14 is already in the cart' } ) );
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.saveGiftToCart();
+        expect( $ctrl.submittingGift ).toEqual( false );
+        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith( 'uri', 'items/crugive/<some id>', {
+          amount:                   85,
+          'recurring-day-of-month': '01'
+        } );
+        expect( $ctrl.dismiss ).not.toHaveBeenCalled();
+        expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(true);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
     } );
 
@@ -450,6 +512,8 @@ describe( 'product config modal', function () {
         expect( $ctrl.cartService.addItem ).not.toHaveBeenCalled();
         expect( $ctrl.close ).not.toHaveBeenCalled();
         expect( $ctrl.dismiss ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
 
       it( 'should still submit the gift if the form is not dirty', () => {
@@ -462,6 +526,8 @@ describe( 'product config modal', function () {
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
         expect( $ctrl.dismiss ).toHaveBeenCalled();
         expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
 
       it( 'should submit a gift successfully', () => {
@@ -475,6 +541,8 @@ describe( 'product config modal', function () {
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
         expect( $ctrl.dismiss ).toHaveBeenCalled();
         expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
 
       it( 'should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
@@ -486,10 +554,12 @@ describe( 'product config modal', function () {
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
         expect( $ctrl.dismiss ).toHaveBeenCalled();
         expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
 
       it( 'should handle an error submitting a gift', () => {
-        $ctrl.cartService.addItem.and.returnValue( Observable.throw( 'error' ) );
+        $ctrl.cartService.addItem.and.returnValue( Observable.throw( 'some error' ) );
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
@@ -499,6 +569,24 @@ describe( 'product config modal', function () {
         } );
         expect( $ctrl.dismiss ).not.toHaveBeenCalled();
         expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(false);
+        expect( $ctrl.errorSavingGeneric).toEqual(true);
+        expect( $ctrl.$log.error.logs[0]).toEqual(['Error adding or updating item in cart', 'some error' ]);
+      } );
+
+      it( 'should handle an error when saving a duplicate item', () => {
+        $ctrl.cartService.addItem.and.returnValue( Observable.throw( { data: 'Recurring gift to designation: 0671540 on draw day: 14 is already in the cart' } ) );
+        $ctrl.itemConfigForm.$dirty = true;
+        $ctrl.saveGiftToCart();
+        expect( $ctrl.submittingGift ).toEqual( false );
+        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith( 'items/crugive/<some id>', {
+          amount:                   85,
+          'recurring-day-of-month': '01'
+        } );
+        expect( $ctrl.dismiss ).not.toHaveBeenCalled();
+        expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.errorAlreadyInCart).toEqual(true);
+        expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
     } );
   } );
