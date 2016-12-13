@@ -16,7 +16,12 @@
                        on-question-answer="$ctrl.onQuestionAnswer(key, answer)">
   </user-match-question>
   <div ng-switch-when="success">
-    <p translate>Thank you for taking the time to answer our security questions. Your account is now activated.</p>
+    <p ng-if="!$ctrl.skippedQuestions" translate>
+      Thank you for taking the time to answer our security questions. Your account is now activated.
+    </p>
+    <p ng-if="$ctrl.skippedQuestions" translate>
+      Thank you for completing account registration. Your account has been activated.
+    </p>
     <p>
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>
