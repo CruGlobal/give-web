@@ -21,7 +21,8 @@
       <div class="panel panel-default panel-plain mt">
         <div class="panel panel-default give-modal-panel">
 
-          <div ng-if="$ctrl.error" ng-switch="$ctrl.error.indexOf('already in the cart') !== -1" class="alert" role="alert"
+          <div ng-if="$ctrl.error" ng-switch="$ctrl.error.indexOf('already in the cart') !== -1" class="alert"
+               role="alert"
                ng-class="{'alert-warning': $ctrl.error.indexOf('already in the cart') !== -1, 'alert-danger': $ctrl.error.indexOf('already in the cart') === -1}">
             <span ng-switch-when="true" translate>You already have this gift in your cart.</span>
             <span ng-switch-when="false" translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact support.</span>
@@ -44,7 +45,8 @@
               </div>
             </div>
 
-            <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}" ng-if="$ctrl.showDefaultAmounts()">
+            <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
+                 ng-if="$ctrl.showDefaultAmounts()">
               <label class="btn btn-radio"
                      ng-click="$ctrl.changeAmount(a)"
                      ng-class="{'active': $ctrl.itemConfig.amount == a && !$ctrl.customInputActive}"
@@ -68,11 +70,14 @@
                          required>
                 </div>
               </label>
-              <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error" ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+              <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                   ng-if="($ctrl.itemConfigForm.amount | showErrors)">
                 <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
                 <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
                 <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
-                <div class="help-block" ng-message="maximum" translate>Amount must be less than {{ 10000000 | currency }}</div>
+                <div class="help-block" ng-message="maximum" translate>
+                  Amount must be less than {{ 10000000 | currency }}
+                </div>
               </div>
             </div>
           </div><!-- // panel-body -->
@@ -135,27 +140,35 @@
           <div class="panel-body pt0">
             <ul class="list-unstyled">
               <li>
-                <a class="commentLink"
-                   href=""
-                   ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
-                   translate>Send a Message to {{$ctrl.productData.displayName}}</a>
+                <button type="button"
+                        class="btn btn-link"
+                        tabindex="-1"
+                        ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
+                        translate>
+                  Send a Message to {{$ctrl.productData.displayName}}
+                </button>
                 <textarea class="staff-comments give-modal-comments"
                           rows="3"
                           maxlength="250"
                           ng-model="$ctrl.itemConfig['recipient-comments']"
                           ng-if="$ctrl.showRecipientComments"
+                          tabindex="-1"
                           style="display:block;"></textarea>
               </li>
               <li>
-                <a class="commentLink"
-                   href=""
-                   ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
-                   translate>Special Handling Instructions for Processing This Gift</a>
+                <button type="button"
+                        class="btn btn-link"
+                        tabindex="-1"
+                        ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
+                        translate>
+                  Special Handling Instructions for Processing This Gift
+                </button>
                 <textarea class="cru-comments give-modal-comments"
                           rows="3"
                           maxlength="250"
                           ng-model="$ctrl.itemConfig['donation-services-comments']"
                           ng-if="$ctrl.showDSComments"
+                          tabindex="-1"
                           style="display:block;"></textarea>
               </li>
             </ul>
@@ -166,11 +179,27 @@
   </div>
   <div class="modal-footer">
     <div class="col-md-6 col-sm-6">
-      <button class="btn btn-default btn-md btn-block-xs" type="button" ng-click="$dismiss()" translate>Cancel &amp; Return</button>
+      <button class="btn btn-default btn-md btn-block-xs"
+              type="button"
+              ng-click="$ctrl.dismiss()"
+              tabindex="-1"
+              translate>
+        Cancel &amp; Return
+      </button>
     </div>
     <div class="col-md-6 col-sm-6 text-right">
-      <button ng-if="!$ctrl.error" class="btn btn-md btn-primary btn-block-xs" type="submit">{{$ctrl.submitLabel|translate}}</button>
-      <button ng-if="$ctrl.error && $ctrl.error.indexOf('already in the cart') !== -1" ng-click="$close(); $ctrl.$location.path('/cart')" class="btn btn-md btn-primary btn-block-xs" type="submit" translate>View Cart</button>
+      <button ng-if="!$ctrl.error" class="btn btn-md btn-primary btn-block-xs" type="submit" ng-switch="$ctrl.isEdit"
+              tabindex="-1">
+        <span ng-switch-when="true" translate>Update Gift</span>
+        <span ng-switch-when="false" translate>Add to Gift Cart</span>
+      </button>
+      <button ng-if="$ctrl.error && $ctrl.error.indexOf('already in the cart') !== -1"
+              ng-click="$ctrl.close(); $ctrl.$location.path('/cart')"
+              class="btn btn-md btn-primary btn-block-xs"
+              tabindex="-1"
+              type="submit"
+              translate>View Cart
+      </button>
     </div>
   </div>
 </form>

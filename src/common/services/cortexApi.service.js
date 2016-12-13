@@ -1,7 +1,9 @@
 import angular from 'angular';
 import 'angular-environment';
+import isEmpty from 'lodash/isEmpty';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
@@ -14,14 +16,21 @@ let serviceName = 'cortexApiService';
 class CortexApi {
 
   /*@ngInject*/
-  constructor($http, envService, hateoasHelperService){
+  constructor($http, $log, envService, hateoasHelperService){
     this.$http = $http;
+    this.$log = $log;
     this.envService = envService;
     this.hateoasHelperService = hateoasHelperService;
     this.scope = cortexScope;
   }
 
   http(config){
+    if(isEmpty(config.path)){
+      const errorMessage = 'The requested path is empty. cortexApiService is unable to send the request.';
+      this.$log.error(errorMessage);
+      return Observable.throw(errorMessage);
+    }
+
     config.params = config.params || {};
     if(config.zoom){
       config.params.zoom = this.hateoasHelperService.serializeZoom(config.zoom);

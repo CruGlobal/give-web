@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 'angular-gettext';
 import 'angular-ordinal';
 
 import indexOf from 'lodash/indexOf';
@@ -15,53 +14,49 @@ import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component';
 
-let controllerName = 'productConfigController';
-export let giveGiftParams = {
+import template from './productConfig.modal.tpl';
+
+const componentName = 'productConfigModal';
+
+export const giveGiftParams = {
   designation: 'd',
   amount:      '$',
   frequency:   'f',
   day:         'dd'
 };
 
-class ModalInstanceCtrl {
+class ProductConfigModalController {
 
   /* @ngInject */
-  constructor( $location, $scope, $log, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, suggestedAmounts, itemConfig, isEdit, uri ) {
+  constructor( $location, $scope, $log, designationsService, cartService, modalStateService ) {
     this.$location = $location;
     this.$scope = $scope;
     this.$log = $log;
-    this.gettext = gettext;
-    this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.modalStateService = modalStateService;
     this.possibleTransactionDays = possibleTransactionDays;
     this.startDate = startDate;
 
-    this.productData = productData;
-    this.nextDrawDate = nextDrawDate;
-    this.itemConfig = itemConfig;
-    this.isEdit = isEdit;
-    this.uri = uri;
-    this.suggestedAmounts = suggestedAmounts;
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
   }
 
-  $onInit() {
-    if ( this.isEdit ) {
-      this.submitLabel = this.gettext( 'Update Gift' );
-    } else {
-      this.submitLabel = this.gettext( 'Add to Gift Cart' );
-      this.initializeParams();
-    }
+  $onInit(){
+    this.productData = this.resolve.productData;
+    this.itemConfig = this.resolve.itemConfig;
+    this.isEdit = this.resolve.isEdit;
+    this.uri =  this.resolve.uri;
+    this.suggestedAmounts =  this.resolve.suggestedAmounts;
+    this.nextDrawDate = this.resolve.nextDrawDate;
+
+    !this.isEdit && this.initializeParams();
 
     if( this.suggestedAmounts.length > 0 ) {
       this.customInputActive = true;
       this.customAmount = (map(this.suggestedAmounts, 'amount').indexOf(this.itemConfig.amount) === -1) ?
         this.suggestedAmounts[0].amount : this.itemConfig.amount;
       this.changeCustomAmount(this.customAmount);
-    }
-    else {
+    } else {
       if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
         this.customAmount = this.itemConfig.amount;
         this.customInputActive = true;
@@ -183,10 +178,10 @@ class ModalInstanceCtrl {
     savingObservable.subscribe( () => {
       if ( this.isEdit ) {
         this.$scope.$emit( cartUpdatedEvent );
-        this.$uibModalInstance.close( {isUpdated: true} );
+        this.close( {isUpdated: true} );
       } else {
         this.$scope.$emit( giftAddedEvent );
-        this.$uibModalInstance.dismiss();
+        this.dismiss();
       }
       this.submittingGift = false;
     }, (error) => {
@@ -198,8 +193,8 @@ class ModalInstanceCtrl {
 }
 
 export default angular
-  .module( controllerName, [
-    'gettext',
+  .module( componentName, [
+    template.name,
     'ordinal',
     designationsService.name,
     cartService.name,
@@ -207,4 +202,12 @@ export default angular
     desigSrcDirective.name,
     showErrors.name
   ] )
-  .controller( controllerName, ModalInstanceCtrl );
+  .component( componentName, {
+    controller:  ProductConfigModalController,
+    templateUrl: template.name,
+    bindings:    {
+      resolve: '<',
+      close: '&',
+      dismiss: '&'
+    }
+  } );

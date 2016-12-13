@@ -1,3 +1,7 @@
+<i class="fa fa-exclamation-triangle text-danger"
+   ng-if="$ctrl.error"
+   uib-tooltip="{{'Error setting up gift. You may be able to try again. If you continue to experience issues, contact support.' | translate}}">
+</i>
 <button class="btn btn-primary btn-{{$ctrl.buttonSize}}" ng-click="$ctrl.configModal()" ng-disabled="$ctrl.loadingModal">
   <span ng-if="!$ctrl.loadingModal">{{$ctrl.buttonLabel}}</span>
   <span ng-if="$ctrl.loadingModal">Loading...</span>
