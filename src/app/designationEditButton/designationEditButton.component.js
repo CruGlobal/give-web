@@ -1,5 +1,6 @@
 import angular from 'angular';
-import sessionService from 'common/services/session/session.service';
+import includes from 'lodash/includes';
+import sessionService, {Roles} from 'common/services/session/session.service';
 import designationEditorService from 'common/services/api/designationEditor.service';
 
 import template from './designationEditButton.tpl';
@@ -15,7 +16,7 @@ class DesignationEditButtonController {
   }
 
   $onInit() {
-    if(this.designationNumber && this.sessionService.getRole() === 'REGISTERED'){
+    if(this.designationNumber && includes([Roles.identified, Roles.registered], this.sessionService.getRole())){
       this.designationEditorService.getContent(this.designationNumber, this.campaignPage).then(() => {
         this.showEditButton = true;
       });
