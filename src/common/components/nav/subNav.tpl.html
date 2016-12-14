@@ -11,7 +11,8 @@
 
     <ul class="sub-nav" ng-class="{'mobile-sub-nav': $ctrl.menuType === 'mobile'}">
       <li>
-        <a ng-href="{{$ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].path}}" translate>
+        <a ng-href="{{$ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].path}}"
+           ng-class="{'active': $ctrl.menuPath.currentPage === ''}" translate>
           Home
         </a>
       </li>
