@@ -38,11 +38,8 @@
   </div>
 
   <div class="row repeating-row sub-total" ng-if="$ctrl.hasItems">
-    <div class="col-xs-4">
-      <p translate>{{$ctrl.cartData.items.length}} Items</p>
-    </div>
-    <div class="col-xs-8 text-right">
-      <p translate>Subtotal {{$ctrl.cartData.cartTotal | currency:'$'}}</p>
+    <div class="col-xs-12 text-right">
+      <p translate translate-n="$ctrl.cartData.items.length" translate-plural="{{$count}} Items">1 Item</p>
     </div>
   </div>
   <div class="row row-no-spacing" ng-if="$ctrl.hasItems || $ctrl.error"><!-- TODO: row-no-spacing not in nav css -->
