@@ -448,7 +448,7 @@ describe( 'product config modal', function () {
           'recurring-day-of-month': '01'
         } );
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
-        expect( $ctrl.close ).toHaveBeenCalledWith( {isUpdated: true} );
+        expect( $ctrl.close ).toHaveBeenCalledWith();
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
         expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
@@ -460,7 +460,7 @@ describe( 'product config modal', function () {
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith( 'uri', 'items/crugive/<some id>', {amount: 85} );
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
-        expect( $ctrl.close ).toHaveBeenCalledWith( {isUpdated: true} );
+        expect( $ctrl.close ).toHaveBeenCalledWith();
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
         expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );

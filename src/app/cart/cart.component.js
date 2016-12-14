@@ -74,11 +74,9 @@ class CartController {
     this.productModalService
       .configureProduct( item.code, item.config, true, item.uri )
       .result
-      .then( ( result ) => {
-        if ( result.isUpdated ) {
-          pull(this.cartData.items, item);
-          this.loadCart(true);
-        }
+      .then( () => {
+        pull(this.cartData.items, item);
+        this.loadCart(true);
       } );
   }
 

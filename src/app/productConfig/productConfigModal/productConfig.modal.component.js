@@ -193,7 +193,7 @@ class ProductConfigModalController {
     savingObservable.subscribe( () => {
       if ( this.isEdit ) {
         this.$scope.$emit( cartUpdatedEvent );
-        this.close( {isUpdated: true} );
+        this.close();
       } else {
         this.$scope.$emit( giftAddedEvent );
         this.dismiss();
