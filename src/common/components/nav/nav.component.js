@@ -64,6 +64,7 @@ class NavController{
           path: '/',
           children: structure.give
         }];
+        this.menuPath.sub = ['give'];
       }else{
         this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
       }
