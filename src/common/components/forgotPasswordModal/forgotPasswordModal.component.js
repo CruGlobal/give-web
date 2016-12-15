@@ -32,16 +32,16 @@ class ForgotPasswordModalController {
       .subscribe( () => {
         this.emailSent = true;
         this.isLoading = false;
-      }, ( error ) => {
+      }, error => {
         this.forgotError = true;
         this.isLoading = false;
-        switch ( error.data.error ) {
+        switch ( error.data && error.data.error ) {
           case 'user_not_found':
           case 'password_cant_change':
             this.errors[error.data.error] = true;
             break;
           default:
-            this.errors['unknown'] = true;
+            this.errors.unknown = true;
         }
       } );
   }

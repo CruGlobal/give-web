@@ -81,6 +81,14 @@ describe( 'forgotPasswordModal', function () {
           expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {unknown: true} ) );
         } );
       } );
+      describe( 'no response body', () => {
+        it( 'sets \'unknown\' error', () => {
+          deferred.reject( {status: -1 } );
+          $rootScope.$digest();
+          expect( $ctrl.forgotError ).toEqual( true );
+          expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {unknown: true} ) );
+        } );
+      } );
     } );
   } );
 
