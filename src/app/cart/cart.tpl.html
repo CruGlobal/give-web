@@ -72,15 +72,15 @@
                   </tbody>
                   <tfoot>
                   <tr>
-                    <td colspan="4" class="text-right">
+                    <td colspan="4">
                       <loading inline="true" class="mb-- text-right" ng-if="$ctrl.updating">
                         <translate>Updating cart...</translate>
                       </loading>
+                      <div class="checkout-cart-summary pull-left">
+                        <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
+                      </div>
                       <div class="checkout-cta pull-right">
                         <a href ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
-                      </div>
-                      <div class="checkout-cart-summary pull-right">
-                        <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
                       </div>
                     </td>
                   </tr>

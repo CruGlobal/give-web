@@ -153,14 +153,14 @@
           </tbody>
           <tfoot>
           <tr>
-            <td colspan="3" class="text-right">
+            <td colspan="3">
+              <div class="checkout-cart-summary pull-left">
+                <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
+              </div>
               <div class="checkout-cta pull-right">
                 <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!$ctrl.canSubmitOrder()">
                   Submit Your Gift
                 </button>
-              </div>
-              <div class="checkout-cart-summary pull-right">
-                <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
               </div>
             </td>
           </tr>
