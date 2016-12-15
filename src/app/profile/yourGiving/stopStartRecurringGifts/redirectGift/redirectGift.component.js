@@ -7,6 +7,8 @@ import redirectGiftStep1 from './step1/redirectGiftStep1.component';
 import redirectGiftStep2 from './step2/redirectGiftStep2.component';
 import redirectGiftStep3 from './step3/redirectGiftStep3.component';
 
+import {scrollModalToTop} from 'common/services/modalState.service';
+
 let componentName = 'redirectGift';
 
 class RedirectGiftController {
@@ -14,6 +16,7 @@ class RedirectGiftController {
   /* @ngInject */
   constructor( donationsService ) {
     this.donationsService = donationsService;
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit() {
@@ -23,6 +26,7 @@ class RedirectGiftController {
 
   setStep( step ) {
     this.step = step;
+    this.scrollModalToTop();
   }
 
   previous() {
@@ -37,6 +41,7 @@ class RedirectGiftController {
       default:
         this.changeState( {state: 'step-0'} );
     }
+    this.scrollModalToTop();
   }
 
   loadRecurringGifts() {

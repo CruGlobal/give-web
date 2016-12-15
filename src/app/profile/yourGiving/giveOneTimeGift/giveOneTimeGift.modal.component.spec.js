@@ -30,6 +30,9 @@ describe('giveOneTimeGiftModal', () => {
   });
 
   describe('loadRecentRecipients', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'next');
+    });
     it('should load recent recipients', () => {
       spyOn(self.controller.donationsService, 'getRecentRecipients').and.returnValue(Observable.of([ { 'designation-name': 'Staff Member', 'designation-number': '0123456' } ]));
       self.controller.loadRecentRecipients();
@@ -37,16 +40,27 @@ describe('giveOneTimeGiftModal', () => {
         { 'designation-name': 'Staff Member', 'designation-number': '0123456' }
       )).setDefaultsSingleGift() ] );
       expect(self.controller.hasRecentRecipients).toEqual(true);
+      expect(self.controller.next).toHaveBeenCalled();
     });
     it('should handle an error loading recent recipients', () => {
       spyOn(self.controller.donationsService, 'getRecentRecipients').and.returnValue(Observable.throw('some error'));
       self.controller.loadRecentRecipients();
       expect(self.controller.recentRecipients).toEqual([]);
       expect(self.controller.$log.error.logs[0]).toEqual( [ 'Error loading recent recipients', 'some error' ] );
+      expect(self.controller.next).not.toHaveBeenCalled();
     });
   });
 
   describe('next', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'scrollModalToTop');
+    });
+
+    it('should scroll to the top of the modal', () => {
+      self.controller.next();
+      expect(self.controller.scrollModalToTop).toHaveBeenCalled();
+    });
+
     it('should transition from loadingRecentRecipients to step1SelectRecentRecipients', () => {
       self.controller.state = 'loadingRecentRecipients';
       self.controller.hasRecentRecipients = true;
@@ -109,6 +123,13 @@ describe('giveOneTimeGiftModal', () => {
   });
 
   describe('previous', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'scrollModalToTop');
+    });
+    it('should scroll to the top of the modal', () => {
+      self.controller.previous();
+      expect(self.controller.scrollModalToTop).toHaveBeenCalled();
+    });
     it('should transition from step2EnterAmounts to step1SelectRecentRecipients if there are recent recipients', () => {
       self.controller.state = 'step2EnterAmounts';
       self.controller.hasRecentRecipients = true;

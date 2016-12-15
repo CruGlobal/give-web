@@ -12,6 +12,7 @@ import find from 'lodash/find';
 import forEach from 'lodash/forEach';
 
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 let componentName = 'deletePaymentMethodModal';
 
@@ -33,6 +34,7 @@ class deletePaymentMethodModalController {
       error: ''
     };
     this.monthNames = moment.months();
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit() {
@@ -59,6 +61,7 @@ class deletePaymentMethodModalController {
         this.confirmText = 'withOutTransfer';
       break;
     }
+    this.scrollModalToTop();
   }
 
   setView(){
