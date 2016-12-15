@@ -16,6 +16,15 @@ describe( 'sessionModalController', function () {
   } ) );
 
   describe( '$ctrl.stateChanged', () => {
+    beforeEach(() => {
+      spyOn($ctrl, 'scrollModalToTop');
+    });
+
+    it('should scroll to the top of the modal', () => {
+      $ctrl.stateChanged();
+      expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+    });
+
     it( 'should be defined', () => {
       expect( $ctrl.stateChanged ).toBeDefined();
       expect( $ctrl.state ).toEqual( 'sign-in' );

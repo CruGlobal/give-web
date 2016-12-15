@@ -10,7 +10,7 @@ import module from './editRecurringGifts.modal.component';
 
 describe('edit recurring gifts modal', () => {
   beforeEach(angular.mock.module(module.name));
-  var self = {};
+  let self = {};
 
   beforeEach(inject(($componentController) => {
     self.controller = $componentController(module.name, {}, {
@@ -149,6 +149,13 @@ describe('edit recurring gifts modal', () => {
   });
 
   describe('next', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'scrollModalToTop');
+    });
+    it('should scroll to the top of the modal', () => {
+      self.controller.next();
+      expect(self.controller.scrollModalToTop).toHaveBeenCalled();
+    });
     it('should transition from loading to step1EditRecurringGifts', () => {
       self.controller.state = 'loading';
       self.controller.hasValidPaymentMethods = true;
@@ -225,6 +232,13 @@ describe('edit recurring gifts modal', () => {
   });
 
   describe('previous', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'scrollModalToTop');
+    });
+    it('should scroll to the top of the modal', () => {
+      self.controller.previous();
+      expect(self.controller.scrollModalToTop).toHaveBeenCalled();
+    });
     it('should transition from step4Confirm to step3ConfigureRecentRecipients', () => {
       self.controller.state = 'step4Confirm';
       self.controller.additions = ['some additions'];

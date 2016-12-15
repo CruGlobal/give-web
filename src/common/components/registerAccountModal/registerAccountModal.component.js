@@ -4,6 +4,7 @@ import template from './registerAccountModal.tpl';
 import orderService from 'common/services/api/order.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
 import verificationService from 'common/services/api/verification.service';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import signInModal from 'common/components/signInModal/signInModal.component';
 import signUpModal from 'common/components/signUpModal/signUpModal.component';
@@ -27,6 +28,7 @@ class RegisterAccountModalController {
     this.sessionService = sessionService;
     this.verificationService = verificationService;
     this.gettext = gettext;
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit() {
@@ -101,6 +103,7 @@ class RegisterAccountModalController {
     }
     this.state = state;
     this.setLoading( {loading: false} );
+    this.scrollModalToTop();
   }
 
   setModalSize( size ) {

@@ -17,6 +17,7 @@ import profileService from 'common/services/api/profile.service';
 import donationsService from 'common/services/api/donations.service';
 import commonService from 'common/services/api/common.service';
 import validPaymentMethods from 'common/services/paymentHelpers/validPaymentMethods';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import template from './editRecurringGifts.modal.tpl';
 
@@ -30,6 +31,7 @@ class EditRecurringGiftsModalController {
     this.profileService = profileService;
     this.donationsService = donationsService;
     this.commonService = commonService;
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit(){
@@ -112,6 +114,7 @@ class EditRecurringGiftsModalController {
         this.close();
         break;
     }
+    this.scrollModalToTop();
   }
 
   previous(){
@@ -136,6 +139,7 @@ class EditRecurringGiftsModalController {
         this.state = 'step0PaymentMethodList';
         break;
     }
+    this.scrollModalToTop();
   }
 
 }

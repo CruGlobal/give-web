@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './modalState.service';
+import module, {scrollModalToTop} from './modalState.service';
 
 describe( 'modalStateServiceProvider', () => {
   beforeEach( angular.mock.module( module.name ) );
@@ -81,6 +81,28 @@ describe( 'modalStateService', () => {
       expect( modalStateService.urlFor( 'test-modal' ) ).toEqual( 'http://server/?modal=test-modal' );
       expect( modalStateService.urlFor( 'test-modal', {key: 'value'}, 'http://localhost/cart.html' ) )
         .toEqual( 'http://localhost/cart.html?key=value&modal=test-modal' );
+    } );
+  } );
+
+  describe( 'scrollModalToTop', () => {
+    it( 'scrolls .modal to top', () => {
+      /* eslint-disable angular/document-service */
+      let element = { scrollTop: 5 };
+      spyOn(window.document, 'querySelector').and.returnValue(element);
+      scrollModalToTop();
+      expect(window.document.querySelector).toHaveBeenCalledWith('.modal');
+      expect(element).toEqual({ scrollTop: 0 });
+      /* eslint-enable angular/document-service */
+    } );
+    
+    it( 'completes gracefully even when a modal isn\'t found in the DOM', () => {
+      /* eslint-disable angular/document-service */
+      let element = null;
+      spyOn(window.document, 'querySelector').and.returnValue(element);
+      scrollModalToTop();
+      expect(window.document.querySelector).toHaveBeenCalledWith('.modal');
+      expect(element).toEqual(null);
+      /* eslint-enable angular/document-service */
     } );
   } );
 } );

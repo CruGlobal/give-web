@@ -244,9 +244,17 @@ describe( 'your giving', () => {
       } );
 
       describe( 'next( selected, configured )', () => {
+        beforeEach(() => {
+          spyOn($ctrl, 'scrollModalToTop');
+        });
         afterEach( () => {
           expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
         } );
+
+        it('should scroll to the top of the modal', () => {
+          $ctrl.next();
+          expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+        });
 
         describe( 'step = \'loading\'', () => {
           beforeEach( () => {
@@ -439,7 +447,13 @@ describe( 'your giving', () => {
             suggested: [],
             search:    []
           };
+          spyOn($ctrl, 'scrollModalToTop');
         } );
+
+        it('should scroll to the top of the modal', () => {
+          $ctrl.previous();
+          expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+        });
 
         describe( 'step = \'confirm\'', () => {
           it( 'sets step to \'configure\'', () => {

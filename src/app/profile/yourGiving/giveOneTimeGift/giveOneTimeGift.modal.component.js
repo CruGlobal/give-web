@@ -11,6 +11,7 @@ import RecurringGiftModel from 'common/models/recurringGift.model';
 
 import donationsService from 'common/services/api/donations.service';
 import cartService from 'common/services/api/cart.service';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import template from './giveOneTimeGift.modal.tpl';
 
@@ -26,6 +27,7 @@ class GiveOneTimeGiftModalController {
     this.cartService = cartService;
     this.recentRecipients = [];
     this.selectedRecipients = [];
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit(){
@@ -76,6 +78,7 @@ class GiveOneTimeGiftModalController {
         this.addSelectedRecipientsToCart();
         break;
     }
+    this.scrollModalToTop();
   }
 
   previous(){
@@ -92,6 +95,7 @@ class GiveOneTimeGiftModalController {
         this.state = 'step1SelectRecentRecipients';
         break;
     }
+    this.scrollModalToTop();
   }
 
   addSelectedRecipientsToCart(){

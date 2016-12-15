@@ -20,7 +20,7 @@
           <p ng-switch-default translate>There was an error saving your gifts. Please check that all the entered information is valid and that you have a good internet connection. If you continue to see this message, please contact support.</p>
         </div>
         <div class="alert alert-warning" role="alert" ng-if="!$ctrl.hasChanges">
-          <p translate>You don't appear to have made any changes to your recurring gifts. Feel free to go back and make some changes.</p>
+          <p translate>You haven't made any changes to your recurring gifts. Feel free to go back and make some changes.</p>
         </div>
         <div ng-repeat="gift in $ctrl.recurringGiftChanges" class="row repeating-row user-profile">
           <gift-list-item gift="gift">

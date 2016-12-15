@@ -158,7 +158,13 @@ describe( 'registerAccountModal', function () {
     beforeEach( () => {
       $ctrl.state = 'unknown';
       spyOn( $ctrl, 'setModalSize' );
+      spyOn($ctrl, 'scrollModalToTop');
     } );
+
+    it('should scroll to the top of the modal', () => {
+      $ctrl.stateChanged();
+      expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+    });
 
     it( 'changes to \'sign-in\' state', () => {
       $ctrl.stateChanged( 'sign-in' );

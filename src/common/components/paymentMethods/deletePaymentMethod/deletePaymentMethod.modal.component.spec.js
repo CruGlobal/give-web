@@ -62,6 +62,13 @@ describe( 'delete payment method modal', function () {
     } );
 
     describe( 'changeView()', () => {
+      beforeEach(() => {
+        spyOn(self.controller, 'scrollModalToTop');
+      });
+      it('should scroll to the top of the modal', () => {
+        self.controller.changeView();
+        expect(self.controller.scrollModalToTop).toHaveBeenCalled();
+      });
       it( 'should reset the view', () => {
         spyOn( self.controller, 'setView' );
         self.controller.changeView(true);
@@ -275,6 +282,10 @@ describe( 'delete payment method modal', function () {
   } );
 
   describe( 'savePaymentMethod()', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'changeView');
+    });
+
     it('should save new payment method', () => {
       let data = {
         self: {
@@ -291,12 +302,14 @@ describe( 'delete payment method modal', function () {
       spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of(data));
       self.controller.savePaymentMethod(true, true);
       expect(self.controller.profileService.addPaymentMethod).toHaveBeenCalled();
+      expect(self.controller.changeView).toHaveBeenCalled();
     });
 
     it('should not make a call', () => {
       spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of({}));
       self.controller.savePaymentMethod(false);
       expect(self.controller.profileService.addPaymentMethod).not.toHaveBeenCalled();
+      expect(self.controller.changeView).not.toHaveBeenCalled();
     });
 
     it('should fail and throw error', () => {
@@ -305,6 +318,7 @@ describe( 'delete payment method modal', function () {
       }));
       self.controller.savePaymentMethod(true, true);
       expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.changeView).not.toHaveBeenCalled();
     });
   } );
 

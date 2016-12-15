@@ -57,6 +57,12 @@ function modalStateServiceRunner( modalStateService ) {
   }
 }
 
+export function scrollModalToTop(){
+  // eslint-disable-next-line angular/document-service
+  const element = window.document.querySelector('.modal');
+  element && (element.scrollTop = 0);
+}
+
 export default angular
   .module( serviceName, [] )
   .provider( serviceName, ModalStateService )

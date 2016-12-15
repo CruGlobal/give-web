@@ -3,6 +3,7 @@ import template from './stopGift.tpl';
 import map from 'lodash/map';
 
 import donationsService from 'common/services/api/donations.service';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import stopGiftStep1 from './step1/stopGiftStep1.component';
 import stopGiftStep2 from './step2/stopGiftStep2.component';
@@ -14,6 +15,7 @@ class StopGiftController {
   /* @ngInject */
   constructor( donationsService ) {
     this.donationsService = donationsService;
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit() {
@@ -23,6 +25,7 @@ class StopGiftController {
 
   setStep( step ) {
     this.step = step;
+    this.scrollModalToTop();
   }
 
   previous() {
@@ -34,6 +37,7 @@ class StopGiftController {
       default:
         this.changeState( {state: 'step-0'} );
     }
+    this.scrollModalToTop();
   }
 
   loadRecurringGifts() {
