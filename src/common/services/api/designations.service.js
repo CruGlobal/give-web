@@ -92,7 +92,7 @@ class DesignationsService {
     })).map((response) => {
       return map(response.data.hits, (hit) => {
         return {
-          path: hit.path ? hit.path.replace('https://stage.cru.org/content/give/us/en', 'https://give-stage2.cru.org') : null,
+          path: hit.path ? hit.path.replace('https://stage.cru.org/content/give/us/en', '') : null,
           designationNumber: hit.designation_number || null,
           replacementDesignationNumber: hit.replacement_designation_number || null,
           name: hit.title || hit.description || null,
