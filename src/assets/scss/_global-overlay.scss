@@ -19,6 +19,15 @@
     }
 }
 
+#globalWebsites-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
 @include mq(767px, max) {
     #js-globalWebsites {display: none !important;}
@@ -122,7 +131,8 @@
 
 .globalWebsites-countries {
     padding-left: 44px;
-    padding-top: 64px !important;
+    padding-top: 0 !important;
+    padding-bottom: 75vh;
 
     h1 {
         color: $colorGrayscale-pebble;
