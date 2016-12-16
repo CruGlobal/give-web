@@ -22,6 +22,7 @@ describe('globalWebsitesModal', () => {
       let element = {id: 'container'};
       spyOn(document, 'getElementById').and.returnValue(element);
       self.controller.$onInit();
+      // eslint-disable-next-line angular/document-service
       expect(document.getElementById).toHaveBeenCalledWith('globalWebsites-modal');
       expect(self.controller.container).toBeDefined();
     });
@@ -33,6 +34,7 @@ describe('globalWebsitesModal', () => {
       spyOn(document, 'getElementById').and.returnValue(element);
       self.controller.container = jasmine.createSpyObj('container', ['scrollTo']);
       self.controller.scrollTo('globalWebsites-continent--africa');
+      // eslint-disable-next-line angular/document-service
       expect(document.getElementById).toHaveBeenCalledWith('globalWebsites-continent--africa');
       expect(self.controller.container.scrollTo).toHaveBeenCalledWith(jasmine.anything(), 0, 300);
     });
