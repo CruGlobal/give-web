@@ -38,7 +38,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .get( {
         path: path,
         zoom: {
-          recipients: 'element[],element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement[]'
+          recipients: 'element[],element:mostrecentdonation,element:recurringdonations'
         }
       } )
       .pluck( 'recipients' );
@@ -60,7 +60,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .get( {
         path: ['donations', 'historical', cortexApiService.scope, year, month],
         zoom: {
-          gifts: 'element[],element:paymentmethod,element:recurringdonationelement'
+          gifts: 'element[],element:paymentmethod,element:recurringdonations'
         }
       } )
       .pluck( 'gifts' );

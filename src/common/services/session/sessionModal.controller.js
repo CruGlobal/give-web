@@ -9,6 +9,8 @@ import contactInfoModal from 'common/components/contactInfoModal/contactInfoModa
 import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component';
 import registerAccountModal from 'common/components/registerAccountModal/registerAccountModal.component';
 
+import {scrollModalToTop} from 'common/services/modalState.service';
+
 let controllerName = 'sessionModalController';
 
 class SessionModalController {
@@ -18,11 +20,13 @@ class SessionModalController {
     this.$uibModalInstance = $uibModalInstance;
     this.sessionService = sessionService;
     this.isLoading = false;
+    this.scrollModalToTop = scrollModalToTop;
     this.stateChanged( state );
   }
 
   stateChanged( state ) {
     this.state = state;
+    this.scrollModalToTop();
   }
 
   onSignInSuccess() {

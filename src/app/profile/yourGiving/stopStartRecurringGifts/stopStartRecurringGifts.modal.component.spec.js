@@ -27,8 +27,12 @@ describe( 'stopStartRecurringGiftsModal', () => {
   describe( 'changeState( state )', () => {
     beforeEach( () => {
       $ctrl.state = 'step-0';
-    } );
-
+      spyOn($ctrl, 'scrollModalToTop');
+    });
+    it('should scroll to the top of the modal', () => {
+      $ctrl.changeState();
+      expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+    });
     it( 'changes state', () => {
       $ctrl.changeState( 'stop' );
       expect( $ctrl.state ).toEqual( 'stop' );

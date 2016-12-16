@@ -23,6 +23,7 @@ import addUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
 import validPaymentMethods from 'common/services/paymentHelpers/validPaymentMethods';
 import step0PaymentMethodList from 'src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.component';
 
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 
@@ -35,6 +36,7 @@ class RestartGiftController {
     this.donationsService = donationsService;
     this.profileService = profileService;
     this.commonService = commonService;
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit() {
@@ -151,6 +153,7 @@ class RestartGiftController {
           this.step = 'search';
         }
     }
+    this.scrollModalToTop();
   }
 
   configureGifts() {
@@ -193,6 +196,7 @@ class RestartGiftController {
         }
         break;
     }
+    this.scrollModalToTop();
   }
 }
 

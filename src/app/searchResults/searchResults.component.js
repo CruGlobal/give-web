@@ -14,9 +14,10 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor($window, $location, designationsService) {
+  constructor($window, $location, $log, designationsService) {
     this.$window = $window;
     this.$location = $location;
+    this.$log = $log;
     this.designationsService = designationsService;
     this.searchParams = {};
   }
@@ -29,6 +30,7 @@ class SearchResultsController {
     this.searchParams.last_name = params.lName;
     this.showAdvancedSearch = !params.q && !params.fName && !params.lName;
     this.searchParams.type = params.type;
+    this.featuredGroupBy = 'startMonth';
 
     this.requestSearch(this.searchParams.type);
   }
@@ -36,16 +38,22 @@ class SearchResultsController {
   requestSearch(type){
     this.searchParams.type = type;
 
-    this.loadingResults = true;
-    this.designationsService.productSearch(this.searchParams)
-      .subscribe((results) => {
-        if(!results.length && this.searchParams.type === 'ministries'){
-          this.searchResults = ministries;
-        }else{
+    if(!this.searchParams.keyword && this.searchParams.type === 'ministries'){
+      this.searchResults = ministries;
+    }else{
+      this.loadingResults = true;
+      this.searchError = false;
+      this.designationsService.productSearch(this.searchParams)
+        .subscribe((results) => {
           this.searchResults = results;
-        }
-        this.loadingResults = false;
-      });
+          this.loadingResults = false;
+        }, (error) => {
+          this.searchResults = null;
+          this.searchError = true;
+          this.loadingResults = false;
+          this.$log.error('Error loading search results', error);
+        });
+    }
   }
 
   exploreSearch(){

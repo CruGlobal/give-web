@@ -35,9 +35,9 @@ class ProductConfigController {
     modalInstance.result.then( () => {
         this.$window.location = '/cart.html';
       },
-      error => {
-        if(error){
-          this.$log.error('Error opening product config modal', error);
+      reason => {
+        if(reason && reason !== 'backdrop click'){ // Avoid labeling normal closes or backdrop clicks as errors
+          this.$log.error('Error opening product config modal', reason);
           this.error = true;
         }
         this.loadingModal = false;

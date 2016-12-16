@@ -34,6 +34,13 @@ describe( 'your giving', () => {
       } );
 
       describe( 'setStep( step )', () => {
+        beforeEach(() => {
+          spyOn($ctrl, 'scrollModalToTop');
+        });
+        it('should scroll to the top of the modal', () => {
+          $ctrl.setStep();
+          expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+        });
         it( 'sets the current step', () => {
           expect( $ctrl.step ).not.toBeDefined();
           $ctrl.setStep( 'step-1' );
@@ -42,6 +49,13 @@ describe( 'your giving', () => {
       } );
 
       describe( 'previous()', () => {
+        beforeEach(() => {
+          spyOn($ctrl, 'scrollModalToTop');
+        });
+        it('should scroll to the top of the modal', () => {
+          $ctrl.previous();
+          expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+        });
         describe( 'undefined current step', () => {
           it( 'changes step to \'step-0\'', () => {
             $ctrl.previous();

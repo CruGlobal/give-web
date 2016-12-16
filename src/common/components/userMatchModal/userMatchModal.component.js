@@ -20,10 +20,12 @@ class UserMatchModalController {
 
   $onInit() {
     this.setLoading( {loading: true} );
+    this.skippedQuestions = false;
     this.modalTitle = this.gettext( 'Activate your Account' );
     this.profileService.getDonorDetails().subscribe( ( donorDetails ) => {
       if ( angular.isDefined( donorDetails['registration-state'] ) ) {
         if ( donorDetails['registration-state'] === 'COMPLETED' ) {
+          this.skippedQuestions = true;
           this.changeMatchState( 'success' );
         } else {
           this.verificationService.getContacts().subscribe( ( contacts ) => {
@@ -65,7 +67,7 @@ class UserMatchModalController {
     }
     else {
       this.verificationService.thatIsNotMe().subscribe( () => {
-        // TODO: this-is-not-me=true
+        this.skippedQuestions = true;
         this.changeMatchState( 'success' );
       } );
     }

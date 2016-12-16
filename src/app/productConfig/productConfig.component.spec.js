@@ -75,6 +75,24 @@ describe( 'productConfig', function () {
       expect( $ctrl.loadingModal ).toEqual( false );
       expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error opening product config modal', 'some error'] );
     } );
+
+    it( 'should not throw an error when the modal gets dismissed normally', () => {
+      $ctrl.configModal();
+      resultDeferred.reject();
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( false );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
+    } );
+
+    it( 'should not throw an error when the modal gets dismissed by a background click', () => {
+      $ctrl.configModal();
+      resultDeferred.reject('backdrop click');
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( false );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
+    } );
   } );
 } );
 
