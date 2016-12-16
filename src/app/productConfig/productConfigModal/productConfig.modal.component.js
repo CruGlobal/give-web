@@ -138,6 +138,7 @@ class ProductConfigModalController {
 
   changeFrequency( product ) {
     this.errorAlreadyInCart = false;
+    this.changingFrequency = true;
     this.errorChangingFrequency = false;
     const lastFrequency = this.productData.frequency;
     this.productData.frequency = product.name;
@@ -147,12 +148,14 @@ class ProductConfigModalController {
         .subscribe(data => {
             this.itemConfigForm.$setDirty();
             this.productData = data;
+            this.changingFrequency = false;
           },
           error => {
             this.$log.error('Error loading new product when changing frequency', error);
             this.errorChangingFrequency = true;
             this.productData.frequency = lastFrequency;
             if (!this.isEdit) this.$location.search(giveGiftParams.frequency, lastFrequency);
+            this.changingFrequency = false;
           });
     }
   }

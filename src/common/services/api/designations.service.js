@@ -108,7 +108,7 @@ class DesignationsService {
   productLookup(query, selectQuery){
     const zoomObj = {
       code: 'code',
-      definition: 'definition,definition:options:element:selector:chosen:description',
+      definition: 'definition',
       choices: 'definition:options:element:selector:choice[],definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction',
       chosen: 'definition:options:element:selector:chosen,definition:options:element:selector:chosen:description'
     };
@@ -127,7 +127,7 @@ class DesignationsService {
       zoom: zoomObj
     });
 
-    return httpRequest.map((data) => {
+    return httpRequest.map(data => {
       const choices = map(data.choices.concat(data.chosen), (choice) => {
         return {
           name: choice.description.name,
