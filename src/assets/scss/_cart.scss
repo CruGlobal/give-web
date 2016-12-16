@@ -97,15 +97,27 @@
         width: 100%;
         border: none;
       }
+      @include mq(500px, max) {
+        td {
+          text-align: center;
+          .btn {
+            display: block;
+          }
+          .pull-left, .pull-right {
+            float: none !important;
+          }
+          .checkout-cta {
+            margin-top: 16px;
+          }
+        }
+      }
       td {
-        padding-top: 40px;
+        padding: 40px 0 0;
         vertical-align: middle;
         @include respond-to(extrasmall) {
           display: block;
           width: 100%;
           border: none;
-          padding-top: 8px;
-          text-align: center;
         }
       }
       .checkout-cta {
@@ -115,18 +127,6 @@
           margin-left: 0;
         }
       }
-    }
-  }
-  .mobile-footer-persist {
-    @include respond-to(extrasmall) {
-      position: fixed;
-      bottom: 0;
-      background: #fff;
-      width: 100%;
-      left: 0;
-      z-index: 100;
-      box-shadow: 0 0 18px rgba(0, 0, 0, 0.35);
-      border: none;
     }
   }
   .giftsum-line {
