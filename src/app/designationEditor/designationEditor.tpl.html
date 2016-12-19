@@ -72,11 +72,11 @@
                  ng-if="$ctrl.photoUrl($ctrl.designationContent.signaturePhoto)"
                  class="signature-image">
 
-            <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editText('signatureText')">
+            <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editText('psText')">
               <i class="fa fa-pencil"></i>
             </a>
-            <div ng-bind-html="$ctrl.designationContent.signatureText"></div>
-            <p ng-if="!$ctrl.designationContent.signatureText">
+            <div ng-bind-html="$ctrl.designationContent.psText"></div>
+            <p ng-if="!$ctrl.designationContent.psText">
               <i translate>Signature text</i>
             </p>
           </div>
