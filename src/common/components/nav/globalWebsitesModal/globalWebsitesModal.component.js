@@ -1,32 +1,31 @@
 import angular from 'angular';
+import 'angular-scroll';
 
 import template from './globalWebsitesModal.tpl';
 
 let componentName = 'globalWebsitesModal';
 
 class GlobalWebsitesModalController {
-
-  /* @ngInject */
-  constructor($anchorScroll, $location) {
-    this.$anchorScroll = $anchorScroll;
-    this.$location = $location;
-    this.country = 'africa';
+  $onInit() {
+    // eslint-disable-next-line angular/document-service
+    this.container = angular.element(document.getElementById('globalWebsites-modal'));
   }
 
   scrollTo(id) {
-    this.country = id;
-    this.$location.hash(this.getContinentId(id));
-    this.$anchorScroll();
+    // eslint-disable-next-line angular/document-service
+    let element = angular.element(document.getElementById(id));
+    this.container.scrollTo(element, 0, 300);
   }
 
   getContinentId(id) {
-    return id.replace('/','');
+    return `globalWebsites-continent--${id.replace('/', '')}`;
   }
 }
 
 export default angular
   .module(componentName, [
-    template.name
+    template.name,
+    'duScroll'
   ])
   .component(componentName, {
     controller: GlobalWebsitesModalController,

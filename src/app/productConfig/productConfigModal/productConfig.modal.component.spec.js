@@ -276,6 +276,10 @@ describe( 'product config modal', function () {
       $ctrl.errorAlreadyInCart = true;
     } );
 
+    afterEach(() => {
+      expect($ctrl.changingFrequency).toEqual(false);
+    });
+
     describe( 'isEdit = true', () => {
       beforeEach( () => {
         $ctrl.isEdit = true;

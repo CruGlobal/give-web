@@ -38,22 +38,22 @@ class SearchResultsController {
   requestSearch(type){
     this.searchParams.type = type;
 
-    this.loadingResults = true;
-    this.searchError = false;
-    this.designationsService.productSearch(this.searchParams)
-      .subscribe((results) => {
-        if(!results.length && this.searchParams.type === 'ministries'){
-          this.searchResults = ministries;
-        }else{
+    if(!this.searchParams.keyword && this.searchParams.type === 'ministries'){
+      this.searchResults = ministries;
+    }else{
+      this.loadingResults = true;
+      this.searchError = false;
+      this.designationsService.productSearch(this.searchParams)
+        .subscribe((results) => {
           this.searchResults = results;
-        }
-        this.loadingResults = false;
-      }, (error) => {
-        this.searchResults = null;
-        this.searchError = true;
-        this.loadingResults = false;
-        this.$log.error('Error loading search results', error);
-      });
+          this.loadingResults = false;
+        }, (error) => {
+          this.searchResults = null;
+          this.searchError = true;
+          this.loadingResults = false;
+          this.$log.error('Error loading search results', error);
+        });
+    }
   }
 
   exploreSearch(){

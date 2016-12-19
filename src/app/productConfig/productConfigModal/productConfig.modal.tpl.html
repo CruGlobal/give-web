@@ -183,7 +183,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <div class="col-md-6 col-sm-6">
+    <div class="col-sm-3">
       <button class="btn btn-default btn-md btn-block-xs"
               type="button"
               ng-click="$ctrl.dismiss()"
@@ -192,8 +192,17 @@
         Cancel &amp; Return
       </button>
     </div>
-    <div class="col-md-6 col-sm-6 text-right">
-      <button class="btn btn-md btn-primary btn-block-xs"
+    <div class="col-sm-9 text-center">
+      <button class="btn btn-md btn-primary btn-block-xs pull-right"
+              type="submit"
+              ng-if="!$ctrl.errorAlreadyInCart"
+              tabindex="-1"
+              ng-switch="$ctrl.isEdit"
+              ng-disabled="$ctrl.changingFrequency">
+        <span ng-switch-when="true" translate>Update Gift</span>
+        <span ng-switch-when="false" translate>Add to Gift Cart</span>
+      </button>
+      <button class="btn btn-md btn-primary btn-block-xs pull-right"
               type="button"
               tabindex="-1"
               ng-if="$ctrl.errorAlreadyInCart"
@@ -201,14 +210,9 @@
               translate>
         View Cart
       </button>
-      <button class="btn btn-md btn-primary btn-block-xs"
-              type="submit"
-              ng-if="!$ctrl.errorAlreadyInCart"
-              tabindex="-1"
-              ng-switch="$ctrl.isEdit">
-        <span ng-switch-when="true" translate>Update Gift</span>
-        <span ng-switch-when="false" translate>Add to Gift Cart</span>
-      </button>
+      <loading inline="true" ng-if="$ctrl.changingFrequency" class="mt-- mr- pull-right">
+        <translate>Changing frequency...</translate>
+      </loading>
     </div>
   </div>
 </form>

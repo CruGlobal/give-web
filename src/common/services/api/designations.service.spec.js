@@ -81,7 +81,7 @@ describe('designation service', () => {
       };
     });
     it('should get product details for a designation number', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/lookups/crugive/items?followLocation=true&zoom=code,definition,definition:options:element:selector:chosen:description,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description',
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/lookups/crugive/items?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description',
         {code: '0354433'})
         .respond(200, lookupResponse);
       self.designationsService.productLookup('0354433')
@@ -91,7 +91,7 @@ describe('designation service', () => {
       self.$httpBackend.flush();
     });
     it('should get product details for a uri', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:chosen:description,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, lookupResponse);
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(data => {
