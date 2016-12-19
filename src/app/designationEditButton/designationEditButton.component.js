@@ -17,7 +17,7 @@ class DesignationEditButtonController {
 
   $onInit() {
     if(this.designationNumber && includes([Roles.identified, Roles.registered], this.sessionService.getRole())){
-      this.designationEditorService.getContent(this.designationNumber, this.campaignPage).then(() => {
+      this.designationEditorService.checkPermission(this.designationNumber, this.campaignPage).then(() => {
         this.showEditButton = true;
       });
     }

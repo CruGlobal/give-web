@@ -25,7 +25,7 @@ describe( 'Designation Editor Button', function () {
       designationContentPromise = _$q_.defer();
 
       spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
-      spyOn( $ctrl.designationEditorService, 'getContent' ).and.returnValue( designationContentPromise.promise );
+      spyOn( $ctrl.designationEditorService, 'checkPermission' ).and.returnValue( designationContentPromise.promise );
     }));
 
     it( 'initializes the component', () => {
