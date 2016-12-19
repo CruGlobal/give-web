@@ -11,6 +11,16 @@ class designationEditorService {
     this.$http = $http;
   }
 
+  checkPermission(designationNumber, campaign) {
+    return this.$http.get(designationConstants.designationCanEdit, {
+      params: {
+        designationNumber: designationNumber,
+        campaign: campaign
+      },
+      withCredentials: true
+    });
+  }
+
   getContent(designationNumber, campaign) {
     return this.$http.get(designationConstants.designationSecurityEndpoint, {
       params: {
