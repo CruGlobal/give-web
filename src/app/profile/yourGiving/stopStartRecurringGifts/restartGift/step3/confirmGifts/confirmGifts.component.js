@@ -16,7 +16,8 @@ let componentName = 'confirmGifts';
 class ConfirmGiftsController {
 
   /* @ngInject */
-  constructor( donationsService ) {
+  constructor( $log, donationsService ) {
+    this.$log = $log;
     this.donationsService = donationsService;
   }
 
@@ -48,9 +49,10 @@ class ConfirmGiftsController {
       .subscribe( () => {
           this.next();
         },
-        () => {
+        error => {
           this.setLoading( {loading: false} );
           this.error = 'error';
+          this.$log.error('Error processing restarts.', error);
         } );
   }
 }

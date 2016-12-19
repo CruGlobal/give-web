@@ -135,6 +135,7 @@ describe( 'your giving', () => {
             expect( $ctrl.commonService.getNextDrawDate ).toHaveBeenCalled();
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
+            expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading paymentMethods', 'invalid'] );
           } );
         } );
 
@@ -149,6 +150,7 @@ describe( 'your giving', () => {
             expect( $ctrl.commonService.getNextDrawDate ).toHaveBeenCalled();
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
+            expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading paymentMethods', ''] );
           } );
         } );
       } );
@@ -212,7 +214,7 @@ describe( 'your giving', () => {
 
         describe( 'getRecurringGifts error', () => {
           it( 'sets error', () => {
-            $ctrl.donationsService.getRecurringGifts.and.returnValue( Observable.throw() );
+            $ctrl.donationsService.getRecurringGifts.and.returnValue( Observable.throw( '' ) );
             $ctrl.donationsService.getSuggestedRecipients.and.returnValue( Observable.of( [{'designation-name': 'Charles Xavier'}] ) );
 
             $ctrl.loadGiftsAndRecipients();
@@ -223,13 +225,14 @@ describe( 'your giving', () => {
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
             expect( $ctrl.next ).not.toHaveBeenCalled();
+            expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading gifts and receipts', ''] );
           } );
         } );
 
         describe( 'getSuggestedRecipients error', () => {
           it( 'sets error', () => {
             $ctrl.donationsService.getRecurringGifts.and.returnValue( Observable.of( [] ) );
-            $ctrl.donationsService.getSuggestedRecipients.and.returnValue( Observable.throw() );
+            $ctrl.donationsService.getSuggestedRecipients.and.returnValue( Observable.throw( 'some error' ) );
 
             $ctrl.loadGiftsAndRecipients();
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
@@ -239,6 +242,7 @@ describe( 'your giving', () => {
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
             expect( $ctrl.next ).not.toHaveBeenCalled();
+            expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading gifts and receipts', 'some error'] );
           } );
         } );
       } );

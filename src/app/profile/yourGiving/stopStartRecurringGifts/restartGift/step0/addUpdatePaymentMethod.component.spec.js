@@ -39,6 +39,11 @@ describe( 'your giving', () => {
           expect($ctrl.profileService.getDonorDetails).toHaveBeenCalled();
           expect($ctrl.mailingAddress).toBe('data');
         });
+        it('should log and error on failure', () => {
+          spyOn($ctrl.profileService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
+          $ctrl.loadDonorDetails();
+          expect($ctrl.$log.error.logs[0]).toEqual(['Error loading donorDetails', 'some error']);
+        });
       });
 
       describe('onSubmit()', () => {

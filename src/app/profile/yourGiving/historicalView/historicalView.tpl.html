@@ -1,3 +1,14 @@
-
-<historical-gift ng-repeat="historicalGift in $ctrl.historicalGifts | orderBy:'designation-name'"
-                 gift="historicalGift"></historical-gift>
+<div>
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingGiftsError">
+    <p translate>There was an error loading your historical giving.</p>
+    <p translate>You can use the retry button to try loading them again. If you continue to see this message, please
+      contact support</p>
+    <p>
+      <button type="button" class="btn btn-primary"
+              ng-click="$ctrl.$onChanges()" translate>Retry
+      </button>
+    </p>
+  </div>
+  <historical-gift ng-repeat="historicalGift in $ctrl.historicalGifts | orderBy:'designation-name'"
+                   gift="historicalGift"></historical-gift>
+</div>

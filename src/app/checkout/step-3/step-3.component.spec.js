@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 
 import {existingPaymentMethodFlag} from 'common/services/api/order.service';
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
@@ -87,6 +88,11 @@ describe('checkout', () => {
         expect(self.controller.donorDetails).toEqual('donor details');
         self.controller.$log.assertEmpty();
       });
+      it('should log error on failure', () => {
+        spyOn(self.controller.orderService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
+        self.controller.loadDonorDetails();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading donorDetails', 'some error']);
+      });
     });
 
     describe('loadCurrentPayment', () => {
@@ -118,6 +124,11 @@ describe('checkout', () => {
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info: current payment type is unknown']);
       });
+      it('should log an error on failure', () => {
+        spyOn(self.controller.orderService, 'getCurrentPayment').and.returnValue(Observable.throw('some error'));
+        self.controller.loadCurrentPayment();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info', 'some error']);
+      });
     });
 
     describe('checkErrors', () => {
@@ -125,6 +136,11 @@ describe('checkout', () => {
         self.controller.checkErrors();
         expect(self.controller.needinfoErrors).toEqual(['email-info']);
         self.controller.$log.assertEmpty();
+      });
+      it('should log and error on failure', () => {
+        spyOn(self.controller.orderService, 'checkErrors').and.returnValue(Observable.throw('some error'));
+        self.controller.checkErrors();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading checkErrors', 'some error']);
       });
     });
 

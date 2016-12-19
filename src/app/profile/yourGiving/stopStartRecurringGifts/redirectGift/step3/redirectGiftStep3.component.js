@@ -12,7 +12,8 @@ let componentName = 'redirectGiftStep3';
 class RedirectGiftStep3Controller {
 
   /* @ngInject */
-  constructor( commonService, donationsService ) {
+  constructor( $log, commonService, donationsService ) {
+    this.$log = $log;
     this.commonService = commonService;
     this.donationsService = donationsService;
     this.state = 'update';
@@ -23,9 +24,10 @@ class RedirectGiftStep3Controller {
     this.setLoading( {loading: true} );
     this.donationsService.updateRecurringGifts( this.gift ).subscribe( () => {
       this.onComplete();
-    }, () => {
+    }, (error) => {
       this.hasError = true;
       this.setLoading( {loading: false} );
+      this.$log.error('Error redirecting a gift', error);
     } );
   }
 

@@ -2,6 +2,10 @@
   <div class="container">
     <div class="col-md-12">
 
+      <div class="alert alert-danger" role="alert" ng-if="$ctrl.profileLoadingError">
+        <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, please contact support</p>
+        <p><button type="button" class="btn btn-primary" ng-click="$ctrl.loadProfile()" translate>Retry</button></p>
+      </div>
       <div class="alert alert-success" role="alert" ng-if="$ctrl.recurringGiftsUpdateSuccess" translate>Your recurring gifts were updated successfully.</div>
       <div class="alert alert-success" role="alert" ng-if="$ctrl.stopStartGiftsSuccess" translate>Your changes were successful.</div>
 

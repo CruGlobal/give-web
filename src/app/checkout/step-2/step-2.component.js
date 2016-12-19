@@ -29,6 +29,9 @@ class Step2Controller{
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         this.mailingAddress = data.mailingAddress;
+      },
+      error => {
+        this.$log.error('Error loading donorDetails', error);
       });
   }
 

@@ -10,7 +10,8 @@ let componentName = 'recipientGift';
 class RecipientGift {
 
   /* @ngInject */
-  constructor( donationsService, productModalService ) {
+  constructor( $log, donationsService, productModalService ) {
+    this.$log = $log;
     this.donationsService = donationsService;
     this.productModalService = productModalService;
     this.showDetails = false;
@@ -19,6 +20,7 @@ class RecipientGift {
   }
 
   toggleDetails() {
+    this.loadingDetailsError = true;
     this.showDetails = !this.showDetails;
     //Load details if we haven't already
     if ( this.showDetails && !this.detailsLoaded ) {
@@ -27,6 +29,11 @@ class RecipientGift {
         this.details = details;
         this.isLoading = false;
         this.detailsLoaded = true;
+      }, error => {
+        this.showDetails = false;
+        this.isLoading = false;
+        this.loadingDetailsError = true;
+        this.$log.error('Error loading recipient details', error);
       } );
     }
   }

@@ -8,8 +8,9 @@ let componentName = 'recipientView';
 class RecipientView {
 
   /* @ngInject */
-  constructor( donationsService ) {
+  constructor( $log, donationsService ) {
     this.donationsService = donationsService;
+    this.$log = $log;
   }
 
   $onChanges( changes ) {
@@ -19,6 +20,7 @@ class RecipientView {
   }
 
   loadRecipients( year ) {
+    this.loadingRecipientsError = false;
     this.setLoading( {loading: true} );
     this.recipients = [];
     if ( angular.isDefined( this.subscriber ) ) this.subscriber.unsubscribe();
@@ -26,10 +28,11 @@ class RecipientView {
       delete this.subscriber;
       this.recipients = recipients;
       this.setLoading( {loading: false} );
-    }, () => {
-      // todo: error loading recipients
+    }, error => {
       delete this.subscriber;
       this.setLoading( {loading: false} );
+      this.loadingRecipientsError = true;
+      this.$log.error( 'Error loading recipients', error );
     } );
   }
 }

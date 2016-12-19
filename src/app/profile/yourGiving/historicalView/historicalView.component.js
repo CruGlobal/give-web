@@ -8,7 +8,8 @@ let componentName = 'historicalView';
 class HistoricalView {
 
   /* @ngInject */
-  constructor( donationsService ) {
+  constructor( $log, donationsService ) {
+    this.$log = $log;
     this.donationsService = donationsService;
   }
 
@@ -19,6 +20,7 @@ class HistoricalView {
   }
 
   loadGifts( year, month ) {
+    this.loadingGiftsError = false;
     this.setLoading( {loading: true} );
     this.historicalGifts = [];
     if ( angular.isDefined( this.subscriber ) ) this.subscriber.unsubscribe();
@@ -26,10 +28,11 @@ class HistoricalView {
       delete this.subscriber;
       this.historicalGifts = historicalGifts;
       this.setLoading( {loading: false} );
-    }, () => {
-      // todo: error loading historical gifts
+    }, (error) => {
       delete this.subscriber;
       this.setLoading( {loading: false} );
+      this.$log.error('Error loading historical gifts', error);
+      this.loadingGiftsError = true;
     } );
   }
 }

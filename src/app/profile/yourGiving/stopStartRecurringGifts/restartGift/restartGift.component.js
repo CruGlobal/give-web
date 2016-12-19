@@ -32,7 +32,8 @@ let componentName = 'restartGift';
 class RestartGiftController {
 
   /* @ngInject */
-  constructor( donationsService, profileService, commonService ) {
+  constructor( $log, donationsService, profileService, commonService ) {
+    this.$log = $log;
     this.donationsService = donationsService;
     this.profileService = profileService;
     this.commonService = commonService;
@@ -74,9 +75,10 @@ class RestartGiftController {
         RecurringGiftModel.paymentMethods = this.validPaymentMethods;
         RecurringGiftModel.nextDrawDate = this.nextDrawDate;
         this.loadGiftsAndRecipients();
-      }, () => {
+      }, (error) => {
         this.setLoading( {loading: false} );
         this.error = true;
+        this.$log.error( 'Error loading paymentMethods', error );
       } );
   }
 
@@ -91,9 +93,10 @@ class RestartGiftController {
       this.includeSuspendedGifts = !!this.suspendedGifts.length;
       this.includeSuggestedRecipients = !!this.suggestedRecipients.length;
       this.next();
-    }, () => {
+    }, (error) => {
       this.setLoading( {loading: false} );
       this.error = true;
+      this.$log.error( 'Error loading gifts and receipts', error );
     } );
   }
 

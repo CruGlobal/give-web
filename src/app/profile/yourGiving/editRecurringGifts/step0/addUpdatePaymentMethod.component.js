@@ -26,9 +26,10 @@ class AddUpdatePaymentMethodsController {
     this.profileService.getDonorDetails()
       .subscribe((data) => {
         this.mailingAddress = data.mailingAddress;
+      }, error => {
+        this.$log.error('Error loading donorDetails', error);
       });
   }
-
 
   onSubmit(success, data) {
     this.submissionError.error = '';

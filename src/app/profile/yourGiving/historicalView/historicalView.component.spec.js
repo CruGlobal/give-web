@@ -57,6 +57,7 @@ describe( 'your giving', function () {
         $ctrl.donationsService.getHistoricalGifts.and.callFake( () => Observable.of( ['a', 'b'] ) );
         $ctrl.subscriber = subscriberSpy;
         $ctrl.loadGifts( 2016, 9 );
+        expect( $ctrl.loadingGiftsError).toEqual(false);
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( subscriberSpy.unsubscribe ).toHaveBeenCalled();
         expect( $ctrl.donationsService.getHistoricalGifts ).toHaveBeenCalledWith( 2016, 9 );
@@ -67,6 +68,7 @@ describe( 'your giving', function () {
       it( 'loads historical gifts by year and month', () => {
         $ctrl.donationsService.getHistoricalGifts.and.callFake( () => Observable.of( ['c', 'd'] ) );
         $ctrl.loadGifts( 2015, 8 );
+        expect( $ctrl.loadingGiftsError).toEqual(false);
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( subscriberSpy.unsubscribe ).not.toHaveBeenCalled();
         expect( $ctrl.donationsService.getHistoricalGifts ).toHaveBeenCalledWith( 2015, 8 );
@@ -80,6 +82,8 @@ describe( 'your giving', function () {
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.historicalGifts ).toEqual( [] );
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+        expect( $ctrl.loadingGiftsError).toEqual(true);
+        expect( $ctrl.$log.error.logs[0]).toEqual( ['Error loading historical gifts', 'error'] );
       } );
     } );
   } );
