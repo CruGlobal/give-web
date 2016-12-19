@@ -35,10 +35,18 @@ describe( 'Designation Editor Button', function () {
 
     it( 'has permission to edit', () => {
       $ctrl.$onInit();
-      designationContentPromise.resolve( {} );
+      designationContentPromise.resolve( );
       $rootScope.$digest();
 
       expect( $ctrl.showEditButton ).toEqual( true );
+    } );
+
+    it( 'does not have permission to edit', () => {
+      $ctrl.$onInit();
+      designationContentPromise.reject( );
+      $rootScope.$digest();
+
+      expect( $ctrl.showEditButton ).toEqual( false );
     } );
   } );
 } );
