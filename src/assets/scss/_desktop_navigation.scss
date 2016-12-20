@@ -130,10 +130,22 @@ $promo-width: 200px;
     }
 
     .has-children {
-      filter: grayscale(100%);
-      background: url("/assets/img/desktop-nav-arrow.png") no-repeat right 15px center;
-      background-size: 7px;
-      &:hover {
+      > a {
+        position: relative;
+        > span {
+          display: inline-block;
+          position: absolute;
+          top: 50%;
+          right: 15px;
+          transform: translateY(-50%);
+          width: 7px;
+          height: 1.35em;
+          filter: grayscale(100%);
+          background: url("/assets/img/desktop-nav-arrow.png") no-repeat center;
+          background-size: 7px;
+        }
+      }
+      &:hover > a > span {
         filter: grayscale(0%);
       }
     }
