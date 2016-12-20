@@ -61,7 +61,7 @@
             </p>
           </div>
 
-          <p class="signature-wrap" ng-if="$ctrl.designationContent.designationType === 'Campaign'">
+          <div class="signature-wrap" ng-if="$ctrl.designationContent.designationType === 'Campaign'">
             <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.selectPhoto('signaturePhoto', $ctrl.designationContent.signaturePhoto)">
               <i class="fa fa-pencil"></i>
             </a>
@@ -71,7 +71,15 @@
             <img ng-src="{{$ctrl.imgDomainDesignation + $ctrl.photoUrl($ctrl.designationContent.signaturePhoto).original}}"
                  ng-if="$ctrl.photoUrl($ctrl.designationContent.signaturePhoto)"
                  class="signature-image">
-          </p>
+
+            <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editText('psText')">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <div ng-bind-html="$ctrl.designationContent.psText"></div>
+            <p ng-if="!$ctrl.designationContent.psText">
+              <i translate>Signature text</i>
+            </p>
+          </div>
 
           <p>
             <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editWebsite()"><i class="fa fa-pencil"></i></a>
