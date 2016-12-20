@@ -1,14 +1,18 @@
 <div class="row">
   <div class="col-sm-12">
-    <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressCountry | showErrors)}">
+    <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressCountry | showErrors) || $ctrl.loadingCountriesError}">
       <label translate>Country</label>
       <div class="form-group">
-        <select class="form-control  form-control-subtle"
+        <select class="form-control form-control-subtle"
                 name="addressCountry" required
                 ng-model="$ctrl.address.country"
                 ng-options="v.name as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
                 ng-change="$ctrl.refreshRegions($ctrl.address.country)">
         </select>
+        <div role="alert" ng-if="$ctrl.loadingCountriesError">
+          <div class="help-block" translate>There was an error loading the list of countries. If you continue to see this message, please contact support.
+            <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.loadCountries()" translate>Retry</button></div>
+        </div>
         <div role="alert" ng-messages="$ctrl.parentForm.addressCountry.$error" ng-if="($ctrl.parentForm.addressCountry | showErrors)">
           <div class="help-block" ng-message="required" translate>You must select a country</div>
         </div>
@@ -75,7 +79,7 @@
   </div>
   <div class="row">
     <div class="col-sm-6">
-      <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressRegion | showErrors)}">
+      <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressRegion | showErrors) || $ctrl.loadingRegionsError}">
         <label translate>State / Region</label>
         <div class="form-group">
           <select class="form-control  form-control-subtle"
@@ -83,6 +87,10 @@
                   ng-model="$ctrl.address.region"
                   ng-options="v.name as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''">
           </select>
+          <div role="alert" ng-if="$ctrl.loadingRegionsError">
+            <div class="help-block" translate>There was an error loading the list of regions/state. If you continue to see this message, please contact support.
+              <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>Retry</button></div>
+          </div>
           <div role="alert" ng-messages="$ctrl.parentForm.addressRegion.$error" ng-if="($ctrl.parentForm.addressRegion | showErrors)">
             <div class="help-block" ng-message="required" translate>You must select a state / region</div>
           </div>
