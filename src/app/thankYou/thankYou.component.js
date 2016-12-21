@@ -65,8 +65,8 @@ class ThankYouController{
               this.sessionModalService.userMatch().then(() => {
                 // Hide accountBenefits after successful user match
                 this.showAccountBenefits = false;
-              });
-            });
+              }, angular.noop);
+            }, angular.noop);
           }
 
           // Map rate totals to match format from order endpoint

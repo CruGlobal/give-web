@@ -92,7 +92,7 @@ class PaymentMethodController{
     });
     this.deletePaymentMethodModal.result.then(() => {
       this.onDelete();
-    });
+    }, angular.noop);
   }
 
   $onDestroy(){

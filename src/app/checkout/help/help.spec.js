@@ -26,6 +26,13 @@ describe('Checkout Help', function() {
     $httpBackend.flush();
 
     expect( $ctrl.helpHTML ).toEqual('<p>Help Content</p>');
+  });
 
+  it('should log an error on failure', () => {
+    $httpBackend.expectGET('/etc/designs/give/_jcr_content/content/give-need-help.json').respond(500, 'some error');
+    $ctrl.$onInit();
+    $httpBackend.flush();
+
+    expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading give-need-help', jasmine.objectContaining({data:'some error'})]);
   });
 });

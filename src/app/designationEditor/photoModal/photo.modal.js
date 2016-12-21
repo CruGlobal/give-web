@@ -24,7 +24,7 @@ class ModalInstanceCtrl {
     this.$timeout(() => {
       this.designationEditorService.getPhotos(this.designationNumber, this.campaignPage).then((response) => {
         this.photos = response.data;
-      });
+      }, angular.noop);
     }, 2500);
   }
 }

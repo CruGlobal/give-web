@@ -129,7 +129,7 @@ class YourGivingController {
     } );
     this.editRecurringGiftsModal.result.then( () => {
       this.recurringGiftsUpdateSuccess = true;
-    } );
+    }, angular.noop );
   }
 
   openGiveOneTimeGiftModal() {
@@ -149,7 +149,7 @@ class YourGivingController {
     } );
     this.stopStartRecurringGiftsModal.result.then( () => {
       this.stopStartGiftsSuccess = true;
-    } );
+    }, angular.noop );
   }
 }
 export default angular

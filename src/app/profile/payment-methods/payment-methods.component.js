@@ -102,7 +102,7 @@ class PaymentMethodsController {
       this.$timeout(()=>{
         this.successMessage.show = false;
       },60000);
-    });
+    }, angular.noop);
   }
 
   onSubmit(e) {

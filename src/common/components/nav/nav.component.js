@@ -123,7 +123,7 @@ class NavController{
       .then( () => {
         // use $timeout here as workaround to Firefox bug
         this.$timeout(() => this.$window.location.reload());
-      } );
+      }, angular.noop );
   }
 
   signOut() {
