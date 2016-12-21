@@ -4,9 +4,15 @@
 </div>
 
 <div ng-if="$ctrl.donorDetails" class="loading-overlay-parent">
-  <loading type="overlay" ng-if="!$ctrl.donorDetails">
+  <loading type="overlay" ng-if="$ctrl.loadingDonorDetails">
     <translate>Checking for existing information...</translate>
   </loading>
+
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingDonorDetailsError">
+    <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, please contact support</p>
+    <p><button type="button" class="btn btn-primary" ng-click="$ctrl.loadDonorDetails()" translate>Retry</button></p>
+  </div>
+
   <div class="mb_x" ng-if="!$ctrl.nameFieldsDisabled">
     <div class="row">
       <div class="col-md-6">

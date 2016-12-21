@@ -12,7 +12,8 @@ let componentName = 'userMatchModal';
 class UserMatchModalController {
 
   /* @ngInject */
-  constructor( gettext, profileService, verificationService ) {
+  constructor( $log, gettext, profileService, verificationService ) {
+    this.$log = $log;
     this.gettext = gettext;
     this.profileService = profileService;
     this.verificationService = verificationService;
@@ -20,6 +21,7 @@ class UserMatchModalController {
 
   $onInit() {
     this.setLoading( {loading: true} );
+    this.loadingDonorDetailsError = false;
     this.skippedQuestions = false;
     this.modalTitle = this.gettext( 'Activate your Account' );
     this.profileService.getDonorDetails().subscribe( ( donorDetails ) => {
@@ -36,9 +38,19 @@ class UserMatchModalController {
               this.contacts = contacts;
               this.changeMatchState( 'identity' );
             }
+          },
+          error => {
+            this.setLoading( {loading: false} );
+            this.loadingDonorDetailsError = true;
+            this.$log.error('Error loading verification contacts.', error);
           } );
         }
       }
+    },
+      error => {
+        this.setLoading( {loading: false} );
+        this.loadingDonorDetailsError = true;
+        this.$log.error('Error loading donorDetails.', error);
     } );
   }
 
@@ -60,21 +72,33 @@ class UserMatchModalController {
 
   onSelectContact( contact ) {
     this.setLoading( {loading: true} );
+    this.selectContactError = false;
     if ( angular.isDefined( contact ) ) {
       this.verificationService.selectContact( contact ).subscribe( () => {
         this.changeMatchState( 'activate' );
-      } );
+      },
+      error => {
+        this.setLoading( {loading: false} );
+        this.selectContactError = true;
+        this.$log.error('Error selecting verification contact.', error);
+      });
     }
     else {
       this.verificationService.thatIsNotMe().subscribe( () => {
         this.skippedQuestions = true;
         this.changeMatchState( 'success' );
-      } );
+      },
+        error => {
+          this.setLoading( {loading: false} );
+          this.selectContactError = true;
+          this.$log.error('Error selecting \'that-is-not-me\' verification contact', error);
+        });
     }
   }
 
   onActivate() {
     this.setLoading( {loading: true} );
+    this.loadingQuestionsError = false;
     this.verificationService.getQuestions().subscribe( ( questions ) => {
       this.answers = [];
       this.questions = questions;
@@ -82,7 +106,12 @@ class UserMatchModalController {
       this.questionCount = this.questions.length;
       this.question = this.questions.shift();
       this.changeMatchState( 'question' );
-    } );
+    },
+    error => {
+      this.setLoading( {loading: false} );
+      this.loadingQuestionsError = true;
+      this.$log.error('Error loading verification questions.', error);
+    });
   }
 
   onQuestionAnswer( key, answer ) {

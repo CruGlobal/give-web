@@ -121,10 +121,10 @@ describe( 'nav', function () {
       spyOn( $ctrl.$rootScope, '$new' ).and.returnValue( {$on: spy} );
       spyOn( $ctrl, 'giftAddedToCart' );
       spyOn( $ctrl, 'signedOut' );
-      $ctrl.$onInit();
     } );
 
     it( 'getNav', () => {
+      $ctrl.$onInit();
       expect( $ctrl.getNav ).toHaveBeenCalled();
       expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( giftAddedEvent, jasmine.any( Function ) );
       $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
@@ -134,6 +134,12 @@ describe( 'nav', function () {
       spy.calls.argsFor( 0 )[1]();
       expect( $ctrl.signedOut ).toHaveBeenCalled();
     } );
+
+    it('should log an error on failure', () => {
+      $ctrl.getNav.and.returnValue( Observable.throw( 'some error' ) );
+      $ctrl.$onInit();
+      expect($ctrl.$log.error.logs[0]).toEqual(['Error loading the nav.', 'some error']);
+    });
   } );
 
   describe( 'giftAddedToCart()', () => {

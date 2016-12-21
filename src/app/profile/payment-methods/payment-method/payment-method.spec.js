@@ -14,6 +14,7 @@ describe('PaymentMethodComponent', function () {
     },
     fakeModal = function() {
       return {
+        // eslint-disable-next-line jasmine/no-unsafe-spy
         close: jasmine.createSpy('close'),
         result: {
           then: function(confirmCallback) {
