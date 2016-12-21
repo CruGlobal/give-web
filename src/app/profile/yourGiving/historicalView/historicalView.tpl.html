@@ -11,4 +11,14 @@
   </div>
   <historical-gift ng-repeat="historicalGift in $ctrl.historicalGifts | orderBy:'designation-name'"
                    gift="historicalGift"></historical-gift>
+
+  <div class="panel panel-margin-bottom recent-recipient-row" ng-if="$ctrl.historicalGifts && $ctrl.historicalGifts.length == 0">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-12 mb">
+          <p tranlsate>No giving found for this period.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

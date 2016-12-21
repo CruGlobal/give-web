@@ -22,11 +22,11 @@ class HistoricalView {
   loadGifts( year, month ) {
     this.loadingGiftsError = false;
     this.setLoading( {loading: true} );
-    this.historicalGifts = [];
+    this.historicalGifts = undefined;
     if ( angular.isDefined( this.subscriber ) ) this.subscriber.unsubscribe();
     this.subscriber = this.donationsService.getHistoricalGifts( year, month ).subscribe( ( historicalGifts ) => {
       delete this.subscriber;
-      this.historicalGifts = historicalGifts;
+      this.historicalGifts = historicalGifts || [];
       this.setLoading( {loading: false} );
     }, (error) => {
       delete this.subscriber;

@@ -80,7 +80,7 @@ describe( 'your giving', function () {
         $ctrl.donationsService.getHistoricalGifts.and.callFake( () => Observable.throw( 'error' ) );
         $ctrl.loadGifts( 1990, 1 );
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
-        expect( $ctrl.historicalGifts ).toEqual( [] );
+        expect( $ctrl.historicalGifts ).not.toBeDefined();
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
         expect( $ctrl.loadingGiftsError).toEqual(true);
         expect( $ctrl.$log.error.logs[0]).toEqual( ['Error loading historical gifts', 'error'] );

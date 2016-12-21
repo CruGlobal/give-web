@@ -77,7 +77,7 @@ describe( 'your giving', function () {
         $ctrl.donationsService.getRecipients.and.callFake( () => Observable.throw( 'error' ) );
         $ctrl.loadRecipients( 2016 );
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
-        expect( $ctrl.recipients ).toEqual( [] );
+        expect( $ctrl.recipients ).not.toBeDefined();
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
         expect( $ctrl.loadingRecipientsError).toEqual(true);
         expect( $ctrl.$log.error.logs[0]).toEqual( ['Error loading recipients', 'error'] );

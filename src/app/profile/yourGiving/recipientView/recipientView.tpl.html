@@ -13,4 +13,14 @@
 
   <recipient-gift ng-repeat="recipient in $ctrl.recipients | orderBy:'designation-name'"
                   recipient="recipient"></recipient-gift>
+
+  <div class="panel panel-margin-bottom recent-recipient-row" ng-if="$ctrl.recipients && $ctrl.recipients.length == 0">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-12 mb">
+          <p tranlsate>No giving found for this period.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
