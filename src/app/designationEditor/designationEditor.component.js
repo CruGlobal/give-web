@@ -100,13 +100,13 @@ class DesignationEditorController {
           return this.designationContent.designationName;
         },
         giveTitle: () => {
-          return this.designationContent.title;
+          return this.designationContent['jcr:title'];
         }
       }
     };
     this.$uibModal.open( modalOptions ).result
       .then( (title) => {
-        this.designationContent.title = title;
+        this.designationContent['jcr:title'] = title;
         this.save();
       }, angular.noop );
   }
@@ -202,7 +202,7 @@ class DesignationEditorController {
     this.loadingOverlay = true;
     this.saveDesignationError = false;
 
-    return this.designationEditorService.save(this.designationContent).then(() => {
+    return this.designationEditorService.save(this.designationContent, this.campaignPage).then(() => {
       this.saveStatus = 'success';
       this.loadingOverlay = false;
     }, error => {

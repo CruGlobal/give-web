@@ -8,7 +8,9 @@ describe( 'Designation Editor Button', function () {
 
   beforeEach( inject( function ( _$rootScope_, _$componentController_ ) {
     $rootScope = _$rootScope_;
-    $ctrl = _$componentController_( module.name, {}, {designationNumber: '0123456'} );
+    $ctrl = _$componentController_( module.name, {
+      $window: {location: '/0123456'}
+    }, {designationNumber: '0123456'} );
   } ) );
 
   it( 'to be defined', function () {
@@ -49,4 +51,9 @@ describe( 'Designation Editor Button', function () {
       expect( $ctrl.showEditButton ).toEqual( false );
     } );
   } );
+
+  it('should navigate to editor on button click', () => {
+    $ctrl.editPage();
+    expect( $ctrl.$window.location ).toContain( $ctrl.designationNumber );
+  });
 } );

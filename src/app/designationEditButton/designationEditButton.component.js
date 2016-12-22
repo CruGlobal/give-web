@@ -10,9 +10,12 @@ let componentName = 'designationEditButton';
 class DesignationEditButtonController {
 
   /* @ngInject */
-  constructor( sessionService, designationEditorService ) {
+  constructor( sessionService, designationEditorService, $window, $httpParamSerializer ) {
     this.sessionService = sessionService;
     this.designationEditorService = designationEditorService;
+
+    this.$window = $window;
+    this.$httpParamSerializer = $httpParamSerializer;
   }
 
   $onInit() {
@@ -23,6 +26,13 @@ class DesignationEditButtonController {
         this.showEditButton = false;
       });
     }
+  }
+
+  editPage() {
+    this.$window.location = '/designation-editor.html?' + this.$httpParamSerializer({
+        d: this.designationNumber,
+        campaign: this.campaignPage
+      });
   }
 }
 

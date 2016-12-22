@@ -12,7 +12,7 @@
       <div class="row">
         <div class="col-sm-6  col-xs-12">
           <h2 class="mb0">
-            {{$ctrl.designationContent.title || $ctrl.designationContent.designationName}}
+            {{$ctrl.designationContent['jcr:title']}}
             <a class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()"
                ng-if="$ctrl.designationContent.designationType === 'Campaign'">
               <i class="fa fa-pencil"></i>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="col-sm-6  col-xs-12 text-right">
-          <a ng-href="/{{$ctrl.designationContent.designationNumber}}" class="btn btn-secondary"
+          <a ng-href="{{$ctrl.designationContent['sling:vanityPath'][0].replace('/content/give/us/en', '')}}" class="btn btn-secondary"
              ng-if="$ctrl.contentLoaded" translate>
             Done Editing
           </a>
