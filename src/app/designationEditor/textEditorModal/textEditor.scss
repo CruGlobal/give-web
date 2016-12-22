@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-.ta-editor,
-.ta-editor > .ta-bind {
+.ta-editor {
   height: 600px;
+  overflow-y: auto;
 }
