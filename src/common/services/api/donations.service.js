@@ -116,7 +116,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
           RecurringGiftModel.nextDrawDate = nextDrawDate;
           RecurringGiftModel.paymentMethods = paymentMethods;
         }
-        return flatMap( flatten( map( recurringGiftsTypes, ( type ) => data[type].donations ) ), donation => {
+        return flatMap( flatten( map( recurringGiftsTypes, type => data[type].donations ) ), donation => {
           return map( donation['donation-lines'], donationLine => {
             return new RecurringGiftModel(donationLine, donation);
           } );

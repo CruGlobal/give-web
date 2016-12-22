@@ -1,28 +1,32 @@
 import angular from 'angular';
-import moment from 'moment';
+import 'rxjs/add/operator/finally';
+
+import forEach from 'lodash/forEach';
+import remove from 'lodash/remove';
+import reject from 'lodash/reject';
+import concat from 'lodash/concat';
 
 import profileService from 'common/services/api/profile.service.js';
+import donationsService from 'common/services/api/donations.service.js';
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
-import {quarterlyMonths} from 'common/services/giftHelpers/giftDates.service';
-
-import template from './deletePaymentMethod.modal.tpl';
-import remove from 'lodash/remove';
-import find from 'lodash/find';
-import forEach from 'lodash/forEach';
+import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
+import giftSummaryView from 'common/components/giftViews/giftSummaryView/giftSummaryView.component';
 
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 import {scrollModalToTop} from 'common/services/modalState.service';
+
+import template from './deletePaymentMethod.modal.tpl';
 
 let componentName = 'deletePaymentMethodModal';
 
 class deletePaymentMethodModalController {
 
   /* @ngInject */
-  constructor(profileService, $log) {
+  constructor(profileService, donationsService, $log) {
     this.profileService = profileService;
+    this.donationsService = donationsService;
     this.$log = $log;
-    this.quarterlyMonths = quarterlyMonths;
 
     this.loading = false;
     this.view = '';
@@ -33,13 +37,28 @@ class deletePaymentMethodModalController {
     this.submissionError = {
       error: ''
     };
-    this.monthNames = moment.months();
     this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit() {
     this.setView();
     this.getPaymentMethods();
+  }
+
+  setView(){
+    this.hasRecurringGifts = this.resolve.paymentMethod.recurringGifts.length !== 0;
+    this.view = this.hasRecurringGifts ? 'manageDonations' : 'confirm';
+  }
+
+  getPaymentMethods(){
+    if(this.resolve.paymentMethodsList && this.hasRecurringGifts){
+      // filtered payment methods for the drop down. List excludes payment method that is being deleted
+      this.filteredPaymentMethods = reject(this.resolve.paymentMethodsList, item => {
+        return item.self.uri === this.resolve.paymentMethod.self.uri;
+      });
+      this.deleteOption = this.filteredPaymentMethods.length ? '1' : '2';
+      this.selectedPaymentMethod = this.filteredPaymentMethods.length ? this.filteredPaymentMethods[0] : false; // set first element as selected by default
+    }
   }
 
   changeView(goBack){
@@ -49,138 +68,52 @@ class deletePaymentMethodModalController {
       return;
     }
     switch(this.deleteOption) {
-      case '1'://move to an existing paymentMethod
+      case '1': //move to an existing paymentMethod
         this.view = 'confirm';
         this.confirmText = 'withTransfer';
-      break;
-      case '2'://move to a new paymentMethod
+        break;
+      case '2': //move to a new paymentMethod
         this.view = 'addPaymentMethod';
-      break;
-      case '3'://confirm to delete
+        break;
+      case '3': //confirm to delete
         this.view = 'confirm';
         this.confirmText = 'withOutTransfer';
-      break;
+        break;
     }
     this.scrollModalToTop();
-  }
-
-  setView(){
-    this.hasRecurrinGifts = this.resolve.paymentMethod._recurringgifts[0].donations.length != 0;
-    this.view = this.hasRecurrinGifts ? 'manageDonations' : 'confirm';
-  }
-
-  getPaymentMethodName(newPaymentMethod){
-    let paymentMethod = newPaymentMethod ? find(this.filteredPaymentMethods,(item)=>{
-      return item.self.uri == this.selectedPaymentMethod;
-    }) : this.resolve.paymentMethod;
-    return paymentMethod['card-type'] || paymentMethod['bank-name'];
-  }
-
-  getPaymentMethodLastFourDigits(newPaymentMethod){
-    let paymentMethod = newPaymentMethod ? find(this.filteredPaymentMethods,(item)=>{
-      return item.self.uri == this.selectedPaymentMethod;
-    }) : this.resolve.paymentMethod;
-    return paymentMethod['display-account-number'] || paymentMethod['card-number'];
   }
 
   getPaymentMethodOptionLabel(paymentMethod){
     return (paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ending in ****' + (paymentMethod['display-account-number'] || paymentMethod['card-number']);
   }
 
-  getRecurrenceDate(gift){
-    return new Date(gift['next-draw-date']['display-value']);
-  }
-
-  buildGifts(recurringGifts){
-    var gifts = [];
-    forEach(recurringGifts,(gift) => {
-      var rate = gift.rate,
-          day = gift['recurring-day-of-month'],
-          nextDrawDate = gift['next-draw-date'];
-      forEach(gift['donation-lines'], (donationLine) => {
-        donationLine['rate'] = rate;
-        donationLine['next-draw-date'] = nextDrawDate;
-        donationLine['recurring-day-of-month'] = day;
-        gifts = gifts.concat(donationLine);
-      });
-    });
-    return gifts;
-  }
-
-  getPaymentMethods(){
-    if(this.resolve.paymentMethodsList && this.hasRecurrinGifts){
-      // filtered payment methods for the drop down. List excludes payment method that is being deleted
-      this.filteredPaymentMethods = this.resolve.paymentMethodsList.slice();
-      remove(this.filteredPaymentMethods,(item) => {
-        return item.self.uri == this.resolve.paymentMethod.self.uri;
-      });
-      this.deleteOption = this.filteredPaymentMethods.length ? '1' : '2';
-      this.selectedPaymentMethod = this.filteredPaymentMethods.length ? this.filteredPaymentMethods[0].self.uri : false; // set first element as selected by default
-    }
-  }
-  moveDonations(){
-    let isExistingPaymentMethod;
-    isExistingPaymentMethod = this.resolve.paymentMethodsList.length > this.filteredPaymentMethods.length;
-    //move donations from old to new PM
-    let selectedPaymentMethod = find(this.filteredPaymentMethods, (item) => {
-      return this.selectedPaymentMethod == item.self.uri;
-    });
-
-    // add recurring gifts to an existing payment method
-    if(isExistingPaymentMethod){
-      forEach(this.resolve.paymentMethodsList, (item) => {
-        if(item.self.uri == selectedPaymentMethod.self.uri) {
-          item._recurringgifts = this.resolve.paymentMethod._recurringgifts;
-        }
-      });
-    } else {
-      //add newly created payment method to a list
-      selectedPaymentMethod._recurringgifts = this.resolve.paymentMethod._recurringgifts;
-      this.resolve.paymentMethodsList.push(selectedPaymentMethod);
-    }
-
-    //remove deleted payment method from the list
-    this.removePaymentMethodFromList();
-
-  }
-
-  removePaymentMethodFromList() {
-    remove(this.resolve.paymentMethodsList, (item) => {
-      return item.self.uri == this.resolve.paymentMethod.self.uri;
-    });
-  }
-
   getNewPaymentMethodId(){
-    let id = this.selectedPaymentMethod.split('/');
+    let id = this.selectedPaymentMethod.self.uri.split('/');
     return id.pop();
   }
 
   moveDonationsToNewPaymentMethod(){
-    forEach(this.resolve.paymentMethod._recurringgifts[0].donations, (donation) => {
-      forEach(donation['donation-lines'], (item) => {
-        item['updated-payment-method-id'] = this.getNewPaymentMethodId();
-      });
+    forEach(this.resolve.paymentMethod.recurringGifts, gift => {
+      gift.paymentMethodId = this.getNewPaymentMethodId();
     });
-    this.updateRecurringGifts(this.resolve.paymentMethod._recurringgifts[0]);
+    this.updateRecurringGifts(this.resolve.paymentMethod.recurringGifts);
   }
 
   stopRecurringGifts(){
-    forEach(this.resolve.paymentMethod._recurringgifts[0].donations, (donation) => {
-      forEach(donation['donation-lines'],(item) => {
-        item['updated-donation-line-status'] = 'Cancelled';
-      });
+    forEach(this.resolve.paymentMethod.recurringGifts, gift => {
+      gift.donationLineStatus = 'Cancelled';
     });
-    this.updateRecurringGifts(this.resolve.paymentMethod._recurringgifts[0]);
+    this.updateRecurringGifts(this.resolve.paymentMethod.recurringGifts);
   }
 
   updateRecurringGifts(recurringGifts){
-    this.profileService.updateRecurringGifts(recurringGifts)
+    this.donationsService.updateRecurringGifts(recurringGifts)
       .subscribe(() => {
         this.deletePaymentMethod();
-      },(error) => {
+      }, error => {
         this.loading = false;
-        this.submissionError.error = error.data;
-        this.$log.error(error.data,error);
+        this.submissionError.error = error && error.data;
+        this.$log.error('Error updating recurring gifts before deleting old payment method', error);
       });
   }
 
@@ -192,20 +125,21 @@ class deletePaymentMethodModalController {
         .finally(() => {
           this.submitted = false;
           this.loading = false;
+          this.submissionError.loading = false;
         })
-        .subscribe((data) => {
-          data.address = formatAddressForTemplate(data.address);
-          this.filteredPaymentMethods.push(data);
-          data._recurringgifts = {};
-          this.filteredPaymentMethods.push(data);
-          this.selectedPaymentMethod = data.self.uri;
-          this.deleteOption = '1';
-          this.changeView();
-        },
-        (error) => {
-          this.submissionError.error = error.data;
-          this.$log.error(error.data,error);
-        });
+        .subscribe(data => {
+            data.address = data.address && formatAddressForTemplate(data.address);
+            data.recurringGifts = [];
+            this.selectedPaymentMethod = data;
+            this.filteredPaymentMethods.push(this.selectedPaymentMethod);
+            this.resolve.paymentMethodsList.push(this.selectedPaymentMethod);
+            this.deleteOption = '1';
+            this.changeView();
+          },
+          error => {
+            this.submissionError.error = error && error.data;
+            this.$log.error('Error saving new payment method in delete payment method modal', error);
+          });
     } else if(!success) {
       this.submissionError.loading = false;
       this.loading = false;
@@ -216,14 +150,25 @@ class deletePaymentMethodModalController {
     this.profileService.deletePaymentMethod(this.resolve.paymentMethod.self.uri)
       .subscribe(() => {
         this.loading = false;
-        this.deleteOption == '3' || !this.hasRecurrinGifts ? this.removePaymentMethodFromList() : this.moveDonations();
+        this.deleteOption !== '3' && this.hasRecurringGifts && this.moveDonationsLocally();
+        this.removePaymentMethodFromList();
         this.close();
       },(error) => {
         this.loading = false;
-        this.submissionError.error = error.data;
-        this.$log.error(error.data,error);
+        this.submissionError.error = error && error.data;
+        this.$log.error('Error deleting payment method', error);
         this.setView();
       });
+  }
+
+  moveDonationsLocally(){
+    this.selectedPaymentMethod.recurringGifts = concat(this.selectedPaymentMethod.recurringGifts, this.resolve.paymentMethod.recurringGifts);
+  }
+
+  removePaymentMethodFromList() {
+    remove(this.resolve.paymentMethodsList, gift => {
+      return gift.self.uri == this.resolve.paymentMethod.self.uri;
+    });
   }
 
   onSubmit(){
@@ -231,13 +176,13 @@ class deletePaymentMethodModalController {
     switch(this.deleteOption) {
       case '1':
         this.moveDonationsToNewPaymentMethod();
-      return;
+        return;
       case '3':
         this.stopRecurringGifts();
-      return;
+        return;
       default:
         this.deletePaymentMethod();
-      return;
+        return;
     }
   }
 
@@ -247,8 +192,11 @@ export default angular
   .module(componentName, [
     template.name,
     paymentMethodForm.name,
+    paymentMethodDisplay.name,
+    giftListItem.name,
+    giftSummaryView.name,
     profileService.name,
-    paymentMethodDisplay.name
+    donationsService.name
   ])
   .component(componentName, {
     controller: deletePaymentMethodModalController,

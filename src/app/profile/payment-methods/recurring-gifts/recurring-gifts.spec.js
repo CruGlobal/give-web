@@ -14,31 +14,8 @@ describe('recurringGiftsController', function() {
     });
   }));
 
-  it('should call BuildGifts()', () => {
-    spyOn(self.controller, 'buildGifts');
-    self.controller.$onInit();
-    expect(self.controller.buildGifts).toHaveBeenCalled();
-  });
-
   it('to be defined', () => {
     expect(self.controller).toBeDefined();
-  });
-
-  it('should return an array of gifts', () => {
-    self.controller.gifts = [
-      {
-        'rate': {},
-        'recurring-day-of-month': '',
-        'donation-lines': [{},{}]
-      },
-      {
-        'rate': {},
-        'recurring-day-of-month': '',
-        'donation-lines': [{},{}]
-      }
-    ];
-
-    expect(self.controller.buildGifts().length).toBe(4);
   });
 
 });
