@@ -15,11 +15,11 @@
           </thead>
 
           <tbody>
-            <tr ng-repeat="gift in $ctrl.buildGifts()">
-              <td>{{ gift['designation-name'] }}</td>
-              <td>{{ gift['amount'] | currency }}</td>
-              <td>{{ gift.rate.recurrence.interval }}</td>
-              <td>{{ gift['next-draw-date']['display-value'] | date:'mediumDate'}}</td>
+            <tr ng-repeat="gift in $ctrl.gifts">
+              <td>{{ gift.designationName }}</td>
+              <td>{{ gift.amount | currency }}</td>
+              <td>{{ gift.frequency }}</td>
+              <td>{{ gift.nextGiftDate.format('ll') }}</td>
             </tr>
           </tbody>
         </table>

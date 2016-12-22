@@ -111,7 +111,7 @@ class Step3Controller{
         this.$scope.$emit( cartUpdatedEvent );
         this.$window.location = '/thank-you.html';
       },
-      (error) => {
+      error => {
         this.onSubmittingOrder({value: false});
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();

@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import omit from 'lodash/omit';
 import assign from 'lodash/assign';
+import cloneDeep from 'lodash/cloneDeep';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import module from './profile.service';
@@ -18,6 +19,7 @@ import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixtu
 import phoneNumbersResponse from 'common/services/api/fixtures/cortex-profile-phonenumbers.fixture.js';
 import selfserviceDonorDetailsResponse from 'common/services/api/fixtures/cortex-profile-selfservicedonordetails.fixture.js';
 import mailingAddressResponse from 'common/services/api/fixtures/cortex-profile-mailingaddress.fixture.js';
+import RecurringGiftModel from 'common/models/recurringGift.model';
 
 let paymentmethodsFormsResponseZoomMapped = {
   bankAccount: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createbankaccountform[0],
@@ -80,29 +82,17 @@ describe('profile service', () => {
     it('should load the user\'s saved payment methods with donations', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts')
         .respond(200, paymentmethodsWithDonationsResponse);
+
+      let expectedData = cloneDeep(paymentmethodsWithDonationsResponse._selfservicepaymentmethods[0]._element)
+        .map(paymentMethod => {
+          paymentMethod.recurringGifts = [];
+          delete paymentMethod._recurringgifts;
+          return paymentMethod;
+        });
+      expectedData[1].recurringGifts = [jasmine.any(RecurringGiftModel), jasmine.any(RecurringGiftModel)];
       self.profileService.getPaymentMethodsWithDonations()
         .subscribe((data) => {
-          expect(data).toEqual([
-            paymentmethodsWithDonationsResponse._selfservicepaymentmethods[0]._element[0],
-            paymentmethodsWithDonationsResponse._selfservicepaymentmethods[0]._element[1]
-          ]);
-        });
-      self.$httpBackend.flush();
-    });
-  });
-
-  describe('updateRecurringGifts', () => {
-    it('should update recurring gifts', () => {
-      let recurringGifts = {
-        self: {
-          uri: '/donations/recurring/crugive/paymentmethods/giydimjygq='
-        }
-      };
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex'+recurringGifts.self.uri)
-        .respond(200, 'success');
-      self.profileService.updateRecurringGifts(recurringGifts)
-        .subscribe((data) => {
-          expect(data).toEqual('success');
+          expect(data).toEqual(expectedData);
         });
       self.$httpBackend.flush();
     });

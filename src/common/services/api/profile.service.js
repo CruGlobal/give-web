@@ -3,6 +3,7 @@ import pick from 'lodash/pick';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
 import map from 'lodash/map';
+import flatMap from 'lodash/flatMap';
 import assign from 'lodash/assign';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -10,7 +11,9 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
+
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
+import RecurringGiftModel from 'common/models/recurringGift.model';
 
 import cortexApiService from '../cortexApi.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
@@ -103,30 +106,30 @@ class Profile {
 
   getEmails(){ // for now zero indexed element is a donor's email and the element with index '1' is spouse's email. TODO: submit ticket to BE team to get rid of 'magic numbers'
     return this.cortexApiService.get({
-        path: ['profiles', this.cortexApiService.scope, 'default'],
-        zoom: {
-          emails: 'emails:element[]'
-        }
-      })
+      path: ['profiles', this.cortexApiService.scope, 'default'],
+      zoom: {
+        emails: 'emails:element[]'
+      }
+    })
       .pluck('emails');
   }
 
   updateEmail(data, spouse){
     return this.cortexApiService.post({
-        path: ['emails', this.cortexApiService.scope, spouse ? 'spouse' : ''],
-        data: {email: data.email},
-        followLocation: true
-      });
+      path: ['emails', this.cortexApiService.scope, spouse ? 'spouse' : ''],
+      data: {email: data.email},
+      followLocation: true
+    });
   }
 
   getPhoneNumbers(){
     return this.cortexApiService.get({
-        path: ['phonenumbers', this.cortexApiService.scope],
-        zoom: {
-          donor: 'element[]',
-          spouse: 'spouse[]'
-        }
-      })
+      path: ['phonenumbers', this.cortexApiService.scope],
+      zoom: {
+        donor: 'element[]',
+        spouse: 'spouse[]'
+      }
+    })
       .map(data => {
         let phoneNumbers = [];
         angular.forEach(data.donor, item => {
@@ -169,10 +172,10 @@ class Profile {
         mailingAddress: 'addresses:mailingaddress'
       }
     })
-    .map((response) => {
-      response.mailingAddress.address = formatAddressForTemplate(response.mailingAddress.address);
-      return response.mailingAddress;
-    });
+      .map((response) => {
+        response.mailingAddress.address = formatAddressForTemplate(response.mailingAddress.address);
+        return response.mailingAddress;
+      });
   }
 
 
@@ -187,11 +190,11 @@ class Profile {
 
   getPaymentMethods(){
     return this.cortexApiService.get({
-        path: ['profiles', this.cortexApiService.scope, 'default'],
-        zoom: {
-          paymentMethods: 'selfservicepaymentmethods:element[]'
-        }
-      })
+      path: ['profiles', this.cortexApiService.scope, 'default'],
+      zoom: {
+        paymentMethods: 'selfservicepaymentmethods:element[]'
+      }
+    })
       .pluck('paymentMethods')
       .map((paymentMethods) => {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
@@ -206,29 +209,27 @@ class Profile {
 
   getPaymentMethodsWithDonations(){
     return this.cortexApiService.get({
-        path: ['profiles', this.cortexApiService.scope, 'default'],
-        zoom: {
-          paymentMethods: 'selfservicepaymentmethods:element[]',
-          recurringGifts: 'selfservicepaymentmethods:element:recurringgifts'
-        }
-      })
+      path: ['profiles', this.cortexApiService.scope, 'default'],
+      zoom: {
+        paymentMethods: 'selfservicepaymentmethods:element[],selfservicepaymentmethods:element:recurringgifts'
+      }
+    })
       .pluck('paymentMethods')
-      .map((paymentMethods) => {
+      .map(paymentMethods => {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
           if(paymentMethod.address){
             paymentMethod.address = formatAddressForTemplate(paymentMethod.address);
           }
+          paymentMethod.recurringGifts = flatMap( paymentMethod.recurringgifts.donations, donation => {
+            return map( donation['donation-lines'], donationLine => {
+              return new RecurringGiftModel(donationLine, donation);
+            } );
+          } );
+          delete paymentMethod.recurringgifts;
           return paymentMethod;
         });
         return sortPaymentMethods(paymentMethods);
       });
-  }
-
-  updateRecurringGifts(recurringGifts){
-    return this.cortexApiService.put({
-      path: recurringGifts.self.uri,
-      data: recurringGifts
-    });
   }
 
   getPaymentMethodForms(){
@@ -236,12 +237,12 @@ class Profile {
       return Observable.of(this.paymentMethodForms);
     }else{
       return this.cortexApiService.get({
-          path: ['profiles', this.cortexApiService.scope, 'default'],
-          zoom: {
-            bankAccount: 'selfservicepaymentmethods:createbankaccountform',
-            creditCard: 'selfservicepaymentmethods:createcreditcardform'
-          }
-        })
+        path: ['profiles', this.cortexApiService.scope, 'default'],
+        zoom: {
+          bankAccount: 'selfservicepaymentmethods:createbankaccountform',
+          creditCard: 'selfservicepaymentmethods:createcreditcardform'
+        }
+      })
         .do((data) => {
           this.paymentMethodForms = data;
         });
@@ -309,14 +310,14 @@ class Profile {
 
   getPurchase(uri){
     return this.cortexApiService.get({
-        path: uri,
-        zoom: {
-          donorDetails: 'donordetails',
-          paymentMeans: 'paymentmeans:element',
-          lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
-          rateTotals: 'ratetotals:element[]'
-        }
-      })
+      path: uri,
+      zoom: {
+        donorDetails: 'donordetails',
+        paymentMeans: 'paymentmeans:element',
+        lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
+        rateTotals: 'ratetotals:element[]'
+      }
+    })
       .map((data) => {
         data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address']);
         delete data.donorDetails['mailing-address'];
