@@ -5,16 +5,16 @@
   <sign-in-form on-success="$ctrl.onSuccess()"></sign-in-form>
   <p class="text-center" ng-class="{'mt mb0': $ctrl.identified}">
     <span translate>Forgot your password?</span>
-    <a href ng-click="$ctrl.onStateChange({state: 'forgot-password'})" translate>Reset It</a>
+    <a href="" ng-click="$ctrl.onStateChange({state: 'forgot-password'})" translate>Reset It</a>
   </p>
   <p class="text-center" ng-if="$ctrl.identified">
     <span translate>Not {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}?</span>
-    <a href ng-click="$ctrl.signOut()" translate>Sign Out</a>
+    <a href="" ng-click="$ctrl.signOut()" translate>Sign Out</a>
   </p>
   <div class="form-group" ng-if="!$ctrl.identified">
     <p class="text-center strike">
       <span translate>Don't have an account?</span>
     </p>
-    <a href ng-click="$ctrl.onStateChange({state: 'sign-up'})" class="btn btn-block btn-default" translate>Sign Up</a>
+    <a href="" ng-click="$ctrl.onStateChange({state: 'sign-up'})" class="btn btn-block btn-default" translate>Sign Up</a>
   </div>
 </div>
