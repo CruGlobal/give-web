@@ -17,7 +17,7 @@
           accept="image/*"
           on-upload="$ctrl.uploading = true"
           on-success="$ctrl.uploadComplete(response)"
-          on-complete="$ctrl.uploading = false"
+          on-error="$ctrl.uploading = false"
         ></upload-button>
       </div>
 
