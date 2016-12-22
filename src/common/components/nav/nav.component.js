@@ -8,6 +8,7 @@ import find from 'lodash/find';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
+import loading from 'common/components/loading/loading.component';
 import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import mobileNavLevelComponent from './navMobileLevel.component';
@@ -19,6 +20,7 @@ import navCart, {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.c
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
+import signOutTemplate from './signOut.modal.tpl';
 
 let componentName = 'cruNav';
 
@@ -127,7 +129,15 @@ class NavController{
   }
 
   signOut() {
-    this.sessionService.downgradeToGuest().subscribe(angular.noop);
+    let modal = this.$uibModal.open({
+      templateUrl: signOutTemplate.name,
+      backdrop: 'static',
+      keyboard: false,
+      size: 'sm'
+    });
+    this.sessionService.downgradeToGuest().subscribe(() => {
+      modal.close();
+    }, angular.noop);
   }
 
   signedOut( event ) {
@@ -223,13 +233,15 @@ export default angular
     'environment',
     mobileTemplate.name,
     desktopTemplate.name,
+    signOutTemplate.name,
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
     subNavDirective.name,
     globalWebsitesModal.name,
     globalWebsitesModalWindowTemplate.name,
-    navCart.name
+    navCart.name,
+    loading.name
   ])
   .component(componentName, {
     controller: NavController,

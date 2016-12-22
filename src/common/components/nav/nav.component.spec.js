@@ -251,9 +251,13 @@ describe( 'nav signInButton', function () {
 
   describe( 'signOut', () => {
     it( 'calls downgradeToGuest()', () => {
+      let modalSpy = jasmine.createSpyObj('modal', ['close']);
       spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue( Observable.of( {} ) );
+      spyOn($ctrl.$uibModal, 'open').and.returnValue(modalSpy);
       $ctrl.signOut();
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalled();
       expect( $ctrl.sessionService.downgradeToGuest ).toHaveBeenCalled();
+      expect( modalSpy.close ).toHaveBeenCalled();
     } );
   } );
 
@@ -277,20 +281,20 @@ describe( 'nav signInButton', function () {
         expect( $ctrl.$window.location.reload ).toHaveBeenCalled();
       } );
     } );
+  } );
 
-    describe( 'openGlobalWebsitesModal', () => {
-      it( 'should open the global websites modal', () => {
-        spyOn($ctrl.$uibModal, 'open');
-        $ctrl.openGlobalWebsitesModal();
-        expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( {
-          component: 'globalWebsitesModal',
-          backdrop: 'static',
-          windowTemplateUrl: jasmine.any(String),
-          windowClass: 'globalWebsites--is-open',
-          resolve: {
-            menuStructure: $ctrl.menuStructure
-          }
-        } );
+  describe( 'openGlobalWebsitesModal', () => {
+    it( 'should open the global websites modal', () => {
+      spyOn($ctrl.$uibModal, 'open');
+      $ctrl.openGlobalWebsitesModal();
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( {
+        component: 'globalWebsitesModal',
+        backdrop: 'static',
+        windowTemplateUrl: jasmine.any(String),
+        windowClass: 'globalWebsites--is-open',
+        resolve: {
+          menuStructure: $ctrl.menuStructure
+        }
       } );
     } );
   } );
