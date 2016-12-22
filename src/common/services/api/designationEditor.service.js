@@ -41,9 +41,12 @@ class designationEditorService {
     });
   }
 
-  save(designationContent){
+  save(designationContent, campaignPage){
     return this.$http.post(designationConstants.saveEndpoint, designationContent, {
-      withCredentials: true
+      withCredentials: true,
+      params: {
+        campaign: campaignPage
+      }
     });
   }
 }

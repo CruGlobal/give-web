@@ -169,12 +169,12 @@ describe( 'Designation Editor', function () {
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.receiptTitle()).toEqual(designationSecurityResponse.designationName);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.giveTitle()).toEqual(designationSecurityResponse.title);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.giveTitle()).toEqual(designationSecurityResponse['jcr:title']);
 
         modalPromise.resolve('Title A');
         $rootScope.$digest();
 
-        expect($ctrl.designationContent.title).toEqual('Title A');
+        expect($ctrl.designationContent['jcr:title']).toEqual('Title A');
       } );
     });
 
