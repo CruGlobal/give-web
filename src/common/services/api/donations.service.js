@@ -73,7 +73,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
         followLocation: true,
         data:           data
       } )
-      .map( ( response ) => {
+      .map( response => {
         let links = filter(response.links, (link) => {
           return link.rel == 'element';
         });
