@@ -7,7 +7,7 @@
         <ul du-spy-context class="list-unstyled globalWebsites-continents" role="tablist">
           <li ng-repeat="continent in $ctrl.resolve.menuStructure.global"
               du-scrollspy="{{$ctrl.getContinentId(continent.path)}}">
-            <a href ng-click="$ctrl.scrollTo($ctrl.getContinentId(continent.path))" translate>{{continent.title}}</a>
+            <a href="" ng-click="$ctrl.scrollTo($ctrl.getContinentId(continent.path))" translate>{{continent.title}}</a>
           </li>
         </ul>
       </div>
