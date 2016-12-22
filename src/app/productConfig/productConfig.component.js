@@ -31,7 +31,7 @@ class ProductConfigController {
       .configureProduct( this.productCode, {amount: 50, 'campaign-code': this.campaignCode}, false );
     modalInstance.rendered.then( () => {
       this.loadingModal = false;
-    } );
+    }, angular.noop );
     modalInstance.result.then( () => {
         this.$window.location = '/cart.html';
       },

@@ -57,8 +57,16 @@
                 class="btn btn-subtle btn-block mt- collapse-indicator split-col-right"
                 ng-class="{collapsed: !$ctrl.showDetails}"
                 ng-click="$ctrl.toggleDetails()"
-                translate>Details
+                translate>
+          <i class="fa fa-exclamation-triangle text-danger"
+             ng-if="$ctrl.loadingDetailsError"
+             uib-tooltip="{{'Error loading detailed giving.' | translate}}">
+          </i>
+          Details&nbsp;
         </button>
+        <div class="alert alert-danger text-sm-center" role="alert" ng-if="$ctrl.loadingDetailsError">
+          <p translate>Error loading detailed giving. You can try again. If you continue to see this message, please contact support</p>
+        </div>
       </div>
     </div>
 

@@ -2,6 +2,8 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './recipientGift.component';
 import {ReplaySubject} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/throw';
 
 describe( 'your giving', function () {
   describe( 'recipient view', () => {
@@ -47,6 +49,15 @@ describe( 'your giving', function () {
           $ctrl.detailsLoaded = true;
           $ctrl.toggleDetails();
           expect( $ctrl.donationsService.getRecipientDetails ).not.toHaveBeenCalled();
+        } );
+
+        it( 'should log and error on failure', () => {
+          $ctrl.donationsService.getRecipientDetails.and.returnValue(Observable.throw('some error'));
+          $ctrl.toggleDetails();
+          expect( $ctrl.showDetails ).toEqual( false );
+          expect( $ctrl.isLoading ).toEqual( false );
+          expect($ctrl.loadingDetailsError).toEqual(true);
+          expect($ctrl.$log.error.logs[0]).toEqual(['Error loading recipient details', 'some error']);
         } );
       } );
 

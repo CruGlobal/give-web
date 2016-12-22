@@ -14,6 +14,7 @@ describe('PaymentMethodComponent', function () {
     },
     fakeModal = function() {
       return {
+        // eslint-disable-next-line jasmine/no-unsafe-spy
         close: jasmine.createSpy('close'),
         result: {
           then: function(confirmCallback) {
@@ -150,6 +151,7 @@ describe('PaymentMethodComponent', function () {
       self.controller.successMessage = {};
       self.controller.onSubmit({success:true, data: self.controller.data});
       expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error updating payment method', {data: 'some error'}]);
     });
 
     it('should edit payment method', () => {

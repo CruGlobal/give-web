@@ -32,8 +32,8 @@ class AccountBenefitsController {
         this.sessionModalService.userMatch().then(() => {
           // Hide component after successful user match
           this.isVisible = false;
-        });
-      } );
+        }, angular.noop );
+      }, angular.noop );
     }
   }
 }

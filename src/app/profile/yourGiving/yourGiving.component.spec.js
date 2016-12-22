@@ -120,7 +120,15 @@ describe( 'your giving', function () {
       expect( $ctrl.profile ).toEqual( {a: 'b'} );
       expect( $ctrl.profileLoading ).toEqual( false );
       expect( $ctrl.currentDate ).toEqual( jasmine.any( Date ) );
+      expect($ctrl.profileLoadingError).toEqual(false);
     } );
+
+    it('should log an error on failure', () => {
+      spyOn( $ctrl.profileService, 'getGivingProfile' ).and.returnValue( Observable.throw( 'some error' ) );
+      $ctrl.loadProfile();
+      expect($ctrl.$log.error.logs[0]).toEqual(['Error loading givingProfile', 'some error']);
+      expect($ctrl.profileLoadingError).toEqual(true);
+    });
   } );
 
   describe( 'setGivingView( name )', () => {

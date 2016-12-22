@@ -77,7 +77,7 @@ class CartController {
       .then( () => {
         pull(this.cartData.items, item);
         this.loadCart(true);
-      } );
+      }, angular.noop );
   }
 
   checkout() {

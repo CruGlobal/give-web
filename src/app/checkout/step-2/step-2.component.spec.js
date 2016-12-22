@@ -33,6 +33,12 @@ describe('checkout', () => {
         expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
         expect(self.controller.mailingAddress).toEqual({ streetAddress: 'Some street address'});
       });
+      it('should log on error', () => {
+        spyOn(self.controller.orderService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
+        self.controller.loadDonorDetails();
+        expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading donorDetails', 'some error']);
+      });
     });
 
     describe('handleExistingPaymentLoading', () => {

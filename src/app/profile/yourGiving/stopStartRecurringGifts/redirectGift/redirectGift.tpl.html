@@ -1,5 +1,15 @@
+<retry-modal ng-if="$ctrl.loadingRecurringGiftsError"
+             title="{{'Redirect A Gift' | translate}}"
+             on-retry="$ctrl.loadRecurringGifts()"
+             cancel="$ctrl.cancel()"
+             previous="$ctrl.previous()">
+  <p translate>There was an error loading your recurring gifts.</p>
+  <p translate>You can use the retry button to try loading them again. If you continue to see this message, please
+    contact support.</p>
+  <p>
+</retry-modal>
 <div ng-switch="$ctrl.step">
-  <div style="height: 100px;" ng-switch-default></div>
+  <div style="height: 100px;" ng-switch-default ng-if="!$ctrl.loadingRecurringGiftsError"></div>
   <redirect-gift-step-1 ng-switch-when="step-1"
                         gifts="$ctrl.gifts"
                         on-select-gift="$ctrl.selectGift(gift)"

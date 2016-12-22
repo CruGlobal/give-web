@@ -25,7 +25,8 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($rootScope, $http, $document, $window, $uibModal, $timeout, envService, sessionService, sessionModalService){
+  constructor($log, $rootScope, $http, $document, $window, $uibModal, $timeout, envService, sessionService, sessionModalService){
+    this.$log = $log;
     this.$http = $http;
     this.$document = $document;
     this.$uibModal = $uibModal;
@@ -68,6 +69,9 @@ class NavController{
       }else{
         this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
       }
+    },
+    error => {
+      this.$log.error('Error loading the nav.', error);
     });
 
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
@@ -119,7 +123,7 @@ class NavController{
       .then( () => {
         // use $timeout here as workaround to Firefox bug
         this.$timeout(() => this.$window.location.reload());
-      } );
+      }, angular.noop );
   }
 
   signOut() {

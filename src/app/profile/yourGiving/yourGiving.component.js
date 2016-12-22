@@ -32,7 +32,8 @@ export const givingViews = ['recipient', 'historical'];
 class YourGivingController {
 
   /* @ngInject */
-  constructor( $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService ) {
+  constructor( $log, $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService ) {
+    this.$log = $log;
     this.$window = $window;
     this.$location = $location;
     this.$uibModal = $uibModal;
@@ -95,11 +96,16 @@ class YourGivingController {
 
   loadProfile() {
     this.profileLoading = true;
+    this.profileLoadingError = false;
     this.profileService.getGivingProfile().subscribe( ( profile ) => {
       this.profile = profile;
       this.currentDate = new Date();
       this.profileLoading = false;
-    } );
+    },
+    error => {
+      this.$log.error('Error loading givingProfile', error);
+      this.profileLoadingError = true;
+    });
   }
 
   setGivingView( name ) {
@@ -123,7 +129,7 @@ class YourGivingController {
     } );
     this.editRecurringGiftsModal.result.then( () => {
       this.recurringGiftsUpdateSuccess = true;
-    } );
+    }, angular.noop );
   }
 
   openGiveOneTimeGiftModal() {
@@ -143,7 +149,7 @@ class YourGivingController {
     } );
     this.stopStartRecurringGiftsModal.result.then( () => {
       this.stopStartGiftsSuccess = true;
-    } );
+    }, angular.noop );
   }
 }
 export default angular

@@ -40,6 +40,9 @@ class Step3Controller{
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         this.donorDetails = data;
+      },
+      error => {
+        this.$log.error('Error loading donorDetails', error);
       });
   }
 
@@ -55,6 +58,9 @@ class Step3Controller{
         }else{
           this.$log.error('Error loading current payment info: current payment type is unknown');
         }
+      },
+      error => {
+        this.$log.error('Error loading current payment info', error);
       });
   }
 
@@ -62,6 +68,9 @@ class Step3Controller{
     this.orderService.checkErrors()
       .subscribe((data) => {
         this.needinfoErrors = data;
+      },
+      error => {
+        this.$log.error('Error loading checkErrors', error);
       });
   }
 

@@ -13,7 +13,8 @@ let componentName = 'paymentMethod';
 class PaymentMethodController{
 
   /* @ngInject */
-  constructor(envService, $uibModal, profileService){
+  constructor($log, envService, $uibModal, profileService){
+    this.$log = $log;
     this.isCollapsed = true;
     this.$uibModal = $uibModal;
     this.profileService = profileService;
@@ -67,6 +68,7 @@ class PaymentMethodController{
             this.editPaymentMethodModal.close();
           },
           error => {
+            this.$log.error('Error updating payment method', error);
             this.submissionError.loading = false;
             this.submissionError.error = error.data;
           }
@@ -90,7 +92,7 @@ class PaymentMethodController{
     });
     this.deletePaymentMethodModal.result.then(() => {
       this.onDelete();
-    });
+    }, angular.noop);
   }
 
   $onDestroy(){

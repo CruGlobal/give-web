@@ -8,9 +8,9 @@ import template from './addressForm.tpl';
 let componentName = 'addressForm';
 
 class AddressFormController {
-
   /* @ngInject */
-  constructor(geographiesService) {
+  constructor($log, geographiesService) {
+    this.$log = $log;
     this.geographiesService = geographiesService;
   }
 
@@ -19,22 +19,32 @@ class AddressFormController {
   }
 
   loadCountries(){
+    this.loadingCountriesError = false;
     this.geographiesService.getCountries()
       .subscribe((data) => {
         this.countries = data;
         if(this.address){
           this.refreshRegions(this.address.country, true);
         }
+      },
+      error => {
+        this.loadingCountriesError = true;
+        this.$log.error('Error loading countries.', error);
       });
   }
 
   refreshRegions(country, initial = false){
+    this.loadingRegionsError = false;
     country = find(this.countries, {name: country});
     if(!country){ return; }
 
     this.geographiesService.getRegions(country)
       .subscribe((data) => {
         this.regions = data;
+      },
+      error => {
+        this.loadingRegionsError = true;
+        this.$log.error('Error loading regions.', error);
       });
 
     if(!initial) {

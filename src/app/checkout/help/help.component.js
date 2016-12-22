@@ -8,13 +8,16 @@ let componentName = 'help';
 class CheckoutHelpController {
 
   /* @ngInject */
-  constructor($http) {
+  constructor($log, $http) {
+    this.$log = $log;
     this.$http = $http;
   }
 
   $onInit(){
     this.$http.get('/etc/designs/give/_jcr_content/content/give-need-help.json').then((response) => {
       this.helpHTML = response.data.richtextglobal;
+    }, error => {
+      this.$log.error('Error loading give-need-help', error);
     });
   }
 }

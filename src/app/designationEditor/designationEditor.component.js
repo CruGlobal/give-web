@@ -26,7 +26,8 @@ let componentName = 'designationEditor';
 class DesignationEditorController {
 
   /* @ngInject */
-  constructor( $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService, designationEditorService ) {
+  constructor( $log, $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService, designationEditorService ) {
+    this.$log = $log;
     this.sessionService = sessionService;
     this.sessionEnforcerService = sessionEnforcerService;
     this.designationEditorService = designationEditorService;
@@ -43,6 +44,11 @@ class DesignationEditorController {
   $onInit() {
     this.designationNumber = this.$location.search().d;
     this.campaignPage = this.$location.search().campaign;
+
+    // designationNumber is required
+    if(angular.isUndefined(this.designationNumber)) {
+      this.$window.location = '/';
+    }
 
     this.enforcerId = this.sessionEnforcerService( [Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -62,20 +68,25 @@ class DesignationEditorController {
 
   getDesignationContent() {
     if(!this.designationNumber){ return; }
+    this.loadingContentError = false;
+    this.contentLoaded = false;
     this.loadingOverlay = true;
 
     return this.$q.all([
       //get designation content
-      this.designationEditorService.getContent(this.designationNumber, this.campaignPage).then((response) => {
-        this.designationContent = response.data;
-      }),
-
+      this.designationEditorService.getContent(this.designationNumber, this.campaignPage),
       //get designation photos
-      this.designationEditorService.getPhotos(this.designationNumber, this.campaignPage).then((response) => {
-        this.designationPhotos = response.data;
-      })
-    ]).then(() => {
+      this.designationEditorService.getPhotos(this.designationNumber, this.campaignPage)
+    ]).then(responses => {
+      this.contentLoaded = true;
       this.loadingOverlay = false;
+      this.designationContent = responses[0].data;
+      this.designationPhotos = responses[1].data;
+    }, error => {
+      this.contentLoaded = false;
+      this.loadingOverlay = false;
+      this.loadingContentError = true;
+      this.$log.error('Error loading designation content or photos.', error);
     });
   }
 
@@ -97,7 +108,7 @@ class DesignationEditorController {
       .then( (title) => {
         this.designationContent.title = title;
         this.save();
-      });
+      }, angular.noop );
   }
 
   editPageOptions() {
@@ -125,7 +136,7 @@ class DesignationEditorController {
         this.designationContent.parentDesignationNumber = data.parentDesignationNumber;
         this.designationContent.suggestedAmounts = data.suggestedAmounts;
         this.save();
-      });
+      }, angular.noop );
   }
 
   selectPhoto(photoLocation, selectedPhoto) {
@@ -145,7 +156,7 @@ class DesignationEditorController {
       this.designationContent[photoLocation] = data.selected;
       this.designationPhotos = data.photos;
       this.save();
-    });
+    }, angular.noop );
   }
 
   photoUrl(originalUrl) {
@@ -166,7 +177,7 @@ class DesignationEditorController {
     this.$uibModal.open( modalOptions ).result.then( (text) => {
       this.designationContent[field] = text;
       this.save();
-    });
+    }, angular.noop );
   }
 
   editWebsite() {
@@ -184,20 +195,21 @@ class DesignationEditorController {
       .then( (websiteURL) => {
         this.designationContent.websiteURL = websiteURL;
         this.save();
-      });
+      }, angular.noop );
   }
 
   save() {
     this.loadingOverlay = true;
+    this.saveDesignationError = false;
 
     return this.designationEditorService.save(this.designationContent).then(() => {
       this.saveStatus = 'success';
       this.loadingOverlay = false;
-    }, () => {
+    }, error => {
       this.saveStatus = 'failure';
+      this.saveDesignationError = true;
       this.loadingOverlay = false;
-
-      alert('An error has occurred.');
+      this.$log.error('Error saving designation editor content.', error);
     });
   }
 }

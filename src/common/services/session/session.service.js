@@ -182,7 +182,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
       } else {
         setSessionTimeout( expiration );
       }
-    } );
+    }, angular.noop );
   }
 
   function giveSessionExpiration() {

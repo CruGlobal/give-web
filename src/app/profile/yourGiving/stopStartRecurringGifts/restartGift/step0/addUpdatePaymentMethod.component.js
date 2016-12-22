@@ -25,11 +25,13 @@ class addPaymentMethodController {
     this.profileService.getDonorDetails()
       .subscribe((data) => {
         this.mailingAddress = data.mailingAddress;
+      },
+      error => {
+        this.$log.error('Error loading donorDetails', error);
       });
   }
 
   onSubmit(success, data) {
-
     if(success && data) {
       if(this.paymentMethod) {
         this.setLoading({loading: true});
@@ -55,7 +57,7 @@ class addPaymentMethodController {
             },
             error => {
               this.setLoading({loading: false});
-              this.$log.error('Failed adding payment method. ', error.data);
+              this.$log.error('Failed adding payment method.', error.data);
               this.submissionError.error = error.data;
             }
           );

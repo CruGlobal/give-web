@@ -74,6 +74,7 @@ describe( 'your giving', () => {
                   expect( $ctrl.donationsService.addRecurringGifts ).toHaveBeenCalled();
                   expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
                   expect( $ctrl.error ).toEqual( 'error' );
+                  expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error processing restarts.', ''] );
                 } );
               } );
             } );

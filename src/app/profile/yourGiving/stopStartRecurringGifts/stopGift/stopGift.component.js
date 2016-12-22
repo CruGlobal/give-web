@@ -7,13 +7,15 @@ import {scrollModalToTop} from 'common/services/modalState.service';
 
 import stopGiftStep1 from './step1/stopGiftStep1.component';
 import stopGiftStep2 from './step2/stopGiftStep2.component';
+import retryModal from 'common/components/retryModal/retryModal.component';
 
 let componentName = 'stopGift';
 
 class StopGiftController {
 
   /* @ngInject */
-  constructor( donationsService ) {
+  constructor( $log, donationsService ) {
+    this.$log = $log;
     this.donationsService = donationsService;
     this.scrollModalToTop = scrollModalToTop;
   }
@@ -41,11 +43,18 @@ class StopGiftController {
   }
 
   loadRecurringGifts() {
+    this.setLoading( {loading: true} );
+    this.loadingRecurringGiftsError = false;
     this.donationsService.getRecurringGifts().subscribe( ( gifts ) => {
       this.gifts = gifts;
       this.setLoading( {loading: false} );
       this.setStep( 'step-1' );
-    } );
+    },
+    error => {
+      this.setLoading( {loading: false} );
+      this.loadingRecurringGiftsError = true;
+      this.$log.error('Error loading recurring gifts', error);
+    });
   }
 
   selectGifts( selectedGifts ) {
@@ -69,7 +78,8 @@ export default angular
     template.name,
     donationsService.name,
     stopGiftStep1.name,
-    stopGiftStep2.name
+    stopGiftStep2.name,
+    retryModal.name
   ] )
   .component( componentName, {
       controller:  StopGiftController,
