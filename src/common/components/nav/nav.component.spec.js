@@ -58,19 +58,6 @@ describe( 'nav', function () {
     expect( $document[0].body.className ).not.toContain( 'body-scroll-lock' );
   } );
 
-  it( 'to modify paths', () => {
-    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
-    $ctrl.getNav().subscribe( ( structure ) => {
-      structure = structure.main;
-      expect( structure[0].path ).toContain( 'https://www.cru.org/' );
-
-      let giveMenu = structure[structure.length - 1];
-      expect( giveMenu.title ).toEqual( 'Give' );
-      expect( giveMenu.children[0].path ).toContain( 'https://give.cru.org/' );
-    } );
-    $httpBackend.flush();
-  } );
-
   it( 'to redirect on search', () => {
     $ctrl.cruSearch( 'hello' );
     expect( $ctrl.$window.location ).toContain( 'search.hello.html' );
