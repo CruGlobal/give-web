@@ -1,7 +1,5 @@
 import angular from 'angular';
 import MobileDetect from 'mobile-detect';
-import transform from 'lodash/transform';
-import isObject from 'lodash/isObject';
 import includes from 'lodash/includes';
 import find from 'lodash/find';
 
@@ -40,7 +38,7 @@ class NavController{
     this.sessionModalService = sessionModalService;
 
     this.imgDomain = envService.read('imgDomain');
-    this.navFeed = '/content/cru/us/en/cru-nav.json';
+    this.navFeed = '/bin/cru/site-nav.json';
   }
 
   $onInit() {
@@ -61,7 +59,7 @@ class NavController{
     this.getNav().subscribe((structure) => {
       this.menuStructure = structure;
 
-      if(this.$window.location.hostname && this.$window.location.hostname.indexOf('give') !== -1){
+      if(this.$window.location.hostname && includes(this.$window.location.hostname, 'give')){
         this.subMenuStructure = [{
           title: 'Give',
           path: '/',
@@ -157,20 +155,9 @@ class NavController{
       url: this.navFeed
     }))
       .map((response) => {
-        let replacePathDeep = function(obj, keysMap) {
-          let replacePath = function(obj) {
-            return transform(obj, function(result, value, key) {
-              const newValue = keysMap[key] ? (keysMap[key] + value) : value;
-              result[key] = isObject(value) ? replacePath(value) : newValue;
-            });
-          };
-
-          return replacePath(obj);
-        };
-
-        let jsonStructure = angular.fromJson(response.data.jsonStructure);
+        let jsonStructure = response.data;
         let menuStructure = {
-          main: replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org', featuredPath: 'https://www.cru.org'}),
+          main: jsonStructure['/content/cru/us/en'],
           global: jsonStructure['/content/cru/us/en/global'],
           give: jsonStructure['/content/give/us/en']
         };
@@ -179,7 +166,7 @@ class NavController{
         menuStructure.main.push({
           title: 'Give',
           path: '/give',
-          children: replacePathDeep(jsonStructure['/content/give/us/en'], {path: 'https://give.cru.org'})
+          children: jsonStructure['/content/give/us/en']
         });
 
         return menuStructure;
