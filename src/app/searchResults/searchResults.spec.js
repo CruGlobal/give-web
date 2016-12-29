@@ -51,7 +51,7 @@ describe( 'searchResults', function () {
       spyOn( $ctrl.designationsService, 'productSearch' ).and.returnValue( Observable.throw( {} ) );
 
       $ctrl.$onInit();
-      $ctrl.requestSearch();
+      $ctrl.requestSearch('people');
       expect( $ctrl.searchResults ).toEqual( null );
       expect( $ctrl.searchError ).toEqual( true );
     } );
