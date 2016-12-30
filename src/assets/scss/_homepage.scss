@@ -229,6 +229,20 @@ $border-radius: 4px;
 .form-give-home-signin {
 
   @media screen and (max-width: 991px) {
+    .home-self-service {
+      margin-top: 8px;
+      a.u-block {
+        display: inline-block !important;
+        margin-left: 16px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 744px) {
+    .form-group:not(:last-child) {margin-right: 10px;}
+  }
+
+  @media only screen and (max-width: 720px) {
     display: none;
   }
 
@@ -278,10 +292,6 @@ $border-radius: 4px;
     a {
       color: $colorText;
     }
-  }
-
-  @media only screen and (max-width: 720px) {
-    display: none;
   }
 }
 
