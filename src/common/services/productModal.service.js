@@ -31,24 +31,21 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
           },
           suggestedAmounts: /*@ngInject*/ function ( $http, $q ) {
             let deferred = $q.defer();
-            if(angular.isDefined(config['campaign-page'])) {
-              let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
-                path = `/content/give/us/en/campaigns/${c}/${code}/${config['campaign-page']}.infinity.json`;
-              $http.get( path ).then( ( data ) => {
-                let suggestedAmounts = [];
-                if ( data.data['jcr:content'] && data.data['jcr:content'].suggestedAmounts ) {
-                  angular.forEach( data.data['jcr:content'].suggestedAmounts, ( v, k ) => {
-                    if ( toFinite( k ) > 0 ) suggestedAmounts.push( {amount: toFinite( k ), label: v} );
-                  } );
-                }
-                deferred.resolve( suggestedAmounts );
-              }, () => {
-                deferred.resolve( [] );
-              } );
-            }
-            else {
+            let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
+              path = config['campaign-page'] ?
+                `/content/give/us/en/campaigns/${c}/${code}/${config['campaign-page']}.infinity.json` :
+                `/content/give/us/en/designations/${c}/${code}.infinity.json`;
+            $http.get( path ).then( ( data ) => {
+              let suggestedAmounts = [];
+              if ( data.data['jcr:content'] && data.data['jcr:content'].suggestedAmounts ) {
+                angular.forEach( data.data['jcr:content'].suggestedAmounts, ( v, k ) => {
+                  if ( toFinite( k ) > 0 ) suggestedAmounts.push( {amount: toFinite( k ), label: v} );
+                } );
+              }
+              deferred.resolve( suggestedAmounts );
+            }, () => {
               deferred.resolve( [] );
-            }
+            } );
             return deferred.promise;
           },
           itemConfig:  () => config,
