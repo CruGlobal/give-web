@@ -36,7 +36,7 @@ class ProductConfigController {
         this.$window.location = '/cart.html';
       },
       reason => {
-        if(reason && reason !== 'backdrop click'){ // Avoid labeling normal closes or backdrop clicks as errors
+        if(reason && reason !== 'escape key press' && reason !== 'backdrop click'){ // Avoid labeling normal closes, escape key, or backdrop clicks as errors
           this.$log.error('Error opening product config modal', reason);
           this.error = true;
         }
