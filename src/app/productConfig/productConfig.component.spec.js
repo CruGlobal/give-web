@@ -85,6 +85,15 @@ describe( 'productConfig', function () {
       expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
     } );
 
+    it( 'should not throw an error when the modal gets dismissed by an escape key press', () => {
+      $ctrl.configModal();
+      resultDeferred.reject('escape key press');
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( false );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
+    } );
+
     it( 'should not throw an error when the modal gets dismissed by a background click', () => {
       $ctrl.configModal();
       resultDeferred.reject('backdrop click');
