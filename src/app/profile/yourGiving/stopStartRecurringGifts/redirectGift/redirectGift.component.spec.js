@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 
 import module from './redirectGift.component';
 
@@ -34,6 +35,13 @@ describe( 'your giving', () => {
       } );
 
       describe( 'setStep( step )', () => {
+        beforeEach(() => {
+          spyOn($ctrl, 'scrollModalToTop');
+        });
+        it('should scroll to the top of the modal', () => {
+          $ctrl.setStep();
+          expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+        });
         it( 'sets the current step', () => {
           expect( $ctrl.step ).not.toBeDefined();
           $ctrl.setStep( 'step-1' );
@@ -42,6 +50,13 @@ describe( 'your giving', () => {
       } );
 
       describe( 'previous()', () => {
+        beforeEach(() => {
+          spyOn($ctrl, 'scrollModalToTop');
+        });
+        it('should scroll to the top of the modal', () => {
+          $ctrl.previous();
+          expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+        });
         describe( 'undefined current step', () => {
           it( 'changes step to \'step-0\'', () => {
             $ctrl.previous();
@@ -78,11 +93,21 @@ describe( 'your giving', () => {
           spyOn( $ctrl.donationsService, 'getRecurringGifts' ).and.returnValue( Observable.of( ['a', 'b'] ) );
           spyOn( $ctrl, 'setStep' );
           $ctrl.loadRecurringGifts();
+          expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+          expect( $ctrl.loadingRecurringGiftsError ).toEqual( false );
           expect( $ctrl.donationsService.getRecurringGifts ).toHaveBeenCalled();
           expect( $ctrl.gifts ).toEqual( ['a', 'b'] );
           expect( $ctrl.setStep ).toHaveBeenCalledWith( 'step-1' );
           expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
         } );
+        it('should log an error on failure', () => {
+          spyOn( $ctrl.donationsService, 'getRecurringGifts' ).and.returnValue( Observable.throw( 'some error' ) );
+          $ctrl.loadRecurringGifts();
+          expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+          expect( $ctrl.loadingRecurringGiftsError ).toEqual( true );
+          expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading recurring gifts', 'some error'] );
+          expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+        });
       } );
 
       describe( 'selectGift( gift )', () => {

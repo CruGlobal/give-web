@@ -8,7 +8,9 @@ describe( 'Designation Editor Button', function () {
 
   beforeEach( inject( function ( _$rootScope_, _$componentController_ ) {
     $rootScope = _$rootScope_;
-    $ctrl = _$componentController_( module.name, {}, {designationNumber: '0123456'} );
+    $ctrl = _$componentController_( module.name, {
+      $window: {location: '/0123456'}
+    }, {designationNumber: '0123456'} );
   } ) );
 
   it( 'to be defined', function () {
@@ -25,7 +27,7 @@ describe( 'Designation Editor Button', function () {
       designationContentPromise = _$q_.defer();
 
       spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
-      spyOn( $ctrl.designationEditorService, 'getContent' ).and.returnValue( designationContentPromise.promise );
+      spyOn( $ctrl.designationEditorService, 'checkPermission' ).and.returnValue( designationContentPromise.promise );
     }));
 
     it( 'initializes the component', () => {
@@ -35,10 +37,23 @@ describe( 'Designation Editor Button', function () {
 
     it( 'has permission to edit', () => {
       $ctrl.$onInit();
-      designationContentPromise.resolve( {} );
+      designationContentPromise.resolve( );
       $rootScope.$digest();
 
       expect( $ctrl.showEditButton ).toEqual( true );
     } );
+
+    it( 'does not have permission to edit', () => {
+      $ctrl.$onInit();
+      designationContentPromise.reject( );
+      $rootScope.$digest();
+
+      expect( $ctrl.showEditButton ).toEqual( false );
+    } );
   } );
+
+  it('should navigate to editor on button click', () => {
+    $ctrl.editPage();
+    expect( $ctrl.$window.location ).toContain( $ctrl.designationNumber );
+  });
 } );

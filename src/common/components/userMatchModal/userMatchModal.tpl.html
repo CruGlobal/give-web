@@ -1,4 +1,12 @@
 <div class="col-xs-12" ng-switch="$ctrl.matchState">
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingDonorDetailsError">
+    <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, please contact support</p>
+    <p><button type="button" class="btn btn-primary" ng-click="$ctrl.$onInit()" translate>Retry</button></p>
+  </div>
+
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.selectContactError || $ctrl.loadingQuestionsError">
+    <p translate>An error has occurred. Please try again. If you continue to see this message, please contact support</p>
+  </div>
   <user-match-identity ng-switch-when="identity"
                        contacts="$ctrl.contacts"
                        on-select-contact="$ctrl.onSelectContact(contact)">
@@ -16,7 +24,12 @@
                        on-question-answer="$ctrl.onQuestionAnswer(key, answer)">
   </user-match-question>
   <div ng-switch-when="success">
-    <p translate>Thank you for taking the time to answer our security questions. Your account is now activated.</p>
+    <p ng-if="!$ctrl.skippedQuestions" translate>
+      Thank you for taking the time to answer our security questions. Your account is now activated.
+    </p>
+    <p ng-if="$ctrl.skippedQuestions" translate>
+      Thank you for completing account registration. Your account has been activated.
+    </p>
     <p>
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>
@@ -27,5 +40,5 @@
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>
   </div>
-  <div ng-switch-default style="height: 100px;"></div>
+  <div ng-switch-default style="height: 100px;" ng-if="!$ctrl.loadingDonorDetailsError"></div>
 </div>

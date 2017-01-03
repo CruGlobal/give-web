@@ -7,7 +7,6 @@ import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.
 import giftDetailsView from 'common/components/giftViews/giftDetailsView/giftDetailsView.component';
 import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
 
-import analyticsModule from 'app/analytics/analytics.module';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'redirectGiftStep3';
@@ -15,7 +14,8 @@ let componentName = 'redirectGiftStep3';
 class RedirectGiftStep3Controller {
 
   /* @ngInject */
-  constructor( commonService, donationsService, analyticsFactory) {
+  constructor( $log, commonService, donationsService, analyticsFactory ) {
+    this.$log = $log;
     this.commonService = commonService;
     this.donationsService = donationsService;
     this.state = 'update';
@@ -29,9 +29,10 @@ class RedirectGiftStep3Controller {
       this.onComplete();
       this.analyticsFactory.setEvent('recurring donation redirected');
       this.analyticsFactory.editRecurringDonation(this.gift);
-    }, () => {
+    }, (error) => {
       this.hasError = true;
       this.setLoading( {loading: false} );
+      this.$log.error('Error redirecting a gift', error);
     } );
   }
 

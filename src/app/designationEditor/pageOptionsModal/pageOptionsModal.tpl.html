@@ -1,18 +1,18 @@
 <div class="modal-body">
   <!-- Nav tabs -->
-  <ul class="nav nav-tabs" ng-init="tab = 'parentDesignation'">
-    <li ng-class="{'active': tab === 'parentDesignation'}">
-      <a href="" ng-click="tab = 'parentDesignation'">
-        <span class="xs-hide">Parent </span>Designation
+  <ul class="nav nav-tabs" ng-init="$ctrl.tab = 'parentDesignation'">
+    <li ng-class="{'active': $ctrl.tab === 'parentDesignation'}">
+      <a href="" ng-click="$ctrl.tab = 'parentDesignation'">
+        <span class="xs-hide">Parent</span> Designation
       </a>
     </li>
-    <li ng-class="{'active': tab === 'givingAmounts'}">
-      <a href="" ng-click="tab = 'givingAmounts'">
-        Custom <span class="xs-hide">Giving </span>Amounts
+    <li ng-class="{'active': $ctrl.tab === 'givingAmounts'}" ng-if="$ctrl.designationType !== 'Staff'">
+      <a href="" ng-click="$ctrl.tab = 'givingAmounts'">
+        Custom <span class="xs-hide">Giving</span> Amounts
       </a>
     </li>
-    <li ng-class="{'active': tab === 'other'}">
-      <a href="" ng-click="tab = 'other'">
+    <li ng-class="{'active': $ctrl.tab === 'other'}">
+      <a href="" ng-click="$ctrl.tab = 'other'" translate>
         Other
       </a>
     </li>
@@ -20,7 +20,7 @@
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div class="tab-pane active" ng-if="tab === 'parentDesignation'">
+    <div class="tab-pane active" ng-if="$ctrl.tab === 'parentDesignation'">
       <div class="form-group">
         <label>Parent Designation</label>
         <input type="text" class="form-control" ng-model="$ctrl.parentDesignationNumber">
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="tab-pane active" ng-if="tab === 'givingAmounts'">
+    <div class="tab-pane active" ng-if="$ctrl.tab === 'givingAmounts'">
       <table class="table table-hover table-condensed">
         <thead>
           <tr>
@@ -60,7 +60,7 @@
       </table>
     </div>
 
-    <div class="tab-pane active" ng-if="tab === 'other'">
+    <div class="tab-pane active" ng-if="$ctrl.tab === 'other'">
       <p>Additional settings can be changed by sending email to <strong><a href="mailto:fds@cru.org">fds@cru.org</a></strong></p>
 
       <ul>

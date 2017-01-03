@@ -1,4 +1,4 @@
-<div ng-switch="$ctrl.state" style="position: relative;">
+<div ng-switch="$ctrl.state" class="loading-overlay-parent">
   <stop-start-step-0 ng-switch-when="step-0"
                      gift-action="$ctrl.giftAction"
                      change-state="$ctrl.changeState(state)"
@@ -22,5 +22,5 @@
                 complete="$ctrl.close()"
                 set-loading="$ctrl.setLoading(loading)">
   </restart-gift>
-  <loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>
+  <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
 </div>

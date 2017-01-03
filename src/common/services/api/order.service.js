@@ -38,10 +38,13 @@ class Order{
           email: 'order:emailinfo:email'
         }
       })
-      .map((data) => {
-        let donorDetails = data.donorDetails;
-        donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address']);
-        delete donorDetails['mailing-address'];
+      .map(data => {
+        let donorDetails = { name: {}, mailingAddress: {} };
+        if(data.donorDetails){
+          donorDetails = data.donorDetails;
+          donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address']);
+          delete donorDetails['mailing-address'];
+        }
 
         // Default country to US
         if(!donorDetails.mailingAddress.country){

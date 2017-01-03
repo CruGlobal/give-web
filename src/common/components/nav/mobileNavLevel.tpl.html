@@ -2,7 +2,12 @@
   <a ng-href="{{i.path}}" ng-if="!i.children.length">{{i.title}}</a>
   <a ng-if="i.children.length" ng-click="$ctrl.path.push(i.path.split('/').pop());">{{i.title}}</a>
 
-  <ul>
-    <nav-mobile-level ng-if="$ctrl.path[$ctrl.level] === i.path.split('/').pop()" structure="i.children" level="$ctrl.level + 1" path="$ctrl.path"></nav-mobile-level>
+  <ul ng-if="$ctrl.path[$ctrl.level] === i.path.split('/').pop()">
+    <li>
+      <a ng-href="{{i.path}}" translate>
+        Home
+      </a>
+    </li>
+    <nav-mobile-level structure="i.children" level="$ctrl.level + 1" path="$ctrl.path"></nav-mobile-level>
   </ul>
 </li>

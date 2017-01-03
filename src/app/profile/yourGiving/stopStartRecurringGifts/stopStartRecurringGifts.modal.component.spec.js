@@ -27,8 +27,12 @@ describe( 'stopStartRecurringGiftsModal', () => {
   describe( 'changeState( state )', () => {
     beforeEach( () => {
       $ctrl.state = 'step-0';
-    } );
-
+      spyOn($ctrl, 'scrollModalToTop');
+    });
+    it('should scroll to the top of the modal', () => {
+      $ctrl.changeState();
+      expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+    });
     it( 'changes state', () => {
       $ctrl.changeState( 'stop' );
       expect( $ctrl.state ).toEqual( 'stop' );
@@ -38,6 +42,14 @@ describe( 'stopStartRecurringGiftsModal', () => {
     it( 'changes state to \'step-0\'', () => {
       $ctrl.changeState( 'step-0' );
       expect( $ctrl.state ).toEqual( 'step-0' );
+    } );
+
+    it( 'redirects to payment methods page', () => {
+      $ctrl.$window = {
+        location: ''
+      };
+      $ctrl.changeState( 'change' );
+      expect( $ctrl.$window.location ).toEqual( '/payment-methods.html' );
     } );
   } );
 

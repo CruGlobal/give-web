@@ -1,13 +1,15 @@
 import angular from 'angular';
 import 'angular-cookies';
-import 'angular-environment';
 import jwtDecode from 'jwt-decode';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/finally';
 
-import { updateRollbarPerson } from 'common/rollbar.config.js';
+import {updateRollbarPerson} from 'common/rollbar.config.js';
 
 import appConfig from 'common/app.config';
 
@@ -23,6 +25,8 @@ export let Sessions = {
   give:   'give-session',
   cru:    'cru-session'
 };
+
+export let SignOutEvent = 'SessionSignedOut';
 
 /*@ngInject*/
 function session( $cookies, $rootScope, $http, $timeout, envService ) {
@@ -41,14 +45,15 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
 
   // Return sessionService public interface
   return {
-    session:        session,
-    sessionSubject: sessionSubject,
-    getRole:        currentRole,
-    signIn:         signIn,
-    signOut:        signOut,
-    signUp:         signUp,
-    forgotPassword: forgotPassword,
-    resetPassword:  resetPassword
+    session:          session,
+    sessionSubject:   sessionSubject,
+    getRole:          currentRole,
+    signIn:           signIn,
+    signOut:          signOut,
+    signUp:           signUp,
+    forgotPassword:   forgotPassword,
+    resetPassword:    resetPassword,
+    downgradeToGuest: downgradeToGuest
   };
 
   /* Public Methods */
@@ -123,6 +128,22 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
       .map( ( response ) => response.data );
   }
 
+  function downgradeToGuest( skipEvent = false ) {
+    let observable = currentRole() == Roles.public ?
+      Observable.throw( 'must be IDENTIFIED' ) :
+      Observable
+        .from( $http( {
+          method:          'POST',
+          url:             casApiUrl( '/downgrade' ),
+          withCredentials: true,
+          data:            {}
+        } ) )
+        .map( ( response ) => response.data );
+    return skipEvent ? observable : observable.finally( () => {
+      $rootScope.$broadcast( SignOutEvent );
+    } );
+  }
+
   /* Private Methods */
   function updateCurrentSession( encoded_value ) {
     let cortexSession = {};
@@ -161,7 +182,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
       } else {
         setSessionTimeout( expiration );
       }
-    } );
+    }, angular.noop );
   }
 
   function giveSessionExpiration() {
@@ -201,7 +222,6 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
 export default angular
   .module( serviceName, [
     'ngCookies',
-    'environment',
     appConfig.name
   ] )
   .factory( serviceName, session );

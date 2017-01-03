@@ -47,6 +47,7 @@ class ExistingPaymentMethodsController {
         }
         this.paymentMethodFormModal && this.paymentMethodFormModal.close();
       }, (error) => {
+        this.$log.error('Error loading paymentMethods', error);
         this.onLoad({success: false, error: error});
         this.paymentMethodFormModal && this.paymentMethodFormModal.close();
       });

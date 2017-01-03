@@ -6,7 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-import {Roles} from 'common/services/session/session.service';
+import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import {queryParams} from './yourGiving.component';
 
 describe( 'your giving', function () {
@@ -15,7 +15,7 @@ describe( 'your giving', function () {
 
   beforeEach( inject( ( _$componentController_ ) => {
     $ctrl = _$componentController_( module.name, {
-      $window: {location: 'your-giving.html'}
+      $window: {location: '/your-giving.html'}
     } );
   } ) );
 
@@ -23,6 +23,7 @@ describe( 'your giving', function () {
     expect( $ctrl ).toBeDefined();
     expect( $ctrl.$window ).toBeDefined();
     expect( $ctrl.$location ).toBeDefined();
+    expect( $ctrl.$rootScope ).toBeDefined();
     expect( $ctrl.sessionEnforcerService ).toBeDefined();
     expect( $ctrl.profileService ).toBeDefined();
     expect( $ctrl.sessionService ).toBeDefined();
@@ -33,6 +34,8 @@ describe( 'your giving', function () {
       spyOn( $ctrl, 'loadProfile' );
       spyOn( $ctrl, 'sessionEnforcerService' );
       spyOn( $ctrl, 'setGivingView' );
+      spyOn( $ctrl.$rootScope, '$on' );
+      spyOn( $ctrl, 'signedOut' );
     } );
 
     describe( '\'PUBLIC\' role', () => {
@@ -49,6 +52,9 @@ describe( 'your giving', function () {
         expect( $ctrl.setGivingView ).not.toHaveBeenCalled();
         expect( $ctrl.profileLoading ).toEqual( true );
         expect( $ctrl.loadProfile ).not.toHaveBeenCalled();
+        expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
+        $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+        expect( $ctrl.signedOut ).toHaveBeenCalled();
       } );
     } );
 
@@ -64,6 +70,9 @@ describe( 'your giving', function () {
           } ), 'donor'
         );
         expect( $ctrl.loadProfile ).not.toHaveBeenCalled();
+        expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
+        $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+        expect( $ctrl.signedOut ).toHaveBeenCalled();
       } );
     } );
 
@@ -82,7 +91,7 @@ describe( 'your giving', function () {
       it( 'executes failure callback', () => {
         $ctrl.$onInit();
         $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['cancel']();
-        expect( $ctrl.$window.location ).toEqual( '/cart.html' );
+        expect( $ctrl.$window.location ).toEqual( '/' );
       } );
     } );
   } );
@@ -111,7 +120,15 @@ describe( 'your giving', function () {
       expect( $ctrl.profile ).toEqual( {a: 'b'} );
       expect( $ctrl.profileLoading ).toEqual( false );
       expect( $ctrl.currentDate ).toEqual( jasmine.any( Date ) );
+      expect($ctrl.profileLoadingError).toEqual(false);
     } );
+
+    it('should log an error on failure', () => {
+      spyOn( $ctrl.profileService, 'getGivingProfile' ).and.returnValue( Observable.throw( 'some error' ) );
+      $ctrl.loadProfile();
+      expect($ctrl.$log.error.logs[0]).toEqual(['Error loading givingProfile', 'some error']);
+      expect($ctrl.profileLoadingError).toEqual(true);
+    });
   } );
 
   describe( 'setGivingView( name )', () => {
@@ -162,6 +179,14 @@ describe( 'your giving', function () {
     } );
   } );
 
+  describe( 'openGiveOneTimeGiftModal', () => {
+    it( 'should open the modal', () => {
+      spyOn( $ctrl.$uibModal, 'open' );
+      $ctrl.openGiveOneTimeGiftModal();
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'giveOneTimeGiftModal'} ) );
+    } );
+  } );
+
   describe( 'openStopStartRecurringGiftsModal', () => {
     it( 'should open the modal', () => {
       spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: jasmine.createSpy( 'then' )}} );
@@ -170,6 +195,24 @@ describe( 'your giving', function () {
       expect( $ctrl.stopStartGiftsSuccess ).toEqual( false );
       $ctrl.stopStartRecurringGiftsModal.result.then.calls.first().args[0](); // Execute close modal promise success function
       expect( $ctrl.stopStartGiftsSuccess ).toEqual( true );
+    } );
+  } );
+
+  describe( 'signedOut( event )', () => {
+    describe( 'default prevented', () => {
+      it( 'does nothing', () => {
+        $ctrl.signedOut( {defaultPrevented: true} );
+        expect( $ctrl.$window.location ).toEqual( '/your-giving.html' );
+      } );
+    } );
+
+    describe( 'default not prevented', () => {
+      it( 'navigates to \'\/\'', () => {
+        let spy = jasmine.createSpy( 'preventDefault' );
+        $ctrl.signedOut( {defaultPrevented: false, preventDefault: spy} );
+        expect( spy ).toHaveBeenCalled();
+        expect( $ctrl.$window.location ).toEqual( '/' );
+      } );
     } );
   } );
 } );

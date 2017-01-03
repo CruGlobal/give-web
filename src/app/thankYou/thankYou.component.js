@@ -2,22 +2,20 @@ import 'babel/external-helpers';
 import angular from 'angular';
 import concat from 'lodash/concat';
 import map from 'lodash/map';
-import { Observable } from 'rxjs/Observable';
 
 import accountBenefits from './accountBenefits/accountBenefits.component';
 import help from '../checkout/help/help.component';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
-import analyticsFactory from 'app/analytics/analytics.factory';
 
 import capitalizeFilter from 'common/filters/capitalize.filter';
 
 import commonModule from 'common/common.module';
 import orderService from 'common/services/api/order.service';
 import profileService from 'common/services/api/profile.service';
-import sessionService from 'common/services/session/session.service';
+import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './thankYou.tpl';
 
@@ -26,7 +24,9 @@ let componentName = 'thankYou';
 class ThankYouController{
 
   /* @ngInject */
-  constructor(orderService, profileService, sessionModalService, analyticsFactory, $log){
+  constructor($rootScope, $window, analyticsFactory, orderService, profileService, sessionModalService, $log){
+    this.$rootScope = $rootScope;
+    this.$window = $window;
     this.orderService = orderService;
     this.profileService = profileService;
     this.sessionModalService = sessionModalService;
@@ -35,9 +35,17 @@ class ThankYouController{
   }
 
   $onInit(){
-    Observable.of(this.loadLastPurchase(), this.loadEmail()).subscribe(null, null, () => {
-      this.analyticsFactory.pageLoaded();
-    });
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
+    this.loadLastPurchase();
+    this.loadEmail();
+    this.showAccountBenefits = true;
+  }
+
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
   }
 
   loadLastPurchase(){
@@ -56,8 +64,11 @@ class ThankYouController{
           // Display Account Benefits Modal when registration-state is NEW or MATCHED
           if(this.purchase.donorDetails['registration-state'] !== 'COMPLETED') {
             this.sessionModalService.accountBenefits().then(() => {
-              this.sessionModalService.userMatch();
-            });
+              this.sessionModalService.userMatch().then(() => {
+                // Hide accountBenefits after successful user match
+                this.showAccountBenefits = false;
+              }, angular.noop);
+            }, angular.noop);
           }
 
           // Map rate totals to match format from order endpoint
@@ -77,6 +88,8 @@ class ThankYouController{
           );
           delete this.loadingError;
           this.loading = false;
+
+          this.analyticsFactory.pageLoaded();
         },
         (error) => {
           this.$log.error('Error loading purchase data for thank you component', error);
@@ -86,29 +99,27 @@ class ThankYouController{
   }
 
   loadEmail(){
-    this.profileService.getEmail()
+    this.profileService.getEmails()
       .subscribe((data) => {
-        this.email = data;
+        this.email = data[0].email;
       });
   }
-
 }
 
 export default angular
   .module(componentName, [
     template.name,
     commonModule.name,
-    analyticsFactory.name,
     accountBenefits.name,
     help.name,
     displayAddressComponent.name,
     displayRateTotals.name,
-    loadingOverlay.name,
     capitalizeFilter.name,
     orderService.name,
     profileService.name,
     sessionService.name,
-    sessionModalService.name
+    sessionModalService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: ThankYouController,

@@ -100,10 +100,27 @@ describe( 'your giving', () => {
             expect( $ctrl.paymentMethods ).toEqual( paymentMethods );
             expect( $ctrl.nextDrawDate ).toEqual( '2015-02-04' );
             expect( $ctrl.hasPaymentMethods ).toEqual( false );
-            expect( $ctrl.validPaymentMethods ).toEqual( [] );
-            expect( $ctrl.hasValidPaymentMethods ).toEqual( false );
-            expect( $ctrl.loadGiftsAndRecipients ).toHaveBeenCalled();
-            expect( $ctrl.setLoading ).not.toHaveBeenCalledWith( {loading: false} );
+            expect( $ctrl.validPaymentMethods ).toBeUndefined();
+          } );
+        } );
+
+
+        describe( 'has payment methods but all are invalid', () => {
+          it( 'should offer to update/add payment method', () => {
+            let paymentMethods = [
+              {
+                self: {
+                  type: ''
+                },
+                'expiry-year': '2000'
+              }
+            ];
+            $ctrl.profileService.getPaymentMethods.and.returnValue( Observable.of( paymentMethods ) );
+            $ctrl.commonService.getNextDrawDate.and.returnValue( Observable.of( '2015-02-04' ) );
+
+            $ctrl.loadPaymentMethods();
+            expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+            expect( $ctrl.step ).toBe('select-payment-method');
           } );
         } );
 
@@ -118,6 +135,7 @@ describe( 'your giving', () => {
             expect( $ctrl.commonService.getNextDrawDate ).toHaveBeenCalled();
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
+            expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading paymentMethods', 'invalid'] );
           } );
         } );
 
@@ -132,6 +150,7 @@ describe( 'your giving', () => {
             expect( $ctrl.commonService.getNextDrawDate ).toHaveBeenCalled();
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
+            expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading paymentMethods', ''] );
           } );
         } );
       } );
@@ -195,7 +214,7 @@ describe( 'your giving', () => {
 
         describe( 'getRecurringGifts error', () => {
           it( 'sets error', () => {
-            $ctrl.donationsService.getRecurringGifts.and.returnValue( Observable.throw() );
+            $ctrl.donationsService.getRecurringGifts.and.returnValue( Observable.throw( '' ) );
             $ctrl.donationsService.getSuggestedRecipients.and.returnValue( Observable.of( [{'designation-name': 'Charles Xavier'}] ) );
 
             $ctrl.loadGiftsAndRecipients();
@@ -206,13 +225,14 @@ describe( 'your giving', () => {
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
             expect( $ctrl.next ).not.toHaveBeenCalled();
+            expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading gifts and receipts', ''] );
           } );
         } );
 
         describe( 'getSuggestedRecipients error', () => {
           it( 'sets error', () => {
             $ctrl.donationsService.getRecurringGifts.and.returnValue( Observable.of( [] ) );
-            $ctrl.donationsService.getSuggestedRecipients.and.returnValue( Observable.throw() );
+            $ctrl.donationsService.getSuggestedRecipients.and.returnValue( Observable.throw( 'some error' ) );
 
             $ctrl.loadGiftsAndRecipients();
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
@@ -222,14 +242,23 @@ describe( 'your giving', () => {
             expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
             expect( $ctrl.error ).toEqual( true );
             expect( $ctrl.next ).not.toHaveBeenCalled();
+            expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error loading gifts and receipts', 'some error'] );
           } );
         } );
       } );
 
       describe( 'next( selected, configured )', () => {
+        beforeEach(() => {
+          spyOn($ctrl, 'scrollModalToTop');
+        });
         afterEach( () => {
           expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
         } );
+
+        it('should scroll to the top of the modal', () => {
+          $ctrl.next();
+          expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+        });
 
         describe( 'step = \'loading\'', () => {
           beforeEach( () => {
@@ -377,6 +406,18 @@ describe( 'your giving', () => {
           } );
         } );
 
+        describe( 'step = \'add-update-payment-method\'', () => {
+          beforeEach( () => {
+            $ctrl.step = 'add-update-payment-method';
+          } );
+          it( 'sets step to \'suspended\'', () => {
+            spyOn($ctrl, 'loadPaymentMethods');
+            $ctrl.next();
+            expect( $ctrl.loadPaymentMethods ).toHaveBeenCalled();
+            expect( $ctrl.step ).toEqual( 'suspended' );
+          } );
+        } );
+
         describe( 'step = \'confirm\'', () => {
           beforeEach( () => {
             $ctrl.step = 'confirm';
@@ -410,7 +451,13 @@ describe( 'your giving', () => {
             suggested: [],
             search:    []
           };
+          spyOn($ctrl, 'scrollModalToTop');
         } );
+
+        it('should scroll to the top of the modal', () => {
+          $ctrl.previous();
+          expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+        });
 
         describe( 'step = \'confirm\'', () => {
           it( 'sets step to \'configure\'', () => {
@@ -506,6 +553,20 @@ describe( 'your giving', () => {
             $ctrl.includeSuspendedGifts = false;
             $ctrl.previous();
             expect( $ctrl.changeState ).toHaveBeenCalledWith( {state: 'step-0'} );
+          } );
+        } );
+        describe( 'step = \'add-update-payment-method\'', () => {
+          it( 'sets step to \'add-update-payment-method\'', () => {
+            $ctrl.step = 'add-update-payment-method';
+            $ctrl.previous();
+            expect( $ctrl.changeState ).toHaveBeenCalledWith( {state: 'step-0'} );
+          } );
+        } );
+        describe( 'step = \'select-payment-method\'', () => {
+          it( 'sets step to \'select-payment-method\'', () => {
+            $ctrl.step = 'select-payment-method';
+            $ctrl.next(null,null,'data');
+            expect( $ctrl.paymentMethod ).toBe('data');
           } );
         } );
       } );

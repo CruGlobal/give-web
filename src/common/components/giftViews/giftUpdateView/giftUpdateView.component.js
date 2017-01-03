@@ -1,6 +1,7 @@
 import angular from 'angular';
 import moment from 'moment';
 
+import showErrors from 'common/filters/showErrors.filter';
 import {startDate, quarterlyMonths, possibleTransactionDays} from 'common/services/giftHelpers/giftDates.service';
 
 import template from './giftUpdateView.tpl';
@@ -24,12 +25,14 @@ class GiftUpdateViewController {
 
 export default angular
   .module(componentName, [
-    template.name
+    template.name,
+    showErrors.name
   ])
   .component(componentName, {
     controller: GiftUpdateViewController,
     templateUrl: template.name,
     bindings: {
-      gift: '='
+      gift: '=',
+      singleGift: '@'
     }
   });

@@ -1,0 +1,53 @@
+<div class="container-fluid">
+  <div class="row repeating-row" ng-if="$ctrl.loading">
+    <div class="col-xs-12">
+      <loading>
+        <div class="mb--" translate>Loading gifts...</div>
+      </loading>
+    </div>
+  </div>
+  <div class="row repeating-row" ng-if="!$ctrl.hasItems && !$ctrl.loading">
+    <div class="col-xs-12">
+      <p class="text-center mt-" translate>
+        Your cart is empty
+      </p>
+    </div>
+  </div>
+  <div class="row repeating-row" ng-if="$ctrl.error">
+    <div class="col-xs-12 text-center mt- text-warning">
+      <p translate>
+        There was an error loading your cart.
+      <br>
+        You can <a href="" ng-click="$ctrl.loadCart()">try again</a>.
+      </p>
+    </div>
+  </div>
+  <div class="row" ng-class="{ 'desktop-cart-list': !$ctrl.mobile }" ng-if="$ctrl.hasItems">
+    <div class="col-xs-12">
+      <div class="row repeating-row" ng-repeat="i in $ctrl.cartData.items">
+        <div class="col-xs-3">
+          <img desig-src="{{i.designationNumber}}">
+        </div>
+        <div class="col-xs-9">
+          <p class="title">{{i.displayName}}</p>
+          <p class="designation-number">#{{i.designationNumber}}</p>
+          <p class="price">{{i.price}} {{i.frequency}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row repeating-row sub-total" ng-if="$ctrl.hasItems">
+    <div class="col-xs-12 text-right">
+      <p translate translate-n="$ctrl.cartData.items.length" translate-plural="{{$count}} Items">1 Item</p>
+    </div>
+  </div>
+  <div class="row row-no-spacing" ng-if="$ctrl.hasItems || $ctrl.error"><!-- TODO: row-no-spacing not in nav css -->
+    <div class="col-xs-6">
+      <a href="/cart.html" class="btn btn-default btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" translate>Cart</a>
+    </div>
+    <div class="col-xs-6">
+      <a href="" class="btn btn-primary btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" ng-click="$ctrl.checkout()" translate>Checkout</a>
+    </div>
+  </div>
+</div>

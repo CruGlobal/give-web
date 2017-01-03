@@ -41,7 +41,7 @@
         </a>
       </li>
       <li role="presentation" ng-class="{'active': mobileTab === 'cart'}">
-        <a href="" ng-click="mobileTab = 'cart'">
+        <a href="" ng-click="mobileTab = 'cart'; $ctrl.cartOpened()">
           <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-cart-icon.png">
         </a>
       </li>
@@ -75,44 +75,28 @@
           </div>
         </form>
       </div>
-      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'global'">
+      <div role="tabpanel" class="tab-pane active" id="mob-global" ng-if="mobileTab === 'global'">
         <div class="main-menu-container">
           <ul class="main-menu main-menu-global global-menu" ng-style="{'left': (($ctrl.menuPath.global.length * -100) + '%')}">
             <nav-mobile-level structure="$ctrl.menuStructure.global" level="0" path="$ctrl.menuPath.global"></nav-mobile-level>
           </ul>
         </div>
       </div>
-      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'cart'" ng-init="$ctrl.loadCart()">
-        <div class="container-fluid" id="mob-cart">
-          <div class="row row-no-spacing">
-            <div class="col-xs-12">
-              <div style="height:100px;" class="repeating-row" ng-if="!$ctrl.cartData">
-                <loading></loading>
-              </div>
-              <p ng-if="$ctrl.cartData && !$ctrl.cartData.items.length" translate>
-                Your cart is empty
-              </p>
-
-              <div class="repeating-row select-recipient-row" ng-repeat="i in $ctrl.cartData.items">
-                <div class="col-xs-3">
-                  <img desig-src="{{i.designationNumber}}">
-                </div>
-                <div class="col-xs-9">
-                  <p class="title">{{i.displayName}}</p>
-                  <p class="title">#{{i.designationNumber}}</p>
-                  <p class="price">{{i.price}}</p>
-                </div>
-              </div>
-
-              <a href="/checkout.html" class="btn btn-primary checkout" ng-if="$ctrl.cartData.items.length">Checkout</a>
-            </div>
-          </div>
-        </div>
+      <div role="tabpanel" class="tab-pane active" ng-show="mobileTab === 'cart'">
+        <nav-cart mobile="true"></nav-cart>
       </div>
       <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'more'">
         <ul id="mob-more">
-          <li><img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-book-icon.png">Shop Books</li>
-          <li><img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-phone-icon.png">Apps</li>
+          <li>
+            <a href="">
+              <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-book-icon.png">Shop Books
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-phone-icon.png">Apps
+            </a>
+          </li>
         </ul>
       </div>
     </div>

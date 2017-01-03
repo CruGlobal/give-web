@@ -2,12 +2,11 @@ import angular from 'angular';
 import 'angular-ui-bootstrap';
 import designationsService from 'common/services/api/designations.service';
 import commonService from 'common/services/api/common.service';
-import templateModal from 'app/productConfig/productConfigModal.tpl';
-import modalController from 'app/productConfig/productConfig.modal';
+import productConfigModal, {giveGiftParams} from 'app/productConfig/productConfigModal/productConfig.modal.component';
 import modalStateService from 'common/services/modalState.service';
-import {giveGiftParams} from 'app/productConfig/productConfig.modal';
+import toFinite from 'lodash/toFinite';
 
-let serviceName = 'productModalService';
+const serviceName = 'productModalService';
 
 /*@ngInject*/
 function ProductModalService( $uibModal, $location, designationsService, commonService, modalStateService ) {
@@ -21,20 +20,37 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
     isEdit = !!isEdit;
     let modalInstance = $uibModal
       .open( {
-        templateUrl:  templateModal.name,
-        controller:   modalController.name,
-        controllerAs: '$ctrl',
+        component:    productConfigModal.name,
         size:         'lg give-modal',
         resolve:      {
-          productData: function () {
+          productData: () => {
             return designationsService.productLookup( code ).toPromise();
           },
-          nextDrawDate: function(){
+          nextDrawDate: function () {
             return commonService.getNextDrawDate().toPromise();
           },
+          suggestedAmounts: /*@ngInject*/ function ( $http, $q ) {
+            let deferred = $q.defer();
+            let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
+              path = config['campaign-page'] ?
+                `/content/give/us/en/campaigns/${c}/${code}/${config['campaign-page']}.infinity.json` :
+                `/content/give/us/en/designations/${c}/${code}.infinity.json`;
+            $http.get( path ).then( ( data ) => {
+              let suggestedAmounts = [];
+              if ( data.data['jcr:content'] && data.data['jcr:content'].suggestedAmounts ) {
+                angular.forEach( data.data['jcr:content'].suggestedAmounts, ( v, k ) => {
+                  if ( toFinite( k ) > 0 ) suggestedAmounts.push( {amount: toFinite( k ), label: v} );
+                } );
+              }
+              deferred.resolve( suggestedAmounts );
+            }, () => {
+              deferred.resolve( [] );
+            } );
+            return deferred.promise;
+          },
           itemConfig:  () => config,
-          isEdit:      () => isEdit,
-          uri:         () => uri
+          isEdit: () => isEdit,
+          uri: () => uri
         }
       } );
     modalInstance.result
@@ -57,10 +73,9 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
 export default angular
   .module( serviceName, [
     'ui.bootstrap',
-    designationsService.name,
     commonService.name,
-    modalController.name,
-    modalStateService.name,
-    templateModal.name
+    designationsService.name,
+    productConfigModal.name,
+    modalStateService.name
   ] )
   .factory( serviceName, ProductModalService );

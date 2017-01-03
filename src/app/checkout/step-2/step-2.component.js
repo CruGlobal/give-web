@@ -2,13 +2,11 @@ import angular from 'angular';
 
 import paymentMethodForm from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.component';
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
-import loadingOverlayComponent from 'common/components/loadingOverlay/loadingOverlay.component';
 
 import orderService from 'common/services/api/order.service';
 
 import template from './step-2.tpl';
 
-import analyticsModule from 'app/analytics/analytics.module';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'checkoutStep2';
@@ -34,6 +32,9 @@ class Step2Controller{
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         this.mailingAddress = data.mailingAddress;
+      },
+      error => {
+        this.$log.error('Error loading donorDetails', error);
       });
   }
 
@@ -80,7 +81,6 @@ export default angular
     template.name,
     paymentMethodForm.name,
     existingPaymentMethods.name,
-    loadingOverlayComponent.name,
     orderService.name,
     analyticsFactory.name
   ])

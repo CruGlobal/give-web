@@ -1,14 +1,14 @@
-import 'babel/external-helpers';
 import angular from 'angular';
-import appConfig from 'common/app.config';
+import commonModule from 'common/common.module';
+import pull from 'lodash/pull';
+
 import cartService from 'common/services/api/cart.service';
 import sessionService from 'common/services/session/session.service';
-import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 
-import loadingOverlayComponent from 'common/components/loadingOverlay/loadingOverlay.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
+import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import analyticsFactory from 'app/analytics/analytics.factory';
 
@@ -19,8 +19,10 @@ let componentName = 'cart';
 class CartController {
 
   /* @ngInject */
-  constructor( $window, cartService, sessionService, productModalService, analyticsFactory ) {
+  constructor( $scope, $window, $log, analyticsFactory, cartService, sessionService, productModalService ) {
+    this.$scope = $scope;
     this.$window = $window;
+    this.$log = $log;
     this.productModalService = productModalService;
     this.cartService = cartService;
     this.sessionService = sessionService;
@@ -31,39 +33,62 @@ class CartController {
     this.loadCart();
   }
 
-  loadCart() {
-    this.loading = true;
+  loadCart(reload) {
+    delete this.error;
+    if(reload){
+      this.updating = true;
+    }else{
+      this.loading = true;
+    }
     this.cartService.get()
-      .subscribe( ( data ) => {
-        this.cartData = data;
-        this.loading = false;
-        this.analyticsFactory.pageLoaded();
-        this.analyticsFactory.cartView(data);
-      } );
+      .subscribe( data => {
+          this.cartData = data;
+          this.loading = false;
+          this.updating = false;
+
+          this.analyticsFactory.pageLoaded();
+          this.analyticsFactory.cartView(data);
+        },
+        error => {
+          this.$log.error('Error loading cart', error);
+          this.loading = false;
+          this.updating = false;
+          this.error = {
+            loading: !reload,
+            updating: !!reload
+          };
+        });
   }
 
-  removeItem( uri, designationNumber ) {
-    this.cartData = null;
-    this.cartService.deleteItem( uri )
+  removeItem( item ) {
+    delete item.removingError;
+    item.removing = true;
+    this.cartService.deleteItem( item.uri )
       .subscribe( () => {
-        this.analyticsFactory.cartRemove(designationNumber);
-        this.loadCart();
-      } );
+          pull(this.cartData.items, item);
+          this.loadCart(true);
+          this.$scope.$emit( cartUpdatedEvent );
+          this.analyticsFactory.cartRemove(item.designationNumber);
+        },
+        error => {
+          this.$log.error('Error deleting item from cart', error);
+          item.removingError = true;
+          delete item.removing;
+        });
   }
 
   editItem( item ) {
     this.productModalService
       .configureProduct( item.code, item.config, true, item.uri )
       .result
-      .then( ( result ) => {
-        if ( result.isUpdated ) {
-          this.loadCart();
-        }
-      } );
+      .then( () => {
+        pull(this.cartData.items, item);
+        this.loadCart(true);
+      }, angular.noop );
   }
 
   checkout() {
-    this.$window.location.href = this.sessionService.getRole() === 'REGISTERED' ? 'checkout.html' : 'sign-in.html';
+    this.$window.location = this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html';
   }
 }
 
@@ -71,9 +96,7 @@ export default angular
   .module(componentName, [
     template.name,
     commonModule.name,
-    loadingOverlayComponent.name,
     displayRateTotals.name,
-    appConfig.name,
     cartService.name,
     productModalService.name,
     sessionService.name,

@@ -6,8 +6,9 @@ let controllerName = 'pageOptionsCtrl';
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( parentDesignationNumber, organizationId, suggestedAmounts ) {
+  constructor( parentDesignationNumber, designationType, organizationId, suggestedAmounts ) {
     this.parentDesignationNumber = parentDesignationNumber;
+    this.designationType = designationType;
     this.organizationId = organizationId;
 
     this.suggestedAmounts = transform(suggestedAmounts, function(result, value, key) {

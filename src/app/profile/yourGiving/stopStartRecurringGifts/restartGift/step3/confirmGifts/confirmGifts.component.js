@@ -11,7 +11,6 @@ import giftDetailsView from 'common/components/giftViews/giftDetailsView/giftDet
 
 import donationsService from 'common/services/api/donations.service';
 
-import analyticsModule from 'app/analytics/analytics.module';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'confirmGifts';
@@ -19,7 +18,8 @@ let componentName = 'confirmGifts';
 class ConfirmGiftsController {
 
   /* @ngInject */
-  constructor( donationsService, analyticsFactory ) {
+  constructor( $log, donationsService, analyticsFactory ) {
+    this.$log = $log;
     this.donationsService = donationsService;
     this.analyticsFactory = analyticsFactory;
   }
@@ -54,9 +54,10 @@ class ConfirmGiftsController {
           this.analyticsFactory.editRecurringDonation(this.gifts);
           this.analyticsFactory.setEvent('recurring donation restarted');
         },
-        () => {
+        error => {
           this.setLoading( {loading: false} );
           this.error = 'error';
+          this.$log.error('Error processing restarts.', error);
         } );
   }
 }

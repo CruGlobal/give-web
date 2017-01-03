@@ -14,7 +14,7 @@ import profileService from './profile.service';
 import commonService from './common.service';
 import RecurringGiftModel from 'common/models/recurringGift.model';
 
-import find from 'lodash/find';
+import filter from 'lodash/filter';
 
 let serviceName = 'donationsService';
 
@@ -38,7 +38,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .get( {
         path: path,
         zoom: {
-          recipients: 'element[],element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement[]'
+          recipients: 'element[],element:mostrecentdonation,element:recurringdonations'
         }
       } )
       .pluck( 'recipients' );
@@ -60,7 +60,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .get( {
         path: ['donations', 'historical', cortexApiService.scope, year, month],
         zoom: {
-          gifts: 'element[],element:paymentmethod,element:recurringdonationelement'
+          gifts: 'element[],element:paymentmethod,element:recurringdonations'
         }
       } )
       .pluck( 'gifts' );
@@ -73,13 +73,13 @@ function DonationsService( cortexApiService, profileService, commonService ) {
         followLocation: true,
         data:           data
       } )
-      .map( ( response ) => {
-        angular.forEach( response['receipt-summaries'], ( item ) => {
-          let link = find( response.links, ( r ) => {
-            return r.uri.indexOf( item['transaction-number'] ) != -1;
-          } );
-          item['pdf-link'] = link;
-        } );
+      .map( response => {
+        let links = filter(response.links, (link) => {
+          return link.rel == 'element';
+        });
+        for(let i=0; i < links.length; i++) {
+          response['receipt-summaries'][i]['pdf-link'] = links[i];
+        }
         return response;
       } )
       .pluck( 'receipt-summaries' );
@@ -116,7 +116,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
           RecurringGiftModel.nextDrawDate = nextDrawDate;
           RecurringGiftModel.paymentMethods = paymentMethods;
         }
-        return flatMap( flatten( map( recurringGiftsTypes, ( type ) => data[type].donations ) ), donation => {
+        return flatMap( flatten( map( recurringGiftsTypes, type => data[type].donations ) ), donation => {
           return map( donation['donation-lines'], donationLine => {
             return new RecurringGiftModel(donationLine, donation);
           } );

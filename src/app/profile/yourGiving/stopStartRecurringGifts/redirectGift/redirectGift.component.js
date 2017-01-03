@@ -6,14 +6,19 @@ import donationsService from 'common/services/api/donations.service';
 import redirectGiftStep1 from './step1/redirectGiftStep1.component';
 import redirectGiftStep2 from './step2/redirectGiftStep2.component';
 import redirectGiftStep3 from './step3/redirectGiftStep3.component';
+import retryModal from 'common/components/retryModal/retryModal.component';
+
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 let componentName = 'redirectGift';
 
 class RedirectGiftController {
 
   /* @ngInject */
-  constructor( donationsService ) {
+  constructor( $log, donationsService ) {
+    this.$log = $log;
     this.donationsService = donationsService;
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit() {
@@ -23,6 +28,7 @@ class RedirectGiftController {
 
   setStep( step ) {
     this.step = step;
+    this.scrollModalToTop();
   }
 
   previous() {
@@ -37,13 +43,20 @@ class RedirectGiftController {
       default:
         this.changeState( {state: 'step-0'} );
     }
+    this.scrollModalToTop();
   }
 
   loadRecurringGifts() {
+    this.setLoading( {loading: true} );
+    this.loadingRecurringGiftsError = false;
     this.donationsService.getRecurringGifts().subscribe( ( gifts ) => {
       this.gifts = gifts;
       this.setLoading( {loading: false} );
       this.setStep( 'step-1' );
+    }, error => {
+      this.setLoading( {loading: false} );
+      this.loadingRecurringGiftsError = true;
+      this.$log.error('Error loading recurring gifts', error);
     } );
   }
 
@@ -67,7 +80,8 @@ export default angular
     donationsService.name,
     redirectGiftStep1.name,
     redirectGiftStep2.name,
-    redirectGiftStep3.name
+    redirectGiftStep3.name,
+    retryModal.name
   ] )
   .component( componentName, {
       controller:  RedirectGiftController,

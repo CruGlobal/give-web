@@ -6,8 +6,8 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
+import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 
-import analyticsModule from 'app/analytics/analytics.module';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'paymentMethod';
@@ -15,7 +15,8 @@ let componentName = 'paymentMethod';
 class PaymentMethodController{
 
   /* @ngInject */
-  constructor(envService, $uibModal, profileService, analyticsFactory){
+  constructor($log, envService, $uibModal, profileService, analyticsFactory){
+    this.$log = $log;
     this.isCollapsed = true;
     this.$uibModal = $uibModal;
     this.profileService = profileService;
@@ -24,26 +25,16 @@ class PaymentMethodController{
     this.analyticsFactory = analyticsFactory;
   }
 
-  $onInit(){
-    this.loadDonorDetails();
-  }
-
-  loadDonorDetails() {
-    this.profileService.getDonorDetails()
-      .subscribe((data) => {
-        this.mailingAddress = data.mailingAddress;
-      });
-  }
-
   getExpiration(){
     return `${this.model['expiry-month']}/${this.model['expiry-year']}`;
   }
 
   isCard(){
-    return this.model['card-number'] ? true : false;
+    return !!this.model['card-number'];
   }
 
   editPaymentMethod() {
+    this.successMessage.show = false;
     this.editPaymentMethodModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
       windowTemplateUrl: giveModalWindowTemplate.name,
@@ -60,15 +51,28 @@ class PaymentMethodController{
     if(e.success && e.data) {
       this.profileService.updatePaymentMethod(this.model, e.data)
         .subscribe(() => {
-            let editedData = e.data.creditCard || e.data.bankAccount;
-            this.submissionError.loading = false;
-            this.editPaymentMethodModal.close();
-            this.analyticsFactory.setEvent('add payment method');
+            let editedData = {};
+            if(e.data.creditCard) {
+              editedData = e.data.creditCard;
+              editedData['card-number'] = e.data.paymentMethodNumber ? e.data.paymentMethodNumber : editedData['card-number'];
+              editedData.address = formatAddressForTemplate(editedData.address);
+            } else {
+              editedData = e.data.bankAccount;
+              editedData['display-account-number'] = e.data.paymentMethodNumber ? e.data.paymentMethodNumber : editedData['display-account-number'];
+            }
             for(let key in editedData){
               this.model[key] = editedData[key];
             }
+            this.successMessage = {
+              show: true,
+              type: 'paymentMethodUpdated'
+            };
+            this.submissionError.loading = false;
+            this.editPaymentMethodModal.close();
+            this.analyticsFactory.setEvent('add payment method');
           },
           error => {
+            this.$log.error('Error updating payment method', error);
             this.submissionError.loading = false;
             this.submissionError.error = error.data;
           }
@@ -79,19 +83,21 @@ class PaymentMethodController{
   }
 
   deletePaymentMethod(){
+    this.successMessage.show = false;
     this.deletePaymentMethodModal = this.$uibModal.open({
       component: 'deletePaymentMethodModal',
       backdrop: 'static',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         paymentMethod: () => this.model,
+        mailingAddress: () => this.mailingAddress,
         paymentMethodsList: () => this.paymentMethodsList
       }
     });
     this.deletePaymentMethodModal.result.then(() => {
       this.onDelete();
       this.analyticsFactory.setEvent('delete payment method');
-    });
+    }, angular.noop);
   }
 
   $onDestroy(){
@@ -121,7 +127,9 @@ export default angular
     templateUrl: template.name,
     bindings: {
       model: '<',
+      successMessage: '=',
       paymentMethodsList: '<',
+      mailingAddress: '<',
       onDelete: '&'
     }
   });

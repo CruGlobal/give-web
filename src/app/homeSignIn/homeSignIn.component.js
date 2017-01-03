@@ -2,7 +2,6 @@ import angular from 'angular';
 import includes from 'lodash/includes';
 
 import commonModule from 'common/common.module';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 
@@ -34,7 +33,7 @@ class HomeSignInController {
       .subscribe( () => {
         this.isSigningIn = false;
         this.showSignInForm = false;
-        this.$window.location.href = 'your-giving.html';
+        this.$window.location = '/your-giving.html';
       }, ( error ) => {
         this.isSigningIn = false;
         this.errorMessage = error.data.error;
@@ -55,8 +54,7 @@ export default angular
     template.name,
     commonModule.name,
     sessionService.name,
-    sessionModalService.name,
-    loadingOverlay.name
+    sessionModalService.name
   ] )
   .component( componentName, {
     controller:  HomeSignInController,

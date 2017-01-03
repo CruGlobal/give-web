@@ -2,8 +2,8 @@ import angular from 'angular';
 import signInForm from 'common/components/signInForm/signInForm.component';
 import commonModule from 'common/common.module';
 import showErrors from 'common/filters/showErrors.filter';
-import sessionService from 'common/services/session/session.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
+import sessionService, {Roles} from 'common/services/session/session.service';
 
 import template from './signIn.tpl';
 
@@ -28,9 +28,20 @@ class SignInController {
   }
 
   sessionChanged() {
-    if ( this.sessionService.getRole() === 'REGISTERED' ) {
-      this.$window.location.href = 'checkout.html';
+    if ( this.sessionService.getRole() === Roles.registered ) {
+      this.$window.location = '/checkout.html';
     }
+  }
+
+  checkoutAsGuest() {
+    this.sessionService.downgradeToGuest( true ).subscribe( {
+      error:    () => {
+        this.$window.location = '/checkout.html';
+      },
+      complete: () => {
+        this.$window.location = '/checkout.html';
+      }
+    } );
   }
 }
 

@@ -29,6 +29,9 @@ export default class RecurringGiftModel {
         },
         'next-draw-date': {
           'display-value': ''
+        },
+        'start-date': {
+          'display-value': ''
         }
       };
     }
@@ -67,15 +70,15 @@ export default class RecurringGiftModel {
   }
 
   get designationNumber() {
-    return this.gift['designation-number'];
+    return this.gift['updated-designation-number'] || this.gift['designation-number'];
   }
 
   set designationNumber(value) {
-    this.gift['designation-number'] = value;
+    this.gift['updated-designation-number'] = value !== this.gift['designation-number'] ? value : '';
   }
 
   get amount(){
-    return this.gift['updated-amount'] || this.gift['amount'];
+    return this.gift['updated-amount'] === undefined ? '' : this.gift['updated-amount'] || this.gift['amount'];
   }
 
   set amount(value){
@@ -140,7 +143,7 @@ export default class RecurringGiftModel {
   }
 
   set startMonth(value){
-    let updatedStartDate = moment(startMonth(this.transactionDay, value, this.nextDrawDate));
+    let updatedStartDate = moment(startMonth(this.transactionDay, value, this.nextDrawDate, 0, this.parentDonation['start-date']['display-value']));
     if(updatedStartDate.isSame(this.parentDonation['next-draw-date']['display-value'], 'month') || this.gift['updated-rate']['recurrence']['interval'] === '' && this.gift['updated-recurring-day-of-month'] === '' && moment(this.parentDonation['next-draw-date']['display-value']).format('M') === updatedStartDate.format('M')){
       this.clearStartDate(); // Don't need to update start date if draw date year and month are still correct, or if frequency, transaction day, and start month are unchanged
     }else {
@@ -155,7 +158,7 @@ export default class RecurringGiftModel {
       giftDate = moment({ year: this.gift['updated-start-year'], month: parseInt(this.gift['updated-start-month']) - 1, day: this.transactionDay });
     }else if(this.gift['updated-recurring-day-of-month'] !== ''){
       // We have to take transactionDay into account here when it is modified for monthly gifts since they don't set the updated-start-month/year fields
-      giftDate = startDate(this.transactionDay, this.nextDrawDate);
+      giftDate = startDate(this.transactionDay, this.nextDrawDate, 0, this.parentDonation['start-date']['display-value']);
     }else{
       giftDate = moment(this.parentDonation['next-draw-date']['display-value']);
     }
@@ -163,7 +166,7 @@ export default class RecurringGiftModel {
   }
 
   initStartMonth(){
-    this.startMonth = startDate(this.transactionDay, this.nextDrawDate).format('MM');
+    this.startMonth = startDate(this.transactionDay, this.nextDrawDate, 0, this.parentDonation['start-date']['display-value']).format('MM');
   }
 
   clearStartDate(){
@@ -195,6 +198,12 @@ export default class RecurringGiftModel {
     this.gift['updated-amount'] = 50;
     this.gift['updated-rate']['recurrence']['interval'] = 'Monthly';
     this.gift['updated-recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
+    return this;
+  }
+
+  setDefaultsSingleGift(){
+    this.gift['updated-designation-number'] = this.gift['designation-number'];
+    this.gift['updated-amount'] = 50;
     return this;
   }
 }

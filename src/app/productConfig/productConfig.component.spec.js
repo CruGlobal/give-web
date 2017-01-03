@@ -2,14 +2,14 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './productConfig.component';
 import modalStateModule from 'common/services/modalState.service';
-import {giveGiftParams} from 'app/productConfig/productConfig.modal';
+import {giveGiftParams} from './productConfigModal/productConfig.modal.component';
 
 describe( 'productConfig', function () {
   beforeEach( angular.mock.module( module.name ) );
   let $ctrl;
 
   beforeEach( inject( function ( _$componentController_ ) {
-    $ctrl = _$componentController_( module.name, {$window: {location: {href: ''}}}, {productCode: '0123456'} );
+    $ctrl = _$componentController_( module.name, {$window: {location: ''}}, {productCode: '0123456', campaignCode: 'test123'} );
   } ) );
 
   it( 'to be defined', function () {
@@ -41,7 +41,7 @@ describe( 'productConfig', function () {
 
     it( 'opens productConfig modal', () => {
       $ctrl.configModal();
-      expect( productModalService.configureProduct ).toHaveBeenCalledWith( '0123456', {amount: 50}, false );
+      expect( productModalService.configureProduct ).toHaveBeenCalledWith( '0123456', {amount: 50, 'campaign-code': 'test123'}, false );
     } );
 
     it( 'updates after modal rendered', () => {
@@ -54,10 +54,53 @@ describe( 'productConfig', function () {
 
     it( 'redirects to cart.html', () => {
       $ctrl.configModal();
-      expect( $ctrl.$window.location.href ).toEqual( '' );
+      expect( $ctrl.$window.location ).toEqual( '' );
       resultDeferred.resolve();
       $rootScope.$digest();
-      expect( $ctrl.$window.location.href ).toEqual( '/cart.html' );
+      expect( $ctrl.$window.location ).toEqual( '/cart.html' );
+    } );
+
+    it( 'should disable loading indicator on dismiss', () => {
+      $ctrl.configModal();
+      resultDeferred.reject();
+      $rootScope.$digest();
+      expect( $ctrl.loadingModal ).toEqual( false );
+    } );
+
+    it( 'should handle an error loading necessary data', () => {
+      $ctrl.configModal();
+      resultDeferred.reject('some error');
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( true );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error opening product config modal', 'some error'] );
+    } );
+
+    it( 'should not throw an error when the modal gets dismissed normally', () => {
+      $ctrl.configModal();
+      resultDeferred.reject();
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( false );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
+    } );
+
+    it( 'should not throw an error when the modal gets dismissed by an escape key press', () => {
+      $ctrl.configModal();
+      resultDeferred.reject('escape key press');
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( false );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
+    } );
+
+    it( 'should not throw an error when the modal gets dismissed by a background click', () => {
+      $ctrl.configModal();
+      resultDeferred.reject('backdrop click');
+      $rootScope.$digest();
+      expect( $ctrl.error ).toEqual( false );
+      expect( $ctrl.loadingModal ).toEqual( false );
+      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
     } );
   } );
 } );

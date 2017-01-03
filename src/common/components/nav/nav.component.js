@@ -1,44 +1,44 @@
 import angular from 'angular';
 import MobileDetect from 'mobile-detect';
-import transform from 'lodash/transform';
-import isObject from 'lodash/isObject';
 import includes from 'lodash/includes';
 import find from 'lodash/find';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import cartService from 'common/services/api/cart.service';
-import sessionService from 'common/services/session/session.service';
+import loading from 'common/components/loading/loading.component';
+import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
-import loadingComponent from 'common/components/loading/loading.component';
 import mobileNavLevelComponent from './navMobileLevel.component';
 import subNavDirective from './subNav.directive';
+import {giftAddedEvent} from 'common/components/nav/navCart/navCart.component';
+import globalWebsitesModalWindowTemplate from './globalWebsitesModal/globalWebsitesModalWindow.tpl';
+import globalWebsitesModal from './globalWebsitesModal/globalWebsitesModal.component';
+import navCart, {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
-
-import analyticsModule from 'app/analytics/analytics.module';
-import analyticsFactory from 'app/analytics/analytics.factory';
+import signOutTemplate from './signOut.modal.tpl';
 
 let componentName = 'cruNav';
 
 class NavController{
 
   /* @ngInject */
-  constructor($scope, $http, $document, $window, envService, cartService, sessionService, sessionModalService, analyticsFactory){
+  constructor($log, $rootScope, $http, $document, $window, $uibModal, $timeout, envService, sessionService, sessionModalService){
+    this.$log = $log;
     this.$http = $http;
     this.$document = $document;
+    this.$uibModal = $uibModal;
     this.$window = $window;
+    this.$rootScope = $rootScope;
+    this.$timeout = $timeout;
 
-    this.cartService = cartService;
     this.sessionService = sessionService;
     this.sessionModalService = sessionModalService;
 
     this.imgDomain = envService.read('imgDomain');
-    this.navFeed = envService.read('navFeed');
-
-    this.analyticsFactory = analyticsFactory;
+    this.navFeed = '/bin/cru/site-nav.json';
   }
 
   $onInit() {
@@ -50,16 +50,36 @@ class NavController{
       global: []
     };
 
-    // pre-set menu path like below
-    // this.menuPath.main = ['opportunities', 'mission-trips', 'summer', 'explore', 'getting-a-job'];
-    // this.menuPath.sub = ['communities', 'campus'];
+    // set sub menu path based on url path
+    let path = this.$window.location.pathname ? this.$window.location.pathname.replace('.html', '').split('/') : [];
+    path.shift();
+    this.menuPath.currentPage = path.pop();
+    this.menuPath.sub = path;
 
     this.getNav().subscribe((structure) => {
       this.menuStructure = structure;
-      this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
+
+      if(this.$window.location.hostname && includes(this.$window.location.hostname, 'give')){
+        this.subMenuStructure = [{
+          title: 'Give',
+          path: '/',
+          children: structure.give
+        }];
+        this.menuPath.sub = ['give'];
+      }else{
+        this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
+      }
+    },
+    error => {
+      this.$log.error('Error loading the nav.', error);
     });
 
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
+
+    this.$rootScope.$on(giftAddedEvent, () => this.giftAddedToCart() );
+    // Register signedOut event on child scope
+    // this basically sets the listener at a lower priority, allowing $rootScope listeners first chance to respond
+    this.$rootScope.$new(true, this.$rootScope).$on(SignOutEvent, (event) => this.signedOut(event) );
   }
 
   $onDestroy() {
@@ -76,6 +96,18 @@ class NavController{
     this.changeMetaTag('viewport', this.menuType === 'mobile' ? 'width=device-width, minimum-scale=1.0' : 'width=1024');
   }
 
+  giftAddedToCart() {
+    this.$window.scrollTo(0, 0);
+    this.cartOpen = true;
+  }
+
+  cartOpened(){
+    if(!this.cartOpenedPreviously){ // Load cart on initial open only. Events will take care of other reloads
+      this.cartOpenedPreviously = true;
+      this.$rootScope.$emit( cartUpdatedEvent );
+    }
+  }
+
   changeMetaTag(tag, content) {
     let metas = this.$document[0].getElementsByTagName('meta');
     for (var i=0; i<metas.length; i++) {
@@ -89,16 +121,28 @@ class NavController{
     this.sessionModalService
       .signIn()
       .then( () => {
-        this.$window.location.reload();
-      } );
+        // use $timeout here as workaround to Firefox bug
+        this.$timeout(() => this.$window.location.reload());
+      }, angular.noop );
   }
 
   signOut() {
-    this.sessionService
-      .signOut()
-      .then( () => {
-        this.$window.location.reload();
-      } );
+    let modal = this.$uibModal.open({
+      templateUrl: signOutTemplate.name,
+      backdrop: 'static',
+      keyboard: false,
+      size: 'sm'
+    });
+    this.sessionService.downgradeToGuest().subscribe(() => {
+      modal.close();
+    }, angular.noop);
+  }
+
+  signedOut( event ) {
+    if(!event.defaultPrevented) {
+      // use $timeout here as workaround to Firefox bug
+      this.$timeout(() => this.$window.location.reload());
+    }
   }
 
   sessionChanged() {
@@ -108,34 +152,21 @@ class NavController{
   getNav() {
     return Observable.from(this.$http({
       method: 'GET',
-      url: this.navFeed,
-      headers: {
-        'Accept': undefined
-      }
+      url: this.navFeed
     }))
       .map((response) => {
-        let replacePathDeep = function(obj, keysMap) {
-          let replacePath = function(obj) {
-            return transform(obj, function(result, value, key) {
-              var newValue = keysMap[key] ? (keysMap[key] + value) : value;
-              result[key] = isObject(value) ? replacePath(value) : newValue;
-            });
-          };
-
-          return replacePath(obj);
-        };
-
-        let jsonStructure = angular.fromJson(response.data.jsonStructure);
+        let jsonStructure = response.data;
         let menuStructure = {
-          main: replacePathDeep(jsonStructure['/content/cru/us/en'], {path: 'https://www.cru.org', featuredPath: 'https://www.cru.org'}),
-          global: jsonStructure['/content/cru/us/en/global']
+          main: jsonStructure['/content/cru/us/en'],
+          global: jsonStructure['/content/cru/us/en/global'],
+          give: jsonStructure['/content/give/us/en']
         };
 
         //add give to main nav
         menuStructure.main.push({
           title: 'Give',
           path: '/give',
-          children: replacePathDeep(jsonStructure['/content/give/us/en'], {path: 'https://give.cru.org'})
+          children: jsonStructure['/content/give/us/en']
         });
 
         return menuStructure;
@@ -145,20 +176,14 @@ class NavController{
   makeSubNav(structure, path){
     let subNav = [];
     angular.forEach(path, function(p, index){
+      if(index && !subNav[index - 1]){ return; }
       let children = index ? subNav[index - 1].children : structure;
-      subNav[index] = find(children, function(item) { return item.path.split('/').pop() === p; });
+
+      let navItem = find(children, function(item) { return item.path.split('/').pop() === p; });
+      if(navItem){ subNav[index] = navItem; }
     });
 
     return subNav;
-  }
-
-  loadCart() {
-    this.cartData = null;
-    this.cartService.get()
-      .subscribe( ( data ) => {
-        this.cartData = data;
-        this.analyticsFactory.cartView(data, 'customLink');
-      } );
   }
 
   toggleMenu(value){
@@ -174,7 +199,19 @@ class NavController{
   }
 
   cruSearch(term){
-    this.$window.location.href = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
+    this.$window.location = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
+  }
+
+  openGlobalWebsitesModal(){
+    this.$uibModal.open({
+      component: 'globalWebsitesModal',
+      backdrop: 'static',
+      windowTemplateUrl: globalWebsitesModalWindowTemplate.name,
+      windowClass: 'globalWebsites--is-open',
+      resolve: {
+        menuStructure: this.menuStructure
+      }
+    });
   }
 }
 
@@ -183,13 +220,15 @@ export default angular
     'environment',
     mobileTemplate.name,
     desktopTemplate.name,
-    cartService.name,
-    loadingComponent.name,
+    signOutTemplate.name,
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
     subNavDirective.name,
-    analyticsFactory.name
+    globalWebsitesModal.name,
+    globalWebsitesModalWindowTemplate.name,
+    navCart.name,
+    loading.name
   ])
   .component(componentName, {
     controller: NavController,

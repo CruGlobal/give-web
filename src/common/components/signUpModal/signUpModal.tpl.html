@@ -11,7 +11,7 @@
       <a ng-click="$ctrl.onStateChange({state: 'forgot-password'})">Reset your Password</a>.
     </div>
   </div>
-  <form name="$ctrl.signUpForm" style="position: relative;">
+  <form name="$ctrl.signUpForm" class="loading-overlay-parent">
     <div class="row">
       <div class="col-xs-6">
         <div class="form-group" ng-class="{'has-success': $ctrl.signUpForm.first_name.$valid, 'has-error': ($ctrl.signUpForm.first_name | showErrors)}">
@@ -121,6 +121,9 @@
          ng-click="$ctrl.signUp()"
          translate>Sign Up</a>
     </div>
-    <loading-overlay ng-if="$ctrl.isLoading"></loading-overlay>
+    <p class="text-center">
+      <span>Already have an account?</span> <a href="" ng-click="$ctrl.onStateChange({state: 'sign-in'})" translate>Sign In</a>
+    </p>
+    <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
   </form>
 </div>

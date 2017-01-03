@@ -2,7 +2,6 @@ import angular from 'angular';
 import desigSrc from 'common/directives/desigSrc.directive';
 import donationsService from 'common/services/api/donations.service';
 import recipientDetail from './recipientDetail/recipientDetail.component';
-import loadingComponent from 'common/components/loading/loading.component';
 import productModalService from 'common/services/productModal.service';
 import template from './recipientGift.tpl';
 
@@ -11,7 +10,8 @@ let componentName = 'recipientGift';
 class RecipientGift {
 
   /* @ngInject */
-  constructor( donationsService, productModalService ) {
+  constructor( $log, donationsService, productModalService ) {
+    this.$log = $log;
     this.donationsService = donationsService;
     this.productModalService = productModalService;
     this.showDetails = false;
@@ -20,6 +20,7 @@ class RecipientGift {
   }
 
   toggleDetails() {
+    this.loadingDetailsError = true;
     this.showDetails = !this.showDetails;
     //Load details if we haven't already
     if ( this.showDetails && !this.detailsLoaded ) {
@@ -28,6 +29,11 @@ class RecipientGift {
         this.details = details;
         this.isLoading = false;
         this.detailsLoaded = true;
+      }, error => {
+        this.showDetails = false;
+        this.isLoading = false;
+        this.loadingDetailsError = true;
+        this.$log.error('Error loading recipient details', error);
       } );
     }
   }
@@ -41,7 +47,6 @@ export default angular
   .module( componentName, [
     desigSrc.name,
     donationsService.name,
-    loadingComponent.name,
     productModalService.name,
     recipientDetail.name,
     template.name

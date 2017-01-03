@@ -11,27 +11,43 @@ class designationEditorService {
     this.$http = $http;
   }
 
-  getContent(designationNumber) {
+  checkPermission(designationNumber, campaign) {
+    return this.$http.get(designationConstants.designationCanEdit, {
+      params: {
+        designationNumber: designationNumber,
+        campaign: campaign
+      },
+      withCredentials: true
+    });
+  }
+
+  getContent(designationNumber, campaign) {
     return this.$http.get(designationConstants.designationSecurityEndpoint, {
       params: {
-        designationNumber: designationNumber
+        designationNumber: designationNumber,
+        campaign: campaign
       },
       withCredentials: true
     });
   }
 
-  getPhotos(designationNumber){
+  getPhotos(designationNumber, campaign){
     return this.$http.get(designationConstants.designationImagesEndpoint, {
       params: {
-        designationNumber: designationNumber
+        designationNumber: designationNumber,
+        campaign: campaign
       },
       withCredentials: true
     });
   }
 
-  save(designationContent){
+  save(designationContent, designationNumber, campaignPage){
     return this.$http.post(designationConstants.saveEndpoint, designationContent, {
-      withCredentials: true
+      withCredentials: true,
+      params: {
+        designationNumber: designationNumber,
+        campaign: campaignPage
+      }
     });
   }
 }

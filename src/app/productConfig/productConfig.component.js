@@ -4,22 +4,22 @@ import template from './productConfig.tpl';
 import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
 import modalStateService from 'common/services/modalState.service';
-import {giveGiftParams} from 'app/productConfig/productConfig.modal';
-import analyticsModule from 'app/analytics/analytics.module';
+import {giveGiftParams} from './productConfigModal/productConfig.modal.component';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 //include designation edit button component to be included on designation page
 import designationEditButtonComponent from '../designationEditButton/designationEditButton.component';
 
-let componentName = 'productConfig';
+const componentName = 'productConfig';
 
 class ProductConfigController {
 
   /* @ngInject */
-  constructor( productModalService, analyticsFactory, $window ) {
+  constructor( productModalService, analyticsFactory, $window, $log ) {
     this.productModalService = productModalService;
     this.analyticsFactory = analyticsFactory;
     this.$window = $window;
+    this.$log = $log;
   }
 
   $onInit() {
@@ -28,15 +28,23 @@ class ProductConfigController {
 
   configModal() {
     this.loadingModal = true;
+    this.error = false;
     let modalInstance = this.productModalService
-      .configureProduct( this.productCode, {amount: 50}, false );
+      .configureProduct( this.productCode, {amount: 50, 'campaign-code': this.campaignCode}, false );
     modalInstance.rendered.then( () => {
       this.loadingModal = false;
       this.analyticsFactory.giveGiftModal(this.productCode);
-    } );
+    }, angular.noop );
     modalInstance.result.then( () => {
-      this.$window.location.href = '/cart.html';
-    } );
+        this.$window.location = '/cart.html';
+      },
+      reason => {
+        if(reason && reason !== 'escape key press' && reason !== 'backdrop click'){ // Avoid labeling normal closes, escape key, or backdrop clicks as errors
+          this.$log.error('Error opening product config modal', reason);
+          this.error = true;
+        }
+        this.loadingModal = false;
+      });
   }
 }
 
@@ -54,6 +62,7 @@ export default angular
     controller:  ProductConfigController,
     templateUrl: template.name,
     bindings:    {
+      campaignCode: '@',
       productCode: '@',
       buttonLabel: '@',
       buttonSize: '@'

@@ -1,98 +1,166 @@
 import angular from 'angular';
-import JSONPath from 'common/lib/jsonPath';
+import map from 'lodash/map';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
+import moment from 'moment';
 
 import cortexApiService from '../cortexApi.service';
+import hateoasHelperService from '../hateoasHelper.service';
 
 let serviceName = 'designationsService';
 
-/*@ngInject*/
-function designations($http, envService, cortexApiService){
+class DesignationsService {
 
-  return {
-    productSearch: productSearch,
-    productLookup: productLookup
-  };
+  /*@ngInject*/
+  constructor($http, envService, cortexApiService, hateoasHelperService){
+    this.$http = $http;
+    this.envService = envService;
+    this.cortexApiService = cortexApiService;
+    this.hateoasHelperService = hateoasHelperService;
+  }
 
-  function productSearch(params){
-    return Observable.from($http({
+  productSearch(params){
+    const ministryIds = {
+      '1-TF-1':	'Cru',
+      '1-TG-1':	'Athletes In Action',
+      '1-TG-2':	'World Priorities',
+      '1-TG-3':	'Global Ministries',
+      '1-TG-4':	'Global Media',
+      '1-TG-5':	'World Headquarters at Lake Hart',
+      '1-TG-6':	'JESUS Film Project',
+      '1-TG-7':	'Josh McDowell Ministry',
+      '1-TG-8':	'Keynote',
+      '1-TG-9':	'Global',
+      '1-TG-10': 'President\'s Office',
+      '1-TG-11': 'Staff Giving',
+      '1-TG-12': 'StoryRunners',
+      '1-TG-13': 'Worldwide Challenge',
+      '1-TH-1': 'Campus Ministry',
+      '1-TH-2': 'Donation Services',
+      '1-TH-3': 'Faculty Commons',
+      '1-TH-4': 'Cities in America',
+      '1-TH-5': 'CityConnect',
+      '1-TH-6': 'Christian Embassy DC',
+      '1-TH-7': 'Christian Embassy - New York',
+      '1-TH-8': 'FamilyLife',
+      '1-TH-9': 'Global Aid Network USA',
+      '1-TH-10': 'Gift and Estate Design',
+      '1-TH-11': 'Global Executive Ministries',
+      '1-TH-12': 'Cru Inner City',
+      '1-TH-13': 'ISP',
+      '1-TH-14': 'Andre Kole Ministries',
+      '1-TH-15': 'Military Ministry',
+      '1-TH-16': 'Missionary Kids',
+      '1-TH-17': 'Ney Bailey',
+      '1-TH-18': 'New Life Resources',
+      '1-TH-19': 'Cru High School',
+      '1-TH-20': 'Women\'s Ministry',
+      '1-TH-21': 'Crossroads',
+      '1-TI-1':	'Intl Leadership Foundation',
+      '1-TI-2':	'Intl Leadership University',
+      '1-TI-3':	'Africa, Central Asia and Middle East (AFRICAME)',
+      '1-TI-4':	'Asia',
+      '1-TI-5':	'Europe and Russia',
+      '1-TI-6':	'Leader Led Movements',
+      '1-TI-7':	'Memorials',
+      '1-TI-8':	'Priority Associates',
+      '1-TJ-1':	'Canada',
+      '1-TJ-2':	'Compassionate Evangelism/Responding to Needs',
+      '1-TJ-3':	'North Africa / Middle East',
+      '1-TJ-4':	'Australia, New Zealand, Pacific (Oceania)',
+      '1-TJ-5':	'Pakistan, Central Asia, Turkey',
+      '1-TJ-6':	'Central America, South America, Caribbean',
+      '1-TJ-7':	'International Ministries',
+      '1-TJ-9':	'The King\'s College',
+      '1-TJ-10': 'U.S. Ministries',
+      '1-TK-1':	'Global Regions',
+      '1-TK-2':	'Macedonia Project',
+      '1-TX-1':	'Bridges',
+      '1-102-1': 'Misc Ministries',
+      '1-103-1': 'U.S. Ministries',
+      '1-108-1': 'East / Southern Africa',
+      '1-108-2': 'Francophone Africa',
+      '1-108-3': 'West Africa'
+    };
+
+    return Observable.from(this.$http({
       method: 'get',
-      url: envService.read('apiUrl') + '/search',
+      url: this.envService.read('apiUrl') + '/search',
       params: params,
       cache: true
     })).map((response) => {
-      var results = [];
-
-      angular.forEach(response.data.hits.hit, function(d){
-        var fields = d.fields;
-        var designation_number = fields.designation_number ? fields.designation_number[0] : null;
-        var replacement_designation_number = fields.replacement_designation_number ? fields.replacement_designation_number[0] : null;
-        var description = fields.description ? fields.description[0] : null;
-        var type = fields.designation_type ? fields.designation_type[0] : null;
-
-        results.push({
-          designationNumber: designation_number,
-          replacementDesignationNumber: replacement_designation_number,
-          name: description,
-          type: type
-        });
+      return map(response.data.hits, (hit) => {
+        return {
+          path: hit.path ? hit.path.replace('https://stage.cru.org/content/give/us/en', '') : null,
+          designationNumber: hit.designation_number || null,
+          replacementDesignationNumber: hit.replacement_designation_number || null,
+          name: hit.title || hit.description || null,
+          type: hit.designation_type || null,
+          facet: hit.facet || null,
+          startMonth: hit.start_date ? moment(hit.start_date).format('YYYY-MM-01') : null,
+          ministry: hit.organization_id ? ministryIds[hit.organization_id] : null
+        };
       });
-
-      return results;
     });
   }
 
-  function productLookup(query, selectQuery){
-    var httpRequest = selectQuery ? cortexApiService.post({
+  productLookup(query, selectQuery){
+    const zoomObj = {
+      code: 'code',
+      definition: 'definition',
+      choices: 'definition:options:element:selector:choice[],definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction',
+      chosen: 'definition:options:element:selector:chosen,definition:options:element:selector:chosen:description'
+    };
+
+    var httpRequest = selectQuery ? this.cortexApiService.post({
       path: query,
       data: { },
       followLocation: true,
-      params: {
-        zoom: 'code,definition,definition:options:element:selector:choice:description,definition:options:element:selector:chosen:description,definition:options:element:selector:choice:selectaction'
-      }
-    }) : cortexApiService.post({
-      path: ['lookups', cortexApiService.scope, 'items'],
+      zoom: zoomObj
+    }) : this.cortexApiService.post({
+      path: ['lookups', this.cortexApiService.scope, 'items'],
       followLocation: true,
       data: {
         code: query
       },
-      params: {
-        zoom: 'code,definition,definition:options:element:selector:choice:description,definition:options:element:selector:chosen:description,definition:options:element:selector:choice:selectaction'
-      }
+      zoom: zoomObj
     });
 
-    return httpRequest.map((data) => {
-      var idUri = JSONPath.query(data, "$._definition[0].links[?(@.rel=='item')]['uri']")[0];
-      var choiceCurrent = JSONPath.query(data, "$._definition[0]._options[0]._element[0]._selector[0]._chosen")[0];
-      var choicesArray = JSONPath.query(data, "$._definition[0]._options[0]._element[0]._selector[0]._choice")[0];
-      var choices = [];
-      angular.forEach(choicesArray.concat(choiceCurrent), function(choice){
-        choices.push({
-          name: JSONPath.query(choice, "$._description[0]['name']")[0],
-          display: JSONPath.query(choice, "$._description[0]['display-name']")[0],
-          selectAction: JSONPath.query(choice, "$._selectaction[0].links[?(@.rel=='selectaction')]['uri']")[0]
-        });
+    return httpRequest.map(data => {
+      const choices = map(data.choices.concat(data.chosen), (choice) => {
+        return {
+          name: choice.description.name,
+          display: choice.description['display-name'],
+          selectAction: choice.selectaction && choice.selectaction.self.uri || ''
+        };
       });
-      var displayName = JSONPath.query(data, "$._definition[0]['display-name']")[0];
-      var code = JSONPath.query(data, "$._code[0].code")[0];
-      var designationNumber = JSONPath.query(data, "$._code[0]['product-code']")[0];
 
       return {
-        id: idUri.split('/').pop(),
+        uri: this.hateoasHelperService.getLink(data.definition, 'item'),
         frequencies: choices,
-        frequency: JSONPath.query(choiceCurrent[0], "$._description[0]['name']")[0],
-        displayName: displayName,
-        code: code,
-        designationNumber: designationNumber
+        frequency: data.chosen.description.name,
+        displayName: data.definition['display-name'],
+        code: data.code.code,
+        designationNumber: data.code['product-code']
       };
+    });
+  }
+
+  bulkLookup(designationNumbers){
+    return this.cortexApiService.post({
+      path: ['lookups', this.cortexApiService.scope, 'batches', 'items'],
+      data: {
+        codes: designationNumbers
+      },
+      followLocation: true
     });
   }
 }
 
 export default angular
   .module(serviceName, [
-    cortexApiService.name
+    cortexApiService.name,
+    hateoasHelperService.name
   ])
-  .factory(serviceName, designations);
+  .service(serviceName, DesignationsService);

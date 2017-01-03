@@ -76,6 +76,19 @@ describe('order service', () => {
         });
       self.$httpBackend.flush();
     });
+    it('should handle an undefined response', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
+        .respond(200, {});
+      self.orderService.getDonorDetails()
+        .subscribe((data) => {
+          expect(data).toEqual({
+            name: {},
+            mailingAddress: {country: 'US'},
+            email: undefined
+          });
+        });
+      self.$httpBackend.flush();
+    });
   });
 
   describe('updateDonorDetails', () => {

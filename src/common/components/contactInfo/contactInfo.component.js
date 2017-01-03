@@ -4,7 +4,6 @@ import includes from 'lodash/includes';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 
-import loadingComponent from 'common/components/loading/loading.component';
 import addressForm from 'common/components/addressForm/addressForm.component';
 
 import orderService from 'common/services/api/order.service';
@@ -41,11 +40,14 @@ class Step1Controller{
   }
 
   loadDonorDetails(){
+    this.loadingDonorDetailsError = false;
+    this.loadingDonorDetails = true;
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         if(data['donor-type'] === ''){
           data['donor-type'] = 'Household';
         }
+        this.loadingDonorDetails = false;
         this.donorDetails = data;
         this.nameFieldsDisabled = this.donorDetails['registration-state'] === 'COMPLETED';
         if(!this.nameFieldsDisabled && includes([Roles.registered, Roles.identified], this.sessionService.getRole())) {
@@ -60,6 +62,11 @@ class Step1Controller{
             this.donorDetails['email'] = this.sessionService.session.email;
           }
         }
+      },
+      error => {
+        this.loadingDonorDetails = false;
+        this.loadingDonorDetailsError = true;
+        this.$log.error('Error loading donorDetails.', error);
       });
   }
 
@@ -91,7 +98,6 @@ export default angular
   .module(componentName, [
     template.name,
     'ngMessages',
-    loadingComponent.name,
     addressForm.name,
     orderService.name,
     sessionService.name

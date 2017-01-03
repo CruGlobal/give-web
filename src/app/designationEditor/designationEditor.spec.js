@@ -46,7 +46,7 @@ describe( 'Designation Editor', function () {
     $q = _$q_;
     $rootScope = _$rootScope_;
     $ctrl = _$componentController_( module.name,
-      {$window: {location: {href: 'designation-editor.html?d=' + designationSecurityResponse.designationNumber}}}
+      {$window: {location: '/designation-editor.html?d=' + designationSecurityResponse.designationNumber}}
     );
   } ) );
 
@@ -58,12 +58,19 @@ describe( 'Designation Editor', function () {
     beforeEach(() => {
       spyOn( $ctrl, 'sessionEnforcerService' );
       spyOn( $ctrl, 'getDesignationContent' );
-      spyOn($ctrl.$location, 'search').and.returnValue({ d: designationSecurityResponse.designationNumber });
+      spyOn( $ctrl.$location, 'search' ).and.returnValue({ d: designationSecurityResponse.designationNumber });
     });
+
     it( 'get designationNumber', () => {
       $ctrl.$onInit();
       expect( $ctrl.designationNumber ).toEqual(designationSecurityResponse.designationNumber);
     } );
+
+    it('should require designationNumber', () => {
+      $ctrl.$location.search.and.returnValue({});
+      $ctrl.$onInit();
+      expect( $ctrl.$window.location ).toEqual( '/' );
+    });
 
     describe( '\'PUBLIC\' role', () => {
       it( 'sets profileLoading and registers sessionEnforcer', () => {
@@ -109,7 +116,7 @@ describe( 'Designation Editor', function () {
     } );
   } );
 
-  describe('getDesignationContent', () => {
+  describe('getDesignationContent()', () => {
     it( 'to skip if no designation number', () => {
       expect( $ctrl.getDesignationContent() ).toEqual(undefined);
     } );
@@ -123,10 +130,23 @@ describe( 'Designation Editor', function () {
         .respond(200, []);
 
       $ctrl.getDesignationContent().then(() => {
-        expect( $ctrl.designationContent ).toEqual(designationSecurityResponse);
+        expect( $ctrl.designationContent ).toBeDefined();
+        expect( $ctrl.contentLoaded ).toEqual(true);
+        expect( $ctrl.loadingContentError ).toEqual(false);
       });
       $httpBackend.flush();
     } );
+
+    it( 'should log an error if content fails', () => {
+      $ctrl.designationNumber = '0123456';
+      spyOn($ctrl.designationEditorService, 'getContent').and.callFake(() => { let p = $q.defer(); p.reject('some error'); return p.promise; });
+      spyOn($ctrl.designationEditorService, 'getPhotos').and.callFake(() => { let p = $q.defer(); p.resolve({}); return p.promise; });
+      $ctrl.getDesignationContent();
+      $rootScope.$digest();
+      expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading designation content or photos.', 'some error']);
+      expect( $ctrl.contentLoaded ).toEqual(false);
+      expect( $ctrl.loadingContentError ).toEqual(true);
+    });
   });
 
   describe('modals', () => {
@@ -149,12 +169,12 @@ describe( 'Designation Editor', function () {
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.receiptTitle()).toEqual(designationSecurityResponse.designationName);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.giveTitle()).toEqual(designationSecurityResponse.title);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.giveTitle()).toEqual(designationSecurityResponse['jcr:title']);
 
         modalPromise.resolve('Title A');
         $rootScope.$digest();
 
-        expect($ctrl.designationContent.title).toEqual('Title A');
+        expect($ctrl.designationContent['jcr:title']).toEqual('Title A');
       } );
     });
 
@@ -172,6 +192,7 @@ describe( 'Designation Editor', function () {
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.parentDesignationNumber()).toEqual(designationSecurityResponse.parentDesignationNumber);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.designationType()).toEqual(designationSecurityResponse.designationType);
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.organizationId()).toEqual(designationSecurityResponse.organizationId);
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts()).toEqual(designationSecurityResponse.suggestedAmounts);
 
@@ -203,6 +224,7 @@ describe( 'Designation Editor', function () {
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber);
+        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.campaignPage()).toBeUndefined();
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photos()).toEqual(photos);
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photoLocation()).toEqual(photoLocation);
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.selectedPhoto()).toEqual(designationSecurityResponse.coverPhoto);
@@ -298,6 +320,7 @@ describe( 'Designation Editor', function () {
 
       $ctrl.save().then(() => {
         expect($ctrl.saveStatus).toEqual('success');
+        expect($ctrl.saveDesignationError).toEqual(false);
       });
       $httpBackend.flush();
     } );
@@ -308,9 +331,10 @@ describe( 'Designation Editor', function () {
 
       $ctrl.save().then(() => {
         expect($ctrl.saveStatus).toEqual('failure');
+        expect($ctrl.saveDesignationError).toEqual(true);
+        expect($ctrl.$log.error.logs[0]).toEqual(['Error saving designation editor content.', jasmine.any(Object)]);
       });
       $httpBackend.flush();
     } );
   });
-
 } );

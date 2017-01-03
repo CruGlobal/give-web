@@ -67,8 +67,12 @@ describe( 'registerAccountModal', function () {
   describe( 'onIdentitySuccess()', () => {
     it( 'calls getDonorDetails', () => {
       spyOn( $ctrl, 'getDonorDetails' );
+      spyOn( $ctrl, 'stateChanged' );
       $ctrl.onIdentitySuccess();
       expect( $ctrl.getDonorDetails ).toHaveBeenCalled();
+      expect( $ctrl.modalTitle ).toEqual('Checking your donor account');
+      expect( $ctrl.stateChanged ).toHaveBeenCalledWith('loading');
+
     } );
   } );
 
@@ -97,7 +101,6 @@ describe( 'registerAccountModal', function () {
         it( 'changes state to \'contact-info\'', () => {
           $ctrl.orderService.getDonorDetails.and.callFake( () => Observable.of( {'registration-state': 'COMPLETED'} ) );
           $ctrl.getDonorDetails();
-          expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
           expect( $ctrl.orderService.getDonorDetails ).toHaveBeenCalled();
           expect( $ctrl.stateChanged ).not.toHaveBeenCalled();
           expect( $ctrl.onSuccess ).toHaveBeenCalled();
@@ -108,7 +111,6 @@ describe( 'registerAccountModal', function () {
         it( 'changes state to \'contact-info\'', () => {
           $ctrl.orderService.getDonorDetails.and.callFake( () => Observable.of( {'registration-state': 'NEW'} ) );
           $ctrl.getDonorDetails();
-          expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
           expect( $ctrl.orderService.getDonorDetails ).toHaveBeenCalled();
           expect( $ctrl.stateChanged ).toHaveBeenCalledWith( 'contact-info' );
         } );
@@ -119,7 +121,6 @@ describe( 'registerAccountModal', function () {
       it( 'changes state to \'contact-info\'', () => {
         $ctrl.orderService.getDonorDetails.and.callFake( () => Observable.throw( {} ) );
         $ctrl.getDonorDetails();
-        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.orderService.getDonorDetails ).toHaveBeenCalled();
         expect( $ctrl.stateChanged ).toHaveBeenCalledWith( 'contact-info' );
       } );
@@ -157,7 +158,13 @@ describe( 'registerAccountModal', function () {
     beforeEach( () => {
       $ctrl.state = 'unknown';
       spyOn( $ctrl, 'setModalSize' );
+      spyOn($ctrl, 'scrollModalToTop');
     } );
+
+    it('should scroll to the top of the modal', () => {
+      $ctrl.stateChanged();
+      expect($ctrl.scrollModalToTop).toHaveBeenCalled();
+    });
 
     it( 'changes to \'sign-in\' state', () => {
       $ctrl.stateChanged( 'sign-in' );

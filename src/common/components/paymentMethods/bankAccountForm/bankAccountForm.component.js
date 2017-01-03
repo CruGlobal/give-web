@@ -97,7 +97,8 @@ class BankAccountController{
             'bank-name': this.bankPayment.bankName,
             'encrypted-account-number': ccpAccountNumber,
             'routing-number': this.bankPayment.routingNumber
-          }
+          },
+          paymentMethodNumber: this.bankPayment.accountNumber ? this.bankPayment.accountNumber.slice(-4) : false
         }
       });
     }else{

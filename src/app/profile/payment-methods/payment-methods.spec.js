@@ -4,6 +4,7 @@ import module from './payment-methods.component';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import {SignOutEvent} from 'common/services/session/session.service';
 
 describe( 'PaymentMethodsComponent', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -26,7 +27,7 @@ describe( 'PaymentMethodsComponent', function () {
 
   beforeEach( inject( ( _$componentController_ ) => {
     $ctrl = _$componentController_( module.name, {
-      $window: {location: '/profile/payment-methods.html'},
+      $window: {location: '/payment-methods.html'},
       $uibModal: uibModal
     } );
   } ) );
@@ -35,6 +36,7 @@ describe( 'PaymentMethodsComponent', function () {
     expect( $ctrl ).toBeDefined();
     expect( $ctrl.$window ).toBeDefined();
     expect( $ctrl.$location ).toBeDefined();
+    expect( $ctrl.$rootScope ).toBeDefined();
     expect( $ctrl.sessionEnforcerService ).toBeDefined();
     expect( $ctrl.profileService ).toBeDefined();
   } );
@@ -44,6 +46,15 @@ describe( 'PaymentMethodsComponent', function () {
       spyOn( $ctrl, 'loadPaymentMethods' );
       spyOn( $ctrl, 'loadDonorDetails' );
       spyOn( $ctrl, 'sessionEnforcerService' );
+      spyOn( $ctrl.$rootScope, '$on' );
+      spyOn( $ctrl, 'signedOut' );
+    } );
+
+    it( 'adds listener for sign-out event', () => {
+      $ctrl.$onInit();
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
+      $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+      expect( $ctrl.signedOut ).toHaveBeenCalled();
     } );
 
     describe( 'sessionEnforcerService success', () => {
@@ -90,6 +101,11 @@ describe( 'PaymentMethodsComponent', function () {
       expect($ctrl.mailingAddress).toBe('address');
       expect($ctrl.profileService.getDonorDetails).toHaveBeenCalled();
     });
+    it('should log an error', () => {
+      spyOn($ctrl.profileService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
+      $ctrl.loadDonorDetails();
+      expect($ctrl.$log.error.logs[0]).toEqual(['Error loading mailing address for use in profile payment method add payment method modals', 'some error']);
+    });
   });
 
   describe('addPaymentMethod()', () => {
@@ -106,7 +122,16 @@ describe( 'PaymentMethodsComponent', function () {
         success: true,
         data: 'some data'
       };
-      spyOn($ctrl.profileService, 'addPaymentMethod').and.returnValue(Observable.of('data'));
+      let data = {
+        address: {
+          streetAddress: '123 First St',
+          extendedAddress: 'Apt 123',
+          locality: 'Sacramento',
+          postalCode: '12345',
+          region: 'CA'
+        }
+      };
+      spyOn($ctrl.profileService, 'addPaymentMethod').and.returnValue(Observable.of(data));
       $ctrl.paymentMethodFormModal = jasmine.createSpyObj('paymentMethodFormModal',['close']);
 
       $ctrl.parentComponent = $ctrl;
@@ -138,10 +163,19 @@ describe( 'PaymentMethodsComponent', function () {
   });
 
   describe('$onDestroy()', () => {
-    it('should close modal on component destroy', ()=>{
+    it('should close modal and cancel the sessionEnforcer', ()=>{
+      spyOn( $ctrl.sessionEnforcerService, 'cancel' );
+      $ctrl.enforcerId = '1234567890';
       $ctrl.paymentMethodFormModal = jasmine.createSpyObj('$ctrl.paymentMethodFormModal', ['close']);
       $ctrl.$onDestroy();
+      expect( $ctrl.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
       expect($ctrl.paymentMethodFormModal.close).toHaveBeenCalled();
+    });
+    it('should cancel the sessionEnforcer', ()=>{
+      spyOn( $ctrl.sessionEnforcerService, 'cancel' );
+      $ctrl.enforcerId = '1234567890';
+      $ctrl.$onDestroy();
+      expect( $ctrl.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
     });
   });
 
@@ -173,4 +207,21 @@ describe( 'PaymentMethodsComponent', function () {
     });
   });
 
+  describe( 'signedOut( event )', () => {
+    describe( 'default prevented', () => {
+      it( 'does nothing', () => {
+        $ctrl.signedOut( {defaultPrevented: true} );
+        expect( $ctrl.$window.location ).toEqual( '/payment-methods.html' );
+      } );
+    } );
+
+    describe( 'default not prevented', () => {
+      it( 'navigates to \'\/\'', () => {
+        let spy = jasmine.createSpy( 'preventDefault' );
+        $ctrl.signedOut( {defaultPrevented: false, preventDefault: spy} );
+        expect( spy ).toHaveBeenCalled();
+        expect( $ctrl.$window.location ).toEqual( '/' );
+      } );
+    } );
+  } );
 });

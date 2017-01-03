@@ -58,6 +58,8 @@ describe('contactInfo', function() {
       spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'donor-type': 'Organization' }));
       self.controller.loadDonorDetails();
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
+      expect(self.controller.loadingDonorDetailsError).toEqual(false);
+      expect(self.controller.loadingDonorDetails).toEqual(false);
       expect(self.controller.donorDetails).toEqual({ 'donor-type': 'Organization' });
       expect(self.controller.nameFieldsDisabled).toEqual(false);
     });
@@ -77,6 +79,8 @@ describe('contactInfo', function() {
       };
       spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of(donorDetails));
       self.controller.loadDonorDetails();
+      expect(self.controller.loadingDonorDetailsError).toEqual(false);
+      expect(self.controller.loadingDonorDetails).toEqual(false);
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
       expect(self.controller.donorDetails).toEqual(donorDetails);
       expect(self.controller.nameFieldsDisabled).toEqual(true);
@@ -122,6 +126,14 @@ describe('contactInfo', function() {
           'registration-state': 'NEW'
         });
       });
+    });
+
+    it('should log an error on failure', () => {
+      spyOn(self.controller.orderService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
+      self.controller.loadDonorDetails();
+      expect(self.controller.loadingDonorDetailsError).toEqual(true);
+      expect(self.controller.loadingDonorDetails).toEqual(false);
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error loading donorDetails.', 'some error']);
     });
   });
 

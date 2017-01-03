@@ -1,44 +1,38 @@
 import angular from 'angular';
+import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+
+import RecurringGiftModel from 'common/models/recurringGift.model';
 
 import module from './deletePaymentMethod.modal.component';
 
 describe( 'delete payment method modal', function () {
   beforeEach( angular.mock.module( module.name ) );
-  var self = {};
-  var _profileService = angular.noop;
-
-  var _resolve = {};
-  _resolve.paymentMethod = {
-    self: {
-      uri: 'uri'
-    }
-  };
-  _resolve.paymentMethod['_recurringgifts'] = [{
-    'donations': [
-      {
-        'donation-lines': [{},{}]
-      },
-      {
-        'donation-lines': [{},{}]
-      }]
-  }];
-  _resolve.paymentMethodsList = [];
+  let self = {};
 
   beforeEach( inject( function ( $componentController ) {
+    const paymentMethod = {
+      self: {
+        uri: 'uri'
+      },
+      recurringGifts: [
+        new RecurringGiftModel({'designation-name': 'Joe'}),
+        new RecurringGiftModel({'designation-name': 'Bob'})
+      ]
+    };
     self.controller = $componentController( module.name, {
-      profileService: _profileService,
-      $log: angular.noop
-    } );
-    self.controller.resolve = _resolve;
-    self.controller.profileService.updateRecurringGifts = angular.noop;
-    self.controller.profileService.addPaymentMethod = angular.noop;
-    self.controller.profileService.deletePaymentMethod = angular.noop;
-    self.controller.$log.error = angular.noop;
-    self.controller.close = angular.noop;
-
+        profileService: jasmine.createSpyObj('profileService', ['addPaymentMethod', 'deletePaymentMethod']),
+        donationsService: jasmine.createSpyObj('donationsService', ['updateRecurringGifts'])
+      },
+      {
+        resolve: {
+          paymentMethod: paymentMethod,
+          paymentMethodsList: [paymentMethod]
+        },
+        close: jasmine.createSpy('close')
+      });
   } ) );
 
   it( 'to be defined', function () {
@@ -49,297 +43,312 @@ describe( 'delete payment method modal', function () {
   } );
 
   describe( '$onInit()', () => {
-
     it( 'initializes the component', () => {
       spyOn( self.controller, 'setView' );
       spyOn( self.controller, 'getPaymentMethods' );
 
       self.controller.$onInit();
 
-      self.controller.hasRecurrinGifts = true;
+      self.controller.hasRecurringGifts = true;
       expect( self.controller.setView ).toHaveBeenCalled();
       expect( self.controller.getPaymentMethods ).toHaveBeenCalled();
     } );
+  } );
 
-    describe( 'changeView()', () => {
-      it( 'should reset the view', () => {
-        spyOn( self.controller, 'setView' );
-        self.controller.changeView(true);
-        expect( self.controller.setView ).toHaveBeenCalled();
-      } );
-      it( 'changes \'view\' and \'confirm text\' properties', () => {
-        self.controller.deleteOption = '1';
-        self.controller.changeView();
-        expect( self.controller.view ).toBe('confirm');
-        expect( self.controller.confirmText ).toBe('withTransfer');
-
-        self.controller.deleteOption = '2';
-        self.controller.changeView();
-        expect( self.controller.view ).toBe('addPaymentMethod');
-
-        self.controller.deleteOption = '3';
-        self.controller.changeView();
-        expect( self.controller.view ).toBe('confirm');
-        expect( self.controller.confirmText ).toBe('withOutTransfer');
-      } );
+  describe( 'setView()', () => {
+    it( 'should set initial view to manageDonations if there are existing recurring gifts', () => {
+      self.controller.resolve.paymentMethod.recurringGifts = [{}];
+      self.controller.setView();
+      expect( self.controller.view ).toEqual( 'manageDonations' );
     } );
-
-    describe( 'setView()', () => {
-      it( 'should set initial view depending on existing of recurring gifts', () => {
-        self.controller.resolve.paymentMethod._recurringgifts[0].donations = [{}];
-        self.controller.setView();
-        expect( self.controller.view ).toEqual( 'manageDonations' );
-        self.controller.resolve.paymentMethod._recurringgifts[0].donations = [];
-        self.controller.setView();
-        expect( self.controller.view ).toEqual( 'confirm' );
-      } );
+    it( 'should set initial view to confirm if there are no existing recurring gifts', () => {
+      self.controller.resolve.paymentMethod.recurringGifts = [];
+      self.controller.setView();
+      expect( self.controller.view ).toEqual( 'confirm' );
     } );
   } );
 
-  describe( 'getPaymentMethodName()', () => {
-    it( 'returns bank name', () => {
-      self.controller.resolve.paymentMethod['bank-name'] = 'Foo bank';
-      expect( self.controller.getPaymentMethodName()).toBe('Foo bank');
-    } );
-
-    it( 'returns credit card type', () => {
-      self.controller.resolve.paymentMethod['card-type'] = 'Foo CC';
-      expect( self.controller.getPaymentMethodName()).toBe('Foo CC');
-    } );
-
-    it( 'excepts payment method parameter and returns it\'s name' , () => {
-      let paymentMethod = _resolve.paymentMethod;
-      self.controller.selectedPaymentMethod = 'uri';
-      paymentMethod.self = {
-        uri: 'uri'
+  describe( 'getPaymentMethods()', () => {
+    it('should do nothing if there are no recurring gifts', () => {
+      self.controller.hasRecurringGifts = false;
+      self.controller.getPaymentMethods();
+      expect(self.controller.filteredPaymentMethods).toEqual([]);
+      expect(self.controller.toEqual).toBeUndefined(0);
+      expect(self.controller.selectedPaymentMethod).toBeUndefined();
+    });
+    it('should handle deleting the only payment method (no filtered payment methods)', () => {
+      self.controller.hasRecurringGifts = true;
+      self.controller.getPaymentMethods();
+      expect(self.controller.filteredPaymentMethods.length).toEqual(0);
+      expect(self.controller.deleteOption).toEqual('2');
+      expect(self.controller.selectedPaymentMethod).toEqual(false);
+    });
+    it('should create an array of filtered payment methods', () => {
+      const secondPaymentMethod = {
+        self: {
+          uri: 'uri2'
+        },
+        recurringGifts: []
       };
-      self.controller.filteredPaymentMethods = [self.controller.resolve.paymentMethod];
-      expect( self.controller.getPaymentMethodName(paymentMethod)).toBe('Foo CC');
+      const thirdPaymentMethod = {
+        self: {
+          uri: 'uri3'
+        },
+        recurringGifts: []
+      };
+      self.controller.resolve.paymentMethodsList.push(secondPaymentMethod);
+      self.controller.resolve.paymentMethodsList.push(thirdPaymentMethod);
+      self.controller.hasRecurringGifts = true;
+      self.controller.getPaymentMethods();
+      expect(self.controller.filteredPaymentMethods).toEqual([secondPaymentMethod, thirdPaymentMethod]);
+      expect(self.controller.deleteOption).toEqual('1');
+      expect(self.controller.selectedPaymentMethod).toEqual(secondPaymentMethod);
     } );
   } );
 
-  describe( 'getPaymentMethodLastFourDigits()', () => {
-    it( 'returns 4 digits of account number depending on which payment method is being deleted (bank account/credit card)', () => {
-      self.controller.resolve.paymentMethod['display-account-number'] = '1234';
-      expect( self.controller.getPaymentMethodLastFourDigits()).toBe('1234');
+  describe( 'changeView()', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'scrollModalToTop');
+    });
+    it('should scroll to the top of the modal', () => {
+      self.controller.changeView();
+      expect(self.controller.scrollModalToTop).toHaveBeenCalled();
+    });
+    it( 'should reset the view', () => {
+      spyOn( self.controller, 'setView' );
+      self.controller.changeView(true);
+      expect( self.controller.setView ).toHaveBeenCalled();
+    } );
+    it( 'changes \'view\' and \'confirm text\' properties', () => {
+      self.controller.deleteOption = '1';
+      self.controller.changeView();
+      expect( self.controller.view ).toBe('confirm');
+      expect( self.controller.confirmText ).toBe('withTransfer');
 
-      self.controller.resolve.paymentMethod['display-account-number'] = undefined;
-      self.controller.resolve.paymentMethod['card-number'] = '3456';
-      expect( self.controller.getPaymentMethodLastFourDigits()).toBe('3456');
+      self.controller.deleteOption = '2';
+      self.controller.changeView();
+      expect( self.controller.view ).toBe('addPaymentMethod');
 
-      let paymentMethod = self.controller.resolve.paymentMethod;
-      paymentMethod['card-number'] = '9876';
-      paymentMethod.self = {
-        uri: 'uri'
-      };
-      self.controller.selectedPaymentMethod = 'uri';
-      self.controller.filteredPaymentMethods = [self.controller.resolve.paymentMethod];
-      expect( self.controller.getPaymentMethodLastFourDigits(paymentMethod)).toBe('9876');
+      self.controller.deleteOption = '3';
+      self.controller.changeView();
+      expect( self.controller.view ).toBe('confirm');
+      expect( self.controller.confirmText ).toBe('withOutTransfer');
     } );
   } );
 
   describe( 'getPaymentMethodOptionLabel()', () => {
-    it( 'returns bank name', () => {
-      self.controller.resolve.paymentMethod['display-account-number'] = '4444';
+    it( 'returns bank display string', () => {
       self.controller.resolve.paymentMethod['bank-name'] = 'Moral Bank';
+      self.controller.resolve.paymentMethod['display-account-number'] = '4444';
       expect( self.controller.getPaymentMethodOptionLabel(self.controller.resolve.paymentMethod)).toBe('Moral Bank ending in ****4444');
     } );
-
-  } );
-
-  describe( 'getRecurrenceDate()', () => {
-    it( 'returns recurrence text', () => {
-      let gift = {
-        'next-draw-date': {
-          'display-value': '2016-07-14'
-        },
-        'recurring-day-of-month': '15'
-      };
-      let date = new Date(gift['next-draw-date']['display-value']);
-      expect(self.controller.getRecurrenceDate(gift)).toEqual(date);
-    } );
-  } );
-
-  describe( 'buildGifts()' , () => {
-    it('should return an array of gifts', () => {
-      self.controller.resolve.paymentMethod['_recurringgifts'] = [{
-        'donations': [
-          {
-            'donation-lines': [{},{}]
-          },
-          {
-            'donation-lines': [{},{}]
-          }]
-      }];
-      self.controller.resolve.paymentMethod['self'] = {
-        'uri': 'bar'
-      };
-      expect(self.controller.buildGifts(self.controller.resolve.paymentMethod._recurringgifts[0].donations ).length).toBe(4);
-    });
-  });
-
-  describe( 'getPaymentMethods()', () => {
-    it('should create an array of filtered payment mehtods', () => {
-      let anotherPaymentMethod = {
-        'self': {
-          'uri': 'uri'
-        },
-        '_recurringgifts': [{
-          'donations': []
-        }]
-      };
-      self.controller.resolve.paymentMethodsList = [self.controller.resolve.paymentMethod, anotherPaymentMethod];
-      self.controller.hasRecurrinGifts = true;
-      self.controller.getPaymentMethods();
-      expect(self.controller.filteredPaymentMethods.length).toBe(1);
-    } );
-  } );
-
-  describe( 'moveDonations()', () => {
-    beforeEach(()=>{
-      self.controller.filteredPaymentMethods = [{
-        'self': {
-          'uri': 'uri'
-        }
-      }];
-    });
-    it('move donations around in the local list after a successfull deletion', () => {
-      self.controller.selectedPaymentMethod = 'uri';
-      self.controller.resolve.paymentMethodsList.push(self.controller.resolve.paymentMethod);
-
-      expect(self.controller.resolve.paymentMethodsList[1]['_recurringgifts'][0]['donations'].length).toBe(0);
-      self.controller.moveDonations();
-      expect(self.controller.resolve.paymentMethodsList.length).toBe(1);
-      expect(self.controller.resolve.paymentMethodsList[0]['_recurringgifts'][0].donations.length).toBe(2);
-    } );
-
-    it('add newly created payment method to a list', () => {
-      self.controller.selectedPaymentMethod = 'uri';
-      expect(self.controller.resolve.paymentMethodsList.length).toBe(1);
-      self.controller.moveDonations();
-      expect(self.controller.resolve.paymentMethodsList.length).toBe(2);
-    });
-  } );
-
-  describe( 'removePaymentMethodFromList()', () => {
-    it('remove payment method that was deleted from local list ', () => {
-      self.controller.resolve.paymentMethodsList.push(self.controller.resolve.paymentMethod);
-      expect(self.controller.resolve.paymentMethodsList.length).toBe(3);
-      self.controller.removePaymentMethodFromList();
-      expect(self.controller.resolve.paymentMethodsList.length).toBe(2);
+    it( 'returns card display string', () => {
+      self.controller.resolve.paymentMethod['card-type'] = 'Visa';
+      self.controller.resolve.paymentMethod['card-number'] = '4321';
+      expect( self.controller.getPaymentMethodOptionLabel(self.controller.resolve.paymentMethod)).toBe('Visa ending in ****4321');
     } );
   } );
 
   describe( 'getNewPaymentMethodId()', () => {
     it('return id from self.uri', () => {
-      self.controller.selectedPaymentMethod = '/blah/blah/123';
+      self.controller.selectedPaymentMethod = {
+        self: {
+          uri: '/blah/blah/123'
+        }
+      };
       expect(self.controller.getNewPaymentMethodId()).toBe('123');
     } );
   } );
 
   describe( 'moveDonationsToNewPaymentMethod()', () => {
-    it('update each donation\'s updated-payment-method-id field and make an API call to update', () => {
-      self.controller.selectedPaymentMethod = '/blah/blah/123';
+    it('should update each donation\'s updated-payment-method-id field and make an API call to update', () => {
+      self.controller.selectedPaymentMethod = {
+        self: {
+          uri: '/blah/blah/123'
+        }
+      };
       spyOn(self.controller,'updateRecurringGifts');
       self.controller.moveDonationsToNewPaymentMethod();
-      expect(self.controller.updateRecurringGifts).toHaveBeenCalled();
-      expect(self.controller.resolve.paymentMethod._recurringgifts[0].donations[0]['donation-lines'][0]['updated-payment-method-id']).toBe('123');
+      expect(self.controller.updateRecurringGifts).toHaveBeenCalledWith(self.controller.resolve.paymentMethod.recurringGifts);
+      expect(self.controller.resolve.paymentMethod.recurringGifts[0].paymentMethodId).toEqual('123');
+      expect(self.controller.resolve.paymentMethod.recurringGifts[1].paymentMethodId).toEqual('123');
     } );
   } );
 
   describe( 'stopRecurringGifts()', () => {
-    it('update each donation\'s updated-donation-line-status field and make an API call to update', () => {
+    it('should update each donation\'s updated-donation-line-status field and make an API call to update', () => {
       spyOn(self.controller,'updateRecurringGifts');
       self.controller.stopRecurringGifts();
-      expect(self.controller.updateRecurringGifts).toHaveBeenCalled();
-      expect(self.controller.resolve.paymentMethod._recurringgifts[0].donations[0]['donation-lines'][0]['updated-donation-line-status']).toBe('Cancelled');
+      expect(self.controller.updateRecurringGifts).toHaveBeenCalledWith(self.controller.resolve.paymentMethod.recurringGifts);
+      expect(self.controller.resolve.paymentMethod.recurringGifts[0].donationLineStatus).toBe('Cancelled');
+      expect(self.controller.resolve.paymentMethod.recurringGifts[1].donationLineStatus).toBe('Cancelled');
     } );
   } );
 
   describe( 'updateRecurringGifts()', () => {
-    it('make an sucessfull API call to update recurrng gifts and delete payment method', () => {
+    it('make an successful API call to update recurrng gifts and delete payment method', () => {
       spyOn(self.controller, 'deletePaymentMethod');
-      spyOn(self.controller.profileService, 'updateRecurringGifts').and.returnValue(Observable.of('data'));
+      self.controller.donationsService.updateRecurringGifts.and.returnValue(Observable.of('data'));
       self.controller.updateRecurringGifts();
       expect(self.controller.deletePaymentMethod).toHaveBeenCalled();
     } );
 
     it('should throw an error', () => {
-      spyOn(self.controller.profileService, 'updateRecurringGifts').and.returnValue(Observable.throw({
+      self.controller.donationsService.updateRecurringGifts.and.returnValue(Observable.throw({
         data: 'some error'
       }));
 
       self.controller.updateRecurringGifts();
       expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error updating recurring gifts before deleting old payment method', {
+        data: 'some error'
+      }]);
     });
   } );
 
   describe( 'savePaymentMethod()', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'changeView');
+    });
+
     it('should save new payment method', () => {
-      let data = {
+      const responseData = {
         self: {
-          uri: ''
+          uri: 'some uri'
+        },
+        address: {
+          streetAddress: '123 First St',
+          extendedAddress: 'Apt 123',
+          locality: 'Sacramento',
+          postalCode: '12345',
+          region: 'CA'
         }
       };
-      spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of(data));
-      self.controller.savePaymentMethod(true, true);
-      expect(self.controller.profileService.addPaymentMethod).toHaveBeenCalled();
+      self.controller.profileService.addPaymentMethod.and.returnValue(Observable.of(responseData));
+      self.controller.savePaymentMethod(true, 'some data');
+      expect(self.controller.profileService.addPaymentMethod).toHaveBeenCalledWith('some data');
+      expect(self.controller.selectedPaymentMethod).toEqual(jasmine.objectContaining(responseData));
+      expect(self.controller.filteredPaymentMethods[0]).toEqual(jasmine.objectContaining(responseData));
+      expect(self.controller.resolve.paymentMethodsList[1]).toEqual(jasmine.objectContaining(responseData));
+      expect(self.controller.deleteOption).toEqual('1');
+      expect(self.controller.changeView).toHaveBeenCalled();
+      expect(self.controller.submitted).toEqual(false);
+      expect(self.controller.loading).toEqual(false);
+      expect(self.controller.submissionError.loading).toEqual(false);
     });
 
     it('should not make a call', () => {
-      spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of({}));
+      self.controller.profileService.addPaymentMethod.and.returnValue(Observable.of({}));
       self.controller.savePaymentMethod(false);
       expect(self.controller.profileService.addPaymentMethod).not.toHaveBeenCalled();
+      expect(self.controller.changeView).not.toHaveBeenCalled();
+      expect(self.controller.loading).toEqual(false);
+      expect(self.controller.submissionError.loading).toEqual(false);
     });
 
     it('should fail and throw error', () => {
-      spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.throw({
+      self.controller.profileService.addPaymentMethod.and.returnValue(Observable.throw({
         data: 'some error'
       }));
-      self.controller.savePaymentMethod(true, true);
+      self.controller.savePaymentMethod(true, 'some data');
+      expect(self.controller.profileService.addPaymentMethod).toHaveBeenCalledWith('some data');
       expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.changeView).not.toHaveBeenCalled();
+      expect(self.controller.submitted).toEqual(false);
+      expect(self.controller.loading).toEqual(false);
+      expect(self.controller.submissionError.loading).toEqual(false);
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error saving new payment method in delete payment method modal', {
+        data: 'some error'
+      }]);
     });
   } );
 
   describe( 'deletePaymentMethod()', () => {
+    beforeEach(() => {
+      spyOn(self.controller, 'moveDonationsLocally');
+      spyOn(self.controller, 'removePaymentMethodFromList');
+    });
     it('should delete payment method and move local donations to a different payment method', () => {
-
-      spyOn(self.controller.profileService, 'deletePaymentMethod').and.returnValue(Observable.of('data'));
-      spyOn(self.controller, 'moveDonations');
+      self.controller.profileService.deletePaymentMethod.and.returnValue(Observable.of('data'));
       self.controller.deleteOption = '1';
-      self.controller.hasRecurrinGifts = true;
+      self.controller.hasRecurringGifts = true;
       self.controller.deletePaymentMethod();
-      expect(self.controller.profileService.deletePaymentMethod).toHaveBeenCalled();
-      expect(self.controller.moveDonations).toHaveBeenCalled();
+      expect(self.controller.profileService.deletePaymentMethod).toHaveBeenCalledWith(self.controller.resolve.paymentMethod.self.uri);
+      expect(self.controller.moveDonationsLocally).toHaveBeenCalled();
+      expect(self.controller.removePaymentMethodFromList).toHaveBeenCalled();
+      expect(self.controller.close).toHaveBeenCalled();
+      expect(self.controller.loading).toEqual(false);
     });
 
     it('should delete payment method and remove it from local list', () => {
-
-      spyOn(self.controller.profileService, 'deletePaymentMethod').and.returnValue(Observable.of('data'));
-      spyOn(self.controller, 'removePaymentMethodFromList');
+      self.controller.profileService.deletePaymentMethod.and.returnValue(Observable.of('data'));
       self.controller.deleteOption = '3';
       self.controller.deletePaymentMethod();
-      expect(self.controller.profileService.deletePaymentMethod).toHaveBeenCalled();
+      expect(self.controller.profileService.deletePaymentMethod).toHaveBeenCalledWith(self.controller.resolve.paymentMethod.self.uri);
+      expect(self.controller.moveDonationsLocally).not.toHaveBeenCalled();
       expect(self.controller.removePaymentMethodFromList).toHaveBeenCalled();
+      expect(self.controller.close).toHaveBeenCalled();
+      expect(self.controller.loading).toEqual(false);
     });
 
     it('should fail and throw error', () => {
-      spyOn(self.controller.profileService, 'deletePaymentMethod').and.returnValue(Observable.throw({
+      self.controller.profileService.deletePaymentMethod.and.returnValue(Observable.throw({
         data: 'some error'
       }));
       self.controller.deletePaymentMethod();
       expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error deleting payment method', {
+        data: 'some error'
+      }]);
+      expect(self.controller.loading).toEqual(false);
     });
 
   } );
 
+  describe( 'moveDonationsLocally()', () => {
+    it('should move donations around in the local list after a successful deletion', () => {
+      self.controller.selectedPaymentMethod = {
+        'self': {
+          'uri': 'uri2'
+        },
+        recurringGifts: [
+          'existing gift'
+        ]
+      };
+      self.controller.moveDonationsLocally();
+      expect(self.controller.selectedPaymentMethod.recurringGifts).toEqual([
+        'existing gift',
+        self.controller.resolve.paymentMethod.recurringGifts[0],
+        self.controller.resolve.paymentMethod.recurringGifts[1]
+      ]);
+    } );
+  } );
+
+  describe( 'removePaymentMethodFromList()', () => {
+    it('remove payment method that was deleted from local list ', () => {
+      const otherPaymentMethod = {
+        self: {
+          uri: 'uri2'
+        }
+      };
+      self.controller.resolve.paymentMethodsList.push(otherPaymentMethod);
+      expect(self.controller.resolve.paymentMethodsList.length).toEqual(2);
+      self.controller.removePaymentMethodFromList();
+      expect(self.controller.resolve.paymentMethodsList).toEqual([otherPaymentMethod]);
+    } );
+  } );
+
   describe('onSubmit()', () => {
-    it('should call different functions depending on delete option', function () {
+    it('should call different functions depending on delete option', () => {
       spyOn(self.controller, 'moveDonationsToNewPaymentMethod');
       spyOn(self.controller, 'stopRecurringGifts');
       spyOn(self.controller, 'deletePaymentMethod');
 
       self.controller.deleteOption = '0';
+      self.controller.onSubmit();
+      expect(self.controller.deletePaymentMethod).toHaveBeenCalled();
+
+      self.controller.deleteOption = '2';
       self.controller.onSubmit();
       expect(self.controller.deletePaymentMethod).toHaveBeenCalled();
 
@@ -350,7 +359,8 @@ describe( 'delete payment method modal', function () {
       self.controller.deleteOption = '3';
       self.controller.onSubmit();
       expect(self.controller.stopRecurringGifts).toHaveBeenCalled();
-    });
 
+      expect(self.controller.loading).toEqual(true);
+    });
   } );
 } );

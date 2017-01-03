@@ -2,8 +2,10 @@ import angular from 'angular';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 
 import {existingPaymentMethodFlag} from 'common/services/api/order.service';
+import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import module from './step-3.component';
 
@@ -34,9 +36,7 @@ describe('checkout', () => {
             clearCardSecurityCode: () => {}
           },
           $window: {
-            location: {
-              href: 'checkout.html'
-            }
+            location: '/checkout.html'
           }
         },
         {
@@ -88,6 +88,11 @@ describe('checkout', () => {
         expect(self.controller.donorDetails).toEqual('donor details');
         self.controller.$log.assertEmpty();
       });
+      it('should log error on failure', () => {
+        spyOn(self.controller.orderService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
+        self.controller.loadDonorDetails();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading donorDetails', 'some error']);
+      });
     });
 
     describe('loadCurrentPayment', () => {
@@ -119,6 +124,11 @@ describe('checkout', () => {
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info: current payment type is unknown']);
       });
+      it('should log an error on failure', () => {
+        spyOn(self.controller.orderService, 'getCurrentPayment').and.returnValue(Observable.throw('some error'));
+        self.controller.loadCurrentPayment();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info', 'some error']);
+      });
     });
 
     describe('checkErrors', () => {
@@ -126,6 +136,11 @@ describe('checkout', () => {
         self.controller.checkErrors();
         expect(self.controller.needinfoErrors).toEqual(['email-info']);
         self.controller.$log.assertEmpty();
+      });
+      it('should log and error on failure', () => {
+        spyOn(self.controller.orderService, 'checkErrors').and.returnValue(Observable.throw('some error'));
+        self.controller.checkErrors();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading checkErrors', 'some error']);
       });
     });
 
@@ -239,7 +254,11 @@ describe('checkout', () => {
         });
       });
 
-      describe('sumbit single order', () => {
+      describe('submit single order', () => {
+        beforeEach(() => {
+          spyOn(self.controller.$scope, '$emit');
+        });
+
         afterEach(() => {
           expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({value: true});
           expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({value: false});
@@ -251,7 +270,8 @@ describe('checkout', () => {
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
-          expect(self.controller.$window.location.href).toEqual('thank-you.html');
+          expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a bank account', () => {
           self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving bank account'));
@@ -260,7 +280,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'error saving bank account']);
-          expect(self.controller.$window.location.href).toEqual('checkout.html');
+          expect(self.controller.$window.location).toEqual('/checkout.html');
           expect(self.controller.submissionError).toEqual('error saving bank account');
         });
         it('should submit the order with a CCV if paying with a credit card', () => {
@@ -269,7 +289,8 @@ describe('checkout', () => {
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
           expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
-          expect(self.controller.$window.location.href).toEqual('thank-you.html');
+          expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should submit the order without a CCV if paying with an existing credit card', () => {
           self.controller.creditCardPaymentDetails = {};
@@ -277,7 +298,8 @@ describe('checkout', () => {
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalledWith();
           expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
-          expect(self.controller.$window.location.href).toEqual('thank-you.html');
+          expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a credit card', () => {
           self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving credit card'));
@@ -287,7 +309,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
           expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'error saving credit card']);
-          expect(self.controller.$window.location.href).toEqual('checkout.html');
+          expect(self.controller.$window.location).toEqual('/checkout.html');
           expect(self.controller.submissionError).toEqual('error saving credit card');
         });
         it('should throw an error if paying with a credit card and the CCV is missing', () => {
@@ -296,7 +318,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).not.toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly']);
-          expect(self.controller.$window.location.href).toEqual('checkout.html');
+          expect(self.controller.$window.location).toEqual('/checkout.html');
           expect(self.controller.submissionError).toEqual('Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly');
         });
         it('should throw an error if neither bank account or credit card details are loaded', () => {
@@ -304,7 +326,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).not.toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'Current payment type is unknown']);
-          expect(self.controller.$window.location.href).toEqual('checkout.html');
+          expect(self.controller.$window.location).toEqual('/checkout.html');
           expect(self.controller.submissionError).toEqual('Current payment type is unknown');
         });
       });

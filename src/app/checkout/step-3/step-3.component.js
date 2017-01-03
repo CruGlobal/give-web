@@ -4,16 +4,14 @@ import 'rxjs/add/observable/throw';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
-import loadingComponent from 'common/components/loading/loading.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 
 import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
+import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import template from './step-3.tpl';
 
-import analyticsModule from 'app/analytics/analytics.module';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'checkoutStep3';
@@ -21,9 +19,10 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(orderService, $window, $log, analyticsFactory){
+  constructor(orderService, $window, $scope, $log, analyticsFactory){
     this.orderService = orderService;
     this.$window = $window;
+    this.$scope = $scope;
     this.$log = $log;
     this.analyticsFactory = analyticsFactory;
   }
@@ -44,6 +43,9 @@ class Step3Controller{
     this.orderService.getDonorDetails()
       .subscribe((data) => {
         this.donorDetails = data;
+      },
+      error => {
+        this.$log.error('Error loading donorDetails', error);
       });
   }
 
@@ -59,6 +61,9 @@ class Step3Controller{
         }else{
           this.$log.error('Error loading current payment info: current payment type is unknown');
         }
+      },
+      error => {
+        this.$log.error('Error loading current payment info', error);
       });
   }
 
@@ -66,6 +71,9 @@ class Step3Controller{
     this.orderService.checkErrors()
       .subscribe((data) => {
         this.needinfoErrors = data;
+      },
+      error => {
+        this.$log.error('Error loading checkErrors', error);
       });
   }
 
@@ -104,9 +112,10 @@ class Step3Controller{
         this.onSubmittingOrder({value: false});
         this.orderService.clearCardSecurityCode();
         this.onSubmitted();
-        this.$window.location.href = 'thank-you.html';
+        this.$scope.$emit( cartUpdatedEvent );
+        this.$window.location = '/thank-you.html';
       },
-      (error) => {
+      error => {
         this.onSubmittingOrder({value: false});
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
@@ -120,11 +129,9 @@ export default angular
     template.name,
     displayAddressComponent.name,
     displayRateTotals.name,
-    loadingComponent.name,
     orderService.name,
     capitalizeFilter.name,
     desigSrcDirective.name,
-    loadingOverlay.name,
     analyticsFactory.name
   ])
   .component(componentName, {

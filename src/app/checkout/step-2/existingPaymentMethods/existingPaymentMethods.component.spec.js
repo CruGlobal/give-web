@@ -106,6 +106,7 @@ describe('checkout', () => {
           expect(self.controller.paymentMethods).toBeUndefined();
           expect(self.controller.selectDefaultPaymentMethod).not.toHaveBeenCalled();
           expect(self.controller.onLoad).toHaveBeenCalledWith({success: false, error: 'some error'});
+          expect(self.controller.$log.error.logs[0]).toEqual(['Error loading paymentMethods', 'some error']);
         });
       });
 

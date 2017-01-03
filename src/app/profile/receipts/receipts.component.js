@@ -2,29 +2,29 @@ import angular from 'angular';
 import template from './receipts.tpl';
 import donationsService from 'common/services/api/donations.service';
 import filterByYear from './receipts.filter';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
-import {Roles} from 'common/services/session/session.service';
+import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
 
 class ReceiptsController {
 
   /* @ngInject */
-  constructor(donationsService,sessionEnforcerService,$location,$window,$log) {
+  constructor($rootScope,donationsService,sessionEnforcerService,$location,$window,$log) {
     this.donationsService = donationsService;
     this.sessionEnforcerService = sessionEnforcerService;
     this.$location = $location;
     this.$window = $window;
     this.$log = $log;
-    this.loading = false;
+    this.$rootScope = $rootScope;
+    this.loading = true;
     this.maxShow = this.step = 25;
     this.retrievingError = '';
   }
 
   $onInit() {
+    this.today = new Date();
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
-        this.today = new Date();
         this.currentYear = this.today.getFullYear();
         this.getReceipts(this.currentYear,true);
       },
@@ -32,12 +32,11 @@ class ReceiptsController {
         this.$window.location = '/';
       }
     }, EnforcerModes.donor);
-    this.today = new Date();
-    this.currentYear = this.today.getFullYear();
-    this.getReceipts(this.currentYear,true);
+
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
   }
 
-  getReceipts(year, tryPreviousYear){
+  getReceipts(year, tryPreviousYear = false){
     this.retrievingError = '';
     this.loading = true;
     let endDate = this.currentYear == this.today.getFullYear()
@@ -57,15 +56,14 @@ class ReceiptsController {
         data => {
           this.retrievingError = '';
           this.receipts = data;
+
           //if there are no receipts in the current year try previous year
           if(this.receipts.length == 0 && tryPreviousYear) {
             this.currentYear = this.currentYear - 1;
             this.getReceipts(this.currentYear);
-            return;
+          } else {
+            this.loading = false;
           }
-          // if no receipts were found for the past two years, reset currentYear to actual current year
-          this.currentYear = this.receipts.length == 0 ? this.today.getFullYear() : this.currentYear;
-          this.loading = false;
         },
         error => {
           this.loading = false;
@@ -93,6 +91,12 @@ class ReceiptsController {
     this.sessionEnforcerService.cancel(this.enforcerId);
   }
 
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
+  }
 }
 
 let componentName = 'receipts';
@@ -103,7 +107,6 @@ export default angular
     commonModule.name,
     donationsService.name,
     filterByYear.name,
-    loadingOverlay.name,
     sessionEnforcerService.name
   ])
   .component(componentName, {

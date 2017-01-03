@@ -33,6 +33,11 @@ describe('editRecurringGiftsModal', () => {
         expect(self.controller.profileService.getDonorDetails).toHaveBeenCalled();
         expect(self.controller.mailingAddress).toEqual({ streetAddress: 'Some street address'});
       });
+      it('should log an error on failure', () => {
+        spyOn(self.controller.profileService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
+        self.controller.loadDonorDetails();
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error loading donorDetails', 'some error']);
+      });
     });
 
     describe('onSubmit', () => {

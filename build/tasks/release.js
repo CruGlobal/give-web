@@ -10,13 +10,16 @@ gulp.task('minify-css', function () {
     .pipe($.cleanCss({
       keepSpecialComments: 0
     }))
-    .pipe($.concat('give.min.css'))
+    .pipe($.rename({
+      suffix: '.min'
+    }))
     .pipe(gulp.dest(paths.output));
 });
 
 gulp.task('inline-systemjs', function () {
   var app = gulp.src([
       './jspm_packages/es6-module-loader.js',
+      './jspm_packages/system-polyfills.js',
       './jspm_packages/system.js',
       './system.config.js',
       'dist/main.js'
@@ -26,6 +29,7 @@ gulp.task('inline-systemjs', function () {
 
   var bundles = gulp.src([
       './jspm_packages/es6-module-loader.js',
+      './jspm_packages/system-polyfills.js',
       './jspm_packages/system.js',
       './system.config.js',
       'dist/common.js'
@@ -56,6 +60,7 @@ gulp.task('bundle', function () {
     'app/signIn/signIn.component',
     'app/searchResults/searchResults.component',
     'app/homeSignIn/homeSignIn.component',
+    'app/profile/profile.component',
     'app/profile/yourGiving/yourGiving.component',
     'app/profile/receipts/receipts.component',
     'app/profile/payment-methods/payment-methods.component',
@@ -93,6 +98,9 @@ gulp.task('bundle', function () {
         },
         { src: 'app/profile/yourGiving/yourGiving.component - ' + commonFilesForBundles,
           dst: 'yourGiving.js'
+        },
+        { src: 'app/profile/profile.component - ' + commonFilesForBundles,
+          dst: 'profile.js'
         },
         { src: 'app/profile/receipts/receipts.component - ' + commonFilesForBundles,
           dst: 'receipts.js'

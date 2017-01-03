@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+          <h3 translate>Give an Extra One-Time Gift</h3>
+          <p translate>How much would you like to give to these recipients?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-danger" role="alert" ng-if="$ctrl.errors.addToCart">
+          <p translate>There was an error adding some of your gifts to cart. The ones below were unable to be added to cart.</p>
+        </div>
+        <div ng-repeat="gift in $ctrl.selectedRecipients" class="row repeating-row user-profile">
+          <gift-list-item gift="gift">
+            <gift-update-view gift="gift" single-gift="true"></gift-update-view>
+          </gift-list-item>
+        </div>
+        <div ng-if="!$ctrl.hasSelectedRecipients" class="alert alert-warning" role="alert">
+          <p translate>You have not selected any recipients. You may go back and add a recent recipient or search for other recipients</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6">
+      <button class="btn btn-default"
+         ng-click="$ctrl.previous()"
+         translate>
+        Back
+      </button>
+    </div>
+    <div class="col-xs-6 text-right">
+      <button class="btn btn-primary"
+              ng-click="$ctrl.addToCart()"
+              ng-disabled="!$ctrl.hasSelectedRecipients || $ctrl.addingToCart"
+              translate>
+        <span ng-if="$ctrl.addingToCart" translate>Adding to Cart...</span>
+        <span ng-if="!$ctrl.addingToCart" translate>Add to Cart</span>
+      </button>
+    </div>
+  </div>
+</div>

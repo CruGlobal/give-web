@@ -15,10 +15,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 col-xs-12">
-        <div class="text-center" ng-if="$ctrl.loading" translate>
-          Loading recurring gifts...
-          <loading inline="true"></loading>
-        </div>
+        <loading ng-if="$ctrl.loading">
+          <translate>Loading recurring gifts...</translate>
+        </loading>
         <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError">
           <p translate>There was an error loading your recurring gifts. You can use the retry button to try loading them again. If you continue to see this message, please contact support</p>
         </div>

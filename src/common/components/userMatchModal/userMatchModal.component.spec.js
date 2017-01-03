@@ -4,6 +4,7 @@ import module from './userMatchModal.component';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 
 describe( 'userMatchModal', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -38,8 +39,21 @@ describe( 'userMatchModal', function () {
         expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
         expect( $ctrl.verificationService.getContacts ).not.toHaveBeenCalled();
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success' );
+        expect( $ctrl.loadingDonorDetailsError ).toEqual( false );
       } );
     } );
+
+    it('should log an error on failure', () => {
+      spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.throw('some error') );
+      $ctrl.$onInit();
+      expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+      expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
+      expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
+      expect( $ctrl.changeMatchState ).not.toHaveBeenCalled();
+      expect( $ctrl.loadingDonorDetailsError ).toEqual( true );
+      expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading donorDetails.', 'some error']);
+      expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+    });
 
     describe( 'donorDetails registration-state=\'MATCHED\'', () => {
       beforeEach( () => {
@@ -55,6 +69,7 @@ describe( 'userMatchModal', function () {
           expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
           expect( $ctrl.verificationService.getContacts ).toHaveBeenCalled();
           expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'activate' );
+          expect( $ctrl.loadingDonorDetailsError ).toEqual( false );
         } );
       } );
 
@@ -68,7 +83,20 @@ describe( 'userMatchModal', function () {
         expect( $ctrl.verificationService.getContacts ).toHaveBeenCalled();
         expect( $ctrl.contacts ).toEqual( contacts );
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'identity' );
+        expect( $ctrl.loadingDonorDetailsError ).toEqual( false );
       } );
+
+      it('should log an error on failure', () => {
+        $ctrl.verificationService.getContacts.and.returnValue( Observable.throw( 'another error' ) );
+        $ctrl.$onInit();
+        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+        expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
+        expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
+        expect( $ctrl.verificationService.getContacts ).toHaveBeenCalled();
+        expect( $ctrl.loadingDonorDetailsError ).toEqual( true );
+        expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading verification contacts.', 'another error']);
+        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+      });
     } );
   } );
 
@@ -118,7 +146,19 @@ describe( 'userMatchModal', function () {
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.verificationService.selectContact ).toHaveBeenCalledWith( {name: 'Batman'} );
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'activate' );
+        expect( $ctrl.selectContactError ).toEqual(false);
       } );
+
+      it('should log an error on failure', () => {
+        spyOn( $ctrl.verificationService, 'selectContact' ).and.returnValue( Observable.throw( 'some error' ) );
+        $ctrl.onSelectContact( {name: 'Batman'} );
+        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+        expect( $ctrl.verificationService.selectContact ).toHaveBeenCalledWith( {name: 'Batman'} );
+        expect( $ctrl.changeMatchState ).not.toHaveBeenCalled();
+        expect( $ctrl.selectContactError ).toEqual(true);
+        expect( $ctrl.$log.error.logs[0] ).toEqual(['Error selecting verification contact.', 'some error']);
+        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+      });
     } );
 
     describe( 'undefined', () => {
@@ -129,6 +169,17 @@ describe( 'userMatchModal', function () {
         expect( $ctrl.verificationService.thatIsNotMe ).toHaveBeenCalled();
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success' );
       } );
+
+      it('should log an error on failure', () => {
+        spyOn( $ctrl.verificationService, 'thatIsNotMe' ).and.returnValue( Observable.throw( 'some error' ) );
+        $ctrl.onSelectContact();
+        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+        expect( $ctrl.verificationService.thatIsNotMe ).toHaveBeenCalled();
+        expect( $ctrl.changeMatchState ).not.toHaveBeenCalled();
+        expect( $ctrl.selectContactError ).toEqual(true);
+        expect( $ctrl.$log.error.logs[0] ).toEqual(['Error selecting \'that-is-not-me\' verification contact', 'some error']);
+        expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+      });
     } );
   } );
 
@@ -145,7 +196,20 @@ describe( 'userMatchModal', function () {
       expect( $ctrl.questionCount ).toEqual( 3 );
       expect( $ctrl.question ).toEqual( 'a' );
       expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'question' );
+      expect( $ctrl.loadingQuestionsError ).toEqual( false );
     } );
+
+    it('should log an error on failure', () => {
+      spyOn( $ctrl.verificationService, 'getQuestions' ).and.returnValue( Observable.throw('some error') );
+      spyOn( $ctrl, 'changeMatchState' );
+
+      $ctrl.onActivate();
+      expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+      expect( $ctrl.changeMatchState ).not.toHaveBeenCalled();
+      expect( $ctrl.loadingQuestionsError ).toEqual(true);
+      expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading verification questions.', 'some error']);
+      expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+    });
   } );
 
   describe( 'onQuestionAnswer', () => {

@@ -3,11 +3,12 @@ import template from './stopGift.tpl';
 import map from 'lodash/map';
 
 import donationsService from 'common/services/api/donations.service';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import stopGiftStep1 from './step1/stopGiftStep1.component';
 import stopGiftStep2 from './step2/stopGiftStep2.component';
+import retryModal from 'common/components/retryModal/retryModal.component';
 
-import analyticsModule from 'app/analytics/analytics.module';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'stopGift';
@@ -15,8 +16,10 @@ let componentName = 'stopGift';
 class StopGiftController {
 
   /* @ngInject */
-  constructor( donationsService, analyticsFactory ) {
+  constructor( $log, donationsService, analyticsFactory ) {
+    this.$log = $log;
     this.donationsService = donationsService;
+    this.scrollModalToTop = scrollModalToTop;
     this.analyticsFactory = analyticsFactory;
   }
 
@@ -27,6 +30,7 @@ class StopGiftController {
 
   setStep( step ) {
     this.step = step;
+    this.scrollModalToTop();
   }
 
   previous() {
@@ -38,14 +42,22 @@ class StopGiftController {
       default:
         this.changeState( {state: 'step-0'} );
     }
+    this.scrollModalToTop();
   }
 
   loadRecurringGifts() {
+    this.setLoading( {loading: true} );
+    this.loadingRecurringGiftsError = false;
     this.donationsService.getRecurringGifts().subscribe( ( gifts ) => {
       this.gifts = gifts;
       this.setLoading( {loading: false} );
       this.setStep( 'step-1' );
-    } );
+    },
+    error => {
+      this.setLoading( {loading: false} );
+      this.loadingRecurringGiftsError = true;
+      this.$log.error('Error loading recurring gifts', error);
+    });
   }
 
   selectGifts( selectedGifts ) {
@@ -71,7 +83,9 @@ export default angular
     template.name,
     donationsService.name,
     stopGiftStep1.name,
-    stopGiftStep2.name
+    stopGiftStep2.name,
+    retryModal.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
       controller:  StopGiftController,

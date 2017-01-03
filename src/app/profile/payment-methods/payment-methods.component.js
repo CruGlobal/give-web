@@ -4,18 +4,19 @@ import recurringGiftsComponent from './recurring-gifts/recurring-gifts.component
 import profileService from 'common/services/api/profile.service.js';
 import paymentMethod from './payment-method/payment-method.component';
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
-import {Roles} from 'common/services/session/session.service';
+import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
+import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 
 class PaymentMethodsController {
 
   /* @ngInject */
-  constructor($uibModal, profileService, sessionEnforcerService, $log, $timeout, $window, $location) {
-    this.log = $log;
+  constructor($rootScope, $uibModal, profileService, sessionEnforcerService, $log, $timeout, $window, $location) {
+    this.$log = $log;
+    this.$rootScope = $rootScope;
     this.$uibModal = $uibModal;
     this.paymentMethod = 'bankAccount';
     this.profileService = profileService;
@@ -24,11 +25,15 @@ class PaymentMethodsController {
     this.successMessage = { show: false };
     this.$timeout = $timeout;
     this.$window = $window;
+    this.paymentMethods = [];
     this.$location = $location;
     this.sessionEnforcerService = sessionEnforcerService;
   }
 
   $onDestroy(){
+    // Destroy enforcer
+    this.sessionEnforcerService.cancel( this.enforcerId );
+
     if(this.paymentMethodFormModal) {
       this.paymentMethodFormModal.close();
     }
@@ -45,15 +50,18 @@ class PaymentMethodsController {
         this.$window.location = '/';
       }
     }, EnforcerModes.donor);
+
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
+
     this.loading = true;
-    this.loadPaymentMethods();
-    this.loadDonorDetails();
   }
 
   loadDonorDetails() {
     this.profileService.getDonorDetails()
-      .subscribe((data) => {
+      .subscribe(data => {
         this.mailingAddress = data.mailingAddress;
+      }, error => {
+        this.$log.error('Error loading mailing address for use in profile payment method add payment method modals', error);
       });
   }
 
@@ -68,7 +76,7 @@ class PaymentMethodsController {
         error => {
           this.loading = false;
           this.submissionError.error = 'Failed retrieving payment methods.';
-          this.log.error(this.submissionError.error, error);
+          this.$log.error(this.submissionError.error, error);
         }
       );
   }
@@ -94,20 +102,22 @@ class PaymentMethodsController {
       this.$timeout(()=>{
         this.successMessage.show = false;
       },60000);
-    });
+    }, angular.noop);
   }
 
   onSubmit(e) {
     if(e.success && e.data) {
       this.profileService.addPaymentMethod(e.data)
         .subscribe((data) => {
+            data.address = data.address && formatAddressForTemplate(data.address);
             this.submissionError.loading = false;
             this.paymentMethodFormModal.close(data);
+
           },
           (error) => {
             this.submissionError.loading = false;
             this.submissionError.error = error.data;
-            this.log.error('error.data',error);
+            this.$log.error('Error adding payment method',error);
           });
     } else {
       this.submissionError.loading = false;
@@ -125,6 +135,13 @@ class PaymentMethodsController {
   isCard(paymentMethod) {
     return paymentMethod['card-number'] ? true : false;
   }
+
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
+  }
 }
 
 let componentName = 'paymentMethods';
@@ -137,7 +154,6 @@ export default angular
     paymentMethodFormModal.name,
     giveModalWindowTemplate.name,
     paymentMethod.name,
-    loadingOverlay.name,
     profileService.name,
     paymentMethodDisplay.name,
     sessionEnforcerService.name

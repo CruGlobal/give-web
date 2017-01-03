@@ -1,26 +1,26 @@
 <div class="screenContent">
   <section class="is-top">
-      <div class="container">
-        <h1 ng-if="!$ctrl.searchParams.type || $ctrl.searchParams.type === 'people'">
+    <div class="container">
+      <h1 ng-if="!$ctrl.searchParams.type || $ctrl.searchParams.type === 'people'">
           <span translate ng-if="$ctrl.searchParams.keyword">
             Search Results for <strong>{{$ctrl.searchParams.keyword}}</strong>
           </span>
-          <span translate ng-if="$ctrl.searchParams.first_name || $ctrl.searchParams.last_name">
+        <span translate ng-if="$ctrl.searchParams.first_name || $ctrl.searchParams.last_name">
             Search Results for <strong>{{$ctrl.searchParams.first_name}} {{$ctrl.searchParams.last_name}}</strong>
           </span>
-          <em ng-if="$ctrl.searchResults.length">({{$ctrl.searchResults.length}} results)</em>
-        </h1>
-        <!-- Search Box -->
+        <em ng-if="$ctrl.searchResults.length">({{$ctrl.searchResults.length}} results)</em>
+      </h1>
+      <!-- Search Box -->
 
-        <div class="row">
-          <div class="col-xs-12 col-sm-10 col-sm-offset-1">
-            <form method="get" action="/search-results.html">
-              <div class="input-group is-search-main">
-                <input type="search" class="form-control" placeholder="Search for..." name="q" value="{{$ctrl.searchParams.keyword}}">
-                <span class="input-group-btn">
+      <div class="row">
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+          <form method="get" action="/search-results.html">
+            <div class="input-group is-search-main">
+              <input type="search" class="form-control" placeholder="Search for..." name="q" value="{{$ctrl.searchParams.keyword}}">
+              <span class="input-group-btn">
                   <button class="btn btn-primary" type="submit" translate>Search</button>
                 </span>
-              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -39,7 +39,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="panel">
+        <div class="panel loading-overlay-parent">
           <div class="panel-body">
             <div class="row">
               <div class="col-sm-12 col-md-3">
@@ -51,9 +51,9 @@
                       <div class="is-widget">
                         <ul class="list-unstyled is-type-links">
                           <li ng-if="$ctrl.searchParams.keyword" ng-class="{'active': !$ctrl.searchParams.type}">
-                            <a href="" ng-click="$ctrl.requestSearch('')" translate>All Giving Opportunities</a>
+                            <a href="" ng-click="$ctrl.requestSearch()" translate>All Giving Opportunities</a>
                           </li>
-                          <li ng-class="{'active': $ctrl.searchParams.type === 'people' || (!$ctrl.searchParams.type && !$ctrl.searchParams.keyword)}">
+                          <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
                             <a href="" ng-click="$ctrl.requestSearch('people')" translate>People</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'ministries'}">
@@ -80,7 +80,7 @@
                       <div ng-if="!$ctrl.searchParams.type">
                         <div class="form-group">
                           <label translate>Name</label>
-                          <input type="text" class="form-control input-subtle" name="keyword" value="{{$ctrl.searchParams.keyword}}">
+                          <input type="text" class="form-control input-subtle" name="q" value="{{$ctrl.searchParams.keyword}}">
                         </div>
                       </div>
 
@@ -101,39 +101,66 @@
                   <p translate>You can search our staff by first or last name.</p>
                 </div>
 
-                <div ng-if="$ctrl.searchResults && !$ctrl.searchResults.length && $ctrl.searchParams.type !== 'featured'">
+                <div ng-if="$ctrl.searchResults && !$ctrl.searchResults.length">
                   <p translate>Your search did not find any results. Please try again.</p>
                   <p translate>If you are uncertain of the exact spelling, enter the first few letters and avoid searching by nicknames.
                     If you still cannot find a staff member you are looking for, you can call 1-888-278-7233 for assistance.</p>
                 </div>
 
-                <div ng-if="$ctrl.searchResults && $ctrl.searchParams.type === 'featured'">
-                  <h3 translate>Featured Opportunities haven't been loaded yet.</h3>
+                <div ng-if="!$ctrl.searchResults && $ctrl.searchError">
+                  <p translate>An error occurred while processing your search query. Please try again.</p>
                 </div>
 
-                <div class="is-row clearfix" ng-repeat="r in $ctrl.searchResults">
-                  <a ng-href="/{{r.designationNumber}}" class="is-row-thumb">
-                    <img desig-src="{{r.designationNumber}}">
-                  </a>
-                  <div class="is-row-meta">
-                    <a ng-href="/{{r.designationNumber}}">
-                      <span class="is-row-title">{{r.name}}</span>
-                      <span class="is-row-num">#{{r.designationNumber}}</span>
+                <div ng-repeat="(facet,hits) in $ctrl.searchResults | groupBy:'facet'">
+                  <h3 class="is-results-divider" ng-switch="facet">
+                    <span ng-switch-when="person" translate>People</span>
+                    <span ng-switch-when="ministry" translate>Ministries</span>
+                    <span ng-switch-when="featured" translate>Featured Opportunities</span>
+                  </h3>
+
+                  <section class="is-tabs" ng-if="facet === 'featured'">
+                    <ul class="nav nav-tabs nav-search-tabs text-center">
+                      <li ng-class="{'active': $ctrl.featuredGroupBy === 'startMonth'}">
+                        <a href="" ng-click="$ctrl.featuredGroupBy = 'startMonth'" translate>By Date</a>
+                      </li>
+                      <li ng-class="{'active': $ctrl.featuredGroupBy === 'ministry'}">
+                        <a href="" ng-click="$ctrl.featuredGroupBy = 'ministry'" translate>By Ministry</a>
+                      </li>
+                    </ul>
+                  </section>
+
+                  <div ng-repeat-start="(k,hits) in hits | orderBy:$ctrl.featuredGroupBy:(facet === 'featured' && $ctrl.featuredGroupBy === 'startMonth') | groupBy:$ctrl.featuredGroupBy">
+                    <h4 class="is-results-divider" ng-if="facet === 'featured' && $ctrl.featuredGroupBy === 'startMonth'">
+                      {{k | date:'LLLL yyyy'}}
+                    </h4>
+
+                    <h4 class="is-results-divider" ng-if="facet === 'featured' && $ctrl.featuredGroupBy === 'ministry'">
+                      {{k}}
+                    </h4>
+                  </div>
+
+                  <div class="is-row clearfix" ng-repeat-end ng-repeat="r in hits">
+                    <a ng-href="{{r.path}}" class="is-row-thumb">
+                      <img desig-src="{{r.designationNumber}}">
                     </a>
-                  </div>
-                  <div class="is-row-actions hidden-xs">
-                    <product-config product-code="{{r.designationNumber}}" button-label="Give a Gift" button-size="sm"></product-config>
-                    &nbsp;
-                    <a ng-href="/{{r.designationNumber}}" class="btn btn-sm btn-subtle" translate>Details</a>
+                    <div class="is-row-meta">
+                      <a ng-href="{{r.path}}">
+                        <span class="is-row-title">{{r.name}}</span>
+                        <span class="is-row-num">#{{r.designationNumber}}</span>
+                      </a>
+                    </div>
+                    <div class="is-row-actions hidden-xs">
+                      <product-config product-code="{{r.designationNumber}}" button-label="Give a Gift" button-size="sm"></product-config>
+                      &nbsp;
+                      <a ng-href="{{r.path}}" class="btn btn-sm btn-subtle" translate>Details</a>
+                    </div>
                   </div>
                 </div>
-
-                <!--<h3 class="is-results-divider" translate>Featured Opportunities</h3>-->
               </div>
             </div>
           </div>
+          <loading type="overlay" ng-if="$ctrl.loadingResults"></loading>
         </div>
-        <loading-overlay ng-if="$ctrl.loadingResults"></loading-overlay>
       </div>
     </div>
   </div>

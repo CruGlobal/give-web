@@ -16,10 +16,14 @@
             <a class="btn btn-primary" ng-click="$ctrl.addPaymentMethod()" translate>Add New Payment Method</a>
           </div>
         </div>
-        <div class="row" style="position: relative">
-          <loading-overlay ng-if="$ctrl.loading"></loading-overlay>
-          <div ng-if="$ctrl.paymentMethods" ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
-            <payment-method model="paymentMethod" payment-methods-list="$ctrl.paymentMethods" on-delete="$ctrl.onDelete()"></payment-method>
+        <div class="row">
+          <div class="col-xs-12">
+            <loading ng-if="$ctrl.loading">
+              <translate>Loading payment methods...</translate>
+            </loading>
+            <div ng-if="$ctrl.paymentMethods" ng-repeat="paymentMethod in $ctrl.paymentMethods" class="panel-group panel-collapse">
+              <payment-method success-message="$ctrl.successMessage" model="paymentMethod" payment-methods-list="$ctrl.paymentMethods" mailing-address="$ctrl.mailingAddress" on-delete="$ctrl.onDelete()"></payment-method>
+            </div>
           </div>
         </div>
         <div ng-if="$ctrl.error" class="error">

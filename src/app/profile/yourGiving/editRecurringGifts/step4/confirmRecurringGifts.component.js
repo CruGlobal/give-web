@@ -9,13 +9,11 @@ import 'rxjs/add/operator/do';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 import giftDetailsView from 'common/components/giftViews/giftDetailsView/giftDetailsView.component';
-import loading from 'common/components/loading/loading.component';
 
 import donationsService from 'common/services/api/donations.service';
 
 import template from './confirmRecurringGifts.tpl';
 
-import analyticsModule from 'app/analytics/analytics.module';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'step4Confirm';
@@ -76,7 +74,6 @@ export default angular
     template.name,
     giftListItem.name,
     giftDetailsView.name,
-    loading.name,
     donationsService.name,
     analyticsFactory.name
   ])

@@ -29,7 +29,8 @@ describe('recurringGift model', () => {
         'effective-status': "Active",
         rate: {recurrence: {interval: 'Monthly'}},
         'recurring-day-of-month': '15',
-        'next-draw-date': {'display-value': '2015-05-06', value: 1430895600}
+        'next-draw-date': {'display-value': '2015-05-06', value: 1430895600},
+        'start-date': {'display-value': '2015-04-06', value: 1428303600}
       }
     );
     RecurringGiftModel.nextDrawDate = '2015-05-20';
@@ -39,6 +40,41 @@ describe('recurringGift model', () => {
         'account-type': 'Savings'
       }
     ];
+    jasmine.clock().mockDate(moment('2015-05-07').toDate());
+  });
+
+  describe('constructor', () => {
+    it('should call initializeEmptyFields', () => {
+      spyOn(RecurringGiftModel.prototype, 'initializeEmptyFields');
+      new RecurringGiftModel({});
+      expect(RecurringGiftModel.prototype.initializeEmptyFields).toHaveBeenCalled();
+    });
+  });
+
+  describe('initializeEmptyFields', () => {
+    it('should default nested fields if they are undefined', () => {
+      let gift = new RecurringGiftModel({});
+      expect(gift.gift).toEqual({
+        'updated-rate': {
+          recurrence: {
+            interval: ''
+          }
+        }
+      });
+      expect(gift.parentDonation).toEqual({
+        rate: {
+          recurrence: {
+            interval: ''
+          }
+        },
+        'next-draw-date': {
+          'display-value': ''
+        },
+        'start-date': {
+          'display-value': ''
+        }
+      });
+    });
   });
 
   describe('designationName getter', () => {
@@ -55,15 +91,25 @@ describe('recurringGift model', () => {
   });
 
   describe('designationNumber getter', () => {
-    it('should return the designation number', () => {
+    it('should return designation-number if it hasn\'t been updated', () => {
       expect(giftModel.designationNumber).toEqual('0105987');
+    });
+    it('should return updated-designation-number if it has been updated', () => {
+      giftModel.gift['updated-designation-number'] = '0123456';
+      expect(giftModel.designationNumber).toEqual('0123456');
     });
   });
 
   describe('designationNumber setter', () => {
-    it('should set the designation number', () => {
-      giftModel.designationNumber = '0123456';
-      expect(giftModel.gift['designation-number']).toEqual('0123456');
+    it('should update designation number', () => {
+      giftModel.designationNumber = '0987654';
+      expect(giftModel.gift['designation-number']).toEqual('0105987');
+      expect(giftModel.gift['updated-designation-number']).toEqual('0987654');
+    });
+    it('should clear updated amount if it is the same as the original', () => {
+      giftModel.designationNumber = '0105987';
+      expect(giftModel.gift['designation-number']).toEqual('0105987');
+      expect(giftModel.gift['updated-designation-number']).toEqual('');
     });
   });
 
@@ -74,6 +120,10 @@ describe('recurringGift model', () => {
     it('should load amount if it has been updated', () => {
       giftModel.gift['updated-amount'] = 50;
       expect(giftModel.amount).toEqual(50);
+    });
+    it('should load an empty string if updated amount is undefined (ng-model was invalid and set it to undefined)', () => {
+      giftModel.gift['updated-amount'] = undefined;
+      expect(giftModel.amount).toEqual('');
     });
   });
 

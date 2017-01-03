@@ -2,7 +2,6 @@ import angular from 'angular';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
-import loading from 'common/components/loading/loading.component';
 
 import donationsService from 'common/services/api/donations.service';
 
@@ -45,7 +44,6 @@ export default angular
     template.name,
     giftListItem.name,
     giftUpdateView.name,
-    loading.name,
     donationsService.name
   ])
   .component(componentName, {

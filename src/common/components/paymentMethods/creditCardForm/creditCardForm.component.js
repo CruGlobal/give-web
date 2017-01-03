@@ -7,7 +7,6 @@ import 'rxjs/add/operator/combineLatest';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import addressForm from 'common/components/addressForm/addressForm.component';
-import loadingComponent from 'common/components/loading/loading.component';
 
 import showErrors from 'common/filters/showErrors.filter';
 
@@ -77,11 +76,20 @@ class CreditCardController {
     });
   }
 
+  waitForSecurityCodeInitialization() {
+    let unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
+      unregister();
+      this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
+      this.creditCardPaymentForm.securityCode.$validators.minlength = number => toString(number).length >= 3;
+      this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
+    });
+  }
+
   addCustomValidators() {
     this.creditCardPaymentForm.cardNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
     this.creditCardPaymentForm.cardNumber.$validators.minlength = number => this.paymentMethod && !number || toString(number).length >= 13;
     this.creditCardPaymentForm.cardNumber.$validators.maxlength = number => toString(number).length <= 16;
-    this.creditCardPaymentForm.cardNumber.$validators.cardNumber = number => this.paymentMethod && !number || this.paymentValidationService.validateCardNumber();
+    this.creditCardPaymentForm.cardNumber.$validators.cardNumber = number => this.paymentMethod && !number || this.paymentValidationService.validateCardNumber()(number);
 
     this.creditCardPaymentForm.expiryMonth.$validators.expired = expiryMonth => {
       let currentDate = new Date();
@@ -96,9 +104,10 @@ class CreditCardController {
       this.creditCardPaymentForm.expiryMonth.$validate();
     });
 
-    this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.creditCardPaymentForm.securityCode.$validators.minlength = number => this.paymentMethod && !this.creditCardPayment.cardNumber || toString(number).length >= 3;
-    this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
+    if(!this.paymentMethod) {
+      this.waitForSecurityCodeInitialization();
+    }
+
   }
 
   initializeExpirationDateOptions(){
@@ -110,7 +119,7 @@ class CreditCardController {
     this.creditCardPaymentForm.$setSubmitted();
     if(this.creditCardPaymentForm.$valid){
       let ccpCreditCardNumber = this.paymentMethod && !this.creditCardPayment.cardNumber ? this.paymentMethod['card-number'] : new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber).encrypt();
-      let ccpSecurityCode = this.paymentMethod && !this.creditCardPayment.cardNumber ? null : new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode).encrypt();
+      let ccpSecurityCode = this.paymentMethod ? null : new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode).encrypt();
       this.onSubmit({
         success: true,
         data: {
@@ -121,7 +130,8 @@ class CreditCardController {
             'expiry-month': this.creditCardPayment.expiryMonth,
             'expiry-year': this.creditCardPayment.expiryYear,
             ccv: ccpSecurityCode
-          }
+          },
+          paymentMethodNumber: this.creditCardPayment.cardNumber ? this.creditCardPayment.cardNumber.slice(-4) : false
         }
       });
     }else{
@@ -136,7 +146,6 @@ export default angular
     'ngMessages',
     displayAddressComponent.name,
     addressForm.name,
-    loadingComponent.name,
     showErrors.name,
     paymentValidationService.name,
     ccpService.name

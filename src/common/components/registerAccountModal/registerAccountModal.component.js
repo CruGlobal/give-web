@@ -4,6 +4,7 @@ import template from './registerAccountModal.tpl';
 import orderService from 'common/services/api/order.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
 import verificationService from 'common/services/api/verification.service';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import signInModal from 'common/components/signInModal/signInModal.component';
 import signUpModal from 'common/components/signUpModal/signUpModal.component';
@@ -22,10 +23,12 @@ class RegisterAccountModalController {
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor( orderService, sessionService, verificationService ) {
+  constructor( orderService, sessionService, verificationService, gettext ) {
     this.orderService = orderService;
     this.sessionService = sessionService;
     this.verificationService = verificationService;
+    this.gettext = gettext;
+    this.scrollModalToTop = scrollModalToTop;
   }
 
   $onInit() {
@@ -41,6 +44,10 @@ class RegisterAccountModalController {
   }
 
   onIdentitySuccess() {
+    // Show loading state
+    this.modalTitle = this.gettext( 'Checking your donor account' );
+    this.stateChanged( 'loading' );
+
     // Success Sign-In/Up, Proceed to Step 2.
     this.getDonorDetails();
   }
@@ -56,7 +63,6 @@ class RegisterAccountModalController {
   }
 
   getDonorDetails() {
-    this.setLoading( {loading: true} );
 
     // Step 2. Fetch Donor Details
     this.orderService.getDonorDetails().subscribe( ( donorDetails ) => {
@@ -97,12 +103,13 @@ class RegisterAccountModalController {
     }
     this.state = state;
     this.setLoading( {loading: false} );
+    this.scrollModalToTop();
   }
 
   setModalSize( size ) {
     // Modal size is unchangeable after initialization. This fetches the modal and changes the size classes.
     // eslint-disable-next-line angular/document-service
-    let modal = angular.element( document.getElementsByClassName( 'modal-dialog' ) );
+    let modal = angular.element( document.getElementsByClassName( 'session-modal' ) );
     modal.removeClass( 'modal-sm modal-md modal-lg' );
     if ( angular.isDefined( size ) ) {
       modal.addClass( `modal-${size}` );

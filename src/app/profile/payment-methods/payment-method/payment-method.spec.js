@@ -14,6 +14,7 @@ describe('PaymentMethodComponent', function () {
     },
     fakeModal = function() {
       return {
+        // eslint-disable-next-line jasmine/no-unsafe-spy
         close: jasmine.createSpy('close'),
         result: {
           then: function(confirmCallback) {
@@ -79,23 +80,6 @@ describe('PaymentMethodComponent', function () {
     expect(self.controller).toBeDefined();
   });
 
-  describe('$onInit()', () => {
-    it('should call loadDonorDetails', () => {
-      spyOn(self.controller, 'loadDonorDetails');
-      self.controller.$onInit();
-      expect(self.controller.loadDonorDetails).toHaveBeenCalled();
-    });
-  });
-
-  describe('loadDonorDetails()', () => {
-    it('should get donor details', () => {
-      spyOn(self.controller.profileService, 'getDonorDetails').and.returnValue(Observable.of({mailingAddress: 'address'}));
-      self.controller.loadDonorDetails();
-      expect(self.controller.mailingAddress).toBe('address');
-    });
-  });
-
-
   describe('getExpiration()', () => {
     it('should return expiration date', () => {
       self.controller.model = modelCC;
@@ -116,6 +100,8 @@ describe('PaymentMethodComponent', function () {
     it('should call Edit Modal', () => {
       self.controller.model = modelCC;
 
+      self.controller.successMessage = {};
+
       let callback = () => {
         self.controller.editPaymentMethodModal.close();
       };
@@ -131,8 +117,6 @@ describe('PaymentMethodComponent', function () {
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
 
       self.controller.onSubmit = () => 'hello';
-      spyOn(self.controller.profileService, 'getDonorDetails').and.returnValue(Observable.of({mailingAddress: 'address'}));
-      self.controller.$onInit();
       expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('hello');
     });
   });
@@ -140,20 +124,34 @@ describe('PaymentMethodComponent', function () {
   describe('deletePaymentMethod()', () => {
     it('should call Delete Modal', () => {
       self.controller.model = modelEFT;
+      self.controller.successMessage = {};
+      self.controller.mailingAddress = 'address';
       self.controller.deletePaymentMethod();
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
       expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethod()).toEqual(modelEFT);
+      expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.mailingAddress()).toEqual('address');
       expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethodsList().length).toBe(1);
     });
   });
 
   describe('onSubmit()', () => {
+    beforeEach(() => {
+      self.controller.data = {
+        creditCard:{
+          'card-number': '0000',
+          address: modelCC.address
+        }
+      };
+    });
+
     it('should throw an error', () => {
       spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.throw({
         data: 'some error'
       }));
-      self.controller.onSubmit({success:true, data: {}});
+      self.controller.successMessage = {};
+      self.controller.onSubmit({success:true, data: self.controller.data});
       expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error updating payment method', {data: 'some error'}]);
     });
 
     it('should edit payment method', () => {
@@ -161,13 +159,20 @@ describe('PaymentMethodComponent', function () {
         close: jasmine.createSpy('close')
       };
       spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.of('data'));
-      self.controller.onSubmit({success:true, data: {creditCard:{'card-number': '0000'}}});
+      self.controller.onSubmit({success:true, data: self.controller.data});
       expect(self.controller.model['card-number']).toBe('0000');
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
+
+      self.controller.data.creditCard = undefined;
+      self.controller.data.bankAccount = {
+        'display-account-number': '9879'
+      };
+      self.controller.onSubmit({success:true, data: self.controller.data});
+      expect(self.controller.model['display-account-number']).toBe('9879');
     });
 
     it('should not submit', () => {
-      self.controller.onSubmit({success:false, data: {}});
+      self.controller.onSubmit({success:false, data: self.controller.data});
       expect(self.controller.submissionError.loading).toBe(false);
     });
   });

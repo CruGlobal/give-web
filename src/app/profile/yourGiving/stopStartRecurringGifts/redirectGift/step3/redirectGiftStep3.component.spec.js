@@ -45,12 +45,13 @@ describe( 'your giving', () => {
             } );
             describe( 'updateRecurringGifts failure', () => {
               it( 'completes the gift redirect', () => {
-                spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).and.returnValue( Observable.throw( undefined ) );
+                spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).and.returnValue( Observable.throw( 'some error' ) );
                 $ctrl.submitGift();
                 expect( $ctrl.hasError ).toEqual( true );
                 expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
                 expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
                 expect( $ctrl.onComplete ).not.toHaveBeenCalled();
+                expect( $ctrl.$log.error.logs[0] ).toEqual(['Error redirecting a gift', 'some error']);
               } );
             } );
           } );

@@ -14,7 +14,7 @@ gulp.task('build', function (callback) {
 
 gulp.task('html', function () {
   return gulp.src(paths.templates)
-    .pipe($.plumber())
+    .pipe($.if(global.suppressErrors, $.plumber()))
     //.pipe($.changed(paths.srcDir, { extension: '.html' })) //TODO: fix this. It doesn't work on travis
     .pipe($.minifyHtml({
       empty: true,
@@ -31,13 +31,20 @@ gulp.task('html', function () {
 });
 
 gulp.task('scss', function () {
-  return gulp.src(paths.scss)
-    .pipe($.plumber())
-    .pipe($.sourcemaps.init())
-    .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
-    .pipe($.sass())
-    .pipe($.concat('give.css'))
-    .pipe($.sourcemaps.write("."))
-    .pipe(gulp.dest(paths.output))
-    .pipe($.browserSync.reload({ stream: true }));
+  var tasks = [];
+  for (var sheet in paths.scss) {
+    var styles = paths.scss[sheet];
+
+    tasks.push(gulp.src(styles)
+      .pipe($.if(global.suppressErrors, $.plumber()))
+      .pipe($.sourcemaps.init())
+      .pipe($.systemjsResolver({systemConfig: './system.config.js'}))
+      .pipe($.sass())
+      .pipe($.concat(sheet + '.css'))
+      .pipe($.sourcemaps.write("."))
+      .pipe(gulp.dest(paths.output))
+      .pipe($.browserSync.reload({ stream: true })));
+  }
+
+  return $.all(tasks);
 });

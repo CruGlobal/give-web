@@ -1,7 +1,6 @@
 import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-bootstrap';
-import appConfig from 'common/app.config';
 import commonModule from 'common/common.module';
 import range from 'lodash/range';
 import map from 'lodash/map';
@@ -10,14 +9,16 @@ import includes from 'lodash/includes';
 import displayAddress from 'common/components/display-address/display-address.component';
 import recipientView from './recipientView/recipientView.component';
 import historicalView from './historicalView/historicalView.component';
-import loadingComponent from 'common/components/loading/loading.component';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.modal.component';
+import giveOneTimeGiftModal from './giveOneTimeGift/giveOneTimeGift.modal.component';
 import stopStartRecurringGiftsModal from './stopStartRecurringGifts/stopStartRecurringGifts.modal.component';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
-import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
-import sessionService, {Roles} from 'common/services/session/session.service';
+import sessionEnforcerService, {
+  EnforcerCallbacks,
+  EnforcerModes
+} from 'common/services/session/sessionEnforcer.service';
+import sessionService, {Roles, SignOutEvent} from 'common/services/session/session.service';
 import template from './yourGiving.tpl';
 
 let componentName = 'yourGiving';
@@ -31,10 +32,12 @@ export const givingViews = ['recipient', 'historical'];
 class YourGivingController {
 
   /* @ngInject */
-  constructor( $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService ) {
+  constructor( $log, $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService ) {
+    this.$log = $log;
     this.$window = $window;
     this.$location = $location;
     this.$uibModal = $uibModal;
+    this.$rootScope = $rootScope;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.sessionService = sessionService;
@@ -51,9 +54,11 @@ class YourGivingController {
       },
       [EnforcerCallbacks.cancel]: () => {
         // Authentication failure
-        this.$window.location = '/cart.html';
+        this.$window.location = '/';
       }
     }, EnforcerModes.donor );
+
+    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
 
     let year = new Date().getFullYear();
     this.years = range( year, year - 11 );
@@ -82,13 +87,25 @@ class YourGivingController {
     } );
   }
 
+  signedOut( event ) {
+    if ( !event.defaultPrevented ) {
+      event.preventDefault();
+      this.$window.location = '/';
+    }
+  }
+
   loadProfile() {
     this.profileLoading = true;
+    this.profileLoadingError = false;
     this.profileService.getGivingProfile().subscribe( ( profile ) => {
       this.profile = profile;
       this.currentDate = new Date();
       this.profileLoading = false;
-    } );
+    },
+    error => {
+      this.$log.error('Error loading givingProfile', error);
+      this.profileLoadingError = true;
+    });
   }
 
   setGivingView( name ) {
@@ -105,38 +122,44 @@ class YourGivingController {
 
   openEditRecurringGiftsModal() {
     this.recurringGiftsUpdateSuccess = false;
-    this.editRecurringGiftsModal = this.$uibModal.open({
-      component: 'editRecurringGiftsModal',
+    this.editRecurringGiftsModal = this.$uibModal.open( {
+      component:         'editRecurringGiftsModal',
+      backdrop:          'static', // Disables closing on click
+      windowTemplateUrl: giveModalWindowTemplate.name
+    } );
+    this.editRecurringGiftsModal.result.then( () => {
+      this.recurringGiftsUpdateSuccess = true;
+    }, angular.noop );
+  }
+
+  openGiveOneTimeGiftModal() {
+    this.$uibModal.open({
+      component: 'giveOneTimeGiftModal',
       backdrop: 'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate.name
-    });
-    this.editRecurringGiftsModal.result.then(() => {
-      this.recurringGiftsUpdateSuccess = true;
     });
   }
 
   openStopStartRecurringGiftsModal() {
     this.stopStartGiftsSuccess = false;
-    this.stopStartRecurringGiftsModal = this.$uibModal.open({
-      component: 'stopStartRecurringGiftsModal',
-      backdrop: 'static',
+    this.stopStartRecurringGiftsModal = this.$uibModal.open( {
+      component:         'stopStartRecurringGiftsModal',
+      backdrop:          'static',
       windowTemplateUrl: giveModalWindowTemplate.name
-    });
-    this.stopStartRecurringGiftsModal.result.then(() => {
+    } );
+    this.stopStartRecurringGiftsModal.result.then( () => {
       this.stopStartGiftsSuccess = true;
-    });
+    }, angular.noop );
   }
 }
 export default angular
   .module( componentName, [
-    appConfig.name,
     commonModule.name,
     displayAddress.name,
     recipientView.name,
     historicalView.name,
-    loadingComponent.name,
-    loadingOverlay.name,
     editRecurringGiftsModal.name,
+    giveOneTimeGiftModal.name,
     stopStartRecurringGiftsModal.name,
     giveModalWindowTemplate.name,
     profileService.name,

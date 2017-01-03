@@ -36,7 +36,7 @@ describe( 'donations service', () => {
   describe( 'getRecipients( year )', () => {
     it( 'should load recent when missing year', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/recent?zoom=element,element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement' )
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/recent?zoom=element,element:mostrecentdonation,element:recurringdonations' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients().subscribe( ( recipients ) => {
         expect( recipients ).toEqual( jasmine.any( Array ) );
@@ -46,7 +46,7 @@ describe( 'donations service', () => {
 
     it( 'should load recipients by year', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/2015?zoom=element,element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement' )
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/2015?zoom=element,element:mostrecentdonation,element:recurringdonations' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients( 2015 ).subscribe( ( recipients ) => {
         expect( recipients ).toEqual( jasmine.any( Array ) );
@@ -70,7 +70,7 @@ describe( 'donations service', () => {
   describe( 'getHistoricalGifts( year, month )', () => {
     it( 'should load historical gifts by year and month', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/2016/9?zoom=element,element:paymentmethod,element:recurringdonationelement' )
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/2016/9?zoom=element,element:paymentmethod,element:recurringdonations' )
         .respond( 200, historicalResponse );
       donationsService.getHistoricalGifts( 2016, 9 ).subscribe( ( historicalGifts ) => {
         expect( historicalGifts ).toEqual( jasmine.any( Array ) );
@@ -81,11 +81,36 @@ describe( 'donations service', () => {
 
   describe( 'getReceipts( data )', () => {
     it( 'should load receipts', () => {
+      let response = [{
+        "designation-names": ["David and Margo Neibling (0105987)"],
+        "total-amount": 25,
+        "transaction-date": {"display-value": "2016-11-16", "value": 1447632000000},
+        "transaction-number": "1-1106420519",
+        "pdf-link": {
+          "rel": "element",
+          "rev": "list",
+          "type": "orderId",
+          "uri": "/receipt/1-1106420519",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/receipt/1-1106420519"
+        }
+      }, {
+        "designation-names": ["David and Margo Neibling (0105987)"],
+        "total-amount": 25,
+        "transaction-date": {"display-value": "2015-10-15", "value": 1444867200000},
+        "transaction-number": "1-1056130965",
+        "pdf-link": {
+          "rel": "element",
+          "rev": "list",
+          "type": "orderId",
+          "uri": "/receipt/1-1056130965",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/receipt/1-1056130965"
+        }
+      }];
       $httpBackend
         .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/receipts/items?followLocation=true' )
         .respond( 200, receiptsResponse );
       donationsService.getReceipts( {} ).subscribe( ( receipts ) => {
-        expect( receipts ).toEqual( jasmine.any( Array ) );
+        expect( receipts ).toEqual( response );
       } );
       $httpBackend.flush();
     } );

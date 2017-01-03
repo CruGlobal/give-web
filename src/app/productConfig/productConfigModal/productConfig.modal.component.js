@@ -1,74 +1,82 @@
 import angular from 'angular';
-import 'angular-gettext';
 import 'angular-ordinal';
 
 import indexOf from 'lodash/indexOf';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
+import map from 'lodash/map';
+import includes from 'lodash/includes';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
-import loadingOverlay from 'common/components/loadingOverlay/loadingOverlay.component';
 import modalStateService from 'common/services/modalState.service';
 import {possibleTransactionDays, startDate} from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
-import analyticsModule from 'app/analytics/analytics.module';
+import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-let controllerName = 'productConfigController';
-export let giveGiftParams = {
+import template from './productConfig.modal.tpl';
+
+const componentName = 'productConfigModal';
+
+export const giveGiftParams = {
   designation: 'd',
   amount:      '$',
   frequency:   'f',
   day:         'dd'
 };
 
-class ModalInstanceCtrl {
+class ProductConfigModalController {
 
   /* @ngInject */
-  constructor( $location, $scope, $log, $uibModalInstance, designationsService, cartService, modalStateService, gettext, productData, nextDrawDate, itemConfig, isEdit, uri, analyticsFactory ) {
+  constructor( $location, $scope, $log, designationsService, cartService, modalStateService, analyticsFactory ) {
     this.$location = $location;
     this.$scope = $scope;
     this.$log = $log;
-    this.$uibModalInstance = $uibModalInstance;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.modalStateService = modalStateService;
     this.possibleTransactionDays = possibleTransactionDays;
     this.startDate = startDate;
-
-    this.productData = productData;
-    this.nextDrawDate = nextDrawDate;
-    this.itemConfig = itemConfig;
-    this.isEdit = isEdit;
-    this.uri = uri;
-    this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
     this.analyticsFactory = analyticsFactory;
 
-    if ( this.isEdit ) {
-      this.submitLabel = gettext( 'Update Gift' );
-    } else {
-      this.submitLabel = gettext( 'Add to Gift Cart' );
-      this.initializeParams();
-    }
-
-    if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
-      this.customAmount = this.itemConfig.amount;
-      this.customInputActive = true;
-    }
-
-    if(!this.itemConfig['recurring-day-of-month'] && nextDrawDate) {
-      this.itemConfig['recurring-day-of-month'] = startDate(null, nextDrawDate).format('DD');
-    }
+    this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
   }
 
-  $onInit() {
-    this.waitForFormInitialization();
+  $onInit(){
+    this.productData = this.resolve.productData;
+    this.itemConfig = this.resolve.itemConfig;
+    this.isEdit = this.resolve.isEdit;
+    this.uri =  this.resolve.uri;
+    this.suggestedAmounts =  this.resolve.suggestedAmounts;
+    this.nextDrawDate = this.resolve.nextDrawDate;
+
+    !this.isEdit && this.initializeParams();
+
+    if( this.suggestedAmounts.length > 0 ) {
+      this.customInputActive = true;
+      this.customAmount = (map(this.suggestedAmounts, 'amount').indexOf(this.itemConfig.amount) === -1) ?
+        this.suggestedAmounts[0].amount : this.itemConfig.amount;
+      this.changeCustomAmount(this.customAmount);
+    } else {
+      if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
+        this.customAmount = this.itemConfig.amount;
+        this.customInputActive = true;
+      }
+    }
+
+    if(!this.itemConfig['recurring-day-of-month'] && this.nextDrawDate) {
+      this.itemConfig['recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
+    }
+
+    this.addedCustomValidators = false;
+    this.showRecipientComments = false;
+    this.showDSComments = false;
   }
 
   waitForFormInitialization() {
-    let unregister = this.$scope.$watch('$ctrl.itemConfigForm', () => {
+    let unregister = this.$scope.$watch(()=>this.itemConfigForm, () => {
       if(this.itemConfigForm) {
         unregister();
         this.addCustomValidators();
@@ -114,19 +122,44 @@ class ModalInstanceCtrl {
     }
   }
 
+  showDefaultAmounts() {
+    if(this.suggestedAmounts.length === 0) {
+      if(!this.addedCustomValidators) {
+        this.waitForFormInitialization();
+        this.addedCustomValidators = true;
+      }
+      return true;
+    }
+    return false;
+  }
+
   frequencyOrder( f ) {
     let order = ['NA', 'MON', 'QUARTERLY', 'ANNUAL'];
     return indexOf( order, f.name );
   }
 
   changeFrequency( product ) {
-    this.designationsService.productLookup( product.selectAction, true ).subscribe( ( data ) => {
-      this.itemConfigForm.$setDirty();
-      this.productData = data;
-    } );
+    this.errorAlreadyInCart = false;
+    this.changingFrequency = true;
+    this.errorChangingFrequency = false;
+    const lastFrequency = this.productData.frequency;
     this.productData.frequency = product.name;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.frequency, product.name );
-
+    if(product.selectAction) {
+      this.designationsService.productLookup(product.selectAction, true)
+        .subscribe(data => {
+            this.itemConfigForm.$setDirty();
+            this.productData = data;
+            this.changingFrequency = false;
+          },
+          error => {
+            this.$log.error('Error loading new product when changing frequency', error);
+            this.errorChangingFrequency = true;
+            this.productData.frequency = lastFrequency;
+            if (!this.isEdit) this.$location.search(giveGiftParams.frequency, lastFrequency);
+            this.changingFrequency = false;
+          });
+    }
   }
 
   changeAmount( amount ) {
@@ -143,45 +176,51 @@ class ModalInstanceCtrl {
   }
 
   changeStartDay( day ) {
+    this.errorAlreadyInCart = false;
     if ( !this.isEdit ) this.$location.search( giveGiftParams.day, day );
   }
 
   saveGiftToCart() {
-    this.giftSubmitted = false;
     this.submittingGift = false;
+    this.errorAlreadyInCart = false;
+    this.errorSavingGeneric = false;
     if ( !this.itemConfigForm.$valid ) {
       return;
     }
     this.submittingGift = true;
 
-    let id = this.productData.id;
     let data = this.productData.frequency === 'NA' ? omit( this.itemConfig, 'recurring-day-of-month' ) : this.itemConfig;
 
     let savingObservable = this.isEdit ?
-      this.cartService.editItem( this.uri, id, data ) :
-      this.cartService.addItem( id, data );
+      this.cartService.editItem( this.uri, this.productData.uri, data ) :
+      this.cartService.addItem( this.productData.uri, data );
 
     savingObservable.subscribe( () => {
       if ( this.isEdit ) {
-        this.$uibModalInstance.close( {isUpdated: true} );
+        this.$scope.$emit( cartUpdatedEvent );
+        this.close();
       } else {
-        this.giftSubmitted = true;
+        this.$scope.$emit( giftAddedEvent );
+        this.dismiss();
         this.analyticsFactory.cartAdd(this.itemConfig, this.productData, 'cart modal');
       }
       this.submittingGift = false;
-    }, (error) => {
-      this.error = error.data;
+    }, error => {
+      if(includes(error.data, 'already in the cart')){
+        this.errorAlreadyInCart = true;
+      }else{
+        this.errorSavingGeneric = true;
+        this.$log.error('Error adding or updating item in cart', error);
+      }
       this.submittingGift = false;
-      this.$log.error('Error adding or updating item in cart', error);
     } );
   }
 }
 
 export default angular
-  .module( controllerName, [
-    'gettext',
+  .module( componentName, [
+    template.name,
     'ordinal',
-    loadingOverlay.name,
     designationsService.name,
     cartService.name,
     modalStateService.name,
@@ -189,4 +228,12 @@ export default angular
     showErrors.name,
     analyticsFactory.name
   ] )
-  .controller( controllerName, ModalInstanceCtrl );
+  .component( componentName, {
+    controller:  ProductConfigModalController,
+    templateUrl: template.name,
+    bindings:    {
+      resolve: '<',
+      close: '&',
+      dismiss: '&'
+    }
+  } );

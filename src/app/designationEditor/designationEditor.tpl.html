@@ -1,35 +1,47 @@
-<div class="container">
+<div class="container loading-overlay-parent">
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingContentError">
+    <p translate>There was an error loading your profile. You can use the retry button to try loading it again. If you continue to see this message, please contact support</p>
+    <p><button type="button" class="btn btn-primary" ng-click="$ctrl.getDesignationContent()" translate>Retry</button></p>
+  </div>
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.saveDesignationError">
+    <p translate>There was an error saving your profile. You can use the retry button to try saving it again. If you continue to see this message, please contact support</p>
+    <p><button type="button" class="btn btn-primary" ng-click="$ctrl.save()" translate>Retry</button></p>
+  </div>
   <div class="panel panel-margin-bottom">
     <div class="panel-body">
       <div class="row">
         <div class="col-sm-6  col-xs-12">
           <h2 class="mb0">
-            {{$ctrl.designationContent.title}}
-            <a class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()">
+            {{$ctrl.designationContent['jcr:title']}}
+            <a class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()"
+               ng-if="$ctrl.designationContent.designationType === 'Campaign'">
               <i class="fa fa-pencil"></i>
             </a>
           </h2>
-          <p class="mt0">#{{$ctrl.designationContent.designationNumber}}</p>
+          <p class="mt0" ng-if="$ctrl.designationContent.designationNumber">#{{$ctrl.designationContent.designationNumber}}</p>
         </div>
 
         <div class="col-sm-6  col-xs-12 text-right">
-          <a ng-href="/{{$ctrl.designationContent.designationNumber}}" class="btn btn-secondary">
+          <a ng-href="{{$ctrl.designationContent['sling:vanityPath'][0].replace('/content/give/us/en', '')}}" class="btn btn-secondary"
+             ng-if="$ctrl.contentLoaded" translate>
             Done Editing
           </a>
 
-          <button type="button" class="btn btn-default" ng-click="$ctrl.editPageOptions()">
+          <button type="button" class="btn btn-default" ng-click="$ctrl.editPageOptions()"
+                  ng-if="$ctrl.contentLoaded" translate>
             Page Options
           </button>
 
-          <product-config product-code="{{$ctrl.designationContent.designationNumber}}" button-label="Give a Gift"></product-config>
+          <product-config product-code="{{$ctrl.designationNumber}}"
+                          button-label="{{'Give a Gift' | translate}}"></product-config>
         </div>
       </div>
     </div>
   </div>
   <div class="panel panel-margin-bottom">
     <div class="panel-cover-wrap">
-      <div href="" ng-click="$ctrl.selectPhoto('coverPhoto', $ctrl.designationContent.coverPhoto)">
-        <div class="edit-trigger"><i class="fa fa-camera"></i></div>
+      <div href="" ng-click="$ctrl.contentLoaded && $ctrl.selectPhoto('coverPhoto', $ctrl.designationContent.coverPhoto)">
+        <div class="edit-trigger" ng-if="$ctrl.contentLoaded"><i class="fa fa-camera"></i></div>
         <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
              ng-if="!$ctrl.photoUrl($ctrl.designationContent.coverPhoto)"
              class="panel-cover-image">
@@ -42,8 +54,8 @@
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <div href="" class="pull-right secondary-detail ml mb hidden-xs"
-               ng-click="$ctrl.selectPhoto('secondaryPhoto', $ctrl.designationContent.secondaryPhoto)">
-            <div class="edit-trigger"><i class="fa fa-camera"></i></div>
+               ng-click="$ctrl.contentLoaded && $ctrl.selectPhoto('secondaryPhoto', $ctrl.designationContent.secondaryPhoto)">
+            <div class="edit-trigger" ng-if="$ctrl.contentLoaded"><i class="fa fa-camera"></i></div>
 
             <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
                  ng-if="!$ctrl.photoUrl($ctrl.designationContent.secondaryPhoto)">
@@ -51,24 +63,41 @@
                  ng-if="$ctrl.photoUrl($ctrl.designationContent.secondaryPhoto)">
           </div>
 
-
-
           <div>
-            <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editText('paragraphText')">
+            <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editText('paragraphText')" ng-if="$ctrl.contentLoaded">
               <i class="fa fa-pencil"></i>
             </a>
             <div ng-bind-html="$ctrl.designationContent.paragraphText"></div>
+            <p ng-if="!$ctrl.designationContent.paragraphText">
+              <i translate>Edit this page and use this space to share with current and potential ministry partners about your vision and calling to Cru.</i>
+            </p>
           </div>
 
+          <div class="signature-wrap" ng-if="$ctrl.designationContent.designationType === 'Campaign'">
+            <a class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded"
+               ng-click="$ctrl.selectPhoto('signaturePhoto', $ctrl.designationContent.signaturePhoto)">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <img ng-src="{{$ctrl.imgDomain}}/assets/img/signature.png"
+                 ng-if="!$ctrl.photoUrl($ctrl.designationContent.signaturePhoto)"
+                 class="signature-image">
+            <img ng-src="{{$ctrl.imgDomainDesignation + $ctrl.photoUrl($ctrl.designationContent.signaturePhoto).original}}"
+                 ng-if="$ctrl.photoUrl($ctrl.designationContent.signaturePhoto)"
+                 class="signature-image">
 
-          <!--<p class="signature-wrap">-->
-            <!--<a class="edit-trigger edit-trigger-text"><i class="fa fa-pencil"></i></a>-->
-            <!--<img ng-src="{{$ctrl.imgDomain}}/assets/img/signature.png" class="signature-image">-->
-          <!--</p>-->
+            <a class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded" ng-click="$ctrl.editText('psText')">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <div ng-bind-html="$ctrl.designationContent.psText"></div>
+            <p ng-if="!$ctrl.designationContent.psText">
+              <i translate>Signature text</i>
+            </p>
+          </div>
 
           <p>
-            <a class="edit-trigger edit-trigger-text" ng-click="$ctrl.editWebsite()"><i class="fa fa-pencil"></i></a>
-            <label class="product-website-link">
+            <a class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded"
+               ng-click="$ctrl.editWebsite()"><i class="fa fa-pencil"></i></a>
+            <label class="product-website-link" translate>
               Website: <a ng-href="{{$ctrl.designationContent.websiteURL}}" target="_blank">
               {{$ctrl.designationContent.websiteURL}}
             </a>
@@ -76,12 +105,15 @@
           </p>
 
           <p>
-            <product-config product-code="{{$ctrl.designationContent.designationNumber}}" button-label="Give a Gift"></product-config>
+            <product-config product-code="{{$ctrl.designationNumber}}"
+                            button-label="{{'Give a Gift' | translate}}"></product-config>
           </p>
         </div>
       </div>
     </div>
   </div>
 
-  <loading-overlay ng-if="$ctrl.loadingOverlay"></loading-overlay>
+  <loading type="overlay" ng-if="$ctrl.loadingOverlay">
+    <translate>Loading your giving page...</translate>
+  </loading>
 </div>

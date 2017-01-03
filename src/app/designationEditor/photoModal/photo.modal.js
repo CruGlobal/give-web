@@ -8,11 +8,12 @@ let controllerName = 'photoCtrl';
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( $timeout, designationNumber, photos, photoLocation, selectedPhoto, designationEditorService ) {
+  constructor( $timeout, designationNumber, campaignPage, photos, photoLocation, selectedPhoto, designationEditorService ) {
     this.$timeout = $timeout;
     this.designationEditorService = designationEditorService;
 
     this.designationNumber = designationNumber;
+    this.campaignPage = campaignPage;
     this.photoLocation = photoLocation;
     this.selectedPhoto = selectedPhoto;
     this.photos = photos;
@@ -21,15 +22,12 @@ class ModalInstanceCtrl {
   uploadComplete() {
     //refresh photos (set timeout to give Adobe time to add to DAM)
     this.$timeout(() => {
-      this.designationEditorService.getPhotos(this.designationNumber).then((response) => {
+      this.designationEditorService.getPhotos(this.designationNumber, this.campaignPage).then((response) => {
         this.photos = response.data;
-      });
-    }, 2500);
+        this.uploading = false;
+      }, angular.noop);
+    }, 3500);
   }
-
-  // deletePhoto(path){
-  //
-  // }
 }
 
 

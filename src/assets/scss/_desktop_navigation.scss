@@ -1,4 +1,4 @@
-$col-width: 280px;
+$col-width: 199px;
 $menu-container-height: 300px;
 $promo-width: 200px;
 
@@ -21,6 +21,7 @@ $promo-width: 200px;
 
   .container {
     position: relative;
+    min-width: 980px !important;
   }
 
   &.padded {
@@ -60,9 +61,9 @@ $promo-width: 200px;
 
       a {
         display: block;
-        padding: 5px 16px;
+        padding: 5px 9px;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 500;
         font-size: 14px;
         color: $colorText;
         text-decoration: none;
@@ -82,6 +83,10 @@ $promo-width: 200px;
         padding-top: 6px;
         padding-bottom: 5px;
       }
+      &.active > a {
+        background: url("/assets/img/menu-selected.png") no-repeat center bottom;
+        background-size: 12px;
+      }
     }
     > li.open-menu .children-container {
       background: $colorGrayscale-pebble;
@@ -92,33 +97,6 @@ $promo-width: 200px;
   .col-level-2,
   .col-level-3 {
     min-height: $menu-container-height;
-  }
-
-  .gh-desk-promo {
-    background-color: $colorGrayscale-stone;
-    display: block;
-    width: 260px;
-    height: 300px;
-    float: right;
-    right: 0;
-    position: absolute;
-    padding: 0;
-    margin: 0;
-
-    a {
-      margin: 0;
-      padding: 0 !important;
-      line-height: 0;
-      
-      img {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: auto;
-        max-height: 100%;
-        max-width: 100%;
-      }
-    }
   }
 
   .gh-offset-2 {
@@ -152,10 +130,22 @@ $promo-width: 200px;
     }
 
     .has-children {
-      filter: grayscale(100%);
-      background: url("/assets/img/desktop-nav-arrow.png") no-repeat right 15px center;
-      background-size: 7px;
-      &:hover {
+      > a {
+        position: relative;
+        > span {
+          display: inline-block;
+          position: absolute;
+          top: 50%;
+          right: 15px;
+          transform: translateY(-50%);
+          width: 7px;
+          height: 1.35em;
+          filter: grayscale(100%);
+          background: url("/assets/img/desktop-nav-arrow.png") no-repeat center;
+          background-size: 7px;
+        }
+      }
+      &:hover > a > span {
         filter: grayscale(0%);
       }
     }
@@ -179,9 +169,7 @@ $promo-width: 200px;
 
   .children-container {
     background: $colorGrayscale-pebble;
-    left: 0;
     position: absolute;
-    width: 100%;
     display: none;
     z-index: 100;
   }
@@ -190,7 +178,7 @@ $promo-width: 200px;
   .search-sign-in-wrapper {
     margin-top: 8px;
     float: right;
-    width: 250px;
+    min-width: 250px;
     position: absolute;
     right: 0;
 
@@ -201,11 +189,10 @@ $promo-width: 200px;
       background-size: 20px 20px;
       width: 20px;
       height: 22px;
-      cursor: pointer;
 
       .dropdown {
         height: 100%;
-        a {
+        & > .dropdown-toggle {
           display: block;
           width: 100%;
           height: 100%;
@@ -222,11 +209,6 @@ $promo-width: 200px;
         width: 360px;
         margin: 0;
 
-        .desktop-cart-list {
-          overflow-y: auto;
-          max-height: 250px;
-        }
-
         .triangle {
           background: transparent url("/assets/img/menu-triangle.png") no-repeat right top;
           width: 100%;
@@ -239,53 +221,6 @@ $promo-width: 200px;
 
           //TODO: Triangle not showing up correctly
           z-index: 10;
-        }
-
-        .repeating-row {
-          background-color: $colorGrayscale-stone;
-          padding: 15px 0px;
-          border-top: 1px solid $colorCru-white;
-
-          &:first-child {
-            border-top: 0;
-          }
-
-          img {
-            min-height: 40px;
-          }
-
-          p {
-            margin: 0 0 7.5px;
-          }
-
-          &.sub-total {
-            text-transform: uppercase;
-            font-weight: 600;
-            margin: 0;
-            padding: $gutter*.35 0;
-            p {
-              padding: 0;
-              margin: 0;
-            }
-          }
-        }
-
-        .title {
-          color: $colorCru-gray;
-          font-weight: 600;
-        }
-
-        .price {
-          font-weight: 600;
-          margin-bottom: 0 !important;
-        }
-
-        .checkout {
-          width: 100%;
-          border-radius: 0;
-          text-transform: uppercase;
-          padding-top: 10px;
-          padding-bottom: 10px;
         }
       }
     }
@@ -374,7 +309,7 @@ $promo-width: 200px;
 
     .ellipsis {
       float: right;
-      background: url("/assets/img/search-ellipsis-grey.png") no-repeat right 22px top;
+      background: url("/assets/img/search-ellipsis-grey.png") no-repeat 28px top;
       background-size: 4px 20px;
       width: 60px;
       height: 22px;

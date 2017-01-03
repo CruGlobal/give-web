@@ -7,6 +7,8 @@ import 'rxjs/add/observable/throw';
 
 import module from './thankYou.component.js';
 
+import {SignOutEvent} from 'common/services/session/session.service';
+
 describe('thank you', () => {
   beforeEach(angular.mock.module(module.name));
   var self = {};
@@ -53,18 +55,45 @@ describe('thank you', () => {
       },
       profileService: {
         getPurchase: () => Observable.of(self.mockPurchase),
-        getEmail: () => Observable.of('someperson@someaddress.com')
-      }
+        getEmails: () => Observable.of([{email:'someperson@someaddress.com'}])
+      },
+      $window: {location: '/thank-you.html'}
     });
   }));
 
   describe('$onInit', () => {
-    it('should call all methods needed to load data for the component', () => {
+    beforeEach(() => {
+      spyOn( self.controller.$rootScope, '$on' );
+      spyOn( self.controller, 'signedOut' );
       spyOn(self.controller, 'loadLastPurchase');
+    });
+    it('should call all methods needed to load data for the component', () => {
       self.controller.$onInit();
+      expect( self.controller.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
+      self.controller.$rootScope.$on.calls.argsFor( 0 )[1]();
+      expect( self.controller.signedOut ).toHaveBeenCalled();
       expect(self.controller.loadLastPurchase).toHaveBeenCalled();
+      expect(self.controller.showAccountBenefits).toEqual(true);
     });
   });
+
+  describe( 'signedOut( event )', () => {
+    describe( 'default prevented', () => {
+      it( 'does nothing', () => {
+        self.controller.signedOut( {defaultPrevented: true} );
+        expect( self.controller.$window.location ).toEqual( '/thank-you.html' );
+      } );
+    } );
+
+    describe( 'default not prevented', () => {
+      it( 'navigates to \'\/\'', () => {
+        let spy = jasmine.createSpy( 'preventDefault' );
+        self.controller.signedOut( {defaultPrevented: false, preventDefault: spy} );
+        expect( spy ).toHaveBeenCalled();
+        expect( self.controller.$window.location ).toEqual( '/' );
+      } );
+    } );
+  } );
 
   describe('loadLastPurchase', () => {
     it('should load all data from the last completed purchase', () => {
@@ -105,13 +134,15 @@ describe('thank you', () => {
     });
 
     describe('accounts benefits modal', () => {
-      let deferred, $rootScope;
+      let deferred, $rootScope, userMatch;
       beforeEach(inject((_$q_, _$rootScope_) => {
         deferred = _$q_.defer();
+        userMatch = _$q_.defer();
         $rootScope = _$rootScope_;
         spyOn(self.controller.profileService, 'getPurchase').and.callThrough();
         spyOn(self.controller.sessionModalService, 'accountBenefits').and.returnValue(deferred.promise);
-        spyOn(self.controller.sessionModalService, 'userMatch');
+        spyOn(self.controller.sessionModalService, 'userMatch').and.returnValue(userMatch.promise);
+        self.controller.showAccountBenefits = true;
       }));
 
       it( 'should show accountBenefits modal on matched user', () => {
@@ -119,7 +150,11 @@ describe('thank you', () => {
         expect(self.controller.sessionModalService.accountBenefits).toHaveBeenCalled();
         deferred.resolve();
         $rootScope.$digest();
+        expect(self.controller.showAccountBenefits).toEqual(true);
         expect(self.controller.sessionModalService.userMatch).toHaveBeenCalled();
+        userMatch.resolve();
+        $rootScope.$digest();
+        expect(self.controller.showAccountBenefits).toEqual(false);
       });
     });
   });

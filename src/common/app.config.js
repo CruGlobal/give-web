@@ -7,37 +7,34 @@ import 'angular-environment';
 import rollbarConfig from './rollbar.config';
 
 /* @ngInject */
-function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider) {
+function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider) {
   $httpProvider.useApplyAsync(true);
 
   // eslint-disable-next-line angular/module-getter
   envServiceProvider.config({
     domains: {
       development: ['localhost', 'localhost.cru.org'],
-      staging: ['give-stage2.cru.org', 'devpub.cru.org', 'uatpub.cru.org', 'uat-give.aws.cru.org'],
-      production: ['give.cru.org']
+      staging: ['give-stage2.cru.org', 'stage.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org'],
+      production: ['www.cru.org', 'give.cru.org', 'author.cru.org']
     },
     vars: {
       development: {
         apiUrl: 'https://cortex-gateway-stage.cru.org',
         imgDomain: '',
         imgDomainDesignation: 'https://give-stage2.cru.org',
-        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current',
-        navFeed: '/assets/nav.json'
+        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current'
       },
       staging: {
         apiUrl: 'https://cortex-gateway-stage.cru.org',
         imgDomain: '//give-static-stage.cru.org',
         imgDomainDesignation: '',
-        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current',
-        navFeed: '/content/cru/us/en/cru-nav.json'
+        ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current'
       },
       production: {
         apiUrl: 'https://cortex-gateway.cru.org',
         imgDomain: '//give-static-stage.cru.org',
         imgDomainDesignation: '',
-        ccpKeyUrl: 'https://ccp.ccci.org/api/v1/rest/client-encryption-keys/current',
-        navFeed: '/content/cru/us/en/cru-nav.json'
+        ccpKeyUrl: 'https://ccp.ccci.org/api/v1/rest/client-encryption-keys/current'
       }
     }
   });
@@ -58,6 +55,8 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
   } else {
     $logProvider.debugEnabled(true);
   }
+
+  $qProvider.errorOnUnhandledRejections(false);
 }
 
 export default angular.module('appConfig', [
