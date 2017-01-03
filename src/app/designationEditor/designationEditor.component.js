@@ -210,6 +210,7 @@ class DesignationEditorController {
       this.saveDesignationError = true;
       this.loadingOverlay = false;
       this.$log.error('Error saving designation editor content.', error);
+      this.$window.scrollTo(0, 0);
     });
   }
 }
