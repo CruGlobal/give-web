@@ -4,10 +4,9 @@ import paymentMethodForm from 'common/components/paymentMethods/paymentMethodFor
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
 
 import orderService from 'common/services/api/order.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './step-2.tpl';
-
-import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'checkoutStep2';
 
@@ -17,11 +16,11 @@ class Step2Controller{
   constructor($log, orderService, analyticsFactory){
     this.$log = $log;
     this.orderService = orderService;
+    this.analyticsFactory = analyticsFactory;
 
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
     this.submissionError = {error: ''};
-    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit(){
