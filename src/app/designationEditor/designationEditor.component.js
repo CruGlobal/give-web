@@ -202,7 +202,7 @@ class DesignationEditorController {
     this.loadingOverlay = true;
     this.saveDesignationError = false;
 
-    return this.designationEditorService.save(this.designationContent, this.campaignPage).then(() => {
+    return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
       this.saveStatus = 'success';
       this.loadingOverlay = false;
     }, error => {
