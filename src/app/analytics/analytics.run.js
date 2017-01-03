@@ -1,10 +1,9 @@
-import sessionService from 'common/services/session/session.service';
-import analyticsFactory from 'app/analytics/analytics.factory';
+import 'app/analytics/analytics.factory';
 
-function dataLayer($rootScope,sessionService,analyticsFactory) {
+function dataLayer($window, analyticsFactory) {
 
     /* Build data layer */
-    window.digitalData = {
+  $window.digitalData = {
       page: {
         attributes: {
           angularLoaded: 'false'
@@ -12,7 +11,7 @@ function dataLayer($rootScope,sessionService,analyticsFactory) {
       }
     };
 
-    var path = analyticsFactory.getPath();
+    const path = analyticsFactory.getPath();
 
     analyticsFactory.setSiteSections(path);
 
