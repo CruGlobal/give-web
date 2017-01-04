@@ -36,7 +36,7 @@ class SearchResultsController {
   }
 
   requestSearch(type){
-    this.searchParams.type = type ? type : 'ministries';
+    this.searchParams.type = !type && !this.searchParams.keyword ? 'ministries' : type;
 
     if(!this.searchParams.keyword && this.searchParams.type === 'ministries'){
       this.searchResults = ministries;
