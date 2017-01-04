@@ -28,7 +28,7 @@
           </a>
 
           <button type="button" class="btn btn-default" ng-click="$ctrl.editPageOptions()"
-                  ng-if="$ctrl.contentLoaded" translate>
+                  ng-if="$ctrl.contentLoaded && $ctrl.designationType !== 'Staff'" translate>
             Page Options
           </button>
 
