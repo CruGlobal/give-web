@@ -5,7 +5,7 @@
   <ul ng-if="$ctrl.path[$ctrl.level] === i.path.split('/').pop()">
     <li>
       <a ng-href="{{i.path}}" translate>
-        Home
+        {{i.title}} Home
       </a>
     </li>
     <nav-mobile-level structure="i.children" level="$ctrl.level + 1" path="$ctrl.path"></nav-mobile-level>
