@@ -39,8 +39,8 @@ System.config({
     "jsencrypt": "npm:jsencrypt@2.3.1",
     "jwt-decode": "github:auth0/jwt-decode@2.1.0",
     "lodash": "npm:lodash@4.17.2",
-    "mobile-detect": "npm:mobile-detect@1.3.5",
     "moment": "npm:moment@2.17.1",
+    "ng-resize": "npm:ng-resize@1.2.0",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.13",
     "plugin-babel-runtime": "npm:babel-runtime@5.8.38",
     "rollbar-browser": "npm:rollbar-browser@1.9.2",
@@ -372,6 +372,9 @@ System.config({
     "npm:multipipe@0.1.2": {
       "duplexer2": "npm:duplexer2@0.0.2",
       "stream": "github:jspm/nodelibs-stream@0.1.0"
+    },
+    "npm:ng-resize@1.2.0": {
+      "path": "github:jspm/nodelibs-path@0.1.0"
     },
     "npm:normalize-package-data@2.3.5": {
       "hosted-git-info": "npm:hosted-git-info@2.1.5",

@@ -6,7 +6,6 @@ import 'rxjs/add/observable/throw';
 import module from './nav.component';
 
 import navStructure from 'common/components/nav/fixtures/nav.fixture';
-const iPhoneUserAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25';
 
 import {giftAddedEvent, cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 import {SignOutEvent} from 'common/services/session/session.service';
@@ -22,9 +21,7 @@ describe( 'nav', function () {
           location: {
             pathname: '/cart.html'
           },
-          navigator: {
-            userAgent: iPhoneUserAgent
-          },
+          innerWidth: 600,
           scrollTo:  jasmine.createSpy( 'scrollTo' )
         }
       } );
