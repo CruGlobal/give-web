@@ -11,7 +11,6 @@ describe('Designation Editor Page Options', function() {
 
     $ctrl = $controller( module.name, {
       parentDesignationNumber: '000555',
-      designationType: 'campaign',
       organizationId: 'IT-001',
       suggestedAmounts: {
         'jcr:primaryType': 'content',
@@ -28,7 +27,6 @@ describe('Designation Editor Page Options', function() {
 
   it('to define modal resolves', function() {
     expect($ctrl.parentDesignationNumber).toEqual('000555');
-    expect($ctrl.designationType).toEqual('campaign');
     expect($ctrl.organizationId).toEqual('IT-001');
     expect($ctrl.suggestedAmounts).toBeDefined();
   });

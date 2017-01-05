@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-sanitize';
 import 'angular-ui-bootstrap';
 import find from 'lodash/find';
+import includes from 'lodash/includes';
 
 import commonModule from 'common/common.module';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
@@ -120,9 +121,6 @@ class DesignationEditorController {
         parentDesignationNumber: () => {
           return this.designationContent.parentDesignationNumber;
         },
-        designationType: () => {
-          return this.designationContent.designationType;
-        },
         organizationId: () => {
           return this.designationContent.organizationId;
         },
@@ -212,6 +210,24 @@ class DesignationEditorController {
       this.$log.error('Error saving designation editor content.', error);
       this.$window.scrollTo(0, 0);
     });
+  }
+
+  isPerson() {
+    return this.designationContent && includes([
+      'National Staff', 'Staff', 'Student', 'Volunteer', 'People'
+      ], this.designationContent.designationType)
+  }
+
+  isMinistry() {
+    return this.designationContent && includes([
+        'Project', 'Scholarship', 'Ministry'
+      ], this.designationContent.designationType)
+  }
+
+  isCampaign() {
+    return this.designationContent && includes([
+        'Campaign'
+      ], this.designationContent.designationType)
   }
 }
 
