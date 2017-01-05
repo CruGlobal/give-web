@@ -215,19 +215,19 @@ class DesignationEditorController {
   isPerson() {
     return this.designationContent && includes([
       'National Staff', 'Staff', 'Student', 'Volunteer', 'People'
-      ], this.designationContent.designationType)
+      ], this.designationContent.designationType);
   }
 
   isMinistry() {
     return this.designationContent && includes([
         'Project', 'Scholarship', 'Ministry'
-      ], this.designationContent.designationType)
+      ], this.designationContent.designationType);
   }
 
   isCampaign() {
     return this.designationContent && includes([
         'Campaign'
-      ], this.designationContent.designationType)
+      ], this.designationContent.designationType);
   }
 }
 
