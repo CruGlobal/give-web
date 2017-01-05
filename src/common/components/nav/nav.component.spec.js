@@ -60,7 +60,7 @@ describe( 'nav', function () {
 
   it( 'to redirect on search', () => {
     $ctrl.cruSearch( 'hello' );
-    expect( $ctrl.$window.location ).toContain( 'search.hello.html' );
+    expect( $ctrl.$window.location ).toContain( 'search.html?q=hello' );
   } );
 
   it( 'to load mobile nav on small screens', () => {
