@@ -6,6 +6,7 @@ import designationsService from 'common/services/api/designations.service';
 import productConfigComponent from 'app/productConfig/productConfig.component';
 import ministries from './searchResults.ministries';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './searchResults.tpl';
 
@@ -14,11 +15,12 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor($window, $location, $log, designationsService) {
+  constructor($window, $location, $log, designationsService, analyticsFactory) {
     this.$window = $window;
     this.$location = $location;
     this.$log = $log;
     this.designationsService = designationsService;
+    this.analyticsFactory = analyticsFactory;
     this.searchParams = {};
   }
 
@@ -53,6 +55,9 @@ class SearchResultsController {
           this.loadingResults = false;
           this.$log.error('Error loading search results', error);
         });
+
+      this.analyticsFactory.search(this.searchParams);
+      this.analyticsFactory.setEvent('search filter');
     }
   }
 
@@ -69,7 +74,8 @@ export default angular
     'angular.filter',
     designationsService.name,
     productConfigComponent.name,
-    desigSrcDirective.name
+    desigSrcDirective.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  SearchResultsController,

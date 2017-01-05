@@ -15,6 +15,7 @@ import orderService from 'common/services/api/order.service';
 import profileService from 'common/services/api/profile.service';
 import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './thankYou.tpl';
 
@@ -23,12 +24,13 @@ let componentName = 'thankYou';
 class ThankYouController{
 
   /* @ngInject */
-  constructor($rootScope, $window, orderService, profileService, sessionModalService, $log){
+  constructor($rootScope, $window, analyticsFactory, orderService, profileService, sessionModalService, $log){
     this.$rootScope = $rootScope;
     this.$window = $window;
     this.orderService = orderService;
     this.profileService = profileService;
     this.sessionModalService = sessionModalService;
+    this.analyticsFactory = analyticsFactory;
     this.$log = $log;
   }
 
@@ -86,6 +88,8 @@ class ThankYouController{
           );
           delete this.loadingError;
           this.loading = false;
+
+          this.analyticsFactory.pageLoaded();
         },
         (error) => {
           this.$log.error('Error loading purchase data for thank you component', error);
@@ -114,7 +118,8 @@ export default angular
     orderService.name,
     profileService.name,
     sessionService.name,
-    sessionModalService.name
+    sessionModalService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: ThankYouController,

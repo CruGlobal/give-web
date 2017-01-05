@@ -4,6 +4,7 @@ import paymentMethodForm from 'common/components/paymentMethods/paymentMethodFor
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
 
 import orderService from 'common/services/api/order.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './step-2.tpl';
 
@@ -12,9 +13,10 @@ let componentName = 'checkoutStep2';
 class Step2Controller{
 
   /* @ngInject */
-  constructor($log, orderService){
+  constructor($log, orderService, analyticsFactory){
     this.$log = $log;
     this.orderService = orderService;
+    this.analyticsFactory = analyticsFactory;
 
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
@@ -78,7 +80,8 @@ export default angular
     template.name,
     paymentMethodForm.name,
     existingPaymentMethods.name,
-    orderService.name
+    orderService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: Step2Controller,

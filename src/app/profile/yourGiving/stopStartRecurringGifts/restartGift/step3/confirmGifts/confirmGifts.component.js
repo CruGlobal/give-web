@@ -11,14 +11,17 @@ import giftDetailsView from 'common/components/giftViews/giftDetailsView/giftDet
 
 import donationsService from 'common/services/api/donations.service';
 
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'confirmGifts';
 
 class ConfirmGiftsController {
 
   /* @ngInject */
-  constructor( $log, donationsService ) {
+  constructor( $log, donationsService, analyticsFactory ) {
     this.$log = $log;
     this.donationsService = donationsService;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -48,6 +51,8 @@ class ConfirmGiftsController {
     Observable.forkJoin( requests )
       .subscribe( () => {
           this.next();
+          this.analyticsFactory.editRecurringDonation(this.gifts);
+          this.analyticsFactory.setEvent('recurring donation restarted');
         },
         error => {
           this.setLoading( {loading: false} );
@@ -62,7 +67,8 @@ export default angular
     template.name,
     donationsService.name,
     giftListItem.name,
-    giftDetailsView.name
+    giftDetailsView.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  ConfirmGiftsController,

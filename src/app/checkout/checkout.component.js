@@ -18,6 +18,8 @@ import designationsService from 'common/services/api/designations.service';
 import sessionEnforcerService, {EnforcerCallbacks} from 'common/services/session/sessionEnforcer.service';
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
 
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 import template from './checkout.tpl';
 
 let componentName = 'checkout';
@@ -25,7 +27,7 @@ let componentName = 'checkout';
 class CheckoutController{
 
   /* @ngInject */
-  constructor($window, $location, $rootScope, $log, cartService, designationsService, sessionEnforcerService){
+  constructor($window, $location, $rootScope, $log, cartService, designationsService, sessionEnforcerService, analyticsFactory){
     this.$log = $log;
     this.$window = $window;
     this.$location = $location;
@@ -34,6 +36,7 @@ class CheckoutController{
     this.designationsService = designationsService;
     this.sessionEnforcerService = sessionEnforcerService;
     this.loadingCartData = true;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -73,6 +76,9 @@ class CheckoutController{
     this.$window.scrollTo(0, 0);
     this.checkoutStep = newStep;
     this.$location.search('step', this.checkoutStep);
+
+    this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
+    this.analyticsFactory.pageLoaded();
   }
 
   loadCart(){
@@ -82,6 +88,9 @@ class CheckoutController{
       })
       .subscribe((data) => {
           this.cartData = data;
+          this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
+          this.analyticsFactory.cartView(data);
+          this.analyticsFactory.pageLoaded();
         },
         (error) => {
           this.$log.error("Error loading cart", error);
@@ -101,7 +110,8 @@ export default angular
     cartService.name,
     designationsService.name,
     sessionEnforcerService.name,
-    showErrors.name
+    showErrors.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: CheckoutController,

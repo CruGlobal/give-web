@@ -9,15 +9,18 @@ import stopGiftStep1 from './step1/stopGiftStep1.component';
 import stopGiftStep2 from './step2/stopGiftStep2.component';
 import retryModal from 'common/components/retryModal/retryModal.component';
 
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'stopGift';
 
 class StopGiftController {
 
   /* @ngInject */
-  constructor( $log, donationsService ) {
+  constructor( $log, donationsService, analyticsFactory ) {
     this.$log = $log;
     this.donationsService = donationsService;
     this.scrollModalToTop = scrollModalToTop;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -69,6 +72,8 @@ class StopGiftController {
       return gift;
     } ) ).subscribe( () => {
       this.complete();
+      this.analyticsFactory.setEvent('recurring donation stopped');
+      this.analyticsFactory.editRecurringDonation(this.selectedGifts);
     } );
   }
 }
@@ -79,7 +84,8 @@ export default angular
     donationsService.name,
     stopGiftStep1.name,
     stopGiftStep2.name,
-    retryModal.name
+    retryModal.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
       controller:  StopGiftController,
