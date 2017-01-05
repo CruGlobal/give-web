@@ -192,7 +192,6 @@ describe( 'Designation Editor', function () {
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.parentDesignationNumber()).toEqual(designationSecurityResponse.parentDesignationNumber);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.designationType()).toEqual(designationSecurityResponse.designationType);
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.organizationId()).toEqual(designationSecurityResponse.organizationId);
         expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts()).toEqual(designationSecurityResponse.suggestedAmounts);
 
@@ -335,6 +334,18 @@ describe( 'Designation Editor', function () {
         expect($ctrl.$log.error.logs[0]).toEqual(['Error saving designation editor content.', jasmine.any(Object)]);
       });
       $httpBackend.flush();
+    } );
+  });
+
+  describe('isPerson, isMinistry, isCampaign', () => {
+    it( 'Staff', () => {
+      $ctrl.designationContent = {
+        designationType: 'Staff'
+      };
+
+      expect($ctrl.isPerson()).toEqual(true);
+      expect($ctrl.isMinistry()).toEqual(false);
+      expect($ctrl.isCampaign()).toEqual(false);
     } );
   });
 } );

@@ -45,7 +45,7 @@
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          type="radio"
                          ng-value="suggested.amount"
-                         required> {{suggested.label}} ({{suggested.amount | currency:'$':2}})
+                         required>{{suggested.amount | currency:'$':2}} {{suggested.label}}
                 </label>
               </div>
             </div>
