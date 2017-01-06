@@ -1,5 +1,10 @@
 $header-height: 84px;
 
+cru-nav {
+  display: block;
+  min-height: $header-height;
+}
+
 .body-scroll-lock {
   overflow: hidden;
 }
@@ -16,6 +21,11 @@ $header-height: 84px;
   }
 }
 
+#mobile-header, #mobile-navigation {
+  position: absolute;
+  width: 100%;
+}
+
 #mobile-header {
   width: 100%;
   background-color: $colorCru-white;
@@ -23,6 +33,8 @@ $header-height: 84px;
   border-top: 4px solid $colorCru-gold;
   border-bottom: 1px solid #EBEBEB;
   height: $header-height;
+
+  z-index: 1000;
 
   &:before,
   &:after {
@@ -132,13 +144,14 @@ $header-height: 84px;
 }
 
 #mobile-navigation {
-  z-index: 10;
-  top: $header-height;
+  z-index: 999;
+  top: 0;
   left: 0;
   width: 100%;
-  position: static;
+  position: absolute;
   height: 100%;
-  overflow-x: hidden;
+  padding-top: $header-height;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 
@@ -155,8 +168,14 @@ $header-height: 84px;
     background: #EBEBEB;
     border: none;
     height: 50px;
-    width: auto;
+    width: 100%;
     padding: 0;
+
+    position: absolute;
+    z-index: 50;
+    top: $header-height;
+    border-bottom: 1px solid #fff;
+    box-sizing: content-box;
 
     &:after {
       content: '';
@@ -210,8 +229,14 @@ $header-height: 84px;
   }
 
   .nav-tabs ~ .tab-content {
-    padding: 0;
-    overflow: visible;
+    padding: 134px 0 0;
+    overflow: auto;
+
+    position: absolute;
+    z-index: 49;
+    top: 0;
+    width: 100%;
+
     .active {
       height: 100%;
     }
