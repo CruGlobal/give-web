@@ -14,6 +14,7 @@ import {possibleTransactionDays, startDate} from 'common/services/giftHelpers/gi
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './productConfig.modal.tpl';
 
@@ -29,7 +30,7 @@ export const giveGiftParams = {
 class ProductConfigModalController {
 
   /* @ngInject */
-  constructor( $location, $scope, $log, designationsService, cartService, modalStateService ) {
+  constructor( $location, $scope, $log, designationsService, cartService, modalStateService, analyticsFactory ) {
     this.$location = $location;
     this.$scope = $scope;
     this.$log = $log;
@@ -38,6 +39,7 @@ class ProductConfigModalController {
     this.modalStateService = modalStateService;
     this.possibleTransactionDays = possibleTransactionDays;
     this.startDate = startDate;
+    this.analyticsFactory = analyticsFactory;
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
   }
@@ -200,6 +202,7 @@ class ProductConfigModalController {
       } else {
         this.$scope.$emit( giftAddedEvent );
         this.dismiss();
+        this.analyticsFactory.cartAdd(this.itemConfig, this.productData, 'cart modal');
       }
       this.submittingGift = false;
     }, error => {
@@ -222,7 +225,8 @@ export default angular
     cartService.name,
     modalStateService.name,
     desigSrcDirective.name,
-    showErrors.name
+    showErrors.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  ProductConfigModalController,

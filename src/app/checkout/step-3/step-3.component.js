@@ -12,16 +12,19 @@ import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component'
 
 import template from './step-3.tpl';
 
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'checkoutStep3';
 
 class Step3Controller{
 
   /* @ngInject */
-  constructor(orderService, $window, $scope, $log){
+  constructor(orderService, $window, $scope, $log, analyticsFactory){
     this.orderService = orderService;
     this.$window = $window;
     this.$scope = $scope;
     this.$log = $log;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit(){
@@ -105,6 +108,7 @@ class Step3Controller{
       submitRequest = Observable.throw('Current payment type is unknown');
     }
     submitRequest.subscribe(() => {
+        this.analyticsFactory.purchase(this.donorDetails, this.cartData);
         this.onSubmittingOrder({value: false});
         this.orderService.clearCardSecurityCode();
         this.onSubmitted();
@@ -127,7 +131,8 @@ export default angular
     displayRateTotals.name,
     orderService.name,
     capitalizeFilter.name,
-    desigSrcDirective.name
+    desigSrcDirective.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: Step3Controller,

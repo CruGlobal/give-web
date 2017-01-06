@@ -11,7 +11,8 @@ let componentName = 'signInForm';
 class SignInFormController {
 
   /* @ngInject */
-  constructor( sessionService, gettext ) {
+  constructor( $log, sessionService, gettext ) {
+    this.$log = $log;
     this.sessionService = sessionService;
     this.gettext = gettext;
   }
@@ -33,9 +34,12 @@ class SignInFormController {
         this.onSuccess();
       }, ( error ) => {
         this.isSigningIn = false;
-        this.errorMessage = (angular.isUndefined( error.data ) || error.data === null) ?
-          this.gettext( 'An error has occurred signing in. Please try again.' ) :
-          error.data.error;
+        if( angular.isUndefined( error.data ) || error.data === null ) {
+          this.$log.error('Sign In Error', error);
+          this.errorMessage = this.gettext( 'An error has occurred signing in. Please try again.' );
+        } else {
+          this.errorMessage = error.data.error;
+        }
         this.onFailure();
       } );
   }

@@ -1,5 +1,5 @@
 import angular from 'angular';
-import MobileDetect from 'mobile-detect';
+import 'ng-resize';
 import includes from 'lodash/includes';
 import find from 'lodash/find';
 
@@ -87,9 +87,7 @@ class NavController{
   }
 
   setMenuTemplate() {
-    let md = new MobileDetect(this.$window.navigator ? this.$window.navigator.userAgent : '');
-
-    this.menuType = md.phone() ? 'mobile' : 'desktop';
+    this.menuType = this.$window.innerWidth < 991 ? 'mobile' : 'desktop';
     this.templateUrl = this.menuType === 'mobile' ? mobileTemplate.name : desktopTemplate.name;
 
     //set viewport
@@ -199,7 +197,7 @@ class NavController{
   }
 
   cruSearch(term){
-    this.$window.location = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
+    this.$window.location = 'https://www.cru.org/search.html?q=' + encodeURIComponent(term);
   }
 
   openGlobalWebsitesModal(){
@@ -218,6 +216,7 @@ class NavController{
 export default angular
   .module(componentName, [
     'environment',
+    'ngResize',
     mobileTemplate.name,
     desktopTemplate.name,
     signOutTemplate.name,
@@ -232,5 +231,5 @@ export default angular
   ])
   .component(componentName, {
     controller: NavController,
-    template: '<ng-include src="$ctrl.templateUrl"></ng-include>'
+    template: '<ng-include src="$ctrl.templateUrl" ng-resize="$ctrl.setMenuTemplate()"></ng-include>'
   });

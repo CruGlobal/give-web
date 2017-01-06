@@ -14,15 +14,18 @@ import donationsService from 'common/services/api/donations.service';
 
 import template from './confirmRecurringGifts.tpl';
 
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 let componentName = 'step4Confirm';
 
 class ConfirmRecurringGiftsController {
 
   /* @ngInject */
-  constructor($log, donationsService) {
+  constructor($log, donationsService, analyticsFactory) {
     this.$log = $log;
     this.donationsService = donationsService;
     this.savedGifts = [];
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit(){
@@ -38,6 +41,8 @@ class ConfirmRecurringGiftsController {
       requests.push(this.donationsService.updateRecurringGifts(this.recurringGiftChanges)
         .do(() => {
           this.savedGifts = concat(this.savedGifts, this.recurringGiftChanges);
+          this.analyticsFactory.setEvent('recurring donation changed');
+          this.analyticsFactory.editRecurringDonation(this.recurringGiftChanges);
           this.recurringGiftChanges.length = 0; // Clear array but keep the same reference
         }));
     }
@@ -69,7 +74,8 @@ export default angular
     template.name,
     giftListItem.name,
     giftDetailsView.name,
-    donationsService.name
+    donationsService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: ConfirmRecurringGiftsController,

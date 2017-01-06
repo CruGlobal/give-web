@@ -10,6 +10,8 @@ import desigSrcDirective from 'common/directives/desigSrc.directive';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
+import analyticsFactory from 'app/analytics/analytics.factory';
+
 import template from './cart.tpl';
 
 let componentName = 'cart';
@@ -17,13 +19,14 @@ let componentName = 'cart';
 class CartController {
 
   /* @ngInject */
-  constructor( $scope, $window, $log, cartService, sessionService, productModalService ) {
+  constructor( $scope, $window, $log, analyticsFactory, cartService, sessionService, productModalService ) {
     this.$scope = $scope;
     this.$window = $window;
     this.$log = $log;
     this.productModalService = productModalService;
     this.cartService = cartService;
     this.sessionService = sessionService;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -42,6 +45,9 @@ class CartController {
           this.cartData = data;
           this.loading = false;
           this.updating = false;
+
+          this.analyticsFactory.pageLoaded();
+          this.analyticsFactory.cartView(data);
         },
         error => {
           this.$log.error('Error loading cart', error);
@@ -62,6 +68,7 @@ class CartController {
           pull(this.cartData.items, item);
           this.loadCart(true);
           this.$scope.$emit( cartUpdatedEvent );
+          this.analyticsFactory.cartRemove(item.designationNumber);
         },
         error => {
           this.$log.error('Error deleting item from cart', error);
@@ -93,7 +100,8 @@ export default angular
     cartService.name,
     productModalService.name,
     sessionService.name,
-    desigSrcDirective.name
+    desigSrcDirective.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  CartController,

@@ -14,7 +14,7 @@
           <h2 class="mb0">
             {{$ctrl.designationContent['jcr:title']}}
             <a class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()"
-               ng-if="$ctrl.designationContent.designationType === 'Campaign'">
+               ng-if="$ctrl.isCampaign()">
               <i class="fa fa-pencil"></i>
             </a>
           </h2>
@@ -28,7 +28,7 @@
           </a>
 
           <button type="button" class="btn btn-default" ng-click="$ctrl.editPageOptions()"
-                  ng-if="$ctrl.contentLoaded" translate>
+                  ng-if="$ctrl.contentLoaded && !$ctrl.isPerson()" translate>
             Page Options
           </button>
 
@@ -73,7 +73,7 @@
             </p>
           </div>
 
-          <div class="signature-wrap" ng-if="$ctrl.designationContent.designationType === 'Campaign'">
+          <div class="signature-wrap" ng-if="$ctrl.isCampaign()">
             <a class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded"
                ng-click="$ctrl.selectPhoto('signaturePhoto', $ctrl.designationContent.signaturePhoto)">
               <i class="fa fa-pencil"></i>
