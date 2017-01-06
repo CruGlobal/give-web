@@ -4,13 +4,10 @@ import module from './photo.modal';
 
 describe('Designation Editor Photo', function() {
   beforeEach(angular.mock.module(module.name));
-  var $rootScope, $ctrl, $q, $timeout;
+  var $ctrl;
 
-  beforeEach(inject(function(_$rootScope_, _$controller_, _$q_, _$timeout_) {
+  beforeEach(inject(function(_$rootScope_, _$controller_) {
     var $scope = _$rootScope_.$new();
-    $rootScope = _$rootScope_;
-    $timeout = _$timeout_;
-    $q = _$q_;
 
     $ctrl = _$controller_( module.name, {
       designationNumber: '000555',
