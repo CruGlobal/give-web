@@ -34,16 +34,8 @@ describe('Designation Editor Photo', function() {
   });
 
   it('uploadComplete', function() {
-    let getPhotosPromise = $q.defer();
-    spyOn( $ctrl.designationEditorService, 'getPhotos' ).and.returnValue(  getPhotosPromise.promise );
 
-    $ctrl.uploadComplete();
-    $timeout.flush();
-
-    getPhotosPromise.resolve({data: []});
-    $rootScope.$digest();
-
-    expect($ctrl.designationEditorService.getPhotos).toHaveBeenCalled();
+    $ctrl.uploadComplete({data: []});
     expect($ctrl.photos).toEqual([]);
   });
 });
