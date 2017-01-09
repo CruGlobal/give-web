@@ -72,6 +72,11 @@ describe( 'nav', function () {
 
       expect( subMenuStructure.length ).toEqual( 2 );
       expect( subMenuStructure[0].path ).toContain( '/communities' );
+
+      subMenuStructure = $ctrl.makeSubNav( structure.main, ['communities', 'campus', 'about-campus'] );
+
+      expect( subMenuStructure.length ).toEqual( 2 );
+      expect( subMenuStructure[0].path ).toContain( '/communities' );
     } );
     $httpBackend.flush();
   } );
