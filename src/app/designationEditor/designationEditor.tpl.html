@@ -14,7 +14,7 @@
           <h2 class="mb0">
             {{$ctrl.designationContent['jcr:title']}}
             <a class="edit-trigger edit-trigger-text inline" ng-click="$ctrl.editTitle()"
-               ng-if="$ctrl.isCampaign()">
+               ng-if="!$ctrl.isPerson()">
               <i class="fa fa-pencil"></i>
             </a>
           </h2>
