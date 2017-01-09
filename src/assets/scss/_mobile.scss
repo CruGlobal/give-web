@@ -21,17 +21,3 @@
     padding-right: 15px;    
   }
 }
-
-#sub-navigation .sub-nav.mobile-sub-nav {
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-  li a {
-    line-height: 25px;
-    &.active {
-      padding-top: 3px;
-      padding-bottom: 2px;
-      line-height: 18px;
-      border-bottom: $colorCru-gold 1px solid;
-    }
-  }
-}
