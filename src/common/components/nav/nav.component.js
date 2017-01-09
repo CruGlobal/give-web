@@ -181,6 +181,10 @@ class NavController{
       if(navItem){ subNav[index] = navItem; }
     });
 
+    if(subNav.length && !subNav[subNav.length - 1].children){
+      subNav.pop();
+    }
+
     return subNav;
   }
 
