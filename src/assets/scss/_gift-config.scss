@@ -170,6 +170,13 @@ label.btn.btn-default-form.active {
     transition-duration: 100ms;
     transition-delay: 100ms;
   }
+  .modal {
+    overflow-y: scroll !important;  // Hack for Mobile Webkit unable to detect Modal Dynamic Heights.
+    -webkit-overflow-scrolling: auto; // Hack for Mobile Webkit unable to detect Modal Dynamic Heights.
+  }
+  .modal-dialog {
+    height: 101%; // Hack for Mobile Webkit unable to detect Modal Dynamic Heights.
+  }
 }
 
 .modal-footer {
