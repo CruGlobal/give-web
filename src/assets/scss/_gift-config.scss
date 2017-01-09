@@ -170,6 +170,9 @@ label.btn.btn-default-form.active {
     transition-duration: 100ms;
     transition-delay: 100ms;
   }
+  .modal {
+    overflow-y: scroll !important;
+  }
 }
 
 .modal-footer {
