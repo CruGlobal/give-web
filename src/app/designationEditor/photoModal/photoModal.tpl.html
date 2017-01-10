@@ -13,7 +13,7 @@
 
         <upload-button
           class="form-control"
-          url="/bin/crugive/image?designationNumber={{$ctrl.designationNumber}}&campaign={{$ctrl.campaignPage}}"
+          url="/bin/crugive/image?designationNumber={{$ctrl.designationNumber}}"
           accept="image/*"
           on-upload="$ctrl.uploading = true"
           on-success="$ctrl.uploadComplete(response)"

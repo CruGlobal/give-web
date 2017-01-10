@@ -31,11 +31,10 @@ class designationEditorService {
     });
   }
 
-  getPhotos(designationNumber, campaign){
+  getPhotos(designationNumber){
     return this.$http.get(designationConstants.designationImagesEndpoint, {
       params: {
-        designationNumber: designationNumber,
-        campaign: campaign
+        designationNumber: designationNumber
       },
       withCredentials: true
     });

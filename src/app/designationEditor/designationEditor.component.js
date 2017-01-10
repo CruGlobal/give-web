@@ -77,7 +77,7 @@ class DesignationEditorController {
       //get designation content
       this.designationEditorService.getContent(this.designationNumber, this.campaignPage),
       //get designation photos
-      this.designationEditorService.getPhotos(this.designationNumber, this.campaignPage)
+      this.designationEditorService.getPhotos(this.designationNumber)
     ]).then(responses => {
       this.contentLoaded = true;
       this.loadingOverlay = false;
