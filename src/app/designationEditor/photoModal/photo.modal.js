@@ -22,7 +22,7 @@ class ModalInstanceCtrl {
   uploadComplete() {
     //refresh photos (set timeout to give Adobe time to add to DAM)
     this.$timeout(() => {
-      this.designationEditorService.getPhotos(this.designationNumber, this.campaignPage).then((response) => {
+      this.designationEditorService.getPhotos(this.designationNumber).then((response) => {
         this.photos = response.data;
         this.uploading = false;
       }, angular.noop);
