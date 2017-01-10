@@ -26,7 +26,7 @@ class ModalInstanceCtrl {
         this.photos = response.data;
         this.uploading = false;
       }, angular.noop);
-    }, 500);
+    }, 3500);
   }
 }
 
