@@ -32,7 +32,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
       },
       production: {
         apiUrl: 'https://give-cg.cru.org',
-        imgDomain: '//dhh8v3fkkl9i1.cloudfront.net',
+        imgDomain: '//give-static.cru.org',
         imgDomainDesignation: '',
         ccpKeyUrl: 'https://ccp.ccci.org/api/v1/rest/client-encryption-keys/current'
       }
