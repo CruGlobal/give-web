@@ -36,23 +36,33 @@ function DonationsService( cortexApiService, profileService, commonService ) {
 
     return cortexApiService
       .get( {
-        path: path,
-        zoom: {
-          recipients: 'element[],element:mostrecentdonation,element:recurringdonations'
-        }
+        path: path
       } )
-      .pluck( 'recipients' );
+      .map( response => {
+        let links = filter(response.links, (link) => {
+          return link.rel == 'recurringdonations';
+        });
+        for(let i=0; i < links.length; i++) {
+          response['donation-summaries'][i]['recurring-donations-link'] = links[i].uri;
+        }
+        return response['donation-summaries'];
+      } );
   }
 
-  function getRecipientDetails( recipient ) {
+  function getRecipientsRecurringGifts( uri ) {
     return cortexApiService
       .get( {
-        path: recipient.self.uri,
-        zoom: {
-          details: 'element[],element:paymentmethod'
-        }
-      } )
-      .pluck( 'details' );
+        path: uri
+      } );
+  }
+
+  function getPaymentMethod( id ) {
+    let path = ['paymentmethods', cortexApiService.scope, id];
+
+    return cortexApiService
+      .get( {
+        path: path
+      } );
   }
 
   function getHistoricalGifts( year, month ) {
@@ -174,7 +184,8 @@ function DonationsService( cortexApiService, profileService, commonService ) {
   return {
     getHistoricalGifts:     getHistoricalGifts,
     getRecipients:          getRecipients,
-    getRecipientDetails:    getRecipientDetails,
+    getRecipientsRecurringGifts:    getRecipientsRecurringGifts,
+    getPaymentMethod:       getPaymentMethod,
     getReceipts:            getReceipts,
     getRecentRecipients:    getRecentRecipients,
     getRecurringGifts:      getRecurringGifts,

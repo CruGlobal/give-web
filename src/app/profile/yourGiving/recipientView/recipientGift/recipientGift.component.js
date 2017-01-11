@@ -20,21 +20,27 @@ class RecipientGift {
   }
 
   toggleDetails() {
-    this.loadingDetailsError = true;
+    this.loadingDetailsError = false;
     this.showDetails = !this.showDetails;
     //Load details if we haven't already
     if ( this.showDetails && !this.detailsLoaded ) {
       this.isLoading = true;
-      this.donationsService.getRecipientDetails( this.recipient ).subscribe( ( details ) => {
-        this.details = details;
-        this.isLoading = false;
-        this.detailsLoaded = true;
-      }, error => {
-        this.showDetails = false;
-        this.isLoading = false;
-        this.loadingDetailsError = true;
-        this.$log.error('Error loading recipient details', error);
-      } );
+
+      //get donation payment methods
+      angular.forEach(this.recipient.donations, (donation) => {
+        let paymentMethodId = donation['historical-donation-line']['payment-method-id'];
+        this.donationsService.getPaymentMethod( paymentMethodId )
+          .subscribe( ( paymentMethod ) => {
+            donation['paymentmethod'] = paymentMethod;
+            this.isLoading = false;
+            this.detailsLoaded = true;
+          }, error => {
+            this.showDetails = false;
+            this.isLoading = false;
+            this.loadingDetailsError = true;
+            this.$log.error('Error loading recipient details', error);
+          });
+      });
     }
   }
 
