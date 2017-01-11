@@ -1,93 +1,91 @@
 <div class="screenContent">
   <div class="container container-edge-small container-edge-extrasmall">
-    <div class="container">
-      <div class="row" ng-if="!$ctrl.cartData.items.length">
-        <div class="col-md-12">
-          <div class="panel">
-            <div class="panel-body">
-              <loading ng-if="$ctrl.loadingCartData">
-                <translate>Loading cart data...</translate>
-              </loading>
-              <div class="alert alert-warning" role="alert" ng-if="$ctrl.cartData && !$ctrl.cartData.items.length">
-                <p translate>Your cart is empty</p>
-              </div>
-              <div class="alert alert-danger" role="alert" ng-if="!$ctrl.loadingCartData && !$ctrl.cartData">
-                <p translate>There was an error loading your cart</p>
-              </div>
+    <div class="row" ng-if="!$ctrl.cartData.items.length">
+      <div class="col-md-12">
+        <div class="panel">
+          <div class="panel-body">
+            <loading ng-if="$ctrl.loadingCartData">
+              <translate>Loading cart data...</translate>
+            </loading>
+            <div class="alert alert-warning" role="alert" ng-if="$ctrl.cartData && !$ctrl.cartData.items.length">
+              <p translate>Your cart is empty</p>
+            </div>
+            <div class="alert alert-danger" role="alert" ng-if="!$ctrl.loadingCartData && !$ctrl.cartData">
+              <p translate>There was an error loading your cart</p>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="row" ng-show="$ctrl.cartData.items.length">
-        <div class="col-md-8">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="panel">
-                <div class="panel-body">
-                  <h3 class="panel-name">Checkout</h3>
+    <div class="row" ng-show="$ctrl.cartData.items.length">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel">
+              <div class="panel-body">
+                <h3 class="panel-name">Checkout</h3>
 
-                  <div class="steps-wrap mb_x clearfix">
-                    <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'contact'}">
-                      <span class="step-title">
-                      Contact Information
-                      </span>
-                      <div class="step-bar">
-                        <span class="step-digit">1</span>
-                      </div>
+                <div class="steps-wrap mb_x clearfix">
+                  <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'contact'}">
+                    <span class="step-title">
+                    Contact Information
+                    </span>
+                    <div class="step-bar">
+                      <span class="step-digit">1</span>
                     </div>
-                    <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'payment'}">
-                      <span class="step-title">
-                      Payment Method
-                      </span>
-                      <div class="step-bar">
-                        <span class="step-digit">2</span>
-                      </div>
+                  </div>
+                  <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'payment'}">
+                    <span class="step-title">
+                    Payment Method
+                    </span>
+                    <div class="step-bar">
+                      <span class="step-digit">2</span>
                     </div>
-                    <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'review'}">
-                      <span class="step-title">
-                      Review and Submit Gift
-                      </span>
-                      <div class="step-bar">
-                        <span class="step-digit">3</span>
-                      </div>
-                    </div>
-
-                    <div class="steps-mobile-progress visible-xs">
-                      <div class="steps-single-mobile on"></div>
-                      <div class="steps-single-mobile"></div>
-                      <div class="steps-single-mobile"></div>
+                  </div>
+                  <div class="steps-single" ng-class="{'on': $ctrl.checkoutStep === 'review'}">
+                    <span class="step-title">
+                    Review and Submit Gift
+                    </span>
+                    <div class="step-bar">
+                      <span class="step-digit">3</span>
                     </div>
                   </div>
 
+                  <div class="steps-mobile-progress visible-xs">
+                    <div class="steps-single-mobile on"></div>
+                    <div class="steps-single-mobile"></div>
+                    <div class="steps-single-mobile"></div>
+                  </div>
+                </div>
 
-                  <checkout-step-1 ng-if="$ctrl.checkoutStep === 'contact'" change-step="$ctrl.changeStep(newStep)"></checkout-step-1>
-                  <checkout-step-2 ng-if="$ctrl.checkoutStep === 'payment'" change-step="$ctrl.changeStep(newStep)"></checkout-step-2>
-                  <checkout-step-3 ng-if="$ctrl.checkoutStep === 'review'" change-step="$ctrl.changeStep(newStep)"
-                                   cart-data="$ctrl.cartData"
-                                   submit="$ctrl.submittedOrder"
-                                   on-submit-btn-change-state="$ctrl.enableSubmitOrderBtn = $event.enabled"
-                                   on-submitting-order="$ctrl.submittingOrder = value"
-                                   submitting-order="$ctrl.submittingOrder"
-                                   on-submitted="$ctrl.submittedOrder = false">
-                  </checkout-step-3>
 
-                </div> <!-- // panelbody -->
-              </div><!-- // panel -->
-            </div>
+                <checkout-step-1 ng-if="$ctrl.checkoutStep === 'contact'" change-step="$ctrl.changeStep(newStep)"></checkout-step-1>
+                <checkout-step-2 ng-if="$ctrl.checkoutStep === 'payment'" change-step="$ctrl.changeStep(newStep)"></checkout-step-2>
+                <checkout-step-3 ng-if="$ctrl.checkoutStep === 'review'" change-step="$ctrl.changeStep(newStep)"
+                                 cart-data="$ctrl.cartData"
+                                 submit="$ctrl.submittedOrder"
+                                 on-submit-btn-change-state="$ctrl.enableSubmitOrderBtn = $event.enabled"
+                                 on-submitting-order="$ctrl.submittingOrder = value"
+                                 submitting-order="$ctrl.submittingOrder"
+                                 on-submitted="$ctrl.submittedOrder = false">
+                </checkout-step-3>
+
+              </div> <!-- // panelbody -->
+            </div><!-- // panel -->
           </div>
         </div>
-        <div class="col-md-4 hidden-xs">
-          <checkout-cart-summary cart-data="$ctrl.cartData"
-                                 show-submit-btn="$ctrl.checkoutStep === 'review'"
-                                 enable-submit-btn="$ctrl.enableSubmitOrderBtn"
-                                 on-submit="$ctrl.submittedOrder = true"
-                                 submitting-order="$ctrl.submittingOrder">
-          </checkout-cart-summary>
-        </div>
-        <div class="col-md-4 hidden-xs hidden-sm">
-          <help></help>
-        </div>
+      </div>
+      <div class="col-md-4 hidden-xs">
+        <checkout-cart-summary cart-data="$ctrl.cartData"
+                               show-submit-btn="$ctrl.checkoutStep === 'review'"
+                               enable-submit-btn="$ctrl.enableSubmitOrderBtn"
+                               on-submit="$ctrl.submittedOrder = true"
+                               submitting-order="$ctrl.submittingOrder">
+        </checkout-cart-summary>
+      </div>
+      <div class="col-md-4 hidden-xs hidden-sm">
+        <help></help>
       </div>
     </div> <!-- // masonry container -->
 
