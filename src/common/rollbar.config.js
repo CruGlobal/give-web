@@ -15,7 +15,8 @@ function rollbarConfig(envServiceProvider, $provide) {
     captureUnhandledRejections: true,
     environment: envServiceProvider.get(),
     enabled: !envServiceProvider.is('development'), // Disable rollbar in development environment
-    transform: transformRollbarPayload
+    transform: transformRollbarPayload,
+    hostWhiteList: ['give.cru.org', 'give-stage2.cru.org', 'stage.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org']
   };
   Rollbar = rollbar.init(rollbarConfig);
 
