@@ -7,22 +7,24 @@ let serviceName = 'designationEditorService';
 class designationEditorService {
 
   /*@ngInject*/
-  constructor($http){
+  constructor($http, $q){
     this.$http = $http;
+    this.$q = $q;
   }
 
   checkPermission(designationNumber, campaign) {
-    return this.$http.get(designationConstants.designationCanEdit, {
+    //response of 200 or 498 is valid to edit
+    return this.$http.head(designationConstants.designationEndpoint, {
       params: {
         designationNumber: designationNumber,
         campaign: campaign
       },
       withCredentials: true
-    });
+    }).then(() => true, errorResponse => errorResponse.status === 498 ? true : this.$q.reject());
   }
 
   getContent(designationNumber, campaign) {
-    return this.$http.get(designationConstants.designationSecurityEndpoint, {
+    return this.$http.get(designationConstants.designationEndpoint, {
       params: {
         designationNumber: designationNumber,
         campaign: campaign
@@ -41,7 +43,7 @@ class designationEditorService {
   }
 
   save(designationContent, designationNumber, campaignPage){
-    return this.$http.post(designationConstants.saveEndpoint, designationContent, {
+    return this.$http.post(designationConstants.designationEndpoint, designationContent, {
       withCredentials: true,
       params: {
         designationNumber: designationNumber,

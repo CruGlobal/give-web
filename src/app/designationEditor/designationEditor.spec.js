@@ -124,7 +124,7 @@ describe( 'Designation Editor', function () {
     it( 'to getDesignationContent', () => {
       $ctrl.designationNumber = designationSecurityResponse.designationNumber;
 
-      $httpBackend.expectGET(designationConstants.designationSecurityEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+      $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
         .respond(200, designationSecurityResponse);
       $httpBackend.expectGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
         .respond(200, []);
@@ -314,7 +314,7 @@ describe( 'Designation Editor', function () {
 
   describe('save', () => {
     it( 'should save designation content', () => {
-      $httpBackend.expectPOST(designationConstants.saveEndpoint).respond(200);
+      $httpBackend.expectPOST(designationConstants.designationEndpoint).respond(200);
       $ctrl.designationContent = designationSecurityResponse;
 
       $ctrl.save().then(() => {
@@ -325,7 +325,7 @@ describe( 'Designation Editor', function () {
     } );
 
     it( 'should try to save designation content', () => {
-      $httpBackend.expectPOST(designationConstants.saveEndpoint).respond(500);
+      $httpBackend.expectPOST(designationConstants.designationEndpoint).respond(500);
       $ctrl.designationContent = designationSecurityResponse;
 
       $ctrl.save().then(() => {
