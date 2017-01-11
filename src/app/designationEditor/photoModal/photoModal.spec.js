@@ -4,10 +4,13 @@ import module from './photo.modal';
 
 describe('Designation Editor Photo', function() {
   beforeEach(angular.mock.module(module.name));
-  var $ctrl;
+  var $rootScope, $ctrl, $q, $timeout;
 
-  beforeEach(inject(function(_$rootScope_, _$controller_) {
+  beforeEach(inject(function(_$rootScope_, _$controller_, _$q_, _$timeout_) {
     var $scope = _$rootScope_.$new();
+    $rootScope = _$rootScope_;
+    $timeout = _$timeout_;
+    $q = _$q_;
 
     $ctrl = _$controller_( module.name, {
       designationNumber: '000555',
@@ -31,8 +34,16 @@ describe('Designation Editor Photo', function() {
   });
 
   it('uploadComplete', function() {
+    let getPhotosPromise = $q.defer();
+    spyOn( $ctrl.designationEditorService, 'getPhotos' ).and.returnValue(  getPhotosPromise.promise );
 
-    $ctrl.uploadComplete({data: []});
+    $ctrl.uploadComplete();
+    $timeout.flush();
+
+    getPhotosPromise.resolve({data: []});
+    $rootScope.$digest();
+
+    expect($ctrl.designationEditorService.getPhotos).toHaveBeenCalled();
     expect($ctrl.photos).toEqual([]);
   });
 });

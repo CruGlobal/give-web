@@ -18,18 +18,40 @@ describe( 'donation editor service', () => {
     $httpBackend.verifyNoOutstandingRequest();
   } );
 
-  it( 'should call can edit endpoint', () => {
+  it( 'should return success if user has permission to edit', () => {
     $httpBackend
-      .expectGET( designationConstants.designationCanEdit + '?designationNumber=' + designationNumber )
+      .expectHEAD( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
       .respond( 200 );
 
-    designationEditorService.checkPermission(designationNumber);
+    designationEditorService.checkPermission(designationNumber).then(() => {}, () => {
+      fail();
+    });
+    $httpBackend.flush();
+
+    $httpBackend
+      .expectHEAD( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
+      .respond( 498 );
+
+    designationEditorService.checkPermission(designationNumber).then(() => {}, () => {
+      fail();
+    });
     $httpBackend.flush();
   } );
 
-  it( 'should call security endpoint', () => {
+  it( 'should return error if user does not have permission to edit', () => {
     $httpBackend
-      .expectGET( designationConstants.designationSecurityEndpoint + '?designationNumber=' + designationNumber )
+      .expectHEAD( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
+      .respond( 401 );
+
+    designationEditorService.checkPermission(designationNumber).then(() => {
+      fail();
+    }, () => {});
+    $httpBackend.flush();
+  } );
+
+  it( 'should get designation content', () => {
+    $httpBackend
+      .expectGET( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
       .respond( 200, {} );
 
     designationEditorService.getContent(designationNumber);
@@ -47,7 +69,7 @@ describe( 'donation editor service', () => {
 
   it( 'should call save endpoint', () => {
     $httpBackend
-      .expectPOST( designationConstants.saveEndpoint )
+      .expectPOST( designationConstants.designationEndpoint )
       .respond( 200 );
 
     designationEditorService.save({});

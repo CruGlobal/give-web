@@ -31,8 +31,8 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         ccpKeyUrl: 'https://ccpstaging.ccci.org/api/v1/rest/client-encryption-keys/current'
       },
       production: {
-        apiUrl: 'https://cortex-gateway.cru.org',
-        imgDomain: '//give-static-stage.cru.org',
+        apiUrl: 'https://give-cg.cru.org',
+        imgDomain: '//give-static.cru.org',
         imgDomainDesignation: '',
         ccpKeyUrl: 'https://ccp.ccci.org/api/v1/rest/client-encryption-keys/current'
       }
