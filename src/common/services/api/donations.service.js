@@ -39,20 +39,15 @@ function DonationsService( cortexApiService, profileService, commonService ) {
         path: path
       } )
       .map( response => {
-        let links = filter(response.links, (link) => {
-          return link.rel == 'recurringdonations';
-        });
-        for(let i=0; i < links.length; i++) {
-          response['donation-summaries'][i]['recurring-donations-link'] = links[i].uri;
-        }
         return response['donation-summaries'];
       } );
   }
 
-  function getRecipientsRecurringGifts( uri ) {
+  function getRecipientsRecurringGifts( link ) {
+    if(!link || !link.uri){ return; }
     return cortexApiService
       .get( {
-        path: uri
+        path: link.uri
       } );
   }
 
