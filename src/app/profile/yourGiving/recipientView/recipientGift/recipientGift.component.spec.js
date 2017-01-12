@@ -6,7 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/of';
 
-fdescribe( 'your giving', function () {
+describe( 'your giving', function () {
   describe( 'recipient view', () => {
     describe( 'recipient gift', () => {
       beforeEach( angular.mock.module( module.name ) );
