@@ -13,14 +13,14 @@ class designationEditorService {
   }
 
   checkPermission(designationNumber, campaign) {
-    //response of 200 or 498 is valid to edit
+    //response of 200 or 422 is valid to edit
     return this.$http.head(designationConstants.designationEndpoint, {
       params: {
         designationNumber: designationNumber,
         campaign: campaign
       },
       withCredentials: true
-    }).then(() => true, errorResponse => errorResponse.status === 498 ? true : this.$q.reject());
+    }).then(() => true, errorResponse => errorResponse.status === 422 ? true : this.$q.reject());
   }
 
   getContent(designationNumber, campaign) {
