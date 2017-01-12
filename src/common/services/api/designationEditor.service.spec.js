@@ -30,7 +30,7 @@ describe( 'donation editor service', () => {
 
     $httpBackend
       .expectHEAD( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
-      .respond( 498 );
+      .respond( 422 );
 
     designationEditorService.checkPermission(designationNumber).then(() => {}, () => {
       fail();
