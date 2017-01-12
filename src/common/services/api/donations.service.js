@@ -56,15 +56,6 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       } );
   }
 
-  function getPaymentMethod( id ) {
-    let path = ['paymentmethods', cortexApiService.scope, id];
-
-    return cortexApiService
-      .get( {
-        path: path
-      } );
-  }
-
   function getHistoricalGifts( year, month ) {
     return cortexApiService
       .get( {
@@ -185,7 +176,6 @@ function DonationsService( cortexApiService, profileService, commonService ) {
     getHistoricalGifts:     getHistoricalGifts,
     getRecipients:          getRecipients,
     getRecipientsRecurringGifts:    getRecipientsRecurringGifts,
-    getPaymentMethod:       getPaymentMethod,
     getReceipts:            getReceipts,
     getRecentRecipients:    getRecentRecipients,
     getRecurringGifts:      getRecurringGifts,
