@@ -44,7 +44,6 @@ function DonationsService( cortexApiService, profileService, commonService ) {
   }
 
   function getRecipientsRecurringGifts( link ) {
-    if(!link || !link.uri){ return; }
     return cortexApiService
       .get( {
         path: link.uri

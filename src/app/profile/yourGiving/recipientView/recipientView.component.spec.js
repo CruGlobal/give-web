@@ -60,6 +60,16 @@ describe( 'your giving', function () {
         expect( $ctrl.donationsService.getRecipients ).toHaveBeenCalledWith( undefined );
         expect( $ctrl.recipients ).toEqual( [] );
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+
+
+        $ctrl.donationsService.getRecipients.and.returnValue(Observable.of([
+          {'recurring-donations-link': '/aaa111'}
+          ]));
+        spyOn( $ctrl.donationsService, 'getRecipientsRecurringGifts' ).and.returnValue(Observable.of([
+          {'id': 'donation1'}
+        ]));
+        $ctrl.loadRecipients();
+        expect( $ctrl.recipients[0]['recurring-donations'][0].id ).toEqual( 'donation1' );
       } );
 
       it( 'loads recipients by year', () => {
