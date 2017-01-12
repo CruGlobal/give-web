@@ -20,7 +20,7 @@
         </a>
       </li>
 
-      <li ng-repeat="menuItem in $ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].children">
+      <li ng-repeat="menuItem in $ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].children" ng-if="!menuItem.hideInNav">
         <a ng-href="{{menuItem.path}}" ng-class="{'active': menuItem.path.split('/').pop() === $ctrl.menuPath.currentPage}">
           {{menuItem.title}}
         </a>

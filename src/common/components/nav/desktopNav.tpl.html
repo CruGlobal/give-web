@@ -5,6 +5,7 @@
 
     <ul class="gh-desk-nav-tree col-level-1" ng-mouseleave="$ctrl.menuPath.main = []">
       <li ng-repeat="menuItem in $ctrl.menuStructure.main"
+          ng-if="!menuItem.hideInNav"
           ng-class="{
             'has-children': menuItem.children.length,
             'open-menu': $ctrl.menuPath.main[0] === menuItem.path.split('/').pop(),
@@ -16,13 +17,14 @@
         <div class="children-container" ng-if="menuItem.children.length">
           <ul class="col-level-2 on">
             <li ng-class="{'has-children': menuItem.children.length}" ng-repeat="menuItem in menuItem.children"
+                ng-if="!menuItem.hideInNav"
                 ng-mouseover="$ctrl.menuPath.main[1] = menuItem.path.split('/').pop(); $ctrl.promoClass = menuItem.children.length ? 'gh-offset-3' : 'gh-offset-2';">
               <a ng-href="{{menuItem.path}}">
                 <span ng-if="menuItem.children.length"></span>{{menuItem.title}}
               </a>
 
               <ul class="col-level-3" ng-class="{'on': menuItem.children.length && $ctrl.menuPath.main[1] === menuItem.path.split('/').pop()}">
-                <li ng-repeat="menuItem in menuItem.children">
+                <li ng-repeat="menuItem in menuItem.children" ng-if="!menuItem.hideInNav">
                   <a ng-href="{{menuItem.path}}">{{menuItem.title}}</a>
                 </li>
               </ul>
