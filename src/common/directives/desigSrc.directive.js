@@ -8,7 +8,7 @@ function desigSrc(envService) {
   return {
     restrict: 'A',
     link:     function ( scope, element, attributes ) {
-      let imgUrl = envService.read('imgDomainDesignation') + '/bin/crugive/image?thumbnailDesigNumber=' + attributes.desigSrc;
+      let imgUrl = envService.read('imgDomainDesignation') + '/bin/crugive/imageThumbnail?designationNumber=' + attributes.desigSrc;
       attributes.$set('src', imgUrl);
     }
   };
