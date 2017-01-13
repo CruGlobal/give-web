@@ -30,7 +30,11 @@ class ProductConfigController {
     this.loadingModal = true;
     this.error = false;
     let modalInstance = this.productModalService
-      .configureProduct( this.productCode, {amount: 50, 'campaign-code': this.campaignCode}, false );
+      .configureProduct( this.productCode, {
+        amount: 50,
+        'campaign-code': this.campaignCode,
+        'campaign-page': this.campaignPage
+      }, false );
     modalInstance.rendered.then( () => {
       this.loadingModal = false;
       this.analyticsFactory.giveGiftModal(this.productCode);
@@ -63,6 +67,7 @@ export default angular
     templateUrl: template.name,
     bindings:    {
       campaignCode: '@',
+      campaignPage: '@',
       productCode: '@',
       buttonLabel: '@',
       buttonSize: '@'

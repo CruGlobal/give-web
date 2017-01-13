@@ -12,11 +12,9 @@ describe('Designation Editor Page Options', function() {
     $ctrl = $controller( module.name, {
       parentDesignationNumber: '000555',
       organizationId: 'IT-001',
-      suggestedAmounts: {
-        'jcr:primaryType': 'content',
-        '100': '1 Bible',
-        '200': '2 Bibles'
-      },
+      suggestedAmounts: {"jcr:primaryType":"nt:unstructured",
+        "1":{"jcr:primaryType":"nt:unstructured","description":"1 Bible","amount":100},
+        "2":{"jcr:primaryType":"nt:unstructured","description":"2 Bibles","amount":200}},
       $scope: $scope
     } );
   }));
@@ -33,13 +31,13 @@ describe('Designation Editor Page Options', function() {
 
   it('transform suggested amounts', function() {
     expect($ctrl.suggestedAmounts).toEqual([
-      {amount: 100, description: '1 Bible'},
-      {amount: 200, description: '2 Bibles'}
+      {amount: 100, description: '1 Bible', order: 1},
+      {amount: 200, description: '2 Bibles', order: 2}
     ]);
 
     expect($ctrl.transformSuggestedAmounts()).toEqual({
-      '100': '1 Bible',
-      '200': '2 Bibles'
+      '1': {amount: 100, description: '1 Bible'},
+      '2': {amount: 200, description: '2 Bibles'}
     });
   });
 });

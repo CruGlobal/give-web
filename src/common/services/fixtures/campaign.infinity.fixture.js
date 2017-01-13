@@ -30,6 +30,6 @@ export default {
     "letterDate":              "",
     "websiteURL":              "",
     "defaultCampaign":         "867EM1",
-    "suggestedAmounts":        {"jcr:primaryType": "nt:unstructured", "100": "1000 Bibles", "350": "45 Bibles"}
+    "suggestedAmounts":        {"jcr:primaryType":"nt:unstructured","1":{"jcr:primaryType":"nt:unstructured","description":"for 10 Bibles","amount":25},"2":{"jcr:primaryType":"nt:unstructured","description":"for 40 Bibles","amount":100}}
   }
 };

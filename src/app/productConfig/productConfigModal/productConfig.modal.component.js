@@ -22,6 +22,7 @@ const componentName = 'productConfigModal';
 
 export const giveGiftParams = {
   designation: 'd',
+  campaignPage: 'c',
   amount:      '$',
   frequency:   'f',
   day:         'dd'
@@ -102,6 +103,7 @@ class ProductConfigModalController {
 
     this.modalStateService.name( 'give-gift' );
     this.$location.search( giveGiftParams.designation, this.productData.code );
+    this.$location.search( giveGiftParams.campaignPage, this.itemConfig['campaign-page'] );
 
     let amount = parseInt( params[giveGiftParams.amount], 10 );
     if ( !isNaN( amount ) ) {

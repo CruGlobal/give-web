@@ -30,6 +30,11 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
             return commonService.getNextDrawDate().toPromise();
           },
           suggestedAmounts: /*@ngInject*/ function ( $http, $q ) {
+            let params = $location.search();
+            if ( params.hasOwnProperty( giveGiftParams.campaignPage ) ) {
+              config['campaign-page'] = params[giveGiftParams.campaignPage];
+            }
+
             let deferred = $q.defer();
             let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
               path = config['campaign-page'] ?
@@ -39,7 +44,11 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
               let suggestedAmounts = [];
               if ( data.data['jcr:content'] && data.data['jcr:content'].suggestedAmounts ) {
                 angular.forEach( data.data['jcr:content'].suggestedAmounts, ( v, k ) => {
-                  if ( toFinite( k ) > 0 ) suggestedAmounts.push( {amount: toFinite( k ), label: v} );
+                  if ( toFinite( k ) > 0 ) suggestedAmounts.push( {
+                    amount: toFinite( v.amount ),
+                    label: v.description,
+                    order: k
+                  } );
                 } );
               }
               deferred.resolve( suggestedAmounts );
