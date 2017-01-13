@@ -67,7 +67,7 @@ describe( 'productModalService', function () {
         deferred.resolve();
         $rootScope.$digest();
         expect( modalStateService.name ).toHaveBeenCalledWith( null );
-        expect( $location.search ).toHaveBeenCalledTimes( 4 );
+        expect( $location.search ).toHaveBeenCalledTimes( 5 );
       } );
     } );
   } );
@@ -97,8 +97,8 @@ describe( 'productModalService', function () {
         $injector.invoke( suggestedAmountsFn )
           .then( ( suggestedAmounts ) => {
             expect( suggestedAmounts ).toEqual( [
-              {amount: 100, label: "1000 Bibles"},
-              {amount: 350, label: "45 Bibles"}
+              {amount: 25, label: "for 10 Bibles", order: "1"},
+              {amount: 100, label: "for 40 Bibles", order: "2"}
             ] );
           } );
         $httpBackend.flush();

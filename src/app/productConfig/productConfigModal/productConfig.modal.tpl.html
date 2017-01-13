@@ -38,7 +38,7 @@
           </h4>
           <div class="panel-body pt0">
             <div ng-if="$ctrl.suggestedAmounts">
-              <div class="radio radio-custom-amount" ng-repeat="suggested in $ctrl.suggestedAmounts">
+              <div class="radio radio-custom-amount" ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
                 <label>
                   <input name="amount"
                          ng-model="$ctrl.customAmount"
