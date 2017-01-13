@@ -73,21 +73,32 @@ describe( 'productModalService', function () {
   } );
 
   describe( 'suggestedAmounts() resolve', () => {
-    let suggestedAmountsFn, $injector, $httpBackend;
-    beforeEach( inject( ( _$injector_, _$httpBackend_ ) => {
+    let suggestedAmountsFn, $injector, $httpBackend, $location;
+    beforeEach( inject( ( _$injector_, _$httpBackend_, _$location_ ) => {
       $injector = _$injector_;
       $httpBackend = _$httpBackend_;
+      $location = _$location_;
     } ) );
 
     describe( 'with campaign page', () => {
+      let config;
       beforeEach( () => {
-        productModalService.configureProduct( '0123456', {amount: 50, 'campaign-page': 9876}, false );
+        config = {amount: 50, 'campaign-page': 9876};
+        productModalService.configureProduct( '0123456', config, false );
         suggestedAmountsFn = $uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts;
       } );
 
       afterEach( () => {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
+      } );
+
+      it( 'sets campaign page', () => {
+        $location.search('c', '1234');
+        $injector.invoke( suggestedAmountsFn )
+          .then( (  ) => {
+            expect( config['campaign-page'] ).toEqual( '1234' );
+          } );
       } );
 
       it( 'has suggested amounts', () => {
