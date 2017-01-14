@@ -25,6 +25,10 @@
     .sub-nav-logo {
       margin-left: 0;
       opacity: 1;
+
+      @media screen and (max-width: 990px) {
+        display: none !important;
+      }
     }
 
     .sub-nav {
@@ -34,6 +38,11 @@
 
     .sub-nav-search-icon {
       opacity: 1;
+
+      @media screen and (max-width: 990px) {
+        display: none !important;
+      }
+      
     }
   }
 
