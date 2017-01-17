@@ -75,14 +75,14 @@
 
           <div class="signature-wrap" ng-if="$ctrl.isCampaign()">
             <a class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded"
-               ng-click="$ctrl.selectPhoto('signaturePhoto', $ctrl.designationContent.signaturePhoto)">
+               ng-click="$ctrl.selectPhoto('signatureImage', $ctrl.designationContent.signatureImage)">
               <i class="fa fa-pencil"></i>
             </a>
             <img ng-src="{{$ctrl.imgDomain}}/assets/img/signature.png"
-                 ng-if="!$ctrl.photoUrl($ctrl.designationContent.signaturePhoto)"
+                 ng-if="!$ctrl.photoUrl($ctrl.designationContent.signatureImage)"
                  class="signature-image">
-            <img ng-src="{{$ctrl.imgDomainDesignation + $ctrl.photoUrl($ctrl.designationContent.signaturePhoto).original}}"
-                 ng-if="$ctrl.photoUrl($ctrl.designationContent.signaturePhoto)"
+            <img ng-src="{{$ctrl.imgDomainDesignation + $ctrl.photoUrl($ctrl.designationContent.signatureImage).original}}"
+                 ng-if="$ctrl.photoUrl($ctrl.designationContent.signatureImage)"
                  class="signature-image">
 
             <a class="edit-trigger edit-trigger-text" ng-if="$ctrl.contentLoaded" ng-click="$ctrl.editText('psText')">
