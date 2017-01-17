@@ -36,23 +36,18 @@ function DonationsService( cortexApiService, profileService, commonService ) {
 
     return cortexApiService
       .get( {
-        path: path,
-        zoom: {
-          recipients: 'element[],element:mostrecentdonation,element:recurringdonations'
-        }
+        path: path
       } )
-      .pluck( 'recipients' );
+      .map( response => {
+        return response['donation-summaries'];
+      } );
   }
 
-  function getRecipientDetails( recipient ) {
+  function getRecipientsRecurringGifts( link ) {
     return cortexApiService
       .get( {
-        path: recipient.self.uri,
-        zoom: {
-          details: 'element[],element:paymentmethod'
-        }
-      } )
-      .pluck( 'details' );
+        path: link.uri
+      } );
   }
 
   function getHistoricalGifts( year, month ) {
@@ -174,7 +169,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
   return {
     getHistoricalGifts:     getHistoricalGifts,
     getRecipients:          getRecipients,
-    getRecipientDetails:    getRecipientDetails,
+    getRecipientsRecurringGifts:    getRecipientsRecurringGifts,
     getReceipts:            getReceipts,
     getRecentRecipients:    getRecentRecipients,
     getRecurringGifts:      getRecurringGifts,

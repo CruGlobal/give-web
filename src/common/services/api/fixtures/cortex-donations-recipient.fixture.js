@@ -1,117 +1,268 @@
 export default {
-  "self":     {
-    "type": "elasticpath.collections.links",
-    "uri":  "/donations/historical/crugive/recipient/recent?zoom=element,element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/recent?zoom=element,element:mostrecentdonation,element:mostrecentdonation:recurringdonationelement"
+  "self": {
+    "type": "elasticpath.donations.recipient-donation-history-list",
+    "uri": "/donations/historical/crugive/recipient/recent",
+    "href": "http://localhost:9080/cortex/donations/historical/crugive/recipient/recent"
   },
-  "links":    [{
-    "rel":  "element",
-    "rev":  "list",
-    "type": "elasticpath.donations.historical-donation",
-    "uri":  "/donations/historical/crugive/recentrecipientsummary/a5ufc43nkb2htqvrlu6vg3lsmtbkkus5ijjh2ob2ykxuypjsnvvf7qvbykuv26kdkf6ta4ltyoavpqvbyk5x3q4co4=",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recentrecipientsummary/a5ufc43nkb2htqvrlu6vg3lsmtbkkus5ijjh2ob2ykxuypjsnvvf7qvbykuv26kdkf6ta4ltyoavpqvbyk5x3q4co4="
-  }, {
-    "rel":  "givingdashboard",
-    "uri":  "/giving/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/giving/crugive"
+  "links": [{
+    "rel": "givingdashboard",
+    "uri": "/giving/crugive",
+    "href": "http://localhost:9080/cortex/giving/crugive"
   }],
-  "_element": [{
-    "self":                {
-      "type": "elasticpath.donations.recipient-donation-history",
-      "uri":  "/donations/historical/crugive/recentrecipientsummary/a5ufc43nkb2htqvrlu6vg3lsmtbkkus5ijjh2ob2ykxuypjsnvvf7qvbykuv26kdkf6ta4ltyoavpqvbyk5x3q4co4=",
-      "href": "https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recentrecipientsummary/a5ufc43nkb2htqvrlu6vg3lsmtbkkus5ijjh2ob2ykxuypjsnvvf7qvbykuv26kdkf6ta4ltyoavpqvbyk5x3q4co4="
-    },
-    "links":               [{
-      "rel":  "mostrecentdonation",
-      "uri":  "/donations/historical/crugive/gewusqknjrju6=",
-      "href": "https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/gewusqknjrju6="
-    }, {
-      "rel":  "giveagift",
-      "type": "elasticpath.items.item",
-      "uri":  "/items/crugive/ga3dinzwga3q=",
-      "href": "https://cortex-gateway-stage.cru.org/cortex/items/crugive/ga3dinzwga3q="
-    }],
-    "_mostrecentdonation": [{
-      "self":                      {
-        "type": "elasticpath.donations.historical-donation",
-        "uri":  "/donations/historical/crugive/gewusqknjrju6=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/gewusqknjrju6="
+  "donation-summaries": [{
+    "designation-active": true,
+    "designation-name": "Houston SP (0687459)",
+    "designation-number": "0687459",
+    "donations": [{
+      "donation-row-id": "1-3CJZKF",
+      "donation-status": "In Process",
+      "historical-donation-line": {
+        "amount": 2.22,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "Houston SP (0687459)",
+        "designation-number": "0687459",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-method-id": "giydambvga=",
+        "payment-type": "Discover",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2017-01-10", "value": 1484006400000},
+        "transaction-sub-type": "Credit Card"
       },
-      "links":                     [{
-        "rel":  "recurringdonationelement",
-        "rev":  "recurringdonationlist",
-        "type": "elasticpath.donations.donation",
-        "uri":  "/donations/recurring/crugive/gewugmkok5jvi=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/gewugmkok5jvi="
-      }, {
-        "rel":  "paymentmethod",
-        "uri":  "/paymentmethods/crugive/giydgmrwha=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydgmrwha="
-      }, {
-        "rel":  "giveagift",
-        "type": "elasticpath.items.item",
-        "uri":  "/items/crugive/ga3dinzwga3q=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/items/crugive/ga3dinzwga3q="
-      }],
-      "_recurringdonationelement": [{
-        "self":                   {
-          "type": "donations.recurring",
-          "uri":  "/donations/recurring/crugive/gewugmkok5jvi=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/gewugmkok5jvi="
-        },
-        "links":                  [{
-          "rel":  "paymentmethods",
-          "uri":  "/paymentmethods/crugive",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
-        }, {
-          "rel":  "paymentmethod",
-          "uri":  "/paymentmethods/crugive/giydgmrwha=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydgmrwha="
-        }],
-        "donation-lines":         [{
-          "amount":                         10,
-          "designation-name":               "Jesse and Rachel Rogers (0647607)",
-          "designation-number":             "0647607",
-          "donation-line-row-id":           "1-C1NWSV",
-          "donation-line-status":           "Standard",
-          "payment-method-id":              "203268",
-          "updated-donation-line-status":   "",
-          "updated-payment-method-id":      "",
-          "updated-rate":                   {"recurrence": {"interval": ""}},
-          "updated-recurring-day-of-month": "",
-          "updated-start-month":            "",
-          "updated-start-year":             ""
-        }],
-        "donation-row-id":        "1-C1NWST",
-        "donation-status":        "Active",
-        "effective-status":       "Active",
-        "rate":                   {"recurrence": {"interval": "Monthly"}},
-        "recurring-day-of-month": "15",
-        "start-date":             {"display-value": "2015-05-08", "value": 1431043200000}
-      }],
-      "donation-row-id":           "1-IAMLSO",
-      "donation-status":           "Completed",
-      "historical-donation-line":  {
-        "amount":                      10,
-        "anonymous":                   false,
-        "campaign-code":               "CCWBST",
-        "completed":                   true,
-        "designation-active":          true,
-        "designation-name":            "Jesse and Rachel Rogers (0647607)",
-        "designation-number":          "0647607",
-        "given-through-description":   "Stovall, Shelly(431770622)",
-        "master-account":              false,
-        "pass-through":                false,
-        "payment-method-id":           "203268",
-        "payment-type":                "Visa",
-        "related-account-description": "Stovall, Shelly(431770622)",
-        "transaction-date":            {"display-value": "2015-11-16", "value": 1447632000000},
-        "transaction-sub-type":        "Credit Card"
+      "payment-method-link": {
+        "rel": "paymentmethod",
+        "type": "elasticpath.paymentmethods.payment-method",
+        "uri": "/paymentmethods/crugive/giydambvga="
       }
     }],
-    "designation-active":  true,
-    "designation-name":    "Jesse and Rachel Rogers (0647607)",
-    "designation-number":  "0647607",
+    "most-recent-donation": {
+      "donation-row-id": "1-3CJZKF",
+      "donation-status": "In Process",
+      "historical-donation-line": {
+        "amount": 2.22,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "Houston SP (0687459)",
+        "designation-number": "0687459",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-method-id": "giydambvga=",
+        "payment-type": "Discover",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2017-01-10", "value": 1484006400000},
+        "transaction-sub-type": "Credit Card"
+      },
+      "payment-method-link": {
+        "rel": "paymentmethod",
+        "type": "elasticpath.paymentmethods.payment-method",
+        "uri": "/paymentmethods/crugive/giydambvga="
+      }
+    },
+    "recurring-donations-link": {
+      "rel": "recurringdonations",
+      "uri": "/donations/recurring/crugive/recipient/ga3dqnzugu4q="
+    },
+    "year-to-date-amount": 2.22
+  }, {
+    "designation-active": true,
+    "designation-name": "Steve Retir (0628066)",
+    "designation-number": "0628044",
+    "donations": [{
+      "donation-row-id": "1-3CJZLM",
+      "donation-status": "In Process",
+      "historical-donation-line": {
+        "amount": 1.03,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "Steve Retir (0628066)",
+        "designation-number": "0628044",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-type": "American Express",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2017-01-10", "value": 1484006400000},
+        "transaction-sub-type": "Credit Card"
+      }
+    }],
+    "most-recent-donation": {
+      "donation-row-id": "1-3CJZLM",
+      "donation-status": "In Process",
+      "historical-donation-line": {
+        "amount": 1.03,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "Steve Retir (0628066)",
+        "designation-number": "0628044",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-type": "American Express",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2017-01-10", "value": 1484006400000},
+        "transaction-sub-type": "Credit Card"
+      }
+    },
+    "recurring-donations-link": {
+      "rel": "recurringdonations",
+      "uri": "/donations/recurring/crugive/recipient/ga3deobqgq2a="
+    },
+    "year-to-date-amount": 1.03
+  }, {
+    "designation-active": true,
+    "designation-name": "UCF Scholarship (0656556)",
+    "designation-number": "0656556",
+    "donations": [{
+      "donation-row-id": "1-3CJZIT",
+      "donation-status": "In Process",
+      "historical-donation-line": {
+        "amount": 5,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "UCF Scholarship (0656556)",
+        "designation-number": "0656556",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-type": "American Express",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2017-01-10", "value": 1484006400000},
+        "transaction-sub-type": "Credit Card"
+      }
+    }],
+    "most-recent-donation": {
+      "donation-row-id": "1-3CJZIT",
+      "donation-status": "In Process",
+      "historical-donation-line": {
+        "amount": 5,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "UCF Scholarship (0656556)",
+        "designation-number": "0656556",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-type": "American Express",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2017-01-10", "value": 1484006400000},
+        "transaction-sub-type": "Credit Card"
+      }
+    },
+    "recurring-donations-link": {
+      "rel": "recurringdonations",
+      "uri": "/donations/recurring/crugive/recipient/ga3dknrvgu3a="
+    },
+    "year-to-date-amount": 5
+  }, {
+    "designation-active": true,
+    "designation-name": "\"God Loves Lebanon\" Initiative(2798344)",
+    "designation-number": "2798344",
+    "donations": [],
+    "most-recent-donation": {
+      "donation-row-id": "1-36020D",
+      "donation-status": "Closed",
+      "historical-donation-line": {
+        "amount": 20,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "\"God Loves Lebanon\" Initiative(2798344)",
+        "designation-number": "2798344",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-method-id": "giydambrg4=",
+        "payment-type": "EFT",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2016-08-22", "value": 1471824000000},
+        "transaction-sub-type": "EFT"
+      },
+      "payment-method-link": {
+        "rel": "paymentmethod",
+        "type": "elasticpath.paymentmethods.payment-method",
+        "uri": "/paymentmethods/crugive/giydambrg4="
+      }
+    },
+    "recurring-donations-link": {
+      "rel": "recurringdonations",
+      "uri": "/donations/recurring/crugive/recipient/gi3tsobtgq2a="
+    },
+    "year-to-date-amount": 0
+  }, {
+    "designation-active": true,
+    "designation-name": "Campus Ministry Greatest Need(2293580)",
+    "designation-number": "2293580",
+    "donations": [],
+    "most-recent-donation": {
+      "donation-row-id": "1-30JO70",
+      "donation-status": "Closed",
+      "historical-donation-line": {
+        "amount": 1,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "Campus Ministry Greatest Need(2293580)",
+        "designation-number": "2293580",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-type": "EFT",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2016-05-02", "value": 1462147200000},
+        "transaction-sub-type": "EFT"
+      }
+    },
+    "recurring-donations-link": {
+      "rel": "recurringdonations",
+      "uri": "/donations/recurring/crugive/recipient/gizdsmzvhaya="
+    },
+    "year-to-date-amount": 0
+  }, {
+    "designation-active": true,
+    "designation-name": "VM - America Region Greatest Need(2802885)",
+    "designation-number": "2802885",
+    "donations": [],
+    "most-recent-donation": {
+      "donation-row-id": "1-2Z3DC8",
+      "donation-status": "In Process",
+      "historical-donation-line": {
+        "amount": 1,
+        "anonymous": false,
+        "campaign-code": "000000",
+        "completed": false,
+        "designation-active": true,
+        "designation-name": "VM - America Region Greatest Need(2802885)",
+        "designation-number": "2802885",
+        "given-through-description": "Steve",
+        "master-account": false,
+        "pass-through": false,
+        "payment-type": "EFT",
+        "related-account-description": "Steve",
+        "transaction-date": {"display-value": "2016-03-16", "value": 1458086400000},
+        "transaction-sub-type": "EFT"
+      }
+    },
+    "recurring-donations-link": {
+      "rel": "recurringdonations",
+      "uri": "/donations/recurring/crugive/recipient/gi4damryha2q="
+    },
     "year-to-date-amount": 0
   }]
 };

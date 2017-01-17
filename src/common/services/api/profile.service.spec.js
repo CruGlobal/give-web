@@ -59,6 +59,8 @@ describe('profile service', () => {
         .respond(200, paymentmethodsResponse);
 
       let expectedPaymentMethods = angular.copy(paymentmethodsResponse._selfservicepaymentmethods[0]._element);
+      expectedPaymentMethods[0].id = expectedPaymentMethods[0].self.uri.split('/').pop();
+      expectedPaymentMethods[1].id = expectedPaymentMethods[1].self.uri.split('/').pop();
       expectedPaymentMethods[0].address = {
         country: 'US',
         streetAddress: '123 First St',

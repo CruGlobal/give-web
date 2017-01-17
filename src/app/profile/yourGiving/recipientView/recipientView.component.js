@@ -28,6 +28,14 @@ class RecipientView {
       delete this.subscriber;
       this.recipients = recipients || [];
       this.setLoading( {loading: false} );
+
+      //get recurring donation for each recipient
+      angular.forEach(recipients, (recipient) => {
+        this.donationsService.getRecipientsRecurringGifts( recipient['recurring-donations-link'] )
+          .subscribe( ( donations ) => {
+            recipient['recurring-donations'] = donations;
+          });
+      });
     }, error => {
       delete this.subscriber;
       this.setLoading( {loading: false} );

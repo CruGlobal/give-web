@@ -51,25 +51,35 @@ describe( 'your giving', function () {
       } );
 
       it( 'loads recent recipients', () => {
-        $ctrl.donationsService.getRecipients.and.callFake( () => Observable.of( ['a', 'b'] ) );
+        $ctrl.donationsService.getRecipients.and.callFake( () => Observable.of( [] ) );
         $ctrl.subscriber = subscriberSpy;
         $ctrl.loadRecipients();
         expect( $ctrl.loadingRecipientsError).toEqual(false);
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( subscriberSpy.unsubscribe ).toHaveBeenCalled();
         expect( $ctrl.donationsService.getRecipients ).toHaveBeenCalledWith( undefined );
-        expect( $ctrl.recipients ).toEqual( ['a', 'b'] );
+        expect( $ctrl.recipients ).toEqual( [] );
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
+
+
+        $ctrl.donationsService.getRecipients.and.returnValue(Observable.of([
+          {'recurring-donations-link': '/aaa111'}
+          ]));
+        spyOn( $ctrl.donationsService, 'getRecipientsRecurringGifts' ).and.returnValue(Observable.of([
+          {'id': 'donation1'}
+        ]));
+        $ctrl.loadRecipients();
+        expect( $ctrl.recipients[0]['recurring-donations'][0].id ).toEqual( 'donation1' );
       } );
 
       it( 'loads recipients by year', () => {
-        $ctrl.donationsService.getRecipients.and.callFake( () => Observable.of( ['c', 'd'] ) );
+        $ctrl.donationsService.getRecipients.and.callFake( () => Observable.of( [] ) );
         $ctrl.loadRecipients( 2016 );
         expect( $ctrl.loadingRecipientsError).toEqual(false);
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( subscriberSpy.unsubscribe ).not.toHaveBeenCalled();
         expect( $ctrl.donationsService.getRecipients ).toHaveBeenCalledWith( 2016 );
-        expect( $ctrl.recipients ).toEqual( ['c', 'd'] );
+        expect( $ctrl.recipients ).toEqual( [] );
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
       } );
 

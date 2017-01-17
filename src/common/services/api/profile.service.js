@@ -188,16 +188,18 @@ class Profile {
     });
   }
 
-  getPaymentMethods(){
+  getPaymentMethods( cache ){
     return this.cortexApiService.get({
       path: ['profiles', this.cortexApiService.scope, 'default'],
       zoom: {
         paymentMethods: 'selfservicepaymentmethods:element[]'
-      }
+      },
+      cache: !!cache
     })
       .pluck('paymentMethods')
       .map((paymentMethods) => {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
+          paymentMethod.id = paymentMethod.self.uri.split('/').pop();
           if(paymentMethod.address){
             paymentMethod.address = formatAddressForTemplate(paymentMethod.address);
           }

@@ -23,21 +23,21 @@
             </div>
           </div>
           <div class="col-sm-3 col-md-3">
-            <div class="form-group mb0" ng-if="$ctrl.recipient['mostrecentdonation']">
+            <div class="form-group mb0" ng-if="$ctrl.recipient['most-recent-donation']">
               <label translate>Most Recent:</label>
               <ul class="list-unstyled list-recurring">
                 <li>
-                  <h4>{{$ctrl.recipient['mostrecentdonation']['historical-donation-line']['amount'] | currency:'$'}}</h4>
-                  <span class="meta">{{$ctrl.recipient['mostrecentdonation']['historical-donation-line']['transaction-date']['display-value'] | date:'mediumDate'}}</span>
+                  <h4>{{$ctrl.recipient['most-recent-donation']['historical-donation-line']['amount'] | currency:'$'}}</h4>
+                  <span class="meta">{{$ctrl.recipient['most-recent-donation']['historical-donation-line']['transaction-date']['display-value'] | date:'mediumDate'}}</span>
                 </li>
               </ul>
             </div>
           </div>
           <div class="col-sm-4 col-md-4">
-            <div class="form-group mb0" ng-if="$ctrl.recipient['recurringdonations']['donations'].length">
+            <div class="form-group mb0" ng-if="$ctrl.recipient['recurring-donations']['donations'].length">
               <label translate>Recurring Gifts:</label>
               <ul class="list-unstyled list-recurring">
-                <li ng-repeat="recurring in $ctrl.recipient['recurringdonations']['donations']">
+                <li ng-repeat="recurring in $ctrl.recipient['recurring-donations']['donations']">
                   <h4 translate>{{recurring['donation-lines'][0].amount | currency:'$'}} {{recurring.rate.recurrence.interval}}</h4>
                   <span class="meta" ng-if="recurring['next-draw-date']" translate>Next Gift: {{recurring['next-draw-date']['display-value'] | date:'mediumDate'}}</span>
                 </li>
@@ -77,7 +77,7 @@
       </loading>
       <div class="table-responsive" ng-if="!$ctrl.isLoading">
         <div ng-if="!$ctrl.details" translate>No Gift History</div>
-        <table class="table table-striped table-payment-history" ng-if="$ctrl.details">
+        <table class="table table-striped table-payment-history" ng-if="$ctrl.recipient['donations'].length">
           <thead>
           <tr>
             <th class="date" translate>Date</th>
@@ -87,7 +87,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="gift in $ctrl.details" recipient-detail="gift"></tr>
+          <tr ng-repeat="gift in $ctrl.recipient['donations']" recipient-detail="gift"></tr>
           </tbody>
         </table>
       </div>
