@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-cookies';
 import jwtDecode from 'jwt-decode';
 import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';

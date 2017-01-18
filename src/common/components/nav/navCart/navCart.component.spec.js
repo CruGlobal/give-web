@@ -1,7 +1,6 @@
 import angular from 'angular';
 import 'angular-mocks';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
+import {Observable, Subject} from 'rxjs';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import module, {giftAddedEvent, cartUpdatedEvent} from './navCart.component';
