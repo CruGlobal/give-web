@@ -64,7 +64,7 @@
                   ng-options="year for year in $ctrl.expirationDateYears">
           </select>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryYear.$error" ng-if="($ctrl.creditCardPaymentForm.expiryYear | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter choose an expiration year</div>
+            <div class="help-block" ng-message="required" translate>You must choose an expiration year</div>
           </div>
         </div>
       </div>

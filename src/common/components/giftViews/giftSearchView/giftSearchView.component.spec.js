@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
-import {Observable, TestScheduler} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import {TestScheduler} from 'rxjs/testing/TestScheduler';
 
 import module from './giftSearchView.component';
 
