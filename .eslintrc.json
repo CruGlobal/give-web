@@ -13,7 +13,7 @@
     "require": true
   },
   "rules": {
-    "no-alert": "off",
+    "no-alert": "error",
     "no-array-constructor": "off",
     "no-bitwise": "off",
     "no-caller": "off",
