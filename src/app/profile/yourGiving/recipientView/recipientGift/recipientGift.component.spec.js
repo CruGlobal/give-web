@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './recipientGift.component';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {ReplaySubject} from 'rxjs';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/of';
