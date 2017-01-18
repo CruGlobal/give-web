@@ -5,6 +5,7 @@ import commonService from 'common/services/api/common.service';
 import productConfigModal, {giveGiftParams} from 'app/productConfig/productConfigModal/productConfig.modal.component';
 import modalStateService from 'common/services/modalState.service';
 import toFinite from 'lodash/toFinite';
+import 'rxjs/add/operator/toPromise';
 
 const serviceName = 'productModalService';
 
