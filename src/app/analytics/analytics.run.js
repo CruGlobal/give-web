@@ -1,5 +1,6 @@
 import 'app/analytics/analytics.factory';
 
+/* @ngInject */
 function dataLayer($window, analyticsFactory) {
 
     /* Build data layer */
