@@ -3,6 +3,7 @@ import './analytics.module';
 import get from 'lodash/get';
 import find from 'lodash/find';
 
+/* @ngInject */
 function analyticsFactory($window, $timeout, sessionService) {
   return {
     buildProductVar: function(cartData) {
