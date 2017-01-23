@@ -64,7 +64,10 @@
       <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'search'">
         <form id="mob-search" ng-submit="$ctrl.cruSearch(mobileSearchTerm)">
           <div class="form-group">
-            <input type="text" class="form-control form-control-subtle text-center" ng-model="mobileSearchTerm" placeholder="ENTER KEYWORDS">
+            <input type="text" class="form-control form-control-subtle text-center"
+                   ng-model="mobileSearchTerm"
+                   placeholder="ENTER KEYWORDS"
+                   autofocus>
           </div>
         </form>
       </div>
