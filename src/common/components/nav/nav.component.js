@@ -15,6 +15,7 @@ import {giftAddedEvent} from 'common/components/nav/navCart/navCart.component';
 import globalWebsitesModalWindowTemplate from './globalWebsitesModal/globalWebsitesModalWindow.tpl';
 import globalWebsitesModal from './globalWebsitesModal/globalWebsitesModal.component';
 import navCart, {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
+import autoFocus from 'common/directives/autoFocus.directive';
 
 import mobileTemplate from './mobileNav.tpl';
 import desktopTemplate from './desktopNav.tpl';
@@ -231,7 +232,8 @@ export default angular
     globalWebsitesModal.name,
     globalWebsitesModalWindowTemplate.name,
     navCart.name,
-    loading.name
+    loading.name,
+    autoFocus.name
   ])
   .component(componentName, {
     controller: NavController,
