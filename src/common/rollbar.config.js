@@ -12,7 +12,7 @@ function rollbarConfig(envServiceProvider, $provide) {
   let rollbarConfig = {
     accessToken: rollbarAccessToken,
     captureUncaught: true,
-    captureUnhandledRejections: true,
+    captureUnhandledRejections: false,
     environment: envServiceProvider.get(),
     enabled: !envServiceProvider.is('development'), // Disable rollbar in development environment
     transform: transformRollbarPayload,
