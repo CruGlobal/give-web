@@ -3,7 +3,7 @@
   <div class="panel-body">
     <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods">
       <label>
-        <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod.selectAction" required>
+        <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" required>
         <payment-method-display payment-method="paymentMethod"></payment-method-display>
       </label>
     </div>

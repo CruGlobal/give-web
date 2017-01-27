@@ -57,10 +57,10 @@ class ExistingPaymentMethodsController {
     let chosenPaymentMethod = find(this.paymentMethods, {chosen: true});
     if(chosenPaymentMethod){
       // Select the payment method previously chosen for the order
-      this.selectedPaymentMethod = chosenPaymentMethod.selectAction;
+      this.selectedPaymentMethod = chosenPaymentMethod;
     }else{
       // Select the first payment method
-      this.selectedPaymentMethod = this.paymentMethods[0].selectAction;
+      this.selectedPaymentMethod = this.paymentMethods[0];
     }
   }
 
@@ -84,15 +84,19 @@ class ExistingPaymentMethodsController {
   }
 
   selectPayment(){
-    this.orderService.selectPaymentMethod(this.selectedPaymentMethod)
-      .subscribe(() => {
-          this.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
-          this.onSubmit({success: true});
-        },
-        (error) => {
-          this.$log.error('Error selecting payment method', error);
-          this.onSubmit({success: false, error: error});
-        });
+    if(this.selectedPaymentMethod.chosen){
+      this.onSubmit({success: true});
+    }else{
+      this.orderService.selectPaymentMethod(this.selectedPaymentMethod.selectAction)
+        .subscribe(() => {
+            this.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
+            this.onSubmit({success: true});
+          },
+          (error) => {
+            this.$log.error('Error selecting payment method', error);
+            this.onSubmit({success: false, error: error});
+          });
+    }
   }
 }
 
