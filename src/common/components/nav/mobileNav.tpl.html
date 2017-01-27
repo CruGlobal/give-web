@@ -79,8 +79,8 @@
         </form>
       </div>
       <div role="tabpanel" class="tab-pane active" id="mob-global" ng-if="mobileTab === 'global'">
-        <div class="main-menu-container">
-          <ul class="main-menu main-menu-global global-menu" ng-style="{'left': (($ctrl.menuPath.global.length * -100) + '%')}">
+        <div class="main-menu-container global-menu">
+          <ul class="main-menu main-menu-global" ng-style="{'left': (($ctrl.menuPath.global.length * -100) + '%')}">
             <nav-mobile-level structure="$ctrl.menuStructure.global" level="0" path="$ctrl.menuPath.global"></nav-mobile-level>
           </ul>
         </div>
