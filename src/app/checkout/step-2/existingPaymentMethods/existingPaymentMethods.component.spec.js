@@ -13,7 +13,7 @@ describe('checkout', () => {
   describe('step 2', () => {
     describe('existing payment methods', () => {
       beforeEach(angular.mock.module(module.name));
-      var self = {};
+      let self = {};
 
       beforeEach(inject(($componentController, $timeout) => {
         self.$timeout = $timeout;
@@ -122,7 +122,7 @@ describe('checkout', () => {
             }
           ];
           self.controller.selectDefaultPaymentMethod();
-          expect(self.controller.selectedPaymentMethod).toEqual('second uri');
+          expect(self.controller.selectedPaymentMethod).toEqual({ selectAction: 'second uri', chosen: true });
         });
         it('should choose the first payment method if none are marked chosen in cortex', () => {
           self.controller.paymentMethods = [
@@ -134,7 +134,7 @@ describe('checkout', () => {
             }
           ];
           self.controller.selectDefaultPaymentMethod();
-          expect(self.controller.selectedPaymentMethod).toEqual('first uri');
+          expect(self.controller.selectedPaymentMethod).toEqual({ selectAction: 'first uri' });
         });
       });
 
@@ -165,19 +165,26 @@ describe('checkout', () => {
         });
 
         it('should save the selected payment', () => {
-          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account' } };
+          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account' }, selectAction: 'some uri' };
           self.controller.orderService.selectPaymentMethod.and.returnValue(Observable.of('success'));
           self.controller.selectPayment();
-          expect(self.controller.orderService.selectPaymentMethod).toHaveBeenCalledWith(self.controller.selectedPaymentMethod);
+          expect(self.controller.orderService.selectPaymentMethod).toHaveBeenCalledWith('some uri' );
           expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
           expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(existingPaymentMethodFlag);
         });
         it('should handle a failed request to save the selected payment', () => {
+          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account' } };
           self.controller.orderService.selectPaymentMethod.and.returnValue(Observable.throw('some error'));
           self.controller.selectPayment();
           expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false, error: 'some error'});
           expect(self.controller.orderService.storeCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error selecting payment method', 'some error']);
+        });
+        it('should not send a request if the payment is already selected', () => {
+          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account'}, chosen: true };
+          self.controller.selectPayment();
+          expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled();
+          expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
         });
       });
     });
