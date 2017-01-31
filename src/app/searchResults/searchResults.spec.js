@@ -65,7 +65,7 @@ describe( 'searchResults', function () {
         keyword: 'steve'
       };
       $ctrl.exploreSearch();
-      expect( $ctrl.$window.location ).toEqual( 'https://www.cru.org/search.steve.html' );
+      expect( $ctrl.$window.location ).toEqual( 'https://www.cru.org/search.html?q=steve' );
     } );
 
     it( 'navigates to cru.org search page, first/last name search', () => {
@@ -76,7 +76,7 @@ describe( 'searchResults', function () {
         last_name: 'doe'
       };
       $ctrl.exploreSearch();
-      expect( $ctrl.$window.location ).toEqual( 'https://www.cru.org/search.steve%20doe.html' );
+      expect( $ctrl.$window.location ).toEqual( 'https://www.cru.org/search.html?q=steve+doe' );
     } );
   } );
 
