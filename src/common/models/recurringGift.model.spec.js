@@ -465,7 +465,6 @@ describe('recurringGift model', () => {
     it('should set default values for a new gift', () => {
       expect(giftModel.setDefaults().toObject).toEqual(jasmine.objectContaining({
         'updated-designation-number': giftModel.gift['designation-number'],
-        'updated-amount': 50,
         'updated-rate': {
           'recurrence': {
             'interval': 'Monthly'
