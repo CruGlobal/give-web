@@ -10,16 +10,16 @@
 
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingDonorDetailsError">
     <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, please contact support</p>
-    <p><button type="button" class="btn btn-primary" ng-click="$ctrl.loadDonorDetails()" translate>Retry</button></p>
+    <p><button id="retryButton1" type="button" class="btn btn-primary" ng-click="$ctrl.loadDonorDetails()" translate>Retry</button></p>
   </div>
 
   <div class="mb_x" ng-if="!$ctrl.nameFieldsDisabled">
     <div class="row">
       <div class="col-md-6">
-        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'Household'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'Household'}" translate>Give as an Individual</a>
+        <a id="householdTypeLink" href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'Household'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'Household'}" translate>Give as an Individual</a>
       </div>
       <div class="col-md-6">
-        <a href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'Organization'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'Organization'}" translate>Give as an Organization</a>
+        <a id="organizationTypeLink" href="" class="tab-btn btn btn-default btn-block" ng-click="$ctrl.donorDetails['donor-type'] = 'Organization'" ng-class="{'on': $ctrl.donorDetails['donor-type'] === 'Organization'}" translate>Give as an Organization</a>
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
         <div class="col-sm-6">
           <div class="form-group  form-group-default">
             <label translate>Title</label>
-            <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['name']['title']">
+            <select name="nameTitle" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['name']['title']">
               <option></option>
               <option value="Mr" translate>Mr</option>
               <option value="Mrs" translate>Mrs</option>
@@ -94,7 +94,7 @@
           <div class="form-group">
             <label translate>Suffix</label>
             <div class="form-group">
-              <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['name']['suffix']">
+              <select name="nameSuffix" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['name']['suffix']">
                 <option></option>
                 <option translate>Jr</option>
                 <option translate>Sr</option>
@@ -144,7 +144,7 @@
                 <div class="form-group">
                   <label translate>Title</label>
                   <div class="form-group">
-                    <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['title']">
+                    <select name="spouseTitle" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['title']">
                       <option></option>
                       <option value="Mr" translate>Mr</option>
                       <option value="Mrs" translate>Mrs</option>
@@ -200,7 +200,7 @@
                 <div class="form-group">
                   <label translate>Suffix</label>
                   <div class="form-group">
-                    <select class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['suffix']">
+                    <select name="spouseSuffix" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['suffix']">
                       <option></option>
                       <option translate>Jr</option>
                       <option translate>Sr</option>
@@ -225,7 +225,7 @@
         <div class="col-sm-12">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.orgName | showErrors)}">
             <label translate>Organization Name</label>
-            <input type="text" class="form-control  form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" required>
+            <input type="text" class="form-control form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" required>
             <div role="alert" ng-messages="$ctrl.detailsForm.orgName.$error" ng-if="($ctrl.detailsForm.orgName | showErrors)">
               <div class="help-block" ng-message="required" translate>You must enter an organization name</div>
             </div>
