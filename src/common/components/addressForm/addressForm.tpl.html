@@ -11,7 +11,7 @@
         </select>
         <div role="alert" ng-if="$ctrl.loadingCountriesError">
           <div class="help-block" translate>There was an error loading the list of countries. If you continue to see this message, please contact support.
-            <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.loadCountries()" translate>Retry</button></div>
+            <button id="retryButton1" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.loadCountries()" translate>Retry</button></div>
         </div>
         <div role="alert" ng-messages="$ctrl.parentForm.addressCountry.$error" ng-if="($ctrl.parentForm.addressCountry | showErrors)">
           <div class="help-block" ng-message="required" translate>You must select a country</div>
@@ -89,7 +89,7 @@
           </select>
           <div role="alert" ng-if="$ctrl.loadingRegionsError">
             <div class="help-block" translate>There was an error loading the list of regions/state. If you continue to see this message, please contact support.
-              <button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>Retry</button></div>
+              <button id="retryButton2" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>Retry</button></div>
           </div>
           <div role="alert" ng-messages="$ctrl.parentForm.addressRegion.$error" ng-if="($ctrl.parentForm.addressRegion | showErrors)">
             <div class="help-block" ng-message="required" translate>You must select a state / region</div>

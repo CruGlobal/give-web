@@ -3,6 +3,7 @@
   <div class="form-group">
     <label for="username" translate>Email</label>
     <input id="username"
+           name="username"
            type="email"
            class="form-control form-control-subtle"
            placeholder="{{'Email'|translate}}"
@@ -14,6 +15,7 @@
   <div class="form-group">
     <label for="password" translate>Password</label>
     <input id="password"
+           name="password"
            type="password"
            class="form-control form-control-subtle"
            placeholder="{{'Password'|translate}}"
@@ -24,6 +26,7 @@
   </div>
   <button
     type="submit"
+    id="signInButton"
     class="btn btn-block btn-primary"
     ng-click="$ctrl.signIn()"
     ng-disabled="!$ctrl.signInForm.$valid || $ctrl.isSigningIn"

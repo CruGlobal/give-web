@@ -1,5 +1,5 @@
 <div class="modal-header pt">
-  <button type="button" class="close" ng-click="$dismiss()"><span aria-hidden="true">×</span></button>
+  <button id="closeButton" type="button" class="close" ng-click="$dismiss()"><span aria-hidden="true">×</span></button>
   <h3 class="modal-title text-center" ng-if="$ctrl.photoLocation === 'coverPhoto'" translate>Add Cover Photo</h3>
   <h3 class="modal-title text-center" ng-if="$ctrl.photoLocation === 'secondaryPhoto'" translate>Add Secondary Photo</h3>
   <h3 class="modal-title text-center" ng-if="$ctrl.photoLocation === 'signatureImage'" translate>Add Signature Photo</h3>
@@ -34,7 +34,7 @@
     </div>
 
     <div class="cover-thumb">
-      <a href="" class="no-cover" ng-click="$close({
+      <a id="removePhotoButton" href="" class="no-cover" ng-click="$close({
         selected: null,
         photos: $ctrl.photos
       })">
@@ -46,9 +46,9 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary pull-right" ng-click="$close({
+  <button id="usePhotoButton" type="button" class="btn btn-primary pull-right" ng-click="$close({
     selected: $ctrl.selectedPhoto,
     photos: $ctrl.photos
   })" translate>Use Photo</button>
-  <button type="button" class="btn btn-default" ng-click="$dismiss()" translate>Cancel</button>
+  <button id="cancelPhotoButton" type="button" class="btn btn-default" ng-click="$dismiss()" translate>Cancel</button>
 </div>

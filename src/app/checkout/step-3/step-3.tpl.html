@@ -22,7 +22,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         Contact Information
-        <button class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'contact'})">Change</button>
+        <button id="changeContactButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'contact'})">Change</button>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -56,7 +56,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         Payment Method
-        <button class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'payment'})">Change</button>
+        <button id="changePaymentButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'payment'})">Change</button>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -158,7 +158,7 @@
                 <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
               </div>
               <div class="checkout-cta pull-right">
-                <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!$ctrl.canSubmitOrder()">
+                <button id="submitOrderButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!$ctrl.canSubmitOrder()">
                   Submit Your Gift
                 </button>
               </div>

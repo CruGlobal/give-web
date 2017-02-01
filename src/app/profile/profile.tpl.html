@@ -33,20 +33,26 @@
                             <div class="form-group is-required person-row">
                               <i class="fa fa-lock"></i>
 
-                              <select class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
-                                <option value="Mr" translate>Mr.</option>
-                                <option value="Mrs" translate>Mrs.</option>
-                                <option value="Dr" translate>Dr.</option>
+                              <select name="nameTitle" class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
+                                <option value=""></option>
+                                <option value="Mr" translate>Mr</option>
+                                <option value="Mrs" translate>Mrs</option>
+                                <option value="Miss" translate>Miss</option>
+                                <option value="Ms" translate>Ms</option>
+                                <option value="Dr" translate>Dr</option>
                               </select>
 
-                              <input type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']">
-                              <input type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails.name['middle-initial']">
-                              <input type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']">
+                              <input name="nameGivenName" type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']">
+                              <input name="nameMiddleInitial" type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails.name['middle-initial']">
+                              <input name="nameFamilyName" type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']">
 
-                              <select class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
-                                <option></option>
-                                <option value="Jr." translate>Jr.</option>
+                              <select name="nameSuffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
+                                <option value=""></option>
+                                <option value="Jr" translate>Jr</option>
+                                <option value="Sr" translate>Sr</option>
+                                <option value="II" translate>II</option>
                                 <option value="III" translate>III</option>
+                                <option value="IV" translate>IV</option>
                               </select>
 
                               <div class="clear"></div>
@@ -58,9 +64,12 @@
                             <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.spouseDetailsForm.spouseName | showErrors) || ($ctrl.spouseDetailsForm.spouseLastName | showErrors) || ($ctrl.spouseDetailsForm.spouseInitial | showErrors) }">
                               <i class="fa fa-lock"></i>
                               <select name="title" class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails['spouse-name'].title">
-                                <option value="Mr" translate>Mr.</option>
-                                <option value="Mrs" translate>Mrs.</option>
-                                <option value="Dr" translate>Dr.</option>
+                                <option value=""></option>
+                                <option value="Mr" translate>Mr</option>
+                                <option value="Mrs" translate>Mrs</option>
+                                <option value="Miss" translate>Miss</option>
+                                <option value="Ms" translate>Ms</option>
+                                <option value="Dr" translate>Dr</option>
                               </select>
 
                               <input name="spouseName" type="text" class="form-control form-control-subtle first" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" maxlength="20" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
@@ -68,9 +77,12 @@
                               <input name="spouseLastName" type="text" class="form-control form-control-subtle last" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" maxlength="25" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
 
                               <select name="suffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
-                                <option></option>
-                                <option value="Jr." translate>Jr.</option>
+                                <option value=""></option>
+                                <option value="Jr" translate>Jr</option>
+                                <option value="Sr" translate>Sr</option>
+                                <option value="II" translate>II</option>
                                 <option value="III" translate>III</option>
+                                <option value="IV" translate>IV</option>
                               </select>
 
                               <div class="clear"></div>
@@ -92,8 +104,8 @@
                         </li>
 
                         <li ng-if="!$ctrl.hasSpouse">
-                          <a ng-if="!$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = true" translate>+ Add Your Spouse</a>
-                          <a ng-if="$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = false" translate>- Remove Spouse</a>
+                          <a id="addSpouseLink" ng-if="!$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = true" translate>+ Add Your Spouse</a>
+                          <a id="removeSpouseLink" ng-if="$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = false" translate>- Remove Spouse</a>
                         </li>
 
                         <li>
@@ -150,15 +162,15 @@
                               <option translate>Unknown</option>
                             </select>
                             <input name="phoneNumber" type="tel" class="form-control form-control-subtle" ng-model="phone['phone-number']" required maxlength="20">
-                            <select ng-model="phone.spouse" ng-change="phone.ownerChanged = !phone.ownerChanged" ng-options="$ctrl.phoneOwner(spouse) for spouse in [true, false]" class="form-control form-control-subtle" ng-disabled="!$ctrl.hasSpouse"></select>
-                            <a href="" ng-click="$ctrl.deletePhoneNumber(phone, $index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                            <select name="spousePhoneNumber" ng-model="phone.spouse" ng-change="phone.ownerChanged = !phone.ownerChanged" ng-options="$ctrl.phoneOwner(spouse) for spouse in [true, false]" class="form-control form-control-subtle" ng-disabled="!$ctrl.hasSpouse"></select>
+                            <a id="removeSpousePhoneNumberLink" href="" ng-click="$ctrl.deletePhoneNumber(phone, $index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
                           </form>
                           <div role="alert" ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)">
                             <div class="help-block" ng-message="required" translate>You must enter a phone number</div>
                           </div>
                         </div>
                       </div>
-                      <a href="" ng-click="$ctrl.addPhoneNumber()" translate>+ Add Phone Number</a>
+                      <a id="addPhoneNumberLink" href="" ng-click="$ctrl.addPhoneNumber()" translate>+ Add Phone Number</a>
                     </div>
 
                   </div>
@@ -179,7 +191,7 @@
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="border-bottom-small"></div>
-                    <button ng-disabled="!$ctrl.touched() || $ctrl.invalid() || $ctrl.loading()" ng-click="$ctrl.onSubmit()" type="submit" class="btn btn-primary btn-lg pull-right" translate>{{$ctrl.loading() ? 'Loading...' : 'Update My Profile'}}</button>
+                    <button id="saveChangesButton" ng-disabled="!$ctrl.touched() || $ctrl.invalid() || $ctrl.loading()" ng-click="$ctrl.onSubmit()" type="submit" class="btn btn-primary btn-lg pull-right" translate>{{$ctrl.loading() ? 'Loading...' : 'Update My Profile'}}</button>
                   </div>
                 </div>
 

@@ -2,6 +2,6 @@
   <text-angular ng-model="$ctrl.text"></text-angular>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary pull-right" ng-click="$close($ctrl.text)">Save &amp; Close</button>
-  <button type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+  <button id="saveChangesButton" type="button" class="btn btn-primary pull-right" ng-click="$close($ctrl.text)">Save &amp; Close</button>
+  <button id="cancelChangesButton" type="button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
 </div>

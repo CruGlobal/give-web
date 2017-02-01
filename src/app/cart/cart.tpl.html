@@ -18,8 +18,8 @@
                 </div>
               </div>
               <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
-                <p ng-if="$ctrl.error.loading" translate>Error loading your cart. <a href="" ng-click="$ctrl.loadCart()">Retry</a></p>
-                <p ng-if="$ctrl.error.updating" translate>Error loading your updated cart. <a href="" ng-click="$ctrl.loadCart(true)">Retry</a></p>
+                <p ng-if="$ctrl.error.loading" translate>Error loading your cart. <a id="retryLoadButton" href="" ng-click="$ctrl.loadCart()">Retry</a></p>
+                <p ng-if="$ctrl.error.updating" translate>Error loading your updated cart. <a id="retryUpdateButton" href="" ng-click="$ctrl.loadCart(true)">Retry</a></p>
               </div>
               <loading ng-if="$ctrl.loading">
                 <translate>Loading your gifts...</translate>
@@ -80,7 +80,7 @@
                         <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
                       </div>
                       <div class="checkout-cta pull-right">
-                        <a href="" ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
+                        <a id="proceedToCheckoutButton" href="" ng-click="$ctrl.checkout()" class="btn btn-primary btn-lg btn-block" translate>Proceed to Checkout</a>
                       </div>
                     </td>
                   </tr>

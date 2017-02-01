@@ -146,6 +146,7 @@
             <ul class="list-unstyled">
               <li>
                 <button type="button"
+                        id="sendMessageButton"
                         class="btn btn-link"
                         tabindex="-1"
                         ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
@@ -153,6 +154,7 @@
                   Send a Message to {{$ctrl.productData.displayName}}
                 </button>
                 <textarea class="staff-comments give-modal-comments"
+                          name="recipientComments"
                           rows="3"
                           maxlength="250"
                           ng-model="$ctrl.itemConfig['recipient-comments']"
@@ -162,6 +164,7 @@
               </li>
               <li>
                 <button type="button"
+                        id="sendHandlingButton"
                         class="btn btn-link"
                         tabindex="-1"
                         ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
@@ -169,6 +172,7 @@
                   Special Handling Instructions for Processing This Gift
                 </button>
                 <textarea class="cru-comments give-modal-comments"
+                          name="donationServicesComments"
                           rows="3"
                           maxlength="250"
                           ng-model="$ctrl.itemConfig['donation-services-comments']"
