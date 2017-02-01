@@ -15,10 +15,11 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor($window, $location, $log, designationsService, analyticsFactory) {
+  constructor($window, $location, $log, $httpParamSerializer, designationsService, analyticsFactory) {
     this.$window = $window;
     this.$location = $location;
     this.$log = $log;
+    this.$httpParamSerializer = $httpParamSerializer;
     this.designationsService = designationsService;
     this.analyticsFactory = analyticsFactory;
     this.searchParams = {};
@@ -62,8 +63,10 @@ class SearchResultsController {
   }
 
   exploreSearch(){
-    var term = this.searchParams.keyword || this.searchParams.first_name + ' ' + this.searchParams.last_name;
-    this.$window.location = 'https://www.cru.org/search.' + encodeURIComponent(term) + '.html';
+    let term = this.searchParams.keyword || this.searchParams.first_name + ' ' + this.searchParams.last_name;
+    this.$window.location = 'https://www.cru.org/search.html?' + this.$httpParamSerializer({
+      q: term
+    });
   }
 }
 

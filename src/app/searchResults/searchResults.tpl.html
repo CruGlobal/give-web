@@ -29,7 +29,7 @@
 
   <section class="is-tabs">
     <ul class="nav nav-tabs nav-search-tabs text-center">
-      <li role="presentation"><a href="" ng-click="$ctrl.exploreSearch()" translate>Explore</a></li>
+      <li role="presentation" ng-if="$ctrl.searchParams.keyword"><a href="" ng-click="$ctrl.exploreSearch()" translate>Explore</a></li>
       <li role="presentation" class="active"><a href="" translate>Giving</a></li>
       <li role="presentation"><a href="https://www.cru.org/opportunities/mission-trips/upcoming.html" translate>Missions Trips</a></li>
     </ul>
