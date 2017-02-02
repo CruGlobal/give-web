@@ -86,4 +86,17 @@ describe( 'signIn', function () {
       } );
     } );
   } );
+
+  describe( 'resetPassword()', () => {
+    let deferred;
+    beforeEach( inject( function ( _$q_ ) {
+      deferred = _$q_.defer();
+      spyOn( $ctrl.sessionModalService, 'forgotPassword' ).and.callFake( () => deferred.promise );
+      $ctrl.resetPassword();
+    } ) );
+
+    it( 'opens reset password modal', () => {
+      expect( $ctrl.sessionModalService.forgotPassword ).toHaveBeenCalled();
+    } );
+  } );
 } );
