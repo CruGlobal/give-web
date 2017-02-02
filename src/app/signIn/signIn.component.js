@@ -4,6 +4,7 @@ import commonModule from 'common/common.module';
 import showErrors from 'common/filters/showErrors.filter';
 import analyticsFactory from 'app/analytics/analytics.factory';
 import sessionService, {Roles} from 'common/services/session/session.service';
+import sessionModalService from 'common/services/session/sessionModal.service';
 
 import template from './signIn.tpl';
 
@@ -12,10 +13,11 @@ let componentName = 'signIn';
 class SignInController {
 
   /* @ngInject */
-  constructor( $window, sessionService, analyticsFactory ) {
+  constructor( $window, sessionService, analyticsFactory, sessionModalService ) {
     this.$window = $window;
     this.sessionService = sessionService;
     this.analyticsFactory = analyticsFactory;
+    this.sessionModalService = sessionModalService;
   }
 
   $onInit() {
@@ -43,6 +45,10 @@ class SignInController {
       }
     } );
   }
+
+  resetPassword() {
+    this.sessionModalService.forgotPassword();
+  }
 }
 
 export default angular
@@ -50,6 +56,7 @@ export default angular
     commonModule.name,
     analyticsFactory.name,
     sessionService.name,
+    sessionModalService.name,
     signInForm.name,
     showErrors.name,
     template.name
