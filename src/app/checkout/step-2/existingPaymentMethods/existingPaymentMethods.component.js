@@ -19,6 +19,7 @@ class ExistingPaymentMethodsController {
     this.$log = $log;
     this.orderService = orderService;
     this.$uibModal = $uibModal;
+    this.paymentFormResolve = {};
   }
 
   $onInit(){
@@ -26,11 +27,18 @@ class ExistingPaymentMethodsController {
   }
 
   $onChanges(changes) {
-    if (changes.submitted && changes.submitted.currentValue === true) {
-      this.selectPayment();
+    if(changes.paymentFormState){
+      const state = changes.paymentFormState.currentValue;
+      this.paymentFormResolve.state = state;
+      if(state === 'submitted' && !this.paymentMethodFormModal){
+        this.selectPayment();
+      }
+      if(state === 'success'){
+        this.loadPaymentMethods();
+      }
     }
-    if (changes.submitSuccess && changes.submitSuccess.currentValue === true) {
-      this.loadPaymentMethods();
+    if(changes.paymentFormError){
+      this.paymentFormResolve.error = changes.paymentFormError.currentValue;
     }
   }
 
@@ -41,7 +49,6 @@ class ExistingPaymentMethodsController {
           this.paymentMethods = data;
           this.selectDefaultPaymentMethod();
           this.onLoad({success: true, hasExistingPaymentMethods: true});
-          this.submissionError.loading = false;
         }else{
           this.onLoad({success: true, hasExistingPaymentMethods: false});
         }
@@ -70,31 +77,38 @@ class ExistingPaymentMethodsController {
       backdrop: 'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
-        submissionError: this.submissionError,
+        paymentForm: this.paymentFormResolve,
         mailingAddress: this.mailingAddress,
-        onSubmit: () => (params) => {
-          params.stayOnStep = true;
-          this.onSubmit(params);
+        onPaymentFormStateChange: () => param => {
+          param.$event.stayOnStep = true;
+          this.onPaymentFormStateChange(param);
         }
       }
     });
-    this.paymentMethodFormModal.result.catch(() => {
-      this.onSubmit({success: false, error: ''}); // To clear the submissionErrors object in step 2
-    });
+
+    const resetForm = () => {
+      this.onPaymentFormStateChange({
+        $event: {
+          state: 'unsubmitted'
+        }
+      });
+      delete this.paymentMethodFormModal;
+    };
+    this.paymentMethodFormModal.result.then(resetForm, resetForm);
   }
 
   selectPayment(){
     if(this.selectedPaymentMethod.chosen){
-      this.onSubmit({success: true});
+      this.onPaymentFormStateChange({ $event: { state: 'loading' } });
     }else{
       this.orderService.selectPaymentMethod(this.selectedPaymentMethod.selectAction)
         .subscribe(() => {
             this.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
-            this.onSubmit({success: true});
+            this.onPaymentFormStateChange({ $event: { state: 'loading' } });
           },
           (error) => {
             this.$log.error('Error selecting payment method', error);
-            this.onSubmit({success: false, error: error});
+            this.onPaymentFormStateChange({ $event: { state: 'error', error: error } });
           });
     }
   }
@@ -113,11 +127,10 @@ export default angular
     controller: ExistingPaymentMethodsController,
     templateUrl: template.name,
     bindings: {
-      submitted: '<',
-      submissionError: '<',
-      submitSuccess: '<',
+      paymentFormState: '<',
+      paymentFormError: '<',
       mailingAddress: '<',
-      onSubmit: '&',
+      onPaymentFormStateChange: '&',
       onLoad: '&'
     }
   });

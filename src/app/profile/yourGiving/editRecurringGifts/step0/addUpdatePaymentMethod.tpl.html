@@ -22,7 +22,7 @@
   <div class="container-fluid" tabindex="-1" role="dialog">
     <div class="row">
       <div class="col-md-12 col-xs-12">
-        <payment-method-form submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success, data)" payment-method="$ctrl.paymentMethod" submission-error="$ctrl.submissionError" mailing-address="$ctrl.mailingAddress"></payment-method-form>
+        <payment-method-form payment-form-state="$ctrl.paymentFormState" payment-form-state="$ctrl.paymentFormError" on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)" payment-method="$ctrl.paymentMethod" mailing-address="$ctrl.mailingAddress"></payment-method-form>
       </div>
     </div>
   </div>
@@ -31,21 +31,26 @@
 <div class="modal-footer">
   <div class="row row-no-spacing">
     <div class="col-xs-6" ng-switch="$ctrl.canGoBack">
-      <a class="btn btn-default"
-         ng-click="$ctrl.dismiss()"
-         ng-switch-when="false"
-         translate>
+      <button class="btn btn-default"
+              ng-click="$ctrl.dismiss()"
+              ng-switch-when="false"
+              translate>
         Cancel
-      </a>
-      <a class="btn btn-default"
-         ng-click="$ctrl.previous()"
-         ng-switch-when="true"
-         translate>
+      </button>
+      <button class="btn btn-default"
+              ng-click="$ctrl.previous()"
+              ng-switch-when="true"
+              translate>
         Back
-      </a>
+      </button>
     </div>
     <div class="col-xs-6 text-right">
-      <a class="btn btn-primary" ng-click="$ctrl.submitted = true">Add and Continue</a>
+      <button class="btn btn-primary"
+              ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
+              ng-disabled="$ctrl.paymentFormState === 'loading'">
+        <span ng-if="!$ctrl.paymentMethod" translate>Add and Continue</span>
+        <span ng-if="$ctrl.paymentMethod" translate>Update and Continue</span>
+      </button>
     </div>
   </div>
 </div>

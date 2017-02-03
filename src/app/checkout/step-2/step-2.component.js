@@ -20,7 +20,6 @@ class Step2Controller{
 
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
-    this.submissionError = {error: ''};
   }
 
   $onInit(){
@@ -48,29 +47,24 @@ class Step2Controller{
     this.loadingPaymentMethods = false;
   }
 
-  onSubmit(success, data, error, stayOnStep){
-    this.submissionError.error = '';
-    this.submitSuccess = false;
-
-    if(success && data){
-      this.orderService.addPaymentMethod(data)
+  onPaymentFormStateChange($event){
+    this.paymentFormState = $event.state;
+    if($event.state === 'loading' && $event.payload){
+      this.orderService.addPaymentMethod($event.payload)
         .subscribe(() => {
-          if(stayOnStep){
-            this.submitSuccess = true;
+          if($event.stayOnStep){
+            this.paymentFormState = 'success';
           }else{
             this.changeStep({newStep: 'review'});
           }
         },
-        (error) => {
+        error => {
           this.$log.error('Error saving payment method', error);
-          this.submissionError.loading = false;
-          this.submissionError.error = error.data;
+          this.paymentFormState = 'error';
+          this.paymentFormError = error.data;
         });
-    }else if(success){
+    }else if($event.state === 'loading') {
       this.changeStep({newStep: 'review'});
-    }else{
-      this.submissionError.loading = false;
-      this.submissionError.error = error;
     }
   }
 }

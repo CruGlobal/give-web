@@ -73,14 +73,20 @@
               </div>
 
               <div class="mb--" ng-switch-when="addPaymentMethod">
-                <payment-method-form mailing-address="$ctrl.resolve.mailingAddress" submission-error="$ctrl.submissionError" on-submit="$ctrl.savePaymentMethod(success, data)"></payment-method-form>
+                <payment-method-form payment-form-state="$ctrl.paymentFormState" payment-form-error="$ctrl.paymentFormError" on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)" mailing-address="$ctrl.resolve.mailingAddress"></payment-method-form>
                 <div class="mb0">
                   <div class="row">
                     <div class="col-xs-6">
                       <button id="backButton" class="btn btn-default" ng-click="$ctrl.changeView(true)" translate>Back</button>
                     </div>
                     <div class="col-xs-6 text-right">
-                      <button id="addPaymentButton" class="btn btn-primary" ng-click="$ctrl.submissionError.loading = true" translate>Add Payment Method</button>
+                      <button id="addPaymentButton"
+                              class="btn btn-primary"
+                              ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
+                              ng-disabled="$ctrl.paymentFormState === 'loading'"
+                              translate>
+                        Add Payment Method
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -89,6 +95,10 @@
               <div class="mb--" ng-switch-when="confirm">
                 <div class="row">
                   <div class="col-sm-12">
+                    <div class="alert alert-danger" role="alert" ng-if="$ctrl.deletionError">
+                      <span ng-if="$ctrl.deletionError === 'updateGifts'" translate>There was an error updating the donations attached to this payment method.</span>
+                      <span ng-if="$ctrl.deletionError === 'delete'" translate>There was an error deleting your payment method.</span>
+                    </div>
                     <ng-switch on="$ctrl.confirmText">
                       <p>
                         <small ng-switch-when="withTransfer" translate>

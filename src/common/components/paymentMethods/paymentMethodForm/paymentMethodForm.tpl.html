@@ -1,5 +1,7 @@
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.error">
-  <p ng-switch="$ctrl.submissionError.error">
+<loading type="overlay" ng-if="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'success'"></loading>
+
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.paymentFormState === 'error'">
+  <p ng-switch="$ctrl.paymentFormError">
     <span ng-switch-when="Invalid routing number" translate>
       The routing number you entered does not seem to be valid. Please verify that it is correct.
     </span>
@@ -40,11 +42,11 @@
 
 <div class="tab-indiv cart-tab show" ng-if="$ctrl.paymentType === 'bankAccount'">
 
-  <bank-account-form submitted="$ctrl.submissionError.loading" on-submit="$ctrl.onChildSubmit(success, data)" payment-method="$ctrl.paymentMethod"></bank-account-form>
+  <bank-account-form payment-form-state="$ctrl.paymentFormState" on-payment-form-state-change="$ctrl.onPaymentFormStateChange({ $event: $event })" payment-method="$ctrl.paymentMethod"></bank-account-form>
 
 </div>
 <div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
 
-  <credit-card-form submitted="$ctrl.submissionError.loading" on-submit="$ctrl.onChildSubmit(success, data)" payment-method="$ctrl.paymentMethod" mailing-address="$ctrl.mailingAddress"></credit-card-form>
+  <credit-card-form payment-form-state="$ctrl.paymentFormState" on-payment-form-state-change="$ctrl.onPaymentFormStateChange({ $event: $event })" payment-method="$ctrl.paymentMethod" mailing-address="$ctrl.mailingAddress"></credit-card-form>
 
 </div>

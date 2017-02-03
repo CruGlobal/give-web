@@ -10,17 +10,15 @@ describe('paymentMethodFormModal', () => {
     self.controller = $componentController(module.name, {},
       {
         resolve: {
-          onSubmit: jasmine.createSpy('onSubmit')
+          onPaymentFormStateChange: jasmine.createSpy('onPaymentFormStateChange')
         },
         dismiss: jasmine.createSpy('dismiss')
       });
   }));
 
-  describe('onSubmit', () => {
-    it('should pass the onSubmit notification to the onSubmit function the parent component gave it through resolve', () => {
-      self.controller.submitted = true;
-      self.controller.onSubmit(true, 'some data');
-      expect(self.controller.resolve.onSubmit).toHaveBeenCalledWith({success: true, data: 'some data'});
-    });
+  it('should be defined', () => {
+    expect(self.controller).toBeDefined();
+    expect(self.controller.resolve.onPaymentFormStateChange).toBeDefined();
+    expect(self.controller.dismiss).toBeDefined();
   });
 });

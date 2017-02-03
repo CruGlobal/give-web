@@ -116,8 +116,9 @@ describe('PaymentMethodComponent', function () {
       self.controller.editPaymentMethod();
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
 
-      self.controller.onSubmit = () => 'hello';
-      expect(self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('hello');
+      spyOn(self.controller, 'onPaymentFormStateChange');
+      self.controller.$uibModal.open.calls.first().args[0].resolve.onPaymentFormStateChange()({ $event: {} });
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalled();
     });
   });
 
@@ -134,7 +135,7 @@ describe('PaymentMethodComponent', function () {
     });
   });
 
-  describe('onSubmit()', () => {
+  describe('onPaymentFormStateChange()', () => {
     beforeEach(() => {
       self.controller.data = {
         creditCard:{
@@ -144,13 +145,20 @@ describe('PaymentMethodComponent', function () {
       };
     });
 
+    it('should update paymentFormState', () => {
+      self.controller.paymentFormResolve.state = 'unsubmitted';
+      self.controller.onPaymentFormStateChange({ state: 'submitted' });
+      expect(self.controller.paymentFormResolve.state).toEqual('submitted');
+    });
+
     it('should throw an error', () => {
       spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.throw({
         data: 'some error'
       }));
       self.controller.successMessage = {};
-      self.controller.onSubmit({success:true, data: self.controller.data});
-      expect(self.controller.submissionError.error).toBe('some error');
+      self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data });
+      expect(self.controller.paymentFormResolve.state).toBe('error');
+      expect(self.controller.paymentFormResolve.error).toBe('some error');
       expect(self.controller.$log.error.logs[0]).toEqual(['Error updating payment method', {data: 'some error'}]);
     });
 
@@ -159,7 +167,7 @@ describe('PaymentMethodComponent', function () {
         close: jasmine.createSpy('close')
       };
       spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.of('data'));
-      self.controller.onSubmit({success:true, data: self.controller.data});
+      self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data });
       expect(self.controller.model['card-number']).toBe('0000');
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
 
@@ -167,13 +175,8 @@ describe('PaymentMethodComponent', function () {
       self.controller.data.bankAccount = {
         'display-account-number': '9879'
       };
-      self.controller.onSubmit({success:true, data: self.controller.data});
+      self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data });
       expect(self.controller.model['display-account-number']).toBe('9879');
-    });
-
-    it('should not submit', () => {
-      self.controller.onSubmit({success:false, data: self.controller.data});
-      expect(self.controller.submissionError.loading).toBe(false);
     });
   });
 

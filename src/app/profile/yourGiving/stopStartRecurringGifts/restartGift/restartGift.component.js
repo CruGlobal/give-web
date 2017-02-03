@@ -19,8 +19,8 @@ import suggestedRecipients from './step1/suggestedRecipients/suggestedRecipients
 import redirectGiftStep2 from '../redirectGift/step2/redirectGiftStep2.component';
 import configureGifts from './step2/configureGifts/configureGifts.component';
 import confirmGifts from './step3/confirmGifts/confirmGifts.component';
-import addUpdatePaymentMethod from './step0/addUpdatePaymentMethod.component';
 import validPaymentMethods from 'common/services/paymentHelpers/validPaymentMethods';
+import addUpdatePaymentMethod from 'src/app/profile/yourGiving/editRecurringGifts/step0/addUpdatePaymentMethod.component';
 import step0PaymentMethodList from 'src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.component';
 
 import {scrollModalToTop} from 'common/services/modalState.service';
