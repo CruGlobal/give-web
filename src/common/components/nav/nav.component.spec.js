@@ -34,6 +34,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to retrieve json nav feed', () => {
+    $ctrl.defineAttributes();
     $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       expect( structure ).toBeDefined();
@@ -56,6 +57,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to redirect on search', () => {
+    $ctrl.defineAttributes();
     $ctrl.cruSearch( 'hello' );
     expect( $ctrl.$window.location ).toContain( 'search.html?q=hello' );
   } );
@@ -66,6 +68,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build sub nav structure', () => {
+    $ctrl.defineAttributes();
     $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       let subMenuStructure = $ctrl.makeSubNav( structure.main, ['communities', 'campus'] );
@@ -82,6 +85,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build sub nav structure with missing path', () => {
+    $ctrl.defineAttributes();
     $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
       let subMenuStructure = $ctrl.makeSubNav( structure.main, ['page', 'that', 'does not', 'exist'] );
@@ -92,6 +96,7 @@ describe( 'nav', function () {
   } );
 
   it( 'to build Give sub nav structure', () => {
+    $ctrl.defineAttributes();
     $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
     $ctrl.$window.location.hostname = 'give.cru.org';
 

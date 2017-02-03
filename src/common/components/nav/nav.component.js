@@ -39,10 +39,10 @@ class NavController{
     this.sessionModalService = sessionModalService;
 
     this.imgDomain = envService.read('imgDomain');
-    this.navFeed = '/bin/cru/site-nav.json';
   }
 
   $onInit() {
+    this.defineAttributes();
     this.setMenuTemplate();
 
     this.menuPath = {
@@ -85,6 +85,20 @@ class NavController{
 
   $onDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  defineAttributes() {
+    this.navFeed = this.navFeed || '/bin/cru/site-nav.json';
+    this.searchResultsPath = this.searchResultsPath || 'https://www.cru.org/search.html';
+    this.editProfilePath = this.editProfilePath || '/profile.html';
+    this.pullRightOptions = this.pullRightOptions || [{
+        title: 'Find Cru Near Me',
+        path: 'https://www.cru.org/communities/locations.html',
+        class: 'nav-near-me'
+      }, {
+        title: 'Cru Around the World',
+        class: 'nav-globe'
+      }];
   }
 
   setMenuTemplate() {
@@ -202,7 +216,7 @@ class NavController{
   }
 
   cruSearch(term){
-    this.$window.location = 'https://www.cru.org/search.html?q=' + encodeURIComponent(term);
+    this.$window.location = this.searchResultsPath + '?q=' + encodeURIComponent(term);
   }
 
   openGlobalWebsitesModal(){
@@ -237,5 +251,11 @@ export default angular
   ])
   .component(componentName, {
     controller: NavController,
-    template: '<ng-include src="$ctrl.templateUrl" ng-resize="$ctrl.setMenuTemplate()"></ng-include>'
+    template: '<ng-include src="$ctrl.templateUrl" ng-resize="$ctrl.setMenuTemplate()"></ng-include>',
+    bindings: {
+      navFeed: '@navigationEndpoint',
+      searchResultsPath: '@',
+      editProfilePath: '@',
+      pullRightOptions: '@'
+    }
   });
