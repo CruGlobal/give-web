@@ -42,19 +42,7 @@ class NavController{
   }
 
   $onInit() {
-    //init attributes
-    this.navFeed = this.navFeed || '/bin/cru/site-nav.json';
-    this.searchResultsPath = this.searchResultsPath || 'https://www.cru.org/search.html';
-    this.editProfilePath = this.editProfilePath || '/profile.html';
-    this.pullRightOptions = this.pullRightOptions || [{
-      title: 'Find Cru Near Me',
-      path: 'https://www.cru.org/communities/locations.html',
-      class: 'nav-near-me'
-    }, {
-      title: 'Cru Around the World',
-      class: 'nav-globe'
-    }];
-
+    this.defineAttributes();
     this.setMenuTemplate();
 
     this.menuPath = {
@@ -97,6 +85,20 @@ class NavController{
 
   $onDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  defineAttributes() {
+    this.navFeed = this.navFeed || '/bin/cru/site-nav.json';
+    this.searchResultsPath = this.searchResultsPath || 'https://www.cru.org/search.html';
+    this.editProfilePath = this.editProfilePath || '/profile.html';
+    this.pullRightOptions = this.pullRightOptions || [{
+        title: 'Find Cru Near Me',
+        path: 'https://www.cru.org/communities/locations.html',
+        class: 'nav-near-me'
+      }, {
+        title: 'Cru Around the World',
+        class: 'nav-globe'
+      }];
   }
 
   setMenuTemplate() {
