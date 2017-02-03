@@ -64,44 +64,40 @@ describe('checkout', () => {
       });
     });
 
-    describe('onSubmit', () => {
-      beforeEach(() => {
-        self.controller.submissionError = {};
+    describe('onPaymentFormStateChange', () => {
+      it('should update paymentFormState if transitioning to a different state', () => {
+        self.controller.paymentFormState = 'unsubmitted';
+        self.controller.onPaymentFormStateChange({ state: 'submitted' });
+        expect(self.controller.paymentFormState).toEqual('submitted');
       });
-      it('should save payment data when success is true and data is defined', () => {
+      it('should save payment data when in the loading state with a payload', () => {
         spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.of(''));
-        self.controller.onSubmit(true, {bankAccount: {}});
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}} });
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
       });
-      it('should save payment data and not change step when success is true, data is defined, and stayOnStep is true', () => {
+      it('should save payment data and not change step when in the loading state with a payload and stayOnStep is true', () => {
         spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.of(''));
-        self.controller.onSubmit(true, {bankAccount: {}}, undefined, true);
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}}, stayOnStep: true });
         expect(self.controller.changeStep).not.toHaveBeenCalled();
-        expect(self.controller.submitSuccess).toEqual(true);
+        expect(self.controller.paymentFormState).toEqual('success');
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
       });
       it('should handle an error saving payment data', () => {
         spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'some error' }));
-        self.controller.onSubmit(true, {bankAccount: {}});
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}} });
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
-        expect(self.controller.submissionError.loading).toEqual(false);
+        expect(self.controller.paymentFormState).toEqual('error');
         expect(self.controller.$log.error.logs[0]).toEqual(['Error saving payment method', { data: 'some error' }]);
-        expect(self.controller.submissionError.error).toEqual('some error');
+        expect(self.controller.paymentFormError).toEqual('some error');
       });
       it('should call changeStep if save was successful and there was no data (assumes another component saved the data)', () => {
         spyOn(self.controller, 'changeStep');
-        self.controller.onSubmit(true);
+        self.controller.onPaymentFormStateChange({ state: 'loading' });
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
-      });
-      it('should set submitted to false if save was unsuccessful', () => {
-        self.controller.submissionError.loading = true;
-        self.controller.onSubmit(false, undefined, 'some error');
-        expect(self.controller.submissionError.loading).toEqual(false);
-        expect(self.controller.submissionError.error).toEqual('some error');
       });
     });
   });

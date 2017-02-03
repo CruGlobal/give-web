@@ -40,48 +40,45 @@ describe('editRecurringGiftsModal', () => {
       });
     });
 
-    describe('onSubmit', () => {
+    describe('onPaymentFormStateChange', () => {
+      it('should update the paymentFormState', () => {
+        self.controller.paymentFormState = 'unsubmitted';
+        self.controller.onPaymentFormStateChange({ state: 'submitted' });
+        expect(self.controller.paymentFormState).toEqual('submitted');
+      });
       it('should save a new payment method to the profile service', () => {
         spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.of('payment method response'));
-        self.controller.onSubmit(true, 'some payment method');
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: 'some payment method' });
         expect(self.controller.profileService.addPaymentMethod).toHaveBeenCalledWith('some payment method');
         expect(self.controller.next).toHaveBeenCalled();
-        expect(self.controller.submissionError.error).toEqual('');
+        expect(self.controller.paymentFormState).toEqual('loading');
       });
       it('should handle an error saving a new payment method to the profile service', () => {
         spyOn(self.controller.profileService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'payment method error' }));
-        self.controller.onSubmit(true, 'some payment method');
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: 'some payment method' });
         expect(self.controller.profileService.addPaymentMethod).toHaveBeenCalledWith('some payment method');
-        expect(self.controller.$log.error.logs[0]).toEqual(['Error saving new payment method', { data: 'payment method error' }]);
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error adding/updating payment method', { data: 'payment method error' }]);
         expect(self.controller.next).not.toHaveBeenCalled();
-        expect(self.controller.submitted).toEqual(false);
-        expect(self.controller.submissionError.error).toEqual('payment method error');
+        expect(self.controller.paymentFormState).toEqual('error');
+        expect(self.controller.paymentFormError).toEqual('payment method error');
       });
       it('should save an existing payment method to the profile service', () => {
         self.controller.paymentMethod = { self: { uri: 'paymentMethodUri'} };
         spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.of(null));
-        self.controller.onSubmit(true, 'some payment method');
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: 'some payment method' });
         expect(self.controller.profileService.updatePaymentMethod).toHaveBeenCalledWith({ self: { uri: 'paymentMethodUri'} }, 'some payment method');
         expect(self.controller.next).toHaveBeenCalled();
-        expect(self.controller.submissionError.error).toEqual('');
+        expect(self.controller.paymentFormState).toEqual('loading');
       });
       it('should handle an error saving an existing payment method to the profile service', () => {
         self.controller.paymentMethod = { self: { uri: 'paymentMethodUri'} };
         spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.throw({ data: 'payment method error' }));
-        self.controller.onSubmit(true, 'some payment method');
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: 'some payment method' });
         expect(self.controller.profileService.updatePaymentMethod).toHaveBeenCalledWith({ self: { uri: 'paymentMethodUri'} }, 'some payment method');
-        expect(self.controller.$log.error.logs[0]).toEqual(['Error updating payment method', { data: 'payment method error' }]);
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error adding/updating payment method', { data: 'payment method error' }]);
         expect(self.controller.next).not.toHaveBeenCalled();
-        expect(self.controller.submitted).toEqual(false);
-        expect(self.controller.submissionError.error).toEqual('payment method error');
-      });
-      it('should the case where success if false and change submitted back to false', () => {
-        spyOn(self.controller.profileService, 'addPaymentMethod');
-        self.controller.onSubmit(false);
-        expect(self.controller.profileService.addPaymentMethod).not.toHaveBeenCalled();
-        expect(self.controller.next).not.toHaveBeenCalled();
-        expect(self.controller.submitted).toEqual(false);
-        expect(self.controller.submissionError.error).toEqual('');
+        expect(self.controller.paymentFormState).toEqual('error');
+        expect(self.controller.paymentFormError).toEqual('payment method error');
       });
     });
   });

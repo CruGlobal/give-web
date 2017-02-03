@@ -12,10 +12,6 @@ class PaymentMethodFormModalController {
   constructor() {
 
   }
-
-  onSubmit(success, data){
-    this.resolve.onSubmit({success: success, data: data});
-  }
 }
 
 export default angular

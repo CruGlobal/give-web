@@ -38,8 +38,6 @@ describe( 'delete payment method modal', function () {
   it( 'to be defined', function () {
     expect( self.controller ).toBeDefined();
     expect( self.controller.loading).toEqual( false );
-    expect( self.controller.submitted).toEqual( false );
-    expect( self.controller.submissionError.error).toEqual( '' );
   } );
 
   describe( '$onInit()', () => {
@@ -118,6 +116,7 @@ describe( 'delete payment method modal', function () {
       spyOn( self.controller, 'setView' );
       self.controller.changeView(true);
       expect( self.controller.setView ).toHaveBeenCalled();
+      expect(self.controller.deletionError).toEqual('');
     } );
     it( 'changes \'view\' and \'confirm text\' properties', () => {
       self.controller.deleteOption = '1';
@@ -186,7 +185,7 @@ describe( 'delete payment method modal', function () {
   } );
 
   describe( 'updateRecurringGifts()', () => {
-    it('make an successful API call to update recurrng gifts and delete payment method', () => {
+    it('make an successful API call to update recurring gifts and delete payment method', () => {
       spyOn(self.controller, 'deletePaymentMethod');
       self.controller.donationsService.updateRecurringGifts.and.returnValue(Observable.of('data'));
       self.controller.updateRecurringGifts();
@@ -199,16 +198,22 @@ describe( 'delete payment method modal', function () {
       }));
 
       self.controller.updateRecurringGifts();
-      expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.deletionError).toEqual('updateGifts');
       expect(self.controller.$log.error.logs[0]).toEqual(['Error updating recurring gifts before deleting old payment method', {
         data: 'some error'
       }]);
     });
   } );
 
-  describe( 'savePaymentMethod()', () => {
+  describe( 'onPaymentFormStateChange()', () => {
     beforeEach(() => {
       spyOn(self.controller, 'changeView');
+    });
+
+    it('should update paymentFormState', () => {
+      self.controller.paymentFormState = 'unsubmitted';
+      self.controller.onPaymentFormStateChange({ state: 'submitted' });
+      expect(self.controller.paymentFormState).toEqual('submitted');
     });
 
     it('should save new payment method', () => {
@@ -225,38 +230,24 @@ describe( 'delete payment method modal', function () {
         }
       };
       self.controller.profileService.addPaymentMethod.and.returnValue(Observable.of(responseData));
-      self.controller.savePaymentMethod(true, 'some data');
+      self.controller.onPaymentFormStateChange({ state: 'loading', payload: 'some data' });
       expect(self.controller.profileService.addPaymentMethod).toHaveBeenCalledWith('some data');
       expect(self.controller.selectedPaymentMethod).toEqual(jasmine.objectContaining(responseData));
       expect(self.controller.filteredPaymentMethods[0]).toEqual(jasmine.objectContaining(responseData));
       expect(self.controller.resolve.paymentMethodsList[1]).toEqual(jasmine.objectContaining(responseData));
       expect(self.controller.deleteOption).toEqual('1');
       expect(self.controller.changeView).toHaveBeenCalled();
-      expect(self.controller.submitted).toEqual(false);
-      expect(self.controller.loading).toEqual(false);
-      expect(self.controller.submissionError.loading).toEqual(false);
-    });
-
-    it('should not make a call', () => {
-      self.controller.profileService.addPaymentMethod.and.returnValue(Observable.of({}));
-      self.controller.savePaymentMethod(false);
-      expect(self.controller.profileService.addPaymentMethod).not.toHaveBeenCalled();
-      expect(self.controller.changeView).not.toHaveBeenCalled();
-      expect(self.controller.loading).toEqual(false);
-      expect(self.controller.submissionError.loading).toEqual(false);
     });
 
     it('should fail and throw error', () => {
       self.controller.profileService.addPaymentMethod.and.returnValue(Observable.throw({
         data: 'some error'
       }));
-      self.controller.savePaymentMethod(true, 'some data');
+      self.controller.onPaymentFormStateChange({ state: 'loading', payload: 'some data' });
       expect(self.controller.profileService.addPaymentMethod).toHaveBeenCalledWith('some data');
-      expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.paymentFormState).toEqual('error');
+      expect(self.controller.paymentFormError).toEqual('some error');
       expect(self.controller.changeView).not.toHaveBeenCalled();
-      expect(self.controller.submitted).toEqual(false);
-      expect(self.controller.loading).toEqual(false);
-      expect(self.controller.submissionError.loading).toEqual(false);
       expect(self.controller.$log.error.logs[0]).toEqual(['Error saving new payment method in delete payment method modal', {
         data: 'some error'
       }]);
@@ -296,7 +287,7 @@ describe( 'delete payment method modal', function () {
         data: 'some error'
       }));
       self.controller.deletePaymentMethod();
-      expect(self.controller.submissionError.error).toBe('some error');
+      expect(self.controller.deletionError).toEqual('delete');
       expect(self.controller.$log.error.logs[0]).toEqual(['Error deleting payment method', {
         data: 'some error'
       }]);

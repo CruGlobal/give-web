@@ -21,7 +21,7 @@ class PaymentMethodController{
     this.$uibModal = $uibModal;
     this.profileService = profileService;
     this.imgDomain = envService.read('imgDomain');
-    this.submissionError = {error: ''};
+    this.paymentFormResolve = {};
     this.analyticsFactory = analyticsFactory;
   }
 
@@ -39,26 +39,27 @@ class PaymentMethodController{
       component: 'paymentMethodFormModal',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
+        paymentForm: this.paymentFormResolve,
         paymentMethod: this.model,
         mailingAddress: this.mailingAddress,
-        submissionError: this.submissionError,
-        onSubmit: () => params => this.onSubmit(params)
+        onPaymentFormStateChange: () => params => this.onPaymentFormStateChange(params.$event)
       }
     });
   }
 
-  onSubmit(e){
-    if(e.success && e.data) {
-      this.profileService.updatePaymentMethod(this.model, e.data)
+  onPaymentFormStateChange($event){
+    this.paymentFormResolve.state = $event.state;
+    if($event.state === 'loading' && $event.payload){
+      this.profileService.updatePaymentMethod(this.model, $event.payload)
         .subscribe(() => {
             let editedData = {};
-            if(e.data.creditCard) {
-              editedData = e.data.creditCard;
-              editedData['card-number'] = e.data.paymentMethodNumber ? e.data.paymentMethodNumber : editedData['card-number'];
+            if($event.payload.creditCard) {
+              editedData = $event.payload.creditCard;
+              editedData['card-number'] = $event.payload.paymentMethodNumber ? $event.payload.paymentMethodNumber : editedData['card-number'];
               editedData.address = formatAddressForTemplate(editedData.address);
             } else {
-              editedData = e.data.bankAccount;
-              editedData['display-account-number'] = e.data.paymentMethodNumber ? e.data.paymentMethodNumber : editedData['display-account-number'];
+              editedData = $event.payload.bankAccount;
+              editedData['display-account-number'] = $event.payload.paymentMethodNumber ? $event.payload.paymentMethodNumber : editedData['display-account-number'];
             }
             for(let key in editedData){
               this.model[key] = editedData[key];
@@ -67,18 +68,16 @@ class PaymentMethodController{
               show: true,
               type: 'paymentMethodUpdated'
             };
-            this.submissionError.loading = false;
+            this.paymentFormResolve.state = 'unsubmitted';
             this.editPaymentMethodModal.close();
             this.analyticsFactory.setEvent('add payment method');
           },
           error => {
             this.$log.error('Error updating payment method', error);
-            this.submissionError.loading = false;
-            this.submissionError.error = error.data;
+            this.paymentFormResolve.state = 'error';
+            this.paymentFormResolve.error = error.data;
           }
         );
-    } else {
-      this.submissionError.loading = false;
     }
   }
 

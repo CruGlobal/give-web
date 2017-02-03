@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-environment';
 import 'angular-messages';
 import toString from 'lodash/toString';
+import get from 'lodash/get';
 
 import showErrors from 'common/filters/showErrors.filter';
 
@@ -35,7 +36,7 @@ class BankAccountController{
   }
 
   $onChanges(changes){
-    if(changes.submitted && changes.submitted.currentValue === true){
+    if(get(changes, 'paymentFormState.currentValue') === 'submitted'){
       this.savePayment();
     }
   }
@@ -89,23 +90,28 @@ class BankAccountController{
     this.bankPaymentForm.$setSubmitted();
     if(this.bankPaymentForm.$valid){
       let ccpAccountNumber = this.paymentMethod && !this.bankPayment.accountNumber ? '' : new (this.ccp.BankAccountNumber)(this.bankPayment.accountNumber).encrypt();
-      this.onSubmit({
-        success: true,
-        data: {
-          bankAccount: {
-            'account-type': this.bankPayment.accountType,
-            'bank-name': this.bankPayment.bankName,
-            'encrypted-account-number': ccpAccountNumber,
-            'routing-number': this.bankPayment.routingNumber
-          },
-          paymentMethodNumber: this.bankPayment.accountNumber ? this.bankPayment.accountNumber.slice(-4) : false
+      this.onPaymentFormStateChange({
+        $event: {
+          state: 'loading',
+          payload: {
+            bankAccount: {
+              'account-type': this.bankPayment.accountType,
+              'bank-name': this.bankPayment.bankName,
+              'encrypted-account-number': ccpAccountNumber,
+              'routing-number': this.bankPayment.routingNumber
+            },
+            paymentMethodNumber: this.bankPayment.accountNumber ? this.bankPayment.accountNumber.slice(-4) : false
+          }
         }
       });
     }else{
-      this.onSubmit({success: false});
+      this.onPaymentFormStateChange({
+        $event: {
+          state: 'unsubmitted'
+        }
+      });
     }
   }
-
 }
 
 export default angular
@@ -121,8 +127,8 @@ export default angular
     controller: BankAccountController,
     templateUrl: template.name,
     bindings: {
-      submitted: '<',
+      paymentFormState: '<',
       paymentMethod: '<',
-      onSubmit: '&'
+      onPaymentFormStateChange: '&'
     }
   });

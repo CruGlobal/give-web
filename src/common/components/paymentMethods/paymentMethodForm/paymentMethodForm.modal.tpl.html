@@ -1,5 +1,3 @@
-<loading type="overlay" ng-if="$ctrl.resolve.submissionError.loading"></loading>
-
 <div class="modal-header">
   <div class="container-fluid">
     <div class="row">
@@ -26,13 +24,17 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <payment-method-form on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.resolve.submissionError" payment-method="$ctrl.resolve.paymentMethod" mailing-address="$ctrl.resolve.mailingAddress"></payment-method-form>
+        <payment-method-form payment-form-state="$ctrl.resolve.paymentForm.state" payment-form-error="$ctrl.resolve.paymentForm.error" on-payment-form-state-change="$ctrl.resolve.onPaymentFormStateChange({$event: $event})" payment-method="$ctrl.resolve.paymentMethod" mailing-address="$ctrl.resolve.mailingAddress"></payment-method-form>
       </div>
     </div>
 
     <div class="row">
       <div class="col-xs-12">
-        <button id="saveChangesButton" type="button" class="btn btn-primary pull-right" ng-click="$ctrl.resolve.submissionError.loading = true;" translate>
+        <button type="button"
+                id="saveChangesButton"
+                class="btn btn-primary pull-right"
+                ng-click="$ctrl.resolve.onPaymentFormStateChange({$event: {state: 'submitted'}})"
+                ng-disabled="$ctrl.resolve.paymentForm.state === 'loading' || $ctrl.resolve.paymentForm.state === 'success'">
           <span ng-if="!$ctrl.resolve.paymentMethod" translate>Add Payment Method</span>
           <span ng-if="$ctrl.resolve.paymentMethod" translate>Update Payment Method</span>
         </button>

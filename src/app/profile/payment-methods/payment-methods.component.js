@@ -20,8 +20,7 @@ class PaymentMethodsController {
     this.$uibModal = $uibModal;
     this.paymentMethod = 'bankAccount';
     this.profileService = profileService;
-    this.loading = false;
-    this.submissionError = {error: ''};
+    this.paymentFormResolve = {};
     this.successMessage = { show: false };
     this.$timeout = $timeout;
     this.$window = $window;
@@ -42,7 +41,6 @@ class PaymentMethodsController {
   $onInit(){
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
-        this.loading = true;
         this.loadPaymentMethods();
         this.loadDonorDetails();
       },
@@ -66,17 +64,18 @@ class PaymentMethodsController {
   }
 
   loadPaymentMethods() {
+    this.loading = true;
+    this.loadingError = false;
     this.profileService.getPaymentMethodsWithDonations()
       .subscribe(
         data => {
-          this.submissionError.error = '';
           this.loading = false;
           this.paymentMethods = data;
         },
         error => {
           this.loading = false;
-          this.submissionError.error = 'Failed retrieving payment methods.';
-          this.$log.error(this.submissionError.error, error);
+          this.loadingError = true;
+          this.$log.error('Error loading payment methods', error);
         }
       );
   }
@@ -87,12 +86,12 @@ class PaymentMethodsController {
       backdrop: 'static',
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
+        paymentForm: this.paymentFormResolve,
         mailingAddress: this.mailingAddress,
-        submissionError: this.submissionError,
-        onSubmit: () => params => this.onSubmit(params)
+        onPaymentFormStateChange: () => param => this.onPaymentFormStateChange(param.$event)
       }
     });
-    this.paymentMethodFormModal.result.then((data) => {
+    this.paymentMethodFormModal.result.then(data => {
       this.successMessage = {
         show: true,
         type: 'paymentMethodAdded'
@@ -101,39 +100,36 @@ class PaymentMethodsController {
       this.paymentMethods.push(data);
       this.$timeout(()=>{
         this.successMessage.show = false;
-      },60000);
+      }, 60000);
     }, angular.noop);
   }
 
-  onSubmit(e) {
-    if(e.success && e.data) {
-      this.profileService.addPaymentMethod(e.data)
-        .subscribe((data) => {
+  onPaymentFormStateChange($event) {
+    this.paymentFormResolve.state = $event.state;
+    if($event.state === 'loading' && $event.payload){
+      this.profileService.addPaymentMethod($event.payload)
+        .subscribe(data => {
             data.address = data.address && formatAddressForTemplate(data.address);
-            this.submissionError.loading = false;
             this.paymentMethodFormModal.close(data);
-
           },
-          (error) => {
-            this.submissionError.loading = false;
-            this.submissionError.error = error.data;
+          error => {
             this.$log.error('Error adding payment method',error);
+            this.paymentFormResolve.state = 'error';
+            this.paymentFormResolve.error = error.data;
           });
-    } else {
-      this.submissionError.loading = false;
     }
   }
 
   onDelete(){
     this.successMessage.show = true;
     this.successMessage.type = 'paymentMethodDeleted';
-    this.$timeout(()=>{
+    this.$timeout(() => {
       this.successMessage.show = false;
-    },60000);
+    }, 60000);
   }
 
   isCard(paymentMethod) {
-    return paymentMethod['card-number'] ? true : false;
+    return !!paymentMethod['card-number'];
   }
 
   signedOut( event ) {
