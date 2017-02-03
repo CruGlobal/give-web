@@ -139,12 +139,19 @@ describe( 'nav', function () {
   describe( 'giftAddedToCart()', () => {
     beforeEach( () => {
       $ctrl.cartOpen = false;
+      $ctrl.mobileTab = 'nav';
+      $ctrl.mobileNavOpen = false;
     } );
 
     it( 'scrolls to top and opens nav cart when giftAdded', () => {
       $ctrl.giftAddedToCart();
       expect( $ctrl.$window.scrollTo ).toHaveBeenCalledWith( 0, 0 );
       expect( $ctrl.cartOpen ).toEqual( true );
+
+      $ctrl.menuType = 'mobile';
+      $ctrl.giftAddedToCart();
+      expect( $ctrl.mobileTab ).toEqual( 'cart' );
+      expect( $ctrl.mobileNavOpen ).toEqual( true );
     } );
   } );
 
