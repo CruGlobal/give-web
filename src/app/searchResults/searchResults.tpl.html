@@ -54,7 +54,7 @@
                             <a id="allOpportunitiesLink" href="" ng-click="$ctrl.requestSearch()" translate>All Giving Opportunities</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
-                            <a id="peopleLink" href="" ng-click="$ctrl.requestSearch('people')" translate>People</a>
+                            <a id="peopleLink" href="" ng-click="$ctrl.requestSearch('people')" translate>Missionaries</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'ministries'}">
                             <a id="ministriesLink" href="" ng-click="$ctrl.requestSearch('ministries')" translate>Ministries</a>
@@ -113,7 +113,7 @@
 
                 <div ng-repeat="(facet,hits) in $ctrl.searchResults | groupBy:'facet'">
                   <h3 class="is-results-divider" ng-switch="facet">
-                    <span ng-switch-when="person" translate>People</span>
+                    <span ng-switch-when="person" translate>Missionaries</span>
                     <span ng-switch-when="ministry" translate>Ministries</span>
                     <span ng-switch-when="featured" translate>Featured Opportunities</span>
                   </h3>
