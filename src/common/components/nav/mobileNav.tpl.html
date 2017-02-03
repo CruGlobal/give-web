@@ -17,36 +17,36 @@
     </div>
   </div>
 
-  <div id="mobile-navigation" ng-class="{'open': $ctrl.mobileNavOpen, 'hidden': !$ctrl.mobileNavOpen}" ng-init="mobileTab = 'nav'">
+  <div id="mobile-navigation" ng-class="{'open': $ctrl.mobileNavOpen, 'hidden': !$ctrl.mobileNavOpen}" ng-init="$ctrl.mobileTab = 'nav'">
     <ul class="menu-icons nav nav-tabs" role="tablist">
-      <li role="presentation" ng-class="{'active': mobileTab === 'nav'}">
-        <a href="" ng-click="mobileTab = 'nav'; ($ctrl.menuPath.main.length ? $ctrl.menuPath.main.pop() : $ctrl.menuPath.main = []);">
+      <li role="presentation" ng-class="{'active': $ctrl.mobileTab === 'nav'}">
+        <a href="" ng-click="$ctrl.mobileTab = 'nav'; ($ctrl.menuPath.main.length ? $ctrl.menuPath.main.pop() : $ctrl.menuPath.main = []);">
           <img class="menu-icon-navigation"
                ng-src="{{$ctrl.imgDomain + '/assets/img/' + ($ctrl.menuPath.main.length > 0 ? 'mobile-menu-back-icon.png' : 'mobile-menu-hamburger-icon.png')}}">
         </a>
       </li>
-      <li role="presentation" ng-class="{'active': mobileTab === 'search'}">
-        <a href="" ng-click="mobileTab = 'search'">
+      <li role="presentation" ng-class="{'active': $ctrl.mobileTab === 'search'}">
+        <a href="" ng-click="$ctrl.mobileTab = 'search'">
           <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-search-icon.png">
         </a>
       </li>
-      <li role="presentation" ng-class="{'active': mobileTab === 'location'}">
-        <a href="" ng-click="mobileTab = 'location'">
+      <li role="presentation" ng-class="{'active': $ctrl.mobileTab === 'location'}">
+        <a href="" ng-click="$ctrl.mobileTab = 'location'">
           <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-location-icon.png">
         </a>
       </li>
-      <li role="presentation" ng-class="{'active': mobileTab === 'global'}">
-        <a href="" ng-click="mobileTab = 'global'; $ctrl.menuPath.global = [];">
+      <li role="presentation" ng-class="{'active': $ctrl.mobileTab === 'global'}">
+        <a href="" ng-click="$ctrl.mobileTab = 'global'; $ctrl.menuPath.global = [];">
           <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-globe-icon.png">
         </a>
       </li>
-      <li role="presentation" ng-class="{'active': mobileTab === 'cart'}">
-        <a href="" ng-click="mobileTab = 'cart'; $ctrl.cartOpened()">
+      <li role="presentation" ng-class="{'active': $ctrl.mobileTab === 'cart'}">
+        <a href="" ng-click="$ctrl.mobileTab = 'cart'; $ctrl.cartOpened()">
           <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-cart-icon.png">
         </a>
       </li>
-      <li role="presentation" ng-class="{'active': mobileTab === 'more'}">
-        <a href="" ng-click="mobileTab = 'more'">
+      <li role="presentation" ng-class="{'active': $ctrl.mobileTab === 'more'}">
+        <a href="" ng-click="$ctrl.mobileTab = 'more'">
           <img ng-src="{{$ctrl.imgDomain}}/assets/img/mobile-menu-ellipsis-icon.png">
         </a>
       </li>
@@ -54,14 +54,14 @@
 
 
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'nav'">
+      <div role="tabpanel" class="tab-pane active" ng-if="$ctrl.mobileTab === 'nav'">
         <div class="main-menu-container">
           <ul class="main-menu" ng-style="{'left': (($ctrl.menuPath.main.length * -100) + '%')}">
             <nav-mobile-level structure="$ctrl.menuStructure.main" level="0" path="$ctrl.menuPath.main"></nav-mobile-level>
           </ul>
         </div>
       </div>
-      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'search'">
+      <div role="tabpanel" class="tab-pane active" ng-if="$ctrl.mobileTab === 'search'">
         <form id="mob-search" ng-submit="$ctrl.cruSearch(mobileSearchTerm)">
           <div class="form-group">
             <input type="text" class="form-control form-control-subtle text-center"
@@ -71,24 +71,24 @@
           </div>
         </form>
       </div>
-      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'location'">
+      <div role="tabpanel" class="tab-pane active" ng-if="$ctrl.mobileTab === 'location'">
         <form id="mob-nearme" method="get" action="https://www.cru.org/locator/colleges.html">
           <div class="form-group">
             <input type="text" class="form-control form-control-subtle text-center" name="q" placeholder="FIND CRU NEAR ME">
           </div>
         </form>
       </div>
-      <div role="tabpanel" class="tab-pane active" id="mob-global" ng-if="mobileTab === 'global'">
+      <div role="tabpanel" class="tab-pane active" id="mob-global" ng-if="$ctrl.mobileTab === 'global'">
         <div class="main-menu-container global-menu">
           <ul class="main-menu main-menu-global" ng-style="{'left': (($ctrl.menuPath.global.length * -100) + '%')}">
             <nav-mobile-level structure="$ctrl.menuStructure.global" level="0" path="$ctrl.menuPath.global"></nav-mobile-level>
           </ul>
         </div>
       </div>
-      <div role="tabpanel" class="tab-pane active" ng-show="mobileTab === 'cart'">
+      <div role="tabpanel" class="tab-pane active" ng-show="$ctrl.mobileTab === 'cart'">
         <nav-cart mobile="true"></nav-cart>
       </div>
-      <div role="tabpanel" class="tab-pane active" ng-if="mobileTab === 'more'">
+      <div role="tabpanel" class="tab-pane active" ng-if="$ctrl.mobileTab === 'more'">
         <ul id="mob-more">
           <li>
             <a href="">

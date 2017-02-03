@@ -110,8 +110,13 @@ class NavController{
   }
 
   giftAddedToCart() {
-    this.$window.scrollTo(0, 0);
-    this.cartOpen = true;
+    if(this.menuType === 'mobile'){
+      this.mobileNavOpen = true;
+      this.mobileTab = 'cart';
+    }else{
+      this.$window.scrollTo(0, 0);
+      this.cartOpen = true;
+    }
   }
 
   cartOpened(){
