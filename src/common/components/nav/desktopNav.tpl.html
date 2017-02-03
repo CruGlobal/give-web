@@ -41,7 +41,7 @@
           <a uib-dropdown-toggle></a>
           <ul class="pull-right" uib-dropdown-menu>
             <span class="triangle"></span>
-            <li class="menu" ng-repeat="i in $ctrl.pullRightOptions" ng-class="i.class">
+            <li class="menu" ng-repeat="i in $ctrl.pullRightOptions track by $index" ng-class="i.class">
               <a ng-href="{{i.path}}" ng-click="!i.path && $ctrl.openGlobalWebsitesModal()" translate>{{i.title}}</a>
             </li>
             <!--<li class="menu nav-books"><a href="" translate>Shop Books</a></li>-->
