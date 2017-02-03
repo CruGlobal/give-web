@@ -20,7 +20,7 @@ describe('checkout', () => {
 
         self.controller = $componentController(module.name, {}, {
           onLoad: jasmine.createSpy('onLoad'),
-          onSubmit: jasmine.createSpy('onSubmit')
+          onPaymentFormStateChange: jasmine.createSpy('onPaymentFormStateChange')
         });
       }));
 
@@ -36,17 +36,27 @@ describe('checkout', () => {
         it('should call selectPayment when called with a mock change object', () => {
           spyOn(self.controller, 'selectPayment');
           self.controller.$onChanges({
-            submitted: {
-              currentValue: true
+            paymentFormState: {
+              currentValue: 'submitted'
             }
           });
           expect(self.controller.selectPayment).toHaveBeenCalled();
         });
-        it('should not call selectPayment when submitted hasn\'t changed to true', () => {
+        it('should not call selectPayment when form is unsubmitted', () => {
           spyOn(self.controller, 'selectPayment');
           self.controller.$onChanges({
-            submitted: {
-              currentValue: false
+            paymentFormState: {
+              currentValue: 'unsubmitted'
+            }
+          });
+          expect(self.controller.selectPayment).not.toHaveBeenCalled();
+        });
+        it('should not call selectPayment when paymentMethodFormModal is open', () => {
+          self.controller.paymentMethodFormModal = {};
+          spyOn(self.controller, 'selectPayment');
+          self.controller.$onChanges({
+            paymentFormState: {
+              currentValue: 'submitted'
             }
           });
           expect(self.controller.selectPayment).not.toHaveBeenCalled();
@@ -54,8 +64,8 @@ describe('checkout', () => {
         it('should call loadPaymentMethods when called with a mock change object', () => {
           spyOn(self.controller, 'loadPaymentMethods');
           self.controller.$onChanges({
-            submitSuccess: {
-              currentValue: true
+            paymentFormState: {
+              currentValue: 'success'
             }
           });
           expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
@@ -63,11 +73,19 @@ describe('checkout', () => {
         it('should not call loadPaymentMethods when submitSuccess hasn\'t changed to true', () => {
           spyOn(self.controller, 'loadPaymentMethods');
           self.controller.$onChanges({
-            submitSuccess: {
-              currentValue: false
+            paymentFormState: {
+              currentValue: 'loading'
             }
           });
           expect(self.controller.loadPaymentMethods).not.toHaveBeenCalled();
+        });
+        it('should pass the form error through when paymentFormError changes', () => {
+          self.controller.$onChanges({
+            paymentFormError: {
+              currentValue: 'some error'
+            }
+          });
+          expect(self.controller.paymentFormResolve.error).toEqual('some error');
         });
       });
 
@@ -146,14 +164,15 @@ describe('checkout', () => {
           expect(self.controller.paymentMethodFormModal).toBeDefined();
 
           // Test calling onSubmit
-          self.controller.$uibModal.open.calls.first().args[0].resolve.onSubmit()({ success: true, data: 'some data' });
-          expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: true, data: 'some data', stayOnStep: true });
+          self.controller.$uibModal.open.calls.first().args[0].resolve.onPaymentFormStateChange()({ $event: { state: 'loading', payload: 'some data' } });
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: 'some data', stayOnStep: true } });
         });
-        it('should call onSubmit to clear submissionErrors when the modal closes', () => {
+        it('should call onPaymentFormStateChange to clear submissionErrors when the modal closes', () => {
           spyOn(self.controller.$uibModal, 'open').and.returnValue({ result: Observable.throw('').toPromise() });
           self.controller.openPaymentMethodFormModal();
           self.$timeout(() => {
-            expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false, error: ''});
+            expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'unsubmitted' } });
+            expect(self.controller.paymentMethodFormModal).toBeUndefined();
           }, 0);
         });
       });
@@ -169,14 +188,14 @@ describe('checkout', () => {
           self.controller.orderService.selectPaymentMethod.and.returnValue(Observable.of('success'));
           self.controller.selectPayment();
           expect(self.controller.orderService.selectPaymentMethod).toHaveBeenCalledWith('some uri' );
-          expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
           expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(existingPaymentMethodFlag);
         });
         it('should handle a failed request to save the selected payment', () => {
           self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account' } };
           self.controller.orderService.selectPaymentMethod.and.returnValue(Observable.throw('some error'));
           self.controller.selectPayment();
-          expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false, error: 'some error'});
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'error', error: 'some error' } });
           expect(self.controller.orderService.storeCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error selecting payment method', 'some error']);
         });
@@ -184,7 +203,7 @@ describe('checkout', () => {
           self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account'}, chosen: true };
           self.controller.selectPayment();
           expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled();
-          expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
         });
       });
     });

@@ -26,11 +26,11 @@ class PaymentMethodFormController{
 
   changePaymentType(type){
     this.paymentType = type;
-    this.onSubmit({success: false});
-  }
-
-  onChildSubmit(success, data){
-    this.onSubmit({success: success, data: data});
+    this.onPaymentFormStateChange({
+      $event: {
+        state: 'unsubmitted'
+      }
+    });
   }
 }
 
@@ -45,9 +45,10 @@ export default angular
     controller: PaymentMethodFormController,
     templateUrl: template.name,
     bindings: {
+      paymentFormState: '<',
+      paymentFormError: '<',
       paymentMethod: '<',
       mailingAddress: '<',
-      submissionError: '<',
-      onSubmit: '&'
+      onPaymentFormStateChange: '&'
     }
   });

@@ -32,11 +32,7 @@ class deletePaymentMethodModalController {
     this.view = '';
     this.filteredPaymentMethods = [];
     this.confirmText = '';
-    this.submitted = false;
     this.deleteOption = 0;
-    this.submissionError = {
-      error: ''
-    };
     this.scrollModalToTop = scrollModalToTop;
   }
 
@@ -62,7 +58,8 @@ class deletePaymentMethodModalController {
   }
 
   changeView(goBack){
-    this.submissionError.error = '';
+    this.onPaymentFormStateChange({ state: 'unsubmitted' });
+    this.deletionError = '';
     if(goBack) {
       this.setView();
       return;
@@ -107,26 +104,21 @@ class deletePaymentMethodModalController {
   }
 
   updateRecurringGifts(recurringGifts){
+    this.deletionError = '';
     this.donationsService.updateRecurringGifts(recurringGifts)
       .subscribe(() => {
         this.deletePaymentMethod();
       }, error => {
         this.loading = false;
-        this.submissionError.error = error && error.data;
         this.$log.error('Error updating recurring gifts before deleting old payment method', error);
+        this.deletionError = 'updateGifts';
       });
   }
 
-  savePaymentMethod(success, data){
-    if(data) {
-      this.submissionError.error = '';
-      this.loading = true;
-      this.profileService.addPaymentMethod(data)
-        .finally(() => {
-          this.submitted = false;
-          this.loading = false;
-          this.submissionError.loading = false;
-        })
+  onPaymentFormStateChange($event){
+    this.paymentFormState = $event.state;
+    if($event.state === 'loading' && $event.payload) {
+      this.profileService.addPaymentMethod($event.payload)
         .subscribe(data => {
             data.address = data.address && formatAddressForTemplate(data.address);
             data.recurringGifts = [];
@@ -137,28 +129,28 @@ class deletePaymentMethodModalController {
             this.changeView();
           },
           error => {
-            this.submissionError.error = error && error.data;
             this.$log.error('Error saving new payment method in delete payment method modal', error);
+            this.paymentFormState = 'error';
+            this.paymentFormError = error && error.data;
           });
-    } else if(!success) {
-      this.submissionError.loading = false;
-      this.loading = false;
     }
   }
 
   deletePaymentMethod(){
+    this.deletionError = '';
+    this.loading = true;
     this.profileService.deletePaymentMethod(this.resolve.paymentMethod.self.uri)
       .subscribe(() => {
-        this.loading = false;
-        this.deleteOption !== '3' && this.hasRecurringGifts && this.moveDonationsLocally();
-        this.removePaymentMethodFromList();
-        this.close();
-      },(error) => {
-        this.loading = false;
-        this.submissionError.error = error && error.data;
-        this.$log.error('Error deleting payment method', error);
-        this.setView();
-      });
+          this.loading = false;
+          this.deleteOption !== '3' && this.hasRecurringGifts && this.moveDonationsLocally();
+          this.removePaymentMethodFromList();
+          this.close();
+        },
+        error => {
+          this.loading = false;
+          this.deletionError = 'delete';
+          this.$log.error('Error deleting payment method', error);
+        });
   }
 
   moveDonationsLocally(){

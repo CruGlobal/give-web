@@ -2,18 +2,19 @@
   <div style="height: 100px;" ng-switch-default></div>
 
   <!-- Step 0 -->
-  <step0-payment-method-list ng-switch-when="select-payment-method"
+  <step-0-payment-method-list ng-switch-when="select-payment-method"
                              payment-methods="$ctrl.paymentMethods"
                              dismiss="$ctrl.cancel()"
                              next="$ctrl.next(null, null, paymentMethod)">
-  </step0-payment-method-list>
-  <add-update-payment-method ng-switch-when="add-update-payment-method"
+  </step-0-payment-method-list>
+  <step-0-add-update-payment-method ng-switch-when="add-update-payment-method"
                       previous="$ctrl.previous()"
                       next="$ctrl.next(selected)"
-                      payment-methods="$ctrl.paymentMethods"
+                      dismiss="$ctrl.cancel()"
+                      can-go-back="true"
                       payment-method="$ctrl.paymentMethod"
                       set-loading="$ctrl.setLoading({loading: loading})">
-  </add-update-payment-method>
+  </step-0-add-update-payment-method>
 
   <!-- Step 1 -->
   <suspended-gifts ng-switch-when="suspended"

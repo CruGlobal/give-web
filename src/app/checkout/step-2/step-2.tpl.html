@@ -6,13 +6,13 @@
   </p>
 </div>
 <div class="loading-overlay-parent">
-  <loading type="overlay" ng-if="$ctrl.loadingPaymentMethods || $ctrl.submissionError.loading"></loading>
+  <loading type="overlay" ng-if="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading'"></loading>
   <div ng-if="!$ctrl.existingPaymentMethods">
-    <payment-method-form on-submit="$ctrl.onSubmit(success, data)" submission-error="$ctrl.submissionError" mailing-address="$ctrl.mailingAddress"></payment-method-form>
+    <payment-method-form payment-form-state="$ctrl.paymentFormState" payment-form-error="$ctrl.paymentFormError" on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)" mailing-address="$ctrl.mailingAddress"></payment-method-form>
   </div>
 
   <div ng-if="$ctrl.existingPaymentMethods">
-    <checkout-existing-payment-methods submitted="$ctrl.submitted" submission-error="$ctrl.submissionError" on-submit="$ctrl.onSubmit(success, data, error, stayOnStep)" submit-success="$ctrl.submitSuccess" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)" mailing-address="$ctrl.mailingAddress"></checkout-existing-payment-methods>
+    <checkout-existing-payment-methods payment-form-state="$ctrl.paymentFormState" payment-form-error="$ctrl.paymentFormError" on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)" on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)" mailing-address="$ctrl.mailingAddress"></checkout-existing-payment-methods>
   </div>
 </div>
 
@@ -22,7 +22,7 @@
       <button id="previousStepButton1" class="btn btn-default" ng-click="$ctrl.changeStep({newStep: 'contact'})">Previous Step</button>
     </div>
     <div class="col-sm-5 col-sm-offset-2">
-      <button id="continueCheckoutButton" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = $ctrl.submissionError.loading = true" ng-disabled="$ctrl.loadingPaymentMethods || $ctrl.submissionError.loading">Continue to Review &amp; Submit</button>
+      <button id="continueCheckoutButton" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})" ng-disabled="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading'">Continue to Review &amp; Submit</button>
       <button id="previousStepButton2" class="btn btn-link btn-block visible-xs" ng-click="$ctrl.changeStep({newStep: 'contact'})"><i class="fa fa-angle-left"></i> Previous Step</button>
     </div>
   </div>

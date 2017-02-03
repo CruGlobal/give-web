@@ -89,8 +89,9 @@ describe( 'PaymentMethodsComponent', function () {
         data: 'some error'
       }));
       $ctrl.loadPaymentMethods();
-      expect($ctrl.submissionError.error).toBe('Failed retrieving payment methods.');
+      expect($ctrl.loadingError).toEqual(true);
       expect($ctrl.profileService.getPaymentMethodsWithDonations).toHaveBeenCalled();
+      expect($ctrl.$log.error.logs[0]).toEqual(['Error loading payment methods', { data: 'some error' }]);
     });
   });
 
@@ -109,19 +110,16 @@ describe( 'PaymentMethodsComponent', function () {
   });
 
   describe('addPaymentMethod()', () => {
-    it('should open add Payment Method Modal', () => {
+    it('should open addPaymentMethod Modal', () => {
       $ctrl.paymentMethods = [{},{}];
       $ctrl.addPaymentMethod();
       expect($ctrl.$uibModal.open).toHaveBeenCalled();
-      $ctrl.onSubmit = () => {return 'here';};
-      expect($ctrl.$uibModal.open.calls.first().args[0].resolve.onSubmit()()).toBe('here');
+      spyOn($ctrl, 'onPaymentFormStateChange');
+      $ctrl.$uibModal.open.calls.first().args[0].resolve.onPaymentFormStateChange()({ $event: {} });
+      expect($ctrl.onPaymentFormStateChange).toHaveBeenCalled();
     });
 
     it('should add payment method', () => {
-      let e = {
-        success: true,
-        data: 'some data'
-      };
       let data = {
         address: {
           streetAddress: '123 First St',
@@ -135,30 +133,20 @@ describe( 'PaymentMethodsComponent', function () {
       $ctrl.paymentMethodFormModal = jasmine.createSpyObj('paymentMethodFormModal',['close']);
 
       $ctrl.parentComponent = $ctrl;
-      $ctrl.onSubmit(e);
+      $ctrl.onPaymentFormStateChange({
+        state: 'loading',
+        payload: 'some data'
+      });
       expect($ctrl.paymentMethodFormModal.close).toHaveBeenCalled();
     });
 
     it('should update payment methods list on modal close', () => {
       $ctrl.paymentMethods = [{},{}];
       $ctrl.addPaymentMethod();
-      let callback = () => {};
-      $ctrl.paymentMethodFormModal.result.then(callback);
+      $ctrl.paymentMethodFormModal.result.then(() => {});
       expect($ctrl.paymentMethods.length).toBe(3);
       $ctrl.$timeout.flush();
       expect($ctrl.successMessage.show).toBe(false);
-    });
-
-    it('should fail adding payment method and show error message', () => {
-      let e = {
-        success: true,
-        data: 'some data'
-      };
-      spyOn($ctrl.profileService, 'addPaymentMethod').and.returnValue(Observable.throw({
-        data: 'some error'
-      }));
-      $ctrl.onSubmit(e);
-      expect($ctrl.submissionError.error).toBe('some error');
     });
   });
 
@@ -196,14 +184,23 @@ describe( 'PaymentMethodsComponent', function () {
     });
   });
 
-  describe('onSubmit()', () => {
-    it('should not try to add a payment method if success if false', ()=> {
-      let e = {
-        success: false
-      };
-      spyOn($ctrl.profileService, 'addPaymentMethod');
-      $ctrl.onSubmit(e);
-      expect($ctrl.profileService.addPaymentMethod).not.toHaveBeenCalled();
+  describe('onPaymentFormStateChange()', () => {
+    it('should update paymentFormState', () => {
+      $ctrl.paymentFormResolve.state = 'unsubmitted';
+      $ctrl.onPaymentFormStateChange({ state: 'submitted' });
+      expect($ctrl.paymentFormResolve.state).toEqual('submitted');
+    });
+
+    it('should fail adding payment method and show error message', () => {
+      spyOn($ctrl.profileService, 'addPaymentMethod').and.returnValue(Observable.throw({
+        data: 'some error'
+      }));
+      $ctrl.onPaymentFormStateChange({
+        state: 'loading',
+        payload: 'some data'
+      });
+      expect($ctrl.paymentFormResolve.state).toBe('error');
+      expect($ctrl.paymentFormResolve.error).toBe('some error');
     });
   });
 

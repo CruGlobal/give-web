@@ -27,9 +27,9 @@ describe('bank account form', () => {
     self.outerScope = $rootScope.$new();
     self.$httpBackend = $httpBackend;
 
-    self.outerScope.submitted = false;
-    self.outerScope.onSubmit = () => {};
-    let compiledElement = $compile(angular.element('<bank-account-form submitted="submitted" on-submit="onSubmit(success, data)"></bank-account-form>'))(self.outerScope);
+    self.outerScope.paymentFormState = 'unsubmitted';
+    self.outerScope.onPaymentFormStateChange = () => {};
+    let compiledElement = $compile(angular.element('<bank-account-form payment-form-state="paymentFormState" on-payment-form-state-change="onPaymentFormStateChange($event)"></bank-account-form>'))(self.outerScope);
     self.outerScope.$apply();
     self.controller = compiledElement.controller(module.name);
     self.formController = self.controller.bankPaymentForm;
@@ -51,15 +51,15 @@ describe('bank account form', () => {
     it('should call savePayment when called directly with a mock change object', () => {
       spyOn(self.controller, 'savePayment');
       self.controller.$onChanges({
-        submitted: {
-          currentValue: true
+        paymentFormState: {
+          currentValue: 'submitted'
         }
       });
       expect(self.controller.savePayment).toHaveBeenCalled();
     });
-    it('should call savePayment when submitted changes to true', () => {
+    it('should call savePayment state changes to submitted', () => {
       spyOn(self.controller, 'savePayment');
-      self.outerScope.submitted = true;
+      self.outerScope.paymentFormState = 'submitted';
       self.outerScope.$apply();
       expect(self.controller.savePayment).toHaveBeenCalled();
     });
@@ -119,15 +119,15 @@ describe('bank account form', () => {
   describe('savePayment', () => {
     beforeEach(() => {
       spyOn(self.formController, '$setSubmitted');
-      spyOn(self.controller, 'onSubmit').and.callThrough();
-      spyOn(self.outerScope, 'onSubmit');
+      spyOn(self.controller, 'onPaymentFormStateChange').and.callThrough();
+      spyOn(self.outerScope, 'onPaymentFormStateChange');
     });
 
-    it('should call onSubmit with success false when form is invalid', () => {
+    it('should call onPaymentFormStateChange to change state to unsubmitted when form is invalid', () => {
       self.controller.savePayment();
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
-      expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false});
-      expect(self.outerScope.onSubmit).toHaveBeenCalledWith(false, undefined);
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'unsubmitted'} });
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'unsubmitted'});
     });
     it('should send a request to save the bank account payment info', () => {
       self.controller.bankPayment = {
@@ -148,8 +148,8 @@ describe('bank account form', () => {
         },
         paymentMethodNumber: '9012'
       };
-      expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
-      expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
     });
     it('should send a request to save the bank account payment info with an existing payment method where the accountNumber is empty', () => {
       self.controller.paymentMethod = {};
@@ -171,8 +171,8 @@ describe('bank account form', () => {
         },
         paymentMethodNumber: false
       };
-      expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true, data: expectedData});
-      expect(self.outerScope.onSubmit).toHaveBeenCalledWith(true, expectedData);
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
     });
   });
 

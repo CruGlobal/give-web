@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-messages';
 import toString from 'lodash/toString';
+import get from 'lodash/get';
 import range from 'lodash/range';
 import assign from 'lodash/assign';
 import 'rxjs/add/operator/combineLatest';
@@ -42,7 +43,7 @@ class CreditCardController {
   }
 
   $onChanges(changes) {
-    if (changes.submitted && changes.submitted.currentValue === true) {
+    if(get(changes, 'paymentFormState.currentValue') === 'submitted'){
       this.savePayment();
     }
   }
@@ -120,22 +121,28 @@ class CreditCardController {
     if(this.creditCardPaymentForm.$valid){
       let ccpCreditCardNumber = this.paymentMethod && !this.creditCardPayment.cardNumber ? this.paymentMethod['card-number'] : new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber).encrypt();
       let ccpSecurityCode = this.paymentMethod ? null : new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode).encrypt();
-      this.onSubmit({
-        success: true,
-        data: {
-          creditCard: {
-            address: this.useMailingAddress ? undefined : this.creditCardPayment.address,
-            'card-number': ccpCreditCardNumber,
-            'cardholder-name': this.creditCardPayment.cardholderName,
-            'expiry-month': this.creditCardPayment.expiryMonth,
-            'expiry-year': this.creditCardPayment.expiryYear,
-            ccv: ccpSecurityCode
-          },
-          paymentMethodNumber: this.creditCardPayment.cardNumber ? this.creditCardPayment.cardNumber.slice(-4) : false
+      this.onPaymentFormStateChange({
+        $event: {
+          state: 'loading',
+          payload: {
+            creditCard: {
+              address: this.useMailingAddress ? undefined : this.creditCardPayment.address,
+              'card-number': ccpCreditCardNumber,
+              'cardholder-name': this.creditCardPayment.cardholderName,
+              'expiry-month': this.creditCardPayment.expiryMonth,
+              'expiry-year': this.creditCardPayment.expiryYear,
+              ccv: ccpSecurityCode
+            },
+            paymentMethodNumber: this.creditCardPayment.cardNumber ? this.creditCardPayment.cardNumber.slice(-4) : false
+          }
         }
       });
     }else{
-      this.onSubmit({success: false});
+      this.onPaymentFormStateChange({
+        $event: {
+          state: 'unsubmitted'
+        }
+      });
     }
   }
 }
@@ -154,9 +161,9 @@ export default angular
     controller: CreditCardController,
     templateUrl: template.name,
     bindings: {
-      submitted: '<',
+      paymentFormState: '<',
       paymentMethod: '<',
       mailingAddress: '<',
-      onSubmit: '&'
+      onPaymentFormStateChange: '&'
     }
   });

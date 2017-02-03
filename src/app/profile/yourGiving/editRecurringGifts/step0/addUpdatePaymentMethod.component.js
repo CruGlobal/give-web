@@ -14,8 +14,6 @@ class AddUpdatePaymentMethodsController {
   constructor($log, profileService) {
     this.$log = $log;
     this.profileService = profileService;
-
-    this.submissionError = {error: ''};
   }
 
   $onInit(){
@@ -31,33 +29,20 @@ class AddUpdatePaymentMethodsController {
       });
   }
 
-  onSubmit(success, data) {
-    this.submissionError.error = '';
-
-    if (success && data) {
-      if(this.paymentMethod){
-        this.profileService.updatePaymentMethod(this.paymentMethod, data)
-          .subscribe(() => {
-              this.next();
-            },
-            (error) => {
-              this.$log.error('Error updating payment method', error);
-              this.submitted = false;
-              this.submissionError.error = error.data;
-            });
-      }else {
-        this.profileService.addPaymentMethod(data)
-          .subscribe(() => {
-              this.next();
-            },
-            (error) => {
-              this.$log.error('Error saving new payment method', error);
-              this.submitted = false;
-              this.submissionError.error = error.data;
-            });
-      }
-    }else{
-      this.submitted = false;
+  onPaymentFormStateChange($event) {
+    this.paymentFormState = $event.state;
+    if ($event.state === 'loading') {
+      const request = this.paymentMethod ?
+        this.profileService.updatePaymentMethod(this.paymentMethod, $event.payload) :
+        this.profileService.addPaymentMethod($event.payload);
+      request.subscribe(() => {
+          this.next();
+        },
+        error => {
+          this.$log.error('Error adding/updating payment method', error);
+          this.paymentFormState = 'error';
+          this.paymentFormError = error.data;
+        });
     }
   }
 }
