@@ -1,6 +1,7 @@
 <span ng-switch="$ctrl.paymentMethod.self.type" class="account-management">
   <span ng-switch-when="cru.creditcards.named-credit-card">
     <span ng-switch="$ctrl.paymentMethod['card-type']">
+      &nbsp;
       <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png" ng-switch-when="American Express"/>
       <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/discover-curved-128px.png" ng-switch-when="Discover"/>
       <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/mastercard-curved-128px.png" ng-switch-when="MasterCard"/>
@@ -9,8 +10,10 @@
     </span>
     <strong>{{$ctrl.paymentMethod['card-type']}}</strong>
     <span translate>ends in ****{{$ctrl.paymentMethod['card-number']}}</span>
-    <small class="number" translate>
-      EXP<span class="hidden-xs">IRES</span>
+    <small class="number" ng-class="{'text-danger': $ctrl.expired}">
+      <span class="hidden-xs" ng-if="!$ctrl.expired" translate>EXPIRES</span>
+      <span class="hidden-xs" ng-if="$ctrl.expired" translate>EXPIRED</span>
+      <span class="visible-xs-inline">EXP</span>
       {{$ctrl.paymentMethod['expiry-month']}}/<span class="hidden-xs">{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2}}</span>{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2 : 2}}
     </small>
   </span>

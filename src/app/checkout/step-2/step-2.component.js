@@ -50,7 +50,10 @@ class Step2Controller{
   onPaymentFormStateChange($event){
     this.paymentFormState = $event.state;
     if($event.state === 'loading' && $event.payload){
-      this.orderService.addPaymentMethod($event.payload)
+      const request = $event.update ?
+        this.orderService.updatePaymentMethod($event.paymentMethodToUpdate, $event.payload) :
+        this.orderService.addPaymentMethod($event.payload);
+      request
         .subscribe(() => {
           if($event.stayOnStep){
             this.paymentFormState = 'success';

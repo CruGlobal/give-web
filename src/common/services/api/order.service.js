@@ -3,6 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/pluck';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import toString from 'lodash/toString';
@@ -32,12 +33,12 @@ class Order{
 
   getDonorDetails(){
     return this.cortexApiService.get({
-        path: ['carts', this.cortexApiService.scope, 'default'],
-        zoom: {
-          donorDetails: 'order:donordetails',
-          email: 'order:emailinfo:email'
-        }
-      })
+      path: ['carts', this.cortexApiService.scope, 'default'],
+      zoom: {
+        donorDetails: 'order:donordetails',
+        email: 'order:emailinfo:email'
+      }
+    })
       .map(data => {
         let donorDetails = { name: {}, mailingAddress: {} };
         if(data.donorDetails){
@@ -79,12 +80,12 @@ class Order{
       return Observable.of(this.paymentMethodForms);
     }else{
       return this.cortexApiService.get({
-          path: ['carts', this.cortexApiService.scope, 'default'],
-          zoom: {
-            bankAccount: 'order:paymentmethodinfo:bankaccountform',
-            creditCard: 'order:paymentmethodinfo:creditcardform'
-          }
-        })
+        path: ['carts', this.cortexApiService.scope, 'default'],
+        zoom: {
+          bankAccount: 'order:paymentmethodinfo:bankaccountform',
+          creditCard: 'order:paymentmethodinfo:creditcardform'
+        }
+      })
         .do((data) => {
           this.paymentMethodForms = data;
         });
@@ -130,26 +131,54 @@ class Order{
     }
   }
 
+  updatePaymentMethod(paymentMethod, paymentInfo){
+    //Only supports updating credit cards here
+    paymentInfo = paymentInfo.creditCard;
+
+    if(paymentInfo.address) {
+      paymentInfo.address = formatAddressForCortex(paymentInfo.address);
+    }
+
+    return this.selectPaymentMethod(paymentMethod.selectAction)
+      .mergeMap(() => {
+        return this.cortexApiService.get({
+          path: ['carts', this.cortexApiService.scope, 'default'],
+          zoom: {
+            updateForm: 'order:paymentmethodinfo:creditcardupdateform'
+          }
+        });
+      })
+      .mergeMap(data => {
+        return this.cortexApiService.post({
+          path: this.hateoasHelperService.getLink(data.updateForm, 'updatecreditcardfororderaction'),
+          data: omit(paymentInfo, 'card-number')
+        });
+      });
+  }
+
   getExistingPaymentMethods(){
     return this.cortexApiService.get({
-        path: ['carts', this.cortexApiService.scope, 'default'],
-        zoom: {
-          choices: 'order:paymentmethodinfo:selector:choice[],order:paymentmethodinfo:selector:choice:description',
-          chosen: 'order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
-        }
-      })
-      .map((selector) => {
+      path: ['carts', this.cortexApiService.scope, 'default'],
+      zoom: {
+        choices: 'order:paymentmethodinfo:selector:choice[],order:paymentmethodinfo:selector:choice:description',
+        chosen: 'order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+      }
+    })
+      .map(selector => {
         let paymentMethods = selector.choices || [];
         if(selector.chosen) {
           selector.chosen.description.chosen = true;
           paymentMethods.unshift(selector.chosen);
         }
-        return map(paymentMethods, (paymentMethod) => {
+        return map(paymentMethods, paymentMethod => {
           paymentMethod.description.selectAction = paymentMethod.self.uri;
+          if(paymentMethod.description.address){
+            paymentMethod.description.address = formatAddressForTemplate(paymentMethod.description.address);
+          }
           return paymentMethod.description;
         });
       })
-      .map((paymentMethods) => {
+      .map(paymentMethods => {
         return sortPaymentMethods(paymentMethods);
       });
   }
@@ -163,11 +192,11 @@ class Order{
 
   getCurrentPayment(){
     return this.cortexApiService.get({
-        path: ['carts', this.cortexApiService.scope, 'default'],
-        zoom: {
-          paymentMethod: 'order:paymentmethodinfo:paymentmethod'
-        }
-      })
+      path: ['carts', this.cortexApiService.scope, 'default'],
+      zoom: {
+        paymentMethod: 'order:paymentmethodinfo:paymentmethod'
+      }
+    })
       .pluck('paymentMethod')
       .map((data) => {
         if(data.address){
@@ -189,11 +218,11 @@ class Order{
 
   checkErrors(){
     return this.cortexApiService.get({
-        path: ['carts', this.cortexApiService.scope, 'default'],
-        zoom: {
-          needInfo: 'order:needinfo[]'
-        }
-      })
+      path: ['carts', this.cortexApiService.scope, 'default'],
+      zoom: {
+        needInfo: 'order:needinfo[]'
+      }
+    })
       .map((data) => {
         let needInfo = data.needInfo;
         let errors = map(needInfo, 'name');

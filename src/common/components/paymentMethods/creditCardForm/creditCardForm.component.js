@@ -163,6 +163,7 @@ export default angular
     bindings: {
       paymentFormState: '<',
       paymentMethod: '<',
+      disableCardNumber: '<',
       mailingAddress: '<',
       onPaymentFormStateChange: '&'
     }

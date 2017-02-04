@@ -99,6 +99,13 @@ describe('checkout', () => {
         self.controller.onPaymentFormStateChange({ state: 'loading' });
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
       });
+      it('should update payment data', () => {
+        spyOn(self.controller, 'changeStep');
+        spyOn(self.controller.orderService, 'updatePaymentMethod').and.returnValue(Observable.of(''));
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: {creditCard: {}}, update: true, paymentMethodToUpdate: 'selected payment method' });
+        expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
+        expect(self.controller.orderService.updatePaymentMethod).toHaveBeenCalledWith('selected payment method', {creditCard: {}});
+      });
     });
   });
 });
