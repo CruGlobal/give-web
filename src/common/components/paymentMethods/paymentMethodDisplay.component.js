@@ -22,6 +22,7 @@ export default angular
     controller: PaymentMethodDisplayController,
     templateUrl: template.name,
     bindings: {
-      paymentMethod: '<'
+      paymentMethod: '<',
+      expired: '<'
     }
   });

@@ -7,6 +7,7 @@ import deletePaymentMethodModal from 'common/components/paymentMethods/deletePay
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
+import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
 
 import analyticsFactory from 'app/analytics/analytics.factory';
 
@@ -23,6 +24,7 @@ class PaymentMethodController{
     this.imgDomain = envService.read('imgDomain');
     this.paymentFormResolve = {};
     this.analyticsFactory = analyticsFactory;
+    this.validPaymentMethod = validPaymentMethod;
   }
 
   getExpiration(){

@@ -16,7 +16,7 @@ import RecurringGiftModel from 'common/models/recurringGift.model';
 import profileService from 'common/services/api/profile.service';
 import donationsService from 'common/services/api/donations.service';
 import commonService from 'common/services/api/common.service';
-import validPaymentMethods from 'common/services/paymentHelpers/validPaymentMethods';
+import {validPaymentMethods} from 'common/services/paymentHelpers/validPaymentMethods';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
 import template from './editRecurringGifts.modal.tpl';

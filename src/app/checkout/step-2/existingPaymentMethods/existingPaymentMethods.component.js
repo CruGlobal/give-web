@@ -6,6 +6,7 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 
 import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
+import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 
 import template from './existingPaymentMethods.tpl';
@@ -20,6 +21,7 @@ class ExistingPaymentMethodsController {
     this.orderService = orderService;
     this.$uibModal = $uibModal;
     this.paymentFormResolve = {};
+    this.validPaymentMethod = validPaymentMethod;
   }
 
   $onInit(){
@@ -71,16 +73,20 @@ class ExistingPaymentMethodsController {
     }
   }
 
-  openPaymentMethodFormModal(){
+  openPaymentMethodFormModal(existingPaymentMethod){
     this.paymentMethodFormModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
       backdrop: 'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate.name,
       resolve: {
         paymentForm: this.paymentFormResolve,
+        paymentMethod: existingPaymentMethod,
+        disableCardNumber: !!existingPaymentMethod,
         mailingAddress: this.mailingAddress,
         onPaymentFormStateChange: () => param => {
           param.$event.stayOnStep = true;
+          param.$event.update = !!existingPaymentMethod;
+          param.$event.paymentMethodToUpdate = existingPaymentMethod;
           this.onPaymentFormStateChange(param);
         }
       }
