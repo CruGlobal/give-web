@@ -95,6 +95,19 @@ describe( 'nav', function () {
     $httpBackend.flush();
   } );
 
+  it( 'to build sub nav structure with "main" node', () => {
+    $ctrl.defineAttributes();
+    let altNavStructure = angular.copy(navStructure);
+    altNavStructure['main'] = navStructure['/content/cru/us/en'];
+    delete altNavStructure['/content/cru/us/en'];
+
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, altNavStructure );
+    $ctrl.getNav().subscribe( ( structure ) => {
+      expect( structure.main ).toEqual( navStructure['/content/cru/us/en'] );
+    } );
+    $httpBackend.flush();
+  } );
+
   it( 'to build Give sub nav structure', () => {
     $ctrl.defineAttributes();
     $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );

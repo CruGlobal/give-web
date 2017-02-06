@@ -174,20 +174,11 @@ class NavController{
     }))
       .map((response) => {
         let jsonStructure = response.data;
-        let menuStructure = {
-          main: jsonStructure['/content/cru/us/en'],
+        return {
+          main: jsonStructure['/content/cru/us/en'] || jsonStructure['main'],
           global: jsonStructure['/content/cru/us/en/global'],
           give: jsonStructure['/content/give/us/en']
         };
-
-        //add give to main nav
-        menuStructure.main.push({
-          title: 'Give',
-          path: '/give',
-          children: jsonStructure['/content/give/us/en']
-        });
-
-        return menuStructure;
       });
   }
 
@@ -261,6 +252,6 @@ export default angular
       navFeed: '@navigationEndpoint',
       searchResultsPath: '@',
       editProfilePath: '@',
-      pullRightOptions: '@'
+      pullRightOptions: '<'
     }
   });
