@@ -252,6 +252,6 @@ export default angular
       navFeed: '@navigationEndpoint',
       searchResultsPath: '@',
       editProfilePath: '@',
-      pullRightOptions: '@'
+      pullRightOptions: '<'
     }
   });
