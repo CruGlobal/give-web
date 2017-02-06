@@ -174,11 +174,22 @@ class NavController{
     }))
       .map((response) => {
         let jsonStructure = response.data;
-        return {
+        let menuStructure = {
           main: jsonStructure['/content/cru/us/en'] || jsonStructure['main'],
           global: jsonStructure['/content/cru/us/en/global'],
           give: jsonStructure['/content/give/us/en']
         };
+
+        //add give to main nav
+        if(jsonStructure['/content/cru/us/en']){
+          menuStructure.main.push({
+            title: 'Give',
+            path: '/give',
+            children: jsonStructure['/content/give/us/en']
+          });
+        }
+
+        return menuStructure;
       });
   }
 
