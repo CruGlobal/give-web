@@ -381,6 +381,10 @@ describe('recurringGift model', () => {
     it('should return the old draw date when start month and transaction day are unchanged', () => {
       expect(giftModel.nextGiftDate.toString()).toEqual(moment('2015-05-06').toString());
     });
+    it('should handle the case when the parent donation doesn\'t have a next draw date', () => {
+      delete giftModel.parentDonation['next-draw-date'];
+      expect(giftModel.nextGiftDate).toBeUndefined();
+    });
   });
 
   describe('initStartMonth', () => {

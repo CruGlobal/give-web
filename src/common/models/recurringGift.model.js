@@ -1,3 +1,4 @@
+import angular from 'angular';
 import moment from 'moment';
 import find from 'lodash/find';
 
@@ -160,7 +161,7 @@ export default class RecurringGiftModel {
       // We have to take transactionDay into account here when it is modified for monthly gifts since they don't set the updated-start-month/year fields
       giftDate = startDate(this.transactionDay, this.nextDrawDate, 0, this.parentDonation['start-date']['display-value']);
     }else{
-      giftDate = moment(this.parentDonation['next-draw-date']['display-value']);
+      giftDate = this.parentDonation['next-draw-date'] && moment(this.parentDonation['next-draw-date']['display-value']);
     }
     return giftDate;
   }
