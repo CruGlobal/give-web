@@ -595,6 +595,7 @@ describe( 'ProfileComponent', function () {
       spyOn($ctrl,'saveSpouse');
       spyOn($ctrl,'updatePhoneNumbers');
       spyOn($ctrl,'updateMailingAddress');
+      $ctrl.$window.scrollTo = jasmine.createSpy('scrollTo');
       $ctrl.donorEmailForm.$dirty = true;
       $ctrl.spouseEmailForm.$dirty = true;
       $ctrl.donorDetailsForm.$dirty = true;
@@ -608,6 +609,7 @@ describe( 'ProfileComponent', function () {
       expect($ctrl.updateEmail).toHaveBeenCalled();
       expect($ctrl.updatePhoneNumbers).toHaveBeenCalled();
       expect($ctrl.updateMailingAddress).toHaveBeenCalled();
+      expect($ctrl.$window.scrollTo).toHaveBeenCalled();
 
       // $ctrl.donorDetailsForm.$dirty = false;
       $ctrl.addingSpouse = true;

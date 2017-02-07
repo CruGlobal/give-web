@@ -374,6 +374,7 @@ class ProfileController {
     if(this.mailingAddressForm.$dirty && this.mailingAddressForm.$valid) {
       this.updateMailingAddress();
     }
+    this.$window.scrollTo(0, 0);
   }
 
 }
