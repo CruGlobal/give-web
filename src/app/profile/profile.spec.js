@@ -577,7 +577,7 @@ describe( 'ProfileComponent', function () {
 
   describe('loading()', () => {
     it('should return true if any of the forms is loading', () => {
-      $ctrl.donorDetialsLoading = false;
+      $ctrl.donorDetailsLoading = false;
       $ctrl.emailLoading = false;
       $ctrl.mailingAddressLoading = false;
       $ctrl.phonesLoading = false;
