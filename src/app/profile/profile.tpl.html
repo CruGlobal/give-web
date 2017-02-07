@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
 
-        <div ng-if="$ctrl.hasError() && !$ctrl.touched()" class="alert alert-danger" role="alert">
+        <div ng-if="$ctrl.hasError()" class="alert alert-danger" role="alert">
           <p>{{$ctrl.donorDetailsError}}</p>
           <p>{{$ctrl.emailAddressError}}</p>
           <p>{{$ctrl.phoneNumberError}}</p>
@@ -26,7 +26,7 @@
                     <!--Donor Details-->
                     <h4 class="panel-title  border-bottom-small visible">Your Name</h4>
                     <div class="loading-overlay-parent">
-                      <loading type="overlay" ng-if="$ctrl.donorDetialsLoading"></loading>
+                      <loading type="overlay" ng-if="$ctrl.donorDetailsLoading"></loading>
                         <ul class="list-unstyled people-fields">
                         <li>
                           <form name="$ctrl.donorDetailsForm" novalidate>
