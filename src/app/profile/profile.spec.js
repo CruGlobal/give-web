@@ -222,12 +222,12 @@ describe( 'ProfileComponent', function () {
 
   describe('loadEmail()', () => {
     it('should load email on $onInit()', () => {
-      let data = ['donor@email.com','spouse@email.com'];
+      let data = [{ email: 'donor@email.com' }, { email: 'spouse@email.com' }];
 
       spyOn($ctrl.profileService, 'getEmails').and.returnValue(Observable.of(data));
       $ctrl.loadEmail();
-      expect($ctrl.donorEmail).toBe('donor@email.com');
-      expect($ctrl.spouseEmail).toBe('spouse@email.com');
+      expect($ctrl.donorEmail).toEqual({ email: 'donor@email.com' });
+      expect($ctrl.spouseEmail).toEqual({ email: 'spouse@email.com' });
       expect($ctrl.profileService.getEmails).toHaveBeenCalled();
     });
 
@@ -236,8 +236,8 @@ describe( 'ProfileComponent', function () {
 
       spyOn($ctrl.profileService, 'getEmails').and.returnValue(Observable.of(data));
       $ctrl.loadEmail();
-      expect($ctrl.donorEmail).toBe('');
-      expect($ctrl.spouseEmail).toBe('');
+      expect($ctrl.donorEmail).toEqual({ email: '' });
+      expect($ctrl.spouseEmail).toEqual({ email: '' });
       expect($ctrl.profileService.getEmails).toHaveBeenCalled();
     });
 
