@@ -48,6 +48,7 @@ export default angular
     bindings:    {
       year:       '<',
       month:      '<',
-      setLoading: '&'
+      setLoading: '&',
+      onManageGift: '&'
     }
   } );

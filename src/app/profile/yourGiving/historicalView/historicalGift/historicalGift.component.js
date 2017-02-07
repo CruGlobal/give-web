@@ -17,7 +17,7 @@ class HistoricalGift {
   }
 
   manageGift() {
-    // TODO: open manage recurring gift modal
+    this.onManageGift({gift: this.gift});
   }
 }
 
@@ -31,6 +31,7 @@ export default angular
     controller:  HistoricalGift,
     templateUrl: template.name,
     bindings:    {
-      gift: '<'
+      gift: '<',
+      onManageGift: '&'
     }
   } );
