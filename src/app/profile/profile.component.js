@@ -107,8 +107,8 @@ class ProfileController {
     this.profileService.getEmails()
       .subscribe(
         emails => {
-          this.donorEmail = emails ? emails[0] : '';
-          this.spouseEmail = emails ? emails[1] : '';
+          this.donorEmail = emails ? emails[0] : { email: '' };
+          this.spouseEmail = emails ? emails[1] : { email: '' };
           this.emailLoading = false;
         },
         error => {
