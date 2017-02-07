@@ -17,7 +17,6 @@
               <ul class="list-unstyled list-recurring">
                 <li>
                   <h4>{{$ctrl.recipient['year-to-date-amount'] | currency:'$'}}</h4>
-                  <span class="meta">{{$ctrl.currentDate | date:'mediumDate'}}</span>
                 </li>
               </ul>
             </div>
@@ -38,8 +37,18 @@
               <label translate>Recurring Gifts:</label>
               <ul class="list-unstyled list-recurring">
                 <li ng-repeat="recurring in $ctrl.recipient['recurring-donations']['donations']">
-                  <h4 translate>{{recurring['donation-lines'][0].amount | currency:'$'}} {{recurring.rate.recurrence.interval}}</h4>
-                  <span class="meta" ng-if="recurring['next-draw-date']" translate>Next Gift: {{recurring['next-draw-date']['display-value'] | date:'mediumDate'}}</span>
+                  <h4 translate>{{recurring['donation-lines'][0].amount | currency:'$'}}</h4>
+                  <div ng-switch="recurring.rate.recurrence.interval">
+                    <span class="meta" ng-switch-when="Monthly" translate>
+                      Monthly on the {{recurring['recurring-day-of-month'] | ordinal}}
+                    </span>
+                    <div class="u-block" ng-switch-when="Quarterly" translate>
+                      Quarterly on the {{recurring['recurring-day-of-month'] | ordinal}}
+                    </div>
+                    <div class="u-block" ng-switch-when="Annually" translate>
+                      Annually on the {{recurring['recurring-day-of-month'] | ordinal}}
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>

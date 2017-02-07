@@ -143,9 +143,10 @@
                                  filter="$ctrl.recipientFilter">
           </recipient-view>
           <historical-view ng-switch-when="historical"
-                               set-loading="$ctrl.setViewLoading(loading)"
-                               year="$ctrl.historicalFilter.year"
-                               month="$ctrl.historicalFilter.month">
+                           set-loading="$ctrl.setViewLoading(loading)"
+                           on-manage-gift="$ctrl.openEditRecurringGiftsModal()"
+                           year="$ctrl.historicalFilter.year"
+                           month="$ctrl.historicalFilter.month">
           </historical-view>
         </div>
 
