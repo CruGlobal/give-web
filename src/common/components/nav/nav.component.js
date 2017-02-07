@@ -53,7 +53,7 @@ class NavController{
 
     // set sub menu path based on url path
     let path = this.$window.location.pathname ? this.$window.location.pathname.replace('.html', '').split('/') : [];
-    path.shift();
+    path.slice(0, this.submenuSkipLevels + 1);
     this.menuPath.currentPage = angular.copy(path).pop();
     this.menuPath.sub = path.slice(0, 3);
 
@@ -88,6 +88,7 @@ class NavController{
   }
 
   defineAttributes() {
+    this.submenuSkipLevels = Number(this.submenuSkipLevels) || 0;
     this.navFeed = this.navFeed || '/bin/cru/site-nav.json';
     this.searchResultsPath = this.searchResultsPath || 'https://www.cru.org/search.html';
     this.editProfilePath = this.editProfilePath || '/profile.html';
@@ -261,6 +262,7 @@ export default angular
     template: '<ng-include src="$ctrl.templateUrl" ng-resize="$ctrl.setMenuTemplate()"></ng-include>',
     bindings: {
       navFeed: '@navigationEndpoint',
+      submenuSkipLevels: '@',
       searchResultsPath: '@',
       editProfilePath: '@',
       pullRightOptions: '<'
