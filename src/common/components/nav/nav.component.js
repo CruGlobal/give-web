@@ -53,7 +53,7 @@ class NavController{
 
     // set sub menu path based on url path
     let path = this.$window.location.pathname ? this.$window.location.pathname.replace('.html', '').split('/') : [];
-    path.slice(0, this.submenuSkipLevels + 1);
+    path.splice(0, this.submenuSkipLevels + 1);
     this.menuPath.currentPage = angular.copy(path).pop();
     this.menuPath.sub = path.slice(0, 3);
 
