@@ -162,7 +162,9 @@ describe( 'donations service', () => {
           'updated-rate': {recurrence: {interval: ''}},
           'updated-recurring-day-of-month': '',
           'updated-start-month': '',
-          'updated-start-year': ''
+          'updated-start-year': '',
+          'updated-amount': '',
+          'updated-designation-number': ''
         } );
         expect( gifts[0].parentDonation ).toEqual( {
           'donation-lines': jasmine.any(Array),
@@ -198,7 +200,9 @@ describe( 'donations service', () => {
           'updated-rate': {recurrence: {interval: ''}},
           'updated-recurring-day-of-month': '',
           'updated-start-month': '',
-          'updated-start-year': ''
+          'updated-start-year': '',
+          'updated-amount': '',
+          'updated-designation-number': ''
         } );
         expect( gifts[0].parentDonation ).toEqual( {
           'donation-lines': jasmine.any(Array),
@@ -275,7 +279,9 @@ describe( 'donations service', () => {
                   'updated-rate': {recurrence: {interval: ''}},
                   'updated-recurring-day-of-month': '',
                   'updated-start-month': '',
-                  'updated-start-year': ''
+                  'updated-start-year': '',
+                  'updated-amount': '',
+                  'updated-designation-number': ''
                 }
               ],
               rate: {recurrence: {interval: 'Monthly'}},
@@ -309,7 +315,9 @@ describe( 'donations service', () => {
                   'updated-rate': {recurrence: {interval: ''}},
                   'updated-recurring-day-of-month': '',
                   'updated-start-month': '',
-                  'updated-start-year': ''
+                  'updated-start-year': '',
+                  'updated-amount': '',
+                  'updated-designation-number': ''
                 }, {
                   amount: 25,
                   'designation-name': 'David and Margo Neibling (0105987)',
@@ -322,7 +330,9 @@ describe( 'donations service', () => {
                   'updated-rate': {recurrence: {interval: ''}},
                   'updated-recurring-day-of-month': '',
                   'updated-start-month': '',
-                  'updated-start-year': ''
+                  'updated-start-year': '',
+                  'updated-amount': '',
+                  'updated-designation-number': ''
                 }
               ],
               rate: {recurrence: {interval: 'Monthly'}},

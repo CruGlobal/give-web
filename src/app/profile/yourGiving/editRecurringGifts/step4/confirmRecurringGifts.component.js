@@ -1,5 +1,4 @@
 import angular from 'angular';
-import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
 import concat from 'lodash/concat';
 import map from 'lodash/map';
@@ -29,7 +28,6 @@ class ConfirmRecurringGiftsController {
   }
 
   $onInit(){
-    this.recurringGiftChanges = filter(this.recurringGifts, gift => gift.hasChanges());
     this.hasChanges = !isEmpty(this.recurringGiftChanges) || !isEmpty(this.additions);
   }
 
@@ -81,7 +79,7 @@ export default angular
     controller: ConfirmRecurringGiftsController,
     templateUrl: template.name,
     bindings: {
-      recurringGifts: '<',
+      recurringGiftChanges: '<',
       additions: '<',
       dismiss: '&',
       previous: '&',

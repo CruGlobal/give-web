@@ -1,6 +1,7 @@
 import angular from 'angular';
 import moment from 'moment';
 import find from 'lodash/find';
+import defaults from 'lodash/defaults';
 
 import {startMonth, startDate} from 'common/services/giftHelpers/giftDates.service';
 
@@ -14,13 +15,21 @@ export default class RecurringGiftModel {
   }
 
   initializeEmptyFields(){
-    if(!this.gift['updated-rate']){
-      this.gift['updated-rate'] = {
+    defaults(this.gift, {
+      'updated-amount': '',
+      'updated-payment-method-id': '',
+      'updated-rate': {
         recurrence: {
           interval: ''
         }
-      };
-    }
+      },
+      'updated-recurring-day-of-month': '',
+      'updated-start-month': '',
+      'updated-start-year': '',
+      'updated-donation-line-status': '',
+      'updated-designation-number': ''
+    });
+
     if(!this.parentDonation){
       this.parentDonation = {
         rate: {

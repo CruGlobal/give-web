@@ -1,0 +1,45 @@
+<div class="modal-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border-bottom-small">
+          <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+          <h3 translate>Give a new recurring gift</h3>
+          <p translate>Search Missionaries and Ministries</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <gift-search-view selectable="checkbox"
+                          on-selection="$ctrl.onChange(selectedRecipients)"
+                          select-label="{{'Add' | translate}}">
+        </gift-search-view>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row row-no-spacing">
+    <div class="col-xs-6">
+      <button class="btn btn-default"
+         ng-click="$ctrl.previous()"
+         translate>
+        Back
+      </button>
+    </div>
+    <div class="col-xs-6 text-right">
+      <button class="btn btn-primary"
+              ng-click="$ctrl.gatherSelections()"
+              translate>
+        Continue
+      </button>
+    </div>
+  </div>
+</div>
