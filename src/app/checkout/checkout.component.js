@@ -78,7 +78,6 @@ class CheckoutController{
     this.$location.search('step', this.checkoutStep);
 
     this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
-    this.analyticsFactory.pageLoaded();
   }
 
   loadCart(){
@@ -88,9 +87,6 @@ class CheckoutController{
       })
       .subscribe((data) => {
           this.cartData = data;
-          this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
-          this.analyticsFactory.cartView(data);
-          this.analyticsFactory.pageLoaded();
         },
         (error) => {
           this.$log.error("Error loading cart", error);
