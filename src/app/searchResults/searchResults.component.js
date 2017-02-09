@@ -36,6 +36,8 @@ class SearchResultsController {
     this.featuredGroupBy = 'startMonth';
 
     this.requestSearch(this.searchParams.type);
+
+    this.analyticsFactory.pageLoaded();
   }
 
   requestSearch(type){

@@ -20,13 +20,14 @@ let componentName = 'profile';
 class ProfileController {
 
   /* @ngInject */
-  constructor($rootScope, $window, $location, $log, sessionEnforcerService, profileService) {
+  constructor($rootScope, $window, $location, $log, sessionEnforcerService, profileService, analyticsFactory) {
     this.$window = $window;
     this.$log = $log;
     this.$location = $location;
     this.$rootScope = $rootScope;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
+    this.analyticsFactory = analyticsFactory;
     this.phoneNumbers = [];
   }
 
@@ -46,6 +47,8 @@ class ProfileController {
     }, EnforcerModes.donor);
 
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
+
+    this.analyticsFactory.pageLoaded();
   }
 
   $onDestroy() {

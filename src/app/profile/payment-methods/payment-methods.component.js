@@ -14,7 +14,7 @@ import formatAddressForTemplate from 'common/services/addressHelpers/formatAddre
 class PaymentMethodsController {
 
   /* @ngInject */
-  constructor($rootScope, $uibModal, profileService, sessionEnforcerService, $log, $timeout, $window, $location) {
+  constructor($rootScope, $uibModal, profileService, sessionEnforcerService, analyticsFactory, $log, $timeout, $window, $location) {
     this.$log = $log;
     this.$rootScope = $rootScope;
     this.$uibModal = $uibModal;
@@ -27,6 +27,7 @@ class PaymentMethodsController {
     this.paymentMethods = [];
     this.$location = $location;
     this.sessionEnforcerService = sessionEnforcerService;
+    this.analyticsFactory = analyticsFactory
   }
 
   $onDestroy(){
@@ -52,6 +53,8 @@ class PaymentMethodsController {
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
 
     this.loading = true;
+
+    this.analyticsFactory.pageLoaded();
   }
 
   loadDonorDetails() {

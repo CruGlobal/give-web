@@ -9,9 +9,10 @@ import commonModule from 'common/common.module';
 class ReceiptsController {
 
   /* @ngInject */
-  constructor($rootScope,donationsService,sessionEnforcerService,$location,$window,$log) {
+  constructor($rootScope,donationsService,sessionEnforcerService,analyticsFactory,$location,$window,$log) {
     this.donationsService = donationsService;
     this.sessionEnforcerService = sessionEnforcerService;
+    this.analyticsFactory = analyticsFactory;
     this.$location = $location;
     this.$window = $window;
     this.$log = $log;
@@ -34,6 +35,7 @@ class ReceiptsController {
     }, EnforcerModes.donor);
 
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
+    this.analyticsFactory.pageLoaded();
   }
 
   getReceipts(year, tryPreviousYear = false){
