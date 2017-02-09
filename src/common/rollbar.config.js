@@ -33,8 +33,8 @@ function rollbarConfig(envServiceProvider, $provide) {
 
         // Generate message string
         let message = args
-          .map((arg) => {
-            if(arg.message){
+          .map(arg => {
+            if(arg && arg.message){
               return arg.message; // Message came from $ExceptionHandler
             }else{
               return angular.toJson(arg);
