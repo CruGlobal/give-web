@@ -1,6 +1,7 @@
 import angular from 'angular';
 import find from 'lodash/find';
 
+import RecurringGiftModel from 'common/models/recurringGift.model';
 import desigSrc from 'common/directives/desigSrc.directive';
 import donationsService from 'common/services/api/donations.service';
 import profileService from 'common/services/api/profile.service';
@@ -51,6 +52,10 @@ class RecipientGift {
 
   giveNewGift() {
     this.productModalService.configureProduct( this.recipient['designation-number'], {amount: 50} );
+  }
+
+  recurringGift(recurring) {
+    return new RecurringGiftModel(recurring['donation-lines'][0], recurring);
   }
 }
 
