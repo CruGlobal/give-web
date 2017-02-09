@@ -55,11 +55,18 @@ describe('recurringGift model', () => {
     it('should default nested fields if they are undefined', () => {
       let gift = new RecurringGiftModel({});
       expect(gift.gift).toEqual({
+        'updated-amount': '',
+        'updated-payment-method-id': '',
         'updated-rate': {
           recurrence: {
             interval: ''
           }
-        }
+        },
+        'updated-recurring-day-of-month': '',
+        'updated-start-month': '',
+        'updated-start-year': '',
+        'updated-donation-line-status': '',
+        'updated-designation-number': ''
       });
       expect(gift.parentDonation).toEqual({
         rate: {

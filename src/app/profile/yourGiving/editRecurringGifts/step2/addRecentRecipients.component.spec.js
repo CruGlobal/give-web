@@ -30,16 +30,19 @@ describe('editRecurringGiftsModal', () => {
     describe('loadedNoRecentRecipients', () => {
       it('should return true if finished loading recipients and there are no recent recipients', () => {
         self.controller.loadingRecentRecipients = false;
-        self.controller.recentRecipients = null;
-        expect(self.controller.loadedNoRecentRecipients()).toEqual(true);
-        self.controller.recentRecipients = [];
+        self.controller.hasRecentRecipients = false;
         expect(self.controller.loadedNoRecentRecipients()).toEqual(true);
       });
-      it('should return false otherwise', () => {
+      it('should return false if finished loading recipients and there are recent recipients', () => {
         self.controller.loadingRecentRecipients = false;
-        self.controller.recentRecipients = ['recipient'];
+        self.controller.hasRecentRecipients = true;
         expect(self.controller.loadedNoRecentRecipients()).toEqual(false);
+      });
+      it('should return false if still loading', () => {
         self.controller.loadingRecentRecipients = true;
+        self.controller.hasRecentRecipients = true;
+        expect(self.controller.loadedNoRecentRecipients()).toEqual(false);
+        self.controller.hasRecentRecipients = false;
         expect(self.controller.loadedNoRecentRecipients()).toEqual(false);
       });
     });
