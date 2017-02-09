@@ -42,7 +42,7 @@ class deletePaymentMethodModalController {
   }
 
   setView(){
-    this.hasRecurringGifts = this.resolve.paymentMethod.recurringGifts.length !== 0;
+    this.hasRecurringGifts = this.resolve.paymentMethod.recurringGifts && this.resolve.paymentMethod.recurringGifts.length !== 0;
     this.view = this.hasRecurringGifts ? 'manageDonations' : 'confirm';
   }
 
