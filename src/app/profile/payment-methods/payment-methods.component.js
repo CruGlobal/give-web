@@ -27,7 +27,7 @@ class PaymentMethodsController {
     this.paymentMethods = [];
     this.$location = $location;
     this.sessionEnforcerService = sessionEnforcerService;
-    this.analyticsFactory = analyticsFactory
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onDestroy(){
