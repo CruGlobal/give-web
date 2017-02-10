@@ -1,0 +1,2 @@
+--color
+--require browserstack_helper.rb

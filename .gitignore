@@ -11,3 +11,20 @@ jspm_packages
 .sass-cache
 
 src/**/*.tpl.js
+
+# Rails / Ruby
+/.bundle
+vendor/ruby
+/tmp
+/spec/tmp
+
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
+
+# IntelliJ
+*.iml
+.idea/
+
+# Environment
+.env.*
