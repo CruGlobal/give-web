@@ -49,6 +49,7 @@
   a:focus {text-decoration: none;}
 
   .sub-nav-search-icon {
+    top: 0;
     right: 20px;
     bottom: 13px;
     cursor: pointer;
@@ -114,6 +115,9 @@
     line-height: 1em;
     margin: 0;
     padding: 0;
+    max-width: 100%;
+    overflow: auto;
+    white-space: nowrap;
 
     li {
       display: inline-block;
@@ -235,6 +239,9 @@
       width: 40px;
     }
   }
+}
+@media screen and (max-width: 750px) {
+  #sub-navigation .container {width: auto;}
 }
 @media screen and (max-width: 450px) {
   #desktop-navigation .search-icon, #sub-navigation .sub-nav-search-icon {display: none;}
