@@ -19,7 +19,6 @@ function cruSubNav($window) {
       offsetTop = !offsetTop ? subNavigation.offsetTop : offsetTop;
       angular.element($window).bind('scroll', () => {
         subNavigation.className = $window.scrollY > offsetTop ? 'out' : '';
-        //desktopNavigation.className = $window.scrollY > offsetTop ? 'padded' : '';
         desktopNavigation.style['margin-bottom'] =
           ($window.scrollY > offsetTop ?
             subNavigation.clientHeight : 0) + 'px';
