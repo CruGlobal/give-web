@@ -284,13 +284,6 @@ function analyticsFactory($window, $timeout, sessionService) {
       $timeout(function() {
         $window.s.t();
         $window.s.clearVars();
-        $window.digitalData = {
-          page: {
-            attributes: {
-              angularLoaded: angularLoaded
-            }
-          }
-        };
       }, 1000);
     },
     purchase: function(donorDetails, cartData) {
