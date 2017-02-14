@@ -50,6 +50,7 @@ class CheckoutController{
     });
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
     this.initStepParam();
+    this.analyticsFactory.pageLoaded();
   }
 
   $onDestroy() {
