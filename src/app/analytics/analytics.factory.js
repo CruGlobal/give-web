@@ -261,9 +261,9 @@ function analyticsFactory($window, $timeout, sessionService) {
       this.pageLoaded();
     },
     pageLoaded: function() {
-      this.getPath();
-      this.getSetProductCategory();
-      this.setSiteSections();
+      let path = this.getPath();
+      this.getSetProductCategory(path);
+      this.setSiteSections(path);
       this.setLoggedInStatus();
 
       if (typeof $window.digitalData.page.attributes !== 'undefined') {
