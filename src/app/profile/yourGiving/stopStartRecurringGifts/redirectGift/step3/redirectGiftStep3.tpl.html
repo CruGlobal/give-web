@@ -18,34 +18,28 @@
 </div>
 
 <div class="modal-body">
-  <div class="container-fluid">
-    <div class="row row-no-spacing">
-      <div class="col-xs-12">
-        <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError" translate>An error occurred saving changes. You may try again by clicking "Confirm Changes."</div>
-        <form name="$ctrl.redirectForm" ng-switch="$ctrl.state">
-          <div class="repeating-row" ng-switch-when="update">
-            <gift-list-item gift="$ctrl.gift">
-              <gift-update-view gift="$ctrl.gift" />
-            </gift-list-item>
-          </div>
-          <div class="repeating-row" ng-switch-when="confirm">
-            <div class="col-xs-12">
-              <p class="text-danger">The recurring gift to this recipient will be stopped:</p>
-            </div>
-            <gift-list-item gift="$ctrl.stopGift" />
-          </div>
-          <div class="repeating-row" ng-switch-when="confirm">
-            <div class="col-xs-12">
-              <p class="text-danger">The following recurring gift will begin:</p>
-            </div>
-            <gift-list-item gift="$ctrl.gift">
-              <gift-details-view gift="$ctrl.gift" />
-            </gift-list-item>
-          </div>
-        </form>
-      </div>
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError" translate>An error occurred saving changes. You may try again by clicking "Confirm Changes."</div>
+  <form name="$ctrl.redirectForm" ng-switch="$ctrl.state">
+    <div class="repeating-row" ng-switch-when="update">
+      <gift-list-item gift="$ctrl.gift">
+        <gift-update-view gift="$ctrl.gift" />
+      </gift-list-item>
     </div>
-  </div>
+    <div class="repeating-row" ng-switch-when="confirm">
+      <div class="col-xs-12">
+        <p class="text-danger">The recurring gift to this recipient will be stopped:</p>
+      </div>
+      <gift-list-item gift="$ctrl.stopGift" />
+    </div>
+    <div class="repeating-row" ng-switch-when="confirm">
+      <div class="col-xs-12">
+        <p class="text-danger">The following recurring gift will begin:</p>
+      </div>
+      <gift-list-item gift="$ctrl.gift">
+        <gift-details-view gift="$ctrl.gift" />
+      </gift-list-item>
+    </div>
+  </form>
 </div>
 
 <div class="modal-footer" ng-switch="$ctrl.state">

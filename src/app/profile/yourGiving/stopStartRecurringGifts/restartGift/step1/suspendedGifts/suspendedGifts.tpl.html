@@ -15,43 +15,35 @@
 </div>
 
 <div class="modal-body">
-  <div class="container-fluid">
-    <div class="row row-no-spacing">
-      <div class="col-xs-12">
-        <form name="$ctrl.restartForm">
-          <div class="repeating-row select-recipient-row" ng-repeat="gift in $ctrl.gifts">
-            <gift-list-item gift="gift"
-                            selectable="checkbox">
-              <label>{{'Restart' | translate}}
-                <input type="checkbox" disabled>
-              </label>
-              <p translate>This gift cannot be changed online. For assistance,
-                please call us at (888) 278-7233 from 9am to 5pm ET, Monday - Friday, or email us at
-                <a href="mailto:eGift@cru.org">eGift@cru.org</a>.
-              </p>
-            </gift-list-item>
-          </div>
-        </form>
-      </div>
+  <form name="$ctrl.restartForm">
+    <div class="repeating-row select-recipient-row" ng-repeat="gift in $ctrl.gifts">
+      <gift-list-item gift="gift"
+                      selectable="checkbox">
+        <label>{{'Restart' | translate}}
+          <input type="checkbox" disabled>
+        </label>
+        <p translate>This gift cannot be changed online. For assistance,
+          please call us at (888) 278-7233 from 9am to 5pm ET, Monday - Friday, or email us at
+          <a href="mailto:eGift@cru.org">eGift@cru.org</a>.
+        </p>
+      </gift-list-item>
     </div>
-  </div>
+  </form>
 </div>
 
 <div class="modal-footer">
-  <div class="row row-no-spacing">
-    <div class="col-xs-6">
-      <button type="button"
-              class="btn btn-default"
-              ng-click="$ctrl.previous()"
-              translate>Back
-      </button>
-    </div>
-    <div class="col-xs-6 text-right">
-      <button type="button"
-              class="btn btn-primary"
-              ng-click="$ctrl.next({selected})"
-              translate>Continue
-      </button>
-    </div>
+  <div class="col-xs-6">
+    <button type="button"
+            class="btn btn-default"
+            ng-click="$ctrl.previous()"
+            translate>Back
+    </button>
+  </div>
+  <div class="col-xs-6 text-right">
+    <button type="button"
+            class="btn btn-primary"
+            ng-click="$ctrl.next({selected})"
+            translate>Continue
+    </button>
   </div>
 </div>

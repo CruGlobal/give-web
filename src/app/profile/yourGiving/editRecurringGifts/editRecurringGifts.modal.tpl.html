@@ -40,18 +40,16 @@
     </div>
   </div>
   <div class="modal-footer" ng-switch-when="error">
-    <div class="row row-no-spacing">
-      <div class="col-xs-6">
-        <a class="btn btn-default"
-           ng-click="$ctrl.dismiss()"
-           translate>
-          Cancel
-        </a>
-      </div>
-      <div class="col-xs-6 text-right">
-        <a class="btn btn-primary" ng-click="$ctrl.loadPaymentMethods()">Retry</a>
-        <a class="btn btn-default" ng-click="$ctrl.next()">Continue</a>
-      </div>
+    <div class="col-xs-6">
+      <a class="btn btn-default"
+         ng-click="$ctrl.dismiss()"
+         translate>
+        Cancel
+      </a>
+    </div>
+    <div class="col-xs-6 text-right">
+      <a class="btn btn-primary" ng-click="$ctrl.loadPaymentMethods()">Retry</a>
+      <a class="btn btn-default" ng-click="$ctrl.next()">Continue</a>
     </div>
   </div>
 

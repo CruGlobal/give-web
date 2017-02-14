@@ -13,30 +13,22 @@
 </div>
 
 <div class="modal-body">
-  <div class="container-fluid">
-    <div class="row row-no-spacing">
-      <div class="col-md-12 col-xs-12">
-        <div ng-repeat="gift in $ctrl.gifts" class="repeating-row">
-          <gift-list-item gift="gift">
-            <gift-update-view gift="gift"></gift-update-view>
-          </gift-list-item>
-        </div>
-      </div>
-    </div>
+  <div ng-repeat="gift in $ctrl.gifts" class="repeating-row">
+    <gift-list-item gift="gift">
+      <gift-update-view gift="gift"></gift-update-view>
+    </gift-list-item>
   </div>
 </div>
 
 <div class="modal-footer">
-  <div class="row row-no-spacing">
-    <div class="col-xs-6">
-      <a class="btn btn-default"
-         ng-click="$ctrl.previous()"
-         translate>
-        Back
-      </a>
-    </div>
-    <div class="col-xs-6 text-right">
-      <button class="btn btn-primary" ng-click="$ctrl.next({ configured: $ctrl.gifts })" translate>Continue</button>
-    </div>
+  <div class="col-xs-6">
+    <a class="btn btn-default"
+       ng-click="$ctrl.previous()"
+       translate>
+      Back
+    </a>
+  </div>
+  <div class="col-xs-6 text-right">
+    <button class="btn btn-primary" ng-click="$ctrl.next({ configured: $ctrl.gifts })" translate>Continue</button>
   </div>
 </div>

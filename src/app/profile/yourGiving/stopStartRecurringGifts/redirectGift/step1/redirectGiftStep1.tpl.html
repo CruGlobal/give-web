@@ -15,40 +15,32 @@
 </div>
 
 <div class="modal-body">
-  <div class="container-fluid">
-    <div class="row row-no-spacing">
-      <div class="col-xs-12">
-        <!-- TODO: no gifts -->
-        <form name="$ctrl.redirectForm">
-          <div class="repeating-row select-recipient-row" ng-repeat="gift in $ctrl.gifts">
-            <gift-list-item gift="gift"
-                            selectable="radio"
-                            select-label="{{'Redirect' | translate}}"
-                            on-selected="$ctrl.giftSelected(gift)">
-            </gift-list-item>
-          </div>
-        </form>
-      </div>
+  <!-- TODO: no gifts -->
+  <form name="$ctrl.redirectForm">
+    <div class="repeating-row select-recipient-row" ng-repeat="gift in $ctrl.gifts">
+      <gift-list-item gift="gift"
+                      selectable="radio"
+                      select-label="{{'Redirect' | translate}}"
+                      on-selected="$ctrl.giftSelected(gift)">
+      </gift-list-item>
     </div>
-  </div>
+  </form>
 </div>
 
 <div class="modal-footer">
-  <div class="row row-no-spacing">
-    <div class="col-xs-6">
-      <button type="button"
-              class="btn btn-default"
-              ng-click="$ctrl.previous()"
-              translate>Back
-      </button>
-    </div>
-    <div class="col-xs-6 text-right">
-      <button type="button"
-              class="btn btn-primary"
-              ng-click="$ctrl.selectGift()"
-              ng-disabled="!$ctrl.find($ctrl.gifts, {_selectedGift: true})"
-              translate>Continue
-      </button>
-    </div>
+  <div class="col-xs-6">
+    <button type="button"
+            class="btn btn-default"
+            ng-click="$ctrl.previous()"
+            translate>Back
+    </button>
+  </div>
+  <div class="col-xs-6 text-right">
+    <button type="button"
+            class="btn btn-primary"
+            ng-click="$ctrl.selectGift()"
+            ng-disabled="!$ctrl.find($ctrl.gifts, {_selectedGift: true})"
+            translate>Continue
+    </button>
   </div>
 </div>

@@ -58,21 +58,19 @@
 </div>
 
 <div class="modal-footer">
-  <div class="row row-no-spacing">
-    <div class="col-xs-6">
-      <button type="button"
-              class="btn btn-default"
-              ng-click="$ctrl.cancel()"
-              translate>Cancel
-      </button>
-    </div>
-    <div class="col-xs-6 text-right">
-      <button type="button"
-              class="btn btn-primary"
-              ng-disabled="!$ctrl.step0From.$valid"
-              ng-click="$ctrl.changeState({state: $ctrl.giftAction})"
-              translate>Continue
-      </button>
-    </div>
+  <div class="col-xs-6">
+    <button type="button"
+            class="btn btn-default"
+            ng-click="$ctrl.cancel()"
+            translate>Cancel
+    </button>
+  </div>
+  <div class="col-xs-6 text-right">
+    <button type="button"
+            class="btn btn-primary"
+            ng-disabled="!$ctrl.step0From.$valid"
+            ng-click="$ctrl.changeState({state: $ctrl.giftAction})"
+            translate>Continue
+    </button>
   </div>
 </div>

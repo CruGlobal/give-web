@@ -3,17 +3,17 @@
 
   <!-- Step 0 -->
   <step-0-payment-method-list ng-switch-when="select-payment-method"
-                             payment-methods="$ctrl.paymentMethods"
-                             dismiss="$ctrl.cancel()"
-                             next="$ctrl.next(null, null, paymentMethod)">
+                              payment-methods="$ctrl.paymentMethods"
+                              dismiss="$ctrl.cancel()"
+                              next="$ctrl.next(null, null, paymentMethod)">
   </step-0-payment-method-list>
   <step-0-add-update-payment-method ng-switch-when="add-update-payment-method"
-                      previous="$ctrl.previous()"
-                      next="$ctrl.next(selected)"
-                      dismiss="$ctrl.cancel()"
-                      can-go-back="true"
-                      payment-method="$ctrl.paymentMethod"
-                      set-loading="$ctrl.setLoading({loading: loading})">
+                                    previous="$ctrl.previous()"
+                                    next="$ctrl.next(selected)"
+                                    dismiss="$ctrl.cancel()"
+                                    can-go-back="true"
+                                    payment-method="$ctrl.paymentMethod"
+                                    set-loading="$ctrl.setLoading({loading: loading})">
   </step-0-add-update-payment-method>
 
   <!-- Step 1 -->
@@ -72,28 +72,20 @@
     </div>
 
     <div class="modal-body">
-      <div class="container-fluid">
-        <div class="row row-no-spacing">
-          <div class="col-md-12 col-xs-12">
-            <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
-              <p translate>There was an error loading gift information. Please try again, or contact support.</p>
-            </div>
-          </div>
-        </div>
+      <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
+        <p translate>There was an error loading gift information. Please try again, or contact support.</p>
       </div>
     </div>
 
     <div class="modal-footer">
-      <div class="row row-no-spacing">
-        <div class="col-xs-6">
-          <a class="btn btn-default" translate>Back</a>
-        </div>
-        <div class="col-xs-6 text-right">
-          <button class="btn btn-primary" ng-click="$ctrl.loadPaymentMethods()">
-            <span ng-if="!$ctrl.error" translate>Continue</span>
-            <span ng-if="$ctrl.error" translate>Retry</span>
-          </button>
-        </div>
+      <div class="col-xs-6">
+        <a class="btn btn-default" translate>Back</a>
+      </div>
+      <div class="col-xs-6 text-right">
+        <button class="btn btn-primary" ng-click="$ctrl.loadPaymentMethods()">
+          <span ng-if="!$ctrl.error" translate>Continue</span>
+          <span ng-if="$ctrl.error" translate>Retry</span>
+        </button>
       </div>
     </div>
   </div>
