@@ -3,9 +3,12 @@ user: "BROWSERSTACK_USERNAME"
 key: "BROWSERSTACK_ACCESS_KEY"
 
 common_caps:
-  "build": "rspec-browserstack"
+  "project": "give-web"
   "browserstack.debug": true
 
 browser_caps:
   -
+    "browser": "chrome"
+  -
     "browser": "firefox"
+    "browser_version": "47"

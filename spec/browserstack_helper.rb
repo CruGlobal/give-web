@@ -15,7 +15,7 @@ RSpec.configure do |config|
                 CONFIG['user'] = ENV['BROWSERSTACK_USERNAME'] || CONFIG['user']
                 CONFIG['key'] = ENV['BROWSERSTACK_ACCESS_KEY'] || CONFIG['key']
                 @caps = CONFIG['common_caps'].merge(CONFIG['browser_caps'][TASK_ID])
-                @caps['name'] = ENV['name']
+                @caps['build'] = ENV['BUILD_DISPLAY_NAME']
                 Selenium::WebDriver.for(:remote,
                                         :url => "http://#{CONFIG['user']}:#{CONFIG['key']}@#{CONFIG['server']}/wd/hub",
                                         :desired_capabilities => @caps)
