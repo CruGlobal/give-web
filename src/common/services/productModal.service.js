@@ -89,6 +89,7 @@ export default angular
     commonService.name,
     designationsService.name,
     productConfigModal.name,
-    modalStateService.name
+    modalStateService.name,
+    giveModalWindowTemplate.name
   ] )
   .factory( serviceName, ProductModalService );
