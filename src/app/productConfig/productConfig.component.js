@@ -24,6 +24,7 @@ class ProductConfigController {
 
   $onInit() {
     this.loadingModal = false;
+    this.analyticsFactory.pageLoaded();
   }
 
   configModal() {

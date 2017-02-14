@@ -4,6 +4,7 @@ import includes from 'lodash/includes';
 import commonModule from 'common/common.module';
 import sessionService from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './homeSignIn.tpl';
 
@@ -12,16 +13,18 @@ let componentName = 'homeSignIn';
 class HomeSignInController {
 
   /* @ngInject */
-  constructor($window, sessionService, sessionModalService) {
+  constructor($window, sessionService, analyticsFactory, sessionModalService) {
     this.$window = $window;
 
     this.sessionService = sessionService;
     this.sessionModalService = sessionModalService;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
     this.isSigningIn = false;
     this.showSignInForm = !includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() );
+    this.analyticsFactory.pageLoaded();
   }
 
   signIn() {
@@ -54,7 +57,8 @@ export default angular
     template.name,
     commonModule.name,
     sessionService.name,
-    sessionModalService.name
+    sessionModalService.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  HomeSignInController,
