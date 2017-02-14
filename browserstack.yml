@@ -9,6 +9,10 @@ common_caps:
 browser_caps:
   -
     "browser": "chrome"
-  -
-    "browser": "firefox"
-    "browser_version": "47"
+#  -
+#    "browser": "firefox"
+#    "browser_version": "47"
+#  -
+#    "browser": "ie"
+#  -
+#    "browser": "edge"
