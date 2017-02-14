@@ -1,13 +1,10 @@
 language: node_js
 node_js: "6"
 before_install:
-  - sudo apt-get -qq update && sudo apt-get install -y curl
-  - rvm use 2.3.1 --install --binary --fuzzy
   - npm install jspm
   - ./node_modules/.bin/jspm config registries.github.auth $JSPM_GITHUB_AUTH_TOKEN
 install:
   - npm install
-  - bundle install --path vendor
 script:
   - gulp lint
   - gulp test
@@ -15,11 +12,9 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 cache:
-  bundler: true
   directories:
-    - cache
-    - node_modules
-    - jspm_packages
+  - node_modules
+  - jspm_packages
 env:
   global:
     - AWS_KEY=AKIAI6YF75KDZNQJBFXA
@@ -48,5 +43,3 @@ deploy:
 after_deploy:
   - chmod +x ./.travis/invalidate_cloudfront_cache.sh
   - ./.travis/invalidate_cloudfront_cache.sh $AWS_KEY $AWS_SECRET
-after_script:
-  - bundle exec rake
