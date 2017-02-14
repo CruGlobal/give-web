@@ -473,7 +473,7 @@ function analyticsFactory($window, $timeout, sessionService) {
           this.getSetProductCategory(path);
           $window.digitalData.page.category.subCategory1 = 'designation detail';
         } else {
-          $window.digitalData.page.category.subCategory1 = path[0];
+          $window.digitalData.page.category.subCategory1 = path[0] === '/' ? '' : path[0];
         }
 
         if (path.length >= 2) {
