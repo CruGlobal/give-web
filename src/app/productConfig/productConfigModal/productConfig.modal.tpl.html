@@ -1,4 +1,4 @@
-<div class="give-modal-header">
+<div class="give-modal-header modal-header">
   <div class="row">
     <div class="col-sm-6">
       <h4 class="modal-title" translate>
@@ -6,6 +6,7 @@
       </h4>
     </div>
     <div class="col-sm-6">
+      <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
       <div class="give-modal-recipient">
         <img class="recipient-image" desig-src="{{$ctrl.productData.designationNumber}}">
         <span class="recipient-title">{{$ctrl.productData.displayName}}</span>
@@ -188,36 +189,38 @@
     </div>
   </div>
   <div class="modal-footer">
-    <div class="col-sm-3">
-      <button class="btn btn-default btn-md btn-block-xs"
-              type="button"
-              ng-click="$ctrl.dismiss()"
-              tabindex="-1"
-              translate>
-        Cancel &amp; Return
-      </button>
-    </div>
-    <div class="col-sm-9 text-center">
-      <button class="btn btn-md btn-primary btn-block-xs pull-right"
-              type="submit"
-              ng-if="!$ctrl.errorAlreadyInCart"
-              tabindex="-1"
-              ng-switch="$ctrl.isEdit"
-              ng-disabled="$ctrl.changingFrequency">
-        <span ng-switch-when="true" translate>Update Gift</span>
-        <span ng-switch-when="false" translate>Add to Gift Cart</span>
-      </button>
-      <button class="btn btn-md btn-primary btn-block-xs pull-right"
-              type="button"
-              tabindex="-1"
-              ng-if="$ctrl.errorAlreadyInCart"
-              ng-click="$ctrl.close(); $ctrl.$location.path('/cart')"
-              translate>
-        View Cart
-      </button>
-      <loading inline="true" ng-if="$ctrl.changingFrequency" class="mt-- mr- pull-right">
-        <translate>Changing frequency...</translate>
-      </loading>
+    <div class="row row-no-spacing">
+      <div class="col-sm-3">
+        <button class="btn btn-default btn-md btn-block-xs"
+                type="button"
+                ng-click="$ctrl.dismiss()"
+                tabindex="-1"
+                translate>
+          Cancel &amp; Return
+        </button>
+      </div>
+      <div class="col-sm-9 text-center">
+        <button class="btn btn-md btn-primary btn-block-xs pull-right"
+                type="submit"
+                ng-if="!$ctrl.errorAlreadyInCart"
+                tabindex="-1"
+                ng-switch="$ctrl.isEdit"
+                ng-disabled="$ctrl.changingFrequency">
+          <span ng-switch-when="true" translate>Update Gift</span>
+          <span ng-switch-when="false" translate>Add to Gift Cart</span>
+        </button>
+        <button class="btn btn-md btn-primary btn-block-xs pull-right"
+                type="button"
+                tabindex="-1"
+                ng-if="$ctrl.errorAlreadyInCart"
+                ng-click="$ctrl.close(); $ctrl.$location.path('/cart')"
+                translate>
+          View Cart
+        </button>
+        <loading inline="true" ng-if="$ctrl.changingFrequency" class="mt-- mr- pull-right">
+          <translate>Changing frequency...</translate>
+        </loading>
+      </div>
     </div>
   </div>
 </form>
