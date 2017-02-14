@@ -106,6 +106,9 @@ class ExistingPaymentMethodsController {
   selectPayment(){
     if(this.selectedPaymentMethod.chosen){
       this.onPaymentFormStateChange({ $event: { state: 'loading' } });
+      if(!this.orderService.retrieveCardSecurityCode()){
+        this.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
+      }
     }else{
       this.orderService.selectPaymentMethod(this.selectedPaymentMethod.selectAction)
         .subscribe(() => {

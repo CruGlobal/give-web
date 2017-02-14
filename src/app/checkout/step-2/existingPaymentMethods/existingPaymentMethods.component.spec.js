@@ -203,6 +203,15 @@ describe('checkout', () => {
           self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account'}, chosen: true };
           self.controller.selectPayment();
           expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled();
+          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(existingPaymentMethodFlag);
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
+        });
+        it('should not send a request if the payment is already selected and should not modify the cvv if it is already set', () => {
+          spyOn(self.controller.orderService, 'retrieveCardSecurityCode').and.returnValue('cvv already stored');
+          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account'}, chosen: true };
+          self.controller.selectPayment();
+          expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled();
+          expect(self.controller.orderService.storeCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
         });
       });
