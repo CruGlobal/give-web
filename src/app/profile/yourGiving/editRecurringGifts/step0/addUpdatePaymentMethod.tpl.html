@@ -29,28 +29,26 @@
 </div>
 
 <div class="modal-footer">
-  <div class="row row-no-spacing">
-    <div class="col-xs-6" ng-switch="$ctrl.canGoBack">
-      <button class="btn btn-default"
-              ng-click="$ctrl.dismiss()"
-              ng-switch-when="false"
-              translate>
-        Cancel
-      </button>
-      <button class="btn btn-default"
-              ng-click="$ctrl.previous()"
-              ng-switch-when="true"
-              translate>
-        Back
-      </button>
-    </div>
-    <div class="col-xs-6 text-right">
-      <button class="btn btn-primary"
-              ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
-              ng-disabled="$ctrl.paymentFormState === 'loading'">
-        <span ng-if="!$ctrl.paymentMethod" translate>Add and Continue</span>
-        <span ng-if="$ctrl.paymentMethod" translate>Update and Continue</span>
-      </button>
-    </div>
+  <div class="col-xs-6" ng-switch="$ctrl.canGoBack">
+    <button class="btn btn-default"
+            ng-click="$ctrl.dismiss()"
+            ng-switch-when="false"
+            translate>
+      Cancel
+    </button>
+    <button class="btn btn-default"
+            ng-click="$ctrl.previous()"
+            ng-switch-when="true"
+            translate>
+      Back
+    </button>
+  </div>
+  <div class="col-xs-6 text-right">
+    <button class="btn btn-primary"
+            ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
+            ng-disabled="$ctrl.paymentFormState === 'loading'">
+      <span ng-if="!$ctrl.paymentMethod" translate>Add and Continue</span>
+      <span ng-if="$ctrl.paymentMethod" translate>Update and Continue</span>
+    </button>
   </div>
 </div>

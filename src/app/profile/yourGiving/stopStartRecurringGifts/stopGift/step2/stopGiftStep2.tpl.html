@@ -14,30 +14,22 @@
 </div>
 
 <div class="modal-body pb0">
-  <div class="container-fluid">
-    <div class="row row-no-spacing">
-      <div class="col-md-12 col-xs-12">
-        <div class="repeating-row" ng-repeat="gift in $ctrl.gifts">
-          <div class="col-xs-12">
-            <p class="text-danger" translate>The recurring gift to this recipient will be stopped:</p>
-          </div>
-
-          <gift-list-item gift="gift">
-            <gift-details-view gift="gift" />
-          </gift-list-item>
-        </div>
-      </div>
+  <div class="repeating-row" ng-repeat="gift in $ctrl.gifts">
+    <div class="col-xs-12">
+      <p class="text-danger" translate>The recurring gift to this recipient will be stopped:</p>
     </div>
+
+    <gift-list-item gift="gift">
+      <gift-details-view gift="gift" />
+    </gift-list-item>
   </div>
 </div>
 
 <div class="modal-footer">
-  <div class="row row-no-spacing">
-    <div class="col-xs-6">
-      <button type="button" class="btn btn-default" ng-click="$ctrl.previous()" translate>Back</button>
-    </div>
-    <div class="col-xs-6 text-right">
-      <button type="button" class="btn btn-primary" ng-click="$ctrl.onConfirm()" translate>Confirm Changes</button>
-    </div>
+  <div class="col-xs-6">
+    <button type="button" class="btn btn-default" ng-click="$ctrl.previous()" translate>Back</button>
+  </div>
+  <div class="col-xs-6 text-right">
+    <button type="button" class="btn btn-primary" ng-click="$ctrl.onConfirm()" translate>Confirm Changes</button>
   </div>
 </div>
