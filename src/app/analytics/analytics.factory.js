@@ -264,6 +264,7 @@ function analyticsFactory($window, $timeout, sessionService) {
       this.getPath();
       this.getSetProductCategory();
       this.setSiteSections();
+      this.setLoggedInStatus();
 
       if (typeof $window.digitalData.page.attributes !== 'undefined') {
         if ($window.digitalData.page.attributes.angularLoaded == 'true') {
@@ -342,6 +343,26 @@ function analyticsFactory($window, $timeout, sessionService) {
         }
       } else {
         $window.digitalData.page.pageInfo.onsiteSearchResults = 0;
+      }
+    },
+    setLoggedInStatus: function(){
+      let ssoGuid = '';
+      if (typeof sessionService !== 'undefined') {
+        if (typeof sessionService.session['sub'] !== 'undefined') {
+          ssoGuid = sessionService.session['sub'].split('|').pop();
+        }
+      }
+
+      if(!ssoGuid){ return; }
+
+      if(!$window.digitalData.user){
+        $window.digitalData.user = [{
+          profile: [{
+            profileInfo: {
+              ssoGuid: ssoGuid
+            }
+          }]
+        }];
       }
     },
     setDonorDetails: function(donorDetails) {
