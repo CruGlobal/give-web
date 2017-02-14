@@ -278,8 +278,6 @@ function analyticsFactory($window, $timeout, sessionService) {
         };
       }
 
-      var angularLoaded = $window.digitalData.page.attributes.angularLoaded;
-
       // Allow time for data layer changes to be consumed & fire image request
       $timeout(function() {
         $window.s.t();
