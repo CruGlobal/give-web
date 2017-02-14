@@ -101,8 +101,10 @@ class EditRecurringGiftsModalController {
         this.recurringGifts = recurringGifts;
         this.recurringGiftChanges = filter(this.recurringGifts, gift => gift.hasChanges());
         this.hasRecurringGiftChanges = this.recurringGiftChanges && this.recurringGiftChanges.length > 0;
-        if(this.loadingRecentRecipients || this.hasRecentRecipients){
+        if(this.loadingRecentRecipients || this.hasRecentRecipients) {
           this.state = 'step2AddRecentRecipients';
+        }else if(this.hasRecurringGiftChanges){
+          this.state = 'step4Confirm';
         }else{
           this.state = 'step2SearchRecipients';
         }
