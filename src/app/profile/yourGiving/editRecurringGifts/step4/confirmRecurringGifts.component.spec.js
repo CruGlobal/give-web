@@ -18,19 +18,9 @@ describe('editRecurringGiftsModal', () => {
     }));
 
     describe('$onInit', () => {
-      it('should filter out unchanged gifts', () => {
-        self.controller.recurringGifts = [
-          {
-            testGift: 1,
-            hasChanges: () => true
-          },
-          {
-            testGift: 2,
-            hasChanges: () => false
-          }
-        ];
+      it('should set hasChanges to true if there are changed gifts', () => {
+        self.controller.recurringGiftChanges = ['change 1'];
         self.controller.$onInit();
-        expect(self.controller.recurringGiftChanges).toEqual([ self.controller.recurringGifts[0] ]);
         expect(self.controller.hasChanges).toEqual(true);
       });
       it('should set hasChanges to true if there are additions', () => {

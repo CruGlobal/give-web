@@ -36,6 +36,8 @@ class SearchResultsController {
     this.featuredGroupBy = 'startMonth';
 
     this.requestSearch(this.searchParams.type);
+
+    this.analyticsFactory.pageLoaded();
   }
 
   requestSearch(type){
@@ -50,6 +52,7 @@ class SearchResultsController {
         .subscribe((results) => {
           this.searchResults = results;
           this.loadingResults = false;
+          this.analyticsFactory.search(this.searchParams, results);
         }, (error) => {
           this.searchResults = null;
           this.searchError = true;
@@ -57,8 +60,9 @@ class SearchResultsController {
           this.$log.error('Error loading search results', error);
         });
 
-      this.analyticsFactory.search(this.searchParams);
-      this.analyticsFactory.setEvent('search filter');
+      if(this.searchParams.type){
+        this.analyticsFactory.setEvent('search filter');
+      }
     }
   }
 

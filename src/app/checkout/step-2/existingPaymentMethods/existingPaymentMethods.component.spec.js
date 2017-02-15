@@ -165,7 +165,7 @@ describe('checkout', () => {
 
           // Test calling onSubmit
           self.controller.$uibModal.open.calls.first().args[0].resolve.onPaymentFormStateChange()({ $event: { state: 'loading', payload: 'some data' } });
-          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: 'some data', stayOnStep: true } });
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: 'some data', stayOnStep: true, update: false, paymentMethodToUpdate: undefined } });
         });
         it('should call onPaymentFormStateChange to clear submissionErrors when the modal closes', () => {
           spyOn(self.controller.$uibModal, 'open').and.returnValue({ result: Observable.throw('').toPromise() });
@@ -203,6 +203,15 @@ describe('checkout', () => {
           self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account'}, chosen: true };
           self.controller.selectPayment();
           expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled();
+          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(existingPaymentMethodFlag);
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
+        });
+        it('should not send a request if the payment is already selected and should not modify the cvv if it is already set', () => {
+          spyOn(self.controller.orderService, 'retrieveCardSecurityCode').and.returnValue('cvv already stored');
+          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account'}, chosen: true };
+          self.controller.selectPayment();
+          expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled();
+          expect(self.controller.orderService.storeCardSecurityCode).not.toHaveBeenCalled();
           expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
         });
       });

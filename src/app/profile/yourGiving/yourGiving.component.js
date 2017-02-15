@@ -19,6 +19,7 @@ import sessionEnforcerService, {
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service';
 import sessionService, {Roles, SignOutEvent} from 'common/services/session/session.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 import template from './yourGiving.tpl';
 
 let componentName = 'yourGiving';
@@ -32,7 +33,7 @@ export const givingViews = ['recipient', 'historical'];
 class YourGivingController {
 
   /* @ngInject */
-  constructor( $log, $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService ) {
+  constructor( $log, $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService, analyticsFactory ) {
     this.$log = $log;
     this.$window = $window;
     this.$location = $location;
@@ -41,6 +42,7 @@ class YourGivingController {
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.sessionService = sessionService;
+    this.analyticsFactory = analyticsFactory;
     this.dateFilter = $filter( 'date' );
   }
 
@@ -75,6 +77,7 @@ class YourGivingController {
     };
 
     this.profileLoading = true;
+    this.analyticsFactory.pageLoaded();
   }
 
   $onDestroy() {
@@ -165,6 +168,7 @@ export default angular
     profileService.name,
     sessionEnforcerService.name,
     sessionService.name,
+    analyticsFactory.name,
     template.name,
     'ui.bootstrap'
   ] )

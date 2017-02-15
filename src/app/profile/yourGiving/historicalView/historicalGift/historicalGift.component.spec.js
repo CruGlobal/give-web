@@ -10,7 +10,8 @@ describe( 'your giving', function () {
 
       beforeEach( inject( ( _$componentController_ ) => {
         $ctrl = _$componentController_( module.name, {}, {
-          gift: {}
+          gift: {},
+          onManageGift: jasmine.createSpy('onManageGift')
         } );
       } ) );
 
@@ -20,9 +21,9 @@ describe( 'your giving', function () {
       } );
 
       describe( 'manageGift()', () => {
-        it( 'does nothing', () => {
+        it( 'calls onManageGift', () => {
           $ctrl.manageGift();
-          expect( true ).toEqual( true );
+          expect( $ctrl.onManageGift ).toHaveBeenCalled();
         } );
       } );
 

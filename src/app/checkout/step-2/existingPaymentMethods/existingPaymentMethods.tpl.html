@@ -1,10 +1,11 @@
 <div class="panel panel-default tab-toggle">
   <div class="panel-title panel-heading" translate>Your Payment Methods</div>
   <div class="panel-body">
-    <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods">
+    <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods" ng-init="expired = !$ctrl.validPaymentMethod(paymentMethod)">
       <label>
-        <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" required>
-        <payment-method-display payment-method="paymentMethod"></payment-method-display>
+        <input ng-if="!expired" type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" required>
+        <button ng-if="expired" class="btn btn-xs btn-default" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)">Update</button>
+        <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
       </label>
     </div>
 

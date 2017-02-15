@@ -8,7 +8,13 @@
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardNumber | showErrors)}">
           <label translate>Card #</label>
-          <input type="text" name="cardNumber" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardNumber" ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}" ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber">
+          <input type="text"
+                 name="cardNumber"
+                 class="form-control  form-control-subtle"
+                 ng-model="$ctrl.creditCardPayment.cardNumber"
+                 ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
+                 ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
+                 ng-disabled="$ctrl.disableCardNumber">
           <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="($ctrl.creditCardPaymentForm.cardNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter a card number</div>
             <div class="help-block" ng-message="minlength" translate>This card number must contain at least 13 digits</div>

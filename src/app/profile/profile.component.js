@@ -20,13 +20,14 @@ let componentName = 'profile';
 class ProfileController {
 
   /* @ngInject */
-  constructor($rootScope, $window, $location, $log, sessionEnforcerService, profileService) {
+  constructor($rootScope, $window, $location, $log, sessionEnforcerService, profileService, analyticsFactory) {
     this.$window = $window;
     this.$log = $log;
     this.$location = $location;
     this.$rootScope = $rootScope;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
+    this.analyticsFactory = analyticsFactory;
     this.phoneNumbers = [];
   }
 
@@ -46,6 +47,8 @@ class ProfileController {
     }, EnforcerModes.donor);
 
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
+
+    this.analyticsFactory.pageLoaded();
   }
 
   $onDestroy() {
@@ -61,18 +64,18 @@ class ProfileController {
   }
 
   loadDonorDetails() {
-    this.donorDetialsLoading = true;
+    this.donorDetailsLoading = true;
     this.phonesLoading = true;
     this.profileService.getProfileDonorDetails()
       .subscribe(
         donorDetails => {
           this.donorDetails = donorDetails;
           this.hasSpouse = this.donorDetails['spouse-name']['family-name'] ? true : false;
-          this.donorDetialsLoading = false;
+          this.donorDetailsLoading = false;
           this.loadPhoneNumbers(); //  phone number's owner output depends on donor details
         },
         error => {
-          this.donorDetialsLoading = false;
+          this.donorDetailsLoading = false;
           this.donorDetailsError = 'Failed loading profile details.';
           this.$log.error(this.donorDetailsError, error.data);
         }
@@ -80,17 +83,17 @@ class ProfileController {
   }
 
   updateDonorDetails(){
-    this.donorDetialsLoading = true;
+    this.donorDetailsLoading = true;
     this.profileService.updateProfileDonorDetails(this.donorDetails)
       .subscribe(
         () => {
-          this.donorDetialsLoading = false;
+          this.donorDetailsLoading = false;
           this.donorDetailsForm.$setPristine();
           this.spouseDetailsForm ? this.spouseDetailsForm.$setPristine() : false;
           this.success = true;
         },
         error => {
-          this.donorDetialsLoading = false;
+          this.donorDetailsLoading = false;
           this.donorDetailsError = 'Failed updating profile details.';
           this.$log.error(this.donorDetailsError, error.data);
         },
@@ -107,8 +110,8 @@ class ProfileController {
     this.profileService.getEmails()
       .subscribe(
         emails => {
-          this.donorEmail = emails ? emails[0] : '';
-          this.spouseEmail = emails ? emails[1] : '';
+          this.donorEmail = emails ? emails[0] : { email: '' };
+          this.spouseEmail = emails ? emails[1] : { email: '' };
           this.emailLoading = false;
         },
         error => {
@@ -296,19 +299,19 @@ class ProfileController {
   }
 
   saveSpouse() {
-    this.donorDetialsLoading = true;
+    this.donorDetailsLoading = true;
     let path = this.donorDetails.self.uri.replace('selfservicedonordetails', 'donordetails') + '/spousedetails';
     this.profileService.addSpouse(path, this.donorDetails['spouse-name'])
       .subscribe(
         () => {
           this.addingSpouse = false;
           this.hasSpouse = true;
-          this.donorDetialsLoading = false;
+          this.donorDetailsLoading = false;
         },
         error => {
           this.donorDetailsError = 'Failed saving spouse info. ';
           this.$log.error(error.data, this.donorDetailsError);
-          this.donorDetialsLoading = false;
+          this.donorDetailsLoading = false;
         },
         () => {
           if(this.spouseDetailsForm.title.$dirty || this.spouseDetailsForm.suffix.$dirty) {
@@ -343,7 +346,7 @@ class ProfileController {
   }
 
   loading() {
-    return this.phonesLoading || this.mailingAddressLoading || this.donorDetialsLoading || this.emailLoading;
+    return this.phonesLoading || this.mailingAddressLoading || this.donorDetailsLoading || this.emailLoading;
   }
 
   onSubmit(){
@@ -374,6 +377,7 @@ class ProfileController {
     if(this.mailingAddressForm.$dirty && this.mailingAddressForm.$valid) {
       this.updateMailingAddress();
     }
+    this.$window.scrollTo(0, 0);
   }
 
 }

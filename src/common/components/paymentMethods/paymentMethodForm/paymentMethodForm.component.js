@@ -48,6 +48,7 @@ export default angular
       paymentFormState: '<',
       paymentFormError: '<',
       paymentMethod: '<',
+      disableCardNumber: '<',
       mailingAddress: '<',
       onPaymentFormStateChange: '&'
     }

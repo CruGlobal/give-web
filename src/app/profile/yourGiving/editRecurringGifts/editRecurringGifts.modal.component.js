@@ -1,5 +1,7 @@
 import angular from 'angular';
 import map from 'lodash/map';
+import concat from 'lodash/concat';
+import filter from 'lodash/filter';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
@@ -8,6 +10,7 @@ import step0AddUpdatePaymentMethod from './step0/addUpdatePaymentMethod.componen
 import step0paymentMethodList from './step0/paymentMethodList.component';
 import step1EditRecurringGifts from './step1/editRecurringGifts.component';
 import step2AddRecentRecipients from './step2/addRecentRecipients.component';
+import step2SearchRecipients from './step2/searchRecipients.component';
 import step3ConfigureRecentRecipients from './step3/configureRecentRecipients.component';
 import step4ConfirmRecurringGifts from './step4/confirmRecurringGifts.component';
 
@@ -16,7 +19,7 @@ import RecurringGiftModel from 'common/models/recurringGift.model';
 import profileService from 'common/services/api/profile.service';
 import donationsService from 'common/services/api/donations.service';
 import commonService from 'common/services/api/common.service';
-import validPaymentMethods from 'common/services/paymentHelpers/validPaymentMethods';
+import {validPaymentMethods} from 'common/services/paymentHelpers/validPaymentMethods';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
 import template from './editRecurringGifts.modal.tpl';
@@ -42,9 +45,9 @@ class EditRecurringGiftsModalController {
   loadPaymentMethods(){
     this.state = 'loading';
     Observable.forkJoin([
-        this.profileService.getPaymentMethods(),
-        this.commonService.getNextDrawDate()
-      ])
+      this.profileService.getPaymentMethods(),
+      this.commonService.getNextDrawDate()
+    ])
       .subscribe(([paymentMethods, nextDrawDate]) => {
         this.paymentMethods = paymentMethods;
         this.nextDrawDate = nextDrawDate;
@@ -96,10 +99,28 @@ class EditRecurringGiftsModalController {
         break;
       case 'step1EditRecurringGifts':
         this.recurringGifts = recurringGifts;
-        this.state = 'step2AddRecentRecipients';
+        this.recurringGiftChanges = filter(this.recurringGifts, gift => gift.hasChanges());
+        this.hasRecurringGiftChanges = this.recurringGiftChanges && this.recurringGiftChanges.length > 0;
+        if(this.loadingRecentRecipients || this.hasRecentRecipients){
+          this.state = 'step2AddRecentRecipients';
+        }else{
+          this.state = 'step2SearchRecipients';
+        }
         break;
       case 'step2AddRecentRecipients':
         this.additions = additions;
+        if(this.additions && this.additions.length > 0) {
+          this.state = 'step3ConfigureRecentRecipients';
+        }else if(this.hasRecurringGiftChanges){
+          this.state = 'step4Confirm';
+        }else{
+          this.state = 'step2SearchRecipients';
+        }
+        break;
+      case 'step2SearchRecipients':
+        this.additions = additions;
+        this.recentRecipients = concat(this.recentRecipients, additions);
+        this.hasRecentRecipients = this.recentRecipients && this.recentRecipients.length > 0;
         if(this.additions && this.additions.length > 0) {
           this.state = 'step3ConfigureRecentRecipients';
         }else{
@@ -129,6 +150,9 @@ class EditRecurringGiftsModalController {
       case 'step3ConfigureRecentRecipients':
         this.state = 'step2AddRecentRecipients';
         break;
+      case 'step2SearchRecipients':
+        this.state = 'step1EditRecurringGifts';
+        break;
       case 'step2AddRecentRecipients':
         this.state = 'step1EditRecurringGifts';
         break;
@@ -151,6 +175,7 @@ export default angular
     step0paymentMethodList.name,
     step1EditRecurringGifts.name,
     step2AddRecentRecipients.name,
+    step2SearchRecipients.name,
     step3ConfigureRecentRecipients.name,
     step4ConfirmRecurringGifts.name,
     profileService.name,

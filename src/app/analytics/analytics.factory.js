@@ -261,9 +261,10 @@ function analyticsFactory($window, $timeout, sessionService) {
       this.pageLoaded();
     },
     pageLoaded: function() {
-      this.getPath();
-      this.getSetProductCategory();
-      this.setSiteSections();
+      let path = this.getPath();
+      this.getSetProductCategory(path);
+      this.setSiteSections(path);
+      this.setLoggedInStatus();
 
       if (typeof $window.digitalData.page.attributes !== 'undefined') {
         if ($window.digitalData.page.attributes.angularLoaded == 'true') {
@@ -277,19 +278,10 @@ function analyticsFactory($window, $timeout, sessionService) {
         };
       }
 
-      var angularLoaded = $window.digitalData.page.attributes.angularLoaded;
-
       // Allow time for data layer changes to be consumed & fire image request
       $timeout(function() {
         $window.s.t();
         $window.s.clearVars();
-        $window.digitalData = {
-          page: {
-            attributes: {
-              angularLoaded: angularLoaded
-            }
-          }
-        };
       }, 1000);
     },
     purchase: function(donorDetails, cartData) {
@@ -342,6 +334,26 @@ function analyticsFactory($window, $timeout, sessionService) {
         }
       } else {
         $window.digitalData.page.pageInfo.onsiteSearchResults = 0;
+      }
+    },
+    setLoggedInStatus: function(){
+      let ssoGuid = '';
+      if (typeof sessionService !== 'undefined') {
+        if (typeof sessionService.session['sub'] !== 'undefined') {
+          ssoGuid = sessionService.session['sub'].split('|').pop();
+        }
+      }
+
+      if(!ssoGuid){ return; }
+
+      if(!$window.digitalData.user){
+        $window.digitalData.user = [{
+          profile: [{
+            profileInfo: {
+              ssoGuid: ssoGuid
+            }
+          }]
+        }];
       }
     },
     setDonorDetails: function(donorDetails) {
@@ -461,7 +473,7 @@ function analyticsFactory($window, $timeout, sessionService) {
           this.getSetProductCategory(path);
           $window.digitalData.page.category.subCategory1 = 'designation detail';
         } else {
-          $window.digitalData.page.category.subCategory1 = path[0];
+          $window.digitalData.page.category.subCategory1 = path[0] === '/' ? '' : path[0];
         }
 
         if (path.length >= 2) {

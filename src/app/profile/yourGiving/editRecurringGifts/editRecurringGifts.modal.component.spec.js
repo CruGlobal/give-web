@@ -198,9 +198,29 @@ describe('edit recurring gifts modal', () => {
 
     it('should transition from step1EditRecurringGifts to step2AddRecentRecipients', () => {
       self.controller.state = 'step1EditRecurringGifts';
-      self.controller.next(undefined, 'modified gifts');
-      expect(self.controller.recurringGifts).toEqual('modified gifts');
+      const testGift = new RecurringGiftModel({});
+      self.controller.hasRecentRecipients = true;
+      self.controller.next(undefined, [testGift]);
+      expect(self.controller.recurringGiftChanges).toEqual([]);
+      expect(self.controller.hasRecurringGiftChanges).toEqual(false);
       expect(self.controller.state).toEqual('step2AddRecentRecipients');
+    });
+
+    it('should transition from step1EditRecurringGifts to step2AddRecentRecipients with modified gifts', () => {
+      self.controller.state = 'step1EditRecurringGifts';
+      const testGift = (new RecurringGiftModel({})).setDefaults();
+      self.controller.hasRecentRecipients = true;
+      self.controller.next(undefined, [testGift]);
+      expect(self.controller.recurringGifts).toEqual([testGift]);
+      expect(self.controller.hasRecurringGiftChanges).toEqual(true);
+      expect(self.controller.state).toEqual('step2AddRecentRecipients');
+    });
+
+    it('should transition from step1EditRecurringGifts to step2SearchRecipients with modified gifts', () => {
+      self.controller.state = 'step1EditRecurringGifts';
+      self.controller.hasRecentRecipients = false;
+      self.controller.next(undefined, []);
+      expect(self.controller.state).toEqual('step2SearchRecipients');
     });
 
     it('should transition from step2AddRecentRecipients to step3ConfigureRecentRecipients', () => {
@@ -212,8 +232,37 @@ describe('edit recurring gifts modal', () => {
 
     it('should transition from step2AddRecentRecipients to step4Confirm', () => {
       self.controller.state = 'step2AddRecentRecipients';
+      self.controller.hasRecurringGiftChanges = true;
       self.controller.next(undefined, undefined, []);
       expect(self.controller.additions).toEqual([]);
+      expect(self.controller.state).toEqual('step4Confirm');
+    });
+
+    it('should transition from step2AddRecentRecipients to step2SearchRecipients', () => {
+      self.controller.state = 'step2AddRecentRecipients';
+      self.controller.hasRecurringGiftChanges = false;
+      self.controller.next(undefined, undefined, []);
+      expect(self.controller.additions).toEqual([]);
+      expect(self.controller.state).toEqual('step2SearchRecipients');
+    });
+
+    it('should transition from step2SearchRecipients to step3ConfigureRecentRecipients', () => {
+      self.controller.state = 'step2SearchRecipients';
+      self.controller.recentRecipients = ['recent recipient'];
+      self.controller.next(undefined, undefined, ['new gift']);
+      expect(self.controller.additions).toEqual(['new gift']);
+      expect(self.controller.recentRecipients).toEqual(['recent recipient', 'new gift']);
+      expect(self.controller.hasRecentRecipients).toEqual(true);
+      expect(self.controller.state).toEqual('step3ConfigureRecentRecipients');
+    });
+
+    it('should transition from step2SearchRecipients to step4Confirm', () => {
+      self.controller.state = 'step2SearchRecipients';
+      self.controller.recentRecipients = [];
+      self.controller.next(undefined, undefined, []);
+      expect(self.controller.additions).toEqual([]);
+      expect(self.controller.recentRecipients).toEqual([]);
+      expect(self.controller.hasRecentRecipients).toEqual(false);
       expect(self.controller.state).toEqual('step4Confirm');
     });
 
@@ -258,6 +307,11 @@ describe('edit recurring gifts modal', () => {
     });
     it('should transition from step2AddRecentRecipients to step1EditRecurringGifts', () => {
       self.controller.state = 'step2AddRecentRecipients';
+      self.controller.previous();
+      expect(self.controller.state).toEqual('step1EditRecurringGifts');
+    });
+    it('should transition from step2SearchRecipients to step1EditRecurringGifts', () => {
+      self.controller.state = 'step2SearchRecipients';
       self.controller.previous();
       expect(self.controller.state).toEqual('step1EditRecurringGifts');
     });

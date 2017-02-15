@@ -222,12 +222,12 @@ describe( 'ProfileComponent', function () {
 
   describe('loadEmail()', () => {
     it('should load email on $onInit()', () => {
-      let data = ['donor@email.com','spouse@email.com'];
+      let data = [{ email: 'donor@email.com' }, { email: 'spouse@email.com' }];
 
       spyOn($ctrl.profileService, 'getEmails').and.returnValue(Observable.of(data));
       $ctrl.loadEmail();
-      expect($ctrl.donorEmail).toBe('donor@email.com');
-      expect($ctrl.spouseEmail).toBe('spouse@email.com');
+      expect($ctrl.donorEmail).toEqual({ email: 'donor@email.com' });
+      expect($ctrl.spouseEmail).toEqual({ email: 'spouse@email.com' });
       expect($ctrl.profileService.getEmails).toHaveBeenCalled();
     });
 
@@ -236,8 +236,8 @@ describe( 'ProfileComponent', function () {
 
       spyOn($ctrl.profileService, 'getEmails').and.returnValue(Observable.of(data));
       $ctrl.loadEmail();
-      expect($ctrl.donorEmail).toBe('');
-      expect($ctrl.spouseEmail).toBe('');
+      expect($ctrl.donorEmail).toEqual({ email: '' });
+      expect($ctrl.spouseEmail).toEqual({ email: '' });
       expect($ctrl.profileService.getEmails).toHaveBeenCalled();
     });
 
@@ -577,7 +577,7 @@ describe( 'ProfileComponent', function () {
 
   describe('loading()', () => {
     it('should return true if any of the forms is loading', () => {
-      $ctrl.donorDetialsLoading = false;
+      $ctrl.donorDetailsLoading = false;
       $ctrl.emailLoading = false;
       $ctrl.mailingAddressLoading = false;
       $ctrl.phonesLoading = false;
@@ -595,6 +595,7 @@ describe( 'ProfileComponent', function () {
       spyOn($ctrl,'saveSpouse');
       spyOn($ctrl,'updatePhoneNumbers');
       spyOn($ctrl,'updateMailingAddress');
+      $ctrl.$window.scrollTo = jasmine.createSpy('scrollTo');
       $ctrl.donorEmailForm.$dirty = true;
       $ctrl.spouseEmailForm.$dirty = true;
       $ctrl.donorDetailsForm.$dirty = true;
@@ -608,6 +609,7 @@ describe( 'ProfileComponent', function () {
       expect($ctrl.updateEmail).toHaveBeenCalled();
       expect($ctrl.updatePhoneNumbers).toHaveBeenCalled();
       expect($ctrl.updateMailingAddress).toHaveBeenCalled();
+      expect($ctrl.$window.scrollTo).toHaveBeenCalled();
 
       // $ctrl.donorDetailsForm.$dirty = false;
       $ctrl.addingSpouse = true;

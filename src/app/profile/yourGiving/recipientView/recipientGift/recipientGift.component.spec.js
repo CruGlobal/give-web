@@ -5,6 +5,7 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/of';
+import RecurringGiftModel from 'common/models/recurringGift.model';
 
 describe( 'your giving', function () {
   describe( 'recipient view', () => {
@@ -91,6 +92,13 @@ describe( 'your giving', function () {
           $ctrl.recipient = {'designation-number': '01234567'};
           $ctrl.giveNewGift();
           expect( $ctrl.productModalService.configureProduct ).toHaveBeenCalledWith( '01234567', jasmine.any(Object) );
+        } );
+      } );
+
+      describe( 'recurringGift( recurring )', () => {
+        it( 'returns a gift model', () => {
+          let gift = $ctrl.recurringGift({'donation-lines': [{amount: 300, 'designation-name': 'Damien Wilberforce'}]});
+          expect( gift ).toEqual( jasmine.any( RecurringGiftModel ) );
         } );
       } );
     } );

@@ -113,21 +113,21 @@ describe('order service', () => {
         }
       ).respond(200, 'somedata');
       self.orderService.updateDonorDetails({
-          "self": {
-            "type": "elasticpath.donordetails.donor",
-            "uri": "/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu=",
-            "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu="
-          },
-          mailingAddress: {
-            country: 'US',
-            streetAddress: '123 First St',
-            extendedAddress: 'Apt 123',
-            locality: 'Sacramento',
-            postalCode: '12345',
-            region: 'CA'
-          },
-          otherStuff: 'is also here'
-        })
+        "self": {
+          "type": "elasticpath.donordetails.donor",
+          "uri": "/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu=",
+          "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu="
+        },
+        mailingAddress: {
+          country: 'US',
+          streetAddress: '123 First St',
+          extendedAddress: 'Apt 123',
+          locality: 'Sacramento',
+          postalCode: '12345',
+          region: 'CA'
+        },
+        otherStuff: 'is also here'
+      })
         .subscribe((data) => {
           expect(data).toEqual('somedata');
         });
@@ -324,14 +324,58 @@ describe('order service', () => {
     });
     it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
       self.orderService.addPaymentMethod({
-          billingAddress: {}
-        })
+        billingAddress: {}
+      })
         .subscribe(() => {
             fail('the addPaymentMethod Observable completed successfully when it should have thrown an error');
           },
           (error) => {
             expect(error).toEqual('Error adding payment method. The data passed to orderService.addPaymentMethod did not contain bankAccount or creditCard data');
           });
+    });
+  });
+
+  describe('updatePaymentMethod', () => {
+    function runTestWith(paymentInfo, expectedRequestData){
+      spyOn(self.orderService, 'selectPaymentMethod').and.returnValue(Observable.of('placeholder'));
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
+        .respond(200, {
+          _order: [{
+            _paymentmethodinfo: [{
+              _creditcardupdateform: [{
+                links: [
+                  {
+                    rel: "updatecreditcardfororderaction",
+                    uri: "/creditcards/orders/crugive/default=/update/<payment id>="
+                  }
+                ]
+              }]
+            }]
+          }]
+        });
+
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/creditcards/orders/crugive/default=/update/<payment id>=',
+        expectedRequestData)
+        .respond(200, {});
+
+      self.orderService.updatePaymentMethod({ selectAction: '<select uri>' }, { creditCard: paymentInfo })
+        .subscribe();
+      expect(self.orderService.selectPaymentMethod).toHaveBeenCalledWith('<select uri>');
+
+      self.$httpBackend.flush();
+      self.$httpBackend.flush();
+    }
+    it('should update the given payment method', () => {
+      runTestWith({ 'cardholder-name': 'New name' },
+        { 'cardholder-name': 'New name' });
+    });
+    it('should update the given payment method with an address', () => {
+      runTestWith({ 'cardholder-name': 'New name', address: { country: 'US' } },
+        { 'cardholder-name': 'New name', address: { 'country-name': 'US' } });
+    });
+    it('should omit the credit card field since it can\'t be updated', () => {
+      runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
+        { 'cardholder-name': 'New name' });
     });
   });
 
@@ -418,7 +462,7 @@ describe('order service', () => {
       ).respond(200, clonedPaymentMethodSelectorResponse);
 
       self.orderService.getExistingPaymentMethods()
-        .subscribe((data) => {
+        .subscribe(data => {
           expect(data).toEqual(expectedResponse);
         });
 
@@ -437,7 +481,7 @@ describe('order service', () => {
       delete expectedResponse[0].chosen;
 
       self.orderService.getExistingPaymentMethods()
-        .subscribe((data) => {
+        .subscribe(data => {
           expect(data).toEqual(expectedResponse);
         });
 
@@ -455,7 +499,22 @@ describe('order service', () => {
       expectedResponse = [expectedResponse[0]];
 
       self.orderService.getExistingPaymentMethods()
-        .subscribe((data) => {
+        .subscribe(data => {
+          expect(data).toEqual(expectedResponse);
+        });
+
+      self.$httpBackend.flush();
+    });
+    it('should format payment addresses while loading existing payment methods', () => {
+      clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen[0]._description[0].address = { 'country-name': 'US' };
+      expectedResponse[0].address = { country: 'US', streetAddress: undefined, extendedAddress: undefined, locality: undefined, region: undefined, postalCode: undefined };
+
+      self.$httpBackend.expectGET(
+        'https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+      ).respond(200, clonedPaymentMethodSelectorResponse);
+
+      self.orderService.getExistingPaymentMethods()
+        .subscribe(data => {
           expect(data).toEqual(expectedResponse);
         });
 

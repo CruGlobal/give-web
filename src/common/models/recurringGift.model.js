@@ -1,5 +1,7 @@
+import angular from 'angular';
 import moment from 'moment';
 import find from 'lodash/find';
+import defaults from 'lodash/defaults';
 
 import {startMonth, startDate} from 'common/services/giftHelpers/giftDates.service';
 
@@ -13,13 +15,21 @@ export default class RecurringGiftModel {
   }
 
   initializeEmptyFields(){
-    if(!this.gift['updated-rate']){
-      this.gift['updated-rate'] = {
+    defaults(this.gift, {
+      'updated-amount': '',
+      'updated-payment-method-id': '',
+      'updated-rate': {
         recurrence: {
           interval: ''
         }
-      };
-    }
+      },
+      'updated-recurring-day-of-month': '',
+      'updated-start-month': '',
+      'updated-start-year': '',
+      'updated-donation-line-status': '',
+      'updated-designation-number': ''
+    });
+
     if(!this.parentDonation){
       this.parentDonation = {
         rate: {
@@ -160,7 +170,7 @@ export default class RecurringGiftModel {
       // We have to take transactionDay into account here when it is modified for monthly gifts since they don't set the updated-start-month/year fields
       giftDate = startDate(this.transactionDay, this.nextDrawDate, 0, this.parentDonation['start-date']['display-value']);
     }else{
-      giftDate = moment(this.parentDonation['next-draw-date']['display-value']);
+      giftDate = this.parentDonation['next-draw-date'] && moment(this.parentDonation['next-draw-date']['display-value']);
     }
     return giftDate;
   }

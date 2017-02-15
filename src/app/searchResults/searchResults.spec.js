@@ -47,6 +47,15 @@ describe( 'searchResults', function () {
       expect( $ctrl.searchResults ).toEqual( ministries );
     } );
 
+    it( 'handles results from search results', () => {
+      spyOn( $ctrl.designationsService, 'productSearch' ).and.returnValue( Observable.of( [] ) );
+
+      $ctrl.$onInit();
+      $ctrl.requestSearch('people');
+      expect( $ctrl.searchResults ).toEqual( [] );
+      expect( $ctrl.loadingResults ).toEqual( false );
+    } );
+
     it( 'handles error from search results', () => {
       spyOn( $ctrl.designationsService, 'productSearch' ).and.returnValue( Observable.throw( {} ) );
 

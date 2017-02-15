@@ -1,11 +1,13 @@
 import angular from 'angular';
 import 'angular-ui-bootstrap';
+import toFinite from 'lodash/toFinite';
+import 'rxjs/add/operator/toPromise';
+
 import designationsService from 'common/services/api/designations.service';
 import commonService from 'common/services/api/common.service';
 import productConfigModal, {giveGiftParams} from 'app/productConfig/productConfigModal/productConfig.modal.component';
 import modalStateService from 'common/services/modalState.service';
-import toFinite from 'lodash/toFinite';
-import 'rxjs/add/operator/toPromise';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 
 const serviceName = 'productModalService';
 
@@ -22,7 +24,8 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
     let modalInstance = $uibModal
       .open( {
         component:    productConfigModal.name,
-        size:         'lg give-modal',
+        size:         'lg',
+        windowTemplateUrl: giveModalWindowTemplate.name,
         resolve:      {
           productData: () => {
             return designationsService.productLookup( code ).toPromise();
@@ -86,6 +89,7 @@ export default angular
     commonService.name,
     designationsService.name,
     productConfigModal.name,
-    modalStateService.name
+    modalStateService.name,
+    giveModalWindowTemplate.name
   ] )
   .factory( serviceName, ProductModalService );

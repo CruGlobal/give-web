@@ -32,13 +32,13 @@ class SignInFormController {
       .signIn( this.username, this.password )
       .subscribe( () => {
         this.onSuccess();
-      }, ( error ) => {
+      }, error => {
         this.isSigningIn = false;
-        if( angular.isUndefined( error.data ) || error.data === null ) {
+        if( error && error.data && error.data.error ) {
+          this.errorMessage = error.data.error;
+        } else {
           this.$log.error('Sign In Error', error);
           this.errorMessage = this.gettext( 'An error has occurred signing in. Please try again.' );
-        } else {
-          this.errorMessage = error.data.error;
         }
         this.onFailure();
       } );
