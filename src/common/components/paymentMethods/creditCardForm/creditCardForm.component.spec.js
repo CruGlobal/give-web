@@ -94,7 +94,7 @@ describe('credit card form', () => {
       expect(size(self.formController.expiryMonth.$validators)).toEqual(2);
 
       expect(size(self.formController.securityCode.$parsers)).toEqual(1);
-      expect(size(self.formController.securityCode.$validators)).toEqual(3);
+      expect(size(self.formController.securityCode.$validators)).toEqual(4);
     });
   });
 
@@ -348,6 +348,22 @@ describe('credit card form', () => {
       it('should be valid if it is 4 digits',  () => {
         self.formController.securityCode.$setViewValue('1234');
         expect(self.formController.securityCode.$valid).toEqual(true);
+      });
+      it('should be valid if it is 4 digits and the card tyoe is American Express',  () => {
+        self.formController.cardNumber.$setViewValue('371449635398431');
+        self.formController.securityCode.$setViewValue('1234');
+        expect(self.formController.securityCode.$valid).toEqual(true);
+      });
+      it('should not be valid if it is 3 digits and the card tyoe is American Express',  () => {
+        self.formController.cardNumber.$setViewValue('371449635398431');
+        self.formController.securityCode.$setViewValue('123');
+        expect(self.formController.securityCode.$valid).toEqual(false);
+      });
+      it('should not be valid if it is 3 digits and the card tyoe is updated to American Express after',  () => {
+        self.formController.securityCode.$setViewValue('123');
+        expect(self.formController.securityCode.$valid).toEqual(true);
+        self.formController.cardNumber.$setViewValue('371449635398431');
+        expect(self.formController.securityCode.$valid).toEqual(false);
       });
     });
 

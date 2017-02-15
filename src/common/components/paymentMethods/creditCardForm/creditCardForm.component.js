@@ -83,6 +83,18 @@ class CreditCardController {
       this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
       this.creditCardPaymentForm.securityCode.$validators.minlength = number => toString(number).length >= 3;
       this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
+      this.creditCardPaymentForm.securityCode.$validators.cardTypeLength = number => {
+        try {
+          const cardType = new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber).getType();
+          return cardType !== 'AMERICAN_EXPRESS' || toString(number).length === 4;
+        } catch(e){
+          return true;
+        }
+      };
+      this.creditCardPaymentForm.cardNumber.$viewChangeListeners.push(() => {
+        // Revalidate CVV when cardNumber changes
+        this.creditCardPaymentForm.securityCode.$validate();
+      });
     });
   }
 
