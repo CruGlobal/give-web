@@ -15,11 +15,13 @@ function cruSubNav($window) {
       let subNavigation = element.children()[0];
       let parent = element.parent();
 
-      let desktopNavigation = parent.children()[0] || {};
+      let desktopNavigation = parent.children()[0] || {style: {}};
       offsetTop = !offsetTop ? subNavigation.offsetTop : offsetTop;
       angular.element($window).bind('scroll', () => {
         subNavigation.className = $window.scrollY > offsetTop ? 'out' : '';
-        desktopNavigation.className = $window.scrollY > offsetTop ? 'padded' : '';
+        desktopNavigation.style['margin-bottom'] =
+          ($window.scrollY > offsetTop ?
+            subNavigation.clientHeight : 0) + 'px';
       });
 
     }

@@ -9,7 +9,7 @@ cru-nav {
   overflow: hidden;
 }
 
-.mobile-nav-wrap {
+#mobile-nav-wrap {
   overflow-x: hidden;
 
   &.on {
@@ -19,11 +19,6 @@ cru-nav {
     z-index: 10;
     overflow: hidden;
   }
-}
-
-#mobile-header, #mobile-navigation {
-  position: absolute;
-  width: 100%;
 }
 
 #mobile-header {
