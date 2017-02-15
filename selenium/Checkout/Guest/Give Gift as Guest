@@ -12,6 +12,11 @@
 <tr><td rowspan="1" colspan="3">Give Gift as Guest</td></tr>
 </thead><tbody>
 <tr>
+	<td>disabled</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
 	<td>open</td>
 	<td>/</td>
 	<td></td>

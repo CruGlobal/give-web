@@ -12,6 +12,11 @@
 <tr><td rowspan="1" colspan="3">Delete Payment Method</td></tr>
 </thead><tbody>
 <tr>
+	<td>disabled</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>open</td>
 	<td>/</td>
 	<td></td>
@@ -176,7 +181,6 @@
 	<td>//payment-methods</td>
 	<td>*Third Test Bank*</td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

@@ -6,6 +6,7 @@ require_relative './helpers/string_helpers.rb'
 require 'rest_client'
 require 'json'
 require 'securerandom'
+require 'cgi'
 
 TASK_ID = (ENV['TASK_ID'] || 0).to_i
 BUILD_NUMBER = ENV['BUILD_DISPLAY_NAME'] || SecureRandom.uuid
@@ -35,10 +36,11 @@ RSpec.configure do |config|
       @driver.quit
       if example.exception
         # Marks failed tests
+        reason = CGI::escapeHTML example.exception.message
         RestClient::Request.execute(method: :put, user: CONFIG['user'], password: CONFIG['key'],
                                     url: "https://www.browserstack.com/automate/sessions/#{@session_id}.json",
                                     headers: {content_type: :json},
-                                    payload: {status: 'failed', reason: example.exception.message}.to_json)
+                                    payload: {status: 'failed', reason: reason}.to_json)
       end
     end
   end

@@ -21,10 +21,14 @@ task rspec: :dotenv do
   if 'browserstack' == ENV['WEBDRIVER_FOR']
     CONFIG = YAML.load(File.read(File.join(File.dirname(__FILE__), 'browserstack.yml')))
     @num_parallel = CONFIG['browser_caps'].length
-    Parallel.map([*1..@num_parallel], :in_processes => @num_parallel) do |task_id|
-      ENV['TASK_ID'] = (task_id - 1).to_s
+    if @num_parallel <= 1
       Rake::Task['browserstack'].invoke
-      Rake::Task['browserstack'].reenable
+    else
+      Parallel.map([*1..@num_parallel], :in_processes => @num_parallel) do |task_id|
+        ENV['TASK_ID'] = (task_id - 1).to_s
+        Rake::Task['browserstack'].invoke
+        Rake::Task['browserstack'].reenable
+      end
     end
   else
     Rake::Task['webdriver'].invoke
