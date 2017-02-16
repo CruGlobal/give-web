@@ -59,6 +59,14 @@ class PaymentMethodController{
               editedData = $event.payload.creditCard;
               editedData['card-number'] = $event.payload.paymentMethodNumber ? $event.payload.paymentMethodNumber : editedData['card-number'];
               editedData.address = formatAddressForTemplate(editedData.address);
+
+              if(editedData['card-number'] !== this.model['card-number']){
+                //update card type if number changed
+                this.profileService.getPaymentMethod(this.model.self.uri)
+                  .subscribe(data => {
+                    this.model['card-type'] = data['card-type'];
+                  });
+              }
             } else {
               editedData = $event.payload.bankAccount;
               editedData['display-account-number'] = $event.payload.paymentMethodNumber ? $event.payload.paymentMethodNumber : editedData['display-account-number'];

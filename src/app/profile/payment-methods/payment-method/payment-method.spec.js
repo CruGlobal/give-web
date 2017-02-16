@@ -38,8 +38,10 @@ describe('PaymentMethodComponent', function () {
       },
       'recurringgifts': {
         'donations': []
+      },
+      self: {
+        uri: ''
       }
-
     },
     modelEFT = {
       'account-type': 'Checking',
@@ -137,6 +139,7 @@ describe('PaymentMethodComponent', function () {
 
   describe('onPaymentFormStateChange()', () => {
     beforeEach(() => {
+      self.controller.model = modelCC;
       self.controller.data = {
         creditCard:{
           'card-number': '0000',
