@@ -1,4 +1,5 @@
 import angular from 'angular';
+import every from 'lodash/every';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
@@ -36,6 +37,10 @@ class EditRecurringGiftsController {
             this.loadingError = true;
           });
     }
+  }
+
+  allPaymentMethodsValid(){
+    return every(this.recurringGifts, gift => gift.paymentMethod);
   }
 }
 

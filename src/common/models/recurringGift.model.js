@@ -109,7 +109,7 @@ export default class RecurringGiftModel {
   }
 
   get paymentMethod(){
-    return this._paymentMethod = this._paymentMethod || find( this.paymentMethods, ( paymentMethod ) => {
+    return this._paymentMethod = this._paymentMethod || find( this.paymentMethods, paymentMethod => {
         return this.paymentMethodId === paymentMethod.self.uri.split( '/' ).pop();
       } );
   }
