@@ -47,10 +47,21 @@ describe( 'searchResults', function () {
       expect( $ctrl.searchResults ).toEqual( ministries );
     } );
 
+    it( 'handles no search query', () => {
+      $ctrl.$onInit();
+      $ctrl.requestSearch('people');
+      expect( $ctrl.searchResults ).toEqual( null );
+    } );
+
     it( 'handles results from search results', () => {
       spyOn( $ctrl.designationsService, 'productSearch' ).and.returnValue( Observable.of( [] ) );
 
+
       $ctrl.$onInit();
+      $ctrl.searchParams = {
+        keyword: 'steve'
+      };
+
       $ctrl.requestSearch('people');
       expect( $ctrl.searchResults ).toEqual( [] );
       expect( $ctrl.loadingResults ).toEqual( false );
@@ -60,6 +71,9 @@ describe( 'searchResults', function () {
       spyOn( $ctrl.designationsService, 'productSearch' ).and.returnValue( Observable.throw( {} ) );
 
       $ctrl.$onInit();
+      $ctrl.searchParams = {
+        keyword: 'steve'
+      };
       $ctrl.requestSearch('people');
       expect( $ctrl.searchResults ).toEqual( null );
       expect( $ctrl.searchError ).toEqual( true );
