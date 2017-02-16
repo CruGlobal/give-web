@@ -21,12 +21,15 @@
     </div>
     <div class="col-sm-6" ng-switch="$ctrl.singleGift">
       <p class="mt hidden-xs" ng-switch-when="true" translate>One-Time Gift</p>
-      <div class="form-group" ng-switch-default>
+      <div class="form-group" ng-switch-default ng-class="{'has-error': !$ctrl.gift.paymentMethod}">
         <label translate>Payment Method</label>
         <select class="form-control  form-control-subtle"
                 ng-model="$ctrl.gift.paymentMethodId"
                 ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['card-number'])) for paymentMethod in $ctrl.gift.paymentMethods" >
         </select>
+        <div role="alert" ng-if="!$ctrl.gift.paymentMethod">
+          <div class="help-block" translate>You must choose a valid payment method</div>
+        </div>
       </div>
     </div>
   </div>
