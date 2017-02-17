@@ -17,10 +17,8 @@ describe('Checkout Help', function() {
   });
 
   it('get help block content from AEM', function() {
-    $httpBackend.expectGET('/etc/designs/give/_jcr_content/content/give-need-help.json')
-      .respond(200, {
-        richtextglobal: '<p>Help Content</p>'
-      });
+    $httpBackend.expectGET('/designations/jcr:content/need-help-ipar/contentfragment.html')
+      .respond(200, '<p>Help Content</p>');
 
     $ctrl.$onInit();
     $httpBackend.flush();
@@ -29,7 +27,7 @@ describe('Checkout Help', function() {
   });
 
   it('should log an error on failure', () => {
-    $httpBackend.expectGET('/etc/designs/give/_jcr_content/content/give-need-help.json').respond(500, 'some error');
+    $httpBackend.expectGET('/designations/jcr:content/need-help-ipar/contentfragment.html').respond(500, 'some error');
     $ctrl.$onInit();
     $httpBackend.flush();
 
