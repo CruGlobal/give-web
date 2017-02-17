@@ -103,7 +103,7 @@
                           </form>
                         </li>
 
-                        <li ng-if="!$ctrl.hasSpouse">
+                        <li ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && !$ctrl.hasSpouse">
                           <a id="addSpouseLink" ng-if="!$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = true" translate>+ Add Your Spouse</a>
                           <a id="removeSpouseLink" ng-if="$ctrl.addingSpouse" href="" ng-click="$ctrl.addingSpouse = false" translate>- Remove Spouse</a>
                         </li>
@@ -133,7 +133,7 @@
                         </div>
                       </form>
 
-                      <form name="$ctrl.spouseEmailForm" novalidate ng-if="$ctrl.hasSpouse || $ctrl.addingSpouse">
+                      <form name="$ctrl.spouseEmailForm" novalidate ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.hasSpouse || $ctrl.addingSpouse)">
                         <div class="form-group" ng-class="{'has-error': ($ctrl.spouseEmailForm.spouseEmail | showErrors)}">
                           <label translate>
                             {{$ctrl.hasSpouse ? ($ctrl.donorDetails['spouse-name']['given-name'] + ' ' + $ctrl.donorDetails['spouse-name']['family-name']) : 'Spouse'}} Email
@@ -179,6 +179,16 @@
 
                     <!--Mailing Address-->
                     <h4 class="panel-title  border-bottom-small visible" translate>Your Mailing Address</h4>
+
+                    <div class="row" ng-if="$ctrl.donorDetails['donor-type'] == 'Organization'">
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label translate>Organization Name</label>
+                          <input type="text" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['organization-name']" readonly>
+                        </div>
+                      </div>
+                    </div>
+
                     <form name="$ctrl.mailingAddressForm" class="loading-overlay-parent" novalidate>
                       <loading type="overlay" ng-if="$ctrl.mailingAddressLoading"></loading>
                       <address-form ng-if="$ctrl.mailingAddress" address="$ctrl.mailingAddress.address" parent-form="$ctrl.mailingAddressForm"></address-form>
