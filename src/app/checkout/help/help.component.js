@@ -14,7 +14,7 @@ class CheckoutHelpController {
   }
 
   $onInit(){
-    this.$http.get('/designations/jcr%3Acontent/need-help-ipar/contentfragment.html').then((response) => {
+    this.$http.get('/designations/jcr:content/need-help-ipar/contentfragment.html').then((response) => {
       this.helpHTML = response.data;
     }, error => {
       this.$log.error('Error loading give-need-help', error);
