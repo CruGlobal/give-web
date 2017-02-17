@@ -209,6 +209,19 @@ class Profile {
       });
   }
 
+  getPaymentMethod( uri ){
+    return this.cortexApiService.get({
+      path: uri
+    })
+      .map((paymentMethod) => {
+        paymentMethod.id = paymentMethod.self.uri.split('/').pop();
+        if(paymentMethod.address){
+          paymentMethod.address = formatAddressForTemplate(paymentMethod.address);
+        }
+        return paymentMethod;
+      });
+  }
+
   getPaymentMethodsWithDonations(){
     return this.cortexApiService.get({
       path: ['profiles', this.cortexApiService.scope, 'default'],
