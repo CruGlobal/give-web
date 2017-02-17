@@ -31,7 +31,6 @@ class ProductConfigController {
     this.error = false;
     let modalInstance = this.productModalService
       .configureProduct( this.productCode, {
-        amount: 50,
         'campaign-code': this.campaignCode,
         'campaign-page': this.campaignPage
       }, false );
@@ -81,7 +80,7 @@ export default angular
       function ( $location, productModalService ) {
         let params = $location.search();
         if ( params.hasOwnProperty( giveGiftParams.designation ) ) {
-          productModalService.configureProduct( params[giveGiftParams.designation], {amount: 50}, false );
+          productModalService.configureProduct( params[giveGiftParams.designation], null, false );
         }
       } );
   } );

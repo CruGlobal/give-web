@@ -19,6 +19,7 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
     if ( modalOpen ) {
       return;
     }
+    config = config || {};
     modalOpen = true;
     isEdit = !!isEdit;
     let modalInstance = $uibModal

@@ -51,7 +51,7 @@ class RecipientGift {
   }
 
   giveNewGift() {
-    this.productModalService.configureProduct( this.recipient['designation-number'], {amount: 50} );
+    this.productModalService.configureProduct( this.recipient['designation-number'] );
   }
 
   recurringGift(recurring) {
