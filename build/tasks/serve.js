@@ -14,6 +14,9 @@ contentProxy.route = '/content';
 var etcProxy = url.parse(aemDomain + '/etc');
 etcProxy.route = '/etc';
 
+var designationsProxy = url.parse(aemDomain + '/designations');
+designationsProxy.route = '/designations';
+
 gulp.task('serve', ['watch'], function (done) {
   browserSync({
     open: false,
@@ -33,7 +36,8 @@ gulp.task('serve', ['watch'], function (done) {
         }),
         proxy(binProxy),
         proxy(contentProxy),
-        proxy(etcProxy)
+        proxy(etcProxy),
+        proxy(designationsProxy)
       ]
     }
   }, done);
