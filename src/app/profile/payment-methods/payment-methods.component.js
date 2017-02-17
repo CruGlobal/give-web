@@ -114,6 +114,7 @@ class PaymentMethodsController {
         .subscribe(data => {
             data.address = data.address && formatAddressForTemplate(data.address);
             this.paymentMethodFormModal.close(data);
+            this.paymentFormResolve.state = 'unsubmitted';
           },
           error => {
             this.$log.error('Error adding payment method',error);
