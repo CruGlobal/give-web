@@ -6,11 +6,12 @@ import find from 'lodash/find';
 import omit from 'lodash/omit';
 import map from 'lodash/map';
 import includes from 'lodash/includes';
+import isEmpty from 'lodash/isEmpty';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
 import modalStateService from 'common/services/modalState.service';
-import {possibleTransactionDays, startDate} from 'common/services/giftHelpers/giftDates.service';
+import { possibleTransactionDays, startDate } from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component';
@@ -46,6 +47,13 @@ class ProductConfigModalController {
   }
 
   $onInit(){
+    this.initModalData();
+    this.initializeParams();
+    this.setDefaultAmount();
+    this.waitForFormInitialization();
+  }
+
+  initModalData(){
     this.productData = this.resolve.productData;
     this.itemConfig = this.resolve.itemConfig;
     this.isEdit = this.resolve.isEdit;
@@ -53,52 +61,21 @@ class ProductConfigModalController {
     this.suggestedAmounts =  this.resolve.suggestedAmounts;
     this.nextDrawDate = this.resolve.nextDrawDate;
 
-    !this.isEdit && this.initializeParams();
-
-    if( this.suggestedAmounts.length > 0 ) {
-      this.customInputActive = true;
-      this.customAmount = (map(this.suggestedAmounts, 'amount').indexOf(this.itemConfig.amount) === -1) ?
-        this.suggestedAmounts[0].amount : this.itemConfig.amount;
-      this.changeCustomAmount(this.customAmount);
-    } else {
-      if ( this.selectableAmounts.indexOf( this.itemConfig.amount ) === -1 ) {
-        this.customAmount = this.itemConfig.amount;
-        this.customInputActive = true;
-      }
-    }
-
     if(!this.itemConfig['recurring-day-of-month'] && this.nextDrawDate) {
       this.itemConfig['recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
     }
 
-    this.addedCustomValidators = false;
     this.showRecipientComments = false;
     this.showDSComments = false;
-  }
 
-  waitForFormInitialization() {
-    let unregister = this.$scope.$watch(()=>this.itemConfigForm, () => {
-      if(this.itemConfigForm) {
-        unregister();
-        this.addCustomValidators();
-      }
-    });
-  }
-
-  addCustomValidators() {
-    this.itemConfigForm.amount.$validators.minimum = value => {
-      return this.customInputActive ? (value*1.0 >= 1) : true;
-    };
-    this.itemConfigForm.amount.$validators.maximum = value => {
-      return this.customInputActive ? (value*1.0 < 10000000) : true;
-    };
-    this.itemConfigForm.amount.$validators.pattern = value => {
-      var regex = /^([0-9]*)(\.[0-9]{1,2})?$/;
-      return this.customInputActive ? (regex.test(value)) : true;
-    };
+    this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts);
   }
 
   initializeParams() {
+    if(this.isEdit){
+      return;
+    }
+
     let params = this.$location.search();
 
     this.modalStateService.name( 'give-gift' );
@@ -124,15 +101,44 @@ class ProductConfigModalController {
     }
   }
 
-  showDefaultAmounts() {
-    if(this.suggestedAmounts.length === 0) {
-      if(!this.addedCustomValidators) {
-        this.waitForFormInitialization();
-        this.addedCustomValidators = true;
+  setDefaultAmount(){
+    const amountOptions = isEmpty(this.suggestedAmounts) ?
+      this.selectableAmounts :
+      map(this.suggestedAmounts, 'amount');
+
+    if(this.itemConfig.amount){
+      if(amountOptions.indexOf(this.itemConfig.amount) === -1){
+        this.changeCustomAmount(this.itemConfig.amount);
       }
-      return true;
+    }else{
+      this.itemConfig.amount = amountOptions[0];
     }
-    return false;
+  }
+
+  waitForFormInitialization() {
+    let unregister = this.$scope.$watch('$ctrl.itemConfigForm.amount', () => {
+      if(this.itemConfigForm && this.itemConfigForm.amount) {
+        unregister();
+        this.addCustomValidators();
+      }
+    });
+  }
+
+  addCustomValidators() {
+    this.itemConfigForm.amount.$validators.minimum = value => {
+      return !this.customInputActive || value*1.0 >= 1;
+    };
+    this.itemConfigForm.amount.$validators.maximum = value => {
+      return !this.customInputActive || value*1.0 < 10000000;
+    };
+    this.itemConfigForm.amount.$validators.pattern = value => {
+      const regex = /^([0-9]*)(\.[0-9]{1,2})?$/;
+      return !this.customInputActive || regex.test(value);
+    };
+  }
+
+  updateQueryParam(param, value){
+    if ( !this.isEdit ) this.$location.search( param, value );
   }
 
   frequencyOrder( f ) {
@@ -146,7 +152,7 @@ class ProductConfigModalController {
     this.errorChangingFrequency = false;
     const lastFrequency = this.productData.frequency;
     this.productData.frequency = product.name;
-    if ( !this.isEdit ) this.$location.search( giveGiftParams.frequency, product.name );
+    this.updateQueryParam( giveGiftParams.frequency, product.name );
     if(product.selectAction) {
       this.designationsService.productLookup(product.selectAction, true)
         .subscribe(data => {
@@ -158,7 +164,7 @@ class ProductConfigModalController {
             this.$log.error('Error loading new product when changing frequency', error);
             this.errorChangingFrequency = true;
             this.productData.frequency = lastFrequency;
-            if (!this.isEdit) this.$location.search(giveGiftParams.frequency, lastFrequency);
+            this.updateQueryParam( giveGiftParams.frequency, lastFrequency);
             this.changingFrequency = false;
           });
     }
@@ -168,18 +174,20 @@ class ProductConfigModalController {
     this.itemConfigForm.$setDirty();
     this.itemConfig.amount = amount;
     this.customAmount = '';
-    if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
     this.customInputActive = false;
+    this.updateQueryParam( giveGiftParams.amount, amount );
   }
 
   changeCustomAmount( amount ) {
     this.itemConfig.amount = amount;
-    if ( !this.isEdit ) this.$location.search( giveGiftParams.amount, amount );
+    this.customAmount = amount;
+    this.customInputActive = true;
+    this.updateQueryParam( giveGiftParams.amount, amount );
   }
 
   changeStartDay( day ) {
     this.errorAlreadyInCart = false;
-    if ( !this.isEdit ) this.$location.search( giveGiftParams.day, day );
+    this.updateQueryParam( giveGiftParams.day, day );
   }
 
   saveGiftToCart() {

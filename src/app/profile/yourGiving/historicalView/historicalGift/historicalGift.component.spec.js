@@ -3,7 +3,7 @@ import 'angular-mocks';
 import module from './historicalGift.component';
 
 describe( 'your giving', function () {
-  describe( 'recipient view', () => {
+  describe( 'historical view', () => {
     describe( 'recipient gift', () => {
       beforeEach( angular.mock.module( module.name ) );
       let $ctrl;
@@ -35,7 +35,7 @@ describe( 'your giving', function () {
         it( 'displays productConfig modal', () => {
           $ctrl.gift = {'historical-donation-line': {'designation-number': '01234567'}};
           $ctrl.giveNewGift();
-          expect( $ctrl.productModalService.configureProduct ).toHaveBeenCalledWith( '01234567', jasmine.any( Object ) );
+          expect( $ctrl.productModalService.configureProduct ).toHaveBeenCalledWith( '01234567' );
         } );
       } );
     } );

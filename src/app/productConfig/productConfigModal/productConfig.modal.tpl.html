@@ -38,24 +38,53 @@
             Gift Amount
           </h4>
           <div class="panel-body pt0">
-            <div ng-if="$ctrl.suggestedAmounts">
-              <div class="radio radio-custom-amount" ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
+            <div ng-if="$ctrl.useSuggestedAmounts">
+              <div class="radio radio-custom-amount"
+                   ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
                 <label>
-                  <input name="amount"
-                         ng-model="$ctrl.customAmount"
-                         ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                  <input name="suggestedAmount"
                          type="radio"
-                         ng-value="suggested.amount"
-                         required>{{suggested.amount | currency:'$':2}} {{suggested.label}}
+                         ng-click="$ctrl.changeAmount(suggested.amount)"
+                         ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.amount === suggested.amount">
+                  {{suggested.amount | currency:'$':2}} {{suggested.label}}
                 </label>
+              </div>
+              <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
+                <div class="form-group">
+                  <label>
+                    <input name="suggestedAmount"
+                           type="radio"
+                           ng-checked="$ctrl.customInputActive">
+                    <input class="form-control form-control-subtle"
+                           name="amount"
+                           type="text"
+                           step="1"
+                           tabindex="-1"
+                           ng-model="$ctrl.customAmount"
+                           ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                           ng-focus="$ctrl.customInputActive = true;"
+                           ng-required="$ctrl.customInputActive"
+                           placeholder="{{'Other' | translate}}">
+                  </label>
+                  <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                       ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+                    <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
+                    <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+                    <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+                    <div class="help-block" ng-message="maximum" translate>
+                      Amount must be less than {{ 10000000 | currency }}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div data-toggle="buttons" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
-                 ng-if="$ctrl.showDefaultAmounts()">
+            <div data-toggle="buttons"
+                 ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
+                 ng-if="!$ctrl.useSuggestedAmounts">
               <label class="btn btn-radio"
                      ng-click="$ctrl.changeAmount(a)"
-                     ng-class="{'active': $ctrl.itemConfig.amount == a && !$ctrl.customInputActive}"
+                     ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
                      ng-repeat-start="a in $ctrl.selectableAmounts">
                 <span class="number">${{a}}</span>
               </label>
@@ -73,7 +102,7 @@
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-focus="$ctrl.customInputActive = true;"
                          tabindex="-1"
-                         placeholder="{{'Other'|translate}}"
+                         placeholder="{{'Other' | translate}}"
                          required>
                 </div>
               </label>

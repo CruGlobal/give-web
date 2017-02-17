@@ -13,7 +13,7 @@ class HistoricalGift {
   }
 
   giveNewGift() {
-    this.productModalService.configureProduct( this.gift['historical-donation-line']['designation-number'], {amount: 50} );
+    this.productModalService.configureProduct( this.gift['historical-donation-line']['designation-number'] );
   }
 
   manageGift() {

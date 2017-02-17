@@ -41,88 +41,182 @@ describe( 'product config modal', function () {
   } ) );
 
   it( 'to be defined', () => {
-    $ctrl.$onInit();
     expect( $ctrl.$location ).toBeDefined();
     expect( $ctrl.$scope ).toBeDefined();
     expect( $ctrl.$log ).toBeDefined();
     expect( $ctrl.designationsService ).toBeDefined();
     expect( $ctrl.cartService ).toBeDefined();
     expect( $ctrl.modalStateService ).toBeDefined();
-    expect( $ctrl.productData ).toBeDefined();
-    expect( $ctrl.nextDrawDate ).toBeDefined();
-    expect( $ctrl.suggestedAmounts ).toBeDefined();
-    expect( $ctrl.itemConfig ).toBeDefined();
-    expect( $ctrl.isEdit ).toBeDefined();
-    expect( $ctrl.uri ).toBeDefined();
+    expect( $ctrl.possibleTransactionDays ).toBeDefined();
+    expect( $ctrl.startDate ).toBeDefined();
   } );
 
-  describe( '$onInit()', () => {
-    describe( 'isEdit = true', () => {
-      beforeEach( () => {
-        $ctrl.resolve.isEdit = true;
-      } );
-      describe( 'with suggestedAmounts', () => {
-        it( 'initializes the controller', () => {
-          $ctrl.resolve.itemConfig = {
-            amount:                   543.21,
-            'recurring-day-of-month': '28'
-          };
-          $ctrl.resolve.suggestedAmounts = [{amount: 123.45, label: 'Testing'}, {amount: 543.21, label: 'gnitseT'}];
-          $ctrl.$onInit();
-          expect( $ctrl.customInputActive ).toEqual( true );
-          expect( $ctrl.customAmount ).toEqual( 543.21 );
-          expect( $ctrl.itemConfig ).toEqual( {amount: 543.21, 'recurring-day-of-month': '28'} );
-          expect( $ctrl.$location.search ).not.toHaveBeenCalled();
-          expect( $ctrl.addedCustomValidators ).toEqual( false );
-        } );
-      } );
-      describe( 'with selectableAmounts', () => {
-        it( 'initializes the controller', () => {
-          $ctrl.resolve.itemConfig = {
-            amount:                   1000,
-            'recurring-day-of-month': '28'
-          };
-          $ctrl.$onInit();
-          expect( $ctrl.selectableAmounts ).toEqual( [50, 100, 250, 500, 1000, 5000] );
-          expect( $ctrl.itemConfig ).toEqual( {amount: 1000, 'recurring-day-of-month': '28'} );
-          expect( $ctrl.customAmount ).not.toBeDefined();
-          expect( $ctrl.customInputActive ).not.toBeDefined();
-          expect( $ctrl.addedCustomValidators ).toEqual( false );
-        } );
-      } );
-    } );
-
-    describe( 'isEdit = false', () => {
-      beforeEach( () => {
-        $ctrl.resolve.isEdit = false;
-        spyOn( $ctrl, 'initializeParams' );
-      } );
-      describe( 'with suggestedAmounts', () => {
-        it( 'initializes the controller', () => {
-          $ctrl.resolve.suggestedAmounts = [{amount: 123.45, label: 'Testing'}, {amount: 543.21, label: 'gnitseT'}];
-          $ctrl.$onInit();
-          expect( $ctrl.customInputActive ).toEqual( true );
-          expect( $ctrl.customAmount ).toEqual( 123.45 );
-          expect( $ctrl.itemConfig ).toEqual( {amount: 123.45, 'recurring-day-of-month': '01'} );
-          expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.amount, 123.45 );
-          expect( $ctrl.addedCustomValidators ).toEqual( false );
-          expect( $ctrl.initializeParams ).toHaveBeenCalled();
-        } );
-      } );
-
-      describe( 'with selectableAmounts', () => {
-        it( 'initializes the controller', () => {
-          $ctrl.$onInit();
-          expect( $ctrl.selectableAmounts ).toEqual( [50, 100, 250, 500, 1000, 5000] );
-          expect( $ctrl.itemConfig ).toEqual( {amount: 85, 'recurring-day-of-month': '01'} );
-          expect( $ctrl.customAmount ).toEqual( 85 );
-          expect( $ctrl.customInputActive ).toEqual( true );
-          expect( $ctrl.addedCustomValidators ).toEqual( false );
-          expect( $ctrl.initializeParams ).toHaveBeenCalled();
-        } );
-      } );
+  describe( '$onInit', () => {
+    it( 'should call the initialization functions', () => {
+      spyOn( $ctrl, 'initModalData' );
+      spyOn( $ctrl, 'initializeParams' );
+      spyOn( $ctrl, 'setDefaultAmount' );
+      spyOn( $ctrl, 'waitForFormInitialization' );
+      $ctrl.$onInit();
+      expect( $ctrl.initModalData ).toHaveBeenCalled();
+      expect( $ctrl.initializeParams ).toHaveBeenCalled();
+      expect( $ctrl.setDefaultAmount ).toHaveBeenCalled();
+      expect( $ctrl.waitForFormInitialization ).toHaveBeenCalled();
     } );
   } );
+
+  describe( 'initModalData', () => {
+    it( 'should use the resolve input to initialize the data used by the modal', () => {
+      $ctrl.resolve = {
+        productData: 'some data',
+        itemConfig: { amount: 50, 'recurring-day-of-month': '10' },
+        isEdit: true,
+        uri: 'some path',
+        suggestedAmounts: [ { amount: 5 }, { amount: 10 } ],
+        nextDrawDate: '2016-10-02'
+      };
+      $ctrl.initModalData();
+      expect( $ctrl.productData ).toEqual('some data');
+      expect( $ctrl.itemConfig ).toEqual({ amount: 50, 'recurring-day-of-month': '10' });
+      expect( $ctrl.isEdit ).toEqual(true);
+      expect( $ctrl.uri ).toEqual('some path');
+      expect( $ctrl.suggestedAmounts ).toEqual([ { amount: 5 }, { amount: 10 } ]);
+      expect( $ctrl.nextDrawDate ).toEqual('2016-10-02');
+      expect( $ctrl.showRecipientComments ).toEqual(false);
+      expect( $ctrl.showDSComments ).toEqual(false);
+      expect( $ctrl.useSuggestedAmounts ).toEqual(true);
+    } );
+
+    it( 'should not use suggested amounts if they are not provided', () => {
+      $ctrl.resolve = {
+        itemConfig: {}
+      };
+      $ctrl.initModalData();
+      expect( $ctrl.useSuggestedAmounts ).toEqual(false);
+    } );
+
+    it( 'should initialize the recurring day of month', () => {
+      $ctrl.resolve = {
+        itemConfig: {},
+        nextDrawDate: '2016-10-02'
+      };
+      $ctrl.initModalData();
+      expect( $ctrl.itemConfig ).toEqual({ 'recurring-day-of-month': '02' });
+    } );
+  } );
+
+  describe( 'initializeParams', () => {
+    beforeEach( () => {
+      spyOn( $ctrl, 'changeFrequency' );
+      spyOn( $ctrl.modalStateService, 'name' );
+      $ctrl.productData = {
+        frequencies: [
+          {name: 'NA', selectAction: '/a'},
+          {name: 'MON', selectAction: '/b'},
+          {name: 'QUARTERLY', selectAction: '/c'}
+        ]
+      };
+      $ctrl.itemConfig = {};
+      $ctrl.isEdit = false;
+    } );
+
+    it('should do nothing if in edit mode', () => {
+      $ctrl.isEdit = true;
+      $ctrl.initializeParams();
+      expect( $ctrl.$location.search ).not.toHaveBeenCalled();
+    });
+
+    it( 'sets all values from query params', () => {
+      $ctrl.$location.search.and.returnValue( {
+        [giveGiftParams.designation]: '0123456',
+        [giveGiftParams.amount]:      '150',
+        [giveGiftParams.frequency]:   'QUARTERLY',
+        [giveGiftParams.day]:         '21'
+      } );
+      $ctrl.initializeParams();
+      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
+      expect( $ctrl.$location.search ).toHaveBeenCalled();
+      expect( $ctrl.itemConfig.amount ).toEqual( 150 );
+      expect( $ctrl.changeFrequency ).toHaveBeenCalled();
+      expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '21' );
+    } );
+
+    it( 'doesn\'t set missing values', () => {
+      $ctrl.$location.search.and.returnValue( {} );
+      $ctrl.initializeParams();
+      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
+      expect( $ctrl.$location.search ).toHaveBeenCalled();
+      expect( $ctrl.itemConfig.amount ).toBeUndefined();
+      expect( $ctrl.changeFrequency ).not.toHaveBeenCalled();
+      expect( $ctrl.itemConfig['recurring-day-of-month'] ).toBeUndefined();
+    } );
+
+    it( 'handles unknown frequency', () => {
+      $ctrl.$location.search.and.returnValue( {
+        [giveGiftParams.frequency]: 'ALWAYS'
+      } );
+      $ctrl.initializeParams();
+      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
+      expect( $ctrl.$location.search ).toHaveBeenCalled();
+      expect( $ctrl.changeFrequency ).not.toHaveBeenCalled();
+    } );
+
+    it( 'handles frequency with missing selectAction', () => {
+      $ctrl.productData.frequencies = [
+        {name: 'NA', selectAction: '/a'},
+        {name: 'MON'},
+        {name: 'QUARTERLY', selectAction: '/c'}];
+      $ctrl.$location.search.and.returnValue( {
+        [giveGiftParams.frequency]: 'MON'
+      } );
+      $ctrl.initializeParams();
+      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
+      expect( $ctrl.$location.search ).toHaveBeenCalled();
+      expect( $ctrl.changeFrequency ).not.toHaveBeenCalled();
+    } );
+  } );
+
+  describe( 'setDefaultAmount', () => {
+    beforeEach(() => {
+      $ctrl.itemConfig = {};
+      spyOn($ctrl, 'changeCustomAmount');
+    });
+    it('should set the default amount if there are no suggested amounts', () => {
+      $ctrl.setDefaultAmount();
+      expect($ctrl.itemConfig.amount).toEqual(50);
+    });
+    it('should set the default amount if there are suggested amounts', () => {
+      $ctrl.suggestedAmounts = [ { amount: 14 }];
+      $ctrl.setDefaultAmount();
+      expect($ctrl.itemConfig.amount).toEqual(14);
+    });
+    it('should use an existing selectableAmounts', () => {
+      $ctrl.itemConfig.amount = 100;
+      $ctrl.setDefaultAmount();
+      expect($ctrl.itemConfig.amount).toEqual(100);
+      expect($ctrl.changeCustomAmount).not.toHaveBeenCalled();
+    });
+    it('should use an existing suggestedAmounts', () => {
+      $ctrl.itemConfig.amount = 14;
+      $ctrl.suggestedAmounts = [ { amount: 14 }];
+      $ctrl.setDefaultAmount();
+      expect($ctrl.itemConfig.amount).toEqual(14);
+      expect($ctrl.changeCustomAmount).not.toHaveBeenCalled();
+    });
+    it('should initialize the custom value without suggestedAmounts', () => {
+      $ctrl.itemConfig.amount = 14;
+      $ctrl.setDefaultAmount();
+      expect($ctrl.itemConfig.amount).toEqual(14);
+      expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14);
+    });
+    it('should initialize the custom value with suggestedAmounts', () => {
+      $ctrl.itemConfig.amount = 14;
+      $ctrl.suggestedAmounts = [ { amount: 25 }];
+      $ctrl.setDefaultAmount();
+      expect($ctrl.itemConfig.amount).toEqual(14);
+      expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14);
+    });
+  });
 
   describe( 'waitForFormInitialization()', () => {
     it( 'should wait for the form to become available and then call addCustomValidators()', ( done ) => {
@@ -133,7 +227,8 @@ describe( 'product config modal', function () {
       expect( $ctrl.addCustomValidators ).not.toHaveBeenCalled();
       $ctrl.itemConfigForm = {
         $valid: true,
-        $dirty: false
+        $dirty: false,
+        amount: {}
       };
       $ctrl.$scope.$digest();
       expect( $ctrl.addCustomValidators ).toHaveBeenCalled();
@@ -173,90 +268,15 @@ describe( 'product config modal', function () {
     } );
   } );
 
-  describe( 'initializeParams', () => {
-    beforeEach( () => {
-      spyOn( $ctrl, 'changeFrequency' );
-      spyOn( $ctrl.modalStateService, 'name' );
-      $ctrl.resolve.productData.frequencies = [
-        {name: 'NA', selectAction: '/a'},
-        {name: 'MON', selectAction: '/b'},
-        {name: 'QUARTERLY', selectAction: '/c'}];
+  describe( 'updateQueryParam', () => {
+    it( 'should update the query param if not editing', () => {
+      $ctrl.updateQueryParam('param', 'value');
+      expect($ctrl.$location.search).toHaveBeenCalledWith('param', 'value');
     } );
-
-    it( 'sets all values from query params', () => {
-      $ctrl.$location.search.and.returnValue( {
-        [giveGiftParams.designation]: '0123456',
-        [giveGiftParams.amount]:      '150',
-        [giveGiftParams.frequency]:   'QUARTERLY',
-        [giveGiftParams.day]:         '21'
-      } );
-      // $onInit calls initializeParams and sets up some defaults.
-      $ctrl.$onInit();
-      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
-      expect( $ctrl.$location.search ).toHaveBeenCalled();
-      expect( $ctrl.itemConfig.amount ).toEqual( 150 );
-      expect( $ctrl.customAmount ).toEqual( 150 );
-      expect( $ctrl.changeFrequency ).toHaveBeenCalled();
-      expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '21' );
-    } );
-
-    it( 'doesn\'t set missing values', () => {
-      $ctrl.$location.search.and.returnValue( {} );
-      $ctrl.$onInit();
-      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
-      expect( $ctrl.$location.search ).toHaveBeenCalled();
-      expect( $ctrl.itemConfig.amount ).toEqual( 85 );
-      expect( $ctrl.customAmount ).toEqual( 85 );
-      expect( $ctrl.changeFrequency ).not.toHaveBeenCalled();
-      expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '01' );
-    } );
-
-    it( 'handles unknown frequency', () => {
-      $ctrl.$location.search.and.returnValue( {
-        [giveGiftParams.frequency]: 'ALWAYS'
-      } );
-      $ctrl.$onInit();
-      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
-      expect( $ctrl.$location.search ).toHaveBeenCalled();
-      expect( $ctrl.changeFrequency ).not.toHaveBeenCalled();
-    } );
-
-    it( 'handles frequency with missing selectAction', () => {
-      $ctrl.resolve.productData.frequencies = [
-        {name: 'NA', selectAction: '/a'},
-        {name: 'MON'},
-        {name: 'QUARTERLY', selectAction: '/c'}];
-      $ctrl.$location.search.and.returnValue( {
-        [giveGiftParams.frequency]: 'MON'
-      } );
-      $ctrl.$onInit();
-      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
-      expect( $ctrl.$location.search ).toHaveBeenCalled();
-      expect( $ctrl.changeFrequency ).not.toHaveBeenCalled();
-    } );
-  } );
-
-  describe( 'showDefaultAmounts()', () => {
-    beforeEach( () => {
-      spyOn( $ctrl, 'waitForFormInitialization' );
-      $ctrl.$onInit();
-    } );
-    it( 'returns true if no suggestedAmounts', () => {
-      expect( $ctrl.showDefaultAmounts() ).toEqual( true );
-      expect( $ctrl.waitForFormInitialization ).toHaveBeenCalled();
-    } );
-
-    it( 'only calls waitForFormInitialization() once', () => {
-      $ctrl.showDefaultAmounts();
-      $ctrl.showDefaultAmounts();
-      $ctrl.showDefaultAmounts();
-      expect( $ctrl.waitForFormInitialization ).toHaveBeenCalledTimes( 1 );
-    } );
-
-    it( 'returns false when suggestedAmounts exists', () => {
-      $ctrl.suggestedAmounts = [{amount: 123.45, label: 'Testing'}, {amount: 543.21, label: 'gnitseT'}];
-      expect( $ctrl.showDefaultAmounts() ).toEqual( false );
-      expect( $ctrl.waitForFormInitialization ).not.toHaveBeenCalled();
+    it( 'should not update the query param if editing', () => {
+      $ctrl.isEdit = true;
+      $ctrl.updateQueryParam('param', 'value');
+      expect($ctrl.$location.search).not.toHaveBeenCalled();
     } );
   } );
 
@@ -272,6 +292,7 @@ describe( 'product config modal', function () {
   describe( 'changeFrequency()', () => {
     beforeEach( () => {
       spyOn( $ctrl.designationsService, 'productLookup' ).and.returnValue(Observable.of({ frequency: 'NA' }));
+      spyOn( $ctrl, 'updateQueryParam' );
       $ctrl.productData = { frequency: 'MON' };
       $ctrl.errorAlreadyInCart = true;
     } );
@@ -280,140 +301,67 @@ describe( 'product config modal', function () {
       expect($ctrl.changingFrequency).toEqual(false);
     });
 
-    describe( 'isEdit = true', () => {
-      beforeEach( () => {
-        $ctrl.isEdit = true;
-      } );
-      it( 'changes product frequency', () => {
-        $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
-        expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
-        expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
-        expect( $ctrl.productData ).toEqual({ frequency: 'NA' });
-        expect( $ctrl.$location.search ).not.toHaveBeenCalled();
-        expect( $ctrl.errorChangingFrequency).toEqual(false);
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-      } );
-      it( 'should handle an error changing frequency', () => {
-        $ctrl.designationsService.productLookup.and.returnValue(Observable.throw('some error'));
-        $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
-        expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
-        expect( $ctrl.itemConfigForm.$setDirty ).not.toHaveBeenCalled();
-        expect( $ctrl.productData ).toEqual({ frequency: 'MON' });
-        expect( $ctrl.$location.search ).not.toHaveBeenCalled();
-        expect( $ctrl.errorChangingFrequency).toEqual(true);
-        expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading new product when changing frequency', 'some error']);
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-      } );
+    it( 'changes product frequency', () => {
+      $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
+      expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
+      expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
+      expect( $ctrl.productData ).toEqual({ frequency: 'NA' });
+      expect( $ctrl.updateQueryParam ).toHaveBeenCalledWith( giveGiftParams.frequency, 'NA' );
+      expect( $ctrl.errorChangingFrequency).toEqual(false);
+      expect( $ctrl.errorAlreadyInCart).toEqual(false);
     } );
-
-    describe( 'isEdit = false', () => {
-      beforeEach( () => {
-        $ctrl.isEdit = false;
-      } );
-      it( 'changes product frequency', () => {
-        $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
-        expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
-        expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
-        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.frequency, 'NA' );
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-      } );
-      it( 'should handle an error changing frequency', () => {
-        $ctrl.designationsService.productLookup.and.returnValue(Observable.throw('some error'));
-        $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
-        expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
-        expect( $ctrl.itemConfigForm.$setDirty ).not.toHaveBeenCalled();
-        expect( $ctrl.productData ).toEqual({ frequency: 'MON' });
-        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.frequency, 'NA' );
-        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.frequency, 'MON' );
-        expect( $ctrl.errorChangingFrequency).toEqual(true);
-        expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading new product when changing frequency', 'some error']);
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-      } );
+    it( 'should handle an error changing frequency', () => {
+      $ctrl.designationsService.productLookup.and.returnValue(Observable.throw('some error'));
+      $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
+      expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
+      expect( $ctrl.itemConfigForm.$setDirty ).not.toHaveBeenCalled();
+      expect( $ctrl.productData ).toEqual({ frequency: 'MON' });
+      expect( $ctrl.updateQueryParam ).toHaveBeenCalledWith( giveGiftParams.frequency, 'NA' );
+      expect( $ctrl.updateQueryParam ).toHaveBeenCalledWith( giveGiftParams.frequency, 'MON' );
+      expect( $ctrl.errorChangingFrequency).toEqual(true);
+      expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading new product when changing frequency', 'some error']);
+      expect( $ctrl.errorAlreadyInCart).toEqual(false);
     } );
   } );
 
   describe( 'changeAmount()', () => {
     beforeEach( () => {
-      spyOn($ctrl, 'initializeParams'); // Prevent $onInit from calling $location.search
+      spyOn( $ctrl, 'updateQueryParam' );
       $ctrl.$onInit();
     } );
 
-    describe( 'isEdit = true', () => {
-      beforeEach( () => {
-        $ctrl.isEdit = true;
-      } );
-      it( 'sets itemConfig amount', () => {
-        $ctrl.changeAmount( 100 );
-        expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
-        expect( $ctrl.itemConfig.amount ).toEqual( 100 );
-        expect( $ctrl.customAmount ).toBe( '' );
-        expect( $ctrl.$location.search ).not.toHaveBeenCalled();
-      } );
-    } );
-
-    describe( 'isEdit = false', () => {
-      beforeEach( () => {
-        $ctrl.isEdit = false;
-      } );
-      it( 'sets itemConfig amount', () => {
-        $ctrl.changeAmount( 100 );
-        expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
-        expect( $ctrl.itemConfig.amount ).toEqual( 100 );
-        expect( $ctrl.customAmount ).toBe( '' );
-        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.amount, 100 );
-      } );
+    it( 'sets itemConfig amount', () => {
+      $ctrl.changeAmount( 100 );
+      expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
+      expect( $ctrl.itemConfig.amount ).toEqual( 100 );
+      expect( $ctrl.customAmount ).toBe( '' );
+      expect( $ctrl.customInputActive ).toEqual( false );
+      expect( $ctrl.updateQueryParam ).toHaveBeenCalledWith( giveGiftParams.amount, 100 );
     } );
   } );
 
   describe( 'changeCustomAmount()', () => {
-    describe( 'isEdit = true', () => {
-      beforeEach( () => {
-        $ctrl.resolve.isEdit = true;
-        $ctrl.$onInit();
-      } );
-      it( 'sets itemConfig amount', () => {
-        $ctrl.changeCustomAmount( 300 );
-        expect( $ctrl.itemConfig.amount ).toEqual( 300 );
-        expect( $ctrl.$location.search ).not.toHaveBeenCalled();
-      } );
-    } );
-
-    describe( 'isEdit = false', () => {
-      beforeEach( () => {
-        $ctrl.resolve.isEdit = false;
-        $ctrl.$onInit();
-      } );
-      it( 'sets itemConfig amount', () => {
-        $ctrl.changeCustomAmount( 300 );
-        expect( $ctrl.itemConfig.amount ).toEqual( 300 );
-        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.amount, 300 );
-      } );
+    it( 'sets itemConfig amount', () => {
+      spyOn( $ctrl, 'updateQueryParam' );
+      $ctrl.itemConfig = {};
+      $ctrl.changeCustomAmount( 300 );
+      expect( $ctrl.itemConfig.amount ).toEqual( 300 );
+      expect( $ctrl.customAmount ).toEqual( 300 );
+      expect( $ctrl.customInputActive ).toEqual( true );
+      expect( $ctrl.updateQueryParam ).toHaveBeenCalledWith( giveGiftParams.amount, 300 );
     } );
   } );
 
   describe( 'changeStartDay()', () => {
     beforeEach( () => {
       $ctrl.errorAlreadyInCart = true;
+      spyOn( $ctrl, 'updateQueryParam' );
     } );
-    describe( 'isEdit = true', () => {
-      beforeEach( () => {
-        $ctrl.isEdit = true;
-      } );
-      it( 'sets day query param', () => {
-        $ctrl.changeStartDay( '11' );
-        expect( $ctrl.$location.search ).not.toHaveBeenCalled();
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-      } );
-    } );
-    describe( 'isEdit = false', () => {
-      beforeEach( () => {
-        $ctrl.isEdit = false;
-      } );
-      it( 'sets day query param', () => {
-        $ctrl.changeStartDay( '11' );
-        expect( $ctrl.$location.search ).toHaveBeenCalledWith( giveGiftParams.day, '11' );
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-      } );
+
+    it( 'sets day query param', () => {
+      $ctrl.changeStartDay( '11' );
+      expect( $ctrl.updateQueryParam ).toHaveBeenCalledWith( giveGiftParams.day, '11' );
+      expect( $ctrl.errorAlreadyInCart).toEqual(false);
     } );
   } );
 
@@ -422,90 +370,34 @@ describe( 'product config modal', function () {
       // Make sure it resets errors
       $ctrl.errorAlreadyInCart = true;
       $ctrl.errorSavingGeneric = true;
+      spyOn( $ctrl.analyticsFactory, 'cartAdd');
     });
+
     describe( 'isEdit = true', () => {
-      beforeEach( () => {
-        $ctrl.resolve.isEdit = true;
-        spyOn( $ctrl.cartService, 'editItem' ).and.returnValue( Observable.of( 'editItem success' ) );
-        $ctrl.resolve.productData.uri = 'items/crugive/<some id>';
-        spyOn( $ctrl.$scope, '$emit' );
-        $ctrl.$onInit();
-      } );
-
-      it( 'should do nothing on invalid form', () => {
-        $ctrl.itemConfigForm.$valid = false;
-        $ctrl.saveGiftToCart();
-        expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.editItem ).not.toHaveBeenCalled();
-        expect( $ctrl.close ).not.toHaveBeenCalled();
-        expect( $ctrl.dismiss ).not.toHaveBeenCalled();
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-        expect( $ctrl.errorSavingGeneric).toEqual(false);
-      } );
-
-      it( 'should submit a gift successfully', () => {
-        $ctrl.itemConfigForm.$dirty = true;
-        $ctrl.saveGiftToCart();
-        expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith( 'uri', 'items/crugive/<some id>', {
-          amount:                   85,
-          'recurring-day-of-month': '01'
-        } );
-        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
-        expect( $ctrl.close ).toHaveBeenCalledWith();
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-        expect( $ctrl.errorSavingGeneric).toEqual(false);
-      } );
-
-      it( 'should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
-        $ctrl.itemConfigForm.$dirty = true;
-        $ctrl.productData.frequency = 'NA';
-        $ctrl.saveGiftToCart();
-        expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith( 'uri', 'items/crugive/<some id>', {amount: 85} );
-        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
-        expect( $ctrl.close ).toHaveBeenCalledWith();
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-        expect( $ctrl.errorSavingGeneric).toEqual(false);
-      } );
-
-      it( 'should handle an error submitting a gift', () => {
-        $ctrl.cartService.editItem.and.returnValue( Observable.throw( 'some error' ) );
-        $ctrl.itemConfigForm.$dirty = true;
-        $ctrl.saveGiftToCart();
-        expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith( 'uri', 'items/crugive/<some id>', {
-          amount:                   85,
-          'recurring-day-of-month': '01'
-        } );
-        expect( $ctrl.close ).not.toHaveBeenCalled();
-        expect( $ctrl.errorAlreadyInCart).toEqual(false);
-        expect( $ctrl.errorSavingGeneric).toEqual(true);
-        expect( $ctrl.$log.error.logs[0]).toEqual(['Error adding or updating item in cart', 'some error' ]);
-      } );
-
-      it( 'should handle an error when saving a duplicate item', () => {
-        $ctrl.cartService.editItem.and.returnValue( Observable.throw( { data: 'Recurring gift to designation: 0671540 on draw day: 14 is already in the cart' } ) );
-        $ctrl.itemConfigForm.$dirty = true;
-        $ctrl.saveGiftToCart();
-        expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.editItem ).toHaveBeenCalledWith( 'uri', 'items/crugive/<some id>', {
-          amount:                   85,
-          'recurring-day-of-month': '01'
-        } );
-        expect( $ctrl.dismiss ).not.toHaveBeenCalled();
-        expect( $ctrl.close ).not.toHaveBeenCalled();
-        expect( $ctrl.errorAlreadyInCart).toEqual(true);
-        expect( $ctrl.errorSavingGeneric).toEqual(false);
-      } );
+      testSaving(true);
+    } );
+    describe( 'isEdit = false', () => {
+      testSaving(false);
     } );
 
-    describe( 'isEdit = false', () => {
+    function expectCloseDismiss(isEdit){
+      if(isEdit){
+        expect( $ctrl.close ).toHaveBeenCalled();
+        expect( $ctrl.dismiss ).not.toHaveBeenCalled();
+      } else {
+        expect( $ctrl.dismiss ).toHaveBeenCalled();
+        expect( $ctrl.close ).not.toHaveBeenCalled();
+      }
+    }
+
+    function testSaving(isEdit){
+      const operation = isEdit ? 'editItem' : 'addItem';
+      const cartEvent = isEdit ? cartUpdatedEvent : giftAddedEvent;
       beforeEach( () => {
-        $ctrl.resolve.isEdit = false;
-        spyOn( $ctrl.cartService, 'addItem' ).and.returnValue( Observable.of( 'saveGiftToCart success' ) );
-        spyOn( $ctrl.$scope, '$emit' );
+        $ctrl.resolve.isEdit = isEdit;
+        spyOn( $ctrl.cartService, operation ).and.returnValue( Observable.of( 'save item success' ) );
         $ctrl.resolve.productData.uri = 'items/crugive/<some id>';
+        spyOn( $ctrl.$scope, '$emit' );
         $ctrl.$onInit();
       } );
 
@@ -513,7 +405,7 @@ describe( 'product config modal', function () {
         $ctrl.itemConfigForm.$valid = false;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.addItem ).not.toHaveBeenCalled();
+        expect( $ctrl.cartService[operation] ).not.toHaveBeenCalled();
         expect( $ctrl.close ).not.toHaveBeenCalled();
         expect( $ctrl.dismiss ).not.toHaveBeenCalled();
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
@@ -523,13 +415,12 @@ describe( 'product config modal', function () {
       it( 'should still submit the gift if the form is not dirty', () => {
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith( 'items/crugive/<some id>', {
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri',  'items/crugive/<some id>', {
           amount:                   85,
           'recurring-day-of-month': '01'
-        } );
-        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
-        expect( $ctrl.dismiss ).toHaveBeenCalled();
-        expect( $ctrl.close ).not.toHaveBeenCalled();
+        } ].slice(isEdit ? 0 : 1));
+        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
+        expectCloseDismiss(isEdit);
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
         expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
@@ -538,13 +429,12 @@ describe( 'product config modal', function () {
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith( 'items/crugive/<some id>', {
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri', 'items/crugive/<some id>', {
           amount:                   85,
           'recurring-day-of-month': '01'
-        } );
-        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
-        expect( $ctrl.dismiss ).toHaveBeenCalled();
-        expect( $ctrl.close ).not.toHaveBeenCalled();
+        } ].slice(isEdit ? 0 : 1));
+        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
+        expectCloseDismiss(isEdit);
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
         expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
@@ -554,44 +444,43 @@ describe( 'product config modal', function () {
         $ctrl.productData.frequency = 'NA';
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith( 'items/crugive/<some id>', {amount: 85} );
-        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( giftAddedEvent );
-        expect( $ctrl.dismiss ).toHaveBeenCalled();
-        expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri', 'items/crugive/<some id>', {amount: 85} ].slice(isEdit ? 0 : 1));
+        expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
+        expectCloseDismiss(isEdit);
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
         expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
 
       it( 'should handle an error submitting a gift', () => {
-        $ctrl.cartService.addItem.and.returnValue( Observable.throw( 'some error' ) );
+        $ctrl.cartService[operation].and.returnValue( Observable.throw( 'some error' ) );
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith( 'items/crugive/<some id>', {
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri', 'items/crugive/<some id>', {
           amount:                   85,
           'recurring-day-of-month': '01'
-        } );
-        expect( $ctrl.dismiss ).not.toHaveBeenCalled();
+        } ].slice(isEdit ? 0 : 1));
         expect( $ctrl.close ).not.toHaveBeenCalled();
+        expect( $ctrl.dismiss ).not.toHaveBeenCalled();
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
         expect( $ctrl.errorSavingGeneric).toEqual(true);
         expect( $ctrl.$log.error.logs[0]).toEqual(['Error adding or updating item in cart', 'some error' ]);
       } );
 
       it( 'should handle an error when saving a duplicate item', () => {
-        $ctrl.cartService.addItem.and.returnValue( Observable.throw( { data: 'Recurring gift to designation: 0671540 on draw day: 14 is already in the cart' } ) );
+        $ctrl.cartService[operation].and.returnValue( Observable.throw( { data: 'Recurring gift to designation: 0671540 on draw day: 14 is already in the cart' } ) );
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService.addItem ).toHaveBeenCalledWith( 'items/crugive/<some id>', {
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri', 'items/crugive/<some id>', {
           amount:                   85,
           'recurring-day-of-month': '01'
-        } );
+        } ].slice(isEdit ? 0 : 1));
         expect( $ctrl.dismiss ).not.toHaveBeenCalled();
         expect( $ctrl.close ).not.toHaveBeenCalled();
         expect( $ctrl.errorAlreadyInCart).toEqual(true);
         expect( $ctrl.errorSavingGeneric).toEqual(false);
       } );
-    } );
+    }
   } );
 } );
