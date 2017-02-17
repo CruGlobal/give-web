@@ -65,7 +65,8 @@ describe('PaymentMethodComponent', function () {
       $uibModal: uibModal,
       profileService: {
         getDonorDetails: angular.noop,
-        updatePaymentMethod: angular.noop
+        updatePaymentMethod: angular.noop,
+        getPaymentMethod: angular.noop
       }
     },{
       'paymentMethodsList': [{}],
@@ -170,6 +171,7 @@ describe('PaymentMethodComponent', function () {
         close: jasmine.createSpy('close')
       };
       spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.of('data'));
+      spyOn(self.controller.profileService, 'getPaymentMethod').and.returnValue(Observable.of('data'));
       self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data });
       expect(self.controller.model['card-number']).toBe('0000');
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
@@ -180,6 +182,7 @@ describe('PaymentMethodComponent', function () {
       };
       self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data });
       expect(self.controller.model['display-account-number']).toBe('9879');
+      expect(self.controller.profileService.getPaymentMethod).toHaveBeenCalled();
     });
   });
 

@@ -13,6 +13,7 @@ import emailsResponse from './fixtures/cortex-profile-emails.fixture.js';
 import donorDetailsResponse from './fixtures/cortex-profile-donordetails.fixture';
 import givingProfileResponse from './fixtures/cortex-profile-giving.fixture';
 import paymentmethodsResponse from './fixtures/cortex-profile-paymentmethods.fixture.js';
+import paymentmethodResponse from './fixtures/cortex-profile-paymentmethod.fixture.js';
 import paymentmethodsFormsResponse from './fixtures/cortex-profile-paymentmethods-forms.fixture.js';
 import paymentmethodsWithDonationsResponse from 'common/services/api/fixtures/cortex-profile-paymentmethods-with-donations.fixture.js';
 import purchaseResponse from 'common/services/api/fixtures/cortex-purchase.fixture.js';
@@ -75,6 +76,31 @@ describe('profile service', () => {
             expectedPaymentMethods[1],
             expectedPaymentMethods[0]
           ]);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('getPaymentMethod', () => {
+    it('should load a user\'s payment method', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydiojyg4=')
+        .respond(200, paymentmethodResponse);
+
+      let expectedPaymentMethod = angular.copy(paymentmethodResponse);
+      expectedPaymentMethod.id = expectedPaymentMethod.self.uri.split('/').pop();
+      expectedPaymentMethod.address = {
+        "country-name": "US",
+        "extended-address": "",
+        "locality": "Franklin",
+        "postal-code": "46131-1632",
+        "region": "IN",
+        "street-address": "198 W King St"
+      };
+      self.profileService.getPaymentMethod('/selfservicepaymentmethods/crugive/giydiojyg4=')
+        .subscribe((data) => {
+          expect(data.id).toEqual(expectedPaymentMethod.id);
+          expect(data.address['card-number']).toEqual(expectedPaymentMethod.address['card-number']);
+          expect(data.address.streetAddress).toEqual(expectedPaymentMethod.address['street-address']);
         });
       self.$httpBackend.flush();
     });
