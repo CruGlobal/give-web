@@ -65,8 +65,8 @@ class ProductConfigModalController {
       this.itemConfig['recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
     }
 
-    this.showRecipientComments = false;
-    this.showDSComments = false;
+    this.showRecipientComments = !isEmpty(this.itemConfig['recipient-comments']);
+    this.showDSComments = !isEmpty(this.itemConfig['donation-services-comments']);
 
     this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts);
   }
