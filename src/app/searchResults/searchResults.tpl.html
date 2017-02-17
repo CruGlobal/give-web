@@ -50,7 +50,7 @@
                     <div class="is-toggle-wrap" ng-class="{'open': $ctrl.showAdvancedSearch}">
                       <div class="is-widget">
                         <ul class="list-unstyled is-type-links">
-                          <li ng-if="$ctrl.searchParams.keyword" ng-class="{'active': !$ctrl.searchParams.type}">
+                          <li ng-class="{'active': !$ctrl.searchParams.type}">
                             <a id="allOpportunitiesLink" href="" ng-click="$ctrl.requestSearch()" translate>All Giving Opportunities</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
@@ -75,17 +75,10 @@
                           <label translate>Last Name</label>
                           <input type="text" class="form-control input-subtle" name="lName" value="{{$ctrl.searchParams.last_name}}">
                         </div>
-                      </div>
 
-                      <div ng-if="!$ctrl.searchParams.type">
-                        <div class="form-group">
-                          <label translate>Name</label>
-                          <input type="text" class="form-control input-subtle" name="q" value="{{$ctrl.searchParams.keyword}}">
-                        </div>
+                        <input type="hidden" name="type" value="{{$ctrl.searchParams.type}}">
+                        <button id="bottomSearchButton" class="btn btn-primary btn-block" type="submit" translate>Search</button>
                       </div>
-
-                      <input type="hidden" name="type" value="{{$ctrl.searchParams.type}}">
-                      <button id="bottomSearchButton" class="btn btn-primary btn-block" type="submit" translate>Search</button>
                     </div>
                   </form>
                 </div>

@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-filter';
+import includes from 'lodash/includes';
 
 import commonModule from 'common/common.module';
 import designationsService from 'common/services/api/designations.service';
@@ -41,10 +42,15 @@ class SearchResultsController {
   }
 
   requestSearch(type){
-    this.searchParams.type = !type && !this.searchParams.keyword ? 'ministries' : type;
+    this.searchParams.type = type;
 
-    if(!this.searchParams.keyword && this.searchParams.type === 'ministries'){
+    if(!this.searchParams.keyword && includes(['ministries', '', undefined], this.searchParams.type)) {
       this.searchResults = ministries;
+    }else if(!this.searchParams.keyword &&
+      !this.searchParams.first_name &&
+      !this.searchParams.last_name
+      && this.searchParams.type === 'people'){
+      this.searchResults = null;
     }else{
       this.loadingResults = true;
       this.searchError = false;
