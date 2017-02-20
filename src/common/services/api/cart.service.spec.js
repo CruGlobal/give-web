@@ -4,6 +4,7 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/empty';
+import {Roles, Sessions} from 'common/services/session/session.service';
 
 import module from './cart.service';
 
@@ -13,9 +14,10 @@ describe('cart service', () => {
   beforeEach(angular.mock.module(module.name));
   let self = {};
 
-  beforeEach(inject((cartService, $httpBackend) => {
+  beforeEach(inject((cartService, $httpBackend, $timeout) => {
     self.cartService = cartService;
     self.$httpBackend = $httpBackend;
+    self.$timeout = $timeout;
   }));
 
   afterEach(() => {
@@ -80,7 +82,22 @@ describe('cart service', () => {
     });
   });
 
+  describe('getTotalQuantity', () => {
+    it('get current number of items in cart', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default')
+        .respond(200, cartResponse);
+
+      self.cartService.getTotalQuantity().subscribe((total) => {
+        expect(total).toEqual(3)
+      });
+      self.$httpBackend.flush();
+    });
+  });
+
   describe('addItem', () => {
+    beforeEach(() => {
+      spyOn(self.cartService.sessionService, 'getRole').and.returnValue(Roles.registered);
+    });
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
@@ -93,6 +110,55 @@ describe('cart service', () => {
       self.cartService.addItem('items/crugive/<some id>', { amount: 50 })
         .subscribe();
       self.$httpBackend.flush();
+    });
+
+    describe('as a public user', () => {
+      beforeEach(() => {
+        self.cartService.sessionService.getRole.and.returnValue(Roles.public);
+        spyOn(self.cartService.$cookies, 'remove')
+      });
+
+      describe('with existing cart', () => {
+        beforeEach(() => {
+          spyOn(self.cartService, 'getTotalQuantity').and.returnValue(Observable.of(3));
+        });
+
+        it('should add an item', () => {
+          self.$httpBackend.expectPOST(
+            'https://cortex-gateway-stage.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
+            {
+              amount: 50,
+              quantity: 1
+            }
+          ).respond(200);
+
+          self.cartService.addItem('items/crugive/<some id>', { amount: 50 })
+            .subscribe();
+          self.$httpBackend.flush();
+        });
+      });
+
+      describe('with empty cart', () => {
+        beforeEach(() => {
+          spyOn(self.cartService, 'getTotalQuantity').and.returnValue(Observable.of(0));
+        });
+
+        it('should delete cookies and addItem to cart', () => {
+          self.$httpBackend.expectPOST(
+            'https://cortex-gateway-stage.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
+            {
+              amount: 50,
+              quantity: 1
+            }
+          ).respond(200);
+
+          self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe();
+          expect(self.cartService.$cookies.remove).toHaveBeenCalledTimes(2);
+          self.$timeout.flush();
+          self.$httpBackend.flush();
+        });
+      });
+
     });
   });
 

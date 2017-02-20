@@ -12,10 +12,12 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/concatAll'; //TODO: switch to mergeAll. See comment below
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/from';
 
 import cortexApiService from '../cortexApi.service';
 import commonService from './common.service';
 import designationsService from './designations.service';
+import sessionService, {Roles, Sessions} from 'common/services/session/session.service';
 import {startDate} from '../giftHelpers/giftDates.service';
 
 let serviceName = 'cartService';
@@ -23,10 +25,13 @@ let serviceName = 'cartService';
 class Cart {
 
   /*@ngInject*/
-  constructor(cortexApiService, commonService, designationsService){
+  constructor($timeout, $cookies, cortexApiService, commonService, designationsService, sessionService){
+    this.$cookies = $cookies;
+    this.$timeout = $timeout;
     this.cortexApiService = cortexApiService;
     this.commonService = commonService;
     this.designationsService = designationsService;
+    this.sessionService = sessionService;
   }
 
   get() {
@@ -82,9 +87,36 @@ class Cart {
       });
   }
 
-  addItem(uri, data){
+  getTotalQuantity() {
+    return this.cortexApiService
+      .get({path: ['carts', this.cortexApiService.scope, 'default']})
+      .map((cart) => {
+        return cart['total-quantity'];
+      });
+  }
+
+  addItem(uri, data) {
     data.quantity = 1;
 
+    if(this.sessionService.getRole() == Roles.public) {
+      return this.getTotalQuantity().mergeMap((total) => {
+        if(total <= 0) {
+          this.$cookies.remove(Sessions.cortex, {path: '/', domain: '.cru.org'});
+          this.$cookies.remove(Sessions.give, {path: '/', domain: '.cru.org'});
+          // Defer til next digest so $cookie.remove propagates.
+          return Observable.from(this.$timeout(angular.noop, 10)).mergeMap(() => {
+            return this.cortexApiService.post({
+              path: ['itemfieldslineitem', uri],
+              data: data
+            });
+          });
+        }
+        return this.cortexApiService.post({
+          path: ['itemfieldslineitem', uri],
+          data: data
+        });
+      });
+    }
     return this.cortexApiService.post({
       path: ['itemfieldslineitem', uri],
       data: data
@@ -145,6 +177,7 @@ export default angular
   .module(serviceName, [
     cortexApiService.name,
     commonService.name,
-    designationsService.name
+    designationsService.name,
+    sessionService.name
   ])
   .service(serviceName, Cart);
