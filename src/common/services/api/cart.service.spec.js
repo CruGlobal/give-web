@@ -4,7 +4,7 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/empty';
-import {Roles, Sessions} from 'common/services/session/session.service';
+import {Roles} from 'common/services/session/session.service';
 
 import module from './cart.service';
 
@@ -88,7 +88,7 @@ describe('cart service', () => {
         .respond(200, cartResponse);
 
       self.cartService.getTotalQuantity().subscribe((total) => {
-        expect(total).toEqual(3)
+        expect(total).toEqual(3);
       });
       self.$httpBackend.flush();
     });
@@ -115,7 +115,7 @@ describe('cart service', () => {
     describe('as a public user', () => {
       beforeEach(() => {
         self.cartService.sessionService.getRole.and.returnValue(Roles.public);
-        spyOn(self.cartService.$cookies, 'remove')
+        spyOn(self.cartService.$cookies, 'remove');
       });
 
       describe('with existing cart', () => {
