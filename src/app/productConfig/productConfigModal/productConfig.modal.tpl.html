@@ -1,4 +1,5 @@
 <div class="give-modal-header modal-header">
+  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
   <div class="row">
     <div class="col-sm-6">
       <h4 class="modal-title" translate>
@@ -6,7 +7,6 @@
       </h4>
     </div>
     <div class="col-sm-6">
-      <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
       <div class="give-modal-recipient">
         <img class="recipient-image" desig-src="{{$ctrl.productData.designationNumber}}">
         <span class="recipient-title">{{$ctrl.productData.displayName}}</span>
