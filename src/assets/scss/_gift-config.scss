@@ -198,7 +198,9 @@ label.btn.btn-default-form.active {
   .recipient-image {
     width: 85px;
     float: right;
-    margin-left: 15px;
+  }
+  .recipient-title, .recipient-id {
+    margin-right: 100px;
   }
   .recipient-title {
     display: block;
@@ -207,6 +209,18 @@ label.btn.btn-default-form.active {
   }
   .recipient-id {
     display: block;
+  }
+}
+
+@media (max-width: 549px) {
+  .give-modal-recipient {
+    margin-top: 5px;
+    .recipient-image {float: left;}
+    .recipient-title, .recipient-id {
+      margin-left: 100px;
+      margin-right: 0;
+      text-align: left;
+    }
   }
 }
 
