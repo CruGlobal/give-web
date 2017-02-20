@@ -69,7 +69,7 @@ describe( 'product config modal', function () {
     it( 'should use the resolve input to initialize the data used by the modal', () => {
       $ctrl.resolve = {
         productData: 'some data',
-        itemConfig: { amount: 50, 'recurring-day-of-month': '10' },
+        itemConfig: { amount: 50, 'recurring-day-of-month': '10', 'recipient-comments': 'You\'re Welcome' },
         isEdit: true,
         uri: 'some path',
         suggestedAmounts: [ { amount: 5 }, { amount: 10 } ],
@@ -77,12 +77,12 @@ describe( 'product config modal', function () {
       };
       $ctrl.initModalData();
       expect( $ctrl.productData ).toEqual('some data');
-      expect( $ctrl.itemConfig ).toEqual({ amount: 50, 'recurring-day-of-month': '10' });
+      expect( $ctrl.itemConfig ).toEqual({ amount: 50, 'recurring-day-of-month': '10', 'recipient-comments': 'You\'re Welcome' });
       expect( $ctrl.isEdit ).toEqual(true);
       expect( $ctrl.uri ).toEqual('some path');
       expect( $ctrl.suggestedAmounts ).toEqual([ { amount: 5 }, { amount: 10 } ]);
       expect( $ctrl.nextDrawDate ).toEqual('2016-10-02');
-      expect( $ctrl.showRecipientComments ).toEqual(false);
+      expect( $ctrl.showRecipientComments ).toEqual(true);
       expect( $ctrl.showDSComments ).toEqual(false);
       expect( $ctrl.useSuggestedAmounts ).toEqual(true);
     } );
