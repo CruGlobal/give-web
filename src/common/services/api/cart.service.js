@@ -105,18 +105,19 @@ class Cart {
           this.$cookies.remove(Sessions.give, {path: '/', domain: '.cru.org'});
           // Defer til next digest so $cookie.remove propagates.
           return Observable.from(this.$timeout(angular.noop, 10)).mergeMap(() => {
-            return this.cortexApiService.post({
-              path: ['itemfieldslineitem', uri],
-              data: data
-            });
+            return this._addItem(uri, data);
           });
         }
-        return this.cortexApiService.post({
-          path: ['itemfieldslineitem', uri],
-          data: data
-        });
+        return this._addItem(uri, data);
       });
     }
+    return this._addItem(uri, data);
+  }
+
+  /**
+   * @private
+   */
+  _addItem(uri, data) {
     return this.cortexApiService.post({
       path: ['itemfieldslineitem', uri],
       data: data
