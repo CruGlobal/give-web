@@ -1,15 +1,15 @@
 <div class="modal-header">
+  <button type="button"
+          id="closeButtonTop"
+          class="close"
+          aria-label="Close"
+          ng-click="$ctrl.dismiss()">
+    <span aria-hidden="true">×</span>
+  </button>
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
         <div class="border-bottom-small">
-          <button type="button"
-                  id="closeButtonTop"
-                  class="close"
-                  aria-label="Close"
-                  ng-click="$ctrl.dismiss()">
-            <span aria-hidden="true">×</span>
-          </button>
           <h3 class="text-center">
             <span ng-if="!$ctrl.resolve.paymentMethod" translate>Add New Payment Method</span>
             <span ng-if="$ctrl.resolve.paymentMethod" translate>Edit Payment Method</span>

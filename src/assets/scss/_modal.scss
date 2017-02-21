@@ -136,6 +136,17 @@ body{
 	}
 }
 
+@media (max-width: 440px) {
+  #saveChangesButton, #cancelButton {
+    display: block;
+    width: 100%;
+  }
+  #saveChangesButton {
+    float: none !important;
+    margin-bottom: 10px;
+  }
+}
+
 #checkoutModal1, #checkoutModal2, #checkoutModal3 {
   .mb_x {
     margin-bottom: 29px !important;
