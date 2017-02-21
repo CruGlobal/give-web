@@ -106,18 +106,18 @@ describe( 'donations service', () => {
   describe( 'getRecentRecipients', () => {
     it( 'should load recent recipients', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:recentdonations:element' )
+        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:recentdonations' )
         .respond( 200, recentRecipientsResponse );
       donationsService.getRecentRecipients()
-        .subscribe( ( recentRecipients ) => {
+        .subscribe( recentRecipients => {
           expect( recentRecipients ).toEqual( [
             jasmine.objectContaining( {
-              "designation-name": "Mike and Becky Crandall (0104878)",
-              "designation-number": "0104878"
+              "designation-name": "Brian and Jennifer Richardson (0679537)",
+              "designation-number": "0679537"
             } ),
             jasmine.objectContaining( {
-              "designation-name": "David and Margo Neibling (0105987)",
-              "designation-number": "0105987"
+              "designation-name": "Steve Lamie (5460173)",
+              "designation-number": "5460173"
             } )
           ]);
         } );

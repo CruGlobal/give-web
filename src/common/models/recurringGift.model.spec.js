@@ -484,4 +484,13 @@ describe('recurringGift model', () => {
       }));
     });
   });
+
+  describe('setDefaultsSingleGift', () => {
+    it('should set default values for a new single gift', () => {
+      expect(giftModel.setDefaults().toObject).toEqual(jasmine.objectContaining({
+        'updated-designation-number': giftModel.gift['designation-number'],
+        'updated-amount': 50
+      }));
+    });
+  });
 });

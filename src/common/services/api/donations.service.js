@@ -84,11 +84,12 @@ function DonationsService( cortexApiService, profileService, commonService ) {
     return cortexApiService.get( {
         path: ['profiles', cortexApiService.scope, 'default'],
         zoom: {
-          recentGifts: 'givingdashboard:recentdonations:element[]'
+          recentGifts: 'givingdashboard:recentdonations'
         },
         cache: true
       } )
-      .pluck( 'recentGifts' );
+      .pluck( 'recentGifts' )
+      .pluck( 'donation-summaries' );
   }
 
   function getRecurringGifts( recurringGiftsTypes, withoutExtraData ) {
