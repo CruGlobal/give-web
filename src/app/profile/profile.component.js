@@ -1,9 +1,10 @@
 import angular from 'angular';
 import 'angular-messages';
 import pull from 'lodash/pull';
+import assign from 'lodash/assign';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
 import { parse, isValidNumber } from 'libphonenumber-js';
 
 import template from './profile.tpl';
@@ -196,7 +197,7 @@ class ProfileController {
 
   updatePhoneNumbers(){
     let requests = [];
-    for(let i=0;i<this.phoneNumbers.length;i++) {
+    for(let i=0; i<this.phoneNumbers.length; i++) {
       let item = this.phoneNumbers[i];
       this.phonesLoading = true;
 
@@ -215,14 +216,14 @@ class ProfileController {
         requests.push(this.profileService.updatePhoneNumber(item));
       } else if(item.self && item.delete) { // delete existing phone number
         requests.push(this.profileService.deletePhoneNumber(item)
-          .map(() => {
+          .do(() => {
             pull(this.phoneNumbers, item);
           })
         );
       } else if(!item.self && !item.delete) { // add new phone number
         requests.push(this.profileService.addPhoneNumber(item)
-          .map((data) => {
-            item['phone-number'] = data['phone-number'];
+          .do(data => {
+            assign(item, data);
           })
         );
       }
