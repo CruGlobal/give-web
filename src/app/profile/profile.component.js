@@ -1,5 +1,10 @@
 import angular from 'angular';
 import 'angular-messages';
+import pull from 'lodash/pull';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/map';
+import { parse, isValidNumber } from 'libphonenumber-js';
 
 import template from './profile.tpl';
 
@@ -8,23 +13,20 @@ import addressForm from 'common/components/addressForm/addressForm.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
-import {Observable} from 'rxjs/Observable';
 import commonModule from 'common/common.module';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/map';
 
-import pull from 'lodash/pull';
 
 let componentName = 'profile';
 
 class ProfileController {
 
   /* @ngInject */
-  constructor($rootScope, $window, $location, $log, sessionEnforcerService, profileService, analyticsFactory) {
-    this.$window = $window;
-    this.$log = $log;
-    this.$location = $location;
+  constructor($rootScope, $window, $location, $log, $scope, sessionEnforcerService, profileService, analyticsFactory) {
     this.$rootScope = $rootScope;
+    this.$window = $window;
+    this.$location = $location;
+    this.$log = $log;
+    this.$scope = $scope;
     this.sessionEnforcerService = sessionEnforcerService;
     this.profileService = profileService;
     this.analyticsFactory = analyticsFactory;
@@ -48,6 +50,8 @@ class ProfileController {
 
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
 
+    this.syncPhoneValidators();
+
     this.analyticsFactory.pageLoaded();
   }
 
@@ -70,7 +74,7 @@ class ProfileController {
       .subscribe(
         donorDetails => {
           this.donorDetails = donorDetails;
-          this.hasSpouse = this.donorDetails['spouse-name']['family-name'] ? true : false;
+          this.hasSpouse = !!this.donorDetails['spouse-name']['family-name'];
           this.donorDetailsLoading = false;
           this.loadPhoneNumbers(); //  phone number's owner output depends on donor details
         },
@@ -144,6 +148,18 @@ class ProfileController {
           this.emailLoading = false;
         }
       );
+  }
+
+  syncPhoneValidators(){
+    this.$scope.$watchCollection('$ctrl.phoneNumberForms', forms => {
+      angular.forEach(forms, form => {
+        if(form && form.phoneNumber && form.phoneNumber.$validators) {
+          form.phoneNumber.$validators.phone = number => {
+            return isValidNumber(parse(number, {country: {default: 'US'}}));
+          };
+        }
+      });
+    });
   }
 
   loadPhoneNumbers() {

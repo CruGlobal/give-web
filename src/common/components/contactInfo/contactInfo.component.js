@@ -1,8 +1,10 @@
 import angular from 'angular';
 import 'angular-messages';
 import includes from 'lodash/includes';
+import startsWith from 'lodash/startsWith';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
+import { parse, isValidNumber } from 'libphonenumber-js';
 
 import addressForm from 'common/components/addressForm/addressForm.component';
 
@@ -16,8 +18,9 @@ let componentName = 'contactInfo';
 class Step1Controller{
 
   /* @ngInject */
-  constructor($log, orderService, sessionService){
+  constructor($log, $scope, orderService, sessionService){
     this.$log = $log;
+    this.$scope = $scope;
     this.orderService = orderService;
     this.sessionService = sessionService;
 
@@ -30,6 +33,7 @@ class Step1Controller{
 
   $onInit(){
     this.loadDonorDetails();
+    this.waitForFormInitialization();
     this.showTitle = this.sessionService.getRole() === Roles.public;
   }
 
@@ -37,6 +41,21 @@ class Step1Controller{
     if (changes.submitted.currentValue === true) {
       this.submitDetails();
     }
+  }
+
+  waitForFormInitialization(){
+    let unregister = this.$scope.$watch('$ctrl.detailsForm', () => {
+      if(this.detailsForm) {
+        unregister();
+        this.addCustomValidators();
+      }
+    });
+  }
+
+  addCustomValidators(){
+    this.detailsForm.phoneNumber.$validators.phone = number => {
+      return !number || isValidNumber(parse(number, { country: { default: 'US' } }));
+    };
   }
 
   loadDonorDetails(){
@@ -76,7 +95,7 @@ class Step1Controller{
       let details = this.donorDetails;
       this.submissionError = '';
 
-      var requests = [this.orderService.updateDonorDetails(details)];
+      let requests = [this.orderService.updateDonorDetails(details)];
       if (details.email) {
         requests.push(this.orderService.addEmail(details.email));
       }
@@ -85,7 +104,10 @@ class Step1Controller{
           this.onSubmit({success: true});
         }, (error) => {
           this.$log.warn('Error saving donor contact info', error);
-          this.submissionError = error.data;
+          this.submissionError = error && error.data;
+          if(startsWith(this.submissionError, 'Invalid email address:')){
+            this.submissionError = 'Invalid email address';
+          }
           this.onSubmit({success: false});
         });
     }else{
