@@ -79,10 +79,16 @@ describe( 'ProfileComponent', function () {
       spyOn( $ctrl, 'loadMailingAddress' );
       spyOn( $ctrl, 'loadEmail' );
       spyOn( $ctrl, 'loadPhoneNumbers' );
+      spyOn( $ctrl, 'syncPhoneValidators' );
       spyOn( $ctrl, 'sessionEnforcerService' );
       spyOn( $ctrl.$rootScope, '$on' );
       spyOn( $ctrl, 'signedOut' );
     } );
+
+    it('should call syncPhoneValidators', () =>{
+      $ctrl.$onInit();
+      expect( $ctrl.syncPhoneValidators ).toHaveBeenCalled();
+    });
 
     it( 'adds listener for sign-out event', () => {
       $ctrl.$onInit();
@@ -251,24 +257,6 @@ describe( 'ProfileComponent', function () {
     });
   });
 
-  describe('loadPhoneNumbers()', () => {
-    it('should load phone numbers on $onInit()', () => {
-      spyOn($ctrl.profileService, 'getPhoneNumbers').and.returnValue(Observable.of([{}]));
-      $ctrl.loadPhoneNumbers();
-      expect($ctrl.phoneNumbers).toEqual([{ ownerChanged: false }]);
-      expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled();
-    });
-
-    it('should handle and error of loading phone numbers on $onInit()', () => {
-      spyOn($ctrl.profileService, 'getPhoneNumbers').and.returnValue(Observable.throw({
-        data: 'some error'
-      }));
-      $ctrl.loadPhoneNumbers();
-      expect($ctrl.phoneNumberError).toBe('Failed loading phone numbers.');
-      expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled();
-    });
-  });
-
   describe('updateEmail()', () => {
     it('should update donor email', () => {
       spyOn($ctrl.profileService, 'updateEmail').and.returnValue(Observable.of({email: 'new email'}));
@@ -291,6 +279,41 @@ describe( 'ProfileComponent', function () {
       $ctrl.updateEmail();
       expect($ctrl.emailAddressError).toBe('Failed updating email address.');
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled();
+    });
+  });
+
+  describe('syncPhoneValidators()', () => {
+    it('should add phone number validators to inputs', () => {
+      $ctrl.phoneNumberForms = {};
+      $ctrl.syncPhoneValidators();
+      $ctrl.$scope.$apply();
+      expect($ctrl.phoneNumberForms).toEqual({});
+      $ctrl.phoneNumberForms[0] = {
+        phoneNumber: {
+          $validators: {}
+        }
+      };
+      $ctrl.$scope.$apply();
+      expect( $ctrl.phoneNumberForms[0].phoneNumber.$validators.phone( '541-967-0010' ) ).toEqual( true );
+      expect( $ctrl.phoneNumberForms[0].phoneNumber.$validators.phone( '123-456-7890' ) ).toEqual( false );
+    });
+  });
+
+  describe('loadPhoneNumbers()', () => {
+    it('should load phone numbers on $onInit()', () => {
+      spyOn($ctrl.profileService, 'getPhoneNumbers').and.returnValue(Observable.of([{}]));
+      $ctrl.loadPhoneNumbers();
+      expect($ctrl.phoneNumbers).toEqual([{ ownerChanged: false }]);
+      expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled();
+    });
+
+    it('should handle and error of loading phone numbers on $onInit()', () => {
+      spyOn($ctrl.profileService, 'getPhoneNumbers').and.returnValue(Observable.throw({
+        data: 'some error'
+      }));
+      $ctrl.loadPhoneNumbers();
+      expect($ctrl.phoneNumberError).toBe('Failed loading phone numbers.');
+      expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled();
     });
   });
 

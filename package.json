@@ -85,6 +85,7 @@
       "angular-upload": "npm:angular-upload@^1.0.13",
       "jsencrypt": "npm:jsencrypt@^2.3.1",
       "jwt-decode": "github:auth0/jwt-decode@^2.1.0",
+      "libphonenumber-js": "npm:libphonenumber-js@^0.3.7",
       "lodash": "npm:lodash@^4.17.2",
       "moment": "npm:moment@^2.17.1",
       "ng-resize": "npm:ng-resize@^1.2.0",

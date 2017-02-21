@@ -24,8 +24,10 @@ describe('contactInfo', function() {
   describe('$onInit', () => {
     it('load the necessary data', () => {
       spyOn(self.controller, 'loadDonorDetails');
+      spyOn(self.controller, 'waitForFormInitialization');
       self.controller.$onInit();
       expect(self.controller.loadDonorDetails).toHaveBeenCalled();
+      expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
     });
     it('if not a public user, it should hide the title', () => {
       spyOn(self.controller, 'loadDonorDetails');
@@ -52,6 +54,34 @@ describe('contactInfo', function() {
       expect(self.controller.submitDetails).toHaveBeenCalled();
     });
   });
+
+  describe( 'waitForFormInitialization()', () => {
+    it( 'should wait for the form to become available and then call addCustomValidators()', ( done ) => {
+      spyOn( self.controller, 'addCustomValidators' );
+      delete self.controller.detailsForm;
+      self.controller.waitForFormInitialization();
+      self.controller.$scope.$digest();
+      expect( self.controller.addCustomValidators ).not.toHaveBeenCalled();
+      self.controller.detailsForm = {
+        phoneNumber: {}
+      };
+      self.controller.$scope.$digest();
+      expect( self.controller.addCustomValidators ).toHaveBeenCalled();
+      done();
+    } );
+  } );
+
+  describe( 'addCustomValidators()', () => {
+    it( 'should create validators', () => {
+      self.controller.detailsForm.phoneNumber = {
+        $validators: {}
+      };
+      self.controller.addCustomValidators();
+      expect( self.controller.detailsForm.phoneNumber.$validators.phone( '541-967-0010' ) ).toEqual( true );
+      expect( self.controller.detailsForm.phoneNumber.$validators.phone( '' ) ).toEqual( true );
+      expect( self.controller.detailsForm.phoneNumber.$validators.phone( '123-456-7890' ) ).toEqual( false );
+    } );
+  } );
 
   describe('loadDonorDetails', () => {
     it('should get the donor\'s details', () => {
@@ -165,23 +195,38 @@ describe('contactInfo', function() {
       expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('someone@asdf.com');
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
     });
-    it('should handle an error saving donor details or email', () => {
+    it('should handle an error saving donor details', () => {
+      self.controller.detailsForm.$valid = true;
+      self.controller.donorDetails = {
+        'given-name': 'Fname'
+      };
+      spyOn(self.controller.orderService, 'updateDonorDetails').and.returnValue(Observable.throw({ data: 'donor details error' }));
+      self.controller.submitDetails();
+      expect(self.controller.detailsForm.$setSubmitted).toHaveBeenCalled();
+      expect(self.controller.orderService.updateDonorDetails).toHaveBeenCalledWith({
+        'given-name': 'Fname'
+      });
+      expect(self.controller.$log.warn.logs[0]).toEqual(['Error saving donor contact info', { data: 'donor details error' }]);
+      expect(self.controller.submissionError).toEqual('donor details error');
+      expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false});
+    });
+    it('should handle an error saving email', () => {
       self.controller.detailsForm.$valid = true;
       self.controller.donorDetails = {
         'given-name': 'Fname',
-        email: 'someone@asdf.com'
+        email: 'a@a'
       };
-      spyOn(self.controller.orderService, 'updateDonorDetails').and.returnValue(Observable.throw({ data: 'donor details error' }));
-      spyOn(self.controller.orderService, 'addEmail').and.returnValue(Observable.throw({ data: 'email error' }));
+      spyOn(self.controller.orderService, 'updateDonorDetails').and.returnValue(Observable.of('success'));
+      spyOn(self.controller.orderService, 'addEmail').and.returnValue(Observable.throw({ data: 'Invalid email address: a@a' }));
       self.controller.submitDetails();
       expect(self.controller.detailsForm.$setSubmitted).toHaveBeenCalled();
       expect(self.controller.orderService.updateDonorDetails).toHaveBeenCalledWith({
         'given-name': 'Fname',
-        email: 'someone@asdf.com'
+        email: 'a@a'
       });
-      expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('someone@asdf.com');
-      expect(self.controller.$log.warn.logs[0]).toEqual(['Error saving donor contact info', { data: 'donor details error' }]);
-      expect(self.controller.submissionError).toEqual('donor details error');
+      expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('a@a');
+      expect(self.controller.$log.warn.logs[0]).toEqual(['Error saving donor contact info', { data: 'Invalid email address: a@a' }]);
+      expect(self.controller.submissionError).toEqual('Invalid email address');
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false});
     });
   });

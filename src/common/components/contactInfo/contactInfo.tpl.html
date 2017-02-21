@@ -1,6 +1,19 @@
-
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError">
-  <p>{{$ctrl.submissionError | translate}}</p>
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError" ng-switch="$ctrl.submissionError">
+  <p ng-switch-when="Invalid title." translate>
+    There was an error saving the title you have chosen.
+  </p>
+  <p ng-switch-when="Invalid email address" translate>
+    There was an error saving your email address. Make sure it was entered correctly.
+  </p>
+  <p ng-switch-when="In order to add the spouse , [family-name] and [given-name] are required" translate>
+    There was an error saving your contact info. Make sure your spouse's first and last name are correct.
+  </p>
+  <p ng-switch-when="Access to the specified resource is forbidden." translate>
+    There was an error saving your contact info. Your session may have expired. If you continue to experience issues, try signing out and back in.
+  </p>
+  <p ng-switch-default translate>
+    There was an error saving your contact info. Please try again or contact support.
+  </p>
 </div>
 
 <div ng-if="$ctrl.donorDetails" class="loading-overlay-parent">
@@ -9,7 +22,7 @@
   </loading>
 
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingDonorDetailsError">
-    <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, please contact support</p>
+    <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, please contact support.</p>
     <p><button id="retryButton1" type="button" class="btn btn-primary" ng-click="$ctrl.loadDonorDetails()" translate>Retry</button></p>
   </div>
 
@@ -113,9 +126,9 @@
         <div class="col-sm-6">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">
             <label translate>Phone</label>
-            <input type="text" class="form-control  form-control-subtle" name="phoneNumber" ng-model="$ctrl.donorDetails['phone-number']" ng-maxlength="100">
+            <input type="text" class="form-control  form-control-subtle" name="phoneNumber" ng-model="$ctrl.donorDetails['phone-number']">
             <div role="alert" ng-messages="$ctrl.detailsForm.phoneNumber.$error" ng-if="($ctrl.detailsForm.phoneNumber | showErrors)">
-              <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
+              <div class="help-block" ng-message="phone" translate>The phone number entered is invalid</div>
             </div>
           </div>
         </div>
@@ -226,9 +239,10 @@
         <div class="col-sm-12">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.orgName | showErrors)}">
             <label translate>Organization Name</label>
-            <input type="text" class="form-control form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" required>
+            <input type="text" class="form-control form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" ng-maxlength="100" required>
             <div role="alert" ng-messages="$ctrl.detailsForm.orgName.$error" ng-if="($ctrl.detailsForm.orgName | showErrors)">
               <div class="help-block" ng-message="required" translate>You must enter an organization name</div>
+              <div class="help-block" ng-message="maxlength" translate>Organization name cannot be longer that 100 characters</div>
             </div>
           </div>
         </div>

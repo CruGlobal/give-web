@@ -161,12 +161,13 @@
                               <option translate>Work</option>
                               <option translate>Unknown</option>
                             </select>
-                            <input name="phoneNumber" type="tel" class="form-control form-control-subtle" ng-model="phone['phone-number']" required maxlength="20">
+                            <input name="phoneNumber" type="tel" class="form-control form-control-subtle" ng-model="phone['phone-number']" required>
                             <select name="spousePhoneNumber" ng-model="phone.spouse" ng-change="phone.ownerChanged = !phone.ownerChanged" ng-options="$ctrl.phoneOwner(spouse) for spouse in [true, false]" class="form-control form-control-subtle" ng-disabled="!$ctrl.hasSpouse"></select>
                             <a id="removeSpousePhoneNumberLink" href="" ng-click="$ctrl.deletePhoneNumber(phone, $index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
                           </form>
                           <div role="alert" ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)">
                             <div class="help-block" ng-message="required" translate>You must enter a phone number</div>
+                            <div class="help-block" ng-message="phone" translate>The phone number entered is invalid</div>
                           </div>
                         </div>
                       </div>
