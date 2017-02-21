@@ -423,14 +423,25 @@ describe( 'ProfileComponent', function () {
           delete: false
         }
       ];
-      let data = {
+      spyOn($ctrl.profileService, 'addPhoneNumber').and.returnValue(Observable.of({
+        self: '<new link>',
         'phone-number': '444'
-      };
-      spyOn($ctrl.profileService, 'addPhoneNumber').and.returnValue(Observable.of(data));
+      }));
+      $ctrl.profileService.addPhoneNumber.calls.saveArgumentsByValue();
       spyOn($ctrl, 'resetPhoneNumberForms');
       $ctrl.updatePhoneNumbers();
-      expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
+      expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalledWith({
+        self: false,
+        delete: false
+      });
       expect($ctrl.resetPhoneNumberForms).toHaveBeenCalled();
+      expect($ctrl.phoneNumbers).toEqual([
+        {
+          self: '<new link>',
+          'phone-number': '444',
+          delete: false
+        }
+      ]);
     });
 
     it('should fail adding phone number', () => {
