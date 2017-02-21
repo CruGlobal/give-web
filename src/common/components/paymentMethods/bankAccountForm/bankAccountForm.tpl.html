@@ -9,9 +9,10 @@
       <div class="col-sm-6">
         <div class="form-group form-group-default is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.bankName | showErrors)}">
           <label>Bank Name</label>
-          <input type="text" class="form-control form-control-subtle" name="bankName" ng-model="$ctrl.bankPayment.bankName" required/>
+          <input type="text" class="form-control form-control-subtle" name="bankName" ng-model="$ctrl.bankPayment.bankName" ng-maxlength="30" required/>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.bankName.$error" ng-if="($ctrl.bankPaymentForm.bankName | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter a bank name</div>
+            <div class="help-block" ng-message="maxlength" translate>The bank name cannot be longer than 30 characters</div>
           </div>
         </div>
       </div>
