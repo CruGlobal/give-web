@@ -68,7 +68,8 @@
                    class="form-control  form-control-subtle"
                    name="nameMiddleInitial"
                    ng-model="$ctrl.donorDetails['name']['middle-initial']"
-                   ng-maxlength="50">
+                   ng-maxlength="50"
+                   ng-disabled="$ctrl.nameFieldsDisabled">
             <div role="alert" ng-messages="$ctrl.detailsForm.nameMiddleInitial.$error" ng-if="($ctrl.detailsForm.nameMiddleInitial | showErrors)">
               <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
             </div>
@@ -94,7 +95,7 @@
           <div class="form-group">
             <label translate>Suffix</label>
             <div class="form-group">
-              <select name="nameSuffix" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['name']['suffix']">
+              <select name="nameSuffix" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['name']['suffix']" ng-disabled="$ctrl.nameFieldsDisabled">
                 <option></option>
                 <option translate>Jr</option>
                 <option translate>Sr</option>
@@ -176,7 +177,7 @@
               <div class="col-sm-2">
                 <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseMiddleInitial | showErrors)}">
                   <label translate>MI</label>
-                  <input type="text" class="form-control  form-control-subtle" name="spouseMiddleInitial" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" ng-maxlength="50">
+                  <input type="text" class="form-control  form-control-subtle" name="spouseMiddleInitial" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" ng-maxlength="50" ng-disabled="$ctrl.nameFieldsDisabled">
                   <div role="alert" ng-messages="$ctrl.detailsForm.spouseMiddleInitial.$error" ng-if="($ctrl.detailsForm.spouseMiddleInitial | showErrors)">
                     <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
                   </div>
@@ -200,7 +201,7 @@
                 <div class="form-group">
                   <label translate>Suffix</label>
                   <div class="form-group">
-                    <select name="spouseSuffix" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['suffix']">
+                    <select name="spouseSuffix" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['suffix']" ng-disabled="$ctrl.nameFieldsDisabled">
                       <option></option>
                       <option translate>Jr</option>
                       <option translate>Sr</option>

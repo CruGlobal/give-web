@@ -46,7 +46,7 @@
                               <input name="nameMiddleInitial" type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails.name['middle-initial']">
                               <input name="nameFamilyName" type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']">
 
-                              <select name="nameSuffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
+                              <select name="nameSuffix" class="form-control form-control-subtle suffix" disabled ng-model="$ctrl.donorDetails.name.suffix">
                                 <option value=""></option>
                                 <option value="Jr" translate>Jr</option>
                                 <option value="Sr" translate>Sr</option>
@@ -76,7 +76,7 @@
                               <input name="spouseInitial" type="text" class="form-control form-control-subtle middle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" maxlength="1" ng-disabled="$ctrl.hasSpouse" pattern="[A-Z]">
                               <input name="spouseLastName" type="text" class="form-control form-control-subtle last" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" maxlength="25" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
 
-                              <select name="suffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
+                              <select name="suffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix" ng-disabled="$ctrl.hasSpouse">
                                 <option value=""></option>
                                 <option value="Jr" translate>Jr</option>
                                 <option value="Sr" translate>Sr</option>
