@@ -4,7 +4,9 @@ import includes from 'lodash/includes';
 import find from 'lodash/find';
 
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/defer';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/retry';
 
 import loading from 'common/components/loading/loading.component';
 import sessionService, {SignOutEvent} from 'common/services/session/session.service';
@@ -58,22 +60,26 @@ class NavController{
     this.menuPath.sub = path.slice(0, 3);
 
     this.getNav().subscribe((structure) => {
-      this.menuStructure = structure;
+        this.menuStructure = structure;
 
-      if(this.$window.location.hostname && includes(this.$window.location.hostname, 'give')){
-        this.subMenuStructure = [{
-          title: 'Give',
-          path: '/',
-          children: structure.give
-        }];
-        this.menuPath.sub = ['give'];
-      }else{
-        this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
-      }
-    },
-    error => {
-      this.$log.error('Error loading the nav.', error);
-    });
+        if(this.$window.location.hostname && includes(this.$window.location.hostname, 'give')){
+          this.subMenuStructure = [{
+            title: 'Give',
+            path: '/',
+            children: structure.give
+          }];
+          this.menuPath.sub = ['give'];
+        }else{
+          this.subMenuStructure = this.makeSubNav(structure.main, this.menuPath.sub);
+        }
+      },
+      error => {
+        if(error && error.status === -1){
+          this.$log.warn('Aborted or timed out request while loading the nav.', error);
+        }else{
+          this.$log.error('Error loading the nav.', error);
+        }
+      });
 
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
 
@@ -169,10 +175,11 @@ class NavController{
   }
 
   getNav() {
-    return Observable.from(this.$http({
+    return Observable.defer(() => this.$http({
       method: 'GET',
       url: this.navFeed
     }))
+      .retry(1)
       .map((response) => {
         let jsonStructure = response.data;
         let menuStructure = {
