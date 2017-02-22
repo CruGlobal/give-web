@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://give-stage2.cru.org/" />
+<title>Give Gift as Guest</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Give Gift as Guest</td></tr>
+</thead><tbody>
+<tr>
+	<td>disabled</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>deleteCookie</td>
+	<td>give-session</td>
+	<td>path=/,domain=.cru.org</td>
+</tr>
+<tr>
+	<td>deleteCookie</td>
+	<td>cortex-session</td>
+	<td>path=/,domain=.cru.org</td>
+</tr>
+<tr>
+	<td>deleteCookie</td>
+	<td>cru-session</td>
+	<td>path=/,domain=.cru.org</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/0015066?modal=give-gift&amp;d=0015066</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//product-config-modal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//button[@type='submit']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/cart.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Proceed to Checkout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Proceed to Checkout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>*/sign-in.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=continueAsGuestButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//checkout-step-1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>*/checkout.html?step=contact</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//contact-info</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>name=nameTitle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=nameTitle</td>
+	<td>label=Dr</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=nameGivenName</td>
+	<td>William</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=nameMiddleInitial</td>
+	<td>P</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=nameFamilyName</td>
+	<td>Wilberforce</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=nameSuffix</td>
+	<td>label=III</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=phoneNumber</td>
+	<td>407-000-0000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=email</td>
+	<td>wpw@example.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=addressStreetAddress</td>
+	<td>1 Mystery Way</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=addressLocality</td>
+	<td>Anywhere</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=addressRegion</td>
+	<td>label=Indiana</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=addressPostalCode</td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=continueToPaymentMethodsButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//checkout-step-2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>*/checkout.html?step=payment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//bank-account-form</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=bankName</td>
+	<td>First Test Bank</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//input[@name='accountType'])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=routingNumber</td>
+	<td>021000021</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=accountNumber</td>
+	<td>24555</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=verifyAccountNumber</td>
+	<td>24555</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=acceptedAgreement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=continueCheckoutButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//checkout-step-3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>*/checkout.html?step=review</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=div.panel-body &gt; div.row &gt; div.col-md-12 &gt; div</td>
+	<td>Dr William P Wilberforce III</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=.giftsum-table tbody .td-gift</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=submitOrderButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//account-benefits-modal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>*/thank-you.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=tr.giftsum-gift-row</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertBodyText</td>
+	<td>*First Test Bank*Savings*Dr William P Wilberforce III*1 Mystery Way*Anywhere, IN 30000*Steve and Judy Douglass*Single Gift Total: $50.00*</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

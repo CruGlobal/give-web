@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://give-stage2.cru.org/" />
+<title>Delete Payment Method</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Delete Payment Method</td></tr>
+</thead><tbody>
+<tr>
+	<td>disabled</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>deleteCookie</td>
+	<td>give-session</td>
+	<td>path=/,domain=.cru.org</td>
+</tr>
+<tr>
+	<td>deleteCookie</td>
+	<td>cortex-session</td>
+	<td>path=/,domain=.cru.org</td>
+</tr>
+<tr>
+	<td>deleteCookie</td>
+	<td>cru-session</td>
+	<td>path=/,domain=.cru.org</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/payment-methods.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>robert.hewitt@example.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>test1234</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=signInButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//payment-method/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.btn.trigger</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Delete Payment Method</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Delete Payment Method</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//delete-payment-method-modal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//input[@name='optradio'])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.btn.btn-primary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//payment-method-form</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=addBankAccountButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=bankName</td>
+	<td>Third Test Bank</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//input[@name='accountType'])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=routingNumber</td>
+	<td>123123123</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=accountNumber</td>
+	<td>12345</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=verifyAccountNumber</td>
+	<td>12345</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=acceptedAgreement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=addPaymentButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=saveChangesButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=saveChangesButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>css=div.modal-header</td>
+	<td>*There was an error updating the donations attached to this payment method.*</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//payment-methods</td>
+	<td>*Third Test Bank*</td>
+</tr>
+</tbody></table>
+</body>
+</html>
