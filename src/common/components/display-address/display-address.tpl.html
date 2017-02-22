@@ -11,6 +11,6 @@
     <span ng-if="$ctrl.address.extendedAddress">{{$ctrl.address.extendedAddress}}<br/></span>
     {{$ctrl.address.intAddressLine3}}<br/>
     {{$ctrl.address.intAddressLine4}}<br/>
-    {{$ctrl.address.country}}
+    {{$ctrl.countries[$ctrl.address.country]['display-name'] || $ctrl.address.country}}
   </p>
 </div>
