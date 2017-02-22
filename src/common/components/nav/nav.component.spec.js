@@ -147,6 +147,12 @@ describe( 'nav', function () {
       $ctrl.$onInit();
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading the nav.', 'some error']);
     });
+
+    it('should log a warning on a status of -1', () => {
+      $ctrl.getNav.and.returnValue( Observable.throw( { status: -1 } ) );
+      $ctrl.$onInit();
+      expect($ctrl.$log.warn.logs[0]).toEqual(['Aborted or timed out request while loading the nav.', { status: -1 }]);
+    });
   } );
 
   describe( 'giftAddedToCart()', () => {
