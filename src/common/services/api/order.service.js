@@ -198,8 +198,8 @@ class Order{
       }
     })
       .pluck('paymentMethod')
-      .map((data) => {
-        if(data.address){
+      .map(data => {
+        if(data && data.address){
           data.address = formatAddressForTemplate(data.address);
         }
         return data;
