@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'rxjs/add/operator/map';
+import map from 'lodash/map';
 
 import cortexApiService from '../cortexApi.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
@@ -17,12 +18,12 @@ class Geographies {
 
   getCountries(){
     return this.cortexApiService.get({
-        path: ['geographies', this.cortexApiService.scope, 'countries'],
-        zoom: {
-          countries: 'element[]'
-        },
-        cache: true
-      })
+      path: ['geographies', this.cortexApiService.scope, 'countries'],
+      zoom: {
+        countries: 'element[]'
+      },
+      cache: true
+    })
       .map((data) => {
         return data.countries;
       });
@@ -30,14 +31,29 @@ class Geographies {
 
   getRegions(country){
     return this.cortexApiService.get({
-        path: this.hateoasHelperService.getLink(country, 'regions'),
-        zoom: {
-          regions: 'element[]'
-        },
-        cache: true
-      })
-      .map((data) => {
-        return data.regions;
+      path: this.hateoasHelperService.getLink(country, 'regions'),
+      zoom: {
+        regions: 'element[]'
+      },
+      cache: true
+    })
+      .map(data => {
+        const regions =  data.regions;
+        if(country && country.name === 'US'){
+          return map(regions, region => {
+            if(region.name === 'AA'){
+              region['display-name'] = 'Armed Forces Americas (AA)';
+            }
+            if(region.name === 'AE'){
+              region['display-name'] = 'Armed Forces Europe (AE)';
+            }
+            if(region.name === 'AP'){
+              region['display-name'] = 'Armed Forces Pacific (AP)';
+            }
+            return region;
+          });
+        }
+        return regions;
       });
   }
 }
