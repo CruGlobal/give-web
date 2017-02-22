@@ -9,8 +9,8 @@
   <p ng-if="$ctrl.address.country !== 'US'">
     {{$ctrl.address.streetAddress}}<br/>
     <span ng-if="$ctrl.address.extendedAddress">{{$ctrl.address.extendedAddress}}<br/></span>
-    {{$ctrl.address.locality}}<br/>
     {{$ctrl.address.intAddressLine3}}<br/>
     {{$ctrl.address.intAddressLine4}}<br/>
+    {{$ctrl.address.country}}
   </p>
 </div>
