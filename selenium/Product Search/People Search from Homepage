@@ -37,6 +37,11 @@
 	<td>Josh</td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>id=bottomSearchButton</td>
 	<td></td>
@@ -50,11 +55,6 @@
 	<td>assertText</td>
 	<td>css=span.is-row-title</td>
 	<td>*Josh*</td>
-</tr>
-<tr>
-	<td></td>
-	<td></td>
-	<td></td>
 </tr>
 </tbody></table>
 </body>
