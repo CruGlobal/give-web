@@ -24,7 +24,7 @@ describe('geographies service', () => {
     it('should send a request to get the list of countries', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries?zoom=element').respond(200, countriesResponse);
       self.geographiesService.getCountries()
-        .subscribe((data) => {
+        .subscribe(data => {
           expect(data).toEqual(countriesResponse._element);
         });
       self.$httpBackend.flush();
@@ -36,8 +36,35 @@ describe('geographies service', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions?zoom=element').respond(200, regionsResponse);
       let us = find(countriesResponse._element, { name: 'US' });
       self.geographiesService.getRegions(us)
-        .subscribe((data) => {
-          expect(data).toEqual(regionsResponse._element);
+        .subscribe(data => {
+          expect(data).toEqual(jasmine.arrayContaining([
+            jasmine.objectContaining({"display-name":"California","name":"CA"}),
+            jasmine.objectContaining({"display-name":"Florida","name":"FL"})
+          ]));
+          expect(data.length).toEqual(54);
+        });
+      self.$httpBackend.flush();
+    });
+    it('should rename the armed services regions to a better display name', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions?zoom=element').respond(200, regionsResponse);
+      let us = find(countriesResponse._element, { name: 'US' });
+      self.geographiesService.getRegions(us)
+        .subscribe(data => {
+          expect(data).toEqual(jasmine.arrayContaining([
+            jasmine.objectContaining({"display-name":"Armed Forces Americas (AA)","name":"AA"}),
+            jasmine.objectContaining({"display-name":"Armed Forces Europe (AE)","name":"AE"}),
+            jasmine.objectContaining({"display-name":"Armed Forces Pacific (AP)","name":"AP"})
+          ]));
+        });
+      self.$httpBackend.flush();
+    });
+
+    it('should not rename any non US regions', () => {
+      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/inaq=/regions?zoom=element').respond(200, {"_element": [{"display-name":"Do not rename","name":"AA"}] });
+      let ca = find(countriesResponse._element, { name: 'CA' });
+      self.geographiesService.getRegions(ca)
+        .subscribe(data => {
+          expect(data).toEqual([{"display-name":"Do not rename","name":"AA"}]);
         });
       self.$httpBackend.flush();
     });

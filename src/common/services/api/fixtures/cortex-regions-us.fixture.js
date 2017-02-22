@@ -57,6 +57,11 @@ export default {
   }, {
     "rel": "element",
     "type": "elasticpath.geographies.region",
+    "uri": "/geographies/crugive/countries/kvjq=/regions/ifaq=",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/ifaq="
+  }, {
+    "rel": "element",
+    "type": "elasticpath.geographies.region",
     "uri": "/geographies/crugive/countries/kvjq=/regions/jvha=",
     "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/jvha="
   }, {
@@ -69,6 +74,11 @@ export default {
     "type": "elasticpath.geographies.region",
     "uri": "/geographies/crugive/countries/kvjq=/regions/jfga=",
     "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/jfga="
+  }, {
+    "rel": "element",
+    "type": "elasticpath.geographies.region",
+    "uri": "/geographies/crugive/countries/kvjq=/regions/ifcq=",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/ifcq="
   }, {
     "rel": "element",
     "type": "elasticpath.geographies.region",
@@ -99,6 +109,11 @@ export default {
     "type": "elasticpath.geographies.region",
     "uri": "/geographies/crugive/countries/kvjq=/regions/ifga=",
     "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/ifga="
+  }, {
+    "rel": "element",
+    "type": "elasticpath.geographies.region",
+    "uri": "/geographies/crugive/countries/kvjq=/regions/ifia=",
+    "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/ifia="
   }, {
     "rel": "element",
     "type": "elasticpath.geographies.region",
@@ -323,6 +338,12 @@ export default {
   }, {
     "self": {
       "type": "elasticpath.geographies.region",
+      "uri": "/geographies/crugive/countries/kvjq=/regions/ifaq=",
+      "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/ifaq="
+    }, "links": [], "display-name": "Armed Forces Americas (except Canada)", "name": "AA"
+  }, {
+    "self": {
+      "type": "elasticpath.geographies.region",
       "uri": "/geographies/crugive/countries/kvjq=/regions/jvha=",
       "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/jvha="
     }, "links": [], "display-name": "Minnesota", "name": "MN"
@@ -338,6 +359,12 @@ export default {
       "uri": "/geographies/crugive/countries/kvjq=/regions/jfga=",
       "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/jfga="
     }, "links": [], "display-name": "Illinois", "name": "IL"
+  }, {
+    "self": {
+      "type": "elasticpath.geographies.region",
+      "uri": "/geographies/crugive/countries/kvjq=/regions/ifcq=",
+      "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/ifcq="
+    }, "links": [], "display-name": "Armed Forces Europe (includes Africa, Middle East and Canada)", "name": "AE"
   }, {
     "self": {
       "type": "elasticpath.geographies.region",
@@ -367,13 +394,19 @@ export default {
       "type": "elasticpath.geographies.region",
       "uri": "/geographies/crugive/countries/kvjq=/regions/kzaq=",
       "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/kzaq="
-    }, "links": [], "display-name": "Virginia ", "name": "VA"
+    }, "links": [], "display-name": "Virginia", "name": "VA"
   }, {
     "self": {
       "type": "elasticpath.geographies.region",
       "uri": "/geographies/crugive/countries/kvjq=/regions/ifga=",
       "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/ifga="
     }, "links": [], "display-name": "Alabama", "name": "AL"
+  }, {
+    "self": {
+      "type": "elasticpath.geographies.region",
+      "uri": "/geographies/crugive/countries/kvjq=/regions/ifia=",
+      "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/ifia="
+    }, "links": [], "display-name": "Armed Forces Pacific", "name": "AP"
   }, {
     "self": {
       "type": "elasticpath.geographies.region",
@@ -565,7 +598,7 @@ export default {
       "type": "elasticpath.geographies.region",
       "uri": "/geographies/crugive/countries/kvjq=/regions/irbq=",
       "href": "https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions/irbq="
-    }, "links": [], "display-name": "District of Columbia ", "name": "DC"
+    }, "links": [], "display-name": "District Of Columbia", "name": "DC"
   }]
 };
 
