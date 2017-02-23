@@ -113,7 +113,7 @@ class DesignationsService {
       chosen: 'definition:options:element:selector:chosen,definition:options:element:selector:chosen:description'
     };
 
-    var httpRequest = selectQuery ? this.cortexApiService.post({
+    const httpRequest = selectQuery ? this.cortexApiService.post({
       path: query,
       data: { },
       followLocation: true,
@@ -128,7 +128,7 @@ class DesignationsService {
     });
 
     return httpRequest.map(data => {
-      const choices = map(data.choices.concat(data.chosen), (choice) => {
+      const choices = map(data.choices && data.choices.concat(data.chosen), choice => {
         return {
           name: choice.description.name,
           display: choice.description['display-name'],
