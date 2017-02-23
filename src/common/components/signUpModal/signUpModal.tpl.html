@@ -116,11 +116,12 @@
 		</div>
 	  -->
     <div class="form-group">
-      <a class="btn btn-block btn-primary"
-         id="signUpLink"
-         ng-disabled="!$ctrl.signUpForm.$valid"
-         ng-click="$ctrl.signUp()"
-         translate>Sign Up</a>
+      <button type="submit"
+              class="btn btn-block btn-primary"
+              id="signUpLink"
+              ng-disabled="!$ctrl.signUpForm.$valid"
+              ng-click="$ctrl.signUp()"
+              translate>Sign Up</button>
     </div>
     <p class="text-center">
       <span>Already have an account?</span> <a id="signInLink" href="" ng-click="$ctrl.onStateChange({state: 'sign-in'})" translate>Sign In</a>
