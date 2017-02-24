@@ -44,10 +44,6 @@ class RegisterAccountModalController {
   }
 
   onIdentitySuccess() {
-    // Show loading state
-    this.modalTitle = this.gettext( 'Checking your donor account' );
-    this.stateChanged( 'loading' );
-
     // Success Sign-In/Up, Proceed to Step 2.
     this.getDonorDetails();
   }
@@ -63,6 +59,9 @@ class RegisterAccountModalController {
   }
 
   getDonorDetails() {
+    // Show loading state
+    this.modalTitle = this.gettext( 'Checking your donor account' );
+    this.stateChanged( 'loading' );
 
     // Step 2. Fetch Donor Details
     this.orderService.getDonorDetails().subscribe( ( donorDetails ) => {

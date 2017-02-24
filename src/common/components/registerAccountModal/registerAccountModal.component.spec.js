@@ -67,12 +67,8 @@ describe( 'registerAccountModal', function () {
   describe( 'onIdentitySuccess()', () => {
     it( 'calls getDonorDetails', () => {
       spyOn( $ctrl, 'getDonorDetails' );
-      spyOn( $ctrl, 'stateChanged' );
       $ctrl.onIdentitySuccess();
       expect( $ctrl.getDonorDetails ).toHaveBeenCalled();
-      expect( $ctrl.modalTitle ).toEqual('Checking your donor account');
-      expect( $ctrl.stateChanged ).toHaveBeenCalledWith('loading');
-
     } );
   } );
 
@@ -101,8 +97,10 @@ describe( 'registerAccountModal', function () {
         it( 'changes state to \'contact-info\'', () => {
           $ctrl.orderService.getDonorDetails.and.callFake( () => Observable.of( {'registration-state': 'COMPLETED'} ) );
           $ctrl.getDonorDetails();
+          expect( $ctrl.modalTitle ).toEqual('Checking your donor account');
+          expect( $ctrl.stateChanged ).toHaveBeenCalledWith('loading');
+          expect( $ctrl.stateChanged.calls.count() ).toEqual(1);
           expect( $ctrl.orderService.getDonorDetails ).toHaveBeenCalled();
-          expect( $ctrl.stateChanged ).not.toHaveBeenCalled();
           expect( $ctrl.onSuccess ).toHaveBeenCalled();
         } );
       } );
