@@ -9,7 +9,7 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/concatAll'; //TODO: switch to mergeAll. See comment below
+import 'rxjs/add/operator/mergeAll';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/from';
@@ -151,7 +151,7 @@ class Cart {
           return this.addItemAndReplaceExisting(cart, configuredDesignation.uri, configuredDesignation);
         });
       })
-      .concatAll(); //TODO: replace with mergeAll when EP supports concurrent requests to the same cart. See https://jira.cru.org/browse/EP-1549
+      .mergeAll();
   }
 
   addItemAndReplaceExisting(cart, uri, configuredDesignation){
