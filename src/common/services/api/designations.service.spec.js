@@ -24,8 +24,8 @@ describe('designation service', () => {
     it('should send a request to API and get results', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/search?keyword=steve').respond(200, searchResponse);
       self.designationsService.productSearch({
-          keyword: 'steve'
-        })
+        keyword: 'steve'
+      })
         .subscribe((data) => {
           expect(data).toEqual([jasmine.objectContaining({
             'designationNumber': '0559826',
@@ -39,8 +39,8 @@ describe('designation service', () => {
     it('should handle undefined fields', () => {
       self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/search?keyword=steve').respond(200, {hits:[{}]});
       self.designationsService.productSearch({
-          keyword: 'steve'
-        })
+        keyword: 'steve'
+      })
         .subscribe((data) => {
           expect(data).toEqual([jasmine.objectContaining({
             designationNumber: null,
@@ -96,6 +96,17 @@ describe('designation service', () => {
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(data => {
           expect(data).toEqual(this.expectedResponse);
+        });
+      self.$httpBackend.flush();
+    });
+    it('should handle an empty response', () => {
+      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
+        .respond(200, '');
+      self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
+        .subscribe(() => {
+          fail('success should not have been called');
+        }, error => {
+          expect(error).toEqual('Product lookup response contains no code data');
         });
       self.$httpBackend.flush();
     });

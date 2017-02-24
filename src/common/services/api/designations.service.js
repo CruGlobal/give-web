@@ -128,7 +128,11 @@ class DesignationsService {
     });
 
     return httpRequest.map(data => {
-      const choices = map(data.choices && data.choices.concat(data.chosen), choice => {
+      if(!data.code) throw 'Product lookup response contains no code data';
+      if(!data.definition) throw 'Product lookup response contains no definition data';
+      if(!data.choices) throw 'Product lookup response contains no choices data';
+      if(!data.chosen) throw 'Product lookup response contains no chosen data';
+      const choices = map(data.choices.concat(data.chosen), choice => {
         return {
           name: choice.description.name,
           display: choice.description['display-name'],
