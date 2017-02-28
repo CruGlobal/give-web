@@ -3,11 +3,13 @@ import angular from 'angular';
 let directiveName = 'autoFocus';
 
 /* @ngInject */
-function desigSrc() {
+function desigSrc($timeout) {
   return {
     restrict: 'A',
     link:     function ( scope, element ) {
-      element[0].focus();
+      $timeout(function () {
+        element[0].focus();
+      }, 300);
     }
   };
 }
