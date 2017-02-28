@@ -174,7 +174,7 @@ describe( 'ProfileComponent', function () {
         data: 'some error'
       }));
       $ctrl.loadDonorDetails();
-      expect($ctrl.donorDetailsError).toBe('Failed loading profile details.');
+      expect($ctrl.donorDetailsError).toBe('loading');
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled();
     });
   });
@@ -194,7 +194,7 @@ describe( 'ProfileComponent', function () {
         data: 'some error'
       }));
       $ctrl.updateDonorDetails();
-      expect($ctrl.donorDetailsError).toBe('Failed updating profile details.');
+      expect($ctrl.donorDetailsError).toBe('updating');
       expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalled();
     });
   });
@@ -221,7 +221,7 @@ describe( 'ProfileComponent', function () {
         data: 'some error'
       }));
       $ctrl.loadMailingAddress();
-      expect($ctrl.mailingAddressError).toBe('Failed loading mailing address.');
+      expect($ctrl.mailingAddressError).toBe('loading');
       expect($ctrl.profileService.getMailingAddress).toHaveBeenCalled();
     });
   });
@@ -252,7 +252,7 @@ describe( 'ProfileComponent', function () {
         data: 'some error'
       }));
       $ctrl.loadEmail();
-      expect($ctrl.emailAddressError).toBe('Failed loading email.');
+      expect($ctrl.emailAddressError).toBe('loading');
       expect($ctrl.profileService.getEmails).toHaveBeenCalled();
     });
   });
@@ -277,7 +277,7 @@ describe( 'ProfileComponent', function () {
         data: 'some error'
       }));
       $ctrl.updateEmail();
-      expect($ctrl.emailAddressError).toBe('Failed updating email address.');
+      expect($ctrl.emailAddressError).toBe('updating');
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled();
     });
   });
@@ -312,7 +312,7 @@ describe( 'ProfileComponent', function () {
         data: 'some error'
       }));
       $ctrl.loadPhoneNumbers();
-      expect($ctrl.phoneNumberError).toBe('Failed loading phone numbers.');
+      expect($ctrl.phoneNumberError).toBe('loading');
       expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled();
     });
   });
@@ -380,7 +380,7 @@ describe( 'ProfileComponent', function () {
       }));
       $ctrl.updatePhoneNumbers();
       expect($ctrl.profileService.updatePhoneNumber).toHaveBeenCalled();
-      expect($ctrl.phoneNumberError).toBe('Failed updating phone number(s).');
+      expect($ctrl.phoneNumberError).toBe('updating');
     });
 
     it('should delete phone number', () => {
@@ -413,7 +413,7 @@ describe( 'ProfileComponent', function () {
       }));
       $ctrl.updatePhoneNumbers();
       expect($ctrl.profileService.deletePhoneNumber).toHaveBeenCalled();
-      expect($ctrl.phoneNumberError).toBe('Failed updating phone number(s).');
+      expect($ctrl.phoneNumberError).toBe('updating');
     });
 
     it('should add phone number', () => {
@@ -456,7 +456,22 @@ describe( 'ProfileComponent', function () {
       }));
       $ctrl.updatePhoneNumbers();
       expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
-      expect($ctrl.phoneNumberError).toBe('Failed updating phone number(s).');
+      expect($ctrl.phoneNumberError).toBe('updating');
+    });
+
+    it('should handle duplicate phone number error', () => {
+      $ctrl.phoneNumbers = [
+        {
+          self: false,
+          delete: false
+        }
+      ];
+      spyOn($ctrl.profileService, 'addPhoneNumber').and.returnValue(Observable.throw({
+        data: 'Failed to create phone number because it already exists.'
+      }));
+      $ctrl.updatePhoneNumbers();
+      expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
+      expect($ctrl.phoneNumberError).toBe('duplicate');
     });
 
   });
@@ -519,7 +534,7 @@ describe( 'ProfileComponent', function () {
         data: 'some error'
       }));
       $ctrl.updateMailingAddress();
-      expect($ctrl.mailingAddressError).toBe('Failed loading mailing address.');
+      expect($ctrl.mailingAddressError).toBe('updating');
     });
   });
 
@@ -551,7 +566,7 @@ describe( 'ProfileComponent', function () {
         data: 'some error'
       }));
       $ctrl.saveSpouse();
-      expect($ctrl.donorDetailsError).toBe('Failed saving spouse info. ');
+      expect($ctrl.donorDetailsError).toBe('saving spouse');
     });
   });
 

@@ -32,6 +32,10 @@ class ProfileController {
     this.profileService = profileService;
     this.analyticsFactory = analyticsFactory;
     this.phoneNumbers = [];
+    this.donorDetailsLoading = true;
+    this.emailLoading = true;
+    this.phonesLoading = true;
+    this.mailingAddressLoading = true;
   }
 
   $onInit() {
@@ -81,8 +85,8 @@ class ProfileController {
         },
         error => {
           this.donorDetailsLoading = false;
-          this.donorDetailsError = 'Failed loading profile details.';
-          this.$log.error(this.donorDetailsError, error.data);
+          this.donorDetailsError = 'loading';
+          this.$log.error('Failed loading profile details', error);
         }
       );
   }
@@ -99,8 +103,8 @@ class ProfileController {
         },
         error => {
           this.donorDetailsLoading = false;
-          this.donorDetailsError = 'Failed updating profile details.';
-          this.$log.error(this.donorDetailsError, error.data);
+          this.donorDetailsError = 'updating';
+          this.$log.error('Failed updating profile details', error);
         },
         () => {
           if(this.spouseEmailForm && this.spouseEmailForm.$dirty && this.spouseEmailForm.$valid) {
@@ -120,9 +124,9 @@ class ProfileController {
           this.emailLoading = false;
         },
         error => {
-          this.emailAddressError = 'Failed loading email.';
+          this.emailAddressError = 'loading';
           this.emailLoading = false;
-          this.$log.error(this.emailAddressError, error.data);
+          this.$log.error('Failed loading email.', error);
         }
       );
   }
@@ -144,8 +148,8 @@ class ProfileController {
           this.emailLoading = false;
         },
         error => {
-          this.emailAddressError = 'Failed updating email address.';
-          this.$log.error(this.emailAddressError, error);
+          this.emailAddressError = 'updating';
+          this.$log.error('Failed updating email address.', error);
           this.emailLoading = false;
         }
       );
@@ -175,8 +179,8 @@ class ProfileController {
           });
         },
         error => {
-          this.phoneNumberError = 'Failed loading phone numbers.';
-          this.$log.error(this.phoneNumberError, error.data);
+          this.phoneNumberError = 'loading';
+          this.$log.error('Failed loading phone numbers', error);
           this.phonesLoading = false;
         }
       );
@@ -230,8 +234,12 @@ class ProfileController {
       Observable.forkJoin(requests)
         .subscribe(null,
           error => {
-            this.phoneNumberError = 'Failed updating phone number(s).';
-            this.$log.error(this.phoneNumberError, error.data);
+            if(error && error.data === 'Failed to create phone number because it already exists.'){
+              this.phoneNumberError = 'duplicate';
+            }else {
+              this.phoneNumberError = 'updating';
+            }
+            this.$log.error('Error updating phone numbers', error);
             this.phonesLoading = false;
           },
           () => {
@@ -291,8 +299,8 @@ class ProfileController {
         },
         error => {
           this.mailingAddressLoading = false;
-          this.mailingAddressError = 'Failed loading mailing address.';
-          this.$log.error(this.mailingAddressError, error.data);
+          this.mailingAddressError = 'loading';
+          this.$log.error('Failed loading mailing address.', error);
         }
       );
   }
@@ -309,8 +317,8 @@ class ProfileController {
         },
         error => {
           this.mailingAddressLoading = false;
-          this.mailingAddressError = 'Failed loading mailing address.';
-          this.$log.error(this.mailingAddressError, error.data);
+          this.mailingAddressError = 'updating';
+          this.$log.error('Failed loading mailing address', error);
         }
       );
   }
@@ -326,8 +334,8 @@ class ProfileController {
           this.donorDetailsLoading = false;
         },
         error => {
-          this.donorDetailsError = 'Failed saving spouse info. ';
-          this.$log.error(error.data, this.donorDetailsError);
+          this.donorDetailsError = 'saving spouse';
+          this.$log.error('Failed saving spouse info. ', error);
           this.donorDetailsLoading = false;
         },
         () => {

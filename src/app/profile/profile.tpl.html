@@ -4,19 +4,34 @@
       <div class="col-md-12">
 
         <div ng-if="$ctrl.hasError()" class="alert alert-danger" role="alert">
-          <p>{{$ctrl.donorDetailsError}}</p>
-          <p>{{$ctrl.emailAddressError}}</p>
-          <p>{{$ctrl.phoneNumberError}}</p>
-          <p>{{$ctrl.mailingAddressError}}</p>
+          <p ng-switch="$ctrl.donorDetailsError">
+            <translate ng-switch-when="loading">There was an error loading your profile information</translate>
+            <translate ng-switch-when="updating">There was an error updating your profile information</translate>
+            <translate ng-switch-when="saving spouse">There was an error updating your spouse's information</translate>
+          </p>
+          <p ng-switch="$ctrl.emailAddressError">
+            <translate ng-switch-when="loading">There was an error loading your email(s)</translate>
+            <translate ng-switch-when="updating">There was an error updating your email(s)</translate>
+          </p>
+          <p ng-switch="$ctrl.phoneNumberError">
+            <translate ng-switch-when="loading">There was an error loading your phone numbers</translate>
+            <translate ng-switch-when="updating">There was an error updating your phone numbers</translate>
+            <translate ng-switch-when="duplicate">There was an error updating your phone numbers. You appear to have entered duplicate phone numbers. Please verify that all of your phone numbers are unique.</translate>
+          </p>
+          <p ng-switch="$ctrl.mailingAddressError">
+            <translate ng-switch-when="loading">There was an error loading your mailing address</translate>
+            <translate ng-switch-when="updating">There was an error updating your mailing address</translate>
+          </p>
         </div>
 
         <div ng-if="$ctrl.success && !$ctrl.touched() && !$ctrl.hasError()" class="alert alert-success" role="alert">
-          <span>Profile information was successfully updated.</span>
+          <translate>Profile information was successfully updated.</translate>
         </div>
 
         <div class="panel panel-margin-bottom">
           <div class="panel-body">
-            <h2 class="mb_x">Your Profile</h2>
+            <loading inline="true" class="pull-right" ng-if="$ctrl.loading()"></loading>
+            <h2 class="mb_x" translate>Your Profile</h2>
             <div class="row mb_x">
               <div class="col-lg-10 col-lg-offset-1">
 
@@ -24,10 +39,10 @@
                   <div class="col-md-7 mb">
 
                     <!--Donor Details-->
-                    <h4 class="panel-title  border-bottom-small visible">Your Name</h4>
+                    <h4 class="panel-title  border-bottom-small visible" translate>Your Name</h4>
                     <div class="loading-overlay-parent">
                       <loading type="overlay" ng-if="$ctrl.donorDetailsLoading"></loading>
-                        <ul class="list-unstyled people-fields">
+                      <ul class="list-unstyled people-fields">
                         <li>
                           <form name="$ctrl.donorDetailsForm" novalidate>
                             <div class="form-group is-required person-row">
@@ -117,7 +132,7 @@
                     </div>
 
                     <!--Email Address-->
-                    <h4 class="panel-title  border-bottom-small visible mt">Email Addresses</h4>
+                    <h4 class="panel-title  border-bottom-small visible mt" translate>Email Addresses</h4>
 
                     <div class="loading-overlay-parent">
                       <loading type="overlay" ng-if="$ctrl.emailLoading"></loading>
@@ -148,7 +163,7 @@
                     </div>
 
                     <!--Phone Numbers-->
-                    <h4 class="panel-title  border-bottom-small visible mt">Phone Numbers</h4>
+                    <h4 class="panel-title  border-bottom-small visible mt" translate>Phone Numbers</h4>
 
                     <div class="loading-overlay-parent">
                       <loading type="overlay" ng-if="$ctrl.phonesLoading"></loading>
@@ -202,7 +217,15 @@
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="border-bottom-small"></div>
-                    <button id="saveChangesButton" ng-disabled="!$ctrl.touched() || $ctrl.invalid() || $ctrl.loading()" ng-click="$ctrl.onSubmit()" type="submit" class="btn btn-primary btn-lg pull-right" translate>{{$ctrl.loading() ? 'Loading...' : 'Update My Profile'}}</button>
+                    <button id="saveChangesButton"
+                            type="submit"
+                            class="btn btn-primary btn-lg pull-right"
+                            ng-click="$ctrl.onSubmit()"
+                            ng-disabled="!$ctrl.touched() || $ctrl.invalid() || $ctrl.loading()"
+                            ng-switch="$ctrl.loading()">
+                      <translate ng-switch-when="true">Loading&hellip;</translate>
+                      <translate ng-switch-default>Update My Profile</translate>
+                    </button>
                   </div>
                 </div>
 
