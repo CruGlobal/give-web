@@ -202,4 +202,15 @@
   &.on {
     max-height: 600px;
   }
+  @include respond-to(extrasmall) {
+    h4{
+      padding-top: 20px;
+    }
+  }
+}
+
+.form-group.has-error.no-wrap{
+  label{
+    white-space: nowrap;
+  }
 }
