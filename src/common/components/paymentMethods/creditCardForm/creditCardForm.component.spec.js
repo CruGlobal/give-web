@@ -210,19 +210,11 @@ describe('credit card form', () => {
 
   describe('initializeExpirationDateOptions', () => {
     it('should generate a range of credit card expiration years for the view dropdown', () => {
-      jasmine.clock().mockDate(new Date(2012, 11, 31)); // Dec 31 2012
+      jasmine.clock().mockDate(new Date(2010, 11, 31)); // Dec 31 2010
       self.controller.initializeExpirationDateOptions();
       expect(self.controller.expirationDateYears).toEqual([
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020,
-        2021
+        2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
+        2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029
       ]);
     });
   });
