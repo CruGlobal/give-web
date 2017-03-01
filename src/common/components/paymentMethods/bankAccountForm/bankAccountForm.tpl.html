@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="col-sm-4">
-        <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)}">
+        <div class="form-group is-required no-wrap" ng-class="{'has-error': ($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)}">
           <label>Retype Account #</label>
           <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" ng-model="$ctrl.bankPayment.verifyAccountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="$ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error" ng-if="($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)">
@@ -89,7 +89,7 @@
                 </div>
                 <div class="col-sm-4">
                   <h4>Where to find it.</h4>
-                  <p>Use your account and routing numbers from your check. Dont use your deposit slip.</p>
+                  <p>Use your account and routing numbers from your check. Do not use your deposit slip.</p>
                 </div>
               </div>
             </div>
