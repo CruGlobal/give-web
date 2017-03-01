@@ -37,6 +37,9 @@ class SignInFormController {
         if( error && error.data && error.data.error ) {
           this.errorMessage = error.data.error;
         } else {
+          if( error && error.config && error.config.data && error.config.data.password ) {
+            delete error.config.data.password;
+          }
           this.$log.error('Sign In Error', error);
           this.errorMessage = this.gettext( 'An error has occurred signing in. Please try again.' );
         }

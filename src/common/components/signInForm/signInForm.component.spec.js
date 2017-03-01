@@ -95,5 +95,17 @@ describe( 'signInForm', function () {
       expect( $ctrl.errorMessage ).toEqual( 'An error has occurred signing in. Please try again.' );
       expect( $ctrl.isSigningIn ).toEqual( false );
     });
+
+    it( 'removes password from error log', () => {
+      deferred.reject( {
+        config: {
+          data: {
+            password: $ctrl.password
+          }
+        }
+      } );
+      $rootScope.$digest();
+      expect( bindings.onFailure ).toHaveBeenCalled();
+    });
   } );
 } );
