@@ -239,7 +239,7 @@
         <div class="col-sm-12">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.orgName | showErrors)}">
             <label translate>Organization Name</label>
-            <input type="text" class="form-control form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" ng-maxlength="100" required>
+            <input type="text" class="form-control form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" ng-maxlength="100" ng-disabled="$ctrl.nameFieldsDisabled" required>
             <div role="alert" ng-messages="$ctrl.detailsForm.orgName.$error" ng-if="($ctrl.detailsForm.orgName | showErrors)">
               <div class="help-block" ng-message="required" translate>You must enter an organization name</div>
               <div class="help-block" ng-message="maxlength" translate>Organization name cannot be longer that 100 characters</div>
