@@ -106,6 +106,7 @@ describe( 'signInForm', function () {
       } );
       $rootScope.$digest();
       expect( bindings.onFailure ).toHaveBeenCalled();
+      expect( $ctrl.$log.error.logs[0] ).toEqual(['Sign In Error', {config: {data: {}}}]);
     });
   } );
 } );
