@@ -160,22 +160,30 @@ describe( 'your giving', function () {
   } );
 
   describe( 'setViewLoading( loading )', () => {
-    it( 'sets viewLoading', () => {
-      $ctrl.setViewLoading( true );
-      expect( $ctrl.viewLoading ).toEqual( true );
+    it( 'sets viewLoading to true', () => {
+      $ctrl.reload = false;
+      $ctrl.setViewLoading(true);
+      expect($ctrl.viewLoading).toEqual(true);
+      expect($ctrl.reload).toEqual(false);
+    });
+    it( 'sets viewLoading and reload to false when finished loading', () => {
+      $ctrl.reload = true;
       $ctrl.setViewLoading( false );
       expect( $ctrl.viewLoading ).toEqual( false );
+      expect( $ctrl.reload ).toEqual( false );
     } );
   } );
 
   describe( 'openEditRecurringGiftsModal', () => {
     it( 'should open the modal', () => {
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: jasmine.createSpy( 'then' )}} );
+      const thenSpy = jasmine.createSpy( 'then' );
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
       $ctrl.openEditRecurringGiftsModal();
       expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'editRecurringGiftsModal'} ) );
       expect( $ctrl.recurringGiftsUpdateSuccess ).toEqual( false );
-      $ctrl.editRecurringGiftsModal.result.then.calls.first().args[0](); // Execute close modal promise success function
+      thenSpy.calls.first().args[0](); // Execute close modal promise success function
       expect( $ctrl.recurringGiftsUpdateSuccess ).toEqual( true );
+      expect( $ctrl.reload ).toEqual( true );
     } );
   } );
 
@@ -189,12 +197,14 @@ describe( 'your giving', function () {
 
   describe( 'openStopStartRecurringGiftsModal', () => {
     it( 'should open the modal', () => {
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: jasmine.createSpy( 'then' )}} );
+      const thenSpy = jasmine.createSpy( 'then' );
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
       $ctrl.openStopStartRecurringGiftsModal();
       expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'stopStartRecurringGiftsModal'} ) );
       expect( $ctrl.stopStartGiftsSuccess ).toEqual( false );
-      $ctrl.stopStartRecurringGiftsModal.result.then.calls.first().args[0](); // Execute close modal promise success function
+      thenSpy.calls.first().args[0](); // Execute close modal promise success function
       expect( $ctrl.stopStartGiftsSuccess ).toEqual( true );
+      expect( $ctrl.reload ).toEqual( true );
     } );
   } );
 

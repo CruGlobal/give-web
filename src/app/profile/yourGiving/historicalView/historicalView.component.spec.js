@@ -28,20 +28,30 @@ describe( 'your giving', function () {
         spyOn( $ctrl, 'loadGifts' );
       } );
 
-      it( 'loads historical gifts based on year and month', () => {
-        $ctrl.$onChanges();
+      it( 'should reload historical gifts when year changes', () => {
+        $ctrl.year = 2018;
+        $ctrl.$onChanges({ year: { currentValue: 2018 } });
+        expect( $ctrl.loadGifts ).toHaveBeenCalledWith( 2018, 9 );
+      } );
+
+      it( 'should reload historical gifts when month changes', () => {
+        $ctrl.month = {month:  10};
+        $ctrl.$onChanges({ year: { currentValue: 10 } });
+        expect( $ctrl.loadGifts ).toHaveBeenCalledWith( 2016, 10 );
+      } );
+
+      it( 'should reload historical gifts when reload changes to true', () => {
+        $ctrl.$onChanges({ reload: { currentValue: true } });
         expect( $ctrl.loadGifts ).toHaveBeenCalledWith( 2016, 9 );
       } );
 
-      it( 'does nothing if year is undefined', () => {
-        $ctrl.year = undefined;
-        $ctrl.$onChanges();
-        expect( $ctrl.loadGifts ).not.toHaveBeenCalledWith( 2016 );
+      it( 'should not reload historical gifts when reload changes to false', () => {
+        $ctrl.$onChanges({ reload: { currentValue: false } });
+        expect( $ctrl.loadGifts ).not.toHaveBeenCalled();
       } );
 
-      it( 'does nothing if month is undefined', () => {
-        $ctrl.month = undefined;
-        $ctrl.$onChanges();
+      it( 'does nothing if there are no changes', () => {
+        $ctrl.$onChanges({});
         expect( $ctrl.loadGifts ).not.toHaveBeenCalled();
       } );
     } );

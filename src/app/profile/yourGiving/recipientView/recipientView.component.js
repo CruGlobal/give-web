@@ -14,8 +14,8 @@ class RecipientView {
   }
 
   $onChanges( changes ) {
-    if ( angular.isDefined( changes.filter ) ) {
-      this.loadRecipients( changes.filter.currentValue == 'recent' ? undefined : changes.filter.currentValue );
+    if ( changes.filter || changes.reload && changes.reload.currentValue === true ) {
+      this.loadRecipients( this.filter === 'recent' ? undefined : this.filter );
     }
   }
 
@@ -55,6 +55,7 @@ export default angular
     templateUrl: template.name,
     bindings:    {
       filter:     '<',
+      reload:     '<',
       setLoading: '&'
     }
   } );

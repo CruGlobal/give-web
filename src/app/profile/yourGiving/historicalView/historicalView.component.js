@@ -13,8 +13,8 @@ class HistoricalView {
     this.donationsService = donationsService;
   }
 
-  $onChanges() {
-    if ( angular.isDefined( this.year ) && angular.isDefined( this.month ) ) {
+  $onChanges(changes) {
+    if ( changes.year || changes.month || changes.reload && changes.reload.currentValue === true) {
       this.loadGifts( this.year, this.month.month );
     }
   }
@@ -48,6 +48,7 @@ export default angular
     bindings:    {
       year:       '<',
       month:      '<',
+      reload:     '<',
       setLoading: '&',
       onManageGift: '&'
     }

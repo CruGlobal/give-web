@@ -139,10 +139,12 @@
 
         <div ng-switch="$ctrl.view">
           <recipient-view ng-switch-when="recipient"
-                                 set-loading="$ctrl.setViewLoading(loading)"
-                                 filter="$ctrl.recipientFilter">
+                          reload="$ctrl.reload"
+                          set-loading="$ctrl.setViewLoading(loading)"
+                          filter="$ctrl.recipientFilter">
           </recipient-view>
           <historical-view ng-switch-when="historical"
+                           reload="$ctrl.reload"
                            set-loading="$ctrl.setViewLoading(loading)"
                            on-manage-gift="$ctrl.openEditRecurringGiftsModal()"
                            year="$ctrl.historicalFilter.year"
