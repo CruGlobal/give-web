@@ -44,6 +44,7 @@ class YourGivingController {
     this.sessionService = sessionService;
     this.analyticsFactory = analyticsFactory;
     this.dateFilter = $filter( 'date' );
+    this.reload = false;
   }
 
   $onInit() {
@@ -101,14 +102,14 @@ class YourGivingController {
     this.profileLoading = true;
     this.profileLoadingError = false;
     this.profileService.getGivingProfile().subscribe( ( profile ) => {
-      this.profile = profile;
-      this.currentDate = new Date();
-      this.profileLoading = false;
-    },
-    error => {
-      this.$log.error('Error loading givingProfile', error);
-      this.profileLoadingError = true;
-    });
+        this.profile = profile;
+        this.currentDate = new Date();
+        this.profileLoading = false;
+      },
+      error => {
+        this.$log.error('Error loading givingProfile', error);
+        this.profileLoadingError = true;
+      });
   }
 
   setGivingView( name ) {
@@ -121,17 +122,21 @@ class YourGivingController {
 
   setViewLoading( loading ) {
     this.viewLoading = loading;
+    if(!loading){
+      this.reload = false;
+    }
   }
 
   openEditRecurringGiftsModal() {
     this.recurringGiftsUpdateSuccess = false;
-    this.editRecurringGiftsModal = this.$uibModal.open( {
+    this.$uibModal.open( {
       component:         'editRecurringGiftsModal',
       backdrop:          'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate.name
-    } );
-    this.editRecurringGiftsModal.result.then( () => {
+    } )
+      .result.then( () => {
       this.recurringGiftsUpdateSuccess = true;
+      this.reload = true;
     }, angular.noop );
   }
 
@@ -145,13 +150,14 @@ class YourGivingController {
 
   openStopStartRecurringGiftsModal() {
     this.stopStartGiftsSuccess = false;
-    this.stopStartRecurringGiftsModal = this.$uibModal.open( {
+    this.$uibModal.open( {
       component:         'stopStartRecurringGiftsModal',
       backdrop:          'static',
       windowTemplateUrl: giveModalWindowTemplate.name
-    } );
-    this.stopStartRecurringGiftsModal.result.then( () => {
+    } )
+      .result.then( () => {
       this.stopStartGiftsSuccess = true;
+      this.reload = true;
     }, angular.noop );
   }
 }

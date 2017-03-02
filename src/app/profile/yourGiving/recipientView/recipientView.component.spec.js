@@ -28,16 +28,29 @@ describe( 'your giving', function () {
       } );
 
       it( 'loads recipients based on filter=\'recent\'', () => {
+        $ctrl.filter = 'recent';
         $ctrl.$onChanges( {filter: {currentValue: 'recent'}} );
         expect( $ctrl.loadRecipients ).toHaveBeenCalledWith( undefined );
       } );
 
       it( 'loads recipients based on filter=2016', () => {
-        $ctrl.$onChanges( {filter: {currentValue: 2016}} );
+        $ctrl.filter = 2017;
+        $ctrl.$onChanges( {filter: {currentValue: 2017}} );
+        expect( $ctrl.loadRecipients ).toHaveBeenCalledWith( 2017 );
+      } );
+
+      it( 'should reload recipients when reload is changed to true', () => {
+        $ctrl.filter = 2016;
+        $ctrl.$onChanges( {reload: {currentValue: true}} );
         expect( $ctrl.loadRecipients ).toHaveBeenCalledWith( 2016 );
       } );
 
-      it( 'does not load if filter is undefined', () => {
+      it( 'should not reload recipients when reload is changed to false', () => {
+        $ctrl.$onChanges( {reload: {currentValue: false}} );
+        expect( $ctrl.loadRecipients ).not.toHaveBeenCalled();
+      } );
+
+      it( 'should not reload recipients when there are no changes', () => {
         $ctrl.$onChanges( {} );
         expect( $ctrl.loadRecipients ).not.toHaveBeenCalled();
       } );
