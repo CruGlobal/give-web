@@ -28,10 +28,10 @@
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardholderName | showErrors)}">
           <label translate>Name On Card</label>
-          <input type="text" name="cardholderName" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardholderName" ng-maxlength="100" required>
+          <input type="text" name="cardholderName" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardholderName" ng-maxlength="50" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.cardholderName.$error" ng-if="($ctrl.creditCardPaymentForm.cardholderName | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the name on the card</div>
-            <div class="help-block" ng-message="maxlength" translate>This name cannot be longer than 100 characters</div>
+            <div class="help-block" ng-message="maxlength" translate>This name cannot be longer than 50 characters</div>
           </div>
         </div>
       </div>
