@@ -52,6 +52,7 @@ class YourGivingController {
     this.enforcerId = this.sessionEnforcerService( [Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
         // Authentication success
+        this.reload = true;
         this.setGivingView();
         this.loadProfile();
       },
