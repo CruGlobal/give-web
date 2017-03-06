@@ -21,8 +21,8 @@
   <div class="mb">
     <div class="panel panel-default">
       <div class="panel-heading">
-        Contact Information
-        <button id="changeContactButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'contact'})">Change</button>
+        <translate>Contact Information</translate>
+        <button id="changeContactButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'contact'})" translate>Change</button>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -55,8 +55,8 @@
   <div class="mb">
     <div class="panel panel-default">
       <div class="panel-heading">
-        Payment Method
-        <button id="changePaymentButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'payment'})">Change</button>
+        <tranlsate>Payment Method</tranlsate>
+        <button id="changePaymentButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'payment'})" translate>Change</button>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -64,21 +64,21 @@
             <div class="row" ng-if="$ctrl.bankAccountPaymentDetails">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="">Bank Name</label>
+                  <label class="" translate>Bank Name</label>
                   <p>{{$ctrl.bankAccountPaymentDetails['bank-name']}}</p>
                 </div>
                 <div class="form-group">
-                  <label class="">Account Number</label>
+                  <label class="" translate>Account Number</label>
                   <p class="number">************{{$ctrl.bankAccountPaymentDetails['display-account-number']}}</p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="">Account Type</label>
+                  <label class="" translate>Account Type</label>
                   <p class="number">{{$ctrl.bankAccountPaymentDetails['account-type'] | capitalize}}</p>
                 </div>
                 <div class="form-group">
-                  <label class="">Routing Number</label>
+                  <label class="" translate>Routing Number</label>
                   <p class="number">{{$ctrl.bankAccountPaymentDetails['routing-number']}}</p>
                 </div>
               </div>
@@ -86,27 +86,27 @@
             <div class="row" ng-if="$ctrl.creditCardPaymentDetails">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="">Name on card</label>
+                  <label class="" translate>Name on card</label>
                   <p>{{$ctrl.creditCardPaymentDetails['cardholder-name']}}</p>
                 </div>
                 <div class="form-group">
-                  <label class="">Card Number</label>
+                  <label class="" translate>Card Number</label>
                   <p class="number">************{{$ctrl.creditCardPaymentDetails['card-number']}}</p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="">Card Type</label>
+                  <label class="" translate>Card Type</label>
                   <p class="number">{{$ctrl.creditCardPaymentDetails['card-type']}}</p>
                 </div>
                 <div class="form-group">
-                  <label class="">Expires</label>
+                  <label class="" translate>Expires</label>
                   <p class="number">{{$ctrl.creditCardPaymentDetails['expiry-month']}}/{{$ctrl.creditCardPaymentDetails['expiry-year']}}</p><!-- TODO: deal with localization -->
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <label class="">Billing Address</label>
+                  <label class="" translate>Billing Address</label>
                   <display-address address="$ctrl.creditCardPaymentDetails.address"></display-address>
                 </div>
               </div>
@@ -121,15 +121,16 @@
   <div class="mb">
     <div class="panel panel-default">
       <div class="panel-heading">
-        Review Gifts
+        <tranlsate>Review Gifts</tranlsate>
+        <a id="changeCartButton" class="btn btn-default btn-panel-head pull-right" href="cart.html" translate>Change</a>
       </div>
       <div class="panel-body">
         <table class="table giftsum-table">
           <thead>
           <tr>
-            <th class="th-title-gift">Gift</th>
-            <th class="th-title-frequency">Frequency</th>
-            <th class="th-title-amount">Amount</th>
+            <th class="th-title-gift" translate>Gift</th>
+            <th class="th-title-frequency" translate>Frequency</th>
+            <th class="th-title-amount" translate>Amount</th>
           </tr>
           </thead>
           <tbody>
@@ -147,7 +148,7 @@
             </td>
             <td class="td-amount">
               <span class="giftsum-about giftsum-title">{{i.price}}</span>
-              <span class="giftsum-detail"><span class=" visible-xs">Gift Amount</span></span>
+              <span class="giftsum-detail"><span class="visible-xs" translate>Gift Amount</span></span>
             </td>
           </tr>
           </tbody>
@@ -158,7 +159,7 @@
                 <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
               </div>
               <div class="checkout-cta pull-right">
-                <button id="submitOrderButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!$ctrl.canSubmitOrder()">
+                <button id="submitOrderButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!$ctrl.canSubmitOrder()" translate>
                   Submit Your Gift
                 </button>
               </div>
