@@ -108,6 +108,9 @@ describe('credit card form', () => {
       self.controller.useMailingAddress = false;
       self.formController.$valid = true;
       self.controller.savePayment();
+      expect(self.controller.tsysService.getManifest).toHaveBeenCalled();
+      expect(cruPayments.creditCard.init).toHaveBeenCalledWith('development', '<device id>', '<manifest>');
+      expect(cruPayments.creditCard.encrypt).toHaveBeenCalledWith('4111111111111111', '123', 12, 2019);
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         creditCard: {
@@ -142,6 +145,9 @@ describe('credit card form', () => {
       self.controller.useMailingAddress = true;
       self.formController.$valid = true;
       self.controller.savePayment();
+      expect(self.controller.tsysService.getManifest).toHaveBeenCalled();
+      expect(cruPayments.creditCard.init).toHaveBeenCalledWith('development', '<device id>', '<manifest>');
+      expect(cruPayments.creditCard.encrypt).toHaveBeenCalledWith('4111111111111111', '123', 12, 2019);
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         creditCard: {
@@ -174,6 +180,9 @@ describe('credit card form', () => {
       self.controller.useMailingAddress = true;
       self.formController.$valid = true;
       self.controller.savePayment();
+      expect(self.controller.tsysService.getManifest).not.toHaveBeenCalled();
+      expect(cruPayments.creditCard.init).not.toHaveBeenCalled();
+      expect(cruPayments.creditCard.encrypt).not.toHaveBeenCalled();
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         creditCard: {
@@ -190,6 +199,24 @@ describe('credit card form', () => {
       };
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
+    });
+    it('should handle an error retrieving the manifest from TSYS', () => {
+      self.formController.$valid = true;
+      self.controller.tsysService.getManifest.and.returnValue(Observable.throw('some error'));
+      self.controller.savePayment();
+      expect(self.formController.$setSubmitted).toHaveBeenCalled();
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'error', error: 'some error' } });
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'error', error: 'some error' });
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error tokenizing credit card', 'some error']);
+    });
+    it('should handle an error while tokenizing the card', () => {
+      self.formController.$valid = true;
+      cruPayments.creditCard.encrypt.and.returnValue(Observable.throw('some error'));
+      self.controller.savePayment();
+      expect(self.formController.$setSubmitted).toHaveBeenCalled();
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'error', error: 'some error' } });
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'error', error: 'some error' });
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error tokenizing credit card', 'some error']);
     });
   });
 
