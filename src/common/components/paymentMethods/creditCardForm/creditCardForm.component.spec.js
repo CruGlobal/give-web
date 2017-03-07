@@ -243,7 +243,7 @@ describe('credit card form', () => {
       self.formController.cardholderName.$setViewValue('Person Name');
       self.formController.expiryMonth.$setViewValue('12');
       self.formController.expiryYear.$setViewValue('2012');
-      self.formController.securityCode.$setViewValue('1234');
+      self.formController.securityCode.$setViewValue('123');
       expect(self.formController.$valid).toEqual(true);
     });
     describe('cardNumber input', () => {

@@ -42,7 +42,7 @@ System.config({
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "core-js": "npm:core-js@1.2.7",
-    "cru-payments": "npm:cru-payments@1.1.4",
+    "cru-payments": "npm:cru-payments@1.2.0",
     "jsencrypt": "npm:jsencrypt@2.3.1",
     "jwt-decode": "github:auth0/jwt-decode@2.1.0",
     "libphonenumber-js": "npm:libphonenumber-js@0.3.7",
@@ -210,10 +210,10 @@ System.config({
     "npm:core-util-is@1.0.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
-    "npm:cru-payments@1.1.4": {
+    "npm:cru-payments@1.2.0": {
       "@types/es6-promise": "npm:@types/es6-promise@0.0.32",
       "@types/whatwg-fetch": "npm:@types/whatwg-fetch@0.0.33",
-      "es6-promise": "npm:es6-promise@4.0.5",
+      "es6-promise": "npm:es6-promise@4.1.0",
       "jsencrypt": "npm:jsencrypt@2.3.1",
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
@@ -230,7 +230,7 @@ System.config({
     "npm:error-stack-parser@1.3.6": {
       "stackframe": "npm:stackframe@0.3.1"
     },
-    "npm:es6-promise@4.0.5": {
+    "npm:es6-promise@4.1.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:fancy-log@1.3.0": {
