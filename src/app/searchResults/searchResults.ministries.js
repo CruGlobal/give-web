@@ -1,23 +1,5 @@
 export default [
   {
-    name: 'Africa',
-    designationNumber: '2802860',
-    path: '/2802860',
-    facet: 'ministry'
-  },
-  {
-    name: 'Andre Kole Ministries',
-    designationNumber: '2294586',
-    path: '/2294586',
-    facet: 'ministry'
-  },
-  {
-    name: 'Asia',
-    designationNumber: '2802878',
-    path: '/2802878',
-    facet: 'ministry'
-  },
-  {
     name: 'Athletes in Action',
     designationNumber: '2863856',
     path: '/2863856',
@@ -27,18 +9,6 @@ export default [
     name: 'Campus Ministry',
     designationNumber: '2752539',
     path: '/2752539',
-    facet: 'ministry'
-  },
-  {
-    name: 'Central America, South America and Caribbean',
-    designationNumber: '2802885',
-    path: '/2802885',
-    facet: 'ministry'
-  },
-  {
-    name: 'City',
-    designationNumber: '2291234',
-    path: '/2291234',
     facet: 'ministry'
   },
   {
@@ -54,27 +24,15 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'Compassionate Evangelism / Responding to Needs',
-    designationNumber: '2847275',
-    path: '/2847275',
-    facet: 'ministry'
-  },
-  {
-    name: 'Crossroads',
-    designationNumber: '2509124',
-    path: '/2509124',
+    name: 'City',
+    designationNumber: '2291234',
+    path: '/2291234',
     facet: 'ministry'
   },
   {
     name: 'Cru Military',
     designationNumber: '2283732',
     path: '/2283732',
-    facet: 'ministry'
-  },
-  {
-    name: 'Europe and Russia',
-    designationNumber: '2802853',
-    path: '/2802853',
     facet: 'ministry'
   },
   {
@@ -120,78 +78,6 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'International - Australia, New Zealand, Pacific',
-    designationNumber: '2848007',
-    path: '/2848007',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - Central Asia and Turkey',
-    designationNumber: '2873715',
-    path: '/2873715',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - East Asia',
-    designationNumber: '2732102',
-    path: '/2732102',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - Eastern Europe and Russia',
-    designationNumber: '2582147',
-    path: '/2582147',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - Francophone Africa',
-    designationNumber: '2598030',
-    path: '/2598030',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - Latin America and the Caribbean',
-    designationNumber: '2580783',
-    path: '/2580783',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - Norh Africa and Middle East',
-    designationNumber: '2879337',
-    path: '/2879337',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - South Asia',
-    designationNumber: '2572249',
-    path: '/2572249',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - Southeast Asia',
-    designationNumber: '2580071',
-    path: '/2580071',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - Southern and Eastern Africa',
-    designationNumber: '2580018',
-    path: '/2580018',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - West Africa',
-    designationNumber: '2578907',
-    path: '/2578907',
-    facet: 'ministry'
-  },
-  {
-    name: 'International - Western Europe',
-    designationNumber: '2580395',
-    path: '/2580395',
-    facet: 'ministry'
-  },
-  {
     name: 'ISP',
     designationNumber: '2762704',
     path: '/2762704',
@@ -210,57 +96,9 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'Keynote',
-    designationNumber: '2278105',
-    path: '/2278105',
-    facet: 'ministry'
-  },
-  {
-    name: 'New Life Resources',
-    designationNumber: '2777777',
-    path: '/2777777',
-    facet: 'ministry'
-  },
-  {
-    name: 'President\'s Office',
-    designationNumber: '2847001',
-    path: '/2847001',
-    facet: 'ministry'
-  },
-  {
-    name: 'Special Ministries',
-    designationNumber: '2835390',
-    path: '/2835390',
-    facet: 'ministry'
-  },
-  {
     name: 'StoryRunners',
     designationNumber: '2852450',
     path: '/2852450',
-    facet: 'ministry'
-  },
-  {
-    name: 'US Development Priorities',
-    designationNumber: '2764993',
-    path: '/2764993',
-    facet: 'ministry'
-  },
-  {
-    name: 'World Headquarters at Lake Hart',
-    designationNumber: '2732586',
-    path: '/2732586',
-    facet: 'ministry'
-  },
-  {
-    name: 'World Priorities',
-    designationNumber: '2800934',
-    path: '/2800934',
-    facet: 'ministry'
-  },
-  {
-    name: 'Worldwide Challenge',
-    designationNumber: '2573504',
-    path: '/2573504',
     facet: 'ministry'
   }
 ];
