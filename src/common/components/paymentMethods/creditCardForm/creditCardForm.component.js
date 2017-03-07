@@ -1,9 +1,10 @@
 import angular from 'angular';
 import 'angular-messages';
-import toString from 'lodash/toString';
 import get from 'lodash/get';
 import range from 'lodash/range';
 import assign from 'lodash/assign';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/combineLatest';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
@@ -11,8 +12,8 @@ import addressForm from 'common/components/addressForm/addressForm.component';
 
 import showErrors from 'common/filters/showErrors.filter';
 
-import paymentValidationService from 'common/services/paymentHelpers/paymentValidation.service';
-import ccpService from 'common/services/paymentHelpers/ccp.service';
+import cruPayments from 'cru-payments/dist/cru-payments';
+import tsys from 'common/services/api/tsys.service';
 
 import template from './creditCardForm.tpl';
 
@@ -21,11 +22,11 @@ let componentName = 'creditCardForm';
 class CreditCardController {
 
   /* @ngInject */
-  constructor($scope, $log, paymentValidationService, ccpService) {
+  constructor($scope, $log, envService, tsysService) {
     this.$scope = $scope;
     this.$log = $log;
-    this.paymentValidationService = paymentValidationService;
-    this.ccpService = ccpService;
+    this.envService = envService;
+    this.tsysService = tsysService;
 
     this.useMailingAddress = true;
     this.creditCardPayment = {
@@ -33,10 +34,11 @@ class CreditCardController {
         country: 'US'
       }
     };
+
+    this.cardInfo = cruPayments.creditCard.card.info;
   }
 
   $onInit(){
-    this.loadCcp();
     this.initExistingPaymentMethod();
     this.waitForFormInitialization();
     this.initializeExpirationDateOptions();
@@ -63,13 +65,6 @@ class CreditCardController {
     }
   }
 
-  loadCcp(){
-    this.ccpService.get()
-      .subscribe((ccp) => {
-        this.ccp = ccp;
-      });
-  }
-
   waitForFormInitialization() {
     let unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm', () => {
       unregister();
@@ -80,17 +75,9 @@ class CreditCardController {
   waitForSecurityCodeInitialization() {
     let unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
       unregister();
-      this.creditCardPaymentForm.securityCode.$parsers.push(this.paymentValidationService.stripNonDigits);
-      this.creditCardPaymentForm.securityCode.$validators.minlength = number => toString(number).length >= 3;
-      this.creditCardPaymentForm.securityCode.$validators.maxlength = number => toString(number).length <= 4;
-      this.creditCardPaymentForm.securityCode.$validators.cardTypeLength = number => {
-        try {
-          const cardType = new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber).getType();
-          return cardType !== 'AMERICAN_EXPRESS' || toString(number).length === 4;
-        } catch(e){
-          return true;
-        }
-      };
+      this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength;
+      this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength;
+      this.creditCardPaymentForm.securityCode.$validators.cardTypeLength = number => cruPayments.creditCard.cvv.validate.cardTypeLength(number, cruPayments.creditCard.card.info.type(this.creditCardPayment.cardNumber));
       this.creditCardPaymentForm.cardNumber.$viewChangeListeners.push(() => {
         // Revalidate CVV when cardNumber changes
         this.creditCardPaymentForm.securityCode.$validate();
@@ -99,22 +86,23 @@ class CreditCardController {
   }
 
   addCustomValidators() {
-    this.creditCardPaymentForm.cardNumber.$parsers.push(this.paymentValidationService.stripNonDigits);
-    this.creditCardPaymentForm.cardNumber.$validators.minlength = number => this.paymentMethod && !number || toString(number).length >= 13;
-    this.creditCardPaymentForm.cardNumber.$validators.maxlength = number => toString(number).length <= 16;
-    this.creditCardPaymentForm.cardNumber.$validators.cardNumber = number => this.paymentMethod && !number || this.paymentValidationService.validateCardNumber()(number);
+    const editAllowEmpty = (validator) => {
+      return number => this.paymentMethod && !number || validator(number);
+    };
+    this.creditCardPaymentForm.cardNumber.$validators.minLength = editAllowEmpty(cruPayments.creditCard.card.validate.minLength);
+    this.creditCardPaymentForm.cardNumber.$validators.maxLength = editAllowEmpty(cruPayments.creditCard.card.validate.maxLength);
+    this.creditCardPaymentForm.cardNumber.$validators.knownType = editAllowEmpty(cruPayments.creditCard.card.validate.knownType);
+    this.creditCardPaymentForm.cardNumber.$validators.typeLength = editAllowEmpty(cruPayments.creditCard.card.validate.typeLength);
+    this.creditCardPaymentForm.cardNumber.$validators.checksum = editAllowEmpty(cruPayments.creditCard.card.validate.checksum);
 
     this.creditCardPaymentForm.expiryMonth.$validators.expired = expiryMonth => {
-      let currentDate = new Date();
-      let chosenYear = parseInt(this.creditCardPayment.expiryYear);
-      let chosenMonth = parseInt(expiryMonth);
-      return !this.creditCardPayment.expiryYear ||
-        chosenYear > currentDate.getFullYear() ||
-        chosenYear === currentDate.getFullYear() && chosenMonth >= currentDate.getMonth() + 1;
+      // Valid if a year has not been chosen or date is valid
+      return !this.creditCardPayment.expiryYear || cruPayments.creditCard.expiryDate.validate.month(expiryMonth, this.creditCardPayment.expiryYear);
     };
+
+    this.creditCardPaymentForm.expiryYear.$validators.expired = cruPayments.creditCard.expiryDate.validate.year;
     this.creditCardPaymentForm.expiryYear.$viewChangeListeners.push(() => {
-      // Revalidate expiryMonth after expiryYear changes
-      this.creditCardPaymentForm.expiryMonth.$validate();
+      this.creditCardPaymentForm.expiryMonth.$validate(); // Revalidate expiryMonth after expiryYear changes
     });
 
     if(!this.paymentMethod) {
@@ -131,24 +119,42 @@ class CreditCardController {
   savePayment(){
     this.creditCardPaymentForm.$setSubmitted();
     if(this.creditCardPaymentForm.$valid){
-      let ccpCreditCardNumber = this.paymentMethod && !this.creditCardPayment.cardNumber ? this.paymentMethod['card-number'] : new (this.paymentValidationService.ccp.CardNumber)(this.creditCardPayment.cardNumber).encrypt();
-      let ccpSecurityCode = this.paymentMethod ? null : new (this.paymentValidationService.ccp.CardSecurityCode)(this.creditCardPayment.securityCode).encrypt();
-      this.onPaymentFormStateChange({
-        $event: {
-          state: 'loading',
-          payload: {
-            creditCard: {
-              address: this.useMailingAddress ? undefined : this.creditCardPayment.address,
-              'card-number': ccpCreditCardNumber,
-              'cardholder-name': this.creditCardPayment.cardholderName,
-              'expiry-month': this.creditCardPayment.expiryMonth,
-              'expiry-year': this.creditCardPayment.expiryYear,
-              ccv: ccpSecurityCode
-            },
-            paymentMethodNumber: this.creditCardPayment.cardNumber ? this.creditCardPayment.cardNumber.slice(-4) : false
-          }
-        }
-      });
+      this.tsysService.getManifest()
+        .mergeMap(data => {
+          cruPayments.creditCard.init(this.envService.get(), data.deviceId || '88812128320102', data.manifest); //TODO: remove hard coded deviceId when added to the manifest api endpoint
+          return this.paymentMethod && !this.creditCardPayment.cardNumber ?
+            Observable.of({ tsepToken: this.paymentMethod['card-number'], maskedCardNumber: this.paymentMethod['card-number'] }) : // Send masked card number when card number is not updated
+            cruPayments.creditCard.encrypt(this.creditCardPayment.cardNumber, this.creditCardPayment.securityCode, this.creditCardPayment.expiryMonth, this.creditCardPayment.expiryYear);
+        })
+        .subscribe(tokenObj => {
+          this.onPaymentFormStateChange({
+            $event: {
+              state: 'loading',
+              payload: {
+                creditCard: {
+                  address: this.useMailingAddress ? undefined : this.creditCardPayment.address,
+                  'card-number': tokenObj.tsepToken,
+                  'card-type': this.cardInfo.type(this.creditCardPayment.cardNumber) || this.paymentMethod['card-type'],
+                  'cardholder-name': this.creditCardPayment.cardholderName,
+                  'expiry-month': this.creditCardPayment.expiryMonth,
+                  'expiry-year': this.creditCardPayment.expiryYear,
+                  'last-four-digits': tokenObj.maskedCardNumber,
+                  transactionId: tokenObj.transactionID,
+                  cvv: tokenObj.cvv2
+                }
+              }
+            }
+          });
+        }, error => {
+          this.$log.error('Error tokenizing credit card', error);
+          this.onPaymentFormStateChange({
+            $event: {
+              state: 'error',
+              error: error
+            }
+          });
+          this.$scope.$apply();
+        });
     }else{
       this.onPaymentFormStateChange({
         $event: {
@@ -166,8 +172,7 @@ export default angular
     displayAddressComponent.name,
     addressForm.name,
     showErrors.name,
-    paymentValidationService.name,
-    ccpService.name
+    tsys.name
   ])
   .component(componentName, {
     controller: CreditCardController,

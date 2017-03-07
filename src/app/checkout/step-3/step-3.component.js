@@ -98,11 +98,11 @@ class Step3Controller{
     if(this.bankAccountPaymentDetails){
       submitRequest = this.orderService.submit();
     }else if(this.creditCardPaymentDetails){
-      let encryptedCcv = this.orderService.retrieveCardSecurityCode();
-      if(encryptedCcv === existingPaymentMethodFlag){
+      const cvv = this.orderService.retrieveCardSecurityCode();
+      if(cvv === existingPaymentMethodFlag){
         submitRequest = this.orderService.submit();
       }else{
-        submitRequest = encryptedCcv ? this.orderService.submit(encryptedCcv) : Observable.throw('Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly');
+        submitRequest = cvv ? this.orderService.submit(cvv) : Observable.throw('Submitting a credit card purchase requires a CVV and the CVV was not retrieved correctly');
       }
     }else{
       submitRequest = Observable.throw('Current payment type is unknown');

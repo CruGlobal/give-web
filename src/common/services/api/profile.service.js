@@ -276,7 +276,7 @@ class Profile {
   }
 
   addCreditCardPayment(paymentInfo){
-    paymentInfo = omit(paymentInfo, 'ccv');
+    paymentInfo = omit(paymentInfo, 'cvv');
     if(paymentInfo.address) {
       paymentInfo.address = formatAddressForCortex(paymentInfo.address);
     }
