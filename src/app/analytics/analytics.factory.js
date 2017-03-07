@@ -553,7 +553,11 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
       }
     },
     track: function(event){
-      $window._satellite.track(event);
+      try{
+        $window._satellite.track(event);
+      }catch(e){
+        $log.warn('Error caught in analyticsFactory.track', e);
+      }
     }
   };
 }
