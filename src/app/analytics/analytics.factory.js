@@ -551,6 +551,13 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
       }catch(e){
         $log.warn('Error caught in analyticsFactory.setSiteSections', e);
       }
+    },
+    track: function(event){
+      try{
+        $window._satellite.track(event);
+      }catch(e){
+        $log.warn('Error caught in analyticsFactory.track', e);
+      }
     }
   };
 }

@@ -78,8 +78,7 @@ class CheckoutController{
     this.checkoutStep = newStep;
     this.$location.search('step', this.checkoutStep);
 
-    this.analyticsFactory.getPath();
-    this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
+    this.analyticsFactory.track('aa-checkout-step-' + this.checkoutStep);
   }
 
   loadCart(){
