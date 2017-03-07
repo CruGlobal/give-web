@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import cruPayments from 'cru-payments/dist/cru-payments';
+import { ccpKey, ccpStagingKey } from 'common/app.constants';
 
 import module from './bankAccountForm.component';
 
@@ -120,6 +121,33 @@ describe('bank account form', () => {
       };
       self.formController.$valid = true;
       self.controller.savePayment();
+      expect(cruPayments.bankAccount.init).toHaveBeenCalledWith('development', ccpStagingKey);
+      expect(cruPayments.bankAccount.encrypt).toHaveBeenCalledWith('123456789012');
+      expect(self.formController.$setSubmitted).toHaveBeenCalled();
+      let expectedData = {
+        bankAccount: {
+          'account-type': 'checking',
+          'bank-name': 'First Bank',
+          'encrypted-account-number': this.encryptedAccountNumber,
+          'display-account-number': '9012',
+          'routing-number': '123456789'
+        }
+      };
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
+    });
+    it('should send a request to save the bank account payment info using the prod env', () => {
+      self.controller.bankPayment = {
+        accountType: 'checking',
+        bankName: 'First Bank',
+        routingNumber: '123456789',
+        accountNumber: '123456789012'
+      };
+      self.formController.$valid = true;
+      self.controller.envService.set('production');
+      self.controller.savePayment();
+      expect(cruPayments.bankAccount.init).toHaveBeenCalledWith('production', ccpKey);
+      expect(cruPayments.bankAccount.encrypt).toHaveBeenCalledWith('123456789012');
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         bankAccount: {
@@ -157,6 +185,15 @@ describe('bank account form', () => {
       };
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
+    });
+    it('should handle an error while encrypting the bank account number', () => {
+      self.formController.$valid = true;
+      cruPayments.bankAccount.encrypt.and.returnValue(Observable.throw('some error'));
+      self.controller.savePayment();
+      expect(self.formController.$setSubmitted).toHaveBeenCalled();
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'error', error: 'some error' } });
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'error', error: 'some error' });
+      expect(self.controller.$log.error.logs[0]).toEqual(['Error encrypting bank account number', 'some error']);
     });
   });
 
