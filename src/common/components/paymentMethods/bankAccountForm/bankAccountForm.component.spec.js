@@ -1,35 +1,24 @@
 import angular from 'angular';
 import 'angular-mocks';
 import size from 'lodash/size';
-import ccp from 'common/lib/ccp';
-import { ccpStagingKey } from 'common/app.constants';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+
+import cruPayments from 'cru-payments/dist/cru-payments';
 
 import module from './bankAccountForm.component';
 
 describe('bank account form', () => {
   beforeEach(angular.mock.module(module.name));
-  var self = {};
+  let self = {};
 
-  beforeEach(() => {
-    angular.mock.module(($provide) => {
-      $provide.value('ccpService', {
-        get: () => {
-          ccp.initialize(ccpStagingKey);
-          return Observable.of(ccp);
-        }
-      });
-    });
-  });
-
-  beforeEach(inject(($rootScope, $componentController, $httpBackend, $compile) => {
+  beforeEach(inject(($rootScope, $httpBackend, $compile) => {
     self.outerScope = $rootScope.$new();
     self.$httpBackend = $httpBackend;
 
     self.outerScope.paymentFormState = 'unsubmitted';
     self.outerScope.onPaymentFormStateChange = () => {};
-    let compiledElement = $compile(angular.element('<bank-account-form payment-form-state="paymentFormState" on-payment-form-state-change="onPaymentFormStateChange($event)"></bank-account-form>'))(self.outerScope);
+    const compiledElement = $compile(angular.element('<bank-account-form payment-form-state="paymentFormState" on-payment-form-state-change="onPaymentFormStateChange($event)"></bank-account-form>'))(self.outerScope);
     self.outerScope.$apply();
     self.controller = compiledElement.controller(module.name);
     self.formController = self.controller.bankPaymentForm;
@@ -37,11 +26,9 @@ describe('bank account form', () => {
 
   describe('$onInit', () => {
     it('should call the necessary initialization functions', () => {
-      spyOn(self.controller, 'loadCcp');
       spyOn(self.controller, 'initExistingPaymentMethod');
       spyOn(self.controller, 'waitForFormInitialization');
       self.controller.$onInit();
-      expect(self.controller.loadCcp).toHaveBeenCalled();
       expect(self.controller.initExistingPaymentMethod).toHaveBeenCalled();
       expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
     });
@@ -83,14 +70,6 @@ describe('bank account form', () => {
     });
   });
 
-  describe('loadCcp', () => {
-    it('should load ccp', () => {
-    spyOn(self.controller.ccpService, 'get').and.returnValue(Observable.of('ccp object'));
-      self.controller.loadCcp();
-      expect(self.controller.ccp).toEqual('ccp object');
-    });
-  });
-
   describe('waitForFormInitialization', () => {
     it('should call addCustomValidators when the form is initialized', () => {
       spyOn(self.controller, 'addCustomValidators');
@@ -121,6 +100,9 @@ describe('bank account form', () => {
       spyOn(self.formController, '$setSubmitted');
       spyOn(self.controller, 'onPaymentFormStateChange').and.callThrough();
       spyOn(self.outerScope, 'onPaymentFormStateChange');
+      spyOn(cruPayments.bankAccount, 'init');
+      this.encryptedAccountNumber = 'ckp3FnRl1+eHIuBXapX2K7wfKoXlSeUrgYXONJBiYpJwDK+nLa+7anu7TOY+Ypsl3bjSQYCuvt0OuHZtQcxJQYdOiDnpHliFqqc/mpw8dcb5DCTaTOIP3mm122o4tdlPHw6m+fgnOF3RIqkPPe0qGRNNr5fK9qmwjt5NcSZ1j+xWeNAT7AI6nPuqHHOOF2tggtQSwZ5cBdkJuF/KIJe6MY7PLMbMf209csz+zdMhnxu4nWM79FYVzAcFz3C62eEXp73xGULAkhTil9YAtLdYmdsQk6/46JlsRV2JfjFAHNU8/6ZAGo5JKEsi58SlWO1BLcuSa1/Z/Po2XcBmEbTXEA==';
+      spyOn(cruPayments.bankAccount, 'encrypt').and.returnValue(Observable.of(this.encryptedAccountNumber));
     });
 
     it('should call onPaymentFormStateChange to change state to unsubmitted when form is invalid', () => {
@@ -141,18 +123,20 @@ describe('bank account form', () => {
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         bankAccount: {
-          "account-type": "checking",
-          "bank-name": "First Bank",
-          "encrypted-account-number": jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
-          "routing-number": "123456789"
-        },
-        paymentMethodNumber: '9012'
+          'account-type': 'checking',
+          'bank-name': 'First Bank',
+          'encrypted-account-number': this.encryptedAccountNumber,
+          'display-account-number': '9012',
+          'routing-number': '123456789'
+        }
       };
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
     });
     it('should send a request to save the bank account payment info with an existing payment method where the accountNumber is empty', () => {
-      self.controller.paymentMethod = {};
+      self.controller.paymentMethod = {
+        'display-account-number': '9012'
+      };
       self.controller.bankPayment = {
         accountType: 'checking',
         bankName: 'First Bank',
@@ -164,12 +148,12 @@ describe('bank account form', () => {
       expect(self.formController.$setSubmitted).toHaveBeenCalled();
       let expectedData = {
         bankAccount: {
-          "account-type": "checking",
-          "bank-name": "First Bank",
-          "encrypted-account-number": '',
-          "routing-number": "123456789"
-        },
-        paymentMethodNumber: false
+          'account-type': 'checking',
+          'bank-name': 'First Bank',
+          'encrypted-account-number': '',
+          'display-account-number': '9012',
+          'routing-number': '123456789'
+        }
       };
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
@@ -239,14 +223,14 @@ describe('bank account form', () => {
         expect(self.formController.routingNumber.$valid).toEqual(false);
         expect(self.formController.routingNumber.$error.required).toBeUndefined();
         expect(self.formController.routingNumber.$error.length).toBeUndefined();
-        expect(self.formController.routingNumber.$error.routingNumber).toEqual(true);
+        expect(self.formController.routingNumber.$error.checksum).toEqual(true);
       });
       it('should be valid if the checksum is correct',  () => {
         self.formController.routingNumber.$setViewValue('267084131');
         expect(self.formController.routingNumber.$valid).toEqual(true);
         expect(self.formController.routingNumber.$error.required).toBeUndefined();
         expect(self.formController.routingNumber.$error.length).toBeUndefined();
-        expect(self.formController.routingNumber.$error.routingNumber).toBeUndefined();
+        expect(self.formController.routingNumber.$error.checksum).toBeUndefined();
       });
       it('should have the stripNonDigits parser',  () => {
         self.formController.routingNumber.$setViewValue('2a670-84!1dsafsdafasdf asdfasdf31');
@@ -270,20 +254,20 @@ describe('bank account form', () => {
         self.formController.accountNumber.$setViewValue('1');
         expect(self.formController.accountNumber.$valid).toEqual(false);
         expect(self.formController.accountNumber.$error.required).toBeUndefined();
-        expect(self.formController.accountNumber.$error.minlength).toEqual(true);
+        expect(self.formController.accountNumber.$error.minLength).toEqual(true);
       });
       it('should not be valid if there are more than 17 digits',  () => {
         self.formController.accountNumber.$setViewValue('123456789012345678');
         expect(self.formController.accountNumber.$valid).toEqual(false);
         expect(self.formController.accountNumber.$error.required).toBeUndefined();
-        expect(self.formController.accountNumber.$error.maxlength).toEqual(true);
+        expect(self.formController.accountNumber.$error.maxLength).toEqual(true);
       });
       it('should be valid if the length is correct',  () => {
         self.formController.accountNumber.$setViewValue('1234567890123456');
         expect(self.formController.accountNumber.$valid).toEqual(true);
         expect(self.formController.accountNumber.$error.required).toBeUndefined();
-        expect(self.formController.accountNumber.$error.minlength).toBeUndefined();
-        expect(self.formController.accountNumber.$error.maxlength).toBeUndefined();
+        expect(self.formController.accountNumber.$error.minLength).toBeUndefined();
+        expect(self.formController.accountNumber.$error.maxLength).toBeUndefined();
       });
       it('should have the stripNonDigits parser',  () => {
         self.formController.accountNumber.$setViewValue('1#$$^%2s345 67g89sdafsadfsa0');

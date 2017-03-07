@@ -7,8 +7,8 @@
       <span ng-switch-default translate>There was an unknown error indicating that the order is still missing data. Please verify all your info, try refreshing the page, and, if you are still seeing this message, contact support.</span>
     </p>
     <p ng-if="$ctrl.submissionError" ng-switch="$ctrl.submissionError">
-      <span ng-switch-when="Submitting a credit card purchase requires a CCV and the CCV was not retrieved correctly" translate>
-        There was an error submitting your credit card's security code (CCV). Your session may have expired before it was sent. Try changing your payment method and saving your credit card again.
+      <span ng-switch-when="Submitting a credit card purchase requires a CVV and the CVV was not retrieved correctly" translate>
+        There was an error submitting your credit card's security code (CVV). Your session may have expired before it was sent. Try changing your payment method and saving your credit card again.
       </span>
       <span ng-switch-when="Current payment type is unknown" translate>
         There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, contact support.

@@ -17,9 +17,11 @@
                  ng-disabled="$ctrl.disableCardNumber">
           <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="($ctrl.creditCardPaymentForm.cardNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter a card number</div>
-            <div class="help-block" ng-message="minlength" translate>This card number must contain at least 13 digits</div>
-            <div class="help-block" ng-message="maxlength" translate>This card number cannot contain more than 16 digits</div>
-            <div class="help-block" ng-message="cardNumber" translate>{{$ctrl.paymentValidationService.getCardNumberErrorMessage($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}}</div>
+            <div class="help-block" ng-message="minLength" translate>This card number must contain at least 13 digits</div>
+            <div class="help-block" ng-message="maxLength" translate>This card number cannot contain more than 16 digits</div>
+            <div class="help-block" ng-message="knownType" translate>This card type is not recognized</div>
+            <div class="help-block" ng-message="typeLength" translate>This is an invalid {{$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}} number. It should have {{$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')}} digits.</div>
+            <div class="help-block" ng-message="checksum" translate>This card number is invalid. At least one digit was entered incorrectly.</div>
           </div>
         </div>
       </div>
@@ -72,17 +74,18 @@
           </select>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryYear.$error" ng-if="($ctrl.creditCardPaymentForm.expiryYear | showErrors)">
             <div class="help-block" ng-message="required" translate>You must choose an expiration year</div>
+            <div class="help-block" ng-message="expired" translate>Your credit card is expired or you selected the wrong year</div>
           </div>
         </div>
       </div>
-      <div class="col-sm-4" ng-if="!$ctrl.paymentMethod">
+      <div class="col-sm-4" ng-if="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"><!-- TODO: disable if not in checkout? -->
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors)}">
           <label translate>CVV Code</label>
-          <input type="text" name="securityCode" class="form-control form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" ng-attr-placeholder="{{$ctrl.paymentMethod ? '****' : ''}}" required>
+          <input type="text" name="securityCode" class="form-control form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the security code</div>
-            <div class="help-block" ng-message="minlength" translate>The security code must be at least 3 digits</div>
-            <div class="help-block" ng-message="maxlength" translate>The security code cannot be more than 4 digits</div>
+            <div class="help-block" ng-message="minLength" translate>The security code must be at least 3 digits</div>
+            <div class="help-block" ng-message="maxLength" translate>The security code cannot be more than 4 digits</div>
             <div class="help-block" ng-message="cardTypeLength" translate>The security code is not valid for this card type</div>
           </div>
         </div>

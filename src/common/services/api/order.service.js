@@ -6,8 +6,8 @@ import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
-import toString from 'lodash/toString';
 import map from 'lodash/map';
+import pick from 'lodash/pick';
 import omit from 'lodash/omit';
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 
@@ -104,7 +104,7 @@ class Order{
   }
 
   addCreditCardPayment(paymentInfo){
-    paymentInfo = omit(paymentInfo, 'ccv');
+    paymentInfo = omit(paymentInfo, 'cvv');
     if(paymentInfo.address) {
       paymentInfo.address = formatAddressForCortex(paymentInfo.address);
     }
@@ -124,7 +124,7 @@ class Order{
     }else if(paymentInfo.creditCard){
       return this.addCreditCardPayment(paymentInfo.creditCard)
         .do(() => {
-          this.storeCardSecurityCode(paymentInfo.creditCard.ccv);
+          this.storeCardSecurityCode(paymentInfo.creditCard.cvv);
         });
     }else{
       return Observable.throw('Error adding payment method. The data passed to orderService.addPaymentMethod did not contain bankAccount or creditCard data');
@@ -151,7 +151,7 @@ class Order{
       .mergeMap(data => {
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.updateForm, 'updatecreditcardfororderaction'),
-          data: omit(paymentInfo, 'card-number')
+          data: pick(paymentInfo, ['address', 'cardholder-name', 'expiry-month', 'expiry-year'])
         });
       });
   }
@@ -233,10 +233,10 @@ class Order{
       });
   }
 
-  submit(ccv){
+  submit(cvv){
     return this.getPurchaseForm()
       .mergeMap((data) => {
-        let postData = ccv ? {"security-code": ccv} : {};
+        let postData = cvv ? {"security-code": cvv} : {};
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
           data: postData,
@@ -248,20 +248,16 @@ class Order{
       });
   }
 
-  storeCardSecurityCode(encryptedCcv){
-    if(encryptedCcv === existingPaymentMethodFlag || toString(encryptedCcv).length > 50){
-      this.sessionStorage.setItem('ccv', encryptedCcv);
-    }else{
-      throw new Error('The CCV should be encrypted and the provided CCV looks like it is too short to be encrypted correctly');
-    }
+  storeCardSecurityCode(encryptedCvv){
+    this.sessionStorage.setItem('cvv', encryptedCvv);
   }
 
   retrieveCardSecurityCode(){
-    return this.sessionStorage.getItem('ccv');
+    return this.sessionStorage.getItem('cvv');
   }
 
   clearCardSecurityCode(){
-    return this.sessionStorage.removeItem('ccv');
+    return this.sessionStorage.removeItem('cvv');
   }
 
   storeLastPurchaseLink(link){

@@ -188,15 +188,15 @@ describe('profile service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        ccv: 'someEncryptedCCV...'
+        cvv: 'someEncryptedCVV...'
       };
 
-      let paymentInfoWithoutCCV = angular.copy(paymentInfo);
-      delete paymentInfoWithoutCCV.ccv;
+      let paymentInfoWithoutCVV = angular.copy(paymentInfo);
+      delete paymentInfoWithoutCVV.cvv;
 
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
-        paymentInfoWithoutCCV
+        paymentInfoWithoutCVV
       ).respond(200, 'success');
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -224,12 +224,12 @@ describe('profile service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        ccv: 'someEncryptedCCV...'
+        cvv: 'someEncryptedCVV...'
       };
 
-      let paymentInfoWithoutCCV = angular.copy(paymentInfo);
-      delete paymentInfoWithoutCCV.ccv;
-      paymentInfoWithoutCCV.address = {
+      let paymentInfoWithoutCVV = angular.copy(paymentInfo);
+      delete paymentInfoWithoutCVV.cvv;
+      paymentInfoWithoutCVV.address = {
         'country-name': 'US',
         'street-address': '123 First St',
         'extended-address': 'Apt 123',
@@ -240,7 +240,7 @@ describe('profile service', () => {
 
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
-        paymentInfoWithoutCCV
+        paymentInfoWithoutCVV
       ).respond(200, 'success');
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -320,7 +320,7 @@ describe('profile service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        ccv: 'someEncryptedCCV...'
+        cvv: 'someEncryptedCVV...'
       };
 
       self.profileService.addPaymentMethod({

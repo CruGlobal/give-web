@@ -211,15 +211,15 @@ describe('order service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        ccv: 'someEncryptedCCV...'
+        cvv: 'someEncryptedCVV...'
       };
 
-      let paymentInfoWithoutCCV = angular.copy(paymentInfo);
-      delete paymentInfoWithoutCCV.ccv;
+      let paymentInfoWithoutCVV = angular.copy(paymentInfo);
+      delete paymentInfoWithoutCVV.cvv;
 
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
-        paymentInfoWithoutCCV
+        paymentInfoWithoutCVV
       ).respond(200, 'success');
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -247,12 +247,12 @@ describe('order service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        ccv: 'someEncryptedCCV...'
+        cvv: 'someEncryptedCVV...'
       };
 
-      let paymentInfoWithoutCCV = angular.copy(paymentInfo);
-      delete paymentInfoWithoutCCV.ccv;
-      paymentInfoWithoutCCV.address = {
+      let paymentInfoWithoutCVV = angular.copy(paymentInfo);
+      delete paymentInfoWithoutCVV.cvv;
+      paymentInfoWithoutCVV.address = {
         'country-name': 'US',
         'street-address': '123 First St',
         'extended-address': 'Apt 123',
@@ -263,7 +263,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
-        paymentInfoWithoutCCV
+        paymentInfoWithoutCVV
       ).respond(200, 'success');
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -312,7 +312,7 @@ describe('order service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        ccv: 'someEncryptedCCV...'
+        cvv: 'someEncryptedCVV...'
       };
       self.orderService.addPaymentMethod({
         creditCard: paymentInfo
@@ -320,7 +320,7 @@ describe('order service', () => {
         expect(data).toEqual('credit card success');
       });
       expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo);
-      expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('someEncryptedCCV...');
+      expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('someEncryptedCVV...');
     });
     it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
       self.orderService.addPaymentMethod({
@@ -622,7 +622,7 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
-    it('should send a request to finalize the purchase and with a CCV', () => {
+    it('should send a request to finalize the purchase and with a CVV', () => {
       self.$httpBackend.expectPOST(
         'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
         {"security-code": '123'}
@@ -638,35 +638,28 @@ describe('order service', () => {
   });
 
   describe('storeCardSecurityCode', () => {
-    it('should store the encrypted ccv', () => {
-      let encryptedCcv = 'g43wj7sevtiusehiuhrv3478wehr783awhsuircahneyisuhwaf7eysu';
-      self.orderService.storeCardSecurityCode(encryptedCcv);
-      expect(self.$window.sessionStorage.getItem('ccv')).toEqual(encryptedCcv);
+    it('should store the encrypted cvv', () => {
+      self.orderService.storeCardSecurityCode('123');
+      expect(self.$window.sessionStorage.getItem('cvv')).toEqual('123');
     });
     it('should allow \'existing payment method\' to be stored', () => {
-      let encryptedCcv = existingPaymentMethodFlag;
-      self.orderService.storeCardSecurityCode(encryptedCcv);
-      expect(self.$window.sessionStorage.getItem('ccv')).toEqual(encryptedCcv);
-    });
-    it('should throw an error when it looks like the security code is unencrypted (has less than 50 chars)', () => {
-      expect(() => self.orderService.storeCardSecurityCode('1234')).toThrowError('The CCV should be encrypted and the provided CCV looks like it is too short to be encrypted correctly');
+      self.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
+      expect(self.$window.sessionStorage.getItem('cvv')).toEqual(existingPaymentMethodFlag);
     });
   });
 
   describe('retrieveCardSecurityCode', () => {
-    it('should return the stored the encrypted ccv', () => {
-      let encryptedCcv = 'g43wj7sevtiusehiuhrv3478wehr783awhsuircahneyisuhwaf7eysu';
-      self.$window.sessionStorage.setItem('ccv', encryptedCcv);
-      expect(self.orderService.retrieveCardSecurityCode()).toEqual(encryptedCcv);
+    it('should return the stored the encrypted cvv', () => {
+      self.$window.sessionStorage.setItem('cvv', '123');
+      expect(self.orderService.retrieveCardSecurityCode()).toEqual('123');
     });
   });
 
   describe('clearCardSecurityCode', () => {
-    it('should clear the stored the encrypted ccv', () => {
-      let encryptedCcv = 'g43wj7sevtiusehiuhrv3478wehr783awhsuircahneyisuhwaf7eysu';
-      self.$window.sessionStorage.setItem('ccv', encryptedCcv);
+    it('should clear the stored the encrypted cvv', () => {
+      self.$window.sessionStorage.setItem('cvv', '123');
       self.orderService.clearCardSecurityCode();
-      expect(self.$window.sessionStorage.getItem('ccv')).toBeNull();
+      expect(self.$window.sessionStorage.getItem('cvv')).toBeNull();
     });
   });
 

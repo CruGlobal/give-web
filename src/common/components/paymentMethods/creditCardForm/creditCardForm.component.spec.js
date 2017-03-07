@@ -1,27 +1,16 @@
 import angular from 'angular';
 import 'angular-mocks';
 import size from 'lodash/size';
-import ccp from 'common/lib/ccp';
-import { ccpStagingKey } from 'common/app.constants';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+
+import cruPayments from 'cru-payments/dist/cru-payments';
 
 import module from './creditCardForm.component';
 
 describe('credit card form', () => {
   beforeEach(angular.mock.module(module.name));
-  var self = {};
-
-  beforeEach(() => {
-    angular.mock.module(($provide) => {
-      $provide.value('ccpService', {
-        get: () => {
-          ccp.initialize(ccpStagingKey);
-          return Observable.of(ccp);
-        }
-      });
-    });
-  });
+  let self = {};
 
   beforeEach(inject(($rootScope, $httpBackend, $compile) => {
     self.outerScope = $rootScope.$new();
@@ -29,7 +18,7 @@ describe('credit card form', () => {
 
     self.outerScope.paymentFormState = 'unsubmitted';
     self.outerScope.onPaymentFormStateChange = () => {};
-    let compiledElement = $compile(angular.element('<credit-card-form payment-form-state="paymentFormState" on-payment-form-state-change="onPaymentFormStateChange($event)"></credit-card-form>'))(self.outerScope);
+    const compiledElement = $compile(angular.element('<credit-card-form payment-form-state="paymentFormState" on-payment-form-state-change="onPaymentFormStateChange($event)"></credit-card-form>'))(self.outerScope);
     self.outerScope.$apply();
     self.controller = compiledElement.controller(module.name);
     self.formController = self.controller.creditCardPaymentForm;
@@ -37,12 +26,10 @@ describe('credit card form', () => {
 
   describe('$onInit', () => {
     it('should call the needed functions to load data', () => {
-      spyOn(self.controller, 'loadCcp');
       spyOn(self.controller, 'initExistingPaymentMethod');
       spyOn(self.controller, 'waitForFormInitialization');
       spyOn(self.controller, 'initializeExpirationDateOptions');
       self.controller.$onInit();
-      expect(self.controller.loadCcp).toHaveBeenCalled();
       expect(self.controller.initExistingPaymentMethod).toHaveBeenCalled();
       expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
       expect(self.controller.initializeExpirationDateOptions).toHaveBeenCalled();
@@ -67,14 +54,6 @@ describe('credit card form', () => {
     });
   });
 
-  describe('loadCcp', () => {
-    it('should load ccp', () => {
-      spyOn(self.controller.ccpService, 'get').and.returnValue(Observable.of('ccp object'));
-      self.controller.loadCcp();
-      expect(self.controller.ccp).toEqual('ccp object');
-    });
-  });
-
   describe('waitForFormInitialization', () => {
     it('should call addCustomValidators when the form is initialized', () => {
       spyOn(self.controller, 'addCustomValidators');
@@ -86,14 +65,11 @@ describe('credit card form', () => {
   });
 
   describe('addCustomValidators', () => {
-    it('should add parser and validator functions to ngModelControllers ', () => {
+    it('should add validator functions to ngModelControllers ', () => {
       self.controller.addCustomValidators();
-      expect(size(self.formController.cardNumber.$parsers)).toEqual(2);
-      expect(size(self.formController.cardNumber.$validators)).toEqual(4);
-
+      expect(size(self.formController.cardNumber.$validators)).toEqual(6);
       expect(size(self.formController.expiryMonth.$validators)).toEqual(2);
-
-      expect(size(self.formController.securityCode.$parsers)).toEqual(1);
+      expect(size(self.formController.expiryYear.$validators)).toEqual(2);
       expect(size(self.formController.securityCode.$validators)).toEqual(4);
     });
   });
@@ -103,6 +79,9 @@ describe('credit card form', () => {
       spyOn(self.formController, '$setSubmitted');
       spyOn(self.controller, 'onPaymentFormStateChange').and.callThrough();
       spyOn(self.outerScope, 'onPaymentFormStateChange');
+      spyOn(self.controller.tsysService, 'getManifest').and.returnValue(Observable.of({ deviceId: '<device id>', manifest: '<manifest>' }));
+      spyOn(cruPayments.creditCard, 'init');
+      spyOn(cruPayments.creditCard, 'encrypt').and.returnValue(Observable.of({ tsepToken: 'YfxWvtXJxjET5100', maskedCardNumber: '1111', transactionID: '<transaction id>' , cvv2: '123' }));
     });
 
     it('should call onPaymentFormStateChange with success false when form is invalid', () => {
@@ -123,7 +102,7 @@ describe('credit card form', () => {
         cardNumber: '4111111111111111',
         cardholderName: 'Person Name',
         expiryMonth: 12,
-        expiryYear: 19,
+        expiryYear: 2019,
         securityCode: '123'
       };
       self.controller.useMailingAddress = false;
@@ -139,13 +118,15 @@ describe('credit card form', () => {
             postalCode: '12345',
             region: 'CA'
           },
-          'card-number': jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
+          'card-number': 'YfxWvtXJxjET5100',
+          'card-type': 'Visa',
           'cardholder-name': 'Person Name',
           'expiry-month': 12,
-          'expiry-year': 19,
-          ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
-        },
-        paymentMethodNumber: '1111'
+          'expiry-year': 2019,
+          'last-four-digits': '1111',
+          transactionId: '<transaction id>',
+          cvv: '123'
+        }
       };
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
@@ -155,7 +136,7 @@ describe('credit card form', () => {
         cardNumber: '4111111111111111',
         cardholderName: 'Person Name',
         expiryMonth: 12,
-        expiryYear: 19,
+        expiryYear: 2019,
         securityCode: '123'
       };
       self.controller.useMailingAddress = true;
@@ -165,26 +146,29 @@ describe('credit card form', () => {
       let expectedData = {
         creditCard: {
           address: undefined,
-          'card-number': jasmine.stringMatching(/^.{50,}$/), // Check for long encrypted string
+          'card-number': 'YfxWvtXJxjET5100',
+          'card-type': 'Visa',
           'cardholder-name': 'Person Name',
           'expiry-month': 12,
-          'expiry-year': 19,
-          ccv: jasmine.stringMatching(/^.{50,}$/) // Check for long encrypted string
-        },
-        paymentMethodNumber: '1111'
+          'expiry-year': 2019,
+          'last-four-digits': '1111',
+          transactionId: '<transaction id>',
+          cvv: '123'
+        }
       };
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
     });
     it('should not send a credit card or security code if a paymentMethod is present and cardNumber is unchanged', () => {
       self.controller.paymentMethod = {
-        'card-number': '4567'
+        'card-number': '4567',
+        'card-type': 'MasterCard'
       };
       self.controller.creditCardPayment = {
         cardNumber: undefined,
         cardholderName: 'Person Name',
         expiryMonth: 12,
-        expiryYear: 19,
+        expiryYear: 2019,
         securityCode: '123'
       };
       self.controller.useMailingAddress = true;
@@ -195,12 +179,14 @@ describe('credit card form', () => {
         creditCard: {
           address: undefined,
           'card-number': '4567',
+          'card-type': 'MasterCard',
           'cardholder-name': 'Person Name',
           'expiry-month': 12,
-          'expiry-year': 19,
-          ccv: null
-        },
-        paymentMethodNumber: false
+          'expiry-year': 2019,
+          'last-four-digits': '4567',
+          transactionId: undefined,
+          cvv: undefined
+        }
       };
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
@@ -242,23 +228,43 @@ describe('credit card form', () => {
         self.formController.cardNumber.$setViewValue('');
         expect(self.formController.cardNumber.$valid).toEqual(true);
         expect(self.formController.cardNumber.$error.required).toBeUndefined();
-        expect(self.formController.cardNumber.$error.minlength).toBeUndefined();
+        expect(self.formController.cardNumber.$error.minLength).toBeUndefined();
         expect(self.formController.cardNumber.$error.cardNumber).toBeUndefined();
       });
       it('should not be valid if the input is too short',  () => {
         self.formController.cardNumber.$setViewValue('123456789012');
         expect(self.formController.cardNumber.$valid).toEqual(false);
         expect(self.formController.cardNumber.$error.required).toBeUndefined();
-        expect(self.formController.cardNumber.$error.minlength).toEqual(true);
+        expect(self.formController.cardNumber.$error.minLength).toEqual(true);
       });
       it('should not be valid if the input is too long',  () => {
         self.formController.cardNumber.$setViewValue('12345678901234567');
         expect(self.formController.cardNumber.$valid).toEqual(false);
         expect(self.formController.cardNumber.$error.required).toBeUndefined();
-        expect(self.formController.cardNumber.$error.maxlength).toEqual(true);
+        expect(self.formController.cardNumber.$error.maxLength).toEqual(true);
+      });
+      it('should not be valid if it is an unknown card type',  () => {
+        self.formController.cardNumber.$setViewValue('1111111111111111');
+        expect(self.formController.cardNumber.$error.minLength).toBeUndefined();
+        expect(self.formController.cardNumber.$error.maxLength).toBeUndefined();
+        expect(self.formController.cardNumber.$error.knownType).toEqual(true);
+        expect(self.formController.cardNumber.$valid).toEqual(false);
       });
       it('should not be valid if it contains an invalid card number',  () => {
         self.formController.cardNumber.$setViewValue('411111111111111'); // Missing 1 digit
+        expect(self.formController.cardNumber.$error.minLength).toBeUndefined();
+        expect(self.formController.cardNumber.$error.maxLength).toBeUndefined();
+        expect(self.formController.cardNumber.$error.knownType).toBeUndefined();
+        expect(self.formController.cardNumber.$error.typeLength).toEqual(true);
+        expect(self.formController.cardNumber.$valid).toEqual(false);
+      });
+      it('should not be valid if the checksum is invalid',  () => {
+        self.formController.cardNumber.$setViewValue('4111111111111112'); // 1 digit wrong
+        expect(self.formController.cardNumber.$error.minLength).toBeUndefined();
+        expect(self.formController.cardNumber.$error.maxLength).toBeUndefined();
+        expect(self.formController.cardNumber.$error.knownType).toBeUndefined();
+        expect(self.formController.cardNumber.$error.typeLength).toBeUndefined();
+        expect(self.formController.cardNumber.$error.checksum).toEqual(true);
         expect(self.formController.cardNumber.$valid).toEqual(false);
       });
       it('should be valid if it contains a valid card number',  () => {
@@ -325,13 +331,13 @@ describe('credit card form', () => {
         self.formController.securityCode.$setViewValue('12');
         expect(self.formController.securityCode.$valid).toEqual(false);
         expect(self.formController.securityCode.$error.required).toBeUndefined();
-        expect(self.formController.securityCode.$error.minlength).toEqual(true);
+        expect(self.formController.securityCode.$error.minLength).toEqual(true);
       });
       it('should not be valid if it is greater than 4 digits',  () => {
         self.formController.securityCode.$setViewValue('12345');
         expect(self.formController.securityCode.$valid).toEqual(false);
         expect(self.formController.securityCode.$error.required).toBeUndefined();
-        expect(self.formController.securityCode.$error.maxlength).toEqual(true);
+        expect(self.formController.securityCode.$error.maxLength).toEqual(true);
       });
       it('should be valid if it is 3 digits',  () => {
         self.formController.securityCode.$setViewValue('123');
