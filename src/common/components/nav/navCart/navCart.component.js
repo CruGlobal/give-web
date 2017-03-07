@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 
 import sessionService from 'common/services/session/session.service';
 import cartService from 'common/services/api/cart.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './navCart.tpl';
 
@@ -14,12 +15,13 @@ let componentName = 'navCart';
 class NavCartController{
 
   /* @ngInject */
-  constructor($rootScope, $window, $log, cartService, sessionService){
+  constructor($rootScope, $window, $log, cartService, sessionService, analyticsFactory){
     this.$rootScope = $rootScope;
     this.$window = $window;
     this.$log = $log;
     this.cartService = cartService;
     this.sessionService = sessionService;
+    this.analyticsFactory = analyticsFactory;
     this.firstLoad = true;
   }
 
@@ -31,6 +33,9 @@ class NavCartController{
   }
 
   loadCart() {
+    if(this.firstLoad){
+      this.analyticsFactory.track('aa-cart-open');
+    }
     this.firstLoad = false;
     this.loading = true;
     this.error = false;
@@ -57,7 +62,8 @@ export default angular
   .module(componentName, [
     template.name,
     cartService.name,
-    sessionService.name
+    sessionService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: NavCartController,
