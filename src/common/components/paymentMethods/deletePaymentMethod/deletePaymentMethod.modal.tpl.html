@@ -83,7 +83,7 @@
                       <button id="addPaymentButton"
                               class="btn btn-primary"
                               ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
-                              ng-disabled="$ctrl.paymentFormState === 'loading'"
+                              ng-disabled="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"
                               translate>
                         Add Payment Method
                       </button>

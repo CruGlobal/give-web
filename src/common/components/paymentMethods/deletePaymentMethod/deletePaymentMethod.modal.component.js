@@ -81,7 +81,7 @@ class deletePaymentMethodModalController {
   }
 
   getPaymentMethodOptionLabel(paymentMethod){
-    return (paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ending in ****' + (paymentMethod['display-account-number'] || paymentMethod['card-number']);
+    return (paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ending in ****' + (paymentMethod['display-account-number'] || paymentMethod['last-four-digits']);
   }
 
   getNewPaymentMethodId(){

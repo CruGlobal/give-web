@@ -34,7 +34,7 @@
                 id="saveChangesButton"
                 class="btn btn-primary pull-right"
                 ng-click="$ctrl.resolve.onPaymentFormStateChange({$event: {state: 'submitted'}})"
-                ng-disabled="$ctrl.resolve.paymentForm.state === 'loading' || $ctrl.resolve.paymentForm.state === 'success'">
+                ng-disabled="$ctrl.resolve.paymentForm.state === 'loading' || $ctrl.resolve.paymentForm.state === 'encrypting' || $ctrl.resolve.paymentForm.state === 'success'">
           <span ng-if="!$ctrl.resolve.paymentMethod" translate>Add Payment Method</span>
           <span ng-if="$ctrl.resolve.paymentMethod" translate>Update Payment Method</span>
         </button>

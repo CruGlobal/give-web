@@ -25,7 +25,7 @@
         <label translate>Payment Method</label>
         <select class="form-control  form-control-subtle"
                 ng-model="$ctrl.gift.paymentMethodId"
-                ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['card-number'])) for paymentMethod in $ctrl.gift.paymentMethods" >
+                ng-options="paymentMethod.self.uri.split('/').pop() as ((paymentMethod['bank-name'] || paymentMethod['card-type']) + ' ****' + (paymentMethod['display-account-number'] || paymentMethod['last-four-digits'])) for paymentMethod in $ctrl.gift.paymentMethods" >
         </select>
         <div role="alert" ng-if="!$ctrl.gift.paymentMethod">
           <div class="help-block" translate>You must choose a valid payment method</div>

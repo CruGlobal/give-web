@@ -11,6 +11,7 @@ import displayAddressComponent from 'common/components/display-address/display-a
 import addressForm from 'common/components/addressForm/addressForm.component';
 
 import showErrors from 'common/filters/showErrors.filter';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import cruPayments from 'cru-payments/dist/cru-payments';
 import tsys from 'common/services/api/tsys.service';
@@ -54,7 +55,7 @@ class CreditCardController {
     if(this.paymentMethod){
       this.creditCardPayment = {
         address: this.paymentMethod.address,
-        cardNumberPlaceholder: this.paymentMethod['card-number'],
+        cardNumberPlaceholder: this.paymentMethod['last-four-digits'],
         cardholderName: this.paymentMethod['cardholder-name'],
         expiryMonth: this.paymentMethod['expiry-month'],
         expiryYear: parseInt(this.paymentMethod['expiry-year'])
@@ -119,11 +120,16 @@ class CreditCardController {
   savePayment(){
     this.creditCardPaymentForm.$setSubmitted();
     if(this.creditCardPaymentForm.$valid){
+      this.onPaymentFormStateChange({
+        $event: {
+          state: 'encrypting'
+        }
+      });
       const tokenObservable =  this.paymentMethod && !this.creditCardPayment.cardNumber ?
-        Observable.of({ tsepToken: this.paymentMethod['card-number'], maskedCardNumber: this.paymentMethod['card-number'] }) : // Send masked card number when card number is not updated
+        Observable.of({ tsepToken: this.paymentMethod['last-four-digits'], maskedCardNumber: this.paymentMethod['last-four-digits'] }) : // Send masked card number when card number is not updated
         this.tsysService.getManifest()
           .mergeMap(data => {
-            cruPayments.creditCard.init(this.envService.get(), data.deviceId || '88812128320102', data.manifest); //TODO: remove hard coded deviceId when added to the manifest api endpoint
+            cruPayments.creditCard.init(this.envService.get(), data.deviceId, data.manifest);
             return cruPayments.creditCard.encrypt(this.creditCardPayment.cardNumber, this.creditCardPayment.securityCode, this.creditCardPayment.expiryMonth, this.creditCardPayment.expiryYear);
           });
       tokenObservable.subscribe(tokenObj => {
@@ -134,7 +140,7 @@ class CreditCardController {
               creditCard: {
                 address: this.useMailingAddress ? undefined : this.creditCardPayment.address,
                 'card-number': tokenObj.tsepToken,
-                'card-type': this.cardInfo.type(this.creditCardPayment.cardNumber) || this.paymentMethod['card-type'],
+                'card-type': this.cardInfo.type(this.creditCardPayment.cardNumber) || this.paymentMethod && this.paymentMethod['card-type'],
                 'cardholder-name': this.creditCardPayment.cardholderName,
                 'expiry-month': this.creditCardPayment.expiryMonth,
                 'expiry-year': this.creditCardPayment.expiryYear,
@@ -153,7 +159,7 @@ class CreditCardController {
             error: error
           }
         });
-        this.$scope.$apply();
+        scrollModalToTop();
       });
     }else{
       this.onPaymentFormStateChange({

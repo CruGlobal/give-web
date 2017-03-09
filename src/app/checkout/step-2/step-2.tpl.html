@@ -6,7 +6,7 @@
   </p>
 </div>
 <div class="loading-overlay-parent">
-  <loading type="overlay" ng-if="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading'"></loading>
+  <loading type="overlay" ng-if="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"></loading>
   <div ng-if="!$ctrl.existingPaymentMethods">
     <payment-method-form payment-form-state="$ctrl.paymentFormState" payment-form-error="$ctrl.paymentFormError" on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)" mailing-address="$ctrl.mailingAddress"></payment-method-form>
   </div>
@@ -22,7 +22,7 @@
       <button id="previousStepButton1" class="btn btn-default" ng-click="$ctrl.changeStep({newStep: 'contact'})">Previous Step</button>
     </div>
     <div class="col-sm-5 col-sm-offset-2">
-      <button id="continueCheckoutButton" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})" ng-disabled="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading'">Continue to Review &amp; Submit</button>
+      <button id="continueCheckoutButton" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})" ng-disabled="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'">Continue to Review &amp; Submit</button>
       <button id="previousStepButton2" class="btn btn-link btn-block visible-xs" ng-click="$ctrl.changeStep({newStep: 'contact'})"><i class="fa fa-angle-left"></i> Previous Step</button>
     </div>
   </div>

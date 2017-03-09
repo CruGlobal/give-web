@@ -46,7 +46,7 @@
   <div class="col-xs-6 text-right">
     <button class="btn btn-primary"
             ng-click="$ctrl.onPaymentFormStateChange({state: 'submitted'})"
-            ng-disabled="$ctrl.paymentFormState === 'loading'">
+            ng-disabled="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'">
       <span ng-if="!$ctrl.paymentMethod" translate>Add and Continue</span>
       <span ng-if="$ctrl.paymentMethod" translate>Update and Continue</span>
     </button>
