@@ -8,6 +8,7 @@ import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 import profileService from 'common/services/api/profile.service';
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import analyticsFactory from 'app/analytics/analytics.factory';
 
@@ -32,7 +33,7 @@ class PaymentMethodController{
   }
 
   isCard(){
-    return !!this.model['card-number'];
+    return this.model.self.type === 'cru.creditcards.named-credit-card';
   }
 
   editPaymentMethod() {
@@ -57,7 +58,7 @@ class PaymentMethodController{
             let editedData = {};
             if($event.payload.creditCard) {
               editedData = $event.payload.creditCard;
-              editedData['card-number'] = editedData['last-four-digits'];
+              editedData['last-four-digits'] = editedData['last-four-digits'];
               editedData.address = formatAddressForTemplate(editedData.address);
             } else {
               editedData = $event.payload.bankAccount;
@@ -77,6 +78,7 @@ class PaymentMethodController{
             this.$log.error('Error updating payment method', error);
             this.paymentFormResolve.state = 'error';
             this.paymentFormResolve.error = error.data;
+            scrollModalToTop();
           }
         );
     }

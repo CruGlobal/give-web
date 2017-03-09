@@ -143,7 +143,7 @@ describe( 'delete payment method modal', function () {
     } );
     it( 'returns card display string', () => {
       self.controller.resolve.paymentMethod['card-type'] = 'Visa';
-      self.controller.resolve.paymentMethod['card-number'] = '4321';
+      self.controller.resolve.paymentMethod['last-four-digits'] = '4321';
       expect( self.controller.getPaymentMethodOptionLabel(self.controller.resolve.paymentMethod)).toBe('Visa ending in ****4321');
     } );
   } );

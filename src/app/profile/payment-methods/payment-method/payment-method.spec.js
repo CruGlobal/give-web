@@ -40,6 +40,7 @@ describe('PaymentMethodComponent', function () {
         'donations': []
       },
       self: {
+        type: 'cru.creditcards.named-credit-card',
         uri: ''
       }
     },
@@ -50,6 +51,9 @@ describe('PaymentMethodComponent', function () {
       'routing-number': '021000021',
       'recurringgifts': {
         'donations': []
+      },
+      self: {
+        type: 'elasticpath.bankaccounts.bank-account'
       }
     },
     uibModal = jasmine.createSpyObj('$uibModal', ['open','close']);

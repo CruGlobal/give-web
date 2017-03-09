@@ -20,7 +20,7 @@ describe( 'PaymentMethodsComponent', function () {
       }
     };
   };
-  
+
   let uibModal = jasmine.createSpyObj('$uibModal', ['open','close']);
 
   uibModal.open.and.callFake(fakeModal);
@@ -169,8 +169,16 @@ describe( 'PaymentMethodsComponent', function () {
 
   describe('isCard()', () => {
     it('should return true if payment method is a card', () => {
-      expect($ctrl.isCard({'card-number': '2222'})).toBe(true);
-      expect($ctrl.isCard({'bank': '2222'})).toBe(false);
+      expect($ctrl.isCard({
+        self: {
+          type: 'cru.creditcards.named-credit-card'
+        }
+      })).toBe(true);
+      expect($ctrl.isCard({
+        self: {
+          type: 'elasticpath.bankaccounts.bank-account'
+        }
+      })).toBe(false);
     });
   });
 

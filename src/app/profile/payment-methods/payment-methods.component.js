@@ -10,6 +10,7 @@ import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/s
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import commonModule from 'common/common.module';
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 class PaymentMethodsController {
 
@@ -120,6 +121,7 @@ class PaymentMethodsController {
             this.$log.error('Error adding payment method',error);
             this.paymentFormResolve.state = 'error';
             this.paymentFormResolve.error = error.data;
+            scrollModalToTop();
           });
     }
   }
@@ -133,7 +135,7 @@ class PaymentMethodsController {
   }
 
   isCard(paymentMethod) {
-    return !!paymentMethod['card-number'];
+    return paymentMethod.self.type === 'cru.creditcards.named-credit-card';
   }
 
   signedOut( event ) {

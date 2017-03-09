@@ -65,6 +65,10 @@ describe('checkout', () => {
     });
 
     describe('onPaymentFormStateChange', () => {
+      beforeEach(() => {
+        spyOn(self.controller.$window, 'scrollTo');
+        spyOn(self.controller, 'scrollModalToTop');
+      });
       it('should update paymentFormState if transitioning to a different state', () => {
         self.controller.paymentFormState = 'unsubmitted';
         self.controller.onPaymentFormStateChange({ state: 'submitted' });
@@ -86,6 +90,7 @@ describe('checkout', () => {
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
       });
       it('should handle an error saving payment data', () => {
+        self.controller.existingPaymentMethods = false;
         spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'some error' }));
         self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}} });
@@ -93,6 +98,19 @@ describe('checkout', () => {
         expect(self.controller.paymentFormState).toEqual('error');
         expect(self.controller.$log.error.logs[0]).toEqual(['Error saving payment method', { data: 'some error' }]);
         expect(self.controller.paymentFormError).toEqual('some error');
+        expect(self.controller.$window.scrollTo).toHaveBeenCalled();
+        expect(self.controller.scrollModalToTop).not.toHaveBeenCalled();
+      });
+      it('should handle an error saving payment data from a modal', () => {
+        spyOn(self.controller, 'changeStep');
+        spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'some error' }));
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}} });
+        expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
+        expect(self.controller.paymentFormState).toEqual('error');
+        expect(self.controller.$log.error.logs[0]).toEqual(['Error saving payment method', { data: 'some error' }]);
+        expect(self.controller.paymentFormError).toEqual('some error');
+        expect(self.controller.$window.scrollTo).not.toHaveBeenCalled();
+        expect(self.controller.scrollModalToTop).toHaveBeenCalled();
       });
       it('should call changeStep if save was successful and there was no data (assumes another component saved the data)', () => {
         spyOn(self.controller, 'changeStep');

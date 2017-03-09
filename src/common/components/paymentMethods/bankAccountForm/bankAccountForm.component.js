@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import showErrors from 'common/filters/showErrors.filter';
+import {scrollModalToTop} from 'common/services/modalState.service';
 
 import cruPayments from 'cru-payments/dist/cru-payments';
 import { ccpKey, ccpStagingKey } from 'common/app.constants';
@@ -84,6 +85,11 @@ class BankAccountController{
   savePayment(){
     this.bankPaymentForm.$setSubmitted();
     if(this.bankPaymentForm.$valid){
+      this.onPaymentFormStateChange({
+        $event: {
+          state: 'encrypting'
+        }
+      });
       cruPayments.bankAccount.init(this.envService.get(), this.envService.is('production') ? ccpKey : ccpStagingKey);
       let encryptObservable = this.paymentMethod && !this.bankPayment.accountNumber ?
         Observable.of('') :
@@ -111,7 +117,7 @@ class BankAccountController{
             error: error
           }
         });
-        this.$scope.$apply();
+        scrollModalToTop();
       });
     }else{
       this.onPaymentFormStateChange({

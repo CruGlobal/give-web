@@ -167,7 +167,7 @@ describe('credit card form', () => {
     });
     it('should not send a credit card or security code if a paymentMethod is present and cardNumber is unchanged', () => {
       self.controller.paymentMethod = {
-        'card-number': '4567',
+        'last-four-digits': '4567',
         'card-type': 'MasterCard'
       };
       self.controller.creditCardPayment = {
@@ -396,7 +396,7 @@ describe('credit card form', () => {
       it('should populate the creditCardPayment fields if a paymentMethod is present', () => {
         self.controller.paymentMethod = {
           address: { streetAddress: 'Some Address' },
-          'card-number': '1234',
+          'last-four-digits': '1234',
           'cardholder-name': 'Some Person',
           'expiry-month': '10',
           'expiry-year': '2015'
