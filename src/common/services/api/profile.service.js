@@ -211,9 +211,10 @@ class Profile {
       });
   }
 
-  getPaymentMethod( uri ){
+  getPaymentMethod( uri, cache ){
     return this.cortexApiService.get({
-      path: uri
+      path: uri,
+      cache: !!cache
     })
       .map((paymentMethod) => {
         paymentMethod.id = paymentMethod.self.uri.split('/').pop();
