@@ -1,5 +1,7 @@
 import angular from 'angular';
-import {Observable} from 'rxjs/Rx';
+import keyBy from 'lodash/keyBy';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
 
 import RecurringGiftModel from 'common/models/recurringGift.model';
 import desigSrc from 'common/directives/desigSrc.directive';
@@ -42,13 +44,14 @@ class RecipientGift {
 
       if(paymentMethodRequests.length){
         Observable.forkJoin(paymentMethodRequests)
-          .subscribe((response) => {
-            angular.forEach(response, (paymentMethod) => {
-              angular.forEach(this.recipient.donations, (donation) => {
-                if(donation['payment-method-link']['uri'] === paymentMethod.self.uri) {
-                  donation['paymentmethod'] = paymentMethod;
-                }
-              });
+          .subscribe((paymentMethods) => {
+            paymentMethods = keyBy(paymentMethods, (paymentMethod) => {
+              return paymentMethod.self.uri;
+            });
+
+            angular.forEach(this.recipient.donations, (donation) => {
+              let uri = donation['payment-method-link'] && donation['payment-method-link']['uri'];
+              donation['paymentmethod'] = paymentMethods[uri];
             });
 
             this.isLoading = false;
