@@ -284,6 +284,22 @@ describe('profile service', () => {
       } );
       self.$httpBackend.flush();
     } );
+
+    it( 'should load the giving profile with an organization', () => {
+      let orgGivingProfileResponse = angular.copy(givingProfileResponse);
+      orgGivingProfileResponse['_donordetails'][0]['donor-type'] = 'Organization';
+      orgGivingProfileResponse['_donordetails'][0]['organization-name'] = 'Organization XYZ';
+
+      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+        .respond( 200, orgGivingProfileResponse );
+
+      self.profileService.getGivingProfile().subscribe( ( profile ) => {
+        expect( profile ).toEqual( jasmine.objectContaining( {
+          name: 'Organization XYZ'
+        } ) );
+      } );
+      self.$httpBackend.flush();
+    } );
   });
 
   describe('addPaymentMethod', () => {
