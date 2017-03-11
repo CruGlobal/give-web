@@ -45,7 +45,7 @@
                       <ul class="list-unstyled people-fields">
                         <li>
                           <form name="$ctrl.donorDetailsForm" novalidate>
-                            <div class="form-group is-required person-row">
+                            <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.donorDetailsForm.nameMiddleInitial | showErrors) }">
                               <i class="fa fa-lock"></i>
 
                               <select name="nameTitle" class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
@@ -58,10 +58,10 @@
                               </select>
 
                               <input name="nameGivenName" type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']">
-                              <input name="nameMiddleInitial" type="text" class="form-control  form-control-subtle middle" disabled ng-model="$ctrl.donorDetails.name['middle-initial']">
+                              <input name="nameMiddleInitial" type="text" class="form-control  form-control-subtle middle" ng-model="$ctrl.donorDetails.name['middle-initial']" maxlength="1" pattern="[A-Z]">
                               <input name="nameFamilyName" type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']">
 
-                              <select name="nameSuffix" class="form-control form-control-subtle suffix" disabled ng-model="$ctrl.donorDetails.name.suffix">
+                              <select name="nameSuffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
                                 <option value=""></option>
                                 <option value="Jr" translate>Jr</option>
                                 <option value="Sr" translate>Sr</option>
@@ -71,6 +71,10 @@
                               </select>
 
                               <div class="clear"></div>
+
+                              <div role="alert" ng-messages="$ctrl.donorDetailsForm.nameMiddleInitial.$error" ng-if="($ctrl.donorDetailsForm.nameMiddleInitial | showErrors)">
+                                <div class="help-block" ng-message="pattern" translate>Initial must be an uppercase letter</div>
+                              </div>
                             </div>
                           </form>
                         </li>
@@ -88,10 +92,10 @@
                               </select>
 
                               <input name="spouseName" type="text" class="form-control form-control-subtle first" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" maxlength="20" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
-                              <input name="spouseInitial" type="text" class="form-control form-control-subtle middle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" maxlength="1" ng-disabled="$ctrl.hasSpouse" pattern="[A-Z]">
+                              <input name="spouseInitial" type="text" class="form-control form-control-subtle middle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" maxlength="1" pattern="[A-Z]">
                               <input name="spouseLastName" type="text" class="form-control form-control-subtle last" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" maxlength="25" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
 
-                              <select name="suffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix" ng-disabled="$ctrl.hasSpouse">
+                              <select name="suffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
                                 <option value=""></option>
                                 <option value="Jr" translate>Jr</option>
                                 <option value="Sr" translate>Sr</option>
@@ -177,7 +181,14 @@
                               <option translate>Unknown</option>
                             </select>
                             <input name="phoneNumber" type="tel" class="form-control form-control-subtle" ng-model="phone['phone-number']" required>
-                            <select name="spousePhoneNumber" ng-model="phone.spouse" ng-change="phone.ownerChanged = !phone.ownerChanged" ng-options="$ctrl.phoneOwner(spouse) for spouse in [true, false]" class="form-control form-control-subtle" ng-disabled="!$ctrl.hasSpouse"></select>
+                            <select name="spousePhoneNumber"
+                                    class="form-control form-control-subtle"
+                                    ng-model="phone.spouse"
+                                    ng-change="phone.ownerChanged = !phone.ownerChanged"
+                                    ng-disabled="!$ctrl.hasSpouse">
+                              <option ng-value="true">{{$ctrl.donorDetails['spouse-name']['given-name']}}</option>
+                              <option ng-value="false">{{$ctrl.donorDetails.name['given-name']}}</option>
+                            </select>
                             <a id="removeSpousePhoneNumberLink" href="" ng-click="$ctrl.deletePhoneNumber(phone, $index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
                           </form>
                           <div role="alert" ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)">
