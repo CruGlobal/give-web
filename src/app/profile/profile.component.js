@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-messages';
 import pull from 'lodash/pull';
 import assign from 'lodash/assign';
+import omit from 'lodash/omit';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/do';
@@ -46,6 +47,7 @@ class ProfileController {
         this.loadDonorDetails();
         this.loadMailingAddress();
         this.loadEmail();
+        this.loadPhoneNumbers();
       },
       [EnforcerCallbacks.cancel]: () => {
         // Authentication failure
@@ -74,14 +76,12 @@ class ProfileController {
 
   loadDonorDetails() {
     this.donorDetailsLoading = true;
-    this.phonesLoading = true;
     this.profileService.getProfileDonorDetails()
       .subscribe(
         donorDetails => {
           this.donorDetails = donorDetails;
           this.hasSpouse = !!this.donorDetails['spouse-name']['family-name'];
           this.donorDetailsLoading = false;
-          this.loadPhoneNumbers(); //  phone number's owner output depends on donor details
         },
         error => {
           this.donorDetailsLoading = false;
@@ -93,7 +93,10 @@ class ProfileController {
 
   updateDonorDetails(){
     this.donorDetailsLoading = true;
-    this.profileService.updateProfileDonorDetails(this.donorDetails)
+    const updatedDetails = this.addingSpouse ?
+      omit(this.donorDetails, 'spouse-name') : // Adding a spouse is handled by saveSpouse
+      this.donorDetails;
+    this.profileService.updateProfileDonorDetails(updatedDetails)
       .subscribe(
         () => {
           this.donorDetailsLoading = false;
@@ -193,10 +196,6 @@ class ProfileController {
       'primary': false,
       'spouse': false
     });
-  }
-
-  phoneOwner(spouse) {
-    return spouse ? this.donorDetails['spouse-name']['given-name'] : this.donorDetails.name['given-name'];
   }
 
   updatePhoneNumbers(){
@@ -380,7 +379,7 @@ class ProfileController {
     this.phoneNumberError = '';
     this.mailingAddressError = '';
     this.success = false;
-    if((this.donorDetailsForm.$dirty && this.donorDetailsForm.$valid && !this.addingSpouse) || (this.spouseDetailsForm.$dirty && this.spouseDetailsForm.$valid && !this.addingSpouse)) {
+    if(this.donorDetailsForm.$dirty && this.donorDetailsForm.$valid || this.spouseDetailsForm.$dirty && this.spouseDetailsForm.$valid && !this.addingSpouse) {
       this.updateDonorDetails();
     }
     // if spouse is being created we need to make sure that email is created after spouse details are created

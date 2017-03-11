@@ -104,6 +104,7 @@ describe( 'ProfileComponent', function () {
         expect( $ctrl.loadDonorDetails ).toHaveBeenCalled();
         expect( $ctrl.loadMailingAddress ).toHaveBeenCalled();
         expect( $ctrl.loadEmail ).toHaveBeenCalled();
+        expect( $ctrl.loadPhoneNumbers ).toHaveBeenCalled();
       } );
     } );
 
@@ -180,11 +181,40 @@ describe( 'ProfileComponent', function () {
   });
 
   describe('updateDonorDetails()', () => {
-    it('should update donor details ', () => {
+    beforeEach(() => {
+      this.donorDetails = {
+        name: {
+          'family-name': 'Lname',
+          'given-name': 'Fname'
+        },
+        'spouse-name': {
+          'family-name': 'SLname',
+          'given-name': 'SFname'
+        }
+      };
+    });
+    it('should update donor details', () => {
+      $ctrl.donorDetails = this.donorDetails;
       spyOn($ctrl.profileService, 'updateProfileDonorDetails').and.returnValue(Observable.of(''));
       spyOn($ctrl,'updateEmail');
       $ctrl.updateDonorDetails();
-      expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalled();
+      expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalledWith(this.donorDetails);
+      expect($ctrl.donorDetailsForm.$setPristine).toHaveBeenCalled();
+      expect($ctrl.updateEmail).toHaveBeenCalled();
+    });
+
+    it('should update donor details while adding a spouse', () => {
+      $ctrl.donorDetails = this.donorDetails;
+      $ctrl.addingSpouse = true;
+      spyOn($ctrl.profileService, 'updateProfileDonorDetails').and.returnValue(Observable.of(''));
+      spyOn($ctrl,'updateEmail');
+      $ctrl.updateDonorDetails();
+      expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalledWith({
+        name: {
+          'family-name': 'Lname',
+          'given-name': 'Fname'
+        }
+      });
       expect($ctrl.donorDetailsForm.$setPristine).toHaveBeenCalled();
       expect($ctrl.updateEmail).toHaveBeenCalled();
     });
@@ -322,21 +352,6 @@ describe( 'ProfileComponent', function () {
       $ctrl.phoneNumbers = [];
       $ctrl.addPhoneNumber();
       expect($ctrl.phoneNumbers.length).toBe(1);
-    });
-  });
-
-  describe('phoneOwner()', () => {
-    it('should return phone owner name', () => {
-      $ctrl.donorDetails = {
-        name: {
-          'given-name': 'donor'
-        },
-        'spouse-name': {
-          'given-name': 'spouse'
-        }
-      };
-      expect($ctrl.phoneOwner(false)).toBe('donor');
-      expect($ctrl.phoneOwner(true)).toBe('spouse');
     });
   });
 
