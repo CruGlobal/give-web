@@ -15,7 +15,9 @@ describe( 'your giving', function () {
 
       beforeEach( inject( ( _$componentController_ ) => {
         $ctrl = _$componentController_( module.name, {}, {
-          recipient: {}
+          recipient: {
+            donations: []
+          }
         } );
       } ) );
 
@@ -33,28 +35,29 @@ describe( 'your giving', function () {
         let subject;
         beforeEach( () => {
           subject = new ReplaySubject( [] );
-          spyOn( $ctrl.profileService, 'getPaymentMethods' ).and.callFake( () => subject );
+          spyOn( $ctrl.profileService, 'getPaymentMethod' ).and.callFake( () => subject );
         } );
 
         it( 'shows the details section', () => {
+
           $ctrl.toggleDetails();
-          expect( $ctrl.profileService.getPaymentMethods ).toHaveBeenCalled( );
-          expect( $ctrl.showDetails ).toEqual( true );
-          expect( $ctrl.isLoading ).toEqual( true );
-          subject.next( );
           expect( $ctrl.isLoading ).toEqual( false );
           expect( $ctrl.detailsLoaded ).toEqual( true );
         } );
 
         it( 'set payment method on donation', () => {
-          $ctrl.profileService.getPaymentMethods.and.returnValue( Observable.of([
-            {
-              id: 'aaa111'
-            }
-          ]) );
+          $ctrl.profileService.getPaymentMethod.and.returnValue( Observable.of({
+              id: 'aaa111',
+              self: {
+                'uri': '/payment/uri'
+              }
+            }) );
 
           $ctrl.recipient = {
             donations: [{
+              'payment-method-link': {
+                'uri': '/payment/uri'
+              },
               'historical-donation-line': {
                 'payment-method-id': 'aaa111'
               }
@@ -70,11 +73,23 @@ describe( 'your giving', function () {
         it( 'doesnt load details a second time', () => {
           $ctrl.detailsLoaded = true;
           $ctrl.toggleDetails();
-          expect( $ctrl.profileService.getPaymentMethods ).not.toHaveBeenCalled();
+          expect( $ctrl.profileService.getPaymentMethod ).not.toHaveBeenCalled();
         } );
 
         it( 'should log and error on failure', () => {
-          $ctrl.profileService.getPaymentMethods.and.returnValue(Observable.throw('some error'));
+          $ctrl.profileService.getPaymentMethod.and.returnValue(Observable.throw('some error'));
+          $ctrl.recipient = {
+            donations: [{
+              'payment-method-link': {
+                'uri': '/payment/uri'
+              },
+              'historical-donation-line': {
+                'payment-method-id': 'aaa111'
+              }
+            }]
+          };
+
+
           $ctrl.toggleDetails();
           expect( $ctrl.showDetails ).toEqual( false );
           expect( $ctrl.isLoading ).toEqual( false );
