@@ -3,6 +3,7 @@
 <td class="method">
   <div class="radio-method">
     <payment-method-display payment-method="$ctrl.gift['paymentmethod']"></payment-method-display>
+    <span ng-if="!$ctrl.gift['paymentmethod']">{{$ctrl.gift['historical-donation-line']['payment-type']}}</span>
   </div>
 </td>
 <td class="status status-pending"
