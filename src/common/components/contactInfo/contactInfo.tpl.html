@@ -5,6 +5,12 @@
   <p ng-switch-when="Invalid email address" translate>
     There was an error saving your email address. Make sure it was entered correctly.
   </p>
+  <p ng-switch-when="Invalid phone number" translate>
+    There was an error saving your phone number. Make sure it was entered correctly.
+  </p>
+  <p ng-switch-when="Organization Name cannot be longer than 100." translate>
+    There was an error saving your organization name. Make sure it is not longer than 100 characters.
+  </p>
   <p ng-switch-when="In order to add the spouse , [family-name] and [given-name] are required" translate>
     There was an error saving your contact info. Make sure your spouse's first and last name are correct.
   </p>
@@ -40,23 +46,6 @@
   <form novalidate ng-keyup="$event.key === 'Enter' && $ctrl.submitDetails()" name="$ctrl.detailsForm">
     <div class="mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>Your Information</h4>
-
-      <div class="row" ng-if="$ctrl.showTitle">
-        <div class="col-sm-6">
-          <div class="form-group  form-group-default">
-            <label translate>Title</label>
-            <select name="nameTitle" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['name']['title']">
-              <option></option>
-              <option value="Mr" translate>Mr</option>
-              <option value="Mrs" translate>Mrs</option>
-              <option value="Miss" translate>Miss</option>
-              <option value="Ms" translate>Ms</option>
-              <option value="Dr" translate>Dr</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       <div class="row">
         <div class="col-sm-4">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
@@ -122,6 +111,92 @@
 
       </div>
 
+      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
+        <div class="col-sm-4">
+          <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
+            <label translate>Spouse First Name</label>
+            <input type="text"
+                   class="form-control  form-control-subtle"
+                   name="spouseGivenName"
+                   ng-model="$ctrl.donorDetails['spouse-name']['given-name']"
+                   ng-maxlength="50"
+                   placeholder="{{ $ctrl.donorDetails['spouse-name']['family-name'] ? '' : 'Optional' | translate}}"
+                   ng-disabled="$ctrl.spouseFieldsDisabled">
+            <div role="alert" ng-messages="$ctrl.detailsForm.spouseGivenName.$error" ng-if="($ctrl.detailsForm.spouseGivenName | showErrors)">
+              <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseMiddleInitial | showErrors)}">
+            <label translate>MI</label>
+            <input type="text"
+                   class="form-control  form-control-subtle"
+                   name="spouseMiddleInitial"
+                   ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']"
+                   ng-maxlength="50"
+                   ng-disabled="$ctrl.spouseFieldsDisabled">
+            <div role="alert" ng-messages="$ctrl.detailsForm.spouseMiddleInitial.$error" ng-if="($ctrl.detailsForm.spouseMiddleInitial | showErrors)">
+              <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseFamilyName | showErrors)}">
+            <label translate>Spouse Last Name</label>
+            <input type="text"
+                   class="form-control  form-control-subtle"
+                   name="spouseFamilyName"
+                   ng-model="$ctrl.donorDetails['spouse-name']['family-name']"
+                   ng-maxlength="50"
+                   placeholder="{{ $ctrl.donorDetails['spouse-name']['given-name'] ? '' : 'Optional' | translate}}"
+                   ng-disabled="$ctrl.spouseFieldsDisabled">
+            <div role="alert" ng-messages="$ctrl.detailsForm.spouseFamilyName.$error" ng-if="($ctrl.detailsForm.spouseFamilyName | showErrors)">
+              <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="form-group">
+            <label translate>Suffix</label>
+            <div class="form-group">
+              <select name="spouseSuffix"
+                      class="form-control  form-control-subtle"
+                      ng-model="$ctrl.donorDetails['spouse-name']['suffix']"
+                      ng-disabled="$ctrl.spouseFieldsDisabled">
+                <option value=""></option>
+                <option value="Jr." translate>Jr</option>
+                <option value="Sr." translate>Sr</option>
+                <option value="II" translate>II</option>
+                <option value="III" translate>III</option>
+                <option value="IV" translate>IV</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Organization'">
+        <div class="col-sm-12">
+          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.orgName | showErrors)}">
+            <label translate>Organization Name</label>
+            <input type="text" class="form-control form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" ng-maxlength="100" ng-disabled="$ctrl.nameFieldsDisabled" required>
+            <div role="alert" ng-messages="$ctrl.detailsForm.orgName.$error" ng-if="($ctrl.detailsForm.orgName | showErrors)">
+              <div class="help-block" ng-message="required" translate>You must enter an organization name</div>
+              <div class="help-block" ng-message="maxlength" translate>Organization name cannot be longer that 100 characters</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb">
+      <h4 class="panel-title  border-bottom-small  visible" translate>Mailing Address</h4>
+
+      <address-form address="$ctrl.donorDetails.mailingAddress" parent-form="$ctrl.detailsForm"></address-form>
+    </div>
+
+    <div class="mb">
+      <h4 class="panel-title  border-bottom-small  visible" translate>Contact Information</h4>
       <div class="row">
         <div class="col-sm-6">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">
@@ -144,110 +219,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="mb_x">
-      <div class="panel panel-default" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
-        <div class="panel-title  panel-heading visible" ng-click="showSpouseDetails = !showSpouseDetails" translate>
-          Spouse Name (Optional)
-        </div>
-        <div class="panel-collapse collapse in" ng-if="showSpouseDetails">
-          <div class="panel-body">
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label translate>Title</label>
-                  <div class="form-group">
-                    <select name="spouseTitle" class="form-control form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['title']">
-                      <option></option>
-                      <option value="Mr" translate>Mr</option>
-                      <option value="Mrs" translate>Mrs</option>
-                      <option value="Miss" translate>Miss</option>
-                      <option value="Ms" translate>Ms</option>
-                      <option value="Dr" translate>Dr</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="row">
-              <div class="col-sm-4">
-                <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
-                  <label translate>First Name</label>
-                  <input type="text"
-                         class="form-control  form-control-subtle"
-                         name="spouseGivenName"
-                         ng-model="$ctrl.donorDetails['spouse-name']['given-name']"
-                         ng-maxlength="50"
-                         ng-disabled="$ctrl.nameFieldsDisabled">
-                  <div role="alert" ng-messages="$ctrl.detailsForm.spouseGivenName.$error" ng-if="($ctrl.detailsForm.spouseGivenName | showErrors)">
-                    <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-2">
-                <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseMiddleInitial | showErrors)}">
-                  <label translate>MI</label>
-                  <input type="text" class="form-control  form-control-subtle" name="spouseMiddleInitial" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" ng-maxlength="50" ng-disabled="$ctrl.nameFieldsDisabled">
-                  <div role="alert" ng-messages="$ctrl.detailsForm.spouseMiddleInitial.$error" ng-if="($ctrl.detailsForm.spouseMiddleInitial | showErrors)">
-                    <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseFamilyName | showErrors)}">
-                  <label translate>Last Name</label>
-                  <input type="text"
-                         class="form-control  form-control-subtle"
-                         name="spouseFamilyName"
-                         ng-model="$ctrl.donorDetails['spouse-name']['family-name']"
-                         ng-maxlength="50"
-                         ng-disabled="$ctrl.nameFieldsDisabled">
-                  <div role="alert" ng-messages="$ctrl.detailsForm.spouseFamilyName.$error" ng-if="($ctrl.detailsForm.spouseFamilyName | showErrors)">
-                    <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label translate>Suffix</label>
-                  <div class="form-group">
-                    <select name="spouseSuffix" class="form-control  form-control-subtle" ng-model="$ctrl.donorDetails['spouse-name']['suffix']" ng-disabled="$ctrl.nameFieldsDisabled">
-                      <option value=""></option>
-                      <option value="Jr." translate>Jr</option>
-                      <option value="Sr." translate>Sr</option>
-                      <option value="II" translate>II</option>
-                      <option value="III" translate>III</option>
-                      <option value="IV" translate>IV</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-          </div><!-- // panel-body -->
-        </div>
-      </div>
-    </div>
-
-    <div class="mb">
-      <h4 class="panel-title  border-bottom-small  visible" translate>Mailing Address</h4>
-      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Organization'">
-        <div class="col-sm-12">
-          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.orgName | showErrors)}">
-            <label translate>Organization Name</label>
-            <input type="text" class="form-control form-control-subtle" name="orgName" ng-model="$ctrl.donorDetails['organization-name']" ng-maxlength="100" ng-disabled="$ctrl.nameFieldsDisabled" required>
-            <div role="alert" ng-messages="$ctrl.detailsForm.orgName.$error" ng-if="($ctrl.detailsForm.orgName | showErrors)">
-              <div class="help-block" ng-message="required" translate>You must enter an organization name</div>
-              <div class="help-block" ng-message="maxlength" translate>Organization name cannot be longer that 100 characters</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <address-form address="$ctrl.donorDetails.mailingAddress" parent-form="$ctrl.detailsForm"></address-form>
     </div>
   </form>
 </div>
