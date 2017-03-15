@@ -148,6 +148,25 @@
 		display: inline-block;
 		height: 1.4em;
 	}
+
+	.panel--buttons-column {
+		@media screen and (max-width: 991px) {
+			margin-top: 29px;
+		}
+	}
+
+	.panel--payment-info {
+		.col-sm-6 {
+			margin-top: 14.5px;
+			&:nth-child(1) {margin-top: 0;}
+			@media screen and (min-width: 992px) {
+				margin-top: 29px;
+			}
+			@media screen and (min-width: 550px) {
+				&:nth-child(2) {margin-top: 0;}
+			}
+		}
+	}
 }
 
 .confirm-billing-info {
