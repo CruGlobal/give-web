@@ -29,18 +29,6 @@ describe('contactInfo', function() {
       expect(self.controller.loadDonorDetails).toHaveBeenCalled();
       expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
     });
-    it('if not a public user, it should hide the title', () => {
-      spyOn(self.controller, 'loadDonorDetails');
-      spyOn(self.controller.sessionService, 'getRole').and.returnValue('REGISTERED');
-      self.controller.$onInit();
-      expect(self.controller.showTitle).toEqual(false);
-    });
-    it('if a public user, it should show the title', () => {
-      spyOn(self.controller, 'loadDonorDetails');
-      spyOn(self.controller.sessionService, 'getRole').and.returnValue('PUBLIC');
-      self.controller.$onInit();
-      expect(self.controller.showTitle).toEqual(true);
-    });
   });
 
   describe('$onChanges', () => {
@@ -85,13 +73,14 @@ describe('contactInfo', function() {
 
   describe('loadDonorDetails', () => {
     it('should get the donor\'s details', () => {
-      spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'donor-type': 'Organization' }));
+      spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'donor-type': 'Organization', 'spouse-name': {} }));
       self.controller.loadDonorDetails();
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
       expect(self.controller.loadingDonorDetailsError).toEqual(false);
       expect(self.controller.loadingDonorDetails).toEqual(false);
-      expect(self.controller.donorDetails).toEqual({ 'donor-type': 'Organization' });
+      expect(self.controller.donorDetails).toEqual({ 'donor-type': 'Organization', 'spouse-name': {} });
       expect(self.controller.nameFieldsDisabled).toEqual(false);
+      expect(self.controller.spouseFieldsDisabled).toEqual(false);
     });
     it('should disable name fields if the user\'s registration state is completed', () => {
       let donorDetails = {
@@ -114,12 +103,13 @@ describe('contactInfo', function() {
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
       expect(self.controller.donorDetails).toEqual(donorDetails);
       expect(self.controller.nameFieldsDisabled).toEqual(true);
+      expect(self.controller.spouseFieldsDisabled).toEqual(true);
     });
     it('should set the donor type if it is an empty string', () => {
-      spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'donor-type': '' }));
+      spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'donor-type': '', 'spouse-name': {} }));
       self.controller.loadDonorDetails();
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
-      expect(self.controller.donorDetails).toEqual({ 'donor-type': 'Household' });
+      expect(self.controller.donorDetails).toEqual({ 'donor-type': 'Household', 'spouse-name': {} });
     });
 
     describe('pre-populate from session', () => {
@@ -141,6 +131,7 @@ describe('contactInfo', function() {
             'given-name': '',
             'family-name': ''
           },
+          'spouse-name': {},
           'email': undefined,
           'registration-state': 'NEW'
         }));
@@ -152,6 +143,7 @@ describe('contactInfo', function() {
             'given-name': 'Charles',
             'family-name': 'Xavier'
           },
+          'spouse-name': {},
           'email': 'professorx@xavier.edu',
           'registration-state': 'NEW'
         });
