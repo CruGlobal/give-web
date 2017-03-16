@@ -6,10 +6,13 @@
       The routing number you entered does not seem to be valid. Please verify that it is correct.
     </span>
     <span ng-switch-when="This credit card already exists." translate>
-      This credit card already exists. Please use a different credit card.
+      You have already added this credit card. If you wish to make changes please edit your existing credit card.
     </span>
     <span ng-switch-when="This card is already expired." translate>
-      This card is already expired. Please use a different credit card.
+      This card has expired. Please use a different payment method.
+    </span>
+    <span ng-switch-when="This bank account already exists." translate>
+      You have already added this bank account. If you wish to make changes please edit your existing bank account.
     </span>
     <span ng-switch-default translate>
       There was an error saving your payment method. Please verify all your info and try again. If you are still seeing this message, contact support.
