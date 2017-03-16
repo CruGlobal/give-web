@@ -5,8 +5,6 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/toPromise';
 
-import {existingPaymentMethodFlag} from 'common/services/api/order.service';
-
 import module from './existingPaymentMethods.component';
 
 describe('checkout', () => {
@@ -189,7 +187,6 @@ describe('checkout', () => {
           self.controller.selectPayment();
           expect(self.controller.orderService.selectPaymentMethod).toHaveBeenCalledWith('some uri' );
           expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
-          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(existingPaymentMethodFlag);
         });
         it('should handle a failed request to save the selected payment', () => {
           self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account' } };
@@ -203,7 +200,6 @@ describe('checkout', () => {
           self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account'}, chosen: true };
           self.controller.selectPayment();
           expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled();
-          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(existingPaymentMethodFlag);
           expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
         });
         it('should not send a request if the payment is already selected and should not modify the cvv if it is already set', () => {

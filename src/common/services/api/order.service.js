@@ -17,8 +17,6 @@ import hateoasHelperService from 'common/services/hateoasHelper.service';
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex';
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
 
-export const existingPaymentMethodFlag = 'existing_payment_method';
-
 let serviceName = 'orderService';
 
 class Order{
@@ -248,8 +246,8 @@ class Order{
       });
   }
 
-  storeCardSecurityCode(encryptedCvv){
-    this.sessionStorage.setItem('cvv', encryptedCvv);
+  storeCardSecurityCode(cvv){
+    this.sessionStorage.setItem('cvv', cvv);
   }
 
   retrieveCardSecurityCode(){

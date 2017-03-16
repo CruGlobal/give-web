@@ -5,7 +5,7 @@ import 'angular-ui-bootstrap';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 
-import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
+import orderService from 'common/services/api/order.service';
 import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
 
@@ -106,13 +106,10 @@ class ExistingPaymentMethodsController {
   selectPayment(){
     if(this.selectedPaymentMethod.chosen){
       this.onPaymentFormStateChange({ $event: { state: 'loading' } });
-      if(!this.orderService.retrieveCardSecurityCode()){
-        this.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
-      }
     }else{
       this.orderService.selectPaymentMethod(this.selectedPaymentMethod.selectAction)
         .subscribe(() => {
-            this.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
+            this.orderService.clearCardSecurityCode(); // Existing payment methods don't have a CVV
             this.onPaymentFormStateChange({ $event: { state: 'loading' } });
           },
           (error) => {
