@@ -4,14 +4,32 @@
       <span ng-switch-when="email-info" translate>There was an issue with your email. Please verify that it is correct.</span>
       <span ng-switch-when="payment-method-info" translate>There was an issue with your payment. Please verify that all your payment information is correct.</span>
       <span ng-switch-when="billing-address-info" translate>There was an issue with your billing address. Please verify that your billing address is correct.</span>
-      <span ng-switch-default translate>There was an unknown error indicating that the order is still missing data. Please verify all your info, try refreshing the page, and, if you are still seeing this message, contact support.</span>
+      <span ng-switch-default translate>There was an unknown error indicating that the order is still missing data. Please verify all your info, try refreshing the page, and, if you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</span>
     </p>
     <p ng-if="$ctrl.submissionError" ng-switch="$ctrl.submissionError">
       <span ng-switch-when="Current payment type is unknown" translate>
-        There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, contact support.
+        There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+      </span>
+      <span ng-switch-when="CardExpiredException" translate>
+        Your card is expired.
+      </span>
+      <span ng-switch-when="CardErrorException" translate>
+        The credit card number entered is invalid.
+      </span>
+      <span ng-switch-when="CardDeclinedException" translate>
+        Your credit card was declined.
+      </span>
+      <span ng-switch-when="AuthorizedAmountExceededException" translate>
+        This transaction exceeds your available card balance.
+      </span>
+      <span ng-switch-when="InvalidCVV2Exception" translate>
+        The security code entered for your card is invalid.
+      </span>
+      <span ng-switch-when="InvalidAddressException" translate>
+        The billing address entered does not match the address associated with the card.
       </span>
       <span ng-switch-default translate>
-        There was an unknown error submitting your order. Please verify all your info and try again. If you are still seeing this message, contact support.
+        There was an issue processing your request. Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
       </span>
     </p>
   </div>

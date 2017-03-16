@@ -115,7 +115,7 @@ class Step3Controller{
         this.onSubmittingOrder({value: false});
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
-        this.submissionError = error;
+        this.submissionError = (error || '').replace(/[:].*$/, ''); // Keep prefix before first colon for easier ng-switch matching
       });
   }
 }
