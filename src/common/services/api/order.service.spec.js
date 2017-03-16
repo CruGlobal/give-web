@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate';
 
-import module, {existingPaymentMethodFlag} from './order.service';
+import module from './order.service';
 
 import cartResponse from 'common/services/api/fixtures/cortex-cart-paymentmethodinfo-forms.fixture.js';
 import paymentMethodBankAccountResponse from 'common/services/api/fixtures/cortex-order-paymentmethod-bankaccount.fixture.js';
@@ -641,10 +641,6 @@ describe('order service', () => {
     it('should store the encrypted cvv', () => {
       self.orderService.storeCardSecurityCode('123');
       expect(self.$window.sessionStorage.getItem('cvv')).toEqual('123');
-    });
-    it('should allow \'existing payment method\' to be stored', () => {
-      self.orderService.storeCardSecurityCode(existingPaymentMethodFlag);
-      expect(self.$window.sessionStorage.getItem('cvv')).toEqual(existingPaymentMethodFlag);
     });
   });
 
