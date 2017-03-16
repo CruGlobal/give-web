@@ -80,13 +80,16 @@
       </div>
       <div class="col-sm-4" ng-if="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors)}">
-          <label translate>CVV Code</label>
+          <label translate>Security Code</label>
           <input type="text" name="securityCode" class="form-control form-control-subtle" ng-model="$ctrl.creditCardPayment.securityCode" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the security code</div>
             <div class="help-block" ng-message="minLength" translate>The security code must be at least 3 digits</div>
             <div class="help-block" ng-message="maxLength" translate>The security code cannot be more than 4 digits</div>
-            <div class="help-block" ng-message="cardTypeLength" translate>The security code is not valid for this card type</div>
+            <div class="help-block" ng-message="cardTypeLength" ng-init="isAmex = $ctrl.cardInfo.type($ctrl.creditCardPayment.cardNumber) === 'American Express'">
+              <translate ng-if="!isAmex">3 digit code on back of card</translate>
+              <translate ng-if="isAmex">4 digit code on front of card</translate>
+            </div>
           </div>
         </div>
       </div>
