@@ -273,12 +273,12 @@ describe('checkout', () => {
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a bank account', () => {
-          self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving bank account'));
+          self.controller.orderService.submit.and.callFake(() => Observable.throw({ data: 'error saving bank account' }));
           self.controller.bankAccountPaymentDetails = {};
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'error saving bank account']);
+          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }]);
           expect(self.controller.$window.location).toEqual('/checkout.html');
           expect(self.controller.submissionError).toEqual('error saving bank account');
         });
@@ -301,13 +301,13 @@ describe('checkout', () => {
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a credit card', () => {
-          self.controller.orderService.submit.and.callFake(() => Observable.throw('CardErrorException: Invalid Card Number: some details'));
+          self.controller.orderService.submit.and.callFake(() => Observable.throw({ data: 'CardErrorException: Invalid Card Number: some details' }));
           self.controller.creditCardPaymentDetails = {};
           self.storedCvv = '1234';
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
           expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'CardErrorException: Invalid Card Number: some details']);
+          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }]);
           expect(self.controller.$window.location).toEqual('/checkout.html');
           expect(self.controller.submissionError).toEqual('CardErrorException');
         });
@@ -315,7 +315,7 @@ describe('checkout', () => {
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).not.toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'Current payment type is unknown']);
+          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'Current payment type is unknown' }]);
           expect(self.controller.$window.location).toEqual('/checkout.html');
           expect(self.controller.submissionError).toEqual('Current payment type is unknown');
         });
