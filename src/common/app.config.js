@@ -24,12 +24,12 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         imgDomainDesignation: 'https://give-stage2.cru.org'
       },
       staging: {
-        apiUrl: '/',
+        apiUrl: '',
         imgDomain: '//give-static-stage.cru.org',
         imgDomainDesignation: ''
       },
       production: {
-        apiUrl: '/',
+        apiUrl: '',
         imgDomain: '//give-static.cru.org',
         imgDomainDesignation: ''
       }
