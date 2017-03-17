@@ -31,7 +31,11 @@ $query-unit:                16px;
 $nav-break-min:             400px;
 $fontWeight5:               500;
 
+$data-font:                 "Helvetica Neue", Helvetica, sans-serif;
+$border-radius:             4px;
+
 @import 'mobile-navigation';
 @import 'desktop_navigation';
 @import 'nav-cart';
 @import 'global-overlay';
+@import 'search';
