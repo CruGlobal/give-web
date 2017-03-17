@@ -21,17 +21,23 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
       development: {
         apiUrl: 'https://give-stage2.cru.org',
         imgDomain: '',
-        imgDomainDesignation: 'https://give-stage2.cru.org'
+        imgDomainDesignation: 'https://give-stage2.cru.org',
+        publicCru: 'https://stage.cru.org',
+        publicGive: 'https://give-stage2.cru.org'
       },
       staging: {
         apiUrl: '',
         imgDomain: '//give-static-stage.cru.org',
-        imgDomainDesignation: ''
+        imgDomainDesignation: '',
+        publicCru: 'https://stage.cru.org',
+        publicGive: 'https://give-stage2.cru.org'
       },
       production: {
         apiUrl: '',
         imgDomain: '//give-static.cru.org',
-        imgDomainDesignation: ''
+        imgDomainDesignation: '',
+        publicCru: 'https://www.cru.org',
+        publicGive: 'https://give.cru.org'
       }
     }
   });

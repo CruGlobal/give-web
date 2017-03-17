@@ -14,7 +14,7 @@
 
       <div class="row">
         <div class="col-xs-12 col-sm-10 col-sm-offset-1">
-          <form method="get" action="/search-results.html">
+          <form method="get" action="">
             <div class="input-group is-search-main">
               <input type="search" class="form-control" placeholder="Search for..." name="q" value="{{$ctrl.searchParams.keyword}}">
               <span class="input-group-btn">
@@ -29,9 +29,15 @@
 
   <section class="is-tabs">
     <ul class="nav nav-tabs nav-search-tabs text-center">
-      <li role="presentation" ng-if="$ctrl.searchParams.keyword"><a id="exploreLink" href="" ng-click="$ctrl.exploreSearch()" translate>Explore</a></li>
-      <li role="presentation" class="active"><a id="givingLink" href="" translate>Giving</a></li>
-      <li role="presentation"><a id="missionTripsLink" href="https://www.cru.org/opportunities/mission-trips/upcoming.html" translate>Missions Trips</a></li>
+      <li role="presentation" ng-if="$ctrl.searchParams.keyword" ng-class="{'active': $ctrl.tab === 'cru'}">
+        <a id="exploreLink" href="" ng-click="$ctrl.redirectSearch('cru')" translate>Explore</a>
+      </li>
+      <li role="presentation" ng-class="{'active': $ctrl.tab === 'give'}">
+        <a id="givingLink" href="" ng-click="$ctrl.redirectSearch('give')" translate>Giving</a>
+      </li>
+      <li role="presentation">
+        <a id="missionTripsLink" href="https://www.cru.org/opportunities/mission-trips/upcoming.html" translate>Missions Trips</a>
+      </li>
     </ul>
   </section>
 
@@ -39,7 +45,10 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="panel loading-overlay-parent">
+        <div class="panel" ng-if="$ctrl.tab === 'cru'" ng-init="$ctrl.requestCruSearch()">
+          <gcse:searchresults-only>Loading...</gcse:searchresults-only>
+        </div>
+        <div class="panel loading-overlay-parent" ng-if="$ctrl.tab === 'give'">
           <div class="panel-body">
             <div class="row">
               <div class="col-sm-12 col-md-3">
@@ -51,16 +60,16 @@
                       <div class="is-widget">
                         <ul class="list-unstyled is-type-links">
                           <li ng-class="{'active': !$ctrl.searchParams.type}">
-                            <a id="allOpportunitiesLink" href="" ng-click="$ctrl.requestSearch()" translate>All Giving Opportunities</a>
+                            <a id="allOpportunitiesLink" href="" ng-click="$ctrl.requestGiveSearch()" translate>All Giving Opportunities</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'people'}">
-                            <a id="peopleLink" href="" ng-click="$ctrl.requestSearch('people')" translate>Missionaries</a>
+                            <a id="peopleLink" href="" ng-click="$ctrl.requestGiveSearch('people')" translate>Missionaries</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'ministries'}">
-                            <a id="ministriesLink" href="" ng-click="$ctrl.requestSearch('ministries')" translate>Ministries</a>
+                            <a id="ministriesLink" href="" ng-click="$ctrl.requestGiveSearch('ministries')" translate>Ministries</a>
                           </li>
                           <li ng-class="{'active': $ctrl.searchParams.type === 'featured'}">
-                            <a id="featuredLink" href="" ng-click="$ctrl.requestSearch('featured')" translate>Featured</a>
+                            <a id="featuredLink" href="" ng-click="$ctrl.requestGiveSearch('featured')" translate>Featured</a>
                           </li>
                         </ul>
                       </div>
