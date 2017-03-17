@@ -1,4 +1,5 @@
 import angular from 'angular';
+import isString from 'lodash/isString';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 
@@ -101,7 +102,7 @@ class Step3Controller{
       const cvv = this.orderService.retrieveCardSecurityCode();
       submitRequest = this.orderService.submit(cvv);
     }else{
-      submitRequest = Observable.throw('Current payment type is unknown');
+      submitRequest = Observable.throw({ data: 'Current payment type is unknown' });
     }
     submitRequest.subscribe(() => {
         this.analyticsFactory.purchase(this.donorDetails, this.cartData);
@@ -115,7 +116,7 @@ class Step3Controller{
         this.onSubmittingOrder({value: false});
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
-        this.submissionError = (error || '').replace(/[:].*$/, ''); // Keep prefix before first colon for easier ng-switch matching
+        this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error'; // Keep prefix before first colon for easier ng-switch matching
       });
   }
 }
