@@ -16,13 +16,14 @@ let componentName = 'searchResults';
 class SearchResultsController {
 
   /* @ngInject */
-  constructor($window, $location, $log, $httpParamSerializer, designationsService, analyticsFactory) {
+  constructor($window, $location, $log, $httpParamSerializer, designationsService, analyticsFactory, envService) {
     this.$window = $window;
     this.$location = $location;
     this.$log = $log;
     this.$httpParamSerializer = $httpParamSerializer;
     this.designationsService = designationsService;
     this.analyticsFactory = analyticsFactory;
+    this.envService = envService;
     this.searchParams = {};
   }
 
@@ -36,12 +37,16 @@ class SearchResultsController {
     this.searchParams.type = params.type;
     this.featuredGroupBy = 'startMonth';
 
-    this.requestSearch(this.searchParams.type);
-
-    this.analyticsFactory.pageLoaded();
+    this.tab = this.$window.location.hostname &&
+      (includes(this.$window.location.hostname, 'give') || includes(this.$window.location.hostname, 'localhost'))
+      ? 'give' : 'cru';
+    if(this.tab === 'give'){
+      this.requestGiveSearch(this.searchParams.type);
+      this.analyticsFactory.pageLoaded();
+    }
   }
 
-  requestSearch(type){
+  requestGiveSearch(type){
     this.searchParams.type = type;
 
     if(!this.searchParams.keyword && includes(['ministries', '', undefined], this.searchParams.type)) {
@@ -72,9 +77,17 @@ class SearchResultsController {
     }
   }
 
-  exploreSearch(){
+  requestCruSearch(){
+    this.$window.google && this.$window.google.search && this.$window.google.search.cse.element.go();
+  }
+
+  redirectSearch(site){
+    let path = site === 'give' ?
+      this.envService.read('publicGive') + '/search-results.html?'
+      : this.envService.read('publicCru') + '/search.html?';
+
     let term = this.searchParams.keyword || this.searchParams.first_name + ' ' + this.searchParams.last_name;
-    this.$window.location = 'https://www.cru.org/search.html?' + this.$httpParamSerializer({
+    this.$window.location = path + this.$httpParamSerializer({
       q: term
     });
   }
@@ -85,6 +98,7 @@ export default angular
     template.name,
     commonModule.name,
     'angular.filter',
+    'environment',
     designationsService.name,
     productConfigComponent.name,
     desigSrcDirective.name,
