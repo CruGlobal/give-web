@@ -4,7 +4,6 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-import {existingPaymentMethodFlag} from 'common/services/api/order.service';
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 import module from './step-3.component';
@@ -292,34 +291,25 @@ describe('checkout', () => {
           expect(self.controller.$window.location).toEqual('/thank-you.html');
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
-        it('should submit the order without a CVV if paying with an existing credit card', () => {
+        it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
           self.controller.creditCardPaymentDetails = {};
-          self.storedCvv = existingPaymentMethodFlag;
+          self.storedCvv = undefined;
           self.controller.submitOrder();
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith();
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith(undefined);
           expect(self.controller.orderService.clearCardSecurityCode).toHaveBeenCalled();
           expect(self.controller.$window.location).toEqual('/thank-you.html');
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a credit card', () => {
-          self.controller.orderService.submit.and.callFake(() => Observable.throw('error saving credit card'));
+          self.controller.orderService.submit.and.callFake(() => Observable.throw('CardErrorException: Invalid Card Number: some details'));
           self.controller.creditCardPaymentDetails = {};
           self.storedCvv = '1234';
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
           expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'error saving credit card']);
+          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'CardErrorException: Invalid Card Number: some details']);
           expect(self.controller.$window.location).toEqual('/checkout.html');
-          expect(self.controller.submissionError).toEqual('error saving credit card');
-        });
-        it('should throw an error if paying with a credit card and the CVV is missing', () => {
-          self.controller.creditCardPaymentDetails = {};
-          self.controller.submitOrder();
-          expect(self.controller.orderService.submit).not.toHaveBeenCalled();
-          expect(self.controller.orderService.clearCardSecurityCode).not.toHaveBeenCalled();
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', 'Submitting a credit card purchase requires a CVV and the CVV was not retrieved correctly']);
-          expect(self.controller.$window.location).toEqual('/checkout.html');
-          expect(self.controller.submissionError).toEqual('Submitting a credit card purchase requires a CVV and the CVV was not retrieved correctly');
+          expect(self.controller.submissionError).toEqual('CardErrorException');
         });
         it('should throw an error if neither bank account or credit card details are loaded', () => {
           self.controller.submitOrder();

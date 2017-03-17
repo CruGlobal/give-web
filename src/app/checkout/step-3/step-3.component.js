@@ -5,7 +5,7 @@ import 'rxjs/add/observable/throw';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 
-import orderService, {existingPaymentMethodFlag} from 'common/services/api/order.service';
+import orderService from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
@@ -42,39 +42,39 @@ class Step3Controller{
   loadDonorDetails(){
     this.orderService.getDonorDetails()
       .subscribe((data) => {
-        this.donorDetails = data;
-      },
-      error => {
-        this.$log.error('Error loading donorDetails', error);
-      });
+          this.donorDetails = data;
+        },
+        error => {
+          this.$log.error('Error loading donorDetails', error);
+        });
   }
 
   loadCurrentPayment(){
     this.orderService.getCurrentPayment()
       .subscribe((data) => {
-        if(!data){
-          this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist');
-        }else if(data.self.type === 'elasticpath.bankaccounts.bank-account') {
-          this.bankAccountPaymentDetails = data;
-        }else if(data.self.type === 'cru.creditcards.named-credit-card'){
-          this.creditCardPaymentDetails = data;
-        }else{
-          this.$log.error('Error loading current payment info: current payment type is unknown');
-        }
-      },
-      error => {
-        this.$log.error('Error loading current payment info', error);
-      });
+          if(!data){
+            this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist');
+          }else if(data.self.type === 'elasticpath.bankaccounts.bank-account') {
+            this.bankAccountPaymentDetails = data;
+          }else if(data.self.type === 'cru.creditcards.named-credit-card'){
+            this.creditCardPaymentDetails = data;
+          }else{
+            this.$log.error('Error loading current payment info: current payment type is unknown');
+          }
+        },
+        error => {
+          this.$log.error('Error loading current payment info', error);
+        });
   }
 
   checkErrors(){
     this.orderService.checkErrors()
       .subscribe((data) => {
-        this.needinfoErrors = data;
-      },
-      error => {
-        this.$log.error('Error loading checkErrors', error);
-      });
+          this.needinfoErrors = data;
+        },
+        error => {
+          this.$log.error('Error loading checkErrors', error);
+        });
   }
 
   canSubmitOrder(){
@@ -99,11 +99,7 @@ class Step3Controller{
       submitRequest = this.orderService.submit();
     }else if(this.creditCardPaymentDetails){
       const cvv = this.orderService.retrieveCardSecurityCode();
-      if(cvv === existingPaymentMethodFlag){
-        submitRequest = this.orderService.submit();
-      }else{
-        submitRequest = cvv ? this.orderService.submit(cvv) : Observable.throw('Submitting a credit card purchase requires a CVV and the CVV was not retrieved correctly');
-      }
+      submitRequest = this.orderService.submit(cvv);
     }else{
       submitRequest = Observable.throw('Current payment type is unknown');
     }
@@ -119,7 +115,7 @@ class Step3Controller{
         this.onSubmittingOrder({value: false});
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
-        this.submissionError = error;
+        this.submissionError = (error || '').replace(/[:].*$/, ''); // Keep prefix before first colon for easier ng-switch matching
       });
   }
 }
