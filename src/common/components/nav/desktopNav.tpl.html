@@ -9,7 +9,7 @@
           ng-class="{
             'has-children': menuItem.children.length,
             'open-menu': $ctrl.menuPath.main[0] === menuItem.path.split('/').pop(),
-            'active': $ctrl.menuPath.sub[0] === menuItem.path.split('/').pop()
+            'active': $ctrl.menuPath.sub[0] === menuItem.path.split('/').pop().replace('.html', '')
           }"
           ng-mouseover="$ctrl.menuPath.main[0] = menuItem.path.split('/').pop()">
         <a ng-href="{{menuItem.path}}">{{menuItem.title}}</a>
