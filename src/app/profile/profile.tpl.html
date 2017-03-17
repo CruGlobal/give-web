@@ -48,13 +48,10 @@
                             <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.donorDetailsForm.nameMiddleInitial | showErrors) }">
                               <i class="fa fa-lock"></i>
 
-                              <select name="nameTitle" class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails.name.title">
-                                <option value=""></option>
-                                <option value="Mr" translate>Mr</option>
-                                <option value="Mrs" translate>Mrs</option>
-                                <option value="Miss" translate>Miss</option>
-                                <option value="Ms" translate>Ms</option>
-                                <option value="Dr" translate>Dr</option>
+                              <select name="nameTitle"
+                                      class="form-control form-control-subtle prefix"
+                                      ng-model="$ctrl.donorDetails.name.title"
+                                      ng-options="value as label for (value , label) in $ctrl.availableTitles">
                               </select>
 
                               <input name="nameGivenName" type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']">
@@ -82,13 +79,10 @@
                           <form name="$ctrl.spouseDetailsForm" novalidate>
                             <div class="form-group is-required person-row" ng-class="{'has-error': ($ctrl.spouseDetailsForm.spouseName | showErrors) || ($ctrl.spouseDetailsForm.spouseLastName | showErrors) || ($ctrl.spouseDetailsForm.spouseInitial | showErrors) }">
                               <i class="fa fa-lock"></i>
-                              <select name="title" class="form-control form-control-subtle prefix" ng-model="$ctrl.donorDetails['spouse-name'].title">
-                                <option value=""></option>
-                                <option value="Mr" translate>Mr</option>
-                                <option value="Mrs" translate>Mrs</option>
-                                <option value="Miss" translate>Miss</option>
-                                <option value="Ms" translate>Ms</option>
-                                <option value="Dr" translate>Dr</option>
+                              <select name="title"
+                                      class="form-control form-control-subtle prefix"
+                                      ng-model="$ctrl.donorDetails['spouse-name'].title"
+                                      ng-options="value as label for (value , label) in $ctrl.availableTitles">
                               </select>
 
                               <input name="spouseName" type="text" class="form-control form-control-subtle first" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" maxlength="20" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
