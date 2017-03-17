@@ -2,18 +2,18 @@ export default {
   "self":                   {
     "type": "elasticpath.verifyregistrations.verify-account",
     "uri":  "/verifyregistrations/crugive/form",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/verifyregistrations/crugive/form"
+    "href": "https://give-stage2.cru.org/cortex/verifyregistrations/crugive/form"
   },
   "links":                  [{
     "rel":  "finalizeaction",
     "type": "elasticpath.verifyregistrations.verify-account",
     "uri":  "/verifyregistrations/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/verifyregistrations/crugive"
+    "href": "https://give-stage2.cru.org/cortex/verifyregistrations/crugive"
   }, {
     "rel":  "verificationquestions",
     "type": "elasticpath.verificationquestions.verification-question",
     "uri":  "/verifyregistrations/crugive/verificationquestions",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/verifyregistrations/crugive/verificationquestions"
+    "href": "https://give-stage2.cru.org/cortex/verifyregistrations/crugive/verificationquestions"
   }],
   "that-is-not-me":         "",
   "verification-questions": [{

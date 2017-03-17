@@ -35,7 +35,7 @@ describe( 'donations service', () => {
   describe( 'getRecipients( year )', () => {
     it( 'should load recent when missing year', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/recent' )
+        .expectGET( 'https://give-stage2.cru.org/cortex/donations/historical/crugive/recipient/recent' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients().subscribe( ( recipients ) => {
         expect( recipients ).toEqual( jasmine.any( Array ) );
@@ -45,7 +45,7 @@ describe( 'donations service', () => {
 
     it( 'should load recipients by year', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/2015' )
+        .expectGET( 'https://give-stage2.cru.org/cortex/donations/historical/crugive/recipient/2015' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients( 2015 ).subscribe( ( recipients ) => {
         expect( recipients ).toEqual( jasmine.any( Array ) );
@@ -57,7 +57,7 @@ describe( 'donations service', () => {
   describe( 'getHistoricalGifts( year, month )', () => {
     it( 'should load historical gifts by year and month', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/2016/9?zoom=element,element:paymentmethod,element:recurringdonations' )
+        .expectGET( 'https://give-stage2.cru.org/cortex/donations/historical/crugive/2016/9?zoom=element,element:paymentmethod,element:recurringdonations' )
         .respond( 200, historicalResponse );
       donationsService.getHistoricalGifts( 2016, 9 ).subscribe( ( historicalGifts ) => {
         expect( historicalGifts ).toEqual( jasmine.any( Array ) );
@@ -78,7 +78,7 @@ describe( 'donations service', () => {
           "rev": "list",
           "type": "orderId",
           "uri": "/receipt/1-1106420519",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/receipt/1-1106420519"
+          "href": "https://give-stage2.cru.org/cortex/receipt/1-1106420519"
         }
       }, {
         "designation-names": ["David and Margo Neibling (0105987)"],
@@ -90,11 +90,11 @@ describe( 'donations service', () => {
           "rev": "list",
           "type": "orderId",
           "uri": "/receipt/1-1056130965",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/receipt/1-1056130965"
+          "href": "https://give-stage2.cru.org/cortex/receipt/1-1056130965"
         }
       }];
       $httpBackend
-        .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/receipts/items?followLocation=true' )
+        .expectPOST( 'https://give-stage2.cru.org/cortex/receipts/items?followLocation=true' )
         .respond( 200, receiptsResponse );
       donationsService.getReceipts( {} ).subscribe( ( receipts ) => {
         expect( receipts ).toEqual( response );
@@ -106,7 +106,7 @@ describe( 'donations service', () => {
   describe( 'getRecentRecipients', () => {
     it( 'should load recent recipients', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:recentdonations' )
+        .expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:recentdonations' )
         .respond( 200, recentRecipientsResponse );
       donationsService.getRecentRecipients()
         .subscribe( recentRecipients => {
@@ -132,7 +132,7 @@ describe( 'donations service', () => {
         "self": {
           "type": "elasticpath.bankaccounts.bank-account",
           "uri": "/selfservicepaymentmethods/crugive/giydcnzyga=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydcnzyga="
+          "href": "https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydcnzyga="
         },
         "account-type": "Savings",
         "bank-name": "2nd Bank",
@@ -146,7 +146,7 @@ describe( 'donations service', () => {
     });
     it( 'should load active recurring gifts', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:managerecurringdonations' )
+        .expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:managerecurringdonations' )
         .respond( 200, activeRecurringGiftsResponse );
 
       donationsService.getRecurringGifts().subscribe( gifts => {
@@ -184,7 +184,7 @@ describe( 'donations service', () => {
 
     it( 'should load cancelled recurring gifts', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:cancelledrecurringdonations' )
+        .expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:cancelledrecurringdonations' )
         .respond( 200, cancelledRecurringGiftsResponse );
 
       donationsService.getRecurringGifts('cancelledrecurringdonations').subscribe( gifts => {
@@ -222,7 +222,7 @@ describe( 'donations service', () => {
 
     it( 'should load active and cancelled recurring gifts', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:managerecurringdonations,givingdashboard:cancelledrecurringdonations' )
+        .expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:managerecurringdonations,givingdashboard:cancelledrecurringdonations' )
         .respond( 200, multipleRecurringGiftsResponse );
 
       donationsService.getRecurringGifts(['managerecurringdonations', 'cancelledrecurringdonations']).subscribe( gifts => {
@@ -263,7 +263,7 @@ describe( 'donations service', () => {
 
     it('should update a recurring gift', () => {
       $httpBackend
-        .expectPUT( 'https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/active', {
+        .expectPUT( 'https://give-stage2.cru.org/cortex/donations/recurring/crugive/active', {
           donations: [
             {
               'donation-lines': [
@@ -299,7 +299,7 @@ describe( 'donations service', () => {
 
     it('should update recurring gifts', () => {
       $httpBackend
-        .expectPUT( 'https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/active', {
+        .expectPUT( 'https://give-stage2.cru.org/cortex/donations/recurring/crugive/active', {
           donations: [
             {
               'donation-lines': [
@@ -363,7 +363,7 @@ describe( 'donations service', () => {
 
     it('should update a recurring gift', () => {
       $httpBackend
-        .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive', {
+        .expectPOST( 'https://give-stage2.cru.org/cortex/donations/recurring/crugive', {
           'donation-lines': [
             gift.toObject
           ]
@@ -376,7 +376,7 @@ describe( 'donations service', () => {
 
     it('should update recurring gifts', () => {
       $httpBackend
-        .expectPOST( 'https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive', {
+        .expectPOST( 'https://give-stage2.cru.org/cortex/donations/recurring/crugive', {
           'donation-lines': [
             gift.toObject,
             gift.toObject
@@ -392,7 +392,7 @@ describe( 'donations service', () => {
   describe('getSuggestedRecipients', () => {
     it( 'should load suggested recipients', () => {
       $httpBackend
-        .expectGET( 'https://cortex-gateway-stage.cru.org/cortex/donations/historical/crugive/recipient/suggested?zoom=element,element:definition,element:code' )
+        .expectGET( 'https://give-stage2.cru.org/cortex/donations/historical/crugive/recipient/suggested?zoom=element,element:definition,element:code' )
         .respond( 200, suggestedRecipientsResponse );
       donationsService.getSuggestedRecipients()
         .subscribe( ( suggestedRecipients ) => {

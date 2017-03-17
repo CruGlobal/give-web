@@ -31,7 +31,7 @@ describe('cart service', () => {
       jasmine.clock().mockDate(moment('2016-09-01').toDate()); // Make sure current date is before next draw date
     });
     it('should handle an empty response', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default' +
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
         'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
@@ -44,7 +44,7 @@ describe('cart service', () => {
       self.$httpBackend.flush();
     });
     it('should handle a response with no line items', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default' +
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
         'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
@@ -57,7 +57,7 @@ describe('cart service', () => {
       self.$httpBackend.flush();
     });
     it('should get cart and parse response', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default' +
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
         'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
@@ -84,7 +84,7 @@ describe('cart service', () => {
 
   describe('getTotalQuantity', () => {
     it('get current number of items in cart', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default')
         .respond(200, cartResponse);
 
       self.cartService.getTotalQuantity().subscribe((total) => {
@@ -100,7 +100,7 @@ describe('cart service', () => {
     });
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
+        'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
         {
           amount: 50,
           quantity: 1
@@ -125,7 +125,7 @@ describe('cart service', () => {
 
         it('should add an item', () => {
           self.$httpBackend.expectPOST(
-            'https://cortex-gateway-stage.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
+            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
             {
               amount: 50,
               quantity: 1
@@ -145,7 +145,7 @@ describe('cart service', () => {
 
         it('should delete cookies and addItem to cart', () => {
           self.$httpBackend.expectPOST(
-            'https://cortex-gateway-stage.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
+            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
             {
               amount: 50,
               quantity: 1
@@ -176,7 +176,7 @@ describe('cart service', () => {
   describe('deleteItem', () => {
     it('should delete an item', () => {
       self.$httpBackend.expectDELETE(
-        'https://cortex-gateway-stage.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>'
+        'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>'
       ).respond(200);
 
       self.cartService.deleteItem('itemfieldslineitem/items/crugive/<some id>')

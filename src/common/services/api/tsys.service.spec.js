@@ -19,7 +19,7 @@ describe('order service', () => {
 
   describe('getManifest', () => {
     it('should load the device id and manifest for TSYS tokenization', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/tsys/manifest')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/tsys/manifest')
         .respond(200, { deviceId: '<device id>', manifest: '<manifest>' });
       self.tsysService.getManifest()
         .subscribe(data => {

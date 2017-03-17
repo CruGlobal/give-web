@@ -22,7 +22,7 @@ describe('geographies service', () => {
 
   describe('getCountries', () => {
     it('should send a request to get the list of countries', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries?zoom=element').respond(200, countriesResponse);
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/geographies/crugive/countries?zoom=element').respond(200, countriesResponse);
       self.geographiesService.getCountries()
         .subscribe(data => {
           expect(data).toEqual(countriesResponse._element);
@@ -33,7 +33,7 @@ describe('geographies service', () => {
 
   describe('getRegions', () => {
     it('should send a request to get the list of regions for a country', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions?zoom=element').respond(200, regionsResponse);
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/geographies/crugive/countries/kvjq=/regions?zoom=element').respond(200, regionsResponse);
       let us = find(countriesResponse._element, { name: 'US' });
       self.geographiesService.getRegions(us)
         .subscribe(data => {
@@ -46,7 +46,7 @@ describe('geographies service', () => {
       self.$httpBackend.flush();
     });
     it('should rename the armed services regions to a better display name', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/kvjq=/regions?zoom=element').respond(200, regionsResponse);
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/geographies/crugive/countries/kvjq=/regions?zoom=element').respond(200, regionsResponse);
       let us = find(countriesResponse._element, { name: 'US' });
       self.geographiesService.getRegions(us)
         .subscribe(data => {
@@ -60,7 +60,7 @@ describe('geographies service', () => {
     });
 
     it('should not rename any non US regions', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/geographies/crugive/countries/inaq=/regions?zoom=element').respond(200, {"_element": [{"display-name":"Do not rename","name":"AA"}] });
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/geographies/crugive/countries/inaq=/regions?zoom=element').respond(200, {"_element": [{"display-name":"Do not rename","name":"AA"}] });
       let ca = find(countriesResponse._element, { name: 'CA' });
       self.geographiesService.getRegions(ca)
         .subscribe(data => {
