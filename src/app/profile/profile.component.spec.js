@@ -1,10 +1,13 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './profile.component';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+
 import {SignOutEvent} from 'common/services/session/session.service';
+import {titles} from './titles.fixture';
+
+import module from './profile.component';
 
 describe( 'ProfileComponent', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -146,6 +149,9 @@ describe( 'ProfileComponent', function () {
   } );
 
   describe('loadDonorDetails()', () => {
+    beforeEach(() => {
+      spyOn($ctrl, 'initTitles');
+    });
     it('should load donor details on $onInit() and have a spouse info', () => {
       let data = {
         'spouse-name': {
@@ -157,6 +163,7 @@ describe( 'ProfileComponent', function () {
       expect($ctrl.donorDetails).toBe(data);
       expect($ctrl.hasSpouse).toBe(true);
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled();
+      expect($ctrl.initTitles).toHaveBeenCalled();
     });
 
     it('should load donor details on $onInit() without spouse info', () => {
@@ -168,6 +175,7 @@ describe( 'ProfileComponent', function () {
       spyOn($ctrl.profileService, 'getProfileDonorDetails').and.returnValue(Observable.of(data));
       $ctrl.loadDonorDetails();
       expect($ctrl.hasSpouse).toBe(false);
+      expect($ctrl.initTitles).toHaveBeenCalled();
     });
 
     it('should handle and error of loading donor details on $onInit()', () => {
@@ -177,6 +185,30 @@ describe( 'ProfileComponent', function () {
       $ctrl.loadDonorDetails();
       expect($ctrl.donorDetailsError).toBe('loading');
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled();
+      expect($ctrl.initTitles).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('initTitles()', () => {
+    beforeEach(() => {
+      $ctrl.donorDetails = {
+        name: {},
+        'spouse-name': {}
+      };
+      this.expectedTitles = angular.copy(titles);
+      this.expectedTitles[''] = '';
+    });
+    it('should load all the normal titles', () => {
+      $ctrl.initTitles();
+      expect($ctrl.availableTitles).toEqual(this.expectedTitles);
+    });
+    it('should additional leacy titles if they are in use in donorDetails', () => {
+      $ctrl.donorDetails.name.title = 'Alderman';
+      $ctrl.donorDetails['spouse-name'].title = 'Prof';
+      $ctrl.initTitles();
+      this.expectedTitles.Alderman = 'Alderman';
+      this.expectedTitles.Prof = 'Professor';
+      expect($ctrl.availableTitles).toEqual(this.expectedTitles);
     });
   });
 

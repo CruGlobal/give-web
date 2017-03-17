@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-messages';
 import pull from 'lodash/pull';
 import assign from 'lodash/assign';
+import pickBy from 'lodash/pickBy';
 import omit from 'lodash/omit';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
@@ -16,6 +17,7 @@ import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/s
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
 import commonModule from 'common/common.module';
+import {titles, legacyTitles} from './titles.fixture';
 
 
 let componentName = 'profile';
@@ -81,6 +83,7 @@ class ProfileController {
         donorDetails => {
           this.donorDetails = donorDetails;
           this.hasSpouse = !!this.donorDetails['spouse-name']['family-name'];
+          this.initTitles();
           this.donorDetailsLoading = false;
         },
         error => {
@@ -89,6 +92,14 @@ class ProfileController {
           this.$log.error('Failed loading profile details', error);
         }
       );
+  }
+
+  initTitles() {
+    this.availableTitles = assign(
+      { '': '' },
+      pickBy(legacyTitles, (val, key) => key === this.donorDetails['spouse-name'].title || key === this.donorDetails.name.title),
+      titles
+    );
   }
 
   updateDonorDetails(){
@@ -365,8 +376,8 @@ class ProfileController {
       this.donorEmailForm.$dirty ||
       this.dirtyPhoneNumbers() ||
       this.donorDetailsForm.$dirty ||
-      (this.addingSpouse || this.hasSpouse ? this.spouseEmailForm.$dirty : false) ||
-      (this.addingSpouse || this.hasSpouse ? this.spouseDetailsForm.$dirty : false);
+      (this.addingSpouse || this.hasSpouse ? this.spouseEmailForm && this.spouseEmailForm.$dirty : false) ||
+      (this.addingSpouse || this.hasSpouse ? this.spouseDetailsForm && this.spouseDetailsForm.$dirty : false);
   }
 
   loading() {
