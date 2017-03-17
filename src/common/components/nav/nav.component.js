@@ -207,7 +207,7 @@ class NavController{
       if(index && !subNav[index - 1]){ return; }
       let children = index ? subNav[index - 1].children : structure;
 
-      let navItem = find(children, function(item) { return item.path.split('/').pop() === p; });
+      let navItem = find(children, function(item) { return item.path.split('/').pop().replace('.html', '') === p; });
       if(navItem){ subNav[index] = navItem; }
     });
 
