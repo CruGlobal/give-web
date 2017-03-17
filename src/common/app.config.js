@@ -19,17 +19,17 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
     },
     vars: {
       development: {
-        apiUrl: 'https://give-stage2.cru.org/cortex',
+        apiUrl: 'https://give-stage2.cru.org',
         imgDomain: '',
         imgDomainDesignation: 'https://give-stage2.cru.org'
       },
       staging: {
-        apiUrl: '/cortex',
+        apiUrl: '/',
         imgDomain: '//give-static-stage.cru.org',
         imgDomainDesignation: ''
       },
       production: {
-        apiUrl: '/cortex',
+        apiUrl: '/',
         imgDomain: '//give-static.cru.org',
         imgDomainDesignation: ''
       }

@@ -18,7 +18,7 @@ describe('cortex api service', () => {
 
   describe('http', () => {
     it('should send a simple request', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.http({
         method: 'GET',
         path: 'test'
@@ -29,7 +29,7 @@ describe('cortex api service', () => {
     });
 
     it('should send a request with params', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/test?one=1&two=2').respond(200, 'success');
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/test?one=1&two=2').respond(200, 'success');
       self.cortexApiService.http({
         method: 'GET',
         path: 'test',
@@ -44,7 +44,7 @@ describe('cortex api service', () => {
     });
 
     it('should set the followLocation param if it is set in the config', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/test?followLocation=true').respond(200, 'success');
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/test?followLocation=true').respond(200, 'success');
       self.cortexApiService.http({
         method: 'GET',
         path: 'test',
@@ -56,7 +56,7 @@ describe('cortex api service', () => {
     });
 
     it('should send the data specified in the config', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/test', 'testData').respond(200, 'success');
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/test', 'testData').respond(200, 'success');
       self.cortexApiService.http({
         method: 'POST',
         path: 'test',
@@ -95,7 +95,7 @@ describe('cortex api service', () => {
           ]
         };
 
-        self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/test?zoom=firstlevel:secondlevel').respond(200, testResponse);
+        self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/test?zoom=firstlevel:secondlevel').respond(200, testResponse);
         self.cortexApiService.http({
           method: 'GET',
           path: 'test',
@@ -118,7 +118,7 @@ describe('cortex api service', () => {
 
   describe('get', () => {
     it('should send a simple GET request', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.get({
         path: 'test'
       }).subscribe(data => {
@@ -130,7 +130,7 @@ describe('cortex api service', () => {
 
   describe('post', () => {
     it('should send a simple POST request', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.post({
         path: 'test'
       }).subscribe(data => {
@@ -142,7 +142,7 @@ describe('cortex api service', () => {
 
   describe('put', () => {
     it('should send a simple PUT request', () => {
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
+      self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.put({
         path: 'test'
       }).subscribe(data => {
@@ -154,7 +154,7 @@ describe('cortex api service', () => {
 
   describe('delete', () => {
     it('should send a simple DELETE request', () => {
-      self.$httpBackend.expectDELETE('https://cortex-gateway-stage.cru.org/cortex/test').respond(200, 'success');
+      self.$httpBackend.expectDELETE('https://give-stage2.cru.org/cortex/test').respond(200, 'success');
       self.cortexApiService.delete({
         path: 'test'
       }).subscribe(data => {

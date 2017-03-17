@@ -56,7 +56,7 @@ describe('order service', () => {
       expectedDonorDetails.mailingAddress = formatAddressForTemplate(donorDetailsResponseZoomMapped.donorDetails['mailing-address']);
       expectedDonorDetails.email = donorDetailsResponseZoomMapped.email.email;
 
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
         .respond(200, donorDetailsResponse);
       self.orderService.getDonorDetails()
         .subscribe((data) => {
@@ -66,7 +66,7 @@ describe('order service', () => {
     });
     it('should set the mailingAddress country to US if undefined', () => {
       donorDetailsResponse._order[0]._donordetails[0]['mailing-address']['country-name'] = '';
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
         .respond(200, donorDetailsResponse);
       self.orderService.getDonorDetails()
         .subscribe((data) => {
@@ -77,7 +77,7 @@ describe('order service', () => {
       self.$httpBackend.flush();
     });
     it('should handle an undefined response', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
         .respond(200, {});
       self.orderService.getDonorDetails()
         .subscribe((data) => {
@@ -94,12 +94,12 @@ describe('order service', () => {
   describe('updateDonorDetails', () => {
     it('should send a request to save the donor details', () => {
       self.$httpBackend.expectPUT(
-        'https://cortex-gateway-stage.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu=',
+        'https://give-stage2.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu=',
         {
           "self": {
             "type": "elasticpath.donordetails.donor",
             "uri": "/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu=",
-            "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu="
+            "href": "https://give-stage2.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu="
           },
           'mailing-address': {
             'country-name': 'US',
@@ -116,7 +116,7 @@ describe('order service', () => {
         "self": {
           "type": "elasticpath.donordetails.donor",
           "uri": "/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu="
+          "href": "https://give-stage2.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu="
         },
         mailingAddress: {
           country: 'US',
@@ -138,7 +138,7 @@ describe('order service', () => {
   describe('addEmail', () => {
     it('should send a request to save the email', () => {
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/emails/crugive',
+        'https://give-stage2.cru.org/cortex/emails/crugive',
         {email: 'someemail@somedomain.com'}
       ).respond(200, 'somedata');
       self.orderService.addEmail('someemail@somedomain.com')
@@ -151,7 +151,7 @@ describe('order service', () => {
 
   describe('getPaymentMethodForms', () => {
     function setupRequest() {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform')
         .respond(200, cartResponse);
     }
 
@@ -187,7 +187,7 @@ describe('order service', () => {
       };
 
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
         paymentInfo
       ).respond(200, 'success');
 
@@ -218,7 +218,7 @@ describe('order service', () => {
       delete paymentInfoWithoutCVV.cvv;
 
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
         paymentInfoWithoutCVV
       ).respond(200, 'success');
 
@@ -262,7 +262,7 @@ describe('order service', () => {
       };
 
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
         paymentInfoWithoutCVV
       ).respond(200, 'success');
 
@@ -338,7 +338,7 @@ describe('order service', () => {
   describe('updatePaymentMethod', () => {
     function runTestWith(paymentInfo, expectedRequestData){
       spyOn(self.orderService, 'selectPaymentMethod').and.returnValue(Observable.of('placeholder'));
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
         .respond(200, {
           _order: [{
             _paymentmethodinfo: [{
@@ -354,7 +354,7 @@ describe('order service', () => {
           }]
         });
 
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/creditcards/orders/crugive/default=/update/<payment id>=',
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/creditcards/orders/crugive/default=/update/<payment id>=',
         expectedRequestData)
         .respond(200, {});
 
@@ -387,18 +387,18 @@ describe('order service', () => {
         "self": {
           "type": "elasticpath.bankaccounts.bank-account",
           "uri": "/paymentmethods/crugive/giydcmzyge=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcmzyge="
+          "href": "https://give-stage2.cru.org/cortex/paymentmethods/crugive/giydcmzyge="
         },
         "links": [{
           "rel": "list",
           "type": "elasticpath.collections.links",
           "uri": "/paymentmethods/crugive",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
+          "href": "https://give-stage2.cru.org/cortex/paymentmethods/crugive"
         }, {
           "rel": "bankaccount",
           "type": "elasticpath.bankaccounts.bank-account",
           "uri": "/bankaccounts/paymentmethods/crugive/giydcmzyge=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcmzyge="
+          "href": "https://give-stage2.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcmzyge="
         }],
         "account-type": "Checking",
         "bank-name": "First Bank",
@@ -411,18 +411,18 @@ describe('order service', () => {
         "self": {
           "type": "elasticpath.bankaccounts.bank-account",
           "uri": "/paymentmethods/crugive/giydcnzyga=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydcnzyga="
+          "href": "https://give-stage2.cru.org/cortex/paymentmethods/crugive/giydcnzyga="
         },
         "links": [{
           "rel": "list",
           "type": "elasticpath.collections.links",
           "uri": "/paymentmethods/crugive",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
+          "href": "https://give-stage2.cru.org/cortex/paymentmethods/crugive"
         }, {
           "rel": "bankaccount",
           "type": "elasticpath.bankaccounts.bank-account",
           "uri": "/bankaccounts/paymentmethods/crugive/giydcnzyga=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga="
+          "href": "https://give-stage2.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga="
         }],
         "account-type": "Savings",
         "bank-name": "2nd Bank",
@@ -434,18 +434,18 @@ describe('order service', () => {
         "self": {
           "type": "cru.creditcards.named-credit-card",
           "uri": "/paymentmethods/crugive/giydembug4=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydembug4="
+          "href": "https://give-stage2.cru.org/cortex/paymentmethods/crugive/giydembug4="
         },
         "links": [{
           "rel": "list",
           "type": "elasticpath.collections.links",
           "uri": "/paymentmethods/crugive",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
+          "href": "https://give-stage2.cru.org/cortex/paymentmethods/crugive"
         }, {
           "rel": "creditcard",
           "type": "cru.creditcards.named-credit-card",
           "uri": "/creditcards/paymentmethods/crugive/giydembug4=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/creditcards/paymentmethods/crugive/giydembug4="
+          "href": "https://give-stage2.cru.org/cortex/creditcards/paymentmethods/crugive/giydembug4="
         }],
         "card-number": "1111",
         "card-type": "Visa",
@@ -458,7 +458,7 @@ describe('order service', () => {
 
     it('should load a user\'s existing payment methods', () => {
       self.$httpBackend.expectGET(
-        'https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse);
 
       self.orderService.getExistingPaymentMethods()
@@ -474,7 +474,7 @@ describe('order service', () => {
       delete clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen;
 
       self.$httpBackend.expectGET(
-        'https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse);
 
       // Since there is no chosen element, this payment method should not be marked as chosen
@@ -492,7 +492,7 @@ describe('order service', () => {
       delete clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._choice;
 
       self.$httpBackend.expectGET(
-        'https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse);
 
       // Since there are no choices, there should only be one the one chosen paymentMethod
@@ -510,7 +510,7 @@ describe('order service', () => {
       expectedResponse[0].address = { country: 'US', streetAddress: undefined, extendedAddress: undefined, locality: undefined, region: undefined, postalCode: undefined };
 
       self.$httpBackend.expectGET(
-        'https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse);
 
       self.orderService.getExistingPaymentMethods()
@@ -525,7 +525,7 @@ describe('order service', () => {
   describe('selectPaymentMethod', () => {
     it('should post the URI of the selected payment method for cortex to select it', () => {
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive/giydembug4=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq=',
+        'https://give-stage2.cru.org/cortex/paymentmethods/crugive/giydembug4=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq=',
         {}
       ).respond(200, 'success');
 
@@ -540,7 +540,7 @@ describe('order service', () => {
 
   describe('getCurrentPayment', () => {
     it('should retrieve the current payment details', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
         .respond(200, paymentMethodBankAccountResponse);
 
       self.orderService.getCurrentPayment()
@@ -551,7 +551,7 @@ describe('order service', () => {
       self.$httpBackend.flush();
     });
     it('should retrieve the current payment details with a billing address', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
         .respond(200, paymentMethodCreditCardResponse);
 
       let expectedPaymentInfo = angular.copy(paymentMethodCreditCardResponse._order[0]._paymentmethodinfo[0]._paymentmethod[0]);
@@ -574,7 +574,7 @@ describe('order service', () => {
 
   describe('getPurchaseForms', () => {
     it('should send a request to get the payment form links', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:enhancedpurchaseform').respond(200, purchaseFormResponse);
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:enhancedpurchaseform').respond(200, purchaseFormResponse);
       self.orderService.getPurchaseForm()
         .subscribe((data) => {
           expect(data).toEqual(purchaseFormResponseZoomMapped);
@@ -585,7 +585,7 @@ describe('order service', () => {
 
   describe('checkErrors', () => {
     it('should send a request to get the payment form links', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, needInfoResponse);
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, needInfoResponse);
       self.orderService.checkErrors()
         .subscribe((data) => {
           expect(data).toEqual(['email-info', 'billing-address-info', 'payment-method-info']);
@@ -594,7 +594,7 @@ describe('order service', () => {
       expect(self.$log.error.logs[0]).toEqual(['The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', ['email-info', 'billing-address-info', 'payment-method-info']]);
     });
     it('should return undefined and not log anything if there are no errors', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, undefined);
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, undefined);
       self.orderService.checkErrors()
         .subscribe((data) => {
           expect(data).toBeUndefined();
@@ -611,7 +611,7 @@ describe('order service', () => {
     });
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
         {}
       ).respond(200, purchaseResponse);
 
@@ -624,7 +624,7 @@ describe('order service', () => {
     });
     it('should send a request to finalize the purchase and with a CVV', () => {
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
         {"security-code": '123'}
       ).respond(200, purchaseResponse);
 

@@ -22,7 +22,7 @@ describe('designation service', () => {
 
   describe('productSearch', () => {
     it('should send a request to API and get results', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/search?keyword=steve').respond(200, searchResponse);
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/search?keyword=steve').respond(200, searchResponse);
       self.designationsService.productSearch({
         keyword: 'steve'
       })
@@ -37,7 +37,7 @@ describe('designation service', () => {
       self.$httpBackend.flush();
     });
     it('should handle undefined fields', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/search?keyword=steve').respond(200, {hits:[{}]});
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/search?keyword=steve').respond(200, {hits:[{}]});
       self.designationsService.productSearch({
         keyword: 'steve'
       })
@@ -81,7 +81,7 @@ describe('designation service', () => {
       };
     });
     it('should get product details for a designation number', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/lookups/crugive/items?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description',
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/lookups/crugive/items?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description',
         {code: '0354433'})
         .respond(200, lookupResponse);
       self.designationsService.productLookup('0354433')
@@ -91,7 +91,7 @@ describe('designation service', () => {
       self.$httpBackend.flush();
     });
     it('should get product details for a uri', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, lookupResponse);
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(data => {
@@ -100,7 +100,7 @@ describe('designation service', () => {
       self.$httpBackend.flush();
     });
     it('should handle an empty response', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, '');
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(() => {
@@ -113,7 +113,7 @@ describe('designation service', () => {
   });
   describe('bulkLookup', () => {
     it('should take an array of designation numbers and return corresponding links for items', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/lookups/crugive/batches/items?followLocation=true',
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/lookups/crugive/batches/items?followLocation=true',
         { codes: ['0123456', '1234567'] })
         .respond(200, bulkLookupResponse);
       self.designationsService.bulkLookup(['0123456', '1234567'])

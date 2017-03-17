@@ -151,7 +151,7 @@ describe( 'session service', function () {
 
   describe( 'signIn', () => {
     it( 'makes http request to cas/login', () => {
-      $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/login', {
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/login', {
         username: 'user@example.com',
         password: 'hello123'
       } ).respond( 200, 'success' );
@@ -166,7 +166,7 @@ describe( 'session service', function () {
 
   describe( 'signUp', () => {
     it( 'makes http request to cas/register', () => {
-      $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/register', {
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/register', {
         email:     'professorx@xavier.edu',
         password:  'Cerebro123',
         firstName: 'Charles',
@@ -183,7 +183,7 @@ describe( 'session service', function () {
 
   describe( 'signOut', () => {
     it( 'makes http request to cas/logout', () => {
-      $httpBackend.expectDELETE( 'https://cortex-gateway-stage.cru.org/cas/logout' )
+      $httpBackend.expectDELETE( 'https://give-stage2.cru.org/cas/logout' )
         .respond( 200, {} );
       sessionService
         .signOut()
@@ -196,7 +196,7 @@ describe( 'session service', function () {
 
   describe( 'forgotPassword', () => {
     it( 'makes http request to cas/send_forgot_password_email', () => {
-      $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/send_forgot_password_email', {
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/send_forgot_password_email', {
         email:            'professorx@xavier.edu',
         passwordResetUrl: 'http://example.com/index.html?theme=cru#reset-password'
       } ).respond( 200, {} );
@@ -211,7 +211,7 @@ describe( 'session service', function () {
 
   describe( 'resetPassword', () => {
     it( 'makes http request to cas/reset_password', () => {
-      $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/reset_password', {
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/reset_password', {
         email:    'professorx@xavier.edu',
         password: 'Cerebro123',
         resetKey: 'abc123def456'
@@ -247,7 +247,7 @@ describe( 'session service', function () {
       } );
 
       it( 'make http request to cas/downgrade', ( done ) => {
-        $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/downgrade', {} ).respond( 204, {} );
+        $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/downgrade', {} ).respond( 204, {} );
         sessionService.downgradeToGuest().subscribe( ( data ) => {
           expect( data ).toEqual( {} );
         } );
@@ -270,7 +270,7 @@ describe( 'session service', function () {
       } );
 
       it( 'make http request to cas/downgrade', ( done ) => {
-        $httpBackend.expectPOST( 'https://cortex-gateway-stage.cru.org/cas/downgrade', {} ).respond( 204, {} );
+        $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/downgrade', {} ).respond( 204, {} );
         sessionService.downgradeToGuest( true ).subscribe( ( data ) => {
           expect( data ).toEqual( {} );
         } );

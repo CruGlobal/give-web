@@ -2,79 +2,79 @@ export default {
   "self": {
     "type": "elasticpath.purchases.purchase",
     "uri": "/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentmeans:element,ratetotals:element",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentmeans:element,ratetotals:element"
+    "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentmeans:element,ratetotals:element"
   },
   "links": [{
     "rel": "list",
     "type": "elasticpath.collections.links",
     "uri": "/purchases/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive"
+    "href": "https://give-stage2.cru.org/cortex/purchases/crugive"
   }, {
     "rel": "coupons",
     "type": "elasticpath.collections.links",
     "uri": "/coupons/purchases/crugive/giydanju=",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/coupons/purchases/crugive/giydanju="
+    "href": "https://give-stage2.cru.org/cortex/coupons/purchases/crugive/giydanju="
   }, {
     "rel": "discount",
     "type": "elasticpath.discounts.discount",
     "uri": "/discounts/purchases/crugive/giydanju=",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/discounts/purchases/crugive/giydanju="
+    "href": "https://give-stage2.cru.org/cortex/discounts/purchases/crugive/giydanju="
   }, {
     "rel": "donordetails",
     "type": "elasticpath.donordetails.donor",
     "uri": "/donordetails/purchases/crugive/giydanju=",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/purchases/crugive/giydanju="
+    "href": "https://give-stage2.cru.org/cortex/donordetails/purchases/crugive/giydanju="
   }, {
     "rel": "appliedpromotions",
     "type": "elasticpath.collections.links",
     "uri": "/promotions/purchases/crugive/giydanju=/applied",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/promotions/purchases/crugive/giydanju=/applied"
+    "href": "https://give-stage2.cru.org/cortex/promotions/purchases/crugive/giydanju=/applied"
   }, {
     "rel": "lineitems",
     "rev": "purchase",
     "type": "elasticpath.collections.links",
     "uri": "/purchases/crugive/giydanju=/lineitems",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems"
+    "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems"
   }, {
     "rel": "billingaddress",
     "rev": "purchase",
     "type": "elasticpath.addresses.address",
     "uri": "/purchases/crugive/giydanju=/billingaddress",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/billingaddress"
+    "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/billingaddress"
   }, {
     "rel": "paymentmeans",
     "rev": "purchase",
     "type": "elasticpath.collections.links",
     "uri": "/purchases/crugive/giydanju=/paymentmeans",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans"
+    "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans"
   }, {
     "rel": "ratetotals",
     "type": "elasticpath.ratetotals.rate-total",
     "uri": "/ratetotals/purchases/crugive/giydanju=",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/ratetotals/purchases/crugive/giydanju="
+    "href": "https://give-stage2.cru.org/cortex/ratetotals/purchases/crugive/giydanju="
   }, {
     "rel": "shipments",
     "rev": "purchase",
     "type": "elasticpath.collections.links",
     "uri": "/shipments/purchases/crugive/giydanju=",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/shipments/purchases/crugive/giydanju="
+    "href": "https://give-stage2.cru.org/cortex/shipments/purchases/crugive/giydanju="
   }],
   "_donordetails": [{
     "self": {
       "type": "elasticpath.donordetails.donor",
       "uri": "/donordetails/purchases/crugive/giydanju=",
-      "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/purchases/crugive/giydanju="
+      "href": "https://give-stage2.cru.org/cortex/donordetails/purchases/crugive/giydanju="
     },
     "links": [{
       "rel": "purchase",
       "rev": "donordetails",
       "type": "elasticpath.purchases.purchase",
       "uri": "/purchases/crugive/giydanju=",
-      "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju="
+      "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju="
     }, {
       "rel": "donormatchesform",
       "uri": "/donormatches/form",
-      "href": "https://cortex-gateway-stage.cru.org/cortex/donormatches/form"
+      "href": "https://give-stage2.cru.org/cortex/donormatches/form"
     }],
     "donor-type": "Household",
     "mailing-address": {
@@ -95,55 +95,55 @@ export default {
       "self": {
         "type": "elasticpath.purchases.line-item",
         "uri": "/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
       },
       "links": [{
         "rel": "purchase",
         "type": "elasticpath.purchases.purchase",
         "uri": "/purchases/crugive/giydanju=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju="
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju="
       }, {
         "rel": "list",
         "type": "elasticpath.collections.links",
         "uri": "/purchases/crugive/giydanju=/lineitems",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems"
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems"
       }, {
         "rel": "code",
         "type": "elasticpath.extlookups.product-code",
         "uri": "/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
+        "href": "https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
       }, {
         "rel": "options",
         "rev": "lineitem",
         "type": "elasticpath.collections.links",
         "uri": "/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=/options",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=/options"
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=/options"
       }, {
         "rel": "rate",
         "rev": "lineitem",
         "type": "elasticpath.rates.rate",
         "uri": "/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
+        "href": "https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
       }],
       "_code": [{
         "self": {
           "type": "elasticpath.extlookups.product-code",
           "uri": "/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
+          "href": "https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
         }, "links": [], "code": "0798349", "product-code": "0798349"
       }],
       "_rate": [{
         "self": {
           "type": "elasticpath.rates.rate",
           "uri": "/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
+          "href": "https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
         },
         "links": [{
           "rel": "lineitem",
           "rev": "rate",
           "type": "elasticpath.purchases.line-item",
           "uri": "/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
+          "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy="
         }],
         "cost": {"amount": 50.00, "currency": "USD", "display": "$50.00"},
         "display": "$50.00 One Time",
@@ -158,55 +158,55 @@ export default {
       "self": {
         "type": "elasticpath.purchases.line-item",
         "uri": "/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
       },
       "links": [{
         "rel": "purchase",
         "type": "elasticpath.purchases.purchase",
         "uri": "/purchases/crugive/giydanju=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju="
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju="
       }, {
         "rel": "list",
         "type": "elasticpath.collections.links",
         "uri": "/purchases/crugive/giydanju=/lineitems",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems"
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems"
       }, {
         "rel": "code",
         "type": "elasticpath.extlookups.product-code",
         "uri": "/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
+        "href": "https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
       }, {
         "rel": "options",
         "rev": "lineitem",
         "type": "elasticpath.collections.links",
         "uri": "/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=/options",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=/options"
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=/options"
       }, {
         "rel": "rate",
         "rev": "lineitem",
         "type": "elasticpath.rates.rate",
         "uri": "/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
+        "href": "https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
       }],
       "_code": [{
         "self": {
           "type": "elasticpath.extlookups.product-code",
           "uri": "/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
+          "href": "https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
         }, "links": [], "code": "0775813_mon", "product-code": "0775813"
       }],
       "_rate": [{
         "self": {
           "type": "elasticpath.rates.rate",
           "uri": "/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
+          "href": "https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
         },
         "links": [{
           "rel": "lineitem",
           "rev": "rate",
           "type": "elasticpath.purchases.line-item",
           "uri": "/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
+          "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu="
         }],
         "cost": {"amount": 50.00, "currency": "USD", "display": "$50.00"},
         "display": "$50.00 Monthly",
@@ -224,18 +224,18 @@ export default {
       "self": {
         "type": "elasticpath.purchases.purchase.paymentmeans",
         "uri": "/purchases/crugive/giydanju=/paymentmeans/giydamzyge=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans/giydamzyge="
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans/giydamzyge="
       },
       "links": [{
         "rel": "list",
         "type": "elasticpath.collections.links",
         "uri": "/purchases/crugive/giydanju=/paymentmeans",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans"
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans"
       }, {
         "rel": "purchase",
         "type": "elasticpath.purchases.purchase",
         "uri": "/purchases/crugive/giydanju=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanju="
+        "href": "https://give-stage2.cru.org/cortex/purchases/crugive/giydanju="
       }],
       "billing-address": {
         "address": {
@@ -259,7 +259,7 @@ export default {
       "self": {
         "type": "elasticpath.ratetotals.rate-total",
         "uri": "/ratetotals/purchases/crugive/giydanju=/a5ve2uj7yoadlqvvku6dckreernmfj6cxvqt6mtooquwyscpppble4jqgnzusp3tfhbkyi3jnhbk46lujmsmhadhykvemv6cwpblg7odrjp4fmwcwjnugwj3lizd65smee=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/ratetotals/purchases/crugive/giydanju=/a5ve2uj7yoadlqvvku6dckreernmfj6cxvqt6mtooquwyscpppble4jqgnzusp3tfhbkyi3jnhbk46lujmsmhadhykvemv6cwpblg7odrjp4fmwcwjnugwj3lizd65smee="
+        "href": "https://give-stage2.cru.org/cortex/ratetotals/purchases/crugive/giydanju=/a5ve2uj7yoadlqvvku6dckreernmfj6cxvqt6mtooquwyscpppble4jqgnzusp3tfhbkyi3jnhbk46lujmsmhadhykvemv6cwpblg7odrjp4fmwcwjnugwj3lizd65smee="
       },
       "links": [],
       "cost": {"amount": 50.00, "currency": "USD", "display": "$50.00"},

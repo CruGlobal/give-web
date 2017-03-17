@@ -2,97 +2,97 @@ export default {
   "self": {
     "type": "elasticpath.profiles.profile",
     "uri": "/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy=?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy=?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts"
+    "href": "https://give-stage2.cru.org/cortex/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy=?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts"
   },
   "links": [{
     "rel": "addresses",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/addresses/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/addresses/crugive"
+    "href": "https://give-stage2.cru.org/cortex/addresses/crugive"
   }, {
     "rel": "donordetails",
     "type": "elasticpath.donordetails.donor",
     "uri": "/donordetails/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy=",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy="
+    "href": "https://give-stage2.cru.org/cortex/donordetails/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy="
   }, {
     "rel": "addspousedetails",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/donordetails/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy=/spousedetails",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/donordetails/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy=/spousedetails"
+    "href": "https://give-stage2.cru.org/cortex/donordetails/profiles/crugive/mi4tozbwgm4tqljwgjqtmljugmzgcljyg4ydiljtge2tkmdfgiztkzldgy=/spousedetails"
   }, {
     "rel": "emails",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/emails/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/emails/crugive"
+    "href": "https://give-stage2.cru.org/cortex/emails/crugive"
   }, {
     "rel": "givingdashboard",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/giving/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/giving/crugive"
+    "href": "https://give-stage2.cru.org/cortex/giving/crugive"
   }, {
     "rel": "paymentmethods",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/paymentmethods/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/paymentmethods/crugive"
+    "href": "https://give-stage2.cru.org/cortex/paymentmethods/crugive"
   }, {
     "rel": "phonenumbers",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/phonenumbers/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive"
+    "href": "https://give-stage2.cru.org/cortex/phonenumbers/crugive"
   }, {
     "rel": "purchases",
     "type": "elasticpath.collections.links",
     "uri": "/purchases/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/purchases/crugive"
+    "href": "https://give-stage2.cru.org/cortex/purchases/crugive"
   }, {
     "rel": "selfservicepaymentmethods",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/selfservicepaymentmethods/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive"
+    "href": "https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive"
   }, {
     "rel": "wishlists",
     "rev": "profile",
     "type": "elasticpath.collections.links",
     "uri": "/wishlists/crugive",
-    "href": "https://cortex-gateway-stage.cru.org/cortex/wishlists/crugive"
+    "href": "https://give-stage2.cru.org/cortex/wishlists/crugive"
   }],
   "_selfservicepaymentmethods": [{
     "_element": [{
       "self": {
         "type": "elasticpath.bankaccounts.bank-account",
         "uri": "/selfservicepaymentmethods/crugive/giydgobwgq=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydgobwgq="
+        "href": "https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydgobwgq="
       },
       "links": [{
         "rel": "list",
         "uri": "/selfservicepaymentmethods/crugive",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive"
+        "href": "https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive"
       }, {
         "rel": "recurringgifts",
         "uri": "/donations/recurring/crugive/paymentmethods/giydgobwgq=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydgobwgq="
+        "href": "https://give-stage2.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydgobwgq="
       }],
       "_recurringgifts": [{
         "self": {
           "type": "elasticpath.donations.donations",
           "uri": "/donations/recurring/crugive/paymentmethods/giydgobwgq=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydgobwgq="
+          "href": "https://give-stage2.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydgobwgq="
         },
         "links": [{
           "rel": "givingdashboard",
           "uri": "/giving/crugive",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/giving/crugive"
+          "href": "https://give-stage2.cru.org/cortex/giving/crugive"
         }, {
           "rel": "selfservicepaymentmethods",
           "uri": "/selfservicepaymentmethods/crugive/giydgobwgq=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydgobwgq="
+          "href": "https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydgobwgq="
         }],
         "donations": []
       }],
@@ -106,55 +106,55 @@ export default {
       "self": {
         "type": "elasticpath.bankaccounts.bank-account",
         "uri": "/selfservicepaymentmethods/crugive/giydimjtgq=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydimjtgq="
+        "href": "https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydimjtgq="
       },
       "links": [{
         "rel": "list",
         "uri": "/selfservicepaymentmethods/crugive",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive"
+        "href": "https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive"
       }, {
         "rel": "element",
         "rev": "list",
         "type": "elasticpath.donations.donation",
         "uri": "/donations/recurring/crugive/gewuuws2ljhvq=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/gewuuws2ljhvq="
+        "href": "https://give-stage2.cru.org/cortex/donations/recurring/crugive/gewuuws2ljhvq="
       }, {
         "rel": "element",
         "rev": "list",
         "type": "elasticpath.donations.donation",
         "uri": "/donations/recurring/crugive/gewuuws2ljida=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/gewuuws2ljida="
+        "href": "https://give-stage2.cru.org/cortex/donations/recurring/crugive/gewuuws2ljida="
       }, {
         "rel": "recurringgifts",
         "uri": "/donations/recurring/crugive/paymentmethods/giydimjtgq=",
-        "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydimjtgq="
+        "href": "https://give-stage2.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydimjtgq="
       }],
       "_recurringgifts": [{
         "self": {
           "type": "elasticpath.donations.donations",
           "uri": "/donations/recurring/crugive/paymentmethods/giydimjtgq=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydimjtgq="
+          "href": "https://give-stage2.cru.org/cortex/donations/recurring/crugive/paymentmethods/giydimjtgq="
         },
         "links": [{
           "rel": "element",
           "rev": "list",
           "type": "elasticpath.donations.donation",
           "uri": "/donations/recurring/crugive/gewuuws2ljhvq=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/gewuuws2ljhvq="
+          "href": "https://give-stage2.cru.org/cortex/donations/recurring/crugive/gewuuws2ljhvq="
         }, {
           "rel": "element",
           "rev": "list",
           "type": "elasticpath.donations.donation",
           "uri": "/donations/recurring/crugive/gewuuws2ljida=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/donations/recurring/crugive/gewuuws2ljida="
+          "href": "https://give-stage2.cru.org/cortex/donations/recurring/crugive/gewuuws2ljida="
         }, {
           "rel": "givingdashboard",
           "uri": "/giving/crugive",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/giving/crugive"
+          "href": "https://give-stage2.cru.org/cortex/giving/crugive"
         }, {
           "rel": "selfservicepaymentmethods",
           "uri": "/selfservicepaymentmethods/crugive/giydimjtgq=",
-          "href": "https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydimjtgq="
+          "href": "https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydimjtgq="
         }],
         "donations": [{
           "donation-lines": [{

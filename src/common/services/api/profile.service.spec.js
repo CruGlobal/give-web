@@ -44,7 +44,7 @@ describe('profile service', () => {
 
   describe('getEmail', () => {
     it('should load the user\'s email', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=emails:element')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=emails:element')
         .respond(200, emailsResponse);
       self.profileService.getEmails()
         .subscribe((data) => {
@@ -56,7 +56,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethods', () => {
     it('should load the user\'s saved payment methods', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element')
         .respond(200, paymentmethodsResponse);
 
       let expectedPaymentMethods = angular.copy(paymentmethodsResponse._selfservicepaymentmethods[0]._element);
@@ -83,7 +83,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethod', () => {
     it('should load a user\'s payment method', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/selfservicepaymentmethods/crugive/giydiojyg4=')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydiojyg4=')
         .respond(200, paymentmethodResponse);
 
       let expectedPaymentMethod = angular.copy(paymentmethodResponse);
@@ -108,7 +108,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethodsWithDonations', () => {
     it('should load the user\'s saved payment methods with donations', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts')
         .respond(200, paymentmethodsWithDonationsResponse);
 
       let expectedData = cloneDeep(paymentmethodsWithDonationsResponse._selfservicepaymentmethods[0]._element)
@@ -128,7 +128,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethodForms', () => {
     function setupRequest() {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform')
         .respond(200, paymentmethodsFormsResponse);
     }
 
@@ -164,7 +164,7 @@ describe('profile service', () => {
       };
 
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive?followLocation=true',
+        'https://give-stage2.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive?followLocation=true',
         paymentInfo
       ).respond(200, 'success');
 
@@ -195,7 +195,7 @@ describe('profile service', () => {
       delete paymentInfoWithoutCVV.cvv;
 
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
+        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
         paymentInfoWithoutCVV
       ).respond(200, 'success');
 
@@ -239,7 +239,7 @@ describe('profile service', () => {
       };
 
       self.$httpBackend.expectPOST(
-        'https://cortex-gateway-stage.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
+        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
         paymentInfoWithoutCVV
       ).respond(200, 'success');
 
@@ -257,7 +257,7 @@ describe('profile service', () => {
 
   describe('getGivingProfile', () => {
     it( 'should load the giving profile with spouse', () => {
-      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+      self.$httpBackend.expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
         .respond( 200, givingProfileResponse );
 
       self.profileService.getGivingProfile().subscribe( ( profile ) => {
@@ -274,7 +274,7 @@ describe('profile service', () => {
     } );
 
     it( 'should load the giving profile without spouse', () => {
-      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+      self.$httpBackend.expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
         .respond( 200, omit( givingProfileResponse, ['_addspousedetails', '_emails', '_givingdashboard', '_phonenumbers', '_addresses', '_donordetails'] ) );
 
       self.profileService.getGivingProfile().subscribe( ( profile ) => {
@@ -290,7 +290,7 @@ describe('profile service', () => {
       orgGivingProfileResponse['_donordetails'][0]['donor-type'] = 'Organization';
       orgGivingProfileResponse['_donordetails'][0]['organization-name'] = 'Organization XYZ';
 
-      self.$httpBackend.expectGET( 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+      self.$httpBackend.expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
         .respond( 200, orgGivingProfileResponse );
 
       self.profileService.getGivingProfile().subscribe( ( profile ) => {
@@ -361,7 +361,7 @@ describe('profile service', () => {
 
   describe('updatePaymentMethod', () => {
     it('should update a bank account', () => {
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/paymentUri',
+      self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
         { 'bank-name': 'Some Bank' }
       ).respond(200, null);
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { bankAccount: { 'bank-name': 'Some Bank' } })
@@ -369,7 +369,7 @@ describe('profile service', () => {
       self.$httpBackend.flush();
     });
     it('should update a credit card', () => {
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/paymentUri',
+      self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
         { 'cardholder-name': 'Some Person', address: { 'street-address': 'Some Address||||||', 'extended-address': '', locality: '', 'postal-code': '', region: ''} }
       ).respond(200, null);
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { creditCard: { 'cardholder-name': 'Some Person', address: { streetAddress: 'Some Address' } } })
@@ -377,7 +377,7 @@ describe('profile service', () => {
       self.$httpBackend.flush();
     });
     it('should update a credit card with no billing address (api will use mailing address)', () => {
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/paymentUri',
+      self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
         { 'cardholder-name': 'Some Person' }
       ).respond(200, null);
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { creditCard: { 'cardholder-name': 'Some Person', address: undefined } })
@@ -395,7 +395,7 @@ describe('profile service', () => {
   describe('deletePaymentMethod', () => {
     it('should delete payment method', () => {
       let uri = '/uri';
-      self.$httpBackend.expectDELETE('https://cortex-gateway-stage.cru.org/cortex'+uri)
+      self.$httpBackend.expectDELETE('https://give-stage2.cru.org/cortex'+uri)
         .respond(200, 'success');
       self.profileService.deletePaymentMethod(uri)
         .subscribe((data) => {
@@ -431,7 +431,7 @@ describe('profile service', () => {
       expectedPurchaseData.paymentMeans.address = formatAddressForTemplate(expectedPurchaseData.paymentMeans['billing-address'].address);
       delete expectedPurchaseData.paymentMeans['billing-address'];
 
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/purchases/crugive/giydanbt=?zoom=donordetails,paymentmeans:element,lineitems:element,lineitems:element:code,lineitems:element:rate,ratetotals:element')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/purchases/crugive/giydanbt=?zoom=donordetails,paymentmeans:element,lineitems:element,lineitems:element:code,lineitems:element:rate,ratetotals:element')
         .respond(200, purchaseResponse);
       self.profileService.getPurchase('/purchases/crugive/giydanbt=')
         .subscribe((data) => {
@@ -443,7 +443,7 @@ describe('profile service', () => {
 
   describe('getDonorDetails', () => {
     it('should load the user\'s donorDetails', () => {
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=donordetails')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=donordetails')
         .respond(200, donorDetailsResponse);
 
       let expectedDonorDetails = angular.copy(donorDetailsResponse['_donordetails'][0]);
@@ -463,14 +463,14 @@ describe('profile service', () => {
         self: {
           type: 'cru.selfservicedonor.self-service-donor',
           uri: '/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=',
-          href: 'https://cortex-gateway-stage.cru.org/cortex/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
+          href: 'https://give-stage2.cru.org/cortex/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
         },
         links: [
           { rel: 'profile',
             rev: 'selfservicedonordetails',
             type: 'elasticpath.profiles.profile',
             uri: '/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=',
-            href: 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
+            href: 'https://give-stage2.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
           }
         ],
         'donor-number': '467023686',
@@ -478,7 +478,7 @@ describe('profile service', () => {
         'organization-name': '',
         'spouse-name': { 'family-name': 'stin', 'given-name': 'stiness', 'middle-initial': '', suffix: 'Jr.', title: 'Mrs' }
       };
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=selfservicedonordetails')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicedonordetails')
         .respond(200, selfserviceDonorDetailsResponse);
       self.profileService.getProfileDonorDetails()
         .subscribe((donorDetails) => {
@@ -490,7 +490,7 @@ describe('profile service', () => {
 
   describe('updateProfileDonorDetails', () => {
     it('should update user\'s details', () => {
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=')
+      self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=')
         .respond(200, 'success');
       self.profileService.updateProfileDonorDetails({self: {uri:'/selfservicedonordetails/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='}})
         .subscribe((data) => {
@@ -503,7 +503,7 @@ describe('profile service', () => {
 
   describe('addSpouse', () => {
     it('should add spouse\'s details', () => {
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/selfservicedonordetails/crugive/spousedetails')
+      self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/selfservicedonordetails/crugive/spousedetails')
         .respond(200, 'success');
       self.profileService.addSpouse('/selfservicedonordetails/crugive/spousedetails', {})
         .subscribe((data) => {
@@ -515,9 +515,9 @@ describe('profile service', () => {
 
   describe('updateEmail', () => {
     it('should add spouse\'s details', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/emails/crugive/spouse?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/spouse?followLocation=true')
         .respond(200, 'spouse success');
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/emails/crugive/?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/?followLocation=true')
         .respond(200, 'donor success');
 
       self.profileService.updateEmail({}, true)
@@ -540,13 +540,13 @@ describe('profile service', () => {
           self: {
             type: 'elasticpath.phonenumbers.phone-number',
             uri: '/phonenumbers/crugive/gewuwmktgjivi=',
-            href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/gewuwmktgjivi='
+            href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive/gewuwmktgjivi='
           },
           links: [
             { rel: 'list',
               type: 'elasticpath.collections.links',
               uri: '/phonenumbers/crugive',
-              href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive'
+              href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive'
             }
           ],
           locked: false,
@@ -559,14 +559,14 @@ describe('profile service', () => {
           self: {
             type: 'elasticpath.phonenumbers.phone-number',
             uri: '/phonenumbers/crugive/gewuwmktgjjfq=',
-            href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/gewuwmktgjjfq='
+            href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive/gewuwmktgjjfq='
           },
           links: [
             {
               rel: 'list',
               type: 'elasticpath.collections.links',
               uri: '/phonenumbers/crugive',
-              href: 'https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive'
+              href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive'
             }
           ],
           locked: false,
@@ -576,7 +576,7 @@ describe('profile service', () => {
           spouse: true
         }
       ];
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive?zoom=element,spouse')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/phonenumbers/crugive?zoom=element,spouse')
         .respond(200, phoneNumbersResponse);
       self.profileService.getPhoneNumbers()
         .subscribe((data) => {
@@ -588,9 +588,9 @@ describe('profile service', () => {
 
   describe('addPhoneNumber', () => {
     it('should add phone number', () => {
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/spouse?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/spouse?followLocation=true')
         .respond(200, 'spouse success');
-      self.$httpBackend.expectPOST('https://cortex-gateway-stage.cru.org/cortex/phonenumbers/crugive/?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/?followLocation=true')
         .respond(200, 'donor success');
       let phoneNumber = {
         spouse: true
@@ -615,7 +615,7 @@ describe('profile service', () => {
           uri: 'uri'
         }
       };
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/uri')
+      self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/uri')
         .respond(200, 'success');
       self.profileService.updatePhoneNumber(phoneNumber)
         .subscribe((data) => {
@@ -632,7 +632,7 @@ describe('profile service', () => {
           uri: 'uri'
         }
       };
-      self.$httpBackend.expectDELETE('https://cortex-gateway-stage.cru.org/cortex/uri')
+      self.$httpBackend.expectDELETE('https://give-stage2.cru.org/cortex/uri')
         .respond(200, 'success');
       self.profileService.deletePhoneNumber(phoneNumber)
         .subscribe((data) => {
@@ -648,7 +648,7 @@ describe('profile service', () => {
         self: {
           type: 'elasticpath.addresses.address',
           uri: '/addresses/crugive/gewuwmktgjfem=',
-          href: 'https://cortex-gateway-stage.cru.org/cortex/addresses/crugive/gewuwmktgjfem='
+          href: 'https://give-stage2.cru.org/cortex/addresses/crugive/gewuwmktgjfem='
         },
         links: [
           {
@@ -656,13 +656,13 @@ describe('profile service', () => {
             rev: 'addresses',
             type: 'elasticpath.profiles.profile',
             uri: '/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=',
-            href: 'https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
+            href: 'https://give-stage2.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
           },
           {
             rel: 'list',
             type: 'elasticpath.collections.links',
             uri: '/addresses/crugive',
-            href: 'https://cortex-gateway-stage.cru.org/cortex/addresses/crugive'
+            href: 'https://give-stage2.cru.org/cortex/addresses/crugive'
           }
         ],
         address: {
@@ -675,7 +675,7 @@ describe('profile service', () => {
         },
         name: {}
       };
-      self.$httpBackend.expectGET('https://cortex-gateway-stage.cru.org/cortex/profiles/crugive/default?zoom=addresses:mailingaddress')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=addresses:mailingaddress')
         .respond(200, mailingAddressResponse);
       self.profileService.getMailingAddress()
         .subscribe((data) => {
@@ -701,7 +701,7 @@ describe('profile service', () => {
           postalCode: '12345'
         }
       };
-      self.$httpBackend.expectPUT('https://cortex-gateway-stage.cru.org/cortex/uri')
+      self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/uri')
         .respond(200, 'success');
       self.profileService.updateMailingAddress(mailingAddress)
         .subscribe((data) => {
