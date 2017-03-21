@@ -211,7 +211,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
     getPath: function() {
       try {
         var pagename = '',
-          delim = ':',
+          delim = ' : ',
           path = $window.location.pathname;
 
         if (path !== '/') {
@@ -233,11 +233,16 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
             path.shift();
           }
 
+          // Capitalize first letter of each page
+          for(var i = 0 ; i < path.length ; i++){
+            path[i] = path[i].charAt(0).toUpperCase() + path[i].slice(1);
+          }
+
           // Set pageName
-          pagename = 'give' + delim + path.join(delim);
+          pagename = 'Give' + delim + path.join(delim);
         } else {
           // Set pageName
-          pagename = 'give' + delim + 'home';
+          pagename = 'Give' + delim + 'Home';
         }
 
         this.setPageNameObj(pagename);
