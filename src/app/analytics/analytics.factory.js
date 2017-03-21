@@ -234,7 +234,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
           }
 
           // Capitalize first letter of each page
-          for(var i = 0 ; i < path.length ; i++){
+          for(i = 0 ; i < path.length ; i++){
             path[i] = path[i].charAt(0).toUpperCase() + path[i].slice(1);
           }
 
