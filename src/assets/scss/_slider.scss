@@ -128,5 +128,9 @@
         transition: .35s all;
       }
     }
+
+    :not(.cycle-slide-active) .btn {
+      pointer-events: none;
+    }
   }
 }
