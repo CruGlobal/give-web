@@ -1,8 +1,9 @@
 import angular from 'angular';
 import 'angular-mocks';
 import module from './session.service';
-import {cortexSession} from './fixtures/cortex-session';
-import {giveSession} from './fixtures/give-session';
+import {cortexRole} from 'common/services/session/fixtures/cortex-role';
+import {giveSession} from 'common/services/session/fixtures/give-session';
+import {cruProfile} from 'common/services/session/fixtures/cru-profile';
 
 import {Roles, Sessions, SignOutEvent} from './session.service';
 
@@ -24,7 +25,7 @@ describe( 'session service', function () {
   } ) );
 
   afterEach( () => {
-    [Sessions.cortex, Sessions.give, Sessions.cru].forEach( ( name ) => {
+    [Sessions.role, Sessions.give, Sessions.profile].forEach( ( name ) => {
       $cookies.remove( name );
     } );
   } );
@@ -40,45 +41,36 @@ describe( 'session service', function () {
 
     describe( 'session with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $cookies.put( Sessions.role, cortexRole.registered );
+        $cookies.put( Sessions.profile, cruProfile );
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest();
       } );
 
       it( 'have properties', () => {
         expect( sessionService.session ).toEqual( {
-          "exp":        1477232207,
-          "iat":        1472221008,
-          "sub":        "cas|873f88fa-327b-b95d-7d7a-7add211a9b64",
-          "first_name": "Charles",
-          "last_name":  "Xavier",
-          "email":      "professorx@xavier.edu",
-          "token_hash": {
-            "access_token": "1a0e2d05-5999-4fd6-a06f-f43c1b2ea8b0",
-            "role":         Roles.registered
-          }
+          sub: 'cas|873f88fa-327b-b95d-7d7a-7add211a9b64',
+          role: 'REGISTERED',
+          first_name: 'Charles',
+          last_name: 'Xavier',
+          email: 'professorx@xavier.edu'
         } );
       } );
 
       describe( 'change to \'IDENTIFIED\' cortex-session', () => {
         beforeEach( () => {
-          $cookies.put( Sessions.cortex, cortexSession.identified );
+          $cookies.put( Sessions.role, cortexRole.identified );
           // Force digest so scope session watchers pick up changes.
           $rootScope.$digest();
         } );
 
         it( 'reflects changes', () => {
           expect( sessionService.session ).toEqual( {
-            "exp":        1477232207,
-            "iat":        1472221008,
-            "sub":        "cas|873f88fa-327b-b95d-7d7a-7add211a9b64",
-            "first_name": "Charles",
-            "last_name":  "Xavier",
-            "email":      "professorx@xavier.edu",
-            "token_hash": {
-              "access_token": "1a0e2d05-5999-4fd6-a06f-f43c1b2ea8b0",
-              "role":         Roles.identified
-            }
+            sub: 'cas|873f88fa-327b-b95d-7d7a-7add211a9b64',
+            role: 'IDENTIFIED',
+            first_name: 'Charles',
+            last_name: 'Xavier',
+            email: 'professorx@xavier.edu'
           } );
         } );
       } );
@@ -102,7 +94,7 @@ describe( 'session service', function () {
 
     describe( 'with \'PUBLIC\' cortex-session', () => {
       beforeEach( () => {
-        $cookies.put( Sessions.cortex, cortexSession.public );
+        $cookies.put( Sessions.role, cortexRole.public );
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest();
       } );
@@ -114,7 +106,7 @@ describe( 'session service', function () {
 
     describe( 'with \'IDENTIFIED\' cortex-session', () => {
       beforeEach( () => {
-        $cookies.put( Sessions.cortex, cortexSession.identified );
+        $cookies.put( Sessions.role, cortexRole.identified );
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest();
       } );
@@ -126,7 +118,7 @@ describe( 'session service', function () {
 
     describe( 'getRole with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $cookies.put( Sessions.role, cortexRole.registered );
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest();
       } );
@@ -241,7 +233,7 @@ describe( 'session service', function () {
 
     describe( 'with \'IDENTIFIED\' role', () => {
       beforeEach( () => {
-        $cookies.put( Sessions.cortex, cortexSession.identified );
+        $cookies.put( Sessions.role, cortexRole.identified );
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest();
       } );
@@ -264,7 +256,7 @@ describe( 'session service', function () {
 
     describe( 'with skipEvent = true', () => {
       beforeEach( () => {
-        $cookies.put( Sessions.cortex, cortexSession.identified );
+        $cookies.put( Sessions.role, cortexRole.identified );
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest();
       } );
@@ -301,7 +293,7 @@ describe( 'session service', function () {
 
     describe( 'undefined \'give-session\'', () => {
       beforeEach( () => {
-        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $cookies.put( Sessions.role, cortexRole.registered );
         $rootScope.$digest();
       } );
 
@@ -316,7 +308,7 @@ describe( 'session service', function () {
         $cookies.put( Sessions.give, '.' + btoa( angular.toJson( {
             exp: Math.round( Date.now() / 1000 ) + 10
           } ) ) + '.' );
-        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $cookies.put( Sessions.role, cortexRole.registered );
         $rootScope.$digest();
       } );
 
@@ -334,7 +326,7 @@ describe( 'session service', function () {
         $cookies.put( Sessions.give, '.' + btoa( angular.toJson( {
             exp: Math.round( Date.now() / 1000 ) + 45
           } ) ) + '.' );
-        $cookies.put( Sessions.cortex, cortexSession.registered );
+        $cookies.put( Sessions.role, cortexRole.registered );
         $rootScope.$digest();
       } );
 
@@ -353,7 +345,7 @@ describe( 'session service', function () {
           spyOn( $timeout, 'cancel' ).and.callThrough();
           jasmine.clock().tick( 10000 );
           $timeout.flush( 10000 );
-          $cookies.put( Sessions.cortex, cortexSession.identified );
+          $cookies.put( Sessions.role, cortexRole.identified );
           $rootScope.$digest();
         } );
 

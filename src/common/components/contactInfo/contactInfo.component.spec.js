@@ -3,7 +3,8 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {Sessions} from 'common/services/session/session.service';
-import {cortexSession} from 'common/services/session/fixtures/cortex-session';
+import {cortexRole} from 'common/services/session/fixtures/cortex-role';
+import {cruProfile} from 'common/services/session/fixtures/cru-profile';
 
 import module from './contactInfo.component.js';
 
@@ -116,7 +117,8 @@ describe('contactInfo', function() {
       let $cookies;
       beforeEach(inject((_$cookies_, $rootScope) => {
         $cookies = _$cookies_;
-        $cookies.put(Sessions.cortex, cortexSession.registered);
+        $cookies.put(Sessions.role, cortexRole.registered);
+        $cookies.put(Sessions.profile, cruProfile);
         $rootScope.$digest();
       }));
 
