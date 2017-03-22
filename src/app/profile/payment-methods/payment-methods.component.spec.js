@@ -184,7 +184,9 @@ describe( 'PaymentMethodsComponent', function () {
 
   describe('onDelete()', () => {
     it('should do stuff onDelete()', () => {
+      spyOn($ctrl, 'loadPaymentMethods');
       $ctrl.onDelete();
+      expect($ctrl.loadPaymentMethods).toHaveBeenCalled();
       expect($ctrl.successMessage.show).toBe(true);
       expect($ctrl.successMessage.type).toBe('paymentMethodDeleted');
       $ctrl.$timeout.flush();

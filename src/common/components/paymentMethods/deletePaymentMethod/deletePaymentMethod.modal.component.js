@@ -4,7 +4,6 @@ import 'rxjs/add/operator/finally';
 import forEach from 'lodash/forEach';
 import remove from 'lodash/remove';
 import reject from 'lodash/reject';
-import concat from 'lodash/concat';
 
 import profileService from 'common/services/api/profile.service.js';
 import donationsService from 'common/services/api/donations.service.js';
@@ -142,7 +141,6 @@ class deletePaymentMethodModalController {
     this.profileService.deletePaymentMethod(this.resolve.paymentMethod.self.uri)
       .subscribe(() => {
           this.loading = false;
-          this.deleteOption !== '3' && this.hasRecurringGifts && this.moveDonationsLocally();
           this.removePaymentMethodFromList();
           this.close();
         },
@@ -151,10 +149,6 @@ class deletePaymentMethodModalController {
           this.deletionError = 'delete';
           this.$log.error('Error deleting payment method', error);
         });
-  }
-
-  moveDonationsLocally(){
-    this.selectedPaymentMethod.recurringGifts = concat(this.selectedPaymentMethod.recurringGifts, this.resolve.paymentMethod.recurringGifts);
   }
 
   removePaymentMethodFromList() {
