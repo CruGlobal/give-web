@@ -3,7 +3,8 @@ import 'angular-mocks';
 import module from './homeSignIn.component';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
-import { cortexSession } from 'common/services/session/fixtures/cortex-session';
+import {cortexRole} from 'common/services/session/fixtures/cortex-role';
+import {Sessions} from 'common/services/session/session.service';
 
 describe('home sign in', function() {
   beforeEach(angular.mock.module(module.name));
@@ -19,7 +20,7 @@ describe('home sign in', function() {
   }));
 
   afterEach( () => {
-    ['cortex-session', 'give-session', 'cru-session'].forEach( ( name ) => {
+    [Sessions.role, Sessions.give, Sessions.profile].forEach( ( name ) => {
       $cookies.remove( name );
     } );
   } );
@@ -41,7 +42,7 @@ describe('home sign in', function() {
     } );
 
     it( 'don\'t show sign in form if a registered user', () => {
-      $cookies.put( 'cortex-session', cortexSession.registered );
+      $cookies.put( Sessions.role, cortexRole.registered );
       // Force digest so scope session watchers pick up changes.
       $rootScope.$digest();
       $ctrl.$onInit();
