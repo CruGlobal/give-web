@@ -137,11 +137,11 @@ body{
 }
 
 @media (max-width: 440px) {
-  #saveChangesButton, #cancelButton {
+  #saveChangesButton, #cancelButton, #backButton, #continueButton {
     display: block;
     width: 100%;
   }
-  #saveChangesButton {
+  #saveChangesButton, #continueButton {
     float: none !important;
     margin-bottom: 10px;
   }

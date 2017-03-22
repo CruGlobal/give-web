@@ -2,7 +2,7 @@ import angular from 'angular';
 import includes from 'lodash/includes';
 
 import commonModule from 'common/common.module';
-import sessionService from 'common/services/session/session.service';
+import sessionService, {Roles} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
@@ -23,7 +23,7 @@ class HomeSignInController {
 
   $onInit() {
     this.isSigningIn = false;
-    this.showSignInForm = !includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() );
+    this.showSignInForm = !includes( [Roles.identified, Roles.registered], this.sessionService.getRole() );
     this.analyticsFactory.pageLoaded();
   }
 

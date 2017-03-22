@@ -256,27 +256,14 @@ describe( 'delete payment method modal', function () {
 
   describe( 'deletePaymentMethod()', () => {
     beforeEach(() => {
-      spyOn(self.controller, 'moveDonationsLocally');
       spyOn(self.controller, 'removePaymentMethodFromList');
     });
-    it('should delete payment method and move local donations to a different payment method', () => {
+    it('should delete payment method and remove it from local list', () => {
       self.controller.profileService.deletePaymentMethod.and.returnValue(Observable.of('data'));
       self.controller.deleteOption = '1';
       self.controller.hasRecurringGifts = true;
       self.controller.deletePaymentMethod();
       expect(self.controller.profileService.deletePaymentMethod).toHaveBeenCalledWith(self.controller.resolve.paymentMethod.self.uri);
-      expect(self.controller.moveDonationsLocally).toHaveBeenCalled();
-      expect(self.controller.removePaymentMethodFromList).toHaveBeenCalled();
-      expect(self.controller.close).toHaveBeenCalled();
-      expect(self.controller.loading).toEqual(false);
-    });
-
-    it('should delete payment method and remove it from local list', () => {
-      self.controller.profileService.deletePaymentMethod.and.returnValue(Observable.of('data'));
-      self.controller.deleteOption = '3';
-      self.controller.deletePaymentMethod();
-      expect(self.controller.profileService.deletePaymentMethod).toHaveBeenCalledWith(self.controller.resolve.paymentMethod.self.uri);
-      expect(self.controller.moveDonationsLocally).not.toHaveBeenCalled();
       expect(self.controller.removePaymentMethodFromList).toHaveBeenCalled();
       expect(self.controller.close).toHaveBeenCalled();
       expect(self.controller.loading).toEqual(false);
@@ -294,25 +281,6 @@ describe( 'delete payment method modal', function () {
       expect(self.controller.loading).toEqual(false);
     });
 
-  } );
-
-  describe( 'moveDonationsLocally()', () => {
-    it('should move donations around in the local list after a successful deletion', () => {
-      self.controller.selectedPaymentMethod = {
-        'self': {
-          'uri': 'uri2'
-        },
-        recurringGifts: [
-          'existing gift'
-        ]
-      };
-      self.controller.moveDonationsLocally();
-      expect(self.controller.selectedPaymentMethod.recurringGifts).toEqual([
-        'existing gift',
-        self.controller.resolve.paymentMethod.recurringGifts[0],
-        self.controller.resolve.paymentMethod.recurringGifts[1]
-      ]);
-    } );
   } );
 
   describe( 'removePaymentMethodFromList()', () => {

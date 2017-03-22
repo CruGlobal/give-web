@@ -239,7 +239,7 @@
               type="button"
               tabindex="-1"
               ng-if="$ctrl.errorAlreadyInCart"
-              ng-click="$ctrl.close(); $ctrl.$location.path('/cart')"
+              ng-click="$ctrl.close(); $ctrl.$window.location = '/cart'"
               translate>
         View Cart
       </button>

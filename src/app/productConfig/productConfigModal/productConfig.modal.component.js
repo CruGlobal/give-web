@@ -32,7 +32,8 @@ export const giveGiftParams = {
 class ProductConfigModalController {
 
   /* @ngInject */
-  constructor( $location, $scope, $log, designationsService, cartService, modalStateService, analyticsFactory ) {
+  constructor( $window, $location, $scope, $log, designationsService, cartService, modalStateService, analyticsFactory ) {
+    this.$window = $window;
     this.$location = $location;
     this.$scope = $scope;
     this.$log = $log;
