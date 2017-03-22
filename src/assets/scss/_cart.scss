@@ -167,13 +167,19 @@
   }
 }
 
-
+product-config-modal .modal-footer {
+  padding: 15px 29px;
+}
 
 @media screen and (max-width: 549px) {
     .btn-block-xs {
         display: block;
         width: 100%;
-        &.btn-default {margin-bottom: 10px;}
+        &.pull-right {float: none !important;}
+        + .btn-block-xs {margin-top: 10px;}
+    }
+    .modal-footer .btn.btn-block-xs + .btn.btn-block-xs {
+      margin-left: 0;
     }
 }
 
