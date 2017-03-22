@@ -55,7 +55,7 @@
                               </select>
 
                               <input name="nameGivenName" type="text" class="form-control  form-control-subtle first" disabled ng-model="$ctrl.donorDetails.name['given-name']">
-                              <input name="nameMiddleInitial" type="text" class="form-control  form-control-subtle middle" ng-model="$ctrl.donorDetails.name['middle-initial']" maxlength="1" pattern="[A-Z]">
+                              <input name="nameMiddleInitial" type="text" class="form-control  form-control-subtle middle" ng-model="$ctrl.donorDetails.name['middle-initial']" ng-maxlength="15">
                               <input name="nameFamilyName" type="text" class="form-control  form-control-subtle last" disabled ng-model="$ctrl.donorDetails.name['family-name']">
 
                               <select name="nameSuffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails.name.suffix">
@@ -70,7 +70,7 @@
                               <div class="clear"></div>
 
                               <div role="alert" ng-messages="$ctrl.donorDetailsForm.nameMiddleInitial.$error" ng-if="($ctrl.donorDetailsForm.nameMiddleInitial | showErrors)">
-                                <div class="help-block" ng-message="pattern" translate>Initial must be an uppercase letter</div>
+                                <div class="help-block" ng-message="maxlength" translate>Middle name cannot be longer than 15 characters</div>
                               </div>
                             </div>
                           </form>
@@ -85,9 +85,9 @@
                                       ng-options="value as label for (value , label) in $ctrl.availableTitles">
                               </select>
 
-                              <input name="spouseName" type="text" class="form-control form-control-subtle first" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" maxlength="20" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
-                              <input name="spouseInitial" type="text" class="form-control form-control-subtle middle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" maxlength="1" pattern="[A-Z]">
-                              <input name="spouseLastName" type="text" class="form-control form-control-subtle last" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" maxlength="25" minlength="2" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
+                              <input name="spouseName" type="text" class="form-control form-control-subtle first" ng-model="$ctrl.donorDetails['spouse-name']['given-name']" ng-maxlength="50" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
+                              <input name="spouseInitial" type="text" class="form-control form-control-subtle middle" ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']" ng-maxlength="15">
+                              <input name="spouseLastName" type="text" class="form-control form-control-subtle last" ng-model="$ctrl.donorDetails['spouse-name']['family-name']" ng-maxlength="50" ng-disabled="$ctrl.hasSpouse" ng-required="$ctrl.addingSpouse">
 
                               <select name="suffix" class="form-control form-control-subtle suffix" ng-model="$ctrl.donorDetails['spouse-name'].suffix">
                                 <option value=""></option>
@@ -100,16 +100,16 @@
 
                               <div class="clear"></div>
 
-                              <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseLastName.$error" ng-if="($ctrl.spouseDetailsForm.spouseLastName | showErrors)">
-                                <div class="help-block" ng-message="minlength" translate>Last name must be at least 2 characters</div>
-                                <div class="help-block" ng-message="required" translate>Last name must not be empty</div>
-                              </div>
                               <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseName.$error" ng-if="($ctrl.spouseDetailsForm.spouseName | showErrors)">
-                                <div class="help-block" ng-message="minlength" translate>First name must be at least 2 characters</div>
                                 <div class="help-block" ng-message="required" translate>First name must not be empty</div>
+                                <div class="help-block" ng-message="maxlength" translate>First name cannot be longer than 50 characters</div>
                               </div>
                               <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseInitial.$error" ng-if="($ctrl.spouseDetailsForm.spouseInitial | showErrors)">
-                                <div class="help-block" ng-message="pattern" translate>Initial must be an uppercase letter</div>
+                                <div class="help-block" ng-message="maxlength" translate>Middle name cannot be longer than 15 characters</div>
+                              </div>
+                              <div role="alert" ng-messages="$ctrl.spouseDetailsForm.spouseLastName.$error" ng-if="($ctrl.spouseDetailsForm.spouseLastName | showErrors)">
+                                <div class="help-block" ng-message="required" translate>Last name must not be empty</div>
+                                <div class="help-block" ng-message="maxlength" translate>Last name cannot be longer than 50 characters</div>
                               </div>
 
                             </div>
