@@ -129,7 +129,7 @@
       }
     }
 
-    :not(.cycle-slide-active) .btn {
+    &:not(.cycle-slide-active) .btn {
       pointer-events: none;
     }
   }
