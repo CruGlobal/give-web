@@ -3,8 +3,10 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import module from './signInForm.component';
-import {cortexSession} from 'common/services/session/fixtures/cortex-session';
+import {Sessions} from 'common/services/session/session.service';
+import {cortexRole} from 'common/services/session/fixtures/cortex-role';
 import {giveSession} from 'common/services/session/fixtures/give-session';
+import {cruProfile} from 'common/services/session/fixtures/cru-profile';
 
 
 describe( 'signInForm', function () {
@@ -32,13 +34,14 @@ describe( 'signInForm', function () {
       let $cookies;
       beforeEach( inject( function ( _$cookies_ ) {
         $cookies = _$cookies_;
-        $cookies.put( 'cortex-session', cortexSession.registered );
-        $cookies.put( 'give-session', giveSession );
+        $cookies.put( Sessions.role, cortexRole.registered );
+        $cookies.put( Sessions.give, giveSession );
+        $cookies.put( Sessions.profile, cruProfile );
         $rootScope.$digest();
       } ) );
 
       afterEach( () => {
-        ['cortex-session', 'give-session'].forEach( ( name ) => {
+        [Sessions.role, Sessions.give, Sessions.profile].forEach( ( name ) => {
           $cookies.remove( name );
         } );
       } );

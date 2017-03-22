@@ -127,6 +127,7 @@ class PaymentMethodsController {
   }
 
   onDelete(){
+    this.loadPaymentMethods();
     this.successMessage.show = true;
     this.successMessage.type = 'paymentMethodDeleted';
     this.$timeout(() => {

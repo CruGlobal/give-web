@@ -120,42 +120,17 @@
         width: auto;
         position: static;
         padding: $gutter;
-        opacity: 1;
       }
       h3 {
         font-size: 24px;
         line-height: 1.35em;
-        opacity: 0;
         margin-left: 0px;
         transition: .35s all;
       }
-      .btn {
-        opacity: 0;
-        margin-left: 0px;
-        transition: .5s all;
-      }
-    }  
-
-    &.cycle-slide-active {
-      .slide-image {
-      }
-      .slide-caption {
-        left: auto;
-        right: 0;
-        bottom: 0;
-        top: auto;
-        opacity: 1;
-        h3 {
-          margin-left: 0;
-          opacity: 1;
-        }
-        .btn {
-          margin-left: 0;
-          opacity: 1;
-        }
-      }
     }
 
+    &:not(.cycle-slide-active) .btn {
+      pointer-events: none;
+    }
   }
-
 }

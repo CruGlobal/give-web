@@ -21,9 +21,9 @@ export let Roles = {
 };
 
 export let Sessions = {
-  cortex: 'cortex-session',
-  give:   'give-session',
-  cru:    'cru-session'
+  role:    'cortex-role',
+  give:    'give-session',
+  profile: 'cru-profile'
 };
 
 export let SignOutEvent = 'SessionSignedOut';
@@ -36,12 +36,12 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
     maximumTimeout = 30 * 1000;
 
   // Set initial session on load
-  updateCurrentSession( $cookies.get( Sessions.cortex ) );
+  updateCurrentSession( $cookies.get( Sessions.role ) );
 
   // Watch cortex-session cookie for changes and update existing session variable
   // This only detects changes made by $http or other angular services, not the browser expiring the cookie.
   // eslint-disable-next-line angular/on-watch
-  $rootScope.$watch( () => $cookies.get( Sessions.cortex ), updateCurrentSession );
+  $rootScope.$watch( () => $cookies.get( Sessions.role ), updateCurrentSession );
 
   // Return sessionService public interface
   return {
@@ -146,9 +146,13 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
 
   /* Private Methods */
   function updateCurrentSession( encoded_value ) {
-    let cortexSession = {};
+    let cortexRole = {}, cruProfile = {};
     if ( angular.isDefined( encoded_value ) ) {
-      cortexSession = jwtDecode( encoded_value );
+      cortexRole = jwtDecode( encoded_value );
+    }
+
+    if( angular.isDefined( $cookies.get( Sessions.profile ) ) ) {
+      cruProfile = jwtDecode( $cookies.get( Sessions.profile ) );
     }
 
     // Set give-session expiration timeout if defined
@@ -156,7 +160,8 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
     if ( angular.isDefined( timeout ) ) setSessionTimeout( timeout );
 
     // Copy new session into current session object
-    angular.copy( cortexSession, session );
+    let newSession = angular.merge( {}, cortexRole, cruProfile );
+    angular.copy( newSession, session );
 
     // Update sessionSubject with new value
     sessionSubject.next( session );
@@ -178,7 +183,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
       let expiration = giveSessionExpiration();
       if ( angular.isUndefined( expiration ) ) {
         // Give session has expired
-        updateCurrentSession( $cookies.get( Sessions.cortex ) );
+        updateCurrentSession( $cookies.get( Sessions.role ) );
       } else {
         setSessionTimeout( expiration );
       }
@@ -200,15 +205,15 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
   }
 
   function currentRole() {
-    if ( angular.isDefined( session.token_hash ) ) {
-      if ( session.token_hash.role === Roles.public ) {
+    if ( angular.isDefined( session.role ) ) {
+      if ( session.role === Roles.public ) {
         return Roles.public;
       }
       // Expired cookies are undefined
       if ( angular.isUndefined( $cookies.get( Sessions.give ) ) ) {
         return Roles.identified;
       }
-      return session.token_hash.role;
+      return session.role;
     }
     return Roles.public;
   }
