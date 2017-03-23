@@ -19,7 +19,13 @@
                     {{$ctrl.gift['historical-donation-line']['amount'] | currency:'$'}}
                     <span ng-if="$ctrl.gift['recurringdonations']['donations'].length"> &mdash; {{$ctrl.gift['recurringdonations']['donations'][0]['rate']['recurrence']['interval']}}</span>
                   </h4>
-                  <span class="meta">{{$ctrl.gift['historical-donation-line']['transaction-date']['display-value'] | date:'mediumDate'}}</span>
+                  <div class="meta">
+                    {{$ctrl.gift['historical-donation-line']['transaction-date']['display-value'] | date:'mediumDate'}} &mdash;&#32;
+                    <translate ng-if="!$ctrl.gift['historical-donation-line'].completed">Pending</translate>
+                    <translate ng-if="$ctrl.gift['historical-donation-line'].completed">Completed</translate>
+                    <translate ng-if="$ctrl.gift['historical-donation-line'].anonymous">, Anonymous</translate>
+                    <translate ng-if="$ctrl.gift['historical-donation-line']['pass-through'] || $ctrl.gift['historical-donation-line']['master-account']">, Given through {{$ctrl.gift['historical-donation-line']['given-through-description']}}</translate>
+                  </div>
                 </li>
               </ul>
               <div class="radio-method">
