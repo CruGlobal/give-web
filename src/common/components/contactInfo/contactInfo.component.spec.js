@@ -123,7 +123,8 @@ describe('contactInfo', function() {
       }));
 
       afterEach( () => {
-        $cookies.remove( Sessions.cortex );
+        $cookies.remove( Sessions.role );
+        $cookies.remove( Sessions.profile );
       } );
 
       it('should set given, family and name to session values', () => {
