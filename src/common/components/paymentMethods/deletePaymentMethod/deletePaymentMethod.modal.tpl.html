@@ -1,12 +1,12 @@
 <div class="account-management">
   <div class="modal-header">
+    <button type="button" id="cancelButtonTop" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+      <span aria-hidden="true">×</span>
+    </button>
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12">
           <div class="border-bottom-small">
-            <button id="cancelButtonTop" type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
-              <span aria-hidden="true">×</span>
-            </button>
             <h3 ng-if="$ctrl.view != 'addPaymentMethod'" class="text-center" translate>Delete Payment Method and Move Gifts</h3>
             <h3 ng-if="$ctrl.view == 'addPaymentMethod'" class="text-center" translate>Add Payment Method</h3>
           </div>

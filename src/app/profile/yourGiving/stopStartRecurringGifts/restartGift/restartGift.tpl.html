@@ -57,12 +57,13 @@
   <!-- Loading -->
   <div ng-switch-when="loading">
     <div class="modal-header">
+      <button type="button" class="close" aria-label="{{'Close' | translate}}" ng-click="$ctrl.cancel()">
+        <span aria-hidden="true">x</span>
+      </button>
       <div class="container-fluid">
         <div class="row">
           <div class="col-xs-12">
             <div class="border-bottom-small">
-              <button type="button" class="close" aria-label="{{'Close' | translate}}" ng-click="$ctrl.cancel()">
-                <span aria-hidden="true">&times;</span></button>
               <h3 translate>Restart A Gift</h3>
               <p translate>Loading gift information&hellip;</p>
             </div>

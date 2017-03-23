@@ -1,11 +1,11 @@
 <div class="modal-header">
+  <button type="button" class="close" ng-click="$ctrl.onCancel()" aria-label="{{'Close' | translate}}">
+    <span aria-hidden="true">×</span>
+  </button>
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
         <div class="border-bottom-small" ng-switch="$ctrl.state">
-          <button type="button" class="close" ng-click="$ctrl.onCancel()" aria-label="{{'Close' | translate}}">
-            <span aria-hidden="true">×</span>
-          </button>
           <h3 ng-switch-when="update" translate>Make Changes To Your Recurring Gifts</h3>
           <p ng-switch-when="update" translate>Please review the amount, payment method, and frequency of this gift below.</p>
           <h3 ng-switch-when="confirm" translate>Confirm Your Changes.</h3>
