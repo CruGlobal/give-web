@@ -70,10 +70,10 @@
                    class="form-control  form-control-subtle"
                    name="nameMiddleInitial"
                    ng-model="$ctrl.donorDetails['name']['middle-initial']"
-                   ng-maxlength="50"
+                   ng-maxlength="15"
                    ng-disabled="$ctrl.nameFieldsDisabled">
             <div role="alert" ng-messages="$ctrl.detailsForm.nameMiddleInitial.$error" ng-if="($ctrl.detailsForm.nameMiddleInitial | showErrors)">
-              <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
+              <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 15 characters</div>
             </div>
           </div>
         </div>
@@ -134,10 +134,10 @@
                    class="form-control  form-control-subtle"
                    name="spouseMiddleInitial"
                    ng-model="$ctrl.donorDetails['spouse-name']['middle-initial']"
-                   ng-maxlength="50"
+                   ng-maxlength="15"
                    ng-disabled="$ctrl.spouseFieldsDisabled">
             <div role="alert" ng-messages="$ctrl.detailsForm.spouseMiddleInitial.$error" ng-if="($ctrl.detailsForm.spouseMiddleInitial | showErrors)">
-              <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
+              <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 15 characters</div>
             </div>
           </div>
         </div>
