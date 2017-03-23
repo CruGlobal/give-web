@@ -218,16 +218,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <div class="col-sm-3">
-      <button class="btn btn-default btn-md btn-block-xs"
-              type="button"
-              ng-click="$ctrl.dismiss()"
-              tabindex="-1"
-              translate>
-        Cancel &amp; Return
-      </button>
-    </div>
-    <div class="col-sm-9 text-center">
+    <div class="container-fluid">
       <button class="btn btn-md btn-primary btn-block-xs pull-right"
               type="submit"
               ng-if="!$ctrl.errorAlreadyInCart"
@@ -236,6 +227,13 @@
               ng-disabled="$ctrl.changingFrequency">
         <span ng-switch-when="true" translate>Update Gift</span>
         <span ng-switch-when="false" translate>Add to Gift Cart</span>
+      </button>
+      <button class="btn btn-default btn-md btn-block-xs"
+              type="button"
+              ng-click="$ctrl.dismiss()"
+              tabindex="-1"
+              translate>
+        Cancel &amp; Return
       </button>
       <button class="btn btn-md btn-primary btn-block-xs pull-right"
               type="button"
