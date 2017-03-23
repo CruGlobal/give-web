@@ -56,7 +56,7 @@ describe('cart service', () => {
         });
       self.$httpBackend.flush();
     });
-    it('should get cart and parse response', () => {
+    it('should get cart, parse response, and show most recent items first', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
         'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
@@ -68,7 +68,9 @@ describe('cart service', () => {
           //verify response
           expect(self.cartService.commonService.getNextDrawDate).toHaveBeenCalled();
           expect(data.items.length).toEqual(3);
-          expect(data.items[0].designationNumber).toEqual('0354433');
+          expect(data.items[0].designationNumber).toEqual('5541091');
+          expect(data.items[1].designationNumber).toEqual('0617368');
+          expect(data.items[2].designationNumber).toEqual('0354433');
           expect(data.items[1].giftStartDate.toString()).toEqual(moment('2016-10-09').toString());
 
           expect(data.cartTotal).toEqual(50);
