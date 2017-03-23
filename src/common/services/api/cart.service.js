@@ -80,7 +80,7 @@ class Cart {
         );
 
         return {
-          items: items,
+          items: items.reverse(), // Show most recent cart items first
           frequencyTotals: frequencyTotals,
           cartTotal: frequencyTotals[0].amount
         };
