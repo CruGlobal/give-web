@@ -201,7 +201,7 @@
         <div class="col-sm-6">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">
             <label translate>Phone</label>
-            <input type="text" class="form-control  form-control-subtle" name="phoneNumber" ng-model="$ctrl.donorDetails['phone-number']">
+            <input type="text" class="form-control  form-control-subtle" name="phoneNumber" ng-model="$ctrl.donorDetails['phone-number']" ng-disabled="$ctrl.donorDetails['phone-number'] && $ctrl.donorDetails.staff">
             <div role="alert" ng-messages="$ctrl.detailsForm.phoneNumber.$error" ng-if="($ctrl.detailsForm.phoneNumber | showErrors)">
               <div class="help-block" ng-message="phone" translate>The phone number entered is invalid</div>
             </div>
@@ -210,7 +210,7 @@
         <div class="col-sm-6">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.email | showErrors)}">
             <label translate>Email Address</label>
-            <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required ng-maxlength="100">
+            <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required ng-maxlength="100" ng-disabled="$ctrl.donorDetails.staff">
             <div role="alert" ng-messages="$ctrl.detailsForm.email.$error" ng-if="($ctrl.detailsForm.email | showErrors)">
               <div class="help-block" ng-message="required" translate>You must enter an email address</div>
               <div class="help-block" ng-message="email" translate>This email address is not valid</div>
