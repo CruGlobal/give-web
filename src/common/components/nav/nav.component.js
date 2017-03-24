@@ -171,7 +171,7 @@ class NavController{
   }
 
   sessionChanged() {
-    this.isSignedIn = includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() );
+    this.isSignedIn = this.customProfile || includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() );
   }
 
   getNav() {
@@ -272,6 +272,7 @@ export default angular
       submenuSkipLevels: '@',
       searchResultsPath: '@',
       editProfilePath: '@',
+      customProfile: '<',
       pullRightOptions: '<'
     }
   });
