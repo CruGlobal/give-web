@@ -14,10 +14,9 @@ describe('cart service', () => {
   beforeEach(angular.mock.module(module.name));
   let self = {};
 
-  beforeEach(inject((cartService, $httpBackend, $timeout) => {
+  beforeEach(inject((cartService, $httpBackend) => {
     self.cartService = cartService;
     self.$httpBackend = $httpBackend;
-    self.$timeout = $timeout;
   }));
 
   afterEach(() => {
@@ -117,7 +116,6 @@ describe('cart service', () => {
     describe('as a public user', () => {
       beforeEach(() => {
         self.cartService.sessionService.getRole.and.returnValue(Roles.public);
-        spyOn(self.cartService.$cookies, 'remove');
       });
 
       describe('with existing cart', () => {
@@ -143,6 +141,7 @@ describe('cart service', () => {
       describe('with empty cart', () => {
         beforeEach(() => {
           spyOn(self.cartService, 'getTotalQuantity').and.returnValue(Observable.of(0));
+          spyOn(self.cartService.sessionService, 'signOut').and.returnValue(Observable.of({}));
         });
 
         it('should delete cookies and addItem to cart', () => {
@@ -155,8 +154,6 @@ describe('cart service', () => {
           ).respond(200);
 
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe();
-          expect(self.cartService.$cookies.remove).toHaveBeenCalledTimes(2);
-          self.$timeout.flush();
           self.$httpBackend.flush();
         });
       });

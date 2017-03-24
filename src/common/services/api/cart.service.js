@@ -17,7 +17,7 @@ import 'rxjs/add/observable/from';
 import cortexApiService from '../cortexApi.service';
 import commonService from './common.service';
 import designationsService from './designations.service';
-import sessionService, {Roles, Sessions} from 'common/services/session/session.service';
+import sessionService, {Roles} from 'common/services/session/session.service';
 import {startDate} from '../giftHelpers/giftDates.service';
 
 let serviceName = 'cartService';
@@ -25,9 +25,7 @@ let serviceName = 'cartService';
 class Cart {
 
   /*@ngInject*/
-  constructor($timeout, $cookies, cortexApiService, commonService, designationsService, sessionService){
-    this.$cookies = $cookies;
-    this.$timeout = $timeout;
+  constructor(cortexApiService, commonService, designationsService, sessionService){
     this.cortexApiService = cortexApiService;
     this.commonService = commonService;
     this.designationsService = designationsService;
@@ -101,10 +99,7 @@ class Cart {
     if(this.sessionService.getRole() == Roles.public) {
       return this.getTotalQuantity().mergeMap((total) => {
         if(total <= 0) {
-          this.$cookies.remove(Sessions.cortex, {path: '/', domain: '.cru.org'});
-          this.$cookies.remove(Sessions.give, {path: '/', domain: '.cru.org'});
-          // Defer til next digest so $cookie.remove propagates.
-          return Observable.from(this.$timeout(angular.noop, 10)).mergeMap(() => {
+          return Observable.from(this.sessionService.signOut()).mergeMap(() => {
             return this._addItem(uri, data);
           });
         }

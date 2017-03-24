@@ -1,10 +1,12 @@
 <div ng-switch="$ctrl.state">
   <div class="modal-header" ng-switch-when="loading|error" ng-switch-when-separator="|">
+    <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()">
+      <span aria-hidden="true">x</span>
+    </button>
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12">
           <div class="border-bottom-small">
-            <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
             <h3 translate>Checking Payment Methods</h3>
             <p translate>You must have at least one valid payment method to continue</p>
           </div>
