@@ -1,10 +1,10 @@
 import angular from 'angular';
-import template from './payment-methods.tpl';
+import template from './payment-methods.tpl.html';
 import recurringGiftsComponent from './recurring-gifts/recurring-gifts.component';
 import profileService from 'common/services/api/profile.service.js';
 import paymentMethod from './payment-method/payment-method.component';
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
@@ -88,7 +88,7 @@ class PaymentMethodsController {
     this.paymentMethodFormModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
       backdrop: 'static',
-      windowTemplateUrl: giveModalWindowTemplate.name,
+      windowTemplateUrl: giveModalWindowTemplate,
       resolve: {
         paymentForm: this.paymentFormResolve,
         mailingAddress: this.mailingAddress,
@@ -151,11 +151,9 @@ let componentName = 'paymentMethods';
 
 export default angular
   .module(componentName, [
-    template.name,
     commonModule.name,
     recurringGiftsComponent.name,
     paymentMethodFormModal.name,
-    giveModalWindowTemplate.name,
     paymentMethod.name,
     profileService.name,
     paymentMethodDisplay.name,
@@ -163,5 +161,5 @@ export default angular
   ])
   .component(componentName, {
     controller: PaymentMethodsController,
-    templateUrl: template.name
+    templateUrl: template
   });

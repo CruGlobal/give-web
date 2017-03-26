@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './redirectGiftStep2.tpl';
+import template from './redirectGiftStep2.tpl.html';
 
 import giftSearchView from 'common/components/giftViews/giftSearchView/giftSearchView.component';
 
@@ -19,12 +19,11 @@ class RedirectGiftStep2Controller {
 
 export default angular
   .module( componentName, [
-    template.name,
     giftSearchView.name
   ] )
   .component( componentName, {
       controller:  RedirectGiftStep2Controller,
-      templateUrl: template.name,
+      templateUrl: template,
       bindings:    {
         onSelectResult: '&',
         cancel:         '&',

@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-scroll';
 
-import template from './globalWebsitesModal.tpl';
+import template from './globalWebsitesModal.tpl.html';
 
 let componentName = 'globalWebsitesModal';
 
@@ -24,12 +24,11 @@ class GlobalWebsitesModalController {
 
 export default angular
   .module(componentName, [
-    template.name,
     'duScroll'
   ])
   .component(componentName, {
     controller: GlobalWebsitesModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       dismiss: '&',
       resolve: '<'

@@ -6,7 +6,7 @@ import analyticsFactory from 'app/analytics/analytics.factory';
 import sessionService, {Roles} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 
-import template from './signIn.tpl';
+import template from './signIn.tpl.html';
 
 let componentName = 'signIn';
 
@@ -58,10 +58,9 @@ export default angular
     sessionService.name,
     sessionModalService.name,
     signInForm.name,
-    showErrors.name,
-    template.name
+    showErrors.name
   ] )
   .component( componentName, {
     controller:  SignInController,
-    templateUrl: template.name
+    templateUrl: template
   } );

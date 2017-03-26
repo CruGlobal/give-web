@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 
-import template from './paymentMethodList.tpl';
+import template from './paymentMethodList.tpl.html';
 
 let componentName = 'step0PaymentMethodList';
 
@@ -25,12 +25,11 @@ class PaymentMethodListController {
 
 export default angular
   .module(componentName, [
-    template.name,
     paymentMethodDisplay.name
   ])
   .component(componentName, {
     controller: PaymentMethodListController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       paymentMethods: '<',
       next: '&',

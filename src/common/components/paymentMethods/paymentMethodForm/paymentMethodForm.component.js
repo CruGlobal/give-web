@@ -4,7 +4,7 @@ import paymentMethodDisplay from '../paymentMethodDisplay.component';
 import bankAccountForm from '../bankAccountForm/bankAccountForm.component';
 import creditCardForm from '../creditCardForm/creditCardForm.component';
 
-import template from './paymentMethodForm.tpl';
+import template from './paymentMethodForm.tpl.html';
 
 let componentName = 'paymentMethodForm';
 
@@ -36,14 +36,13 @@ class PaymentMethodFormController{
 
 export default angular
   .module(componentName, [
-    template.name,
     paymentMethodDisplay.name,
     bankAccountForm.name,
     creditCardForm.name
   ])
   .component(componentName, {
     controller: PaymentMethodFormController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       paymentFormState: '<',
       paymentFormError: '<',

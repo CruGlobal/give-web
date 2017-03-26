@@ -4,7 +4,7 @@ import includes from 'lodash/includes';
 
 import sessionService from 'common/services/session/session.service';
 
-import template from './signInForm.tpl';
+import template from './signInForm.tpl.html';
 
 let componentName = 'signInForm';
 
@@ -50,13 +50,12 @@ class SignInFormController {
 
 export default angular
   .module( componentName, [
-    template.name,
     sessionService.name,
     'gettext'
   ] )
   .component( componentName, {
     controller:  SignInFormController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       onSuccess: '&',
       onFailure: '&'

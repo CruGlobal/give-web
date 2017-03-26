@@ -1,4 +1,3 @@
-import 'babel/external-helpers';
 import angular from 'angular';
 import concat from 'lodash/concat';
 import map from 'lodash/map';
@@ -17,7 +16,7 @@ import sessionService, {SignOutEvent} from 'common/services/session/session.serv
 import sessionModalService from 'common/services/session/sessionModal.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './thankYou.tpl';
+import template from './thankYou.tpl.html';
 
 let componentName = 'thankYou';
 
@@ -108,7 +107,6 @@ class ThankYouController{
 
 export default angular
   .module(componentName, [
-    template.name,
     commonModule.name,
     accountBenefits.name,
     help.name,
@@ -123,5 +121,5 @@ export default angular
   ])
   .component(componentName, {
     controller: ThankYouController,
-    templateUrl: template.name
+    templateUrl: template
   });

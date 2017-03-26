@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './stopGift.tpl';
+import template from './stopGift.tpl.html';
 import map from 'lodash/map';
 
 import donationsService from 'common/services/api/donations.service';
@@ -80,7 +80,6 @@ class StopGiftController {
 
 export default angular
   .module( componentName, [
-    template.name,
     donationsService.name,
     stopGiftStep1.name,
     stopGiftStep2.name,
@@ -89,7 +88,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  StopGiftController,
-      templateUrl: template.name,
+      templateUrl: template,
       bindings:    {
         changeState: '&',
         cancel:      '&',

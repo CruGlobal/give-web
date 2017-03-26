@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import paymentMethodForm from './paymentMethodForm.component.js';
 
-import template from './paymentMethodForm.modal.tpl';
+import template from './paymentMethodForm.modal.tpl.html';
 
 let componentName = 'paymentMethodFormModal';
 
@@ -16,12 +16,11 @@ class PaymentMethodFormModalController {
 
 export default angular
   .module(componentName, [
-    template.name,
     paymentMethodForm.name
   ])
   .component(componentName, {
     controller: PaymentMethodFormModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       resolve: '<',
       dismiss: '&'

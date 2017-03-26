@@ -16,7 +16,7 @@ import {scrollModalToTop} from 'common/services/modalState.service';
 import cruPayments from 'cru-payments/dist/cru-payments';
 import tsys from 'common/services/api/tsys.service';
 
-import template from './creditCardForm.tpl';
+import template from './creditCardForm.tpl.html';
 
 let componentName = 'creditCardForm';
 
@@ -173,7 +173,6 @@ class CreditCardController {
 
 export default angular
   .module(componentName, [
-    template.name,
     'ngMessages',
     displayAddressComponent.name,
     addressForm.name,
@@ -182,7 +181,7 @@ export default angular
   ])
   .component(componentName, {
     controller: CreditCardController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       paymentFormState: '<',
       paymentMethod: '<',

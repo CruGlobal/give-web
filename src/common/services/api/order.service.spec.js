@@ -336,45 +336,47 @@ describe('order service', () => {
   });
 
   describe('updatePaymentMethod', () => {
-    function runTestWith(paymentInfo, expectedRequestData){
-      spyOn(self.orderService, 'selectPaymentMethod').and.returnValue(Observable.of('placeholder'));
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
-        .respond(200, {
-          _order: [{
-            _paymentmethodinfo: [{
-              _creditcardupdateform: [{
-                links: [
-                  {
-                    rel: "updatecreditcardfororderaction",
-                    uri: "/creditcards/orders/crugive/default=/update/<payment id>="
-                  }
-                ]
+    beforeEach(() => {
+      this.runTestWith = (paymentInfo, expectedRequestData) => {
+        spyOn(self.orderService, 'selectPaymentMethod').and.returnValue(Observable.of('placeholder'));
+        self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
+          .respond(200, {
+            _order: [{
+              _paymentmethodinfo: [{
+                _creditcardupdateform: [{
+                  links: [
+                    {
+                      rel: "updatecreditcardfororderaction",
+                      uri: "/creditcards/orders/crugive/default=/update/<payment id>="
+                    }
+                  ]
+                }]
               }]
             }]
-          }]
-        });
+          });
 
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/creditcards/orders/crugive/default=/update/<payment id>=',
-        expectedRequestData)
-        .respond(200, {});
+        self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/creditcards/orders/crugive/default=/update/<payment id>=',
+          expectedRequestData)
+          .respond(200, {});
 
-      self.orderService.updatePaymentMethod({ selectAction: '<select uri>' }, { creditCard: paymentInfo })
-        .subscribe();
-      expect(self.orderService.selectPaymentMethod).toHaveBeenCalledWith('<select uri>');
+        self.orderService.updatePaymentMethod({ selectAction: '<select uri>' }, { creditCard: paymentInfo })
+          .subscribe();
+        expect(self.orderService.selectPaymentMethod).toHaveBeenCalledWith('<select uri>');
 
-      self.$httpBackend.flush();
-      self.$httpBackend.flush();
-    }
+        self.$httpBackend.flush();
+        self.$httpBackend.flush();
+      };
+    });
     it('should update the given payment method', () => {
-      runTestWith({ 'cardholder-name': 'New name' },
+      this.runTestWith({ 'cardholder-name': 'New name' },
         { 'cardholder-name': 'New name' });
     });
     it('should update the given payment method with an address', () => {
-      runTestWith({ 'cardholder-name': 'New name', address: { country: 'US' } },
+      this.runTestWith({ 'cardholder-name': 'New name', address: { country: 'US' } },
         { 'cardholder-name': 'New name', address: { 'country-name': 'US' } });
     });
     it('should omit the credit card field since it can\'t be updated', () => {
-      runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
+      this.runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
         { 'cardholder-name': 'New name' });
     });
   });

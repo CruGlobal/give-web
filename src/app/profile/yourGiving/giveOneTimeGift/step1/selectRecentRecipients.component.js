@@ -3,7 +3,7 @@ import filter from 'lodash/filter';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 
-import template from './selectRecentRecipients.tpl';
+import template from './selectRecentRecipients.tpl.html';
 
 let componentName = 'step1SelectRecentRecipients';
 
@@ -21,12 +21,11 @@ class SelectRecentRecipientsController {
 
 export default angular
   .module(componentName, [
-    template.name,
     giftListItem.name
   ])
   .component(componentName, {
     controller: SelectRecentRecipientsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       recentRecipients: '<',
       dismiss: '&',

@@ -5,7 +5,7 @@ import giftSearchView from 'common/components/giftViews/giftSearchView/giftSearc
 
 import RecurringGiftModel from 'common/models/recurringGift.model';
 
-import template from './searchRecipients.tpl';
+import template from './searchRecipients.tpl.html';
 
 let componentName = 'step2SearchRecipients';
 
@@ -33,12 +33,11 @@ class SearchRecipientsController {
 
 export default angular
   .module(componentName, [
-    template.name,
     giftSearchView.name
   ])
   .component(componentName, {
     controller: SearchRecipientsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       dismiss: '&',
       previous: '&',

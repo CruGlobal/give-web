@@ -5,7 +5,7 @@ import sessionService from 'common/services/session/session.service';
 import cartService from 'common/services/api/cart.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './navCart.tpl';
+import template from './navCart.tpl.html';
 
 export let giftAddedEvent = 'giftAddedToCart';
 export let cartUpdatedEvent = 'cartUpdatedEvent';
@@ -60,14 +60,13 @@ class NavCartController{
 
 export default angular
   .module(componentName, [
-    template.name,
     cartService.name,
     sessionService.name,
     analyticsFactory.name
   ])
   .component(componentName, {
     controller: NavCartController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       mobile: '@'
     }

@@ -22,7 +22,7 @@ import commonService from 'common/services/api/common.service';
 import {validPaymentMethods} from 'common/services/paymentHelpers/validPaymentMethods';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
-import template from './editRecurringGifts.modal.tpl';
+import template from './editRecurringGifts.modal.tpl.html';
 
 let componentName = 'editRecurringGiftsModal';
 
@@ -172,7 +172,6 @@ class EditRecurringGiftsModalController {
 
 export default angular
   .module(componentName, [
-    template.name,
     step0AddUpdatePaymentMethod.name,
     step0paymentMethodList.name,
     step1EditRecurringGifts.name,
@@ -186,7 +185,7 @@ export default angular
   ])
   .component(componentName, {
     controller: EditRecurringGiftsModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       close: '&',
       dismiss: '&'

@@ -1,6 +1,9 @@
-import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-router';
+
+import '../../assets/scss/styles.scss';
+import '../../assets/scss/global-nav.scss';
+import './main.scss';
 
 import commonModule from 'common/common.module';
 import cartComponent from '../cart/cart.component';
@@ -16,7 +19,7 @@ import profileComponent from '../profile/profile.component';
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
 import receiptsComponent from '../profile/receipts/receipts.component';
 
-import template from './main.tpl';
+import template from './main.tpl.html';
 
 let componentName = 'main';
 
@@ -77,7 +80,6 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
 
 export default angular
   .module(componentName, [
-    template.name,
     commonModule.name,
     cartComponent.name,
     checkoutComponent.name,
@@ -95,5 +97,5 @@ export default angular
   .config(routingConfig)
   .component(componentName, {
     controller: MainController,
-    templateUrl: template.name
+    templateUrl: template
   });

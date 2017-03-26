@@ -3,7 +3,7 @@ import find from 'lodash/find';
 
 import geographiesService from 'common/services/api/geographies.service';
 
-import template from './addressForm.tpl';
+import template from './addressForm.tpl.html';
 
 let componentName = 'addressForm';
 
@@ -56,12 +56,11 @@ class AddressFormController {
 
 export default angular
   .module( componentName, [
-    template.name,
     geographiesService.name
   ] )
   .component( componentName, {
     controller:  AddressFormController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       address: '=',
       parentForm: '<',

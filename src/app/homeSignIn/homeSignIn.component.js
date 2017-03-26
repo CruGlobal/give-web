@@ -6,7 +6,7 @@ import sessionService, {Roles} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './homeSignIn.tpl';
+import template from './homeSignIn.tpl.html';
 
 let componentName = 'homeSignIn';
 
@@ -54,7 +54,6 @@ class HomeSignInController {
 
 export default angular
   .module( componentName, [
-    template.name,
     commonModule.name,
     sessionService.name,
     sessionModalService.name,
@@ -62,5 +61,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  HomeSignInController,
-    templateUrl: template.name
+    templateUrl: template
   } );

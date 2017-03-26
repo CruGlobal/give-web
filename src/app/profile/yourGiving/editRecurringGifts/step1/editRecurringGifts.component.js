@@ -6,7 +6,7 @@ import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdat
 
 import donationsService from 'common/services/api/donations.service';
 
-import template from './editRecurringGifts.tpl';
+import template from './editRecurringGifts.tpl.html';
 
 let componentName = 'step1EditRecurringGifts';
 
@@ -46,14 +46,13 @@ class EditRecurringGiftsController {
 
 export default angular
   .module(componentName, [
-    template.name,
     giftListItem.name,
     giftUpdateView.name,
     donationsService.name
   ])
   .component(componentName, {
     controller: EditRecurringGiftsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       recurringGifts: '<',
       dismiss: '&',

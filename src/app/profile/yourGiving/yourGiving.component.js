@@ -1,4 +1,3 @@
-import 'babel/external-helpers';
 import angular from 'angular';
 import 'angular-ui-bootstrap';
 import commonModule from 'common/common.module';
@@ -12,7 +11,7 @@ import historicalView from './historicalView/historicalView.component';
 import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.modal.component';
 import giveOneTimeGiftModal from './giveOneTimeGift/giveOneTimeGift.modal.component';
 import stopStartRecurringGiftsModal from './stopStartRecurringGifts/stopStartRecurringGifts.modal.component';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
 import profileService from 'common/services/api/profile.service';
 import sessionEnforcerService, {
   EnforcerCallbacks,
@@ -20,7 +19,7 @@ import sessionEnforcerService, {
 } from 'common/services/session/sessionEnforcer.service';
 import sessionService, {Roles, SignOutEvent} from 'common/services/session/session.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
-import template from './yourGiving.tpl';
+import template from './yourGiving.tpl.html';
 
 let componentName = 'yourGiving';
 
@@ -133,7 +132,7 @@ class YourGivingController {
     this.$uibModal.open( {
       component:         'editRecurringGiftsModal',
       backdrop:          'static', // Disables closing on click
-      windowTemplateUrl: giveModalWindowTemplate.name
+      windowTemplateUrl: giveModalWindowTemplate
     } )
       .result.then( () => {
       this.recurringGiftsUpdateSuccess = true;
@@ -145,7 +144,7 @@ class YourGivingController {
     this.$uibModal.open({
       component: 'giveOneTimeGiftModal',
       backdrop: 'static', // Disables closing on click
-      windowTemplateUrl: giveModalWindowTemplate.name
+      windowTemplateUrl: giveModalWindowTemplate
     });
   }
 
@@ -154,7 +153,7 @@ class YourGivingController {
     this.$uibModal.open( {
       component:         'stopStartRecurringGiftsModal',
       backdrop:          'static',
-      windowTemplateUrl: giveModalWindowTemplate.name
+      windowTemplateUrl: giveModalWindowTemplate
     } )
       .result.then( () => {
       this.stopStartGiftsSuccess = true;
@@ -171,15 +170,13 @@ export default angular
     editRecurringGiftsModal.name,
     giveOneTimeGiftModal.name,
     stopStartRecurringGiftsModal.name,
-    giveModalWindowTemplate.name,
     profileService.name,
     sessionEnforcerService.name,
     sessionService.name,
     analyticsFactory.name,
-    template.name,
     'ui.bootstrap'
   ] )
   .component( componentName, {
     controller:  YourGivingController,
-    templateUrl: template.name
+    templateUrl: template
   } );

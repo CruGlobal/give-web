@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import template from './displayRateTotals.tpl';
+import template from './displayRateTotals.tpl.html';
 
 let componentName = 'displayRateTotals';
 
@@ -23,12 +23,10 @@ class DisplayRateTotalsController {
 }
 
 export default angular
-  .module( componentName, [
-    template.name
-  ] )
+  .module( componentName, [] )
   .component( componentName, {
     controller:  DisplayRateTotalsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       rateTotals: '<'
     }

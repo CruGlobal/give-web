@@ -11,7 +11,7 @@ import addressForm from 'common/components/addressForm/addressForm.component';
 import orderService from 'common/services/api/order.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
 
-import template from './contactInfo.tpl';
+import template from './contactInfo.tpl.html';
 
 let componentName = 'contactInfo';
 
@@ -118,7 +118,6 @@ class Step1Controller{
 
 export default angular
   .module(componentName, [
-    template.name,
     'ngMessages',
     addressForm.name,
     orderService.name,
@@ -126,7 +125,7 @@ export default angular
   ])
   .component(componentName, {
     controller: Step1Controller,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       submitted: '<',
       onSubmit: '&'

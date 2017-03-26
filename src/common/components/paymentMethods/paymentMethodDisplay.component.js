@@ -1,7 +1,7 @@
 import angular from 'angular';
 import appConfig from 'common/app.config';
 
-import template from './paymentMethodDisplay.tpl';
+import template from './paymentMethodDisplay.tpl.html';
 
 let componentName = 'paymentMethodDisplay';
 
@@ -15,12 +15,11 @@ class PaymentMethodDisplayController{
 
 export default angular
   .module(componentName, [
-    template.name,
     appConfig.name
   ])
   .component(componentName, {
     controller: PaymentMethodDisplayController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       paymentMethod: '<',
       expired: '<'

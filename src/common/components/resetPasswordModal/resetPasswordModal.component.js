@@ -4,7 +4,7 @@ import 'angular-messages';
 import modalStateService from 'common/services/modalState.service';
 import sessionService from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
-import template from './resetPasswordModal.tpl';
+import template from './resetPasswordModal.tpl.html';
 import valueMatch from 'common/directives/valueMatch.directive';
 
 let componentName = 'resetPasswordModal';
@@ -83,7 +83,6 @@ export default angular
   .module( componentName, [
     'gettext',
     'ngMessages',
-    template.name,
     showErrors.name,
     sessionService.name,
     modalStateService.name,
@@ -91,7 +90,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ResetPasswordModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&'

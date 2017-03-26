@@ -4,7 +4,7 @@ import paymentMethodForm from 'common/components/paymentMethods/paymentMethodFor
 
 import profileService from 'common/services/api/profile.service';
 
-import template from './addUpdatePaymentMethod.tpl';
+import template from './addUpdatePaymentMethod.tpl.html';
 
 let componentName = 'step0AddUpdatePaymentMethod';
 
@@ -49,13 +49,12 @@ class AddUpdatePaymentMethodsController {
 
 export default angular
   .module(componentName, [
-    template.name,
     paymentMethodForm.name,
     profileService.name
   ])
   .component(componentName, {
     controller: AddUpdatePaymentMethodsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       paymentMethod: '<',
       canGoBack: '<',

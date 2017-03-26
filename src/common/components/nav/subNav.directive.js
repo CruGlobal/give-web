@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import template from './subNav.tpl';
+import template from './subNav.tpl.html';
 
 let directiveName = 'cruSubNav';
 
@@ -9,7 +9,7 @@ function cruSubNav($window) {
   let offsetTop;
   return {
     restrict: 'E',
-    templateUrl: template.name,
+    templateUrl: template,
     link: function ( scope, element ) {
 
       let subNavigation = element.children()[0];
@@ -29,7 +29,5 @@ function cruSubNav($window) {
 }
 
 export default angular
-  .module( directiveName, [
-    template.name
-  ] )
+  .module( directiveName, [] )
   .directive( directiveName, cruSubNav );

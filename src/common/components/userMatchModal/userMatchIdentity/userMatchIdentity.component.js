@@ -1,6 +1,6 @@
 import angular from 'angular';
 import isEmpty from 'lodash/isEmpty';
-import template from './userMatchIdentity.tpl';
+import template from './userMatchIdentity.tpl.html';
 
 let componentName = 'userMatchIdentity';
 
@@ -25,12 +25,10 @@ class UserMatchIdentityController {
 }
 
 export default angular
-  .module( componentName, [
-    template.name
-  ] )
+  .module( componentName, [] )
   .component( componentName, {
     controller:  UserMatchIdentityController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       contacts:        '<',
       onSelectContact: '&'

@@ -1,16 +1,12 @@
 node_modules
-bower_components
 dist
 .idea
 .DS_STORE
 coverage
-jspm_packages
 
 *.log
 *.back.*
 .sass-cache
-
-src/**/*.tpl.js
 
 # Rails / Ruby
 /.bundle

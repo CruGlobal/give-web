@@ -1,6 +1,8 @@
 import angular from 'angular';
 
-import template from './loading.tpl.js';
+import './loading.scss';
+
+import template from './loading.tpl.html';
 
 let componentName = 'loading';
 
@@ -39,12 +41,10 @@ class LoadingController{
 }
 
 export default angular
-  .module(componentName, [
-    template.name
-  ])
+  .module(componentName, [])
   .component(componentName, {
     controller: LoadingController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       type: '@',
       inline: '@'

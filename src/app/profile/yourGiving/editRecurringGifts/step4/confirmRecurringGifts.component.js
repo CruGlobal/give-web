@@ -11,7 +11,7 @@ import giftDetailsView from 'common/components/giftViews/giftDetailsView/giftDet
 
 import donationsService from 'common/services/api/donations.service';
 
-import template from './confirmRecurringGifts.tpl';
+import template from './confirmRecurringGifts.tpl.html';
 
 import analyticsFactory from 'app/analytics/analytics.factory';
 
@@ -69,7 +69,6 @@ class ConfirmRecurringGiftsController {
 
 export default angular
   .module(componentName, [
-    template.name,
     giftListItem.name,
     giftDetailsView.name,
     donationsService.name,
@@ -77,7 +76,7 @@ export default angular
   ])
   .component(componentName, {
     controller: ConfirmRecurringGiftsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       recurringGiftChanges: '<',
       additions: '<',

@@ -12,7 +12,7 @@ import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component'
 
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './cart.tpl';
+import template from './cart.tpl.html';
 
 let componentName = 'cart';
 
@@ -94,7 +94,6 @@ class CartController {
 
 export default angular
   .module(componentName, [
-    template.name,
     commonModule.name,
     displayRateTotals.name,
     cartService.name,
@@ -105,5 +104,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  CartController,
-    templateUrl: template.name
+    templateUrl: template
   } );

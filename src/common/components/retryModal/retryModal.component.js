@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './retryModal.tpl';
+import template from './retryModal.tpl.html';
 
 let componentName = 'retryModal';
 
@@ -11,12 +11,10 @@ class RetryModalController {
 }
 
 export default angular
-  .module(componentName, [
-    template.name
-  ])
+  .module(componentName, [])
   .component(componentName, {
     controller: RetryModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     transclude: true,
     bindings: {
       title: '@',

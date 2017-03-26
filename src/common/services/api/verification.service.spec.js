@@ -3,7 +3,7 @@ import 'angular-mocks';
 import module from './verification.service';
 
 import contactsResponse from './fixtures/cortex-verificationcontacts.fixture';
-import questionsResponse from './fixtures/cortex-verifyregistrations-form';
+import questionsResponse from './fixtures/cortex-verifyregistrations-form.fixture';
 
 describe( 'verification service', () => {
   beforeEach( angular.mock.module( module.name ) );

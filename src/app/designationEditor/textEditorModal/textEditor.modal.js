@@ -2,6 +2,8 @@ import angular from 'angular';
 import 'textangular';
 import 'textangular/dist/textAngular-sanitize';
 
+import './textEditor.scss';
+
 let controllerName = 'textEditorCtrl';
 
 class ModalInstanceCtrl {

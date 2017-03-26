@@ -15,7 +15,7 @@ import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.
 
 import designationsService from 'common/services/api/designations.service';
 
-import template from './giftSearchView.tpl';
+import template from './giftSearchView.tpl.html';
 
 let componentName = 'giftSearchView';
 
@@ -87,13 +87,12 @@ class GiftSearchViewController {
 
 export default angular
   .module( componentName, [
-    template.name,
     giftListItem.name,
     designationsService.name
   ] )
   .component( componentName, {
     controller:  GiftSearchViewController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       selectable: '@',
       selectLabel: '@',

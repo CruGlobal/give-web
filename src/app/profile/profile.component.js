@@ -9,7 +9,7 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/do';
 import { parse, isValidNumber } from 'libphonenumber-js';
 
-import template from './profile.tpl';
+import template from './profile.tpl.html';
 
 import profileService from 'common/services/api/profile.service';
 import addressForm from 'common/components/addressForm/addressForm.component';
@@ -419,7 +419,6 @@ class ProfileController {
 
 export default angular
   .module(componentName, [
-    template.name,
     profileService.name,
     'ngMessages',
     sessionEnforcerService.name,
@@ -429,5 +428,5 @@ export default angular
   ])
   .component(componentName, {
     controller: ProfileController,
-    templateUrl: template.name
+    templateUrl: template
   });

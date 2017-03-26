@@ -4,7 +4,7 @@ import 'angular-ordinal';
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
 import {quarterlyMonths} from 'common/services/giftHelpers/giftDates.service';
 
-import template from './giftDetailsView.tpl';
+import template from './giftDetailsView.tpl.html';
 
 let componentName = 'giftDetailsView';
 
@@ -18,13 +18,12 @@ class GiftDetailsViewController {
 
 export default angular
   .module( componentName, [
-    template.name,
     paymentMethodDisplay.name,
     'ordinal'
   ] )
   .component( componentName, {
     controller:  GiftDetailsViewController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       gift: '<'
     }

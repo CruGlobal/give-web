@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './restartGift.tpl';
+import template from './restartGift.tpl.html';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
@@ -20,8 +20,8 @@ import redirectGiftStep2 from '../redirectGift/step2/redirectGiftStep2.component
 import configureGifts from './step2/configureGifts/configureGifts.component';
 import confirmGifts from './step3/confirmGifts/confirmGifts.component';
 import {validPaymentMethods} from 'common/services/paymentHelpers/validPaymentMethods';
-import addUpdatePaymentMethod from 'src/app/profile/yourGiving/editRecurringGifts/step0/addUpdatePaymentMethod.component';
-import step0PaymentMethodList from 'src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.component';
+import addUpdatePaymentMethod from 'app/profile/yourGiving/editRecurringGifts/step0/addUpdatePaymentMethod.component';
+import step0PaymentMethodList from 'app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.component';
 
 import {scrollModalToTop} from 'common/services/modalState.service';
 
@@ -205,7 +205,6 @@ class RestartGiftController {
 
 export default angular
   .module( componentName, [
-    template.name,
     commonService.name,
     donationsService.name,
     profileService.name,
@@ -220,7 +219,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  RestartGiftController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       changeState: '&',
       cancel:      '&',
