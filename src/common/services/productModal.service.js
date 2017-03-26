@@ -7,7 +7,7 @@ import designationsService from 'common/services/api/designations.service';
 import commonService from 'common/services/api/common.service';
 import productConfigModal, {giveGiftParams} from 'app/productConfig/productConfigModal/productConfig.modal.component';
 import modalStateService from 'common/services/modalState.service';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
 
 const serviceName = 'productModalService';
 
@@ -26,7 +26,7 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
       .open( {
         component:    productConfigModal.name,
         size:         'lg',
-        windowTemplateUrl: giveModalWindowTemplate.name,
+        windowTemplateUrl: giveModalWindowTemplate,
         resolve:      {
           productData: () => {
             return designationsService.productLookup( code ).toPromise();
@@ -90,7 +90,6 @@ export default angular
     commonService.name,
     designationsService.name,
     productConfigModal.name,
-    modalStateService.name,
-    giveModalWindowTemplate.name
+    modalStateService.name
   ] )
   .factory( serviceName, ProductModalService );

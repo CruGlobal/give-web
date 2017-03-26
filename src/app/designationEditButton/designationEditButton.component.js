@@ -3,7 +3,7 @@ import includes from 'lodash/includes';
 import sessionService, {Roles} from 'common/services/session/session.service';
 import designationEditorService from 'common/services/api/designationEditor.service';
 
-import template from './designationEditButton.tpl';
+import template from './designationEditButton.tpl.html';
 
 let componentName = 'designationEditButton';
 
@@ -38,13 +38,12 @@ class DesignationEditButtonController {
 
 export default angular
   .module( componentName, [
-    template.name,
     sessionService.name,
     designationEditorService.name
   ] )
   .component( componentName, {
     controller:  DesignationEditButtonController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       designationNumber: '@',
       campaignPage: '@'

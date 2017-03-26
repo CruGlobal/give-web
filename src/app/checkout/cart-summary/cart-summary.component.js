@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 
-import template from './cart-summary.tpl';
+import template from './cart-summary.tpl.html';
 
 let componentName = 'checkoutCartSummary';
 
@@ -17,12 +17,11 @@ class CartSummaryController{
 
 export default angular
   .module(componentName, [
-    template.name,
     displayRateTotals.name
   ])
   .component(componentName, {
     controller: CartSummaryController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       cartData: '<',
       showSubmitBtn: '<',

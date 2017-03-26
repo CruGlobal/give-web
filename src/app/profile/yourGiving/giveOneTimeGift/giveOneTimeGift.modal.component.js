@@ -13,7 +13,7 @@ import donationsService from 'common/services/api/donations.service';
 import cartService from 'common/services/api/cart.service';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
-import template from './giveOneTimeGift.modal.tpl';
+import template from './giveOneTimeGift.modal.tpl.html';
 
 let componentName = 'giveOneTimeGiftModal';
 
@@ -135,7 +135,6 @@ class GiveOneTimeGiftModalController {
 
 export default angular
   .module(componentName, [
-    template.name,
     step1SelectRecentRecipients.name,
     step1SearchRecipients.name,
     step2EnterAmounts.name,
@@ -144,7 +143,7 @@ export default angular
   ])
   .component(componentName, {
     controller: GiveOneTimeGiftModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       close: '&',
       dismiss: '&'

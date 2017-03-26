@@ -1,6 +1,6 @@
 import angular from 'angular';
 import 'angular-messages';
-import template from './productConfig.tpl';
+import template from './productConfig.tpl.html';
 import commonModule from 'common/common.module';
 import productModalService from 'common/services/productModal.service';
 import modalStateService from 'common/services/modalState.service';
@@ -58,12 +58,11 @@ export default angular
     modalStateService.name,
     productModalService.name,
     designationEditButtonComponent.name,
-    template.name,
     analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  ProductConfigController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       campaignCode: '@',
       campaignPage: '@',

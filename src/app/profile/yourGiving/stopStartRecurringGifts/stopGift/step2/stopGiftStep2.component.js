@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './stopGiftStep2.tpl';
+import template from './stopGiftStep2.tpl.html';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 import giftSummaryView from 'common/components/giftViews/giftDetailsView/giftDetailsView.component';
@@ -15,13 +15,12 @@ class StopGiftStep2Controller {
 
 export default angular
   .module( componentName, [
-    template.name,
     giftListItem.name,
     giftSummaryView.name
   ] )
   .component( componentName, {
       controller:  StopGiftStep2Controller,
-      templateUrl: template.name,
+      templateUrl: template,
       bindings:    {
         gifts:     '<',
         onConfirm: '&',

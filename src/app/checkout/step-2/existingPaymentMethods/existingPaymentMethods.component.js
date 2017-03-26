@@ -7,9 +7,9 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 
 import orderService from 'common/services/api/order.service';
 import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
 
-import template from './existingPaymentMethods.tpl';
+import template from './existingPaymentMethods.tpl.html';
 
 let componentName = 'checkoutExistingPaymentMethods';
 
@@ -77,7 +77,7 @@ class ExistingPaymentMethodsController {
     this.paymentMethodFormModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
       backdrop: 'static', // Disables closing on click
-      windowTemplateUrl: giveModalWindowTemplate.name,
+      windowTemplateUrl: giveModalWindowTemplate,
       resolve: {
         paymentForm: this.paymentFormResolve,
         paymentMethod: existingPaymentMethod,
@@ -122,16 +122,14 @@ class ExistingPaymentMethodsController {
 
 export default angular
   .module(componentName, [
-    template.name,
     'ui.bootstrap',
     paymentMethodDisplay.name,
     paymentMethodFormModal.name,
-    giveModalWindowTemplate.name,
     orderService.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       paymentFormState: '<',
       paymentFormError: '<',

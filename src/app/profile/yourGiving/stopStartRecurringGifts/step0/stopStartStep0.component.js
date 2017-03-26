@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './stopStartStep0.tpl';
+import template from './stopStartStep0.tpl.html';
 
 let componentName = 'stopStartStep0';
 
@@ -11,12 +11,10 @@ class StopStartStep0Controller {
 }
 
 export default angular
-  .module( componentName, [
-    template.name
-  ] )
+  .module( componentName, [] )
   .component( componentName, {
     controller:  StopStartStep0Controller,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       giftAction:  '<',
       changeState: '&',

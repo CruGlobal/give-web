@@ -12,8 +12,7 @@ function ModalStateService() {
     registeredModals[name] = injectableFn;
   }
 
-  /*@ngInject*/
-  this.$get = function ( $injector, $location, $document, $httpParamSerializer ) {
+  this.$get = /*@ngInject*/ ( $injector, $location, $document, $httpParamSerializer ) => {
     return {
       name:        name,
       invokeModal: invokeModal,

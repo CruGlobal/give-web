@@ -1,4 +1,3 @@
-import 'babel/external-helpers';
 import angular from 'angular';
 import 'rxjs/add/operator/finally';
 
@@ -20,7 +19,7 @@ import {Roles, SignOutEvent} from 'common/services/session/session.service';
 
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './checkout.tpl';
+import template from './checkout.tpl.html';
 
 let componentName = 'checkout';
 
@@ -97,7 +96,6 @@ class CheckoutController{
 
 export default angular
   .module(componentName, [
-    template.name,
     commonModule.name,
     step1.name,
     step2.name,
@@ -112,5 +110,5 @@ export default angular
   ])
   .component(componentName, {
     controller: CheckoutController,
-    templateUrl: template.name
+    templateUrl: template
   });

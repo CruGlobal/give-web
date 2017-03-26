@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-gettext';
 import sessionService from 'common/services/session/session.service';
-import template from './accountBenefitsModal.tpl';
+import template from './accountBenefitsModal.tpl.html';
 
 import {Roles} from 'common/services/session/session.service';
 
@@ -33,12 +33,11 @@ class AccountBenefitsModalController {
 export default angular
   .module( componentName, [
     'gettext',
-    sessionService.name,
-    template.name
+    sessionService.name
   ] )
   .component( componentName, {
     controller:  AccountBenefitsModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',

@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './confirmGifts.tpl';
+import template from './confirmGifts.tpl.html';
 import isEmpty from 'lodash/isEmpty';
 import concat from 'lodash/concat';
 import {Observable} from 'rxjs/Observable';
@@ -64,7 +64,6 @@ class ConfirmGiftsController {
 
 export default angular
   .module( componentName, [
-    template.name,
     donationsService.name,
     giftListItem.name,
     giftDetailsView.name,
@@ -72,7 +71,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ConfirmGiftsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       gifts:      '<',
       cancel:     '&',

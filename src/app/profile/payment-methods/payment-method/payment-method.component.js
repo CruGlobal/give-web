@@ -1,10 +1,10 @@
 import angular from 'angular';
-import template from './payment-method.tpl';
+import template from './payment-method.tpl.html';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import recurringGiftsComponent from '../recurring-gifts/recurring-gifts.component';
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl';
+import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
 import profileService from 'common/services/api/profile.service';
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
@@ -40,7 +40,7 @@ class PaymentMethodController{
     this.successMessage.show = false;
     this.editPaymentMethodModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
-      windowTemplateUrl: giveModalWindowTemplate.name,
+      windowTemplateUrl: giveModalWindowTemplate,
       resolve: {
         paymentForm: this.paymentFormResolve,
         paymentMethod: this.model,
@@ -89,7 +89,7 @@ class PaymentMethodController{
     this.deletePaymentMethodModal = this.$uibModal.open({
       component: 'deletePaymentMethodModal',
       backdrop: 'static',
-      windowTemplateUrl: giveModalWindowTemplate.name,
+      windowTemplateUrl: giveModalWindowTemplate,
       resolve: {
         paymentMethod: () => this.model,
         mailingAddress: () => this.mailingAddress,
@@ -115,18 +115,16 @@ class PaymentMethodController{
 
 export default angular
   .module(componentName, [
-    template.name,
     displayAddressComponent.name,
     recurringGiftsComponent.name,
     paymentMethodFormModal.name,
     deletePaymentMethodModal.name,
-    giveModalWindowTemplate.name,
     profileService.name,
     analyticsFactory.name
   ])
   .component(componentName, {
     controller: PaymentMethodController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       model: '<',
       successMessage: '=',

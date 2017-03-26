@@ -3,7 +3,7 @@ import 'angular-gettext';
 import 'angular-messages';
 import sessionService from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
-import template from './signUpModal.tpl';
+import template from './signUpModal.tpl.html';
 import valueMatch from 'common/directives/valueMatch.directive';
 
 let componentName = 'signUpModal';
@@ -62,12 +62,11 @@ export default angular
     'ngMessages',
     sessionService.name,
     showErrors.name,
-    template.name,
     valueMatch.name
   ] )
   .component( componentName, {
     controller:  SignUpModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',

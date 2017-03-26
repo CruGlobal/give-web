@@ -4,7 +4,7 @@ import keyBy from 'lodash/keyBy';
 
 import geographiesService from 'common/services/api/geographies.service';
 
-import template from './display-address.tpl';
+import template from './display-address.tpl.html';
 
 let componentName = 'displayAddress';
 
@@ -35,12 +35,11 @@ class DisplayAddressController {
 
 export default angular
   .module( componentName, [
-    template.name,
     geographiesService.name
   ] )
   .component( componentName, {
     controller:  DisplayAddressController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       address: '<'
     }

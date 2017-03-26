@@ -1,7 +1,7 @@
 import angular from 'angular';
 import desigSrc from 'common/directives/desigSrc.directive';
 import productModalService from 'common/services/productModal.service';
-import template from './historicalGift.tpl';
+import template from './historicalGift.tpl.html';
 
 let componentName = 'historicalGift';
 
@@ -24,12 +24,11 @@ class HistoricalGift {
 export default angular
   .module( componentName, [
     desigSrc.name,
-    productModalService.name,
-    template.name
+    productModalService.name
   ] )
   .component( componentName, {
     controller:  HistoricalGift,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       gift: '<',
       onManageGift: '&'

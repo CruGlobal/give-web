@@ -1,7 +1,7 @@
 import angular from 'angular';
 import sessionModalService from 'common/services/session/sessionModal.service';
 import sessionService from 'common/services/session/session.service';
-import template from './accountBenefits.tpl';
+import template from './accountBenefits.tpl.html';
 
 import {Roles} from 'common/services/session/session.service';
 
@@ -41,12 +41,11 @@ class AccountBenefitsController {
 export default angular
   .module( componentName, [
     sessionModalService.name,
-    sessionService.name,
-    template.name
+    sessionService.name
   ] )
   .component( componentName, {
     controller:  AccountBenefitsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       donorDetails: '<'
     }

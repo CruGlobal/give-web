@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './userMatchQuestion.tpl';
+import template from './userMatchQuestion.tpl.html';
 
 let componentName = 'userMatchQuestion';
 
@@ -25,12 +25,10 @@ class UserMatchQuestionController {
 }
 
 export default angular
-  .module( componentName, [
-    template.name
-  ] )
+  .module( componentName, [] )
   .component( componentName, {
     controller:  UserMatchQuestionController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       question:         '<',
       questionIndex:    '<',

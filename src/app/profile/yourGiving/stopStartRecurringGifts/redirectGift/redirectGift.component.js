@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './redirectGift.tpl';
+import template from './redirectGift.tpl.html';
 import pick from 'lodash/pick';
 
 import donationsService from 'common/services/api/donations.service';
@@ -76,7 +76,6 @@ class RedirectGiftController {
 
 export default angular
   .module( componentName, [
-    template.name,
     donationsService.name,
     redirectGiftStep1.name,
     redirectGiftStep2.name,
@@ -85,7 +84,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  RedirectGiftController,
-      templateUrl: template.name,
+      templateUrl: template,
       bindings:    {
         changeState: '&',
         cancel:      '&',

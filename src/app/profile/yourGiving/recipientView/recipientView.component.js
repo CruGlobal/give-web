@@ -1,7 +1,7 @@
 import angular from 'angular';
 import donationsService from 'common/services/api/donations.service';
 import recipientGift from './recipientGift/recipientGift.component';
-import template from './recipientView.tpl';
+import template from './recipientView.tpl.html';
 
 let componentName = 'recipientView';
 
@@ -47,12 +47,11 @@ class RecipientView {
 export default angular
   .module( componentName, [
     donationsService.name,
-    recipientGift.name,
-    template.name
+    recipientGift.name
   ] )
   .component( componentName, {
     controller:  RecipientView,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       filter:     '<',
       reload:     '<',

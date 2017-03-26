@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './stopGiftStep1.tpl';
+import template from './stopGiftStep1.tpl.html';
 import find from 'lodash/find';
 import filter from 'lodash/filter';
 
@@ -31,13 +31,12 @@ class StopGiftStep1Controller {
 
 export default angular
   .module( componentName, [
-    template.name,
     giftListItem.name,
     giftSummaryView.name
   ] )
   .component( componentName, {
       controller:  StopGiftStep1Controller,
-      templateUrl: template.name,
+      templateUrl: template,
       bindings:    {
         gifts:         '<',
         onSelectGifts: '&',

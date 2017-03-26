@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './redirectGiftStep3.tpl';
+import template from './redirectGiftStep3.tpl.html';
 import commonService from 'common/services/api/common.service';
 import donationsService from 'common/services/api/donations.service';
 
@@ -48,7 +48,6 @@ class RedirectGiftStep3Controller {
 
 export default angular
   .module( componentName, [
-    template.name,
     commonService.name,
     donationsService.name,
     giftListItem.name,
@@ -58,7 +57,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  RedirectGiftStep3Controller,
-      templateUrl: template.name,
+      templateUrl: template,
       bindings:    {
         stopGift:   '<',
         gift:       '<',

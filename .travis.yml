@@ -1,20 +1,14 @@
 language: node_js
-node_js: "6"
-before_install:
-  - npm install jspm
-  - ./node_modules/.bin/jspm config registries.github.auth $JSPM_GITHUB_AUTH_TOKEN
-install:
-  - npm install
+node_js: "7"
 script:
-  - gulp lint
-  - gulp test
-  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "dev" ]); then gulp release; fi
+  - yarn run test -- --single-run
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "dev" ]); then yarn run build; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 cache:
+  yarn: true
   directories:
   - node_modules
-  - jspm_packages
 env:
   global:
     - AWS_KEY=AKIAI6YF75KDZNQJBFXA

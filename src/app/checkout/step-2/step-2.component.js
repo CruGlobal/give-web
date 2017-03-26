@@ -7,7 +7,7 @@ import orderService from 'common/services/api/order.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
-import template from './step-2.tpl';
+import template from './step-2.tpl.html';
 
 let componentName = 'checkoutStep2';
 
@@ -81,7 +81,6 @@ class Step2Controller{
 
 export default angular
   .module(componentName, [
-    template.name,
     paymentMethodForm.name,
     existingPaymentMethods.name,
     orderService.name,
@@ -89,7 +88,7 @@ export default angular
   ])
   .component(componentName, {
     controller: Step2Controller,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       changeStep: '&'
     }

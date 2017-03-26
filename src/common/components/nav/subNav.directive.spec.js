@@ -13,13 +13,11 @@ describe( 'cruSubNav', function () {
     scope.$digest();
   } ) );
 
-  it( 'is class set', (done) => {
+  it( 'is class set', () => {
     angular.element($window).triggerHandler('scroll');
 
     let subNavigation = subNav.children()[0];
-    $window.setTimeout(() => {
-      expect( subNavigation.className ).toEqual( '' );
-      done();
-    });
+    scope.$digest();
+    expect( subNavigation.className ).toEqual( '' );
   } );
 } );

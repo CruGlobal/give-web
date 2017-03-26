@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-gettext';
 import modalStateService from 'common/services/modalState.service';
 import sessionService from 'common/services/session/session.service';
-import template from './forgotPasswordModal.tpl';
+import template from './forgotPasswordModal.tpl.html';
 
 let componentName = 'forgotPasswordModal';
 
@@ -62,12 +62,11 @@ export default angular
   .module( componentName, [
     'gettext',
     modalStateService.name,
-    template.name,
     sessionService.name
   ] )
   .component( componentName, {
     controller:  ForgotPasswordModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&'

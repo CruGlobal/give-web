@@ -3,7 +3,7 @@ import 'angular-gettext';
 import includes from 'lodash/includes';
 import sessionService from 'common/services/session/session.service';
 import signInForm from 'common/components/signInForm/signInForm.component';
-import template from './signInModal.tpl';
+import template from './signInModal.tpl.html';
 
 import {Roles} from 'common/services/session/session.service';
 
@@ -38,12 +38,11 @@ export default angular
   .module( componentName, [
     'gettext',
     signInForm.name,
-    sessionService.name,
-    template.name
+    sessionService.name
   ] )
   .component( componentName, {
     controller:  SignInModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',

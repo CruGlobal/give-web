@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './receipts.tpl';
+import template from './receipts.tpl.html';
 import donationsService from 'common/services/api/donations.service';
 import filterByYear from './receipts.filter';
 import sessionEnforcerService, {EnforcerCallbacks, EnforcerModes} from 'common/services/session/sessionEnforcer.service';
@@ -105,7 +105,6 @@ let componentName = 'receipts';
 
 export default angular
   .module(componentName, [
-    template.name,
     commonModule.name,
     donationsService.name,
     filterByYear.name,
@@ -113,5 +112,5 @@ export default angular
   ])
   .component(componentName, {
     controller: ReceiptsController,
-    templateUrl: template.name
+    templateUrl: template
   });

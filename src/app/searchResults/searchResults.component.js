@@ -9,7 +9,7 @@ import ministries from './searchResults.ministries';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './searchResults.tpl';
+import template from './searchResults.tpl.html';
 
 let componentName = 'searchResults';
 
@@ -95,7 +95,6 @@ class SearchResultsController {
 
 export default angular
   .module( componentName, [
-    template.name,
     commonModule.name,
     'angular.filter',
     'environment',
@@ -106,5 +105,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SearchResultsController,
-    templateUrl: template.name
+    templateUrl: template
   } );

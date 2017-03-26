@@ -8,7 +8,6 @@
   "ecmaFeatures": {},
   "extends": ["angular", "plugin:jasmine/recommended"],
   "globals": {
-    "System": true,
     "inject": true,
     "require": true
   },
@@ -225,6 +224,7 @@
     "yield-star-spacing": "off",
     "yoda": "off",
     "angular/definedundefined": "off",
+    "angular/no-service-method": "off",
     "jasmine/no-spec-dupes": ["warn", "branch"],
     "jasmine/no-suite-dupes": ["warn", "branch"]
   }

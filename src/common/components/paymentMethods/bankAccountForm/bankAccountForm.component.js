@@ -10,7 +10,7 @@ import {scrollModalToTop} from 'common/services/modalState.service';
 import cruPayments from 'cru-payments/dist/cru-payments';
 import { ccpKey, ccpStagingKey } from 'common/app.constants';
 
-import template from './bankAccountForm.tpl';
+import template from './bankAccountForm.tpl.html';
 
 let componentName = 'bankAccountForm';
 
@@ -131,13 +131,12 @@ class BankAccountController{
 
 export default angular
   .module(componentName, [
-    template.name,
     commonModule.name,
     showErrors.name
   ])
   .component(componentName, {
     controller: BankAccountController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       paymentFormState: '<',
       paymentMethod: '<',

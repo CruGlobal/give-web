@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-sanitize';
 
-import template from './help.tpl';
+import template from './help.tpl.html';
 
 let componentName = 'help';
 
@@ -24,10 +24,9 @@ class CheckoutHelpController {
 
 export default angular
   .module(componentName, [
-    'ngSanitize',
-    template.name
+    'ngSanitize'
   ])
   .component(componentName, {
     controller: CheckoutHelpController,
-    templateUrl: template.name
+    templateUrl: template
   });

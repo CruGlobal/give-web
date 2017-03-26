@@ -5,7 +5,7 @@ import contactInfoComponent from 'common/components/contactInfo/contactInfo.comp
 
 import sessionService from 'common/services/session/session.service';
 
-import template from './contactInfoModal.tpl';
+import template from './contactInfoModal.tpl.html';
 
 let componentName = 'contactInfoModal';
 
@@ -34,12 +34,11 @@ export default angular
   .module( componentName, [
     'gettext',
     contactInfoComponent.name,
-    sessionService.name,
-    template.name
+    sessionService.name
   ] )
   .component( componentName, {
     controller:  contactInfoModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',

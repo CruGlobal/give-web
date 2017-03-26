@@ -15,12 +15,14 @@ import photoModalController from './photoModal/photo.modal';
 import textEditorModalController from './textEditorModal/textEditor.modal';
 import websiteModalController from './websiteModal/website.modal';
 
-import template from './designationEditor.tpl';
-import titleModalTemplate from './titleModal/titleModal.tpl';
-import pageOptionsModalTemplate from './pageOptionsModal/pageOptionsModal.tpl';
-import photoModalTemplate from './photoModal/photoModal.tpl';
-import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl';
-import websiteModalTemplate from './websiteModal/websiteModal.tpl';
+import template from './designationEditor.tpl.html';
+import titleModalTemplate from './titleModal/titleModal.tpl.html';
+import pageOptionsModalTemplate from './pageOptionsModal/pageOptionsModal.tpl.html';
+import photoModalTemplate from './photoModal/photoModal.tpl.html';
+import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html';
+import websiteModalTemplate from './websiteModal/websiteModal.tpl.html';
+
+import './designationEditor.scss';
 
 let componentName = 'designationEditor';
 
@@ -93,7 +95,7 @@ class DesignationEditorController {
 
   editTitle() {
     let modalOptions = {
-      templateUrl: titleModalTemplate.name,
+      templateUrl: titleModalTemplate,
       controller: titleModalController.name,
       controllerAs: '$ctrl',
       resolve : {
@@ -114,7 +116,7 @@ class DesignationEditorController {
 
   editPageOptions() {
     let modalOptions = {
-      templateUrl: pageOptionsModalTemplate.name,
+      templateUrl: pageOptionsModalTemplate,
       controller: pageOptionsModalController.name,
       controllerAs: '$ctrl',
       resolve : {
@@ -139,7 +141,7 @@ class DesignationEditorController {
 
   selectPhoto(photoLocation, selectedPhoto) {
     let modalOptions = {
-      templateUrl: photoModalTemplate.name,
+      templateUrl: photoModalTemplate,
       controller: photoModalController.name,
       controllerAs: '$ctrl',
       resolve: {
@@ -163,7 +165,7 @@ class DesignationEditorController {
 
   editText(field) {
     let modalOptions = {
-      templateUrl:       textEditorModalTemplate.name,
+      templateUrl:       textEditorModalTemplate,
       controller:        textEditorModalController.name,
       controllerAs:      '$ctrl',
       resolve : {
@@ -180,7 +182,7 @@ class DesignationEditorController {
 
   editWebsite() {
     let modalOptions = {
-      templateUrl:       websiteModalTemplate.name,
+      templateUrl:       websiteModalTemplate,
       controller:        websiteModalController.name,
       controllerAs:      '$ctrl',
       resolve : {
@@ -239,24 +241,13 @@ export default angular
     sessionService.name,
     sessionEnforcerService.name,
     designationEditorService.name,
-    template.name,
-
-    titleModalTemplate.name,
     titleModalController.name,
-
-    pageOptionsModalTemplate.name,
     pageOptionsModalController.name,
-
-    photoModalTemplate.name,
     photoModalController.name,
-
-    textEditorModalTemplate.name,
     textEditorModalController.name,
-
-    websiteModalTemplate.name,
     websiteModalController.name
   ] )
   .component( componentName, {
     controller:  DesignationEditorController,
-    templateUrl: template.name
+    templateUrl: template
   } );

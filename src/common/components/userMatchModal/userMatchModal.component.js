@@ -4,7 +4,7 @@ import profileService from 'common/services/api/profile.service';
 import verificationService from 'common/services/api/verification.service';
 import userMatchIdentity from './userMatchIdentity/userMatchIdentity.component';
 import userMatchQuestion from './userMatchQuestion/userMatchQuestion.component';
-import template from './userMatchModal.tpl';
+import template from './userMatchModal.tpl.html';
 import find from 'lodash/find';
 
 let componentName = 'userMatchModal';
@@ -137,13 +137,12 @@ export default angular
     'gettext',
     verificationService.name,
     profileService.name,
-    template.name,
     userMatchIdentity.name,
     userMatchQuestion.name
   ] )
   .component( componentName, {
     controller:  UserMatchModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       modalTitle:    '=',
       setLoading:    '&',

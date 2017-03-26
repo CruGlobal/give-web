@@ -1,7 +1,7 @@
 import angular from 'angular';
 import historicalGift from './historicalGift/historicalGift.component';
 import donationsService from 'common/services/api/donations.service';
-import template from './historicalView.tpl';
+import template from './historicalView.tpl.html';
 
 let componentName = 'historicalView';
 
@@ -39,12 +39,11 @@ class HistoricalView {
 export default angular
   .module( componentName, [
     historicalGift.name,
-    donationsService.name,
-    template.name
+    donationsService.name
   ] )
   .component( componentName, {
     controller:  HistoricalView,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       year:       '<',
       month:      '<',

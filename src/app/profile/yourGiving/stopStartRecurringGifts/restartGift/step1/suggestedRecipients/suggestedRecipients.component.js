@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './suggestedRecipients.tpl';
+import template from './suggestedRecipients.tpl.html';
 import filter from 'lodash/filter';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
@@ -19,12 +19,11 @@ class SuggestedRecipientsController {
 
 export default angular
   .module( componentName, [
-    template.name,
     giftListItem.name
   ] )
   .component( componentName, {
     controller:  SuggestedRecipientsController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       gifts:    '<',
       cancel:   '&',

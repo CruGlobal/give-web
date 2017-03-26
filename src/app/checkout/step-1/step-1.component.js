@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import contactInfoComponent from 'common/components/contactInfo/contactInfo.component';
 
-import template from './step-1.tpl';
+import template from './step-1.tpl.html';
 
 let componentName = 'checkoutStep1';
 
@@ -25,12 +25,11 @@ class Step1Controller{
 
 export default angular
   .module(componentName, [
-    template.name,
     contactInfoComponent.name
   ])
   .component(componentName, {
     controller: Step1Controller,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       changeStep: '&'
     }

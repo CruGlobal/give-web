@@ -11,7 +11,7 @@ import capitalizeFilter from 'common/filters/capitalize.filter';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
-import template from './step-3.tpl';
+import template from './step-3.tpl.html';
 
 import analyticsFactory from 'app/analytics/analytics.factory';
 
@@ -123,7 +123,6 @@ class Step3Controller{
 
 export default angular
   .module(componentName, [
-    template.name,
     displayAddressComponent.name,
     displayRateTotals.name,
     orderService.name,
@@ -133,7 +132,7 @@ export default angular
   ])
   .component(componentName, {
     controller: Step3Controller,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       changeStep: '&',
       cartData: '<',

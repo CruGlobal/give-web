@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './giftListItem.tpl';
+import template from './giftListItem.tpl.html';
 import desigSrc from 'common/directives/desigSrc.directive';
 
 let componentName = 'giftListItem';
@@ -13,12 +13,11 @@ class GiftListItemController {
 
 export default angular
   .module( componentName, [
-    template.name,
     desigSrc.name
   ] )
   .component( componentName, {
     controller:  GiftListItemController,
-    templateUrl: template.name,
+    templateUrl: template,
     transclude:  {
       'selectInput': '?label'
     },

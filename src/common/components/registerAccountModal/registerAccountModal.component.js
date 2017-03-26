@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './registerAccountModal.tpl';
+import template from './registerAccountModal.tpl.html';
 
 import orderService from 'common/services/api/order.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
@@ -124,13 +124,12 @@ export default angular
     sessionService.name,
     signInModal.name,
     signUpModal.name,
-    template.name,
     userMatchModal.name,
     verificationService.name
   ] )
   .component( componentName, {
     controller:  RegisterAccountModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       modalTitle: '=',
       onSuccess:  '&',

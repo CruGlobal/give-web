@@ -15,7 +15,7 @@ import giftSummaryView from 'common/components/giftViews/giftSummaryView/giftSum
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
-import template from './deletePaymentMethod.modal.tpl';
+import template from './deletePaymentMethod.modal.tpl.html';
 
 let componentName = 'deletePaymentMethodModal';
 
@@ -176,7 +176,6 @@ class deletePaymentMethodModalController {
 
 export default angular
   .module(componentName, [
-    template.name,
     paymentMethodForm.name,
     paymentMethodDisplay.name,
     giftListItem.name,
@@ -186,7 +185,7 @@ export default angular
   ])
   .component(componentName, {
     controller: deletePaymentMethodModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       resolve: '<',
       dismiss: '&',

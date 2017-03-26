@@ -17,7 +17,7 @@ import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
-import template from './productConfig.modal.tpl';
+import template from './productConfig.modal.tpl.html';
 
 const componentName = 'productConfigModal';
 
@@ -230,7 +230,6 @@ class ProductConfigModalController {
 
 export default angular
   .module( componentName, [
-    template.name,
     'ordinal',
     designationsService.name,
     cartService.name,
@@ -241,7 +240,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ProductConfigModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       resolve: '<',
       close: '&',

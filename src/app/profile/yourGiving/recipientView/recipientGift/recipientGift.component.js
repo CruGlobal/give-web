@@ -9,7 +9,7 @@ import donationsService from 'common/services/api/donations.service';
 import profileService from 'common/services/api/profile.service';
 import recipientDetail from './recipientDetail/recipientDetail.component';
 import productModalService from 'common/services/productModal.service';
-import template from './recipientGift.tpl';
+import template from './recipientGift.tpl.html';
 
 let componentName = 'recipientGift';
 
@@ -84,12 +84,11 @@ export default angular
     profileService.name,
     donationsService.name,
     productModalService.name,
-    recipientDetail.name,
-    template.name
+    recipientDetail.name
   ] )
   .component( componentName, {
     controller:  RecipientGift,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       recipient: '<'
     }

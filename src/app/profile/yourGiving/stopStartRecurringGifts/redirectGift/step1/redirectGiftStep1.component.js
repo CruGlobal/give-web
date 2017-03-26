@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './redirectGiftStep1.tpl';
+import template from './redirectGiftStep1.tpl.html';
 import find from 'lodash/find';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
@@ -29,12 +29,11 @@ class RedirectGiftStep1Controller {
 
 export default angular
   .module( componentName, [
-    template.name,
     giftListItem.name
   ] )
   .component( componentName, {
       controller:  RedirectGiftStep1Controller,
-      templateUrl: template.name,
+      templateUrl: template,
       bindings:    {
         gifts:        '<',
         onSelectGift: '&',

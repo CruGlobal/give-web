@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import template from './mobileNavLevel.tpl';
+import template from './mobileNavLevel.tpl.html';
 
 let componentName = 'navMobileLevel';
 
@@ -13,12 +13,10 @@ class NavController{
 }
 
 export default angular
-  .module(componentName, [
-    template.name
-  ])
+  .module(componentName, [])
   .component(componentName, {
     controller: NavController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings: {
       structure: '<',
       path: '=',

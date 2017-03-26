@@ -14,14 +14,14 @@ import sessionModalService from 'common/services/session/sessionModal.service';
 import mobileNavLevelComponent from './navMobileLevel.component';
 import subNavDirective from './subNav.directive';
 import {giftAddedEvent} from 'common/components/nav/navCart/navCart.component';
-import globalWebsitesModalWindowTemplate from './globalWebsitesModal/globalWebsitesModalWindow.tpl';
+import globalWebsitesModalWindowTemplate from './globalWebsitesModal/globalWebsitesModalWindow.tpl.html';
 import globalWebsitesModal from './globalWebsitesModal/globalWebsitesModal.component';
 import navCart, {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 import autoFocus from 'common/directives/autoFocus.directive';
 
-import mobileTemplate from './mobileNav.tpl';
-import desktopTemplate from './desktopNav.tpl';
-import signOutTemplate from './signOut.modal.tpl';
+import mobileTemplate from './mobileNav.tpl.html';
+import desktopTemplate from './desktopNav.tpl.html';
+import signOutTemplate from './signOut.modal.tpl.html';
 
 let componentName = 'cruNav';
 
@@ -110,7 +110,7 @@ class NavController{
 
   setMenuTemplate() {
     this.menuType = this.$window.innerWidth < 991 ? 'mobile' : 'desktop';
-    this.templateUrl = this.menuType === 'mobile' ? mobileTemplate.name : desktopTemplate.name;
+    this.templateUrl = this.menuType === 'mobile' ? mobileTemplate : desktopTemplate;
 
     //set viewport
     this.changeMetaTag('viewport', this.menuType === 'mobile' ? 'width=device-width, minimum-scale=1.0' : 'width=1024');
@@ -153,7 +153,7 @@ class NavController{
 
   signOut() {
     let modal = this.$uibModal.open({
-      templateUrl: signOutTemplate.name,
+      templateUrl: signOutTemplate,
       backdrop: 'static',
       keyboard: false,
       size: 'sm'
@@ -238,7 +238,7 @@ class NavController{
     this.$uibModal.open({
       component: 'globalWebsitesModal',
       backdrop: 'static',
-      windowTemplateUrl: globalWebsitesModalWindowTemplate.name,
+      windowTemplateUrl: globalWebsitesModalWindowTemplate,
       windowClass: 'globalWebsites--is-open',
       resolve: {
         menuStructure: this.menuStructure
@@ -251,15 +251,11 @@ export default angular
   .module(componentName, [
     'environment',
     'ngResize',
-    mobileTemplate.name,
-    desktopTemplate.name,
-    signOutTemplate.name,
     sessionService.name,
     sessionModalService.name,
     mobileNavLevelComponent.name,
     subNavDirective.name,
     globalWebsitesModal.name,
-    globalWebsitesModalWindowTemplate.name,
     navCart.name,
     loading.name,
     autoFocus.name

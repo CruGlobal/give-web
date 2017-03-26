@@ -1,5 +1,4 @@
 /* eslint angular/module-getter:0, angular/document-service:0 */
-import 'babel/external-helpers';
 
 import angular from 'angular';
 import 'angular-environment';

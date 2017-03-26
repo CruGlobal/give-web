@@ -1,5 +1,5 @@
 import angular from 'angular';
-import template from './stopStartRecurringGifts.modal.tpl';
+import template from './stopStartRecurringGifts.modal.tpl.html';
 
 import stopStartStep0 from './step0/stopStartStep0.component';
 import stopGift from './stopGift/stopGift.component';
@@ -36,7 +36,6 @@ class StopStartRecurringGiftsModalController {
 
 export default angular
   .module( componentName, [
-    template.name,
     stopStartStep0.name,
     stopGift.name,
     redirectGift.name,
@@ -44,7 +43,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  StopStartRecurringGiftsModalController,
-    templateUrl: template.name,
+    templateUrl: template,
     bindings:    {
       close:   '&',
       dismiss: '&'
