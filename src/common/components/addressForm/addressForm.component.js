@@ -64,6 +64,7 @@ export default angular
     templateUrl: template.name,
     bindings:    {
       address: '=',
-      parentForm: '<'
+      parentForm: '<',
+      disabled: '<'
     }
   } );
