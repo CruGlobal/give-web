@@ -33,7 +33,8 @@ module.exports = {
   entry: isBuild ? entryPoints : { main: 'app/main/main.component.js' },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    devtoolModuleFilenameTemplate: info => info.resourcePath.replace(/^\.\//, '')
   },
   plugins: concat(
     [
@@ -44,7 +45,10 @@ module.exports = {
           from: '**/*.+(json|svg|woff|ttf|png|ico|jpg|gif|eot)',
           to: '[path][name].[ext]'
         }
-      ])
+      ]),
+      new webpack.EnvironmentPlugin({
+        'TRAVIS_COMMIT': 'development'
+      })
     ],
     isBuild ?
       [
