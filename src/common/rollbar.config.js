@@ -16,14 +16,23 @@ function rollbarConfig(envServiceProvider, $provide) {
     environment: envServiceProvider.get(),
     enabled: !envServiceProvider.is('development'), // Disable rollbar in development environment
     transform: transformRollbarPayload,
-    hostWhiteList: ['give.cru.org', 'give-stage2.cru.org', 'stage.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org']
+    hostWhiteList: ['give.cru.org', 'give-stage2.cru.org', 'stage.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org'],
+    payload: {
+      client: {
+        javascript: {
+          source_map_enabled: true,
+          guess_uncaught_frames: true,
+          code_version: process.env.TRAVIS_COMMIT // eslint-disable-line
+        }
+      }
+    }
   };
   Rollbar = rollbar.init(rollbarConfig);
 
   /* @ngInject */
-  $provide.decorator('$log', ($delegate) => {
+  $provide.decorator('$log', $delegate => {
     // Add rollbar functionality to each $log method
-    angular.forEach(['log', 'debug', 'info', 'warn', 'error'], (ngLogLevel) => {
+    angular.forEach(['log', 'debug', 'info', 'warn', 'error'], ngLogLevel => {
       let rollbarLogLevel = ngLogLevel === 'warn' ? 'warning' : ngLogLevel;
 
       let originalFunction = $delegate[ngLogLevel]; // Call below to keep angular $log functionality
@@ -31,29 +40,34 @@ function rollbarConfig(envServiceProvider, $provide) {
       $delegate[ngLogLevel] = (...args) => {
         originalFunction.apply(null, args);
 
-        // Generate message string
-        let message = args
-          .map(arg => {
-            if(arg && arg.message){
-              return arg.message; // Message came from $ExceptionHandler
-            }else{
-              return angular.toJson(arg);
-            }
-          })
-          .join(', ');
+        let origin = args[0] && args[0].message ? '$ExceptionHandler' : '$log';
+        let stackFramesPromise, message;
 
-        let origin = args[0].message ? '$ExceptionHandler' : '$log';
+        if(origin === '$ExceptionHandler'){
+          message = args[0].message;
 
-        stacktrace.get({offline: true})
-          .then((stackFrames) => {
-            // Ignore first stack frame which is this function
-            stackFrames.shift();
+          // Parse the exception to get the stack
+          stackFramesPromise = stacktrace.fromError(args[0], {offline: true});
+        }else{
+          // Join $log arguments
+          message = args
+            .map(arg => angular.toJson(arg))
+            .join(', ');
+
+          // Log came from app so we get the stacktrace from this file
+          stackFramesPromise = stacktrace.get({offline: true});
+        }
+
+        stackFramesPromise
+          .then(stackFrames => {
+            // For logs, ignore first stack frame which is this file
+            origin === '$log' && stackFrames.shift();
             // Send combined message and stack trace to rollbar
             Rollbar[rollbarLogLevel](message, {stackTrace: stackFrames, origin: origin});
           })
-          .catch((error) => {
+          .catch(error => {
             // Send message without stack trace to rollbar
-            Rollbar[rollbarLogLevel](message);
+            Rollbar[rollbarLogLevel](message, {origin: origin});
             // Send warning about the issue loading stackframes
             Rollbar.warning('Error loading stackframes: ' + error);
           });
@@ -68,7 +82,7 @@ function rollbarConfig(envServiceProvider, $provide) {
 }
 
 function formatStacktraceForRollbar(stackFrames){
-  return map(stackFrames, (frame) => {
+  return map(stackFrames, frame => {
     return {
       method: frame.functionName,
       lineno: frame.lineNumber,

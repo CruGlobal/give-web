@@ -8,7 +8,7 @@ import 'rxjs/add/operator/toPromise';
 import * as module from './rollbar.config';
 
 describe('rollbarConfig', () => {
-  var self = {};
+  const self = {};
 
   describe('pipe $log to Rollbar', () => {
     beforeEach(() => {
@@ -41,7 +41,7 @@ describe('rollbarConfig', () => {
       };
 
       // Mock stacktrace
-      self.stacktraceSpy = spyOn(module.stacktrace, 'get').and.callFake(() =>
+      self.stacktraceLogSpy = spyOn(module.stacktrace, 'get').and.callFake(() =>
         Observable.of(['ignored frame', self.rollbarExtraArgs.stackTrace[0]]).toPromise());
 
       // Init and run the test module
@@ -93,28 +93,33 @@ describe('rollbarConfig', () => {
       spyOn(self.$log, 'error').and.callThrough();
       self.$log.error('test error');
       expect(self.$log.error.logs[0]).toEqual(['test error']);
+      expect(self.stacktraceLogSpy).toHaveBeenCalledWith({ offline: true });
       self.$window.setTimeout(() => {
         expect(self.rollbarSpies.error).toHaveBeenCalledWith('"test error"', self.rollbarExtraArgs);
         done();
       });
     });
     it('should send errors from $ExceptionHandler to rollbar', (done) => {
+      const stacktraceFromErrorSpy = spyOn(module.stacktrace, 'fromError').and.callFake(() =>
+        Observable.of(['non-ignored frame', self.rollbarExtraArgs.stackTrace[0]]).toPromise());
       spyOn(self.$log, 'error').and.callThrough();
-      self.$log.error(new Error('some exception'));
+      const error = new Error('some exception');
+      self.$log.error(error);
       expect(self.$log.error.logs[0]).toEqual([new Error('some exception')]);
+      expect(stacktraceFromErrorSpy).toHaveBeenCalledWith(error, { offline: true });
       self.$window.setTimeout(() => {
         self.rollbarExtraArgs.origin = '$ExceptionHandler';
-        expect(self.rollbarSpies.error).toHaveBeenCalledWith('some exception', self.rollbarExtraArgs);
+        expect(self.rollbarSpies.error).toHaveBeenCalledWith('some exception', { stackTrace: ['non-ignored frame', self.rollbarExtraArgs.stackTrace[0]], origin: '$ExceptionHandler' });
         done();
       });
     });
     it('should send a log to rollbar even the stacktrace fails', (done) => {
       spyOn(self.$log, 'error').and.callThrough();
-      self.stacktraceSpy.and.callFake(() => Observable.throw('error message when fetching stack').toPromise());
+      self.stacktraceLogSpy.and.callFake(() => Observable.throw('error message when fetching stack').toPromise());
       self.$log.error('test error');
       expect(self.$log.error.logs[0]).toEqual(['test error']);
       self.$window.setTimeout(() => {
-        expect(self.rollbarSpies.error).toHaveBeenCalledWith('"test error"');
+        expect(self.rollbarSpies.error).toHaveBeenCalledWith('"test error"', { origin: '$log' });
         expect(self.rollbarSpies.warning).toHaveBeenCalledWith('Error loading stackframes: error message when fetching stack');
         done();
       });
