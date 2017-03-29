@@ -12,6 +12,7 @@ const isBuild = process.env.npm_lifecycle_event === 'build';
 const ci = process.env.CI === 'true';
 
 const entryPoints = {
+  common: 'common/common.module.js',
   cart: 'app/cart/cart.component.js',
   checkout: 'app/checkout/checkout.component.js',
   thankYou: 'app/thankYou/thankYou.component.js',
