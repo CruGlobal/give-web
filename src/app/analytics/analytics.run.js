@@ -2,6 +2,9 @@ import 'app/analytics/analytics.factory';
 
 /* @ngInject */
 function dataLayer($window, analyticsFactory) {
+  if(!$window.location.hostname || $window.location.hostname.indexOf('give') == -1){
+    return;
+  }
 
     /* Build data layer */
   $window.digitalData = {
