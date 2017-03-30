@@ -84,6 +84,12 @@ class DesignationsService {
       '1-108-3': 'West Africa'
     };
 
+    params = angular.copy(params);
+    if(params.type !== 'people'){
+      delete params.first_name;
+      delete params.last_name;
+    }
+
     return Observable.from(this.$http({
       method: 'get',
       url: this.envService.read('apiUrl') + '/search',
