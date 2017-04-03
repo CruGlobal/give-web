@@ -86,6 +86,19 @@ export default {
           "href": "https://give-stage2.cru.org/cortex/profiles/crugive/gjqwinrxmfrgillemi2wkljumqzteljzmfsgellcmqzdmojqgyzdoyjsga="
         }],
         "email": "asdf@asdf.com"
+      }],
+      "_emailform": [{
+        "self": {
+          "type": "elasticpath.emails.email",
+          "uri": "/emails/crugive/form",
+          "href": "https://give-stage2.cru.org/cortex/emails/crugive/form"
+        },
+        "links": [{
+          "rel": "createemailaction",
+          "uri": "/emails/crugive",
+          "href": "https://give-stage2.cru.org/cortex/emails/crugive"
+        }],
+        "email": ""
       }]
     }]
   }],

@@ -97,7 +97,7 @@ class Step1Controller{
 
       let requests = [this.orderService.updateDonorDetails(details)];
       if (details.email) {
-        requests.push(this.orderService.addEmail(details.email));
+        requests.push(this.orderService.addEmail(details.email, details.emailFormUri));
       }
       Observable.forkJoin(requests)
         .subscribe(() => {
