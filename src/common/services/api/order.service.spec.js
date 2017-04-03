@@ -86,7 +86,8 @@ describe('order service', () => {
           expect(data).toEqual({
             name: {},
             mailingAddress: {country: 'US'},
-            email: undefined
+            email: undefined,
+            emailFormUri: undefined
           });
         });
       self.$httpBackend.flush();
