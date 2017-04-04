@@ -55,7 +55,7 @@ function DonationsService( cortexApiService, profileService, commonService ) {
       .get( {
         path: ['donations', 'historical', cortexApiService.scope, year, month],
         zoom: {
-          gifts: 'element[],element:paymentmethod,element:recurringdonations'
+          gifts: 'element[],element:paymentmethod,element:recurringdonation'
         }
       } )
       .pluck( 'gifts' );
