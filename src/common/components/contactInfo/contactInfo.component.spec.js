@@ -177,7 +177,8 @@ describe('contactInfo', function() {
       self.controller.detailsForm.$valid = true;
       self.controller.donorDetails = {
         'given-name': 'Fname',
-        email: 'someone@asdf.com'
+        email: 'someone@asdf.com',
+        emailFormUri: '/emails/crugive'
       };
       spyOn(self.controller.orderService, 'updateDonorDetails').and.returnValue(Observable.of('donor details success'));
       spyOn(self.controller.orderService, 'addEmail').and.returnValue(Observable.of('email success'));
@@ -185,9 +186,10 @@ describe('contactInfo', function() {
       expect(self.controller.detailsForm.$setSubmitted).toHaveBeenCalled();
       expect(self.controller.orderService.updateDonorDetails).toHaveBeenCalledWith({
         'given-name': 'Fname',
-        email: 'someone@asdf.com'
+        email: 'someone@asdf.com',
+        emailFormUri: '/emails/crugive'
       });
-      expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('someone@asdf.com');
+      expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('someone@asdf.com', '/emails/crugive');
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: true});
     });
     it('should handle an error saving donor details', () => {
@@ -209,7 +211,8 @@ describe('contactInfo', function() {
       self.controller.detailsForm.$valid = true;
       self.controller.donorDetails = {
         'given-name': 'Fname',
-        email: 'a@a'
+        email: 'a@a',
+        emailFormUri: '/emails/crugive'
       };
       spyOn(self.controller.orderService, 'updateDonorDetails').and.returnValue(Observable.of('success'));
       spyOn(self.controller.orderService, 'addEmail').and.returnValue(Observable.throw({ data: 'Invalid email address: a@a' }));
@@ -217,9 +220,10 @@ describe('contactInfo', function() {
       expect(self.controller.detailsForm.$setSubmitted).toHaveBeenCalled();
       expect(self.controller.orderService.updateDonorDetails).toHaveBeenCalledWith({
         'given-name': 'Fname',
-        email: 'a@a'
+        email: 'a@a',
+        emailFormUri: '/emails/crugive'
       });
-      expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('a@a');
+      expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('a@a', '/emails/crugive');
       expect(self.controller.$log.warn.logs[0]).toEqual(['Error saving donor contact info', { data: 'Invalid email address: a@a' }]);
       expect(self.controller.submissionError).toEqual('Invalid email address');
       expect(self.controller.onSubmit).toHaveBeenCalledWith({success: false});

@@ -34,7 +34,8 @@ class Order{
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
         donorDetails: 'order:donordetails',
-        email: 'order:emailinfo:email'
+        email: 'order:emailinfo:email',
+        emailForm: 'order:emailinfo:emailform'
       }
     })
       .map(data => {
@@ -51,6 +52,8 @@ class Order{
         }
 
         donorDetails.email = data.email && data.email.email;
+        donorDetails.emailFormUri = data.emailForm && data.emailForm.links[0].uri;
+
         return donorDetails;
       });
   }
@@ -66,9 +69,9 @@ class Order{
     });
   }
 
-  addEmail(email){
+  addEmail(email, uri){
     return this.cortexApiService.post({
-      path: ['emails', this.cortexApiService.scope],
+      path: uri,
       data: {email: email}
     });
   }

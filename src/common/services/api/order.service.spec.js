@@ -48,6 +48,7 @@ describe('order service', () => {
       let donorDetailsResponseZoomMapped = {
         donorDetails: donorDetailsResponse._order[0]._donordetails[0],
         email: donorDetailsResponse._order[0]._emailinfo[0]._email[0],
+        emailForm: donorDetailsResponse._order[0]._emailinfo[0]._emailform[0],
         rawData: donorDetailsResponse
       };
 
@@ -55,8 +56,9 @@ describe('order service', () => {
       let expectedDonorDetails = omit(donorDetailsResponseZoomMapped.donorDetails, 'mailing-address');
       expectedDonorDetails.mailingAddress = formatAddressForTemplate(donorDetailsResponseZoomMapped.donorDetails['mailing-address']);
       expectedDonorDetails.email = donorDetailsResponseZoomMapped.email.email;
+      expectedDonorDetails.emailFormUri = donorDetailsResponseZoomMapped.emailForm.links[0].uri;
 
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
         .respond(200, donorDetailsResponse);
       self.orderService.getDonorDetails()
         .subscribe((data) => {
@@ -66,7 +68,7 @@ describe('order service', () => {
     });
     it('should set the mailingAddress country to US if undefined', () => {
       donorDetailsResponse._order[0]._donordetails[0]['mailing-address']['country-name'] = '';
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
         .respond(200, donorDetailsResponse);
       self.orderService.getDonorDetails()
         .subscribe((data) => {
@@ -77,14 +79,15 @@ describe('order service', () => {
       self.$httpBackend.flush();
     });
     it('should handle an undefined response', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
         .respond(200, {});
       self.orderService.getDonorDetails()
         .subscribe((data) => {
           expect(data).toEqual({
             name: {},
             mailingAddress: {country: 'US'},
-            email: undefined
+            email: undefined,
+            emailFormUri: undefined
           });
         });
       self.$httpBackend.flush();
@@ -141,7 +144,7 @@ describe('order service', () => {
         'https://give-stage2.cru.org/cortex/emails/crugive',
         {email: 'someemail@somedomain.com'}
       ).respond(200, 'somedata');
-      self.orderService.addEmail('someemail@somedomain.com')
+      self.orderService.addEmail('someemail@somedomain.com', '/emails/crugive')
         .subscribe((data) => {
           expect(data).toEqual('somedata');
         });
