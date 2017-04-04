@@ -74,12 +74,12 @@ describe('contactInfo', function() {
 
   describe('loadDonorDetails', () => {
     it('should get the donor\'s details', () => {
-      spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'donor-type': 'Organization', 'spouse-name': {} }));
+      spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'donor-type': 'Organization', 'spouse-name': {}, staff: false }));
       self.controller.loadDonorDetails();
       expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
       expect(self.controller.loadingDonorDetailsError).toEqual(false);
       expect(self.controller.loadingDonorDetails).toEqual(false);
-      expect(self.controller.donorDetails).toEqual({ 'donor-type': 'Organization', 'spouse-name': {} });
+      expect(self.controller.donorDetails).toEqual({ 'donor-type': 'Organization', 'spouse-name': {}, staff: false });
       expect(self.controller.nameFieldsDisabled).toEqual(false);
       expect(self.controller.spouseFieldsDisabled).toEqual(false);
     });
