@@ -6,6 +6,7 @@
         <input ng-if="!expired" type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" required>
         <button ng-if="expired" class="btn btn-xs btn-default" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)">Update</button>
         <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
+        <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)">edit</button>
       </label>
     </div>
 
