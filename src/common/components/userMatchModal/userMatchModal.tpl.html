@@ -1,11 +1,11 @@
 <div class="col-xs-12" ng-switch="$ctrl.matchState">
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingDonorDetailsError">
-    <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, please contact support</p>
+    <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
     <p><button type="button" class="btn btn-primary" ng-click="$ctrl.$onInit()" translate>Retry</button></p>
   </div>
 
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.selectContactError || $ctrl.loadingQuestionsError">
-    <p translate>An error has occurred. Please try again. If you continue to see this message, please contact support</p>
+    <p translate>An error has occurred. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
   </div>
   <user-match-identity ng-switch-when="identity"
                        contacts="$ctrl.contacts"
