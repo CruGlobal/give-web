@@ -29,7 +29,7 @@ class SignInFormController {
     this.isSigningIn = true;
     delete this.errorMessage;
     this.sessionService
-      .signIn( this.username, this.password )
+      .signIn( this.username, this.password, this.lastPurchaseId )
       .subscribe( () => {
         this.onSuccess();
       }, error => {
@@ -58,6 +58,7 @@ export default angular
     templateUrl: template,
     bindings:    {
       onSuccess: '&',
-      onFailure: '&'
+      onFailure: '&',
+      lastPurchaseId: '<'
     }
   } );

@@ -66,7 +66,7 @@ describe( 'signInForm', function () {
 
     it( 'calls sessionService signIn', () => {
       expect( $ctrl.isSigningIn ).toEqual( true );
-      expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123' );
+      expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', undefined );
     } );
 
     it( 'signs in successfully', () => {

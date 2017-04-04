@@ -45,6 +45,7 @@ export default angular
     templateUrl: template,
     bindings:    {
       modalTitle:    '=',
+      lastPurchaseId: '<',
       onStateChange: '&',
       onSuccess:     '&'
     }

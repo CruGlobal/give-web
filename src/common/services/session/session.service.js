@@ -57,15 +57,19 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
   };
 
   /* Public Methods */
-  function signIn( username, password ) {
+  function signIn( username, password, lastPurchaseId ) {
+    let data = {
+      username: username,
+      password: password
+    };
+    // Only send lastPurchaseId if present and currently public
+    if(angular.isDefined(lastPurchaseId) && currentRole() === Roles.public)
+      data.lastPurchaseId = lastPurchaseId;
     return Observable
       .from( $http( {
         method:          'POST',
         url:             casApiUrl( '/login' ),
-        data:            {
-          username: username,
-          password: password
-        },
+        data:            data,
         withCredentials: true
       } ) )
       .map( ( response ) => response.data );
