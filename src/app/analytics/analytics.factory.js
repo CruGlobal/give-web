@@ -318,8 +318,12 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
 
         // Allow time for data layer changes to be consumed & fire image request
         $timeout(function () {
-          $window.s.t();
-          $window.s.clearVars();
+          try {
+            $window.s.t();
+            $window.s.clearVars();
+          }catch(e){
+            $log.warn('Error caught in analyticsFactory.pageLoaded while trying to fire analytics image request or clearVars', e);
+          }
         }, 1000);
       }catch(e){
         $log.warn('Error caught in analyticsFactory.pageLoaded', e);
