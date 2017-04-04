@@ -18,8 +18,8 @@
     <div class="row">
       <div class="col-md-12 col-xs-12">
         <div class="alert alert-danger" role="alert" ng-if="$ctrl.savingError" ng-switch="$ctrl.savingError">
-          <p ng-switch-when="Only Active recurring donations can be modified." translate>One of the gifts you are modifying is no longer an active gift. We may have accidentally shown you an inactive gift in a previous step. You may try only editing one gift at a time to determine which gift cannot be changed. If you continue to experience problems, please contact support.</p>
-          <p ng-switch-default translate>There was an error saving your gifts. Please check that all the entered information is valid and that you have a good internet connection. If you continue to see this message, please contact support.</p>
+          <p ng-switch-when="Only Active recurring donations can be modified." translate>One of the gifts you are modifying is no longer an active gift. We may have accidentally shown you an inactive gift in a previous step. You may try only editing one gift at a time to determine which gift cannot be changed. If you continue to experience problems, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+          <p ng-switch-default translate>There was an error saving your gifts. Please check that all the entered information is valid and that you have a good internet connection. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
         </div>
         <div class="alert alert-warning" role="alert" ng-if="!$ctrl.hasChanges">
           <p translate>You haven't made any changes to your recurring gifts. Feel free to go back and make some changes.</p>

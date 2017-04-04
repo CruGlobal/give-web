@@ -1,8 +1,7 @@
 <div>
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingRecipientsError">
     <p translate>There was an error loading your giving by recipient.</p>
-    <p translate>You can use the retry button to try loading them again. If you continue to see this message, please
-      contact support</p>
+    <p translate>You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
     <p>
       <button type="button" class="btn btn-primary"
               ng-click="$ctrl.loadRecipients($ctrl.filter == 'recent' ? undefined : $ctrl.filter)" translate>

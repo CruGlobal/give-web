@@ -21,7 +21,7 @@
           <translate>Loading recurring gifts...</translate>
         </loading>
         <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError">
-          <p translate>There was an error loading your recurring gifts. You can use the retry button to try loading them again. If you continue to see this message, please contact support</p>
+          <p translate>There was an error loading your recurring gifts. You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
         </div>
         <div class="alert alert-warning" role="alert" ng-if="!$ctrl.loading && !$ctrl.loadingError && (!$ctrl.recurringGifts || $ctrl.recurringGifts.length === 0)">
           <p translate>
