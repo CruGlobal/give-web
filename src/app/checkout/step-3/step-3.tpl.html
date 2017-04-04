@@ -60,6 +60,9 @@
               {{$ctrl.donorDetails['organization-name']}}
             </div>
             <display-address address="$ctrl.donorDetails.mailingAddress"></display-address>
+            <div>
+              {{$ctrl.donorDetails.email}}
+            </div>
             <loading ng-if="!$ctrl.donorDetails"></loading>
           </div>
         </div>
