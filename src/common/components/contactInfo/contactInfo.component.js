@@ -68,7 +68,7 @@ class Step1Controller{
         this.loadingDonorDetails = false;
         this.donorDetails = data;
         this.nameFieldsDisabled = this.donorDetails['registration-state'] === 'COMPLETED';
-        this.spouseFieldsDisabled = !!this.donorDetails['spouse-name']['given-name'] || !!this.donorDetails['spouse-name']['family-name'];
+        this.spouseFieldsDisabled = !!this.donorDetails['spouse-name']['given-name'] || !!this.donorDetails['spouse-name']['family-name'] || this.donorDetails.staff;
         if(!this.nameFieldsDisabled && includes([Roles.registered, Roles.identified], this.sessionService.getRole())) {
           // Pre-populate first, last and email from session if missing from donorDetails
           if(!this.donorDetails['name']['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
