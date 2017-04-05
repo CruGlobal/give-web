@@ -154,6 +154,21 @@ describe( 'session service', function () {
         } );
       $httpBackend.flush();
     } );
+
+    it( 'includes lastPurchaseId when present and PUBLIC', () => {
+      spyOn( sessionService, 'getRole' ).and.returnValue(Roles.public);
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/login', {
+        username: 'user@example.com',
+        password: 'hello123',
+        lastPurchaseId: 'gxbcdviu='
+      } ).respond( 200, 'success' );
+      sessionService
+        .signIn( 'user@example.com', 'hello123', 'gxbcdviu=' )
+        .subscribe( ( data ) => {
+          expect( data ).toEqual( 'success' );
+        } );
+      $httpBackend.flush();
+    });
   } );
 
   describe( 'signUp', () => {
