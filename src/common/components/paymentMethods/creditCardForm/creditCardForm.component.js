@@ -106,10 +106,7 @@ class CreditCardController {
       this.creditCardPaymentForm.expiryMonth.$validate(); // Revalidate expiryMonth after expiryYear changes
     });
 
-    if(!this.paymentMethod) {
-      this.waitForSecurityCodeInitialization();
-    }
-
+    this.waitForSecurityCodeInitialization();
   }
 
   initializeExpirationDateOptions(){
@@ -146,7 +143,7 @@ class CreditCardController {
                 'expiry-year': this.creditCardPayment.expiryYear,
                 'last-four-digits': tokenObj.maskedCardNumber,
                 transactionId: tokenObj.transactionID,
-                cvv: tokenObj.cvv2
+                cvv: this.creditCardPayment.securityCode
               }
             }
           }
