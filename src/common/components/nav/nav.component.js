@@ -97,7 +97,6 @@ class NavController{
     this.submenuSkipLevels = Number(this.submenuSkipLevels) || 0;
     this.navFeed = this.navFeed || '/bin/cru/site-nav.json';
     this.searchResultsPath = this.searchResultsPath || 'https://www.cru.org/search.html';
-    this.editProfilePath = this.editProfilePath || '/profile.html';
     this.pullRightOptions = this.pullRightOptions || [{
         title: 'Find Cru Near Me',
         path: 'https://www.cru.org/communities/locations.html',
