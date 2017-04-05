@@ -165,7 +165,7 @@ describe('credit card form', () => {
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
     });
-    it('should not send a credit card or security code if a paymentMethod is present and cardNumber is unchanged', () => {
+    it('should not send a credit card if a paymentMethod is present and cardNumber is unchanged', () => {
       self.controller.paymentMethod = {
         'last-four-digits': '4567',
         'card-type': 'MasterCard'
@@ -194,7 +194,7 @@ describe('credit card form', () => {
           'expiry-year': 2019,
           'last-four-digits': '4567',
           transactionId: undefined,
-          cvv: undefined
+          cvv: '123'
         }
       };
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });

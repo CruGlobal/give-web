@@ -107,7 +107,7 @@ class Step3Controller{
     submitRequest.subscribe(() => {
         this.analyticsFactory.purchase(this.donorDetails, this.cartData);
         this.onSubmittingOrder({value: false});
-        this.orderService.clearCardSecurityCode();
+        this.orderService.clearCardSecurityCodes();
         this.onSubmitted();
         this.$scope.$emit( cartUpdatedEvent );
         this.$window.location = '/thank-you.html';

@@ -105,6 +105,7 @@ class Order{
   }
 
   addCreditCardPayment(paymentInfo){
+    const cvv = paymentInfo.cvv;
     paymentInfo = omit(paymentInfo, 'cvv');
     if(paymentInfo.address) {
       paymentInfo.address = formatAddressForCortex(paymentInfo.address);
@@ -115,6 +116,8 @@ class Order{
           path: this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction'),
           data: paymentInfo,
           followLocation: true
+        }).do(creditCard => {
+          this.storeCardSecurityCode(cvv, creditCard.self.uri);
         });
       });
   }
@@ -123,10 +126,7 @@ class Order{
     if(paymentInfo.bankAccount){
       return this.addBankAccountPayment(paymentInfo.bankAccount);
     }else if(paymentInfo.creditCard){
-      return this.addCreditCardPayment(paymentInfo.creditCard)
-        .do(() => {
-          this.storeCardSecurityCode(paymentInfo.creditCard.cvv);
-        });
+      return this.addCreditCardPayment(paymentInfo.creditCard);
     }else{
       return Observable.throw('Error adding payment method. The data passed to orderService.addPaymentMethod did not contain bankAccount or creditCard data');
     }
@@ -153,7 +153,10 @@ class Order{
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.updateForm, 'updatecreditcardfororderaction'),
           data: pick(paymentInfo, ['address', 'cardholder-name', 'expiry-month', 'expiry-year'])
-        });
+        })
+          .do(() => {
+            this.storeCardSecurityCode(paymentInfo.cvv, paymentMethod.self.uri);
+          });
       });
   }
 
@@ -249,16 +252,35 @@ class Order{
       });
   }
 
-  storeCardSecurityCode(cvv){
-    this.sessionStorage.setItem('cvv', cvv);
+  storeCardSecurityCode(cvv, uri){
+    const storedCvvs = this.retrieveCardSecurityCodes();
+    if(!cvv){
+      cvv = storedCvvs[uri]; // Try looking up previously stored CVV by payment method uri
+    }else{
+      // Save new cvv in list of stored CVVs
+      storedCvvs[uri] = cvv;
+      this.sessionStorage.setItem('storedCvvs', angular.toJson(storedCvvs));
+    }
+
+    if(cvv){
+      this.sessionStorage.setItem('cvv', cvv);
+    }else{
+      this.sessionStorage.removeItem('cvv');
+    }
   }
 
   retrieveCardSecurityCode(){
     return this.sessionStorage.getItem('cvv');
   }
 
-  clearCardSecurityCode(){
-    return this.sessionStorage.removeItem('cvv');
+  retrieveCardSecurityCodes(){
+    const storedCvvs = this.sessionStorage.getItem('storedCvvs');
+    return storedCvvs && angular.fromJson(storedCvvs) || {};
+  }
+
+  clearCardSecurityCodes(){
+    this.sessionStorage.removeItem('cvv');
+    this.sessionStorage.removeItem('storedCvvs');
   }
 
   storeLastPurchaseLink(link){
