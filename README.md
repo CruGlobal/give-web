@@ -44,6 +44,7 @@ Note: For session cookies to work correctly, add an entry to your hosts file for
 - `yarn run test` or `npm run test` to run karma tests
 - `yarn run lint` or `npm run lint` to run eslint
 - `yarn run build` or `npm run build` to generate minified output files. These files are output to `/dist`. `common.js` must be included before any of the other JS files.
+- `yarn run build:analyze` or `npm run build:analyze` to open a visualization of bundle sizes after building
 
 ### Adding dependencies
 
