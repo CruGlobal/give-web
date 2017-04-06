@@ -39,6 +39,9 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
             if ( params.hasOwnProperty( giveGiftParams.campaignPage ) ) {
               config['campaign-page'] = params[giveGiftParams.campaignPage];
             }
+            if ( params.hasOwnProperty( giveGiftParams.campaignCode ) ) {
+              config['campaign-code'] = params[giveGiftParams.campaignCode];
+            }
 
             let deferred = $q.defer();
             let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
@@ -73,7 +76,10 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
         // Clear the modal name and params when the modal closes
         modalStateService.name( null );
         angular.forEach( giveGiftParams, ( value ) => {
-          $location.search( value, null );
+          // Remove all query params except CampaignCode
+          if( value !== giveGiftParams.campaignCode ) {
+            $location.search(value, null);
+          }
         } );
       } );
     return modalInstance;
