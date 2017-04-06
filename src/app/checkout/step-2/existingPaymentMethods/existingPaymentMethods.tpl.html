@@ -5,7 +5,7 @@
       <label>
         <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" ng-disabled="expired" required>
         <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
-        <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod.self.type === 'cru.creditcards.named-credit-card'" translate>update</button>
+        <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod.self.type === 'cru.creditcards.named-credit-card'" translate>edit</button>
       </label>
     </div>
 
