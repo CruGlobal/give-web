@@ -93,11 +93,13 @@ describe( 'productModalService', function () {
         $httpBackend.verifyNoOutstandingRequest();
       } );
 
-      it( 'sets campaign page', () => {
+      it( 'sets campaign page and code', () => {
         $location.search('c', '1234');
+        $location.search('CampaignCode', 'LEGACY');
         $injector.invoke( suggestedAmountsFn )
           .then( (  ) => {
             expect( config['campaign-page'] ).toEqual( '1234' );
+            expect( config['campaign-code'] ).toEqual( 'LEGACY' );
           } );
       } );
 

@@ -22,11 +22,12 @@ import template from './productConfig.modal.tpl.html';
 const componentName = 'productConfigModal';
 
 export const giveGiftParams = {
-  designation: 'd',
+  designation:  'd',
   campaignPage: 'c',
-  amount:      '$',
-  frequency:   'f',
-  day:         'dd'
+  amount:       '$',
+  frequency:    'f',
+  day:          'dd',
+  campaignCode: 'CampaignCode'
 };
 
 class ProductConfigModalController {
@@ -54,7 +55,7 @@ class ProductConfigModalController {
     this.waitForFormInitialization();
   }
 
-  initModalData(){
+  initModalData() {
     this.productData = this.resolve.productData;
     this.itemConfig = this.resolve.itemConfig;
     this.isEdit = this.resolve.isEdit;
@@ -82,6 +83,7 @@ class ProductConfigModalController {
     this.modalStateService.name( 'give-gift' );
     this.$location.search( giveGiftParams.designation, this.productData.code );
     this.$location.search( giveGiftParams.campaignPage, this.itemConfig['campaign-page'] );
+    this.$location.search( giveGiftParams.campaignCode, this.itemConfig['campaign-code'] );
 
     let amount = parseInt( params[giveGiftParams.amount], 10 );
     if ( !isNaN( amount ) ) {
