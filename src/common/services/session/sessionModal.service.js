@@ -23,7 +23,7 @@ function SessionModalService( $uibModal, $log, modalStateService ) {
     }
     type = angular.isDefined( type ) ? type : 'sign-in';
     options = angular.isObject( options ) ? options : {};
-    var modalOptions = angular.merge( {}, {
+    let modalOptions = angular.merge( {}, {
       templateUrl:       sessionModalTemplate,
       controller:        sessionModalController.name,
       controllerAs:      '$ctrl',
@@ -48,13 +48,13 @@ function SessionModalService( $uibModal, $log, modalStateService ) {
   return {
     open:            openModal,
     currentModal:    () => currentModal,
-    signIn:          () => openModal( 'sign-in' ).result,
+    signIn:          (lastPurchaseId) => openModal( 'sign-in', { resolve: { lastPurchaseId: () => lastPurchaseId } } ).result,
     signUp:          () => openModal( 'sign-up' ).result,
     forgotPassword:  () => openModal( 'forgot-password' ).result,
     resetPassword:   () => openModal( 'reset-password', {backdrop: 'static'} ).result,
     userMatch:       () => openModal( 'user-match', {backdrop: 'static'} ).result,
     contactInfo:     () => openModal( 'contact-info', {size: '', backdrop: 'static'} ).result,
-    accountBenefits: () => openModal( 'account-benefits' ).result,
+    accountBenefits: (lastPurchaseId) => openModal( 'account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId } } ).result,
     registerAccount: () => openModal( 'register-account', {backdrop: 'static', keyboard: false} ).result
   };
 }

@@ -62,7 +62,8 @@ class ThankYouController{
 
           // Display Account Benefits Modal when registration-state is NEW or MATCHED
           if(this.purchase.donorDetails['registration-state'] !== 'COMPLETED') {
-            this.sessionModalService.accountBenefits().then(() => {
+            let lastPurchaseId = lastPurchaseLink.split('/').pop();
+            this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
               this.sessionModalService.userMatch().then(() => {
                 // Hide accountBenefits after successful user match
                 this.showAccountBenefits = false;

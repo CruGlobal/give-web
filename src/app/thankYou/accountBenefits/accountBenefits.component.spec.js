@@ -17,6 +17,7 @@ describe( 'thank you', function () {
       expect( $ctrl ).toBeDefined();
       expect( $ctrl.sessionModalService ).toBeDefined();
       expect( $ctrl.sessionService ).toBeDefined();
+      expect( $ctrl.orderService ).toBeDefined();
       expect( $ctrl.isVisible ).toEqual( false );
     } );
 
@@ -32,7 +33,7 @@ describe( 'thank you', function () {
     } );
 
     describe( 'doUserMatch()', () => {
-      it( 'shows userMatch modal is role is \'REGISTERED\'', () => {
+      it( 'shows userMatch modal if role is \'REGISTERED\'', () => {
         spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( Roles.registered );
         spyOn( $ctrl.sessionModalService, 'userMatch' );
 
@@ -63,6 +64,17 @@ describe( 'thank you', function () {
           $rootScope.$digest();
           expect( $ctrl.isVisible ).toEqual( false );
         } );
+
+        describe('with lastPurchaseLink', () => {
+          beforeEach( () => {
+            spyOn( $ctrl.orderService, 'retrieveLastPurchaseLink' ).and.returnValue( '/purchases/crugive/iiydanbt=' );
+          });
+
+          it( 'passes lastPurchaseId to signIn', () => {
+            $ctrl.doUserMatch();
+            expect( $ctrl.sessionModalService.signIn ).toHaveBeenCalledWith( 'iiydanbt=' );
+          });
+        });
       } );
     } );
   } );

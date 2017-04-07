@@ -11,7 +11,8 @@ describe( 'sessionModalController', function () {
     state = 'sign-in';
     $ctrl = $controller( module.name, {
       $uibModalInstance: uibModalInstance,
-      state:             state
+      state:             state,
+      $scope:            { $resolve: {} }
     } );
   } ) );
 

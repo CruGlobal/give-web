@@ -16,11 +16,12 @@ let controllerName = 'sessionModalController';
 class SessionModalController {
 
   /* @ngInject */
-  constructor( $uibModalInstance, sessionService, state ) {
+  constructor( $uibModalInstance, $scope, sessionService, state ) {
     this.$uibModalInstance = $uibModalInstance;
     this.sessionService = sessionService;
     this.isLoading = false;
     this.scrollModalToTop = scrollModalToTop;
+    this.lastPurchaseId = $scope.$resolve.lastPurchaseId;
     this.stateChanged( state );
   }
 
