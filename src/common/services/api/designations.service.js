@@ -97,9 +97,11 @@ class DesignationsService {
       cache: true
     })).map((response) => {
       return map(response.data.hits, (hit) => {
+        let code = hit.id ? hit.id.split('/').pop().replace('.html', '') : '';
         return {
-          path: hit.path ? hit.path.replace('https://stage.cru.org/content/give/us/en', '') : null,
+          path: hit.path || null,
           designationNumber: hit.designation_number || null,
+          campaignPage: code != hit.designation_number ? code : null,
           replacementDesignationNumber: hit.replacement_designation_number || null,
           name: hit.title || hit.description || null,
           type: hit.designation_type || null,

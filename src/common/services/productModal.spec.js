@@ -93,13 +93,11 @@ describe( 'productModalService', function () {
         $httpBackend.verifyNoOutstandingRequest();
       } );
 
-      it( 'sets campaign page and code', () => {
+      it( 'sets campaign page', () => {
         $location.search('c', '1234');
-        $location.search('CampaignCode', 'LEGACY');
         $injector.invoke( suggestedAmountsFn )
           .then( (  ) => {
             expect( config['campaign-page'] ).toEqual( '1234' );
-            expect( config['campaign-code'] ).toEqual( 'LEGACY' );
           } );
       } );
 
@@ -113,6 +111,7 @@ describe( 'productModalService', function () {
               {amount: 25, label: "for 10 Bibles", order: "1"},
               {amount: 100, label: "for 40 Bibles", order: "2"}
             ] );
+            expect( config['default-campaign-code'] ).toEqual( '867EM1' );
           } );
         $httpBackend.flush();
       } );

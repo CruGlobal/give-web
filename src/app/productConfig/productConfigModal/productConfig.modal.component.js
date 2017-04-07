@@ -83,7 +83,6 @@ class ProductConfigModalController {
     this.modalStateService.name( 'give-gift' );
     this.$location.search( giveGiftParams.designation, this.productData.code );
     this.$location.search( giveGiftParams.campaignPage, this.itemConfig['campaign-page'] );
-    this.$location.search( giveGiftParams.campaignCode, this.itemConfig['campaign-code'] );
 
     let amount = parseInt( params[giveGiftParams.amount], 10 );
     if ( !isNaN( amount ) ) {
@@ -101,6 +100,14 @@ class ProductConfigModalController {
 
     if ( params.hasOwnProperty( giveGiftParams.day ) ) {
       this.itemConfig['recurring-day-of-month'] = params[giveGiftParams.day];
+    }
+
+    // If CampaignCode exists in URL, use it, otherwise use default-campaign-code if set.
+    if ( params.hasOwnProperty( giveGiftParams.campaignCode ) ) {
+      this.itemConfig['campaign-code'] = params[giveGiftParams.campaignCode];
+    }
+    else if(this.itemConfig.hasOwnProperty('default-campaign-code')) {
+      this.itemConfig['campaign-code'] = this.itemConfig['default-campaign-code'];
     }
   }
 

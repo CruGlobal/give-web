@@ -36,11 +36,8 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
           },
           suggestedAmounts: /*@ngInject*/ function ( $http, $q ) {
             let params = $location.search();
-            if ( params.hasOwnProperty( giveGiftParams.campaignPage ) ) {
+            if ( params.hasOwnProperty( giveGiftParams.campaignPage ) && params[giveGiftParams.campaignPage] !== '' ) {
               config['campaign-page'] = params[giveGiftParams.campaignPage];
-            }
-            if ( params.hasOwnProperty( giveGiftParams.campaignCode ) ) {
-              config['campaign-code'] = params[giveGiftParams.campaignCode];
             }
 
             let deferred = $q.defer();
@@ -58,6 +55,9 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
                     order: k
                   } );
                 } );
+              }
+              if ( data.data['jcr:content'] && data.data['jcr:content'].defaultCampaign && !config['campaign-code'] ) {
+                config['default-campaign-code'] = data.data['jcr:content'].defaultCampaign;
               }
               deferred.resolve( suggestedAmounts );
             }, () => {
