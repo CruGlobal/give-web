@@ -1,5 +1,5 @@
 const path = require('path');
-const webpackConfig = require('./webpack.config.js');
+const webpackConfig = require('./webpack.config.js')();
 
 delete webpackConfig.entry;
 delete webpackConfig.plugins;
