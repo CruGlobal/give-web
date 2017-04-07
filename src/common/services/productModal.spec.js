@@ -111,6 +111,7 @@ describe( 'productModalService', function () {
               {amount: 25, label: "for 10 Bibles", order: "1"},
               {amount: 100, label: "for 40 Bibles", order: "2"}
             ] );
+            expect( config['default-campaign-code'] ).toEqual( '867EM1' );
           } );
         $httpBackend.flush();
       } );

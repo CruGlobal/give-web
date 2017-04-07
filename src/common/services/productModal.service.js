@@ -36,7 +36,7 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
           },
           suggestedAmounts: /*@ngInject*/ function ( $http, $q ) {
             let params = $location.search();
-            if ( params.hasOwnProperty( giveGiftParams.campaignPage ) ) {
+            if ( params.hasOwnProperty( giveGiftParams.campaignPage ) && params[giveGiftParams.campaignPage] !== '' ) {
               config['campaign-page'] = params[giveGiftParams.campaignPage];
             }
 
@@ -56,6 +56,9 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
                   } );
                 } );
               }
+              if ( data.data['jcr:content'] && data.data['jcr:content'].defaultCampaign && !config['campaign-code'] ) {
+                config['default-campaign-code'] = data.data['jcr:content'].defaultCampaign;
+              }
               deferred.resolve( suggestedAmounts );
             }, () => {
               deferred.resolve( [] );
@@ -73,7 +76,10 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
         // Clear the modal name and params when the modal closes
         modalStateService.name( null );
         angular.forEach( giveGiftParams, ( value ) => {
-          $location.search( value, null );
+          // Remove all query params except CampaignCode
+          if( value !== giveGiftParams.campaignCode ) {
+            $location.search(value, null);
+          }
         } );
       } );
     return modalInstance;

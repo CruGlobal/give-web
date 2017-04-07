@@ -25,6 +25,8 @@ describe('order service', () => {
     self.$httpBackend = $httpBackend;
     self.$window = $window;
     self.$log = $log;
+
+    self.$window.sessionStorage.clear();
   }));
 
   afterEach(() => {
@@ -207,6 +209,10 @@ describe('order service', () => {
   });
 
   describe('addCreditCardPayment', () => {
+    beforeEach(() => {
+      spyOn(self.orderService, 'storeCardSecurityCode');
+    });
+
     it('should send a request to save the credit card payment info with no billing address', () => {
       let paymentInfo = {
         'card-number': '**fake*encrypted**1234567890123456**',
@@ -214,7 +220,7 @@ describe('order service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        cvv: 'someEncryptedCVV...'
+        cvv: '456'
       };
 
       let paymentInfoWithoutCVV = angular.copy(paymentInfo);
@@ -223,17 +229,18 @@ describe('order service', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
         paymentInfoWithoutCVV
-      ).respond(200, 'success');
+      ).respond(200, { self: { uri: 'new cc uri' } });
 
       // cache getPaymentForms response to avoid another http request while testing
       self.orderService.paymentMethodForms = cartResponseZoomMapped;
 
       self.orderService.addCreditCardPayment(paymentInfo)
         .subscribe((data) => {
-          expect(data).toEqual('success');
+          expect(data).toEqual({ self: { uri: 'new cc uri' } });
         });
 
       self.$httpBackend.flush();
+      expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('456', 'new cc uri');
     });
     it('should send a request to save the credit card payment info with a billing address', () => {
       let paymentInfo = {
@@ -250,7 +257,7 @@ describe('order service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        cvv: 'someEncryptedCVV...'
+        cvv: '789'
       };
 
       let paymentInfoWithoutCVV = angular.copy(paymentInfo);
@@ -267,17 +274,18 @@ describe('order service', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
         paymentInfoWithoutCVV
-      ).respond(200, 'success');
+      ).respond(200, { self: { uri: 'new cc uri' } });
 
       // cache getPaymentForms response to avoid another http request while testing
       self.orderService.paymentMethodForms = cartResponseZoomMapped;
 
       self.orderService.addCreditCardPayment(paymentInfo)
         .subscribe((data) => {
-          expect(data).toEqual('success');
+          expect(data).toEqual({ self: { uri: 'new cc uri' } });
         });
 
       self.$httpBackend.flush();
+      expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('789', 'new cc uri');
     });
   });
 
@@ -299,8 +307,7 @@ describe('order service', () => {
       expect(self.orderService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo);
     });
     it('should save a new credit card payment method', () => {
-      spyOn(self.orderService,'addCreditCardPayment').and.returnValue(Observable.of('credit card success'));
-      spyOn(self.orderService,'storeCardSecurityCode');
+      spyOn(self.orderService,'addCreditCardPayment').and.returnValue(Observable.of({ self: {uri: 'new payment method uri' } }));
       let paymentInfo = {
         address: {
           'country-name': 'US',
@@ -315,15 +322,14 @@ describe('order service', () => {
         'cardholder-name': 'Test Name',
         'expiry-month': '06',
         'expiry-year': '12',
-        cvv: 'someEncryptedCVV...'
+        cvv: '123'
       };
       self.orderService.addPaymentMethod({
         creditCard: paymentInfo
       }).subscribe((data) => {
-        expect(data).toEqual('credit card success');
+        expect(data).toEqual({ self: {uri: 'new payment method uri' } });
       });
       expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo);
-      expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('someEncryptedCVV...');
     });
     it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
       self.orderService.addPaymentMethod({
@@ -340,7 +346,8 @@ describe('order service', () => {
 
   describe('updatePaymentMethod', () => {
     beforeEach(() => {
-      this.runTestWith = (paymentInfo, expectedRequestData) => {
+      this.runTestWith = (paymentInfo, expectedRequestData, expectedCvv) => {
+        spyOn(self.orderService, 'storeCardSecurityCode');
         spyOn(self.orderService, 'selectPaymentMethod').and.returnValue(Observable.of('placeholder'));
         self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
           .respond(200, {
@@ -362,25 +369,31 @@ describe('order service', () => {
           expectedRequestData)
           .respond(200, {});
 
-        self.orderService.updatePaymentMethod({ selectAction: '<select uri>' }, { creditCard: paymentInfo })
+        self.orderService.updatePaymentMethod({ selectAction: '<select uri>', self: { uri: 'existing payment method uri' } }, { creditCard: paymentInfo })
           .subscribe();
         expect(self.orderService.selectPaymentMethod).toHaveBeenCalledWith('<select uri>');
 
         self.$httpBackend.flush();
         self.$httpBackend.flush();
+
+        expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith(expectedCvv, 'existing payment method uri');
       };
     });
     it('should update the given payment method', () => {
-      this.runTestWith({ 'cardholder-name': 'New name' },
-        { 'cardholder-name': 'New name' });
+      this.runTestWith({ 'cardholder-name': 'New name', cvv: '963' },
+        { 'cardholder-name': 'New name' }, '963');
     });
     it('should update the given payment method with an address', () => {
-      this.runTestWith({ 'cardholder-name': 'New name', address: { country: 'US' } },
-        { 'cardholder-name': 'New name', address: { 'country-name': 'US' } });
+      this.runTestWith({ 'cardholder-name': 'New name', cvv: '789', address: { country: 'US' } },
+        { 'cardholder-name': 'New name', address: { 'country-name': 'US' } }, '789');
     });
     it('should omit the credit card field since it can\'t be updated', () => {
+      this.runTestWith({ 'cardholder-name': 'New name', cvv: '741', 'card-number': '0000' },
+        { 'cardholder-name': 'New name' }, '741');
+    });
+    it('should call storeCardSecurityCode with undefined when the cvv wasn\'t changed', () => {
       this.runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
-        { 'cardholder-name': 'New name' });
+        { 'cardholder-name': 'New name' }, undefined);
     });
   });
 
@@ -643,24 +656,56 @@ describe('order service', () => {
   });
 
   describe('storeCardSecurityCode', () => {
-    it('should store the encrypted cvv', () => {
-      self.orderService.storeCardSecurityCode('123');
+    it('should save the cvv to session storage', () => {
+      self.orderService.storeCardSecurityCode('123', 'new id');
       expect(self.$window.sessionStorage.getItem('cvv')).toEqual('123');
+      expect(self.$window.sessionStorage.getItem('storedCvvs')).toEqual('{"new id":"123"}');
+    });
+    it('should remember previous the encrypted cvv', () => {
+      self.orderService.storeCardSecurityCode('321', 'new id');
+      self.orderService.storeCardSecurityCode('845', 'new id2');
+      expect(self.$window.sessionStorage.getItem('cvv')).toEqual('845');
+      expect(self.$window.sessionStorage.getItem('storedCvvs')).toEqual('{"new id":"321","new id2":"845"}');
+    });
+    it('should set the session storage cvv to be null if a null cvv is passed', () => {
+      self.orderService.storeCardSecurityCode('654', 'new id');
+      self.orderService.storeCardSecurityCode(null, 'new id3');
+      expect(self.$window.sessionStorage.getItem('cvv')).toBeNull();
+      expect(self.$window.sessionStorage.getItem('storedCvvs')).toEqual('{"new id":"654"}');
+    });
+    it('should set the session storage cvv to a stored cvv if a null cvv is passed with a payment method uri that had been previously stored', () => {
+      self.orderService.storeCardSecurityCode('654', 'new id');
+      self.orderService.storeCardSecurityCode('789', 'new id2');
+      self.orderService.storeCardSecurityCode(null, 'new id');
+      expect(self.$window.sessionStorage.getItem('cvv')).toEqual('654');
+      expect(self.$window.sessionStorage.getItem('storedCvvs')).toEqual('{"new id":"654","new id2":"789"}');
     });
   });
 
   describe('retrieveCardSecurityCode', () => {
-    it('should return the stored the encrypted cvv', () => {
+    it('should return the cvv from session storage', () => {
       self.$window.sessionStorage.setItem('cvv', '123');
       expect(self.orderService.retrieveCardSecurityCode()).toEqual('123');
     });
   });
 
-  describe('clearCardSecurityCode', () => {
+  describe('retrieveCardSecurityCodes', () => {
+    it('should return the stored cvvs', () => {
+      self.$window.sessionStorage.setItem('storedCvvs', '{"/paymentmethods/crugive/giydsnjqgi=":"123","/paymentmethods/crugive/giydsnjqgy=":"321"}');
+      expect(self.orderService.retrieveCardSecurityCodes()).toEqual({
+        '/paymentmethods/crugive/giydsnjqgi=': '123',
+        '/paymentmethods/crugive/giydsnjqgy=': '321'
+      });
+    });
+  });
+
+  describe('clearCardSecurityCodes', () => {
     it('should clear the stored the encrypted cvv', () => {
       self.$window.sessionStorage.setItem('cvv', '123');
-      self.orderService.clearCardSecurityCode();
+      self.$window.sessionStorage.setItem('storedCvvs', { 'some uri': '456' });
+      self.orderService.clearCardSecurityCodes();
       expect(self.$window.sessionStorage.getItem('cvv')).toBeNull();
+      expect(self.$window.sessionStorage.getItem('storedCvvs')).toBeNull();
     });
   });
 

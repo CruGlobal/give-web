@@ -22,11 +22,12 @@ import template from './productConfig.modal.tpl.html';
 const componentName = 'productConfigModal';
 
 export const giveGiftParams = {
-  designation: 'd',
+  designation:  'd',
   campaignPage: 'c',
-  amount:      '$',
-  frequency:   'f',
-  day:         'dd'
+  amount:       '$',
+  frequency:    'f',
+  day:          'dd',
+  campaignCode: 'CampaignCode'
 };
 
 class ProductConfigModalController {
@@ -54,7 +55,7 @@ class ProductConfigModalController {
     this.waitForFormInitialization();
   }
 
-  initModalData(){
+  initModalData() {
     this.productData = this.resolve.productData;
     this.itemConfig = this.resolve.itemConfig;
     this.isEdit = this.resolve.isEdit;
@@ -99,6 +100,14 @@ class ProductConfigModalController {
 
     if ( params.hasOwnProperty( giveGiftParams.day ) ) {
       this.itemConfig['recurring-day-of-month'] = params[giveGiftParams.day];
+    }
+
+    // If CampaignCode exists in URL, use it, otherwise use default-campaign-code if set.
+    if ( params.hasOwnProperty( giveGiftParams.campaignCode ) ) {
+      this.itemConfig['campaign-code'] = params[giveGiftParams.campaignCode];
+    }
+    else if(this.itemConfig.hasOwnProperty('default-campaign-code')) {
+      this.itemConfig['campaign-code'] = this.itemConfig['default-campaign-code'];
     }
   }
 

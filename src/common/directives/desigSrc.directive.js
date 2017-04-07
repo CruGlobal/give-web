@@ -9,6 +9,9 @@ function desigSrc(envService) {
     restrict: 'A',
     link:     function ( scope, element, attributes ) {
       let imgUrl = envService.read('imgDomainDesignation') + '/bin/crugive/imageThumbnail?designationNumber=' + attributes.desigSrc;
+      if(attributes.hasOwnProperty('campaignPage') && attributes.campaignPage !== '') {
+        imgUrl += '&campaign=' + attributes.campaignPage;
+      }
       attributes.$set('src', imgUrl);
     }
   };
