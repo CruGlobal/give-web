@@ -27,6 +27,7 @@ describe('order service', () => {
     self.$log = $log;
 
     self.$window.sessionStorage.clear();
+    self.$window.localStorage.clear();
   }));
 
   afterEach(() => {
@@ -720,6 +721,93 @@ describe('order service', () => {
     it('should save the link to the completed purchase', () => {
       self.$window.sessionStorage.setItem('lastPurchaseLink', '/purchases/crugive/hiydanbt=');
       expect(self.orderService.retrieveLastPurchaseLink()).toEqual('/purchases/crugive/hiydanbt=');
+    });
+  });
+
+  describe('spouseEditableForOrder', () => {
+    it('should not be editable for staff', () => {
+      expect(self.orderService.spouseEditableForOrder({ staff: true })).toEqual(false);
+    });
+    it('should be editable during a new order when the spouse name fields are empty', () => {
+      expect(self.orderService.spouseEditableForOrder({
+        'spouse-name': {}
+      })).toEqual(true);
+      expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true');
+    });
+    it('should not be editable during a new order when the spouse has a first name', () => {
+      expect(self.orderService.spouseEditableForOrder({
+        'spouse-name': {
+          'given-name': 'Name'
+        }
+      })).toEqual(false);
+      expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('false');
+    });
+    it('should not be editable during a new order when the spouse has a last name', () => {
+      expect(self.orderService.spouseEditableForOrder({
+        'spouse-name': {
+          'family-name': 'Name'
+        }
+      })).toEqual(false);
+      expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('false');
+    });
+    it('should store the current order uri during a new order', () => {
+      expect(self.orderService.spouseEditableForOrder({
+        'spouse-name': {},
+        links: [
+          {
+            rel: 'order',
+            uri: 'order id'
+          }
+        ]
+      })).toEqual(true);
+      expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true');
+      expect(self.$window.localStorage.getItem('currentOrder')).toEqual('order id');
+    });
+    it('should be editable during an order that started without a spouse', () => {
+      self.$window.localStorage.setItem('startedOrderWithoutSpouse', 'true');
+      self.$window.localStorage.setItem('currentOrder', 'order id');
+      expect(self.orderService.spouseEditableForOrder({
+        'spouse-name': {
+          'given-name': 'Name',
+          'family-name': 'Name'
+        },
+        links: [
+          {
+            rel: 'order',
+            uri: 'order id'
+          }
+        ]
+      })).toEqual(true);
+      expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true');
+    });
+    it('should not be editable during an order that started with a spouse', () => {
+      self.$window.localStorage.setItem('startedOrderWithoutSpouse', 'false');
+      self.$window.localStorage.setItem('currentOrder', 'order id');
+      expect(self.orderService.spouseEditableForOrder({
+        'spouse-name': {},
+        links: [
+          {
+            rel: 'order',
+            uri: 'order id'
+          }
+        ]
+      })).toEqual(false);
+      expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('false');
+    });
+    it('should reset startedOrderWithoutSpouse flag when order id changes', () => {
+      self.$window.localStorage.setItem('startedOrderWithoutSpouse', 'false');
+      self.$window.localStorage.setItem('currentOrder', 'order id');
+      expect(self.orderService.spouseEditableForOrder({
+        'spouse-name': {},
+        links: [
+          {
+            rel: 'order',
+            uri: 'order id 2'
+          }
+        ]
+      })).toEqual(true);
+      expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true');
+      expect(self.$window.localStorage.getItem('currentOrder')).toEqual('order id 2');
     });
   });
 });

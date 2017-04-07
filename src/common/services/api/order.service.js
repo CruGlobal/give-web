@@ -26,6 +26,7 @@ class Order{
     this.cortexApiService = cortexApiService;
     this.hateoasHelperService = hateoasHelperService;
     this.sessionStorage = $window.sessionStorage;
+    this.localStorage = $window.localStorage;
     this.$log = $log;
   }
 
@@ -289,6 +290,22 @@ class Order{
 
   retrieveLastPurchaseLink(){
     return this.sessionStorage.getItem('lastPurchaseLink');
+  }
+
+  spouseEditableForOrder(donorDetails){
+    if(donorDetails.staff) return false;
+    const currentOrder = this.hateoasHelperService.getLink(donorDetails, 'order');
+    const storedOrder = this.localStorage.getItem('currentOrder');
+    const hasSpouse = !!donorDetails['spouse-name']['given-name'] || !!donorDetails['spouse-name']['family-name'];
+    const startedOrderWithoutSpouse = angular.fromJson(this.localStorage.getItem('startedOrderWithoutSpouse'));
+
+    if(currentOrder !== storedOrder || startedOrderWithoutSpouse === null){
+      this.localStorage.setItem('currentOrder', currentOrder);
+      this.localStorage.setItem('startedOrderWithoutSpouse', angular.toJson(!hasSpouse));
+      return !hasSpouse;
+    }else{
+      return startedOrderWithoutSpouse;
+    }
   }
 
 }
