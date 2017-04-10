@@ -185,6 +185,15 @@ describe( 'your giving', function () {
       expect( $ctrl.recurringGiftsUpdateSuccess ).toEqual( true );
       expect( $ctrl.reload ).toEqual( true );
     } );
+
+    it( 'should call analytics event on dismiss', () => {
+      const thenSpy = jasmine.createSpy( 'then' );
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
+      spyOn( $ctrl.analyticsFactory, 'track' ).and.returnValue( null );
+      $ctrl.openEditRecurringGiftsModal();
+      thenSpy.calls.first().args[1]();
+      expect( $ctrl.analyticsFactory.track ).toHaveBeenCalledWith( 'aa-edit-recurring-exit' );
+    } );
   } );
 
   describe( 'openGiveOneTimeGiftModal', () => {
