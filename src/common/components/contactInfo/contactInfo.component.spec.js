@@ -84,6 +84,7 @@ describe('contactInfo', function() {
       expect(self.controller.spouseFieldsDisabled).toEqual(false);
     });
     it('should disable name fields if the user\'s registration state is completed', () => {
+      spyOn(self.controller.orderService, 'spouseEditableForOrder').and.returnValue(false);
       let donorDetails = {
         'donor-type': 'Organization',
         'name': {
@@ -105,6 +106,7 @@ describe('contactInfo', function() {
       expect(self.controller.donorDetails).toEqual(donorDetails);
       expect(self.controller.nameFieldsDisabled).toEqual(true);
       expect(self.controller.spouseFieldsDisabled).toEqual(true);
+      expect(self.controller.orderService.spouseEditableForOrder).toHaveBeenCalledWith(donorDetails);
     });
     it('should set the donor type if it is an empty string', () => {
       spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'donor-type': '', 'spouse-name': {} }));

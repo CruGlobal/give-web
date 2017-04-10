@@ -198,11 +198,11 @@ describe('checkout', () => {
           expect(self.controller.$log.error.logs[0]).toEqual(['Error selecting payment method', 'some error']);
         });
         it('should not send a request if the payment is already selected', () => {
-          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account'}, chosen: true };
+          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account', uri: 'chosen uri' }, chosen: true };
           self.controller.selectPayment();
           expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled();
           expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } });
-          expect(self.controller.orderService.storeCardSecurityCode).not.toHaveBeenCalled();
+          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(null, 'chosen uri');
         });
       });
     });
