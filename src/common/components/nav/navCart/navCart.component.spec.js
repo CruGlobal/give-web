@@ -96,15 +96,15 @@ describe( 'navCart', () => {
   });
 
   describe( 'checkout', () => {
-    it( 'should redirect to a sign-in', () => {
+    it( 'should redirect to sign-in', () => {
       spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'GUEST' );
       $ctrl.checkout();
-      expect($ctrl.$window.location).toBe('/sign-in.html');
+      expect($ctrl.$window.location).toBe('https://give-stage2.cru.org/sign-in.html');
     } );
-    it( 'should redirect to a checkout', () => {
+    it( 'should redirect to checkout', () => {
       spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
       $ctrl.checkout();
-      expect($ctrl.$window.location).toBe('/checkout.html');
+      expect($ctrl.$window.location).toBe('https://give-stage2.cru.org/checkout.html');
     } );
   } );
 } );
