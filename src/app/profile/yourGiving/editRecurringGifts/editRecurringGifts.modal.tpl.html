@@ -60,7 +60,8 @@
     ng-switch-when="step0PaymentMethodList"
     payment-methods="$ctrl.paymentMethods"
     dismiss="$ctrl.dismiss()"
-    next="$ctrl.next(paymentMethod)">
+    next="$ctrl.next(paymentMethod)"
+    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-select-payment-method')">
   </step-0-payment-method-list>
 
   <step-0-add-update-payment-method
@@ -69,14 +70,17 @@
     can-go-back="$ctrl.hasPaymentMethods"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(paymentMethod)">
+    next="$ctrl.next(paymentMethod)"
+    ng-init="$ctrl.analyticsFactory.track($ctrl.paymentMethod ?
+      'aa-edit-recurring-edit-payment-method' : 'aa-edit-recurring-add-payment-method')">
   </step-0-add-update-payment-method>
 
   <step-1-edit-recurring-gifts
     ng-switch-when="step1EditRecurringGifts"
     recurring-gifts="$ctrl.recurringGifts"
     dismiss="$ctrl.dismiss()"
-    next="$ctrl.next(null, recurringGifts)">
+    next="$ctrl.next(null, recurringGifts)"
+    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-configure')">
   </step-1-edit-recurring-gifts>
 
   <step-2-add-recent-recipients
@@ -87,14 +91,16 @@
     has-recurring-gift-changes="$ctrl.hasRecurringGiftChanges"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(null, null, additions)">
+    next="$ctrl.next(null, null, additions)"
+    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-add-recent')">
   </step-2-add-recent-recipients>
 
   <step-2-search-recipients
     ng-switch-when="step2SearchRecipients"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(null, null, additions)">
+    next="$ctrl.next(null, null, additions)"
+    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-search')">
   </step-2-search-recipients>
 
   <step-3-configure-recent-recipients
@@ -102,7 +108,8 @@
     additions="$ctrl.additions"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(null, null, additions)">
+    next="$ctrl.next(null, null, additions)"
+    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-add-new')">
   </step-3-configure-recent-recipients>
 
   <step-4-confirm
@@ -111,6 +118,7 @@
     additions="$ctrl.additions"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next()">
+    next="$ctrl.next()"
+    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-review')">
   </step-4-confirm>
 </div>

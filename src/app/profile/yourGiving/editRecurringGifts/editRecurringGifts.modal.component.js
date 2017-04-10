@@ -19,6 +19,7 @@ import RecurringGiftModel from 'common/models/recurringGift.model';
 import profileService from 'common/services/api/profile.service';
 import donationsService from 'common/services/api/donations.service';
 import commonService from 'common/services/api/common.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 import {validPaymentMethods} from 'common/services/paymentHelpers/validPaymentMethods';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
@@ -29,12 +30,13 @@ let componentName = 'editRecurringGiftsModal';
 class EditRecurringGiftsModalController {
 
   /* @ngInject */
-  constructor($log, profileService, donationsService, commonService) {
+  constructor($log, profileService, donationsService, commonService, analyticsFactory) {
     this.$log = $log;
     this.profileService = profileService;
     this.donationsService = donationsService;
     this.commonService = commonService;
     this.scrollModalToTop = scrollModalToTop;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit(){
@@ -181,7 +183,8 @@ export default angular
     step4ConfirmRecurringGifts.name,
     profileService.name,
     donationsService.name,
-    commonService.name
+    commonService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: EditRecurringGiftsModalController,

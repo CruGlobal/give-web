@@ -137,7 +137,9 @@ class YourGivingController {
       .result.then( () => {
       this.recurringGiftsUpdateSuccess = true;
       this.reload = true;
-    }, angular.noop );
+    }, () => {
+        this.analyticsFactory.track('aa-edit-recurring-exit');
+    } );
   }
 
   openGiveOneTimeGiftModal() {
