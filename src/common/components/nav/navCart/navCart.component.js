@@ -15,13 +15,14 @@ let componentName = 'navCart';
 class NavCartController{
 
   /* @ngInject */
-  constructor($rootScope, $window, $log, cartService, sessionService, analyticsFactory){
+  constructor($rootScope, $window, $log, cartService, sessionService, analyticsFactory, envService){
     this.$rootScope = $rootScope;
     this.$window = $window;
     this.$log = $log;
     this.cartService = cartService;
     this.sessionService = sessionService;
     this.analyticsFactory = analyticsFactory;
+    this.envService = envService;
     this.firstLoad = true;
   }
 
@@ -54,7 +55,7 @@ class NavCartController{
   }
 
   checkout() {
-    this.$window.location = this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html';
+    this.$window.location = this.envService.read('publicGive') + (this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html');
   }
 }
 

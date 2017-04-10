@@ -44,7 +44,7 @@
   </div>
   <div class="row row-no-spacing" ng-if="$ctrl.hasItems || $ctrl.error"><!-- TODO: row-no-spacing not in nav css -->
     <div class="col-xs-6">
-      <a href="/cart.html" class="btn btn-default btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" translate>Cart</a>
+      <a ng-href="{{$ctrl.envService.read('publicGive')}}/cart.html" class="btn btn-default btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" translate>Cart</a>
     </div>
     <div class="col-xs-6">
       <a href="" class="btn btn-primary btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" ng-click="$ctrl.checkout()" translate>Checkout</a>
