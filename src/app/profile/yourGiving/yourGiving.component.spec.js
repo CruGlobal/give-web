@@ -198,7 +198,8 @@ describe( 'your giving', function () {
 
   describe( 'openGiveOneTimeGiftModal', () => {
     it( 'should open the modal', () => {
-      spyOn( $ctrl.$uibModal, 'open' );
+      const thenSpy = jasmine.createSpy( 'then' );
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
       $ctrl.openGiveOneTimeGiftModal();
       expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'giveOneTimeGiftModal'} ) );
     } );
