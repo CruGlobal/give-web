@@ -76,7 +76,9 @@ class CreditCardController {
   waitForSecurityCodeInitialization() {
     let unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
       unregister();
-      this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength;
+      if(!this.paymentMethod) { // If editing existing payment method, don't require a CVV
+        this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength;
+      }
       this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength;
       this.creditCardPaymentForm.securityCode.$validators.cardTypeLength = number => cruPayments.creditCard.cvv.validate.cardTypeLength(number, cruPayments.creditCard.card.info.type(this.creditCardPayment.cardNumber));
       this.creditCardPaymentForm.cardNumber.$viewChangeListeners.push(() => {
