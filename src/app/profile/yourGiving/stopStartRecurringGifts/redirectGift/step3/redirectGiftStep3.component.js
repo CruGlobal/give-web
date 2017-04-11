@@ -23,6 +23,7 @@ class RedirectGiftStep3Controller {
   }
 
   submitGift() {
+    this.analyticsFactory.track('aa-redirect-submit');
     this.hasError = false;
     this.setLoading( {loading: true} );
     this.donationsService.updateRecurringGifts( this.gift ).subscribe( () => {

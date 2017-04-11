@@ -34,6 +34,7 @@ class ConfirmGiftsController {
   }
 
   processRestarts() {
+    this.analyticsFactory.track('aa-restart-submit');
     let requests = [];
     this.setLoading( {loading: true} );
     if ( !isEmpty( this.adds ) ) {

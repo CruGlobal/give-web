@@ -12,12 +12,14 @@
                         gifts="$ctrl.gifts"
                         on-select-gift="$ctrl.selectGift(gift)"
                         cancel="$ctrl.cancel()"
-                        previous="$ctrl.previous()">
+                        previous="$ctrl.previous()"
+                        ng-init="$ctrl.analyticsFactory.track('aa-redirect-select-recipient')">
   </redirect-gift-step-1>
   <redirect-gift-step-2 ng-switch-when="step-2"
                         on-select-result="$ctrl.selectResult(selected)"
                         cancel="$ctrl.cancel()"
-                        previous="$ctrl.previous()">
+                        previous="$ctrl.previous()"
+                        ng-init="$ctrl.analyticsFactory.track('aa-redirect-search')">
   </redirect-gift-step-2>
   <redirect-gift-step-3 ng-switch-when="step-3"
                         stop-gift="$ctrl.selectedGift"
@@ -25,6 +27,7 @@
                         on-complete="$ctrl.complete()"
                         on-cancel="$ctrl.cancel()"
                         on-previous="$ctrl.previous()"
-                        set-loading="$ctrl.setLoading({loading: loading})">
+                        set-loading="$ctrl.setLoading({loading: loading})"
+                        ng-init="$ctrl.analyticsFactory.track('aa-redirect-search')">
   </redirect-gift-step-3>
 </div>

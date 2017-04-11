@@ -2,7 +2,8 @@
   <stop-start-step-0 ng-switch-when="step-0"
                      gift-action="$ctrl.giftAction"
                      change-state="$ctrl.changeState(state)"
-                     cancel="$ctrl.dismiss()">
+                     cancel="$ctrl.dismiss()"
+                     ng-init="$ctrl.analyticsFactory.track('aa-stop-restart-choice')">
   </stop-start-step-0>
   <stop-gift ng-switch-when="stop"
              change-state="$ctrl.changeState(state)"

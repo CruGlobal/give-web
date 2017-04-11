@@ -66,6 +66,7 @@ class StopGiftController {
   }
 
   confirmChanges() {
+    this.analyticsFactory.track('aa-stop-submit');
     this.setLoading( {loading: true} );
     this.donationsService.updateRecurringGifts( map( this.selectedGifts, ( gift ) => {
       gift.donationLineStatus = 'Cancelled';

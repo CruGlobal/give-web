@@ -13,12 +13,14 @@
                     gifts="$ctrl.gifts"
                     on-select-gifts="$ctrl.selectGifts(selectedGifts)"
                     cancel="$ctrl.cancel()"
-                    previous="$ctrl.previous()">
+                    previous="$ctrl.previous()"
+                    ng-init="$ctrl.analyticsFactory.track('aa-stop-select-recipients')">
   </stop-gift-step-1>
   <stop-gift-step-2 ng-switch-when="step-2"
                     gifts="$ctrl.selectedGifts"
                     on-confirm="$ctrl.confirmChanges()"
                     cancel="$ctrl.cancel()"
-                    previous="$ctrl.previous()">
+                    previous="$ctrl.previous()"
+                    ng-init="$ctrl.analyticsFactory.track('aa-stop-review')">
   </stop-gift-step-2>
 </div>
