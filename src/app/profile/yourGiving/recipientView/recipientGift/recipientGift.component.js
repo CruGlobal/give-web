@@ -9,6 +9,7 @@ import donationsService from 'common/services/api/donations.service';
 import profileService from 'common/services/api/profile.service';
 import recipientDetail from './recipientDetail/recipientDetail.component';
 import productModalService from 'common/services/productModal.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 import template from './recipientGift.tpl.html';
 
 let componentName = 'recipientGift';
@@ -16,11 +17,12 @@ let componentName = 'recipientGift';
 class RecipientGift {
 
   /* @ngInject */
-  constructor( $log, donationsService, profileService, productModalService ) {
+  constructor( $log, donationsService, profileService, productModalService, analyticsFactory ) {
     this.$log = $log;
     this.donationsService = donationsService;
     this.profileService = profileService;
     this.productModalService = productModalService;
+    this.analyticsFactory = analyticsFactory;
     this.showDetails = false;
     this.detailsLoaded = false;
     this.currentDate = new Date();
@@ -70,6 +72,7 @@ class RecipientGift {
   }
 
   giveNewGift() {
+    this.analyticsFactory.track('aa-your-giving-give-new-gift');
     this.productModalService.configureProduct( this.recipient['designation-number'] );
   }
 
@@ -84,7 +87,8 @@ export default angular
     profileService.name,
     donationsService.name,
     productModalService.name,
-    recipientDetail.name
+    recipientDetail.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  RecipientGift,

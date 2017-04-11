@@ -57,14 +57,16 @@
     ng-switch-when="step1SelectRecentRecipients"
     recent-recipients="$ctrl.recentRecipients"
     dismiss="$ctrl.dismiss()"
-    next="$ctrl.next(selectedRecipients, search)">
+    next="$ctrl.next(selectedRecipients, search)"
+    ng-init="$ctrl.analyticsFactory.track('aa-give-extra-1-time-your-favorites')">
   </step-1-select-recent-recipients>
 
   <step-1-search-recipients
     ng-switch-when="step1SearchRecipients"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(null, null, additionalRecipients)">
+    next="$ctrl.next(null, null, additionalRecipients)"
+    ng-init="$ctrl.analyticsFactory.track('aa-give-extra-1-time-search')">
   </step-1-search-recipients>
 
   <step-2-enter-amounts
@@ -74,6 +76,7 @@
     errors="$ctrl.errors"
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
-    next="$ctrl.next(selectedRecipients)">
+    next="$ctrl.next(selectedRecipients)"
+    ng-init="$ctrl.analyticsFactory.track('aa-give-extra-1-time-configure')">
   </step-2-enter-amounts>
 </div>

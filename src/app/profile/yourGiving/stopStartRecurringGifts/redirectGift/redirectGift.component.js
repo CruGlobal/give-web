@@ -7,6 +7,7 @@ import redirectGiftStep1 from './step1/redirectGiftStep1.component';
 import redirectGiftStep2 from './step2/redirectGiftStep2.component';
 import redirectGiftStep3 from './step3/redirectGiftStep3.component';
 import retryModal from 'common/components/retryModal/retryModal.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import {scrollModalToTop} from 'common/services/modalState.service';
 
@@ -15,9 +16,10 @@ let componentName = 'redirectGift';
 class RedirectGiftController {
 
   /* @ngInject */
-  constructor( $log, donationsService ) {
+  constructor( $log, donationsService, analyticsFactory ) {
     this.$log = $log;
     this.donationsService = donationsService;
+    this.analyticsFactory = analyticsFactory;
     this.scrollModalToTop = scrollModalToTop;
   }
 
@@ -80,7 +82,8 @@ export default angular
     redirectGiftStep1.name,
     redirectGiftStep2.name,
     redirectGiftStep3.name,
-    retryModal.name
+    retryModal.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
       controller:  RedirectGiftController,

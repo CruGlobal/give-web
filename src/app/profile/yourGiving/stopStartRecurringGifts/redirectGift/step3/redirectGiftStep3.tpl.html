@@ -20,12 +20,12 @@
 <div class="modal-body">
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError" translate>An error occurred saving changes. You may try again by clicking "Confirm Changes."</div>
   <form name="$ctrl.redirectForm" ng-switch="$ctrl.state">
-    <div class="repeating-row" ng-switch-when="update">
+    <div class="repeating-row" ng-switch-when="update" ng-init="$ctrl.analyticsFactory.track('aa-redirect-configure')">
       <gift-list-item gift="$ctrl.gift">
         <gift-update-view gift="$ctrl.gift" />
       </gift-list-item>
     </div>
-    <div class="repeating-row" ng-switch-when="confirm">
+    <div class="repeating-row" ng-switch-when="confirm" ng-init="$ctrl.analyticsFactory.track('aa-redirect-review')">
       <div class="col-xs-12">
         <p class="text-danger">The recurring gift to this recipient will be stopped:</p>
       </div>

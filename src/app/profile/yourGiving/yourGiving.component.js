@@ -118,6 +118,8 @@ class YourGivingController {
       this.view = givingViews[0];
     }
     this.$location.search( queryParams.view, this.view );
+
+    this.analyticsFactory.track(this.view === 'historical' ? 'aa-your-giving-historical-view' : 'aa-your-giving-recipient-view');
   }
 
   setViewLoading( loading ) {
@@ -147,7 +149,9 @@ class YourGivingController {
       component: 'giveOneTimeGiftModal',
       backdrop: 'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate
-    });
+    }).result.then( angular.noop, () => {
+      this.analyticsFactory.track('aa-give-extra-1-time-exit');
+    } );
   }
 
   openStopStartRecurringGiftsModal() {
@@ -160,7 +164,9 @@ class YourGivingController {
       .result.then( () => {
       this.stopStartGiftsSuccess = true;
       this.reload = true;
-    }, angular.noop );
+    }, () => {
+      this.analyticsFactory.track('aa-stop-restart-exit');
+    } );
   }
 }
 export default angular

@@ -13,6 +13,7 @@ import donationsService, {RecurringGiftsType} from 'common/services/api/donation
 import profileService from 'common/services/api/profile.service';
 import commonService from 'common/services/api/common.service';
 import RecurringGiftModel from 'common/models/recurringGift.model';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import suspendedGifts from  './step1/suspendedGifts/suspendedGifts.component';
 import suggestedRecipients from './step1/suggestedRecipients/suggestedRecipients.component';
@@ -32,11 +33,12 @@ let componentName = 'restartGift';
 class RestartGiftController {
 
   /* @ngInject */
-  constructor( $log, donationsService, profileService, commonService ) {
+  constructor( $log, donationsService, profileService, commonService, analyticsFactory ) {
     this.$log = $log;
     this.donationsService = donationsService;
     this.profileService = profileService;
     this.commonService = commonService;
+    this.analyticsFactory = analyticsFactory;
     this.scrollModalToTop = scrollModalToTop;
   }
 
@@ -215,7 +217,8 @@ export default angular
     confirmGifts.name,
     paymentMethodForm.name,
     addUpdatePaymentMethod.name,
-    step0PaymentMethodList.name
+    step0PaymentMethodList.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  RestartGiftController,

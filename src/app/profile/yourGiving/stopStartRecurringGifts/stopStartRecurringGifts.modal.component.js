@@ -5,6 +5,7 @@ import stopStartStep0 from './step0/stopStartStep0.component';
 import stopGift from './stopGift/stopGift.component';
 import redirectGift from './redirectGift/redirectGift.component';
 import restartGift from './restartGift/restartGift.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import {scrollModalToTop} from 'common/services/modalState.service';
 
@@ -13,8 +14,9 @@ let componentName = 'stopStartRecurringGiftsModal';
 class StopStartRecurringGiftsModalController {
 
   /* @ngInject */
-  constructor($window) {
+  constructor($window, analyticsFactory) {
     this.$window = $window;
+    this.analyticsFactory = analyticsFactory;
     this.scrollModalToTop = scrollModalToTop;
   }
 
@@ -39,7 +41,8 @@ export default angular
     stopStartStep0.name,
     stopGift.name,
     redirectGift.name,
-    restartGift.name
+    restartGift.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  StopStartRecurringGiftsModalController,

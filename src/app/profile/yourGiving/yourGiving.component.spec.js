@@ -198,9 +198,19 @@ describe( 'your giving', function () {
 
   describe( 'openGiveOneTimeGiftModal', () => {
     it( 'should open the modal', () => {
-      spyOn( $ctrl.$uibModal, 'open' );
+      const thenSpy = jasmine.createSpy( 'then' );
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
       $ctrl.openGiveOneTimeGiftModal();
       expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'giveOneTimeGiftModal'} ) );
+    } );
+
+    it( 'should call analytics event on dismiss', () => {
+      const thenSpy = jasmine.createSpy( 'then' );
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
+      spyOn( $ctrl.analyticsFactory, 'track' ).and.returnValue( null );
+      $ctrl.openGiveOneTimeGiftModal();
+      thenSpy.calls.first().args[1]();
+      expect( $ctrl.analyticsFactory.track ).toHaveBeenCalledWith( 'aa-give-extra-1-time-exit' );
     } );
   } );
 
@@ -214,6 +224,15 @@ describe( 'your giving', function () {
       thenSpy.calls.first().args[0](); // Execute close modal promise success function
       expect( $ctrl.stopStartGiftsSuccess ).toEqual( true );
       expect( $ctrl.reload ).toEqual( true );
+    } );
+
+    it( 'should call analytics event on dismiss', () => {
+      const thenSpy = jasmine.createSpy( 'then' );
+      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
+      spyOn( $ctrl.analyticsFactory, 'track' ).and.returnValue( null );
+      $ctrl.openStopStartRecurringGiftsModal();
+      thenSpy.calls.first().args[1]();
+      expect( $ctrl.analyticsFactory.track ).toHaveBeenCalledWith( 'aa-stop-restart-exit' );
     } );
   } );
 
