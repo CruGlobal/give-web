@@ -11,6 +11,7 @@ import RecurringGiftModel from 'common/models/recurringGift.model';
 
 import donationsService from 'common/services/api/donations.service';
 import cartService from 'common/services/api/cart.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
 import template from './giveOneTimeGift.modal.tpl.html';
@@ -20,11 +21,12 @@ let componentName = 'giveOneTimeGiftModal';
 class GiveOneTimeGiftModalController {
 
   /* @ngInject */
-  constructor($scope, $log, donationsService, cartService) {
+  constructor($scope, $log, donationsService, cartService, analyticsFactory) {
     this.$scope = $scope;
     this.$log = $log;
     this.donationsService = donationsService;
     this.cartService = cartService;
+    this.analyticsFactory = analyticsFactory;
     this.recentRecipients = [];
     this.selectedRecipients = [];
     this.scrollModalToTop = scrollModalToTop;
@@ -139,7 +141,8 @@ export default angular
     step1SearchRecipients.name,
     step2EnterAmounts.name,
     donationsService.name,
-    cartService.name
+    cartService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: GiveOneTimeGiftModalController,

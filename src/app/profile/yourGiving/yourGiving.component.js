@@ -147,7 +147,9 @@ class YourGivingController {
       component: 'giveOneTimeGiftModal',
       backdrop: 'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate
-    });
+    }).result.then( angular.noop, () => {
+      this.analyticsFactory.track('aa-give-extra-1-time-exit');
+    } );
   }
 
   openStopStartRecurringGiftsModal() {

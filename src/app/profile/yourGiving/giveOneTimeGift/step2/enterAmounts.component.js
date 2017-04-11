@@ -2,6 +2,7 @@ import angular from 'angular';
 
 import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
 import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './enterAmounts.tpl.html';
 
@@ -10,7 +11,8 @@ let componentName = 'step2EnterAmounts';
 class EnterAmountsController {
 
   /* @ngInject */
-  constructor() {
+  constructor(analyticsFactory) {
+    this.analyticsFactory = analyticsFactory;
     this.addingToCart = false;
   }
 
@@ -27,13 +29,15 @@ class EnterAmountsController {
   addToCart(){
     this.addingToCart = true;
     this.next({ selectedRecipients: this.selectedRecipients });
+    this.analyticsFactory.track('aa-give-extra-1-time-add-to-cart');
   }
 }
 
 export default angular
   .module(componentName, [
     giftListItem.name,
-    giftUpdateView.name
+    giftUpdateView.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: EnterAmountsController,
