@@ -19,12 +19,13 @@
     </p>
   </div>
   <user-match-question ng-switch-when="question"
+                       ng-init="$ctrl.analyticsFactory.track('aa-registration-match-security-question'+$ctrl.questionCount)"
                        question="$ctrl.question"
                        question-index="$ctrl.questionIndex"
                        question-count="$ctrl.questionCount"
                        on-question-answer="$ctrl.onQuestionAnswer(key, answer)">
   </user-match-question>
-  <div ng-switch-when="success">
+  <div ng-switch-when="success" ng-init="$ctrl.analyticsFactory.track('aa-registration-match-linked-account-success')">
     <p ng-if="!$ctrl.skippedQuestions" translate>
       Thank you for taking the time to answer our security questions. Your account is now activated.
     </p>
@@ -35,7 +36,7 @@
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>
   </div>
-  <div ng-switch-when="success-failure">
+  <div ng-switch-when="success-failure" ng-init="$ctrl.analyticsFactory.track('aa-registration-match-new-account-success')">
     <p translate>Your account is now activated.</p>
     <p>
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>

@@ -1,14 +1,20 @@
 import angular from 'angular';
 import isEmpty from 'lodash/isEmpty';
 import template from './userMatchIdentity.tpl.html';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 let componentName = 'userMatchIdentity';
 
 class UserMatchIdentityController {
 
   /* @ngInject */
-  constructor() {
+  constructor(analyticsFactory) {
+    this.analyticsFactory = analyticsFactory;
     this.hasError = false;
+  }
+
+  $onInit() {
+    this.analyticsFactory.track('aa-registration-match-is-this-you');
   }
 
   selectContact() {
@@ -25,7 +31,9 @@ class UserMatchIdentityController {
 }
 
 export default angular
-  .module( componentName, [] )
+  .module( componentName, [
+    analyticsFactory.name
+  ] )
   .component( componentName, {
     controller:  UserMatchIdentityController,
     templateUrl: template,
