@@ -235,6 +235,14 @@ class ProductConfigModalController {
       this.submittingGift = false;
     } );
   }
+
+  displayId() {
+    let value = `#${this.productData.designationNumber}`;
+    if(this.productData.displayName !== this.itemConfig['jcr-title'] && this.itemConfig['campaign-page']) {
+      value += ` - ${this.productData.displayName}`;
+    }
+    return value;
+  }
 }
 
 export default angular
