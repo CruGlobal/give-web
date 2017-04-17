@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-ordinal';
+import 'angular-sanitize';
 
 import indexOf from 'lodash/indexOf';
 import find from 'lodash/find';
@@ -248,6 +249,7 @@ class ProductConfigModalController {
 export default angular
   .module( componentName, [
     'ordinal',
+    'ngSanitize',
     designationsService.name,
     cartService.name,
     modalStateService.name,
