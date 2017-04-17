@@ -25,11 +25,11 @@
                        question-count="$ctrl.questionCount"
                        on-question-answer="$ctrl.onQuestionAnswer(key, answer)">
   </user-match-question>
-  <div ng-switch-when="success" ng-init="$ctrl.analyticsFactory.track('aa-registration-match-linked-account-success')">
-    <p ng-if="!$ctrl.skippedQuestions" translate>
+  <div ng-switch-when="success">
+    <p ng-if="!$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('aa-registration-match-linked-account-success')">
       Thank you for taking the time to answer our security questions. Your account is now activated.
     </p>
-    <p ng-if="$ctrl.skippedQuestions" translate>
+    <p ng-if="$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('aa-registration-no-match-new-account-success')">
       Thank you for completing account registration. Your account has been activated.
     </p>
     <p>
