@@ -67,9 +67,7 @@ class ThankYouController{
               this.sessionModalService.userMatch().then(() => {
                 // Hide accountBenefits after successful user match
                 this.showAccountBenefits = false;
-              }, () => {
-                this.analyticsFactory.track('aa-registration-exit');
-              });
+              }, angular.noop);
             }, angular.noop);
           }
 

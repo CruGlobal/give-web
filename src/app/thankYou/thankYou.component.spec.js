@@ -156,18 +156,6 @@ describe('thank you', () => {
         $rootScope.$digest();
         expect(self.controller.showAccountBenefits).toEqual(false);
       });
-
-      it( 'should call analytics event on dismiss', () => {
-        spyOn( self.controller.analyticsFactory, 'track' ).and.returnValue( null );
-
-        self.controller.loadLastPurchase();
-        deferred.resolve();
-        $rootScope.$digest();
-        userMatch.reject();
-        $rootScope.$digest();
-
-        expect( self.controller.analyticsFactory.track ).toHaveBeenCalledWith( 'aa-registration-exit' );
-      } );
     });
   });
   describe('loadEmail', () => {
