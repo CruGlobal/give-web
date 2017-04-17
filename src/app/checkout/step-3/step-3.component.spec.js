@@ -5,6 +5,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
+import {SignInEvent} from 'common/services/session/session.service';
 
 import module from './step-3.component';
 
@@ -56,6 +57,11 @@ describe('checkout', () => {
         expect(self.controller.loadCurrentPayment).toHaveBeenCalled();
         expect(self.controller.checkErrors).toHaveBeenCalled();
       });
+      it('should be called on sign in', () => {
+        spyOn(self.controller, '$onInit');
+        self.controller.$scope.$broadcast(SignInEvent);
+        expect(self.controller.$onInit).toHaveBeenCalled();
+      });
     });
 
     describe('$onChanges', () => {
@@ -101,6 +107,7 @@ describe('checkout', () => {
         expect(self.controller.bankAccountPaymentDetails).toEqual(self.loadedPayment);
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         self.controller.$log.assertEmpty();
+        expect(self.controller.loadingCurrentPayment).toEqual(false);
       });
       it('should load credit card payment details', () => {
         self.loadedPayment.self.type = 'cru.creditcards.named-credit-card';
@@ -108,6 +115,7 @@ describe('checkout', () => {
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined();
         expect(self.controller.creditCardPaymentDetails).toEqual(self.loadedPayment);
         self.controller.$log.assertEmpty();
+        expect(self.controller.loadingCurrentPayment).toEqual(false);
       });
       it('should throw an error if the payments aren\'t loaded', () => {
         self.loadedPayment = undefined;
@@ -115,6 +123,7 @@ describe('checkout', () => {
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined();
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info: current payment doesn\'t seem to exist']);
+        expect(self.controller.loadingCurrentPayment).toEqual(false);
       });
       it('should throw an error if the type is unknown', () => {
         self.loadedPayment.self.type = 'some other type';
@@ -122,11 +131,13 @@ describe('checkout', () => {
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined();
         expect(self.controller.creditCardPaymentDetails).toBeUndefined();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info: current payment type is unknown']);
+        expect(self.controller.loadingCurrentPayment).toEqual(false);
       });
       it('should log an error on failure', () => {
         spyOn(self.controller.orderService, 'getCurrentPayment').and.returnValue(Observable.throw('some error'));
         self.controller.loadCurrentPayment();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading current payment info', 'some error']);
+        expect(self.controller.loadingCurrentPayment).toEqual(false);
       });
     });
 

@@ -129,7 +129,7 @@
                 </div>
               </div>
             </div>
-            <loading ng-if="!$ctrl.bankAccountPaymentDetails && !$ctrl.creditCardPaymentDetails"></loading>
+            <loading ng-if="$ctrl.loadingCurrentPayment"></loading>
           </div>
         </div>
       </div>
