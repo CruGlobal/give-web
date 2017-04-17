@@ -503,19 +503,6 @@ describe( 'product config modal', function () {
     }
   } );
 
-  describe('displayName()', () => {
-    it('shows productData when jcr:title is the same', () => {
-      $ctrl.productData = { displayName: 'Title'};
-      $ctrl.itemConfig = { 'jcr-title': 'Title' };
-      expect($ctrl.displayName()).toEqual('Title');
-    });
-    it('shows itemConfig when jcr:title is different', () => {
-      $ctrl.productData = { displayName: 'Title'};
-      $ctrl.itemConfig = { 'jcr-title': 'Special Title' };
-      expect($ctrl.displayName()).toEqual('Special Title');
-    });
-  });
-
   describe('displayId()', () => {
     it('shows designationNumber when jcr:title is the same', () => {
       $ctrl.productData = { displayName: 'Title', designationNumber: '0123456'};
@@ -524,7 +511,7 @@ describe( 'product config modal', function () {
     });
     it('includes productData when jcr:title is different', () => {
       $ctrl.productData = { displayName: 'Title', designationNumber: '0123456'};
-      $ctrl.itemConfig = { 'jcr-title': 'Special Title' };
+      $ctrl.itemConfig = { 'jcr-title': 'Special Title', 'campaign-page': '9876' };
       expect($ctrl.displayId()).toEqual('#0123456 - Title');
     });
   });
