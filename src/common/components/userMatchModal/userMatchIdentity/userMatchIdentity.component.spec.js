@@ -21,6 +21,14 @@ describe( 'userMatchIdentity', function () {
     expect( $ctrl.hasError ).toEqual( false );
   } );
 
+  describe( '$onInit', () => {
+    it('track open analytics event', () => {
+      spyOn( $ctrl.analyticsFactory, 'track' ).and.returnValue( null );
+      $ctrl.$onInit();
+      expect( $ctrl.analyticsFactory.track ).toHaveBeenCalledWith( 'aa-registration-match-is-this-you' );
+    });
+  });
+
   describe( 'selectContact()', () => {
     describe( 'invalid form', () => {
       it( 'set hasError', () => {
