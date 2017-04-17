@@ -235,6 +235,19 @@ class ProductConfigModalController {
       this.submittingGift = false;
     } );
   }
+
+  displayName() {
+    return this.productData.displayName === this.itemConfig['jcr-title'] ?
+      this.productData.displayName : this.itemConfig['jcr-title'];
+  }
+
+  displayId() {
+    let value = `#${this.productData.designationNumber}`;
+    if(this.itemConfig['jcr-title'] && this.productData.displayName !== this.itemConfig['jcr-title']) {
+      value += ` - ${this.productData.displayName}`;
+    }
+    return value;
+  }
 }
 
 export default angular
