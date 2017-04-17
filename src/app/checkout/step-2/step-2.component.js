@@ -4,6 +4,7 @@ import paymentMethodForm from 'common/components/paymentMethods/paymentMethodFor
 import existingPaymentMethods from './existingPaymentMethods/existingPaymentMethods.component';
 
 import orderService from 'common/services/api/order.service';
+import {SignInEvent} from 'common/services/session/session.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
 import {scrollModalToTop} from 'common/services/modalState.service';
 
@@ -14,18 +15,22 @@ let componentName = 'checkoutStep2';
 class Step2Controller{
 
   /* @ngInject */
-  constructor($window, $log, orderService, analyticsFactory){
+  constructor($window, $log, $scope, orderService, analyticsFactory){
     this.$window = $window;
     this.$log = $log;
+    this.$scope = $scope;
     this.orderService = orderService;
     this.analyticsFactory = analyticsFactory;
     this.scrollModalToTop = scrollModalToTop;
 
-    this.loadingPaymentMethods = true;
-    this.existingPaymentMethods = true;
+    this.$scope.$on(SignInEvent, () => {
+      this.$onInit();
+    });
   }
 
   $onInit(){
+    this.loadingPaymentMethods = true;
+    this.existingPaymentMethods = true;
     this.loadDonorDetails();
   }
 
