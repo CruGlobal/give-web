@@ -26,6 +26,7 @@ export let Sessions = {
   profile: 'cru-profile'
 };
 
+export let SignInEvent = 'SessionSignedIn';
 export let SignOutEvent = 'SessionSignedOut';
 
 /*@ngInject*/
@@ -72,7 +73,10 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
         data:            data,
         withCredentials: true
       } ) )
-      .map( ( response ) => response.data );
+      .map( ( response ) => response.data )
+      .finally(() => {
+        $rootScope.$broadcast( SignInEvent );
+      });
   }
 
   function signOut() {

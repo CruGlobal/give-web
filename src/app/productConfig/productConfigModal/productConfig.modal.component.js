@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-ordinal';
+import 'angular-sanitize';
 
 import indexOf from 'lodash/indexOf';
 import find from 'lodash/find';
@@ -235,11 +236,20 @@ class ProductConfigModalController {
       this.submittingGift = false;
     } );
   }
+
+  displayId() {
+    let value = `#${this.productData.designationNumber}`;
+    if(this.productData.displayName !== this.itemConfig['jcr-title'] && this.itemConfig['campaign-page']) {
+      value += ` - ${this.productData.displayName}`;
+    }
+    return value;
+  }
 }
 
 export default angular
   .module( componentName, [
     'ordinal',
+    'ngSanitize',
     designationsService.name,
     cartService.name,
     modalStateService.name,

@@ -8,6 +8,7 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import orderService from 'common/services/api/order.service';
 import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
+import {SignInEvent} from 'common/services/session/session.service';
 
 import template from './existingPaymentMethods.tpl.html';
 
@@ -16,12 +17,17 @@ let componentName = 'checkoutExistingPaymentMethods';
 class ExistingPaymentMethodsController {
 
   /* @ngInject */
-  constructor($log, orderService, $uibModal) {
+  constructor($log, $scope, orderService, $uibModal) {
     this.$log = $log;
+    this.$scope = $scope;
     this.orderService = orderService;
     this.$uibModal = $uibModal;
     this.paymentFormResolve = {};
     this.validPaymentMethod = validPaymentMethod;
+
+    this.$scope.$on(SignInEvent, () => {
+      this.$onInit();
+    });
   }
 
   $onInit(){

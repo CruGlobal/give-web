@@ -502,4 +502,17 @@ describe( 'product config modal', function () {
       } );
     }
   } );
+
+  describe('displayId()', () => {
+    it('shows designationNumber when jcr:title is the same', () => {
+      $ctrl.productData = { displayName: 'Title', designationNumber: '0123456'};
+      $ctrl.itemConfig = { 'jcr-title': 'Title' };
+      expect($ctrl.displayId()).toEqual('#0123456');
+    });
+    it('includes productData when jcr:title is different', () => {
+      $ctrl.productData = { displayName: 'Title', designationNumber: '0123456'};
+      $ctrl.itemConfig = { 'jcr-title': 'Special Title', 'campaign-page': '9876' };
+      expect($ctrl.displayId()).toEqual('#0123456 - Title');
+    });
+  });
 } );

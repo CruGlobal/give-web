@@ -11,8 +11,8 @@
     <div class="col-sm-6">
       <div class="give-modal-recipient">
         <img class="recipient-image" desig-src="{{$ctrl.productData.designationNumber}}" campaign-page="{{$ctrl.itemConfig['campaign-page']}}">
-        <span class="recipient-title">{{$ctrl.productData.displayName}}</span>
-        <span class="recipient-id">#{{$ctrl.productData.designationNumber}}</span>
+        <span class="recipient-title" ng-bind-html="$ctrl.itemConfig['jcr-title']"></span>
+        <span class="recipient-id" ng-bind-html="$ctrl.displayId()"></span>
       </div>
     </div>
   </div>

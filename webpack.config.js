@@ -114,7 +114,7 @@ module.exports = env => {
         },
         // inline css for components with the component's js
         {
-          test: /\.scss$/,
+          test: /\.(scss|css)$/,
           exclude: path.resolve(__dirname, "./src/assets"),
           use: [
             "style-loader",

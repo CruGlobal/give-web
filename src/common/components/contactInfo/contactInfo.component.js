@@ -9,7 +9,7 @@ import { parse, isValidNumber } from 'libphonenumber-js';
 import addressForm from 'common/components/addressForm/addressForm.component';
 
 import orderService from 'common/services/api/order.service';
-import sessionService, {Roles} from 'common/services/session/session.service';
+import sessionService, {SignInEvent, Roles} from 'common/services/session/session.service';
 
 import template from './contactInfo.tpl.html';
 
@@ -34,6 +34,10 @@ class Step1Controller{
   $onInit(){
     this.loadDonorDetails();
     this.waitForFormInitialization();
+
+    this.$scope.$on(SignInEvent, () => {
+      this.loadDonorDetails();
+    });
   }
 
   $onChanges(changes) {

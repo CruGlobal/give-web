@@ -112,6 +112,7 @@ describe( 'productModalService', function () {
               {amount: 100, label: "for 40 Bibles", order: "2"}
             ] );
             expect( config['default-campaign-code'] ).toEqual( '867EM1' );
+            expect( config['jcr-title'] ).toEqual( 'PowerPacksTM for Inner City Children' );
           } );
         $httpBackend.flush();
       } );

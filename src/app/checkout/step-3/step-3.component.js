@@ -10,6 +10,7 @@ import orderService from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
+import {SignInEvent} from 'common/services/session/session.service';
 
 import template from './step-3.tpl.html';
 
@@ -26,6 +27,10 @@ class Step3Controller{
     this.$scope = $scope;
     this.$log = $log;
     this.analyticsFactory = analyticsFactory;
+
+    this.$scope.$on(SignInEvent, () => {
+      this.$onInit();
+    });
   }
 
   $onInit(){
@@ -51,6 +56,7 @@ class Step3Controller{
   }
 
   loadCurrentPayment(){
+    this.loadingCurrentPayment = true;
     this.orderService.getCurrentPayment()
       .subscribe((data) => {
           if(!data){
@@ -62,8 +68,10 @@ class Step3Controller{
           }else{
             this.$log.error('Error loading current payment info: current payment type is unknown');
           }
+          this.loadingCurrentPayment = false;
         },
         error => {
+          this.loadingCurrentPayment = false;
           this.$log.error('Error loading current payment info', error);
         });
   }

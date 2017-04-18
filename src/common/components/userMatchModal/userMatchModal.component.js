@@ -4,6 +4,7 @@ import profileService from 'common/services/api/profile.service';
 import verificationService from 'common/services/api/verification.service';
 import userMatchIdentity from './userMatchIdentity/userMatchIdentity.component';
 import userMatchQuestion from './userMatchQuestion/userMatchQuestion.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
 import template from './userMatchModal.tpl.html';
 import find from 'lodash/find';
 
@@ -12,11 +13,12 @@ let componentName = 'userMatchModal';
 class UserMatchModalController {
 
   /* @ngInject */
-  constructor( $log, gettext, profileService, verificationService ) {
+  constructor( $log, gettext, profileService, verificationService, analyticsFactory ) {
     this.$log = $log;
     this.gettext = gettext;
     this.profileService = profileService;
     this.verificationService = verificationService;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
@@ -138,7 +140,8 @@ export default angular
     verificationService.name,
     profileService.name,
     userMatchIdentity.name,
-    userMatchQuestion.name
+    userMatchQuestion.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller:  UserMatchModalController,
