@@ -5,6 +5,7 @@ import 'rxjs/add/observable/of';
 import {Sessions} from 'common/services/session/session.service';
 import {cortexRole} from 'common/services/session/fixtures/cortex-role';
 import {cruProfile} from 'common/services/session/fixtures/cru-profile';
+import {SignInEvent} from 'common/services/session/session.service';
 
 import module from './contactInfo.component.js';
 
@@ -29,6 +30,14 @@ describe('contactInfo', function() {
       self.controller.$onInit();
       expect(self.controller.loadDonorDetails).toHaveBeenCalled();
       expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
+    });
+    it('should call loadDonorDetails on sign in', () => {
+      spyOn(self.controller, 'loadDonorDetails');
+      self.controller.$onInit();
+      expect(self.controller.loadDonorDetails).toHaveBeenCalled();
+      self.controller.loadDonorDetails.calls.reset();
+      self.controller.$scope.$broadcast(SignInEvent);
+      expect(self.controller.loadDonorDetails).toHaveBeenCalled();
     });
   });
 

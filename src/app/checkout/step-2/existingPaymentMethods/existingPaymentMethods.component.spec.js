@@ -5,6 +5,8 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/toPromise';
 
+import {SignInEvent} from 'common/services/session/session.service';
+
 import module from './existingPaymentMethods.component';
 
 describe('checkout', () => {
@@ -27,6 +29,11 @@ describe('checkout', () => {
           spyOn(self.controller, 'loadPaymentMethods');
           self.controller.$onInit();
           expect(self.controller.loadPaymentMethods).toHaveBeenCalled();
+        });
+        it('should be called on sign in', () => {
+          spyOn(self.controller, '$onInit');
+          self.controller.$scope.$broadcast(SignInEvent);
+          expect(self.controller.$onInit).toHaveBeenCalled();
         });
       });
 

@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'textangular';
 import 'textangular/dist/textAngular-sanitize';
+import 'textangular/dist/textAngular.css';
 
 import './textEditor.scss';
 

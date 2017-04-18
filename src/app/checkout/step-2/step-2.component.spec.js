@@ -4,6 +4,8 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
+import {SignInEvent} from 'common/services/session/session.service';
+
 import module from './step-2.component';
 
 describe('checkout', () => {
@@ -24,6 +26,11 @@ describe('checkout', () => {
         self.controller.$onInit();
         expect(self.controller.loadDonorDetails).toHaveBeenCalled();
       });
+      it('should be called on sign in', () => {
+        spyOn(self.controller, '$onInit');
+        self.controller.$scope.$broadcast(SignInEvent);
+        expect(self.controller.$onInit).toHaveBeenCalled();
+      });
     });
 
     describe('loadDonorDetails', () => {
@@ -42,6 +49,9 @@ describe('checkout', () => {
     });
 
     describe('handleExistingPaymentLoading', () => {
+      beforeEach(() => {
+        self.controller.$onInit();
+      });
       it('should set flags for the view if payment methods exist', () => {
         expect(self.controller.loadingPaymentMethods).toEqual(true);
         self.controller.handleExistingPaymentLoading(true, true);
@@ -102,6 +112,7 @@ describe('checkout', () => {
         expect(self.controller.scrollModalToTop).not.toHaveBeenCalled();
       });
       it('should handle an error saving payment data from a modal', () => {
+        self.controller.$onInit();
         spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'some error' }));
         self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}} });

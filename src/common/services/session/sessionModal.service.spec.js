@@ -12,7 +12,12 @@ describe( 'sessionModalService', function () {
     $uibModal = _$uibModal_;
     // Spy On $uibModal.open and return mock object
     spyOn( $uibModal, 'open' ).and.callFake( () => {
-      return {result: {finally: angular.noop}, dismiss: angular.noop, uniq: counter++};
+      return {
+        result: {finally: angular.noop, then: angular.noop},
+        dismiss: angular.noop,
+        opened: { then: angular.noop },
+        uniq: counter++
+      };
     } );
   } ) );
 
@@ -39,13 +44,35 @@ describe( 'sessionModalService', function () {
       expect( $uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {backdrop: false, keyboard: false} ) );
     } );
 
+    describe( 'modal opens', () => {
+      let deferred, $rootScope, analyticsFactory;
+      beforeEach(inject(function (_$q_, _$rootScope_, _$location_, _analyticsFactory_) {
+        $rootScope = _$rootScope_;
+        deferred = _$q_.defer();
+        analyticsFactory = _analyticsFactory_;
+        spyOn(analyticsFactory, 'track');
+        $uibModal.open.and.returnValue({result: {finally: angular.noop, then: angular.noop}, opened: deferred.promise});
+      }));
+
+      it( 'sends analytics event', ( ) => {
+        sessionModalService.open('sign-up', {
+          openAnalyticsEvent: 'eventA'
+        });
+        deferred.resolve();
+        $rootScope.$digest();
+        expect( analyticsFactory.track ).toHaveBeenCalledWith( 'eventA' );
+      } );
+    }) ;
+
     describe( 'modal closes', () => {
-      let deferred, $rootScope, modalStateService;
-      beforeEach( inject( function ( _$q_, _$rootScope_, _$location_, _modalStateService_ ) {
+      let deferred, $rootScope, modalStateService, analyticsFactory;
+      beforeEach( inject( function ( _$q_, _$rootScope_, _$location_, _modalStateService_, _analyticsFactory_ ) {
         $rootScope = _$rootScope_;
         modalStateService = _modalStateService_;
         deferred = _$q_.defer();
+        analyticsFactory = _analyticsFactory_;
         spyOn( modalStateService, 'name' );
+        spyOn( analyticsFactory, 'track' );
         $uibModal.open.and.returnValue( {result: deferred.promise} );
       } ) );
 
@@ -54,6 +81,16 @@ describe( 'sessionModalService', function () {
         deferred.resolve();
         $rootScope.$digest();
         expect( modalStateService.name ).toHaveBeenCalledWith( null );
+        expect( analyticsFactory.track ).not.toHaveBeenCalled( );
+      } );
+
+      it( 'sends analytics event', ( ) => {
+        sessionModalService.open('sign-up', {
+          dismissAnalyticsEvent: 'eventA'
+        });
+        deferred.reject();
+        $rootScope.$digest();
+        expect( analyticsFactory.track ).toHaveBeenCalledWith( 'eventA' );
       } );
     } );
 
@@ -77,6 +114,12 @@ describe( 'sessionModalService', function () {
       sessionModalService.signIn();
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'sign-in' );
+    } );
+
+    it( 'should open signIn modal with last purchase id', () => {
+      sessionModalService.signIn('gxwpz=');
+      expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
+      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.lastPurchaseId() ).toEqual( 'gxwpz=' );
     } );
   } );
 

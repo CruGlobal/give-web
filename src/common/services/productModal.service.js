@@ -47,17 +47,27 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
                 `/content/give/us/en/designations/${c}/${code}.infinity.json`;
             $http.get( path ).then( ( data ) => {
               let suggestedAmounts = [];
-              if ( data.data['jcr:content'] && data.data['jcr:content'].suggestedAmounts ) {
-                angular.forEach( data.data['jcr:content'].suggestedAmounts, ( v, k ) => {
-                  if ( toFinite( k ) > 0 ) suggestedAmounts.push( {
-                    amount: toFinite( v.amount ),
-                    label: v.description,
-                    order: k
+              if ( data.data['jcr:content'] ) {
+                // Map suggested amounts
+                if( data.data['jcr:content'].suggestedAmounts) {
+                  angular.forEach( data.data['jcr:content'].suggestedAmounts, ( v, k ) => {
+                    if ( toFinite( k ) > 0 ) suggestedAmounts.push( {
+                      amount: toFinite( v.amount ),
+                      label: v.description,
+                      order: k
+                    } );
                   } );
-                } );
-              }
-              if ( data.data['jcr:content'] && data.data['jcr:content'].defaultCampaign && !config['campaign-code'] ) {
-                config['default-campaign-code'] = data.data['jcr:content'].defaultCampaign;
+                }
+
+                // Copy default-campaign-code to config
+                if( data.data['jcr:content'].defaultCampaign && !config['campaign-code'] ) {
+                  config['default-campaign-code'] = data.data['jcr:content'].defaultCampaign;
+                }
+
+                // Copy jcr:title
+                if( data.data['jcr:content']['jcr:title'] ) {
+                  config['jcr-title'] = data.data['jcr:content']['jcr:title'];
+                }
               }
               deferred.resolve( suggestedAmounts );
             }, () => {
