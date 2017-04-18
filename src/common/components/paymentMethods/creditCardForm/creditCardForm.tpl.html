@@ -78,14 +78,14 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-4" ng-if="!$ctrl.paymentMethod || $ctrl.disableCardNumber">
+      <div class="col-sm-4" ng-if="!$ctrl.hideCvv">
         <div class="form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
           <label translate>Security Code</label>
           <input type="text"
                  name="securityCode"
                  class="form-control form-control-subtle"
                  ng-model="$ctrl.creditCardPayment.securityCode"
-                 ng-required="!$ctrl.paymentMethod"
+                 ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
                  ng-attr-placeholder="{{$ctrl.paymentMethod && !$ctrl.creditCardPayment.cardNumber ? '***' : ''}}">
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the security code</div>

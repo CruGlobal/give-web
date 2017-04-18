@@ -87,7 +87,7 @@ class ExistingPaymentMethodsController {
       resolve: {
         paymentForm: this.paymentFormResolve,
         paymentMethod: existingPaymentMethod,
-        disableCardNumber: !!existingPaymentMethod,
+        disableCardNumber: !!existingPaymentMethod && !existingPaymentMethod['from-current-order'],
         mailingAddress: this.mailingAddress,
         onPaymentFormStateChange: () => param => {
           param.$event.stayOnStep = true;
