@@ -115,6 +115,12 @@ describe( 'sessionModalService', function () {
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
       expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'sign-in' );
     } );
+
+    it( 'should open signIn modal with last purchase id', () => {
+      sessionModalService.signIn('gxwpz=');
+      expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
+      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.lastPurchaseId() ).toEqual( 'gxwpz=' );
+    } );
   } );
 
   describe( 'signUp', () => {
