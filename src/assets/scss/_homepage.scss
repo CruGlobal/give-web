@@ -6,6 +6,10 @@ $border-radius: 4px;
     background-size: cover;
     position: relative;
     height: 430px;
+    @media only screen and (min-width: 1400px) {
+      height: auto;
+      padding-top: 30.8%;
+    }
   }
 
   .hero-content {
@@ -156,6 +160,28 @@ $border-radius: 4px;
     .hero-lead-third {
       .image-container {
         background-image: url(/assets/images/featured-opportunities.jpg);
+      }
+    }
+
+    @media only screen and (min-width: 1400px) {
+      margin-top: 0;
+      .hero-lead-first, 
+      .hero-lead-second, 
+      .hero-lead-third {
+        h3 {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+        }
+        a {
+          padding-top: 0;
+          height: auto;
+        }
+        .image-container {
+          position: relative;
+          padding-top: 40.1%;
+        }
       }
     }
 
