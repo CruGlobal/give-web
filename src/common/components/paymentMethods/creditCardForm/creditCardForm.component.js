@@ -76,9 +76,10 @@ class CreditCardController {
   waitForSecurityCodeInitialization() {
     let unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
       unregister();
-      if(!this.paymentMethod) { // If editing existing payment method, don't require a CVV
-        this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength;
-      }
+      this.creditCardPaymentForm.securityCode.$validators.minLength = number => {
+        // If editing existing payment method, don't require a CVV
+        return !this.creditCardPaymentForm.securityCode.$viewValue && this.paymentMethod && !this.creditCardPayment.cardNumber || cruPayments.creditCard.cvv.validate.minLength(number);
+      };
       this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength;
       this.creditCardPaymentForm.securityCode.$validators.cardTypeLength = number => cruPayments.creditCard.cvv.validate.cardTypeLength(number, cruPayments.creditCard.card.info.type(this.creditCardPayment.cardNumber));
       this.creditCardPaymentForm.cardNumber.$viewChangeListeners.push(() => {
@@ -108,7 +109,9 @@ class CreditCardController {
       this.creditCardPaymentForm.expiryMonth.$validate(); // Revalidate expiryMonth after expiryYear changes
     });
 
-    this.waitForSecurityCodeInitialization();
+    if(!this.hideCvv){
+      this.waitForSecurityCodeInitialization();
+    }
   }
 
   initializeExpirationDateOptions(){
@@ -185,6 +188,7 @@ export default angular
       paymentFormState: '<',
       paymentMethod: '<',
       disableCardNumber: '<',
+      hideCvv: '<',
       mailingAddress: '<',
       onPaymentFormStateChange: '&'
     }

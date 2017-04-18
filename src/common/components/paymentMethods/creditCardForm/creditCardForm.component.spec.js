@@ -349,11 +349,6 @@ describe('credit card form', () => {
       it('should not be valid if the field is empty',  () => {
         expect(self.formController.securityCode.$valid).toEqual(false);
       });
-      it('should not exist if existing payment method is present',  () => {
-        self.controller.paymentMethod = {};
-        self.formController.securityCode.$setViewValue('foo');
-        expect(self.formController.securityCode).toBeUndefined();
-      });
       it('should not be valid if it is less than 3 digits',  () => {
         self.formController.securityCode.$setViewValue('12');
         expect(self.formController.securityCode.$valid).toEqual(false);
@@ -388,6 +383,21 @@ describe('credit card form', () => {
         self.formController.securityCode.$setViewValue('123');
         expect(self.formController.securityCode.$valid).toEqual(true);
         self.formController.cardNumber.$setViewValue('371449635398431');
+        expect(self.formController.securityCode.$valid).toEqual(false);
+      });
+      it('should be valid if it is empty and is an existing payment method',  () => {
+        self.controller.paymentMethod = {
+          'last-four-digits': '1234'
+        };
+        self.formController.securityCode.$setViewValue('');
+        expect(self.formController.securityCode.$valid).toEqual(true);
+      });
+      it('should not be valid if it is empty, is an existing payment method, but has a modified card number',  () => {
+        self.controller.paymentMethod = {
+          'last-four-digits': '1234'
+        };
+        self.formController.cardNumber.$setViewValue('4111111111111111');
+        self.formController.securityCode.$setViewValue('');
         expect(self.formController.securityCode.$valid).toEqual(false);
       });
     });
