@@ -177,10 +177,12 @@ $border-radius: 4px;
         a {
           padding-top: 0;
           height: auto;
-        }
-        .image-container {
-          position: relative;
-          padding-top: 40.1%;
+          transition: none;
+          .image-container {
+            position: relative;
+            padding-top: 40.1%;
+            transition: none;
+          }
         }
       }
     }
