@@ -4,18 +4,20 @@
     <p><button type="button" class="btn btn-primary" ng-click="$ctrl.$onInit()" translate>Retry</button></p>
   </div>
 
-  <div class="alert alert-danger" role="alert" ng-if="$ctrl.selectContactError || $ctrl.loadingQuestionsError">
-    <p translate>An error has occurred. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+  <div class="alert alert-danger" role="alert" ng-if="$ctrl.selectContactError">
+    <p translate>There was an error saving your answer. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
   </div>
   <user-match-identity ng-switch-when="identity"
                        contacts="$ctrl.contacts"
                        on-select-contact="$ctrl.onSelectContact(contact)">
   </user-match-identity>
   <div ng-switch-when="activate">
+    <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingQuestionsError">
+      <p translate>There was an error loading the verification questions. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+    </div>
     <p translate>To protect your privacy, we need to ask you a few questions before we can give you access to your historical information. <!--You can up to one minute each to answer these questions.--></p>
     <p>
-      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onActivate()"
-              ng-disabled="$ctrl.selectContactError || $ctrl.loadingQuestionsError" translate>Continue</button>
+      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onActivate()" translate>Continue</button>
     </p>
   </div>
   <user-match-question ng-switch-when="question"
