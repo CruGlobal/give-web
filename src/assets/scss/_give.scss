@@ -79,6 +79,12 @@ hr.vertical-divider {
   width: 1px;
 }
 
+hr.horizontal-divider {
+  width: 100%;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
 .container,
 .container-fluid {
   &:focus {
