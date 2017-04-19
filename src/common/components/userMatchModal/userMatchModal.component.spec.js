@@ -55,6 +55,17 @@ describe( 'userMatchModal', function () {
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
     });
 
+    describe( 'donorDetails registration-state=\'NEW\'', () => {
+      beforeEach( () => {
+        spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.of( {'registration-state': 'NEW'} ) );
+        spyOn( $ctrl, 'postDonorMatch' );
+      } );
+      it( 'proceeds to postDonorMatch()', () => {
+        $ctrl.$onInit();
+        expect( $ctrl.postDonorMatch ).toHaveBeenCalled();
+      } );
+    } );
+
     describe( 'donorDetails registration-state=\'MATCHED\'', () => {
       beforeEach( () => {
         spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.of( {'registration-state': 'MATCHED'} ) );
@@ -97,6 +108,25 @@ describe( 'userMatchModal', function () {
         expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading verification contacts.', 'another error']);
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
       });
+    } );
+  } );
+
+  describe( 'postDonorMatch()', () => {
+    it( 'should proceed to getContacts() on donor match success', () => {
+      spyOn( $ctrl, 'getContacts' );
+      spyOn( $ctrl.verificationService, 'postDonorMatches').and.returnValue( Observable.of( {} ) );
+      $ctrl.postDonorMatch();
+      expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+      expect( $ctrl.getContacts ).toHaveBeenCalled();
+    } );
+
+    it( 'proceeds to success on postDonorMatch failure.', () => {
+      spyOn( $ctrl, 'changeMatchState' );
+      spyOn( $ctrl.verificationService, 'postDonorMatches').and.returnValue( Observable.throw( 'error' ) );
+      $ctrl.postDonorMatch();
+      expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
+      expect( $ctrl.skippedQuestions ).toEqual( true );
+      expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success' );
     } );
   } );
 
