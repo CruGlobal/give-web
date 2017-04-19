@@ -31,29 +31,49 @@ class UserMatchModalController {
         if ( donorDetails['registration-state'] === 'COMPLETED' ) {
           this.skippedQuestions = true;
           this.changeMatchState( 'success' );
+        } else if( donorDetails['registration-state'] === 'NEW' ) {
+          // Do donor matching if
+          this.postDonorMatch();
         } else {
-          this.verificationService.getContacts().subscribe( ( contacts ) => {
-            if ( find( contacts, {selected: true} ) ) {
-              this.changeMatchState( 'activate' );
-            }
-            else {
-              this.contacts = contacts;
-              this.changeMatchState( 'identity' );
-            }
-          },
-          error => {
-            this.setLoading( {loading: false} );
-            this.loadingDonorDetailsError = true;
-            this.$log.error('Error loading verification contacts.', error);
-          } );
+          this.getContacts();
         }
       }
     },
+    error => {
+      this.setLoading( {loading: false} );
+      this.loadingDonorDetailsError = true;
+      this.$log.error('Error loading donorDetails.', error);
+    } );
+  }
+
+  postDonorMatch() {
+    this.setLoading( {loading: true} );
+    this.verificationService.postDonorMatches().subscribe( () => {
+      // Donor match success, get contacts
+      this.getContacts();
+    }, () => {
+      // Donor Match failed, user match not required
+      this.skippedQuestions = true;
+      this.changeMatchState( 'success' );
+    } );
+  }
+
+  getContacts() {
+    this.setLoading( {loading: true} );
+    this.verificationService.getContacts().subscribe( ( contacts ) => {
+        if ( find( contacts, {selected: true} ) ) {
+          this.changeMatchState( 'activate' );
+        }
+        else {
+          this.contacts = contacts;
+          this.changeMatchState( 'identity' );
+        }
+      },
       error => {
         this.setLoading( {loading: false} );
         this.loadingDonorDetailsError = true;
-        this.$log.error('Error loading donorDetails.', error);
-    } );
+        this.$log.error('Error loading verification contacts.', error);
+      } );
   }
 
   changeMatchState( state ) {
