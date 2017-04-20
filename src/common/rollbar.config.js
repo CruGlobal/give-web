@@ -16,7 +16,7 @@ function rollbarConfig(envServiceProvider, $provide) {
     environment: envServiceProvider.get(),
     enabled: !envServiceProvider.is('development'), // Disable rollbar in development environment
     transform: transformRollbarPayload,
-    hostWhiteList: ['give.cru.org', 'give-stage2.cru.org', 'stage.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org'],
+    hostWhiteList: ['give.cru.org', 'give-prod.cru.org', 'give-stage2.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org'],
     scrubFields: ['password', 'cvv', 'cvv2', 'security-code'],
     payload: {
       client: {
