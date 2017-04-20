@@ -381,20 +381,16 @@ describe('order service', () => {
       };
     });
     it('should update the given payment method', () => {
-      this.runTestWith({ 'cardholder-name': 'New name', cvv: '963' },
-        { 'cardholder-name': 'New name' }, '963');
+      this.runTestWith({ 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa', cvv: '963' },
+        { 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa' }, '963');
     });
     it('should update the given payment method with an address', () => {
       this.runTestWith({ 'cardholder-name': 'New name', cvv: '789', address: { country: 'US' } },
         { 'cardholder-name': 'New name', address: { 'country-name': 'US' } }, '789');
     });
-    it('should omit the credit card field since it can\'t be updated', () => {
-      this.runTestWith({ 'cardholder-name': 'New name', cvv: '741', 'card-number': '0000' },
-        { 'cardholder-name': 'New name' }, '741');
-    });
     it('should call storeCardSecurityCode with undefined when the cvv wasn\'t changed', () => {
       this.runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
-        { 'cardholder-name': 'New name' }, undefined);
+        { 'cardholder-name': 'New name', 'card-number': '0000' }, undefined);
     });
   });
 
