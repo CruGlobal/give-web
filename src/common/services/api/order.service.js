@@ -7,7 +7,6 @@ import 'rxjs/add/operator/pluck';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import map from 'lodash/map';
-import pick from 'lodash/pick';
 import omit from 'lodash/omit';
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 
@@ -153,7 +152,7 @@ class Order{
       .mergeMap(data => {
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.updateForm, 'updatecreditcardfororderaction'),
-          data: pick(paymentInfo, ['address', 'cardholder-name', 'expiry-month', 'expiry-year'])
+          data: omit(paymentInfo, 'cvv')
         })
           .do(() => {
             this.storeCardSecurityCode(paymentInfo.cvv, paymentMethod.self.uri);
