@@ -14,7 +14,7 @@ $border-radius: 4px;
 
   .hero-content {
     position: absolute;
-    top: 50%;
+    top: 75%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -81,12 +81,6 @@ $border-radius: 4px;
     margin-top: -30px;
     position: relative;
 
-    @media screen and (max-width: 720px) {
-      margin-top: 0;
-      background-size: cover;
-      background-position: 50% 50%;
-    }
-
     .hero-lead-first, 
     .hero-lead-second, 
     .hero-lead-third {
@@ -96,16 +90,20 @@ $border-radius: 4px;
       padding: 0;
       overflow: hidden;
 
-      @media screen and (max-width: 720px) {
-        width: 100%;
-        border-bottom: 1px solid #333;
-      }
-
 
       h3 {
         font-size: 20px;
+        font-weight: 600;
         color: $colorCru-white;
-        padding-top: $gutter*.5;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(#000, .4);
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-top: 9px;
+        margin-bottom: 9px;
       }
 
       a {
@@ -120,16 +118,6 @@ $border-radius: 4px;
           padding-top: 15px;
         }
 
-        @media screen and (max-width: 720px) {
-          height: 60px;
-          padding-top: 0;
-          line-height: 60px;
-          h3 {
-            line-height: 60px;
-            padding: 0;
-          }
-        }
-
         &:hover {
           padding-top: 0;
         }
@@ -141,10 +129,7 @@ $border-radius: 4px;
           height: 100%;
           text-align: center;
           transition: .25s all;
-
-          @media screen and (max-width: 720px) {
-            background: rgba(0,0,0,.8);
-          }
+          position: relative;
 
         }
       }
@@ -154,12 +139,41 @@ $border-radius: 4px;
         background-image: url(/assets/images/people.jpg);
       }
     }
-    .hero-lead-second .image-container {
-      background-image: url(/assets/images/ministry.jpg);
+    .hero-lead-second {
+      .image-container {
+        background-image: url(/assets/images/ministry.jpg);
+      }
     }
     .hero-lead-third {
       .image-container {
         background-image: url(/assets/images/featured-opportunities.jpg);
+      }
+    }
+
+    @media screen and (max-width: 720px) {
+      margin-top: 0;
+      background-size: cover;
+      background-position: 50% 50%;
+
+      .hero-lead-first, 
+      .hero-lead-second, 
+      .hero-lead-third {
+        width: 100%;
+        border-bottom: 1px solid #333;
+        .image-container {
+          padding-top: 9px;
+          padding-bottom: 9px;
+          background-color: rgba(0,0,0,.8);
+        }
+        h3 {
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+        a {
+          position: relative;
+          height: auto;
+          padding-top: 0;
+        }
       }
     }
 
@@ -168,18 +182,11 @@ $border-radius: 4px;
       .hero-lead-first, 
       .hero-lead-second, 
       .hero-lead-third {
-        h3 {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-        }
         a {
           padding-top: 0;
           height: auto;
           transition: none;
           .image-container {
-            position: relative;
             padding-top: 40.1%;
             transition: none;
           }
