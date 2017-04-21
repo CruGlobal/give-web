@@ -75,6 +75,9 @@ $border-radius: 4px;
         }
       }
     }
+    @media only screen and (min-width: 1400px) {
+      top: 65%;
+    }
   }
 
   .hero-leads {
