@@ -320,6 +320,13 @@ describe( 'product config modal', function () {
       expect($ctrl.changingFrequency).toEqual(false);
     });
 
+    it( 'does nothing', () => {
+      $ctrl.changeFrequency( {name: 'MON', selectAction: '/b'} );
+      expect( $ctrl.designationsService.productLookup ).not.toHaveBeenCalled();
+      expect( $ctrl.itemConfigForm.$setDirty ).not.toHaveBeenCalled();
+      expect( $ctrl.productData ).toEqual({ frequency: 'MON' });
+    } );
+
     it( 'changes product frequency', () => {
       $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
       expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );

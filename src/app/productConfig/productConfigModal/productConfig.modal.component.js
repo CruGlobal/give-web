@@ -158,6 +158,10 @@ class ProductConfigModalController {
   }
 
   changeFrequency( product ) {
+    if(product.name === this.productData.frequency) {
+      // Do nothing if same frequency is selected
+      return;
+    }
     this.errorAlreadyInCart = false;
     this.changingFrequency = true;
     this.errorChangingFrequency = false;
