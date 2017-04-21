@@ -314,6 +314,7 @@ describe( 'product config modal', function () {
       spyOn( $ctrl, 'updateQueryParam' );
       $ctrl.productData = { frequency: 'MON' };
       $ctrl.errorAlreadyInCart = true;
+      $ctrl.changingFrequency = false;
     } );
 
     afterEach(() => {
