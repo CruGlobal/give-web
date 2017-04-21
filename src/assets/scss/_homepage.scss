@@ -75,6 +75,9 @@ $border-radius: 4px;
         }
       }
     }
+    @media only screen and (max-width: 400px) {
+      top: 65%;
+    }
   }
 
   .hero-leads {
@@ -168,6 +171,7 @@ $border-radius: 4px;
         h3 {
           margin-top: 0;
           margin-bottom: 0;
+          position: relative;
         }
         a {
           position: relative;
