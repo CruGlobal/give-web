@@ -18,6 +18,7 @@ import sessionEnforcerService, {EnforcerCallbacks} from 'common/services/session
 import {Roles, SignOutEvent} from 'common/services/session/session.service';
 
 import analyticsFactory from 'app/analytics/analytics.factory';
+import 'common/lib/fakeLocalStorage';
 
 import template from './checkout.tpl.html';
 
