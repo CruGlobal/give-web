@@ -128,8 +128,8 @@ export default class RecurringGiftModel {
 
   set frequency(value) {
     this.gift['updated-rate']['recurrence']['interval'] = value !== this.parentDonation['rate']['recurrence']['interval'] ? value : '';
-    if(value === 'Monthly' || this.gift['updated-rate']['recurrence']['interval'] === '' && this.gift['updated-recurring-day-of-month'] === ''){
-      this.clearStartDate(); // Don't need to update start date if gift if Monthly or if frequency and transaction day are unchanged
+    if(this.gift['updated-rate']['recurrence']['interval'] === '' && this.gift['updated-recurring-day-of-month'] === ''){
+      this.clearStartDate(); // Don't need to update start date if frequency and transaction day are unchanged
     }else{
       this.initStartMonth();
     }
@@ -141,8 +141,8 @@ export default class RecurringGiftModel {
 
   set transactionDay(value){
     this.gift['updated-recurring-day-of-month'] = value !== this.parentDonation['recurring-day-of-month'] ? value : '';
-    if(this.frequency === 'Monthly' || this.gift['updated-rate']['recurrence']['interval'] === '' && this.gift['updated-recurring-day-of-month'] === ''){
-      this.clearStartDate(); // Don't need to update start date if gift is Monthly or if the frequency is unchanged and the transaction day is unchanged
+    if(this.gift['updated-rate']['recurrence']['interval'] === '' && this.gift['updated-recurring-day-of-month'] === ''){
+      this.clearStartDate(); // Don't need to update start date if the frequency is unchanged and the transaction day is unchanged
     }else{
       this.initStartMonth();
     }

@@ -294,12 +294,6 @@ describe('recurringGift model', () => {
       giftModel.transactionDay = '15';
       expect(giftModel.gift['updated-recurring-day-of-month']).toEqual('');
     });
-    it('should clear start date when frequency is Monthly', () => {
-      giftModel.gift['updated-rate']['recurrence']['interval'] = 'Monthly';
-      giftModel.transactionDay = '15';
-      expect(giftModel.clearStartDate).toHaveBeenCalled();
-      expect(giftModel.initStartMonth).not.toHaveBeenCalled();
-    });
     it('should clear start date when frequency was Monthly and the frequency is unchanged', () => {
       giftModel.parentDonation['rate']['recurrence']['interval'] = 'Monthly';
       giftModel.gift['updated-rate']['recurrence']['interval'] = '';
