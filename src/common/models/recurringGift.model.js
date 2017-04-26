@@ -213,7 +213,6 @@ export default class RecurringGiftModel {
 
   setDefaultsSingleGift(){
     this.gift['updated-designation-number'] = this.gift['designation-number'];
-    this.gift['updated-amount'] = 50;
     return this;
   }
 }
