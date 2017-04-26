@@ -36,7 +36,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         imgDomain: '//give-static.cru.org',
         imgDomainDesignation: '',
         publicCru: 'https://www.cru.org',
-        publicGive: 'https://give.cru.org'
+        publicGive: 'https://give-prod.cru.org'
       }
     }
   });
