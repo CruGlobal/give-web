@@ -132,7 +132,7 @@ class CreditCardController {
         this.tsysService.getManifest()
           .mergeMap(data => {
             cruPayments.creditCard.init(this.envService.get(), data.deviceId, data.manifest);
-            return cruPayments.creditCard.encrypt(this.creditCardPayment.cardNumber, this.creditCardPayment.securityCode, this.creditCardPayment.expiryMonth, this.creditCardPayment.expiryYear);
+            return cruPayments.creditCard.encrypt(this.creditCardPayment.cardNumber, this.hideCvv ? null : this.creditCardPayment.securityCode, this.creditCardPayment.expiryMonth, this.creditCardPayment.expiryYear);
           });
       tokenObservable.subscribe(tokenObj => {
         this.onPaymentFormStateChange({
