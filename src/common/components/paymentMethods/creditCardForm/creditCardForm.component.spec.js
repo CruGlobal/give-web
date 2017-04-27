@@ -165,6 +165,22 @@ describe('credit card form', () => {
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } });
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData });
     });
+    it('should call encrypt with a null cvv if the cvv input is hidden', () => {
+      self.controller.hideCvv = true;
+      self.controller.creditCardPayment = {
+        cardNumber: '4111111111111111',
+        cardholderName: 'Person Name',
+        expiryMonth: 12,
+        expiryYear: 2019
+      };
+      self.controller.useMailingAddress = true;
+      self.formController.$valid = true;
+      self.controller.savePayment();
+      expect(self.controller.tsysService.getManifest).toHaveBeenCalled();
+      expect(cruPayments.creditCard.init).toHaveBeenCalledWith('development', '<device id>', '<manifest>');
+      expect(cruPayments.creditCard.encrypt).toHaveBeenCalledWith('4111111111111111', null, 12, 2019);
+      expect(self.formController.$setSubmitted).toHaveBeenCalled();
+    });
     it('should not send a credit card if a paymentMethod is present and cardNumber is unchanged', () => {
       self.controller.paymentMethod = {
         'last-four-digits': '4567',
