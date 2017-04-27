@@ -1,9 +1,9 @@
 <div class="container loading-overlay-parent">
-  <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingContentError">
+  <div class="alert alert-danger mt-" role="alert" ng-if="$ctrl.loadingContentError">
     <p translate>There was an error loading your profile. You can use the retry button to try loading it again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
     <p><button id="retryButton1" type="button" class="btn btn-primary" ng-click="$ctrl.getDesignationContent()" translate>Retry</button></p>
   </div>
-  <div class="alert alert-danger" role="alert" ng-if="$ctrl.saveDesignationError">
+  <div class="alert alert-danger mt-" role="alert" ng-if="$ctrl.saveDesignationError">
     <p translate>There was an error saving your profile. You can use the retry button to try saving it again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
     <p><button id="retryButton2" type="button" class="btn btn-primary" ng-click="$ctrl.save()" translate>Retry</button></p>
   </div>
