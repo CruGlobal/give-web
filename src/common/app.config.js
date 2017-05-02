@@ -32,11 +32,11 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         publicGive: 'https://give-stage2.cru.org'
       },
       production: {
-        apiUrl: '',
+        apiUrl: 'https://give.cru.org',
         imgDomain: '//give-static.cru.org',
         imgDomainDesignation: '',
         publicCru: 'https://www.cru.org',
-        publicGive: 'https://give-prod.cru.org'
+        publicGive: 'https://give.cru.org'
       }
     }
   });
