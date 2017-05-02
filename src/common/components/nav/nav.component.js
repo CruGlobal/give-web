@@ -170,7 +170,8 @@ class NavController{
   }
 
   sessionChanged() {
-    this.isSignedIn = this.customProfile || includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() );
+    this.isSignedIn = (this.customProfile && this.sessionService.session.email) ||
+      includes(['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole());
   }
 
   getNav() {
