@@ -1,8 +1,7 @@
 import angular from 'angular';
 import 'angular-ui-bootstrap';
 import modalStateService from 'common/services/modalState.service';
-import sessionModalController from './sessionModal.controller';
-import sessionModalTemplate from './sessionModal.tpl.html';
+import sessionModalComponent from './sessionModal.component';
 import sessionModalWindowTemplate from './sessionModalWindow.tpl.html';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
@@ -27,9 +26,7 @@ function SessionModalService( $uibModal, $log, modalStateService, analyticsFacto
     type = angular.isDefined( type ) ? type : 'sign-in';
     options = angular.isObject( options ) ? options : {};
     let modalOptions = angular.merge( {}, {
-      templateUrl:       sessionModalTemplate,
-      controller:        sessionModalController.name,
-      controllerAs:      '$ctrl',
+      component:         sessionModalComponent.name,
       size:              'sm',
       windowTemplateUrl: sessionModalWindowTemplate,
       resolve:           {
@@ -89,7 +86,7 @@ export default angular
   .module( serviceName, [
     'ui.bootstrap',
     modalStateService.name,
-    sessionModalController.name,
+    sessionModalComponent.name,
     analyticsFactory.name
   ] )
   .factory( serviceName, SessionModalService )
