@@ -1,35 +1,39 @@
 import angular from 'angular';
 import 'angular-mocks';
-import module from './sessionModal.controller';
+import module from './sessionModal.component';
 
 describe( 'sessionModalController', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let $ctrl, uibModalInstance, state;
+  let $ctrl, state;
 
-  beforeEach( inject( function ( $controller, ) {
-    uibModalInstance = jasmine.createSpyObj( 'uibModalInstance', ['close', 'dismiss'] );
+  beforeEach( inject( function ( $componentController, ) {
     state = 'sign-in';
-    $ctrl = $controller( module.name, {
-      $uibModalInstance: uibModalInstance,
-      state:             state,
-      $scope:            { $resolve: {} }
-    } );
+    $ctrl = $componentController( module.name, {},
+      {
+        resolve: {
+          state: state,
+          lastPurchaseId: '<some id>'
+        },
+        close: jasmine.createSpy('dismiss'),
+        dismiss: jasmine.createSpy('dismiss')
+      });
   } ) );
 
-  describe( '$ctrl.stateChanged', () => {
-    beforeEach(() => {
-      spyOn($ctrl, 'scrollModalToTop');
+  describe( '$ctrl.$onInit', () => {
+    it('should initialize the component state', () => {
+      expect( $ctrl.isLoading ).toEqual( false );
+      $ctrl.$onInit();
+      expect( $ctrl.state ).toEqual( 'sign-in' );
+      expect( $ctrl.lastPurchaseId ).toEqual( '<some id>' );
     });
+  });
 
+  describe( '$ctrl.stateChanged', () => {
     it('should scroll to the top of the modal', () => {
+      spyOn($ctrl, 'scrollModalToTop');
       $ctrl.stateChanged();
       expect($ctrl.scrollModalToTop).toHaveBeenCalled();
     });
-
-    it( 'should be defined', () => {
-      expect( $ctrl.stateChanged ).toBeDefined();
-      expect( $ctrl.state ).toEqual( 'sign-in' );
-    } );
 
     it( 'should update state', () => {
       $ctrl.stateChanged( 'sign-up' );
@@ -40,28 +44,28 @@ describe( 'sessionModalController', function () {
   describe( '$ctrl.onSignInSuccess', () => {
     it( 'should close modal', () => {
       $ctrl.onSignInSuccess();
-      expect( uibModalInstance.close ).toHaveBeenCalled();
+      expect( $ctrl.close ).toHaveBeenCalled();
     } );
   } );
 
   describe( '$ctrl.onSignUpSuccess', () => {
     it( 'should close modal', () => {
       $ctrl.onSignUpSuccess();
-      expect( uibModalInstance.close ).toHaveBeenCalled();
+      expect( $ctrl.close ).toHaveBeenCalled();
     } );
   } );
 
   describe( '$ctrl.onFailure', () => {
     it( 'should dismiss modal with \'error\'', () => {
       $ctrl.onFailure();
-      expect( uibModalInstance.dismiss ).toHaveBeenCalledWith( 'error' );
+      expect( $ctrl.dismiss ).toHaveBeenCalledWith({ $value: 'error' });
     } );
   } );
 
   describe( '$ctrl.onCancel', () => {
     it( 'should dismiss modal with \'cancel\'', () => {
       $ctrl.onCancel();
-      expect( uibModalInstance.dismiss ).toHaveBeenCalledWith( 'cancel' );
+      expect( $ctrl.dismiss ).toHaveBeenCalledWith({ $value: 'cancel' });
     } );
   } );
 

@@ -11,18 +11,22 @@ import registerAccountModal from 'common/components/registerAccountModal/registe
 
 import {scrollModalToTop} from 'common/services/modalState.service';
 
-let controllerName = 'sessionModalController';
+import template from './sessionModal.tpl.html';
+
+let componentName = 'sessionModal';
 
 class SessionModalController {
 
   /* @ngInject */
-  constructor( $uibModalInstance, $scope, sessionService, state ) {
-    this.$uibModalInstance = $uibModalInstance;
+  constructor( sessionService ) {
     this.sessionService = sessionService;
     this.isLoading = false;
     this.scrollModalToTop = scrollModalToTop;
-    this.lastPurchaseId = $scope.$resolve.lastPurchaseId;
-    this.stateChanged( state );
+  }
+
+  $onInit(){
+    this.stateChanged( this.resolve.state );
+    this.lastPurchaseId = this.resolve.lastPurchaseId;
   }
 
   stateChanged( state ) {
@@ -31,19 +35,19 @@ class SessionModalController {
   }
 
   onSignInSuccess() {
-    this.$uibModalInstance.close();
+    this.close();
   }
 
   onSignUpSuccess() {
-    this.$uibModalInstance.close();
+    this.close();
   }
 
   onFailure() {
-    this.$uibModalInstance.dismiss( 'error' );
+    this.dismiss({ $value:  'error' });
   }
 
   onCancel() {
-    this.$uibModalInstance.dismiss( 'cancel' );
+    this.dismiss({ $value: 'cancel' });
   }
 
   setLoading( loading ) {
@@ -52,7 +56,7 @@ class SessionModalController {
 }
 
 export default angular
-  .module( controllerName, [
+  .module( componentName, [
     signInModal.name,
     signUpModal.name,
     resetPasswordModal.name,
@@ -62,4 +66,12 @@ export default angular
     accountBenefitsModal.name,
     registerAccountModal.name
   ] )
-  .controller( controllerName, SessionModalController );
+  .component( componentName, {
+    controller: SessionModalController,
+    templateUrl: template,
+    bindings: {
+      resolve: '<',
+      close: '&',
+      dismiss: '&'
+    }
+  } );
