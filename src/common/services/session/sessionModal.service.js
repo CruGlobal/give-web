@@ -18,7 +18,9 @@ function SessionModalService( $uibModal, $log, modalStateService, analyticsFacto
         currentModal.dismiss( 'replaced' );
       }
       else {
-        $log.error( 'Attempted to open more than 1 modal' );
+        if(currentModal.type !== 'reset-password'){
+          $log.error( 'Attempted to open more than 1 modal' );
+        }
         return false;
       }
     }
@@ -35,6 +37,7 @@ function SessionModalService( $uibModal, $log, modalStateService, analyticsFacto
       }
     }, options );
     currentModal = $uibModal.open( modalOptions );
+    currentModal.type = type;
     currentModal.result
       .finally( () => {
         // Clear the modal name when modals close

@@ -102,7 +102,7 @@ function SessionEnforcerService( orderService, sessionService, sessionModalServi
           backdrop: 'static',
           keyboard: false
         } ).result;
-        modal.then( () => {
+        modal && modal.then( () => {
           angular.forEach( enforced, ( enforcer ) => {
             if ( angular.isFunction( enforcer[EnforcerCallbacks.signIn] ) ) enforcer[EnforcerCallbacks.signIn]();
           } );
@@ -111,7 +111,7 @@ function SessionEnforcerService( orderService, sessionService, sessionModalServi
             if ( angular.isFunction( enforcer[EnforcerCallbacks.cancel] ) ) enforcer[EnforcerCallbacks.cancel]();
           } );
         } );
-        modal.finally( () => {
+        modal && modal.finally( () => {
           modal = undefined;
         } );
       }
