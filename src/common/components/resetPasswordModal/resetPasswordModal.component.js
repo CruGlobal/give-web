@@ -12,7 +12,8 @@ let componentName = 'resetPasswordModal';
 class ResetPasswordModalController {
 
   /* @ngInject */
-  constructor( $location, gettext, sessionService, modalStateService ) {
+  constructor( $window, $location, gettext, sessionService, modalStateService ) {
+    this.$window = $window;
     this.$location = $location;
     this.gettext = gettext;
     this.sessionService = sessionService;
@@ -41,6 +42,7 @@ class ResetPasswordModalController {
     angular.forEach( ['e', 'k'], ( key ) => {
       this.$location.search( key, null );
     } );
+    this.$window.location.reload();
   }
 
   resetPassword() {
@@ -93,6 +95,7 @@ export default angular
     templateUrl: template,
     bindings:    {
       modalTitle:    '=',
-      onStateChange: '&'
+      onStateChange: '&',
+      dismiss: '&'
     }
   } );
