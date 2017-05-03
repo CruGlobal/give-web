@@ -146,6 +146,9 @@ hr.horizontal-divider {
   max-width: 40%;
   max-height: 345px;
   position: relative;
+  & > img {
+    max-height: 345px;
+  }
 }
 
 .loading {
