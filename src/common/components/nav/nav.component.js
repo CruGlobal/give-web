@@ -157,7 +157,7 @@ class NavController{
       keyboard: false,
       size: 'sm'
     });
-    this.sessionService.downgradeToGuest().subscribe(() => {
+    this.sessionService[this.customProfile ? 'signOut' : 'downgradeToGuest']().subscribe(() => {
       modal.close();
     }, angular.noop);
   }

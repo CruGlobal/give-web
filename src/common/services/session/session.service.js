@@ -81,11 +81,13 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
 
   function signOut() {
     // https://github.com/CruGlobal/cortex_gateway/wiki/Logout
-    return $http( {
-      method:          'DELETE',
-      url:             casApiUrl( '/logout' ),
-      withCredentials: true
-    } );
+    return Observable
+      .from( $http( {
+        method:          'DELETE',
+        url:             casApiUrl( '/logout' ),
+        withCredentials: true
+      } )
+    );
   }
 
   function signUp( email, password, first_name, last_name ) {
