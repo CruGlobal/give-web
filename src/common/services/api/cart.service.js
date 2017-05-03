@@ -99,7 +99,7 @@ class Cart {
     if(this.sessionService.getRole() == Roles.public) {
       return this.getTotalQuantity().mergeMap((total) => {
         if(total <= 0) {
-          return Observable.from(this.sessionService.signOut()).mergeMap(() => {
+          return this.sessionService.signOut().mergeMap(() => {
             return this._addItem(uri, data);
           });
         }

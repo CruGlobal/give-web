@@ -194,7 +194,7 @@ describe( 'session service', function () {
         .respond( 200, {} );
       sessionService
         .signOut()
-        .then( ( response ) => {
+        .subscribe( ( response ) => {
           expect( response.data ).toEqual( {} );
         } );
       $httpBackend.flush();
