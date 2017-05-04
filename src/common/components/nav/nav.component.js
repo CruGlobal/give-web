@@ -41,6 +41,7 @@ class NavController{
     this.sessionModalService = sessionModalService;
 
     this.imgDomain = envService.read('imgDomain');
+    this.publicCru = envService.read('publicCru');
   }
 
   $onInit() {
