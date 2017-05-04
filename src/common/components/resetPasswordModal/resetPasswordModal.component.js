@@ -12,8 +12,11 @@ let componentName = 'resetPasswordModal';
 class ResetPasswordModalController {
 
   /* @ngInject */
-  constructor( $location, gettext, sessionService, modalStateService ) {
+  constructor( $window, $location, $log, $timeout, gettext, sessionService, modalStateService ) {
+    this.$window = $window;
     this.$location = $location;
+    this.$log = $log;
+    this.$timeout = $timeout;
     this.gettext = gettext;
     this.sessionService = sessionService;
     this.modalState = modalStateService;
@@ -38,9 +41,11 @@ class ResetPasswordModalController {
   }
 
   $onDestroy() {
-    angular.forEach( ['e', 'k'], ( key ) => {
-      this.$location.search( key, null );
-    } );
+    this.removeQueryParams();
+    if(!this.exitWithoutRefresh){
+      // use $timeout here as workaround to Firefox bug
+      this.$timeout(() => this.$window.location.reload());
+    }
   }
 
   resetPassword() {
@@ -56,9 +61,7 @@ class ResetPasswordModalController {
         this.isLoading = false;
         this.passwordChanged = true;
         // Remove modal name and modal params on success
-        this.modalState.name( null );
-        this.$location.search( 'e', null );
-        this.$location.search( 'k', null );
+        this.removeQueryParams();
       }, ( error ) => {
         this.isLoading = false;
         this.hasError = true;
@@ -68,6 +71,7 @@ class ResetPasswordModalController {
             this.errors[error.data.error] = true;
             break;
           default:
+            this.$log.error('Error resetting password', error);
             this.errors['unknown'] = true;
         }
       } );
@@ -76,6 +80,18 @@ class ResetPasswordModalController {
   setPristine() {
     this.errors = {};
     this.hasError = false;
+  }
+
+  backToSignIn(){
+    this.exitWithoutRefresh = true;
+    this.onStateChange({state: 'sign-in'});
+  }
+
+  removeQueryParams(){
+    this.modalState.name( null );
+    this.$location.search( 'e', null );
+    this.$location.search( 'k', null );
+    this.$location.search( 'theme', null );
   }
 }
 
@@ -93,6 +109,7 @@ export default angular
     templateUrl: template,
     bindings:    {
       modalTitle:    '=',
-      onStateChange: '&'
+      onStateChange: '&',
+      onSuccess: '&'
     }
   } );

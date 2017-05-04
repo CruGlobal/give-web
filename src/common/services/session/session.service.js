@@ -5,8 +5,8 @@ import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/finally';
 
 import {updateRollbarPerson} from 'common/rollbar.config.js';
@@ -135,7 +135,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
           resetKey: resetKey
         }
       } ) )
-      .map( ( response ) => response.data );
+      .mergeMap( () => signIn(email, password) );
   }
 
   function downgradeToGuest( skipEvent = false ) {

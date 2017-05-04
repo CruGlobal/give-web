@@ -14,6 +14,9 @@ describe( 'resetPasswordModal', function () {
       module.name, {
         modalStateService: {
           name: jasmine.createSpy( 'name' )
+        },
+        $window: {
+          location: jasmine.createSpyObj('location', ['reload'])
         }
       }, {
         form:          {$valid: true},
@@ -48,11 +51,20 @@ describe( 'resetPasswordModal', function () {
   } );
 
   describe( '$onDestroy', () => {
-    it( 'removes query params', () => {
-      spyOn( $ctrl.$location, 'search' );
+    it( 'removes query params and refreshes the page', () => {
+      spyOn( $ctrl, 'removeQueryParams' );
       $ctrl.$onDestroy();
-      expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'e', null );
-      expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'k', null );
+      expect( $ctrl.removeQueryParams ).toHaveBeenCalled();
+      $ctrl.$timeout.flush();
+      expect( $ctrl.$window.location.reload ).toHaveBeenCalled();
+    } );
+    it( 'removes query params and does not refresh the page', () => {
+      $ctrl.exitWithoutRefresh = true;
+      spyOn( $ctrl, 'removeQueryParams' );
+      $ctrl.$onDestroy();
+      expect( $ctrl.removeQueryParams ).toHaveBeenCalled();
+      $ctrl.$timeout.verifyNoPendingTasks();
+      expect( $ctrl.$window.location.reload ).not.toHaveBeenCalled();
     } );
   } );
 
@@ -87,7 +99,7 @@ describe( 'resetPasswordModal', function () {
 
       describe( 'resetPassword success', () => {
         beforeEach( () => {
-          spyOn( $ctrl.$location, 'search' );
+          spyOn( $ctrl, 'removeQueryParams' );
           deferred.resolve();
           $rootScope.$digest();
         } );
@@ -95,8 +107,7 @@ describe( 'resetPasswordModal', function () {
         it( 'sets passwordChanged', () => {
           expect( $ctrl.isLoading ).toEqual( false );
           expect( $ctrl.passwordChanged ).toEqual( true );
-          expect( $ctrl.modalState.name ).toHaveBeenCalledWith( null );
-          expect( $ctrl.$location.search ).toHaveBeenCalledTimes( 2 );
+          expect( $ctrl.removeQueryParams ).toHaveBeenCalled();
         } );
       } );
 
@@ -126,6 +137,25 @@ describe( 'resetPasswordModal', function () {
           } );
         } );
       } );
+    } );
+  } );
+
+  describe( 'backToSignIn', () => {
+    it( 'avoids refresh and changes state', () => {
+      $ctrl.backToSignIn();
+      expect( $ctrl.exitWithoutRefresh ).toEqual( true );
+      expect( $ctrl.onStateChange ).toHaveBeenCalledWith( {state: 'sign-in'} );
+    } );
+  } );
+
+  describe( 'removeQueryParams', () => {
+    it( 'removes query params', () => {
+      spyOn( $ctrl.$location, 'search' );
+      $ctrl.removeQueryParams();
+      expect( $ctrl.modalState.name ).toHaveBeenCalledWith( null );
+      expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'e', null );
+      expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'k', null );
+      expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'theme', null );
     } );
   } );
 } );
