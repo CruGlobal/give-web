@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import find from 'lodash/find';
 
 /* @ngInject */
-function analyticsFactory($window, $timeout, $log, sessionService) {
+function analyticsFactory($window, $timeout, sessionService) {
   return {
     buildProductVar: function(cartData) {
       try {
@@ -53,7 +53,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
           }
         }
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.buildProductVar', e);
+        // Error caught in analyticsFactory.buildProductVar
       }
     },
     cartAdd: function(itemConfig, productData) {
@@ -111,7 +111,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
           $window._satellite.track('aa-add-to-cart');
         }
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.cartAdd', e);
+        // Error caught in analyticsFactory.cartAdd
       }
     },
     cartRemove: function(designationNumber) {
@@ -155,7 +155,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
           }
         }
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.cartRemove', e);
+        // Error caught in analyticsFactory.cartRemove
       }
     },
     cartView: function(cartData, callType) {
@@ -171,7 +171,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
           }
         }
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.cartView', e);
+        // Error caught in analyticsFactory.cartView
       }
     },
     editRecurringDonation: function(giftData) {
@@ -205,7 +205,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
 
         this.pageLoaded();
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.editRecurringDonation', e);
+        // Error caught in analyticsFactory.editRecurringDonation
       }
     },
     getPath: function() {
@@ -249,7 +249,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
 
         return path;
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.getPath', e);
+        // Error caught in analyticsFactory.getPath
       }
     },
     getSetProductCategory: function(path) {
@@ -274,7 +274,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
 
         return false;
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.getSetProductCategory', e);
+        // Error caught in analyticsFactory.getSetProductCategory
       }
     },
     giveGiftModal: function(productCode) {
@@ -294,7 +294,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
         this.setEvent('give gift modal');
         this.pageLoaded();
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.giveGiftModal', e);
+        // Error caught in analyticsFactory.giveGiftModal
       }
     },
     pageLoaded: function() {
@@ -322,11 +322,11 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
             $window.s.t();
             $window.s.clearVars();
           }catch(e){
-            $log.warn('Error caught in analyticsFactory.pageLoaded while trying to fire analytics image request or clearVars', e);
+            // Error caught in analyticsFactory.pageLoaded while trying to fire analytics image request or clearVars
           }
         }, 1000);
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.pageLoaded', e);
+        // Error caught in analyticsFactory.pageLoaded
       }
     },
     purchase: function(donorDetails, cartData) {
@@ -340,7 +340,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
         // Store data for use on following page load
         localStorage.setItem('aaProducts', aaProducts);
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.purchase', e);
+        // Error caught in analyticsFactory.purchase
       }
     },
     search: function(params, results) {
@@ -386,7 +386,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
           $window.digitalData.page.pageInfo.onsiteSearchResults = 0;
         }
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.search', e);
+        // Error caught in analyticsFactory.search
       }
     },
     setLoggedInStatus: function(){
@@ -412,7 +412,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
           }];
         }
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.setLoggedInStatus', e);
+        // Error caught in analyticsFactory.setLoggedInStatus
       }
     },
     setDonorDetails: function(donorDetails) {
@@ -470,7 +470,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
         localStorage.setItem('aaDonorType', $window.digitalData.user[0].profile[0].profileInfo.donorType);
         localStorage.setItem('aaDonorAcct', $window.digitalData.user[0].profile[0].profileInfo.donorAcct);
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.setDonorDetails', e);
+        // Error caught in analyticsFactory.setDonorDetails
       }
     },
     setEvent: function(eventName) {
@@ -484,7 +484,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
         $window.digitalData.event = [];
         $window.digitalData.event.push(evt);
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.setEvent', e);
+        // Error caught in analyticsFactory.setEvent
       }
     },
     setPageNameObj: function(pageName) {
@@ -505,7 +505,7 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
           };
         }
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.setPageNameObj', e);
+        // Error caught in analyticsFactory.setPageNameObj
       }
     },
     setSiteSections: function(path) {
@@ -558,14 +558,14 @@ function analyticsFactory($window, $timeout, $log, sessionService) {
 
         }
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.setSiteSections', e);
+        // Error caught in analyticsFactory.setSiteSections
       }
     },
     track: function(event){
       try{
         $window._satellite.track(event);
       }catch(e){
-        $log.warn('Error caught in analyticsFactory.track', e);
+        // Error caught in analyticsFactory.track
       }
     }
   };
