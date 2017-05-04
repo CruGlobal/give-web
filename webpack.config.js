@@ -48,6 +48,9 @@ module.exports = env => {
             context: 'src',
             from: '**/*.+(json|svg|woff|ttf|png|ico|jpg|gif|eot)',
             to: '[path][name].[ext]'
+          },
+          {
+            from: 'unsupportedBrowser.html'
           }
         ]),
         new webpack.EnvironmentPlugin({
