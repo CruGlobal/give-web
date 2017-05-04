@@ -217,12 +217,16 @@ describe( 'session service', function () {
   } );
 
   describe( 'resetPassword', () => {
-    it( 'makes http request to cas/reset_password', () => {
+    it( 'makes http request to cas/reset_password and then sign in', () => {
       $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/reset_password', {
         email:    'professorx@xavier.edu',
         password: 'Cerebro123',
         resetKey: 'abc123def456'
       } ).respond( 200, {} );
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/login', {
+        username: 'professorx@xavier.edu',
+        password: 'Cerebro123'
+      } ).respond( 200, 'success' );
       sessionService
         .resetPassword( 'professorx@xavier.edu', 'Cerebro123', 'abc123def456' )
         .subscribe( ( data ) => {
