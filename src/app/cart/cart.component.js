@@ -78,9 +78,9 @@ class CartController {
   }
 
   editItem( item ) {
-    this.productModalService
-      .configureProduct( item.code, item.config, true, item.uri )
-      .result
+    const modal = this.productModalService
+      .configureProduct( item.code, item.config, true, item.uri );
+    modal && modal.result
       .then( () => {
         pull(this.cartData.items, item);
         this.loadCart(true);
