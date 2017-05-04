@@ -34,6 +34,11 @@ class ProductConfigController {
         'campaign-code': this.campaignCode,
         'campaign-page': this.campaignPage
       }, false );
+    if(!modalInstance){
+      // Another modal already opened
+      this.loadingModal = false;
+      return;
+    }
     modalInstance.rendered.then( () => {
       this.loadingModal = false;
       this.analyticsFactory.giveGiftModal(this.productCode);

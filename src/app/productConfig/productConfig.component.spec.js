@@ -102,6 +102,11 @@ describe( 'productConfig', function () {
       expect( $ctrl.loadingModal ).toEqual( false );
       expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
     } );
+    it( 'should gracefully handle an attempt to open a second modal', () => {
+      productModalService.configureProduct.and.returnValue(false);
+      $ctrl.configModal();
+      expect( $ctrl.loadingModal ).toEqual( false );
+    } );
   } );
 } );
 
