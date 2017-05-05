@@ -185,6 +185,16 @@ describe( 'product config modal', function () {
       expect( $ctrl.itemConfig['campaign-code'] ).toEqual('LEGACY');
     } );
 
+    it( 'sets campaignCode if multiple are set in url', () => {
+      $ctrl.$location.search.and.returnValue( {
+        [giveGiftParams.campaignCode]: ['LEGACY', 'LEGACY']
+      } );
+      $ctrl.initializeParams();
+      expect( $ctrl.modalStateService.name ).toHaveBeenCalledWith( 'give-gift' );
+      expect( $ctrl.$location.search ).toHaveBeenCalled();
+      expect( $ctrl.itemConfig['campaign-code'] ).toEqual('LEGACY');
+    } );
+
     it( 'sets campaignCode if default-campaign-code is set', () => {
       $ctrl.$location.search.and.returnValue( {} );
       $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT';

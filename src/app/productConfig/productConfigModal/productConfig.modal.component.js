@@ -8,6 +8,7 @@ import omit from 'lodash/omit';
 import map from 'lodash/map';
 import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
+import isArray from 'lodash/isArray';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
@@ -105,7 +106,8 @@ class ProductConfigModalController {
 
     // If CampaignCode exists in URL, use it, otherwise use default-campaign-code if set.
     if ( params.hasOwnProperty( giveGiftParams.campaignCode ) ) {
-      this.itemConfig['campaign-code'] = params[giveGiftParams.campaignCode];
+      this.itemConfig['campaign-code'] = isArray(params[giveGiftParams.campaignCode]) ?
+        params[giveGiftParams.campaignCode][0] : params[giveGiftParams.campaignCode];
     }
     else if(this.itemConfig.hasOwnProperty('default-campaign-code')) {
       this.itemConfig['campaign-code'] = this.itemConfig['default-campaign-code'];
