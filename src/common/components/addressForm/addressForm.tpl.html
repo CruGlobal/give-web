@@ -8,7 +8,7 @@
                 ng-model="$ctrl.address.country"
                 ng-options="v.name as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
                 ng-change="$ctrl.refreshRegions($ctrl.address.country)"
-                ng-disabled="$ctrl.disabled">
+                ng-disabled="$ctrl.addressDisabled">
         </select>
         <div role="alert" ng-if="$ctrl.loadingCountriesError">
           <div class="help-block" translate>There was an error loading the list of countries. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
@@ -31,7 +31,7 @@
              ng-model="$ctrl.address.streetAddress"
              required
              ng-maxlength="200"
-             ng-disabled="$ctrl.disabled">
+             ng-disabled="$ctrl.addressDisabled">
       <div role="alert" ng-messages="$ctrl.parentForm.addressStreetAddress.$error" ng-if="($ctrl.parentForm.addressStreetAddress | showErrors)">
         <div class="help-block" ng-message="required" translate>You must enter an address</div>
         <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 200 characters</div>
@@ -47,7 +47,7 @@
              name="addressExtendedAddress"
              ng-model="$ctrl.address.extendedAddress"
              ng-maxlength="100"
-             ng-disabled="$ctrl.disabled">
+             ng-disabled="$ctrl.addressDisabled">
       <div role="alert" ng-messages="$ctrl.parentForm.addressExtendedAddress.$error" ng-if="($ctrl.parentForm.addressExtendedAddress | showErrors)">
         <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
       </div>
@@ -62,7 +62,7 @@
                class="form-control  form-control-subtle" name="intAddressLine3"
                ng-model="$ctrl.address.intAddressLine3"
                ng-maxlength="100"
-               ng-disabled="$ctrl.disabled">
+               ng-disabled="$ctrl.addressDisabled">
         <div role="alert" ng-messages="$ctrl.parentForm.intAddressLine3.$error" ng-if="($ctrl.parentForm.intAddressLine3 | showErrors)">
           <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
         </div>
@@ -77,7 +77,7 @@
                name="intAddressLine4"
                ng-model="$ctrl.address.intAddressLine4"
                ng-maxlength="100"
-               ng-disabled="$ctrl.disabled">
+               ng-disabled="$ctrl.addressDisabled">
         <div role="alert" ng-messages="$ctrl.parentForm.intAddressLine4.$error" ng-if="($ctrl.parentForm.intAddressLine4 | showErrors)">
           <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
         </div>
@@ -96,7 +96,7 @@
                ng-model="$ctrl.address.locality"
                required
                ng-maxlength="50"
-               ng-disabled="$ctrl.disabled">
+               ng-disabled="$ctrl.addressDisabled">
         <div role="alert" ng-messages="$ctrl.parentForm.addressLocality.$error" ng-if="($ctrl.parentForm.addressLocality | showErrors)">
           <div class="help-block" ng-message="required" translate>You must enter a city</div>
           <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 50 characters</div>
@@ -113,7 +113,7 @@
                   name="addressRegion" required
                   ng-model="$ctrl.address.region"
                   ng-options="v.name as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''"
-                  ng-disabled="$ctrl.disabled">
+                  ng-disabled="$ctrl.addressDisabled">
           </select>
           <div role="alert" ng-if="$ctrl.loadingRegionsError">
             <div class="help-block" translate>There was an error loading the list of regions/state. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
@@ -134,7 +134,7 @@
                ng-model="$ctrl.address.postalCode"
                required
                ng-pattern="/^\d{5}(?:[-\s]\d{4})?$/"
-               ng-disabled="$ctrl.disabled">
+               ng-disabled="$ctrl.addressDisabled">
         <div role="alert" ng-messages="$ctrl.parentForm.addressPostalCode.$error" ng-if="($ctrl.parentForm.addressPostalCode | showErrors)">
           <div class="help-block" ng-message="required" translate>You must enter a zip / postal code</div>
           <div class="help-block" ng-message="pattern" translate>You must enter a valid US zip code</div>
