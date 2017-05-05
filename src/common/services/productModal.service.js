@@ -12,7 +12,7 @@ import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
 const serviceName = 'productModalService';
 
 /*@ngInject*/
-function ProductModalService( $uibModal, $location, designationsService, commonService, modalStateService ) {
+function ProductModalService( $q, $uibModal, $location, designationsService, commonService, modalStateService ) {
   let modalOpen = false;
 
   function configureProduct( code, config, isEdit, uri ) {
@@ -29,10 +29,10 @@ function ProductModalService( $uibModal, $location, designationsService, commonS
         windowTemplateUrl: giveModalWindowTemplate,
         resolve:      {
           productData: () => {
-            return designationsService.productLookup( code ).toPromise();
+            return designationsService.productLookup( code ).toPromise($q);
           },
           nextDrawDate: function () {
-            return commonService.getNextDrawDate().toPromise();
+            return commonService.getNextDrawDate().toPromise($q);
           },
           suggestedAmounts: /*@ngInject*/ function ( $http, $q ) {
             let params = $location.search();
