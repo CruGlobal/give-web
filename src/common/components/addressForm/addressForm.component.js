@@ -64,6 +64,6 @@ export default angular
     bindings:    {
       address: '=',
       parentForm: '<',
-      disabled: '<'
+      addressDisabled: '<'
     }
   } );
