@@ -119,7 +119,9 @@ class PaymentMethodsController {
             this.paymentFormResolve.state = 'unsubmitted';
           },
           error => {
-            this.$log.error('Error adding payment method',error);
+            if(error.status !== 409){
+              this.$log.error('Error adding payment method', error);
+            }
             this.paymentFormResolve.state = 'error';
             this.paymentFormResolve.error = error.data;
             scrollModalToTop();
