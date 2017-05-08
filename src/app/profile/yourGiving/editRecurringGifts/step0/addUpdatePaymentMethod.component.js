@@ -39,7 +39,9 @@ class AddUpdatePaymentMethodsController {
           this.next();
         },
         error => {
-          this.$log.error('Error adding/updating payment method', error);
+          if(error.status !== 409) {
+            this.$log.error('Error adding/updating payment method', error);
+          }
           this.paymentFormState = 'error';
           this.paymentFormError = error.data;
         });

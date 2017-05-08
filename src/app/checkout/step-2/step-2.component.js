@@ -69,7 +69,9 @@ class Step2Controller{
           }
         },
         error => {
-          this.$log.error('Error saving payment method', error);
+          if(error.status !== 409) {
+            this.$log.error('Error saving payment method', error);
+          }
           this.paymentFormState = 'error';
           this.paymentFormError = error.data;
           if(this.existingPaymentMethods){
