@@ -57,7 +57,7 @@ class ConfirmGiftsController {
         },
         error => {
           this.setLoading( {loading: false} );
-          this.error = 'error';
+          this.error = error.data || 'error';
           this.$log.error('Error processing restarts.', error);
         } );
   }
