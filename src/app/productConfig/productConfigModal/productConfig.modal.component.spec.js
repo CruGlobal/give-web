@@ -266,12 +266,17 @@ describe( 'product config modal', function () {
   } );
 
   describe( 'addCustomValidators()', () => {
-    it( 'should create validators', () => {
+    beforeEach(() => {
       $ctrl.itemConfigForm.amount = {
-        $validators: {}
+        $validators: {},
+        $parsers: []
       };
+    });
+    it( 'should create validators', () => {
       $ctrl.customInputActive = true;
       $ctrl.addCustomValidators();
+      expect( $ctrl.itemConfigForm.amount.$parsers[0]( '$10' ) ).toBe( '10' );
+
       expect( $ctrl.itemConfigForm.amount.$validators.minimum( '1' ) ).toBe( true );
       expect( $ctrl.itemConfigForm.amount.$validators.minimum( '0.9' ) ).toBe( false );
 
@@ -285,9 +290,6 @@ describe( 'product config modal', function () {
     } );
 
     it( 'should pass validation in any \'bad\' case', () => {
-      $ctrl.itemConfigForm.amount = {
-        $validators: {}
-      };
       $ctrl.customInputActive = false;
       $ctrl.addCustomValidators();
       expect( $ctrl.itemConfigForm.amount.$validators.minimum( '0.3' ) ).toBe( true );
