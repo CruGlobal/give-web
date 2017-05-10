@@ -1,5 +1,11 @@
 export default [
   {
+    name: 'Cru Greatest Needs',
+    designationNumber: '0763355',
+    path: '/0763355',
+    facet: 'ministry'
+  },
+  {
     name: 'Athletes in Action',
     designationNumber: '2863856',
     path: '/2863856',
@@ -54,15 +60,15 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'Global Aid Network (GAIN)',
+    name: 'Global Aid Network (GAiN)',
     designationNumber: '2807640',
     path: '/2807640',
     facet: 'ministry'
   },
   {
     name: 'Global Ministries',
-    designationNumber: '2501316',
-    path: '/2501316',
+    designationNumber: '0703618',
+    path: '/0703618',
     facet: 'ministry'
   },
   {
