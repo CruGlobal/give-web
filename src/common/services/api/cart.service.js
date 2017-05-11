@@ -17,6 +17,7 @@ import 'rxjs/add/observable/from';
 import cortexApiService from '../cortexApi.service';
 import commonService from './common.service';
 import designationsService from './designations.service';
+import hateoasHelperService from 'common/services/hateoasHelper.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
 import {startDate} from '../giftHelpers/giftDates.service';
 
@@ -25,11 +26,12 @@ let serviceName = 'cartService';
 class Cart {
 
   /*@ngInject*/
-  constructor(cortexApiService, commonService, designationsService, sessionService){
+  constructor(cortexApiService, commonService, designationsService, sessionService, hateoasHelperService){
     this.cortexApiService = cortexApiService;
     this.commonService = commonService;
     this.designationsService = designationsService;
     this.sessionService = sessionService;
+    this.hateoasHelperService = hateoasHelperService;
   }
 
   get() {
@@ -78,6 +80,7 @@ class Cart {
         );
 
         return {
+          id: this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
           items: items.reverse(), // Show most recent cart items first
           frequencyTotals: frequencyTotals,
           cartTotal: frequencyTotals[0].amount
@@ -174,6 +177,7 @@ export default angular
     cortexApiService.name,
     commonService.name,
     designationsService.name,
-    sessionService.name
+    sessionService.name,
+    hateoasHelperService.name
   ])
   .service(serviceName, Cart);

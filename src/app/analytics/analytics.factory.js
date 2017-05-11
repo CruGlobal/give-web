@@ -12,6 +12,7 @@ function analyticsFactory($window, $timeout, sessionService) {
 
         // Instantiate cart data layer
         $window.digitalData.cart = {
+          id: cartData.id,
           item: []
         };
 
@@ -334,11 +335,13 @@ function analyticsFactory($window, $timeout, sessionService) {
         // Build cart data layer
         this.setDonorDetails(donorDetails);
         this.buildProductVar(cartData);
-
-        var aaProducts = $window.s && $window.s.setProducts('checkout');
-
-        // Store data for use on following page load
-        localStorage.setItem('aaProducts', aaProducts);
+      }catch(e){
+        // Error caught in analyticsFactory.purchase
+      }
+    },
+    setPurchaseNumber: function(purchaseNumber) {
+      try {
+        $window.digitalData.purchaseNumber = purchaseNumber;
       }catch(e){
         // Error caught in analyticsFactory.purchase
       }

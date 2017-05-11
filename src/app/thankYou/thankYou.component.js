@@ -90,6 +90,7 @@ class ThankYouController{
           this.loading = false;
 
           this.analyticsFactory.pageLoaded();
+          this.analyticsFactory.setPurchaseNumber(data.rawData['purchase-number']);
         },
         (error) => {
           this.$log.error('Error loading purchase data for thank you component', error);
