@@ -343,7 +343,7 @@ function analyticsFactory($window, $timeout, sessionService) {
       try {
         $window.digitalData.purchaseNumber = purchaseNumber;
       }catch(e){
-        // Error caught in analyticsFactory.purchase
+        // Error caught in analyticsFactory.setPurchaseNumber
       }
     },
     search: function(params, results) {
