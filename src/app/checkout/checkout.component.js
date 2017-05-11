@@ -88,6 +88,7 @@ class CheckoutController{
       })
       .subscribe((data) => {
           this.cartData = data;
+          this.analyticsFactory.buildProductVar(data);
         },
         (error) => {
           this.$log.error("Error loading cart", error);

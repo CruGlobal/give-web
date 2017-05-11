@@ -47,7 +47,7 @@ class CartController {
           this.updating = false;
 
           this.analyticsFactory.pageLoaded();
-          this.analyticsFactory.cartView(data);
+          this.analyticsFactory.buildProductVar(data);
         },
         error => {
           this.$log.error('Error loading cart', error);
