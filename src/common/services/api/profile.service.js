@@ -263,6 +263,10 @@ class Profile {
       })
         .do((data) => {
           this.paymentMethodForms = data;
+
+          if(!this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardaction')){
+            this.$log.warn('Payment form request contains empty link', data);
+          }
         });
     }
   }
