@@ -1,6 +1,8 @@
 import angular from 'angular';
 import 'angular-gettext';
 import 'angular-messages';
+import omit from 'lodash/omit';
+
 import modalStateService from 'common/services/modalState.service';
 import sessionService from 'common/services/session/session.service';
 import showErrors from 'common/filters/showErrors.filter';
@@ -71,7 +73,7 @@ class ResetPasswordModalController {
             this.errors[error.data.error] = true;
             break;
           default:
-            this.$log.error('Error resetting password', error);
+            this.$log.error('Error resetting password', omit(error, ['config.data.password', 'config.data.resetKey']));
             this.errors['unknown'] = true;
         }
       } );
