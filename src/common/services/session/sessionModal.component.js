@@ -8,6 +8,7 @@ import userMatchModal from 'common/components/userMatchModal/userMatchModal.comp
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component';
 import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component';
 import registerAccountModal from 'common/components/registerAccountModal/registerAccountModal.component';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import {scrollModalToTop} from 'common/services/modalState.service';
 
@@ -18,8 +19,9 @@ let componentName = 'sessionModal';
 class SessionModalController {
 
   /* @ngInject */
-  constructor( sessionService ) {
+  constructor( sessionService, analyticsFactory ) {
     this.sessionService = sessionService;
+    this.analyticsFactory = analyticsFactory;
     this.isLoading = false;
     this.scrollModalToTop = scrollModalToTop;
   }
@@ -39,6 +41,7 @@ class SessionModalController {
   }
 
   onSignUpSuccess() {
+    this.analyticsFactory.track('aa-sign-in-create-login');
     this.close();
   }
 
@@ -64,7 +67,8 @@ export default angular
     userMatchModal.name,
     contactInfoModal.name,
     accountBenefitsModal.name,
-    registerAccountModal.name
+    registerAccountModal.name,
+    analyticsFactory.name
   ] )
   .component( componentName, {
     controller: SessionModalController,
