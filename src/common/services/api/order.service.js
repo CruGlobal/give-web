@@ -89,6 +89,10 @@ class Order{
       })
         .do((data) => {
           this.paymentMethodForms = data;
+
+          if(!this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction')){
+            this.$log.warn('Payment form request contains empty link', data);
+          }
         });
     }
   }
