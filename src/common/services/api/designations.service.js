@@ -41,7 +41,7 @@ class DesignationsService {
       '1-TH-3': 'Faculty Commons',
       '1-TH-4': 'Cities in America',
       '1-TH-5': 'CityConnect',
-      '1-TH-6': 'Christian Embassy DC',
+      '1-TH-6': 'Christian Embassy - Washington, D.C.',
       '1-TH-7': 'Christian Embassy - New York',
       '1-TH-8': 'FamilyLife',
       '1-TH-9': 'Global Aid Network USA',

@@ -24,7 +24,7 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'Christian Embassy DC',
+    name: 'Christian Embassy - Washington, D.C.',
     designationNumber: '2277786',
     path: '/2277786',
     facet: 'ministry'
