@@ -13,6 +13,10 @@ class ModalInstanceCtrl {
   constructor( initialText ) {
     this.text = initialText;
   }
+
+  stripHtml(html){
+    return html ? String(html).replace(/<[^>]+>/gm, '') : '';
+  }
 }
 
 
