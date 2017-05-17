@@ -3,8 +3,6 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const concat = require('lodash/concat');
-const omit = require('lodash/omit');
-const keys = require('lodash/keys');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const aemDomain = 'https://give-stage2.cru.org';
@@ -60,13 +58,6 @@ module.exports = env => {
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)
       ],
-      isBuild ?
-        [
-          new webpack.optimize.CommonsChunkPlugin({
-            name: 'app',
-            chunks: keys(omit(entryPoints, ['give', 'nav']))
-          })
-        ] : [],
       env.analyze ? [ new BundleAnalyzerPlugin() ] : []
 
     ),
