@@ -1,5 +1,5 @@
 <div class="modal-body">
-  <text-angular ng-model="$ctrl.text"></text-angular>
+  <text-angular ng-model="$ctrl.text" ta-paste="$ctrl.stripHtml($html)"></text-angular>
 </div>
 <div class="modal-footer">
   <button id="saveChangesButton" type="button" class="btn btn-primary pull-right" ng-click="$close($ctrl.text)">Save &amp; Close</button>
