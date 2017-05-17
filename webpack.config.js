@@ -13,19 +13,21 @@ const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
 const ci = process.env.CI === 'true';
 
 const entryPoints = {
-  common: 'common/common.module.js',
-  cart: 'app/cart/cart.component.js',
-  checkout: 'app/checkout/checkout.component.js',
-  thankYou: 'app/thankYou/thankYou.component.js',
-  productConfig: 'app/productConfig/productConfig.component.js',
-  signIn: 'app/signIn/signIn.component.js',
-  searchResults: 'app/searchResults/searchResults.component.js',
-  homeSignIn: 'app/homeSignIn/homeSignIn.component.js',
-  yourGiving: 'app/profile/yourGiving/yourGiving.component.js',
-  profile: 'app/profile/profile.component.js',
-  receipts: 'app/profile/receipts/receipts.component.js',
-  paymentMethods: 'app/profile/payment-methods/payment-methods.component.js',
-  designationEditor: 'app/designationEditor/designationEditor.component.js',
+  app: [
+    'common/common.module.js',
+    'app/cart/cart.component.js',
+    'app/checkout/checkout.component.js',
+    'app/thankYou/thankYou.component.js',
+    'app/productConfig/productConfig.component.js',
+    'app/signIn/signIn.component.js',
+    'app/searchResults/searchResults.component.js',
+    'app/homeSignIn/homeSignIn.component.js',
+    'app/profile/yourGiving/yourGiving.component.js',
+    'app/profile/profile.component.js',
+    'app/profile/receipts/receipts.component.js',
+    'app/profile/payment-methods/payment-methods.component.js',
+    'app/designationEditor/designationEditor.component.js'
+  ],
   give: 'assets/scss/styles.scss',
   nav: 'assets/scss/global-nav.scss'
 };
@@ -61,7 +63,7 @@ module.exports = env => {
       isBuild ?
         [
           new webpack.optimize.CommonsChunkPlugin({
-            name: 'common',
+            name: 'app',
             chunks: keys(omit(entryPoints, ['give', 'nav']))
           })
         ] : [],
