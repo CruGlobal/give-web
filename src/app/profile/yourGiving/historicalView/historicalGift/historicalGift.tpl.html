@@ -40,6 +40,7 @@
         <button type="button"
                 class="btn btn-primary btn-block split-col-left"
                 ng-click="$ctrl.giveNewGift()"
+                ng-if="$ctrl.gift['historical-donation-line']['designation-active']"
                 translate>Give a New Gift
         </button>
         <button type="button"

@@ -14,7 +14,7 @@ class HistoricalView {
   }
 
   $onChanges(changes) {
-    if ( changes.year || changes.month || changes.reload && changes.reload.currentValue === true) {
+    if ( changes && (changes.year || changes.month || changes.reload && changes.reload.currentValue === true)) {
       this.loadGifts( this.year, this.month.month );
     }
   }
