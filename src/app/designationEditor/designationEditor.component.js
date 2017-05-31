@@ -49,7 +49,7 @@ class DesignationEditorController {
     this.campaignPage = this.$location.search().campaign;
 
     // designationNumber is required
-    if(angular.isUndefined(this.designationNumber)) {
+    if(!this.designationNumber) {
       this.$window.location = '/';
     }
 
