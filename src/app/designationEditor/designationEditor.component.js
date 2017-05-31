@@ -168,6 +168,7 @@ class DesignationEditorController {
       templateUrl:       textEditorModalTemplate,
       controller:        textEditorModalController.name,
       controllerAs:      '$ctrl',
+      size:              'lg designation-editor-modal',
       resolve : {
         initialText: () => {
           return this.designationContent[field];
