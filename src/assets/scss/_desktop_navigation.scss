@@ -289,21 +289,21 @@ $promo-width: 200px;
           background-size: 12px 6px;
         }
       }
+    }
 
-      .nav-edit-profile {
-        background: url(/assets/img/desktop-edit-profile-off.png) no-repeat 13px center;
-        background-size: 16px 20px;
-        &:hover {
-          background-image: url("/assets/img/desktop-edit-profile.png");
-        }
+    .nav-edit-profile {
+      background: url(/assets/img/desktop-edit-profile-off.png) no-repeat 13px center;
+      background-size: 16px 20px;
+      &:hover {
+        background-image: url("/assets/img/desktop-edit-profile.png");
       }
+    }
 
-      .nav-sign-out {
-        background: url(/assets/img/desktop-sign-out-off.png) no-repeat 13px center;
-        background-size: 16px 20px;
-        &:hover {
-          background-image: url("/assets/img/desktop-sign-out.png");
-        }
+    .nav-sign-out {
+      background: url(/assets/img/desktop-sign-out-off.png) no-repeat 13px center;
+      background-size: 16px 20px;
+      &:hover {
+        background-image: url("/assets/img/desktop-sign-out.png");
       }
     }
 
