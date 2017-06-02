@@ -137,7 +137,8 @@ module.exports = env => {
         '/etc': aemDomain,
         '/designations': aemDomain
       },
-      port: 9000
+      port: 9000,
+      public: "localhost.cru.org:9000"
     }
   };
 };
