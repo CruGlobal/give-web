@@ -2,6 +2,7 @@ import './analytics.module';
 
 import get from 'lodash/get';
 import find from 'lodash/find';
+import md5 from 'crypto-js/md5';
 
 /* @ngInject */
 function analyticsFactory($window, $timeout, sessionService) {
@@ -13,6 +14,7 @@ function analyticsFactory($window, $timeout, sessionService) {
         // Instantiate cart data layer
         $window.digitalData.cart = {
           id: cartData.id,
+          hash: cartData.id ? md5(cartData.id).toString() : null,
           item: []
         };
 
