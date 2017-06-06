@@ -14,7 +14,7 @@ function analyticsFactory($window, $timeout, sessionService) {
         // Instantiate cart data layer
         $window.digitalData.cart = {
           id: cartData.id,
-          hash: cartData.id ? md5(cartData.id).toString() : null,
+          hash: cartData.id ? md5(cartData.id).toString().substring(0, 20) : null,
           item: []
         };
 
