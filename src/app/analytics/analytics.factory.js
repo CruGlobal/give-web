@@ -12,7 +12,7 @@ function analyticsFactory($window, $timeout, sessionService) {
         var item, donationType;
 
         // Instantiate cart data layer
-        const hash = sha3(cartData.id, { outputLength: 20*4 });
+        const hash = sha3(cartData.id, { outputLength: 80 }); //limit hash to 20 characters
         $window.digitalData.cart = {
           id: cartData.id,
           hash: cartData.id ? hash.toString() : null,
