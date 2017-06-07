@@ -5,10 +5,12 @@ import module from './designations.service';
 import searchResponse from 'common/services/api/fixtures/product-search.fixture';
 import lookupResponse from 'common/services/api/fixtures/product-lookup.fixture';
 import bulkLookupResponse from 'common/services/api/fixtures/product-lookup-bulk.fixture';
+import campaignResponse from '../fixtures/campaign.infinity.fixture';
+import designationResponse from '../fixtures/designation.infinity.fixture';
 
 describe('designation service', () => {
   beforeEach(angular.mock.module(module.name));
-  var self = {};
+  const self = {};
 
   beforeEach(inject((designationsService, $httpBackend) => {
     self.designationsService = designationsService;
@@ -119,6 +121,48 @@ describe('designation service', () => {
       self.designationsService.bulkLookup(['0123456', '1234567'])
         .subscribe(data => {
           expect(data).toEqual(bulkLookupResponse);
+        });
+      self.$httpBackend.flush();
+    });
+  });
+
+  describe('suggestedAmounts', () => {
+    it('should load suggested amounts', () => {
+      const itemConfig = {amount: 50, 'campaign-page': 9876};
+      self.$httpBackend.expectGET('/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
+        .respond(200, campaignResponse);
+      self.designationsService.suggestedAmounts('0123456', itemConfig)
+        .subscribe(suggestedAmounts => {
+          expect( suggestedAmounts ).toEqual( [
+            {amount: 25, label: "for 10 Bibles", order: "1"},
+            {amount: 100, label: "for 40 Bibles", order: "2"}
+          ] );
+          expect( itemConfig['default-campaign-code'] ).toEqual( '867EM1' );
+          expect( itemConfig['jcr-title'] ).toEqual( 'PowerPacksTM for Inner City Children' );
+        });
+      self.$httpBackend.flush();
+    });
+    it('should handle an invalid campaign page', () => {
+      const itemConfig = {amount: 50, 'campaign-page': 9876};
+      self.$httpBackend.expectGET('/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
+        .respond(400, {});
+      self.designationsService.suggestedAmounts('0123456', itemConfig)
+        .subscribe(suggestedAmounts => {
+          expect( suggestedAmounts ).toEqual( [] );
+          expect( itemConfig['default-campaign-code'] ).toBeUndefined();
+          expect( itemConfig['jcr-title'] ).toBeUndefined();
+        });
+      self.$httpBackend.flush();
+    });
+    it('should handle no campaign page', () => {
+      const itemConfig = {amount: 50};
+      self.$httpBackend.expectGET('/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+        .respond(200, designationResponse);
+      self.designationsService.suggestedAmounts('0123456', itemConfig)
+        .subscribe(suggestedAmounts => {
+          expect( suggestedAmounts ).toEqual( [] );
+          expect( itemConfig['default-campaign-code'] ).toEqual( '867EM1' );
+          expect( itemConfig['jcr-title'] ).toEqual( 'PowerPacksTM for Inner City Children' );
         });
       self.$httpBackend.flush();
     });

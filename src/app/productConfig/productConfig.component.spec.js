@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './productConfig.component';
 import modalStateModule from 'common/services/modalState.service';
-import {giveGiftParams} from './productConfigModal/productConfig.modal.component';
+import {giveGiftParams} from './giveGiftParams';
 
 describe( 'productConfig', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -12,23 +12,11 @@ describe( 'productConfig', function () {
     $ctrl = _$componentController_( module.name, {$window: {location: ''}}, {productCode: '0123456', campaignCode: 'test123'} );
   } ) );
 
-  it( 'to be defined', function () {
-    expect( $ctrl ).toBeDefined();
-  } );
-
-  describe( '$onInit()', () => {
-    it( 'initializes the component', () => {
-      $ctrl.$onInit();
-      expect( $ctrl.loadingModal ).toEqual( false );
-    } );
-  } );
-
   describe( 'configModal()', () => {
-    let productModalService, $rootScope, renderDeferred, resultDeferred;
+    let productModalService, renderDeferred, resultDeferred;
 
-    beforeEach( inject( function ( _productModalService_, _$q_, _$rootScope_ ) {
+    beforeEach( inject( function ( _productModalService_, _$q_ ) {
       productModalService = _productModalService_;
-      $rootScope = _$rootScope_;
       spyOn( productModalService, 'configureProduct' ).and.callFake( () => {
         renderDeferred = _$q_.defer();
         resultDeferred = _$q_.defer();
@@ -42,70 +30,6 @@ describe( 'productConfig', function () {
     it( 'opens productConfig modal', () => {
       $ctrl.configModal();
       expect( productModalService.configureProduct ).toHaveBeenCalledWith( '0123456', {'campaign-code': 'test123', 'campaign-page': undefined}, false );
-    } );
-
-    it( 'updates after modal rendered', () => {
-      $ctrl.configModal();
-      expect( $ctrl.loadingModal ).toEqual( true );
-      renderDeferred.resolve();
-      $rootScope.$digest();
-      expect( $ctrl.loadingModal ).toEqual( false );
-    } );
-
-    it( 'redirects to cart.html', () => {
-      $ctrl.configModal();
-      expect( $ctrl.$window.location ).toEqual( '' );
-      resultDeferred.resolve();
-      $rootScope.$digest();
-      expect( $ctrl.$window.location ).toEqual( '/cart.html' );
-    } );
-
-    it( 'should disable loading indicator on dismiss', () => {
-      $ctrl.configModal();
-      resultDeferred.reject();
-      $rootScope.$digest();
-      expect( $ctrl.loadingModal ).toEqual( false );
-    } );
-
-    it( 'should handle an error loading necessary data', () => {
-      $ctrl.configModal();
-      resultDeferred.reject('some error');
-      $rootScope.$digest();
-      expect( $ctrl.error ).toEqual( true );
-      expect( $ctrl.loadingModal ).toEqual( false );
-      expect( $ctrl.$log.error.logs[0] ).toEqual( ['Error opening product config modal', 'some error'] );
-    } );
-
-    it( 'should not throw an error when the modal gets dismissed normally', () => {
-      $ctrl.configModal();
-      resultDeferred.reject();
-      $rootScope.$digest();
-      expect( $ctrl.error ).toEqual( false );
-      expect( $ctrl.loadingModal ).toEqual( false );
-      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
-    } );
-
-    it( 'should not throw an error when the modal gets dismissed by an escape key press', () => {
-      $ctrl.configModal();
-      resultDeferred.reject('escape key press');
-      $rootScope.$digest();
-      expect( $ctrl.error ).toEqual( false );
-      expect( $ctrl.loadingModal ).toEqual( false );
-      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
-    } );
-
-    it( 'should not throw an error when the modal gets dismissed by a background click', () => {
-      $ctrl.configModal();
-      resultDeferred.reject('backdrop click');
-      $rootScope.$digest();
-      expect( $ctrl.error ).toEqual( false );
-      expect( $ctrl.loadingModal ).toEqual( false );
-      expect( $ctrl.$log.error.logs[0] ).toBeUndefined();
-    } );
-    it( 'should gracefully handle an attempt to open a second modal', () => {
-      productModalService.configureProduct.and.returnValue(false);
-      $ctrl.configModal();
-      expect( $ctrl.loadingModal ).toEqual( false );
     } );
   } );
 } );
