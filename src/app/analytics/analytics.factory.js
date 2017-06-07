@@ -2,7 +2,7 @@ import './analytics.module';
 
 import get from 'lodash/get';
 import find from 'lodash/find';
-import md5 from 'crypto-js/md5';
+import sha3 from 'crypto-js/sha3';
 
 /* @ngInject */
 function analyticsFactory($window, $timeout, sessionService) {
@@ -12,9 +12,10 @@ function analyticsFactory($window, $timeout, sessionService) {
         var item, donationType;
 
         // Instantiate cart data layer
+        const hash = sha3(cartData.id, { outputLength: 80 }); //limit hash to 20 characters
         $window.digitalData.cart = {
           id: cartData.id,
-          hash: cartData.id ? md5(cartData.id).toString() : null,
+          hash: cartData.id ? hash.toString() : null,
           item: []
         };
 
