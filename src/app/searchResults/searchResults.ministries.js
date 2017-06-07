@@ -6,15 +6,15 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'Bridges International',
-    designationNumber: '2293153',
-    path: '/2293153',
-    facet: 'ministry'
-  },
-  {
     name: 'Athletes in Action',
     designationNumber: '2863856',
     path: '/2863856',
+    facet: 'ministry'
+  },
+  {
+    name: 'Bridges International',
+    designationNumber: '2293153',
+    path: '/2293153',
     facet: 'ministry'
   },
   {
