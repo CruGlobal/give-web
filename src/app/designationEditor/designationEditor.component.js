@@ -128,6 +128,9 @@ class DesignationEditorController {
         },
         suggestedAmounts: () => {
           return this.designationContent.suggestedAmounts;
+        },
+        facebookPixelId: () => {
+          return this.designationContent.facebookPixelId;
         }
       }
     };
@@ -135,6 +138,7 @@ class DesignationEditorController {
       .then( (data) => {
         this.designationContent.parentDesignationNumber = data.parentDesignationNumber;
         this.designationContent.suggestedAmounts = data.suggestedAmounts;
+        this.designationContent.facebookPixelId = data.facebookPixelId;
         this.save();
       }, angular.noop );
   }

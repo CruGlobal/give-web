@@ -12,6 +12,7 @@ describe('Designation Editor Page Options', function() {
     $ctrl = $controller( module.name, {
       parentDesignationNumber: '000555',
       organizationId: 'IT-001',
+      facebookPixelId: '635334562464',
       suggestedAmounts: {"jcr:primaryType":"nt:unstructured",
         "1":{"jcr:primaryType":"nt:unstructured","description":"1 Bible","amount":100},
         "2":{"jcr:primaryType":"nt:unstructured","description":"2 Bibles","amount":200}},
@@ -26,6 +27,7 @@ describe('Designation Editor Page Options', function() {
   it('to define modal resolves', function() {
     expect($ctrl.parentDesignationNumber).toEqual('000555');
     expect($ctrl.organizationId).toEqual('IT-001');
+    expect($ctrl.facebookPixelId).toEqual('635334562464');
     expect($ctrl.suggestedAmounts).toBeDefined();
   });
 

@@ -44,7 +44,7 @@
         <tbody>
           <tr ng-repeat="a in $ctrl.suggestedAmounts track by $index">
             <td><input name="amount" type="number" class="form-control" placeholder="50" ng-model="a.amount"></td>
-            <td><input name="description" type="text" class="form-control" placeholder="$50.53 to help 14 refugees" ng-model="a.description"></td>
+            <td><input name="description" type="text" class="form-control" placeholder="$50 to help 5 refugees" ng-model="a.description"></td>
             <td><a href="" class="btn-link btn" ng-click="$ctrl.suggestedAmounts.splice($index, 1)">
               <i class="fa fa-minus-circle"></i>
             </a></td>
@@ -61,6 +61,12 @@
     </div>
 
     <div class="tab-pane active" ng-if="$ctrl.tab === 'other'">
+      <div class="form-group">
+        <label>Facebook Pixel ID</label>
+        <input name="facebookPixelId" type="text" class="form-control" ng-model="$ctrl.facebookPixelId">
+      </div>
+
+
       <p>Additional settings can be changed by sending email to <strong><a href="mailto:fds@cru.org">fds@cru.org</a></strong></p>
 
       <ul>
@@ -75,7 +81,8 @@
   <button id="saveChangesButton" type="button" class="btn btn-primary pull-right"
           ng-click="$close({
             parentDesignationNumber: $ctrl.parentDesignationNumber,
-            suggestedAmounts: $ctrl.transformSuggestedAmounts()
+            suggestedAmounts: $ctrl.transformSuggestedAmounts(),
+            facebookPixelId: $ctrl.facebookPixelId
           })">
     Save &amp; Close
   </button>

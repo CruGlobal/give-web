@@ -7,9 +7,10 @@ let controllerName = 'pageOptionsCtrl';
 class ModalInstanceCtrl {
 
   /* @ngInject */
-  constructor( parentDesignationNumber, organizationId, suggestedAmounts ) {
+  constructor( parentDesignationNumber, organizationId, suggestedAmounts, facebookPixelId ) {
     this.parentDesignationNumber = parentDesignationNumber;
     this.organizationId = organizationId;
+    this.facebookPixelId = facebookPixelId;
 
     this.suggestedAmounts = transform(suggestedAmounts, (result, value, key) => {
       if(key === 'jcr:primaryType'){ return; }
