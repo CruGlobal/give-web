@@ -16,7 +16,8 @@ describe('checkout', () => {
     beforeEach(inject(function($componentController) {
       self.controller = $componentController(module.name, {},
         {
-          changeStep: () => {}
+          changeStep: jasmine.createSpy('changeStep'),
+          onStateChange: jasmine.createSpy('onStateChange')
         });
     }));
 
@@ -85,14 +86,12 @@ describe('checkout', () => {
         expect(self.controller.paymentFormState).toEqual('submitted');
       });
       it('should save payment data when in the loading state with a payload', () => {
-        spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.of(''));
         self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}} });
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
       });
       it('should save payment data and not change step when in the loading state with a payload and stayOnStep is true', () => {
-        spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.of(''));
         self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}}, stayOnStep: true });
         expect(self.controller.changeStep).not.toHaveBeenCalled();
@@ -101,7 +100,6 @@ describe('checkout', () => {
       });
       it('should handle an error saving payment data', () => {
         self.controller.existingPaymentMethods = false;
-        spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'some error' }));
         self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}} });
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
@@ -113,7 +111,6 @@ describe('checkout', () => {
       });
       it('should handle an error saving payment data from a modal', () => {
         self.controller.$onInit();
-        spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'addPaymentMethod').and.returnValue(Observable.throw({ data: 'some error' }));
         self.controller.onPaymentFormStateChange({ state: 'loading', payload: {bankAccount: {}} });
         expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({bankAccount: {}});
@@ -124,12 +121,10 @@ describe('checkout', () => {
         expect(self.controller.scrollModalToTop).toHaveBeenCalled();
       });
       it('should call changeStep if save was successful and there was no data (assumes another component saved the data)', () => {
-        spyOn(self.controller, 'changeStep');
         self.controller.onPaymentFormStateChange({ state: 'loading' });
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });
       });
       it('should update payment data', () => {
-        spyOn(self.controller, 'changeStep');
         spyOn(self.controller.orderService, 'updatePaymentMethod').and.returnValue(Observable.of(''));
         self.controller.onPaymentFormStateChange({ state: 'loading', payload: {creditCard: {}}, update: true, paymentMethodToUpdate: 'selected payment method' });
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' });

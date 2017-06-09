@@ -96,10 +96,10 @@ class Cart {
       });
   }
 
-  addItem(uri, data) {
+  addItem(uri, data, isEdit) {
     data.quantity = 1;
 
-    if(this.sessionService.getRole() == Roles.public) {
+    if(!isEdit && this.sessionService.getRole() == Roles.public) {
       return this.getTotalQuantity().mergeMap((total) => {
         if(total <= 0) {
           return this.sessionService.signOut().mergeMap(() => {
@@ -118,13 +118,14 @@ class Cart {
   _addItem(uri, data) {
     return this.cortexApiService.post({
       path: ['itemfieldslineitem', uri],
-      data: data
+      data: data,
+      followLocation: true
     });
   }
 
   editItem(oldUri, uri, data){
     return this.deleteItem(oldUri)
-      .switchMap(() => this.addItem(uri, data));
+      .switchMap(() => this.addItem(uri, data, true));
   }
 
   deleteItem(uri){

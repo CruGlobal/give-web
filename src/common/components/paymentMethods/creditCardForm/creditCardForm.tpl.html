@@ -101,7 +101,7 @@
     </div>
   </div>
 
-  <div class="mb">
+  <div>
 
     <div class="">
       <label class="checkbox-inline">
@@ -110,7 +110,7 @@
     </div>
 
     <div class="billing-address-new-wrap mt- on" id="address-billing-current" ng-if="$ctrl.useMailingAddress">
-      <div class="panel panel-default">
+      <div class="panel panel-default mb0">
         <div class="panel-body">
           <h4 class="panel-title  border-bottom-small  visible" translate>Billing Address</h4>
           <display-address address="$ctrl.mailingAddress"></display-address>
@@ -122,7 +122,7 @@
     </div>
 
     <div class="billing-address-wrap mt-" id="address-billing-new" ng-if="!$ctrl.useMailingAddress" style="display: block"><!-- TODO: fix CSS so display: block isn't needed -->
-      <div class="panel panel-default">
+      <div class="panel panel-default mb0">
         <div class="panel-body">
           <div class="mb">
             <h4 class="panel-title  border-bottom-small  visible">
@@ -135,6 +135,6 @@
       </div>
     </div>
 
-  </div> <!-- // mb -->
+  </div>
 
 </form>

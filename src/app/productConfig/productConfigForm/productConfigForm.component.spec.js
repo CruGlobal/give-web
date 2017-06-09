@@ -330,7 +330,7 @@ describe( 'product config form component', function () {
       const cartEvent = isEdit ? cartUpdatedEvent : giftAddedEvent;
       beforeEach( () => {
         $ctrl.isEdit = isEdit;
-        spyOn( $ctrl.cartService, operation ).and.returnValue( Observable.of( 'save item success' ) );
+        spyOn( $ctrl.cartService, operation ).and.returnValue( Observable.of({ self: { uri: 'uri' } }) );
         $ctrl.productData = { uri: 'items/crugive/<some id>' };
         spyOn( $ctrl.$scope, '$emit' );
       } );

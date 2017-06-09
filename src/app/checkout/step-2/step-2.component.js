@@ -34,6 +34,12 @@ class Step2Controller{
     this.loadDonorDetails();
   }
 
+  $onChanges(changes){
+    if (changes.submitted && changes.submitted.currentValue === true) {
+      this.submit();
+    }
+  }
+
   loadDonorDetails(){
     this.orderService.getDonorDetails()
       .subscribe((data) => {
@@ -55,6 +61,10 @@ class Step2Controller{
     this.loadingPaymentMethods = false;
   }
 
+  submit(){
+    this.onPaymentFormStateChange({state: 'submitted'});
+  }
+
   onPaymentFormStateChange($event){
     this.paymentFormState = $event.state;
     if($event.state === 'loading' && $event.payload){
@@ -62,11 +72,12 @@ class Step2Controller{
         this.orderService.updatePaymentMethod($event.paymentMethodToUpdate, $event.payload) :
         this.orderService.addPaymentMethod($event.payload);
       request.subscribe(() => {
-          if($event.stayOnStep){
-            this.paymentFormState = 'success';
-          }else{
+          if(!$event.stayOnStep){
             this.changeStep({newStep: 'review'});
+            this.onStateChange({ state: 'submitted' });
+            this.$onInit();
           }
+          this.paymentFormState = 'success';
         },
         error => {
           if(error.status !== 409) {
@@ -74,6 +85,7 @@ class Step2Controller{
           }
           this.paymentFormState = 'error';
           this.paymentFormError = error.data;
+          this.onStateChange({ state: 'errorSubmitting' });
           if(this.existingPaymentMethods){
             this.scrollModalToTop();
           }else{
@@ -82,6 +94,10 @@ class Step2Controller{
         });
     }else if($event.state === 'loading') {
       this.changeStep({newStep: 'review'});
+      this.onStateChange({ state: 'submitted' });
+      this.paymentFormState = 'success';
+    }else if($event.state === 'unsubmitted'){
+      this.onStateChange({ state: 'unsubmitted' });
     }
   }
 }
@@ -97,6 +113,9 @@ export default angular
     controller: Step2Controller,
     templateUrl: template,
     bindings: {
-      changeStep: '&'
+      submitted: '<',
+      hideButtons: '<',
+      changeStep: '&',
+      onStateChange: '&'
     }
   });
