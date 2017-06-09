@@ -15,6 +15,7 @@ import searchResultsComponent from '../searchResults/searchResults.component';
 import designationEditorComponent from '../designationEditor/designationEditor.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
 import profileComponent from '../profile/profile.component';
+import brandedCheckoutComponent from '../branded/brandedCheckout.component';
 
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
 import receiptsComponent from '../profile/receipts/receipts.component';
@@ -72,6 +73,10 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     .state('designation-editor', {
       url: "/designation-editor.html",
       template: '<designation-editor></designation-editor>'
+    })
+    .state('branded-checkout', {
+      url: "/branded-checkout.html",
+      template: '<branded-checkout code="2294554"></branded-checkout>'
     });
 
   $locationProvider.html5Mode(true);
@@ -92,6 +97,7 @@ export default angular
     designationEditorComponent.name,
     paymentMethodsComponent.name,
     receiptsComponent.name,
+    brandedCheckoutComponent.name,
     'ui.router'
   ])
   .config(routingConfig)

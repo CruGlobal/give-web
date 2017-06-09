@@ -101,7 +101,7 @@ describe('cart service', () => {
     });
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
+        'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
         {
           amount: 50,
           quantity: 1
@@ -125,7 +125,7 @@ describe('cart service', () => {
 
         it('should add an item', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
+            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
             {
               amount: 50,
               quantity: 1
@@ -146,7 +146,7 @@ describe('cart service', () => {
 
         it('should delete cookies and addItem to cart', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>',
+            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
             {
               amount: 50,
               quantity: 1
@@ -168,7 +168,7 @@ describe('cart service', () => {
       self.cartService.editItem('<some old id>', '<new id>', { code: '<some code>'})
         .subscribe();
       expect(self.cartService.deleteItem).toHaveBeenCalledWith('<some old id>');
-      expect(self.cartService.addItem).toHaveBeenCalledWith('<new id>', { code: '<some code>'});
+      expect(self.cartService.addItem).toHaveBeenCalledWith('<new id>', { code: '<some code>'}, true);
     });
   });
 
