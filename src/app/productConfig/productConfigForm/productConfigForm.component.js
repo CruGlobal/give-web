@@ -219,8 +219,9 @@ class ProductConfigFormController {
       this.cartService.editItem( this.uri, this.productData.uri, data ) :
       this.cartService.addItem( this.productData.uri, data );
 
-    savingObservable.subscribe( () => {
+    savingObservable.subscribe( data => {
       if ( this.isEdit ) {
+        this.uri = data.self.uri;
         this.$scope.$emit( cartUpdatedEvent );
       } else {
         this.$scope.$emit( giftAddedEvent );

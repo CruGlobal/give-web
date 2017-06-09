@@ -99,32 +99,28 @@
     </div>
   </div>
 
-  <div class="mb">
-
-    <div class="mb">
-      <h4 class="panel-title  border-bottom-small  visible">Bank Account Agreement</h4>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <p>By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.</p>
-            </div>
+  <div>
+    <h4 class="panel-title  border-bottom-small  visible">Bank Account Agreement</h4>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <p>By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.</p>
           </div>
-
-          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.acceptedAgreement | showErrors)}">
-            <label class="checkbox-inline">
-              <input type="checkbox" name="acceptedAgreement" ng-model="$ctrl.bankPayment.acceptedAgreement" required value="true"> I Agree
-            </label>
-            <div role="alert" ng-messages="$ctrl.bankPaymentForm.acceptedAgreement.$error" ng-if="($ctrl.bankPaymentForm.acceptedAgreement | showErrors)">
-              <div class="help-block" ng-message="required" translate>You must accept this agreement to pay with a bank account</div>
-            </div>
-          </div>
-
         </div>
-      </div>
 
+        <div class="form-group is-required mb0" ng-class="{'has-error': ($ctrl.bankPaymentForm.acceptedAgreement | showErrors)}">
+          <label class="checkbox-inline">
+            <input type="checkbox" name="acceptedAgreement" ng-model="$ctrl.bankPayment.acceptedAgreement" required value="true"> I Agree
+          </label>
+          <div role="alert" ng-messages="$ctrl.bankPaymentForm.acceptedAgreement.$error" ng-if="($ctrl.bankPaymentForm.acceptedAgreement | showErrors)">
+            <div class="help-block" ng-message="required" translate>You must accept this agreement to pay with a bank account</div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-  </div> <!-- // mb -->
+  </div>
 
 </form>
