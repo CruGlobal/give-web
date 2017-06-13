@@ -72,7 +72,7 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'Global Ministries',
+    name: 'Global Greatest Needs',
     designationNumber: '0703618',
     path: '/0703618',
     facet: 'ministry'
@@ -87,6 +87,12 @@ export default [
     name: 'Inner City',
     designationNumber: '2272458',
     path: '/2272458',
+    facet: 'ministry'
+  },
+  {
+    name: 'International Ministries',
+    designationNumber: '0896754',
+    path: '/0896754',
     facet: 'ministry'
   },
   {
