@@ -27,6 +27,7 @@ describe( 'checkout', function () {
     beforeEach( () => {
       spyOn( self.controller, 'loadCart' );
       spyOn( self.controller, 'initStepParam' );
+      spyOn( self.controller, 'listenForLocationChange' );
       spyOn( self.controller, 'sessionEnforcerService' );
       spyOn( self.controller.$rootScope, '$on' );
       spyOn( self.controller, 'signedOut' );
@@ -41,6 +42,7 @@ describe( 'checkout', function () {
       );
       expect( self.controller.loadCart ).not.toHaveBeenCalled();
       expect( self.controller.initStepParam ).toHaveBeenCalled();
+      expect( self.controller.listenForLocationChange ).toHaveBeenCalled();
       expect( self.controller.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
       self.controller.$rootScope.$on.calls.argsFor( 0 )[1]();
       expect( self.controller.signedOut ).toHaveBeenCalled();
@@ -77,31 +79,33 @@ describe( 'checkout', function () {
 
   describe( 'initStepParam()', () => {
     beforeEach( () => {
-      spyOn( self.controller.$location, 'search' ).and.callThrough();
-      spyOn( self.controller.$location, 'replace' );
+      spyOn( self.controller, 'changeStep' );
     } );
 
     it( 'should set the default step', () => {
       self.controller.initStepParam();
-      expect( self.controller.checkoutStep ).toEqual( 'contact' );
-      expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'contact' );
-      expect( self.controller.$location.replace ).toHaveBeenCalled();
+      expect( self.controller.changeStep ).toHaveBeenCalledWith( 'contact', undefined );
     } );
 
     it( 'should load the step from the query param', () => {
       self.controller.$location.search( 'step', 'payment' );
       self.controller.initStepParam();
-      expect( self.controller.checkoutStep ).toEqual( 'payment' );
-      expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'payment' );
-      expect( self.controller.$location.replace ).toHaveBeenCalled();
+      expect( self.controller.changeStep ).toHaveBeenCalledWith( 'payment', undefined );
     } );
 
+    it( 'should pass the replace argument along', () => {
+      self.controller.initStepParam(true);
+      expect( self.controller.changeStep ).toHaveBeenCalledWith( 'contact', true );
+    } );
+  } );
+
+  describe( 'listenForLocationChange', () => {
     it( 'should watch the url and update the state', () => {
-      self.controller.initStepParam();
       spyOn( self.controller, 'initStepParam' );
-      self.controller.$location.search( 'step', 'payment' );
+      self.controller.listenForLocationChange();
+      self.controller.$location.search( 'step', 'review' );
       self.controller.$rootScope.$digest();
-      expect( self.controller.initStepParam ).toHaveBeenCalled();
+      expect( self.controller.initStepParam ).toHaveBeenCalledWith( 'review' );
     } );
   } );
 
@@ -126,10 +130,21 @@ describe( 'checkout', function () {
   describe( 'changeStep', () => {
     it( 'should scroll to top and change the checkout step', () => {
       spyOn( self.controller.$location, 'search' );
+      spyOn( self.controller.$location, 'replace' );
       self.controller.changeStep( 'review' );
       expect( self.controller.$window.scrollTo ).toHaveBeenCalledWith( 0, 0 );
       expect( self.controller.checkoutStep ).toEqual( 'review' );
       expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'review' );
+      expect( self.controller.$location.replace ).not.toHaveBeenCalled();
+    } );
+    it( 'should replace the current item in pushState', () => {
+      spyOn( self.controller.$location, 'search' );
+      spyOn( self.controller.$location, 'replace' );
+      self.controller.changeStep( 'payment', true );
+      expect( self.controller.$window.scrollTo ).toHaveBeenCalledWith( 0, 0 );
+      expect( self.controller.checkoutStep ).toEqual( 'payment' );
+      expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'payment' );
+      expect( self.controller.$location.replace ).toHaveBeenCalled();
     } );
   } );
 

@@ -49,7 +49,8 @@ class CheckoutController{
       }
     });
     this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
-    this.initStepParam();
+    this.initStepParam(true);
+    this.listenForLocationChange();
     this.analyticsFactory.pageLoaded();
   }
 
@@ -58,11 +59,15 @@ class CheckoutController{
     this.$locationChangeSuccessListener && this.$locationChangeSuccessListener();
   }
 
-  initStepParam(){
-    this.changeStep(this.$location.search().step || 'contact');
-    this.$location.replace();
-    this.$locationChangeSuccessListener = this.$locationChangeSuccessListener || this.$rootScope.$on('$locationChangeSuccess', () => {
-      this.initStepParam();
+  initStepParam(replace){
+    this.changeStep(this.$location.search().step || 'contact', replace);
+  }
+
+  listenForLocationChange() {
+    this.$locationChangeSuccessListener = this.$rootScope.$on('$locationChangeSuccess', () => {
+      this.initStepParam(this.$location.search().step || 'contact');
+      this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
+      this.analyticsFactory.track('aa-checkout-step-' + this.checkoutStep);
     });
   }
 
@@ -73,12 +78,11 @@ class CheckoutController{
     }
   }
 
-  changeStep(newStep){
+  changeStep(newStep, replace){
     this.$window.scrollTo(0, 0);
     this.checkoutStep = newStep;
     this.$location.search('step', this.checkoutStep);
-
-    this.analyticsFactory.track('aa-checkout-step-' + this.checkoutStep);
+    replace && this.$location.replace();
   }
 
   loadCart(){
