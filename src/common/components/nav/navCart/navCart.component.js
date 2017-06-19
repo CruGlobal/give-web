@@ -43,6 +43,7 @@ class NavCartController{
           this.loading = false;
           this.hasItems = !isEmpty(this.cartData.items);
           this.analyticsFactory.buildProductVar(data);
+          this.analyticsFactory.setEvent('cart open');
         },
         error => {
           this.$log.error('Error loading nav cart items', error);
