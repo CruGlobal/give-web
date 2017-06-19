@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 
 import sessionService from 'common/services/session/session.service';
 import cartService from 'common/services/api/cart.service';
+import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './navCart.tpl.html';
 
@@ -14,13 +15,14 @@ let componentName = 'navCart';
 class NavCartController{
 
   /* @ngInject */
-  constructor($rootScope, $window, $log, cartService, sessionService, envService){
+  constructor($rootScope, $window, $log, cartService, sessionService, envService, analyticsFactory){
     this.$rootScope = $rootScope;
     this.$window = $window;
     this.$log = $log;
     this.cartService = cartService;
     this.sessionService = sessionService;
     this.envService = envService;
+    this.analyticsFactory = analyticsFactory;
     this.firstLoad = true;
   }
 
@@ -40,6 +42,7 @@ class NavCartController{
           this.cartData = data;
           this.loading = false;
           this.hasItems = !isEmpty(this.cartData.items);
+          this.analyticsFactory.buildProductVar(data);
         },
         error => {
           this.$log.error('Error loading nav cart items', error);
@@ -57,7 +60,8 @@ class NavCartController{
 export default angular
   .module(componentName, [
     cartService.name,
-    sessionService.name
+    sessionService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: NavCartController,
