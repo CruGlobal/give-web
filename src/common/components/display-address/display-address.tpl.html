@@ -1,7 +1,7 @@
 <p ng-if="$ctrl.address && $ctrl.address.country === 'US'">
-  {{$ctrl.address.streetAddress}}<br/>
+  <span ng-if="$ctrl.address.streetAddress">{{$ctrl.address.streetAddress}}<br/></span>
   <span ng-if="$ctrl.address.extendedAddress">{{$ctrl.address.extendedAddress}}<br/></span>
-  {{$ctrl.address.locality}},
+  <span ng-if="$ctrl.address.locality">{{$ctrl.address.locality}},</span>
   {{$ctrl.address.region}}
   {{$ctrl.address.postalCode}}
 </p>
