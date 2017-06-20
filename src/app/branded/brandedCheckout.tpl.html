@@ -23,7 +23,7 @@
         <div class="panel">
           <div class="panel-body">
             <h3 class="panel-name" translate>Your Information</h3>
-            <contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onContactInfoSubmit(success)"></contact-info>
+            <contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onContactInfoSubmit(success)" donor-details="$ctrl.donorDetails"></contact-info>
           </div>
         </div>
         <div class="panel">
@@ -31,7 +31,8 @@
             <h3 class="panel-name" translate>Payment</h3>
             <checkout-step-2 hide-buttons="true"
                              submitted="$ctrl.submitted"
-                             on-state-change="$ctrl.onPaymentStateChange(state)">
+                             on-state-change="$ctrl.onPaymentStateChange(state)"
+                             mailing-address="$ctrl.donorDetails.mailingAddress">
             </checkout-step-2>
           </div>
         </div>

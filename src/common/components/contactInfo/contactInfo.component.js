@@ -23,15 +23,15 @@ class Step1Controller{
     this.$scope = $scope;
     this.orderService = orderService;
     this.sessionService = sessionService;
+  }
 
+  $onInit(){
     this.donorDetails = {
       mailingAddress: {
         country: 'US'
       }
     };
-  }
 
-  $onInit(){
     this.loadDonorDetails();
     this.waitForFormInitialization();
 
@@ -132,6 +132,7 @@ export default angular
     templateUrl: template,
     bindings: {
       submitted: '<',
+      donorDetails: '=',
       onSubmit: '&'
     }
   });
