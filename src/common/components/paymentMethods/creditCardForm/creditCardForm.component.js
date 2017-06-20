@@ -140,7 +140,7 @@ class CreditCardController {
             state: 'loading',
             payload: {
               creditCard: {
-                address: this.useMailingAddress ? undefined : this.creditCardPayment.address,
+                address: this.useMailingAddress ? this.mailingAddress : this.creditCardPayment.address,
                 'card-number': tokenObj.tsepToken,
                 'card-type': this.cardInfo.type(this.creditCardPayment.cardNumber) || this.paymentMethod && this.paymentMethod['card-type'],
                 'cardholder-name': this.creditCardPayment.cardholderName,

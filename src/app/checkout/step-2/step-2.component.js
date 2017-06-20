@@ -31,7 +31,7 @@ class Step2Controller{
   $onInit(){
     this.loadingPaymentMethods = true;
     this.existingPaymentMethods = true;
-    this.loadDonorDetails();
+    !this.mailingAddress && this.loadDonorDetails();
   }
 
   $onChanges(changes){
@@ -115,6 +115,7 @@ export default angular
     bindings: {
       submitted: '<',
       hideButtons: '<',
+      mailingAddress: '=',
       changeStep: '&',
       onStateChange: '&'
     }
