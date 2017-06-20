@@ -28,12 +28,12 @@ class NavCartController{
 
   $onInit(){
     this.mobile = !!this.mobile;
-    this.$rootScope.$on(giftAddedEvent, () => this.loadCart());
+    this.$rootScope.$on(giftAddedEvent, () => this.loadCart(true));
     this.$rootScope.$on(cartUpdatedEvent, () => this.loadCart());
     this.sessionService.sessionSubject.subscribe( () => !this.firstLoad && this.loadCart() ); // Ignore session events until another event loads cart
   }
 
-  loadCart() {
+  loadCart(setAnalyticsEvent) {
     this.firstLoad = false;
     this.loading = true;
     this.error = false;
@@ -43,7 +43,7 @@ class NavCartController{
           this.loading = false;
           this.hasItems = !isEmpty(this.cartData.items);
           this.analyticsFactory.buildProductVar(data);
-          if(this.cartData.items.length === 1){
+          if(setAnalyticsEvent && this.cartData.items.length === 1){
             this.analyticsFactory.setEvent('cart open');
           }
         },
