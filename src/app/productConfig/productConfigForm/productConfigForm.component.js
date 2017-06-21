@@ -217,7 +217,7 @@ class ProductConfigFormController {
 
     let savingObservable = this.isEdit ?
       this.cartService.editItem( this.uri, this.productData.uri, data ) :
-      this.cartService.addItem( this.productData.uri, data );
+      this.cartService.addItem( this.productData.uri, data, this.disableSessionRestart );
 
     savingObservable.subscribe( data => {
       if ( this.isEdit ) {
@@ -274,6 +274,7 @@ export default angular
       isEdit: '<',
       uri: '<',
       defaultFrequency: '<',
+      disableSessionRestart: '@',
       updateQueryParam: '&',
       submitted: '<',
       onStateChange: '&'
