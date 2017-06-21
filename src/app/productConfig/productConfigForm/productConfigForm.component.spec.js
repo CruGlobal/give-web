@@ -328,6 +328,9 @@ describe( 'product config form component', function () {
     function testSaving(isEdit){
       const operation = isEdit ? 'editItem' : 'addItem';
       const cartEvent = isEdit ? cartUpdatedEvent : giftAddedEvent;
+      const operationArgs = isEdit ?
+        [ 'uri',  'items/crugive/<some id>', { amount: 85 } ] :
+        [ 'items/crugive/<some id>', { amount: 85 }, undefined ];
       beforeEach( () => {
         $ctrl.isEdit = isEdit;
         spyOn( $ctrl.cartService, operation ).and.returnValue( Observable.of({ self: { uri: 'uri' } }) );
@@ -347,9 +350,7 @@ describe( 'product config form component', function () {
       it( 'should still submit the gift if the form is not dirty', () => {
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri',  'items/crugive/<some id>', {
-          amount: 85
-        } ].slice(isEdit ? 0 : 1));
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
         expect( $ctrl.errorSavingGeneric).toEqual(false);
@@ -359,9 +360,7 @@ describe( 'product config form component', function () {
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri', 'items/crugive/<some id>', {
-          amount: 85
-        } ].slice(isEdit ? 0 : 1));
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'submitted' });
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
@@ -374,7 +373,7 @@ describe( 'product config form component', function () {
         $ctrl.productData.frequency = 'NA';
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri', 'items/crugive/<some id>', {amount: 85} ].slice(isEdit ? 0 : 1));
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'submitted' });
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
@@ -386,9 +385,7 @@ describe( 'product config form component', function () {
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri', 'items/crugive/<some id>', {
-          amount: 85
-        } ].slice(isEdit ? 0 : 1));
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorSubmitting' });
         expect( $ctrl.errorAlreadyInCart).toEqual(false);
         expect( $ctrl.errorSavingGeneric).toEqual(true);
@@ -400,9 +397,7 @@ describe( 'product config form component', function () {
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
         expect( $ctrl.submittingGift ).toEqual( false );
-        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...[ 'uri', 'items/crugive/<some id>', {
-          amount: 85
-        } ].slice(isEdit ? 0 : 1));
+        expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorAlreadyInCart' });
         expect( $ctrl.errorAlreadyInCart).toEqual(true);
         expect( $ctrl.errorSavingGeneric).toEqual(false);
