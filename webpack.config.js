@@ -27,7 +27,7 @@ const entryPoints = {
     'app/profile/receipts/receipts.component.js',
     'app/profile/payment-methods/payment-methods.component.js',
     'app/designationEditor/designationEditor.component.js',
-    'app/branded/brandedCheckout.component.js'
+    'app/branded/branded-checkout.component.js'
   ],
   give: 'assets/scss/styles.scss',
   nav: 'assets/scss/global-nav.scss'

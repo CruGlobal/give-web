@@ -1,0 +1,42 @@
+<div class="panel">
+  <div class="panel-body loading-overlay-parent">
+    <loading ng-if="$ctrl.loadingProductConfig">
+      <translate>Loading gift info...</translate>
+    </loading>
+    <product-config-form code="$ctrl.code"
+                         is-edit="$ctrl.isEdit"
+                         item-config="$ctrl.item.config"
+                         uri="$ctrl.item.uri"
+                         submitted="$ctrl.submitted"
+                         on-state-change="$ctrl.onGiftConfigStateChange(state)"
+                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
+    </product-config-form>
+    <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
+      <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.$onInit()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+    </div>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <h3 class="panel-name" translate>Your Information</h3>
+    <contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onContactInfoSubmit(success)" donor-details="$ctrl.donorDetails"></contact-info>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <h3 class="panel-name" translate>Payment</h3>
+    <checkout-step-2 hide-buttons="true"
+                     submitted="$ctrl.submitted"
+                     on-state-change="$ctrl.onPaymentStateChange(state)"
+                     mailing-address="$ctrl.donorDetails.mailingAddress">
+    </checkout-step-2>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body text-right">
+    <button class="btn btn-primary"
+            ng-click="$ctrl.submit()"
+            ng-disabled="$ctrl.errorLoadingProductConfig"
+            translate>Continue</button>
+  </div>
+</div>
