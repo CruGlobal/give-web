@@ -66,16 +66,18 @@ describe( 'navCart', () => {
   describe( 'loadCart', () => {
     beforeEach(() => {
       spyOn($ctrl.cartService, 'get');
+      spyOn($ctrl.analyticsFactory, 'setEvent');
     });
     it('should load the cart data', () => {
       $ctrl.cartService.get.and.returnValue(Observable.of({ items: ['first item'] }));
       expect($ctrl.firstLoad).toEqual(true);
-      $ctrl.loadCart();
+      $ctrl.loadCart(true);
       expect($ctrl.cartData).toEqual({ items: ['first item'] });
       expect($ctrl.loading).toEqual(false);
       expect($ctrl.hasItems).toEqual(true);
       expect($ctrl.error).toEqual(false);
       expect($ctrl.firstLoad).toEqual(false);
+      expect($ctrl.analyticsFactory.setEvent).toHaveBeenCalled();
     });
     it('should handling loading a cart that has no items', () => {
       $ctrl.cartService.get.and.returnValue(Observable.of({}));
