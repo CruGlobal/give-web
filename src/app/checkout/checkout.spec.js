@@ -146,6 +146,14 @@ describe( 'checkout', function () {
       expect( self.controller.$location.search ).toHaveBeenCalledWith( 'step', 'payment' );
       expect( self.controller.$location.replace ).toHaveBeenCalled();
     } );
+    it( 'should redirect to cart page', () => {
+      self.controller.changeStep( 'cart' );
+      expect( self.controller.$window.location ).toEqual( '/cart.html' );
+    } );
+    it( 'should redirect to thank you page', () => {
+      self.controller.changeStep( 'thankYou' );
+      expect( self.controller.$window.location ).toEqual( '/thank-you.html' );
+    } );
   } );
 
   describe( 'loadCart', () => {

@@ -79,10 +79,20 @@ class CheckoutController{
   }
 
   changeStep(newStep, replace){
-    this.$window.scrollTo(0, 0);
-    this.checkoutStep = newStep;
-    this.$location.search('step', this.checkoutStep);
-    replace && this.$location.replace();
+    switch(newStep){
+      case 'cart':
+        this.$window.location = '/cart.html';
+        break;
+      case 'thankYou':
+        this.$window.location = '/thank-you.html';
+        break;
+      default:
+        this.$window.scrollTo(0, 0);
+        this.checkoutStep = newStep;
+        this.$location.search('step', this.checkoutStep);
+        replace && this.$location.replace();
+        break;
+    }
   }
 
   loadCart(){

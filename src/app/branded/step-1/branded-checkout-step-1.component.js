@@ -6,30 +6,24 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 
-import commonModule from 'common/common.module';
-
 import productConfigForm from 'app/productConfig/productConfigForm/productConfigForm.component';
 import contactInfo from 'common/components/contactInfo/contactInfo.component';
 import checkoutStep2 from 'app/checkout/step-2/step-2.component';
 
 import sessionService from 'common/services/session/session.service';
 import cartService from 'common/services/api/cart.service';
-import loading from 'common/components/loading/loading.component';
 
-import 'common/lib/fakeLocalStorage';
+import template from './branded-checkout-step-1.tpl.html';
 
-import template from './brandedCheckout.tpl.html';
+let componentName = 'brandedCheckoutStep1';
 
-let componentName = 'brandedCheckout';
-
-class BrandedCheckoutController{
+class BrandedCheckoutStep1Controller{
 
   /* @ngInject */
-  constructor($log, sessionService, cartService, analyticsFactory){
+  constructor($log, sessionService, cartService){
     this.$log = $log;
     this.sessionService = sessionService;
     this.cartService = cartService;
-    this.analyticsFactory = analyticsFactory;
 
     this.resetSubmission();
   }
@@ -126,8 +120,7 @@ class BrandedCheckoutController{
   checkSuccessfulSubmission(){
     if(every(this.submission, 'completed')){
       if(every(this.submission, {error: false})){
-        this.$log.info('submitted forms successfully'); // TODO: transition to next page
-        this.submitted = false; // TODO: remove
+        this.next();
       }else{
         this.submitted = false;
       }
@@ -137,18 +130,17 @@ class BrandedCheckoutController{
 
 export default angular
   .module(componentName, [
-    commonModule.name,
     productConfigForm.name,
     contactInfo.name,
     checkoutStep2.name,
     sessionService.name,
-    cartService.name,
-    loading.name
+    cartService.name
   ])
   .component(componentName, {
-    controller: BrandedCheckoutController,
+    controller: BrandedCheckoutStep1Controller,
     templateUrl: template,
     bindings: {
-      code: '@'
+      code: '<',
+      next: '&'
     }
   });

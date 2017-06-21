@@ -152,10 +152,11 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <tranlsate>Review Gifts</tranlsate>
-        <a id="changeCartButton" class="btn btn-default btn-panel-head pull-right" href="cart.html" translate>Change</a>
+        <button id="changeCartButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'cart'})" translate>Change</button>
       </div>
       <div class="panel-body">
-        <table class="table giftsum-table">
+        <loading ng-if="!$ctrl.cartData"></loading>
+        <table class="table giftsum-table" ng-if="$ctrl.cartData">
           <thead>
           <tr>
             <th class="th-title-gift" translate>Gift</th>

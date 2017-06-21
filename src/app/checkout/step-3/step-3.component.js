@@ -102,6 +102,7 @@ class Step3Controller{
     delete this.submissionErrorStatus;
     // Prevent multiple submissions
     if(this.submittingOrder) return;
+    this.submittingOrder = true;
     this.onSubmittingOrder({value: true});
 
     let submitRequest;
@@ -115,13 +116,15 @@ class Step3Controller{
     }
     submitRequest.subscribe(() => {
         this.analyticsFactory.purchase(this.donorDetails, this.cartData);
+        this.submittingOrder = false;
         this.onSubmittingOrder({value: false});
         this.orderService.clearCardSecurityCodes();
         this.onSubmitted();
         this.$scope.$emit( cartUpdatedEvent );
-        this.$window.location = '/thank-you.html';
+        this.changeStep({newStep: 'thankYou'});
       },
       error => {
+        this.submittingOrder = false;
         this.onSubmittingOrder({value: false});
         if(error.config && error.config.data && error.config.data['security-code']){
           error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X'); // Mask security-code
@@ -130,6 +133,7 @@ class Step3Controller{
         this.onSubmitted();
         this.submissionErrorStatus = error.status;
         this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error'; // Keep prefix before first colon for easier ng-switch matching
+        this.$window.scrollTo(0, 0);
       });
   }
 }

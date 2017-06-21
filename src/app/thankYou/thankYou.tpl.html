@@ -1,7 +1,7 @@
 <div class="screenContent">
   <div class="container container-edge-small container-edge-extrasmall">
     <div class="row">
-      <div class="col-md-8">
+      <div ng-class="{'col-md-8': !$ctrl.disableAccountBenefits, 'col-md-12': $ctrl.disableAccountBenefits}">
         <div class="row">
           <div class="col-md-12">
             <div class="panel loading-overlay-parent">
@@ -163,11 +163,11 @@
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-4" ng-if="!$ctrl.disableAccountBenefits">
         <account-benefits donor-details="$ctrl.purchase.donorDetails" ng-if="$ctrl.showAccountBenefits"></account-benefits>
       </div>
 
-      <div class="col-md-4 hidden-xs hidden-sm">
+      <div class="col-md-4 hidden-xs hidden-sm" ng-if="!$ctrl.disableAccountBenefits">
         <help></help>
       </div>
     </div>
