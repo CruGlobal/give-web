@@ -15,7 +15,7 @@ import searchResultsComponent from '../searchResults/searchResults.component';
 import designationEditorComponent from '../designationEditor/designationEditor.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
 import profileComponent from '../profile/profile.component';
-import brandedCheckoutComponent from '../branded/brandedCheckout.component';
+import brandedCheckoutComponent from '../branded/branded-checkout.component';
 
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
 import receiptsComponent from '../profile/receipts/receipts.component';

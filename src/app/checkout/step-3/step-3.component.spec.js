@@ -14,8 +14,7 @@ describe('checkout', () => {
     beforeEach(angular.mock.module(module.name));
     var self = {};
 
-    beforeEach(inject(function($rootScope, $componentController) {
-      var $scope = $rootScope.$new();
+    beforeEach(inject(function($componentController) {
       self.loadedPayment = {
         self: {
           type: null
@@ -24,7 +23,6 @@ describe('checkout', () => {
       self.storedCvv = null;
 
       self.controller = $componentController(module.name, {
-          $scope: $scope,
           // Mock services
           cartService: {},
           orderService: {
@@ -36,10 +34,11 @@ describe('checkout', () => {
             clearCardSecurityCodes: jasmine.createSpy('clearCardSecurityCodes')
           },
           $window: {
-            location: '/checkout.html'
+            scrollTo: jasmine.createSpy('scrollTo')
           }
         },
         {
+          changeStep: jasmine.createSpy('changeStep'),
           onSubmitBtnChangeState: jasmine.createSpy('onSubmitBtnChangeState'),
           onSubmitted: jasmine.createSpy('onSubmitted'),
           onSubmittingOrder: jasmine.createSpy('onSubmittingOrder'),
@@ -279,7 +278,7 @@ describe('checkout', () => {
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled();
-          expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.changeStep).toHaveBeenCalledWith({newStep: 'thankYou'});
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a bank account', () => {
@@ -289,8 +288,9 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }]);
-          expect(self.controller.$window.location).toEqual('/checkout.html');
+          expect(self.controller.changeStep).not.toHaveBeenCalled();
           expect(self.controller.submissionError).toEqual('error saving bank account');
+          expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0);
         });
         it('should submit the order with a CVV if paying with a credit card', () => {
           self.controller.creditCardPaymentDetails = {};
@@ -298,7 +298,7 @@ describe('checkout', () => {
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled();
-          expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.changeStep).toHaveBeenCalledWith({newStep: 'thankYou'});
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
@@ -307,7 +307,7 @@ describe('checkout', () => {
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).toHaveBeenCalledWith(undefined);
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled();
-          expect(self.controller.$window.location).toEqual('/thank-you.html');
+          expect(self.controller.changeStep).toHaveBeenCalledWith({newStep: 'thankYou'});
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
         });
         it('should handle an error submitting an order with a credit card', () => {
@@ -318,8 +318,9 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }]);
-          expect(self.controller.$window.location).toEqual('/checkout.html');
+          expect(self.controller.changeStep).not.toHaveBeenCalled();
           expect(self.controller.submissionError).toEqual('CardErrorException');
+          expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0);
         });
         it('should mask the security code on a credit card error', () => {
           self.controller.orderService.submit.and.returnValue(Observable.throw({ data: 'some error', config: { data: { 'security-code' : '1234' } } }));
@@ -334,8 +335,9 @@ describe('checkout', () => {
           expect(self.controller.orderService.submit).not.toHaveBeenCalled();
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled();
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'Current payment type is unknown' }]);
-          expect(self.controller.$window.location).toEqual('/checkout.html');
+          expect(self.controller.changeStep).not.toHaveBeenCalled();
           expect(self.controller.submissionError).toEqual('Current payment type is unknown');
+          expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0);
         });
       });
     });

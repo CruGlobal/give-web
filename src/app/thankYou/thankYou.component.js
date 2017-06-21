@@ -61,7 +61,7 @@ class ThankYouController{
           this.purchase = data;
 
           // Display Account Benefits Modal when registration-state is NEW or MATCHED
-          if(this.purchase.donorDetails['registration-state'] !== 'COMPLETED') {
+          if(this.purchase.donorDetails['registration-state'] !== 'COMPLETED' && !this.disableAccountBenefits) {
             let lastPurchaseId = lastPurchaseLink.split('/').pop();
             this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
               this.sessionModalService.userMatch().then(() => {
@@ -123,5 +123,8 @@ export default angular
   ])
   .component(componentName, {
     controller: ThankYouController,
-    templateUrl: template
+    templateUrl: template,
+    bindings: {
+      disableAccountBenefits: '<'
+    }
   });

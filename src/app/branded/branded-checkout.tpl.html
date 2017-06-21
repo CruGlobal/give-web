@@ -1,0 +1,22 @@
+<div class="screenContent">
+  <div class="container container-edge-small container-edge-extrasmall">
+    <div class="row">
+      <div class="col-xs-12">
+        <branded-checkout-step-1
+          ng-if="$ctrl.checkoutStep === 'giftContactPayment'"
+          code="$ctrl.code"
+          next="$ctrl.next()">
+        </branded-checkout-step-1>
+        <branded-checkout-step-2
+          ng-if="$ctrl.checkoutStep === 'review'"
+          next="$ctrl.next()"
+          previous="$ctrl.previous()">
+        </branded-checkout-step-2>
+        <thank-you
+          ng-if="$ctrl.checkoutStep === 'thankYou'"
+          disable-account-benefits="true">
+        </thank-you>
+      </div>
+    </div>
+  </div>
+</div>
