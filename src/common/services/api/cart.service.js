@@ -96,10 +96,10 @@ class Cart {
       });
   }
 
-  addItem(uri, data, isEdit) {
+  addItem(uri, data, disableSessionRestart) {
     data.quantity = 1;
 
-    if(!isEdit && this.sessionService.getRole() == Roles.public) {
+    if(!disableSessionRestart && this.sessionService.getRole() == Roles.public) {
       return this.getTotalQuantity().mergeMap((total) => {
         if(total <= 0) {
           return this.sessionService.signOut().mergeMap(() => {

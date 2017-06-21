@@ -2,8 +2,7 @@ import angular from 'angular';
 import find from 'lodash/find';
 import every from 'lodash/every';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
 import productConfigForm from 'app/productConfig/productConfigForm/productConfigForm.component';
@@ -29,30 +28,41 @@ class BrandedCheckoutStep1Controller{
   }
 
   $onInit() {
+    this.loadingSession = true;
     this.loadingProductConfig = true;
     this.errorLoadingProductConfig = false;
 
-    const downgradeSessionObservable = this.sessionService.downgradeToGuest(true)
-      .catch(() => Observable.of('already guest'));
-
-    const cartObservable = this.cartService.get()
-      .do(data => {
-        const item = find(data.items, {code: this.code});
-        if(item){ // Edit first item with this code from user's cart if it exits
-          this.isEdit = true;
-          this.item = item;
+    this.sessionService.downgradeToGuest(true) // Make sure we don't have signed in users
+      .catch(() => Observable.of('already guest'))
+      .mergeMap(() => {
+        return this.cartService.getTotalQuantity();
+      })
+      .mergeMap(total => {
+        if (total <= 0) {
+          return this.sessionService.signOut() // Restart user's session and clear session data if they have no items in cart
+            .mergeMap(() => {
+              return this.sessionService.startNewSession();
+            });
         }
-      });
-
-    Observable.merge(downgradeSessionObservable, cartObservable)
-      .subscribe(null,
+        return Observable.of('keeping session');
+      })
+      .catch(() => Observable.of('ignore session errors'))
+      .mergeMap(() => {
+        this.loadingSession = false;
+        return this.cartService.get();
+      })
+      .subscribe(data => {
+          const item = find(data.items, {code: this.code});
+          if (item) { // Edit first item with this code from user's cart if it exits
+            this.isEdit = true;
+            this.item = item;
+          }
+          this.loadingProductConfig = false;
+        },
         error => {
           this.errorLoadingProductConfig = true;
           this.loadingProductConfig = false;
           this.$log.error('Error loading cart for branded checkout', error);
-        },
-        () => {
-          this.loadingProductConfig = false;
         });
   }
 

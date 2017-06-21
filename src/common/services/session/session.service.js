@@ -12,6 +12,7 @@ import 'rxjs/add/operator/finally';
 import {updateRollbarPerson} from 'common/rollbar.config.js';
 
 import appConfig from 'common/app.config';
+import cortexApiService from 'common/services/cortexApi.service';
 
 let serviceName = 'sessionService';
 export let Roles = {
@@ -30,7 +31,7 @@ export let SignInEvent = 'SessionSignedIn';
 export let SignOutEvent = 'SessionSignedOut';
 
 /*@ngInject*/
-function session( $cookies, $rootScope, $http, $timeout, envService ) {
+function session( $cookies, $rootScope, $http, $timeout, envService, cortexApiService ) {
   let session = {},
     sessionSubject = new BehaviorSubject( session ),
     sessionTimeout,
@@ -54,7 +55,8 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
     signUp:           signUp,
     forgotPassword:   forgotPassword,
     resetPassword:    resetPassword,
-    downgradeToGuest: downgradeToGuest
+    downgradeToGuest: downgradeToGuest,
+    startNewSession:  startNewSession
   };
 
   /* Public Methods */
@@ -154,6 +156,17 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
     } );
   }
 
+  function startNewSession(){
+    return cortexApiService.post({
+      path: ['oauth2', 'tokens'],
+      params: {
+        role: 'PUBLIC',
+        scope: cortexApiService.scope,
+        grant_type: 'password'
+      }
+    });
+  }
+
   /* Private Methods */
   function updateCurrentSession( encoded_value ) {
     let cortexRole = {}, cruProfile = {};
@@ -237,6 +250,7 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
 export default angular
   .module( serviceName, [
     'ngCookies',
-    appConfig.name
+    appConfig.name,
+    cortexApiService.name
   ] )
   .factory( serviceName, session );

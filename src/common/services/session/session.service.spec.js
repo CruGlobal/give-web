@@ -297,6 +297,18 @@ describe( 'session service', function () {
     } );
   } );
 
+  describe( 'startNewSession', () => {
+    it( 'should start a new EP session', () => {
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cortex/oauth2/tokens?grant_type=password&role=PUBLIC&scope=crugive')
+        .respond( 200, { access_token: 'token' } );
+      sessionService.startNewSession()
+        .subscribe( data => {
+            expect( data ).toEqual( { access_token: 'token' } );
+          });
+      $httpBackend.flush();
+    });
+  });
+
   describe( 'session expiration', () => {
     let $timeout;
     beforeEach( inject( ( _$timeout_ ) => {
