@@ -12,7 +12,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
   // eslint-disable-next-line angular/module-getter
   envServiceProvider.config({
     domains: {
-      development: ['localhost', 'localhost.cru.org'],
+      development: ['localhost', 'localhost.cru.org', 'cru-givedev.s3-website-us-east-1.amazonaws.com'],
       staging: ['give-stage2.cru.org', 'stage.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org', 'uatdisp.aws.cru.org'],
       production: []
     },
@@ -25,16 +25,16 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         publicGive: 'https://give-stage2.cru.org'
       },
       staging: {
-        apiUrl: '',
+        apiUrl: 'https://give-stage2.cru.org',
         imgDomain: '//give-static-stage.cru.org',
-        imgDomainDesignation: '',
+        imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org'
       },
       production: {
         apiUrl: 'https://give.cru.org',
         imgDomain: '//give-static.cru.org',
-        imgDomainDesignation: '',
+        imgDomainDesignation: 'https://give.cru.org',
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give.cru.org'
       }
