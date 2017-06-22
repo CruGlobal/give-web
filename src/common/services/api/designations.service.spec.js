@@ -129,7 +129,7 @@ describe('designation service', () => {
   describe('suggestedAmounts', () => {
     it('should load suggested amounts', () => {
       const itemConfig = {amount: 50, 'campaign-page': 9876};
-      self.$httpBackend.expectGET('/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
         .respond(200, campaignResponse);
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
@@ -144,7 +144,7 @@ describe('designation service', () => {
     });
     it('should handle an invalid campaign page', () => {
       const itemConfig = {amount: 50, 'campaign-page': 9876};
-      self.$httpBackend.expectGET('/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
         .respond(400, {});
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
@@ -156,7 +156,7 @@ describe('designation service', () => {
     });
     it('should handle no campaign page', () => {
       const itemConfig = {amount: 50};
-      self.$httpBackend.expectGET('/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse);
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {

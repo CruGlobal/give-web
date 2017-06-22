@@ -3,7 +3,6 @@ import 'angular-ui-router';
 
 import '../../assets/scss/styles.scss';
 import '../../assets/scss/global-nav.scss';
-import './main.scss';
 
 import commonModule from 'common/common.module';
 import cartComponent from '../cart/cart.component';
