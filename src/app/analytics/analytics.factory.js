@@ -121,7 +121,7 @@ function analyticsFactory($window, $timeout, sessionService) {
     cartRemove: function(designationNumber) {
       try {
         if (typeof designationNumber !== 'undefined') {
-          $window.digitalData.cart.item = [{
+          $window.digitalData.cartItemRemoved = [{
             productInfo: {
               productID: designationNumber
             }
