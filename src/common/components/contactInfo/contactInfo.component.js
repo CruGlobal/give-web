@@ -132,7 +132,7 @@ export default angular
     templateUrl: template,
     bindings: {
       submitted: '<',
-      donorDetails: '=',
+      donorDetails: '=?',
       onSubmit: '&'
     }
   });

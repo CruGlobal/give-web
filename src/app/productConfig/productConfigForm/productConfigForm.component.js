@@ -221,12 +221,12 @@ class ProductConfigFormController {
 
     savingObservable.subscribe( data => {
       if ( this.isEdit ) {
-        this.uri = data.self.uri;
         this.$scope.$emit( cartUpdatedEvent );
       } else {
         this.$scope.$emit( giftAddedEvent );
         this.analyticsFactory.cartAdd(this.itemConfig, this.productData, 'cart modal');
       }
+      this.uri = data.self.uri;
       this.submittingGift = false;
       this.onStateChange({ state: 'submitted' });
     }, error => {

@@ -92,9 +92,11 @@ class BrandedCheckoutStep1Controller{
     switch(state){
       case 'submitted':
         this.submission.giftConfig.completed = true;
+        this.isEdit = true;
         this.checkSuccessfulSubmission();
         break;
       case 'errorSubmitting':
+      case 'errorAlreadyInCart':
         this.submission.giftConfig.completed = true;
         this.submission.giftConfig.error = true;
         this.checkSuccessfulSubmission();
