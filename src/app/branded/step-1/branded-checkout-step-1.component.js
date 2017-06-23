@@ -39,19 +39,16 @@ class BrandedCheckoutStep1Controller{
       })
       .mergeMap(total => {
         if (total <= 0) {
-          return this.sessionService.signOut() // Restart user's session and clear session data if they have no items in cart
-            .mergeMap(() => {
-              return this.sessionService.startNewSession();
-            });
+          return this.sessionService.signOut(); // Restart user's session and clear session data if they have no items in cart
         }
         return Observable.of('keeping session');
       })
       .catch(() => Observable.of('ignore session errors'))
       .mergeMap(() => {
-        this.loadingSession = false;
         return this.cartService.get();
       })
       .subscribe(data => {
+          this.loadingSession = false; // After signOut, wait for the cart request to finish so we have a session cookie before starting other requests
           const item = find(data.items, {code: this.code});
           if (item) { // Edit first item with this code from user's cart if it exits
             this.isEdit = true;
