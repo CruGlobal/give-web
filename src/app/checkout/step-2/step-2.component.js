@@ -98,6 +98,8 @@ class Step2Controller{
       this.paymentFormState = 'success';
     }else if($event.state === 'unsubmitted'){
       this.onStateChange({ state: 'unsubmitted' });
+    }else if($event.state === 'error'){
+      this.onStateChange({ state: 'errorSubmitting' });
     }
   }
 }
@@ -115,7 +117,7 @@ export default angular
     bindings: {
       submitted: '<',
       hideButtons: '<',
-      mailingAddress: '=',
+      mailingAddress: '=?',
       changeStep: '&',
       onStateChange: '&'
     }
