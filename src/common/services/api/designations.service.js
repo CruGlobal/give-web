@@ -1,8 +1,10 @@
 import angular from 'angular';
 import map from 'lodash/map';
+import toFinite from 'lodash/toFinite';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 import moment from 'moment';
 
 import cortexApiService from '../cortexApi.service';
@@ -167,6 +169,41 @@ class DesignationsService {
       },
       followLocation: true
     });
+  }
+
+  suggestedAmounts(code, itemConfig) {
+    let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
+      path = itemConfig['campaign-page'] ?
+        `/content/give/us/en/campaigns/${c}/${code}/${itemConfig['campaign-page']}.infinity.json` :
+        `/content/give/us/en/designations/${c}/${code}.infinity.json`;
+    return Observable.from(this.$http.get( path ))
+      .map( ( data ) => {
+        let suggestedAmounts = [];
+        if ( data.data['jcr:content'] ) {
+          // Map suggested amounts
+          if( data.data['jcr:content'].suggestedAmounts) {
+            angular.forEach( data.data['jcr:content'].suggestedAmounts, ( v, k ) => {
+              if ( toFinite( k ) > 0 ) suggestedAmounts.push( {
+                amount: toFinite( v.amount ),
+                label: v.description,
+                order: k
+              } );
+            } );
+          }
+
+          // Copy default-campaign-code to config
+          if( data.data['jcr:content'].defaultCampaign && !itemConfig['campaign-code'] ) {
+            itemConfig['default-campaign-code'] = data.data['jcr:content'].defaultCampaign;
+          }
+
+          // Copy jcr:title
+          if( data.data['jcr:content']['jcr:title'] ) {
+            itemConfig['jcr-title'] = data.data['jcr:content']['jcr:title'];
+          }
+        }
+        return suggestedAmounts;
+      })
+      .catch(() => []);
   }
 }
 

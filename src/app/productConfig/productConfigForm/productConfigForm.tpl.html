@@ -1,0 +1,226 @@
+<form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.saveGiftToCart()">
+  <div class="row">
+    <div class="col-sm-6">
+      <h4 class="give-gift-header" translate>
+        Give a Gift
+      </h4>
+    </div>
+    <div class="col-sm-6" ng-if="!$ctrl.loading && !$ctrl.errorLoading">
+      <div class="give-modal-recipient">
+        <img class="recipient-image" desig-src="{{$ctrl.productData.designationNumber}}" campaign-page="{{$ctrl.itemConfig['campaign-page']}}">
+        <span class="recipient-title" ng-bind-html="$ctrl.itemConfig['jcr-title']"></span>
+        <span class="recipient-id" ng-bind-html="$ctrl.displayId()"></span>
+      </div>
+    </div>
+  </div>
+
+  <loading ng-if="$ctrl.loading">
+    <translate>Loading gift details...</translate>
+  </loading>
+
+  <div ng-if="$ctrl.errorLoading" class="alert alert-danger" role="alert">
+    <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.loadData()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+  </div>
+
+  <div class="panel panel-default panel-plain mt" ng-if="!$ctrl.loading && !$ctrl.errorLoading">
+    <div class="panel panel-default give-modal-panel">
+
+      <div ng-if="$ctrl.errorChangingFrequency" class="alert alert-danger" role="alert">
+        <p translate>There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+      </div>
+
+      <div ng-if="$ctrl.errorSavingGeneric" role="alert" class="alert alert-danger">
+        <p translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+      </div>
+
+      <div ng-if="$ctrl.errorAlreadyInCart" class="alert alert-warning" role="alert">
+        <p translate>You already have this gift in your cart.</p>
+      </div>
+
+      <h4 class="panel-title border-bottom-small" translate>
+        Gift Amount
+      </h4>
+      <div class="panel-body pt0">
+        <div ng-if="$ctrl.useSuggestedAmounts">
+          <div class="radio radio-custom-amount"
+               ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
+            <label>
+              <input name="suggestedAmount"
+                     type="radio"
+                     ng-click="$ctrl.changeAmount(suggested.amount)"
+                     ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.amount === suggested.amount">
+              {{suggested.amount | currency:'$':2}} {{suggested.label}}
+            </label>
+          </div>
+          <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
+            <div class="form-group">
+              <label>
+                <input name="suggestedAmount"
+                       type="radio"
+                       ng-checked="$ctrl.customInputActive">
+                <input class="form-control form-control-subtle"
+                       name="amount"
+                       type="text"
+                       step="1"
+                       tabindex="-1"
+                       ng-model="$ctrl.customAmount"
+                       ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                       ng-focus="$ctrl.customInputActive = true;"
+                       ng-required="$ctrl.customInputActive"
+                       placeholder="{{'Other' | translate}}">
+              </label>
+              <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                   ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+                <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
+                <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+                <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+                <div class="help-block" ng-message="maximum" translate>
+                  Amount must be less than {{ 10000000 | currency }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div data-toggle="buttons"
+             ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
+             ng-if="!$ctrl.useSuggestedAmounts">
+          <label class="btn btn-radio"
+                 ng-click="$ctrl.changeAmount(a)"
+                 ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
+                 ng-repeat-start="a in $ctrl.selectableAmounts">
+            <span class="number">${{a}}</span>
+          </label>
+          <span ng-repeat-end></span>
+          <label
+            ng-class="{active: $ctrl.customInputActive}"
+            class="btn btn-default-form u-textLeft custom-amount">
+            <div class="form-group form-group-default u-inline">
+              <input class="form-control form-control-subtle number"
+                     name="amount"
+                     type="text"
+                     step="1"
+                     ng-required="$ctrl.customInputActive"
+                     ng-model="$ctrl.customAmount"
+                     ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                     ng-focus="$ctrl.customInputActive = true;"
+                     tabindex="-1"
+                     placeholder="{{'Other' | translate}}"
+                     required>
+            </div>
+          </label>
+          <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+               ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+            <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
+            <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+            <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+            <div class="help-block" ng-message="maximum" translate>
+              Amount must be less than {{ 10000000 | currency }}
+            </div>
+          </div>
+        </div>
+      </div><!-- // panel-body -->
+    </div><!-- // panel -->
+    <div class="panel panel-default give-modal-panel">
+      <h4 class="panel-title border-bottom-small mt" translate>
+        Gift Frequency
+      </h4>
+      <div class="panel-body">
+        <div data-toggle="buttons">
+          <label class="btn btn-radio btn-wide"
+                 ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
+                 ng-if="f.name !== 'SEMIANNUAL'"
+                 ng-class="{'active': f.name === $ctrl.productData.frequency}"
+                 ng-click="$ctrl.changeFrequency(f)">
+                <span class="giftsum-about giftsum-title" ng-switch="f.name">
+                  <span ng-switch-when="NA" translate>Single Gift</span>
+                  <span ng-switch-default>{{f.display}}</span>
+                </span>
+          </label>
+          <span ng-repeat-end></span>
+        </div>
+        <loading inline="true" ng-if="$ctrl.changingFrequency" class="mt-- text-center">
+          <translate>Changing frequency...</translate>
+        </loading>
+      </div><!-- // panel-body -->
+    </div><!-- // panel -->
+    <div ng-if="$ctrl.productData.frequency !== 'NA'">
+      <div class="panel panel-default give-modal-panel">
+        <h4 class="panel-title border-bottom-small mt0 pt-" translate>
+          Transaction Date for Recurring Gifts
+        </h4>
+        <div class="panel-body pt0">
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="form-group">
+                <label translate>Day</label>
+                <div class="form-group">
+                  <select class="form-control form-control-subtle"
+                          ng-model="$ctrl.itemConfig['recurring-day-of-month']"
+                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'])">
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label translate>Your gift will start on</label>
+                <div class="form-group">
+                  {{$ctrl.startDate( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.nextDrawDate ).format('ll')}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- // panel-body -->
+      </div><!-- // panel -->
+    </div>
+    <div class="panel panel-default give-modal-panel">
+      <h4 class="panel-title border-bottom-small mt" translate>
+        Optional
+      </h4>
+      <div class="panel-body pt0">
+        <ul class="list-unstyled">
+          <li>
+            <button type="button"
+                    id="sendMessageButton"
+                    class="btn btn-link"
+                    tabindex="-1"
+                    ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
+                    translate>
+              Send a Message to {{$ctrl.productData.displayName}}
+            </button>
+            <textarea class="staff-comments give-modal-comments"
+                      name="recipientComments"
+                      rows="3"
+                      maxlength="250"
+                      ng-model="$ctrl.itemConfig['recipient-comments']"
+                      ng-if="$ctrl.showRecipientComments"
+                      tabindex="-1"
+                      style="display:block;"></textarea>
+          </li>
+          <li>
+            <button type="button"
+                    id="sendHandlingButton"
+                    class="btn btn-link"
+                    tabindex="-1"
+                    ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
+                    translate>
+              Special Handling Instructions for Processing This Gift
+            </button>
+            <textarea class="cru-comments give-modal-comments"
+                      name="donationServicesComments"
+                      rows="3"
+                      maxlength="250"
+                      ng-model="$ctrl.itemConfig['donation-services-comments']"
+                      ng-if="$ctrl.showDSComments"
+                      tabindex="-1"
+                      placeholder="{{'For example: make this gift anonymous, start my gift in August, stop my gift after 18 months, etc.' | translate}}"
+                      style="display:block;"></textarea>
+          </li>
+        </ul>
+      </div><!-- // panel-body -->
+    </div><!-- // panel -->
+  </div>
+</form>
+<loading type="overlay" ng-if="$ctrl.submittingGift"></loading>

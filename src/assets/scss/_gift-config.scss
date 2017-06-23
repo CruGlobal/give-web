@@ -23,7 +23,7 @@
 
 
 
-.radio, 
+.radio,
 .checkbox {
   label {
     min-height: 29px;
@@ -62,8 +62,8 @@ label.btn-radio {
     color: #7AA3CC;
   }
   input[type="checkbox"] ~ i.fa.fa-square-o{
-      color: #c8c8c8;
-      display: inline;
+    color: #c8c8c8;
+    display: inline;
   }
   input[type="checkbox"] ~ i.fa.fa-check-square-o{
     display: none;
@@ -72,7 +72,7 @@ label.btn-radio {
     display: none;
   }
   input[type="checkbox"]:checked ~ i.fa.fa-check-square-o{
-    color: #7AA3CC;    
+    color: #7AA3CC;
     display: inline;
   }
   &:hover input[type="checkbox"] ~ i.fa {
@@ -115,7 +115,7 @@ div[data-toggle="buttons"] label:hover {
   background: #f9f9f9;
 }
 
-div[data-toggle="buttons"] label:active, 
+div[data-toggle="buttons"] label:active,
 div[data-toggle="buttons"] label.active {
   color: $colorCru-white;
   font-weight: 600;
@@ -185,11 +185,12 @@ label.btn.btn-default-form.active {
 
 .give-modal-header {
   padding: 30px 40px 15px 40px;
-  .modal-title {
-    font-size: 40px;
-    font-weight: 100;
-    line-height: 48px;
-  }
+}
+
+.give-gift-header {
+  font-size: 40px;
+  font-weight: 100;
+  line-height: 48px;
 }
 
 .give-modal-recipient {
@@ -248,7 +249,7 @@ label.btn.btn-default-form.active {
       }
       li {
         text-indent: 0;
-      }      
+      }
     }
   }
   input.number {
