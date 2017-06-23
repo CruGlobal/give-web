@@ -152,16 +152,20 @@ class NavController{
   }
 
   signOut() {
-    let modal = this.$uibModal.open({
-      templateUrl: signOutTemplate,
-      backdrop: 'static',
-      keyboard: false,
-      size: 'sm'
-    });
-    this.sessionService[this.customProfile ? 'signOut' : 'downgradeToGuest']().subscribe(() => {
-      modal.close();
-      this.signedOut( {} );
-    }, angular.noop);
+    if(this.signOutPath){
+      this.$window.location = this.signOutPath;
+    }else{
+      let modal = this.$uibModal.open({
+        templateUrl: signOutTemplate,
+        backdrop: 'static',
+        keyboard: false,
+        size: 'sm'
+      });
+      this.sessionService[this.customProfile ? 'signOut' : 'downgradeToGuest']().subscribe(() => {
+        modal.close();
+        this.signedOut( {} );
+      }, angular.noop);
+    }
   }
 
   signedOut( event ) {
@@ -270,6 +274,7 @@ export default angular
       submenuSkipLevels: '@',
       searchResultsPath: '@',
       editProfilePath: '@',
+      signOutPath: '@',
       customProfile: '<',
       pullRightOptions: '<'
     }

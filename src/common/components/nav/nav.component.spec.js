@@ -279,6 +279,14 @@ describe( 'nav signInButton', function () {
       expect( $ctrl.sessionService.downgradeToGuest ).toHaveBeenCalled();
       expect( modalSpy.close ).toHaveBeenCalled();
     } );
+
+    it( 'redirects if custom signOutPath is set', () => {
+      $ctrl.signOutPath = '/signout';
+      $ctrl.signOut();
+      $rootScope.$digest();
+
+      expect( $ctrl.$window.location ).toEqual('/signout');
+    } );
   } );
 
   describe( 'signedOut( event )', () => {
