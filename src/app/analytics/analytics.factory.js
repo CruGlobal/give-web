@@ -121,8 +121,6 @@ function analyticsFactory($window, $timeout, sessionService) {
     cartRemove: function(designationNumber) {
       try {
         if (typeof designationNumber !== 'undefined') {
-          var products = $window.s.products;
-
           $window.digitalData.cart.item = [{
             productInfo: {
               productID: designationNumber
@@ -130,33 +128,6 @@ function analyticsFactory($window, $timeout, sessionService) {
           }];
 
           $window._satellite.track('aa-cart-remove');
-
-          // Curate events variable for subsequent scView event
-          if ($window.s.events.length > -1) {
-            var eventsArr = $window.s.events.split(',');
-
-            for (let i = 0; i < eventsArr.length; i++) {
-              if (eventsArr[i] == 'scRemove') {
-                eventsArr.splice(i, 1);
-              }
-            }
-
-            $window.s.events = eventsArr.join(',');
-            $window.s.events = $window.s.apl($window.s.events, 'scView', ',', 2);
-          }
-
-          // Curate products variable for subsequent scView event
-          if (products.length > -1) {
-            var productsArr = products.split(',');
-
-            for (let i = 0; i < productsArr.length; i++) {
-              if (productsArr[i].slice(1) == designationNumber) {
-                productsArr.splice(i, 1);
-              }
-            }
-
-            $window.s.products = productsArr.join(',');
-          }
         }
       }catch(e){
         // Error caught in analyticsFactory.cartRemove
@@ -264,7 +235,11 @@ function analyticsFactory($window, $timeout, sessionService) {
           var desigType = allElements[i].getAttribute('designationtype');
 
           if (desigType !== null) {
+            const productConfig = $window.document.getElementsByTagName('product-config');
             $window.digitalData.product = [{
+              productInfo: {
+                productID: productConfig.length ? productConfig[0].getAttribute('product-code') : null
+              },
               category: {
                 primaryCategory: 'donation ' + desigType.toLowerCase(),
                 siebelProductType: 'designation',
@@ -301,7 +276,7 @@ function analyticsFactory($window, $timeout, sessionService) {
         // Error caught in analyticsFactory.giveGiftModal
       }
     },
-    pageLoaded: function() {
+    pageLoaded: function(skipImageRequests) {
       try {
         let path = this.getPath();
         this.getSetProductCategory(path);
@@ -320,15 +295,17 @@ function analyticsFactory($window, $timeout, sessionService) {
           };
         }
 
-        // Allow time for data layer changes to be consumed & fire image request
-        $timeout(function () {
-          try {
-            $window.s.t();
-            $window.s.clearVars();
-          }catch(e){
-            // Error caught in analyticsFactory.pageLoaded while trying to fire analytics image request or clearVars
-          }
-        }, 1000);
+        if(!skipImageRequests){
+          // Allow time for data layer changes to be consumed & fire image request
+          $timeout(function () {
+            try {
+              $window.s.t();
+              $window.s.clearVars();
+            }catch(e){
+              // Error caught in analyticsFactory.pageLoaded while trying to fire analytics image request or clearVars
+            }
+          }, 1000);
+        }
       }catch(e){
         // Error caught in analyticsFactory.pageLoaded
       }
