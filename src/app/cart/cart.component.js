@@ -65,10 +65,10 @@ class CartController {
     item.removing = true;
     this.cartService.deleteItem( item.uri )
       .subscribe( () => {
+          this.analyticsFactory.cartRemove(item.designationNumber);
           pull(this.cartData.items, item);
           this.loadCart(true);
           this.$scope.$emit( cartUpdatedEvent );
-          this.analyticsFactory.cartRemove(item.designationNumber);
         },
         error => {
           this.$log.error('Error deleting item from cart', error);
