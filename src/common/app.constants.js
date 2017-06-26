@@ -1,24 +1,24 @@
 // These CCP keys are used as backup keys if a network request for one fails.
 // They should be updated annually (around mid-April) as CCP rotates encryption keys.
-// Last updated 08/11/2016
+// Last updated 06/22/2017
 const ccpKey = '-----BEGIN PUBLIC KEY-----' +
-  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiiBT37BsBVBgKfF6z78X' +
-  'lOl73+HexgTND1Z7qCIScFPSRlQd+svsYah7kQKjNFGPYvz9dmBgNKq1EmdML2nz' +
-  'iRDAsBRR14OW4P8v2EjaMDGoOc+SwOJcyfoU6iBFkjwrUzlk8SXK07k3hgrtugCB' +
-  'WEEfDuZOA+2DR0ydRzT1p+nbVg9+HnpnKE3JQWG7M8Czy0+U085gReKq0C0xcJ+G' +
-  's4vBUiO0JWYsmRODBGspkOi9jO/+mZVflmPd5Zvf4l8MwA3A9emHF4tet4WxIAWP' +
-  'Y9trU+GPuZuYRbnDPB7SmPR5DWSZzmbyJXdFaLxn/Q5a0lRt4AzCmUPLbAz4/Mip' +
-  'swIDAQAB' +
+  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnY7iTAnM/B1uFZ2AH0yj' +
+  'pmwiBzzk7p6aFBfScpJ9ZMPwD3PjujTzobZpRm2pXF2XoaWqccZQyQ02TW6IfnFT' +
+  '/+6/y/hmsMv2E3Lr7kILpJbHwAitFt2jNCXFYH25o0azq46Cy429tTHyVYDzrm27' +
+  'pAvHwblPLTiS+/urMAOoBeq4Quk8P/9xP0Ia5z7hrL85sPxBRSIqzOtNmw2ce/V4' +
+  'LsYri8058wDNaeLPSUamUtjI6g7CP1UcLFB69NM3ZeCauUTp1BTUuLykOfu9GTF3' +
+  'UjMD24Ez0avvTzMHqPEBPXfslqulqSERQ7b1E6CwXonFwYMEEcek8CWYd7YJGQ8b' +
+  'HQIDAQAB' +
   '-----END PUBLIC KEY-----';
 
 const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
-  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgAdFxOSlGG6b/8Wkc5qX' +
-  'EuFhMwJJ8He6XgcLRlO/ktvQ9FA02xFE7ditpyCxZ8dXRKp+kjVoAqL5fCOEnxJU' +
-  '9IsGIo3hqtzWCBbYd8uSIFtJSwAIiaw46bYX33XR4WGpXJZOQKYxS6ui+1dfCgWB' +
-  '6YUWRwWbtOXcSm38dIPomVMS7X5WVRr9Lu7QCpq8jKhbPqFAeaT64TLnC+lmBrFB' +
-  'ny5g7p9UyCPEkK4y5R7QmSIO1dxuu2Sgb42PjX+/QWriEYqJxPBzhVk+jmegv/62' +
-  'AREJneyPtIKqkDnYcKLXgMSOyLmoXlkaMX7UqOGN/cp7jgKUC2byFa04nPaRPjT1' +
-  'WwIDAQAB' +
+  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1wOCSLbKrlAJKa21iWZa' +
+  '4KwkEbTW1DIJLZ7kULHqOq//0TOUjIfW6DX4dULSND25uWi2hHQA2+q8uuaYCVfC' +
+  'h2IvOUygOwJyNRTwpQtlIKgq1C7xnsnO4COA8hmnkr2aAxTX1aynGWw/3gvsx2y/' +
+  'pML4UM+LeiHdrVv7zSaW92MZd+bhf4Lu3CA2doyY6uobq/+P087dLqBXS61OZSAR' +
+  'xMCKF2BquwQfEq8GyblHpjWI2SXWmB276NdKrCp/ZKH3vFoBSlLoPdVT4Qbd4sKi' +
+  'PNnKvxIBooLPQLBOO0QGv6AIgyL4Jss+dAvn5O6lckwip9QRMfINNBX3Clhq53xE' +
+  'FwIDAQAB' +
   '-----END PUBLIC KEY-----';
 
 const cortexScope = 'crugive';
