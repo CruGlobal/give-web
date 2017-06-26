@@ -71,7 +71,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack -p",
+    "build": "webpack -p && node ./makeNav.js",
     "build:analyze": "webpack -p --env.analyze",
     "test": "karma start",
     "lint": "eslint 'src/**/*.js'"
