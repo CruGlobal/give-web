@@ -122,6 +122,9 @@ class Step3Controller{
       },
       error => {
         this.onSubmittingOrder({value: false});
+        if(error.config && error.config.data && error.config.data['security-code']){
+          error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X'); // Mask security-code
+        }
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
         this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error'; // Keep prefix before first colon for easier ng-switch matching
