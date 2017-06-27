@@ -99,7 +99,7 @@ class Step3Controller{
 
   submitOrder(){
     delete this.submissionError;
-    delete this.submissionErrorCode;
+    delete this.submissionErrorStatus;
     // Prevent multiple submissions
     if(this.submittingOrder) return;
     this.onSubmittingOrder({value: true});
