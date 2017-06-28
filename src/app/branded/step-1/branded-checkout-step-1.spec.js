@@ -19,10 +19,28 @@ describe('branded checkout step 1', () => {
   describe('$onInit', () => {
     it('should load cart', () => {
       spyOn($ctrl, 'resetSubmission');
+      spyOn($ctrl, 'initItemConfig');
       spyOn($ctrl, 'initSessionAndCart');
       $ctrl.$onInit();
       expect($ctrl.resetSubmission).toHaveBeenCalled();
+      expect($ctrl.initItemConfig).toHaveBeenCalled();
       expect($ctrl.initSessionAndCart).toHaveBeenCalled();
+    });
+  });
+
+  describe('initItemConfig', () => {
+    it('should set campaign code in item config if defined', () => {
+      $ctrl.campaignCode = '1234';
+      $ctrl.initItemConfig();
+      expect($ctrl.item).toEqual({
+        config: {
+          'campaign-code': '1234'
+        }
+      });
+    });
+    it('should leave item config undefined if no campaign code', () => {
+      $ctrl.initItemConfig();
+      expect($ctrl.item).toBeUndefined();
     });
   });
 

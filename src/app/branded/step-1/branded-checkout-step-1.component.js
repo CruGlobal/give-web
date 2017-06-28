@@ -27,7 +27,18 @@ class BrandedCheckoutStep1Controller{
 
   $onInit() {
     this.resetSubmission();
+    this.initItemConfig();
     this.initSessionAndCart();
+  }
+
+  initItemConfig(){
+    if(this.campaignCode){
+      this.item = {
+        config: {
+          'campaign-code': this.campaignCode
+        }
+      };
+    }
   }
 
   initSessionAndCart(){
@@ -154,6 +165,7 @@ export default angular
     templateUrl: template,
     bindings: {
       code: '<',
+      campaignCode: '<',
       next: '&'
     }
   });

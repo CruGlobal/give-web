@@ -55,6 +55,7 @@ export default angular
     controller: BrandedCheckoutController,
     templateUrl: template,
     bindings: {
-      code: '@'
+      code: '@',
+      campaignCode: '@'
     }
   });
