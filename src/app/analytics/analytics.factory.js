@@ -129,6 +129,7 @@ function analyticsFactory($window, $timeout, sessionService) {
               basePrice: item.amount
             },
             attributes: {
+              donationType: item.frequency.toLowerCase() == 'single' ? 'one-time donation' : 'recurring donation',
               donationFrequency: item.frequency.toLowerCase(),
               siebel: {
                 productType: 'designation',
