@@ -21,7 +21,7 @@
                            ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
       </product-config-form>
       <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
-        <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.$onInit()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+        <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.initSessionAndCart()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
       </div>
     </div>
   </div>
