@@ -88,7 +88,7 @@ class Step3Controller{
 
   canSubmitOrder(){
     let enableSubmitBtn = !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.needinfoErrors);
-    enableSubmitBtn = enableSubmitBtn && !this.submittingOrder;
+    enableSubmitBtn = enableSubmitBtn && !this.submittingOrder && this.submissionErrorStatus !== -1;
     this.onSubmitBtnChangeState({
       $event: {
         enabled: enableSubmitBtn
@@ -99,6 +99,7 @@ class Step3Controller{
 
   submitOrder(){
     delete this.submissionError;
+    delete this.submissionErrorStatus;
     // Prevent multiple submissions
     if(this.submittingOrder) return;
     this.onSubmittingOrder({value: true});
@@ -122,8 +123,12 @@ class Step3Controller{
       },
       error => {
         this.onSubmittingOrder({value: false});
+        if(error.config && error.config.data && error.config.data['security-code']){
+          error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X'); // Mask security-code
+        }
         this.$log.error('Error submitting purchase:', error);
         this.onSubmitted();
+        this.submissionErrorStatus = error.status;
         this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error'; // Keep prefix before first colon for easier ng-switch matching
       });
   }

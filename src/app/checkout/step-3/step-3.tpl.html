@@ -4,7 +4,16 @@
       <span ng-switch-when="email-info" translate>There was an issue with your email. Please verify that it is correct.</span>
       <span ng-switch-when="payment-method-info" translate>There was an issue with your payment. Please verify that all your payment information is correct.</span>
       <span ng-switch-when="billing-address-info" translate>There was an issue with your billing address. Please verify that your billing address is correct.</span>
-      <span ng-switch-default translate>There was an unknown error indicating that the order is still missing data. Please verify all your info, try refreshing the page, and, if you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</span>
+      <span ng-switch-default translate>
+        <span ng-if="$ctrl.submissionErrorStatus > -1" translate>
+          There was an unknown error indicating that the order is still missing data.
+          Please verify all your info, try refreshing the page, and, if you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+        </span>
+       <span ng-if="$ctrl.submissionErrorStatus === -1" translate>
+         There was an error receiving your gift submission status. Your connection dropped or timed out.
+         Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+       </span>
+      </span>
     </p>
     <p ng-if="$ctrl.submissionError" ng-switch="$ctrl.submissionError">
       <span ng-switch-when="Current payment type is unknown" translate>

@@ -321,6 +321,14 @@ describe('checkout', () => {
           expect(self.controller.$window.location).toEqual('/checkout.html');
           expect(self.controller.submissionError).toEqual('CardErrorException');
         });
+        it('should mask the security code on a credit card error', () => {
+          self.controller.orderService.submit.and.returnValue(Observable.throw({ data: 'some error', config: { data: { 'security-code' : '1234' } } }));
+          self.controller.creditCardPaymentDetails = {};
+          self.storedCvv = '1234';
+          self.controller.submitOrder();
+          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234');
+          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'some error', config: { data: { 'security-code' : 'XXXX' } } }]);
+        });
         it('should throw an error if neither bank account or credit card details are loaded', () => {
           self.controller.submitOrder();
           expect(self.controller.orderService.submit).not.toHaveBeenCalled();

@@ -46,7 +46,9 @@ class CartController {
           this.loading = false;
           this.updating = false;
 
-          this.analyticsFactory.pageLoaded();
+          if(!reload){
+            this.analyticsFactory.pageLoaded();
+          }
           this.analyticsFactory.buildProductVar(data);
         },
         error => {
