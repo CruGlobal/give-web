@@ -118,12 +118,22 @@ function analyticsFactory($window, $timeout, sessionService) {
         // Error caught in analyticsFactory.cartAdd
       }
     },
-    cartRemove: function(designationNumber) {
+    cartRemove: function(item) {
       try {
-        if (typeof designationNumber !== 'undefined') {
+        if (item) {
           $window.digitalData.cart.item = [{
             productInfo: {
-              productID: designationNumber
+              productID: item.designationNumber
+            },
+            price: {
+              basePrice: item.amount
+            },
+            attributes: {
+              donationFrequency: item.frequency.toLowerCase(),
+              siebel: {
+                productType: 'designation',
+                campaignCode: item.config['campaign-code']
+              }
             }
           }];
 
