@@ -23,11 +23,14 @@ class BrandedCheckoutStep1Controller{
     this.$log = $log;
     this.sessionService = sessionService;
     this.cartService = cartService;
-
-    this.resetSubmission();
   }
 
   $onInit() {
+    this.resetSubmission();
+    this.initSessionAndCart();
+  }
+
+  initSessionAndCart(){
     this.loadingSession = true;
     this.loadingProductConfig = true;
     this.errorLoadingProductConfig = false;
@@ -57,9 +60,10 @@ class BrandedCheckoutStep1Controller{
           this.loadingProductConfig = false;
         },
         error => {
+          this.loadingSession = false;
           this.errorLoadingProductConfig = true;
           this.loadingProductConfig = false;
-          this.$log.error('Error loading cart for branded checkout', error);
+          this.$log.error('Error loading cart data for branded checkout step 1', error);
         });
   }
 
