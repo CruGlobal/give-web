@@ -67,7 +67,7 @@ class CartController {
     item.removing = true;
     this.cartService.deleteItem( item.uri )
       .subscribe( () => {
-          this.analyticsFactory.cartRemove(item.designationNumber);
+          this.analyticsFactory.cartRemove(item);
           pull(this.cartData.items, item);
           this.loadCart(true);
           this.$scope.$emit( cartUpdatedEvent );
