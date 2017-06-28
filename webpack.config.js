@@ -12,6 +12,7 @@ const ci = process.env.CI === 'true';
 
 const entryPoints = {
   common: 'common/common.module.js',
+  cruNav: 'common/components/nav/nav.bundle.js',
   app: [
     'common/common.module.js',
     'app/cart/cart.component.js',
