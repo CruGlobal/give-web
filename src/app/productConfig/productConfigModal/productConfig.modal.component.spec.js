@@ -47,7 +47,7 @@ describe( 'product config modal', function () {
       expect($ctrl.modalStateService.name).toHaveBeenCalledWith(null);
       expect($ctrl.$location.search).toHaveBeenCalledWith('d', null);
       expect($ctrl.$location.search).toHaveBeenCalledWith('c', null);
-      expect($ctrl.$location.search).toHaveBeenCalledWith('$', null);
+      expect($ctrl.$location.search).toHaveBeenCalledWith('a', null);
       expect($ctrl.$location.search).toHaveBeenCalledWith('f', null);
       expect($ctrl.$location.search).toHaveBeenCalledWith('dd', null);
       expect($ctrl.$location.search).not.toHaveBeenCalledWith('CampaignCode', null);
