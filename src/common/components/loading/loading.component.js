@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import './loading.scss';
+import styles from './loading.scss';
 
 import template from './loading.tpl.html';
 
@@ -37,6 +37,7 @@ class LoadingController{
   constructor(){
     this.type = 'block';
     this.inline = false;
+    this.styles = styles;
   }
 }
 

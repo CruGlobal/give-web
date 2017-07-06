@@ -117,7 +117,7 @@ module.exports = env => {
           exclude: path.resolve(__dirname, "./src/assets"),
           use: [
             "style-loader",
-            "css-loader?sourceMap",
+            "css-loader?sourceMap&modules&localIdentName=[name]__[local]___[hash:base64:5]",
             "sass-loader?sourceMap"
           ]
         }

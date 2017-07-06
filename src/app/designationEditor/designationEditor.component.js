@@ -22,7 +22,7 @@ import photoModalTemplate from './photoModal/photoModal.tpl.html';
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html';
 import websiteModalTemplate from './websiteModal/websiteModal.tpl.html';
 
-import './designationEditor.scss';
+import styles from './designationEditor.scss';
 
 let componentName = 'designationEditor';
 
@@ -42,6 +42,7 @@ class DesignationEditorController {
     this.$q = $q;
     this.$uibModal = $uibModal;
     this.$window = $window;
+    this.styles = styles;
   }
 
   $onInit() {
@@ -172,7 +173,7 @@ class DesignationEditorController {
       templateUrl:       textEditorModalTemplate,
       controller:        textEditorModalController.name,
       controllerAs:      '$ctrl',
-      size:              'lg designation-editor-modal',
+      size:              `lg ${styles.designationEditorModal}`,
       resolve : {
         initialText: () => {
           return this.designationContent[field];
