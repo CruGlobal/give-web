@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const concat = require('lodash/concat');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const aemDomain = 'https://give-stage2.cru.org';
 
@@ -27,7 +28,7 @@ const entryPoints = {
     'app/profile/receipts/receipts.component.js',
     'app/profile/payment-methods/payment-methods.component.js',
     'app/designationEditor/designationEditor.component.js',
-    'app/branded/branded-checkout.component.js'
+    'app/branded/branded-checkout.component.ts'
   ],
   give: 'assets/scss/styles.scss',
   nav: 'assets/scss/global-nav.scss',
@@ -60,7 +61,8 @@ module.exports = env => {
         new webpack.EnvironmentPlugin({
           'TRAVIS_COMMIT': 'development'
         }),
-        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+        new CheckerPlugin()
       ],
       env.analyze ? [ new BundleAnalyzerPlugin() ] : []
 
@@ -83,6 +85,10 @@ module.exports = env => {
         {
           test: /\.html$/,
           use: ['ngtemplate-loader?relativeTo=' + path.resolve(__dirname, './src') + '/', 'html-loader']
+        },
+        {
+          test: /\.tsx?$/,
+          loader: "awesome-typescript-loader"
         },
         {
           test: /\.js$/,
@@ -125,7 +131,8 @@ module.exports = env => {
       ]
     },
     resolve: {
-      modules: [path.resolve(__dirname, "src"), "node_modules"]
+      modules: [path.resolve(__dirname, "src"), "node_modules"],
+      extensions: [".ts", ".js", ".json"]
     },
     devtool: "source-map",
     devServer: {

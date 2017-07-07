@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "baseUrl": "src",
+    "allowJs": true
+  }
+}

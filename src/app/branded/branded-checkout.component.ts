@@ -1,4 +1,4 @@
-import angular from 'angular';
+import * as angular from 'angular';
 
 import commonModule from 'common/common.module';
 import step1 from './step-1/branded-checkout-step-1.component';
@@ -7,16 +7,15 @@ import thankYou from 'app/thankYou/thankYou.component';
 
 import 'common/lib/fakeLocalStorage';
 
-import template from './branded-checkout.tpl.html';
+import * as template from './branded-checkout.tpl.html';
 
 let componentName = 'brandedCheckout';
 
 class BrandedCheckoutController{
 
+  private checkoutStep: 'giftContactPayment' | 'review' | 'thankYou';
   /* @ngInject */
-  constructor($window){
-    this.$window = $window;
-  }
+  constructor(private $window: Window){}
 
   $onInit() {
     this.checkoutStep = 'giftContactPayment';
