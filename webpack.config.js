@@ -39,7 +39,7 @@ const entryPoints = {
 module.exports = env => {
   env = env || {};
   return {
-    entry: isBuild ? entryPoints : { main: 'app/main/main.component.js' },
+    entry: isBuild ? entryPoints : { main: 'app/main/main.module.ts' },
     output: {
       filename: '[name].js',
       path: path.resolve(__dirname, 'dist'),
@@ -62,6 +62,10 @@ module.exports = env => {
           'TRAVIS_COMMIT': 'development'
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+        new webpack.ContextReplacementPlugin(
+          /angular(\\|\/)core(\\|\/)@angular/,
+          path.resolve(__dirname, '../src')
+        ),
         new CheckerPlugin()
       ],
       env.analyze ? [ new BundleAnalyzerPlugin() ] : []
