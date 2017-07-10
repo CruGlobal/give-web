@@ -151,52 +151,6 @@ hr.horizontal-divider {
   }
 }
 
-.loading {
-  display: inline-block;
-  height: 26px;
-  width: 7px;
-  border-radius: 10%;
-  animation: fade1 1s infinite;
-  transition: background .2s;
-  vertical-align: middle;
-  &.loading2 {
-    animation: fade2 1s infinite;
-    height: 32px;
-  }
-  &.loading3 {
-    animation: fade3 1s infinite;
-    height: 32px;
-  }
-  &.loading4 {
-    animation: fade4 1s infinite;
-    height: 26px;
-  }
-}
-
-@keyframes fade1 {
-  0% {
-    background: #43B3C9;
-  }
-}
-
-@keyframes fade2 {
-  33% {
-    background: #F9B625;
-  }
-}
-
-@keyframes fade3 {
-  66% {
-    background: #DE8123;
-  }
-}
-
-@keyframes fade4 {
-  90% {
-    background: #007398;
-  }
-}
-
 .self-service {
   margin-top: 29px;
   font-size: 125%;
