@@ -43,7 +43,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  DesignationEditButtonController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       designationNumber: '@',
       campaignPage: '@'

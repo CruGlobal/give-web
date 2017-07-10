@@ -68,7 +68,7 @@ export default angular
   ])
   .component(componentName, {
     controller: NavCartController,
-    templateUrl: template,
+    template: template,
     bindings: {
       mobile: '@'
     }

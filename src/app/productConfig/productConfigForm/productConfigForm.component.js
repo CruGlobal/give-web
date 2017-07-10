@@ -267,7 +267,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ProductConfigFormController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       code: '<',
       itemConfig: '<',

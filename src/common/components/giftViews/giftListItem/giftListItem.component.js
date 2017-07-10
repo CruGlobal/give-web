@@ -17,7 +17,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  GiftListItemController,
-    templateUrl: template,
+    template: template,
     transclude:  {
       'selectInput': '?label'
     },

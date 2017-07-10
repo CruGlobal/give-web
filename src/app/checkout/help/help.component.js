@@ -28,5 +28,5 @@ export default angular
   ])
   .component(componentName, {
     controller: CheckoutHelpController,
-    templateUrl: template
+    template: template
   });

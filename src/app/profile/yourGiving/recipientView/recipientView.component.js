@@ -51,7 +51,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  RecipientView,
-    templateUrl: template,
+    template: template,
     bindings:    {
       filter:     '<',
       reload:     '<',

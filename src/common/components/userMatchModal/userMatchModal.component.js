@@ -165,7 +165,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  UserMatchModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       modalTitle:    '=',
       setLoading:    '&',

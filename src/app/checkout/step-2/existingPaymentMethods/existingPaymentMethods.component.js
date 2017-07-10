@@ -7,7 +7,7 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 
 import orderService from 'common/services/api/order.service';
 import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
+import giveModalWindowTemplate from 'ngtemplate-loader?relativeTo=src!common/templates/giveModalWindow.tpl.html';
 import {SignInEvent} from 'common/services/session/session.service';
 
 import template from './existingPaymentMethods.tpl.html';
@@ -136,7 +136,7 @@ export default angular
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       paymentFormState: '<',
       paymentFormError: '<',

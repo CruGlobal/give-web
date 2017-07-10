@@ -16,7 +16,7 @@ export default angular
   ] )
   .directive( componentName, () => {
     return {
-      templateUrl:      template,
+      template:      template,
       restrict:         'A',
       scope:            false,
       bindToController: {

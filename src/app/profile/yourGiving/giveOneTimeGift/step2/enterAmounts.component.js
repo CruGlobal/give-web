@@ -41,7 +41,7 @@ export default angular
   ])
   .component(componentName, {
     controller: EnterAmountsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       selectedRecipients: '<',
       submitted: '<',

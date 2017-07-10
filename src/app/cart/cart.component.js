@@ -106,5 +106,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  CartController,
-    templateUrl: template
+    template: template
   } );

@@ -19,8 +19,8 @@ import globalWebsitesModal from './globalWebsitesModal/globalWebsitesModal.compo
 import navCart, {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 import autoFocus from 'common/directives/autoFocus.directive';
 
-import mobileTemplate from './mobileNav.tpl.html';
-import desktopTemplate from './desktopNav.tpl.html';
+import mobileTemplate from 'ngtemplate-loader?relativeTo=src!./mobileNav.tpl.html';
+import desktopTemplate from 'ngtemplate-loader?relativeTo=src!./desktopNav.tpl.html';
 import signOutTemplate from './signOut.modal.tpl.html';
 
 let componentName = 'cruNav';
@@ -156,7 +156,7 @@ class NavController{
       this.$window.location = this.signOutPath;
     }else{
       let modal = this.$uibModal.open({
-        templateUrl: signOutTemplate,
+        template: signOutTemplate,
         backdrop: 'static',
         keyboard: false,
         size: 'sm'

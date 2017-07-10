@@ -87,7 +87,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  RedirectGiftController,
-      templateUrl: template,
+      template: template,
       bindings:    {
         changeState: '&',
         cancel:      '&',

@@ -62,5 +62,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SignInController,
-    templateUrl: template
+    template: template
   } );

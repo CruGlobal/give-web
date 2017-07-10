@@ -428,5 +428,5 @@ export default angular
   ])
   .component(componentName, {
     controller: ProfileController,
-    templateUrl: template
+    template: template
   });

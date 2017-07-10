@@ -108,7 +108,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ResetPasswordModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',

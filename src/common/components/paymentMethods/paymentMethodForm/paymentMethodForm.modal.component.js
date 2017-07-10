@@ -20,7 +20,7 @@ export default angular
   ])
   .component(componentName, {
     controller: PaymentMethodFormModalController,
-    templateUrl: template,
+    template: template,
     bindings: {
       resolve: '<',
       dismiss: '&'

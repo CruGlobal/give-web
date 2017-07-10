@@ -50,7 +50,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  AccountBenefitsController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       donorDetails: '<'
     }

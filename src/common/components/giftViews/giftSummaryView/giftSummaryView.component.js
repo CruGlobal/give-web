@@ -21,7 +21,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  GiftSummaryViewController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       gift: '<'
     }

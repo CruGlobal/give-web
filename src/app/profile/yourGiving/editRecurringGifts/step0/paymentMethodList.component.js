@@ -29,7 +29,7 @@ export default angular
   ])
   .component(componentName, {
     controller: PaymentMethodListController,
-    templateUrl: template,
+    template: template,
     bindings: {
       paymentMethods: '<',
       next: '&',

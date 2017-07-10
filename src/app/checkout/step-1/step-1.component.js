@@ -29,7 +29,7 @@ export default angular
   ])
   .component(componentName, {
     controller: Step1Controller,
-    templateUrl: template,
+    template: template,
     bindings: {
       changeStep: '&'
     }

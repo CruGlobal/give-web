@@ -188,7 +188,7 @@ export default angular
   ])
   .component(componentName, {
     controller: EditRecurringGiftsModalController,
-    templateUrl: template,
+    template: template,
     bindings: {
       close: '&',
       dismiss: '&'

@@ -183,7 +183,7 @@ export default angular
   ])
   .component(componentName, {
     controller: CreditCardController,
-    templateUrl: template,
+    template: template,
     bindings: {
       paymentFormState: '<',
       paymentMethod: '<',

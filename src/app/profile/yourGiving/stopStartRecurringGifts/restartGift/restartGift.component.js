@@ -222,7 +222,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  RestartGiftController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       changeState: '&',
       cancel:      '&',

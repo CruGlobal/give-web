@@ -4,7 +4,7 @@ import displayAddressComponent from 'common/components/display-address/display-a
 import recurringGiftsComponent from '../recurring-gifts/recurring-gifts.component';
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component';
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
+import giveModalWindowTemplate from 'ngtemplate-loader?relativeTo=src!common/templates/giveModalWindow.tpl.html';
 import profileService from 'common/services/api/profile.service';
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate';
 import {validPaymentMethod} from 'common/services/paymentHelpers/validPaymentMethods';
@@ -125,7 +125,7 @@ export default angular
   ])
   .component(componentName, {
     controller: PaymentMethodController,
-    templateUrl: template,
+    template: template,
     bindings: {
       model: '<',
       successMessage: '=',

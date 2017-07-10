@@ -95,7 +95,7 @@ class DesignationEditorController {
 
   editTitle() {
     let modalOptions = {
-      templateUrl: titleModalTemplate,
+      template: titleModalTemplate,
       controller: titleModalController.name,
       controllerAs: '$ctrl',
       resolve : {
@@ -116,7 +116,7 @@ class DesignationEditorController {
 
   editPageOptions() {
     let modalOptions = {
-      templateUrl: pageOptionsModalTemplate,
+      template: pageOptionsModalTemplate,
       controller: pageOptionsModalController.name,
       controllerAs: '$ctrl',
       resolve : {
@@ -145,7 +145,7 @@ class DesignationEditorController {
 
   selectPhoto(photoLocation, selectedPhoto) {
     let modalOptions = {
-      templateUrl: photoModalTemplate,
+      template: photoModalTemplate,
       controller: photoModalController.name,
       controllerAs: '$ctrl',
       resolve: {
@@ -169,7 +169,7 @@ class DesignationEditorController {
 
   editText(field) {
     let modalOptions = {
-      templateUrl:       textEditorModalTemplate,
+      template:       textEditorModalTemplate,
       controller:        textEditorModalController.name,
       controllerAs:      '$ctrl',
       size:              'lg designation-editor-modal',
@@ -187,7 +187,7 @@ class DesignationEditorController {
 
   editWebsite() {
     let modalOptions = {
-      templateUrl:       websiteModalTemplate,
+      template:       websiteModalTemplate,
       controller:        websiteModalController.name,
       controllerAs:      '$ctrl',
       resolve : {
@@ -254,5 +254,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  DesignationEditorController,
-    templateUrl: template
+    template: template
   } );

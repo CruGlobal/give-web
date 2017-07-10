@@ -112,5 +112,5 @@ export default angular
   ])
   .component(componentName, {
     controller: ReceiptsController,
-    templateUrl: template
+    template: template
   });

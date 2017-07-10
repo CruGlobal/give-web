@@ -55,7 +55,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SignInFormController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       onSuccess: '&',
       onFailure: '&',

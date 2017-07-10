@@ -28,7 +28,7 @@ export default angular
   .module( componentName, [] )
   .component( componentName, {
     controller:  UserMatchIdentityController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       contacts:        '<',
       onSelectContact: '&'

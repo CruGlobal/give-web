@@ -25,7 +25,7 @@ export default angular
   ])
   .component(componentName, {
     controller: SelectRecentRecipientsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       recentRecipients: '<',
       dismiss: '&',

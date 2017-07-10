@@ -28,7 +28,7 @@ export default angular
   .module( componentName, [] )
   .component( componentName, {
     controller:  UserMatchQuestionController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       question:         '<',
       questionIndex:    '<',

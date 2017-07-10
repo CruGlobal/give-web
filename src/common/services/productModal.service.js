@@ -3,7 +3,7 @@ import 'angular-ui-bootstrap';
 import 'rxjs/add/operator/toPromise';
 
 import productConfigModal from 'app/productConfig/productConfigModal/productConfig.modal.component';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
+import giveModalWindowTemplate from 'ngtemplate-loader?relativeTo=src!common/templates/giveModalWindow.tpl.html';
 
 const serviceName = 'productModalService';
 

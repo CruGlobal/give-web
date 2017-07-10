@@ -106,7 +106,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ProductConfigModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       resolve: '<',
       close: '&',

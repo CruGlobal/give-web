@@ -77,7 +77,7 @@ export default angular
   ])
   .component(componentName, {
     controller: ConfirmRecurringGiftsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       recurringGiftChanges: '<',
       additions: '<',

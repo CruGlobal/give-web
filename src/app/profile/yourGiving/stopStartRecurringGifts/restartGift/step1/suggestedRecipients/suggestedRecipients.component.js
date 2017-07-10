@@ -23,7 +23,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SuggestedRecipientsController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       gifts:    '<',
       cancel:   '&',

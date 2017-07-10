@@ -61,5 +61,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  HomeSignInController,
-    templateUrl: template
+    template: template
   } );

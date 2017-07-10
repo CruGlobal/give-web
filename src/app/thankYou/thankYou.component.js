@@ -123,7 +123,7 @@ export default angular
   ])
   .component(componentName, {
     controller: ThankYouController,
-    templateUrl: template,
+    template: template,
     bindings: {
       disableAccountBenefits: '<'
     }

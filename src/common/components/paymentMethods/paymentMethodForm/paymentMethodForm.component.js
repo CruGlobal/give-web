@@ -42,7 +42,7 @@ export default angular
   ])
   .component(componentName, {
     controller: PaymentMethodFormController,
-    templateUrl: template,
+    template: template,
     bindings: {
       paymentFormState: '<',
       paymentFormError: '<',

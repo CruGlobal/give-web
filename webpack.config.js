@@ -88,7 +88,7 @@ module.exports = env => {
         },
         {
           test: /\.html$/,
-          use: ['ngtemplate-loader?relativeTo=' + path.resolve(__dirname, './src') + '/', 'html-loader']
+          use: ['html-loader']
         },
         {
           test: /\.tsx?$/,
@@ -105,30 +105,11 @@ module.exports = env => {
             emitWarning: !isBuild && !ci
           }
         },
-        // extract global css into separate files
-        {
-          test: /\.scss$/,
-          include: path.resolve(__dirname, "./src/assets"),
-          use: isBuild ?
-            ExtractTextPlugin.extract({
-              use: [
-                "css-loader?-url",
-                "sass-loader?sourceMap"
-              ]
-            }) :
-            [
-              "style-loader",
-              "css-loader?-url&sourceMap",
-              "sass-loader?sourceMap"
-            ]
-        },
-        // inline css for components with the component's js
         {
           test: /\.(scss|css)$/,
-          exclude: path.resolve(__dirname, "./src/assets"),
           use: [
-            "style-loader",
-            "css-loader?sourceMap",
+            "exports-loader?module.exports.toString()",
+            "css-loader?-url&sourceMap", // TODO: fix url paths so loaders can be used
             "sass-loader?sourceMap"
           ]
         }

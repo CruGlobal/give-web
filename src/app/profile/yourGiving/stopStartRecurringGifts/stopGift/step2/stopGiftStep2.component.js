@@ -20,7 +20,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  StopGiftStep2Controller,
-      templateUrl: template,
+      template: template,
       bindings:    {
         gifts:     '<',
         onConfirm: '&',

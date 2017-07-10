@@ -66,7 +66,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SignUpModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',

@@ -52,7 +52,7 @@ export default angular
   ])
   .component(componentName, {
     controller: EditRecurringGiftsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       recurringGifts: '<',
       dismiss: '&',

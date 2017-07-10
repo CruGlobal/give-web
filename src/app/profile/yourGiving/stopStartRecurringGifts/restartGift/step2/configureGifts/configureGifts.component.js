@@ -20,7 +20,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ConfigureGiftsController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       gifts:    '<',
       cancel:   '&',

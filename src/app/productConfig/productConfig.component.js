@@ -42,7 +42,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ProductConfigController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       campaignCode: '@',
       campaignPage: '@',

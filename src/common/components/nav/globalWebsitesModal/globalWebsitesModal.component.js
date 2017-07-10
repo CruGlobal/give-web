@@ -28,7 +28,7 @@ export default angular
   ])
   .component(componentName, {
     controller: GlobalWebsitesModalController,
-    templateUrl: template,
+    template: template,
     bindings: {
       dismiss: '&',
       resolve: '<'

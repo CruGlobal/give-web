@@ -52,7 +52,7 @@ export default angular
   ])
   .component(componentName, {
     controller: BrandedCheckoutController,
-    templateUrl: template,
+    template: template,
     bindings: {
       code: '@',
       campaignCode: '@'

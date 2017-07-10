@@ -42,7 +42,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SignInModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       modalTitle:    '=',
       lastPurchaseId: '<',

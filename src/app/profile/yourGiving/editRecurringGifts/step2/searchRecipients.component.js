@@ -37,7 +37,7 @@ export default angular
   ])
   .component(componentName, {
     controller: SearchRecipientsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       dismiss: '&',
       previous: '&',

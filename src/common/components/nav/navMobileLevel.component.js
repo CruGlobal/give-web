@@ -16,7 +16,7 @@ export default angular
   .module(componentName, [])
   .component(componentName, {
     controller: NavController,
-    templateUrl: template,
+    template: template,
     bindings: {
       structure: '<',
       path: '=',

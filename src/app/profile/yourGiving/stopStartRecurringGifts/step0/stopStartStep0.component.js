@@ -14,7 +14,7 @@ export default angular
   .module( componentName, [] )
   .component( componentName, {
     controller:  StopStartStep0Controller,
-    templateUrl: template,
+    template: template,
     bindings:    {
       giftAction:  '<',
       changeState: '&',

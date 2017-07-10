@@ -36,7 +36,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  StopGiftStep1Controller,
-      templateUrl: template,
+      template: template,
       bindings:    {
         gifts:         '<',
         onSelectGifts: '&',

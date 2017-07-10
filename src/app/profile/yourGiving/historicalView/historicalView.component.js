@@ -43,7 +43,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  HistoricalView,
-    templateUrl: template,
+    template: template,
     bindings:    {
       year:       '<',
       month:      '<',

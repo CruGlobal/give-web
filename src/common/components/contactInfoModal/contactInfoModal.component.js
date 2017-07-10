@@ -42,7 +42,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  contactInfoModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',

@@ -39,7 +39,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  DisplayAddressController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       address: '<'
     }

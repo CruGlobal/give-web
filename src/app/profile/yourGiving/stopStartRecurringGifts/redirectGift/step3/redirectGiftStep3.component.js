@@ -58,7 +58,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  RedirectGiftStep3Controller,
-      templateUrl: template,
+      template: template,
       bindings:    {
         stopGift:   '<',
         gift:       '<',

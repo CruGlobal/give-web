@@ -72,7 +72,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  ConfirmGiftsController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       gifts:      '<',
       cancel:     '&',

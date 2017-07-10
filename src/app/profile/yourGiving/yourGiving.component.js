@@ -11,7 +11,7 @@ import historicalView from './historicalView/historicalView.component';
 import editRecurringGiftsModal from './editRecurringGifts/editRecurringGifts.modal.component';
 import giveOneTimeGiftModal from './giveOneTimeGift/giveOneTimeGift.modal.component';
 import stopStartRecurringGiftsModal from './stopStartRecurringGifts/stopStartRecurringGifts.modal.component';
-import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html';
+import giveModalWindowTemplate from 'ngtemplate-loader?relativeTo=src!common/templates/giveModalWindow.tpl.html';
 import profileService from 'common/services/api/profile.service';
 import sessionEnforcerService, {
   EnforcerCallbacks,
@@ -186,5 +186,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  YourGivingController,
-    templateUrl: template
+    template: template
   } );

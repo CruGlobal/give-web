@@ -146,7 +146,7 @@ export default angular
   ])
   .component(componentName, {
     controller: GiveOneTimeGiftModalController,
-    templateUrl: template,
+    template: template,
     bindings: {
       close: '&',
       dismiss: '&'

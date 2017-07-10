@@ -14,7 +14,7 @@ export default angular
   .module(componentName, [])
   .component(componentName, {
     controller: RetryModalController,
-    templateUrl: template,
+    template: template,
     transclude: true,
     bindings: {
       title: '@',

@@ -35,7 +35,7 @@ export default angular
   ])
   .component(componentName, {
     controller: AddRecentRecipientsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       recentRecipients: '<',
       hasRecentRecipients: '<',

@@ -149,7 +149,7 @@ export default angular
   ])
   .component(componentName, {
     controller: Step3Controller,
-    templateUrl: template,
+    template: template,
     bindings: {
       changeStep: '&',
       cartData: '<',

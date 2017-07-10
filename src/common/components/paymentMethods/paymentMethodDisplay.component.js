@@ -19,7 +19,7 @@ export default angular
   ])
   .component(componentName, {
     controller: PaymentMethodDisplayController,
-    templateUrl: template,
+    template: template,
     bindings: {
       paymentMethod: '<',
       expired: '<'

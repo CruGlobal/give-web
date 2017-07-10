@@ -129,7 +129,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  RegisterAccountModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       modalTitle: '=',
       onSuccess:  '&',

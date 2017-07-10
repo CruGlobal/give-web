@@ -29,7 +29,7 @@ export default angular
   ])
   .component(componentName, {
     controller: GiftUpdateViewController,
-    templateUrl: template,
+    template: template,
     bindings: {
       gift: '=',
       singleGift: '@'

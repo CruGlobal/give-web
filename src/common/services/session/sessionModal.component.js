@@ -72,7 +72,7 @@ export default angular
   ] )
   .component( componentName, {
     controller: SessionModalController,
-    templateUrl: template,
+    template: template,
     bindings: {
       resolve: '<',
       close: '&',

@@ -26,7 +26,7 @@ export default angular
   .module( componentName, [] )
   .component( componentName, {
     controller:  DisplayRateTotalsController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       rateTotals: '<'
     }

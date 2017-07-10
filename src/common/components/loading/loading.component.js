@@ -44,7 +44,7 @@ export default angular
   .module(componentName, [])
   .component(componentName, {
     controller: LoadingController,
-    templateUrl: template,
+    template: template,
     bindings: {
       type: '@',
       inline: '@'

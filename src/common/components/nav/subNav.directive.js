@@ -9,7 +9,7 @@ function cruSubNav($window) {
   let offsetTop;
   return {
     restrict: 'E',
-    templateUrl: template,
+    template: template,
     link: function ( scope, element ) {
 
       let subNavigation = element.children()[0];

@@ -21,7 +21,7 @@ export default angular
   ])
   .component(componentName, {
     controller: CartSummaryController,
-    templateUrl: template,
+    template: template,
     bindings: {
       cartData: '<',
       showSubmitBtn: '<',

@@ -136,7 +136,7 @@ export default angular
   ])
   .component(componentName, {
     controller: BankAccountController,
-    templateUrl: template,
+    template: template,
     bindings: {
       paymentFormState: '<',
       paymentMethod: '<',

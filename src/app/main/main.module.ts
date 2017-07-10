@@ -12,14 +12,11 @@ import MainComponent from './main.component.js';
     UpgradeModule
   ]
 })
-class MainModule {
+export class MainModule {
   constructor(private upgrade: UpgradeModule) { }
   ngDoBootstrap() {
     this.upgrade.bootstrap(document.body, [MainComponent.name]);
   }
 }
 
-
-
 platformBrowserDynamic().bootstrapModule(MainModule);
-

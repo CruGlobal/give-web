@@ -37,7 +37,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  AccountBenefitsModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       modalTitle:    '=',
       onStateChange: '&',

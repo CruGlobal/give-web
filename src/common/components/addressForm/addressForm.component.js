@@ -60,7 +60,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  AddressFormController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       address: '=',
       parentForm: '<',

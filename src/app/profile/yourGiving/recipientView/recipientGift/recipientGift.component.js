@@ -92,7 +92,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  RecipientGift,
-    templateUrl: template,
+    template: template,
     bindings:    {
       recipient: '<'
     }

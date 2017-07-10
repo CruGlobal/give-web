@@ -1,8 +1,8 @@
 import angular from 'angular';
 import 'angular-ui-router';
 
-import '../../assets/scss/styles.scss';
-import '../../assets/scss/global-nav.scss';
+import 'style-loader!../../assets/scss/styles.scss';
+import 'style-loader!../../assets/scss/global-nav.scss';
 
 import commonModule from 'common/common.module';
 import cartComponent from '../cart/cart.component';
@@ -102,5 +102,5 @@ export default angular
   .config(routingConfig)
   .component(componentName, {
     controller: MainController,
-    templateUrl: template
+    template: template
   });

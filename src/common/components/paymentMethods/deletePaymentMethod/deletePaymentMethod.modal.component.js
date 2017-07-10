@@ -185,7 +185,7 @@ export default angular
   ])
   .component(componentName, {
     controller: deletePaymentMethodModalController,
-    templateUrl: template,
+    template: template,
     bindings: {
       resolve: '<',
       dismiss: '&',

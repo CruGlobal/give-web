@@ -126,5 +126,5 @@ export default angular
   ])
   .component(componentName, {
     controller: CheckoutController,
-    templateUrl: template
+    template: template
   });

@@ -22,7 +22,7 @@ export default angular
   ])
   .component(componentName, {
     controller: ConfigureRecentRecipientsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       additions: '<',
       dismiss: '&',

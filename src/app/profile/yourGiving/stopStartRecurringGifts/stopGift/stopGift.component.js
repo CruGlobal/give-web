@@ -89,7 +89,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  StopGiftController,
-      templateUrl: template,
+      template: template,
       bindings:    {
         changeState: '&',
         cancel:      '&',

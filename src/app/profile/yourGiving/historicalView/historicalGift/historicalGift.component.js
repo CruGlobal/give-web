@@ -32,7 +32,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  HistoricalGift,
-    templateUrl: template,
+    template: template,
     bindings:    {
       gift: '<',
       onManageGift: '&'

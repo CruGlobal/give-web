@@ -46,7 +46,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  StopStartRecurringGiftsModalController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       close:   '&',
       dismiss: '&'

@@ -92,7 +92,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  GiftSearchViewController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       selectable: '@',
       selectLabel: '@',

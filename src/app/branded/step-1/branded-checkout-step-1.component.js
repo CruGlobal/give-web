@@ -162,7 +162,7 @@ export default angular
   ])
   .component(componentName, {
     controller: BrandedCheckoutStep1Controller,
-    templateUrl: template,
+    template: template,
     bindings: {
       code: '<',
       campaignCode: '<',

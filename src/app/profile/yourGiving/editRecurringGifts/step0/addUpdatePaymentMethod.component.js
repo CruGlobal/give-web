@@ -56,7 +56,7 @@ export default angular
   ])
   .component(componentName, {
     controller: AddUpdatePaymentMethodsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       paymentMethod: '<',
       canGoBack: '<',

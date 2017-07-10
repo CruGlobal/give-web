@@ -105,5 +105,5 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SearchResultsController,
-    templateUrl: template
+    template: template
   } );

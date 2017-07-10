@@ -16,7 +16,7 @@ export default angular
   .module(componentName, [])
   .component(componentName, {
     controller: recurringGiftsController,
-    templateUrl: template,
+    template: template,
     bindings: {
       gifts: '<'
     }

@@ -23,7 +23,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  RedirectGiftStep2Controller,
-      templateUrl: template,
+      template: template,
       bindings:    {
         onSelectResult: '&',
         cancel:         '&',

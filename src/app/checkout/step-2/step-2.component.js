@@ -113,7 +113,7 @@ export default angular
   ])
   .component(componentName, {
     controller: Step2Controller,
-    templateUrl: template,
+    template: template,
     bindings: {
       submitted: '<',
       hideButtons: '<',

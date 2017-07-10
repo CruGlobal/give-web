@@ -33,7 +33,7 @@ export default angular
   ] )
   .component( componentName, {
       controller:  RedirectGiftStep1Controller,
-      templateUrl: template,
+      template: template,
       bindings:    {
         gifts:        '<',
         onSelectGift: '&',

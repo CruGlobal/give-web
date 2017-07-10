@@ -47,7 +47,7 @@ export default angular
   ])
   .component(componentName, {
     controller: BrandedCheckoutStep2Controller,
-    templateUrl: template,
+    template: template,
     bindings: {
       previous: '&',
       next: '&'

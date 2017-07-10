@@ -23,7 +23,7 @@ export default angular
   ] )
   .component( componentName, {
     controller:  SuspendedGiftsController,
-    templateUrl: template,
+    template: template,
     bindings:    {
       gifts:    '<',
       cancel:   '&',
