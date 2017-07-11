@@ -30,7 +30,8 @@ const entryPoints = {
     'app/branded/branded-checkout.component.js'
   ],
   give: 'assets/scss/styles.scss',
-  nav: 'assets/scss/global-nav.scss'
+  nav: 'assets/scss/global-nav.scss',
+  'branded-checkout': 'assets/scss/branded-checkout.scss'
 };
 
 
