@@ -22,7 +22,7 @@ import photoModalTemplate from './photoModal/photoModal.tpl.html';
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html';
 import websiteModalTemplate from './websiteModal/websiteModal.tpl.html';
 
-import './designationEditor.scss';
+import 'style-loader!./designationEditor.scss';
 
 let componentName = 'designationEditor';
 

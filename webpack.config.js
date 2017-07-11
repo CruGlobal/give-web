@@ -95,6 +95,16 @@ module.exports = env => {
           loader: "awesome-typescript-loader"
         },
         {
+          test: /\.ts$/,
+          enforce: 'pre',
+          loader: 'tslint-loader',
+          options: {
+            // Fail on CI but show warnings during development
+            emitErrors: isBuild || ci,
+            failOnHint: isBuild || ci
+          }
+        },
+        {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: "eslint-loader",

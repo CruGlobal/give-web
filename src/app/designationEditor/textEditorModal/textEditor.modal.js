@@ -3,7 +3,7 @@ import 'textangular';
 import 'textangular/dist/textAngular-sanitize';
 import 'textangular/dist/textAngular.css';
 
-import './textEditor.scss';
+import 'style-loader!./textEditor.scss';
 
 let controllerName = 'textEditorCtrl';
 

@@ -14,7 +14,7 @@ import searchResultsComponent from '../searchResults/searchResults.component';
 import designationEditorComponent from '../designationEditor/designationEditor.component';
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component';
 import profileComponent from '../profile/profile.component';
-import brandedCheckoutComponent from '../branded/branded-checkout.component';
+import brandedCheckoutModule from '../branded/branded-checkout.module';
 
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component';
 import receiptsComponent from '../profile/receipts/receipts.component';
@@ -75,7 +75,7 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     })
     .state('branded-checkout', {
       url: "/branded-checkout.html",
-      template: '<branded-checkout code="2294554"></branded-checkout>'
+      template: '<give-branded-checkout></give-branded-checkout>'
     });
 
   $locationProvider.html5Mode(true);
@@ -96,8 +96,9 @@ export default angular
     designationEditorComponent.name,
     paymentMethodsComponent.name,
     receiptsComponent.name,
-    brandedCheckoutComponent.name,
-    'ui.router'
+    brandedCheckoutModule.name,
+    'ui.router',
+    'downgradedComponents'
   ])
   .config(routingConfig)
   .component(componentName, {

@@ -3,19 +3,19 @@
     <div class="row">
       <div class="col-xs-12">
         <branded-checkout-step-1
-          ng-if="$ctrl.checkoutStep === 'giftContactPayment'"
-          code="$ctrl.code"
-          campaign-code="$ctrl.campaignCode"
-          next="$ctrl.next()">
+          *ngIf="checkoutStep === 'giftContactPayment'"
+          [code]="code"
+          [campaignCode]="campaignCode"
+          (next)="next()">
         </branded-checkout-step-1>
         <branded-checkout-step-2
-          ng-if="$ctrl.checkoutStep === 'review'"
-          next="$ctrl.next()"
-          previous="$ctrl.previous()">
+          *ngIf="checkoutStep === 'review'"
+          (next)="next()"
+          (previous)="previous()">
         </branded-checkout-step-2>
         <thank-you
-          ng-if="$ctrl.checkoutStep === 'thankYou'"
-          disable-account-benefits="true">
+          *ngIf="checkoutStep === 'thankYou'"
+          [disableAccountBenefits]="true">
         </thank-you>
       </div>
     </div>

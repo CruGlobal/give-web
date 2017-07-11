@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import './loading.scss';
+import 'style-loader!./loading.scss';
 
 import template from './loading.tpl.html';
 
