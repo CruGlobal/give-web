@@ -21,7 +21,24 @@ class AccountBenefitsController {
     // donorDetails is undefined initially
     if ( changes.donorDetails && angular.isDefined( changes.donorDetails.currentValue ) ) {
       // Show account benefits if registration state is NEW or MATCHED
-      this.isVisible = changes.donorDetails.currentValue['registration-state'] !== 'COMPLETED';
+      if(changes.donorDetails.currentValue['registration-state'] !== 'COMPLETED'){
+        this.isVisible = true;
+        this.openAccountBenefitsModal();
+      }
+    }
+  }
+
+  openAccountBenefitsModal(){
+    const lastPurchaseId = this.getLastPurchaseId();
+
+    // Display Account Benefits Modal when registration-state is NEW or MATCHED
+    if(lastPurchaseId && this.donorDetails['registration-state'] !== 'COMPLETED') {
+      this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
+        this.sessionModalService.userMatch().then(() => {
+          // Hide accountBenefits after successful user match
+          this.isVisible = false;
+        }, angular.noop);
+      }, angular.noop);
     }
   }
 
@@ -30,15 +47,18 @@ class AccountBenefitsController {
       this.sessionModalService.userMatch();
     }
     else {
-      let lastPurchaseLink = this.orderService.retrieveLastPurchaseLink();
-      let lastPurchaseId = lastPurchaseLink ? lastPurchaseLink.split('/').pop() : undefined;
-      this.sessionModalService.signIn(lastPurchaseId).then( () => {
+      this.sessionModalService.signIn(this.getLastPurchaseId()).then( () => {
         this.sessionModalService.userMatch().then(() => {
           // Hide component after successful user match
           this.isVisible = false;
         }, angular.noop );
       }, angular.noop );
     }
+  }
+
+  getLastPurchaseId(){
+    let lastPurchaseLink = this.orderService.retrieveLastPurchaseLink();
+    return lastPurchaseLink ? lastPurchaseLink.split('/').pop() : undefined;
   }
 }
 
