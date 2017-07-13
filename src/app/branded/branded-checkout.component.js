@@ -3,7 +3,7 @@ import angular from 'angular';
 import commonModule from 'common/common.module';
 import step1 from './step-1/branded-checkout-step-1.component';
 import step2 from './step-2/branded-checkout-step-2.component';
-import thankYou from 'app/thankYou/thankYou.component';
+import thankYouSummary from 'app/thankYou/summary/thankYouSummary.component';
 
 import 'common/lib/fakeLocalStorage';
 
@@ -49,7 +49,7 @@ export default angular
     commonModule.name,
     step1.name,
     step2.name,
-    thankYou.name
+    thankYouSummary.name
   ])
   .component(componentName, {
     controller: BrandedCheckoutController,

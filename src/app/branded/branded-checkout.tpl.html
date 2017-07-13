@@ -1,5 +1,5 @@
-<div class="branded-checkout screenContent">
-  <div class="container-fluid container-edge-small container-edge-extrasmall">
+<div class="branded-checkout">
+  <div class="container-fluid container-edge-small container-edge-extrasmall screenContent">
     <div class="row">
       <div class="col-xs-12">
         <branded-checkout-step-1
@@ -13,10 +13,9 @@
           next="$ctrl.next()"
           previous="$ctrl.previous()">
         </branded-checkout-step-2>
-        <thank-you
-          ng-if="$ctrl.checkoutStep === 'thankYou'"
-          disable-account-benefits="true">
-        </thank-you>
+        <thank-you-summary
+          ng-if="$ctrl.checkoutStep === 'thankYou'">
+        </thank-you-summary>
       </div>
     </div>
   </div>

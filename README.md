@@ -8,24 +8,37 @@
 
 ### Importing JS and HTML templates
 
-To use the `checkout` component, include this code on your page:
-```
-<checkout ng-cloak ng-app="checkout"></checkout>
+To use the `searchResults` component, include this code on your page:
+```html
+<search-results ng-app="searchResults"></search-results>
 
-<script src="https://cru-givestage.s3.amazonaws.com/common.js"></script>
-<script src="https://cru-givestage.s3.amazonaws.com/checkout.js"></script>
+<script src="https://cru-givestage.s3.amazonaws.com/app.js"></script>
 ```
 
-For other components, replace all instances of `checkout` with the name of another component. Current components are `cart`, `checkout`, `thankYou`, `productConfig`, `signIn`, `searchResults`, `homeSignIn`, `yourGiving`, `profile`, `receipts`, `paymentMethods`, and `designationEditor`.
+For other components, replace all instances of `checkout` with the name of another component. Current components are `cart`, `checkout`, `thankYou`, `productConfig`, `signIn`, `searchResults`, `homeSignIn`, `yourGiving`, `profile`, `receipts`, `paymentMethods`, `designationEditor`, and `brandedCheckout`. The element name needs to be kebab case and the ng-app module name needs to be camel case.
 
 ### Importing CSS
 
 Import the following:
-```
+```html
 <link rel="stylesheet" href="https://cru-givestage.s3.amazonaws.com/give.min.css">
 <link rel="stylesheet" href="https://cru-givestage.s3.amazonaws.com/nav.min.css">
 ```
 This currently includes all cru.org styling from cru.scss.
+
+### Branded checkout
+Add the following code to your page where appropriate:
+```html
+<link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<branded-checkout code="<designation number>" campaign-code="<campaign code>" ng-app="brandedCheckout"></branded-checkout>
+<script src="https://give-static.cru.org/app.js"></script>
+```
+Replace `<designation number>` with the designation number you would like donors to give to.
+
+Replace `<campaign code>` with a campaign code if desired. This attribute is optional and can be removed.
+
+The `<branded-checkout>` element is where the branded checkout angular app will be loaded.
 
 ## Development
 
