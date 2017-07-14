@@ -56,6 +56,9 @@ export default angular
     templateUrl: template,
     bindings: {
       code: '@',
-      campaignCode: '@'
+      campaignCode: '@',
+      amount: '@',
+      frequency: '@',
+      day: '@'
     }
   });

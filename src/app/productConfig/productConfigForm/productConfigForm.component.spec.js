@@ -30,7 +30,7 @@ describe( 'product config form component', function () {
       },
       code: '1234567',
       itemConfig: {
-        amount: 85
+        amount: '85'
       },
       isEdit: false,
       uri: 'uri',
@@ -51,11 +51,29 @@ describe( 'product config form component', function () {
 
   describe( '$onInit', () => {
     it( 'should call the initialization functions', () => {
+      spyOn( $ctrl, 'initItemConfig' );
       spyOn( $ctrl, 'loadData' );
       spyOn( $ctrl, 'waitForFormInitialization' );
       $ctrl.$onInit();
+      expect( $ctrl.initItemConfig ).toHaveBeenCalled();
       expect( $ctrl.loadData ).toHaveBeenCalled();
       expect( $ctrl.waitForFormInitialization ).toHaveBeenCalled();
+    } );
+  } );
+
+  describe( 'initItemConfig', () => {
+    it( 'should format item config values', () => {
+      $ctrl.itemConfig['recurring-day-of-month'] = '9';
+      $ctrl.initItemConfig();
+      expect($ctrl.itemConfig.amount).toEqual(85);
+      expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('09');
+    } );
+    it( 'should handle out of range values', () => {
+      $ctrl.itemConfig.amount = 'invalid';
+      $ctrl.itemConfig['recurring-day-of-month'] = '29';
+      $ctrl.initItemConfig();
+      expect($ctrl.itemConfig.amount).toBeUndefined();
+      expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined();
     } );
   } );
 
@@ -312,6 +330,7 @@ describe( 'product config form component', function () {
       $ctrl.errorAlreadyInCart = true;
       $ctrl.errorSavingGeneric = true;
       spyOn( $ctrl.analyticsFactory, 'cartAdd');
+      $ctrl.initItemConfig();
     });
 
     afterEach(() => {

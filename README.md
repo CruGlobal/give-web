@@ -31,14 +31,19 @@ Add the following code to your page where appropriate:
 ```html
 <link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<branded-checkout code="<designation number>" campaign-code="<campaign code>" ng-app="brandedCheckout"></branded-checkout>
+<branded-checkout ng-app="brandedCheckout" code="<designation number>" campaign-code="<campaign code>" amount="<amount>" frequency="<frequency>" day="<day>"></branded-checkout>
 <script src="https://give-static.cru.org/app.js"></script>
 ```
-Replace `<designation number>` with the designation number you would like donors to give to.
-
-Replace `<campaign code>` with a campaign code if desired. This attribute is optional and can be removed.
-
-The `<branded-checkout>` element is where the branded checkout angular app will be loaded.
+The `<branded-checkout>` element is where the branded checkout angular app will be loaded. It accepts the following attributes:
+- `code` - the designation number you would like donors to give to - **Required**
+- `campaign-code` - the campaign code you would like to use - *Optional*
+- `amount` - defaults the gift's amount - *Optional*
+- `frequency` - defaults the gift's frequency - *Optional* - can be one of the following values:
+  - `NA` - single gift - this is the defualt so it doesn't need to be specified
+  - `MON` - monthly recurring gift
+  - `QUARTERLY` - quarterly recurring gift
+  - `ANNUAL` - annually recurring gift
+- `day` - for recuring gifts this defaults the gift's day of the month - *Optional* - can be `1` to `28`
 
 ## Development
 
