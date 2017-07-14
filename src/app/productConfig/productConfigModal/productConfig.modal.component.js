@@ -48,7 +48,7 @@ class ProductConfigModalController {
 
     // Add query params for current modal
     this.modalStateService.name( 'give-gift' );
-    this.updateQueryParam( giveGiftParams.designation, this.code ); // TODO: can this.code change? Do we need to set this again if productData comes back with a different code?
+    this.updateQueryParam( giveGiftParams.designation, this.code );
     if(this.itemConfig['campaign-page']){
       this.updateQueryParam( giveGiftParams.campaignPage, this.itemConfig['campaign-page'] );
     }
@@ -56,10 +56,7 @@ class ProductConfigModalController {
     // Load query params to populate itemConfig
     let params = this.$location.search();
 
-    let amount = parseInt( params[giveGiftParams.amount], 10 );
-    if ( !isNaN( amount ) ) {
-      this.itemConfig.amount = amount;
-    }
+    this.itemConfig.amount = params[giveGiftParams.amount];
 
     if ( params.hasOwnProperty( giveGiftParams.frequency ) ) {
       this.defaultFrequency = params[giveGiftParams.frequency];

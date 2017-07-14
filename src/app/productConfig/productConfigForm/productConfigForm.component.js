@@ -8,6 +8,8 @@ import omit from 'lodash/omit';
 import map from 'lodash/map';
 import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
+import padStart from 'lodash/padStart';
+import inRange from 'lodash/inRange';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/merge';
@@ -45,7 +47,7 @@ class ProductConfigFormController {
   }
 
   $onInit(){
-    this.itemConfig = this.itemConfig || {};
+    this.initItemConfig();
     this.loadData();
     this.waitForFormInitialization();
   }
@@ -53,6 +55,23 @@ class ProductConfigFormController {
   $onChanges(changes) {
     if (changes.submitted && changes.submitted.currentValue === true) {
       this.saveGiftToCart();
+    }
+  }
+
+  initItemConfig(){
+    this.itemConfig = this.itemConfig || {};
+
+    const amount = parseInt( this.itemConfig.amount, 10 );
+    if(isNaN( amount )) {
+      delete this.itemConfig.amount;
+    }else{
+      this.itemConfig.amount = amount;
+    }
+
+    if(inRange(parseInt(this.itemConfig['recurring-day-of-month'], 10), 1, 28)){
+      this.itemConfig['recurring-day-of-month'] = padStart(this.itemConfig['recurring-day-of-month'], 2, '0');
+    }else{
+      delete this.itemConfig['recurring-day-of-month'];
     }
   }
 

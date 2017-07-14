@@ -32,13 +32,11 @@ class BrandedCheckoutStep1Controller{
   }
 
   initItemConfig(){
-    if(this.campaignCode){
-      this.item = {
-        config: {
-          'campaign-code': this.campaignCode
-        }
-      };
-    }
+    this.itemConfig = {};
+    this.itemConfig['campaign-code'] = this.campaignCode;
+    this.itemConfig.amount = this.amount;
+    this.defaultFrequency = this.frequency;
+    this.itemConfig['recurring-day-of-month'] = this.day;
   }
 
   initSessionAndCart(){
@@ -166,6 +164,9 @@ export default angular
     bindings: {
       code: '<',
       campaignCode: '<',
+      amount: '<',
+      frequency: '<',
+      day: '<',
       next: '&'
     }
   });

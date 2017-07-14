@@ -29,18 +29,18 @@ describe('branded checkout step 1', () => {
   });
 
   describe('initItemConfig', () => {
-    it('should set campaign code in item config if defined', () => {
+    it('should initialize item config', () => {
       $ctrl.campaignCode = '1234';
+      $ctrl.amount = '75';
+      $ctrl.frequency = 'MON';
+      $ctrl.day = '9';
       $ctrl.initItemConfig();
-      expect($ctrl.item).toEqual({
-        config: {
-          'campaign-code': '1234'
-        }
+      expect($ctrl.itemConfig).toEqual({
+        'campaign-code': '1234',
+        amount: '75',
+        'recurring-day-of-month': '9'
       });
-    });
-    it('should leave item config undefined if no campaign code', () => {
-      $ctrl.initItemConfig();
-      expect($ctrl.item).toBeUndefined();
+      expect($ctrl.defaultFrequency).toEqual('MON');
     });
   });
 

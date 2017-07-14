@@ -96,7 +96,7 @@ describe( 'product config modal', function () {
       } );
       $ctrl.initializeParams();
       expect( $ctrl.$location.search ).toHaveBeenCalled();
-      expect( $ctrl.itemConfig.amount ).toEqual( 150 );
+      expect( $ctrl.itemConfig.amount ).toEqual( '150' );
       expect( $ctrl.defaultFrequency ).toEqual( 'QUARTERLY' );
       expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '21' );
       expect( $ctrl.itemConfig['campaign-page'] ).toEqual( 'testCampaign' );
