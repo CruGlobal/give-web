@@ -10,6 +10,8 @@ describe('branded checkout', () => {
   beforeEach(inject($componentController => {
     $ctrl = $componentController(module.name, {
       $window: { scrollTo: jasmine.createSpy('scrollTo') }
+    }, {
+      onOrderCompleted: jasmine.createSpy('onOrderCompleted')
     });
   }));
 
@@ -46,6 +48,25 @@ describe('branded checkout', () => {
       $ctrl.checkoutStep = 'review';
       $ctrl.previous();
       expect($ctrl.checkoutStep).toEqual('giftContactPayment');
+    });
+  });
+
+  describe('onThankYouPurchaseLoaded', () => {
+    it('should pass the purchase info to the onOrderCompleted binding', () => {
+      $ctrl.onThankYouPurchaseLoaded({
+        donorDetails: {
+          'donor-type': 'Household'
+        },
+        paymentMeans: {},
+        lineItems: {},
+        rawData: {}
+      });
+      expect($ctrl.onOrderCompleted).toHaveBeenCalledWith({$event: {$window: $ctrl.$window, purchase: {
+        donorDetails: {
+          donorType: 'Household'
+        },
+        lineItems: {}
+      }}});
     });
   });
 });

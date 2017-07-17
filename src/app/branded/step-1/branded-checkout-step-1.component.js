@@ -35,7 +35,17 @@ class BrandedCheckoutStep1Controller{
     this.itemConfig = {};
     this.itemConfig['campaign-code'] = this.campaignCode;
     this.itemConfig.amount = this.amount;
-    this.defaultFrequency = this.frequency;
+    switch(this.frequency){
+      case 'monthly':
+        this.defaultFrequency = 'MON';
+        break;
+      case 'quarterly':
+        this.defaultFrequency = 'QUARTERLY';
+        break;
+      case 'annually':
+        this.defaultFrequency = 'ANNUAL';
+        break;
+    }
     this.itemConfig['recurring-day-of-month'] = this.day;
   }
 

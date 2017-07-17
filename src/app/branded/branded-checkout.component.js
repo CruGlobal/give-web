@@ -1,4 +1,6 @@
 import angular from 'angular';
+import pick from 'lodash/pick';
+import changeCaseObject from 'change-case-object';
 
 import commonModule from 'common/common.module';
 import step1 from './step-1/branded-checkout-step-1.component';
@@ -11,10 +13,10 @@ import template from './branded-checkout.tpl.html';
 
 let componentName = 'brandedCheckout';
 
-class BrandedCheckoutController{
+class BrandedCheckoutController {
 
   /* @ngInject */
-  constructor($window){
+  constructor($window) {
     this.$window = $window;
   }
 
@@ -22,8 +24,8 @@ class BrandedCheckoutController{
     this.checkoutStep = 'giftContactPayment';
   }
 
-  next(){
-    switch(this.checkoutStep){
+  next() {
+    switch (this.checkoutStep) {
       case 'giftContactPayment':
         this.checkoutStep = 'review';
         break;
@@ -34,13 +36,17 @@ class BrandedCheckoutController{
     this.$window.scrollTo(0, 0);
   }
 
-  previous(){
-    switch(this.checkoutStep){
+  previous() {
+    switch (this.checkoutStep) {
       case 'review':
         this.checkoutStep = 'giftContactPayment';
         break;
     }
     this.$window.scrollTo(0, 0);
+  }
+
+  onThankYouPurchaseLoaded(purchase) {
+    this.onOrderCompleted({$event: {$window: this.$window, purchase: changeCaseObject.camelCase(pick(purchase, ['donorDetails', 'lineItems']))}});
   }
 }
 
@@ -59,6 +65,7 @@ export default angular
       campaignCode: '@',
       amount: '@',
       frequency: '@',
-      day: '@'
+      day: '@',
+      onOrderCompleted: '&'
     }
   });

@@ -60,7 +60,7 @@ describe('thank you summary', () => {
         $window: {location: '/thank-you.html'}
       },
       {
-        onDonorDetailsLoaded: jasmine.createSpy('onDonorDetailsLoaded')
+        onPurchaseLoaded: jasmine.createSpy('onPurchaseLoaded')
       });
   }));
 
@@ -117,8 +117,8 @@ describe('thank you summary', () => {
       ]);
       expect(self.controller.loading).toEqual(false);
       expect(self.controller.loadingError).toBeUndefined();
-      expect(self.controller.onDonorDetailsLoaded).toHaveBeenCalledWith({
-        $event: { donorDetails: self.mockPurchase.donorDetails }
+      expect(self.controller.onPurchaseLoaded).toHaveBeenCalledWith({
+        $event: { purchase: self.mockPurchase }
       });
     });
     it('should not request purchase data if lastPurchaseLink is not defined', () => {

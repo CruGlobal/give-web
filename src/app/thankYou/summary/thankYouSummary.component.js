@@ -74,8 +74,8 @@ class ThankYouSummaryController{
           );
           delete this.loadingError;
           this.loading = false;
-          this.onDonorDetailsLoaded({
-            $event: { donorDetails: this.purchase.donorDetails }
+          this.onPurchaseLoaded({
+            $event: { purchase: this.purchase }
           });
 
           this.analyticsFactory.pageLoaded();
@@ -112,6 +112,6 @@ export default angular
     controller: ThankYouSummaryController,
     templateUrl: template,
     bindings: {
-      onDonorDetailsLoaded: '&'
+      onPurchaseLoaded: '&'
     }
   });
