@@ -31,19 +31,38 @@ Add the following code to your page where appropriate:
 ```html
 <link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<branded-checkout ng-app="brandedCheckout" code="<designation number>" campaign-code="<campaign code>" amount="<amount>" frequency="<frequency>" day="<day>"></branded-checkout>
+
+<branded-checkout
+    ng-app="brandedCheckout"
+    code="<designation number>"
+    campaign-code="<campaign code>"
+    amount="<amount>"
+    frequency="<frequency>"
+    day="<day>"
+    on-order-completed="$event.$window.onOrderCompleted($event.purchase)">
+</branded-checkout>
+
 <script src="https://give-static.cru.org/app.js"></script>
+<script>
+  window.onOrderCompleted = function (purchaseData) {
+    console.log('Order completed successfully', purchaseData);
+  };
+</script>
 ```
-The `<branded-checkout>` element is where the branded checkout angular app will be loaded. It accepts the following attributes:
+The `<branded-checkout>` element is where the branded checkout Angular app will be loaded. It accepts the following attributes:
+- `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
 - `code` - the designation number you would like donors to give to - **Required**
 - `campaign-code` - the campaign code you would like to use - *Optional*
 - `amount` - defaults the gift's amount - *Optional*
 - `frequency` - defaults the gift's frequency - *Optional* - can be one of the following values:
-  - `NA` - single gift - this is the defualt so it doesn't need to be specified
-  - `MON` - monthly recurring gift
-  - `QUARTERLY` - quarterly recurring gift
-  - `ANNUAL` - annually recurring gift
+  - `single` - single gift - this is the default so it doesn't need to be specified
+  - `monthly` - monthly recurring gift
+  - `quarterly` - quarterly recurring gift
+  - `annually` - annually recurring gift
 - `day` - for recuring gifts this defaults the gift's day of the month - *Optional* - can be `1` to `28`
+- `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - *Optional* -  provides 2 variables:
+  - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
+  - `$event.purchase` - contains the order's details that are loaded for the thank you page
 
 ## Development
 

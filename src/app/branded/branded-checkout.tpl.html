@@ -17,7 +17,8 @@
           previous="$ctrl.previous()">
         </branded-checkout-step-2>
         <thank-you-summary
-          ng-if="$ctrl.checkoutStep === 'thankYou'">
+          ng-if="$ctrl.checkoutStep === 'thankYou'"
+          on-purchase-loaded="$ctrl.onThankYouPurchaseLoaded($event.purchase)">
         </thank-you-summary>
       </div>
     </div>

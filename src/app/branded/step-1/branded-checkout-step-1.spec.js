@@ -32,7 +32,6 @@ describe('branded checkout step 1', () => {
     it('should initialize item config', () => {
       $ctrl.campaignCode = '1234';
       $ctrl.amount = '75';
-      $ctrl.frequency = 'MON';
       $ctrl.day = '9';
       $ctrl.initItemConfig();
       expect($ctrl.itemConfig).toEqual({
@@ -40,7 +39,22 @@ describe('branded checkout step 1', () => {
         amount: '75',
         'recurring-day-of-month': '9'
       });
+      expect($ctrl.defaultFrequency).toBeUndefined();
+    });
+    it('should initialize monthly gifts', () => {
+      $ctrl.frequency = 'monthly';
+      $ctrl.initItemConfig();
       expect($ctrl.defaultFrequency).toEqual('MON');
+    });
+    it('should initialize quarterly gifts', () => {
+      $ctrl.frequency = 'quarterly';
+      $ctrl.initItemConfig();
+      expect($ctrl.defaultFrequency).toEqual('QUARTERLY');
+    });
+    it('should initialize annual gifts', () => {
+      $ctrl.frequency = 'annually';
+      $ctrl.initItemConfig();
+      expect($ctrl.defaultFrequency).toEqual('ANNUAL');
     });
   });
 
