@@ -134,8 +134,8 @@ describe('designation service', () => {
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
           expect( suggestedAmounts ).toEqual( [
-            {amount: 25, label: "for 10 Bibles", order: "1"},
-            {amount: 100, label: "for 40 Bibles", order: "2"}
+            {amount: 25, label: "for 10 Bibles", order: 1},
+            {amount: 100, label: "for 40 Bibles", order: 2}
           ] );
           expect( itemConfig['default-campaign-code'] ).toEqual( '867EM1' );
           expect( itemConfig['jcr-title'] ).toEqual( 'PowerPacksTM for Inner City Children' );
