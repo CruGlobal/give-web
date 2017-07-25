@@ -64,6 +64,7 @@ describe('branded checkout step 1', () => {
       spyOn($ctrl.cartService, 'getTotalQuantity').and.returnValue(Observable.of(0));
       spyOn($ctrl.sessionService, 'signOut').and.returnValue(Observable.of(''));
       spyOn($ctrl.cartService, 'get').and.returnValue(Observable.of({ items: [ { code: '1234567' } ] }));
+      $ctrl.donorDetails = { mailingAddress: {} };
     });
     it('should downgrade session', () => {
       $ctrl.initSessionAndCart();
@@ -81,6 +82,7 @@ describe('branded checkout step 1', () => {
       expect($ctrl.cartService.getTotalQuantity).toHaveBeenCalled();
       expect($ctrl.sessionService.signOut).toHaveBeenCalled();
       expect($ctrl.loadingSession).toEqual(false);
+      expect($ctrl.donorDetails).toEqual({ mailingAddress: {} });
     });
     it('should get cart quantity and not sign out if there are items in cart', () => {
       $ctrl.cartService.getTotalQuantity.and.returnValue(Observable.of(1));
@@ -88,6 +90,7 @@ describe('branded checkout step 1', () => {
       expect($ctrl.cartService.getTotalQuantity).toHaveBeenCalled();
       expect($ctrl.sessionService.signOut).not.toHaveBeenCalled();
       expect($ctrl.loadingSession).toEqual(false);
+      expect($ctrl.donorDetails).toBeUndefined();
     });
     it('should ignore session errors', () => {
       $ctrl.sessionService.signOut.and.returnValue(Observable.throw('some error'));

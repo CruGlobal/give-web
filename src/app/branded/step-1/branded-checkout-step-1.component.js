@@ -62,6 +62,8 @@ class BrandedCheckoutStep1Controller{
       .mergeMap(total => {
         if (total <= 0) {
           return this.sessionService.signOut(); // Restart user's session and clear session data if they have no items in cart
+        } else {
+          delete this.donorDetails; // Don't use donor details binding when user already has a session
         }
         return Observable.of('keeping session');
       })
@@ -177,6 +179,7 @@ export default angular
       amount: '<',
       frequency: '<',
       day: '<',
+      donorDetails: '<',
       next: '&'
     }
   });

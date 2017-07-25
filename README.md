@@ -39,6 +39,7 @@ Add the following code to your page where appropriate:
     amount="<amount>"
     frequency="<frequency>"
     day="<day>"
+    donor-details="<donor details object>"
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)">
 </branded-checkout>
 
@@ -60,6 +61,43 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
   - `quarterly` - quarterly recurring gift
   - `annually` - annually recurring gift
 - `day` - for recuring gifts this defaults the gift's day of the month - *Optional* - can be `1` to `28`
+- `donor-details` - set default values for donor's name and contact info - *Optional* - can be provided as an inline string JSON string or as an Angular expression referencing a variable from an outside Angular module - should be in this format:
+    ```javascript
+    {
+        donorType: 'Household', // or 'Organization'
+        name: {
+            title: '',
+            givenName: 'First Name',
+            middleInitial: '',
+            familyName: 'Last Name',
+            suffix: ''
+        },
+        organizationName: '', // Used when donorType is 'Organization'
+        phoneNumber: '',
+        spouseName: {
+            title: '',
+            givenName: 'First Name',
+            middleInitial: '',
+            familyName: 'Last Name',
+            suffix: ''
+        },
+        mailingAddress: {
+            country: 'US',
+            // For US addresses
+            streetAddress: '123 Some Street',
+            extendedAddress: 'Address Line 2',
+            locality: 'City',
+            region: 'CA',
+            postalCode: '12345'
+            // For non-US addresses
+            streetAddress: '123 Some Street',
+            extendedAddress: 'Address Line 2',
+            intAddressLine3: 'Address Line 3',
+            intAddressLine4: 'Address Line 4'
+        },
+        email: 'email@example.com'
+    }
+    ```
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - *Optional* -  provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
   - `$event.purchase` - contains the order's details that are loaded for the thank you page

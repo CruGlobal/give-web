@@ -26,13 +26,17 @@ class Step1Controller{
   }
 
   $onInit(){
-    this.donorDetails = {
-      mailingAddress: {
-        country: 'US'
-      }
-    };
+    // If donorDetails binding is initialized, use it instead of loading from EP
+    if(!this.donorDetails){
+      this.donorDetails = {
+          mailingAddress: {
+            country: 'US'
+          }
+        };
 
-    this.loadDonorDetails();
+      this.loadDonorDetails();
+    }
+
     this.waitForFormInitialization();
 
     this.$scope.$on(SignInEvent, () => {
