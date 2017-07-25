@@ -1,5 +1,6 @@
 import angular from 'angular';
 import pick from 'lodash/pick';
+import omit from 'lodash/omit';
 import changeCaseObject from 'change-case-object';
 
 import commonModule from 'common/common.module';
@@ -22,6 +23,16 @@ class BrandedCheckoutController {
 
   $onInit() {
     this.checkoutStep = 'giftContactPayment';
+    this.formatDonorDetails();
+  }
+
+  formatDonorDetails(){
+    if(this.donorDetails){
+      //change donorDetails to param-case but leave mailing address alone since this Angular app uses a different format than EP
+      const mailingAddress = this.donorDetails.mailingAddress;
+      this.donorDetails = changeCaseObject.paramCase(omit(this.donorDetails, 'mailingAddress'));
+      this.donorDetails.mailingAddress = mailingAddress;
+    }
   }
 
   next() {
@@ -66,6 +77,7 @@ export default angular
       amount: '@',
       frequency: '@',
       day: '@',
+      donorDetails: '<',
       onOrderCompleted: '&'
     }
   });

@@ -24,11 +24,20 @@ describe('contactInfo', function() {
   }));
 
   describe('$onInit', () => {
-    it('load the necessary data', () => {
+    it('should load the necessary data', () => {
       spyOn(self.controller, 'loadDonorDetails');
       spyOn(self.controller, 'waitForFormInitialization');
       self.controller.$onInit();
       expect(self.controller.loadDonorDetails).toHaveBeenCalled();
+      expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
+    });
+    it('should not load donorDetails if provided by the binding', () => {
+      self.controller.donorDetails = { mailingAddress: {} };
+      spyOn(self.controller, 'loadDonorDetails');
+      spyOn(self.controller, 'waitForFormInitialization');
+      self.controller.$onInit();
+      expect(self.controller.donorDetails).toEqual({ mailingAddress: {} });
+      expect(self.controller.loadDonorDetails).not.toHaveBeenCalled();
       expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
     });
     it('should call loadDonorDetails on sign in', () => {
