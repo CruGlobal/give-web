@@ -33,9 +33,10 @@ const componentName = 'productConfigForm';
 class ProductConfigFormController {
 
   /* @ngInject */
-  constructor( $scope, $log, designationsService, cartService, commonService, analyticsFactory ) {
+  constructor( $scope, $log, $filter, designationsService, cartService, commonService, analyticsFactory ) {
     this.$scope = $scope;
     this.$log = $log;
+    this.$filter = $filter;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.commonService = commonService;
@@ -270,6 +271,10 @@ class ProductConfigFormController {
       value += ` - ${this.productData.displayName}`;
     }
     return value;
+  }
+
+  suggestedAmount(amount) {
+    return this.$filter('currency')(amount, '$', `${amount}`.indexOf('.') > -1 ? 2 : 0);
   }
 }
 
