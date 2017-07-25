@@ -439,4 +439,14 @@ describe( 'product config form component', function () {
       expect($ctrl.displayId()).toEqual('#0123456 - Title');
     });
   });
+
+  describe('suggestedAmount( amount )', () => {
+    it('should format suggestedAmounts correctly.', () => {
+      expect($ctrl.suggestedAmount(123.45)).toEqual('$123.45');
+      expect($ctrl.suggestedAmount(12345.67)).toEqual('$12,345.67');
+      expect($ctrl.suggestedAmount(123.4)).toEqual('$123.40');
+      expect($ctrl.suggestedAmount(123)).toEqual('$123');
+      expect($ctrl.suggestedAmount(1234)).toEqual('$1,234');
+    });
+  });
 } );
