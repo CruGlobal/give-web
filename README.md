@@ -42,7 +42,7 @@ Add the following code to your page where appropriate:
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)">
 </branded-checkout>
 
-<script src="https://give-static.cru.org/app.js"></script>
+<script src="https://give-static.cru.org/branded-checkout.js"></script>
 <script>
   window.onOrderCompleted = function (purchaseData) {
     console.log('Order completed successfully', purchaseData);
