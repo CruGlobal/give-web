@@ -26,12 +26,11 @@ const entryPoints = {
     'app/profile/profile.component.js',
     'app/profile/receipts/receipts.component.js',
     'app/profile/payment-methods/payment-methods.component.js',
-    'app/designationEditor/designationEditor.component.js',
-    'app/branded/branded-checkout.component.js'
+    'app/designationEditor/designationEditor.component.js'
   ],
   give: 'assets/scss/styles.scss',
   nav: 'assets/scss/global-nav.scss',
-  'branded-checkout': 'assets/scss/branded-checkout.scss'
+  'branded-checkout': ['app/branded/branded-checkout.component.js', 'assets/scss/branded-checkout.scss']
 };
 
 
