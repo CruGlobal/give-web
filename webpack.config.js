@@ -135,10 +135,22 @@ module.exports = env => {
         ]
       },
       proxy: {
-        '/bin': aemDomain,
-        '/content': aemDomain,
-        '/etc': aemDomain,
-        '/designations': aemDomain
+        '/bin': {
+          target: aemDomain,
+          changeOrigin: true
+        },
+        '/content': {
+          target: aemDomain,
+          changeOrigin: true
+        },
+        '/etc': {
+          target: aemDomain,
+          changeOrigin: true
+        },
+        '/designations': {
+          target: aemDomain,
+          changeOrigin: true
+        }
       },
       port: 9000,
       public: "localhost.cru.org:9000"
