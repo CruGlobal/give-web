@@ -205,6 +205,15 @@ class DesignationsService {
       })
       .catch(() => []);
   }
+
+  facebookPixel(code) {
+    let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
+      path = `/content/give/us/en/designations/${c}/${code}.infinity.json`;
+    return Observable.from(this.$http.get( this.envService.read('apiUrl') + path ))
+      .map( ( data ) => {
+        return data.data['jcr:content']['facebookPixelId'];
+      });
+  }
 }
 
 export default angular

@@ -123,7 +123,7 @@
 
               <table class="table giftsum-table giftsum-table-cart">
                 <tbody>
-                <tr class="giftsum-gift-row" ng-repeat="item in $ctrl.purchase.lineItems">
+                <tr class="giftsum-gift-row" ng-repeat="item in $ctrl.purchase.lineItems" ng-init="$ctrl.loadFacebookPixel(item)">
                   <td class="td-gift">
                     <span class="giftsum-person giftsum-title">{{item.name}}</span>
                     <p>#{{item.code['product-code']}}</p>

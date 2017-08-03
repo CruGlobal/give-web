@@ -144,4 +144,50 @@ describe('thank you summary', () => {
       expect(self.controller.email).toEqual('someperson@someaddress.com');
     });
   });
+
+  describe('loadFacebookPixel', () => {
+    beforeEach(() => {
+      self.controller.$window.document = document;
+    });
+
+    it('should not continue if missing designation code', () => {
+      self.controller.loadFacebookPixel({});
+    });
+
+    it('should not append facebook pixel to page', () => {
+      spyOn(self.controller.designationsService, 'facebookPixel').and.returnValue(
+        Observable.of(undefined)
+      );
+
+      self.controller.loadFacebookPixel({
+        code:{
+          code: '555111'
+        },
+        rate: {
+          cost: { amount: 100 }
+        }
+      });
+
+      expect(self.controller.designationsService.facebookPixel).toHaveBeenCalled();
+      expect(self.controller.$window.document.body.innerHTML).not.toContain('img');
+    });
+
+    it('should append facebook pixel to page', () => {
+      spyOn(self.controller.designationsService, 'facebookPixel').and.returnValue(
+        Observable.of(123456)
+      );
+
+      self.controller.loadFacebookPixel({
+        code:{
+          code: '555111'
+        },
+        rate: {
+          cost: { amount: 100 }
+        }
+      });
+
+      expect(self.controller.designationsService.facebookPixel).toHaveBeenCalled();
+      expect(self.controller.$window.document.body.innerHTML).toContain('img');
+    });
+  });
 });
