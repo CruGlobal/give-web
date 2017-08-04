@@ -30,6 +30,7 @@ export default {
     "letterDate":              "",
     "websiteURL":              "",
     "defaultCampaign":         "867EM1",
-    "suggestedAmounts":        {"jcr:primaryType":"nt:unstructured"}
+    "suggestedAmounts":        {"jcr:primaryType":"nt:unstructured"},
+    "facebookPixelId":         "123456"
   }
 };

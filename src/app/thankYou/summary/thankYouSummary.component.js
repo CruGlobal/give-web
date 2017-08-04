@@ -12,6 +12,7 @@ import orderService from 'common/services/api/order.service';
 import profileService from 'common/services/api/profile.service';
 import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
+import designationsService from 'common/services/api/designations.service';
 import analyticsFactory from 'app/analytics/analytics.factory';
 
 import template from './thankYouSummary.tpl.html';
@@ -21,12 +22,13 @@ let componentName = 'thankYouSummary';
 class ThankYouSummaryController{
 
   /* @ngInject */
-  constructor($rootScope, $window, analyticsFactory, orderService, profileService, sessionModalService, $log){
+  constructor($rootScope, $window, analyticsFactory, orderService, profileService, sessionModalService, designationsService, $log){
     this.$rootScope = $rootScope;
     this.$window = $window;
     this.orderService = orderService;
     this.profileService = profileService;
     this.sessionModalService = sessionModalService;
+    this.designationsService = designationsService;
     this.analyticsFactory = analyticsFactory;
     this.$log = $log;
   }
@@ -94,6 +96,23 @@ class ThankYouSummaryController{
         this.email = data[0].email;
       });
   }
+
+  loadFacebookPixel(item){
+    if(!item.code || !item.code.code){ return; }
+
+    const designation = item.code.code, value = item.rate.cost.amount;
+
+    this.designationsService.facebookPixel(designation).subscribe((pixelId) => {
+      if(!pixelId){ return; }
+
+      //append FB pixel to page
+      let pixel = new Image();
+      pixel.src = 'https://www.facebook.com/tr?id=' + pixelId + '&ev=Purchase&cd[value]=' + value + '&cd[currency]=USD';
+      pixel.style.display = 'none';
+
+      angular.element(this.$window.document.body).append(pixel);
+    });
+  }
 }
 
 export default angular
@@ -106,6 +125,7 @@ export default angular
     profileService.name,
     sessionService.name,
     sessionModalService.name,
+    designationsService.name,
     analyticsFactory.name
   ])
   .component(componentName, {
