@@ -17,13 +17,16 @@ let componentName = 'brandedCheckout';
 class BrandedCheckoutController {
 
   /* @ngInject */
-  constructor($window) {
+  constructor($window, analyticsFactory) {
     this.$window = $window;
+    this.analyticsFactory = analyticsFactory;
   }
 
   $onInit() {
     this.checkoutStep = 'giftContactPayment';
     this.formatDonorDetails();
+    this.analyticsFactory.pageLoaded(true);
+    this.fireAnalyticsEvents('contact', 'payment');
   }
 
   formatDonorDetails(){
@@ -39,6 +42,7 @@ class BrandedCheckoutController {
     switch (this.checkoutStep) {
       case 'giftContactPayment':
         this.checkoutStep = 'review';
+        this.fireAnalyticsEvents('review');
         break;
       case 'review':
         this.checkoutStep = 'thankYou';
@@ -50,6 +54,7 @@ class BrandedCheckoutController {
   previous() {
     switch (this.checkoutStep) {
       case 'review':
+        this.fireAnalyticsEvents('contact', 'payment');
         this.checkoutStep = 'giftContactPayment';
         break;
     }
@@ -58,6 +63,13 @@ class BrandedCheckoutController {
 
   onThankYouPurchaseLoaded(purchase) {
     this.onOrderCompleted({$event: {$window: this.$window, purchase: changeCaseObject.camelCase(pick(purchase, ['donorDetails', 'lineItems']))}});
+  }
+
+  fireAnalyticsEvents(...checkoutSteps){
+    checkoutSteps.forEach(checkoutStep => {
+      this.analyticsFactory.setEvent('checkout step ' + checkoutStep);
+      this.analyticsFactory.track('aa-checkout-step-' + checkoutStep);
+    });
   }
 }
 
