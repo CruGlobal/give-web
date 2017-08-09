@@ -113,8 +113,8 @@
                   <p translate>An error occurred while processing your search query. Please try again.</p>
                 </div>
 
-                <div ng-repeat="(facet,hits) in $ctrl.searchResults | groupBy:'facet'">
-                  <h3 class="is-results-divider" ng-switch="facet">
+                <div ng-repeat="(facet,hits) in $ctrl.searchResults | groupBy:($ctrl.searchParams.type ? 'facet' : null)">
+                  <h3 class="is-results-divider" ng-switch="facet" ng-if="facet != 'undefined'">
                     <span ng-switch-when="person" translate>Missionaries</span>
                     <span ng-switch-when="ministry" translate>Ministries</span>
                     <span ng-switch-when="featured" translate>Featured Opportunities</span>
