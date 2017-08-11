@@ -7,11 +7,11 @@
   // angular.js to load itself into
   const angular = (window.angular = {});
 
-  require('./nav.component');
+  const nav = require('./nav.component').default;
 
   //Manually bootstrap cruNav
   angular.element(document).ready(function () {
-    angular.bootstrap(document.getElementsByTagName("cru-nav")[0], ["cruNav"]);
+    angular.bootstrap(document.getElementsByTagName("cru-nav")[0], [nav.name]);
     // restore the old angular version
     window.angular = existingWindowDotAngular;
   });

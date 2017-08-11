@@ -29,7 +29,7 @@ function analyticsFactory($window, $timeout, sessionService) {
           for (var i = 0; i < cartData.items.length; i++) {
 
             // Set donation type
-            if (cartData.items[i].frequency.toLowerCase() == 'single') {
+            if (cartData.items[i].frequency.toLowerCase() === 'single') {
               donationType = 'one-time donation';
             } else {
               donationType = 'recurring donation';

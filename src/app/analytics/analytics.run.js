@@ -2,25 +2,21 @@ import 'app/analytics/analytics.factory';
 
 /* @ngInject */
 function dataLayer($window, analyticsFactory) {
-  if(!$window.location.hostname || $window.location.hostname.indexOf('give') == -1){
-    return;
-  }
-
-    /* Build data layer */
-  $window.digitalData = {
-      page: {
-        attributes: {
-          angularLoaded: 'false'
-        }
+  /* Build data layer */
+  $window.digitalData = Object.assign({}, $window.digitalData, {
+    page: {
+      attributes: {
+        angularLoaded: 'false'
       }
-    };
+    }
+  });
 
-    const path = analyticsFactory.getPath();
+  const path = analyticsFactory.getPath();
 
-    analyticsFactory.setSiteSections(path);
+  analyticsFactory.setSiteSections(path);
 
 }
 
 export default angular
-    .module('analytics')
-    .run(dataLayer);
+  .module('analytics')
+  .run(dataLayer);
