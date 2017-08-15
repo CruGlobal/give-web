@@ -43,7 +43,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="a in $ctrl.suggestedAmounts track by $index">
-            <td><input name="amount" type="number" class="form-control" placeholder="50" ng-model="a.amount"></td>
+            <td><input name="amount" type="number" class="form-control" ng-model="a.amount"></td>
             <td><input name="description" type="text" class="form-control" placeholder="$50 to help 5 refugees" ng-model="a.description"></td>
             <td><a href="" class="btn-link btn" ng-click="$ctrl.suggestedAmounts.splice($index, 1)">
               <i class="fa fa-minus-circle"></i>
