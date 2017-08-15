@@ -12,7 +12,9 @@
   //Manually bootstrap cruNav
   angular.element(document).ready(function () {
     angular.bootstrap(document.getElementsByTagName("cru-nav")[0], [nav.name]);
-    // restore the old angular version
-    window.angular = existingWindowDotAngular;
+    // restore the old angular version if exists
+    if(existingWindowDotAngular){
+      window.angular = existingWindowDotAngular;
+    }
   });
 }
