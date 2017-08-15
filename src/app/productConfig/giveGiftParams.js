@@ -4,5 +4,6 @@ export const giveGiftParams = {
   amount:       'a',
   frequency:    'f',
   day:          'dd',
+  month:        'm',
   campaignCode: 'CampaignCode'
 };

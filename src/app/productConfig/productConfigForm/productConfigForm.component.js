@@ -17,7 +17,7 @@ import 'rxjs/add/operator/do';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
-import { possibleTransactionDays, startDate } from 'common/services/giftHelpers/giftDates.service';
+import { possibleTransactionDays, startDate, startMonth } from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component';
@@ -42,6 +42,7 @@ class ProductConfigFormController {
     this.commonService = commonService;
     this.possibleTransactionDays = possibleTransactionDays;
     this.startDate = startDate;
+    this.startMonth = startMonth;
     this.analyticsFactory = analyticsFactory;
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000];
@@ -74,6 +75,12 @@ class ProductConfigFormController {
     }else{
       delete this.itemConfig['recurring-day-of-month'];
     }
+
+    if(inRange(parseInt(this.itemConfig['recurring-start-month'], 10), 1, 12)){
+      this.itemConfig['recurring-start-month'] = padStart(this.itemConfig['recurring-start-month'], 2, '0');
+    }else{
+      delete this.itemConfig['recurring-start-month'];
+    }
   }
 
   loadData(){
@@ -95,6 +102,9 @@ class ProductConfigFormController {
         this.nextDrawDate = nextDrawDate;
         if(!this.itemConfig['recurring-day-of-month'] && this.nextDrawDate) {
           this.itemConfig['recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD');
+        }
+        if(!this.itemConfig['recurring-start-month'] && this.nextDrawDate) {
+          this.itemConfig['recurring-start-month'] = startDate(null, this.nextDrawDate).format('MM');
         }
       });
 
@@ -217,9 +227,10 @@ class ProductConfigFormController {
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount });
   }
 
-  changeStartDay( day ) {
+  changeStartDay( day, month ) {
     this.errorAlreadyInCart = false;
     this.updateQueryParam({ key: giveGiftParams.day, value: day });
+    this.updateQueryParam({ key: giveGiftParams.month, value: month });
   }
 
   saveGiftToCart() {
@@ -233,7 +244,7 @@ class ProductConfigFormController {
     this.submittingGift = true;
     this.onStateChange({ state: 'submitting' });
 
-    let data = this.productData.frequency === 'NA' ? omit( this.itemConfig, 'recurring-day-of-month' ) : this.itemConfig;
+    let data = this.productData.frequency === 'NA' ? omit( this.itemConfig, ['recurring-start-month', 'recurring-day-of-month'] ) : this.itemConfig;
 
     let savingObservable = this.isEdit ?
       this.cartService.editItem( this.uri, this.productData.uri, data ) :
