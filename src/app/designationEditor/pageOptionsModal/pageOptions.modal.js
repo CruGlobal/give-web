@@ -26,6 +26,7 @@ class ModalInstanceCtrl {
   transformSuggestedAmounts(){
     return transform(this.suggestedAmounts, (result, value, i) => {
       delete value.order;
+      value.amount = value.amount || 0;
       result[i+1] = value;
     }, {});
   }
