@@ -64,16 +64,20 @@ describe( 'product config form component', function () {
   describe( 'initItemConfig', () => {
     it( 'should format item config values', () => {
       $ctrl.itemConfig['recurring-day-of-month'] = '9';
+      $ctrl.itemConfig['recurring-start-month'] = '8';
       $ctrl.initItemConfig();
       expect($ctrl.itemConfig.amount).toEqual(85);
       expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('09');
+      expect($ctrl.itemConfig['recurring-start-month']).toEqual('08');
     } );
     it( 'should handle out of range values', () => {
       $ctrl.itemConfig.amount = 'invalid';
       $ctrl.itemConfig['recurring-day-of-month'] = '29';
+      $ctrl.itemConfig['recurring-start-month'] = '13';
       $ctrl.initItemConfig();
       expect($ctrl.itemConfig.amount).toBeUndefined();
       expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined();
+      expect($ctrl.itemConfig['recurring-start-month']).toBeUndefined();
     } );
   } );
 
@@ -113,6 +117,7 @@ describe( 'product config form component', function () {
 
       expect( $ctrl.nextDrawDate ).toEqual('2016-10-02');
       expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual('02');
+      expect( $ctrl.itemConfig['recurring-start-month'] ).toEqual('10');
 
       expect( $ctrl.suggestedAmounts ).toEqual([ { amount: 5 }, { amount: 10 } ]);
       expect( $ctrl.useSuggestedAmounts ).toEqual(true);
