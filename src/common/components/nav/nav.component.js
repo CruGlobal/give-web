@@ -11,7 +11,6 @@ import 'rxjs/add/operator/retry';
 import loading from 'common/components/loading/loading.component';
 import sessionService, {SignOutEvent} from 'common/services/session/session.service';
 import sessionModalService from 'common/services/session/sessionModal.service';
-import analyticsRun from 'app/analytics/analytics.run';
 import mobileNavLevelComponent from './navMobileLevel.component';
 import subNavDirective from './subNav.directive';
 import {giftAddedEvent} from 'common/components/nav/navCart/navCart.component';
@@ -29,7 +28,7 @@ let componentName = 'cruNav';
 class NavController{
 
   /* @ngInject */
-  constructor($log, $rootScope, $http, $document, $window, $uibModal, $timeout, envService, sessionService, sessionModalService, analyticsFactory){
+  constructor($log, $rootScope, $http, $document, $window, $uibModal, $timeout, envService, sessionService, sessionModalService){
     this.$log = $log;
     this.$http = $http;
     this.$document = $document;
@@ -40,7 +39,6 @@ class NavController{
 
     this.sessionService = sessionService;
     this.sessionModalService = sessionModalService;
-    this.analyticsFactory = analyticsFactory;
 
     this.imgDomain = envService.read('imgDomain');
     this.publicCru = envService.read('publicCru');
@@ -90,12 +88,6 @@ class NavController{
     // Register signedOut event on child scope
     // this basically sets the listener at a lower priority, allowing $rootScope listeners first chance to respond
     this.$rootScope.$new(true, this.$rootScope).$on(SignOutEvent, (event) => this.signedOut(event) );
-
-    try {
-      angular.module('common');
-    } catch(err) {
-      this.analyticsFactory.pageLoaded(true); // Only call pageLoaded when common module doesn't exist, indicating that only the nav bundle is running and we aren't on the give site
-    }
   }
 
   $onDestroy() {
@@ -267,7 +259,6 @@ export default angular
     'ngResize',
     sessionService.name,
     sessionModalService.name,
-    analyticsRun.name,
     mobileNavLevelComponent.name,
     subNavDirective.name,
     globalWebsitesModal.name,
