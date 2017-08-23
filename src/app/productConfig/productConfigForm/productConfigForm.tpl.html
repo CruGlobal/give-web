@@ -157,19 +157,8 @@
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
                           ng-model="$ctrl.itemConfig['recurring-start-month']"
+                          ng-options="m.value as m.text for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
                           ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
-                    <option value="01" translate>January</option>
-                    <option value="02" translate>February</option>
-                    <option value="03" translate>March</option>
-                    <option value="04" translate>April</option>
-                    <option value="05" translate>May</option>
-                    <option value="06" translate>June</option>
-                    <option value="07" translate>July</option>
-                    <option value="08" translate>August</option>
-                    <option value="09" translate>September</option>
-                    <option value="10" translate>October</option>
-                    <option value="11" translate>November</option>
-                    <option value="12" translate>December</option>
                   </select>
                 </div>
               </div>
@@ -180,7 +169,7 @@
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
                           ng-model="$ctrl.itemConfig['recurring-day-of-month']"
-                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
+                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate)"
                           ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
                   </select>
                 </div>

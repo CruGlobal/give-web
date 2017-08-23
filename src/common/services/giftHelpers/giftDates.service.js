@@ -2,8 +2,28 @@ import moment from 'moment';
 import range from 'lodash/range';
 import map from 'lodash/map';
 
-export function possibleTransactionDays() {
-  return range( 1, 29 ).map((i) => (`0${i}`).slice(-2));
+export function possibleTransactionDays(month, nextDrawDate) {
+  nextDrawDate = moment.utc(nextDrawDate);
+
+  const startDay = Number(month) - 1 === nextDrawDate.get('month') ? nextDrawDate.get('date') : 1;
+  return range( startDay, 29 ).map((i) => (`0${i}`).slice(-2));
+}
+
+export function possibleTransactionMonths(nextDrawDate) {
+  nextDrawDate = moment.utc(nextDrawDate);
+  nextDrawDate.set('date', 1);
+
+  let months = [];
+  for(let i = 0; i < 12; i++) {
+    months.push({
+      value: nextDrawDate.format('MM'),
+      text: nextDrawDate.format('MMMM, YYYY')
+    });
+
+    nextDrawDate.add(1, 'months');
+  }
+
+  return months;
 }
 
 // Generate a string of 4 months based on transactionDay and nextDrawDate

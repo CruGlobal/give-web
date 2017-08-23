@@ -17,7 +17,7 @@ import 'rxjs/add/operator/do';
 
 import designationsService from 'common/services/api/designations.service';
 import cartService from 'common/services/api/cart.service';
-import { possibleTransactionDays, startDate, startMonth } from 'common/services/giftHelpers/giftDates.service';
+import { possibleTransactionDays, possibleTransactionMonths, startDate, startMonth } from 'common/services/giftHelpers/giftDates.service';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import showErrors from 'common/filters/showErrors.filter';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component';
@@ -41,6 +41,7 @@ class ProductConfigFormController {
     this.cartService = cartService;
     this.commonService = commonService;
     this.possibleTransactionDays = possibleTransactionDays;
+    this.possibleTransactionMonths = possibleTransactionMonths;
     this.startDate = startDate;
     this.startMonth = startMonth;
     this.analyticsFactory = analyticsFactory;
