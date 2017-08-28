@@ -147,18 +147,30 @@
     <div ng-if="$ctrl.productData.frequency !== 'NA'">
       <div class="panel panel-default give-modal-panel">
         <h4 class="panel-title border-bottom-small mt0 pt-" translate>
-          Transaction Date for Recurring Gifts
+          Transaction Start Date for Recurring Gifts
         </h4>
         <div class="panel-body pt0">
           <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label translate>Month</label>
+                <div class="form-group">
+                  <select class="form-control form-control-subtle"
+                          ng-model="$ctrl.itemConfig['recurring-start-month']"
+                          ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
+                  </select>
+                </div>
+              </div>
+            </div>
             <div class="col-sm-2">
               <div class="form-group">
                 <label translate>Day</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
                           ng-model="$ctrl.itemConfig['recurring-day-of-month']"
-                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays()"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'])">
+                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate)"
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
                   </select>
                 </div>
               </div>
@@ -167,7 +179,7 @@
               <div class="form-group">
                 <label translate>Your gift will start on</label>
                 <div class="form-group">
-                  {{$ctrl.startDate( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.nextDrawDate ).format('ll')}}
+                  {{$ctrl.startMonth( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate ).format('ll')}}
                 </div>
               </div>
             </div>

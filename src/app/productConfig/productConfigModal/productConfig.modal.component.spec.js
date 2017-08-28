@@ -92,6 +92,7 @@ describe( 'product config modal', function () {
         [giveGiftParams.amount]:        '150',
         [giveGiftParams.frequency]:     'QUARTERLY',
         [giveGiftParams.day]:           '21',
+        [giveGiftParams.month]:         '07',
         [giveGiftParams.campaignPage]:  'testCampaign'
       } );
       $ctrl.initializeParams();
@@ -99,6 +100,7 @@ describe( 'product config modal', function () {
       expect( $ctrl.itemConfig.amount ).toEqual( '150' );
       expect( $ctrl.defaultFrequency ).toEqual( 'QUARTERLY' );
       expect( $ctrl.itemConfig['recurring-day-of-month'] ).toEqual( '21' );
+      expect( $ctrl.itemConfig['recurring-start-month'] ).toEqual( '07' );
       expect( $ctrl.itemConfig['campaign-page'] ).toEqual( 'testCampaign' );
     } );
 

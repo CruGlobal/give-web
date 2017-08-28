@@ -66,6 +66,10 @@ class ProductConfigModalController {
       this.itemConfig['recurring-day-of-month'] = params[giveGiftParams.day];
     }
 
+    if ( params.hasOwnProperty( giveGiftParams.month ) ) {
+      this.itemConfig['recurring-start-month'] = params[giveGiftParams.month];
+    }
+
     // If CampaignCode exists in URL, use it, otherwise use default-campaign-code if set.
     if ( params.hasOwnProperty( giveGiftParams.campaignCode ) ) {
       this.itemConfig['campaign-code'] = isArray(params[giveGiftParams.campaignCode]) ?
