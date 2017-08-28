@@ -61,7 +61,7 @@ class Cart {
             frequency: frequency,
             amount: item.rate.cost.amount,
             designationNumber: item.itemCode['product-code'],
-            giftStartDate: frequency !== 'Single' ? startDate(itemConfig['recurring-day-of-month'], nextDrawDate) : null
+            giftStartDate: frequency !== 'Single' ? item.rate['start-date']['display-value'] : null
           };
         });
 

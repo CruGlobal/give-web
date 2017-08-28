@@ -3,7 +3,7 @@ import range from 'lodash/range';
 import map from 'lodash/map';
 
 export function possibleTransactionDays(month, nextDrawDate) {
-  nextDrawDate = moment.utc(nextDrawDate);
+  nextDrawDate = moment.max(moment.utc(), moment.utc(nextDrawDate));
 
   const startDay = Number(month) - 1 === nextDrawDate.get('month') ? nextDrawDate.get('date') : 1;
   return range( startDay, 29 ).map((i) => (`0${i}`).slice(-2));
