@@ -15,10 +15,7 @@ export function possibleTransactionMonths(nextDrawDate) {
 
   let months = [];
   for(let i = 0; i < 12; i++) {
-    months.push({
-      value: nextDrawDate.format('MM'),
-      text: nextDrawDate.format('MMMM, YYYY')
-    });
+    months.push(nextDrawDate.format('YYYY-MM-DD'));
 
     nextDrawDate.add(1, 'months');
   }

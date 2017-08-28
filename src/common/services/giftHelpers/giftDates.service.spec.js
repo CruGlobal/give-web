@@ -1,5 +1,4 @@
 import moment from 'moment';
-import map from 'lodash/map';
 
 import * as giftDates from './giftDates.service';
 
@@ -26,11 +25,9 @@ describe('giftDates service', () => {
   describe('possibleTransactionMonths', () => {
     it('should list available months with years', () => {
       let months = giftDates.possibleTransactionMonths('2018-10-06');
-      months = map(months, 'value');
-
       expect(months).toEqual([
-        '10', '11', '12', '01', '02', '03', '04', '05', '06', '07',
-        '08', '09'
+        '2018-10-01', '2018-11-01', '2018-12-01', '2019-01-01', '2019-02-01', '2019-03-01', '2019-04-01', '2019-05-01',
+        '2019-06-01', '2019-07-01', '2019-08-01', '2019-09-01'
       ]);
     });
   });

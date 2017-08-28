@@ -157,7 +157,7 @@
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
                           ng-model="$ctrl.itemConfig['recurring-start-month']"
-                          ng-options="m.value as m.text for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
+                          ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
                           ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
                   </select>
                 </div>
