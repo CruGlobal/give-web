@@ -193,7 +193,8 @@ export default {
         "campaign-code": "",
         "donation-services-comments": "",
         "recipient-comments": "",
-        "recurring-day-of-month": ""
+        "recurring-day-of-month": "",
+        "recurring-start-month": ""
       }],
       "_rate": [{
         "self": {
@@ -382,7 +383,8 @@ export default {
         "campaign-code": "",
         "donation-services-comments": "",
         "recipient-comments": "",
-        "recurring-day-of-month": "09"
+        "recurring-day-of-month": "09",
+        "recurring-start-month": "10"
       }],
       "_rate": [{
         "self": {
@@ -572,7 +574,8 @@ export default {
         "campaign-code": "",
         "donation-services-comments": "",
         "recipient-comments": "",
-        "recurring-day-of-month": "09"
+        "recurring-day-of-month": "09",
+        "recurring-start-month": "10"
       }],
       "_rate": [{
         "self": {
