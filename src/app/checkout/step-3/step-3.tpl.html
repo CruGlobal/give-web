@@ -174,7 +174,7 @@
             <td class="td-frequency">
               <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
               <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'" translate>
-              Starts on: {{i.giftStartDate | date}}
+              Starts on: {{i.giftStartDate.format('ll')}}
             </span>
             </td>
             <td class="td-amount">

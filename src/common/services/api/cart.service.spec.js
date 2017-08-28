@@ -70,7 +70,7 @@ describe('cart service', () => {
           expect(data.items[0].designationNumber).toEqual('5541091');
           expect(data.items[1].designationNumber).toEqual('0617368');
           expect(data.items[2].designationNumber).toEqual('0354433');
-          expect(data.items[1].giftStartDate).toEqual('2016-12-09');
+          expect(data.items[1].giftStartDate.toString()).toEqual(moment('2016-10-09').toString());
 
           expect(data.cartTotal).toEqual(50);
           expect(data.frequencyTotals).toEqual([

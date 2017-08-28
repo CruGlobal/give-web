@@ -19,7 +19,7 @@ import commonService from './common.service';
 import designationsService from './designations.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
-import {startDate} from '../giftHelpers/giftDates.service';
+import {startMonth} from '../giftHelpers/giftDates.service';
 
 let serviceName = 'cartService';
 
@@ -61,7 +61,8 @@ class Cart {
             frequency: frequency,
             amount: item.rate.cost.amount,
             designationNumber: item.itemCode['product-code'],
-            giftStartDate: frequency !== 'Single' ? item.rate['start-date']['display-value'] : null
+            giftStartDate: frequency !== 'Single' ?
+              startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null
           };
         });
 
