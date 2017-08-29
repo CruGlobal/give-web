@@ -38,7 +38,7 @@ class Cart {
     return Observable.forkJoin(this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
+        lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
         rateTotals: 'ratetotals:element[]',
         total: 'total,total:cost'
       }
@@ -51,6 +51,8 @@ class Cart {
         let items = map(cartResponse.lineItems, item => {
           let frequency = item.rate.recurrence.display;
           let itemConfig = omit(item.itemfields, ['self', 'links']);
+          let giftStartDate = frequency !== 'Single' ?
+            startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null;
 
           return {
             uri: item.self.uri,
@@ -61,8 +63,9 @@ class Cart {
             frequency: frequency,
             amount: item.rate.cost.amount,
             designationNumber: item.itemCode['product-code'],
-            giftStartDate: frequency !== 'Single' ?
-              startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null
+            productUri: item.item.self.uri,
+            giftStartDate: giftStartDate,
+            giftStartDateDaysFromNow: giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
           };
         });
 

@@ -31,7 +31,7 @@ describe('cart service', () => {
     });
     it('should handle an empty response', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
-        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
+        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
         'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, null);
@@ -44,7 +44,7 @@ describe('cart service', () => {
     });
     it('should handle a response with no line items', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
-        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
+        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
         'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, {});
@@ -57,7 +57,7 @@ describe('cart service', () => {
     });
     it('should get cart, parse response, and show most recent items first', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
-        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,' +
+        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
         'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, cartResponse);

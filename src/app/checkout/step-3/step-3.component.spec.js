@@ -25,6 +25,9 @@ describe('checkout', () => {
       self.controller = $componentController(module.name, {
           // Mock services
           cartService: {},
+          commonService: {
+            getNextDrawDate: () => Observable.of('2018-09-07')
+          },
           orderService: {
             getDonorDetails: () => Observable.of('donor details'),
             getCurrentPayment: () => Observable.of(self.loadedPayment),
@@ -96,6 +99,34 @@ describe('checkout', () => {
         spyOn(self.controller.orderService, 'getDonorDetails').and.returnValue(Observable.throw('some error'));
         self.controller.loadDonorDetails();
         expect(self.controller.$log.error.logs[0]).toEqual(['Error loading donorDetails', 'some error']);
+      });
+    });
+
+    describe('getNextDrawDate', () => {
+      it('should load next draw date', () => {
+        self.controller.getNextDrawDate();
+        expect(self.controller.nextDrawDate).toEqual('2018-09-07');
+        self.controller.$log.assertEmpty();
+      });
+    });
+
+    describe('updateGiftStartMonth', () => {
+      it('should save item edits', () => {
+
+        let item = {
+          uri: '/uri',
+          productUri: '/uri',
+          config: {
+            'recurring-start-month': '07'
+          }
+        };
+        self.controller.updateGiftStartMonth(item, '05');
+
+        item.config['recurring-start-month'] = '05';
+        expect( self.controller.cartService.editItem ).toHaveBeenCalledWith(item.uri, item.productUri, item.config);
+
+        expect( self.controller.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
+        expect( self.controller.loadCart ).toHaveBeenCalled();
       });
     });
 
