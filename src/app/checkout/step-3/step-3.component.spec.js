@@ -24,7 +24,9 @@ describe('checkout', () => {
 
       self.controller = $componentController(module.name, {
           // Mock services
-          cartService: {},
+          cartService: {
+            editItem: jasmine.createSpy('editItem')
+          },
           commonService: {
             getNextDrawDate: () => Observable.of('2018-09-07')
           },
