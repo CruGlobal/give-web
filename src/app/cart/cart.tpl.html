@@ -48,7 +48,7 @@
                       <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'">
                           <span translate>Starts on:</span>
                           {{i.giftStartDate.format('ll')}}
-                          <i class="fa fa-warning" ng-if="i.giftStartDateDaysFromNow > 300"
+                          <i class="fa fa-warning" ng-if="i.giftStartDateDaysFromNow >= 330"
                             title="This gift will begin {{i.giftStartDateDaysFromNow}} days in the future."></i>
                         </span>
                     </td>
