@@ -6,11 +6,14 @@ import 'rxjs/add/observable/throw';
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
 
+import commonService from 'common/services/api/common.service';
+import cartService from 'common/services/api/cart.service';
 import orderService from 'common/services/api/order.service';
 import capitalizeFilter from 'common/filters/capitalize.filter';
 import desigSrcDirective from 'common/directives/desigSrc.directive';
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 import {SignInEvent} from 'common/services/session/session.service';
+import {startDate} from 'common/services/giftHelpers/giftDates.service';
 
 import template from './step-3.tpl.html';
 
@@ -21,12 +24,15 @@ let componentName = 'checkoutStep3';
 class Step3Controller{
 
   /* @ngInject */
-  constructor(orderService, $window, $scope, $log, analyticsFactory){
+  constructor(orderService, $window, $scope, $log, analyticsFactory, cartService, commonService){
     this.orderService = orderService;
     this.$window = $window;
     this.$scope = $scope;
     this.$log = $log;
     this.analyticsFactory = analyticsFactory;
+    this.cartService = cartService;
+    this.commonService = commonService;
+    this.startDate = startDate;
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit();
@@ -37,6 +43,7 @@ class Step3Controller{
     this.loadDonorDetails();
     this.loadCurrentPayment();
     this.checkErrors();
+    this.getNextDrawDate();
   }
 
   $onChanges(changes) {
@@ -84,6 +91,21 @@ class Step3Controller{
         error => {
           this.$log.error('Error loading checkErrors', error);
         });
+  }
+
+  getNextDrawDate(){
+    this.commonService.getNextDrawDate().subscribe(nextDrawDate => {
+      this.nextDrawDate = nextDrawDate;
+    });
+  }
+
+  updateGiftStartMonth(item, month){
+    item.config['recurring-start-month'] = month;
+
+    this.cartData = null;
+    this.cartService.editItem( item.uri, item.productUri, item.config ).subscribe( () => {
+      this.loadCart();
+    });
   }
 
   canSubmitOrder(){
@@ -145,13 +167,16 @@ export default angular
     orderService.name,
     capitalizeFilter.name,
     desigSrcDirective.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    cartService.name,
+    commonService.name
   ])
   .component(componentName, {
     controller: Step3Controller,
     templateUrl: template,
     bindings: {
       changeStep: '&',
+      loadCart: '&',
       cartData: '<',
       submit: '<',
       onSubmitBtnChangeState: '&',

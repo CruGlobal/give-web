@@ -116,6 +116,11 @@ export default {
         "state": "AVAILABLE"
       }],
       "_item": [{
+        "self": {
+          "type": "elasticpath.extlookups.product-code",
+          "uri": "/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=",
+          "href": "https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu="
+        },
         "_code": [{
           "self": {
             "type": "elasticpath.extlookups.product-code",
@@ -306,6 +311,11 @@ export default {
         "state": "AVAILABLE"
       }],
       "_item": [{
+        "self": {
+          "type": "elasticpath.extlookups.product-code",
+          "uri": "/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=",
+          "href": "https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu="
+        },
         "_code": [{
           "self": {
             "type": "elasticpath.extlookups.product-code",
@@ -497,6 +507,11 @@ export default {
         "state": "AVAILABLE"
       }],
       "_item": [{
+        "self": {
+          "type": "elasticpath.extlookups.product-code",
+          "uri": "/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=",
+          "href": "https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu="
+        },
         "_code": [{
           "self": {
             "type": "elasticpath.extlookups.product-code",

@@ -165,7 +165,23 @@
           </tr>
           </thead>
           <tbody>
-          <tr class="giftsum-gift-row" ng-repeat="i in $ctrl.cartData.items">
+          <tr ng-repeat-start="i in $ctrl.cartData.items" ng-if="i.giftStartDateDaysFromNow >= 330">
+            <td colspan="3">
+              <div class="alert alert-warning text-center">
+                <strong>Warning!</strong>
+                You are about to give a gift starting {{i.giftStartDateDaysFromNow}} days in the future.
+                <div>
+                  <button class="btn btn-default" ng-click="i.giftStartDateDaysFromNow = 0">
+                    Keep {{i.giftStartDate.format('ll')}}
+                  </button>
+                  <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('MM'))">
+                    Change to {{$ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('ll')}}
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="giftsum-gift-row" ng-repeat-end>
             <td class="td-gift">
               <img desig-src="{{i.designationNumber}}" class="giftsum-profile pull-left">
               <span class="giftsum-person giftsum-title">{{i.displayName}}</span>
@@ -174,8 +190,8 @@
             <td class="td-frequency">
               <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
               <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'" translate>
-              Starts on: {{i.giftStartDate.format('ll')}}
-            </span>
+                Starts on: {{i.giftStartDate.format('ll')}}
+              </span>
             </td>
             <td class="td-amount">
               <span class="giftsum-about giftsum-title">{{i.price}}</span>

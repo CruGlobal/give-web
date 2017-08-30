@@ -71,13 +71,13 @@ class ProductConfigFormController {
       this.itemConfig.amount = amount;
     }
 
-    if(inRange(parseInt(this.itemConfig['recurring-day-of-month'], 10), 1, 28)){
+    if(inRange(parseInt(this.itemConfig['recurring-day-of-month'], 10), 1, 29)){
       this.itemConfig['recurring-day-of-month'] = padStart(this.itemConfig['recurring-day-of-month'], 2, '0');
     }else{
       delete this.itemConfig['recurring-day-of-month'];
     }
 
-    if(inRange(parseInt(this.itemConfig['recurring-start-month'], 10), 1, 12)){
+    if(inRange(parseInt(this.itemConfig['recurring-start-month'], 10), 1, 13)){
       this.itemConfig['recurring-start-month'] = padStart(this.itemConfig['recurring-start-month'], 2, '0');
     }else{
       delete this.itemConfig['recurring-start-month'];
