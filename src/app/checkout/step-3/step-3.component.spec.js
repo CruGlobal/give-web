@@ -25,7 +25,7 @@ describe('checkout', () => {
       self.controller = $componentController(module.name, {
           // Mock services
           cartService: {
-            editItem: jasmine.createSpy('editItem')
+            editItem: jasmine.createSpy('editItem').and.returnValue(Observable.of(''))
           },
           commonService: {
             getNextDrawDate: () => Observable.of('2018-09-07')
@@ -43,6 +43,7 @@ describe('checkout', () => {
           }
         },
         {
+          loadCart: jasmine.createSpy('loadCart'),
           changeStep: jasmine.createSpy('changeStep'),
           onSubmitBtnChangeState: jasmine.createSpy('onSubmitBtnChangeState'),
           onSubmitted: jasmine.createSpy('onSubmitted'),
@@ -127,7 +128,6 @@ describe('checkout', () => {
         item.config['recurring-start-month'] = '05';
         expect( self.controller.cartService.editItem ).toHaveBeenCalledWith(item.uri, item.productUri, item.config);
 
-        expect( self.controller.$scope.$emit ).toHaveBeenCalledWith( cartUpdatedEvent );
         expect( self.controller.loadCart ).toHaveBeenCalled();
       });
     });

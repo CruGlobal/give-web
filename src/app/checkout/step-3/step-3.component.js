@@ -104,7 +104,6 @@ class Step3Controller{
 
     this.cartData = null;
     this.cartService.editItem( item.uri, item.productUri, item.config ).subscribe( () => {
-      this.$scope.$emit( cartUpdatedEvent );
       this.loadCart();
     });
   }
