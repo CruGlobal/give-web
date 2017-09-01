@@ -165,13 +165,13 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat-start="i in $ctrl.cartData.items" ng-if="i.giftStartDateDaysFromNow >= 330">
+          <tr ng-repeat-start="i in $ctrl.cartData.items" ng-if="i.giftStartDateWarning">
             <td colspan="3">
               <div class="alert alert-warning text-center">
                 <strong>Warning!</strong>
                 You are about to give a gift starting {{i.giftStartDateDaysFromNow}} days in the future.
                 <div>
-                  <button class="btn btn-default" ng-click="i.giftStartDateDaysFromNow = 0">
+                  <button class="btn btn-default" ng-click="i.giftStartDateWarning = false">
                     Keep {{i.giftStartDate.format('ll')}}
                   </button>
                   <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('MM'))">
