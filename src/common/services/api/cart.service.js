@@ -53,6 +53,7 @@ class Cart {
           let itemConfig = omit(item.itemfields, ['self', 'links']);
           let giftStartDate = frequency !== 'Single' ?
             startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null;
+          let giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0;
 
           return {
             uri: item.self.uri,
@@ -65,7 +66,8 @@ class Cart {
             designationNumber: item.itemCode['product-code'],
             productUri: item.item.self.uri,
             giftStartDate: giftStartDate,
-            giftStartDateDaysFromNow: giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
+            giftStartDateDaysFromNow: giftStartDateDaysFromNow,
+            giftStartDateWarning: giftStartDateDaysFromNow >= 275
           };
         });
 

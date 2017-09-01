@@ -165,7 +165,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat-start="i in $ctrl.cartData.items" ng-if="i.giftStartDateDaysFromNow >= 275">
+          <tr ng-repeat-start="i in $ctrl.cartData.items" ng-if="i.giftStartDateWarning">
             <td colspan="3">
               <div class="alert alert-warning text-center">
                 <strong>Warning!</strong>
