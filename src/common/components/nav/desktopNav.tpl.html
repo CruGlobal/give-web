@@ -1,7 +1,7 @@
 <header id="desktop-navigation" class="gh-desk-nav" ng-init="$ctrl.toggleMenu()">
   <div class="container">
 
-    <a ng-href="{{$ctrl.publicCru}}" title="Cru" class="gh-desk-logo"></a>
+    <a ng-href="{{$ctrl.logoLink}}" title="Cru" class="gh-desk-logo"></a>
 
     <ul class="gh-desk-nav-tree col-level-1" ng-mouseleave="$ctrl.menuPath.main = []">
       <li ng-repeat="menuItem in $ctrl.menuStructure.main"

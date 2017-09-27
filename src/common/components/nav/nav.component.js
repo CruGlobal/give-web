@@ -106,6 +106,7 @@ class NavController{
         title: 'Cru Around the World',
         class: 'nav-globe'
       }];
+    this.logoLink = this.logoLink || this.publicCru;
   }
 
   setMenuTemplate() {
@@ -276,6 +277,7 @@ export default angular
       editProfilePath: '@',
       signOutPath: '@',
       customProfile: '<',
-      pullRightOptions: '<'
+      pullRightOptions: '<',
+      logoLink: '@'
     }
   });
