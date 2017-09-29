@@ -7,23 +7,23 @@
       <li ng-repeat="menuItem in $ctrl.menuStructure.main"
           ng-if="!menuItem.hideInNav"
           ng-class="{
-            'has-children': menuItem.children.length,
+            'has-children': $ctrl.hasVisibleChildren(menuItem.children),
             'open-menu': $ctrl.menuPath.main[0] === menuItem.path.split('/').pop(),
             'active': $ctrl.menuPath.sub[0] === menuItem.path.split('/').pop().replace('.html', '')
           }"
           ng-mouseover="$ctrl.menuPath.main[0] = menuItem.path.split('/').pop()">
         <a ng-href="{{menuItem.path}}">{{menuItem.title}}</a>
 
-        <div class="children-container" ng-if="menuItem.children.length">
+        <div class="children-container" ng-if="$ctrl.hasVisibleChildren(menuItem.children)">
           <ul class="col-level-2 on">
-            <li ng-class="{'has-children': menuItem.children.length}" ng-repeat="menuItem in menuItem.children"
+            <li ng-class="{'has-children': $ctrl.hasVisibleChildren(menuItem.children)}" ng-repeat="menuItem in menuItem.children"
                 ng-if="!menuItem.hideInNav"
-                ng-mouseover="$ctrl.menuPath.main[1] = menuItem.path.split('/').pop(); $ctrl.promoClass = menuItem.children.length ? 'gh-offset-3' : 'gh-offset-2';">
+                ng-mouseover="$ctrl.menuPath.main[1] = menuItem.path.split('/').pop(); $ctrl.promoClass = $ctrl.hasVisibleChildren(menuItem.children) ? 'gh-offset-3' : 'gh-offset-2';">
               <a ng-href="{{menuItem.path}}">
-                <span ng-if="menuItem.children.length"></span>{{menuItem.title}}
+                <span ng-if="$ctrl.hasVisibleChildren(menuItem.children)"></span>{{menuItem.title}}
               </a>
 
-              <ul class="col-level-3" ng-class="{'on': menuItem.children.length && $ctrl.menuPath.main[1] === menuItem.path.split('/').pop()}">
+              <ul class="col-level-3" ng-class="{'on': $ctrl.hasVisibleChildren(menuItem.children) && $ctrl.menuPath.main[1] === menuItem.path.split('/').pop()}">
                 <li ng-repeat="menuItem in menuItem.children" ng-if="!menuItem.hideInNav">
                   <a ng-href="{{menuItem.path}}">{{menuItem.title}}</a>
                 </li>

@@ -252,6 +252,10 @@ class NavController{
       }
     });
   }
+
+  hasVisibleChildren(children){
+    return angular.isDefined(children) && angular.isDefined(find(children, {hideInNav: false}));
+  }
 }
 
 export default angular

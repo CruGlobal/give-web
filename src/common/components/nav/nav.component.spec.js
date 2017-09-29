@@ -326,4 +326,19 @@ describe( 'nav signInButton', function () {
       } );
     } );
   } );
+
+  it( 'to detect if any visible children menuItems exist', () => {
+    expect( $ctrl.hasVisibleChildren([
+      {"path":"path.html","title":"MPD & Donations","hideInNav":true},
+      {"path":"path1.html","title":"MPD & Donations","hideInNav":false}
+    ]) ).toEqual( true );
+
+    expect( $ctrl.hasVisibleChildren([
+      {"path":"path.html","title":"MPD & Donations","hideInNav":true},
+      {"path":"path1.html","title":"MPD & Donations","hideInNav":true}
+    ]) ).toEqual( false );
+
+    expect( $ctrl.hasVisibleChildren( [] )).toEqual( false );
+    expect( $ctrl.hasVisibleChildren( undefined )).toEqual( false );
+  } );
 } );
