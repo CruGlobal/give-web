@@ -14,7 +14,7 @@
         <a ng-href="{{$ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].path}}"
            ng-class="{'active':
              $ctrl.menuPath.currentPage === '' ||
-             $ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].path.split('/').pop() === $ctrl.menuPath.currentPage
+             $ctrl.subMenuStructure[$ctrl.subMenuStructure.length - 1].path.split('/').pop().replace('.html', '') === $ctrl.menuPath.currentPage
            }" translate>
           Home
         </a>
