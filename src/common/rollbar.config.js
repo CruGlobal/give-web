@@ -50,10 +50,14 @@ function rollbarConfig(envServiceProvider, $provide) {
           // Parse the exception to get the stack
           stackFramesPromise = stacktrace.fromError(args[0], {offline: true});
         }else{
+          if (args[1] && (args[1].status === -1 || args[1].status === 401)) {
+            return; // Drop browser network errors and unauthorized api errors due to expired tokens
+          }
+
           // Join $log arguments
           message = args
-            .map(arg => angular.toJson(arg))
-            .join(', ');
+            .map(arg => angular.toJson(arg, true))
+            .join('\n');
 
           // Log came from app so we get the stacktrace from this file
           stackFramesPromise = stacktrace.get({offline: true});
