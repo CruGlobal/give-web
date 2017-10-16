@@ -77,10 +77,6 @@ class SearchResultsController {
     }
   }
 
-  requestCruSearch(){
-    this.$window.google && this.$window.google.search && this.$window.google.search.cse.element.go();
-  }
-
   redirectSearch(site){
     let path = site === 'give' ?
       this.envService.read('publicGive') + '/search-results.html?'

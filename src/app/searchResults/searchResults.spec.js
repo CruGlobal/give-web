@@ -94,25 +94,6 @@ describe( 'searchResults', function () {
     } );
   } );
 
-  describe( 'requestCruSearch', () => {
-    it('creates Google Custom Search elements', () => {
-      $ctrl.$window.google = {
-        search: {
-          cse: {
-            element: {
-              go: () => {}
-            }
-          }
-        }
-      };
-
-      spyOn($ctrl.$window.google.search.cse.element, 'go');
-
-      $ctrl.requestCruSearch();
-      expect($ctrl.$window.google.search.cse.element.go).toHaveBeenCalled();
-    });
-  });
-
   describe( 'redirectSearch', () => {
     it( 'navigates to cru.org search page, keyword search', () => {
       $ctrl.$onInit();
