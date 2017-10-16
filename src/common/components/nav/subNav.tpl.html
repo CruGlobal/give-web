@@ -29,6 +29,16 @@
       </li>
     </ul>
 
+    <div class="cart">
+      <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
+        <a uib-dropdown-toggle></a>
+        <div class="pull-right" uib-dropdown-menu>
+          <span class="triangle"></span>
+          <nav-cart></nav-cart>
+        </div>
+      </div>
+    </div>
+
     <div class="sub-nav-search-icon" ng-click="$ctrl.toggleMenu(!$ctrl.desktopSearch)">
       <span ng-class="{'search-icon-on': $ctrl.desktopSearch, 'search-icon-off': !$ctrl.desktopSearch}"></span>
     </div>
