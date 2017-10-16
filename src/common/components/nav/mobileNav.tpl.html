@@ -101,6 +101,6 @@
   </div>
 </div>
 
-<cru-sub-nav ng-if="$ctrl.subMenuStructure.length"></cru-sub-nav>
+<cru-sub-nav ng-if="$ctrl.subMenuStructure.length && !$ctrl.mobileNavOpen"></cru-sub-nav>
 
 <div class="mobile-nav-overlay" ng-class="{'on': $ctrl.mobileNavOpen}"></div>
