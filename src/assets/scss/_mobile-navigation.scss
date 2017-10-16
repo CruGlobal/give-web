@@ -43,7 +43,7 @@ cru-nav {
 
   #mobile-logo {
     float: left;
-    background: url("/assets/img/cru-mobile-logo.png") no-repeat 20px center;
+    background: url("assets/img/cru-mobile-logo.png") no-repeat 20px center;
     background-size: 80px 50px;
     width: 50%;
     height: 100%;
@@ -266,7 +266,7 @@ cru-nav {
       text-transform: uppercase;
       font-size: 14px;
       &.has-children {
-        background: url("/assets/img/mobile-menu-forward-arrow.png") no-repeat;
+        background: url("assets/img/mobile-menu-forward-arrow.png") no-repeat;
         background-position: right 20px center;
       }
       &:focus,
@@ -354,7 +354,7 @@ cru-nav {
 
   #mob-global {
     height: 100%;
-    background: url("/assets/img/mobile-global-bg.jpg") no-repeat center center fixed;
+    background: url("assets/img/mobile-global-bg.jpg") no-repeat center center fixed;
     background-size: cover;
 
     .global-menu {
