@@ -12,8 +12,6 @@ describe( 'cruSubNav', function () {
     scope = _$rootScope_.$new();
     subNav = _$compile_('<cru-sub-nav></cru-sub-nav>')(scope);
     scope.$digest();
-
-    spyOn( scope, '$emit' );
   } ) );
 
   it( 'is class set', () => {
@@ -25,9 +23,12 @@ describe( 'cruSubNav', function () {
   } );
 
   it( 'should emit event when sub navigation is locked', () => {
-    angular.element($window).triggerHandler('scroll');
-    scope.$digest();
+    spyOn( scope, '$emit' );
 
+    $window.scrollTo(0, 1);
     expect(scope.$emit).toHaveBeenCalledWith(subNavUnlockEvent);
+
+    $window.scrollTo(0, 1400);
+    expect(scope.$emit).toHaveBeenCalledWith(subNavLockEvent);
   } );
 } );
