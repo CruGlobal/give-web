@@ -63,7 +63,7 @@ class NavController{
     this.getNav().subscribe((structure) => {
         this.menuStructure = structure;
 
-        if(this.$window.location.hostname && includes(this.$window.location.hostname, 'cru.org')){
+        if(this.$window.location.hostname && includes(this.$window.location.hostname, 'give')){
           this.subMenuStructure = [{
             title: 'Give',
             path: '/',
