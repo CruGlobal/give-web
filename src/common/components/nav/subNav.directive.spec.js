@@ -5,30 +5,34 @@ import module from './subNav.directive';
 
 describe( 'cruSubNav', function () {
   beforeEach( angular.mock.module( module.name ) );
-  let $window, scope, subNav;
+  let $window, $rootScope, subNav;
 
   beforeEach( inject( function ( _$compile_, _$rootScope_, _$window_ ) {
     $window = _$window_;
-    scope = _$rootScope_.$new();
-    subNav = _$compile_('<cru-sub-nav></cru-sub-nav>')(scope);
-    scope.$digest();
+    $rootScope = _$rootScope_;
+    subNav = _$compile_('<cru-sub-nav></cru-sub-nav>')($rootScope.$new());
+    spyOn( $window, 'addEventListener' );
+    spyOn( $rootScope, '$emit' );
+    $rootScope.$digest();
   } ) );
 
   it( 'is class set', () => {
     angular.element($window).triggerHandler('scroll');
-    scope.$digest();
+    $rootScope.$digest();
 
     let subNavigation = subNav.children()[0];
     expect( subNavigation.className ).toEqual( '' );
   } );
 
   it( 'should emit event when sub navigation is locked', () => {
-    spyOn( scope, '$emit' );
+    expect($window.addEventListener).toHaveBeenCalledWith('scroll', jasmine.any(Function));
 
-    $window.scrollTo(0, 1);
-    expect(scope.$emit).toHaveBeenCalledWith(subNavUnlockEvent);
+    $window.scrollY = 0;
+    $window.addEventListener.calls.argsFor(0)[1]();
+    expect($rootScope.$emit).toHaveBeenCalledWith(subNavUnlockEvent);
 
-    $window.scrollTo(0, 1400);
-    expect(scope.$emit).toHaveBeenCalledWith(subNavLockEvent);
+    $window.scrollY = 1400;
+    $window.addEventListener.calls.argsFor(0)[1]();
+    expect($rootScope.$emit).toHaveBeenCalledWith(subNavLockEvent);
   } );
 } );
