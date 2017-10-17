@@ -3,7 +3,7 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
-import module from './nav.component';
+import module, {subNavLockEvent, subNavUnlockEvent} from './nav.component';
 
 import navStructure from 'common/components/nav/fixtures/nav.fixture';
 
@@ -153,6 +153,17 @@ describe( 'nav', function () {
       $ctrl.$onInit();
       expect($ctrl.$log.warn.logs[0]).toEqual(['Aborted or timed out request while loading the nav.', { status: -1 }]);
     });
+
+    it( 'should send event to set subNavLack var', () => {
+      $ctrl.$onInit();
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( subNavLockEvent, jasmine.any( Function ) );
+      $ctrl.$rootScope.$on.calls.argsFor( 1 )[1]();
+      expect( $ctrl.subNavLocked ).toEqual( true );
+
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( subNavUnlockEvent, jasmine.any( Function ) );
+      $ctrl.$rootScope.$on.calls.argsFor( 2 )[1]();
+      expect( $ctrl.subNavLocked ).toEqual( false );
+    } );
   } );
 
   describe( 'giftAddedToCart()', () => {
