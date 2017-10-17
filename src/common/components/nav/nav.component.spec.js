@@ -162,9 +162,8 @@ describe( 'nav', function () {
       $ctrl.mobileNavOpen = false;
     } );
 
-    it( 'scrolls to top and opens nav cart when giftAdded', () => {
+    it( 'opens nav cart when giftAdded', () => {
       $ctrl.giftAddedToCart();
-      expect( $ctrl.$window.scrollTo ).toHaveBeenCalledWith( 0, 0 );
       expect( $ctrl.cartOpen ).toEqual( true );
 
       $ctrl.menuType = 'mobile';

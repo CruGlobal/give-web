@@ -63,7 +63,7 @@ class NavController{
     this.getNav().subscribe((structure) => {
         this.menuStructure = structure;
 
-        if(this.$window.location.hostname && includes(this.$window.location.hostname, 'give')){
+        if(this.$window.location.hostname && includes(this.$window.location.hostname, 'cru.org')){
           this.subMenuStructure = [{
             title: 'Give',
             path: '/',
@@ -122,8 +122,12 @@ class NavController{
       this.mobileNavOpen = true;
       this.mobileTab = 'cart';
     }else{
-      this.$window.scrollTo(0, 0);
-      this.cartOpen = true;
+      //only open visible cart
+      if(angular.element(this.$document[0].getElementById('sub-navigation')).hasClass('out')){
+        this.cartOpenSubNav = true;
+      }else{
+        this.cartOpen = true;
+      }
     }
   }
 
