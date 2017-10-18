@@ -31,10 +31,6 @@ class NavCartController{
     this.$rootScope.$on(giftAddedEvent, () => this.loadCart(true));
     this.$rootScope.$on(cartUpdatedEvent, () => this.loadCart());
     this.sessionService.sessionSubject.subscribe( () => !this.firstLoad && this.loadCart() ); // Ignore session events until another event loads cart
-
-    if(this.cartData){
-      this.hasItems = !isEmpty(this.cartData.items);
-    }
   }
 
   loadCart(setAnalyticsEvent) {
@@ -74,7 +70,6 @@ export default angular
     controller: NavCartController,
     templateUrl: template,
     bindings: {
-      mobile: '@',
-      cartData: '='
+      mobile: '@'
     }
   });
