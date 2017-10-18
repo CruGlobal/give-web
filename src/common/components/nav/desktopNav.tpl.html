@@ -36,25 +36,25 @@
     </ul>
 
     <div class="search-sign-in-wrapper">
-      <div class="ellipsis">
-        <div uib-dropdown>
-          <a uib-dropdown-toggle></a>
-          <ul class="pull-right" uib-dropdown-menu>
-            <span class="triangle"></span>
-            <li class="menu" ng-repeat="i in $ctrl.pullRightOptions track by $index" ng-class="i.class">
-              <a ng-href="{{i.path}}" ng-click="!i.path && $ctrl.openGlobalWebsitesModal()" translate>{{i.title}}</a>
-            </li>
-            <li class="menu nav-books">
-              <a href="https://www.cru.org/store.html" target="_blank" translate>
-                Shop Books
-              </a>
-            </li>
-            <!--<li class="menu nav-apps"><a href="" translate>Apps</a></li>-->
-          </ul>
+      <div ng-class="{'nav-icons-fixed': $ctrl.subNavLocked}">
+        <div class="ellipsis">
+          <div uib-dropdown>
+            <a uib-dropdown-toggle></a>
+            <ul class="pull-right" uib-dropdown-menu>
+              <span class="triangle"></span>
+              <li class="menu" ng-repeat="i in $ctrl.pullRightOptions track by $index" ng-class="i.class">
+                <a ng-href="{{i.path}}" ng-click="!i.path && $ctrl.openGlobalWebsitesModal()" translate>{{i.title}}</a>
+              </li>
+              <li class="menu nav-books">
+                <a href="https://www.cru.org/store.html" target="_blank" translate>
+                  Shop Books
+                </a>
+              </li>
+              <!--<li class="menu nav-apps"><a href="" translate>Apps</a></li>-->
+            </ul>
+          </div>
         </div>
-      </div>
 
-      <div ng-class="{'sign-in-fixed': $ctrl.subNavLocked}">
         <div class="sign-in" ng-if="!$ctrl.isSignedIn" ng-click="$ctrl.signIn()" translate>Sign In</div>
         <div class="signed-in" ng-if="$ctrl.isSignedIn">
           <div uib-dropdown>
@@ -71,21 +71,21 @@
             </ul>
           </div>
         </div>
-      </div>
 
-      <div class="cart" ng-class="{'cart-fixed': $ctrl.subNavLocked}">
-        <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
-          <a uib-dropdown-toggle></a>
-          <div class="pull-right" uib-dropdown-menu>
-            <span class="triangle"></span>
-            <nav-cart></nav-cart>
+        <div class="cart">
+          <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
+            <a uib-dropdown-toggle></a>
+            <div class="pull-right" uib-dropdown-menu>
+              <span class="triangle"></span>
+              <nav-cart></nav-cart>
+            </div>
           </div>
         </div>
-      </div>
 
-      <span class="search-icon" ng-click="$ctrl.toggleMenu(!$ctrl.desktopSearch)">
-        <span ng-class="{'search-icon-on': $ctrl.desktopSearch, 'search-icon-off': !$ctrl.desktopSearch}"></span>
-      </span>
+        <span class="search-icon" ng-click="$ctrl.toggleMenu(!$ctrl.desktopSearch)">
+          <span ng-class="{'search-icon-on': $ctrl.desktopSearch, 'search-icon-off': !$ctrl.desktopSearch}"></span>
+        </span>
+      </div>
     </div>
   </div>
 </header>
