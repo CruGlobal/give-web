@@ -86,7 +86,7 @@
         </div>
       </div>
       <div role="tabpanel" class="tab-pane active" ng-show="$ctrl.mobileTab === 'cart'">
-        <nav-cart mobile="true"></nav-cart>
+        <nav-cart mobile="true" cart-data="$ctrl.cartData"></nav-cart>
       </div>
       <div role="tabpanel" class="tab-pane active" ng-if="$ctrl.mobileTab === 'more'">
         <ul id="mob-more">

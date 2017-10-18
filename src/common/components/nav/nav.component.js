@@ -23,17 +23,21 @@ import mobileTemplate from './mobileNav.tpl.html';
 import desktopTemplate from './desktopNav.tpl.html';
 import signOutTemplate from './signOut.modal.tpl.html';
 
+export let subNavLockEvent = 'subNavLock';
+export let subNavUnlockEvent = 'subNavUnlock';
+
 let componentName = 'cruNav';
 
 class NavController{
 
   /* @ngInject */
-  constructor($log, $rootScope, $http, $document, $window, $uibModal, $timeout, envService, sessionService, sessionModalService){
+  constructor($log, $rootScope, $scope, $http, $document, $window, $uibModal, $timeout, envService, sessionService, sessionModalService){
     this.$log = $log;
     this.$http = $http;
     this.$document = $document;
     this.$uibModal = $uibModal;
     this.$window = $window;
+    this.$scope = $scope;
     this.$rootScope = $rootScope;
     this.$timeout = $timeout;
 
@@ -85,6 +89,8 @@ class NavController{
     this.subscription = this.sessionService.sessionSubject.subscribe( () => this.sessionChanged() );
 
     this.$rootScope.$on(giftAddedEvent, () => this.giftAddedToCart() );
+    this.$rootScope.$on(subNavLockEvent, () => this.$scope.$apply(() => this.subNavLocked = true ));
+    this.$rootScope.$on(subNavUnlockEvent, () => this.$scope.$apply(() => this.subNavLocked = false ));
     // Register signedOut event on child scope
     // this basically sets the listener at a lower priority, allowing $rootScope listeners first chance to respond
     this.$rootScope.$new(true, this.$rootScope).$on(SignOutEvent, (event) => this.signedOut(event) );
@@ -122,7 +128,6 @@ class NavController{
       this.mobileNavOpen = true;
       this.mobileTab = 'cart';
     }else{
-      this.$window.scrollTo(0, 0);
       this.cartOpen = true;
     }
   }

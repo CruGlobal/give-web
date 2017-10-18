@@ -29,12 +29,12 @@
       </li>
     </ul>
 
-    <div class="cart">
+    <div class="cart" ng-if="$ctrl.subNavLocked">
       <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
         <a uib-dropdown-toggle></a>
         <div class="pull-right" uib-dropdown-menu>
           <span class="triangle"></span>
-          <nav-cart></nav-cart>
+          <nav-cart cart-data="$ctrl.cartData"></nav-cart>
         </div>
       </div>
     </div>
