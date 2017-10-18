@@ -54,29 +54,31 @@
         </div>
       </div>
 
-      <div class="sign-in" ng-if="!$ctrl.isSignedIn" ng-click="$ctrl.signIn()" translate>Sign In</div>
-      <div class="signed-in" ng-if="$ctrl.isSignedIn">
-        <div uib-dropdown>
-          <a uib-dropdown-toggle>{{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}</a>
-          <ul class="pull-right" uib-dropdown-menu>
-            <span class="triangle"></span>
-            <li class="nav-edit-profile">
-              <a ng-href="{{$ctrl.editProfilePath}}" ng-if="$ctrl.editProfilePath" translate>Edit Profile</a>
-              <a href="https://signin.cru.org/sso/selfservice/settings?theme=cru" target="_blank" ng-if="!$ctrl.editProfilePath" translate>
-                Login Settings
-              </a>
-            </li>
-            <li class="nav-sign-out"><a href="" ng-click="$ctrl.signOut()" translate>Sign Out</a></li>
-          </ul>
+      <div ng-class="{'sign-in-fixed': $ctrl.subNavLocked}">
+        <div class="sign-in" ng-if="!$ctrl.isSignedIn" ng-click="$ctrl.signIn()" translate>Sign In</div>
+        <div class="signed-in" ng-if="$ctrl.isSignedIn">
+          <div uib-dropdown>
+            <a uib-dropdown-toggle>{{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}</a>
+            <ul class="pull-right" uib-dropdown-menu>
+              <span class="triangle"></span>
+              <li class="nav-edit-profile">
+                <a ng-href="{{$ctrl.editProfilePath}}" ng-if="$ctrl.editProfilePath" translate>Edit Profile</a>
+                <a href="https://signin.cru.org/sso/selfservice/settings?theme=cru" target="_blank" ng-if="!$ctrl.editProfilePath" translate>
+                  Login Settings
+                </a>
+              </li>
+              <li class="nav-sign-out"><a href="" ng-click="$ctrl.signOut()" translate>Sign Out</a></li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <div class="cart" ng-if="!$ctrl.subNavLocked">
+      <div class="cart" ng-class="{'cart-fixed': $ctrl.subNavLocked}">
         <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
           <a uib-dropdown-toggle></a>
           <div class="pull-right" uib-dropdown-menu>
             <span class="triangle"></span>
-            <nav-cart cart-data="$ctrl.cartData"></nav-cart>
+            <nav-cart></nav-cart>
           </div>
         </div>
       </div>

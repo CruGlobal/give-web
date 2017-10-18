@@ -196,6 +196,7 @@ $promo-width: 200px;
           display: block;
           width: 100%;
           height: 100%;
+          cursor: pointer;
         }
       }
 
@@ -230,9 +231,20 @@ $promo-width: 200px;
       text-transform: uppercase;
       color: $colorGrayscale-slate;
       font-weight: 600;
-      line-height: 1.2;
       text-align: right;
       line-height: 22px;
+    }
+
+    .sign-in-fixed {
+      position: fixed;
+      z-index: 1100;
+      width: 160px;
+    }
+
+    .cart-fixed {
+      position: fixed;
+      z-index: 1100;
+      margin-left: 175px;
     }
 
     .sign-in {
