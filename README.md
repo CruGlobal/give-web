@@ -27,6 +27,24 @@ Import the following:
 This currently includes all cru.org styling from cru.scss.
 
 ### Branded checkout
+
+#### Branded checkout basic example
+
+Add the following code to your page where appropriate:
+```html
+<link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+<branded-checkout
+    ng-app="brandedCheckout"
+    code="0763355">
+</branded-checkout>
+
+<script src="https://give-static.cru.org/branded-checkout.js"></script>
+```
+
+#### Branded checkout full example with all attributes
+
 Add the following code to your page where appropriate:
 ```html
 <link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
@@ -50,7 +68,10 @@ Add the following code to your page where appropriate:
   };
 </script>
 ```
-The `<branded-checkout>` element is where the branded checkout Angular app will be loaded. It accepts the following attributes:
+
+#### Branded checkout config
+
+The `<branded-checkout>` element is where the branded checkout Angular app will be loaded. It is configured by providing HTML attributes that will be loaded by Angular. Attributes with values containing angle brackets (such as `<designation number>`) are placeholders and should be replaced with real values or, if not needed, the whole attribute should be omitted. The `<branded-checkout>` element accepts the following attributes:
 - `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
 - `code` - the designation number you would like donors to give to - **Required**
 - `campaign-code` - the campaign code you would like to use - *Optional*
