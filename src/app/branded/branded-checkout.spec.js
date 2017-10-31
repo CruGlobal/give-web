@@ -9,9 +9,11 @@ describe('branded checkout', () => {
 
   beforeEach(inject($componentController => {
     $ctrl = $componentController(module.name, {
-      $window: { scrollTo: jasmine.createSpy('scrollTo') }
+      $window: jasmine.createSpyObj('$window', ['scrollTo']),
+      tsysService: jasmine.createSpyObj('tsysService', ['setEnvironment'])
     }, {
-      onOrderCompleted: jasmine.createSpy('onOrderCompleted')
+      onOrderCompleted: jasmine.createSpy('onOrderCompleted'),
+      tsysEnv: 'test-env'
     });
   }));
 
@@ -21,6 +23,7 @@ describe('branded checkout', () => {
       $ctrl.$onInit();
       expect($ctrl.checkoutStep).toEqual('giftContactPayment');
       expect($ctrl.formatDonorDetails).toHaveBeenCalled();
+      expect($ctrl.tsysService.setEnvironment).toHaveBeenCalledWith('test-env');
     });
   });
 
