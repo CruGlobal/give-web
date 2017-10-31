@@ -30,7 +30,9 @@ This currently includes all cru.org styling from cru.scss.
 
 #### Branded checkout basic example
 
-Add the following code to your page where appropriate:
+Add the following code to your page where appropriate. You must change the value of the `code` and `tsys-env` attributes:
+- `code` must be changed to the designation number you want users to give to.
+- `tsys-env` must be changed to match your environment. It is provided by DPS when adding your domain to the TSYS whitelist.
 ```html
 <link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -38,7 +40,7 @@ Add the following code to your page where appropriate:
 <branded-checkout
     ng-app="brandedCheckout"
     code="0763355"
-    tsys-env="default">
+    tsys-env="cru">
 </branded-checkout>
 
 <script src="https://give-static.cru.org/branded-checkout.js"></script>

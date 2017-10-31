@@ -23,12 +23,6 @@ describe('order service', () => {
       self.tsysService.setEnvironment('test-env');
       expect(self.tsysService.environment).toEqual('test-env');
     });
-    
-    it('should handle default', () => {
-      expect(self.tsysService.environment).toEqual('');
-      self.tsysService.setEnvironment('default');
-      expect(self.tsysService.environment).toEqual('');
-    });
   });
 
   describe('getManifest', () => {

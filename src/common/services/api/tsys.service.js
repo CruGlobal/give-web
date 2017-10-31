@@ -14,7 +14,7 @@ class Tsys{
   }
 
   setEnvironment(environment){
-    this.environment = environment === 'default' ? '' : environment;
+    this.environment = environment;
   }
 
   getManifest(){
