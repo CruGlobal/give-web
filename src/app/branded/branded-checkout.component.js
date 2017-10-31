@@ -24,7 +24,8 @@ class BrandedCheckoutController {
   }
 
   $onInit() {
-    this.tsysService.setEnvironment(this.tsysEnv);
+    this.code = this.designationNumber;
+    this.tsysService.setDevice(this.tsysDevice);
     this.checkoutStep = 'giftContactPayment';
     this.formatDonorDetails();
     this.analyticsFactory.pageLoaded(true);
@@ -86,8 +87,8 @@ export default angular
     controller: BrandedCheckoutController,
     templateUrl: template,
     bindings: {
-      code: '@',
-      tsysEnv: '@',
+      designationNumber: '@',
+      tsysDevice: '@',
       campaignCode: '@',
       amount: '@',
       frequency: '@',

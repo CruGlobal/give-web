@@ -10,10 +10,11 @@ describe('branded checkout', () => {
   beforeEach(inject($componentController => {
     $ctrl = $componentController(module.name, {
       $window: jasmine.createSpyObj('$window', ['scrollTo']),
-      tsysService: jasmine.createSpyObj('tsysService', ['setEnvironment'])
+      tsysService: jasmine.createSpyObj('tsysService', ['setDevice'])
     }, {
-      onOrderCompleted: jasmine.createSpy('onOrderCompleted'),
-      tsysEnv: 'test-env'
+      designationNumber: '1234567',
+      tsysDevice: 'test-env',
+      onOrderCompleted: jasmine.createSpy('onOrderCompleted')
     });
   }));
 
@@ -21,9 +22,10 @@ describe('branded checkout', () => {
     it('should set initial checkout step and call formatDonorDetails', () => {
       spyOn($ctrl, 'formatDonorDetails');
       $ctrl.$onInit();
+      expect($ctrl.code).toEqual('1234567');
+      expect($ctrl.tsysService.setDevice).toHaveBeenCalledWith('test-env');
       expect($ctrl.checkoutStep).toEqual('giftContactPayment');
       expect($ctrl.formatDonorDetails).toHaveBeenCalled();
-      expect($ctrl.tsysService.setEnvironment).toHaveBeenCalledWith('test-env');
     });
   });
 

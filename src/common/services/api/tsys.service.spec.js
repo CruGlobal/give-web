@@ -17,11 +17,11 @@ describe('order service', () => {
     self.$httpBackend.verifyNoOutstandingRequest();
   });
 
-  describe('setEnvironment', () => {
-    it('should set the branded checkout TSYS environment', () => {
-      expect(self.tsysService.environment).toEqual('');
-      self.tsysService.setEnvironment('test-env');
-      expect(self.tsysService.environment).toEqual('test-env');
+  describe('setDevice', () => {
+    it('should set the branded checkout TSYS device', () => {
+      expect(self.tsysService.device).toEqual('');
+      self.tsysService.setDevice('test-env');
+      expect(self.tsysService.device).toEqual('test-env');
     });
   });
 
@@ -37,7 +37,7 @@ describe('order service', () => {
     });
 
     it('should use the branded checkout TSYS environment if specified', () => {
-      self.tsysService.environment = 'test-env';
+      self.tsysService.device = 'test-env';
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/tsys/manifest/test-env')
         .respond(200, { deviceId: '<device id>', manifest: '<manifest>' });
       self.tsysService.getManifest()
