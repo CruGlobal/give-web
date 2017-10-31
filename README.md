@@ -37,7 +37,8 @@ Add the following code to your page where appropriate:
 
 <branded-checkout
     ng-app="brandedCheckout"
-    code="0763355">
+    code="0763355"
+    tsys-env="default">
 </branded-checkout>
 
 <script src="https://give-static.cru.org/branded-checkout.js"></script>
@@ -53,6 +54,7 @@ Add the following code to your page where appropriate:
 <branded-checkout
     ng-app="brandedCheckout"
     code="<designation number>"
+    tsys-env="<tsys-env>"
     campaign-code="<campaign code>"
     amount="<amount>"
     frequency="<frequency>"
@@ -74,6 +76,7 @@ Add the following code to your page where appropriate:
 The `<branded-checkout>` element is where the branded checkout Angular app will be loaded. It is configured by providing HTML attributes that will be loaded by Angular. Attributes with values containing angle brackets (such as `<designation number>`) are placeholders and should be replaced with real values or, if not needed, the whole attribute should be omitted. The `<branded-checkout>` element accepts the following attributes:
 - `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
 - `code` - the designation number you would like donors to give to - **Required**
+- `tsys-env` - the environment name for processing credit cards with TSYS - **Required** - Provided by DPS when adding your domain to the TSYS whitelist
 - `campaign-code` - the campaign code you would like to use - *Optional*
 - `amount` - defaults the gift's amount - *Optional*
 - `frequency` - defaults the gift's frequency - *Optional* - can be one of the following values:
@@ -81,7 +84,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
   - `monthly` - monthly recurring gift
   - `quarterly` - quarterly recurring gift
   - `annually` - annually recurring gift
-- `day` - for recuring gifts this defaults the gift's day of the month - *Optional* - can be `1` to `28`
+- `day` - for recurring gifts this defaults the gift's day of the month - *Optional* - can be `1` to `28`
 - `donor-details` - set default values for donor's name and contact info - *Optional* - can be provided as an inline string JSON string or as an Angular expression referencing a variable from an outside Angular module - should be in this format:
     ```javascript
     {

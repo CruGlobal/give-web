@@ -17,12 +17,14 @@ let componentName = 'brandedCheckout';
 class BrandedCheckoutController {
 
   /* @ngInject */
-  constructor($window, analyticsFactory) {
+  constructor($window, analyticsFactory, tsysService) {
     this.$window = $window;
     this.analyticsFactory = analyticsFactory;
+    this.tsysService = tsysService;
   }
 
   $onInit() {
+    this.tsysService.setEnvironment(this.tsysEnv);
     this.checkoutStep = 'giftContactPayment';
     this.formatDonorDetails();
     this.analyticsFactory.pageLoaded(true);
@@ -85,6 +87,7 @@ export default angular
     templateUrl: template,
     bindings: {
       code: '@',
+      tsysEnv: '@',
       campaignCode: '@',
       amount: '@',
       frequency: '@',

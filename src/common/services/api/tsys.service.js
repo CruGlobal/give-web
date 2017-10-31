@@ -10,11 +10,16 @@ class Tsys{
   /*@ngInject*/
   constructor(cortexApiService){
     this.cortexApiService = cortexApiService;
+    this.environment = '';
+  }
+
+  setEnvironment(environment){
+    this.environment = environment === 'default' ? '' : environment;
   }
 
   getManifest(){
     return this.cortexApiService.get({
-      path: ['tsys', 'manifest']
+      path: this.environment ? ['tsys', 'manifest', this.environment] : ['tsys', 'manifest']
     });
   }
 
