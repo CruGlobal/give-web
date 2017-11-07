@@ -191,8 +191,8 @@ class NavController{
         let jsonStructure = response.data;
         let menuStructure = {
           main: jsonStructure['/content/cru/us/en'] || jsonStructure['main'],
-          global: jsonStructure['/content/cru/us/en/global'],
-          give: jsonStructure['/content/give/us/en']
+          global: jsonStructure['/content/cru/us/en/global'] || jsonStructure['global'],
+          give: jsonStructure['/content/give/us/en'] || jsonStructure['give']
         };
 
         //add give to main nav
