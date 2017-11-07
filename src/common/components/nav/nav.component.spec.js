@@ -321,22 +321,6 @@ describe( 'nav signInButton', function () {
     } );
   } );
 
-  describe( 'openGlobalWebsitesModal', () => {
-    it( 'should open the global websites modal', () => {
-      spyOn($ctrl.$uibModal, 'open');
-      $ctrl.openGlobalWebsitesModal();
-      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( {
-        component: 'globalWebsitesModal',
-        backdrop: 'static',
-        windowTemplateUrl: jasmine.any(String),
-        windowClass: 'globalWebsites--is-open',
-        resolve: {
-          menuStructure: $ctrl.menuStructure
-        }
-      } );
-    } );
-  } );
-
   it( 'to detect if any visible children menuItems exist', () => {
     expect( $ctrl.hasVisibleChildren([
       {"path":"path.html","title":"MPD & Donations","hideInNav":true},

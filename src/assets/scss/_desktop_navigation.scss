@@ -4,9 +4,7 @@ $promo-width: 200px;
 
 #desktop-navigation {
   background-color: $colorCru-white;
-  border-top: 4px solid $colorCru-gold;
   display: block;
-  height: 80px;
 
   + #container {
     &:before,
@@ -24,8 +22,72 @@ $promo-width: 200px;
     min-width: 980px !important;
   }
 
+  .gold-border{
+    border-top: 4px solid $colorCru-gold;
+  }
+
   &.padded {
     margin-bottom: 80px;
+  }
+
+  .language-picker {
+    transition: max-height 1s, opacity 1s;
+    max-height: 400px;
+    opacity: 1;
+    background-color: #5A5A5A;
+
+    &.closed {
+      max-height: 0;
+      opacity: 0;
+    }
+
+    .picker-countries{
+      list-style: none;
+      padding-top: 8px;
+      letter-spacing: 0.5px;
+
+      a{
+        &:visited, &:link, &:active {
+          color: #fff;
+        }
+
+        &:hover, &.active {
+          color: $colorCru-gold;
+          text-decoration: none;
+        }
+      }
+
+      & > a{
+        font-size: 24px;
+        text-transform: uppercase;
+        margin-right: 20px;
+      }
+
+      & > li > ul {
+        list-style: none;
+        column-count: 4;
+        column-gap: 20px;
+        margin-top: 6px;
+
+        & > li {
+          color: #fff;
+
+          & > h5{
+            color: #BEBEBE;
+            display: inline;
+            font-size: 18px;
+            line-height: 16px;
+            text-transform: uppercase;
+            margin-right: 12px;
+          }
+
+          a {
+            font-size: 14px;
+            font-weight: 500;
+          }
+        }
+      }
+    }
   }
 
   .gh-desk-logo {
@@ -229,6 +291,17 @@ $promo-width: 200px;
           z-index: 10;
         }
       }
+    }
+
+    .language {
+      float: right;
+      text-transform: uppercase;
+      color: #BEBEBE;
+      font-weight: 600;
+      text-align: right;
+      line-height: 22px;
+      margin-right: 26px;
+      cursor: pointer;
     }
 
     .sign-in, .signed-in {

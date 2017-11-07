@@ -14,8 +14,6 @@ import sessionModalService from 'common/services/session/sessionModal.service';
 import mobileNavLevelComponent from './navMobileLevel.component';
 import subNavDirective from './subNav.directive';
 import {giftAddedEvent} from 'common/components/nav/navCart/navCart.component';
-import globalWebsitesModalWindowTemplate from './globalWebsitesModal/globalWebsitesModalWindow.tpl.html';
-import globalWebsitesModal from './globalWebsitesModal/globalWebsitesModal.component';
 import navCart, {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 import autoFocus from 'common/directives/autoFocus.directive';
 
@@ -108,9 +106,6 @@ class NavController{
         title: 'Find Cru Near Me',
         path: 'https://www.cru.org/communities/locations.html',
         class: 'nav-near-me'
-      }, {
-        title: 'Cru Around the World',
-        class: 'nav-globe'
       }];
     this.logoLink = this.logoLink || this.publicCru;
   }
@@ -233,6 +228,7 @@ class NavController{
   toggleMenu(value){
     this.mobileNavOpen = value;
     this.desktopSearch = value;
+    this.languagePickerOpen = false;
 
     var body = angular.element(this.$document[0].body);
     if(value){
@@ -244,18 +240,6 @@ class NavController{
 
   cruSearch(term){
     this.$window.location = this.searchResultsPath + '?q=' + encodeURIComponent(term);
-  }
-
-  openGlobalWebsitesModal(){
-    this.$uibModal.open({
-      component: 'globalWebsitesModal',
-      backdrop: 'static',
-      windowTemplateUrl: globalWebsitesModalWindowTemplate,
-      windowClass: 'globalWebsites--is-open',
-      resolve: {
-        menuStructure: this.menuStructure
-      }
-    });
   }
 
   hasVisibleChildren(children){
@@ -271,7 +255,6 @@ export default angular
     sessionModalService.name,
     mobileNavLevelComponent.name,
     subNavDirective.name,
-    globalWebsitesModal.name,
     navCart.name,
     loading.name,
     autoFocus.name
@@ -287,6 +270,7 @@ export default angular
       signOutPath: '@',
       customProfile: '<',
       pullRightOptions: '<',
-      logoLink: '@'
+      logoLink: '@',
+      language: '@'
     }
   });
