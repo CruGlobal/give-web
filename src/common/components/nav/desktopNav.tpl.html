@@ -113,9 +113,9 @@
         </div>
 
         <div class="language"
-             ng-if="$ctrl.language && !$ctrl.subNavLocked"
+             ng-if="$ctrl.languagePickerLabel && !$ctrl.subNavLocked"
              ng-click="$ctrl.languagePickerOpen = !$ctrl.languagePickerOpen">
-          {{$ctrl.language}}
+          {{$ctrl.languagePickerLabel}}
         </div>
 
         <span class="search-icon" ng-click="$ctrl.toggleMenu(!$ctrl.desktopSearch)">

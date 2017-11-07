@@ -271,6 +271,6 @@ export default angular
       customProfile: '<',
       pullRightOptions: '<',
       logoLink: '@',
-      language: '@'
+      languagePickerLabel: '@'
     }
   });
