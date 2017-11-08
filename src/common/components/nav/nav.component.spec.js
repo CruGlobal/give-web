@@ -100,6 +100,7 @@ describe( 'nav', function () {
     let altNavStructure = angular.copy(navStructure);
     altNavStructure['main'] = navStructure['/content/cru/us/en'];
     delete altNavStructure['/content/cru/us/en'];
+    delete altNavStructure['/content/give/us/en'];
 
     $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, altNavStructure );
     $ctrl.getNav().subscribe( ( structure ) => {
