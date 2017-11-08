@@ -188,7 +188,7 @@ class NavController{
     }))
       .retry(1)
       .map((response) => {
-        let jsonStructure = response.data;
+        const jsonStructure = response.data;
         let menuStructure = {
           main: jsonStructure['/content/cru/us/en'] || jsonStructure['main'],
           global: jsonStructure['/content/cru/us/en/global'] || jsonStructure['global'],
@@ -196,11 +196,11 @@ class NavController{
         };
 
         //add give to main nav
-        if(jsonStructure['/content/cru/us/en']){
+        if(menuStructure.give){
           menuStructure.main.push({
             title: 'Give',
             path: '/give',
-            children: jsonStructure['/content/give/us/en']
+            children: menuStructure.give
           });
         }
 
@@ -271,6 +271,7 @@ export default angular
       customProfile: '<',
       pullRightOptions: '<',
       logoLink: '@',
-      languagePickerLabel: '@'
+      languagePickerCountry: '@',
+      languagePickerLanguage: '@'
     }
   });
