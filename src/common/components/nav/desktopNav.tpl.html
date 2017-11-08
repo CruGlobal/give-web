@@ -1,4 +1,34 @@
 <header id="desktop-navigation" class="gh-desk-nav" ng-init="$ctrl.toggleMenu()">
+  <div class="language-picker"
+       ng-if="!$ctrl.subNavLocked"
+       ng-class="{'closed': !$ctrl.languagePickerOpen}"
+       ng-init="$ctrl.activeContinent = 0">
+    <div class="container">
+      <ul class="picker-countries">
+        <a href=""
+           ng-class="{'active': $index === $ctrl.activeContinent}"
+           ng-click="$ctrl.activeContinent = $index"
+           ng-repeat="continent in $ctrl.menuStructure.global">
+          {{continent.title}}
+        </a>
+
+        <li ng-repeat="continent in $ctrl.menuStructure.global" ng-if="$index === $ctrl.activeContinent">
+          <ul>
+            <li ng-repeat="country in continent.children">
+              <h5>{{country.title}}</h5>
+
+              <span ng-repeat="lang in country.children">
+                <a ng-href="{{lang.path}}">{{lang.title}}</a>{{$last ? '' : ', '}}
+              </span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gold-border"></div>
+
   <div class="container">
 
     <a ng-href="{{$ctrl.logoLink}}" title="Cru" class="gh-desk-logo"></a>
@@ -43,7 +73,7 @@
             <ul class="pull-right" uib-dropdown-menu>
               <span class="triangle"></span>
               <li class="menu" ng-repeat="i in $ctrl.pullRightOptions track by $index" ng-class="i.class">
-                <a ng-href="{{i.path}}" ng-click="!i.path && $ctrl.openGlobalWebsitesModal()" translate>{{i.title}}</a>
+                <a ng-href="{{i.path}}">{{i.title}}</a>
               </li>
               <li class="menu nav-books">
                 <a href="https://www.cru.org/store.html" target="_blank" translate>
@@ -80,6 +110,12 @@
               <nav-cart></nav-cart>
             </div>
           </div>
+        </div>
+
+        <div class="language"
+             ng-if="$ctrl.languagePickerLabel && !$ctrl.subNavLocked"
+             ng-click="$ctrl.languagePickerOpen = !$ctrl.languagePickerOpen">
+          {{$ctrl.languagePickerLabel}}
         </div>
 
         <span class="search-icon" ng-click="$ctrl.toggleMenu(!$ctrl.desktopSearch)">
