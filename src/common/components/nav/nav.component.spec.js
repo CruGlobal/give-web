@@ -120,6 +120,17 @@ describe( 'nav', function () {
     expect( $ctrl.subMenuStructure[0].title ).toEqual( 'Give' );
   } );
 
+  it( 'to set activeContinent for language picker', () => {
+    $ctrl.defineAttributes();
+    $httpBackend.expectGET( $ctrl.navFeed ).respond( 200, navStructure );
+    $ctrl.languagePickerCountry = 'United States';
+
+    $ctrl.$onInit();
+    $httpBackend.flush();
+
+    expect( $ctrl.activeContinent ).toEqual( 'North America' );
+  } );
+
   describe( '$onInit()', () => {
     let spy;
     beforeEach( () => {

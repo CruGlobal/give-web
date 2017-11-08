@@ -1,18 +1,17 @@
 <header id="desktop-navigation" class="gh-desk-nav" ng-init="$ctrl.toggleMenu()">
   <div class="language-picker"
        ng-if="!$ctrl.subNavLocked"
-       ng-class="{'closed': !$ctrl.languagePickerOpen}"
-       ng-init="$ctrl.activeContinent = 0">
+       ng-class="{'closed': !$ctrl.languagePickerOpen}">
     <div class="container">
       <ul class="picker-countries">
         <a href=""
-           ng-class="{'active': $index === $ctrl.activeContinent}"
-           ng-click="$ctrl.activeContinent = $index"
+           ng-class="{'active': continent.title === $ctrl.activeContinent}"
+           ng-click="$ctrl.activeContinent = continent.title"
            ng-repeat="continent in $ctrl.menuStructure.global">
           {{continent.title}}
         </a>
 
-        <li ng-repeat="continent in $ctrl.menuStructure.global" ng-if="$index === $ctrl.activeContinent">
+        <li ng-repeat="continent in $ctrl.menuStructure.global" ng-if="continent.title === $ctrl.activeContinent">
           <ul>
             <li ng-repeat="country in continent.children">
               <h5>{{country.title}}</h5>

@@ -204,6 +204,15 @@ class NavController{
           });
         }
 
+        //set default continent for language picker
+        if(menuStructure.global && this.languagePickerCountry){
+          angular.forEach(menuStructure.global, (continent) => {
+            if(find(continent.children, {title: this.languagePickerCountry})){
+              this.activeContinent = continent.title;
+            }
+          });
+        }
+
         return menuStructure;
       });
   }
