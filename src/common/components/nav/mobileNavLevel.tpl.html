@@ -1,5 +1,5 @@
 <li ng-repeat="i in $ctrl.structure" ng-class="{'has-children': i.children.length}" ng-if="!i.hideInNav">
-  <a ng-href="{{i.path}}" ng-if="!i.children.length">{{i.title}}</a>
+  <a ng-href="{{i.path}}" ng-attr-target="{{i.newTab ? '_blank' : undefined}}" ng-if="!i.children.length">{{i.title}}</a>
   <a ng-if="i.children.length" ng-click="$ctrl.path.push(i.path.split('/').pop());">{{i.title}}</a>
 
   <ul ng-if="$ctrl.path[$ctrl.level] === i.path.split('/').pop()">
