@@ -129,6 +129,7 @@ $promo-width: 200px;
         font-size: 14px;
         color: $colorText;
         text-decoration: none;
+        letter-spacing: .5px;
 
         &:hover {
           color: $colorCru-gold;
@@ -302,6 +303,7 @@ $promo-width: 200px;
       line-height: 22px;
       margin-right: 26px;
       cursor: pointer;
+      font-size: 14px;
     }
 
     .sign-in, .signed-in {
@@ -311,6 +313,7 @@ $promo-width: 200px;
       font-weight: 600;
       text-align: right;
       line-height: 22px;
+      font-size: 14px;
     }
 
     .sign-in {
