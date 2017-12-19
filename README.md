@@ -30,14 +30,15 @@ This currently includes all cru.org styling from cru.scss.
 
 #### Branded checkout basic example
 
-Add the following code to your page where appropriate. You must change the value of `designation-number` to the designation number you want users to give to.
+Add the following code to your page where appropriate. You must change the value of `designation-number` to the designation number you want users to give to. As part of the setup process Cru should provide a `tsys-device` attribute which matches the TSYS config for your site.
 ```html
 <link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
 <branded-checkout
     ng-app="brandedCheckout"
-    designation-number="0763355">
+    designation-number="0763355"
+    tsys-device="cru">
 </branded-checkout>
 
 <script src="https://give-static.cru.org/branded-checkout.js"></script>
@@ -45,7 +46,7 @@ Add the following code to your page where appropriate. You must change the value
 
 #### Branded checkout full example with all attributes
 
-Add the following code to your page where appropriate:
+Add the following code to your page where appropriate. See the [Branded checkout config](#branded-checkout-config) section for details on setting these attributes.
 ```html
 <link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -54,11 +55,11 @@ Add the following code to your page where appropriate:
     ng-app="brandedCheckout"
     designation-number="<designation number>"
     campaign-code="<campaign code>"
+    tsys-device="<tsys-device>"
     amount="<amount>"
     frequency="<frequency>"
     day="<day>"
     donor-details="<donor details object>"
-    tsys-device="<tsys-device>"
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)">
 </branded-checkout>
 
@@ -76,6 +77,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
 - `designation-number` - the designation number you would like donors to give to - **Required**
 - `campaign-code` - the campaign code you would like to use - *Optional*
+- `tsys-device` - the device name that corresponds to the TSYS Merchant Account which will be used for processing your site's credit cards with TSYS - **Required** - Will be provided by DPS when adding your domain to the TSYS whitelist. `cru` is the default and corresponds with Cru's main TSYS Merchant ID
 - `amount` - defaults the gift's amount - *Optional*
 - `frequency` - defaults the gift's frequency - *Optional* - can be one of the following values:
   - `single` - single gift - this is the default so it doesn't need to be specified
@@ -120,7 +122,6 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
         email: 'email@example.com'
     }
     ```
-- `tsys-device` - the device name for processing credit cards with TSYS - *Optional* - May be provided by DPS when adding your domain to the TSYS whitelist if you are using a different TSYS Merchant ID than Cru's main Merchant ID
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - *Optional* -  provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
   - `$event.purchase` - contains the order's details that are loaded for the thank you page
