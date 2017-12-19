@@ -77,7 +77,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
 - `designation-number` - the designation number you would like donors to give to - **Required**
 - `campaign-code` - the campaign code you would like to use - *Optional*
-- `tsys-device` - the device name that corresponds to the TSYS Merchant Account which will be used for processing your site's credit cards with TSYS - **Required** - Will be provided by DPS when adding your domain to the TSYS whitelist. `cru` is the default and corresponds with Cru's main TSYS Merchant ID
+- `tsys-device` - the device name that corresponds to the TSYS Merchant Account which will be used for tokenizing your site's credit cards with TSYS - **Required** - Will be provided by DPS when adding your domain to the TSYS whitelist. `cru` is the default and corresponds with Cru's main TSYS Merchant ID
 - `amount` - defaults the gift's amount - *Optional*
 - `frequency` - defaults the gift's frequency - *Optional* - can be one of the following values:
   - `single` - single gift - this is the default so it doesn't need to be specified
