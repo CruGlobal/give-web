@@ -26,14 +26,18 @@ describe( 'userMatchQuestion', function () {
       it( 'sets hasError', () => {
         $ctrl.selectAnswer();
         expect( $ctrl.hasError ).toEqual( true );
+        expect( $ctrl.onQuestionAnswer ).not.toHaveBeenCalled();
+        expect( $ctrl.answer ).toEqual({answer: 'answer'});
       } );
     } );
 
     describe( 'valid form', () => {
       it( 'submits the answer', () => {
         $ctrl.questionForm.$valid = true;
+        expect( $ctrl.answer ).toEqual({answer: 'answer'});
         $ctrl.selectAnswer();
         expect( $ctrl.onQuestionAnswer ).toHaveBeenCalledWith( {key: 'key', answer: 'answer'} );
+        expect( $ctrl.answer ).toBeUndefined();
       } );
     } );
   } );
