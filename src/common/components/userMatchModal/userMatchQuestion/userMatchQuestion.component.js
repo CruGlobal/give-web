@@ -20,6 +20,7 @@ class UserMatchQuestionController {
         key:    this.question.key,
         answer: this.answer.answer
       } );
+      delete this.answer;
     }
   }
 }
