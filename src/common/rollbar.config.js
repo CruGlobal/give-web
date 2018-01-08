@@ -1,5 +1,5 @@
 import { rollbarAccessToken } from 'common/app.constants';
-import rollbar from 'rollbar-browser';
+import rollbar from 'rollbar';
 import stacktrace from 'stacktrace-js';
 import map from 'lodash/map';
 import defaults from 'lodash/defaults';
