@@ -4,6 +4,8 @@ import stacktrace from 'stacktrace-js';
 import map from 'lodash/map';
 import defaults from 'lodash/defaults';
 import get from 'lodash/get';
+import find from 'lodash/find';
+import includes from 'lodash/includes';
 
 let Rollbar;
 
@@ -18,6 +20,7 @@ function rollbarConfig(envServiceProvider, $provide) {
     transform: transformRollbarPayload,
     hostWhiteList: ['give.cru.org', 'give-prod.cru.org', 'give-stage2.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org'],
     scrubFields: ['password', 'cvv', 'cvv2', 'security-code', 'k'],
+    telemetryScrubber: scrubDomNodes(['cardNumber', 'cardholderName', 'expiryMonth', 'expiryYear', 'securityCode', 'bankName', 'accountType', 'routingNumber', 'accountNumber', 'verifyAccountNumber']),
     payload: {
       client: {
         javascript: {
@@ -129,11 +132,19 @@ function updateRollbarPerson(session){
   });
 }
 
+function scrubDomNodes(scrubNames){
+  return node => {
+    const nameAttr = find(node.attributes, attr => attr.key === 'name');
+    return !!nameAttr && includes(scrubNames, nameAttr.value);
+  };
+}
+
 export {
   rollbarConfig as default,
   updateRollbarPerson,
   rollbar, // For mocking during testing
   stacktrace, // For mocking during testing,
   formatStacktraceForRollbar, // To test this function separately
-  transformRollbarPayload // To test this function separately
+  transformRollbarPayload, // To test this function separately
+  scrubDomNodes // To test this function separately
 };
