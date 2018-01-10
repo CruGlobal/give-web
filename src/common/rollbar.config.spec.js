@@ -234,4 +234,37 @@ describe('rollbarConfig', () => {
       expect(module.transformRollbarPayload(payload)).toEqual(payload);
     });
   });
+
+  describe('scrubDomNodes', () => {
+    it('should return true for dom modes where the name matches', () => {
+      expect(module.scrubDomNodes(['creditCardField'])({
+        attributes: [
+          {
+            key: 'name',
+            value: 'creditCardField'
+          }
+        ]
+      })).toEqual(true);
+    });
+    it('should return false for dom modes where the name does not match', () => {
+      expect(module.scrubDomNodes(['creditCardField'])({
+        attributes: [
+          {
+            key: 'name',
+            value: 'notCreditCardField'
+          }
+        ]
+      })).toEqual(false);
+    });
+    it('should return false for dom modes that don\'t have a name', () => {
+      expect(module.scrubDomNodes(['creditCardField'])({
+        attributes: [
+          {
+            key: 'id',
+            value: 'creditCardField'
+          }
+        ]
+      })).toEqual(false);
+    });
+  });
 });
