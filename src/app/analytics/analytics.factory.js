@@ -3,6 +3,8 @@ import './analytics.module';
 import get from 'lodash/get';
 import find from 'lodash/find';
 import sha3 from 'crypto-js/sha3';
+import merge from 'lodash/merge';
+import isEmpty from 'lodash/isEmpty';
 
 /* @ngInject */
 function analyticsFactory($window, $timeout, sessionService) {
@@ -385,80 +387,57 @@ function analyticsFactory($window, $timeout, sessionService) {
     },
     setLoggedInStatus: function(){
       try {
-        let ssoGuid = '';
+        let profileInfo = {};
         if (typeof sessionService !== 'undefined') {
-          if (typeof sessionService.session['sub'] !== 'undefined') {
-            ssoGuid = sessionService.session['sub'].split('|').pop();
+          if (typeof sessionService.session['sso_guid'] !== 'undefined') {
+            profileInfo['ssoGuid'] = sessionService.session['sso_guid']
+          }
+          else if (typeof sessionService.session['sub'] !== 'undefined') {
+            profileInfo['ssoGuid'] = sessionService.session['sub'].split('|').pop();
+          }
+
+          if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
+            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id']
           }
         }
 
-        if (!ssoGuid) {
+        if (isEmpty(profileInfo)) {
           return;
         }
 
-        if (!$window.digitalData.user) {
-          $window.digitalData.user = [{
-            profile: [{
-              profileInfo: {
-                ssoGuid: ssoGuid
-              }
-            }]
-          }];
-        }
+        // Use lodash merge to deep merge with existing data or new empty hash
+        $window.digitalData = merge($window.digitalData || {}, {
+          user: [{profile: [{profileInfo: profileInfo}]}]
+        });
       }catch(e){
         // Error caught in analyticsFactory.setLoggedInStatus
       }
     },
     setDonorDetails: function(donorDetails) {
       try {
-        var ssoGuid = '',
-          donorType = '',
-          donorAcct = '';
-
-        if (donorDetails) {
-          donorType = donorDetails['donor-type'].toLowerCase();
-          donorAcct = donorDetails['donor-number'].toLowerCase();
-        }
-
+        let profileInfo = {};
         if (typeof sessionService !== 'undefined') {
-          if (typeof sessionService.session['sub'] !== 'undefined') {
-            ssoGuid = sessionService.session['sub'].split('|').pop();
+          if (typeof sessionService.session['sso_guid'] !== 'undefined') {
+            profileInfo['ssoGuid'] = sessionService.session['sso_guid']
+          }
+          else if (typeof sessionService.session['sub'] !== 'undefined') {
+            profileInfo['ssoGuid'] = sessionService.session['sub'].split('|').pop();
+          }
+
+          if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
+            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id']
+          }
+
+          if (donorDetails) {
+            profileInfo['donorType'] = donorDetails['donor-type'].toLowerCase();
+            profileInfo['donorAcct'] = donorDetails['donor-number'].toLowerCase();
           }
         }
 
-        if (typeof $window.digitalData.user !== 'undefined') {
-          if (typeof $window.digitalData.user[0].profile !== 'undefined') {
-            if (typeof $window.digitalData.user[0].profile[0].profileInfo !== 'undefined') {
-              $window.digitalData.user[0].profile[0].profileInfo.ssoGuid = ssoGuid;
-              $window.digitalData.user[0].profile[0].profileInfo.donorType = donorType;
-              $window.digitalData.user[0].profile[0].profileInfo.donorAcct = donorAcct;
-            } else {
-              $window.digitalData.user[0].profile[0].profileInfo = {
-                ssoGuid: ssoGuid,
-                donorType: donorType,
-                donorAcct: donorAcct
-              };
-            }
-          } else {
-            $window.digitalData.user[0].profile = [{
-              profileInfo: {
-                ssoGuid: ssoGuid,
-                donorType: donorType,
-                donorAcct: donorAcct
-              }
-            }];
-          }
-        } else {
-          $window.digitalData.user = [{
-            profile: [{
-              profileInfo: {
-                ssoGuid: ssoGuid,
-                donorType: donorType,
-                donorAcct: donorAcct
-              }
-            }]
-          }];
-        }
+        // Use lodash merge to deep merge with existing data or new empty hash
+        $window.digitalData = merge($window.digitalData || {}, {
+          user: [{profile: [{profileInfo: profileInfo}]}]
+        });
 
         // Store data for use on following page load
         localStorage.setItem('aaDonorType', $window.digitalData.user[0].profile[0].profileInfo.donorType);
