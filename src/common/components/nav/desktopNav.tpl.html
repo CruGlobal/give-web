@@ -87,7 +87,10 @@
         <div class="sign-in" ng-if="!$ctrl.isSignedIn" ng-click="$ctrl.signIn()" translate>Sign In</div>
         <div class="signed-in" ng-if="$ctrl.isSignedIn">
           <div uib-dropdown>
-            <a uib-dropdown-toggle>{{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}</a>
+            <a uib-dropdown-toggle>
+              {{$ctrl.displayName ? $ctrl.displayName :
+                $ctrl.sessionService.session.first_name + ' ' + $ctrl.sessionService.session.last_name}}
+            </a>
             <ul class="pull-right" uib-dropdown-menu>
               <span class="triangle"></span>
               <li class="nav-edit-profile">

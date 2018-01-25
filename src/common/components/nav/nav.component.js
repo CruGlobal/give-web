@@ -178,6 +178,7 @@ class NavController{
 
   sessionChanged() {
     this.isSignedIn = (this.customProfile && this.sessionService.session.email) ||
+      this.displayName ||
       includes(['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole());
   }
 
@@ -277,7 +278,8 @@ export default angular
       searchResultsPath: '@',
       editProfilePath: '@',
       signOutPath: '@',
-      customProfile: '<',
+      customProfile: '<', //boolean: if true, will use 'cru-profile' cookie for auth state and user first/last name
+      displayName: '@', //string: override 'cru-profile' cookie and display this string as the user's first/last name
       pullRightOptions: '<',
       logoLink: '@',
       languagePickerCountry: '@',
