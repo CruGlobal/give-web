@@ -390,14 +390,14 @@ function analyticsFactory($window, $timeout, sessionService) {
         let profileInfo = {};
         if (typeof sessionService !== 'undefined') {
           if (typeof sessionService.session['sso_guid'] !== 'undefined') {
-            profileInfo['ssoGuid'] = sessionService.session['sso_guid']
+            profileInfo['ssoGuid'] = sessionService.session['sso_guid'];
           }
           else if (typeof sessionService.session['sub'] !== 'undefined') {
             profileInfo['ssoGuid'] = sessionService.session['sub'].split('|').pop();
           }
 
           if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
-            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id']
+            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id'];
           }
         }
 
@@ -418,14 +418,14 @@ function analyticsFactory($window, $timeout, sessionService) {
         let profileInfo = {};
         if (typeof sessionService !== 'undefined') {
           if (typeof sessionService.session['sso_guid'] !== 'undefined') {
-            profileInfo['ssoGuid'] = sessionService.session['sso_guid']
+            profileInfo['ssoGuid'] = sessionService.session['sso_guid'];
           }
           else if (typeof sessionService.session['sub'] !== 'undefined') {
             profileInfo['ssoGuid'] = sessionService.session['sub'].split('|').pop();
           }
 
           if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
-            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id']
+            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id'];
           }
 
           if (donorDetails) {
