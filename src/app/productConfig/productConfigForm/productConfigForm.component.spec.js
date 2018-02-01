@@ -224,6 +224,7 @@ describe( 'product config form component', function () {
       $ctrl.customInputActive = true;
       $ctrl.addCustomValidators();
       expect( $ctrl.itemConfigForm.amount.$parsers[0]( '$10' ) ).toBe( '10' );
+      expect( $ctrl.itemConfigForm.amount.$parsers[0]( '$10,000' ) ).toBe( '10000' );
 
       expect( $ctrl.itemConfigForm.amount.$validators.minimum( '1' ) ).toBe( true );
       expect( $ctrl.itemConfigForm.amount.$validators.minimum( '0.9' ) ).toBe( false );
