@@ -163,7 +163,7 @@ class ProductConfigFormController {
   }
 
   addCustomValidators() {
-    this.itemConfigForm.amount.$parsers.push(value => value.replace('$', '')); // Ignore a dollar sign if included by the user
+    this.itemConfigForm.amount.$parsers.push(value => value.replace('$', '').replace(',', '')); // Ignore a dollar sign and comma if included by the user
     this.itemConfigForm.amount.$validators.minimum = value => {
       return !this.customInputActive || value*1.0 >= 1;
     };
