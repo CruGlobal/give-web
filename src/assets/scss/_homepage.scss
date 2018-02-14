@@ -2,23 +2,18 @@ $border-radius: 4px;
 
 #give-hero {
   .hero-image {
-    background: url(/assets/images/give-hero-placeholder.jpg) 50%;
     background-size: cover;
     position: relative;
     height: 430px;
-    @media only screen and (min-width: 1400px) {
-      height: auto;
-      padding-top: 30.8%;
-    }
   }
 
   .hero-content {
     position: absolute;
-    top: 75%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    width: 75%;
+    width: 100%;
 
     h1 {
       color: $colorCru-gold;
@@ -77,6 +72,29 @@ $border-radius: 4px;
     }
     @media only screen and (max-width: 400px) {
       top: 65%;
+    }
+
+    .homepage-hero-links {
+      display: block;
+      clear: both;
+      padding-top: .25em;
+      padding-bottom: 1.5em;
+
+      a {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 400;
+        display: inline-block;
+        border-right: 1px solid #fff;
+        margin-right: .5em;
+        padding-right: .5em;
+      }
+
+      &:last-child {
+        margin-right: 0;
+        padding-right: 0;
+        border-right: none;
+      }
     }
   }
 
