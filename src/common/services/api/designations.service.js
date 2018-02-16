@@ -183,10 +183,10 @@ class DesignationsService {
           // Map suggested amounts
           if( data.data['jcr:content'].suggestedAmounts) {
             angular.forEach( data.data['jcr:content'].suggestedAmounts, ( v, k ) => {
-              if ( toFinite( k ) > 0 ) suggestedAmounts.push( {
+              if ( toFinite( k ) > 0 || k.includes('item') ) suggestedAmounts.push( {
                 amount: toFinite( v.amount ),
                 label: v.description,
-                order: toFinite( k )
+                order: toFinite( k ) > 0 ? toFinite( k ) : k.substring(4)
               } );
             } );
           }
