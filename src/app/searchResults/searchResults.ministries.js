@@ -74,7 +74,7 @@ export default [
   {
     name: 'Global Greatest Needs',
     designationNumber: '0703618',
-    path: '/0703618',
+    path: '/2017-globalgreatestneeds.html',
     facet: 'ministry'
   },
   {
