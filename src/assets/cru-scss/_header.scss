@@ -18,24 +18,6 @@ body {
     }
 }
 
-.logo {
-  background: url("//www.cru.org/images/cru-logo.svg") no-repeat center center;
-
-    float: left;
-    width: 24%;
-    height: 100%;
-    max-height: $header-height;
-    display: inline-block;
-
-    @include mq(520px) {
-        width: 15%;
-    }
-
-    @include mq(840px) {
-        width: 10%;
-    }
-}
-
 
 .navToggle {
     text-transform: none;
