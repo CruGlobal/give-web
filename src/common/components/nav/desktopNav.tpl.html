@@ -106,7 +106,9 @@
 
         <div class="cart">
           <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
-            <a uib-dropdown-toggle></a>
+            <a uib-dropdown-toggle>
+              <i class="fal fa-shopping-cart"></i>
+            </a>
             <div class="pull-right" uib-dropdown-menu>
               <span class="triangle"></span>
               <nav-cart></nav-cart>
