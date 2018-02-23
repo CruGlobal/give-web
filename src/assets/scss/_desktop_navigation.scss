@@ -20,10 +20,11 @@ $promo-width: 200px;
   .container {
     position: relative;
     min-width: 980px !important;
+    padding: 15px;
   }
 
   .gold-border{
-    border-top: 4px solid $colorCru-gold;
+    border-top: 2px solid $colorCru-gold;
   }
 
   &.padded {
@@ -96,7 +97,7 @@ $promo-width: 200px;
     width: 87px;
     height: 54px;
     float: left;
-    margin-top: 11px;
+    max-height: 46px;
   }
 
   ul {
@@ -244,7 +245,7 @@ $promo-width: 200px;
   }
 
   .search-sign-in-wrapper {
-    margin-top: 8px;
+    margin-top: 12px;
     float: right;
     min-width: 250px;
     position: absolute;
@@ -311,8 +312,8 @@ $promo-width: 200px;
     .sign-in, .signed-in {
       float: right;
       text-transform: uppercase;
-      color: $colorGrayscale-slate;
-      font-weight: 600;
+      color: #000;
+      font-weight: 800;
       text-align: right;
       line-height: 22px;
       font-size: 14px;
