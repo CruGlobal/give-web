@@ -21,6 +21,10 @@ $promo-width: 200px;
     position: relative;
     min-width: 980px !important;
     padding: 15px;
+
+    @media screen and (min-width: 1200px) {
+      width: 1140px;
+    }
   }
 
   .gold-border{
