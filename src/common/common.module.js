@@ -12,7 +12,6 @@ let moduleName = 'common';
 export default angular
   .module( moduleName, [
     'gettext',
-    'ngAnimate',
     appConfig.name,
     nav.name,
     loadingComponent.name,

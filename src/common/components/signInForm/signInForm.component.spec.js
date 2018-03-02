@@ -87,7 +87,7 @@ describe( 'signInForm', function () {
       deferred.reject( {} );
       $rootScope.$digest();
       expect( bindings.onFailure ).toHaveBeenCalled();
-      expect( $ctrl.errorMessage ).toEqual( 'An error has occurred signing in. Please try again.' );
+      expect( $ctrl.errorMessage ).toEqual( 'generic' );
       expect( $ctrl.isSigningIn ).toEqual( false );
     });
 
@@ -95,7 +95,7 @@ describe( 'signInForm', function () {
       deferred.reject( {data: null} );
       $rootScope.$digest();
       expect( bindings.onFailure ).toHaveBeenCalled();
-      expect( $ctrl.errorMessage ).toEqual( 'An error has occurred signing in. Please try again.' );
+      expect( $ctrl.errorMessage ).toEqual( 'generic' );
       expect( $ctrl.isSigningIn ).toEqual( false );
     });
 

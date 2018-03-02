@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 'angular-gettext';
 import includes from 'lodash/includes';
 
 import sessionService from 'common/services/session/session.service';
@@ -11,10 +10,9 @@ let componentName = 'signInForm';
 class SignInFormController {
 
   /* @ngInject */
-  constructor( $log, sessionService, gettext ) {
+  constructor( $log, sessionService ) {
     this.$log = $log;
     this.sessionService = sessionService;
-    this.gettext = gettext;
   }
 
   $onInit() {
@@ -41,7 +39,7 @@ class SignInFormController {
             delete error.config.data.password;
           }
           this.$log.error('Sign In Error', error);
-          this.errorMessage = this.gettext( 'An error has occurred signing in. Please try again.' );
+          this.errorMessage = 'generic';
         }
         this.onFailure();
       } );
@@ -50,8 +48,7 @@ class SignInFormController {
 
 export default angular
   .module( componentName, [
-    sessionService.name,
-    'gettext'
+    sessionService.name
   ] )
   .component( componentName, {
     controller:  SignInFormController,
