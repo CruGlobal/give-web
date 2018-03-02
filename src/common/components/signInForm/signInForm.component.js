@@ -41,7 +41,7 @@ class SignInFormController {
             delete error.config.data.password;
           }
           this.$log.error('Sign In Error', error);
-          this.errorMessage = this.gettext( 'An error has occurred signing in. Please try again.' );
+          this.errorMessage = 'generic';
         }
         this.onFailure();
       } );

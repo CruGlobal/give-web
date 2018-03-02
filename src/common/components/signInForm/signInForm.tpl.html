@@ -1,4 +1,11 @@
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage | translate}}</div>
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage" ng-switch="$ctrl.errorMessage">
+  <span ng-switch-when="generic" translate>
+    An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+  </span>
+  <span ng-switch-default>
+    {{$ctrl.errorMessage | translate}}
+  </span>
+</div>
 <form class="sign-in-form loading-overlay-parent" name="$ctrl.signInForm">
   <div class="form-group">
     <label for="username" translate>Email</label>
