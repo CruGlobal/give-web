@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-gettext';
 import includes from 'lodash/includes';
 
 import sessionService from 'common/services/session/session.service';
@@ -10,9 +11,10 @@ let componentName = 'signInForm';
 class SignInFormController {
 
   /* @ngInject */
-  constructor( $log, sessionService ) {
+  constructor( $log, sessionService, gettext ) {
     this.$log = $log;
     this.sessionService = sessionService;
+    this.gettext = gettext;
   }
 
   $onInit() {
@@ -48,7 +50,8 @@ class SignInFormController {
 
 export default angular
   .module( componentName, [
-    sessionService.name
+    sessionService.name,
+    'gettext'
   ] )
   .component( componentName, {
     controller:  SignInFormController,
