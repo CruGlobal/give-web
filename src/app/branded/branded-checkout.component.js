@@ -90,6 +90,7 @@ export default angular
       designationNumber: '@',
       tsysDevice: '@',
       campaignCode: '@',
+      campaignPage: '@',
       amount: '@',
       frequency: '@',
       day: '@',

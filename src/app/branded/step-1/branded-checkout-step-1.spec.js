@@ -31,11 +31,13 @@ describe('branded checkout step 1', () => {
   describe('initItemConfig', () => {
     it('should initialize item config', () => {
       $ctrl.campaignCode = '1234';
+      $ctrl.campaignPage = '135';
       $ctrl.amount = '75';
       $ctrl.day = '9';
       $ctrl.initItemConfig();
       expect($ctrl.itemConfig).toEqual({
         'campaign-code': '1234',
+        'campaign-page': '135',
         amount: '75',
         'recurring-day-of-month': '9'
       });
