@@ -4,16 +4,12 @@ $border-radius: 4px;
   .hero-image {
     background-size: cover;
     position: relative;
-    height: 430px;
-    @media screen and (max-width: 1024px) {
-      height: 300px;
-      top: 55%;
-    }
+    height: 220px;
   }
 
   .hero-content {
     position: absolute;
-    top: 60%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -22,7 +18,7 @@ $border-radius: 4px;
     h1 {
       color: $colorCru-gold;
       font-weight: 400;
-      font-size: 40px;
+      font-size: 30px;
       margin-bottom: 0;
     }
 
@@ -45,44 +41,39 @@ $border-radius: 4px;
         padding: 0 50px;
         font-size: 20px;
       }
-      .input-group {
-        max-width: 345px;
-        margin-left: auto;
-        margin-right: auto;
+      .form-group {
+        margin-right: 15px;
 
         input {
-          border-radius: $border-radius 0 0 $border-radius;
-          border-right-width: 0;
+          border-radius: $border-radius;
           box-shadow: none;
           border: none;
           line-height: 22px;
           padding: 0 13px;
           height: 50px;
+          width: 250px;
+          max-width: 100%;
         }
 
-        button {
-          background-color: #fff;
-          border: none;
-          box-shadow: none;
-          border-radius: 0 $border-radius $border-radius 0;
-          padding: 14px;
-          line-height: 22px;
+        @media screen and (max-width: 720px) {
+          margin-left: 15px;
 
-          i {
-            color: $colorCru-gray;
+          input{
+            width: 100%;
           }
         }
       }
-    }
-    @media only screen and (max-width: 400px) {
-      top: 65%;
     }
 
     .homepage-hero-links {
       display: block;
       clear: both;
       padding-top: .25em;
-      padding-bottom: 1.5em;
+      margin-top: 29px;
+
+      @media screen and (max-width: 720px) {
+        margin-top: 1em;
+      }
 
       a {
         color: #fff;
