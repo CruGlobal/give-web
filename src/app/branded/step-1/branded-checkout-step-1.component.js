@@ -34,6 +34,7 @@ class BrandedCheckoutStep1Controller{
   initItemConfig(){
     this.itemConfig = {};
     this.itemConfig['campaign-code'] = this.campaignCode;
+    this.itemConfig['campaign-page'] = this.campaignPage;
     this.itemConfig.amount = this.amount;
     switch(this.frequency){
       case 'monthly':
@@ -176,6 +177,7 @@ export default angular
     bindings: {
       code: '<',
       campaignCode: '<',
+      campaignPage: '<',
       amount: '<',
       frequency: '<',
       day: '<',

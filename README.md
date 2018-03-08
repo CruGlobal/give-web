@@ -76,6 +76,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
 The `<branded-checkout>` element is where the branded checkout Angular app will be loaded. It is configured by providing HTML attributes that will be loaded by Angular. Attributes with values containing angle brackets (such as `<designation number>`) are placeholders and should be replaced with real values or, if not needed, the whole attribute should be omitted. The `<branded-checkout>` element accepts the following attributes:
 - `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
 - `designation-number` - the designation number you would like donors to give to - **Required**
+- `campaign-page` - the campaign page you would like to use, used for suggested amounts - *Optional*
 - `campaign-code` - the campaign code you would like to use - *Optional*
 - `tsys-device` - the device name that corresponds to the TSYS Merchant Account which will be used for tokenizing your site's credit cards with TSYS - **Required** - Will be provided by DPS when adding your domain to the TSYS whitelist. `cru` is the default and corresponds with Cru's main TSYS Merchant ID
 - `amount` - defaults the gift's amount - *Optional*
