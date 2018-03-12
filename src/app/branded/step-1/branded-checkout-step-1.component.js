@@ -1,7 +1,6 @@
 import angular from 'angular';
 import find from 'lodash/find';
 import every from 'lodash/every';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
@@ -9,7 +8,6 @@ import productConfigForm from 'app/productConfig/productConfigForm/productConfig
 import contactInfo from 'common/components/contactInfo/contactInfo.component';
 import checkoutStep2 from 'app/checkout/step-2/step-2.component';
 
-import sessionService from 'common/services/session/session.service';
 import cartService from 'common/services/api/cart.service';
 
 import template from './branded-checkout-step-1.tpl.html';
@@ -19,16 +17,15 @@ let componentName = 'brandedCheckoutStep1';
 class BrandedCheckoutStep1Controller{
 
   /* @ngInject */
-  constructor($log, sessionService, cartService){
+  constructor($log, cartService){
     this.$log = $log;
-    this.sessionService = sessionService;
     this.cartService = cartService;
   }
 
   $onInit() {
     this.resetSubmission();
     this.initItemConfig();
-    this.initSessionAndCart();
+    this.initCart();
   }
 
   initItemConfig(){
@@ -50,43 +47,23 @@ class BrandedCheckoutStep1Controller{
     this.itemConfig['recurring-day-of-month'] = this.day;
   }
 
-  initSessionAndCart(){
-    this.loadingSession = true;
+  initCart(){
     this.loadingProductConfig = true;
     this.errorLoadingProductConfig = false;
 
-    this.sessionService.downgradeToGuest(true) // Make sure we don't have signed in users
-      .catch(() => Observable.of('already guest'))
-      .mergeMap(() => {
-        return this.cartService.getTotalQuantity();
-      })
-      .mergeMap(total => {
-        if (total <= 0) {
-          return this.sessionService.signOut(); // Restart user's session and clear session data if they have no items in cart
-        } else {
-          delete this.donorDetails; // Don't use donor details binding when user already has a session
+    this.cartService.get().subscribe(data => {
+        const item = find(data.items, {code: this.code});
+        if (item) { // Edit first item with this code from user's cart if it exits
+          this.isEdit = true;
+          this.item = item;
         }
-        return Observable.of('keeping session');
-      })
-      .catch(() => Observable.of('ignore session errors'))
-      .mergeMap(() => {
-        return this.cartService.get();
-      })
-      .subscribe(data => {
-          this.loadingSession = false; // After signOut, wait for the cart request to finish so we have a session cookie before starting other requests
-          const item = find(data.items, {code: this.code});
-          if (item) { // Edit first item with this code from user's cart if it exits
-            this.isEdit = true;
-            this.item = item;
-          }
-          this.loadingProductConfig = false;
-        },
-        error => {
-          this.loadingSession = false;
-          this.errorLoadingProductConfig = true;
-          this.loadingProductConfig = false;
-          this.$log.error('Error loading cart data for branded checkout step 1', error);
-        });
+        this.loadingProductConfig = false;
+      },
+      error => {
+        this.errorLoadingProductConfig = true;
+        this.loadingProductConfig = false;
+        this.$log.error('Error loading cart data for branded checkout step 1', error);
+      });
   }
 
   submit(){
@@ -168,7 +145,6 @@ export default angular
     productConfigForm.name,
     contactInfo.name,
     checkoutStep2.name,
-    sessionService.name,
     cartService.name
   ])
   .component(componentName, {

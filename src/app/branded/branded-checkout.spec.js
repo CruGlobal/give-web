@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 
 import module from './branded-checkout.component';
+import {Observable} from "rxjs/Observable";
 
 describe('branded checkout', () => {
   beforeEach(angular.mock.module(module.name));
@@ -20,8 +21,12 @@ describe('branded checkout', () => {
 
   describe('$onInit', () => {
     it('should set initial checkout step and call formatDonorDetails', () => {
+      spyOn($ctrl.sessionService, 'signOut').and.returnValue(Observable.of(''));
+      spyOn($ctrl.sessionService, 'downgradeToGuest').and.returnValue(Observable.of(''));
       spyOn($ctrl, 'formatDonorDetails');
       $ctrl.$onInit();
+
+      expect($ctrl.sessionService.signOut).toHaveBeenCalled();
       expect($ctrl.code).toEqual('1234567');
       expect($ctrl.tsysService.setDevice).toHaveBeenCalledWith('test-env');
       expect($ctrl.checkoutStep).toEqual('giftContactPayment');

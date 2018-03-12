@@ -20,11 +20,11 @@ describe('branded checkout step 1', () => {
     it('should load cart', () => {
       spyOn($ctrl, 'resetSubmission');
       spyOn($ctrl, 'initItemConfig');
-      spyOn($ctrl, 'initSessionAndCart');
+      spyOn($ctrl, 'initCart');
       $ctrl.$onInit();
       expect($ctrl.resetSubmission).toHaveBeenCalled();
       expect($ctrl.initItemConfig).toHaveBeenCalled();
-      expect($ctrl.initSessionAndCart).toHaveBeenCalled();
+      expect($ctrl.initCart).toHaveBeenCalled();
     });
   });
 
@@ -60,70 +60,31 @@ describe('branded checkout step 1', () => {
     });
   });
 
-  describe('initSessionAndCart', () => {
+  describe('initCart', () => {
     beforeEach(() => {
-      spyOn($ctrl.sessionService, 'downgradeToGuest').and.returnValue(Observable.of(''));
-      spyOn($ctrl.cartService, 'getTotalQuantity').and.returnValue(Observable.of(0));
-      spyOn($ctrl.sessionService, 'signOut').and.returnValue(Observable.of(''));
       spyOn($ctrl.cartService, 'get').and.returnValue(Observable.of({ items: [ { code: '1234567' } ] }));
       $ctrl.donorDetails = { mailingAddress: {} };
     });
-    it('should downgrade session', () => {
-      $ctrl.initSessionAndCart();
-      expect($ctrl.sessionService.downgradeToGuest).toHaveBeenCalledWith(true);
-      expect($ctrl.loadingSession).toEqual(false);
-    });
-    it('should continue if downgrade session fails', () => {
-      $ctrl.sessionService.downgradeToGuest.and.returnValue(Observable.throw('some error'));
-      $ctrl.initSessionAndCart();
-      expect($ctrl.sessionService.downgradeToGuest).toHaveBeenCalledWith(true);
-      expect($ctrl.loadingSession).toEqual(false);
-    });
-    it('should get cart quantity and sign out if there are no items in cart', () => {
-      $ctrl.initSessionAndCart();
-      expect($ctrl.cartService.getTotalQuantity).toHaveBeenCalled();
-      expect($ctrl.sessionService.signOut).toHaveBeenCalled();
-      expect($ctrl.loadingSession).toEqual(false);
-      expect($ctrl.donorDetails).toEqual({ mailingAddress: {} });
-    });
-    it('should get cart quantity and not sign out if there are items in cart', () => {
-      $ctrl.cartService.getTotalQuantity.and.returnValue(Observable.of(1));
-      $ctrl.initSessionAndCart();
-      expect($ctrl.cartService.getTotalQuantity).toHaveBeenCalled();
-      expect($ctrl.sessionService.signOut).not.toHaveBeenCalled();
-      expect($ctrl.loadingSession).toEqual(false);
-      expect($ctrl.donorDetails).toBeUndefined();
-    });
-    it('should ignore session errors', () => {
-      $ctrl.sessionService.signOut.and.returnValue(Observable.throw('some error'));
-      $ctrl.initSessionAndCart();
-      expect($ctrl.cartService.getTotalQuantity).toHaveBeenCalled();
-      expect($ctrl.sessionService.signOut).toHaveBeenCalled();
-      expect($ctrl.loadingSession).toEqual(false);
-    });
     it('should get cart data and find existing item in cart', () => {
       $ctrl.code = '1234567';
-      $ctrl.initSessionAndCart();
+      $ctrl.initCart();
       expect($ctrl.cartService.get).toHaveBeenCalled();
-      expect($ctrl.loadingSession).toEqual(false);
       expect($ctrl.isEdit).toEqual(true);
       expect($ctrl.item).toEqual({ code: '1234567' });
       expect($ctrl.loadingProductConfig).toEqual(false);
     });
     it('should get cart data and not enter edit mode when item isn\'t in cart', () => {
       $ctrl.code = '0000000';
-      $ctrl.initSessionAndCart();
+      $ctrl.initCart();
       expect($ctrl.cartService.get).toHaveBeenCalled();
-      expect($ctrl.loadingSession).toEqual(false);
       expect($ctrl.isEdit).toBeUndefined();
       expect($ctrl.item).toBeUndefined();
       expect($ctrl.loadingProductConfig).toEqual(false);
     });
     it('should handle error loading cart', () => {
       $ctrl.cartService.get.and.returnValue(Observable.throw('some error'));
-      $ctrl.initSessionAndCart();
+      $ctrl.initCart();
       expect($ctrl.cartService.get).toHaveBeenCalled();
-      expect($ctrl.loadingSession).toEqual(false);
       expect($ctrl.isEdit).toBeUndefined();
       expect($ctrl.item).toBeUndefined();
       expect($ctrl.loadingProductConfig).toEqual(false);
