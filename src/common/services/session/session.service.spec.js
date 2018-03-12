@@ -236,7 +236,7 @@ describe( 'session service', function () {
     } );
   } );
 
-  describe( 'downgradeToGuest( skipEvent )', () => {
+  describe( 'downgradeToGuest( skipEvent, verifyRole )', () => {
     beforeEach( () => {
       spyOn( $rootScope, '$broadcast' );
     } );
@@ -283,6 +283,29 @@ describe( 'session service', function () {
       it( 'make http request to cas/downgrade', ( done ) => {
         $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/downgrade', {} ).respond( 204, {} );
         sessionService.downgradeToGuest( true ).subscribe( ( data ) => {
+          expect( data ).toEqual( {} );
+        } );
+        $rootScope.$digest();
+        // Observable.finally is fired after the test, this defers until it's called.
+        // eslint-disable-next-line angular/timeout-service
+        setTimeout( () => {
+          expect( $rootScope.$broadcast ).not.toHaveBeenCalled();
+          done();
+        } );
+        $httpBackend.flush();
+      } );
+    } );
+
+    describe( 'with verifyRole = false', () => {
+      beforeEach( () => {
+        $cookies.put( Sessions.role, cortexRole.public );
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest();
+      } );
+
+      it( 'make http request to cas/downgrade', ( done ) => {
+        $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/downgrade', {} ).respond( 204, {} );
+        sessionService.downgradeToGuest( true, false ).subscribe( ( data ) => {
           expect( data ).toEqual( {} );
         } );
         $rootScope.$digest();
