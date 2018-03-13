@@ -1,31 +1,24 @@
-<div class="panel" ng-if="$ctrl.loadingSession">
-  <div class="panel-body">
-    <loading>
-      <translate>Loading...</translate>
+<div class="panel">
+  <div class="panel-body loading-overlay-parent">
+    <loading ng-if="$ctrl.loadingProductConfig">
+      <translate>Loading gift details...</translate>
     </loading>
-  </div>
-</div>
-<div ng-if="!$ctrl.loadingSession">
-  <div class="panel">
-    <div class="panel-body loading-overlay-parent">
-      <loading ng-if="$ctrl.loadingProductConfig">
-        <translate>Loading gift details...</translate>
-      </loading>
-      <product-config-form code="$ctrl.code"
-                           is-edit="$ctrl.isEdit"
-                           item-config="$ctrl.itemConfig"
-                           default-frequency="$ctrl.defaultFrequency"
-                           uri="$ctrl.item.uri"
-                           submitted="$ctrl.submitted"
-                           on-state-change="$ctrl.onGiftConfigStateChange(state)"
-                           disable-session-restart="true"
-                           ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
-      </product-config-form>
-      <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
-        <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.initSessionAndCart()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
-      </div>
+    <product-config-form code="$ctrl.code"
+                         is-edit="$ctrl.isEdit"
+                         item-config="$ctrl.itemConfig"
+                         default-frequency="$ctrl.defaultFrequency"
+                         uri="$ctrl.item.uri"
+                         submitted="$ctrl.submitted"
+                         on-state-change="$ctrl.onGiftConfigStateChange(state)"
+                         disable-session-restart="true"
+                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
+    </product-config-form>
+    <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
+      <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.initSessionAndCart()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
     </div>
   </div>
+</div>
+<div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
   <div class="panel">
     <div class="panel-body">
       <h3 class="panel-name" translate>Your Information</h3>

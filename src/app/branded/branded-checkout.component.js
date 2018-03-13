@@ -8,6 +8,8 @@ import step1 from './step-1/branded-checkout-step-1.component';
 import step2 from './step-2/branded-checkout-step-2.component';
 import thankYouSummary from 'app/thankYou/summary/thankYouSummary.component';
 
+import sessionService from 'common/services/session/session.service';
+
 import 'common/lib/fakeLocalStorage';
 
 import template from './branded-checkout.tpl.html';
@@ -17,19 +19,23 @@ let componentName = 'brandedCheckout';
 class BrandedCheckoutController {
 
   /* @ngInject */
-  constructor($window, analyticsFactory, tsysService) {
+  constructor($window, analyticsFactory, tsysService, sessionService) {
     this.$window = $window;
     this.analyticsFactory = analyticsFactory;
     this.tsysService = tsysService;
+    this.sessionService = sessionService;
   }
 
   $onInit() {
     this.code = this.designationNumber;
     this.tsysService.setDevice(this.tsysDevice);
-    this.checkoutStep = 'giftContactPayment';
-    this.formatDonorDetails();
     this.analyticsFactory.pageLoaded(true);
-    this.fireAnalyticsEvents('contact', 'payment');
+    this.formatDonorDetails();
+
+    this.sessionService.signOut().subscribe(() => {
+      this.checkoutStep = 'giftContactPayment';
+      this.fireAnalyticsEvents('contact', 'payment');
+    }, angular.noop);
   }
 
   formatDonorDetails(){
@@ -81,7 +87,8 @@ export default angular
     commonModule.name,
     step1.name,
     step2.name,
-    thankYouSummary.name
+    thankYouSummary.name,
+    sessionService.name
   ])
   .component(componentName, {
     controller: BrandedCheckoutController,
