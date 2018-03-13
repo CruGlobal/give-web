@@ -1,8 +1,6 @@
 import angular from 'angular';
 import find from 'lodash/find';
 import every from 'lodash/every';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/catch';
 
 import productConfigForm from 'app/productConfig/productConfigForm/productConfigForm.component';
 import contactInfo from 'common/components/contactInfo/contactInfo.component';
