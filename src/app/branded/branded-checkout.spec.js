@@ -22,7 +22,6 @@ describe('branded checkout', () => {
   describe('$onInit', () => {
     it('should set initial checkout step and call formatDonorDetails', () => {
       spyOn($ctrl.sessionService, 'signOut').and.returnValue(Observable.of(''));
-      spyOn($ctrl.sessionService, 'downgradeToGuest').and.returnValue(Observable.of(''));
       spyOn($ctrl, 'formatDonorDetails');
       $ctrl.$onInit();
 

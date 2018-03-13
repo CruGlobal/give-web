@@ -138,8 +138,8 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
       .mergeMap( () => signIn(email, password) );
   }
 
-  function downgradeToGuest( skipEvent = false, verifyRole = true ) {
-    let observable = verifyRole && currentRole() == Roles.public ?
+  function downgradeToGuest( skipEvent = false ) {
+    let observable = currentRole() == Roles.public ?
       Observable.throw( 'must be IDENTIFIED' ) :
       Observable
         .from( $http( {

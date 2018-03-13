@@ -18,27 +18,29 @@
     </div>
   </div>
 </div>
-<div class="panel">
-  <div class="panel-body">
-    <h3 class="panel-name" translate>Your Information</h3>
-    <contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onContactInfoSubmit(success)" donor-details="$ctrl.donorDetails"></contact-info>
+<div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
+  <div class="panel">
+    <div class="panel-body">
+      <h3 class="panel-name" translate>Your Information</h3>
+      <contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onContactInfoSubmit(success)" donor-details="$ctrl.donorDetails"></contact-info>
+    </div>
   </div>
-</div>
-<div class="panel">
-  <div class="panel-body">
-    <h3 class="panel-name" translate>Payment</h3>
-    <checkout-step-2 hide-buttons="true"
-                     submitted="$ctrl.submitted"
-                     on-state-change="$ctrl.onPaymentStateChange(state)"
-                     mailing-address="$ctrl.donorDetails.mailingAddress">
-    </checkout-step-2>
+  <div class="panel">
+    <div class="panel-body">
+      <h3 class="panel-name" translate>Payment</h3>
+      <checkout-step-2 hide-buttons="true"
+                       submitted="$ctrl.submitted"
+                       on-state-change="$ctrl.onPaymentStateChange(state)"
+                       mailing-address="$ctrl.donorDetails.mailingAddress">
+      </checkout-step-2>
+    </div>
   </div>
-</div>
-<div class="panel">
-  <div class="panel-body text-right">
-    <button class="btn btn-primary"
-            ng-click="$ctrl.submit()"
-            ng-disabled="$ctrl.errorLoadingProductConfig"
-            translate>Continue</button>
+  <div class="panel">
+    <div class="panel-body text-right">
+      <button class="btn btn-primary"
+              ng-click="$ctrl.submit()"
+              ng-disabled="$ctrl.errorLoadingProductConfig"
+              translate>Continue</button>
+    </div>
   </div>
 </div>

@@ -30,13 +30,11 @@ class BrandedCheckoutController {
     this.code = this.designationNumber;
     this.tsysService.setDevice(this.tsysDevice);
     this.analyticsFactory.pageLoaded(true);
+    this.formatDonorDetails();
 
     this.sessionService.signOut().subscribe(() => {
-      this.sessionService.downgradeToGuest(true, false).subscribe(() => {
-        this.checkoutStep = 'giftContactPayment';
-        this.formatDonorDetails();
-        this.fireAnalyticsEvents('contact', 'payment');
-      }, angular.noop);
+      this.checkoutStep = 'giftContactPayment';
+      this.fireAnalyticsEvents('contact', 'payment');
     }, angular.noop);
   }
 
