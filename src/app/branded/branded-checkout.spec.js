@@ -39,7 +39,7 @@ describe('branded checkout', () => {
       expect($ctrl.donorDetails).toBeUndefined();
     });
     it('should convert donorDetails to param case except for mailingAddress', () => {
-      $ctrl.donorDetails =  {
+      $ctrl.$window.donorDetails =  {
         donorType: 'Household',
         name: {
           title: '',
@@ -67,6 +67,8 @@ describe('branded checkout', () => {
         },
         email: 'email@example.com'
       };
+      $ctrl.donorDetailsVariable = 'donorDetails';
+
       $ctrl.formatDonorDetails();
       expect($ctrl.donorDetails).toEqual({
         'donor-type': 'Household',

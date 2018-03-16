@@ -86,9 +86,9 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
   - `quarterly` - quarterly recurring gift
   - `annually` - annually recurring gift
 - `day` - for recurring gifts this defaults the gift's day of the month - *Optional* - can be `1` to `28`
-- `donor-details` - set default values for donor's name and contact info - *Optional* - can be provided as an inline string JSON string or as an Angular expression referencing a variable from an outside Angular module - should be in this format:
+- `donor-details` - name of default values object for donor's name and contact info - *Optional* - should be in this format:
     ```javascript
-    {
+    window.donorDetails = {
         donorType: 'Household', // or 'Organization'
         name: {
             title: '',
@@ -121,7 +121,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
             intAddressLine4: 'Address Line 4'
         },
         email: 'email@example.com'
-    }
+    };
     ```
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - *Optional* -  provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
