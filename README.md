@@ -59,7 +59,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     amount="<amount>"
     frequency="<frequency>"
     day="<day>"
-    donor-details="<donor details object>"
+    donor-details="<window variable containing default values for donor's name and contact info>"
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)">
 </branded-checkout>
 
@@ -86,7 +86,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
   - `quarterly` - quarterly recurring gift
   - `annually` - annually recurring gift
 - `day` - for recurring gifts this defaults the gift's day of the month - *Optional* - can be `1` to `28`
-- `donor-details` - name of default values object for donor's name and contact info - *Optional* - should be in this format:
+- `donor-details` - name of the window variable containing default values for donor's name and contact info - *Optional* - should be in this format:
     ```javascript
     window.donorDetails = {
         donorType: 'Household', // or 'Organization'
