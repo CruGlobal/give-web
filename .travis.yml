@@ -1,5 +1,5 @@
 language: node_js
-node_js: "7"
+node_js: "8"
 script:
   - yarn run test -- --single-run
   - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "dev" ]); then yarn run build; fi
