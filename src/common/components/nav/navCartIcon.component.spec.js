@@ -4,7 +4,7 @@ import module from './navCartIcon.component';
 
 import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
-describe( 'nav', function () {
+describe( 'nav cart icon', function () {
   beforeEach( angular.mock.module( module.name ) );
   let $ctrl;
 
