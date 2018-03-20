@@ -104,17 +104,7 @@
           </div>
         </div>
 
-        <div class="cart">
-          <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
-            <a uib-dropdown-toggle>
-              <i class="fal fa-shopping-cart"></i>
-            </a>
-            <div class="pull-right" uib-dropdown-menu>
-              <span class="triangle"></span>
-              <nav-cart></nav-cart>
-            </div>
-          </div>
-        </div>
+        <nav-cart-icon></nav-cart-icon>
 
         <div class="language"
              ng-if="$ctrl.languagePickerLanguage && $ctrl.languagePickerCountry && !$ctrl.subNavLocked"
