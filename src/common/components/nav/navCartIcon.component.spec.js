@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'angular-mocks';
 import module from './navCartIcon.component';
 
-import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
+import {giftAddedEvent, cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
 
 describe( 'nav cart icon', function () {
   beforeEach( angular.mock.module( module.name ) );
@@ -16,11 +16,17 @@ describe( 'nav cart icon', function () {
     expect( $ctrl ).toBeDefined();
   } );
 
-  describe( 'giftAddedToCart()', () => {
-    beforeEach( () => {
-      $ctrl.cartOpen = false;
-    } );
+  it( '$onInit()', () => {
+    spyOn( $ctrl.$rootScope, '$on' );
+    spyOn( $ctrl, 'giftAddedToCart' );
 
+    $ctrl.$onInit();
+    expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( giftAddedEvent, jasmine.any( Function ) );
+    $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+    expect( $ctrl.giftAddedToCart ).toHaveBeenCalled();
+  } );
+
+  describe( 'giftAddedToCart()', () => {
     it( 'opens nav cart when giftAdded', () => {
       $ctrl.giftAddedToCart();
       expect( $ctrl.cartOpen ).toEqual( true );
