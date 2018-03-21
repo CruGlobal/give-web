@@ -24,6 +24,7 @@ class NavCartController{
     this.envService = envService;
     this.analyticsFactory = analyticsFactory;
     this.firstLoad = true;
+    this.imgDomain = envService.read('imgDomain');
   }
 
   $onInit(){

@@ -1,4 +1,5 @@
 <div class="container-fluid">
+
   <div class="row repeating-row" ng-if="$ctrl.loading">
     <div class="col-xs-12">
       <loading>
@@ -6,6 +7,7 @@
       </loading>
     </div>
   </div>
+
   <div class="row repeating-row" ng-if="!$ctrl.hasItems && !$ctrl.loading && !$ctrl.error">
     <div class="col-xs-12">
       <p class="text-center mt-" translate>
@@ -13,6 +15,7 @@
       </p>
     </div>
   </div>
+
   <div class="row repeating-row" ng-if="$ctrl.error">
     <div class="col-xs-12 text-center mt- text-warning">
       <p translate>
@@ -22,32 +25,44 @@
       </p>
     </div>
   </div>
+
+  <div class="row repeating-row top-row" ng-if="$ctrl.hasItems || $ctrl.error">
+    <div class="col-xs-6">
+      <a ng-href="{{$ctrl.envService.read('publicGive')}}/cart.html" class="btn btn-default btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" translate>View Cart</a>
+    </div>
+    <div class="col-xs-6">
+      <img src="{{$ctrl.imgDomain}}/assets/img/icon-cart-full.png" class="full-cart" />
+    </div>
+  </div>
+
   <div class="row" ng-class="{ 'desktop-cart-list': !$ctrl.mobile }" ng-if="$ctrl.hasItems">
     <div class="col-xs-12">
       <div class="row repeating-row" ng-repeat="i in $ctrl.cartData.items">
-        <div class="col-xs-3">
-          <img desig-src="{{i.designationNumber}}">
-        </div>
         <div class="col-xs-9">
           <p class="title">{{i.displayName}}</p>
           <p class="designation-number">#{{i.designationNumber}}</p>
-          <p class="price">{{i.price}} {{i.frequency}}</p>
+        </div>
+        <div class="col-xs-3 text-right">
+          <p class="price">{{i.price}}</p>
+          <p class="frequency">{{i.frequency}}</p>
         </div>
       </div>
     </div>
   </div>
 
   <div class="row repeating-row sub-total" ng-if="$ctrl.hasItems">
-    <div class="col-xs-12 text-right">
-      <p translate translate-n="$ctrl.cartData.items.length" translate-plural="{{$count}} Items">1 Item</p>
+    <div class="col-xs-9">
+      <p translate translate-n="$ctrl.cartData.items.length" translate-plural="TOTAL ({{$count}} Items)">TOTAL 1 Item</p>
+    </div>
+    <div class="col-xs-3 text-right">
+      <p>{{$ctrl.cartData.cartTotal | currency}}</p>
     </div>
   </div>
+
   <div class="row row-no-spacing" ng-if="$ctrl.hasItems || $ctrl.error"><!-- TODO: row-no-spacing not in nav css -->
-    <div class="col-xs-6">
-      <a ng-href="{{$ctrl.envService.read('publicGive')}}/cart.html" class="btn btn-default btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" translate>Cart</a>
-    </div>
-    <div class="col-xs-6">
+    <div class="col-xs-12">
       <a href="" class="btn btn-primary btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" ng-click="$ctrl.checkout()" translate>Checkout</a>
     </div>
   </div>
+
 </div>
