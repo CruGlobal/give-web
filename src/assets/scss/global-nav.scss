@@ -34,6 +34,43 @@ $fontWeight5:               500;
 $data-font:                 "Helvetica Neue", Helvetica, sans-serif;
 $border-radius:             4px;
 
+
+
+
+
+/***** UPDATED COLORS *****/
+$cru-bahama-blue:               #05699B;
+  $cru-bahama-blue-light:       #BED7E6;
+  $cru-bahama-blue-alt:         #3282AF;
+  $cru-bahama-blue-dark:        #00557D;
+
+$cru-scooter:                   #32C3D7;
+  $cru-scooter-light:           #D7F0F5;
+  $cru-scooter-alt:             #87D2E1;
+  $cru-scooter-dark:            #2DAFC3;
+
+$cru-buttercup:                 #F5BE19;
+  $cru-buttercup-light:         #FAE6A5;
+  $cru-buttercup-alt:           #FACD46;
+  $cru-buttercup-dark:          #E6AF28;
+
+$cru-scorpion:                  #5A5A5A;
+  $cru-scorpion-light:          #E6E6E6;
+  $cru-scorpion-alt:            #BEBEBE;
+  $cru-scorpion-dark:           #323232;
+
+$cru-tango:                     #EB8223;
+  $cru-tango-light:             #F5BE87;
+  $cru-tango-alt:               #F5A055;
+  $cru-tango-dark:              #D77328;
+
+$color-white:                   #FFFFFF;
+
+
+
+
+
+
 @import 'mobile-navigation';
 @import 'desktop_navigation';
 @import 'nav-cart';

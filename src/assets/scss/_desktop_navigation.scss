@@ -274,31 +274,6 @@ $promo-width: 200px;
           }
         }
       }
-
-      .dropdown-menu {
-        border: none;
-        background: $colorGrayscale-pebble;
-        position: relative;
-        top: 16px;
-        left: 10px;
-        padding: 0;
-        width: 360px;
-        margin: 0;
-
-        .triangle {
-          background: transparent url("assets/img/menu-triangle.png") no-repeat right top;
-          width: 100%;
-          height: 12px;
-          background-size: 12px 6px;
-          display: block;
-          position: absolute;
-          top: -6px;
-          left: -14px;
-
-          //TODO: Triangle not showing up correctly
-          z-index: 10;
-        }
-      }
     }
 
     .language {

@@ -1,72 +1,104 @@
-nav-cart {
-  display: block;
-  background-color: $colorCru-white;
+.search-sign-in-wrapper .dropdown {
+  position: unset;
+}
+
+#nav-cart-dropdown {
+  background-color: $cru-scorpion-light;
+  border: none;
+  top: -12px;
+  right: 0;
+  left: auto;
+  padding: 0;
+  width: 360px;
+  margin: 0;
+  color: $cru-scorpion;
 
   .repeating-row {
-    background-color: $colorGrayscale-stone;
-    padding: 15px 0px;
+    padding: 28px 0px;
     border-top: 1px solid $colorCru-white;
 
     &:first-child {
       border-top: 0;
     }
 
-    img {
-      min-height: 40px;
-    }
-
     p {
       margin: 0 0 7.5px;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     &.sub-total {
       text-transform: uppercase;
       font-weight: 600;
-      padding: $gutter*.35 0;
-      p {
-        padding: 0;
-        margin: 0;
-      }
     }
+  }
+
+  .top-row {
+    border-bottom: 1px solid $colorCru-white;
+    padding: 12px 0;
+    .btn-default {
+      padding: 8px 20px;
+      width: auto;
+      line-height: 1;
+      font-size: 14px;
+    }
+  }
+
+  .full-cart {
+    width: auto;
+    height: 18px;
+    float: right;
+    margin-top: 7px;
   }
 
   .desktop-cart-list {
     overflow-y: auto;
-    max-height: 250px;
+    max-height: 240px;
   }
 
-  .title {
-    color: $colorCru-gray;
+  .title, .price {
     font-weight: 600;
-  }
-
-  .designation-number {
-    color: $colorCru-gray;
-    font-weight: 400;
-  }
-
-  .price {
-    font-weight: 400;
-    margin-bottom: 0 !important;
   }
 
   .btn-cart {
     width: 100%;
-    border-radius: 0;
     text-transform: uppercase;
     padding-top: 10px;
     padding-bottom: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
     &.btn-default {
-      background-color: $colorCru-gray;
-      color: $colorCru-white;
-      border-color: rgba(darken($colorCru-gray, 5%), 0.35);
+      background-color: transparent;
+      border-color: $cru-scorpion;
       &:hover {
-        background-color: darken($colorCru-gray, 10%);
+        background-color: $cru-scorpion;
+        color: $colorCru-white;
       }
     }
     &.btn-mobile {
       padding-top: 4px;
       padding-bottom: 4px;
+    }
+    &:not(.btn-default) {
+      border-radius: 0;
+    }
+  }
+
+  .col-xs-9 {
+    padding-left: 28px;
+    padding-right: 14px;
+  }
+  .col-xs-3 {
+    padding-left: 14px;
+    padding-right: 28px;
+  }
+
+  .btn-primary {
+    background-color: $cru-buttercup;
+    border-color: transparent;
+    &:hover {
+      background-color: $cru-buttercup-dark;
     }
   }
 }
