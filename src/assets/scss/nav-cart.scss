@@ -59,9 +59,6 @@ $color-white:                   #FFFFFF;
 
 
 
-#cru-header .cart .dropdown {
-  position: unset;
-}
 
 #nav-cart-dropdown {
   background-color: $cru-scorpion-light;
@@ -98,6 +95,10 @@ $color-white:                   #FFFFFF;
   .top-row {
     border-bottom: 1px solid $colorCru-white;
     padding: 12px 0;
+    .col-xs-6 {
+      padding-left: 18px;
+      padding-right: 18px;
+    }
     .btn-default {
       padding: 8px 20px;
       width: auto;
@@ -110,7 +111,7 @@ $color-white:                   #FFFFFF;
     width: auto;
     height: 18px;
     float: right;
-    margin-top: 7px;
+    margin-top: 2px;
   }
 
   .desktop-cart-list {
