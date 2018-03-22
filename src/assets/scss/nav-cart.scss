@@ -1,11 +1,69 @@
-.search-sign-in-wrapper .dropdown {
-  position: unset;
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
 }
+
+$colorCru-gold:             #f9b625;
+$colorCru-gray:             #666062;
+$colorCru-mid-gray:         #444244;
+$colorCru-white:            #fff;
+$colorCru-blueBright:       #3eb1c8;
+
+$colorGrayscale-background: #f7f7f7;
+$colorGrayscale-sand:       #f4f4f4;
+$colorGrayscale-pebble:     #f0f0f0;
+$colorGrayscale-stone:      #e7e7e7;
+$colorGrayscale-rock:       #b9b9b9;
+$colorGrayscale-slate:      #909b9c;
+$colorGrayscale-black:      #000;
+$colorText:                 #3a3a3a;
+
+$sm:                        992px;
+$header-height:             84px;
+$gutter:                    30px;
+
+$query-unit:                16px;
+$nav-break-min:             400px;
+$fontWeight5:               500;
+
+$data-font:                 "Helvetica Neue", Helvetica, sans-serif;
+$border-radius:             4px;
+
+
+/***** UPDATED COLORS *****/
+$cru-bahama-blue:               #05699B;
+  $cru-bahama-blue-light:       #BED7E6;
+  $cru-bahama-blue-alt:         #3282AF;
+  $cru-bahama-blue-dark:        #00557D;
+
+$cru-scooter:                   #32C3D7;
+  $cru-scooter-light:           #D7F0F5;
+  $cru-scooter-alt:             #87D2E1;
+  $cru-scooter-dark:            #2DAFC3;
+
+$cru-buttercup:                 #F5BE19;
+  $cru-buttercup-light:         #FAE6A5;
+  $cru-buttercup-alt:           #FACD46;
+  $cru-buttercup-dark:          #E6AF28;
+
+$cru-scorpion:                  #5A5A5A;
+  $cru-scorpion-light:          #E6E6E6;
+  $cru-scorpion-alt:            #BEBEBE;
+  $cru-scorpion-dark:           #323232;
+
+$cru-tango:                     #EB8223;
+  $cru-tango-light:             #F5BE87;
+  $cru-tango-alt:               #F5A055;
+  $cru-tango-dark:              #D77328;
+
+$color-white:                   #FFFFFF;
+
+
+
 
 #nav-cart-dropdown {
   background-color: $cru-scorpion-light;
   border: none;
-  top: -12px;
+  top: 0;
   right: 0;
   left: auto;
   padding: 0;
@@ -37,6 +95,10 @@
   .top-row {
     border-bottom: 1px solid $colorCru-white;
     padding: 12px 0;
+    .col-xs-6 {
+      padding-left: 18px;
+      padding-right: 18px;
+    }
     .btn-default {
       padding: 8px 20px;
       width: auto;
@@ -49,7 +111,7 @@
     width: auto;
     height: 18px;
     float: right;
-    margin-top: 7px;
+    margin-top: 2px;
   }
 
   .desktop-cart-list {
@@ -59,6 +121,10 @@
 
   .title, .price {
     font-weight: 600;
+  }
+
+  .designation-number, .frequency {
+    font-weight: 400 !important;
   }
 
   .btn-cart {
@@ -97,6 +163,7 @@
   .btn-primary {
     background-color: $cru-buttercup;
     border-color: transparent;
+    color: $colorCru-white;
     &:hover {
       background-color: $cru-buttercup-dark;
     }
