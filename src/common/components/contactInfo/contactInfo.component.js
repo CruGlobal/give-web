@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'angular-messages';
+import assign from 'lodash/assign';
 import includes from 'lodash/includes';
 import startsWith from 'lodash/startsWith';
 import {Observable} from 'rxjs/Observable';
@@ -26,17 +27,7 @@ class Step1Controller{
   }
 
   $onInit(){
-    // If donorDetails binding is initialized, use it instead of loading from EP
-    if(!this.donorDetails){
-      this.donorDetails = {
-          mailingAddress: {
-            country: 'US'
-          }
-        };
-
-      this.loadDonorDetails();
-    }
-
+    this.loadDonorDetails(this.donorDetails);
     this.waitForFormInitialization();
 
     this.$scope.$on(SignInEvent, () => {
@@ -65,7 +56,7 @@ class Step1Controller{
     };
   }
 
-  loadDonorDetails(){
+  loadDonorDetails(overrideDonorDetails){
     this.loadingDonorDetailsError = false;
     this.loadingDonorDetails = true;
     this.orderService.getDonorDetails()
@@ -88,6 +79,10 @@ class Step1Controller{
           if(angular.isUndefined(this.donorDetails['email']) && angular.isDefined(this.sessionService.session.email)) {
             this.donorDetails['email'] = this.sessionService.session.email;
           }
+        }
+
+        if(overrideDonorDetails){
+          this.donorDetails = assign(this.donorDetails, overrideDonorDetails);
         }
       },
       error => {

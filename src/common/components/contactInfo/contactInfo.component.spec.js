@@ -31,15 +31,6 @@ describe('contactInfo', function() {
       expect(self.controller.loadDonorDetails).toHaveBeenCalled();
       expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
     });
-    it('should not load donorDetails if provided by the binding', () => {
-      self.controller.donorDetails = { mailingAddress: {} };
-      spyOn(self.controller, 'loadDonorDetails');
-      spyOn(self.controller, 'waitForFormInitialization');
-      self.controller.$onInit();
-      expect(self.controller.donorDetails).toEqual({ mailingAddress: {} });
-      expect(self.controller.loadDonorDetails).not.toHaveBeenCalled();
-      expect(self.controller.waitForFormInitialization).toHaveBeenCalled();
-    });
     it('should call loadDonorDetails on sign in', () => {
       spyOn(self.controller, 'loadDonorDetails');
       self.controller.$onInit();
@@ -171,6 +162,13 @@ describe('contactInfo', function() {
           'registration-state': 'NEW'
         });
       });
+    });
+
+    it('should override details if passed in', () => {
+      spyOn(self.controller.orderService, 'getDonorDetails').and.callFake(() => Observable.of({ 'spouse-name': {} }));
+      self.controller.loadDonorDetails({'email': 'steve@cru.org'});
+      expect(self.controller.orderService.getDonorDetails).toHaveBeenCalled();
+      expect(self.controller.donorDetails.email).toEqual('steve@cru.org');
     });
 
     it('should log an error on failure', () => {
