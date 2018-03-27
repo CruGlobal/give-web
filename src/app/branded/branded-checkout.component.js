@@ -45,7 +45,9 @@ class BrandedCheckoutController {
       //change donorDetails to param-case but leave mailing address alone since this Angular app uses a different format than EP
       const mailingAddress = this.donorDetails.mailingAddress;
       this.donorDetails = changeCaseObject.paramCase(omit(this.donorDetails, 'mailingAddress'));
-      this.donorDetails.mailingAddress = mailingAddress;
+      if(mailingAddress){
+        this.donorDetails.mailingAddress = mailingAddress;
+      }
     }
   }
 
