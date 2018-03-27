@@ -27,7 +27,16 @@ class Step1Controller{
   }
 
   $onInit(){
-    this.loadDonorDetails(this.donorDetails);
+    const donorDetailsDefaults = angular.copy(this.donorDetails);
+
+    // init address to populate 'US state' dropdown
+    this.donorDetails = {
+      mailingAddress: {
+        country: 'US'
+      }
+    };
+
+    this.loadDonorDetails(donorDetailsDefaults);
     this.waitForFormInitialization();
 
     this.$scope.$on(SignInEvent, () => {
