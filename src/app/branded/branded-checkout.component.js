@@ -1,7 +1,6 @@
 import angular from 'angular';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
-import assign from 'lodash/assign';
 import changeCaseObject from 'change-case-object';
 
 import commonModule from 'common/common.module';
@@ -40,16 +39,8 @@ class BrandedCheckoutController {
   }
 
   formatDonorDetails(){
-    const defaultDonorDetails = {
-      donorType: 'Household',
-      mailingAddress: {
-        country: 'US'
-      }
-    };
-
     if(this.donorDetailsVariable && this.$window[this.donorDetailsVariable]){
-      //merge defaults
-      this.donorDetails = assign(defaultDonorDetails, this.$window[this.donorDetailsVariable]);
+      this.donorDetails = this.$window[this.donorDetailsVariable];
 
       //change donorDetails to param-case but leave mailing address alone since this Angular app uses a different format than EP
       const mailingAddress = this.donorDetails.mailingAddress;
