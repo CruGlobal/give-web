@@ -93,7 +93,10 @@ export default angular
     step2.name,
     thankYouSummary.name,
     sessionService.name
-  ])
+  ]).config(($uibModalProvider, $windowProvider) => {
+    const $window = $windowProvider.$get();
+    $uibModalProvider.options.appendTo = angular.element($window.document).find('branded-checkout').eq(0);
+  })
   .component(componentName, {
     controller: BrandedCheckoutController,
     templateUrl: template,

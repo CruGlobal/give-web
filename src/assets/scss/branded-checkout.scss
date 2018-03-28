@@ -1,5 +1,14 @@
-.branded-checkout{
-  @import 'styles';
+branded-checkout{
+  @import '../cru-scss/cru';
+  @import 'give';
+  @import 'form';
+  @import 'cart';
+  @import 'checkout';
+  @import 'gift-config';
+  @import 'modal';
+  @import 'account_management';
+  @import 'mobile';
+
   font-family: $data-font;
   font-size: ($font-size-base / 16px) * 1em;
   line-height: $line-height-base;
