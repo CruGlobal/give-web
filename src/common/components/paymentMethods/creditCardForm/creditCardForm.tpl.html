@@ -10,6 +10,7 @@
           <label translate>Card #</label>
           <input type="text"
                  name="cardNumber"
+                 autocomplete="off"
                  class="form-control  form-control-subtle"
                  ng-model="$ctrl.creditCardPayment.cardNumber"
                  ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
@@ -83,6 +84,7 @@
           <label translate>Security Code</label>
           <input type="text"
                  name="securityCode"
+                 autocomplete="off"
                  class="form-control form-control-subtle"
                  ng-model="$ctrl.creditCardPayment.securityCode"
                  ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
