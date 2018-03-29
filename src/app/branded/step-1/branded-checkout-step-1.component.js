@@ -1,5 +1,4 @@
 import angular from 'angular';
-import find from 'lodash/find';
 import every from 'lodash/every';
 
 import productConfigForm from 'app/productConfig/productConfigForm/productConfigForm.component';
@@ -50,10 +49,11 @@ class BrandedCheckoutStep1Controller{
     this.errorLoadingProductConfig = false;
 
     this.cartService.get().subscribe(data => {
-        const item = find(data.items, {code: this.code});
-        if (item) { // Edit first item with this code from user's cart if it exits
+        const item = data.items && data.items[0];
+        if (item) { // Edit first item from user's cart if it exits
           this.isEdit = true;
           this.item = item;
+          this.itemConfig = item.config;
         }
         this.loadingProductConfig = false;
       },
