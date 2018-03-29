@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-messages';
 import assign from 'lodash/assign';
+import find from 'lodash/find';
 import includes from 'lodash/includes';
 import startsWith from 'lodash/startsWith';
 import {Observable} from 'rxjs/Observable';
@@ -90,7 +91,8 @@ class Step1Controller{
           }
         }
 
-        if(overrideDonorDetails){
+        const firstTimeLoading = !find(this.donorDetails.links, ['rel', 'donormatchesform']);
+        if(overrideDonorDetails && firstTimeLoading){
           this.donorDetails = assign(this.donorDetails, overrideDonorDetails);
         }
       },
