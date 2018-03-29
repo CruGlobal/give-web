@@ -73,8 +73,8 @@ describe('branded checkout step 1', () => {
       expect($ctrl.item).toEqual({ code: '1234567' });
       expect($ctrl.loadingProductConfig).toEqual(false);
     });
-    it('should get cart data and not enter edit mode when item isn\'t in cart', () => {
-      $ctrl.code = '0000000';
+    it('should get cart data and not enter edit mode when cart has no items', () => {
+      $ctrl.cartService.get.and.returnValue(Observable.of({ }));
       $ctrl.initCart();
       expect($ctrl.cartService.get).toHaveBeenCalled();
       expect($ctrl.isEdit).toBeUndefined();
