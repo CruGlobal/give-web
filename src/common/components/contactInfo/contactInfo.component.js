@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-messages';
 import assign from 'lodash/assign';
+import pick from 'lodash/pick';
 import find from 'lodash/find';
 import includes from 'lodash/includes';
 import startsWith from 'lodash/startsWith';
@@ -93,7 +94,9 @@ class Step1Controller{
 
         const firstTimeLoading = !find(this.donorDetails.links, ['rel', 'donormatchesform']);
         if(overrideDonorDetails && firstTimeLoading){
-          this.donorDetails = assign(this.donorDetails, overrideDonorDetails);
+          this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
+            'donor-type', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
+          ]));
         }
       },
       error => {
