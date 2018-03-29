@@ -37,7 +37,7 @@
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.routingNumber | showErrors)}">
           <label>Routing #</label>
-          <input type="text" class="form-control  form-control-subtle" name="routingNumber" ng-model="$ctrl.bankPayment.routingNumber" required>
+          <input type="text" class="form-control  form-control-subtle" name="routingNumber" autocomplete="off" ng-model="$ctrl.bankPayment.routingNumber" required>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.routingNumber.$error" ng-if="($ctrl.bankPaymentForm.routingNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter a routing number</div>
             <div class="help-block" ng-message="length" translate>This routing number must contain 9 digits</div>
@@ -48,7 +48,7 @@
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountNumber | showErrors)}">
           <label>Account #</label>
-          <input type="text" class="form-control  form-control-subtle" name="accountNumber" ng-model="$ctrl.bankPayment.accountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber">
+          <input type="text" class="form-control  form-control-subtle" name="accountNumber" autocomplete="off" ng-model="$ctrl.bankPayment.accountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountNumber.$error" ng-if="($ctrl.bankPaymentForm.accountNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter an account number</div>
             <div class="help-block" ng-message="minlength" translate>This account number must contain 2 or more digits</div>
@@ -59,7 +59,7 @@
       <div class="col-sm-4">
         <div class="form-group is-required no-wrap" ng-class="{'has-error': ($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)}">
           <label>Retype Account #</label>
-          <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" ng-model="$ctrl.bankPayment.verifyAccountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="$ctrl.bankPayment.accountNumber">
+          <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" autocomplete="off" ng-model="$ctrl.bankPayment.verifyAccountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="$ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error" ng-if="($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>You must retype your account number</div>
             <div class="help-block" ng-message="verifyAccountNumber" translate>Your account numbers do not match</div>
