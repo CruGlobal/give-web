@@ -53,6 +53,7 @@ class BrandedCheckoutStep1Controller{
         if (item) { // Edit first item from user's cart if it exits
           this.isEdit = true;
           this.item = item;
+          this.code = item.code;
           this.itemConfig = item.config;
         }
         this.loadingProductConfig = false;
