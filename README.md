@@ -15,7 +15,7 @@ To use the `searchResults` component, include this code on your page:
 <script src="https://cru-givestage.s3.amazonaws.com/app.js"></script>
 ```
 
-For other components, replace all instances of `checkout` with the name of another component. Current components are `cart`, `checkout`, `thankYou`, `productConfig`, `signIn`, `searchResults`, `homeSignIn`, `yourGiving`, `profile`, `receipts`, `paymentMethods`, `designationEditor`, and `brandedCheckout`. The element name needs to be kebab case and the ng-app module name needs to be camel case.
+For other components, replace all instances of `checkout` with the name of another component. Current components are `cart`, `checkout`, `thankYou`, `productConfig`, `signIn`, `searchResults`, `yourGiving`, `profile`, `receipts`, `paymentMethods`, `designationEditor`, and `brandedCheckout`. The element name needs to be kebab case and the ng-app module name needs to be camel case.
 
 ### Importing CSS
 
