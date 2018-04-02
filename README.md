@@ -152,3 +152,6 @@ Note: For session cookies to work correctly, add an entry to your hosts file for
 
 ### Making queries to Cortex
 Use the `cortexApiService` which provides convenience methods for sending requests to Cortex. For more documentation see the [cortexApiService docs](docs/cortexApiService.md).
+
+### Staging Environment
+Replace `https://give-static.cru.org` with `https://cru-givestage.s3.amazonaws.com` to use the staging environment. 
