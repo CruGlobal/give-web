@@ -20,7 +20,6 @@ const entryPoints = {
     'app/productConfig/productConfig.component.js',
     'app/signIn/signIn.component.js',
     'app/searchResults/searchResults.component.js',
-    'app/homeSignIn/homeSignIn.component.js',
     'app/profile/yourGiving/yourGiving.component.js',
     'app/profile/profile.component.js',
     'app/profile/receipts/receipts.component.js',

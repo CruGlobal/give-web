@@ -10,6 +10,7 @@
           <label translate>Card #</label>
           <input type="text"
                  name="cardNumber"
+                 autocomplete="cc-number"
                  class="form-control  form-control-subtle"
                  ng-model="$ctrl.creditCardPayment.cardNumber"
                  ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
@@ -28,7 +29,12 @@
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardholderName | showErrors)}">
           <label translate>Name On Card</label>
-          <input type="text" name="cardholderName" class="form-control  form-control-subtle" ng-model="$ctrl.creditCardPayment.cardholderName" ng-maxlength="50" required>
+          <input type="text"
+                 name="cardholderName"
+                 class="form-control  form-control-subtle"
+                 autocomplete="cc-name"
+                 ng-model="$ctrl.creditCardPayment.cardholderName"
+                 ng-maxlength="50" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.cardholderName.$error" ng-if="($ctrl.creditCardPaymentForm.cardholderName | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter the name on the card</div>
             <div class="help-block" ng-message="maxlength" translate>This name cannot be longer than 50 characters</div>
@@ -42,6 +48,7 @@
           <label translate>Exp. Month</label>
           <select class="form-control  form-control-subtle"
                   name="expiryMonth"
+                  autocomplete="cc-exp-month"
                   required
                   ng-model="$ctrl.creditCardPayment.expiryMonth">
             <option value="01" translate>01 - January</option>
@@ -68,6 +75,7 @@
           <label translate>Exp. Year</label>
           <select class="form-control  form-control-subtle"
                   name="expiryYear"
+                  autocomplete="cc-exp-year"
                   required
                   ng-model="$ctrl.creditCardPayment.expiryYear"
                   ng-options="year for year in $ctrl.expirationDateYears">
@@ -83,6 +91,7 @@
           <label translate>Security Code</label>
           <input type="text"
                  name="securityCode"
+                 autocomplete="cc-csc"
                  class="form-control form-control-subtle"
                  ng-model="$ctrl.creditCardPayment.securityCode"
                  ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
