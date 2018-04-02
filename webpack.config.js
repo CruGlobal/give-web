@@ -12,7 +12,6 @@ const ci = process.env.CI === 'true';
 
 const entryPoints = {
   common: 'common/common.module.js',
-  cruNav: 'common/components/nav/nav.bundle.js',
   app: [
     'common/common.module.js',
     'app/cart/cart.component.js',
@@ -28,7 +27,6 @@ const entryPoints = {
     'app/designationEditor/designationEditor.component.js'
   ],
   give: 'assets/scss/styles.scss',
-  nav: 'assets/scss/global-nav.scss',
   'branded-checkout': ['app/branded/branded-checkout.component.js', 'assets/scss/branded-checkout.scss']
 };
 

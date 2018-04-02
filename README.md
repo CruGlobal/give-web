@@ -12,7 +12,7 @@ To use the `searchResults` component, include this code on your page:
 ```html
 <search-results ng-app="searchResults"></search-results>
 
-<script src="https://cru-givestage.s3.amazonaws.com/app.js"></script>
+<script src="https://give-static.cru.org/app.js"></script>
 ```
 
 For other components, replace all instances of `checkout` with the name of another component. Current components are `cart`, `checkout`, `thankYou`, `productConfig`, `signIn`, `searchResults`, `yourGiving`, `profile`, `receipts`, `paymentMethods`, `designationEditor`, and `brandedCheckout`. The element name needs to be kebab case and the ng-app module name needs to be camel case.
@@ -21,10 +21,9 @@ For other components, replace all instances of `checkout` with the name of anoth
 
 Import the following:
 ```html
-<link rel="stylesheet" href="https://cru-givestage.s3.amazonaws.com/give.min.css">
-<link rel="stylesheet" href="https://cru-givestage.s3.amazonaws.com/nav.min.css">
+<link rel="stylesheet" href="https://give-static.cru.org/give.min.css">
 ```
-This currently includes all cru.org styling from cru.scss.
+This includes legacy cru.org styling from cru.scss.
 
 ### Branded checkout
 
@@ -153,3 +152,6 @@ Note: For session cookies to work correctly, add an entry to your hosts file for
 
 ### Making queries to Cortex
 Use the `cortexApiService` which provides convenience methods for sending requests to Cortex. For more documentation see the [cortexApiService docs](docs/cortexApiService.md).
+
+### Staging Environment
+Replace `https://give-static.cru.org` with `https://cru-givestage.s3.amazonaws.com` to use the staging environment. 
