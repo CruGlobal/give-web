@@ -9,7 +9,7 @@
     &:before {
       content: "\f071";
       display: inline-block;
-      font-family: "fontawesome";
+      font-family: "fontawesome", "Font Awesome 5 Pro";
       margin-right: 6px;
     }
   }
@@ -24,7 +24,7 @@
     &:before {
       content: "\f00c";
       display: inline-block;
-      font-family: "fontawesome";
+      font-family: "fontawesome", "Font Awesome 5 Pro";
       margin-right: 6px;
     }
   }
@@ -36,7 +36,7 @@
       content: "*";
       display: inline-block;
       font-size: 115%;
-      font-family: "fontawesome";
+      font-family: "fontawesome", "Font Awesome 5 Pro";
       margin-left: 6px;
     }
   }
