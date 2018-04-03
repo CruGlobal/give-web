@@ -7,6 +7,9 @@ import loadingComponent from './components/loading/loading.component';
 import navCartIcon from 'common/components/nav/navCartIcon.component';
 import analyticsRun from 'app/analytics/analytics.run';
 
+import sessionModalService from "./services/session/sessionModal.service";
+import sessionService from "./services/session/session.service";
+
 let moduleName = 'common';
 
 export default angular
@@ -16,5 +19,7 @@ export default angular
     appConfig.name,
     navCartIcon.name,
     loadingComponent.name,
-    analyticsRun.name
+    analyticsRun.name,
+    sessionService.name,
+    sessionModalService.name
   ]);
