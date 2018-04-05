@@ -55,6 +55,9 @@ class BrandedCheckoutStep1Controller{
           this.item = item;
           this.code = item.code;
           this.itemConfig = item.config;
+
+          //add campaign page
+          this.itemConfig['campaign-page'] = this.campaignPage;
         }
         this.loadingProductConfig = false;
       },
