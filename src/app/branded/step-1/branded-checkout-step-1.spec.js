@@ -62,15 +62,17 @@ describe('branded checkout step 1', () => {
 
   describe('initCart', () => {
     beforeEach(() => {
-      spyOn($ctrl.cartService, 'get').and.returnValue(Observable.of({ items: [ { code: '1234567' } ] }));
+      spyOn($ctrl.cartService, 'get').and.returnValue(Observable.of({ items: [ { code: '1234567', config: {} } ] }));
       $ctrl.donorDetails = { mailingAddress: {} };
     });
     it('should get cart data and find existing item in cart', () => {
+      $ctrl.campaignPage = 'campaign1';
       $ctrl.code = '1234567';
       $ctrl.initCart();
       expect($ctrl.cartService.get).toHaveBeenCalled();
       expect($ctrl.isEdit).toEqual(true);
-      expect($ctrl.item).toEqual({ code: '1234567' });
+      expect($ctrl.item.code).toEqual('1234567');
+      expect($ctrl.itemConfig['campaign-page']).toEqual('campaign1');
       expect($ctrl.loadingProductConfig).toEqual(false);
     });
     it('should get cart data and not enter edit mode when cart has no items', () => {
