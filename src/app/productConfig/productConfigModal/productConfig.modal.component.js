@@ -21,6 +21,8 @@ class ProductConfigModalController {
   $onInit(){
     this.initModalData();
     this.initializeParams();
+
+    this.isMobile = this.$window.innerWidth <= 575;
   }
 
   $onDestroy(){
@@ -94,6 +96,10 @@ class ProductConfigModalController {
     switch(state){
       case 'submitted':
         this.close();
+
+        if(this.isMobile && !this.isEdit){
+          this.$window.location = '/cart.html';
+        }
         break;
     }
   }

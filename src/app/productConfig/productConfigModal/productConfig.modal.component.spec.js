@@ -13,6 +13,10 @@ describe( 'product config modal', function () {
     $ctrl = $componentController( module.name,
       {
         $location: jasmine.createSpyObj( '$location', ['search'] ),
+        $window: {
+          location: '/cart.html',
+          innerWidth: 450
+        },
         modalStateService: jasmine.createSpyObj( 'modalStateService', ['name'] )
       },
       {
@@ -38,6 +42,7 @@ describe( 'product config modal', function () {
       $ctrl.$onInit();
       expect( $ctrl.initModalData ).toHaveBeenCalled();
       expect( $ctrl.initializeParams ).toHaveBeenCalled();
+      expect( $ctrl.isMobile ).toEqual(true);
     } );
   } );
 
@@ -160,6 +165,7 @@ describe( 'product config modal', function () {
     it( 'should close modal if state is submitted', () => {
       $ctrl.onStateChange('submitted');
       expect($ctrl.close).toHaveBeenCalled();
+      expect( $ctrl.$window.location ).toContain( 'cart.html' );
     } );
   } );
 } );
