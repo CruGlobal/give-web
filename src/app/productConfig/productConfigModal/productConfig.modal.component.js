@@ -4,6 +4,7 @@ import isArray from 'lodash/isArray';
 import productConfigForm from '../productConfigForm/productConfigForm.component';
 import { giveGiftParams } from '../giveGiftParams';
 import modalStateService from 'common/services/modalState.service';
+import { mobileBreakpoint } from 'common/app.constants';
 
 import template from './productConfig.modal.tpl.html';
 
@@ -21,6 +22,8 @@ class ProductConfigModalController {
   $onInit(){
     this.initModalData();
     this.initializeParams();
+
+    this.isMobile = this.$window.innerWidth <= mobileBreakpoint;
   }
 
   $onDestroy(){
@@ -94,6 +97,10 @@ class ProductConfigModalController {
     switch(state){
       case 'submitted':
         this.close();
+
+        if(this.isMobile && !this.isEdit){
+          this.$window.location = '/cart.html';
+        }
         break;
     }
   }
