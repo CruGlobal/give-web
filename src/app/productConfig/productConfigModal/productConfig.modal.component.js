@@ -4,6 +4,7 @@ import isArray from 'lodash/isArray';
 import productConfigForm from '../productConfigForm/productConfigForm.component';
 import { giveGiftParams } from '../giveGiftParams';
 import modalStateService from 'common/services/modalState.service';
+import { mobileBreakpoint } from 'common/app.constants';
 
 import template from './productConfig.modal.tpl.html';
 
@@ -22,7 +23,7 @@ class ProductConfigModalController {
     this.initModalData();
     this.initializeParams();
 
-    this.isMobile = this.$window.innerWidth <= 575;
+    this.isMobile = this.$window.innerWidth <= mobileBreakpoint;
   }
 
   $onDestroy(){

@@ -165,7 +165,7 @@ describe( 'product config modal', function () {
     it( 'should close modal if state is submitted', () => {
       $ctrl.onStateChange('submitted');
       expect($ctrl.close).toHaveBeenCalled();
-      expect( $ctrl.$window.location ).toContain( 'cart.html' );
+      expect( $ctrl.$window.location ).toEqual( '/cart.html' );
     } );
   } );
 } );
