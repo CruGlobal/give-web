@@ -95,7 +95,7 @@ class Step1Controller{
         const firstTimeLoading = !find(this.donorDetails.links, ['rel', 'donormatchesform']);
         if(overrideDonorDetails && firstTimeLoading){
           this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
-            'donor-type', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
+            'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
           ]));
         }
       },
