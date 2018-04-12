@@ -186,7 +186,7 @@ class DesignationsService {
               if ( toFinite( k ) > 0 || k.includes('item') ) suggestedAmounts.push( {
                 amount: toFinite( v.amount ),
                 label: v.description,
-                order: toFinite( k ) > 0 ? toFinite( k ) : k.substring(4)
+                order: toFinite( k ) > 0 ? toFinite( k ) : Number(k.substring(4))
               } );
             } );
           }
