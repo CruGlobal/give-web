@@ -26,14 +26,14 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
-        imgDomain: '//stage.cru.org/s3',
+        imgDomain: '//give-static.cru.org',
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org'
       },
       production: {
         apiUrl: 'https://give.cru.org',
-        imgDomain: '//www.cru.org/s3',
+        imgDomain: '//give-static.cru.org',
         imgDomainDesignation: 'https://give.cru.org',
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give.cru.org'
