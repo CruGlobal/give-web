@@ -14,8 +14,12 @@ class Common {
 
   getNextDrawDate(){
     return this.cortexApiService.get({
-        path: ['nextdrawdate']
-      })
+      path: ['nextdrawdate'],
+      params: {
+        nocache: new Date().getTime()
+      },
+      cache: true
+    })
       .pluck('next-draw-date');
   }
 }
