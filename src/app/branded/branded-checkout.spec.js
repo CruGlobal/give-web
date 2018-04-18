@@ -25,6 +25,7 @@ describe('branded checkout', () => {
       spyOn($ctrl, 'formatDonorDetails');
       $ctrl.$onInit();
 
+      expect($ctrl.sessionService.signOut).toHaveBeenCalled();
       expect($ctrl.code).toEqual('1234567');
       expect($ctrl.tsysService.setDevice).toHaveBeenCalledWith('test-env');
       expect($ctrl.checkoutStep).toEqual('giftContactPayment');
