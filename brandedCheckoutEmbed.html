@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      background: transparent;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body>
+  <script>
+    //create branded checkout element
+    (function(){
+      var attributes = location.hash.substr(1);
+      attributes = JSON.parse(atob(attributes));
+
+      var checkoutApp = document.createElement('branded-checkout');
+      checkoutApp.setAttribute('ng-app', 'brandedCheckout');
+
+      //set custom attributes
+      Object.keys(attributes).map(function(objectKey) {
+        checkoutApp.setAttribute(objectKey, attributes[objectKey]);
+      });
+
+      document.body.appendChild(checkoutApp);
+    })();
+  </script>
+
+  <script>
+    //window height
+    setInterval(function() {
+      if(parent.postMessage) {
+        var height= document.body.offsetHeight;
+        parent.postMessage(height, '*');
+      }
+    }, 800);
+  </script>
+
+  <script src="https://give-static.cru.org/branded-checkout.js"></script>
+</body>
+</html>
