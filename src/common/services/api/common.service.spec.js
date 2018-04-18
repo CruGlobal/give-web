@@ -19,7 +19,7 @@ describe('common service', () => {
 
   describe('getNextDrawDate', () => {
     it('should get next draw date', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/nextdrawdate')
+      self.$httpBackend.expectGET(/https:\/\/give-stage2.cru.org\/cortex\/nextdrawdate\?.*/g)
         .respond(200, {"next-draw-date": "2016-10-01"});
       self.commonService.getNextDrawDate().subscribe(date => {
         expect(date).toEqual('2016-10-01');
