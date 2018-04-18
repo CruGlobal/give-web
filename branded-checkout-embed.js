@@ -6,11 +6,13 @@
       return;
     }
 
+    //convert element attributes to json hash to pass to iframe src
     var attributes = {};
     [].slice.call(brandedElement.attributes).forEach(function(attr){
       attributes[attr.nodeName] = attr.nodeValue;
     });
 
+    //build iframe element
     var iframe = document.createElement('iframe');
     iframe.style.width = '100%';
     iframe.style.border = 'none';
@@ -20,6 +22,7 @@
     iframe.src = 'https://give-static.cru.org/brandedCheckoutEmbed.html#' + btoa(JSON.stringify(attributes));
     brandedElement.appendChild(iframe);
 
+    //listen for iframe height changes
     var eventMethod = window.addEventListener ? 'addEventListener' : 'attachEvent';
     var eventer = window[eventMethod];
     var messageEvent = eventMethod === 'attachEvent' ? 'onmessage' : 'message';
