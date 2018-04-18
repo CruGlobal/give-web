@@ -32,6 +32,9 @@ class CortexApi {
     }
 
     config.params = config.params || {};
+    if(!config.cache){
+      config.params.nocache = new Date().getTime();
+    }
     if(config.zoom){
       config.params.zoom = this.hateoasHelperService.serializeZoom(config.zoom);
     }
