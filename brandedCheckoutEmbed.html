@@ -30,14 +30,13 @@
       document.body.appendChild(checkoutApp);
     })();
 
-    //window height
+    //send iframe height to parent
     (function(){
       var docBody = document.body;
 
       var observer = new MutationObserver(function() {
         if(parent.postMessage) {
-          var height= docBody.offsetHeight;
-          parent.postMessage(height, '*');
+          parent.postMessage(docBody.offsetHeight, '*');
         }
       });
       observer.observe(docBody, { childList: true, subtree: true });
