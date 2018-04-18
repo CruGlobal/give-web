@@ -29,16 +29,19 @@
 
       document.body.appendChild(checkoutApp);
     })();
-  </script>
 
-  <script>
     //window height
-    setInterval(function() {
-      if(parent.postMessage) {
-        var height= document.body.offsetHeight;
-        parent.postMessage(height, '*');
-      }
-    }, 800);
+    (function(){
+      var docBody = document.body;
+
+      var observer = new MutationObserver(function() {
+        if(parent.postMessage) {
+          var height= docBody.offsetHeight;
+          parent.postMessage(height, '*');
+        }
+      });
+      observer.observe(docBody, { childList: true, subtree: true });
+    })();
   </script>
 
   <script src="https://give-static.cru.org/branded-checkout.js"></script>
