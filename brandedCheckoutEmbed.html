@@ -24,6 +24,10 @@
 
       //set custom attributes
       Object.keys(attributes).map(function(objectKey) {
+        if(objectKey === 'donor-details'){
+          window.donorDetails = attributes[objectKey];
+          attributes[objectKey] = 'donorDetails';
+        }
         checkoutApp.setAttribute(objectKey, attributes[objectKey]);
       });
 

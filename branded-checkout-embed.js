@@ -9,7 +9,12 @@
     //convert element attributes to json hash to pass to iframe src
     var attributes = {};
     [].slice.call(brandedElement.attributes).forEach(function(attr){
-      attributes[attr.nodeName] = attr.nodeValue;
+      var nodeName = attr.nodeName, nodeValue = attr.nodeValue;
+
+      if(nodeName === 'donor-details' && window[nodeValue]){
+        nodeValue = window[nodeValue];
+      }
+      attributes[nodeName] = nodeValue;
     });
 
     //build iframe element
