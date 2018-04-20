@@ -74,6 +74,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
 
 The `<branded-checkout>` element is where the branded checkout Angular app will be loaded. It is configured by providing HTML attributes that will be loaded by Angular. Attributes with values containing angle brackets (such as `<designation number>`) are placeholders and should be replaced with real values or, if not needed, the whole attribute should be omitted. The `<branded-checkout>` element accepts the following attributes:
 - `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
+- `api-url` - Custom API url. This is required to be on the same top level domain as the branded checkout form for use in browsers that block third party cookies. 
 - `designation-number` - the designation number you would like donors to give to - **Required**
 - `campaign-page` - the campaign page you would like to use, used for suggested amounts - *Optional*
 - `campaign-code` - the campaign code you would like to use - *Optional*
