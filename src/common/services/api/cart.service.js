@@ -1,4 +1,6 @@
 import angular from 'angular';
+import 'angular-cookies';
+import moment from 'moment';
 import map from 'lodash/map';
 import omit from 'lodash/omit';
 import concat from 'lodash/concat';
@@ -21,17 +23,21 @@ import hateoasHelperService from 'common/services/hateoasHelper.service';
 import sessionService, {Roles} from 'common/services/session/session.service';
 import {startMonth} from '../giftHelpers/giftDates.service';
 
+const cartTotalCookie = 'giveCartItemCount';
+const cartTotalCookieDomain = 'cru.org';
+
 let serviceName = 'cartService';
 
 class Cart {
 
   /*@ngInject*/
-  constructor(cortexApiService, commonService, designationsService, sessionService, hateoasHelperService){
+  constructor(cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies){
     this.cortexApiService = cortexApiService;
     this.commonService = commonService;
     this.designationsService = designationsService;
     this.sessionService = sessionService;
     this.hateoasHelperService = hateoasHelperService;
+    this.$cookies = $cookies;
   }
 
   get() {
@@ -45,6 +51,9 @@ class Cart {
     }), this.commonService.getNextDrawDate())
       .map(([cartResponse, nextDrawDate]) => {
         if (!cartResponse || !cartResponse.lineItems) {
+          this.$cookies.remove( cartTotalCookie, {
+            domain: cartTotalCookieDomain
+          } );
           return {};
         }
 
@@ -84,6 +93,12 @@ class Cart {
             };
           })
         );
+
+        //set cart item count cookie
+        this.$cookies.put( cartTotalCookie, items.length, {
+          domain: cartTotalCookieDomain,
+          expires: moment().add(58, 'days').toISOString()
+        } );
 
         return {
           id: this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
@@ -185,6 +200,7 @@ export default angular
     commonService.name,
     designationsService.name,
     sessionService.name,
-    hateoasHelperService.name
+    hateoasHelperService.name,
+    'ngCookies'
   ])
   .service(serviceName, Cart);
