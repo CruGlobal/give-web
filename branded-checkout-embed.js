@@ -13,6 +13,8 @@
 
       if(nodeName === 'donor-details' && window[nodeValue]){
         nodeValue = window[nodeValue];
+      }else if(nodeName === 'tsys-device'){
+        nodeValue = undefined;
       }
       attributes[nodeName] = nodeValue;
     });
@@ -24,7 +26,7 @@
     iframe.style.overflow = 'hidden';
     iframe.setAttribute('allowtransparency', 'true');
     iframe.setAttribute('scrolling', 'no');
-    iframe.src = 'https://give-static.cru.org/brandedCheckoutEmbed.html#' + btoa(JSON.stringify(attributes));
+    iframe.src = 'https://give-static.cru.org/branded-checkout-embed.html#' + btoa(JSON.stringify(attributes));
     brandedElement.appendChild(iframe);
 
     //listen for iframe height changes
