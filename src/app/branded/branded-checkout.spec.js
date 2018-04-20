@@ -20,6 +20,13 @@ describe('branded checkout', () => {
   }));
 
   describe('$onInit', () => {
+    it('should set API Url if custom one is set', () => {
+      $ctrl.apiUrl = 'https://custom-api.cru.org';
+      $ctrl.$onInit();
+
+      expect($ctrl.envService.read('apiUrl')).toEqual('https://custom-api.cru.org');
+    });
+
     it('should set initial checkout step and call formatDonorDetails', () => {
       spyOn($ctrl.sessionService, 'signOut').and.returnValue(Observable.of(''));
       spyOn($ctrl, 'formatDonorDetails');

@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-environment';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
 import changeCaseObject from 'change-case-object';
@@ -19,14 +20,18 @@ let componentName = 'brandedCheckout';
 class BrandedCheckoutController {
 
   /* @ngInject */
-  constructor($window, analyticsFactory, tsysService, sessionService) {
+  constructor($window, analyticsFactory, tsysService, sessionService, envService) {
     this.$window = $window;
     this.analyticsFactory = analyticsFactory;
     this.tsysService = tsysService;
     this.sessionService = sessionService;
+    this.envService = envService;
   }
 
   $onInit() {
+    if(this.apiUrl){ //set custom API url
+      this.envService.data.vars[this.envService.get()].apiUrl = this.apiUrl;
+    }
     this.code = this.designationNumber;
     this.tsysService.setDevice(this.tsysDevice);
     this.analyticsFactory.pageLoaded(true);
@@ -92,7 +97,8 @@ export default angular
     step1.name,
     step2.name,
     thankYouSummary.name,
-    sessionService.name
+    sessionService.name,
+    'environment'
   ]).config(($uibModalProvider, $windowProvider) => {
     const $window = $windowProvider.$get();
     $uibModalProvider.options.appendTo = angular.element($window.document).find('branded-checkout').eq(0);
@@ -108,6 +114,7 @@ export default angular
       amount: '@',
       frequency: '@',
       day: '@',
+      apiUrl: '@',
       donorDetailsVariable: '@donorDetails',
       onOrderCompleted: '&'
     }
