@@ -12,7 +12,8 @@ describe('branded checkout step 1', () => {
 
   beforeEach(inject($componentController => {
     $ctrl = $componentController(module.name, null, {
-      next: jasmine.createSpy('next')
+      next: jasmine.createSpy('next'),
+      onPaymentFailed: jasmine.createSpy('onPaymentFailed')
     });
   }));
 
@@ -199,6 +200,7 @@ describe('branded checkout step 1', () => {
         error: true
       });
       expect($ctrl.checkSuccessfulSubmission).toHaveBeenCalled();
+      expect($ctrl.onPaymentFailed).toHaveBeenCalled();
     });
     it('should handle an unsubmitted error', () => {
       $ctrl.onPaymentStateChange('unsubmitted');
@@ -207,6 +209,7 @@ describe('branded checkout step 1', () => {
         error: true
       });
       expect($ctrl.checkSuccessfulSubmission).toHaveBeenCalled();
+      expect($ctrl.onPaymentFailed).toHaveBeenCalled();
     });
   });
 

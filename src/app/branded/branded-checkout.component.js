@@ -83,6 +83,10 @@ class BrandedCheckoutController {
     this.onOrderCompleted({$event: {$window: this.$window, purchase: changeCaseObject.camelCase(pick(purchase, ['donorDetails', 'lineItems']))}});
   }
 
+  onPaymentFailed(donorDetails) {
+    this.onOrderFailed({$event: {$window: this.$window, donorDetails: changeCaseObject.camelCase(donorDetails)}});
+  }
+
   fireAnalyticsEvents(...checkoutSteps){
     checkoutSteps.forEach(checkoutStep => {
       this.analyticsFactory.setEvent('checkout step ' + checkoutStep);
@@ -116,6 +120,7 @@ export default angular
       day: '@',
       apiUrl: '@',
       donorDetailsVariable: '@donorDetails',
-      onOrderCompleted: '&'
+      onOrderCompleted: '&',
+      onOrderFailed: '&'
     }
   });
