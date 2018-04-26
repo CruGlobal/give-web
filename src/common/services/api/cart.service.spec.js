@@ -14,9 +14,10 @@ describe('cart service', () => {
   beforeEach(angular.mock.module(module.name));
   let self = {};
 
-  beforeEach(inject((cartService, $httpBackend) => {
+  beforeEach(inject((cartService, $httpBackend, $rootScope) => {
     self.cartService = cartService;
     self.$httpBackend = $httpBackend;
+    self.$rootScope = $rootScope;
   }));
 
   afterEach(() => {
@@ -52,6 +53,7 @@ describe('cart service', () => {
       self.cartService.get()
         .subscribe((data) => {
           expect(data).toEqual({});
+          expect(self.cartService.$cookies.get('giveCartItemCount')).toEqual(undefined);
         });
       self.$httpBackend.flush();
     });
@@ -78,6 +80,9 @@ describe('cart service', () => {
             { frequency: 'Annually', amount: 50, total: '$50.00' },
             { frequency: 'Quarterly', amount: 50, total: '$50.00' }
           ]);
+
+          self.$rootScope.$digest();
+          expect(self.cartService.$cookies.get('giveCartItemCount')).toEqual(3);
         });
       self.$httpBackend.flush();
     });
