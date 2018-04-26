@@ -15,11 +15,19 @@ describe('branded checkout', () => {
     }, {
       designationNumber: '1234567',
       tsysDevice: 'test-env',
-      onOrderCompleted: jasmine.createSpy('onOrderCompleted')
+      onOrderCompleted: jasmine.createSpy('onOrderCompleted'),
+      onOrderFailed: jasmine.createSpy('onOrderFailed')
     });
   }));
 
   describe('$onInit', () => {
+    it('should set API Url if custom one is set', () => {
+      $ctrl.apiUrl = 'https://custom-api.cru.org';
+      $ctrl.$onInit();
+
+      expect($ctrl.envService.read('apiUrl')).toEqual('https://custom-api.cru.org');
+    });
+
     it('should set initial checkout step and call formatDonorDetails', () => {
       spyOn($ctrl.sessionService, 'signOut').and.returnValue(Observable.of(''));
       spyOn($ctrl, 'formatDonorDetails');
@@ -145,6 +153,17 @@ describe('branded checkout', () => {
           donorType: 'Household'
         },
         lineItems: {}
+      }}});
+    });
+  });
+
+  describe('onPaymentFailed', () => {
+    it('should pass donorDetails info to the onPaymentFailed binding', () => {
+      $ctrl.onPaymentFailed({
+        'donor-type': 'Household'
+      });
+      expect($ctrl.onOrderFailed).toHaveBeenCalledWith({$event: {$window: $ctrl.$window, donorDetails: {
+        donorType: 'Household'
       }}});
     });
   });
