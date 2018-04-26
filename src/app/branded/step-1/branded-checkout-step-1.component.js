@@ -127,6 +127,7 @@ class BrandedCheckoutStep1Controller{
         this.submission.payment.completed = true;
         this.submission.payment.error = true;
         this.checkSuccessfulSubmission();
+        this.onPaymentFailed({$event: {donorDetails: this.donorDetails}});
         break;
     }
   }
@@ -160,6 +161,7 @@ export default angular
       frequency: '<',
       day: '<',
       donorDetails: '<',
-      next: '&'
+      next: '&',
+      onPaymentFailed: '&'
     }
   });

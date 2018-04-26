@@ -15,7 +15,8 @@ describe('branded checkout', () => {
     }, {
       designationNumber: '1234567',
       tsysDevice: 'test-env',
-      onOrderCompleted: jasmine.createSpy('onOrderCompleted')
+      onOrderCompleted: jasmine.createSpy('onOrderCompleted'),
+      onOrderFailed: jasmine.createSpy('onOrderFailed')
     });
   }));
 
@@ -152,6 +153,17 @@ describe('branded checkout', () => {
           donorType: 'Household'
         },
         lineItems: {}
+      }}});
+    });
+  });
+
+  describe('onPaymentFailed', () => {
+    it('should pass donorDetails info to the onPaymentFailed binding', () => {
+      $ctrl.onPaymentFailed({
+        'donor-type': 'Household'
+      });
+      expect($ctrl.onOrderFailed).toHaveBeenCalledWith({$event: {$window: $ctrl.$window, donorDetails: {
+        donorType: 'Household'
       }}});
     });
   });

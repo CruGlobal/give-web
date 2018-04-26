@@ -59,13 +59,17 @@ Add the following code to your page where appropriate. See the [Branded checkout
     frequency="<frequency>"
     day="<day>"
     donor-details="<window variable containing default values for donor's name and contact info>"
-    on-order-completed="$event.$window.onOrderCompleted($event.purchase)">
+    on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
+    on-order-failed="$event.$window.onOrderFailed($event.donorDetails)">
 </branded-checkout>
 
 <script src="https://give-static.cru.org/branded-checkout.js"></script>
 <script>
   window.onOrderCompleted = function (purchaseData) {
     console.log('Order completed successfully', purchaseData);
+  };
+  window.onOrderFailed = function (donorDetails) {
+    console.log('Order failed', donorDetails);
   };
 </script>
 ```
