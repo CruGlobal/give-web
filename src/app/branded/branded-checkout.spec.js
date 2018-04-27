@@ -26,6 +26,7 @@ describe('branded checkout', () => {
       $ctrl.$onInit();
 
       expect($ctrl.envService.read('apiUrl')).toEqual('https://custom-api.cru.org');
+      expect($ctrl.envService.read('isBrandedCheckout')).toEqual(true);
     });
 
     it('should set initial checkout step and call formatDonorDetails', () => {
