@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      background: transparent;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body>
+  <script>
+    //create branded checkout element
+    (function(){
+      var attributes = location.hash.substr(1);
+      attributes = JSON.parse(atob(attributes));
+
+      var checkoutApp = document.createElement('branded-checkout');
+      checkoutApp.setAttribute('ng-app', 'brandedCheckout');
+
+      //set custom attributes
+      Object.keys(attributes).map(function(objectKey) {
+        if(objectKey === 'donor-details'){
+          window.donorDetails = attributes[objectKey];
+          attributes[objectKey] = 'donorDetails';
+        }
+        checkoutApp.setAttribute(objectKey, attributes[objectKey]);
+      });
+
+      document.body.appendChild(checkoutApp);
+    })();
+
+    //send iframe height to parent
+    (function(){
+      var docBody = document.body;
+
+      var observer = new MutationObserver(function() {
+        if(parent.postMessage) {
+          parent.postMessage(docBody.offsetHeight, '*');
+        }
+      });
+      observer.observe(docBody, { childList: true, subtree: true });
+    })();
+  </script>
+
+  <script src="https://give-static.cru.org/branded-checkout.js"></script>
+</body>
+</html>
