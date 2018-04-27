@@ -14,10 +14,9 @@ describe('cart service', () => {
   beforeEach(angular.mock.module(module.name));
   let self = {};
 
-  beforeEach(inject((cartService, $httpBackend, $rootScope) => {
+  beforeEach(inject((cartService, $httpBackend) => {
     self.cartService = cartService;
     self.$httpBackend = $httpBackend;
-    self.$rootScope = $rootScope;
   }));
 
   afterEach(() => {
@@ -27,6 +26,8 @@ describe('cart service', () => {
 
   describe('get', () => {
     beforeEach(() => {
+      spyOn(self.cartService.$cookies, 'put');
+      spyOn(self.cartService.$cookies, 'remove');
       spyOn(self.cartService.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2016-10-01'));
       jasmine.clock().mockDate(moment('2016-09-01').toDate()); // Make sure current date is before next draw date
     });
@@ -53,7 +54,7 @@ describe('cart service', () => {
       self.cartService.get()
         .subscribe((data) => {
           expect(data).toEqual({});
-          expect(self.cartService.$cookies.get('giveCartItemCount')).toEqual(undefined);
+          expect(self.cartService.$cookies.remove).toHaveBeenCalledWith('giveCartItemCount', jasmine.any(Object));
         });
       self.$httpBackend.flush();
     });
@@ -81,8 +82,7 @@ describe('cart service', () => {
             { frequency: 'Quarterly', amount: 50, total: '$50.00' }
           ]);
 
-          self.$rootScope.$digest();
-          expect(self.cartService.$cookies.get('giveCartItemCount')).toEqual(3);
+          expect(self.cartService.$cookies.put).toHaveBeenCalledWith('giveCartItemCount', 3, jasmine.any(Object));
         });
       self.$httpBackend.flush();
     });
