@@ -29,6 +29,7 @@ class BrandedCheckoutController {
   }
 
   $onInit() {
+    this.envService.data.vars[this.envService.get()].isBrandedCheckout = true;
     if(this.apiUrl){ //set custom API url
       this.envService.data.vars[this.envService.get()].apiUrl = this.apiUrl;
     }
