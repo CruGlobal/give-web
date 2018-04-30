@@ -11,6 +11,7 @@ import omit from 'lodash/omit';
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort';
 
 import cortexApiService from '../cortexApi.service';
+import cartService from './cart.service';
 import hateoasHelperService from 'common/services/hateoasHelper.service';
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex';
@@ -21,8 +22,9 @@ let serviceName = 'orderService';
 class Order{
 
   /*@ngInject*/
-  constructor(cortexApiService, hateoasHelperService, $window, $log){
+  constructor(cortexApiService, cartService, hateoasHelperService, $window, $log){
     this.cortexApiService = cortexApiService;
+    this.cartService = cartService;
     this.hateoasHelperService = hateoasHelperService;
     this.sessionStorage = $window.sessionStorage;
     this.localStorage = $window.localStorage;
@@ -253,6 +255,7 @@ class Order{
       })
       .do((data) => {
         this.storeLastPurchaseLink(data.self.uri);
+        this.cartService.setCartCountCookie(0);
       });
   }
 
@@ -316,6 +319,7 @@ class Order{
 export default angular
   .module(serviceName, [
     cortexApiService.name,
+    cartService.name,
     hateoasHelperService.name
   ])
   .service(serviceName, Order);
