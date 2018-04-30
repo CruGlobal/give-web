@@ -40,6 +40,19 @@ class Cart {
     this.$cookies = $cookies;
   }
 
+  setCartCountCookie(quantity) {
+    if(quantity){
+      this.$cookies.put( cartTotalCookie, quantity, {
+        domain: cartTotalCookieDomain,
+        expires: moment().add(58, 'days').toISOString()
+      } );
+    }else{
+      this.$cookies.remove( cartTotalCookie, {
+        domain: cartTotalCookieDomain
+      } );
+    }
+  }
+
   get() {
     return Observable.forkJoin(this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
@@ -51,9 +64,7 @@ class Cart {
     }), this.commonService.getNextDrawDate())
       .map(([cartResponse, nextDrawDate]) => {
         if (!cartResponse || !cartResponse.lineItems) {
-          this.$cookies.remove( cartTotalCookie, {
-            domain: cartTotalCookieDomain
-          } );
+          this.setCartCountCookie(0);
           return {};
         }
 
@@ -95,10 +106,7 @@ class Cart {
         );
 
         //set cart item count cookie
-        this.$cookies.put( cartTotalCookie, items.length, {
-          domain: cartTotalCookieDomain,
-          expires: moment().add(58, 'days').toISOString()
-        } );
+        this.setCartCountCookie(items.length);
 
         return {
           id: this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
