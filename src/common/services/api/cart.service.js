@@ -43,11 +43,13 @@ class Cart {
   setCartCountCookie(quantity) {
     if(quantity){
       this.$cookies.put( cartTotalCookie, quantity, {
+        path: '/',
         domain: cartTotalCookieDomain,
         expires: moment().add(58, 'days').toISOString()
       } );
     }else{
       this.$cookies.remove( cartTotalCookie, {
+        path: '/',
         domain: cartTotalCookieDomain
       } );
     }
