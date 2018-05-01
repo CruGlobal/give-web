@@ -98,7 +98,7 @@ class CartController {
   }
 
   setContinueBrowsingUrl() {
-    let url = this.$document.referrer;
+    let url = this.$document[0].referrer;
     if(!url){ return; }
 
     //verify page is on give site
