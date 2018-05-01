@@ -27,6 +27,9 @@ describe('cart', () => {
       },
       $window: {
         location: '/cart.html'
+      },
+      $document: {
+        referrer: ''
       }
     });
 
@@ -150,6 +153,30 @@ describe('cart', () => {
       self.controller.sessionService.getRole = () => 'foo';
       self.controller.checkout();
       expect(self.controller.$window.location).toBe('/sign-in.html');
+    });
+  });
+
+  describe('setContinueBrowsingUrl()', () => {
+    beforeEach(() => {
+      self.controller.continueBrowsingUrl = null;
+    });
+
+    it('set continue browsing url', () => {
+      self.controller.$document.referrer = 'https://give-stage2.cru.org/page-to-give-more';
+      self.controller.setContinueBrowsingUrl();
+      expect(self.controller.continueBrowsingUrl).toEqual('https://give-stage2.cru.org/page-to-give-more');
+    });
+
+    it('skip if not give url', () => {
+      self.controller.$document.referrer = 'https://www.cru.org/another-page';
+      self.controller.setContinueBrowsingUrl();
+      expect(self.controller.continueBrowsingUrl).toEqual(null);
+    });
+
+    it('remove giving modal params', () => {
+      self.controller.$document.referrer = 'https://give-stage2.cru.org/page-to-give-more?modal=give-gift';
+      self.controller.setContinueBrowsingUrl();
+      expect(self.controller.continueBrowsingUrl).toEqual('https://give-stage2.cru.org/page-to-give-more');
     });
   });
 });

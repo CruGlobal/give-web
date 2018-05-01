@@ -1,6 +1,7 @@
 import angular from 'angular';
 import commonModule from 'common/common.module';
 import pull from 'lodash/pull';
+import includes from 'lodash/includes';
 
 import cartService from 'common/services/api/cart.service';
 import sessionService from 'common/services/session/session.service';
@@ -19,18 +20,21 @@ let componentName = 'cart';
 class CartController {
 
   /* @ngInject */
-  constructor( $scope, $window, $log, analyticsFactory, cartService, sessionService, productModalService ) {
+  constructor( $scope, $window, $log, $document, analyticsFactory, cartService, sessionService, productModalService, envService ) {
     this.$scope = $scope;
     this.$window = $window;
     this.$log = $log;
+    this.$document = $document;
     this.productModalService = productModalService;
     this.cartService = cartService;
     this.sessionService = sessionService;
     this.analyticsFactory = analyticsFactory;
+    this.envService = envService;
   }
 
   $onInit() {
     this.loadCart();
+    this.setContinueBrowsingUrl();
   }
 
   loadCart(reload) {
@@ -92,10 +96,26 @@ class CartController {
   checkout() {
     this.$window.location = this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html';
   }
+
+  setContinueBrowsingUrl() {
+    let url = this.$document.referrer;
+    if(!url){ return; }
+
+    //verify page is on give site
+    if(!includes(url, this.envService.read('publicGive'))){ return; }
+
+    //remove modal params
+    if(includes(url, 'modal=give-gift')){
+      url = url.split('?')[0];
+    }
+
+    this.continueBrowsingUrl = url;
+  }
 }
 
 export default angular
   .module(componentName, [
+    'environment',
     commonModule.name,
     displayRateTotals.name,
     cartService.name,
