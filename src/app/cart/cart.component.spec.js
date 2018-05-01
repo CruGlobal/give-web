@@ -28,9 +28,9 @@ describe('cart', () => {
       $window: {
         location: '/cart.html'
       },
-      $document: {
+      $document: [{
         referrer: ''
-      }
+      }]
     });
 
   }));
@@ -162,19 +162,19 @@ describe('cart', () => {
     });
 
     it('set continue browsing url', () => {
-      self.controller.$document.referrer = 'https://give-stage2.cru.org/page-to-give-more';
+      self.controller.$document[0].referrer = 'https://give-stage2.cru.org/page-to-give-more';
       self.controller.setContinueBrowsingUrl();
       expect(self.controller.continueBrowsingUrl).toEqual('https://give-stage2.cru.org/page-to-give-more');
     });
 
     it('skip if not give url', () => {
-      self.controller.$document.referrer = 'https://www.cru.org/another-page';
+      self.controller.$document[0].referrer = 'https://www.cru.org/another-page';
       self.controller.setContinueBrowsingUrl();
       expect(self.controller.continueBrowsingUrl).toEqual(null);
     });
 
     it('remove giving modal params', () => {
-      self.controller.$document.referrer = 'https://give-stage2.cru.org/page-to-give-more?modal=give-gift';
+      self.controller.$document[0].referrer = 'https://give-stage2.cru.org/page-to-give-more?modal=give-gift';
       self.controller.setContinueBrowsingUrl();
       expect(self.controller.continueBrowsingUrl).toEqual('https://give-stage2.cru.org/page-to-give-more');
     });
