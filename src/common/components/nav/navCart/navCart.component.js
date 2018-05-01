@@ -71,6 +71,7 @@ export default angular
     controller: NavCartController,
     templateUrl: template,
     bindings: {
-      mobile: '@'
+      mobile: '@',
+      isOpen: '='
     }
   });
