@@ -103,11 +103,11 @@ $color-white:                   #FFFFFF;
     }
   }
 
-  .full-cart {
-    width: auto;
-    height: 18px;
+  .close-cart {
+    cursor: pointer;
     float: right;
     margin-top: 2px;
+    font-size: 150%;
   }
 
   .desktop-cart-list {
