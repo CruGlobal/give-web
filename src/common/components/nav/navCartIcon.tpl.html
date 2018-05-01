@@ -1,7 +1,9 @@
 <div class="cart">
   <div uib-dropdown on-toggle="$ctrl.cartOpened()" is-open="$ctrl.cartOpen" auto-close="outsideClick">
-    <a uib-dropdown-toggle>
-      <i class="fal fa-shopping-cart"></i>
+    <a uib-dropdown-toggle class="nav-cart-icon nav-cart-icon-desktop">
+      <span class="fal fa-shopping-cart">
+        <span class="cart-item-count"></span>
+      </span>
     </a>
     <div id="nav-cart-dropdown" uib-dropdown-menu>
       <nav-cart></nav-cart>
