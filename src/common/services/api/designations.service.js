@@ -176,7 +176,7 @@ class DesignationsService {
       path = itemConfig['campaign-page'] ?
         `/content/give/us/en/campaigns/${c}/${code}/${itemConfig['campaign-page']}.infinity.json` :
         `/content/give/us/en/designations/${c}/${code}.infinity.json`;
-    return Observable.from(this.$http.get( this.envService.read('apiUrl') + path ))
+    return Observable.from(this.$http.get( this.envService.read('publicGive') + path ))
       .map( ( data ) => {
         let suggestedAmounts = [];
         if ( data.data['jcr:content'] ) {
