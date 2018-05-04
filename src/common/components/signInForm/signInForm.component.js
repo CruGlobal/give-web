@@ -19,6 +19,7 @@ class SignInFormController {
 
   $onInit() {
     this.isSigningIn = false;
+    this.signInState = 'identity';
 
     if ( includes( ['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole() ) ) {
       this.username = this.sessionService.session.email;
@@ -29,21 +30,37 @@ class SignInFormController {
     this.isSigningIn = true;
     delete this.errorMessage;
     this.sessionService
-      .signIn( this.username, this.password, this.lastPurchaseId )
+      .signIn( this.username, this.password, this.mfa_token, this.lastPurchaseId )
       .subscribe( () => {
         this.onSuccess();
       }, error => {
         this.isSigningIn = false;
-        if( error && error.data && error.data.error ) {
-          this.errorMessage = error.data.error;
+        if( error && error.data && error.data.error && error.data.error === 'invalid_grant' && error.data.thekey_authn_error ) {
+          switch(error.data.thekey_authn_error) {
+            case 'mfa_required':
+              if(this.signInState === 'mfa') {
+                this.errorMessage = 'mfa';
+                delete this.mfa_token;
+              }
+              this.signInState = 'mfa';
+              break;
+            case 'invalid_credentials':
+            case 'stale_password':
+            case 'email_unverified':
+            default:
+              this.errorMessage = 'Bad username or password';
+              this.signInState = 'identity';
+              this.onFailure();
+          }
         } else {
           if( error && error.config && error.config.data && error.config.data.password ) {
             delete error.config.data.password;
           }
           this.$log.error('Sign In Error', error);
+          this.signInState = 'identity';
           this.errorMessage = 'generic';
+          this.onFailure();
         }
-        this.onFailure();
       } );
   }
 }

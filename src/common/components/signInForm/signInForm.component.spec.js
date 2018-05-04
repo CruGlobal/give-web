@@ -28,6 +28,7 @@ describe( 'signInForm', function () {
     it( 'has no username', () => {
       $ctrl.$onInit();
       expect( $ctrl.username ).not.toBeDefined();
+      expect( $ctrl.signInState).toEqual('identity');
     } );
 
     describe( 'with \'REGISTERED\' cortex-session', () => {
@@ -55,61 +56,109 @@ describe( 'signInForm', function () {
   } );
 
   describe( 'signIn', () => {
-    let deferred;
-    beforeEach( inject( function ( _$q_ ) {
-      deferred = _$q_.defer();
-      spyOn( $ctrl.sessionService, 'signIn' ).and.callFake( () => Observable.from( deferred.promise ) );
-      $ctrl.username = 'professorx@xavier.edu';
-      $ctrl.password = 'Cerebro123';
-      $ctrl.signIn();
-    } ) );
+    describe( 'on \'identity\' signInState', () => {
+      let deferred;
+      beforeEach( inject( function ( _$q_ ) {
+        deferred = _$q_.defer();
+        $ctrl.signInState = 'identity';
+        spyOn( $ctrl.sessionService, 'signIn' ).and.callFake( () => Observable.from( deferred.promise ) );
+        $ctrl.username = 'professorx@xavier.edu';
+        $ctrl.password = 'Cerebro123';
+        $ctrl.signIn();
+      } ) );
 
-    it( 'calls sessionService signIn', () => {
-      expect( $ctrl.isSigningIn ).toEqual( true );
-      expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', undefined );
-    } );
-
-    it( 'signs in successfully', () => {
-      deferred.resolve( {} );
-      $rootScope.$digest();
-      expect( bindings.onSuccess ).toHaveBeenCalled();
-    } );
-
-    it( 'has error signing in', () => {
-      deferred.reject( {data: {error: 'Error Signing In'}} );
-      $rootScope.$digest();
-      expect( bindings.onFailure ).toHaveBeenCalled();
-      expect( $ctrl.errorMessage ).toEqual( 'Error Signing In' );
-      expect( $ctrl.isSigningIn ).toEqual( false );
-    } );
-
-    it( 'has unknown error signing in', () => {
-      deferred.reject( {} );
-      $rootScope.$digest();
-      expect( bindings.onFailure ).toHaveBeenCalled();
-      expect( $ctrl.errorMessage ).toEqual( 'generic' );
-      expect( $ctrl.isSigningIn ).toEqual( false );
-    });
-
-    it( 'has missing error signing in', () => {
-      deferred.reject( {data: null} );
-      $rootScope.$digest();
-      expect( bindings.onFailure ).toHaveBeenCalled();
-      expect( $ctrl.errorMessage ).toEqual( 'generic' );
-      expect( $ctrl.isSigningIn ).toEqual( false );
-    });
-
-    it( 'removes password from error log', () => {
-      deferred.reject( {
-        config: {
-          data: {
-            password: $ctrl.password
-          }
-        }
+      it( 'calls sessionService signIn', () => {
+        expect( $ctrl.isSigningIn ).toEqual( true );
+        expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', undefined, undefined );
       } );
-      $rootScope.$digest();
-      expect( bindings.onFailure ).toHaveBeenCalled();
-      expect( $ctrl.$log.error.logs[0] ).toEqual(['Sign In Error', {config: {data: {}}}]);
+
+      it( 'signs in successfully', () => {
+        deferred.resolve( {} );
+        $rootScope.$digest();
+        expect( bindings.onSuccess ).toHaveBeenCalled();
+      } );
+
+      it( 'requires multi-factor', () => {
+        deferred.reject( {data: {error: 'invalid_grant', thekey_authn_error: 'mfa_required' } } );
+        $rootScope.$digest();
+        expect( bindings.onFailure ).not.toHaveBeenCalled();
+        expect( $ctrl.signInState ).toEqual( 'mfa' );
+        expect( $ctrl.errorMessage ).not.toBeDefined();
+        expect( $ctrl.isSigningIn ).toEqual( false );
+      } );
+
+      it( 'has error signing in', () => {
+        deferred.reject( {data: {error: 'invalid_grant', thekey_authn_error: 'invalid_credentials' } } );
+        $rootScope.$digest();
+        expect( bindings.onFailure ).toHaveBeenCalled();
+        expect( $ctrl.errorMessage ).toEqual( 'Bad username or password' );
+        expect( $ctrl.isSigningIn ).toEqual( false );
+        expect( $ctrl.signInState ).toEqual( 'identity' );
+      } );
+
+      it( 'has unknown error signing in', () => {
+        deferred.reject( {data: {error: 'invalid_grant' } } );
+        $rootScope.$digest();
+        expect( bindings.onFailure ).toHaveBeenCalled();
+        expect( $ctrl.errorMessage ).toEqual( 'generic' );
+        expect( $ctrl.isSigningIn ).toEqual( false );
+      });
+
+      it( 'has missing error signing in', () => {
+        deferred.reject( {data: null} );
+        $rootScope.$digest();
+        expect( bindings.onFailure ).toHaveBeenCalled();
+        expect( $ctrl.errorMessage ).toEqual( 'generic' );
+        expect( $ctrl.isSigningIn ).toEqual( false );
+      });
+
+      it( 'removes password from error log', () => {
+        deferred.reject( {
+          config: {
+            data: {
+              password: $ctrl.password
+            }
+          }
+        } );
+        $rootScope.$digest();
+        expect( bindings.onFailure ).toHaveBeenCalled();
+        expect( $ctrl.$log.error.logs[0] ).toEqual(['Sign In Error', {config: {data: {}}}]);
+      });
+    });
+
+    describe( 'on \'mfa\' signInState', () => {
+      let deferred;
+      beforeEach( inject( function ( _$q_ ) {
+        deferred = _$q_.defer();
+        $ctrl.signInState = 'mfa';
+        spyOn( $ctrl.sessionService, 'signIn' ).and.callFake( () => Observable.from( deferred.promise ) );
+        $ctrl.username = 'professorx@xavier.edu';
+        $ctrl.password = 'Cerebro123';
+        $ctrl.mfa_token = '123456';
+        $ctrl.signIn();
+      } ) );
+
+      it( 'calls sessionService signIn', () => {
+        expect( $ctrl.isSigningIn ).toEqual( true );
+        expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', '123456', undefined );
+      } );
+
+      it( 'signs in successfully', () => {
+        deferred.resolve( {} );
+        $rootScope.$digest();
+        expect( bindings.onSuccess ).toHaveBeenCalled();
+      } );
+
+      it( 'requires multi-factor', () => {
+        deferred.reject( {data: {error: 'invalid_grant', thekey_authn_error: 'mfa_required' } } );
+        $rootScope.$digest();
+        expect( bindings.onFailure ).not.toHaveBeenCalled();
+        expect( $ctrl.signInState ).toEqual( 'mfa' );
+        expect( $ctrl.errorMessage ).toEqual( 'mfa' );
+        expect( $ctrl.isSigningIn ).toEqual( false );
+        expect( $ctrl.mfa_token ).not.toBeDefined();
+      } );
+
     });
   } );
 } );

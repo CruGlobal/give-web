@@ -142,13 +142,27 @@ describe( 'session service', function () {
   } );
 
   describe( 'signIn', () => {
-    it( 'makes http request to cas/login', () => {
+    it( 'makes http request to cas/login without mfa', () => {
       $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/login', {
         username: 'user@example.com',
         password: 'hello123'
       } ).respond( 200, 'success' );
       sessionService
         .signIn( 'user@example.com', 'hello123' )
+        .subscribe( ( data ) => {
+          expect( data ).toEqual( 'success' );
+        } );
+      $httpBackend.flush();
+    } );
+
+    it( 'makes http request to cas/login with mfa', () => {
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/login', {
+        username: 'user@example.com',
+        password: 'hello123',
+        mfa_token: '123456'
+      } ).respond( 200, 'success' );
+      sessionService
+        .signIn( 'user@example.com', 'hello123', '123456' )
         .subscribe( ( data ) => {
           expect( data ).toEqual( 'success' );
         } );
@@ -163,7 +177,7 @@ describe( 'session service', function () {
         lastPurchaseId: 'gxbcdviu='
       } ).respond( 200, 'success' );
       sessionService
-        .signIn( 'user@example.com', 'hello123', 'gxbcdviu=' )
+        .signIn( 'user@example.com', 'hello123', undefined, 'gxbcdviu=' )
         .subscribe( ( data ) => {
           expect( data ).toEqual( 'success' );
         } );
