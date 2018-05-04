@@ -2,34 +2,56 @@
   <span ng-switch-when="generic" translate>
     An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
   </span>
+  <span ng-switch-when="mfa" translate>
+    Invalid Verification Code. Please try again.
+  </span>
   <span ng-switch-default>
     {{$ctrl.errorMessage | translate}}
   </span>
 </div>
-<form class="sign-in-form loading-overlay-parent" name="$ctrl.signInForm">
-  <div class="form-group">
-    <label for="username" translate>Email</label>
-    <input id="username"
-           name="username"
-           type="email"
-           class="form-control form-control-subtle"
-           placeholder="{{'Email'|translate}}"
-           autocomplete="off"
-           required
-           ng-disabled="$ctrl.isSigningIn"
-           ng-model="$ctrl.username">
+<form class="sign-in-form loading-overlay-parent" name="$ctrl.signInForm" ng-switch="$ctrl.signInState">
+  <div ng-switch-when="identity">
+    <div class="form-group">
+      <label for="username" translate>Email</label>
+      <input id="username"
+             name="username"
+             type="email"
+             class="form-control form-control-subtle"
+             placeholder="{{'Email'|translate}}"
+             autocomplete="off"
+             required
+             ng-disabled="$ctrl.isSigningIn"
+             ng-model="$ctrl.username">
+    </div>
+    <div class="form-group">
+      <label for="password" translate>Password</label>
+      <input id="password"
+             name="password"
+             type="password"
+             class="form-control form-control-subtle"
+             placeholder="{{'Password'|translate}}"
+             autocomplete="off"
+             required
+             ng-disabled="$ctrl.isSigningIn"
+             ng-model="$ctrl.password">
+    </div>
   </div>
-  <div class="form-group">
-    <label for="password" translate>Password</label>
-    <input id="password"
-           name="password"
-           type="password"
-           class="form-control form-control-subtle"
-           placeholder="{{'Password'|translate}}"
-           autocomplete="off"
-           required
-           ng-disabled="$ctrl.isSigningIn"
-           ng-model="$ctrl.password">
+  <div ng-switch-when="mfa">
+    <p translate>Enter a verification code from your Authenticator app to continue.</p>
+    <div class="form-group">
+      <label for="mfa_token" translate>Verification Code</label>
+      <input id="mfa_token"
+             name="mfa_token"
+             type="text"
+             minlength="6"
+             maxlength="8"
+             class="form-control form-control-subtle"
+             placeholder="{{'Code'|translate}}"
+             autocomplete="off"
+             required
+             ng-disabled="$ctrl.isSigningIn"
+             ng-model="$ctrl.mfa_token">
+    </div>
   </div>
   <button
     type="submit"
