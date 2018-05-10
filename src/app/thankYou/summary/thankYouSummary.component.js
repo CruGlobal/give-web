@@ -50,7 +50,6 @@ class ThankYouSummaryController{
     this.loading = true;
     let lastPurchaseLink = this.orderService.retrieveLastPurchaseLink();
     if(!lastPurchaseLink){
-      this.$log.error('Session storage does not contain lastPurchaseLink. Cannot load data for thank you component.');
       this.loadingError =  'lastPurchaseLink missing';
       this.loading = false;
       return;
