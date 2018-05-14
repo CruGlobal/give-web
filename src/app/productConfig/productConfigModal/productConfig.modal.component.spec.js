@@ -142,6 +142,14 @@ describe( 'product config modal', function () {
       $ctrl.initializeParams();
       expect( $ctrl.itemConfig['campaign-code'] ).toEqual('DEFAULT');
     } );
+
+    it( 'cleans campaignCode if containing invalid characters', () => {
+      $ctrl.$location.search.and.returnValue( {
+        [giveGiftParams.campaignCode]: 'LEGACY?vid=3408342..fj039jf08ajs&kdljfi3lniclisgw5DFS4'
+      } );
+      $ctrl.initializeParams();
+      expect( $ctrl.itemConfig['campaign-code'] ).toEqual('LEGACYvid3408342fj039jf08ajskd');
+    } );
   } );
 
   describe( 'updateQueryParam', () => {
