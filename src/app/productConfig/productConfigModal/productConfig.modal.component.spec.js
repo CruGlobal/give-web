@@ -142,6 +142,22 @@ describe( 'product config modal', function () {
       $ctrl.initializeParams();
       expect( $ctrl.itemConfig['campaign-code'] ).toEqual('DEFAULT');
     } );
+
+    it( 'cleans campaignCode if containing invalid characters', () => {
+      $ctrl.$location.search.and.returnValue( {
+        [giveGiftParams.campaignCode]: 'LEGACY?vid=3408342..fj039jf08ajs&kdljfi3lniclisgw5DFS4'
+      } );
+      $ctrl.initializeParams();
+      expect( $ctrl.itemConfig['campaign-code'] ).toEqual('');
+    } );
+
+    it( 'cleans campaignCode if longer than 30 characters', () => {
+      $ctrl.$location.search.and.returnValue( {
+        [giveGiftParams.campaignCode]: 'SXLHIGJWSGEUAVJXDBAAODNTEIIUBNPVMBCUJO'
+      } );
+      $ctrl.initializeParams();
+      expect( $ctrl.itemConfig['campaign-code'] ).toEqual('');
+    } );
   } );
 
   describe( 'updateQueryParam', () => {
