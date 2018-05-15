@@ -78,8 +78,8 @@ class ProductConfigModalController {
       this.itemConfig['campaign-code'] = isArray(params[giveGiftParams.campaignCode]) ?
         params[giveGiftParams.campaignCode][0] : params[giveGiftParams.campaignCode];
 
-      //make sure campaign code is alphanumeric
-      if(this.itemConfig['campaign-code'].match(/^[a-z0-9]+$/i) === null){
+      //make sure campaign code is alphanumeric and less than 30 characters
+      if(this.itemConfig['campaign-code'].match(/^[a-z0-9]+$/i) === null || this.itemConfig['campaign-code'].length > 30){
         this.itemConfig['campaign-code'] = '';
       }
     }
