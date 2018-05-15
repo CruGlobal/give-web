@@ -148,7 +148,7 @@ describe( 'product config modal', function () {
         [giveGiftParams.campaignCode]: 'LEGACY?vid=3408342..fj039jf08ajs&kdljfi3lniclisgw5DFS4'
       } );
       $ctrl.initializeParams();
-      expect( $ctrl.itemConfig['campaign-code'] ).toEqual('LEGACYvid3408342fj039jf08ajskd');
+      expect( $ctrl.itemConfig['campaign-code'] ).toEqual('');
     } );
   } );
 

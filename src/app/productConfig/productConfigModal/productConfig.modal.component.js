@@ -78,8 +78,10 @@ class ProductConfigModalController {
       this.itemConfig['campaign-code'] = isArray(params[giveGiftParams.campaignCode]) ?
         params[giveGiftParams.campaignCode][0] : params[giveGiftParams.campaignCode];
 
-      //make sure campaign code is alphanumeric and under 30 characters
-      this.itemConfig['campaign-code'] = this.itemConfig['campaign-code'].replace(/[\W_]+/g, '').substring(0, 30);
+      //make sure campaign code is alphanumeric
+      if(this.itemConfig['campaign-code'].match(/^[a-z0-9]+$/i) === null){
+        this.itemConfig['campaign-code'] = '';
+      }
     }
     else if(this.itemConfig.hasOwnProperty('default-campaign-code')) {
       this.itemConfig['campaign-code'] = this.itemConfig['default-campaign-code'];
