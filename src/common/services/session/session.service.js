@@ -58,13 +58,15 @@ function session( $cookies, $rootScope, $http, $timeout, envService ) {
   };
 
   /* Public Methods */
-  function signIn( username, password, mfa_token, lastPurchaseId ) {
+  function signIn( username, password, mfa_token, trust_device, lastPurchaseId ) {
     let data = {
       username: username,
       password: password
     };
     if(angular.isDefined(mfa_token))
       data.mfa_token = mfa_token;
+    if(trust_device)
+      data.trust_device = '1';
     // Only send lastPurchaseId if present and currently public
     if(angular.isDefined(lastPurchaseId) && currentRole() === Roles.public)
       data.lastPurchaseId = lastPurchaseId;
