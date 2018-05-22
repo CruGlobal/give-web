@@ -69,7 +69,7 @@ describe( 'signInForm', function () {
 
       it( 'calls sessionService signIn', () => {
         expect( $ctrl.isSigningIn ).toEqual( true );
-        expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', undefined, undefined );
+        expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', undefined, undefined, undefined );
       } );
 
       it( 'signs in successfully', () => {
@@ -135,21 +135,31 @@ describe( 'signInForm', function () {
         $ctrl.username = 'professorx@xavier.edu';
         $ctrl.password = 'Cerebro123';
         $ctrl.mfa_token = '123456';
-        $ctrl.signIn();
+        $ctrl.trust_device = false;
       } ) );
 
       it( 'calls sessionService signIn', () => {
+        $ctrl.signIn();
         expect( $ctrl.isSigningIn ).toEqual( true );
-        expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', '123456', undefined );
+        expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', '123456', false, undefined );
+      } );
+
+      it( 'calls sessionService signIn with trust_device', () => {
+        $ctrl.trust_device = true;
+        $ctrl.signIn();
+        expect( $ctrl.isSigningIn ).toEqual( true );
+        expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', '123456', true, undefined );
       } );
 
       it( 'signs in successfully', () => {
+        $ctrl.signIn();
         deferred.resolve( {} );
         $rootScope.$digest();
         expect( bindings.onSuccess ).toHaveBeenCalled();
       } );
 
       it( 'requires multi-factor', () => {
+        $ctrl.signIn();
         deferred.reject( {data: {error: 'invalid_grant', thekey_authn_error: 'mfa_required' } } );
         $rootScope.$digest();
         expect( bindings.onFailure ).not.toHaveBeenCalled();

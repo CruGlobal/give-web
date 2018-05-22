@@ -30,7 +30,7 @@ class SignInFormController {
     this.isSigningIn = true;
     delete this.errorMessage;
     this.sessionService
-      .signIn( this.username, this.password, this.mfa_token, this.lastPurchaseId )
+      .signIn( this.username, this.password, this.mfa_token, this.trust_device, this.lastPurchaseId )
       .subscribe( () => {
         this.onSuccess();
       }, error => {

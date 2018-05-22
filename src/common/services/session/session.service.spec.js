@@ -169,6 +169,21 @@ describe( 'session service', function () {
       $httpBackend.flush();
     } );
 
+    it( 'makes http request to cas/login with mfa and trust_device', () => {
+      $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/login', {
+        username: 'user@example.com',
+        password: 'hello123',
+        mfa_token: '123456',
+        trust_device: '1'
+      } ).respond( 200, 'success' );
+      sessionService
+        .signIn( 'user@example.com', 'hello123', '123456', true )
+        .subscribe( ( data ) => {
+          expect( data ).toEqual( 'success' );
+        } );
+      $httpBackend.flush();
+    } );
+
     it( 'includes lastPurchaseId when present and PUBLIC', () => {
       spyOn( sessionService, 'getRole' ).and.returnValue(Roles.public);
       $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/login', {
@@ -177,7 +192,7 @@ describe( 'session service', function () {
         lastPurchaseId: 'gxbcdviu='
       } ).respond( 200, 'success' );
       sessionService
-        .signIn( 'user@example.com', 'hello123', undefined, 'gxbcdviu=' )
+        .signIn( 'user@example.com', 'hello123', undefined, undefined, 'gxbcdviu=' )
         .subscribe( ( data ) => {
           expect( data ).toEqual( 'success' );
         } );

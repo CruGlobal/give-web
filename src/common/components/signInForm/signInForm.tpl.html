@@ -52,6 +52,17 @@
              ng-disabled="$ctrl.isSigningIn"
              ng-model="$ctrl.mfa_token">
     </div>
+    <div class="form-group">
+      <label class="checkbox-inline">
+        <input id="trust_device"
+               name="trust_device"
+               type="checkbox"
+               ng-model="$ctrl.trust_device"
+               ng-disabled="$ctrl.isSigningIn"
+               translate> Don't ask for codes again on this device.
+      </label>
+    </div>
+
   </div>
   <button
     type="submit"
