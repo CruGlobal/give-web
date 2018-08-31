@@ -202,7 +202,9 @@
                               <option ng-value="true">{{$ctrl.donorDetails['spouse-name']['given-name']}}</option>
                               <option ng-value="false">{{$ctrl.donorDetails.name['given-name']}}</option>
                             </select>
-                            <a id="removeSpousePhoneNumberLink" href="" ng-click="$ctrl.deletePhoneNumber(phone, $index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                            <a id="removeSpousePhoneNumberLink" href="" ng-click="$ctrl.deletePhoneNumber(phone, $index)" ng-if="!$ctrl.donorDetails.staff">
+                              <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            </a>
                           </form>
                           <div role="alert" ng-messages="$ctrl.phoneNumberForms[$index].phoneNumber.$error" ng-if="($ctrl.phoneNumberForms[$index].phoneNumber | showErrors)">
                             <div class="help-block" ng-message="required" translate>You must enter a phone number</div>
