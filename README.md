@@ -144,12 +144,12 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
    > I'm working on implementing branded checkout for {{my ministry}}. I would like to host the branded checkout form on {{myminsitry.org}}. HTTPS is setup on my domain and I have created a CNAME record for the subdomain {{brandedcheckout.myministry.org}} that points to give.cru.org. (DPS may be able to help with the CNAME record configuration if the domain is hosted with us.)
    >
    >    I need help configuring the give.cru.org API to work on my domain. Can you:
-   >    1\. Add an SSL certificate to cruorg-alb for my subdomain {{brandedcheckout.myministry.org}}
-   >    2\. Add that same subdomain to cortex_gateway's AUTH_PROXY_VALID_ORIGINS environment variable
+   >    - Add an SSL certificate to cruorg-alb for my subdomain {{brandedcheckout.myministry.org}}
+   >    - Add that same subdomain to cortex_gateway's AUTH_PROXY_VALID_ORIGINS environment variable
    >
    >    I also need help setting up a my TSYS merchant account with the give.cru.org API to be able to proccess credit cards on my site. Can you:
-   >    1\. Add my TSYS device id to the give.cru.org API configuration. My device id is {{12345678901234}} and the url I would like to use for the branded checkout form is {{https://myministry.org}}. I would like to use a identifier of "{{myministry}}". (Or uniquely describe your ministry and domain if you want DPS to create the identifier. We can't have multiple sites that use the same identifier.)
-   >    2\. Whitelist my site {{https://myministry.org}} with TSYS so their TSEP credit card tokenization services will work on my domain.
+   >    - Add my TSYS device id to the give.cru.org API configuration. My device id is {{12345678901234}} and the url I would like to use for the branded checkout form is {{https://myministry.org}}. I would like to use a identifier of "{{myministry}}". (Or uniquely describe your ministry and domain if you want DPS to create the identifier. We can't have multiple sites that use the same identifier.)
+   >    - Whitelist my site {{https://myministry.org}} with TSYS so their TSEP credit card tokenization services will work on my domain.
 
 7. Test the subdomain configured to point to the give.cru.org API. https://brandedcheckout.myministry.org/cortex/nextdrawdate is a good test url. There should be no certificate errors and you should get a response that looks like this `{"next-draw-date":"2018-09-27"}`. If there are errors, please get in touch with ([help@cru.org](mailto:help@cru.org)) again and provide details as to what is happening.
 8. Add the `<branded-checkout>` tag to a page on the domain you've configured above. You can follow the documentation above for all the possible attributes and the required style and script tags. The email conversations above should have provided the values for the `api-url` (the subdomain that has a CNAME to give.cru.org) and `tsys-device` (the unique string identifier created by you or by DPS) attributes. You can add them like this:
