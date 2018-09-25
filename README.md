@@ -37,6 +37,7 @@ Add the following code to your page where appropriate. You must change the value
 <branded-checkout
     ng-app="brandedCheckout"
     designation-number="0763355"
+    api-url="brandedcheckout.mydomain.com"
     tsys-device="cru">
 </branded-checkout>
 
@@ -53,6 +54,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
 <branded-checkout
     ng-app="brandedCheckout"
     designation-number="<designation number>"
+    api-url="brandedcheckout.mydomain.com"
     campaign-code="<campaign code>"
     tsys-device="<tsys-device>"
     amount="<amount>"
@@ -78,7 +80,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
 
 The `<branded-checkout>` element is where the branded checkout Angular app will be loaded. It is configured by providing HTML attributes that will be loaded by Angular. Attributes with values containing angle brackets (such as `<designation number>`) are placeholders and should be replaced with real values or, if not needed, the whole attribute should be omitted. The `<branded-checkout>` element accepts the following attributes:
 - `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
-- `api-url` - Custom API url. This is required to be on the same top level domain as the branded checkout form for use in browsers that block third party cookies. 
+- `api-url` - Custom API url. This is required to be on the same top level domain as the branded checkout form for use in browsers that block third party cookies. - **Required** if your domain is not a subdomain of cru.org
 - `designation-number` - the designation number you would like donors to give to - **Required**
 - `campaign-page` - the campaign page you would like to use, used for suggested amounts - *Optional*
 - `campaign-code` - the campaign code you would like to use - *Optional*
@@ -130,6 +132,36 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - *Optional* -  provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
   - `$event.purchase` - contains the order's details that are loaded for the thank you page
+
+#### Server-side configuration for a new branded checkout domain
+1. Figure out what domain you will be hosting the branded checkout form on. For example, `myministry.org`
+2. Make sure HTTPS is enabled on that domain
+3. You will need to setup a subdomain for the give.cru.org API. We've experienced CORS issues and cross-domain cookie issues trying to hit the give.cru.org API directly from a custom domain. Create a CNAME record for `brandedcheckout.myministry.org` (the subdomain could be different but using that suggested subdomain makes it consistent with other sites) and point it at `give.cru.org`.
+4. In order to accept credit cards on your own domain, you will need to setup a TSYS merchant account. Contact the Cru's Financial Services Group ([jesse.kimbell@cru.org](mailto:jesse.kimbell@cru.org)) if you don't already have one. You will need a TSYS device id (a numeric id around 14 digits) to complete the next step.
+5. To prepare for the next step, think of a unique identifier like `"jesusfilm"` or `"aia"` that uniquely identifies your ministry and domain. We can create this for you but we need enough information about your ministry to do so.
+6. Once you have completed the steps above, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)). Below is an example email: (replace the `{{}}`s with the info for your site)
+
+   > I'm working on implementing branded checkout for {{my ministry}}. I would like to host the branded checkout form on {{myminsitry.org}}. HTTPS is setup on my domain and I have created a CNAME record for the subdomain {{brandedcheckout.myministry.org}} that points to give.cru.org. (DPS may be able to help with the CNAME record configuration if the domain is hosted with us.)
+   >
+   >    I need help configuring the give.cru.org API to work on my domain. Can you:
+   >    1\. Add an SSL certificate to cruorg-alb for my subdomain {{brandedcheckout.myministry.org}}
+   >    2\. Add that same subdomain to cortex_gateway's AUTH_PROXY_VALID_ORIGINS environment variable
+   >
+   >    I also need help setting up a my TSYS merchant account with the give.cru.org API to be able to proccess credit cards on my site. Can you:
+   >    1\. Add my TSYS device id to the give.cru.org API configuration. My device id is {{12345678901234}} and the url I would like to use for the branded checkout form is {{https://myministry.org}}. I would like to use a identifier of "{{myministry}}". (Or uniquely describe your ministry and domain if you want DPS to create the identifier. We can't have multiple sites that use the same identifier.)
+   >    2\. Whitelist my site {{https://myministry.org}} with TSYS so their TSEP credit card tokenization services will work on my domain.
+
+7. Test the subdomain configured to point to the give.cru.org API. https://brandedcheckout.myministry.org/cortex/nextdrawdate is a good test url. There should be no certificate errors and you should get a response that looks like this `{"next-draw-date":"2018-09-27"}`. If there are errors, please get in touch with ([help@cru.org](mailto:help@cru.org)) again and provide details as to what is happening.
+8. Add the `<branded-checkout>` tag to a page on the domain you've configured above. You can follow the documentation above for all the possible attributes and the required style and script tags. The email conversations above should have provided the values for the `api-url` (the subdomain that has a CNAME to give.cru.org) and `tsys-device` (the unique string identifier created by you or by DPS) attributes. You can add them like this:
+   ```html
+   <branded-checkout
+       ng-app="brandedCheckout"
+       designation-number="0763355"
+       api-url="brandedcheckout.myministry.com"
+       tsys-device="myministry">
+   </branded-checkout>
+   ```
+9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us.
 
 ## Development
 
