@@ -137,7 +137,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 1. Figure out what domain you will be hosting the branded checkout form on. For example, `myministry.org`
 2. Make sure HTTPS is enabled on that domain
 3. You will need to setup a subdomain for the give.cru.org API. We've experienced cross-domain cookie issues trying to hit the give.cru.org API directly from a custom domain. Create a CNAME record for `brandedcheckout.myministry.org` (the subdomain could be different but using that suggested subdomain makes it consistent with other sites) and point it at `give.cru.org`.
-4. In order to accept credit cards on your own domain, you will need to setup a TSYS merchant account. Contact the Cru's Financial Services Group ([jesse.kimbell@cru.org](mailto:jesse.kimbell@cru.org)) if you don't already have one. You will need a TSYS device id (a numeric id around 14 digits) to complete step 6.
+4. In order to accept credit cards on your own domain, you will need to setup a TSYS merchant account. Contact the Cru's Financial Services Group ([chad.vaughan@cru.org](mailto:chad.vaughan@cru.org)) if you don't already have one. You will need a TSYS device id (a numeric id around 14 digits) to complete step 6.
 5. To prepare for the next step, think of a unique identifier like `"jesusfilm"` or `"aia"` that uniquely identifies your ministry and domain. We can create this for you but we need enough information about your ministry to do so.
 6. Once you have completed the steps above, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)). Below is an example email: (replace the `{{}}`s with the info for your site)
 
