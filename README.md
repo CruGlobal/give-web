@@ -56,6 +56,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     designation-number="<designation number>"
     api-url="brandedcheckout.mydomain.com"
     campaign-code="<campaign code>"
+    campaign-page="<campaign-page>"
     tsys-device="<tsys-device>"
     amount="<amount>"
     frequency="<frequency>"
