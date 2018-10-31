@@ -23,7 +23,8 @@
       payment-form-error="$ctrl.paymentFormError"
       on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)"
       on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"
-      mailing-address="$ctrl.mailingAddress">
+      mailing-address="$ctrl.mailingAddress"
+      default-payment-type="$ctrl.defaultPaymentType">
     </checkout-existing-payment-methods>
   </div>
 </div>
