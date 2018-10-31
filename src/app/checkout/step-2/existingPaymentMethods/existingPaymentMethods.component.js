@@ -89,6 +89,7 @@ class ExistingPaymentMethodsController {
         paymentMethod: existingPaymentMethod,
         disableCardNumber: !!existingPaymentMethod && !existingPaymentMethod['from-current-order'],
         mailingAddress: this.mailingAddress,
+        defaultPaymentType: () => this.defaultPaymentType,
         onPaymentFormStateChange: () => param => {
           param.$event.stayOnStep = true;
           param.$event.update = !!existingPaymentMethod;
@@ -141,6 +142,7 @@ export default angular
       paymentFormState: '<',
       paymentFormError: '<',
       mailingAddress: '<',
+      defaultPaymentType: '<',
       onPaymentFormStateChange: '&',
       onLoad: '&'
     }
