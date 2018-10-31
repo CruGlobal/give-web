@@ -21,6 +21,8 @@ class PaymentMethodFormController{
   $onInit(){
     if(this.paymentMethod){
       this.paymentType = this.paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' ? 'bankAccount' : 'creditCard';
+    }else if(this.defaultPaymentType === 'creditCard'){
+      this.paymentType = 'creditCard';
     }
   }
 
@@ -50,6 +52,7 @@ export default angular
       disableCardNumber: '<',
       hideCvv: '<',
       mailingAddress: '<',
+      defaultPaymentType: '<',
       onPaymentFormStateChange: '&'
     }
   });

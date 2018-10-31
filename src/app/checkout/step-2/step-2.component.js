@@ -118,6 +118,7 @@ export default angular
       submitted: '<',
       hideButtons: '<',
       mailingAddress: '=?',
+      defaultPaymentType: '<',
       changeStep: '&',
       onStateChange: '&'
     }

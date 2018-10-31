@@ -61,6 +61,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     amount="<amount>"
     frequency="<frequency>"
     day="<day>"
+    default-payment-type="creditCard"
     donor-details="<window variable containing default values for donor's name and contact info>"
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)">
@@ -93,6 +94,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
   - `quarterly` - quarterly recurring gift
   - `annually` - annually recurring gift
 - `day` - for recurring gifts this defaults the gift's day of the month - *Optional* - can be `1` to `28`
+- `default-payment-type` - if set to `creditCard`, the credit card form will be shown by default instead of bank account - *Optional*
 - `donor-details` - name of the window variable containing default values for donor's name and contact info - *Optional* - should be in this format:
     ```javascript
     window.donorDetails = {

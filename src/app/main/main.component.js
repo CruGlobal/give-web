@@ -74,7 +74,7 @@ function routingConfig($stateProvider, $locationProvider, $urlRouterProvider){
     })
     .state('branded-checkout', {
       url: "/branded-checkout.html",
-      template: '<branded-checkout designation-number="2294554"></branded-checkout>'
+      template: '<branded-checkout designation-number="2294554" default-payment-type="creditCard"></branded-checkout>'
     });
 
   $locationProvider.html5Mode(true);
