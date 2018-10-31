@@ -27,6 +27,11 @@ describe('paymentMethodForm', () => {
       self.controller.$onInit();
       expect(self.controller.paymentType).toEqual('creditCard');
     });
+    it('should use defaultPaymentType as the default payment method if defaultPaymentType is specified', () => {
+      self.controller.defaultPaymentType = 'creditCard';
+      self.controller.$onInit();
+      expect(self.controller.paymentType).toEqual('creditCard');
+    });
   });
 
   describe('changePaymentType', () => {

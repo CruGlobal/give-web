@@ -121,6 +121,7 @@ export default angular
       day: '@',
       apiUrl: '@',
       donorDetailsVariable: '@donorDetails',
+      defaultPaymentType: '@',
       onOrderCompleted: '&',
       onOrderFailed: '&'
     }

@@ -161,6 +161,7 @@ export default angular
       frequency: '<',
       day: '<',
       donorDetails: '<',
+      defaultPaymentType: '<',
       next: '&',
       onPaymentFailed: '&'
     }
