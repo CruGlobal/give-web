@@ -65,7 +65,7 @@
         <div class="row mt">
           <div class="col-xs-12">
             <button
-              ng-if="$ctrl.maxShow < filtered.length"
+              ng-if="$ctrl.maxShow < $ctrl.receipts.length"
               ng-click="$ctrl.maxShow = $ctrl.maxShow + $ctrl.step"
               class="btn btn-default center-block ps_x">Load More</button>
           </div>
