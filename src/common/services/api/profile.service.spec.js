@@ -273,6 +273,26 @@ describe('profile service', () => {
       self.$httpBackend.flush();
     } );
 
+    it( 'should load the giving profile with spouse with a different family name', () => {
+      let givingProfileResponseWithDifferentFamilyNames = angular.copy(givingProfileResponse);
+      givingProfileResponseWithDifferentFamilyNames['_addspousedetails'][0]['family-name'] = 'Smith';
+
+      self.$httpBackend.expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
+        .respond( 200, givingProfileResponseWithDifferentFamilyNames );
+
+      self.profileService.getGivingProfile().subscribe( ( profile ) => {
+        expect( profile ).toEqual( jasmine.objectContaining( {
+          name:       'Mark Tubbs & Julia Smith',
+          email:      'mt@example.com',
+          address:    jasmine.any( Object ),
+          phone:      '(909) 337-2433',
+          donorNumber: '447072430',
+          yearToDate: 0
+        } ) );
+      } );
+      self.$httpBackend.flush();
+    } );
+
     it( 'should load the giving profile without spouse', () => {
       self.$httpBackend.expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=donordetails,addresses:mailingaddress,emails:element,phonenumbers:element,addspousedetails,givingdashboard:yeartodateamount' )
         .respond( 200, omit( givingProfileResponse, ['_addspousedetails', '_emails', '_givingdashboard', '_phonenumbers', '_addresses', '_donordetails'] ) );

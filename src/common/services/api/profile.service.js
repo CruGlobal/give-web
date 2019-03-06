@@ -47,14 +47,16 @@ class Profile {
       } )
       .map( ( data ) => {
         let donor = pick( data.rawData, ['family-name', 'given-name'] ),
-          spouse = pick( data.spouse, ['given-name'] ),
+          spouse = pick( data.spouse, ['family-name', 'given-name'] ),
           phone = find( data.phoneNumbers, {primary: true} );
         return {
           name: angular.isDefined( data.donorDetails ) && data.donorDetails['donor-type'] === 'Organization' ?
             data.donorDetails['organization-name']
             : (spouse['given-name']) ?
-              `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
-              `${donor['given-name']} ${donor['family-name']}`,
+              (spouse['family-name'] === donor['family-name']) ?
+                `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}` :
+                `${donor['given-name']} ${donor['family-name']} & ${spouse['given-name']} ${spouse['family-name']}`
+              : `${donor['given-name']} ${donor['family-name']}`,
           donorNumber: angular.isDefined( data.donorDetails ) ? data.donorDetails['donor-number'] : undefined,
           email:       angular.isDefined( data.emailAddress ) ? data.emailAddress.email : undefined,
           phone:       angular.isDefined( phone ) ? phone['phone-number'] : undefined,
