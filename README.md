@@ -37,7 +37,7 @@ Add the following code to your page where appropriate. You must change the value
 <branded-checkout
     ng-app="brandedCheckout"
     designation-number="0763355"
-    api-url="brandedcheckout.mydomain.com"
+    api-url="https://brandedcheckout.mydomain.com"
     tsys-device="cru">
 </branded-checkout>
 
