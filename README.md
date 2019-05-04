@@ -160,7 +160,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
    <branded-checkout
        ng-app="brandedCheckout"
        designation-number="0763355"
-       api-url="brandedcheckout.myministry.com"
+       api-url="https://brandedcheckout.myministry.com"
        tsys-device="myministry">
    </branded-checkout>
    ```
