@@ -149,6 +149,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
    >    I need help configuring the give.cru.org API to work on my domain. Can you:
    >    - Add an SSL certificate to cruorg-alb for my subdomain {{brandedcheckout.myministry.org}}
    >    - Add that same subdomain to cortex_gateway's AUTH_PROXY_VALID_ORIGINS environment variable
+   >    - Add the user facing domain to the maintenence app's cortex_gateway CORS Whitelist
    >
    >    I also need help setting up a my TSYS merchant account with the give.cru.org API to be able to proccess credit cards on my site. Can you:
    >    - Add my TSYS device id to the give.cru.org API configuration. My device id is {{12345678901234}} and the url I would like to use for the branded checkout form is {{https://myministry.org}}. I would like to use a identifier of "{{myministry}}". (Or uniquely describe your ministry and domain if you want DPS to create the identifier. We can't have multiple sites that use the same identifier.)
