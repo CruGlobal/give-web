@@ -147,9 +147,10 @@ angular-scroll@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/angular-scroll/-/angular-scroll-1.0.0.tgz#6c916fc5c5a1b8706a6b54ce121ff2574a7b24bd"
 
-angular-ui-bootstrap@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.0.tgz#2facefb915386655dc5f44150258032517236d01"
+angular-ui-bootstrap@2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
+  integrity sha512-yzcHpPMLQl0232nDzm5P4iAFTFQ9dMw0QgFLuKYbDj9M0xJ62z0oudYD/Lvh1pWfRsukiytP4Xj6BHOSrSXP8A==
 
 angular-ui-router@^0.4.2:
   version "0.4.2"
