@@ -105,8 +105,10 @@ export default angular
     sessionService.name,
     'environment'
   ]).config(($uibModalProvider, $windowProvider) => {
-    const $window = $windowProvider.$get();
-    $uibModalProvider.options.appendTo = angular.element($window.document).find('branded-checkout').eq(0);
+    const $document = angular.element($windowProvider.$get().document);
+    $uibModalProvider.options.appendTo = $document.find('branded-checkout').eq(0);
+    if (!$uibModalProvider.options.appendTo.length)
+      $uibModalProvider.options.appendTo = $document.find('body').eq(0);
   })
   .component(componentName, {
     controller: BrandedCheckoutController,
