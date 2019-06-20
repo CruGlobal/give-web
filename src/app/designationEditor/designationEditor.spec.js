@@ -38,7 +38,27 @@ const designationSecurityResponse = {
   secondaryMiddleName: '',
   secondaryLastName: '',
   secondaryMaidenName: '',
-  secondarySuffix: ''
+  secondarySuffix: '',
+  'design-controller': {
+    'carousel': {
+      'image0': {
+        'fileReference': '/content/dam/give/designations/0/1/2/3/4/0123456/some-image.jpg',
+        'sling:resourceType': 'Give/components/content/image',
+        'jcr:primaryType': 'nt:unstructured'
+      },
+      'image1': {
+        'fileReference': '/content/dam/give/designations/0/1/2/3/4/0123456/another-image.jpg',
+        'sling:resourceType': 'Give/components/content/image',
+        'jcr:primaryType': 'nt:unstructured'
+      },
+      'image2': {
+        'fileReference': '/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg',
+        'sling:resourceType': 'Give/components/content/image',
+        'jcr:primaryType': 'nt:unstructured'
+      },
+      'jcr:primaryType': 'nt:unstructured'
+    }
+  }
 }
 
 describe('Designation Editor', function () {
@@ -288,6 +308,43 @@ describe('Designation Editor', function () {
       })
     })
 
+    describe('carousel modal', () => {
+      let modalPromise
+      beforeEach(inject((_$q_) => {
+        modalPromise = _$q_.defer()
+        spyOn($ctrl.$uibModal, 'open').and.returnValue({ result: modalPromise.promise })
+      }))
+
+      it('should open modal', () => {
+        let photos = []
+        let photoLocation = 'secondaryPhotos'
+        $ctrl.designationContent = designationSecurityResponse
+        $ctrl.designationPhotos = photos
+
+        $ctrl.selectPhotos(photoLocation, designationSecurityResponse['design-controller'].carousel)
+
+        let selectedPhotos = {}
+        selectedPhotos['/content/dam/give/designations/0/1/2/3/4/0123456/some-image.jpg'] = true
+        selectedPhotos['/content/dam/give/designations/0/1/2/3/4/0123456/another-image.jpg'] = true
+        selectedPhotos['/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg'] = true
+
+        expect($ctrl.$uibModal.open).toHaveBeenCalled()
+        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
+        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.campaignPage()).toBeUndefined()
+        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photos()).toEqual(photos)
+        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photoLocation()).toEqual(photoLocation)
+        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.selectedPhoto()).toEqual(selectedPhotos)
+
+        modalPromise.resolve({
+          selected: '',
+          photos: photos
+        })
+        $rootScope.$digest()
+
+        expect($ctrl.designationContent['secondaryPhotos']).toEqual([])
+      })
+    })
+
     describe('edit text modal', () => {
       let modalPromise
       beforeEach(inject((_$q_) => {
@@ -396,6 +453,32 @@ describe('Designation Editor', function () {
       expect($ctrl.isPerson()).toEqual(true)
       expect($ctrl.isMinistry()).toEqual(false)
       expect($ctrl.isCampaign()).toEqual(false)
+    })
+  })
+
+  describe('images', () => {
+    it('should return all of the selected images for the carousel', () => {
+      $ctrl.designationContent = designationSecurityResponse
+      let expectedImageUrls = [
+        '/content/dam/give/designations/0/1/2/3/4/0123456/some-image.jpg',
+        '/content/dam/give/designations/0/1/2/3/4/0123456/another-image.jpg',
+        '/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg'
+      ]
+
+      expect($ctrl.images()).toEqual(expectedImageUrls)
+    })
+  })
+
+  describe('getImageUrls', () => {
+    it('should return just the URLs of the images in the carousel', () => {
+      let expectedImageUrls = [
+        '/content/dam/give/designations/0/1/2/3/4/0123456/some-image.jpg',
+        '/content/dam/give/designations/0/1/2/3/4/0123456/another-image.jpg',
+        '/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg'
+      ]
+      let imageUrls = []
+      $ctrl.getImageUrls(designationSecurityResponse['design-controller'].carousel, imageUrls)
+      expect(imageUrls).toEqual(expectedImageUrls)
     })
   })
 })

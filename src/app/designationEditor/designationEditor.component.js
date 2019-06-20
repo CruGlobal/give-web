@@ -24,6 +24,7 @@ import titleModalTemplate from './titleModal/titleModal.tpl.html'
 import pageOptionsModalTemplate from './pageOptionsModal/pageOptionsModal.tpl.html'
 import personalOptionsModalTemplate from './personalOptionsModal/personalOptionsModal.tpl.html'
 import photoModalTemplate from './photoModal/photoModal.tpl.html'
+import carouselModalTemplate from './carouselModal/carouselModal.tpl.html'
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html'
 import websiteModalTemplate from './websiteModal/websiteModal.tpl.html'
 
@@ -52,6 +53,7 @@ class DesignationEditorController {
   $onInit () {
     this.designationNumber = this.$location.search().d
     this.campaignPage = this.$location.search().campaign
+    this.carouselLoaded = false
 
     // designationNumber is required
     if (!this.designationNumber) {
@@ -166,8 +168,39 @@ class DesignationEditorController {
       }, angular.noop)
   }
 
-  selectPhoto (photoLocation, selectedPhoto) {
+  selectPhotos (photoLocation, selectedPhotos) {
+    const imageUrls = []
+    this.getImageUrls(selectedPhotos, imageUrls)
+    const selectedUrls = []
+    for (const url in imageUrls) {
+      selectedUrls.push({ url: imageUrls[url] })
+    }
+
     const modalOptions = {
+      templateUrl: carouselModalTemplate,
+      controller: photoModalController.name,
+      controllerAs: '$ctrl',
+      resolve: {
+        designationNumber: () => { return this.designationContent.designationNumber },
+        campaignPage: () => { return this.campaignPage },
+        photos: () => { return this.designationPhotos },
+        photoLocation: () => { return photoLocation },
+        selectedPhoto: () => { return selectedUrls }
+      }
+    }
+    this.$uibModal.open(modalOptions).result.then((data) => {
+      const selectedUrls = []
+      angular.forEach(data.selected, function (selectedPhoto) {
+        selectedUrls.push(selectedPhoto.url)
+      })
+      this.designationContent[photoLocation] = selectedUrls
+      this.designationPhotos = data.photos
+      this.save()
+    }, angular.noop)
+  }
+
+  selectPhoto (photoLocation, selectedPhoto) {
+    let modalOptions = {
       templateUrl: photoModalTemplate,
       controller: photoModalController.name,
       controllerAs: '$ctrl',
@@ -190,8 +223,15 @@ class DesignationEditorController {
     return find(this.designationPhotos, { original: originalUrl })
   }
 
+  images () {
+    let carousel = this.designationContent['design-controller'].carousel
+    const imageUrls = []
+    this.getImageUrls(carousel, imageUrls)
+    return imageUrls
+  }
+
   editText (field) {
-    const modalOptions = {
+    let modalOptions = {
       templateUrl: textEditorModalTemplate,
       controller: textEditorModalController.name,
       controllerAs: '$ctrl',
@@ -258,6 +298,27 @@ class DesignationEditorController {
     return this.designationContent && includes([
       'Campaign'
     ], this.designationContent.designationType)
+  }
+
+  getImageUrls (obj, imageUrls) {
+    Object.keys(obj).forEach(key => {
+      if (angular.isObject(obj[key])) {
+        this.getImageUrls(obj[key], imageUrls)
+      }
+      if (key === 'fileReference') {
+        imageUrls.push(obj[key])
+      }
+    })
+  }
+
+  carouselLoad () {
+    if (!this.carouselLoaded) {
+      this.$window.document.dispatchEvent(new Event('DOMContentLoaded', {
+        bubbles: true,
+        cancelable: true
+      }))
+      this.carouselLoaded = true
+    }
   }
 }
 

@@ -1,0 +1,88 @@
+<div class="modal-header pt">
+  <button id="closeButton" type="button" class="close" ng-click="$dismiss()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h3 class="modal-title text-center" translate>Add Secondary Photos</h3>
+</div>
+
+<div class="modal-body">
+  <div class="upload-drag-target p mb">
+    <div class="form-group text-center">
+      <div ng-if="!$ctrl.uploading">
+        <label translate>Select a Photo to Upload</label>
+
+        <upload-button
+          class="form-control"
+          url="/bin/crugive/image?designationNumber={{$ctrl.designationNumber}}"
+          accept="image/*"
+          on-upload="$ctrl.uploading = true"
+          on-success="$ctrl.uploadComplete(response)"
+          on-error="$ctrl.uploading = false"
+        ></upload-button>
+      </div>
+
+      <label ng-if="$ctrl.uploading" translate>Uploading...</label>
+    </div>
+  </div>
+
+  <div class="give-thumbs-container clearfix" ng-if="$ctrl.photos.length" dnd-list="$ctrl.photos">
+    <div class="cover-thumb"
+         ng-repeat="photo in $ctrl.photos"
+         dnd-draggable="{{ {url: photo.original} }}"
+         dnd-copied="$ctrl.selectedPhoto[photo.original] = true"
+         dnd-effect-allowed="copy"
+         dnd-selected="$ctrl.photos.beingDragged = {url: photo.original} }}"
+         dnd-type="'secondaryphoto'"
+         ng-class="{'selected': $ctrl.photos.beingDragged === {url: photo.original} }">
+        <img ng-src="{{photo.thumbnail}}">
+    </div>
+
+    <div class="cover-thumb">
+      <a id="removePhotosButton" href="" class="no-cover" ng-click="$close({
+        selected: '',
+        photos: $ctrl.photos
+      })">
+        <i class="fa fa-ban" aria-hidden="true"></i>
+        <span translate>Remove Photos</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="carousel-drag-and-drop give-thumbs-container">
+    <h3 class="text-center">Drag and Drop Carousel</h3>
+    <ul dnd-list="$ctrl.selectedPhoto"
+        dnd-allowed-types="['secondaryphoto']"
+        dnd-drop="$ctrl.dropCallback(index, item, external, type)"
+        dnd-external-sources="true">
+      <li class="cover-thumb"
+          ng-repeat="pic in $ctrl.selectedPhoto"
+          dnd-draggable="pic"
+          dnd-moved="$ctrl.selectedPhoto.splice($index, 1)"
+          dnd-copied="$ctrl.selectedPhoto.splice($index, 1)"
+          dnd-inserted="$ctrl.logListEvent('inserted at', index, external, type)"
+          dnd-effect-allowed="copyMove"
+          dnd-selected="$ctrl.selectedPhoto.beingDragged = pic"
+          dnd-type="'secondaryphoto'"
+          ng-class="{'selected': $ctrl.selectedPhoto.beingDragged === pic}">
+        <img ng-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg">
+      </li>
+    </ul>
+
+    <div class="trash text-center"
+         dnd-list="$ctrl.trash"
+         dnd-effect-allowed="move"
+         dnd-moved="$ctrl.trash.splice(0, 1)"
+         dnd-external-sources="true"
+         dnd-allowed-types="['secondaryphoto']">
+      <i class="fa fa-trash"></i>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button id="usePhotosButton" type="button" class="btn btn-primary pull-right"
+    ng-click="$close({
+    selected: $ctrl.selectedPhoto,
+    photos: $ctrl.photos
+  })" translate>Use Photos</button>
+  <button id="cancelPhotoButton" type="button" class="btn btn-default" ng-click="$dismiss()" translate>Cancel</button>
+</div>

@@ -64,7 +64,8 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
 }
 
 export default angular.module('appConfig', [
-  'environment'
+    'environment',
+    'dndLists'
 ])
   .config(appConfig)
   .config(rollbarConfig)

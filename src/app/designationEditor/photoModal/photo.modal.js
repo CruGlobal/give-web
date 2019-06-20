@@ -16,6 +16,7 @@ class ModalInstanceCtrl {
     this.photoLocation = photoLocation
     this.selectedPhoto = selectedPhoto
     this.photos = photos
+    this.trash = []
   }
 
   uploadComplete () {
@@ -26,6 +27,12 @@ class ModalInstanceCtrl {
         this.uploading = false
       }, angular.noop)
     }, 3500)
+  }
+
+  dropCallback(index, item, external, type) {
+    if (type === 'secondaryphoto') {
+      return item;
+    }
   }
 }
 
