@@ -10,6 +10,8 @@ const aemDomain = 'https://give-stage2.cru.org';
 const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
 const ci = process.env.CI === 'true';
 
+const fs = require('fs');
+
 const entryPoints = {
   common: 'common/common.module.js',
   app: [
@@ -125,6 +127,11 @@ module.exports = env => {
     },
     devtool: "source-map",
     devServer: {
+      https: {
+        key: fs.readFileSync('./certs/private.key'),
+        cert: fs.readFileSync('./certs/private.crt'),
+        ca: fs.readFileSync('./certs/private.pem'),
+      },
       historyApiFallback: {
         rewrites: [
           { from: /\/(?!test\-release).+\.html/, to: '/index.html' }
