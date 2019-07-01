@@ -389,11 +389,15 @@ function analyticsFactory($window, $timeout, sessionService) {
       try {
         let profileInfo = {};
         if (typeof sessionService !== 'undefined') {
+          let ssoGuid;
           if (typeof sessionService.session['sso_guid'] !== 'undefined') {
-            profileInfo['ssoGuid'] = sessionService.session['sso_guid'];
+            ssoGuid = sessionService.session['sso_guid'];
           }
           else if (typeof sessionService.session['sub'] !== 'undefined') {
-            profileInfo['ssoGuid'] = sessionService.session['sub'].split('|').pop();
+            ssoGuid = sessionService.session['sub'].split('|').pop();
+          }
+          if (typeof ssoGuid !== 'undefined' && ssoGuid !== 'cas') {
+            profileInfo['ssoGuid'] = ssoGuid;
           }
 
           if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
