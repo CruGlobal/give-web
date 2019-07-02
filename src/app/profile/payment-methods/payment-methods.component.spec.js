@@ -110,6 +110,10 @@ describe( 'PaymentMethodsComponent', function () {
   });
 
   describe('addPaymentMethod()', () => {
+    beforeEach(() => {
+      $ctrl.$uibModal.open.calls.reset();
+    });
+
     it('should open addPaymentMethod Modal', () => {
       $ctrl.paymentMethods = [{},{}];
       $ctrl.addPaymentMethod();

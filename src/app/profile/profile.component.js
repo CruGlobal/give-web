@@ -7,7 +7,7 @@ import omit from 'lodash/omit';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/do';
-import { parse, isValidNumber } from 'libphonenumber-js';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 import template from './profile.tpl.html';
 
@@ -174,7 +174,7 @@ class ProfileController {
       angular.forEach(forms, form => {
         if(form && form.phoneNumber && form.phoneNumber.$validators) {
           form.phoneNumber.$validators.phone = number => {
-            return isValidNumber(parse(number, {country: {default: 'US'}}));
+            return parsePhoneNumberFromString(number, 'US').isValid();
           };
         }
       });

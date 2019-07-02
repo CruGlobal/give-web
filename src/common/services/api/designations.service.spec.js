@@ -56,39 +56,47 @@ describe('designation service', () => {
   });
 
   describe('productLookup', () => {
-    beforeEach(() => {
-      this.expectedResponse = {
-        'uri': 'items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-        'frequencies': [{
-          'name': 'QUARTERLY',
-          'display': 'Quarterly',
-          'selectAction': '/itemselections/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options/izzgk4lvmvxgg6i=/values/kfkucusuivjeywi=/selector'
-        }, {
-          'name': 'SEMIANNUAL',
-          'display': 'Semi-Annually',
-          'selectAction': '/itemselections/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options/izzgk4lvmvxgg6i=/values/kncu2skbjzhfkqkm=/selector'
-        }, {
-          'name': 'MON',
-          'display': 'Monthly',
-          'selectAction': '/itemselections/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options/izzgk4lvmvxgg6i=/values/jvhu4=/selector'
-        }, {
-          'name': 'ANNUAL',
-          'display': 'Annually',
-          'selectAction': '/itemselections/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options/izzgk4lvmvxgg6i=/values/ifhe4vkbjq=/selector'
-        }, {'name': 'NA', 'display': 'Single', 'selectAction': ''}],
-        'frequency': 'NA',
-        'displayName': 'Steve Peck',
-        'code': '0354433',
-        'designationNumber': '0354433'
-      };
-    });
+    const expectedResponse = {
+      uri: 'items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
+      frequencies: [
+        {
+          name: 'QUARTERLY',
+          display: 'Quarterly',
+          selectAction:
+            '/itemselections/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options/izzgk4lvmvxgg6i=/values/kfkucusuivjeywi=/selector',
+        },
+        {
+          name: 'SEMIANNUAL',
+          display: 'Semi-Annually',
+          selectAction:
+            '/itemselections/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options/izzgk4lvmvxgg6i=/values/kncu2skbjzhfkqkm=/selector',
+        },
+        {
+          name: 'MON',
+          display: 'Monthly',
+          selectAction:
+            '/itemselections/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options/izzgk4lvmvxgg6i=/values/jvhu4=/selector',
+        },
+        {
+          name: 'ANNUAL',
+          display: 'Annually',
+          selectAction:
+            '/itemselections/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options/izzgk4lvmvxgg6i=/values/ifhe4vkbjq=/selector',
+        },
+        { name: 'NA', display: 'Single', selectAction: '' },
+      ],
+      frequency: 'NA',
+      displayName: 'Steve Peck',
+      code: '0354433',
+      designationNumber: '0354433',
+    };
     it('should get product details for a designation number', () => {
       self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/lookups/crugive/items?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description',
         {code: '0354433'})
         .respond(200, lookupResponse);
       self.designationsService.productLookup('0354433')
         .subscribe((data) => {
-          expect(data).toEqual(this.expectedResponse);
+          expect(data).toEqual(expectedResponse);
         });
       self.$httpBackend.flush();
     });
@@ -97,7 +105,7 @@ describe('designation service', () => {
         .respond(200, lookupResponse);
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(data => {
-          expect(data).toEqual(this.expectedResponse);
+          expect(data).toEqual(expectedResponse);
         });
       self.$httpBackend.flush();
     });
