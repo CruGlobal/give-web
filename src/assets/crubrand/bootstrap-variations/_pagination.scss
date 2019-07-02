@@ -87,10 +87,22 @@
 
 // Large
 .pagination-lg {
-    @include pagination-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $border-radius-base);
+  @include pagination-size(
+    $padding-base-vertical,
+    $padding-base-horizontal,
+    $font-size-base,
+    $line-height-large,
+    $border-radius-base
+  );
 }
 
 // Small
 .pagination-sm {
-    @include pagination-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $border-radius-base);
+  @include pagination-size(
+    $padding-base-vertical,
+    $padding-base-horizontal,
+    $font-size-base,
+    $line-height-small,
+    $border-radius-base
+  );
 }

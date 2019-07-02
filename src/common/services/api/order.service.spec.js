@@ -346,8 +346,9 @@ describe('order service', () => {
   });
 
   describe('updatePaymentMethod', () => {
+    let runTestWith;
     beforeEach(() => {
-      this.runTestWith = (paymentInfo, expectedRequestData, expectedCvv) => {
+      runTestWith = (paymentInfo, expectedRequestData, expectedCvv) => {
         spyOn(self.orderService, 'storeCardSecurityCode');
         spyOn(self.orderService, 'selectPaymentMethod').and.returnValue(Observable.of('placeholder'));
         self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
@@ -381,15 +382,15 @@ describe('order service', () => {
       };
     });
     it('should update the given payment method', () => {
-      this.runTestWith({ 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa', cvv: '963' },
+      runTestWith({ 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa', cvv: '963' },
         { 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa' }, '963');
     });
     it('should update the given payment method with an address', () => {
-      this.runTestWith({ 'cardholder-name': 'New name', cvv: '789', address: { country: 'US' } },
+      runTestWith({ 'cardholder-name': 'New name', cvv: '789', address: { country: 'US' } },
         { 'cardholder-name': 'New name', address: { 'country-name': 'US' } }, '789');
     });
     it('should call storeCardSecurityCode with undefined when the cvv wasn\'t changed', () => {
-      this.runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
+      runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
         { 'cardholder-name': 'New name', 'card-number': '0000' }, undefined);
     });
   });

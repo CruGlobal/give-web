@@ -22,23 +22,26 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         imgDomain: '',
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
-        publicGive: 'https://give-stage2.cru.org'
+        publicGive: 'https://give-stage2.cru.org',
+        isBrandedCheckout: false,
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
         imgDomain: '//give-static.cru.org',
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
-        publicGive: 'https://give-stage2.cru.org'
+        publicGive: 'https://give-stage2.cru.org',
+        isBrandedCheckout: false,
       },
       production: {
         apiUrl: 'https://give.cru.org',
         imgDomain: '//give-static.cru.org',
         imgDomainDesignation: 'https://give.cru.org',
         publicCru: 'https://www.cru.org',
-        publicGive: 'https://give.cru.org'
-      }
-    }
+        publicGive: 'https://give.cru.org',
+        isBrandedCheckout: false,
+      },
+    },
   });
 
   // default the environment to production
