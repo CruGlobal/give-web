@@ -131,6 +131,7 @@ class ProductConfigFormController {
         },
         () => {
           this.analyticsFactory.giveGiftModal(this.code);
+          this.loading = false;
           // Show givingLinks if they exist and it isn't an edit
           if(this.givingLinks.length > 0 && !this.isEdit) {
             this.showGivingLinks = true;
@@ -138,7 +139,6 @@ class ProductConfigFormController {
           } else {
             this.onStateChange({ state: 'unsubmitted' });
           }
-          this.loading = false;
         });
   }
 
