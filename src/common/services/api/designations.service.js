@@ -214,6 +214,28 @@ class DesignationsService {
         return data.data['jcr:content']['facebookPixelId'];
       });
   }
+
+  givingLinks(code) {
+    let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
+      path = `/content/give/us/en/designations/${c}/${code}.infinity.json`;
+    return Observable.from(this.$http.get( this.envService.read('apiUrl') + path ))
+      .map( ( data ) => {
+        let givingLinks = [];
+        if ( data.data['jcr:content'] ) {
+          // Map giving links
+          if (data.data['jcr:content'].givingLinks) {
+            angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
+              if (toFinite(k) > 0 || k.includes('item')) givingLinks.push({
+                name: v.name,
+                url: v.url,
+                order: toFinite(k) > 0 ? toFinite(k) : Number(k.substring(4))
+              });
+            });
+          }
+        }
+        return givingLinks;
+      });
+  }
 }
 
 export default angular
