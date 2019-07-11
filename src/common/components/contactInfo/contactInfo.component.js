@@ -7,7 +7,7 @@ import includes from 'lodash/includes';
 import startsWith from 'lodash/startsWith';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
-import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { parse, isValidNumber } from 'libphonenumber-js';
 
 import addressForm from 'common/components/addressForm/addressForm.component';
 
@@ -63,7 +63,7 @@ class Step1Controller{
 
   addCustomValidators(){
     this.detailsForm.phoneNumber.$validators.phone = number => {
-      return !number || parsePhoneNumberFromString(number, 'US').isValid();
+      return !number || isValidNumber(parse(number, { country: { default: 'US' } }));
     };
   }
 

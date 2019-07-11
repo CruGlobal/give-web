@@ -5,6 +5,7 @@
     "browser": true,
     "jasmine": true
   },
+  "ecmaFeatures": {},
   "extends": ["angular", "plugin:jasmine/recommended"],
   "globals": {
     "inject": true,
@@ -144,6 +145,7 @@
     "brace-style": "off",
     "callback-return": "off",
     "camelcase": "off",
+    "comma-dangle": "error",
     "comma-spacing": "off",
     "comma-style": "off",
     "complexity": ["off", 11],

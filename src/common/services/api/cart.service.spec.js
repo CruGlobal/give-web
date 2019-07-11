@@ -234,12 +234,10 @@ describe('cart service', () => {
     });
   });
   describe('addItemAndReplaceExisting', () => {
-    const cartObservable = Observable.of({
-      items: [{ code: '0123456', uri: 'oldUri' }],
-    });
     beforeEach(() => {
       spyOn(self.cartService, 'addItem').and.returnValue(Observable.of({}));
       spyOn(self.cartService, 'editItem').and.returnValue(Observable.of({}));
+      this.cartObservable = Observable.of({ items: [ { code: '0123456', uri: 'oldUri'}]});
     });
     it('should add items to cart if there are no conflicts', () => {
       self.cartService.addItemAndReplaceExisting(null, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
@@ -266,7 +264,7 @@ describe('cart service', () => {
     });
     it('should catch a conflict in the cart and replace that item', () => {
       self.cartService.addItem.and.returnValue(Observable.throw({ status: 409 }));
-      self.cartService.addItemAndReplaceExisting(cartObservable, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
+      self.cartService.addItemAndReplaceExisting(this.cartObservable, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
         .subscribe(
           response => {
             expect(self.cartService.addItem).toHaveBeenCalledWith('uri1', { amount: 51 });
@@ -279,7 +277,7 @@ describe('cart service', () => {
     it('should catch a conflict in the cart and catch an error replacing that item', () => {
       self.cartService.addItem.and.returnValue(Observable.throw({ status: 409 }));
       self.cartService.editItem.and.returnValue(Observable.throw('some error'));
-      self.cartService.addItemAndReplaceExisting(cartObservable, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
+      self.cartService.addItemAndReplaceExisting(this.cartObservable, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
         .subscribe(
           response => {
             expect(self.cartService.addItem).toHaveBeenCalledWith('uri1', { amount: 51 });
