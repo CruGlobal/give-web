@@ -97,16 +97,13 @@ describe('bank account form', () => {
   });
 
   describe('savePayment', () => {
-    const encryptedAccountNumber =
-      'ckp3FnRl1+eHIuBXapX2K7wfKoXlSeUrgYXONJBiYpJwDK+nLa+7anu7TOY+Ypsl3bjSQYCuvt0OuHZtQcxJQYdOiDnpHliFqqc/mpw8dcb5DCTaTOIP3mm122o4tdlPHw6m+fgnOF3RIqkPPe0qGRNNr5fK9qmwjt5NcSZ1j+xWeNAT7AI6nPuqHHOOF2tggtQSwZ5cBdkJuF/KIJe6MY7PLMbMf209csz+zdMhnxu4nWM79FYVzAcFz3C62eEXp73xGULAkhTil9YAtLdYmdsQk6/46JlsRV2JfjFAHNU8/6ZAGo5JKEsi58SlWO1BLcuSa1/Z/Po2XcBmEbTXEA==';
     beforeEach(() => {
       spyOn(self.formController, '$setSubmitted');
       spyOn(self.controller, 'onPaymentFormStateChange').and.callThrough();
       spyOn(self.outerScope, 'onPaymentFormStateChange');
       spyOn(cruPayments.bankAccount, 'init');
-      spyOn(cruPayments.bankAccount, 'encrypt').and.returnValue(
-        Observable.of(encryptedAccountNumber),
-      );
+      this.encryptedAccountNumber = 'ckp3FnRl1+eHIuBXapX2K7wfKoXlSeUrgYXONJBiYpJwDK+nLa+7anu7TOY+Ypsl3bjSQYCuvt0OuHZtQcxJQYdOiDnpHliFqqc/mpw8dcb5DCTaTOIP3mm122o4tdlPHw6m+fgnOF3RIqkPPe0qGRNNr5fK9qmwjt5NcSZ1j+xWeNAT7AI6nPuqHHOOF2tggtQSwZ5cBdkJuF/KIJe6MY7PLMbMf209csz+zdMhnxu4nWM79FYVzAcFz3C62eEXp73xGULAkhTil9YAtLdYmdsQk6/46JlsRV2JfjFAHNU8/6ZAGo5JKEsi58SlWO1BLcuSa1/Z/Po2XcBmEbTXEA==';
+      spyOn(cruPayments.bankAccount, 'encrypt').and.returnValue(Observable.of(this.encryptedAccountNumber));
     });
 
     it('should call onPaymentFormStateChange to change state to unsubmitted when form is invalid', () => {
@@ -131,7 +128,7 @@ describe('bank account form', () => {
         bankAccount: {
           'account-type': 'checking',
           'bank-name': 'First Bank',
-          'encrypted-account-number': encryptedAccountNumber,
+          'encrypted-account-number': this.encryptedAccountNumber,
           'display-account-number': '9012',
           'routing-number': '123456789'
         }
@@ -156,7 +153,7 @@ describe('bank account form', () => {
         bankAccount: {
           'account-type': 'checking',
           'bank-name': 'First Bank',
-          'encrypted-account-number': encryptedAccountNumber,
+          'encrypted-account-number': this.encryptedAccountNumber,
           'display-account-number': '9012',
           'routing-number': '123456789'
         }
