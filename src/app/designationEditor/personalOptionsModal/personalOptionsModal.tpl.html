@@ -12,18 +12,21 @@
     <!-- Tab panes -->
     <div class="tab-content">
       <div class="tab-pane active" ng-if="$ctrl.tab === 'givingLinks'">
+        <div class="form-group">
+          <span class="help-block">Setup additional country giving links.</span>
+        </div>
         <table class="table table-hover table-condensed">
           <thead>
           <tr>
-            <th>Name</th>
-            <th>URL</th>
+            <th>Country Name</th>
+            <th>Give Site URL</th>
             <th></th>
           </tr>
           </thead>
           <tbody>
           <tr>
             <td><input type="text" class="form-control" style="border: 0; box-shadow: none;" name="name"
-                       value="Give at Cru.org" readonly="readonly"/></td>
+                       value="US" readonly="readonly"/></td>
             <td><input type="url" class="form-control" style="border: 0; box-shadow: none;" name="url"
                        value="{{$ctrl.giveDomain}}/{{$ctrl.designationNumber}}" readonly="readonly"/></td>
             <td></td>
@@ -34,7 +37,7 @@
                      type="text"
                      class="form-control"
                      ng-model="a.name"
-                     placeholder="Give at example"
+                     placeholder="Country Name"
                      required ng-change="console.log(givingLinkForm)">
               <span class="help-block" ng-hide="givingLinkForm.name.$valid">Name is required.</span>
             </td>
@@ -42,7 +45,7 @@
               <input name="url"
                      type="url"
                      class="form-control"
-                     placeholder="https://www.example.com"
+                     placeholder="https://give.country.co/name"
                      ng-model="a.url"
                      required>
               <span class="help-block" ng-hide="givingLinkForm.url.$valid">Url is required.</span>
@@ -55,8 +58,8 @@
           <tfoot>
           <tr>
             <td colspan="3">
-              <a id="addGivingLinksButton" href="" ng-click="$ctrl.givingLinks.push({})"><i
-                class="fa fa-plus-circle"></i> Add another Giving Link</a>
+              <a id="addGivingLinksButton" href="" ng-click="$ctrl.givingLinks.push({})">
+                <i class="fa fa-plus-circle"></i> Add Giving Link</a>
             </td>
           </tr>
           </tfoot>

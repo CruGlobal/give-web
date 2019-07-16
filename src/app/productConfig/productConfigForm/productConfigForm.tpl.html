@@ -25,7 +25,7 @@
   <div class="panel panel-default panel-plain mt" ng-if="$ctrl.showGivingLinks">
     <div class="panel panel-default give-modal-panel">
       <h4 class="panel-title border-bottom-small" translate>
-        How would you like to give?
+        Through which country would you like to give?
       </h4>
       <div class="panel-body pt0">
         <div class="row">
@@ -33,13 +33,13 @@
             <button class="btn btn-block btn-primary"
                     type="button"
                     ng-click="$ctrl.giveLink()"
-                    translate>Continue giving at give.cru.org</button>
+                    translate>Give through US give site</button>
           </div>
           <div class="col-xs-6 col-xs-offset-3 pt-" ng-repeat="link in $ctrl.givingLinks">
             <button class="btn btn-block btn-default"
                     type="button"
                     ng-click="$ctrl.giveLink(link.url)"
-                    translate>{{link.name}}</button>
+                    translate>Give through {{link.name}} give site</button>
           </div>
         </div>
       </div>
