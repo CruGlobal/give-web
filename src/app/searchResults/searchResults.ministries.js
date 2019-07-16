@@ -8,7 +8,7 @@ export default [
   {
     name: 'Athletes in Action',
     designationNumber: '2863856',
-    path: '/2863856',
+    path: '/athletesinaction-greatestneeds',
     facet: 'ministry'
   },
   {
@@ -62,7 +62,7 @@ export default [
   {
     name: 'FamilyLife',
     designationNumber: '2294554',
-    path: '/2294554',
+    path: '/familylife-needs',
     facet: 'ministry'
   },
   {
@@ -104,7 +104,7 @@ export default [
   {
     name: 'Jesus Film Project',
     designationNumber: '2592320',
-    path: '/2592320',
+    path: '/jesusfilmproject-priorities',
     facet: 'ministry'
   },
   {
@@ -116,7 +116,7 @@ export default [
   {
     name: 'StoryRunners',
     designationNumber: '2852450',
-    path: '/2852450',
+    path: '/storyrunners-strategies',
     facet: 'ministry'
   }
 ];
