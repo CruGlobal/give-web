@@ -16,7 +16,6 @@ class ModalInstanceCtrl {
     this.photoLocation = photoLocation
     this.selectedPhoto = selectedPhoto
     this.photos = photos
-    this.trash = []
   }
 
   uploadComplete () {
@@ -29,10 +28,13 @@ class ModalInstanceCtrl {
     }, 3500)
   }
 
-  dropCallback(index, item, external, type) {
-    if (type === 'secondaryphoto') {
-      return item;
-    }
+  addImageToCarousel (photo) {
+    this.selectedPhoto = [...this.selectedPhoto, { url: photo.original }]
+  }
+
+  reorderImageInCarousel (index, newIndex) {
+    const item = this.selectedPhoto.splice(index, 1)
+    this.selectedPhoto.splice(newIndex, 0, ...item)
   }
 }
 

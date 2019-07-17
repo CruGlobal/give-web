@@ -70,7 +70,14 @@ describe('Designation Editor', function () {
     $q = _$q_
     $rootScope = _$rootScope_
     $ctrl = _$componentController_(module.name,
-      { $window: { location: '/designation-editor.html?d=' + designationSecurityResponse.designationNumber } }
+      {
+        $window: {
+          location: '/designation-editor.html?d=' + designationSecurityResponse.designationNumber,
+          document: {
+            dispatchEvent: jest.fn()
+          }
+        }
+      }
     )
   }))
 
@@ -313,36 +320,49 @@ describe('Designation Editor', function () {
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer()
         spyOn($ctrl.$uibModal, 'open').and.returnValue({ result: modalPromise.promise })
+        $ctrl.designationContent = designationSecurityResponse
       }))
 
       it('should open modal', () => {
         let photos = []
-        let photoLocation = 'secondaryPhotos'
-        $ctrl.designationContent = designationSecurityResponse
         $ctrl.designationPhotos = photos
 
-        $ctrl.selectPhotos(photoLocation, designationSecurityResponse['design-controller'].carousel)
+        $ctrl.selectPhotos('secondaryPhotos', designationSecurityResponse['design-controller'].carousel)
 
-        let selectedPhotos = {}
-        selectedPhotos['/content/dam/give/designations/0/1/2/3/4/0123456/some-image.jpg'] = true
-        selectedPhotos['/content/dam/give/designations/0/1/2/3/4/0123456/another-image.jpg'] = true
-        selectedPhotos['/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg'] = true
+        let selectedPhotos = [
+          { url: '/content/dam/give/designations/0/1/2/3/4/0123456/some-image.jpg' },
+          { url: '/content/dam/give/designations/0/1/2/3/4/0123456/another-image.jpg' },
+          { url: '/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg' }
+        ]
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled()
         expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
         expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.campaignPage()).toBeUndefined()
         expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photos()).toEqual(photos)
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photoLocation()).toEqual(photoLocation)
+        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photoLocation()).toEqual('secondaryPhotos')
         expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.selectedPhoto()).toEqual(selectedPhotos)
+      })
 
+      it('should have empty selectedPhotos', () => {
+        $ctrl.selectPhotos('secondaryPhotos', designationSecurityResponse['design-controller'].carousel)
         modalPromise.resolve({
           selected: '',
-          photos: photos
+          photos: []
         })
         $rootScope.$digest()
-
         expect($ctrl.designationContent['secondaryPhotos']).toEqual([])
       })
+
+      it('should have selectedPhotos', () => {
+        $ctrl.selectPhotos('secondaryPhotos', designationSecurityResponse['design-controller'].carousel)
+        modalPromise.resolve({
+          selected: [{ url: '/content/photo1.jpg' }, { url: '/content/photo2.jpg' }],
+          photos: designationSecurityResponse['design-controller'].carousel
+        })
+        $rootScope.$digest()
+        expect($ctrl.designationContent['secondaryPhotos']).toEqual(['/content/photo1.jpg', '/content/photo2.jpg'])
+      })
+
     })
 
     describe('edit text modal', () => {
@@ -476,9 +496,22 @@ describe('Designation Editor', function () {
         '/content/dam/give/designations/0/1/2/3/4/0123456/another-image.jpg',
         '/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg'
       ]
-      let imageUrls = []
-      $ctrl.getImageUrls(designationSecurityResponse['design-controller'].carousel, imageUrls)
+      const imageUrls = $ctrl.getImageUrls(designationSecurityResponse['design-controller'].carousel)
       expect(imageUrls).toEqual(expectedImageUrls)
+    })
+  })
+
+  describe('carouselLoad()', () => {
+    it('does nothing when loaded', () => {
+      $ctrl.carouselLoaded = true
+      $ctrl.carouselLoad()
+      expect($ctrl.$window.document.dispatchEvent).not.toHaveBeenCalled()
+    })
+
+    it('fires event when not loaded', () => {
+      $ctrl.carouselLoaded = false
+      $ctrl.carouselLoad()
+      expect($ctrl.$window.document.dispatchEvent).toHaveBeenCalled()
     })
   })
 })

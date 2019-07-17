@@ -156,9 +156,15 @@ class DesignationEditorController {
       controller: personalOptionsModalController.name,
       controllerAs: '$ctrl',
       resolve: {
-        giveDomain: () => { return this.giveDomain },
-        designationNumber: () => { return this.designationNumber },
-        givingLinks: () => { return this.designationContent.givingLinks }
+        giveDomain: () => {
+          return this.giveDomain
+        },
+        designationNumber: () => {
+          return this.designationNumber
+        },
+        givingLinks: () => {
+          return this.designationContent.givingLinks
+        }
       }
     }
     this.$uibModal.open(modalOptions).result
@@ -169,47 +175,59 @@ class DesignationEditorController {
   }
 
   selectPhotos (photoLocation, selectedPhotos) {
-    const imageUrls = []
-    this.getImageUrls(selectedPhotos, imageUrls)
-    const selectedUrls = []
-    for (const url in imageUrls) {
-      selectedUrls.push({ url: imageUrls[url] })
-    }
+    const imageUrls = this.getImageUrls(selectedPhotos)
+    const selectedUrls = imageUrls.map(url => ({ url }))
 
     const modalOptions = {
       templateUrl: carouselModalTemplate,
       controller: photoModalController.name,
       controllerAs: '$ctrl',
       resolve: {
-        designationNumber: () => { return this.designationContent.designationNumber },
-        campaignPage: () => { return this.campaignPage },
-        photos: () => { return this.designationPhotos },
-        photoLocation: () => { return photoLocation },
-        selectedPhoto: () => { return selectedUrls }
+        designationNumber: () => {
+          return this.designationContent.designationNumber
+        },
+        campaignPage: () => {
+          return this.campaignPage
+        },
+        photos: () => {
+          return this.designationPhotos
+        },
+        photoLocation: () => {
+          return photoLocation
+        },
+        selectedPhoto: () => {
+          return selectedUrls
+        }
       }
     }
     this.$uibModal.open(modalOptions).result.then((data) => {
-      const selectedUrls = []
-      angular.forEach(data.selected, function (selectedPhoto) {
-        selectedUrls.push(selectedPhoto.url)
-      })
-      this.designationContent[photoLocation] = selectedUrls
+      this.designationContent[photoLocation] = (data.selected || []).map(photo => photo.url)
       this.designationPhotos = data.photos
       this.save()
     }, angular.noop)
   }
 
   selectPhoto (photoLocation, selectedPhoto) {
-    let modalOptions = {
+    const modalOptions = {
       templateUrl: photoModalTemplate,
       controller: photoModalController.name,
       controllerAs: '$ctrl',
       resolve: {
-        designationNumber: () => { return this.designationContent.designationNumber },
-        campaignPage: () => { return this.campaignPage },
-        photos: () => { return this.designationPhotos },
-        photoLocation: () => { return photoLocation },
-        selectedPhoto: () => { return selectedPhoto }
+        designationNumber: () => {
+          return this.designationContent.designationNumber
+        },
+        campaignPage: () => {
+          return this.campaignPage
+        },
+        photos: () => {
+          return this.designationPhotos
+        },
+        photoLocation: () => {
+          return photoLocation
+        },
+        selectedPhoto: () => {
+          return selectedPhoto
+        }
       }
     }
     this.$uibModal.open(modalOptions).result.then((data) => {
@@ -224,14 +242,11 @@ class DesignationEditorController {
   }
 
   images () {
-    let carousel = this.designationContent['design-controller'].carousel
-    const imageUrls = []
-    this.getImageUrls(carousel, imageUrls)
-    return imageUrls
+    return this.getImageUrls(this.designationContent['design-controller'].carousel)
   }
 
   editText (field) {
-    let modalOptions = {
+    const modalOptions = {
       templateUrl: textEditorModalTemplate,
       controller: textEditorModalController.name,
       controllerAs: '$ctrl',
@@ -300,15 +315,17 @@ class DesignationEditorController {
     ], this.designationContent.designationType)
   }
 
-  getImageUrls (obj, imageUrls) {
+  getImageUrls (obj) {
+    const imageUrls = []
     Object.keys(obj).forEach(key => {
       if (angular.isObject(obj[key])) {
-        this.getImageUrls(obj[key], imageUrls)
+        imageUrls.push(...this.getImageUrls(obj[key]))
       }
       if (key === 'fileReference') {
         imageUrls.push(obj[key])
       }
     })
+    return imageUrls
   }
 
   carouselLoad () {
