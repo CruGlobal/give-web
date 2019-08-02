@@ -1,6 +1,7 @@
 import angular from 'angular';
 import map from 'lodash/map';
 import toFinite from 'lodash/toFinite';
+import startsWith from 'lodash/startsWith';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
@@ -212,6 +213,30 @@ class DesignationsService {
     return Observable.from(this.$http.get( this.envService.read('apiUrl') + path ))
       .map( ( data ) => {
         return data.data['jcr:content']['facebookPixelId'];
+      });
+  }
+
+  givingLinks(code) {
+    let c = code.split( '' ).slice( 0, 5 ).join( '/' ),
+      path = `/content/give/us/en/designations/${c}/${code}.infinity.json`;
+    return Observable.from(this.$http.get( this.envService.read('apiUrl') + path ))
+      .map( ( data ) => {
+        let givingLinks = [];
+        if ( data.data['jcr:content'] ) {
+          // Map giving links
+          if (data.data['jcr:content'].givingLinks) {
+            angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
+              if (toFinite(k) > 0 || startsWith(k, 'item')) {
+                givingLinks.push({
+                  name: v.name,
+                  url: v.url,
+                  order: toFinite(k) > 0 ? toFinite(k) : Number(k.substring(4))
+                });
+              }
+            });
+          }
+        }
+        return givingLinks;
       });
   }
 }

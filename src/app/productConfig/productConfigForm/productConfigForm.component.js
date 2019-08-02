@@ -33,10 +33,11 @@ const componentName = 'productConfigForm';
 class ProductConfigFormController {
 
   /* @ngInject */
-  constructor( $scope, $log, $filter, designationsService, cartService, commonService, analyticsFactory ) {
+  constructor( $scope, $log, $filter, $window, designationsService, cartService, commonService, analyticsFactory ) {
     this.$scope = $scope;
     this.$log = $log;
     this.$filter = $filter;
+    this.$window = $window;
     this.designationsService = designationsService;
     this.cartService = cartService;
     this.commonService = commonService;
@@ -115,7 +116,12 @@ class ProductConfigFormController {
         this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts);
       });
 
-    Observable.merge(productLookupObservable, nextDrawDateObservable, suggestedAmountsObservable)
+    const givingLinksObservable = this.designationsService.givingLinks(this.code)
+      .do(givingLinks => {
+        this.givingLinks = givingLinks || [];
+      });
+
+    Observable.merge(productLookupObservable, nextDrawDateObservable, suggestedAmountsObservable, givingLinksObservable)
       .subscribe(null,
         error => {
           this.errorLoading = true;
@@ -126,7 +132,13 @@ class ProductConfigFormController {
         () => {
           this.analyticsFactory.giveGiftModal(this.code);
           this.loading = false;
-          this.onStateChange({ state: 'unsubmitted' });
+          // Show givingLinks if they exist and it isn't an edit
+          if(this.givingLinks.length > 0 && !this.isEdit) {
+            this.showGivingLinks = true;
+            this.onStateChange({ state: 'givingLinks' });
+          } else {
+            this.onStateChange({ state: 'unsubmitted' });
+          }
         });
   }
 
@@ -287,6 +299,15 @@ class ProductConfigFormController {
 
   suggestedAmount(amount) {
     return this.$filter('currency')(amount, '$', `${amount}`.indexOf('.') > -1 ? 2 : 0);
+  }
+
+  giveLink(url) {
+    if(typeof url === 'undefined') {
+      this.showGivingLinks = false;
+      this.onStateChange({state: 'unsubmitted'});
+    } else {
+      this.$window.location = url;
+    }
   }
 }
 
