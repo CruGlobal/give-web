@@ -53,7 +53,7 @@ export default angular
       hideCvv: '<',
       mailingAddress: '<',
       defaultPaymentType: '<',
-      hideBankAccountLegalStatement: '<',
+      hidePaymentTypeOptions: '<',
       onPaymentFormStateChange: '&'
     }
   });

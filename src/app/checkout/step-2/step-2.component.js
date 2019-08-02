@@ -119,7 +119,7 @@ export default angular
       hideButtons: '<',
       mailingAddress: '=?',
       defaultPaymentType: '<',
-      hideBankAccountLegalStatement: '<',
+      hidePaymentTypeOptions: '<',
       changeStep: '&',
       onStateChange: '&'
     }
