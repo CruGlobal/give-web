@@ -162,7 +162,7 @@ export default angular
       day: '<',
       donorDetails: '<',
       defaultPaymentType: '<',
-      hideBankAccountLegalStatement: '<',
+      hidePaymentTypeOptions: '<',
       next: '&',
       onPaymentFailed: '&'
     }

@@ -124,7 +124,7 @@ export default angular
       apiUrl: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
-      hideBankAccountLegalStatement: '@',
+      hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',
       onOrderFailed: '&'
     }

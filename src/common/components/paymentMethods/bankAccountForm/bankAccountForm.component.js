@@ -140,7 +140,6 @@ export default angular
     bindings: {
       paymentFormState: '<',
       paymentMethod: '<',
-      onPaymentFormStateChange: '&',
-      hideBankAccountLegalStatement: '<'
+      onPaymentFormStateChange: '&'
     }
   });
