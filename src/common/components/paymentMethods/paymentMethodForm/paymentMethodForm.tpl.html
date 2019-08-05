@@ -26,7 +26,7 @@
   </div>
 </div>
 
-<div class="mb_x" ng-if="!$ctrl.paymentMethod">
+<div class="mb_x" ng-if="!$ctrl.paymentMethod && $ctrl.hidePaymentTypeOptions !== 'true'"">
   <div class="row">
     <div class="col-md-6">
       <button id="addBankAccountButton" class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('bankAccount')" ng-class="{'on': $ctrl.paymentType === 'bankAccount'}">

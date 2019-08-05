@@ -6,7 +6,7 @@ describe( 'sessionModalController', function () {
   beforeEach( angular.mock.module( module.name ) );
   let $ctrl, state;
 
-  beforeEach( inject( function ( $componentController, ) {
+  beforeEach( inject( function ( $componentController ) {
     state = 'sign-in';
     $ctrl = $componentController( module.name, {},
       {

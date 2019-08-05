@@ -13,7 +13,8 @@
       payment-form-error="$ctrl.paymentFormError"
       on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)"
       mailing-address="$ctrl.mailingAddress"
-      default-payment-type="$ctrl.defaultPaymentType">
+      default-payment-type="$ctrl.defaultPaymentType"
+      hide-payment-type-options="$ctrl.hidePaymentTypeOptions">
     </payment-method-form>
   </div>
 
@@ -24,7 +25,8 @@
       on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)"
       on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"
       mailing-address="$ctrl.mailingAddress"
-      default-payment-type="$ctrl.defaultPaymentType">
+      default-payment-type="$ctrl.defaultPaymentType"
+      hide-payment-type-options="$ctrl.hidePaymentTypeOptions">
     </checkout-existing-payment-methods>
   </div>
 </div>
