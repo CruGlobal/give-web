@@ -25,9 +25,6 @@ const designationSecurityResponse = {
   "status": "",
   "pointedToDesignationPath": "",
   "suggestedAmounts": [],
-  "givingLinks": {"jcr:primaryType":"nt:unstructured",
-    "item0": {"jcr:primaryType":"nt:unstructured","url":"https://example.com","name":"Name"}
-  },
   "primaryFirstName": "",
   "primaryMiddleName": "",
   "primaryLastName": "",
@@ -208,34 +205,6 @@ describe( 'Designation Editor', function () {
 
         expect($ctrl.designationContent.parentDesignationNumber).toEqual('000777');
         expect($ctrl.designationContent.facebookPixelId).toEqual('563541681');
-        expect($ctrl.designationContent.suggestedAmounts).toEqual([]);
-      } );
-    });
-
-    describe('personal options modal', () => {
-      let modalPromise;
-      beforeEach(inject((_$q_) => {
-        modalPromise = _$q_.defer();
-        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
-      }));
-
-      it( 'should open modal', () => {
-        $ctrl.designationNumber = '000555';
-        $ctrl.giveDomain = 'https://give.example.com';
-        $ctrl.designationContent = designationSecurityResponse;
-
-        $ctrl.editPersonalOptions();
-
-        expect($ctrl.$uibModal.open).toHaveBeenCalled();
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.giveDomain()).toEqual($ctrl.giveDomain);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.givingLinks()).toEqual(designationSecurityResponse.givingLinks);
-
-        modalPromise.resolve({
-          givingLinks: []
-        });
-        $rootScope.$digest();
-
         expect($ctrl.designationContent.suggestedAmounts).toEqual([]);
       } );
     });
