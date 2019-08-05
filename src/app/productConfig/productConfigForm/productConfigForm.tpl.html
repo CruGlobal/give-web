@@ -22,105 +22,129 @@
     <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.loadData()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
   </div>
 
-  <div class="panel panel-default panel-plain mt" ng-if="!$ctrl.loading && !$ctrl.errorLoading">
+  <div class="panel panel-default panel-plain mt" ng-if="$ctrl.showGivingLinks">
     <div class="panel panel-default give-modal-panel">
-
-      <div ng-if="$ctrl.errorChangingFrequency" class="alert alert-danger" role="alert">
-        <p translate>There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
-      </div>
-
-      <div ng-if="$ctrl.errorSavingGeneric" role="alert" class="alert alert-danger">
-        <p translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
-      </div>
-
-      <div ng-if="$ctrl.errorAlreadyInCart" class="alert alert-warning" role="alert">
-        <p translate>You already have this gift in your cart.</p>
-      </div>
-
       <h4 class="panel-title border-bottom-small" translate>
-        Gift Amount
+        Through which country would you like to give?
       </h4>
       <div class="panel-body pt0">
-        <div ng-if="$ctrl.useSuggestedAmounts">
-          <div class="radio radio-custom-amount"
-               ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
-            <label>
-              <input name="suggestedAmount"
-                     type="radio"
-                     ng-click="$ctrl.changeAmount(suggested.amount)"
-                     ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.amount === suggested.amount">
-              {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
-            </label>
+        <div class="row">
+          <div class="col-xs-6 col-xs-offset-3">
+            <button class="btn btn-block btn-primary"
+                    type="button"
+                    ng-click="$ctrl.giveLink()"
+                    translate>Give through US give site</button>
           </div>
-          <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
-            <div class="form-group">
+          <div class="col-xs-6 col-xs-offset-3 pt-" ng-repeat="link in $ctrl.givingLinks">
+            <button class="btn btn-block btn-default"
+                    type="button"
+                    ng-click="$ctrl.giveLink(link.url)"
+                    translate>Give through {{link.name}} give site</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="!$ctrl.loading && !$ctrl.errorLoading && !$ctrl.showGivingLinks">
+    <div class="panel panel-default panel-plain mt">
+
+        <div ng-if="$ctrl.errorChangingFrequency" class="alert alert-danger" role="alert">
+          <p translate>There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+        </div>
+
+        <div ng-if="$ctrl.errorSavingGeneric" role="alert" class="alert alert-danger">
+          <p translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+        </div>
+
+        <div ng-if="$ctrl.errorAlreadyInCart" class="alert alert-warning" role="alert">
+          <p translate>You already have this gift in your cart.</p>
+        </div>
+
+        <h4 class="panel-title border-bottom-small" translate>
+          Gift Amount
+        </h4>
+        <div class="panel-body pt0">
+          <div ng-if="$ctrl.useSuggestedAmounts">
+            <div class="radio radio-custom-amount"
+                 ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
               <label>
                 <input name="suggestedAmount"
                        type="radio"
-                       ng-checked="$ctrl.customInputActive">
-                <input class="form-control form-control-subtle"
-                       name="amount"
-                       type="text"
-                       step="1"
-                       tabindex="-1"
-                       ng-model="$ctrl.customAmount"
-                       ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
-                       ng-focus="$ctrl.customInputActive = true;"
-                       ng-required="$ctrl.customInputActive"
-                       placeholder="{{'Other' | translate}}">
+                       ng-click="$ctrl.changeAmount(suggested.amount)"
+                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.amount === suggested.amount">
+                {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
               </label>
-              <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
-                   ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-                <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
-                <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
-                <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
-                <div class="help-block" ng-message="maximum" translate>
-                  Amount must be less than {{ 10000000 | currency }}
+            </div>
+            <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
+              <div class="form-group">
+                <label>
+                  <input name="suggestedAmount"
+                         type="radio"
+                         ng-checked="$ctrl.customInputActive">
+                  <input class="form-control form-control-subtle"
+                         name="amount"
+                         type="text"
+                         step="1"
+                         tabindex="-1"
+                         ng-model="$ctrl.customAmount"
+                         ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                         ng-focus="$ctrl.customInputActive = true;"
+                         ng-required="$ctrl.customInputActive"
+                         placeholder="{{'Other' | translate}}">
+                </label>
+                <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                     ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+                  <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
+                  <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+                  <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+                  <div class="help-block" ng-message="maximum" translate>
+                    Amount must be less than {{ 10000000 | currency }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div data-toggle="buttons"
-             ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
-             ng-if="!$ctrl.useSuggestedAmounts">
-          <label class="btn btn-radio"
-                 ng-click="$ctrl.changeAmount(a)"
-                 ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
-                 ng-repeat-start="a in $ctrl.selectableAmounts">
-            <span class="number">&dollar;{{a}}</span>
-          </label>
-          <span ng-repeat-end></span>
-          <label
-            ng-class="{active: $ctrl.customInputActive}"
-            class="btn btn-default-form u-textLeft custom-amount">
-            <div class="form-group form-group-default u-inline">
-              <input class="form-control form-control-subtle number"
-                     name="amount"
-                     type="text"
-                     step="1"
-                     ng-required="$ctrl.customInputActive"
-                     ng-model="$ctrl.customAmount"
-                     ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
-                     ng-focus="$ctrl.customInputActive = true;"
-                     tabindex="-1"
-                     placeholder="{{'Other' | translate}}"
-                     required>
-            </div>
-          </label>
-          <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
-               ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-            <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
-            <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
-            <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
-            <div class="help-block" ng-message="maximum" translate>
-              Amount must be less than {{ 10000000 | currency }}
+          <div data-toggle="buttons"
+               ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
+               ng-if="!$ctrl.useSuggestedAmounts">
+            <label class="btn btn-radio"
+                   ng-click="$ctrl.changeAmount(a)"
+                   ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
+                   ng-repeat-start="a in $ctrl.selectableAmounts">
+              <span class="number">${{a}}</span>
+            </label>
+            <span ng-repeat-end></span>
+            <label
+              ng-class="{active: $ctrl.customInputActive}"
+              class="btn btn-default-form u-textLeft custom-amount">
+              <div class="form-group form-group-default u-inline">
+                <input class="form-control form-control-subtle number"
+                       name="amount"
+                       type="text"
+                       step="1"
+                       ng-required="$ctrl.customInputActive"
+                       ng-model="$ctrl.customAmount"
+                       ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                       ng-focus="$ctrl.customInputActive = true;"
+                       tabindex="-1"
+                       placeholder="{{'Other' | translate}}"
+                       required>
+              </div>
+            </label>
+            <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                 ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+              <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
+              <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+              <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+              <div class="help-block" ng-message="maximum" translate>
+                Amount must be less than {{ 10000000 | currency }}
+              </div>
             </div>
           </div>
-        </div>
-      </div><!-- // panel-body -->
-    </div><!-- // panel -->
+        </div><!-- // panel-body -->
+      </div><!-- // panel -->
     <div class="panel panel-default give-modal-panel">
       <h4 class="panel-title border-bottom-small mt" translate>
         Gift Frequency

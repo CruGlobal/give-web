@@ -115,9 +115,11 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.commonService, 'getNextDrawDate').mockReturnValue(Observable.of('2016-10-02'))
 
       jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 5 }, { amount: 10 }]))
+
+      jest.spyOn($ctrl.designationsService, 'givingLinks').mockReturnValue(Observable.of([]))
     })
 
-    it('should get productData, nextDrawDate, and suggestedAmounts', () => {
+    it('should get productData, nextDrawDate, suggestedAmounts and givingLinks', () => {
       $ctrl.loadData()
 
       expect($ctrl.showRecipientComments).toEqual(false)
@@ -134,6 +136,8 @@ describe('product config form component', function () {
       expect($ctrl.suggestedAmounts).toEqual([{ amount: 5 }, { amount: 10 }])
       expect($ctrl.useSuggestedAmounts).toEqual(true)
 
+      expect($ctrl.givingLinks).toEqual([])
+
       expect($ctrl.loading).toEqual(false)
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' })
     })
@@ -141,8 +145,20 @@ describe('product config form component', function () {
     it('should not use suggested amounts if they are not provided', () => {
       $ctrl.designationsService.suggestedAmounts.mockReturnValue(Observable.of([]))
       $ctrl.loadData()
-
       expect($ctrl.useSuggestedAmounts).toEqual(false)
+    })
+
+    it('should show givingLinks if present', () => {
+      $ctrl.designationsService.givingLinks.mockReturnValue(Observable.of([{
+        name: 'Name',
+        url: 'http://example.com'
+      }]))
+      $ctrl.loadData()
+      expect($ctrl.givingLinks).toEqual([{ name: 'Name', url: 'http://example.com' }])
+
+      expect($ctrl.loading).toEqual(false)
+      expect($ctrl.showGivingLinks).toEqual(true)
+      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'givingLinks' })
     })
 
     it('should handle an error loading data', () => {
@@ -502,6 +518,21 @@ describe('product config form component', function () {
       expect($ctrl.suggestedAmount(123.4)).toEqual('$123.40')
       expect($ctrl.suggestedAmount(123)).toEqual('$123')
       expect($ctrl.suggestedAmount(1234)).toEqual('$1,234')
+    })
+  })
+
+  describe('giveLink( url )', () => {
+    beforeEach(() => {
+      $ctrl.showGivingLinks = true
+    })
+    it('should proceed to product config', () => {
+      $ctrl.giveLink()
+      expect($ctrl.showGivingLinks).toEqual(false)
+      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' })
+    })
+    it('should navigate to other giving link', () => {
+      $ctrl.giveLink('https://example.com')
+      expect($ctrl.$window.location).toEqual('https://example.com')
     })
   })
 })

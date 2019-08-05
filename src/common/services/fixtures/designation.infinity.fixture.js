@@ -13,6 +13,10 @@ export default {
     'cq:template': '/apps/Give/templates/campaign',
     secondaryPhoto: '/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg',
     psText: '',
+    givingLinks: {
+      'jcr:primaryType': 'nt:unstructured',
+      item0: { 'jcr:primaryType': 'nt:unstructured', url: 'https://example.com', name: 'Name' }
+    },
     organizationId: '1-103-1',
     parentDesignationNumber: '',
     paragraphText: '<p>Sample Text</p>',

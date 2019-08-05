@@ -25,6 +25,10 @@ const designationSecurityResponse = {
   status: '',
   pointedToDesignationPath: '',
   suggestedAmounts: [],
+  givingLinks: {
+    'jcr:primaryType': 'nt:unstructured',
+    item0: { 'jcr:primaryType': 'nt:unstructured', url: 'https://example.com', name: 'Name' }
+  },
   primaryFirstName: '',
   primaryMiddleName: '',
   primaryLastName: '',
@@ -145,8 +149,16 @@ describe('Designation Editor', function () {
 
     it('should log an error if content fails', () => {
       $ctrl.designationNumber = '0123456'
-      jest.spyOn($ctrl.designationEditorService, 'getContent').mockImplementation(() => { const p = $q.defer(); p.reject('some error'); return p.promise })
-      jest.spyOn($ctrl.designationEditorService, 'getPhotos').mockImplementation(() => { const p = $q.defer(); p.resolve({}); return p.promise })
+      jest.spyOn($ctrl.designationEditorService, 'getContent').mockImplementation(() => {
+        const p = $q.defer()
+        p.reject('some error')
+        return p.promise
+      })
+      jest.spyOn($ctrl.designationEditorService, 'getPhotos').mockImplementation(() => {
+        const p = $q.defer()
+        p.resolve({})
+        return p.promise
+      })
       $ctrl.getDesignationContent()
       $rootScope.$digest()
 
@@ -212,6 +224,34 @@ describe('Designation Editor', function () {
 
         expect($ctrl.designationContent.parentDesignationNumber).toEqual('000777')
         expect($ctrl.designationContent.facebookPixelId).toEqual('563541681')
+        expect($ctrl.designationContent.suggestedAmounts).toEqual([])
+      })
+    })
+
+    describe('personal options modal', () => {
+      let modalPromise
+      beforeEach(inject((_$q_) => {
+        modalPromise = _$q_.defer()
+        jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: modalPromise.promise })
+      }))
+
+      it('should open modal', () => {
+        $ctrl.designationNumber = '000555'
+        $ctrl.giveDomain = 'https://give.example.com'
+        $ctrl.designationContent = designationSecurityResponse
+
+        $ctrl.editPersonalOptions()
+
+        expect($ctrl.$uibModal.open).toHaveBeenCalled()
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.giveDomain()).toEqual($ctrl.giveDomain)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.givingLinks()).toEqual(designationSecurityResponse.givingLinks)
+
+        modalPromise.resolve({
+          givingLinks: []
+        })
+        $rootScope.$digest()
+
         expect($ctrl.designationContent.suggestedAmounts).toEqual([])
       })
     })

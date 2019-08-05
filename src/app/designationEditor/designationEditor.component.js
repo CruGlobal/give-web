@@ -5,12 +5,16 @@ import find from 'lodash/find'
 import includes from 'lodash/includes'
 
 import commonModule from 'common/common.module'
-import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
+import sessionEnforcerService, {
+  EnforcerCallbacks,
+  EnforcerModes
+} from 'common/services/session/sessionEnforcer.service'
 import sessionService, { Roles } from 'common/services/session/session.service'
 import designationEditorService from 'common/services/api/designationEditor.service'
 
 import titleModalController from './titleModal/title.modal'
 import pageOptionsModalController from './pageOptionsModal/pageOptions.modal'
+import personalOptionsModalController from './personalOptionsModal/personalOptions.modal'
 import photoModalController from './photoModal/photo.modal'
 import textEditorModalController from './textEditorModal/textEditor.modal'
 import websiteModalController from './websiteModal/website.modal'
@@ -18,6 +22,7 @@ import websiteModalController from './websiteModal/website.modal'
 import template from './designationEditor.tpl.html'
 import titleModalTemplate from './titleModal/titleModal.tpl.html'
 import pageOptionsModalTemplate from './pageOptionsModal/pageOptionsModal.tpl.html'
+import personalOptionsModalTemplate from './personalOptionsModal/personalOptionsModal.tpl.html'
 import photoModalTemplate from './photoModal/photoModal.tpl.html'
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html'
 import websiteModalTemplate from './websiteModal/websiteModal.tpl.html'
@@ -36,6 +41,7 @@ class DesignationEditorController {
 
     this.imgDomain = envService.read('imgDomain')
     this.imgDomainDesignation = envService.read('imgDomainDesignation')
+    this.giveDomain = envService.read('publicGive')
 
     this.$location = $location
     this.$q = $q
@@ -138,6 +144,24 @@ class DesignationEditorController {
         this.designationContent.parentDesignationNumber = data.parentDesignationNumber
         this.designationContent.suggestedAmounts = data.suggestedAmounts
         this.designationContent.facebookPixelId = data.facebookPixelId
+        this.save()
+      }, angular.noop)
+  }
+
+  editPersonalOptions () {
+    const modalOptions = {
+      templateUrl: personalOptionsModalTemplate,
+      controller: personalOptionsModalController.name,
+      controllerAs: '$ctrl',
+      resolve: {
+        giveDomain: () => { return this.giveDomain },
+        designationNumber: () => { return this.designationNumber },
+        givingLinks: () => { return this.designationContent.givingLinks }
+      }
+    }
+    this.$uibModal.open(modalOptions).result
+      .then((data) => {
+        this.designationContent.givingLinks = data.givingLinks
         this.save()
       }, angular.noop)
   }
@@ -247,6 +271,7 @@ export default angular
     designationEditorService.name,
     titleModalController.name,
     pageOptionsModalController.name,
+    personalOptionsModalController.name,
     photoModalController.name,
     textEditorModalController.name,
     websiteModalController.name
