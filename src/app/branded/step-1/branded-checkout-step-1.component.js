@@ -162,7 +162,6 @@ export default angular
       day: '<',
       donorDetails: '<',
       defaultPaymentType: '<',
-      hidePaymentTypeOptions: '<',
       next: '&',
       onPaymentFailed: '&'
     }

@@ -90,7 +90,6 @@ class ExistingPaymentMethodsController {
         disableCardNumber: !!existingPaymentMethod && !existingPaymentMethod['from-current-order'],
         mailingAddress: this.mailingAddress,
         defaultPaymentType: () => this.defaultPaymentType,
-        hidePaymentTypeOptions: () => this.hidePaymentTypeOptions,
         onPaymentFormStateChange: () => param => {
           param.$event.stayOnStep = true;
           param.$event.update = !!existingPaymentMethod;
@@ -144,7 +143,6 @@ export default angular
       paymentFormError: '<',
       mailingAddress: '<',
       defaultPaymentType: '<',
-      hidePaymentTypeOptions: '<',
       onPaymentFormStateChange: '&',
       onLoad: '&'
     }
