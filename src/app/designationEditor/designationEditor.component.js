@@ -156,12 +156,15 @@ class DesignationEditorController {
       resolve: {
         giveDomain: () => { return this.giveDomain },
         designationNumber: () => { return this.designationNumber },
-        givingLinks: () => { return this.designationContent.givingLinks }
+        designationType: () => { return this.designationContent.designationType },
+        givingLinks: () => { return this.designationContent.givingLinks },
+        showNewsletterForm: () => { return this.designationContent.showNewsletterForm }
       }
     }
     this.$uibModal.open(modalOptions).result
       .then((data) => {
         this.designationContent.givingLinks = data.givingLinks
+        this.designationContent.showNewsletterForm = data.showNewsletterForm
         this.save()
       }, angular.noop)
   }

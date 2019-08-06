@@ -6,9 +6,11 @@ const controllerName = 'personalOptionsCtrl'
 
 class ModalInstanceCtrl {
   /* @ngInject */
-  constructor (designationNumber, giveDomain, givingLinks) {
+  constructor (designationNumber, designationType, giveDomain, givingLinks, showNewsletterForm) {
     this.designationNumber = designationNumber
+    this.designationType = designationType
     this.giveDomain = giveDomain
+    this.showNewsletterForm = showNewsletterForm
 
     this.givingLinks = transform(givingLinks, (result, value, key) => {
       if (key === 'jcr:primaryType') { return }
@@ -19,6 +21,8 @@ class ModalInstanceCtrl {
       })
     }, [])
     this.givingLinks = sortBy(this.givingLinks, 'order')
+
+    this.tab = 'newsletter'
   }
 
   transformGivingLinks () {

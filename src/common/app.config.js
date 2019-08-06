@@ -9,7 +9,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
   envServiceProvider.config({
     domains: {
       development: ['localhost', 'localhost.cru.org', 'cru-givedev.s3-website-us-east-1.amazonaws.com'],
-      staging: ['give-stage2.cru.org', 'stage.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org', 'uatdisp.aws.cru.org'],
+      staging: ['give-stage2.cru.org', 'stage.cru.org', 'dev.aws.cru.org', 'devauth.aws.cru.org', 'devpub.aws.cru.org', 'uatauth.aws.cru.org', 'uatpub.aws.cru.org', 'uatdisp.aws.cru.org', 'cru-givestage.s3-website-us-east-1.amazonaws.com'],
       production: []
     },
     vars: {

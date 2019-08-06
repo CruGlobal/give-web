@@ -11,10 +11,13 @@ describe('Designation Editor Personal Options', function () {
 
     $ctrl = $controller(module.name, {
       designationNumber: '000555',
+      designationType: 'Staff',
       giveDomain: 'https://give.cru.org',
-      givingLinks: { 'jcr:primaryType': 'nt:unstructured',
+      givingLinks: {
+        'jcr:primaryType': 'nt:unstructured',
         1: { 'jcr:primaryType': 'nt:unstructured', url: 'https://example.com', name: 'Name' }
       },
+      showNewsletterForm: true,
       $scope: $scope
     })
   }))
@@ -25,7 +28,9 @@ describe('Designation Editor Personal Options', function () {
 
   it('to define modal resolves', function () {
     expect($ctrl.designationNumber).toEqual('000555')
+    expect($ctrl.designationType).toEqual('Staff')
     expect($ctrl.givingLinks).toEqual([{ name: 'Name', url: 'https://example.com', order: 1 }])
+    expect($ctrl.showNewsletterForm).toEqual(true)
   })
 
   it('transforms giving links', function () {

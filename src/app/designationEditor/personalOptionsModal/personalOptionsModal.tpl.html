@@ -1,9 +1,13 @@
 <div class="modal-body">
   <form name="personalForm">
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" ng-init="$ctrl.tab = 'givingLinks'">
+    <ul class="nav nav-tabs">
       <li ng-class="{'active': $ctrl.tab === 'givingLinks'}">
-        <a href="" ng-click="$ctrl.tab = 'givingLinks'">
+        <a href="" ng-click="$ctrl.tab = 'newsletter'">
+          Newsletter <span class="xs-hide">Form</span>
+        </a>
+        <a href="" ng-click="$ctrl.tab = 'givingLinks'"
+           ng-if="$ctrl.designationType === 'National Staff'">
           Giving Links
         </a>
       </li>
@@ -11,7 +15,9 @@
 
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane active" ng-if="$ctrl.tab === 'givingLinks'">
+      <div class="tab-pane"
+           ng-class="{active: $ctrl.tab === 'givingLinks'}"
+           ng-if="$ctrl.tab === 'givingLinks' && $ctrl.designationType === 'National Staff'">
         <div class="form-group">
           <span class="help-block">Setup additional country giving links.</span>
         </div>
@@ -65,7 +71,15 @@
           </tfoot>
         </table>
       </div>
-
+      <div class="tab-pane"
+           ng-class="{active: $ctrl.tab === 'newsletter'}"
+           ng-if="$ctrl.tab === 'newsletter'">
+        <div class="form-group">
+          <label>
+            <input type="checkbox" ng-checked="$ctrl.showNewsletterForm" /> Display Newsletter Sign Up Form.
+          </label>
+        </div>
+      </div>
     </div>
   </form>
 </div>
