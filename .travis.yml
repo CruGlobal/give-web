@@ -2,7 +2,7 @@ language: node_js
 node_js: "8"
 script:
   - yarn run test -- --single-run
-  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "dev" ]); then yarn run build; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "staging" ]); then yarn run build; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 cache:
@@ -17,18 +17,18 @@ deploy:
   - provider: s3
     access_key_id: $AWS_KEY
     secret_access_key: $AWS_SECRET
-    bucket: cru-givedev
+    bucket: cru-givestage
     acl: public_read
     cache_control: "max-age=300"
     local-dir: dist
     skip_cleanup: true
     on:
-      branch: dev
+      branch: staging
 
   - provider: s3
     access_key_id: $AWS_KEY
     secret_access_key: $AWS_SECRET
-    bucket: cru-givestage
+    bucket: cru-givepreprod
     acl: public_read
     cache_control: "max-age=3600"
     local-dir: dist
