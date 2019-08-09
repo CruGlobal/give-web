@@ -31,12 +31,13 @@
     "textangularjs": "^2.1.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.5.5",
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/runtime": "^7.4.5",
     "angular-mocks": "^1.7.8",
     "babel-eslint": "^10.0.2",
+    "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-angularjs-annotate": "^0.10.0",
     "copy-webpack-plugin": "^5.0.3",
@@ -50,14 +51,7 @@
     "istanbul-instrumenter-loader": "^3.0.1",
     "jasmine-core": "^3.4.0",
     "jasmine-promise-matchers": "^2.6.0",
-    "karma": "^4.1.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-coverage-istanbul-reporter": "^2.0.5",
-    "karma-jasmine": "^2.0.1",
-    "karma-mocha-reporter": "^2.2.5",
-    "karma-phantomjs-launcher": "^1.0.4",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^4.0.2",
+    "jest": "^24.8.0",
     "mini-css-extract-plugin": "^0.7.0",
     "ng-annotate-loader": "^0.6.1",
     "ngtemplate-loader": "^2.0.1",
@@ -75,7 +69,25 @@
     "start": "webpack-dev-server",
     "build": "webpack -p",
     "build:analyze": "webpack -p --env.analyze",
-    "test": "karma start",
+    "test": "jest",
     "lint": "eslint 'src/**/*.js'"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*,js"
+    ],
+    "clearMocks": true,
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest/setup.js"
+    ],
+    "modulePaths": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.js?$": "babel-jest",
+      "^.+\\.html$": "<rootDir>/jest/htmlTransform.js"
+    },
+    "verbose": true
   }
 }
