@@ -7,6 +7,9 @@ import template from './paymentMethodList.tpl.html'
 const componentName = 'step0PaymentMethodList'
 
 class PaymentMethodListController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
+
   $onInit () {
     // Select the first payment method
     this.selectedPaymentMethod = this.paymentMethods[0]

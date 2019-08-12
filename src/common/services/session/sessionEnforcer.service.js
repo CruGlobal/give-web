@@ -21,9 +21,9 @@ export const EnforcerModes = {
   donor: 'donor'
 }
 
-/* @ngInject */
 function SessionEnforcerService (orderService, sessionService, sessionModalService) {
-  const enforcers = {}; let modal
+  const enforcers = {}
+  let modal
 
   /**
    * Enforces Session and or Donor account
@@ -154,4 +154,4 @@ export default angular
     sessionService.name,
     sessionModalService.name
   ])
-  .factory(serviceName, SessionEnforcerService)
+  .factory(serviceName, [orderService.name, sessionService.name, sessionModalService.name, SessionEnforcerService])

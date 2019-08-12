@@ -6,6 +6,7 @@ import defaults from 'lodash/defaults'
 import { startMonth, startDate } from 'common/services/giftHelpers/giftDates.service'
 
 export default class RecurringGiftModel {
+  /* @ngInject */
   constructor (gift, parentDonation) {
     this.gift = gift
     this.parentDonation = parentDonation

@@ -8,6 +8,9 @@ import template from './selectRecentRecipients.tpl.html'
 const componentName = 'step1SelectRecentRecipients'
 
 class SelectRecentRecipientsController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
+
   gatherSelections (search) {
     this.next({ selectedRecipients: filter(this.recentRecipients, { _selectedGift: true }), search: search })
   }

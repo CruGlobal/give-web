@@ -2,7 +2,7 @@ language: node_js
 node_js: "8"
 script:
   - yarn lint
-  - yarn test --single-run
+  - yarn test
   - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "staging" ]); then yarn run build; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash)

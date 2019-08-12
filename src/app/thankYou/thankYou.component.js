@@ -10,6 +10,8 @@ import template from './thankYou.tpl.html'
 const componentName = 'thankYou'
 
 class ThankYouController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular

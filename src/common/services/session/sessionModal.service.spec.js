@@ -199,7 +199,7 @@ describe('sessionModalService module config', () => {
   })
 
   it('config to register \'reset-password\' modal', inject(function () {
-    expect(modalStateServiceProvider.registerModal).toHaveBeenCalledWith('reset-password', ['sessionModalService', expect.any(Function)])
+    expect(modalStateServiceProvider.registerModal).toHaveBeenCalledWith('reset-password', expect.any(Function))
   }))
 
   describe('invoke \'reset-password\' modal function', () => {
