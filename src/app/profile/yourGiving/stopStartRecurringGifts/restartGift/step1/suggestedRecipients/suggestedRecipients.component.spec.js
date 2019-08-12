@@ -11,7 +11,7 @@ describe( 'your giving', () => {
           let $ctrl;
 
           beforeEach( inject( ( $componentController ) => {
-            $ctrl = $componentController( module.name, {}, jasmine.createSpyObj( 'bindings', ['next', 'previous'] ) );
+            $ctrl = $componentController( module.name, {}, {next: jest.fn(), previous: jest.fn()} );
           } ) );
 
           it( 'is defined', () => {
@@ -27,6 +27,7 @@ describe( 'your giving', () => {
               $ctrl.gifts[0]._selectedGift = true;
               $ctrl.gifts[2]._selectedGift = false;
               $ctrl.selectRecipients();
+
               expect( $ctrl.next ).toHaveBeenCalledWith( {
                 selected: [{gift: 1, _selectedGift: true}]
               } );

@@ -8,7 +8,7 @@ describe( 'userMatchQuestion', function () {
 
   beforeEach( inject( function ( _$componentController_ ) {
     bindings = {
-      onQuestionAnswer: jasmine.createSpy( 'onQuestionAnswer' ),
+      onQuestionAnswer: jest.fn(),
       questionForm:     {$valid: false},
       question:         {key: 'key'},
       answer:           {answer: 'answer'}
@@ -25,6 +25,7 @@ describe( 'userMatchQuestion', function () {
     describe( 'invalid form', () => {
       it( 'sets hasError', () => {
         $ctrl.selectAnswer();
+
         expect( $ctrl.hasError ).toEqual( true );
         expect( $ctrl.onQuestionAnswer ).not.toHaveBeenCalled();
         expect( $ctrl.answer ).toEqual({answer: 'answer'});
@@ -34,8 +35,10 @@ describe( 'userMatchQuestion', function () {
     describe( 'valid form', () => {
       it( 'submits the answer', () => {
         $ctrl.questionForm.$valid = true;
+
         expect( $ctrl.answer ).toEqual({answer: 'answer'});
         $ctrl.selectAnswer();
+
         expect( $ctrl.onQuestionAnswer ).toHaveBeenCalledWith( {key: 'key', answer: 'answer'} );
         expect( $ctrl.answer ).toBeUndefined();
       } );

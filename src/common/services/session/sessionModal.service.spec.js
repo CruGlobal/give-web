@@ -11,7 +11,7 @@ describe( 'sessionModalService', function () {
     sessionModalService = _sessionModalService_;
     $uibModal = _$uibModal_;
     // Spy On $uibModal.open and return mock object
-    spyOn( $uibModal, 'open' ).and.callFake( () => {
+    jest.spyOn( $uibModal, 'open' ).mockImplementation( () => {
       return {
         result: {finally: angular.noop, then: angular.noop},
         dismiss: angular.noop,
@@ -32,16 +32,18 @@ describe( 'sessionModalService', function () {
 
     it( 'should open \'sign-in\' by default', () => {
       let modal = sessionModalService.open();
+
       expect( $uibModal.open ).toHaveBeenCalled();
-      expect( $uibModal.open.calls.count() ).toEqual( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'sign-in' );
+      expect( $uibModal.open.mock.calls.length ).toEqual( 1 );
+      expect( $uibModal.open.mock.calls[0][0].resolve.state() ).toEqual( 'sign-in' );
       expect( modal ).toEqual( sessionModalService.currentModal() );
     } );
 
     it( 'should allow options', () => {
       sessionModalService.open( 'sign-up', {backdrop: false, keyboard: false} );
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {backdrop: false, keyboard: false} ) );
+      expect( $uibModal.open ).toHaveBeenCalledWith( expect.objectContaining( {backdrop: false, keyboard: false} ) );
     } );
 
     describe( 'modal opens', () => {
@@ -50,8 +52,8 @@ describe( 'sessionModalService', function () {
         $rootScope = _$rootScope_;
         deferred = _$q_.defer();
         analyticsFactory = _analyticsFactory_;
-        spyOn(analyticsFactory, 'track');
-        $uibModal.open.and.returnValue({result: {finally: angular.noop, then: angular.noop}, opened: deferred.promise});
+        jest.spyOn(analyticsFactory, 'track').mockImplementation(() => {});
+        $uibModal.open.mockReturnValue({result: {finally: angular.noop, then: angular.noop}, opened: deferred.promise});
       }));
 
       it( 'sends analytics event', ( ) => {
@@ -60,6 +62,7 @@ describe( 'sessionModalService', function () {
         });
         deferred.resolve();
         $rootScope.$digest();
+
         expect( analyticsFactory.track ).toHaveBeenCalledWith( 'eventA' );
       } );
     }) ;
@@ -71,15 +74,16 @@ describe( 'sessionModalService', function () {
         modalStateService = _modalStateService_;
         deferred = _$q_.defer();
         analyticsFactory = _analyticsFactory_;
-        spyOn( modalStateService, 'name' );
-        spyOn( analyticsFactory, 'track' );
-        $uibModal.open.and.returnValue( {result: deferred.promise} );
+        jest.spyOn( modalStateService, 'name' ).mockImplementation(() => {});
+        jest.spyOn( analyticsFactory, 'track' ).mockImplementation(() => {});
+        $uibModal.open.mockReturnValue( {result: deferred.promise} );
       } ) );
 
       it( 'removes modal name', () => {
         sessionModalService.open();
         deferred.resolve();
         $rootScope.$digest();
+
         expect( modalStateService.name ).toHaveBeenCalledWith( null );
         expect( analyticsFactory.track ).not.toHaveBeenCalled( );
       } );
@@ -90,6 +94,7 @@ describe( 'sessionModalService', function () {
         });
         deferred.reject();
         $rootScope.$digest();
+
         expect( analyticsFactory.track ).toHaveBeenCalledWith( 'eventA' );
       } );
     } );
@@ -97,6 +102,7 @@ describe( 'sessionModalService', function () {
     it( 'should only allow 1 modal at a time', () => {
       sessionModalService.open();
       let result = sessionModalService.open();
+
       expect( result ).toEqual( false );
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
     } );
@@ -104,6 +110,7 @@ describe( 'sessionModalService', function () {
     it( 'can replace existing modal', () => {
       let modalA = sessionModalService.open();
       let modalB = sessionModalService.open( 'sign-up', {}, true );
+
       expect( sessionModalService.currentModal() ).not.toEqual( modalA );
       expect( sessionModalService.currentModal() ).toEqual( modalB );
     } );
@@ -112,62 +119,70 @@ describe( 'sessionModalService', function () {
   describe( 'signIn', () => {
     it( 'should open signIn modal', () => {
       sessionModalService.signIn();
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'sign-in' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.state() ).toEqual( 'sign-in' );
     } );
 
     it( 'should open signIn modal with last purchase id', () => {
       sessionModalService.signIn('gxwpz=');
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.lastPurchaseId() ).toEqual( 'gxwpz=' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.lastPurchaseId() ).toEqual( 'gxwpz=' );
     } );
   } );
 
   describe( 'signUp', () => {
     it( 'should open signUp modal', () => {
       sessionModalService.signUp();
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'sign-up' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.state() ).toEqual( 'sign-up' );
     } );
   } );
 
   describe( 'forgotPassword', () => {
     it( 'should open forgotPassword modal', () => {
       sessionModalService.forgotPassword();
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'forgot-password' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.state() ).toEqual( 'forgot-password' );
     } );
   } );
 
   describe( 'resetPassword', () => {
     it( 'should open resetPassword modal', () => {
       sessionModalService.resetPassword();
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'reset-password' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.state() ).toEqual( 'reset-password' );
     } );
   } );
 
   describe( 'userMatch', () => {
     it( 'should open userMatch modal', () => {
       sessionModalService.userMatch();
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'user-match' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.state() ).toEqual( 'user-match' );
     } );
   } );
 
   describe( 'contactInfo', () => {
     it( 'should open contactInfo modal', () => {
       sessionModalService.contactInfo();
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'contact-info' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.state() ).toEqual( 'contact-info' );
     } );
   } );
 
   describe( 'registerAccount', () => {
     it( 'should open registerAccount modal', () => {
       sessionModalService.registerAccount();
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.state() ).toEqual( 'register-account' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.state() ).toEqual( 'register-account' );
     } );
   } );
 } );
@@ -178,13 +193,13 @@ describe( 'sessionModalService module config', () => {
   beforeEach( () => {
     angular.mock.module( modalStateModule.name, function ( _modalStateServiceProvider_ ) {
       modalStateServiceProvider = _modalStateServiceProvider_;
-      spyOn( modalStateServiceProvider, 'registerModal' );
+      jest.spyOn( modalStateServiceProvider, 'registerModal' ).mockImplementation(() => {});
     } );
     angular.mock.module( module.name );
   } );
 
   it( 'config to register \'reset-password\' modal', inject( function () {
-    expect( modalStateServiceProvider.registerModal ).toHaveBeenCalledWith( 'reset-password', jasmine.any( Function ) );
+    expect( modalStateServiceProvider.registerModal ).toHaveBeenCalledWith( 'reset-password', ['sessionModalService', expect.any( Function )] );
   } ) );
 
   describe( 'invoke \'reset-password\' modal function', () => {
@@ -193,12 +208,13 @@ describe( 'sessionModalService module config', () => {
     beforeEach( inject( function ( _sessionModalService_, _$injector_ ) {
       sessionModalService = _sessionModalService_;
       $injector = _$injector_;
-      spyOn( sessionModalService, 'resetPassword' );
+      jest.spyOn( sessionModalService, 'resetPassword' ).mockImplementation(() => {});
     } ) );
 
     it( 'calls sessionModalService.resetPassword()', () => {
-      let fn = modalStateServiceProvider.registerModal.calls.argsFor( 0 )[1];
+      let fn = modalStateServiceProvider.registerModal.mock.calls[0][1];
       $injector.invoke( fn );
+
       expect( sessionModalService.resetPassword ).toHaveBeenCalled();
     } );
   } );

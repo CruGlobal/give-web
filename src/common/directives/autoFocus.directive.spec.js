@@ -16,10 +16,11 @@ describe( 'autoFocus', function () {
     let $scope = $rootScope.$new(),
       rawEl = angular.element('<input auto-focus>');
 
-    spyOn(rawEl[0], 'focus');
+    jest.spyOn(rawEl[0], 'focus').mockImplementation(() => {});
     $compile(rawEl)($scope);
 
     $timeout.flush();
+
     expect(rawEl[0].focus).toHaveBeenCalled();
   } );
 } );

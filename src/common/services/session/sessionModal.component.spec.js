@@ -14,8 +14,8 @@ describe( 'sessionModalController', function () {
           state: state,
           lastPurchaseId: '<some id>'
         },
-        close: jasmine.createSpy('dismiss'),
-        dismiss: jasmine.createSpy('dismiss')
+        close: jest.fn(),
+        dismiss: jest.fn()
       });
   } ) );
 
@@ -23,6 +23,7 @@ describe( 'sessionModalController', function () {
     it('should initialize the component state', () => {
       expect( $ctrl.isLoading ).toEqual( false );
       $ctrl.$onInit();
+
       expect( $ctrl.state ).toEqual( 'sign-in' );
       expect( $ctrl.lastPurchaseId ).toEqual( '<some id>' );
     });
@@ -30,13 +31,15 @@ describe( 'sessionModalController', function () {
 
   describe( '$ctrl.stateChanged', () => {
     it('should scroll to the top of the modal', () => {
-      spyOn($ctrl, 'scrollModalToTop');
+      jest.spyOn($ctrl, 'scrollModalToTop').mockImplementation(() => {});
       $ctrl.stateChanged();
+
       expect($ctrl.scrollModalToTop).toHaveBeenCalled();
     });
 
     it( 'should update state', () => {
       $ctrl.stateChanged( 'sign-up' );
+
       expect( $ctrl.state ).toEqual( 'sign-up' );
     } );
   } );
@@ -44,6 +47,7 @@ describe( 'sessionModalController', function () {
   describe( '$ctrl.onSignInSuccess', () => {
     it( 'should close modal', () => {
       $ctrl.onSignInSuccess();
+
       expect( $ctrl.close ).toHaveBeenCalled();
     } );
   } );
@@ -51,6 +55,7 @@ describe( 'sessionModalController', function () {
   describe( '$ctrl.onSignUpSuccess', () => {
     it( 'should close modal', () => {
       $ctrl.onSignUpSuccess();
+
       expect( $ctrl.close ).toHaveBeenCalled();
     } );
   } );
@@ -58,6 +63,7 @@ describe( 'sessionModalController', function () {
   describe( '$ctrl.onFailure', () => {
     it( 'should dismiss modal with \'error\'', () => {
       $ctrl.onFailure();
+
       expect( $ctrl.dismiss ).toHaveBeenCalledWith({ $value: 'error' });
     } );
   } );
@@ -65,6 +71,7 @@ describe( 'sessionModalController', function () {
   describe( '$ctrl.onCancel', () => {
     it( 'should dismiss modal with \'cancel\'', () => {
       $ctrl.onCancel();
+
       expect( $ctrl.dismiss ).toHaveBeenCalledWith({ $value: 'cancel' });
     } );
   } );
@@ -73,6 +80,7 @@ describe( 'sessionModalController', function () {
     it( 'should set isLoading', () => {
       expect( $ctrl.isLoading ).toEqual( false );
       $ctrl.setLoading( true );
+
       expect( $ctrl.isLoading ).toEqual( true );
     } );
   } );

@@ -20,6 +20,7 @@ describe( 'formatAddressForCortex', () => {
       'region':           'CA'
     } );
   } );
+
   it( 'should take an international address, convert it to kebab case, and merge all address lines into street-address', () => {
     expect( formatAddressForCortex( {
       country:         'CA',

@@ -13,7 +13,7 @@ describe( 'your giving', () => {
 
           beforeEach( inject( ( $componentController ) => {
             $ctrl = $componentController( module.name, {}, {
-              onSelectGifts: jasmine.createSpy( 'onSelectGifts' )
+              onSelectGifts: jest.fn()
             } );
           } ) );
 

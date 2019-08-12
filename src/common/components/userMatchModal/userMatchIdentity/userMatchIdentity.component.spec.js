@@ -9,7 +9,7 @@ describe( 'userMatchIdentity', function () {
   beforeEach( inject( function ( _$componentController_ ) {
     bindings = {
       contacts:        ['a', 'b'],
-      onSelectContact: jasmine.createSpy( 'onSelectContact' ),
+      onSelectContact: jest.fn(),
       identityForm:    {$valid: false},
       contact:         {}
     };
@@ -25,6 +25,7 @@ describe( 'userMatchIdentity', function () {
     describe( 'invalid form', () => {
       it( 'set hasError', () => {
         $ctrl.selectContact();
+
         expect( $ctrl.hasError ).toEqual( true );
       } );
     } );
@@ -37,6 +38,7 @@ describe( 'userMatchIdentity', function () {
       describe( 'empty contact', () => {
         it( 'sends selects \'that-is-not-me\' contact', () => {
           $ctrl.selectContact();
+
           expect( $ctrl.onSelectContact ).toHaveBeenCalledWith( {contact: undefined} );
         } );
       } );
@@ -45,6 +47,7 @@ describe( 'userMatchIdentity', function () {
         it( 'selects contact', () => {
           $ctrl.contact = 'a';
           $ctrl.selectContact();
+
           expect( $ctrl.onSelectContact ).toHaveBeenCalledWith( {contact: 'a'} );
         } );
       } );

@@ -25,9 +25,9 @@ describe( 'verification service', () => {
         .expectGET( 'https://give-stage2.cru.org/cortex/verificationcontacts/crugive?zoom=element' )
         .respond( 200, contactsResponse );
       verificationService.getContacts().subscribe( ( contacts ) => {
-        expect( contacts ).toEqual( jasmine.arrayContaining( [
-          jasmine.objectContaining( {name: 'BillRegister RegisterTest'} ),
-          jasmine.objectContaining( {name: 'LadyRegister RegisterTest'} )
+        expect( contacts ).toEqual( expect.arrayContaining( [
+          expect.objectContaining( {name: 'BillRegister RegisterTest'} ),
+          expect.objectContaining( {name: 'LadyRegister RegisterTest'} )
         ] ) );
       } );
       $httpBackend.flush();
@@ -50,7 +50,7 @@ describe( 'verification service', () => {
         .expectGET( 'https://give-stage2.cru.org/cortex/verifyregistrations/crugive/form' )
         .respond( 200, questionsResponse );
       verificationService.getQuestions().subscribe( ( questions ) => {
-        expect( questions ).toEqual( jasmine.any( Array ) );
+        expect( questions ).toEqual( expect.any( Array ) );
         expect( questions.length ).toEqual( 5 );
       } );
       $httpBackend.flush();

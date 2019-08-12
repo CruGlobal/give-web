@@ -1,4 +1,5 @@
 import { rollbarAccessToken } from 'common/app.constants';
+import 'angular-environment';
 import rollbar from 'rollbar';
 import stacktrace from 'stacktrace-js';
 import map from 'lodash/map';

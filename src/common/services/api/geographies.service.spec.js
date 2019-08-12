@@ -37,23 +37,25 @@ describe('geographies service', () => {
       let us = find(countriesResponse._element, { name: 'US' });
       self.geographiesService.getRegions(us)
         .subscribe(data => {
-          expect(data).toEqual(jasmine.arrayContaining([
-            jasmine.objectContaining({"display-name":"California","name":"CA"}),
-            jasmine.objectContaining({"display-name":"Florida","name":"FL"})
+          expect(data).toEqual(expect.arrayContaining([
+            expect.objectContaining({"display-name":"California","name":"CA"}),
+            expect.objectContaining({"display-name":"Florida","name":"FL"})
           ]));
+
           expect(data.length).toEqual(54);
         });
       self.$httpBackend.flush();
     });
+
     it('should rename the armed services regions to a better display name', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/geographies/crugive/countries/kvjq=/regions?zoom=element').respond(200, regionsResponse);
       let us = find(countriesResponse._element, { name: 'US' });
       self.geographiesService.getRegions(us)
         .subscribe(data => {
-          expect(data).toEqual(jasmine.arrayContaining([
-            jasmine.objectContaining({"display-name":"Armed Forces Americas (AA)","name":"AA"}),
-            jasmine.objectContaining({"display-name":"Armed Forces Europe (AE)","name":"AE"}),
-            jasmine.objectContaining({"display-name":"Armed Forces Pacific (AP)","name":"AP"})
+          expect(data).toEqual(expect.arrayContaining([
+            expect.objectContaining({"display-name":"Armed Forces Americas (AA)","name":"AA"}),
+            expect.objectContaining({"display-name":"Armed Forces Europe (AE)","name":"AE"}),
+            expect.objectContaining({"display-name":"Armed Forces Pacific (AP)","name":"AP"})
           ]));
         });
       self.$httpBackend.flush();

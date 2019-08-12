@@ -13,16 +13,18 @@ describe('editRecurringGiftsModal', () => {
 
     beforeEach(inject(($componentController) => {
       self.controller = $componentController(module.name, {}, {
-        next: jasmine.createSpy('next')
+        next: jest.fn()
       });
     }));
 
     describe('onChange', () => {
       it('should update additionalRecipients', () => {
         self.controller.onChange('newly selected recipients');
+
         expect(self.controller.additionalRecipients).toEqual('newly selected recipients');
       });
     });
+
     describe('gatherSelections', () => {
       it('should call next with the additionalRecipients after having mapped them to a gift model', () => {
         self.controller.additionalRecipients = [ { designationName: 'Name', designationNumber: '0123456' }, { designationName: 'Name 2', designationNumber: '1234567' } ];
@@ -35,6 +37,7 @@ describe('editRecurringGiftsModal', () => {
             recipient._selectedGift = true;
             return recipient;
           });
+
         expect(self.controller.next).toHaveBeenCalledWith({ additions: additionalRecipients });
       });
     });

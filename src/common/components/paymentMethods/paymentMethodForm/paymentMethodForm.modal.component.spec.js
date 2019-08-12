@@ -10,9 +10,9 @@ describe('paymentMethodFormModal', () => {
     self.controller = $componentController(module.name, {},
       {
         resolve: {
-          onPaymentFormStateChange: jasmine.createSpy('onPaymentFormStateChange')
+          onPaymentFormStateChange: jest.fn()
         },
-        dismiss: jasmine.createSpy('dismiss')
+        dismiss: jest.fn()
       });
   }));
 

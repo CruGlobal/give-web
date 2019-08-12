@@ -20,6 +20,7 @@ describe( 'valueMatch', function () {
     form.password.$setViewValue( 'Cerebro123' );
     form.check.$setViewValue( 'Cerebro123' );
     scope.$digest();
+
     expect( scope.check ).toEqual( 'Cerebro123' );
     expect( form.check.$valid ).toEqual( true );
     expect(form.check.$error.valueMatch).not.toBeDefined();
@@ -29,6 +30,7 @@ describe( 'valueMatch', function () {
     form.password.$setViewValue( 'hello123' );
     form.check.$setViewValue( 'Cerebro123' );
     scope.$digest();
+
     expect( scope.check ).not.toBeDefined();
     expect( form.check.$valid ).toEqual( false );
     expect(form.check.$error.valueMatch).toBeDefined();

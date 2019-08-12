@@ -13,14 +13,17 @@ describe( 'resetPasswordModal', function () {
     $ctrl = _$componentController_(
       module.name, {
         modalStateService: {
-          name: jasmine.createSpy( 'name' )
+          name: jest.fn()
         },
         $window: {
-          location: jasmine.createSpyObj('location', ['reload'])
+          location: {
+            reload: jest.fn(),
+            search: jest.fn()
+          }
         }
       }, {
         form:          {$valid: true},
-        onStateChange: jasmine.createSpy( 'onStateChange' )
+        onStateChange: jest.fn()
       }
     );
   } ) );
@@ -29,17 +32,19 @@ describe( 'resetPasswordModal', function () {
     describe( 'missing required modalState.params', () => {
       it( 'changes to \'forgot-password\' state', () => {
         $ctrl.$onInit();
+
         expect( $ctrl.onStateChange ).toHaveBeenCalledWith( {state: 'forgot-password'} );
       } );
     } );
 
     describe( 'with modalState.params', () => {
       beforeEach( () => {
-        spyOn( $ctrl.$location, 'search' ).and.returnValue( {e: 'professorx@xavier.edu', k: 'abc123def456'} );
+        jest.spyOn( $ctrl.$location, 'search' ).mockReturnValue( {e: 'professorx@xavier.edu', k: 'abc123def456'} );
       } );
 
       it( 'initializes the modal', () => {
         $ctrl.$onInit();
+
         expect( $ctrl.onStateChange ).not.toHaveBeenCalled();
         expect( $ctrl.email ).toEqual( 'professorx@xavier.edu' );
         expect( $ctrl.resetKey ).toEqual( 'abc123def456' );
@@ -52,18 +57,23 @@ describe( 'resetPasswordModal', function () {
 
   describe( '$onDestroy', () => {
     it( 'removes query params and refreshes the page', () => {
-      spyOn( $ctrl, 'removeQueryParams' );
+      jest.spyOn( $ctrl, 'removeQueryParams' ).mockImplementation(() => {});
       $ctrl.$onDestroy();
+
       expect( $ctrl.removeQueryParams ).toHaveBeenCalled();
       $ctrl.$timeout.flush();
+
       expect( $ctrl.$window.location.reload ).toHaveBeenCalled();
     } );
+
     it( 'removes query params and does not refresh the page', () => {
       $ctrl.exitWithoutRefresh = true;
-      spyOn( $ctrl, 'removeQueryParams' );
+      jest.spyOn( $ctrl, 'removeQueryParams' ).mockImplementation(() => {});
       $ctrl.$onDestroy();
+
       expect( $ctrl.removeQueryParams ).toHaveBeenCalled();
       $ctrl.$timeout.verifyNoPendingTasks();
+
       expect( $ctrl.$window.location.reload ).not.toHaveBeenCalled();
     } );
   } );
@@ -72,13 +82,14 @@ describe( 'resetPasswordModal', function () {
     let deferred;
     beforeEach( inject( function ( _$q_ ) {
       deferred = _$q_.defer();
-      spyOn( $ctrl.sessionService, 'resetPassword' ).and.callFake( () => Observable.from( deferred.promise ) );
+      jest.spyOn( $ctrl.sessionService, 'resetPassword' ).mockImplementation( () => Observable.from( deferred.promise ) );
     } ) );
 
     describe( 'invalid form', () => {
       it( 'does not submit the form', () => {
         $ctrl.form.$valid = false;
         $ctrl.resetPassword();
+
         expect( $ctrl.sessionService.resetPassword ).not.toHaveBeenCalled();
       } );
     } );
@@ -99,7 +110,7 @@ describe( 'resetPasswordModal', function () {
 
       describe( 'resetPassword success', () => {
         beforeEach( () => {
-          spyOn( $ctrl, 'removeQueryParams' );
+          jest.spyOn( $ctrl, 'removeQueryParams' ).mockImplementation(() => {});
           deferred.resolve();
           $rootScope.$digest();
         } );
@@ -116,24 +127,29 @@ describe( 'resetPasswordModal', function () {
           it( 'sets \'invalid_reset_key\' error', () => {
             deferred.reject( {status: 400, data: {error: 'invalid_reset_key'}} );
             $rootScope.$digest();
+
             expect( $ctrl.hasError ).toEqual( true );
-            expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {invalid_reset_key: true} ) );
+            expect( $ctrl.errors ).toEqual( expect.objectContaining( {invalid_reset_key: true} ) );
           } );
         } );
+
         describe( '403 Forbidden', () => {
           it( 'sets \'password_cant_change\' error', () => {
             deferred.reject( {status: 403, data: {error: 'password_cant_change'}} );
             $rootScope.$digest();
+
             expect( $ctrl.hasError ).toEqual( true );
-            expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {password_cant_change: true} ) );
+            expect( $ctrl.errors ).toEqual( expect.objectContaining( {password_cant_change: true} ) );
           } );
         } );
+
         describe( '500 Internal Server Error', () => {
           it( 'sets \'unknown\' error', () => {
             deferred.reject( {status: 500, data: {error: 'unknown'}} );
             $rootScope.$digest();
+
             expect( $ctrl.hasError ).toEqual( true );
-            expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {unknown: true} ) );
+            expect( $ctrl.errors ).toEqual( expect.objectContaining( {unknown: true} ) );
           } );
         } );
       } );
@@ -143,6 +159,7 @@ describe( 'resetPasswordModal', function () {
   describe( 'backToSignIn', () => {
     it( 'avoids refresh and changes state', () => {
       $ctrl.backToSignIn();
+
       expect( $ctrl.exitWithoutRefresh ).toEqual( true );
       expect( $ctrl.onStateChange ).toHaveBeenCalledWith( {state: 'sign-in'} );
     } );
@@ -150,8 +167,9 @@ describe( 'resetPasswordModal', function () {
 
   describe( 'removeQueryParams', () => {
     it( 'removes query params', () => {
-      spyOn( $ctrl.$location, 'search' );
+      jest.spyOn( $ctrl.$location, 'search' ).mockImplementation(() => {});
       $ctrl.removeQueryParams();
+
       expect( $ctrl.modalState.name ).toHaveBeenCalledWith( null );
       expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'e', null );
       expect( $ctrl.$location.search ).toHaveBeenCalledWith( 'k', null );

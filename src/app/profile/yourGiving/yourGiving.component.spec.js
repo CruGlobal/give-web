@@ -31,47 +31,51 @@ describe( 'your giving', function () {
 
   describe( '$onInit()', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'loadProfile' );
-      spyOn( $ctrl, 'sessionEnforcerService' );
-      spyOn( $ctrl, 'setGivingView' );
-      spyOn( $ctrl.$rootScope, '$on' );
-      spyOn( $ctrl, 'signedOut' );
+      jest.spyOn( $ctrl, 'loadProfile' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'sessionEnforcerService' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'setGivingView' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl.$rootScope, '$on' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'signedOut' ).mockImplementation(() => {});
     } );
 
     describe( '\'PUBLIC\' role', () => {
       it( 'sets profileLoading and registers sessionEnforcer', () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( Roles.public );
+        jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( Roles.public );
         $ctrl.$onInit();
 
         expect( $ctrl.sessionEnforcerService ).toHaveBeenCalledWith(
-          [Roles.registered], jasmine.objectContaining( {
-            'sign-in': jasmine.any( Function ),
-            cancel:    jasmine.any( Function )
+          [Roles.registered], expect.objectContaining( {
+            'sign-in': expect.any( Function ),
+            cancel:    expect.any( Function )
           } ), 'donor'
         );
+
         expect( $ctrl.setGivingView ).not.toHaveBeenCalled();
         expect( $ctrl.profileLoading ).toEqual( true );
         expect( $ctrl.loadProfile ).not.toHaveBeenCalled();
-        expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
-        $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+        expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, expect.any( Function ) );
+        $ctrl.$rootScope.$on.mock.calls[0][1]();
+
         expect( $ctrl.signedOut ).toHaveBeenCalled();
       } );
     } );
 
     describe( '\'REGISTERED\' role', () => {
       it( 'calls loadProfile and registers sessionEnforcer', () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( Roles.registered );
+        jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( Roles.registered );
         $ctrl.$onInit();
 
         expect( $ctrl.sessionEnforcerService ).toHaveBeenCalledWith(
-          [Roles.registered], jasmine.objectContaining( {
-            'sign-in': jasmine.any( Function ),
-            cancel:    jasmine.any( Function )
+          [Roles.registered], expect.objectContaining( {
+            'sign-in': expect.any( Function ),
+            cancel:    expect.any( Function )
           } ), 'donor'
         );
+
         expect( $ctrl.loadProfile ).not.toHaveBeenCalled();
-        expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
-        $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+        expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, expect.any( Function ) );
+        $ctrl.$rootScope.$on.mock.calls[0][1]();
+
         expect( $ctrl.signedOut ).toHaveBeenCalled();
       } );
     } );
@@ -81,7 +85,8 @@ describe( 'your giving', function () {
         expect( $ctrl.loadProfile ).not.toHaveBeenCalled();
 
         $ctrl.$onInit();
-        $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['sign-in']();
+
         expect( $ctrl.loadProfile ).toHaveBeenCalledTimes( 1 );
         expect( $ctrl.setGivingView ).toHaveBeenCalled();
       } );
@@ -90,7 +95,8 @@ describe( 'your giving', function () {
     describe( 'sessionEnforcerService failure', () => {
       it( 'executes failure callback', () => {
         $ctrl.$onInit();
-        $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['cancel']();
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']();
+
         expect( $ctrl.$window.location ).toEqual( '/' );
       } );
     } );
@@ -98,11 +104,12 @@ describe( 'your giving', function () {
 
   describe( '$onDestroy()', () => {
     it( 'cleans up the component', () => {
-      spyOn( $ctrl.sessionEnforcerService, 'cancel' );
-      spyOn( $ctrl.$location, 'search' );
+      jest.spyOn( $ctrl.sessionEnforcerService, 'cancel' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl.$location, 'search' ).mockImplementation(() => {});
 
       $ctrl.enforcerId = '1234567890';
       $ctrl.$onDestroy();
+
       expect( $ctrl.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
       expect( $ctrl.$location.search ).toHaveBeenCalledTimes( keys( queryParams ).length );
     } );
@@ -114,18 +121,20 @@ describe( 'your giving', function () {
     } );
 
     it( 'successfully loads profile', () => {
-      spyOn( $ctrl.profileService, 'getGivingProfile' ).and.returnValue( Observable.of( {a: 'b'} ) );
+      jest.spyOn( $ctrl.profileService, 'getGivingProfile' ).mockReturnValue( Observable.of( {a: 'b'} ) );
 
       $ctrl.loadProfile();
+
       expect( $ctrl.profile ).toEqual( {a: 'b'} );
       expect( $ctrl.profileLoading ).toEqual( false );
-      expect( $ctrl.currentDate ).toEqual( jasmine.any( Date ) );
+      expect( $ctrl.currentDate ).toEqual( expect.any( Date ) );
       expect($ctrl.profileLoadingError).toEqual(false);
     } );
 
     it('should log an error on failure', () => {
-      spyOn( $ctrl.profileService, 'getGivingProfile' ).and.returnValue( Observable.throw( 'some error' ) );
+      jest.spyOn( $ctrl.profileService, 'getGivingProfile' ).mockReturnValue( Observable.throw( 'some error' ) );
       $ctrl.loadProfile();
+
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading givingProfile', 'some error']);
       expect($ctrl.profileLoadingError).toEqual(true);
     });
@@ -133,27 +142,30 @@ describe( 'your giving', function () {
 
   describe( 'setGivingView( name )', () => {
     it( 'sets view based on url query param', () => {
-      spyOn( $ctrl.$location, 'search' ).and.returnValue( {[queryParams.view]: 'historical'} );
+      jest.spyOn( $ctrl.$location, 'search' ).mockReturnValue( {[queryParams.view]: 'historical'} );
 
       $ctrl.setGivingView();
+
       expect( $ctrl.$location.search ).toHaveBeenCalled();
       expect( $ctrl.view ).toEqual( 'historical' );
       expect( $ctrl.$location.search ).toHaveBeenCalledWith( queryParams.view, 'historical' );
     } );
 
     it( 'sets view to \'recipient\' if name missing', () => {
-      spyOn( $ctrl.$location, 'search' ).and.returnValue( {} );
+      jest.spyOn( $ctrl.$location, 'search' ).mockReturnValue( {} );
 
       $ctrl.setGivingView();
+
       expect( $ctrl.$location.search ).toHaveBeenCalled();
       expect( $ctrl.view ).toEqual( 'recipient' );
       expect( $ctrl.$location.search ).toHaveBeenCalledWith( queryParams.view, 'recipient' );
     } );
 
     it( 'sets view', () => {
-      spyOn( $ctrl.$location, 'search' ).and.returnValue( {} );
+      jest.spyOn( $ctrl.$location, 'search' ).mockReturnValue( {} );
 
       $ctrl.setGivingView( 'historical' );
+
       expect( $ctrl.view ).toEqual( 'historical' );
       expect( $ctrl.$location.search ).toHaveBeenCalledWith( queryParams.view, 'historical' );
     } );
@@ -163,12 +175,15 @@ describe( 'your giving', function () {
     it( 'sets viewLoading to true', () => {
       $ctrl.reload = false;
       $ctrl.setViewLoading(true);
+
       expect($ctrl.viewLoading).toEqual(true);
       expect($ctrl.reload).toEqual(false);
     });
+
     it( 'sets viewLoading and reload to false when finished loading', () => {
       $ctrl.reload = true;
       $ctrl.setViewLoading( false );
+
       expect( $ctrl.viewLoading ).toEqual( false );
       expect( $ctrl.reload ).toEqual( false );
     } );
@@ -176,62 +191,70 @@ describe( 'your giving', function () {
 
   describe( 'openEditRecurringGiftsModal', () => {
     it( 'should open the modal', () => {
-      const thenSpy = jasmine.createSpy( 'then' );
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
+      const thenSpy = jest.fn();
+      jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: {then: thenSpy}} );
       $ctrl.openEditRecurringGiftsModal();
-      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'editRecurringGiftsModal'} ) );
+
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( expect.objectContaining( {component: 'editRecurringGiftsModal'} ) );
       expect( $ctrl.recurringGiftsUpdateSuccess ).toEqual( false );
-      thenSpy.calls.first().args[0](); // Execute close modal promise success function
+      thenSpy.mock.calls[0][0]();
+
       expect( $ctrl.recurringGiftsUpdateSuccess ).toEqual( true );
       expect( $ctrl.reload ).toEqual( true );
     } );
 
     it( 'should call analytics event on dismiss', () => {
-      const thenSpy = jasmine.createSpy( 'then' );
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
-      spyOn( $ctrl.analyticsFactory, 'track' ).and.returnValue( null );
+      const thenSpy = jest.fn();
+      jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: {then: thenSpy}} );
+      jest.spyOn( $ctrl.analyticsFactory, 'track' ).mockReturnValue( null );
       $ctrl.openEditRecurringGiftsModal();
-      thenSpy.calls.first().args[1]();
+      thenSpy.mock.calls[0][1]();
+
       expect( $ctrl.analyticsFactory.track ).toHaveBeenCalledWith( 'aa-edit-recurring-exit' );
     } );
   } );
 
   describe( 'openGiveOneTimeGiftModal', () => {
     it( 'should open the modal', () => {
-      const thenSpy = jasmine.createSpy( 'then' );
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
+      const thenSpy = jest.fn();
+      jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: {then: thenSpy}} );
       $ctrl.openGiveOneTimeGiftModal();
-      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'giveOneTimeGiftModal'} ) );
+
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( expect.objectContaining( {component: 'giveOneTimeGiftModal'} ) );
     } );
 
     it( 'should call analytics event on dismiss', () => {
-      const thenSpy = jasmine.createSpy( 'then' );
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
-      spyOn( $ctrl.analyticsFactory, 'track' ).and.returnValue( null );
+      const thenSpy = jest.fn();
+      jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: {then: thenSpy}} );
+      jest.spyOn( $ctrl.analyticsFactory, 'track' ).mockReturnValue( null );
       $ctrl.openGiveOneTimeGiftModal();
-      thenSpy.calls.first().args[1]();
+      thenSpy.mock.calls[0][1]();
+
       expect( $ctrl.analyticsFactory.track ).toHaveBeenCalledWith( 'aa-give-extra-1-time-exit' );
     } );
   } );
 
   describe( 'openStopStartRecurringGiftsModal', () => {
     it( 'should open the modal', () => {
-      const thenSpy = jasmine.createSpy( 'then' );
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
+      const thenSpy = jest.fn();
+      jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: {then: thenSpy}} );
       $ctrl.openStopStartRecurringGiftsModal();
-      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( jasmine.objectContaining( {component: 'stopStartRecurringGiftsModal'} ) );
+
+      expect( $ctrl.$uibModal.open ).toHaveBeenCalledWith( expect.objectContaining( {component: 'stopStartRecurringGiftsModal'} ) );
       expect( $ctrl.stopStartGiftsSuccess ).toEqual( false );
-      thenSpy.calls.first().args[0](); // Execute close modal promise success function
+      thenSpy.mock.calls[0][0]();
+
       expect( $ctrl.stopStartGiftsSuccess ).toEqual( true );
       expect( $ctrl.reload ).toEqual( true );
     } );
 
     it( 'should call analytics event on dismiss', () => {
-      const thenSpy = jasmine.createSpy( 'then' );
-      spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: {then: thenSpy}} );
-      spyOn( $ctrl.analyticsFactory, 'track' ).and.returnValue( null );
+      const thenSpy = jest.fn();
+      jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: {then: thenSpy}} );
+      jest.spyOn( $ctrl.analyticsFactory, 'track' ).mockReturnValue( null );
       $ctrl.openStopStartRecurringGiftsModal();
-      thenSpy.calls.first().args[1]();
+      thenSpy.mock.calls[0][1]();
+
       expect( $ctrl.analyticsFactory.track ).toHaveBeenCalledWith( 'aa-stop-restart-exit' );
     } );
   } );
@@ -240,14 +263,16 @@ describe( 'your giving', function () {
     describe( 'default prevented', () => {
       it( 'does nothing', () => {
         $ctrl.signedOut( {defaultPrevented: true} );
+
         expect( $ctrl.$window.location ).toEqual( '/your-giving.html' );
       } );
     } );
 
     describe( 'default not prevented', () => {
       it( 'navigates to \'\/\'', () => {
-        let spy = jasmine.createSpy( 'preventDefault' );
+        let spy = jest.fn();
         $ctrl.signedOut( {defaultPrevented: false, preventDefault: spy} );
+
         expect( spy ).toHaveBeenCalled();
         expect( $ctrl.$window.location ).toEqual( '/' );
       } );

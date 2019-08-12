@@ -22,56 +22,73 @@ describe( 'navCart', () => {
 
   describe( '$onInit', () => {
     beforeEach(() => {
-      spyOn($ctrl, 'loadCart');
+      jest.spyOn($ctrl, 'loadCart').mockImplementation(() => {});
       $ctrl.sessionService.sessionSubject = new Subject();
     });
+
     it('should initialize the mobile flag', () => {
       $ctrl.$onInit();
+
       expect($ctrl.mobile).toEqual(false);
 
       $ctrl.mobile = 'true';
       $ctrl.$onInit();
+
       expect($ctrl.mobile).toEqual(true);
     });
+
     it('should not call loadCart', () => {
       // Other events will notify this component that the cart needs to be loaded for the first time
       $ctrl.$onInit();
+
       expect($ctrl.loadCart).not.toHaveBeenCalled();
     });
+
     it('should setup event listeners to reload cart', () => {
-      spyOn($ctrl.$rootScope, '$on');
+      jest.spyOn($ctrl.$rootScope, '$on').mockImplementation(() => {});
       $ctrl.$onInit();
+
       expect($ctrl.loadCart).not.toHaveBeenCalled();
-      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( giftAddedEvent, jasmine.any( Function ) );
-      $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( giftAddedEvent, expect.any( Function ) );
+      $ctrl.$rootScope.$on.mock.calls[0][1]();
+
       expect($ctrl.loadCart).toHaveBeenCalledTimes(1);
-      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( cartUpdatedEvent, jasmine.any( Function ) );
-      $ctrl.$rootScope.$on.calls.argsFor( 1 )[1]();
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( cartUpdatedEvent, expect.any( Function ) );
+      $ctrl.$rootScope.$on.mock.calls[1][1]();
+
       expect($ctrl.loadCart).toHaveBeenCalledTimes(2);
     });
+
     it('should setup the session subject event listener but not reload cart until another event has loaded it', () => {
       $ctrl.$onInit();
       $ctrl.sessionService.sessionSubject.next();
+
       expect($ctrl.loadCart).not.toHaveBeenCalled();
     });
+
     it('should setup the session subject event listener and reload cart if it has been loaded previously', () => {
       $ctrl.firstLoad = false;
       $ctrl.$onInit();
+
       expect($ctrl.loadCart).not.toHaveBeenCalled();
       $ctrl.sessionService.sessionSubject.next();
+
       expect($ctrl.loadCart).toHaveBeenCalled();
     });
   });
 
   describe( 'loadCart', () => {
     beforeEach(() => {
-      spyOn($ctrl.cartService, 'get');
-      spyOn($ctrl.analyticsFactory, 'setEvent');
+      jest.spyOn($ctrl.cartService, 'get').mockImplementation(() => {});
+      jest.spyOn($ctrl.analyticsFactory, 'setEvent').mockImplementation(() => {});
     });
+
     it('should load the cart data', () => {
-      $ctrl.cartService.get.and.returnValue(Observable.of({ items: ['first item'] }));
+      $ctrl.cartService.get.mockReturnValue(Observable.of({ items: ['first item'] }));
+
       expect($ctrl.firstLoad).toEqual(true);
       $ctrl.loadCart(true);
+
       expect($ctrl.cartData).toEqual({ items: ['first item'] });
       expect($ctrl.loading).toEqual(false);
       expect($ctrl.hasItems).toEqual(true);
@@ -79,17 +96,21 @@ describe( 'navCart', () => {
       expect($ctrl.firstLoad).toEqual(false);
       expect($ctrl.analyticsFactory.setEvent).toHaveBeenCalled();
     });
+
     it('should handling loading a cart that has no items', () => {
-      $ctrl.cartService.get.and.returnValue(Observable.of({}));
+      $ctrl.cartService.get.mockReturnValue(Observable.of({}));
       $ctrl.loadCart();
+
       expect($ctrl.cartData).toEqual({});
       expect($ctrl.loading).toEqual(false);
       expect($ctrl.hasItems).toEqual(false);
       expect($ctrl.error).toEqual(false);
     });
+
     it('should handling an error loading the cart', () => {
-      $ctrl.cartService.get.and.returnValue(Observable.throw('some error'));
+      $ctrl.cartService.get.mockReturnValue(Observable.throw('some error'));
       $ctrl.loadCart();
+
       expect($ctrl.loading).toEqual(false);
       expect($ctrl.hasItems).toEqual(false);
       expect($ctrl.error).toEqual(true);
@@ -99,13 +120,16 @@ describe( 'navCart', () => {
 
   describe( 'checkout', () => {
     it( 'should redirect to sign-in', () => {
-      spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'GUEST' );
+      jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( 'GUEST' );
       $ctrl.checkout();
+
       expect($ctrl.$window.location).toBe('https://give-stage2.cru.org/sign-in.html');
     } );
+
     it( 'should redirect to checkout', () => {
-      spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
+      jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( 'REGISTERED' );
       $ctrl.checkout();
+
       expect($ctrl.$window.location).toBe('https://give-stage2.cru.org/checkout.html');
     } );
   } );

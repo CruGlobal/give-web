@@ -69,18 +69,20 @@ describe('order service', () => {
         });
       self.$httpBackend.flush();
     });
+
     it('should set the mailingAddress country to US if undefined', () => {
       donorDetailsResponse._order[0]._donordetails[0]['mailing-address']['country-name'] = '';
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
         .respond(200, donorDetailsResponse);
       self.orderService.getDonorDetails()
         .subscribe((data) => {
-          expect(data).toEqual(jasmine.objectContaining({
-            mailingAddress: jasmine.objectContaining({country: 'US'})
+          expect(data).toEqual(expect.objectContaining({
+            mailingAddress: expect.objectContaining({country: 'US'})
           }));
         });
       self.$httpBackend.flush();
     });
+
     it('should handle an undefined response', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
         .respond(200, {});
@@ -211,7 +213,7 @@ describe('order service', () => {
 
   describe('addCreditCardPayment', () => {
     beforeEach(() => {
-      spyOn(self.orderService, 'storeCardSecurityCode');
+      jest.spyOn(self.orderService, 'storeCardSecurityCode').mockImplementation(() => {});
     });
 
     it('should send a request to save the credit card payment info with no billing address', () => {
@@ -241,8 +243,10 @@ describe('order service', () => {
         });
 
       self.$httpBackend.flush();
+
       expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('456', 'new cc uri');
     });
+
     it('should send a request to save the credit card payment info with a billing address', () => {
       let paymentInfo = {
         address: {
@@ -286,13 +290,14 @@ describe('order service', () => {
         });
 
       self.$httpBackend.flush();
+
       expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('789', 'new cc uri');
     });
   });
 
   describe('addPaymentMethod', () => {
     it('should save a new bank account payment method', () => {
-      spyOn(self.orderService,'addBankAccountPayment').and.returnValue(Observable.of('success'));
+      jest.spyOn(self.orderService,'addBankAccountPayment').mockReturnValue(Observable.of('success'));
       let paymentInfo = {
         'account-type': 'checking',
         'bank-name': 'First Bank',
@@ -305,10 +310,12 @@ describe('order service', () => {
       }).subscribe((data) => {
         expect(data).toEqual('success');
       });
+
       expect(self.orderService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo);
     });
+
     it('should save a new credit card payment method', () => {
-      spyOn(self.orderService,'addCreditCardPayment').and.returnValue(Observable.of({ self: {uri: 'new payment method uri' } }));
+      jest.spyOn(self.orderService,'addCreditCardPayment').mockReturnValue(Observable.of({ self: {uri: 'new payment method uri' } }));
       let paymentInfo = {
         address: {
           'country-name': 'US',
@@ -330,8 +337,10 @@ describe('order service', () => {
       }).subscribe((data) => {
         expect(data).toEqual({ self: {uri: 'new payment method uri' } });
       });
+
       expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo);
     });
+
     it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
       self.orderService.addPaymentMethod({
         billingAddress: {}
@@ -349,8 +358,8 @@ describe('order service', () => {
     let runTestWith;
     beforeEach(() => {
       runTestWith = (paymentInfo, expectedRequestData, expectedCvv) => {
-        spyOn(self.orderService, 'storeCardSecurityCode');
-        spyOn(self.orderService, 'selectPaymentMethod').and.returnValue(Observable.of('placeholder'));
+        jest.spyOn(self.orderService, 'storeCardSecurityCode').mockImplementation(() => {});
+        jest.spyOn(self.orderService, 'selectPaymentMethod').mockReturnValue(Observable.of('placeholder'));
         self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
           .respond(200, {
             _order: [{
@@ -373,6 +382,7 @@ describe('order service', () => {
 
         self.orderService.updatePaymentMethod({ selectAction: '<select uri>', self: { uri: 'existing payment method uri' } }, { creditCard: paymentInfo })
           .subscribe();
+
         expect(self.orderService.selectPaymentMethod).toHaveBeenCalledWith('<select uri>');
 
         self.$httpBackend.flush();
@@ -381,14 +391,17 @@ describe('order service', () => {
         expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith(expectedCvv, 'existing payment method uri');
       };
     });
+
     it('should update the given payment method', () => {
       runTestWith({ 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa', cvv: '963' },
         { 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa' }, '963');
     });
+
     it('should update the given payment method with an address', () => {
       runTestWith({ 'cardholder-name': 'New name', cvv: '789', address: { country: 'US' } },
         { 'cardholder-name': 'New name', address: { 'country-name': 'US' } }, '789');
     });
+
     it('should call storeCardSecurityCode with undefined when the cvv wasn\'t changed', () => {
       runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
         { 'cardholder-name': 'New name', 'card-number': '0000' }, undefined);
@@ -484,6 +497,7 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
+
     it('should load a user\'s existing payment methods even if there is no chosen one', () => {
       // Move the payment method in chosen to be one of the choices for this test
       clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._choice.push(clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen[0]);
@@ -503,6 +517,7 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
+
     it('should load a user\'s existing payment methods even if there is no choice element and only a chosen one', () => {
       // Delete all the choices so there is only a chosen element for this test
       delete clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._choice;
@@ -521,6 +536,7 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
+
     it('should format payment addresses while loading existing payment methods', () => {
       clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen[0]._description[0].address = { 'country-name': 'US' };
       expectedResponse[0].address = { country: 'US', streetAddress: undefined, extendedAddress: undefined, locality: undefined, region: undefined, postalCode: undefined };
@@ -566,6 +582,7 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
+
     it('should retrieve the current payment details with a billing address', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
         .respond(200, paymentMethodCreditCardResponse);
@@ -607,8 +624,10 @@ describe('order service', () => {
           expect(data).toEqual(['email-info', 'billing-address-info', 'payment-method-info']);
         });
       self.$httpBackend.flush();
+
       expect(self.$log.error.logs[0]).toEqual(['The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', ['email-info', 'billing-address-info', 'payment-method-info']]);
     });
+
     it('should return undefined and not log anything if there are no errors', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, undefined);
       self.orderService.checkErrors()
@@ -623,8 +642,9 @@ describe('order service', () => {
   describe('submit', () => {
     beforeEach(() => {
       // Avoid another http request while testing
-      spyOn(self.orderService, 'getPurchaseForm').and.returnValue(Observable.of(purchaseFormResponseZoomMapped));
+      jest.spyOn(self.orderService, 'getPurchaseForm').mockReturnValue(Observable.of(purchaseFormResponseZoomMapped));
     });
+
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
@@ -638,6 +658,7 @@ describe('order service', () => {
 
       self.$httpBackend.flush();
     });
+
     it('should send a request to finalize the purchase and with a CVV', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
@@ -656,25 +677,32 @@ describe('order service', () => {
   describe('storeCardSecurityCode', () => {
     it('should save the cvv to session storage', () => {
       self.orderService.storeCardSecurityCode('123', 'new id');
+
       expect(self.$window.sessionStorage.getItem('cvv')).toEqual('123');
       expect(self.$window.sessionStorage.getItem('storedCvvs')).toEqual('{"new id":"123"}');
     });
+
     it('should remember previous the encrypted cvv', () => {
       self.orderService.storeCardSecurityCode('321', 'new id');
       self.orderService.storeCardSecurityCode('845', 'new id2');
+
       expect(self.$window.sessionStorage.getItem('cvv')).toEqual('845');
       expect(self.$window.sessionStorage.getItem('storedCvvs')).toEqual('{"new id":"321","new id2":"845"}');
     });
+
     it('should set the session storage cvv to be null if a null cvv is passed', () => {
       self.orderService.storeCardSecurityCode('654', 'new id');
       self.orderService.storeCardSecurityCode(null, 'new id3');
+
       expect(self.$window.sessionStorage.getItem('cvv')).toBeNull();
       expect(self.$window.sessionStorage.getItem('storedCvvs')).toEqual('{"new id":"654"}');
     });
+
     it('should set the session storage cvv to a stored cvv if a null cvv is passed with a payment method uri that had been previously stored', () => {
       self.orderService.storeCardSecurityCode('654', 'new id');
       self.orderService.storeCardSecurityCode('789', 'new id2');
       self.orderService.storeCardSecurityCode(null, 'new id');
+
       expect(self.$window.sessionStorage.getItem('cvv')).toEqual('654');
       expect(self.$window.sessionStorage.getItem('storedCvvs')).toEqual('{"new id":"654","new id2":"789"}');
     });
@@ -683,6 +711,7 @@ describe('order service', () => {
   describe('retrieveCardSecurityCode', () => {
     it('should return the cvv from session storage', () => {
       self.$window.sessionStorage.setItem('cvv', '123');
+
       expect(self.orderService.retrieveCardSecurityCode()).toEqual('123');
     });
   });
@@ -690,6 +719,7 @@ describe('order service', () => {
   describe('retrieveCardSecurityCodes', () => {
     it('should return the stored cvvs', () => {
       self.$window.sessionStorage.setItem('storedCvvs', '{"/paymentmethods/crugive/giydsnjqgi=":"123","/paymentmethods/crugive/giydsnjqgy=":"321"}');
+
       expect(self.orderService.retrieveCardSecurityCodes()).toEqual({
         '/paymentmethods/crugive/giydsnjqgi=': '123',
         '/paymentmethods/crugive/giydsnjqgy=': '321'
@@ -702,6 +732,7 @@ describe('order service', () => {
       self.$window.sessionStorage.setItem('cvv', '123');
       self.$window.sessionStorage.setItem('storedCvvs', { 'some uri': '456' });
       self.orderService.clearCardSecurityCodes();
+
       expect(self.$window.sessionStorage.getItem('cvv')).toBeNull();
       expect(self.$window.sessionStorage.getItem('storedCvvs')).toBeNull();
     });
@@ -710,6 +741,7 @@ describe('order service', () => {
   describe('storeLastPurchaseLink', () => {
     it('should save the link to the completed purchase', () => {
       self.orderService.storeLastPurchaseLink('/purchases/crugive/giydanbt=');
+
       expect(self.$window.sessionStorage.getItem('lastPurchaseLink')).toEqual('/purchases/crugive/giydanbt=');
     });
   });
@@ -717,6 +749,7 @@ describe('order service', () => {
   describe('retrieveLastPurchaseLink', () => {
     it('should save the link to the completed purchase', () => {
       self.$window.sessionStorage.setItem('lastPurchaseLink', '/purchases/crugive/hiydanbt=');
+
       expect(self.orderService.retrieveLastPurchaseLink()).toEqual('/purchases/crugive/hiydanbt=');
     });
   });
@@ -725,28 +758,35 @@ describe('order service', () => {
     it('should not be editable for staff', () => {
       expect(self.orderService.spouseEditableForOrder({ staff: true })).toEqual(false);
     });
+
     it('should be editable during a new order when the spouse name fields are empty', () => {
       expect(self.orderService.spouseEditableForOrder({
         'spouse-name': {}
       })).toEqual(true);
+
       expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true');
     });
+
     it('should not be editable during a new order when the spouse has a first name', () => {
       expect(self.orderService.spouseEditableForOrder({
         'spouse-name': {
           'given-name': 'Name'
         }
       })).toEqual(false);
+
       expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('false');
     });
+
     it('should not be editable during a new order when the spouse has a last name', () => {
       expect(self.orderService.spouseEditableForOrder({
         'spouse-name': {
           'family-name': 'Name'
         }
       })).toEqual(false);
+
       expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('false');
     });
+
     it('should store the current order uri during a new order', () => {
       expect(self.orderService.spouseEditableForOrder({
         'spouse-name': {},
@@ -757,12 +797,15 @@ describe('order service', () => {
           }
         ]
       })).toEqual(true);
+
       expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true');
       expect(self.$window.localStorage.getItem('currentOrder')).toEqual('order id');
     });
+
     it('should be editable during an order that started without a spouse', () => {
       self.$window.localStorage.setItem('startedOrderWithoutSpouse', 'true');
       self.$window.localStorage.setItem('currentOrder', 'order id');
+
       expect(self.orderService.spouseEditableForOrder({
         'spouse-name': {
           'given-name': 'Name',
@@ -775,11 +818,14 @@ describe('order service', () => {
           }
         ]
       })).toEqual(true);
+
       expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true');
     });
+
     it('should not be editable during an order that started with a spouse', () => {
       self.$window.localStorage.setItem('startedOrderWithoutSpouse', 'false');
       self.$window.localStorage.setItem('currentOrder', 'order id');
+
       expect(self.orderService.spouseEditableForOrder({
         'spouse-name': {},
         links: [
@@ -789,11 +835,14 @@ describe('order service', () => {
           }
         ]
       })).toEqual(false);
+
       expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('false');
     });
+
     it('should reset startedOrderWithoutSpouse flag when order id changes', () => {
       self.$window.localStorage.setItem('startedOrderWithoutSpouse', 'false');
       self.$window.localStorage.setItem('currentOrder', 'order id');
+
       expect(self.orderService.spouseEditableForOrder({
         'spouse-name': {},
         links: [
@@ -803,6 +852,7 @@ describe('order service', () => {
           }
         ]
       })).toEqual(true);
+
       expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true');
       expect(self.$window.localStorage.getItem('currentOrder')).toEqual('order id 2');
     });

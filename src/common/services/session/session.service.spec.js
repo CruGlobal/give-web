@@ -6,11 +6,16 @@ import {giveSession} from 'common/services/session/fixtures/give-session';
 import {cruProfile} from 'common/services/session/fixtures/cru-profile';
 
 import {Roles, Sessions, SignOutEvent} from './session.service';
+import { advanceBy, advanceTo, clear } from 'jest-date-mock';
 
 describe( 'session service', function () {
   beforeEach( angular.mock.module( function ( $provide ) {
     $provide.decorator( '$timeout', function ( $delegate ) {
-      return jasmine.createSpy( '$timeout', $delegate ).and.callThrough();
+      const spy = jest.fn($delegate);
+      spy.cancel = $delegate.cancel;
+      spy.flush = $delegate.flush;
+      spy.verifyNoPendingTasks = $delegate.verifyNoPendingTasks;
+      return spy;
     } );
   } ) );
 
@@ -185,7 +190,7 @@ describe( 'session service', function () {
     } );
 
     it( 'includes lastPurchaseId when present and PUBLIC', () => {
-      spyOn( sessionService, 'getRole' ).and.returnValue(Roles.public);
+      jest.spyOn( sessionService, 'getRole' ).mockReturnValue(Roles.public);
       $httpBackend.expectPOST( 'https://give-stage2.cru.org/cas/login', {
         username: 'user@example.com',
         password: 'hello123',
@@ -267,7 +272,7 @@ describe( 'session service', function () {
 
   describe( 'downgradeToGuest( skipEvent )', () => {
     beforeEach( () => {
-      spyOn( $rootScope, '$broadcast' );
+      jest.spyOn( $rootScope, '$broadcast' ).mockImplementation(() => {});
     } );
 
     describe( 'with \'PUBLIC\' role', () => {
@@ -275,6 +280,7 @@ describe( 'session service', function () {
         sessionService.downgradeToGuest().subscribe( angular.noop, ( error ) => {
           expect( error ).toBeDefined();
         } );
+
         expect( $rootScope.$broadcast ).toHaveBeenCalledWith( SignOutEvent );
       } );
     } );
@@ -330,13 +336,13 @@ describe( 'session service', function () {
     let $timeout;
     beforeEach( inject( ( _$timeout_ ) => {
       $timeout = _$timeout_;
-      jasmine.clock().install();
-      jasmine.clock().mockDate( new Date( 2016, 1, 1 ) );
+      $timeout.mockClear();
+      advanceTo( new Date( 2016, 1, 1 ) );
     } ) );
 
     afterEach( () => {
+      clear();
       $timeout.verifyNoPendingTasks();
-      jasmine.clock().uninstall();
     } );
 
     describe( 'undefined \'give-session\'', () => {
@@ -362,8 +368,9 @@ describe( 'session service', function () {
 
       it( 'sets sessionTimeout', () => {
         expect( $timeout ).toHaveBeenCalledWith( 10000 );
-        jasmine.clock().tick( 10001 );
+        advanceBy(10001);
         $timeout.flush( 10001 );
+
         expect( $timeout ).toHaveBeenCalledTimes( 1 );
       } );
     } );
@@ -380,18 +387,19 @@ describe( 'session service', function () {
 
       it( 'sets sessionTimeout twice', () => {
         expect( $timeout ).toHaveBeenCalledWith( 30000 );
-        jasmine.clock().tick( 30001 );
+        advanceBy(30001);
         $timeout.flush( 30001 );
+
         expect( $timeout ).toHaveBeenCalledWith( 14999 );
-        jasmine.clock().tick( 15000 );
+        advanceBy( 15000 );
         $timeout.flush( 15000 );
+
         expect( $timeout ).toHaveBeenCalledTimes( 2 );
       } );
 
       describe( '\'cortex-session\' updated', () => {
         beforeEach( () => {
-          spyOn( $timeout, 'cancel' ).and.callThrough();
-          jasmine.clock().tick( 10000 );
+          jest.spyOn($timeout, 'cancel');
           $timeout.flush( 10000 );
           $cookies.put( Sessions.role, cortexRole.identified );
           $rootScope.$digest();
@@ -399,8 +407,9 @@ describe( 'session service', function () {
 
         it( 'cancels existing sessionTimeout', () => {
           expect( $timeout.cancel ).toHaveBeenCalled();
-          jasmine.clock().tick( 90000 );
+          advanceBy( 90000 );
           $timeout.flush( 90000 );
+
           expect( $timeout ).toHaveBeenCalledTimes( 2 );
         } );
       } );

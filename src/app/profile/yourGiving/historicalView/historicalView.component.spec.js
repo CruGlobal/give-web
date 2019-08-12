@@ -14,7 +14,7 @@ describe( 'your giving', function () {
       $ctrl = _$componentController_( module.name, {}, {
         year:       2016,
         month:      {month: 9},
-        setLoading: jasmine.createSpy( 'setLoading' )
+        setLoading: jest.fn()
       } );
     } ) );
 
@@ -25,33 +25,38 @@ describe( 'your giving', function () {
 
     describe( '$onChanges()', () => {
       beforeEach( () => {
-        spyOn( $ctrl, 'loadGifts' );
+        jest.spyOn( $ctrl, 'loadGifts' ).mockImplementation(() => {});
       } );
 
       it( 'should reload historical gifts when year changes', () => {
         $ctrl.year = 2018;
         $ctrl.$onChanges({ year: { currentValue: 2018 } });
+
         expect( $ctrl.loadGifts ).toHaveBeenCalledWith( 2018, 9 );
       } );
 
       it( 'should reload historical gifts when month changes', () => {
         $ctrl.month = {month:  10};
         $ctrl.$onChanges({ year: { currentValue: 10 } });
+
         expect( $ctrl.loadGifts ).toHaveBeenCalledWith( 2016, 10 );
       } );
 
       it( 'should reload historical gifts when reload changes to true', () => {
         $ctrl.$onChanges({ reload: { currentValue: true } });
+
         expect( $ctrl.loadGifts ).toHaveBeenCalledWith( 2016, 9 );
       } );
 
       it( 'should not reload historical gifts when reload changes to false', () => {
         $ctrl.$onChanges({ reload: { currentValue: false } });
+
         expect( $ctrl.loadGifts ).not.toHaveBeenCalled();
       } );
 
       it( 'does nothing if there are no changes', () => {
         $ctrl.$onChanges({});
+
         expect( $ctrl.loadGifts ).not.toHaveBeenCalled();
       } );
     } );
@@ -59,14 +64,15 @@ describe( 'your giving', function () {
     describe( 'loadGifts( year, month )', () => {
       let subscriberSpy;
       beforeEach( () => {
-        subscriberSpy = jasmine.createSpyObj( 'subscriber', ['unsubscribe'] );
-        spyOn( $ctrl.donationsService, 'getHistoricalGifts' );
+        subscriberSpy = {unsubscribe: jest.fn()};
+        jest.spyOn( $ctrl.donationsService, 'getHistoricalGifts' );
       } );
 
       it( 'loads historical gifts by year and month if current request is pending', () => {
-        $ctrl.donationsService.getHistoricalGifts.and.callFake( () => Observable.of( ['a', 'b'] ) );
+        $ctrl.donationsService.getHistoricalGifts.mockImplementation( () => Observable.of( ['a', 'b'] ) );
         $ctrl.subscriber = subscriberSpy;
         $ctrl.loadGifts( 2016, 9 );
+
         expect( $ctrl.loadingGiftsError).toEqual(false);
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( subscriberSpy.unsubscribe ).toHaveBeenCalled();
@@ -76,8 +82,9 @@ describe( 'your giving', function () {
       } );
 
       it( 'loads historical gifts by year and month', () => {
-        $ctrl.donationsService.getHistoricalGifts.and.callFake( () => Observable.of( ['c', 'd'] ) );
+        $ctrl.donationsService.getHistoricalGifts.mockImplementation( () => Observable.of( ['c', 'd'] ) );
         $ctrl.loadGifts( 2015, 8 );
+
         expect( $ctrl.loadingGiftsError).toEqual(false);
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( subscriberSpy.unsubscribe ).not.toHaveBeenCalled();
@@ -87,8 +94,9 @@ describe( 'your giving', function () {
       } );
 
       it( 'sets loading false on error ', () => {
-        $ctrl.donationsService.getHistoricalGifts.and.callFake( () => Observable.throw( 'error' ) );
+        $ctrl.donationsService.getHistoricalGifts.mockImplementation( () => Observable.throw( 'error' ) );
         $ctrl.loadGifts( 1990, 1 );
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.historicalGifts ).not.toBeDefined();
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );

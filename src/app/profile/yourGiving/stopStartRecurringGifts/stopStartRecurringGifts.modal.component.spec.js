@@ -8,7 +8,7 @@ describe( 'stopStartRecurringGiftsModal', () => {
   let $ctrl, bindings;
 
   beforeEach( inject( ( $componentController ) => {
-    bindings = jasmine.createSpyObj( 'bindings', ['dismiss', 'close'] );
+    bindings = {dismiss: jest.fn(), close: jest.fn()};
     $ctrl = $componentController( module.name, {}, bindings );
   } ) );
 
@@ -18,8 +18,9 @@ describe( 'stopStartRecurringGiftsModal', () => {
 
   describe( '$onInit()', () => {
     it( 'initializes the component', () => {
-      spyOn( $ctrl, 'changeState' );
+      jest.spyOn( $ctrl, 'changeState' ).mockImplementation(() => {});
       $ctrl.$onInit();
+
       expect( $ctrl.changeState ).toHaveBeenCalledWith( 'step-0' );
     } );
   } );
@@ -27,20 +28,25 @@ describe( 'stopStartRecurringGiftsModal', () => {
   describe( 'changeState( state )', () => {
     beforeEach( () => {
       $ctrl.state = 'step-0';
-      spyOn($ctrl, 'scrollModalToTop');
+      jest.spyOn($ctrl, 'scrollModalToTop').mockImplementation(() => {});
     });
+
     it('should scroll to the top of the modal', () => {
       $ctrl.changeState();
+
       expect($ctrl.scrollModalToTop).toHaveBeenCalled();
     });
+
     it( 'changes state', () => {
       $ctrl.changeState( 'stop' );
+
       expect( $ctrl.state ).toEqual( 'stop' );
       expect( $ctrl.giftAction ).toEqual( 'stop' );
     } );
 
     it( 'changes state to \'step-0\'', () => {
       $ctrl.changeState( 'step-0' );
+
       expect( $ctrl.state ).toEqual( 'step-0' );
     } );
 
@@ -49,6 +55,7 @@ describe( 'stopStartRecurringGiftsModal', () => {
         location: ''
       };
       $ctrl.changeState( 'change' );
+
       expect( $ctrl.$window.location ).toEqual( '/payment-methods.html' );
     } );
   } );
@@ -56,10 +63,13 @@ describe( 'stopStartRecurringGiftsModal', () => {
   describe( 'setLoading( loading )', () => {
     it( 'sets isLoading to true', () => {
       $ctrl.setLoading( true );
+
       expect( $ctrl.isLoading ).toEqual( true );
     } );
+
     it( 'sets isLoading to false', () => {
       $ctrl.setLoading( false );
+
       expect( $ctrl.isLoading ).toEqual( false );
     } );
   } );

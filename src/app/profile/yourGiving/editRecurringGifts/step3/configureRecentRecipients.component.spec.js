@@ -10,7 +10,7 @@ describe('editRecurringGiftsModal', () => {
 
     beforeEach(inject(($componentController) => {
       self.controller = $componentController(module.name, {}, {
-        next: jasmine.createSpy('next')
+        next: jest.fn()
       });
     }));
 

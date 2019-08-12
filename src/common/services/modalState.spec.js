@@ -24,16 +24,18 @@ describe( 'modalStateServiceProvider', () => {
     beforeEach( inject( function ( _modalStateService_, _$injector_ ) {
       $injector = _$injector_;
       modalStateService = _modalStateService_;
-      spyOn( $injector, 'invoke' );
+      jest.spyOn( $injector, 'invoke' ).mockImplementation(() => {});
     } ) );
 
     it( 'invokes registered modal', () => {
       modalStateService.invokeModal( 'test-modal' );
-      expect( $injector.invoke ).toHaveBeenCalledWith( jasmine.any( Function ) );
+
+      expect( $injector.invoke ).toHaveBeenCalledWith( expect.any( Function ) );
     } );
 
     it( 'does not invoke unknown modal', () => {
       modalStateService.invokeModal( 'unknown' );
+
       expect( $injector.invoke ).not.toHaveBeenCalled();
     } );
   } );
@@ -57,7 +59,7 @@ describe( 'modalStateService', () => {
     beforeEach( () => {
       $location.search( 'modal', 'sample' );
       $rootScope.$digest();
-      spyOn( $location, 'search' ).and.callThrough();
+      jest.spyOn($location, 'search');
     } );
 
     it( 'returns current modal name', () => {
@@ -88,8 +90,9 @@ describe( 'modalStateService', () => {
     it( 'scrolls .modal to top', () => {
       /* eslint-disable angular/document-service */
       let element = { scrollTop: 5 };
-      spyOn(window.document, 'querySelector').and.returnValue(element);
+      jest.spyOn(window.document, 'querySelector').mockReturnValue(element);
       scrollModalToTop();
+
       expect(window.document.querySelector).toHaveBeenCalledWith('.modal');
       expect(element).toEqual({ scrollTop: 0 });
       /* eslint-enable angular/document-service */
@@ -98,8 +101,9 @@ describe( 'modalStateService', () => {
     it( 'completes gracefully even when a modal isn\'t found in the DOM', () => {
       /* eslint-disable angular/document-service */
       let element = null;
-      spyOn(window.document, 'querySelector').and.returnValue(element);
+      jest.spyOn(window.document, 'querySelector').mockReturnValue(element);
       scrollModalToTop();
+
       expect(window.document.querySelector).toHaveBeenCalledWith('.modal');
       expect(element).toEqual(null);
       /* eslint-enable angular/document-service */

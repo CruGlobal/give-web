@@ -56,33 +56,36 @@ describe( 'Designation Editor', function () {
 
   describe('$onInit', () => {
     beforeEach(() => {
-      spyOn( $ctrl, 'sessionEnforcerService' );
-      spyOn( $ctrl, 'getDesignationContent' );
-      spyOn( $ctrl.$location, 'search' ).and.returnValue({ d: designationSecurityResponse.designationNumber });
+      jest.spyOn( $ctrl, 'sessionEnforcerService' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'getDesignationContent' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl.$location, 'search' ).mockReturnValue({ d: designationSecurityResponse.designationNumber });
     });
 
     it( 'get designationNumber', () => {
       $ctrl.$onInit();
+
       expect( $ctrl.designationNumber ).toEqual(designationSecurityResponse.designationNumber);
     } );
 
     it('should require designationNumber', () => {
-      $ctrl.$location.search.and.returnValue({});
+      $ctrl.$location.search.mockReturnValue({});
       $ctrl.$onInit();
+
       expect( $ctrl.$window.location ).toEqual( '/' );
     });
 
     describe( '\'PUBLIC\' role', () => {
       it( 'sets profileLoading and registers sessionEnforcer', () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( Roles.public );
+        jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( Roles.public );
         $ctrl.$onInit();
 
         expect( $ctrl.sessionEnforcerService ).toHaveBeenCalledWith(
-          [Roles.registered], jasmine.objectContaining( {
-            'sign-in': jasmine.any( Function ),
-            cancel:    jasmine.any( Function )
+          [Roles.registered], expect.objectContaining( {
+            'sign-in': expect.any( Function ),
+            cancel:    expect.any( Function )
           } ), 'session'
         );
+
         expect( $ctrl.getDesignationContent ).not.toHaveBeenCalled();
       } );
     } );
@@ -92,7 +95,8 @@ describe( 'Designation Editor', function () {
         expect( $ctrl.getDesignationContent ).not.toHaveBeenCalled();
 
         $ctrl.$onInit();
-        $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['sign-in']();
+
         expect( $ctrl.getDesignationContent ).toHaveBeenCalled();
       } );
     } );
@@ -100,7 +104,8 @@ describe( 'Designation Editor', function () {
     describe( 'sessionEnforcerService failure', () => {
       it( 'executes failure callback', () => {
         $ctrl.$onInit();
-        $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['cancel']();
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']();
+
         expect( $ctrl.$window.location ).toEqual( '/' );
       } );
     } );
@@ -108,10 +113,11 @@ describe( 'Designation Editor', function () {
 
   describe( '$onDestroy()', () => {
     it( 'cleans up the component', () => {
-      spyOn( $ctrl.sessionEnforcerService, 'cancel' );
+      jest.spyOn( $ctrl.sessionEnforcerService, 'cancel' ).mockImplementation(() => {});
 
       $ctrl.enforcerId = '1234567890';
       $ctrl.$onDestroy();
+
       expect( $ctrl.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
     } );
   } );
@@ -139,10 +145,11 @@ describe( 'Designation Editor', function () {
 
     it( 'should log an error if content fails', () => {
       $ctrl.designationNumber = '0123456';
-      spyOn($ctrl.designationEditorService, 'getContent').and.callFake(() => { let p = $q.defer(); p.reject('some error'); return p.promise; });
-      spyOn($ctrl.designationEditorService, 'getPhotos').and.callFake(() => { let p = $q.defer(); p.resolve({}); return p.promise; });
+      jest.spyOn($ctrl.designationEditorService, 'getContent').mockImplementation(() => { let p = $q.defer(); p.reject('some error'); return p.promise; });
+      jest.spyOn($ctrl.designationEditorService, 'getPhotos').mockImplementation(() => { let p = $q.defer(); p.resolve({}); return p.promise; });
       $ctrl.getDesignationContent();
       $rootScope.$digest();
+
       expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading designation content or photos.', 'some error']);
       expect( $ctrl.contentLoaded ).toEqual(false);
       expect( $ctrl.loadingContentError ).toEqual(true);
@@ -152,14 +159,14 @@ describe( 'Designation Editor', function () {
   describe('modals', () => {
     beforeEach(() => {
       let savePromise = $q.defer();
-      spyOn( $ctrl, 'save' ).and.returnValue( {result: savePromise.promise} );
+      jest.spyOn( $ctrl, 'save' ).mockReturnValue( {result: savePromise.promise} );
     });
 
     describe('title modal', () => {
       let modalPromise;
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer();
-        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+        jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: modalPromise.promise} );
       }));
 
       it( 'should open modal', () => {
@@ -168,8 +175,8 @@ describe( 'Designation Editor', function () {
         $ctrl.editTitle();
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.receiptTitle()).toEqual(designationSecurityResponse.designationName);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.giveTitle()).toEqual(designationSecurityResponse['jcr:title']);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.receiptTitle()).toEqual(designationSecurityResponse.designationName);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.giveTitle()).toEqual(designationSecurityResponse['jcr:title']);
 
         modalPromise.resolve('Title A');
         $rootScope.$digest();
@@ -182,7 +189,7 @@ describe( 'Designation Editor', function () {
       let modalPromise;
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer();
-        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+        jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: modalPromise.promise} );
       }));
 
       it( 'should open modal', () => {
@@ -191,10 +198,10 @@ describe( 'Designation Editor', function () {
         $ctrl.editPageOptions();
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.parentDesignationNumber()).toEqual(designationSecurityResponse.parentDesignationNumber);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.organizationId()).toEqual(designationSecurityResponse.organizationId);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.facebookPixelId()).toEqual(designationSecurityResponse.facebookPixelId);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.suggestedAmounts()).toEqual(designationSecurityResponse.suggestedAmounts);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.parentDesignationNumber()).toEqual(designationSecurityResponse.parentDesignationNumber);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.organizationId()).toEqual(designationSecurityResponse.organizationId);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.facebookPixelId()).toEqual(designationSecurityResponse.facebookPixelId);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.suggestedAmounts()).toEqual(designationSecurityResponse.suggestedAmounts);
 
         modalPromise.resolve({
           parentDesignationNumber: '000777',
@@ -213,7 +220,7 @@ describe( 'Designation Editor', function () {
       let modalPromise;
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer();
-        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+        jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: modalPromise.promise} );
       }));
 
       it( 'should open modal', () => {
@@ -225,11 +232,11 @@ describe( 'Designation Editor', function () {
         $ctrl.selectPhoto(photoLocation, designationSecurityResponse.coverPhoto);
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.campaignPage()).toBeUndefined();
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photos()).toEqual(photos);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.photoLocation()).toEqual(photoLocation);
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.selectedPhoto()).toEqual(designationSecurityResponse.coverPhoto);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.campaignPage()).toBeUndefined();
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.photos()).toEqual(photos);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.photoLocation()).toEqual(photoLocation);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.selectedPhoto()).toEqual(designationSecurityResponse.coverPhoto);
 
         modalPromise.resolve({
           selected: null,
@@ -245,7 +252,7 @@ describe( 'Designation Editor', function () {
       let modalPromise;
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer();
-        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+        jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: modalPromise.promise} );
       }));
 
       it( 'should open modal', () => {
@@ -254,7 +261,7 @@ describe( 'Designation Editor', function () {
         $ctrl.editText('paragraphText');
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.initialText()).toEqual(designationSecurityResponse.paragraphText);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.initialText()).toEqual(designationSecurityResponse.paragraphText);
 
         modalPromise.resolve('Text 123');
         $rootScope.$digest();
@@ -267,7 +274,7 @@ describe( 'Designation Editor', function () {
       let modalPromise;
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer();
-        spyOn( $ctrl.$uibModal, 'open' ).and.returnValue( {result: modalPromise.promise} );
+        jest.spyOn( $ctrl.$uibModal, 'open' ).mockReturnValue( {result: modalPromise.promise} );
       }));
 
       it( 'should open modal', () => {
@@ -276,7 +283,7 @@ describe( 'Designation Editor', function () {
         $ctrl.editWebsite();
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled();
-        expect($ctrl.$uibModal.open.calls.argsFor( 0 )[0].resolve.initialWebsite()).toEqual(designationSecurityResponse.websiteURL);
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.initialWebsite()).toEqual(designationSecurityResponse.websiteURL);
 
         modalPromise.resolve('http://www.cru.org/website');
         $rootScope.$digest();
@@ -334,7 +341,7 @@ describe( 'Designation Editor', function () {
       $ctrl.save().then(() => {
         expect($ctrl.saveStatus).toEqual('failure');
         expect($ctrl.saveDesignationError).toEqual(true);
-        expect($ctrl.$log.error.logs[0]).toEqual(['Error saving designation editor content.', jasmine.any(Object)]);
+        expect($ctrl.$log.error.logs[0]).toEqual(['Error saving designation editor content.', expect.any(Object)]);
       });
       $httpBackend.flush();
     } );

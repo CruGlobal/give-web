@@ -10,13 +10,17 @@ describe('branded checkout', () => {
 
   beforeEach(inject($componentController => {
     $ctrl = $componentController(module.name, {
-      $window: jasmine.createSpyObj('$window', ['scrollTo']),
-      tsysService: jasmine.createSpyObj('tsysService', ['setDevice'])
+      $window: {
+        scrollTo: jest.fn()
+      },
+      tsysService: {
+        setDevice: jest.fn()
+      }
     }, {
       designationNumber: '1234567',
       tsysDevice: 'test-env',
-      onOrderCompleted: jasmine.createSpy('onOrderCompleted'),
-      onOrderFailed: jasmine.createSpy('onOrderFailed')
+      onOrderCompleted: jest.fn(),
+      onOrderFailed: jest.fn()
     });
   }));
 
@@ -30,8 +34,8 @@ describe('branded checkout', () => {
     });
 
     it('should set initial checkout step and call formatDonorDetails', () => {
-      spyOn($ctrl.sessionService, 'signOut').and.returnValue(Observable.of(''));
-      spyOn($ctrl, 'formatDonorDetails');
+      jest.spyOn($ctrl.sessionService, 'signOut').mockReturnValue(Observable.of(''));
+      jest.spyOn($ctrl, 'formatDonorDetails').mockImplementation(() => {});
       $ctrl.$onInit();
 
       expect($ctrl.sessionService.signOut).toHaveBeenCalled();
@@ -45,8 +49,10 @@ describe('branded checkout', () => {
   describe('formatDonorDetails', () => {
     it('should do nothing if donorDetails is undefined', () => {
       $ctrl.formatDonorDetails();
+
       expect($ctrl.donorDetails).toBeUndefined();
     });
+
     it('should convert donorDetails to param case except for mailingAddress', () => {
       $ctrl.$window.donorDetails =  {
         donorType: 'Household',
@@ -79,6 +85,7 @@ describe('branded checkout', () => {
       $ctrl.donorDetailsVariable = 'donorDetails';
 
       $ctrl.formatDonorDetails();
+
       expect($ctrl.donorDetails).toEqual({
         'donor-type': 'Household',
         name: {
@@ -118,11 +125,14 @@ describe('branded checkout', () => {
     it('should transition from giftContactPayment to review', () => {
       $ctrl.checkoutStep = 'giftContactPayment';
       $ctrl.next();
+
       expect($ctrl.checkoutStep).toEqual('review');
     });
+
     it('should transition from review to thankYou ', () => {
       $ctrl.checkoutStep = 'review';
       $ctrl.next();
+
       expect($ctrl.checkoutStep).toEqual('thankYou');
     });
   });
@@ -135,6 +145,7 @@ describe('branded checkout', () => {
     it('should transition from review to giftContactPayment', () => {
       $ctrl.checkoutStep = 'review';
       $ctrl.previous();
+
       expect($ctrl.checkoutStep).toEqual('giftContactPayment');
     });
   });
@@ -149,6 +160,7 @@ describe('branded checkout', () => {
         lineItems: {},
         rawData: {}
       });
+
       expect($ctrl.onOrderCompleted).toHaveBeenCalledWith({$event: {$window: $ctrl.$window, purchase: {
         donorDetails: {
           donorType: 'Household'
@@ -163,6 +175,7 @@ describe('branded checkout', () => {
       $ctrl.onPaymentFailed({
         'donor-type': 'Household'
       });
+
       expect($ctrl.onOrderFailed).toHaveBeenCalledWith({$event: {$window: $ctrl.$window, donorDetails: {
         donorType: 'Household'
       }}});

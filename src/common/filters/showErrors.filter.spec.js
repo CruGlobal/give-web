@@ -23,6 +23,7 @@ describe('showErrors filter', () => {
         $submitted: false
       }
     };
+
     expect(self.$filter('showErrors')(ngModelController)).toEqual(true);
   });
 
@@ -34,6 +35,7 @@ describe('showErrors filter', () => {
         $submitted: true
       }
     };
+
     expect(self.$filter('showErrors')(ngModelController)).toEqual(true);
   });
 
@@ -45,6 +47,7 @@ describe('showErrors filter', () => {
         $submitted: true
       }
     };
+
     expect(self.$filter('showErrors')(ngModelController)).toEqual(true);
   });
 
@@ -56,6 +59,7 @@ describe('showErrors filter', () => {
         $submitted: false
       }
     };
+
     expect(self.$filter('showErrors')(ngModelController)).toEqual(false);
   });
 
@@ -67,15 +71,19 @@ describe('showErrors filter', () => {
         $submitted: true
       }
     };
+
     expect(self.$filter('showErrors')(ngModelController)).toEqual(false);
     ngModelController.$touched = false;
     ngModelController.$$parentForm.$submitted = false;
+
     expect(self.$filter('showErrors')(ngModelController)).toEqual(false);
     ngModelController.$touched = true;
     ngModelController.$$parentForm.$submitted = false;
+
     expect(self.$filter('showErrors')(ngModelController)).toEqual(false);
     ngModelController.$touched = false;
     ngModelController.$$parentForm.$submitted = true;
+
     expect(self.$filter('showErrors')(ngModelController)).toEqual(false);
   });
 

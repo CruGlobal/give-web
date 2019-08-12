@@ -26,16 +26,18 @@ describe( 'ReceiptsComponent', function () {
 
   describe( '$onInit()', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'getReceipts' );
-      spyOn( $ctrl, 'sessionEnforcerService' );
-      spyOn( $ctrl.$rootScope, '$on' );
-      spyOn( $ctrl, 'signedOut' );
+      jest.spyOn( $ctrl, 'getReceipts' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'sessionEnforcerService' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl.$rootScope, '$on' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'signedOut' ).mockImplementation(() => {});
     } );
 
     it( 'registers signed-out callback', () => {
       $ctrl.$onInit();
-      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
-      $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, expect.any( Function ) );
+      $ctrl.$rootScope.$on.mock.calls[0][1]();
+
       expect( $ctrl.signedOut ).toHaveBeenCalled();
     });
 
@@ -44,7 +46,8 @@ describe( 'ReceiptsComponent', function () {
         expect( $ctrl.getReceipts ).not.toHaveBeenCalled();
 
         $ctrl.$onInit();
-        $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['sign-in']();
+
         expect( $ctrl.getReceipts ).toHaveBeenCalled();
       } );
     } );
@@ -52,7 +55,8 @@ describe( 'ReceiptsComponent', function () {
     describe( 'sessionEnforcerService failure', () => {
       it( 'executes failure callback', () => {
         $ctrl.$onInit();
-        $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['cancel']();
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']();
+
         expect( $ctrl.$window.location ).toEqual( '/' );
       } );
     } );
@@ -77,26 +81,29 @@ describe( 'ReceiptsComponent', function () {
         },
         'transaction-number': '322'
       }];
-      spyOn($ctrl.donationsService, 'getReceipts').and.returnValue(Observable.of(receipts));
+      jest.spyOn($ctrl.donationsService, 'getReceipts').mockReturnValue(Observable.of(receipts));
       $ctrl.$onInit();
       $ctrl.getReceipts();
+
       expect($ctrl.donationsService.getReceipts).toHaveBeenCalled();
     } );
 
     it( 'should get a list of receipts for last year', () => {
       let receipts = [];
-      spyOn($ctrl.donationsService, 'getReceipts').and.returnValue(Observable.of(receipts));
+      jest.spyOn($ctrl.donationsService, 'getReceipts').mockReturnValue(Observable.of(receipts));
       $ctrl.$onInit();
       $ctrl.getReceipts('2015',true);
+
       expect($ctrl.donationsService.getReceipts).toHaveBeenCalledTimes(2);
     } );
 
     it( 'should fail retrieving receipts', () => {
-      spyOn($ctrl.donationsService, 'getReceipts').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.donationsService, 'getReceipts').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.$onInit();
       $ctrl.getReceipts();
+
       expect($ctrl.donationsService.getReceipts).toHaveBeenCalled();
       expect($ctrl.retrievingError).toBe('Failed retrieving receipts.');
     }) ;
@@ -104,8 +111,9 @@ describe( 'ReceiptsComponent', function () {
 
   describe( 'setYear()', () => {
     it( 'sets year to display and resets the max shown items value', () => {
-      spyOn( $ctrl, 'getReceipts' );
+      jest.spyOn( $ctrl, 'getReceipts' ).mockImplementation(() => {});
       $ctrl.setYear('2014');
+
       expect($ctrl.maxShow).toBe(25);
       expect($ctrl.getReceipts).toHaveBeenCalled();
     } );
@@ -114,15 +122,17 @@ describe( 'ReceiptsComponent', function () {
   describe( 'getListYears()', () => {
     it( 'sets year to display and resets the max shown items value', () => {
       $ctrl.$onInit();
+
       expect($ctrl.getListYears().length).toBe(10);
     } );
   } );
 
   describe( '$onDestroy()', () => {
     it( 'cleans up the component', () => {
-      spyOn( $ctrl.sessionEnforcerService, 'cancel' );
+      jest.spyOn( $ctrl.sessionEnforcerService, 'cancel' ).mockImplementation(() => {});
       $ctrl.enforcerId = '1234567890';
       $ctrl.$onDestroy();
+
       expect( $ctrl.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
     } );
   } );
@@ -131,14 +141,16 @@ describe( 'ReceiptsComponent', function () {
     describe( 'default prevented', () => {
       it( 'does nothing', () => {
         $ctrl.signedOut( {defaultPrevented: true} );
+
         expect( $ctrl.$window.location ).toEqual( '/receipts.html' );
       } );
     } );
 
     describe( 'default not prevented', () => {
       it( 'navigates to \'\/\'', () => {
-        let spy = jasmine.createSpy( 'preventDefault' );
+        let spy = jest.fn();
         $ctrl.signedOut( {defaultPrevented: false, preventDefault: spy} );
+
         expect( spy ).toHaveBeenCalled();
         expect( $ctrl.$window.location ).toEqual( '/' );
       } );

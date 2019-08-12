@@ -60,20 +60,23 @@ describe('thank you summary', () => {
         $window: {location: '/thank-you.html'}
       },
       {
-        onPurchaseLoaded: jasmine.createSpy('onPurchaseLoaded')
+        onPurchaseLoaded: jest.fn()
       });
   }));
 
   describe('$onInit', () => {
     beforeEach(() => {
-      spyOn( self.controller.$rootScope, '$on' );
-      spyOn( self.controller, 'signedOut' );
-      spyOn(self.controller, 'loadLastPurchase');
+      jest.spyOn( self.controller.$rootScope, '$on' ).mockImplementation(() => {});
+      jest.spyOn( self.controller, 'signedOut' ).mockImplementation(() => {});
+      jest.spyOn(self.controller, 'loadLastPurchase').mockImplementation(() => {});
     });
+
     it('should call all methods needed to load data for the component', () => {
       self.controller.$onInit();
-      expect( self.controller.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
-      self.controller.$rootScope.$on.calls.argsFor( 0 )[1]();
+
+      expect( self.controller.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, expect.any( Function ) );
+      self.controller.$rootScope.$on.mock.calls[0][1]();
+
       expect( self.controller.signedOut ).toHaveBeenCalled();
       expect(self.controller.loadLastPurchase).toHaveBeenCalled();
     });
@@ -83,14 +86,16 @@ describe('thank you summary', () => {
     describe( 'default prevented', () => {
       it( 'does nothing', () => {
         self.controller.signedOut( {defaultPrevented: true} );
+
         expect( self.controller.$window.location ).toEqual( '/thank-you.html' );
       } );
     } );
 
     describe( 'default not prevented', () => {
       it( 'navigates to \'\/\'', () => {
-        let spy = jasmine.createSpy( 'preventDefault' );
+        let spy = jest.fn();
         self.controller.signedOut( {defaultPrevented: false, preventDefault: spy} );
+
         expect( spy ).toHaveBeenCalled();
         expect( self.controller.$window.location ).toEqual( '/' );
       } );
@@ -99,8 +104,9 @@ describe('thank you summary', () => {
 
   describe('loadLastPurchase', () => {
     it('should load all data from the last completed purchase', () => {
-      spyOn(self.controller.profileService, 'getPurchase').and.callThrough();
+      jest.spyOn(self.controller.profileService, 'getPurchase');
       self.controller.loadLastPurchase();
+
       expect(self.controller.profileService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=');
       expect(self.controller.purchase).toEqual(self.mockPurchase);
       expect(self.controller.rateTotals).toEqual([
@@ -115,32 +121,39 @@ describe('thank you summary', () => {
           amount: 20
         }
       ]);
+
       expect(self.controller.loading).toEqual(false);
       expect(self.controller.loadingError).toBeUndefined();
       expect(self.controller.onPurchaseLoaded).toHaveBeenCalledWith({
         $event: { purchase: self.mockPurchase }
       });
     });
+
     it('should not request purchase data if lastPurchaseLink is not defined', () => {
-      spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').and.callFake(() => undefined);
-      spyOn(self.controller.profileService, 'getPurchase');
+      jest.spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').mockImplementation(() => undefined);
+      jest.spyOn(self.controller.profileService, 'getPurchase').mockImplementation(() => {});
       self.controller.loadLastPurchase();
+
       expect(self.controller.profileService.getPurchase).not.toHaveBeenCalled();
       expect(self.controller.purchase).not.toBeDefined();
       expect(self.controller.loading).toEqual(false);
       expect(self.controller.loadingError).toEqual('lastPurchaseLink missing');
     });
+
     it('should handle an api error', () => {
-      spyOn(self.controller.profileService, 'getPurchase').and.returnValue(Observable.throw('some error'));
+      jest.spyOn(self.controller.profileService, 'getPurchase').mockReturnValue(Observable.throw('some error'));
       self.controller.loadLastPurchase();
+
       expect(self.controller.purchase).not.toBeDefined();
       expect(self.controller.loading).toEqual(false);
       expect(self.controller.loadingError).toEqual('api error');
     });
   });
+
   describe('loadEmail', () => {
     it('should load the user\'s email', () => {
       self.controller.loadEmail();
+
       expect(self.controller.email).toEqual('someperson@someaddress.com');
     });
   });
@@ -155,7 +168,7 @@ describe('thank you summary', () => {
     });
 
     it('should not append facebook pixel to page', () => {
-      spyOn(self.controller.designationsService, 'facebookPixel').and.returnValue(
+      jest.spyOn(self.controller.designationsService, 'facebookPixel').mockReturnValue(
         Observable.of(undefined)
       );
 
@@ -173,7 +186,7 @@ describe('thank you summary', () => {
     });
 
     it('should append facebook pixel to page', () => {
-      spyOn(self.controller.designationsService, 'facebookPixel').and.returnValue(
+      jest.spyOn(self.controller.designationsService, 'facebookPixel').mockReturnValue(
         Observable.of(123456)
       );
 

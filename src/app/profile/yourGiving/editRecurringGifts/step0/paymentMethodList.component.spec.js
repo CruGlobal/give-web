@@ -16,6 +16,7 @@ describe('editRecurringGiftsModal', () => {
       it('should select the first payment method by default', () => {
         self.controller.paymentMethods = [ { 'card-number': 1234 }, { 'card-number': 5678 } ];
         self.controller.$onInit();
+
         expect(self.controller.selectedPaymentMethod).toEqual({ 'card-number': 1234 });
       });
     });

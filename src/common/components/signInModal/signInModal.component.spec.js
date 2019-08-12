@@ -11,8 +11,8 @@ describe( 'signInModal', function () {
   beforeEach( inject( function ( _$componentController_ ) {
     bindings = {
       modalTitle:    '',
-      onStateChange: jasmine.createSpy( 'onStateChange' ),
-      onSuccess:     jasmine.createSpy( 'onSuccess' )
+      onStateChange: jest.fn(),
+      onSuccess:     jest.fn()
     };
     $ctrl = _$componentController_( module.name, {}, bindings );
   } ) );
@@ -24,7 +24,7 @@ describe( 'signInModal', function () {
   describe( '$onInit', () => {
     describe( 'with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( Roles.registered );
+        jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( Roles.registered );
         $ctrl.session.email = 'professorx@xavier.edu';
         $ctrl.$onInit();
       } );
@@ -35,9 +35,10 @@ describe( 'signInModal', function () {
         expect( $ctrl.identified ).toEqual( true );
       } );
     } );
+
     describe( 'with \'PUBLIC\' cortex-session', () => {
       beforeEach( () => {
-        spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue(  Roles.public );
+        jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue(  Roles.public );
         $ctrl.$onInit();
       } );
 
@@ -56,6 +57,7 @@ describe( 'signInModal', function () {
 
     it( 'set identified to false', () => {
       $ctrl.signOut();
+
       expect( $ctrl.identified ).toEqual( false );
     } );
   } );

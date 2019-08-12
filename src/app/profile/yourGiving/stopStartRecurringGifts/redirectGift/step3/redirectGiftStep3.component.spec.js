@@ -14,7 +14,12 @@ describe( 'your giving', () => {
           let $ctrl;
 
           beforeEach( inject( ( $componentController ) => {
-            $ctrl = $componentController( module.name, {}, jasmine.createSpyObj( 'bindings', ['onComplete', 'onCancel', 'onPrevious', 'setLoading'] ) );
+            $ctrl = $componentController( module.name, {}, {
+              onComplete: jest.fn(),
+              onCancel: jest.fn(),
+              onPrevious: jest.fn(),
+              setLoading: jest.fn()
+            });
           } ) );
 
           it( 'is defined', () => {
@@ -32,21 +37,25 @@ describe( 'your giving', () => {
 
             describe( 'updateRecurringGifts success', () => {
               it( 'completes the gift redirect', () => {
-                spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).and.returnValue( Observable.of( {} ) );
+                jest.spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).mockReturnValue( Observable.of( {} ) );
                 $ctrl.submitGift();
+
                 expect( $ctrl.hasError ).toEqual( false );
                 expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
                 expect( $ctrl.donationsService.updateRecurringGifts ).toHaveBeenCalledWith( {
                   designationName:   'Javier',
                   designationNumber: '6543210'
                 } );
+
                 expect( $ctrl.onComplete ).toHaveBeenCalled();
               } );
             } );
+
             describe( 'updateRecurringGifts failure', () => {
               it( 'completes the gift redirect', () => {
-                spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).and.returnValue( Observable.throw( 'some error' ) );
+                jest.spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).mockReturnValue( Observable.throw( 'some error' ) );
                 $ctrl.submitGift();
+
                 expect( $ctrl.hasError ).toEqual( true );
                 expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
                 expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
@@ -65,14 +74,17 @@ describe( 'your giving', () => {
               it( 'calls onPrevious()', () => {
                 $ctrl.state = 'update';
                 $ctrl.previous();
+
                 expect( $ctrl.hasError ).toEqual( false );
                 expect( $ctrl.onPrevious ).toHaveBeenCalled();
               } );
             } );
+
             describe( 'state = \'confirm\'', () => {
               it( 'sets state to \'update\'', () => {
                 $ctrl.state = 'confirm';
                 $ctrl.previous();
+
                 expect( $ctrl.hasError ).toEqual( false );
                 expect( $ctrl.state ).toEqual( 'update' );
                 expect( $ctrl.onPrevious ).not.toHaveBeenCalled();

@@ -31,6 +31,6 @@ describe('Checkout Help', function() {
     $ctrl.$onInit();
     $httpBackend.flush();
 
-    expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading give-need-help', jasmine.objectContaining({data:'some error'})]);
+    expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading give-need-help', expect.objectContaining({data:'some error'})]);
   });
 });

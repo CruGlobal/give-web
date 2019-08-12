@@ -10,19 +10,22 @@ describe('editRecurringGiftsModal', () => {
 
     beforeEach(inject(($componentController) => {
       self.controller = $componentController(module.name, {}, {
-        next: jasmine.createSpy('next')
+        next: jest.fn()
       });
     }));
 
     describe('$onInit', () => {
       it('should skip this step if there are no recent recipients', () => {
-        spyOn(self.controller, 'loadedNoRecentRecipients').and.returnValue(false);
+        jest.spyOn(self.controller, 'loadedNoRecentRecipients').mockReturnValue(false);
         self.controller.$onInit();
+
         expect(self.controller.next).not.toHaveBeenCalled();
       });
+
       it('should not skip this step if there are recent recipients', () => {
-        spyOn(self.controller, 'loadedNoRecentRecipients').and.returnValue(true);
+        jest.spyOn(self.controller, 'loadedNoRecentRecipients').mockReturnValue(true);
         self.controller.$onInit();
+
         expect(self.controller.next).toHaveBeenCalled();
       });
     });
@@ -31,18 +34,24 @@ describe('editRecurringGiftsModal', () => {
       it('should return true if finished loading recipients and there are no recent recipients', () => {
         self.controller.loadingRecentRecipients = false;
         self.controller.hasRecentRecipients = false;
+
         expect(self.controller.loadedNoRecentRecipients()).toEqual(true);
       });
+
       it('should return false if finished loading recipients and there are recent recipients', () => {
         self.controller.loadingRecentRecipients = false;
         self.controller.hasRecentRecipients = true;
+
         expect(self.controller.loadedNoRecentRecipients()).toEqual(false);
       });
+
       it('should return false if still loading', () => {
         self.controller.loadingRecentRecipients = true;
         self.controller.hasRecentRecipients = true;
+
         expect(self.controller.loadedNoRecentRecipients()).toEqual(false);
         self.controller.hasRecentRecipients = false;
+
         expect(self.controller.loadedNoRecentRecipients()).toEqual(false);
       });
     });
@@ -51,6 +60,7 @@ describe('editRecurringGiftsModal', () => {
       it('should get all selected gifts and pass them to the next step', () => {
         self.controller.recentRecipients = [ {}, {_selectedGift: true} ];
         self.controller.gatherSelections();
+
         expect(self.controller.next).toHaveBeenCalledWith({ additions: [{_selectedGift: true}] });
       });
     });

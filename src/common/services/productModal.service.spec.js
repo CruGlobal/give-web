@@ -10,7 +10,7 @@ describe( 'productModalService', function () {
     productModalService = _productModalService_;
     $uibModal = _$uibModal_;
     // Spy On $uibModal.open and return mock object
-    spyOn( $uibModal, 'open' ).and.returnValue( {result: {finally: jasmine.createSpy('finally')}} );
+    jest.spyOn( $uibModal, 'open' ).mockReturnValue( {result: {finally: jest.fn()}} );
   } ) );
 
   it( 'should be defined', () => {
@@ -24,28 +24,33 @@ describe( 'productModalService', function () {
 
     it( 'should open productConfig modal', () => {
       productModalService.configureProduct( '0123456', {amount: 50}, false );
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
     } );
 
     it( 'should not open multiple modals at once', () => {
       productModalService.configureProduct( '0123456', {amount: 50}, false );
       productModalService.configureProduct( '0987654', {amount: 100}, true );
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
     } );
 
     it( 'should pass through itemConfig and isEditing', () => {
       productModalService.configureProduct( '0987654', {amount: 100}, true, 'uri' );
+
       expect( $uibModal.open ).toHaveBeenCalledTimes( 1 );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.code() ).toEqual( '0987654' );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.itemConfig() ).toEqual( {amount: 100} );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.isEdit() ).toEqual( true );
-      expect( $uibModal.open.calls.argsFor( 0 )[0].resolve.uri() ).toBe( 'uri' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.code() ).toEqual( '0987654' );
+      expect( $uibModal.open.mock.calls[0][0].resolve.itemConfig() ).toEqual( {amount: 100} );
+      expect( $uibModal.open.mock.calls[0][0].resolve.isEdit() ).toEqual( true );
+      expect( $uibModal.open.mock.calls[0][0].resolve.uri() ).toBe( 'uri' );
     } );
 
     it( 'should make modalOpen false when modal closes', () => {
       const modalInstance = productModalService.configureProduct( '0123456', {amount: 50}, false );
+
       expect( productModalService.modalOpen ).toEqual( true );
-      modalInstance.result.finally.calls.argsFor(0)[0]();
+      modalInstance.result.finally.mock.calls[0][0]();
+
       expect( productModalService.modalOpen ).toEqual( false );
     } );
   } );

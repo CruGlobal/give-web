@@ -21,8 +21,8 @@ describe( 'signIn', function () {
 
   describe( 'as \'GUEST\'', () => {
     beforeEach( () => {
-      spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'GUEST' );
-      spyOn( $ctrl, 'sessionChanged' ).and.callThrough();
+      jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( 'GUEST' );
+      jest.spyOn($ctrl, 'sessionChanged');
       $ctrl.$onInit();
     } );
 
@@ -38,8 +38,8 @@ describe( 'signIn', function () {
 
   describe( 'as \'IDENTIFIED\'', () => {
     beforeEach( () => {
-      spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'IDENTIFIED' );
-      spyOn( $ctrl, 'sessionChanged' ).and.callThrough();
+      jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( 'IDENTIFIED' );
+      jest.spyOn($ctrl, 'sessionChanged');
       $ctrl.$onInit();
     } );
 
@@ -55,8 +55,8 @@ describe( 'signIn', function () {
 
   describe( 'as \'REGISTERED\'', () => {
     beforeEach( () => {
-      spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
-      spyOn( $ctrl, 'sessionChanged' ).and.callThrough();
+      jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( 'REGISTERED' );
+      jest.spyOn($ctrl, 'sessionChanged');
       $ctrl.$onInit();
     } );
 
@@ -73,15 +73,18 @@ describe( 'signIn', function () {
   describe( 'checkoutAsGuest()', () => {
     describe( 'downgradeToGuest success', () => {
       it( 'navigates to checkout', () => {
-        spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue( Observable.of( {} ) );
+        jest.spyOn( $ctrl.sessionService, 'downgradeToGuest' ).mockReturnValue( Observable.of( {} ) );
         $ctrl.checkoutAsGuest();
+
         expect( $ctrl.$window.location ).toEqual( '/checkout.html' );
       } );
     } );
+
     describe( 'downgradeToGuest failure', () => {
       it( 'navigates to checkout', () => {
-        spyOn( $ctrl.sessionService, 'downgradeToGuest' ).and.returnValue( Observable.throw( {} ) );
+        jest.spyOn( $ctrl.sessionService, 'downgradeToGuest' ).mockReturnValue( Observable.throw( {} ) );
         $ctrl.checkoutAsGuest();
+
         expect( $ctrl.$window.location ).toEqual( '/checkout.html' );
       } );
     } );
@@ -91,7 +94,7 @@ describe( 'signIn', function () {
     let deferred;
     beforeEach( inject( function ( _$q_ ) {
       deferred = _$q_.defer();
-      spyOn( $ctrl.sessionModalService, 'forgotPassword' ).and.callFake( () => deferred.promise );
+      jest.spyOn( $ctrl.sessionModalService, 'forgotPassword' ).mockImplementation( () => deferred.promise );
       $ctrl.resetPassword();
     } ) );
 

@@ -18,6 +18,7 @@ describe( 'formatAddressForTemplate', () => {
       region:          'CA'
     } );
   } );
+
   it( 'should take an international address object, convert it to camel case and split the street-address into its individual address lines', () => {
     expect( formatAddressForTemplate( {
       'country-name':     'CA',

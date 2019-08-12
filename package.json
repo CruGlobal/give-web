@@ -49,15 +49,12 @@
     "eslint-plugin-jasmine": "^2.10.1",
     "html-loader": "^0.5.5",
     "istanbul-instrumenter-loader": "^3.0.1",
-    "jasmine-core": "^3.4.0",
-    "jasmine-promise-matchers": "^2.6.0",
     "jest": "^24.8.0",
+    "jest-date-mock": "^1.0.7",
     "mini-css-extract-plugin": "^0.7.0",
     "ng-annotate-loader": "^0.6.1",
     "ngtemplate-loader": "^2.0.1",
     "node-sass": "4.12.0",
-    "phantomjs-polyfill": "0.0.2",
-    "phantomjs-prebuilt": "^2.1.16",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.35.2",
@@ -75,12 +72,19 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*,js"
+      "src/**/*.js",
+      "!**/*.fixture.js"
     ],
-    "clearMocks": true,
+    "restoreMocks": true,
     "setupFilesAfterEnv": [
+      "angular",
+      "angular-mocks",
+      "jest-date-mock",
       "<rootDir>/jest/setup.js"
     ],
+    "moduleNameMapper": {
+      "^.+\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
+    },
     "modulePaths": [
       "<rootDir>/src"
     ],

@@ -12,7 +12,7 @@ describe( 'signUpModal', function () {
     $rootScope = _$rootScope_;
     $ctrl = _$componentController_( module.name, {}, {
       signUpForm: {$valid: true},
-      onSuccess:  jasmine.createSpy( 'onSuccess' )
+      onSuccess:  jest.fn()
     } );
   } ) );
 
@@ -23,6 +23,7 @@ describe( 'signUpModal', function () {
   describe( '$onInit()', () => {
     it( 'initializes the component', () => {
       $ctrl.$onInit();
+
       expect( $ctrl.modalTitle ).toEqual( 'Sign Up' );
       expect( $ctrl.isLoading ).toEqual( false );
       expect( $ctrl.signUpErrors ).toEqual( {} );
@@ -34,13 +35,14 @@ describe( 'signUpModal', function () {
     let deferred;
     beforeEach( inject( function ( _$q_ ) {
       deferred = _$q_.defer();
-      spyOn( $ctrl.sessionService, 'signUp' ).and.callFake( () => Observable.from( deferred.promise ) );
+      jest.spyOn( $ctrl.sessionService, 'signUp' ).mockImplementation( () => Observable.from( deferred.promise ) );
     } ) );
 
     describe( 'invalid form', () => {
       it( 'does not submit the form', () => {
         $ctrl.signUpForm.$valid = false;
         $ctrl.signUp();
+
         expect( $ctrl.sessionService.signUp ).not.toHaveBeenCalled();
       } );
     } );
@@ -77,8 +79,9 @@ describe( 'signUpModal', function () {
           it( 'sets 400 error', () => {
             deferred.reject( {status: 400} );
             $rootScope.$digest();
+
             expect( $ctrl.hasError ).toEqual( true );
-            expect( $ctrl.signUpErrors ).toEqual( jasmine.objectContaining( {400: true} ) );
+            expect( $ctrl.signUpErrors ).toEqual( expect.objectContaining( {400: true} ) );
           } );
         } );
 
@@ -86,8 +89,9 @@ describe( 'signUpModal', function () {
           it( 'sets 403 error', () => {
             deferred.reject( {status: 403} );
             $rootScope.$digest();
+
             expect( $ctrl.hasError ).toEqual( true );
-            expect( $ctrl.signUpErrors ).toEqual( jasmine.objectContaining( {403: true} ) );
+            expect( $ctrl.signUpErrors ).toEqual( expect.objectContaining( {403: true} ) );
           } );
         } );
 
@@ -95,8 +99,9 @@ describe( 'signUpModal', function () {
           it( 'sets 409 error', () => {
             deferred.reject( {status: 409} );
             $rootScope.$digest();
+
             expect( $ctrl.hasError ).toEqual( true );
-            expect( $ctrl.signUpErrors ).toEqual( jasmine.objectContaining( {409: true} ) );
+            expect( $ctrl.signUpErrors ).toEqual( expect.objectContaining( {409: true} ) );
           } );
         } );
 
@@ -104,8 +109,9 @@ describe( 'signUpModal', function () {
           it( 'sets generic error', () => {
             deferred.reject( {status: 500} );
             $rootScope.$digest();
+
             expect( $ctrl.hasError ).toEqual( true );
-            expect( $ctrl.signUpErrors ).toEqual( jasmine.objectContaining( {generic: true} ) );
+            expect( $ctrl.signUpErrors ).toEqual( expect.objectContaining( {generic: true} ) );
           } );
         } );
       } );

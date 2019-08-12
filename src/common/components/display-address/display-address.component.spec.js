@@ -15,38 +15,49 @@ describe('display-address', function() {
 
   describe('$onChanges', () => {
     beforeEach(() => {
-      spyOn(self.controller, 'loadCountryNames');
+      jest.spyOn(self.controller, 'loadCountryNames').mockImplementation(() => {});
     });
+
     it('should call loadCountryNames when the country is non US', () => {
       self.controller.$onChanges({ address: { currentValue: { country: 'CA'} } });
+
       expect(self.controller.loadCountryNames).toHaveBeenCalled();
     });
+
     it('should not call loadCountryNames when the country is US', () => {
       self.controller.$onChanges({ address: { currentValue: { country: 'US'} } });
+
       expect(self.controller.loadCountryNames).not.toHaveBeenCalled();
     });
+
     it('should not call loadCountryNames when address is not defined', () => {
       self.controller.$onChanges();
+
       expect(self.controller.loadCountryNames).not.toHaveBeenCalled();
     });
+
     it('should not call loadCountryNames if countries is already defined', () => {
       self.controller.countries = { CA: {name: 'CA', 'display-name': 'Canada'} };
       self.controller.$onChanges({ address: { currentValue: { country: 'CA'} } });
+
       expect(self.controller.loadCountryNames).not.toHaveBeenCalled();
     });
   });
 
   describe('loadCountryNames', () => {
     it('should load country names and key them by abbreviation', () => {
-      spyOn(self.controller.geographiesService, 'getCountries').and.returnValue(Observable.of([
+      jest.spyOn(self.controller.geographiesService, 'getCountries').mockReturnValue(Observable.of([
         {name: 'CA', 'display-name': 'Canada'}
       ]));
       self.controller.loadCountryNames();
+
       expect(self.controller.countries).toEqual({ CA: {name: 'CA', 'display-name': 'Canada'} });
     });
+
     it('should handle an error loading countries', () => {
-      spyOn(self.controller.geographiesService, 'getCountries').and.returnValue(Observable.throw('some error'));
+      jest.spyOn(self.controller.geographiesService, 'getCountries').mockReturnValue(Observable.throw('some error'));
       self.controller.loadCountryNames();
+
       expect(self.controller.countries).toBeUndefined();
       expect(self.controller.$log.warn.logs[0]).toEqual(['Error loading countries for display address', 'some error']);
     });

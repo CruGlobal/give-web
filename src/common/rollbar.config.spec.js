@@ -18,12 +18,12 @@ describe('rollbarConfig', () => {
 
       // Mock rollbar
       self.rollbarSpies = {
-        log: jasmine.createSpy('log'),
-        debug: jasmine.createSpy('debug'),
-        info: jasmine.createSpy('info'),
-        warning: jasmine.createSpy('warning'),
-        error: jasmine.createSpy('error'),
-        configure: jasmine.createSpy('configure')
+        log: jest.fn(),
+        debug: jest.fn(),
+        info: jest.fn(),
+        warning: jest.fn(),
+        error: jest.fn(),
+        configure: jest.fn()
       };
       module.rollbar.init = () => self.rollbarSpies;
 
@@ -41,7 +41,7 @@ describe('rollbarConfig', () => {
       };
 
       // Mock stacktrace
-      self.stacktraceLogSpy = spyOn(module.stacktrace, 'get').and.callFake(() =>
+      self.stacktraceLogSpy = jest.spyOn(module.stacktrace, 'get').mockImplementation(() =>
         Observable.of(['ignored frame', self.rollbarExtraArgs.stackTrace[0]]).toPromise());
 
       // Init and run the test module
@@ -54,44 +54,58 @@ describe('rollbarConfig', () => {
     });
 
     it('should send $log.log to rollbar and call through to $log', (done) => {
-      spyOn(self.$log, 'log').and.callThrough();
+      jest.spyOn(self.$log, 'log');
+      self.$log.log.logs = [];
       self.$log.log('test log');
+
       expect(self.$log.log.logs[0]).toEqual(['test log']);
       self.$window.setTimeout(() => { // Use setTimout to wait until the event loop has been called once to process the stacktrace promise
         expect(self.rollbarSpies.log).toHaveBeenCalledWith('"test log"', self.rollbarExtraArgs);
         done(); // Tell jasmine that our async behavior has finished
       });
     });
+
     it('should send $log.debug to rollbar and call through to $log', (done) => {
-      spyOn(self.$log, 'debug').and.callThrough();
+      jest.spyOn(self.$log, 'debug');
+      self.$log.debug.logs = [];
       self.$log.debug('test debug');
+
       expect(self.$log.debug.logs[0]).toEqual(['test debug']);
       self.$window.setTimeout(() => {
         expect(self.rollbarSpies.debug).toHaveBeenCalledWith('"test debug"', self.rollbarExtraArgs);
         done();
       });
     });
+
     it('should send $log.info to rollbar and call through to $log', (done) => {
-      spyOn(self.$log, 'info').and.callThrough();
+      jest.spyOn(self.$log, 'info');
+      self.$log.info.logs = [];
       self.$log.info('test info');
+
       expect(self.$log.info.logs[0]).toEqual(['test info']);
       self.$window.setTimeout(() => {
         expect(self.rollbarSpies.info).toHaveBeenCalledWith('"test info"', self.rollbarExtraArgs);
         done();
       });
     });
+
     it('should send $log.warn to rollbar and call through to $log', (done) => {
-      spyOn(self.$log, 'warn').and.callThrough();
+      jest.spyOn(self.$log, 'warn');
+      self.$log.warn.logs = [];
       self.$log.warn('test warn');
+
       expect(self.$log.warn.logs[0]).toEqual(['test warn']);
       self.$window.setTimeout(() => {
         expect(self.rollbarSpies.warning).toHaveBeenCalledWith('"test warn"', self.rollbarExtraArgs);
         done();
       });
     });
+
     it('should send $log.error to rollbar and call through to $log', (done) => {
-      spyOn(self.$log, 'error').and.callThrough();
+      jest.spyOn(self.$log, 'error');
+      self.$log.error.logs = [];
       self.$log.error('test error');
+
       expect(self.$log.error.logs[0]).toEqual(['test error']);
       expect(self.stacktraceLogSpy).toHaveBeenCalledWith({ offline: true });
       self.$window.setTimeout(() => {
@@ -99,24 +113,31 @@ describe('rollbarConfig', () => {
         done();
       });
     });
+
     it('should send errors from $ExceptionHandler to rollbar', (done) => {
-      const stacktraceFromErrorSpy = spyOn(module.stacktrace, 'fromError').and.callFake(() =>
+      const stacktraceFromErrorSpy = jest.spyOn(module.stacktrace, 'fromError').mockImplementation(() =>
         Observable.of(['non-ignored frame', self.rollbarExtraArgs.stackTrace[0]]).toPromise());
-      spyOn(self.$log, 'error').and.callThrough();
+      jest.spyOn(self.$log, 'error');
+      self.$log.error.logs = [];
       const error = new Error('some exception');
       self.$log.error(error);
+
       expect(self.$log.error.logs[0]).toEqual([new Error('some exception')]);
       expect(stacktraceFromErrorSpy).toHaveBeenCalledWith(error, { offline: true });
       self.$window.setTimeout(() => {
         self.rollbarExtraArgs.origin = '$ExceptionHandler';
+
         expect(self.rollbarSpies.error).toHaveBeenCalledWith('some exception', { stackTrace: ['non-ignored frame', self.rollbarExtraArgs.stackTrace[0]], origin: '$ExceptionHandler' });
         done();
       });
     });
+
     it('should send a log to rollbar even the stacktrace fails', (done) => {
-      spyOn(self.$log, 'error').and.callThrough();
-      self.stacktraceLogSpy.and.callFake(() => Observable.throw('error message when fetching stack').toPromise());
+      jest.spyOn(self.$log, 'error');
+      self.$log.error.logs = [];
+      self.stacktraceLogSpy.mockImplementation(() => Observable.throw('error message when fetching stack').toPromise());
       self.$log.error('test error');
+
       expect(self.$log.error.logs[0]).toEqual(['test error']);
       self.$window.setTimeout(() => {
         expect(self.rollbarSpies.error).toHaveBeenCalledWith('"test error"', { origin: '$log' });
@@ -133,6 +154,7 @@ describe('rollbarConfig', () => {
           last_name: 'Lname',
           email: 'someone@email.com'
         });
+
         expect(self.rollbarSpies.configure).toHaveBeenCalledWith( {
           payload: {
             person: {
@@ -218,6 +240,7 @@ describe('rollbarConfig', () => {
           }
         });
     });
+
     it('should leave the payload unmodified if extra.stackTrace is missing', () => {
       let payload = {
         data: {
@@ -231,6 +254,7 @@ describe('rollbarConfig', () => {
           }
         }
       };
+
       expect(module.transformRollbarPayload(payload)).toEqual(payload);
     });
   });
@@ -246,6 +270,7 @@ describe('rollbarConfig', () => {
         ]
       })).toEqual(true);
     });
+
     it('should return false for dom modes where the name does not match', () => {
       expect(module.scrubDomNodes(['creditCardField'])({
         attributes: [
@@ -256,6 +281,7 @@ describe('rollbarConfig', () => {
         ]
       })).toEqual(false);
     });
+
     it('should return false for dom modes that don\'t have a name', () => {
       expect(module.scrubDomNodes(['creditCardField'])({
         attributes: [

@@ -10,8 +10,8 @@ describe( 'accountBenefitsModal', function () {
   beforeEach( inject( function ( _$componentController_ ) {
     bindings = {
       modalTitle:    '',
-      onStateChange: jasmine.createSpy( 'onStateChange' ),
-      onSuccess:     jasmine.createSpy( 'onSuccess' )
+      onStateChange: jest.fn(),
+      onSuccess:     jest.fn()
     };
     $ctrl = _$componentController_( module.name, {}, bindings );
   } ) );
@@ -23,19 +23,22 @@ describe( 'accountBenefitsModal', function () {
   describe( '$onInit', () => {
     it( 'initializes component', () => {
       $ctrl.$onInit();
+
       expect( $ctrl.modalTitle ).toEqual( 'Register Your Account for Online Access' );
     } );
   } );
 
   describe( 'registerAccount()', () => {
     it( 'call onSuccess if role is registered', () => {
-      spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( Roles.registered );
+      jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( Roles.registered );
       $ctrl.registerAccount();
+
       expect( $ctrl.onSuccess ).toHaveBeenCalled();
     } );
 
     it( 'changes state to \'sign-in\'', () => {
       $ctrl.registerAccount();
+
       expect( $ctrl.onStateChange ).toHaveBeenCalledWith( {state: 'sign-in'} );
     } );
   } );

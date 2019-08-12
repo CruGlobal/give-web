@@ -1,6 +1,7 @@
 import angular from 'angular';
 import 'angular-mocks';
 import moment from 'moment';
+import {advanceTo, clear} from 'jest-date-mock';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
@@ -14,17 +15,17 @@ describe( 'product config form component', function () {
   let $ctrl;
 
   beforeEach( inject( function ( $componentController ) {
-    jasmine.clock().mockDate( moment.utc( '2016-10-01' ).toDate() );
+    advanceTo(moment.utc( '2016-10-01' ).toDate());
 
     $ctrl = $componentController( module.name, {}, {
       itemConfigForm: {
         $valid: true,
         $dirty: false,
-        $setDirty: jasmine.createSpy('$setDirty').and.callFake(() => {
+        $setDirty: jest.fn(() => {
           $ctrl.itemConfigForm.$dirty = true;
         }),
         $submitted: false,
-        $setSubmitted: jasmine.createSpy('$setSubmitted').and.callFake(() => {
+        $setSubmitted: jest.fn(() => {
           $ctrl.itemConfigForm.$submitted = true;
         })
       },
@@ -35,10 +36,14 @@ describe( 'product config form component', function () {
       isEdit: false,
       uri: 'uri',
       defaultFrequency: 'MON',
-      updateQueryParam: jasmine.createSpy('updateQueryParam'),
-      onStateChange: jasmine.createSpy('onStateChange')
+      updateQueryParam: jest.fn(),
+      onStateChange: jest.fn()
     } );
   } ) );
+
+  afterEach(() => {
+    clear();
+  });
 
   it( 'to be defined', () => {
     expect( $ctrl.$scope ).toBeDefined();
@@ -51,10 +56,11 @@ describe( 'product config form component', function () {
 
   describe( '$onInit', () => {
     it( 'should call the initialization functions', () => {
-      spyOn( $ctrl, 'initItemConfig' );
-      spyOn( $ctrl, 'loadData' );
-      spyOn( $ctrl, 'waitForFormInitialization' );
+      jest.spyOn( $ctrl, 'initItemConfig' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'loadData' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'waitForFormInitialization' ).mockImplementation(() => {});
       $ctrl.$onInit();
+
       expect( $ctrl.initItemConfig ).toHaveBeenCalled();
       expect( $ctrl.loadData ).toHaveBeenCalled();
       expect( $ctrl.waitForFormInitialization ).toHaveBeenCalled();
@@ -66,15 +72,18 @@ describe( 'product config form component', function () {
       $ctrl.itemConfig['recurring-day-of-month'] = '9';
       $ctrl.itemConfig['recurring-start-month'] = '8';
       $ctrl.initItemConfig();
+
       expect($ctrl.itemConfig.amount).toEqual(85);
       expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('09');
       expect($ctrl.itemConfig['recurring-start-month']).toEqual('08');
     } );
+
     it( 'should handle out of range values', () => {
       $ctrl.itemConfig.amount = 'invalid';
       $ctrl.itemConfig['recurring-day-of-month'] = '29';
       $ctrl.itemConfig['recurring-start-month'] = '13';
       $ctrl.initItemConfig();
+
       expect($ctrl.itemConfig.amount).toBeUndefined();
       expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined();
       expect($ctrl.itemConfig['recurring-start-month']).toBeUndefined();
@@ -83,26 +92,29 @@ describe( 'product config form component', function () {
 
   describe( '$onChanges', () => {
     it( 'should call saveGiftToCart when submitted changes to true', () => {
-      spyOn( $ctrl, 'saveGiftToCart' );
+      jest.spyOn( $ctrl, 'saveGiftToCart' ).mockImplementation(() => {});
       $ctrl.$onChanges({ submitted: { currentValue: true } });
+
       expect( $ctrl.saveGiftToCart ).toHaveBeenCalled();
     } );
+
     it( 'should not call saveGiftToCart when submit changes to false', () => {
-      spyOn( $ctrl, 'saveGiftToCart' );
+      jest.spyOn( $ctrl, 'saveGiftToCart' ).mockImplementation(() => {});
       $ctrl.$onChanges({ submitted: { currentValue: false } });
+
       expect( $ctrl.saveGiftToCart ).not.toHaveBeenCalled();
     } );
   } );
 
   describe( 'loadData', () => {
     beforeEach(() => {
-      spyOn($ctrl.designationsService, 'productLookup').and.returnValue(Observable.of('product data'));
-      spyOn($ctrl, 'setDefaultAmount');
-      spyOn($ctrl, 'setDefaultFrequency');
+      jest.spyOn($ctrl.designationsService, 'productLookup').mockReturnValue(Observable.of('product data'));
+      jest.spyOn($ctrl, 'setDefaultAmount').mockImplementation(() => {});
+      jest.spyOn($ctrl, 'setDefaultFrequency').mockImplementation(() => {});
 
-      spyOn($ctrl.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2016-10-02'));
+      jest.spyOn($ctrl.commonService, 'getNextDrawDate').mockReturnValue(Observable.of('2016-10-02'));
 
-      spyOn($ctrl.designationsService, 'suggestedAmounts').and.returnValue(Observable.of([ { amount: 5 }, { amount: 10 } ]));
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([ { amount: 5 }, { amount: 10 } ]));
     });
 
     it( 'should get productData, nextDrawDate, and suggestedAmounts', () => {
@@ -127,14 +139,16 @@ describe( 'product config form component', function () {
     } );
 
     it( 'should not use suggested amounts if they are not provided', () => {
-      $ctrl.designationsService.suggestedAmounts.and.returnValue(Observable.of([]));
+      $ctrl.designationsService.suggestedAmounts.mockReturnValue(Observable.of([]));
       $ctrl.loadData();
+
       expect( $ctrl.useSuggestedAmounts ).toEqual(false);
     } );
 
     it( 'should handle an error loading data', () => {
-      $ctrl.designationsService.productLookup.and.returnValue(Observable.throw('some error'));
+      $ctrl.designationsService.productLookup.mockReturnValue(Observable.throw('some error'));
       $ctrl.loadData();
+
       expect( $ctrl.errorLoading ).toEqual(true);
       expect( $ctrl.onStateChange ).toHaveBeenCalledWith({ state: 'errorLoading' });
       expect( $ctrl.$log.error.logs[0] ).toEqual(['Error loading data for product config form', 'some error']);
@@ -145,40 +159,52 @@ describe( 'product config form component', function () {
   describe( 'setDefaultAmount', () => {
     beforeEach(() => {
       $ctrl.itemConfig = {};
-      spyOn($ctrl, 'changeCustomAmount');
+      jest.spyOn($ctrl, 'changeCustomAmount').mockImplementation(() => {});
     });
+
     it('should set the default amount if there are no suggested amounts', () => {
       $ctrl.setDefaultAmount();
+
       expect($ctrl.itemConfig.amount).toEqual(50);
     });
+
     it('should set the default amount if there are suggested amounts', () => {
       $ctrl.suggestedAmounts = [ { amount: 14 }];
       $ctrl.setDefaultAmount();
+
       expect($ctrl.itemConfig.amount).toEqual(14);
     });
+
     it('should use an existing selectableAmounts', () => {
       $ctrl.itemConfig.amount = 100;
       $ctrl.setDefaultAmount();
+
       expect($ctrl.itemConfig.amount).toEqual(100);
       expect($ctrl.changeCustomAmount).not.toHaveBeenCalled();
     });
+
     it('should use an existing suggestedAmounts', () => {
       $ctrl.itemConfig.amount = 14;
       $ctrl.suggestedAmounts = [ { amount: 14 }];
       $ctrl.setDefaultAmount();
+
       expect($ctrl.itemConfig.amount).toEqual(14);
       expect($ctrl.changeCustomAmount).not.toHaveBeenCalled();
     });
+
     it('should initialize the custom value without suggestedAmounts', () => {
       $ctrl.itemConfig.amount = 14;
       $ctrl.setDefaultAmount();
+
       expect($ctrl.itemConfig.amount).toEqual(14);
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14);
     });
+
     it('should initialize the custom value with suggestedAmounts', () => {
       $ctrl.itemConfig.amount = 14;
       $ctrl.suggestedAmounts = [ { amount: 25 }];
       $ctrl.setDefaultAmount();
+
       expect($ctrl.itemConfig.amount).toEqual(14);
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14);
     });
@@ -186,21 +212,23 @@ describe( 'product config form component', function () {
 
   describe('setDefaultFrequency', () => {
     it('should change the frequency to the specified default frequency', () => {
-      spyOn($ctrl, 'changeFrequency');
+      jest.spyOn($ctrl, 'changeFrequency').mockImplementation(() => {});
       $ctrl.productData = {
         frequencies: [{ name: 'MON', selectAction: 'uri' }]
       };
       $ctrl.setDefaultFrequency();
+
       expect($ctrl.changeFrequency).toHaveBeenCalledWith({ name: 'MON', selectAction: 'uri' });
     });
   });
 
   describe( 'waitForFormInitialization()', () => {
     it( 'should wait for the form to become available and then call addCustomValidators()', ( done ) => {
-      spyOn( $ctrl, 'addCustomValidators' );
+      jest.spyOn( $ctrl, 'addCustomValidators' ).mockImplementation(() => {});
       delete $ctrl.itemConfigForm;
       $ctrl.waitForFormInitialization();
       $ctrl.$scope.$digest();
+
       expect( $ctrl.addCustomValidators ).not.toHaveBeenCalled();
       $ctrl.itemConfigForm = {
         $valid: true,
@@ -208,6 +236,7 @@ describe( 'product config form component', function () {
         amount: {}
       };
       $ctrl.$scope.$digest();
+
       expect( $ctrl.addCustomValidators ).toHaveBeenCalled();
       done();
     } );
@@ -220,9 +249,11 @@ describe( 'product config form component', function () {
         $parsers: []
       };
     });
+
     it( 'should create validators', () => {
       $ctrl.customInputActive = true;
       $ctrl.addCustomValidators();
+
       expect( $ctrl.itemConfigForm.amount.$parsers[0]( '$10' ) ).toBe( '10' );
       expect( $ctrl.itemConfigForm.amount.$parsers[0]( '$10,000' ) ).toBe( '10000' );
 
@@ -241,6 +272,7 @@ describe( 'product config form component', function () {
     it( 'should pass validation in any \'bad\' case', () => {
       $ctrl.customInputActive = false;
       $ctrl.addCustomValidators();
+
       expect( $ctrl.itemConfigForm.amount.$validators.minimum( '0.3' ) ).toBe( true );
       expect( $ctrl.itemConfigForm.amount.$validators.minimum( 'dlksfjs' ) ).toBe( true );
       expect( $ctrl.itemConfigForm.amount.$validators.maximum( '4542452454524.99' ) ).toBe( true );
@@ -259,7 +291,7 @@ describe( 'product config form component', function () {
 
   describe( 'changeFrequency()', () => {
     beforeEach( () => {
-      spyOn( $ctrl.designationsService, 'productLookup' ).and.returnValue(Observable.of({ frequency: 'NA' }));
+      jest.spyOn( $ctrl.designationsService, 'productLookup' ).mockReturnValue(Observable.of({ frequency: 'NA' }));
       $ctrl.productData = { frequency: 'MON' };
       $ctrl.errorAlreadyInCart = true;
       $ctrl.changingFrequency = false;
@@ -267,6 +299,7 @@ describe( 'product config form component', function () {
 
     it( 'does nothing', () => {
       $ctrl.changeFrequency( {name: 'MON', selectAction: '/b'} );
+
       expect( $ctrl.designationsService.productLookup ).not.toHaveBeenCalled();
       expect( $ctrl.itemConfigForm.$setDirty ).not.toHaveBeenCalled();
       expect( $ctrl.productData ).toEqual({ frequency: 'MON' });
@@ -274,6 +307,7 @@ describe( 'product config form component', function () {
 
     it( 'changes product frequency', () => {
       $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
+
       expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
       expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
       expect( $ctrl.productData ).toEqual({ frequency: 'NA' });
@@ -283,9 +317,11 @@ describe( 'product config form component', function () {
       expect($ctrl.changingFrequency).toEqual(false);
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' });
     } );
+
     it( 'should handle an error changing frequency', () => {
-      $ctrl.designationsService.productLookup.and.returnValue(Observable.throw('some error'));
+      $ctrl.designationsService.productLookup.mockReturnValue(Observable.throw('some error'));
       $ctrl.changeFrequency( {name: 'NA', selectAction: '/a'} );
+
       expect( $ctrl.designationsService.productLookup ).toHaveBeenCalledWith( '/a', true );
       expect( $ctrl.itemConfigForm.$setDirty ).not.toHaveBeenCalled();
       expect( $ctrl.productData ).toEqual({ frequency: 'MON' });
@@ -302,6 +338,7 @@ describe( 'product config form component', function () {
   describe( 'changeAmount()', () => {
     it( 'sets itemConfig amount', () => {
       $ctrl.changeAmount( 100 );
+
       expect( $ctrl.itemConfigForm.$setDirty ).toHaveBeenCalled();
       expect( $ctrl.itemConfig.amount ).toEqual( 100 );
       expect( $ctrl.customAmount ).toBe( '' );
@@ -314,6 +351,7 @@ describe( 'product config form component', function () {
     it( 'sets itemConfig amount', () => {
       $ctrl.itemConfig = {};
       $ctrl.changeCustomAmount( 300 );
+
       expect( $ctrl.itemConfig.amount ).toEqual( 300 );
       expect( $ctrl.customAmount ).toEqual( 300 );
       expect( $ctrl.customInputActive ).toEqual( true );
@@ -325,6 +363,7 @@ describe( 'product config form component', function () {
     it( 'sets day query param', () => {
       $ctrl.errorAlreadyInCart = true;
       $ctrl.changeStartDay( '11' );
+
       expect( $ctrl.updateQueryParam ).toHaveBeenCalledWith({ key: giveGiftParams.day, value: '11' });
       expect( $ctrl.errorAlreadyInCart).toEqual(false);
     } );
@@ -335,7 +374,7 @@ describe( 'product config form component', function () {
       // Make sure it resets errors
       $ctrl.errorAlreadyInCart = true;
       $ctrl.errorSavingGeneric = true;
-      spyOn( $ctrl.analyticsFactory, 'cartAdd');
+      jest.spyOn( $ctrl.analyticsFactory, 'cartAdd').mockImplementation(() => {});
       $ctrl.initItemConfig();
     });
 
@@ -346,6 +385,7 @@ describe( 'product config form component', function () {
     describe( 'isEdit = true', () => {
       testSaving(true);
     } );
+
     describe( 'isEdit = false', () => {
       testSaving(false);
     } );
@@ -358,14 +398,15 @@ describe( 'product config form component', function () {
         [ 'items/crugive/<some id>', { amount: 85 }, undefined ];
       beforeEach( () => {
         $ctrl.isEdit = isEdit;
-        spyOn( $ctrl.cartService, operation ).and.returnValue( Observable.of({ self: { uri: 'uri' } }) );
+        jest.spyOn( $ctrl.cartService, operation ).mockReturnValue( Observable.of({ self: { uri: 'uri' } }) );
         $ctrl.productData = { uri: 'items/crugive/<some id>' };
-        spyOn( $ctrl.$scope, '$emit' );
+        jest.spyOn( $ctrl.$scope, '$emit' ).mockImplementation(() => {});
       } );
 
       it( 'should do nothing on invalid form', () => {
         $ctrl.itemConfigForm.$valid = false;
         $ctrl.saveGiftToCart();
+
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService[operation] ).not.toHaveBeenCalled();
         expect( $ctrl.errorAlreadyInCart ).toEqual(false);
@@ -374,6 +415,7 @@ describe( 'product config form component', function () {
 
       it( 'should still submit the gift if the form is not dirty', () => {
         $ctrl.saveGiftToCart();
+
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
@@ -384,6 +426,7 @@ describe( 'product config form component', function () {
       it( 'should submit a gift successfully', () => {
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
+
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
@@ -397,6 +440,7 @@ describe( 'product config form component', function () {
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.productData.frequency = 'NA';
         $ctrl.saveGiftToCart();
+
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect( $ctrl.$scope.$emit ).toHaveBeenCalledWith( cartEvent );
@@ -406,9 +450,10 @@ describe( 'product config form component', function () {
       } );
 
       it( 'should handle an error submitting a gift', () => {
-        $ctrl.cartService[operation].and.returnValue( Observable.throw( 'some error' ) );
+        $ctrl.cartService[operation].mockReturnValue( Observable.throw( 'some error' ) );
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
+
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorSubmitting' });
@@ -418,9 +463,10 @@ describe( 'product config form component', function () {
       } );
 
       it( 'should handle an error when saving a duplicate item', () => {
-        $ctrl.cartService[operation].and.returnValue( Observable.throw( { data: 'Recurring gift to designation: 0671540 on draw day: 14 is already in the cart' } ) );
+        $ctrl.cartService[operation].mockReturnValue( Observable.throw( { data: 'Recurring gift to designation: 0671540 on draw day: 14 is already in the cart' } ) );
         $ctrl.itemConfigForm.$dirty = true;
         $ctrl.saveGiftToCart();
+
         expect( $ctrl.submittingGift ).toEqual( false );
         expect( $ctrl.cartService[operation] ).toHaveBeenCalledWith(...operationArgs);
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorAlreadyInCart' });
@@ -434,14 +480,18 @@ describe( 'product config form component', function () {
     it('should return an empty string when productData isn\'t defined', () => {
       expect($ctrl.displayId()).toEqual('');
     });
+
     it('shows designationNumber when jcr:title is the same', () => {
       $ctrl.productData = { displayName: 'Title', designationNumber: '0123456'};
       $ctrl.itemConfig = { 'jcr-title': 'Title' };
+
       expect($ctrl.displayId()).toEqual('#0123456');
     });
+
     it('includes productData when jcr:title is different', () => {
       $ctrl.productData = { displayName: 'Title', designationNumber: '0123456'};
       $ctrl.itemConfig = { 'jcr-title': 'Special Title', 'campaign-page': '9876' };
+
       expect($ctrl.displayId()).toEqual('#0123456 - Title');
     });
   });

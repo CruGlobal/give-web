@@ -13,9 +13,9 @@ describe( 'userMatchModal', function () {
   beforeEach( inject( function ( _$componentController_ ) {
     bindings = {
       modalTitle:    '',
-      onStateChange: jasmine.createSpy( 'onStateChange' ),
-      onSuccess:     jasmine.createSpy( 'onSuccess' ),
-      setLoading:    jasmine.createSpy( 'setLoading' )
+      onStateChange: jest.fn(),
+      onSuccess:     jest.fn(),
+      setLoading:    jest.fn()
     };
     $ctrl = _$componentController_( module.name, {}, bindings );
   } ) );
@@ -26,14 +26,15 @@ describe( 'userMatchModal', function () {
 
   describe( '$onInit', () => {
     beforeEach( () => {
-      spyOn( $ctrl.verificationService, 'getContacts' ).and.callFake( () => Observable.of( [] ) );
-      spyOn( $ctrl, 'changeMatchState' );
+      jest.spyOn( $ctrl.verificationService, 'getContacts' ).mockImplementation( () => Observable.of( [] ) );
+      jest.spyOn( $ctrl, 'changeMatchState' ).mockImplementation(() => {});
     } );
 
     describe( 'donorDetails registration-state=\'COMPLETED\'', () => {
       it( 'does not load contacts', () => {
-        spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.of( {'registration-state': 'COMPLETED'} ) );
+        jest.spyOn( $ctrl.profileService, 'getDonorDetails' ).mockReturnValue( Observable.of( {'registration-state': 'COMPLETED'} ) );
         $ctrl.$onInit();
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
         expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
@@ -44,8 +45,9 @@ describe( 'userMatchModal', function () {
     } );
 
     it('should log an error on failure', () => {
-      spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.throw('some error') );
+      jest.spyOn( $ctrl.profileService, 'getDonorDetails' ).mockReturnValue( Observable.throw('some error') );
       $ctrl.$onInit();
+
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
       expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
       expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
@@ -57,24 +59,28 @@ describe( 'userMatchModal', function () {
 
     describe( 'donorDetails registration-state=\'NEW\'', () => {
       beforeEach( () => {
-        spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.of( {'registration-state': 'NEW'} ) );
-        spyOn( $ctrl, 'postDonorMatch' );
+        jest.spyOn( $ctrl.profileService, 'getDonorDetails' ).mockReturnValue( Observable.of( {'registration-state': 'NEW'} ) );
+        jest.spyOn( $ctrl, 'postDonorMatch' ).mockImplementation(() => {});
       } );
+
       it( 'proceeds to postDonorMatch()', () => {
         $ctrl.$onInit();
+
         expect( $ctrl.postDonorMatch ).toHaveBeenCalled();
       } );
     } );
 
     describe( 'donorDetails registration-state=\'MATCHED\'', () => {
       beforeEach( () => {
-        spyOn( $ctrl.profileService, 'getDonorDetails' ).and.returnValue( Observable.of( {'registration-state': 'MATCHED'} ) );
+        jest.spyOn( $ctrl.profileService, 'getDonorDetails' ).mockReturnValue( Observable.of( {'registration-state': 'MATCHED'} ) );
       } );
+
       describe( 'getContacts has selected contact', () => {
         it( 'initializes the component and proceeds to \'activate\'', () => {
           let contacts = [{name: 'Charles Xavier', selected: false}, {name: 'Bruce Bannr', selected: true}];
-          $ctrl.verificationService.getContacts.and.callFake( () => Observable.of( contacts ) );
+          $ctrl.verificationService.getContacts.mockImplementation( () => Observable.of( contacts ) );
           $ctrl.$onInit();
+
           expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
           expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
           expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
@@ -86,8 +92,9 @@ describe( 'userMatchModal', function () {
 
       it( 'initializes the component and proceeds to \'identity\'', () => {
         let contacts = [{name: 'Charles Xavier', selected: false}, {name: 'Bruce Bannr', selected: false}];
-        $ctrl.verificationService.getContacts.and.callFake( () => Observable.of( contacts ) );
+        $ctrl.verificationService.getContacts.mockImplementation( () => Observable.of( contacts ) );
         $ctrl.$onInit();
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
         expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
@@ -98,8 +105,9 @@ describe( 'userMatchModal', function () {
       } );
 
       it('should log an error on failure', () => {
-        $ctrl.verificationService.getContacts.and.returnValue( Observable.throw( 'another error' ) );
+        $ctrl.verificationService.getContacts.mockReturnValue( Observable.throw( 'another error' ) );
         $ctrl.$onInit();
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.modalTitle ).toEqual( 'Activate your Account' );
         expect( $ctrl.profileService.getDonorDetails ).toHaveBeenCalled();
@@ -113,17 +121,19 @@ describe( 'userMatchModal', function () {
 
   describe( 'postDonorMatch()', () => {
     it( 'should proceed to getContacts() on donor match success', () => {
-      spyOn( $ctrl, 'getContacts' );
-      spyOn( $ctrl.verificationService, 'postDonorMatches').and.returnValue( Observable.of( {} ) );
+      jest.spyOn( $ctrl, 'getContacts' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl.verificationService, 'postDonorMatches').mockReturnValue( Observable.of( {} ) );
       $ctrl.postDonorMatch();
+
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
       expect( $ctrl.getContacts ).toHaveBeenCalled();
     } );
 
     it( 'proceeds to success on postDonorMatch failure.', () => {
-      spyOn( $ctrl, 'changeMatchState' );
-      spyOn( $ctrl.verificationService, 'postDonorMatches').and.returnValue( Observable.throw( 'error' ) );
+      jest.spyOn( $ctrl, 'changeMatchState' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl.verificationService, 'postDonorMatches').mockReturnValue( Observable.throw( 'error' ) );
       $ctrl.postDonorMatch();
+
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
       expect( $ctrl.skippedQuestions ).toEqual( true );
       expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success' );
@@ -137,6 +147,7 @@ describe( 'userMatchModal', function () {
 
     it( 'sets state and title on \'identity\'', () => {
       $ctrl.changeMatchState( 'identity' );
+
       expect( $ctrl.modalTitle ).toEqual( 'It looks like someone in your household has given to Cru previously' );
       expect( $ctrl.matchState ).toEqual( 'identity' );
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
@@ -144,6 +155,7 @@ describe( 'userMatchModal', function () {
 
     it( 'sets state and title on \'success\'', () => {
       $ctrl.changeMatchState( 'success' );
+
       expect( $ctrl.modalTitle ).toEqual( 'Success!' );
       expect( $ctrl.matchState ).toEqual( 'success' );
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
@@ -151,6 +163,7 @@ describe( 'userMatchModal', function () {
 
     it( 'sets state and title on \'activate\'', () => {
       $ctrl.changeMatchState( 'activate' );
+
       expect( $ctrl.modalTitle ).toEqual( 'Activate Your Account' );
       expect( $ctrl.matchState ).toEqual( 'activate' );
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
@@ -158,6 +171,7 @@ describe( 'userMatchModal', function () {
 
     it( 'sets state and title on \'unknown-state\'', () => {
       $ctrl.changeMatchState( 'unknown-state' );
+
       expect( $ctrl.modalTitle ).toEqual( 'Activate Your Account' );
       expect( $ctrl.matchState ).toEqual( 'unknown-state' );
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
@@ -166,13 +180,14 @@ describe( 'userMatchModal', function () {
 
   describe( 'onSelectContact( contact )', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'changeMatchState' );
+      jest.spyOn( $ctrl, 'changeMatchState' ).mockImplementation(() => {});
     } );
 
     describe( 'valid contact', () => {
       it( 'selects the contact', () => {
-        spyOn( $ctrl.verificationService, 'selectContact' ).and.returnValue( Observable.of( {} ) );
+        jest.spyOn( $ctrl.verificationService, 'selectContact' ).mockReturnValue( Observable.of( {} ) );
         $ctrl.onSelectContact( {name: 'Batman'} );
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.verificationService.selectContact ).toHaveBeenCalledWith( {name: 'Batman'} );
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'activate' );
@@ -180,8 +195,9 @@ describe( 'userMatchModal', function () {
       } );
 
       it('should log an error on failure', () => {
-        spyOn( $ctrl.verificationService, 'selectContact' ).and.returnValue( Observable.throw( 'some error' ) );
+        jest.spyOn( $ctrl.verificationService, 'selectContact' ).mockReturnValue( Observable.throw( 'some error' ) );
         $ctrl.onSelectContact( {name: 'Batman'} );
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.verificationService.selectContact ).toHaveBeenCalledWith( {name: 'Batman'} );
         expect( $ctrl.changeMatchState ).not.toHaveBeenCalled();
@@ -193,16 +209,18 @@ describe( 'userMatchModal', function () {
 
     describe( 'undefined', () => {
       it( 'selects \'that-is-not-me\'', () => {
-        spyOn( $ctrl.verificationService, 'thatIsNotMe' ).and.returnValue( Observable.of( {} ) );
+        jest.spyOn( $ctrl.verificationService, 'thatIsNotMe' ).mockReturnValue( Observable.of( {} ) );
         $ctrl.onSelectContact();
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.verificationService.thatIsNotMe ).toHaveBeenCalled();
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success' );
       } );
 
       it('should log an error on failure', () => {
-        spyOn( $ctrl.verificationService, 'thatIsNotMe' ).and.returnValue( Observable.throw( 'some error' ) );
+        jest.spyOn( $ctrl.verificationService, 'thatIsNotMe' ).mockReturnValue( Observable.throw( 'some error' ) );
         $ctrl.onSelectContact();
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.verificationService.thatIsNotMe ).toHaveBeenCalled();
         expect( $ctrl.changeMatchState ).not.toHaveBeenCalled();
@@ -215,10 +233,11 @@ describe( 'userMatchModal', function () {
 
   describe( 'onActivate', () => {
     it( 'load questions and changes state', () => {
-      spyOn( $ctrl.verificationService, 'getQuestions' ).and.returnValue( Observable.of( ['a', 'b', 'c'] ) );
-      spyOn( $ctrl, 'changeMatchState' );
+      jest.spyOn( $ctrl.verificationService, 'getQuestions' ).mockReturnValue( Observable.of( ['a', 'b', 'c'] ) );
+      jest.spyOn( $ctrl, 'changeMatchState' ).mockImplementation(() => {});
 
       $ctrl.onActivate();
+
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
       expect( $ctrl.answers ).toEqual( [] );
       expect( $ctrl.questions ).toEqual( ['b', 'c'] );
@@ -230,10 +249,11 @@ describe( 'userMatchModal', function () {
     } );
 
     it('should log an error on failure', () => {
-      spyOn( $ctrl.verificationService, 'getQuestions' ).and.returnValue( Observable.throw('some error') );
-      spyOn( $ctrl, 'changeMatchState' );
+      jest.spyOn( $ctrl.verificationService, 'getQuestions' ).mockReturnValue( Observable.throw('some error') );
+      jest.spyOn( $ctrl, 'changeMatchState' ).mockImplementation(() => {});
 
       $ctrl.onActivate();
+
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
       expect( $ctrl.changeMatchState ).not.toHaveBeenCalled();
       expect( $ctrl.loadingQuestionsError ).toEqual(true);
@@ -244,7 +264,7 @@ describe( 'userMatchModal', function () {
 
   describe( 'onQuestionAnswer', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'changeMatchState' );
+      jest.spyOn( $ctrl, 'changeMatchState' ).mockImplementation(() => {});
       $ctrl.questionIndex = 2;
       $ctrl.answers = [{key: 'a', answer: 'a'}];
     } );
@@ -254,6 +274,7 @@ describe( 'userMatchModal', function () {
         $ctrl.questions = ['b', 'c'];
 
         $ctrl.onQuestionAnswer( 'key', 'answer' );
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.answers ).toEqual( [{key: 'a', answer: 'a'}, {key: 'key', answer: 'answer'}] );
         expect( $ctrl.question ).toEqual( 'b' );
@@ -264,10 +285,11 @@ describe( 'userMatchModal', function () {
 
     describe( 'no more questions', () => {
       it( 'proceeds to success on submitAnswers success', () => {
-        spyOn( $ctrl.verificationService, 'submitAnswers' ).and.returnValue( Observable.of( {} ) );
+        jest.spyOn( $ctrl.verificationService, 'submitAnswers' ).mockReturnValue( Observable.of( {} ) );
         $ctrl.questions = [];
 
         $ctrl.onQuestionAnswer( 'key', 'answer' );
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.answers ).toEqual( [{key: 'a', answer: 'a'}, {key: 'key', answer: 'answer'}] );
         expect( $ctrl.question ).not.toBeDefined();
@@ -276,18 +298,21 @@ describe( 'userMatchModal', function () {
           key:    'key',
           answer: 'answer'
         }] );
+
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success' );
       } );
 
       it( 'proceeds to success-failure on submitAnswers failure', () => {
-        spyOn( $ctrl.verificationService, 'submitAnswers' ).and.returnValue( Observable.throw( {} ) );
+        jest.spyOn( $ctrl.verificationService, 'submitAnswers' ).mockReturnValue( Observable.throw( {} ) );
         $ctrl.questions = [];
 
         $ctrl.onQuestionAnswer( 'key', 'answer' );
+
         expect( $ctrl.verificationService.submitAnswers ).toHaveBeenCalledWith( [{key: 'a', answer: 'a'}, {
           key:    'key',
           answer: 'answer'
         }] );
+
         expect( $ctrl.changeMatchState ).toHaveBeenCalledWith( 'success-failure' );
       } );
     } );

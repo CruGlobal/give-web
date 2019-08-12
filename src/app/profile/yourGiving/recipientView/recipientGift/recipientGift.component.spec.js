@@ -28,25 +28,26 @@ describe( 'your giving', function () {
         expect( $ctrl.productModalService ).toBeDefined();
         expect( $ctrl.showDetails ).toEqual( false );
         expect( $ctrl.detailsLoaded ).toEqual( false );
-        expect( $ctrl.currentDate ).toEqual( jasmine.any( Date ) );
+        expect( $ctrl.currentDate ).toEqual( expect.any( Date ) );
       } );
 
       describe( 'toggleDetails', () => {
         let subject;
         beforeEach( () => {
           subject = new ReplaySubject( [] );
-          spyOn( $ctrl.profileService, 'getPaymentMethod' ).and.callFake( () => subject );
+          jest.spyOn( $ctrl.profileService, 'getPaymentMethod' ).mockImplementation( () => subject );
         } );
 
         it( 'shows the details section', () => {
 
           $ctrl.toggleDetails();
+
           expect( $ctrl.isLoading ).toEqual( false );
           expect( $ctrl.detailsLoaded ).toEqual( true );
         } );
 
         it( 'set payment method on donation', () => {
-          $ctrl.profileService.getPaymentMethod.and.returnValue( Observable.of({
+          $ctrl.profileService.getPaymentMethod.mockReturnValue( Observable.of({
               id: 'aaa111',
               self: {
                 'uri': '/payment/uri'
@@ -73,11 +74,12 @@ describe( 'your giving', function () {
         it( 'doesnt load details a second time', () => {
           $ctrl.detailsLoaded = true;
           $ctrl.toggleDetails();
+
           expect( $ctrl.profileService.getPaymentMethod ).not.toHaveBeenCalled();
         } );
 
         it( 'should log and error on failure', () => {
-          $ctrl.profileService.getPaymentMethod.and.returnValue(Observable.throw('some error'));
+          $ctrl.profileService.getPaymentMethod.mockReturnValue(Observable.throw('some error'));
           $ctrl.recipient = {
             donations: [{
               'payment-method-link': {
@@ -91,6 +93,7 @@ describe( 'your giving', function () {
 
 
           $ctrl.toggleDetails();
+
           expect( $ctrl.showDetails ).toEqual( false );
           expect( $ctrl.isLoading ).toEqual( false );
           expect($ctrl.loadingDetailsError).toEqual(true);
@@ -100,12 +103,13 @@ describe( 'your giving', function () {
 
       describe( 'giveNewGift()', () => {
         beforeEach( () => {
-          spyOn( $ctrl.productModalService, 'configureProduct' );
+          jest.spyOn( $ctrl.productModalService, 'configureProduct' ).mockImplementation(() => {});
         } );
 
         it( 'displays productConfig modal', () => {
           $ctrl.recipient = {'designation-number': '01234567'};
           $ctrl.giveNewGift();
+
           expect( $ctrl.productModalService.configureProduct ).toHaveBeenCalledWith( '01234567' );
         } );
       } );
@@ -113,7 +117,8 @@ describe( 'your giving', function () {
       describe( 'recurringGift( recurring )', () => {
         it( 'returns a gift model', () => {
           let gift = $ctrl.recurringGift({'donation-lines': [{amount: 300, 'designation-name': 'Damien Wilberforce'}]});
-          expect( gift ).toEqual( jasmine.any( RecurringGiftModel ) );
+
+          expect( gift ).toEqual( expect.any( RecurringGiftModel ) );
         } );
       } );
     } );

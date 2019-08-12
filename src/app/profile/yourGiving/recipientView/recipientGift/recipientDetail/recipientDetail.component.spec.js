@@ -19,6 +19,7 @@ describe( 'your giving', function () {
           scope.gift = {a: 'a'};
           let element = $compile( '<tr recipient-detail="gift"></tr>' )( scope );
           $rootScope.$digest();
+
           expect( element.children().length ).toEqual( 4 );
         } );
       } );

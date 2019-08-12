@@ -11,7 +11,7 @@ describe( 'your giving', function () {
       beforeEach( inject( ( _$componentController_ ) => {
         $ctrl = _$componentController_( module.name, {}, {
           gift: {},
-          onManageGift: jasmine.createSpy('onManageGift')
+          onManageGift: jest.fn()
         } );
       } ) );
 
@@ -23,18 +23,20 @@ describe( 'your giving', function () {
       describe( 'manageGift()', () => {
         it( 'calls onManageGift', () => {
           $ctrl.manageGift();
+
           expect( $ctrl.onManageGift ).toHaveBeenCalled();
         } );
       } );
 
       describe( 'giveNewGift()', () => {
         beforeEach( () => {
-          spyOn( $ctrl.productModalService, 'configureProduct' );
+          jest.spyOn( $ctrl.productModalService, 'configureProduct' ).mockImplementation(() => {});
         } );
 
         it( 'displays productConfig modal', () => {
           $ctrl.gift = {'historical-donation-line': {'designation-number': '01234567'}};
           $ctrl.giveNewGift();
+
           expect( $ctrl.productModalService.configureProduct ).toHaveBeenCalledWith( '01234567' );
         } );
       } );

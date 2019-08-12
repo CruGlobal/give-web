@@ -13,13 +13,14 @@ describe('giveOneTimeGiftModal', () => {
 
     beforeEach(inject(($componentController) => {
       self.controller = $componentController(module.name, {}, {
-        next: jasmine.createSpy('next')
+        next: jest.fn()
       });
     }));
 
     describe('onChange', () => {
       it('should update additionalRecipients when selectedRecipients changes', () => {
         self.controller.onChange(['first selected recipient', 'second selected recipient']);
+
         expect(self.controller.additionalRecipients).toEqual(['first selected recipient', 'second selected recipient']);
       });
     });
@@ -37,6 +38,7 @@ describe('giveOneTimeGiftModal', () => {
           recipient._selectedGift = true;
           return recipient;
         });
+
         expect(self.controller.next).toHaveBeenCalledWith({ additionalRecipients: additionalRecipients });
       });
     });

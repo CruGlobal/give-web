@@ -10,7 +10,7 @@ describe('giveOneTimeGiftModal', () => {
 
     beforeEach(inject(($componentController) => {
       self.controller = $componentController(module.name, {}, {
-        next: jasmine.createSpy('next')
+        next: jest.fn()
       });
     }));
 
@@ -18,16 +18,21 @@ describe('giveOneTimeGiftModal', () => {
       it('should initialize hasSelectedRecipients if there are selectedRecipients', () => {
         self.controller.selectedRecipients = ['some gift'];
         self.controller.$onInit();
+
         expect(self.controller.hasSelectedRecipients).toEqual(true);
       });
+
       it('should initialize hasSelectedRecipients if selectedRecipients is an empty array', () => {
         self.controller.selectedRecipients = [];
         self.controller.$onInit();
+
         expect(self.controller.hasSelectedRecipients).toEqual(false);
       });
+
       it('should initialize hasSelectedRecipients if selectedRecipients is undefined', () => {
         self.controller.selectedRecipients = undefined;
         self.controller.$onInit();
+
         expect(self.controller.hasSelectedRecipients).toBeFalsy();
       });
     });
@@ -36,13 +41,17 @@ describe('giveOneTimeGiftModal', () => {
       it('should set addingToCart to false when submitted is true', () => {
         self.controller.addingToCart = true;
         self.controller.$onChanges({ submitted: { currentValue: true } });
+
         expect(self.controller.addingToCart).toEqual(false);
       });
+
       it('should not set addingToCart to false when submitted is not true', () => {
         self.controller.addingToCart = true;
         self.controller.$onChanges({ submitted: { currentValue: false } });
+
         expect(self.controller.addingToCart).toEqual(true);
         self.controller.$onChanges({});
+
         expect(self.controller.addingToCart).toEqual(true);
       });
     });
@@ -52,6 +61,7 @@ describe('giveOneTimeGiftModal', () => {
         self.controller.addingToCart = false;
         self.controller.selectedRecipients = [{ designationNumber: '0123456' }];
         self.controller.addToCart();
+
         expect(self.controller.addingToCart).toEqual(true);
         expect(self.controller.next).toHaveBeenCalledWith({ selectedRecipients: [{ designationNumber: '0123456' }]});
       });

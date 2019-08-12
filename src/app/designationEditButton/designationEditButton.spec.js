@@ -26,12 +26,13 @@ describe( 'Designation Editor Button', function () {
     beforeEach(inject((_$q_) => {
       designationContentPromise = _$q_.defer();
 
-      spyOn( $ctrl.sessionService, 'getRole' ).and.returnValue( 'REGISTERED' );
-      spyOn( $ctrl.designationEditorService, 'checkPermission' ).and.returnValue( designationContentPromise.promise );
+      jest.spyOn( $ctrl.sessionService, 'getRole' ).mockReturnValue( 'REGISTERED' );
+      jest.spyOn( $ctrl.designationEditorService, 'checkPermission' ).mockReturnValue( designationContentPromise.promise );
     }));
 
     it( 'initializes the component', () => {
       $ctrl.$onInit();
+
       expect( $ctrl.showEditButton ).toEqual( undefined );
     } );
 
@@ -54,6 +55,7 @@ describe( 'Designation Editor Button', function () {
 
   it('should navigate to editor on button click', () => {
     $ctrl.editPage();
+
     expect( $ctrl.$window.location ).toContain( $ctrl.designationNumber );
   });
 } );

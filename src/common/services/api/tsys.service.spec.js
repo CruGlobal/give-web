@@ -21,6 +21,7 @@ describe('order service', () => {
     it('should set the branded checkout TSYS device', () => {
       expect(self.tsysService.device).toEqual('');
       self.tsysService.setDevice('test-env');
+
       expect(self.tsysService.device).toEqual('test-env');
     });
   });

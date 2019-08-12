@@ -6,6 +6,7 @@ import assign from 'lodash/assign';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/mergeMap';
 
 import displayAddressComponent from 'common/components/display-address/display-address.component';
 import addressForm from 'common/components/addressForm/addressForm.component';

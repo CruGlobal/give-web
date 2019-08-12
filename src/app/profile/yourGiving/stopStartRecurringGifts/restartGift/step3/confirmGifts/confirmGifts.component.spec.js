@@ -16,7 +16,7 @@ describe( 'your giving', () => {
           let $ctrl;
 
           beforeEach( inject( ( $componentController ) => {
-            $ctrl = $componentController( module.name, {}, jasmine.createSpyObj( 'bindings', ['next', 'previous', 'setLoading'] ) );
+            $ctrl = $componentController( module.name, {}, {next: jest.fn(), previous: jest.fn(), setLoading: jest.fn()} );
           } ) );
 
           it( 'is defined', () => {
@@ -31,8 +31,9 @@ describe( 'your giving', () => {
                 new RecurringGiftModel( {'designation-name': 'Charles Xavier'}, {'donation-status': 'Active'} )
               ];
               $ctrl.$onInit();
-              expect( $ctrl.updates ).toEqual( jasmine.any( Array ) );
-              expect( $ctrl.adds ).toEqual( jasmine.any( Array ) );
+
+              expect( $ctrl.updates ).toEqual( expect.any( Array ) );
+              expect( $ctrl.adds ).toEqual( expect.any( Array ) );
               expect( $ctrl.saved ).toEqual( [] );
               expect( $ctrl.updates[0].designationName ).toEqual( 'Charles Xavier' );
               expect( $ctrl.adds[0].designationName ).toEqual( 'Batman' );
@@ -41,8 +42,8 @@ describe( 'your giving', () => {
 
           describe( 'processRestarts()', () => {
             beforeEach( () => {
-              spyOn( $ctrl.donationsService, 'addRecurringGifts' );
-              spyOn( $ctrl.donationsService, 'updateRecurringGifts' );
+              jest.spyOn( $ctrl.donationsService, 'addRecurringGifts' ).mockImplementation(() => {});
+              jest.spyOn( $ctrl.donationsService, 'updateRecurringGifts' ).mockImplementation(() => {});
             } );
 
             describe( 'has additions', () => {
@@ -53,7 +54,8 @@ describe( 'your giving', () => {
 
               describe( 'addRecurringGifts success', () => {
                 it( 'calls next()', () => {
-                  $ctrl.donationsService.addRecurringGifts.and.returnValue( Observable.of( [] ) );
+                  $ctrl.donationsService.addRecurringGifts.mockReturnValue( Observable.of( [] ) );
+
                   expect( $ctrl.saved.length ).toEqual( 0 );
                   expect( $ctrl.adds.length ).toEqual( 1 );
                   $ctrl.processRestarts();
@@ -68,8 +70,9 @@ describe( 'your giving', () => {
 
               describe( 'addRecurringGifts failure', () => {
                 it( 'sets error state', () => {
-                  $ctrl.donationsService.addRecurringGifts.and.returnValue( Observable.throw( '' ) );
+                  $ctrl.donationsService.addRecurringGifts.mockReturnValue( Observable.throw( '' ) );
                   $ctrl.processRestarts();
+
                   expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
                   expect( $ctrl.donationsService.addRecurringGifts ).toHaveBeenCalled();
                   expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
@@ -87,7 +90,8 @@ describe( 'your giving', () => {
 
               describe( 'updateRecurringGifts success', () => {
                 it( 'calls next()', () => {
-                  $ctrl.donationsService.updateRecurringGifts.and.returnValue( Observable.of( [] ) );
+                  $ctrl.donationsService.updateRecurringGifts.mockReturnValue( Observable.of( [] ) );
+
                   expect( $ctrl.saved.length ).toEqual( 0 );
                   expect( $ctrl.updates.length ).toEqual( 1 );
                   $ctrl.processRestarts();
@@ -102,8 +106,9 @@ describe( 'your giving', () => {
 
               describe( 'updateRecurringGifts failure', () => {
                 it( 'sets error state', () => {
-                  $ctrl.donationsService.updateRecurringGifts.and.returnValue( Observable.throw( '' ) );
+                  $ctrl.donationsService.updateRecurringGifts.mockReturnValue( Observable.throw( '' ) );
                   $ctrl.processRestarts();
+
                   expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
                   expect( $ctrl.donationsService.updateRecurringGifts ).toHaveBeenCalled();
                   expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
@@ -121,13 +126,15 @@ describe( 'your giving', () => {
 
               describe( 'addRecurringGifts and updateRecurringGifts success', () => {
                 it( 'calls next()', () => {
-                  $ctrl.donationsService.addRecurringGifts.and.returnValue( Observable.of( [] ) );
-                  $ctrl.donationsService.updateRecurringGifts.and.returnValue( Observable.of( [] ) );
+                  $ctrl.donationsService.addRecurringGifts.mockReturnValue( Observable.of( [] ) );
+                  $ctrl.donationsService.updateRecurringGifts.mockReturnValue( Observable.of( [] ) );
+
                   expect( $ctrl.saved.length ).toEqual( 0 );
                   expect( $ctrl.updates.length ).toEqual( 1 );
                   expect( $ctrl.adds.length ).toEqual( 1 );
 
                   $ctrl.processRestarts();
+
                   expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
                   expect( $ctrl.donationsService.addRecurringGifts ).toHaveBeenCalled();
                   expect( $ctrl.donationsService.updateRecurringGifts ).toHaveBeenCalled();
@@ -140,17 +147,19 @@ describe( 'your giving', () => {
 
               describe( 'addRecurringGifts failure and updateRecurringGifts success', () => {
                 it( 'sets error state', () => {
-                  $ctrl.donationsService.addRecurringGifts.and.returnValue( Observable.throw( '' ) );
-                  $ctrl.donationsService.updateRecurringGifts.and.returnValue( Observable.of( [] ) );
+                  $ctrl.donationsService.addRecurringGifts.mockReturnValue( Observable.throw( '' ) );
+                  $ctrl.donationsService.updateRecurringGifts.mockReturnValue( Observable.of( [] ) );
+
                   expect( $ctrl.saved.length ).toEqual( 0 );
                   expect( $ctrl.updates.length ).toEqual( 1 );
                   expect( $ctrl.adds.length ).toEqual( 1 );
 
                   $ctrl.processRestarts();
+
                   expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
                   expect( $ctrl.donationsService.addRecurringGifts ).toHaveBeenCalled();
                   expect( $ctrl.donationsService.updateRecurringGifts ).toHaveBeenCalled();
-                  expect( $ctrl.adds ).toEqual( [jasmine.any( RecurringGiftModel )] );
+                  expect( $ctrl.adds ).toEqual( [expect.any( RecurringGiftModel )] );
                   expect( $ctrl.updates ).toEqual( [] );
                   expect( $ctrl.saved.length ).toEqual( 1 );
                   expect( $ctrl.next ).not.toHaveBeenCalled();
@@ -161,17 +170,19 @@ describe( 'your giving', () => {
 
               describe( 'addRecurringGifts success and updateRecurringGifts failure', () => {
                 it( 'sets error state', () => {
-                  $ctrl.donationsService.addRecurringGifts.and.returnValue( Observable.of( [] ) );
-                  $ctrl.donationsService.updateRecurringGifts.and.returnValue( Observable.throw( [] ) );
+                  $ctrl.donationsService.addRecurringGifts.mockReturnValue( Observable.of( [] ) );
+                  $ctrl.donationsService.updateRecurringGifts.mockReturnValue( Observable.throw( [] ) );
+
                   expect( $ctrl.saved.length ).toEqual( 0 );
                   expect( $ctrl.updates.length ).toEqual( 1 );
                   expect( $ctrl.adds.length ).toEqual( 1 );
 
                   $ctrl.processRestarts();
+
                   expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
                   expect( $ctrl.donationsService.addRecurringGifts ).toHaveBeenCalled();
                   expect( $ctrl.donationsService.updateRecurringGifts ).toHaveBeenCalled();
-                  expect( $ctrl.updates ).toEqual( [jasmine.any( RecurringGiftModel )] );
+                  expect( $ctrl.updates ).toEqual( [expect.any( RecurringGiftModel )] );
                   expect( $ctrl.adds ).toEqual( [] );
                   expect( $ctrl.saved.length ).toEqual( 1 );
                   expect( $ctrl.next ).not.toHaveBeenCalled();

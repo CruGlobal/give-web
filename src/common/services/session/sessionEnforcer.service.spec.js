@@ -17,9 +17,9 @@ describe( 'sessionEnforcerService', function () {
     sessionEnforcerService = _sessionEnforcerService_;
     sessionModalService = _sessionModalService_;
     sessionService = _sessionService_;
-    spyOn( sessionService, 'getRole' ).and.returnValue( Roles.public );
+    jest.spyOn( sessionService, 'getRole' ).mockReturnValue( Roles.public );
     deferred = _$q_.defer();
-    spyOn( sessionModalService, 'open' ).and.callFake( () => {
+    jest.spyOn( sessionModalService, 'open' ).mockImplementation( () => {
       return {result: deferred.promise};
     } );
   } ) );
@@ -34,7 +34,7 @@ describe( 'sessionEnforcerService', function () {
     } );
 
     it( 'returns id', () => {
-      expect( sessionEnforcerService( [Roles.public, Roles.registered] ) ).toEqual( jasmine.any( String ) );
+      expect( sessionEnforcerService( [Roles.public, Roles.registered] ) ).toEqual( expect.any( String ) );
       expect( sessionModalService.open ).not.toHaveBeenCalled();
     } );
 
@@ -48,7 +48,8 @@ describe( 'sessionEnforcerService', function () {
           [EnforcerCallbacks.change]: () => {
           }
         }
-      ) ).toEqual( jasmine.any( String ) );
+      ) ).toEqual( expect.any( String ) );
+
       expect( sessionModalService.open ).not.toHaveBeenCalled();
     } );
 
@@ -57,9 +58,9 @@ describe( 'sessionEnforcerService', function () {
         let signIn, cancel, change, $rootScope;
         beforeEach( inject( function ( _$rootScope_ ) {
           $rootScope = _$rootScope_;
-          signIn = jasmine.createSpy( 'success' );
-          cancel = jasmine.createSpy( 'failure' );
-          change = jasmine.createSpy( 'change' );
+          signIn = jest.fn();
+          cancel = jest.fn();
+          change = jest.fn();
           sessionEnforcerService( [Roles.registered], {
             [EnforcerCallbacks.signIn]: signIn,
             [EnforcerCallbacks.cancel]: cancel,
@@ -76,6 +77,7 @@ describe( 'sessionEnforcerService', function () {
           it( 'calls \'sign-in\' callback', () => {
             deferred.resolve();
             $rootScope.$digest();
+
             expect( signIn ).toHaveBeenCalled();
           } );
         } );
@@ -84,6 +86,7 @@ describe( 'sessionEnforcerService', function () {
           it( 'calls \'cancel\' callback', () => {
             deferred.reject();
             $rootScope.$digest();
+
             expect( cancel ).toHaveBeenCalled();
           } );
         } );
@@ -93,9 +96,9 @@ describe( 'sessionEnforcerService', function () {
         let signIn, cancel, change, $rootScope;
         beforeEach( inject( function ( _$rootScope_ ) {
           $rootScope = _$rootScope_;
-          signIn = jasmine.createSpy( 'success' );
-          cancel = jasmine.createSpy( 'failure' );
-          change = jasmine.createSpy( 'change' );
+          signIn = jest.fn();
+          cancel = jest.fn();
+          change = jest.fn();
           sessionEnforcerService( [Roles.registered], {}, EnforcerModes.session );
         } ) );
 
@@ -108,6 +111,7 @@ describe( 'sessionEnforcerService', function () {
           it( 'does not call \'sign-in\' callback', () => {
             deferred.resolve();
             $rootScope.$digest();
+
             expect( signIn ).not.toHaveBeenCalled();
           } );
         } );
@@ -116,6 +120,7 @@ describe( 'sessionEnforcerService', function () {
           it( 'does not call \'cancel\' callback', () => {
             deferred.reject();
             $rootScope.$digest();
+
             expect( cancel ).not.toHaveBeenCalled();
           } );
         } );
@@ -125,10 +130,10 @@ describe( 'sessionEnforcerService', function () {
         let signIn, cancel, change, $rootScope;
         beforeEach( inject( function ( _$rootScope_ ) {
           $rootScope = _$rootScope_;
-          signIn = jasmine.createSpy( 'success' );
-          cancel = jasmine.createSpy( 'failure' );
-          change = jasmine.createSpy( 'change' );
-          sessionService.getRole.and.returnValue( Roles.registered );
+          signIn = jest.fn();
+          cancel = jest.fn();
+          change = jest.fn();
+          sessionService.getRole.mockReturnValue( Roles.registered );
         } ) );
 
         describe( 'callbackOnInit = true', () => {
@@ -139,6 +144,7 @@ describe( 'sessionEnforcerService', function () {
               [EnforcerCallbacks.change]: change
             }, 'blah', true );
             $rootScope.$digest();
+
             expect( signIn ).toHaveBeenCalled();
             expect( sessionModalService.open ).not.toHaveBeenCalled();
           } );
@@ -152,6 +158,7 @@ describe( 'sessionEnforcerService', function () {
               [EnforcerCallbacks.change]: change
             }, 'blah', false );
             $rootScope.$digest();
+
             expect( signIn ).not.toHaveBeenCalled();
             expect( sessionModalService.open ).not.toHaveBeenCalled();
           } );
@@ -164,10 +171,10 @@ describe( 'sessionEnforcerService', function () {
       beforeEach( inject( function ( _$rootScope_, _orderService_ ) {
         $rootScope = _$rootScope_;
         orderService = _orderService_;
-        signIn = jasmine.createSpy( 'success' );
-        cancel = jasmine.createSpy( 'failure' );
-        change = jasmine.createSpy( 'change' );
-        spyOn( orderService, 'getDonorDetails' ).and.callFake( () => Observable.of( {'registration-state': 'NEW'} ) );
+        signIn = jest.fn();
+        cancel = jest.fn();
+        change = jest.fn();
+        jest.spyOn( orderService, 'getDonorDetails' ).mockImplementation( () => Observable.of( {'registration-state': 'NEW'} ) );
       } ) );
 
       describe( 'does not include current role', () => {
@@ -188,7 +195,7 @@ describe( 'sessionEnforcerService', function () {
 
       describe( '\'REGISTERED\' role with \'NEW\' registration-state', () => {
         beforeEach( () => {
-          sessionService.getRole.and.returnValue( Roles.registered );
+          sessionService.getRole.mockReturnValue( Roles.registered );
         } );
 
         describe( 'registerAccount', () => {
@@ -202,6 +209,7 @@ describe( 'sessionEnforcerService', function () {
 
           it( 'opens registerAccount modal and calls \'change\' callback', () => {
             $rootScope.$digest();
+
             expect( orderService.getDonorDetails ).toHaveBeenCalled();
             expect( change ).toHaveBeenCalledWith( Roles.registered );
             expect( sessionModalService.open ).toHaveBeenCalledWith( 'register-account', {
@@ -214,6 +222,7 @@ describe( 'sessionEnforcerService', function () {
             it( 'calls \'sign-in\' callback', () => {
               deferred.resolve();
               $rootScope.$digest();
+
               expect( signIn ).toHaveBeenCalled();
             } );
           } );
@@ -222,6 +231,7 @@ describe( 'sessionEnforcerService', function () {
             it( 'calls \'cancel\' callback', () => {
               deferred.reject();
               $rootScope.$digest();
+
               expect( cancel ).toHaveBeenCalled();
             } );
           } );
@@ -229,7 +239,7 @@ describe( 'sessionEnforcerService', function () {
 
         describe( 'orderService.getDonorDetails() fails', () => {
           beforeEach( () => {
-            orderService.getDonorDetails.and.callFake( () => Observable.throw( {} ) );
+            orderService.getDonorDetails.mockImplementation( () => Observable.throw( {} ) );
           } );
 
           it( 'opens registerAccount modal and calls \'change\' callback', () => {
@@ -269,8 +279,8 @@ describe( 'sessionEnforcerService', function () {
 
       describe( '\'REGISTERED\' role with \'COMPLETED\' registration-state', () => {
         beforeEach( () => {
-          sessionService.getRole.and.returnValue( Roles.registered );
-          orderService.getDonorDetails.and.callFake( () => Observable.of( {'registration-state': 'COMPLETED'} ) );
+          sessionService.getRole.mockReturnValue( Roles.registered );
+          orderService.getDonorDetails.mockImplementation( () => Observable.of( {'registration-state': 'COMPLETED'} ) );
         } );
 
         it( 'does not open registerAccount modal and calls \'sign-in\' callback', () => {
@@ -304,6 +314,7 @@ describe( 'sessionEnforcerService', function () {
     it( 'cancels known enforcer', () => {
       let id = sessionEnforcerService( [Roles.public, Roles.registered] ),
         result = sessionEnforcerService.cancel( id );
+
       expect( result ).toEqual( true );
     } );
 

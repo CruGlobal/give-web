@@ -96,18 +96,6 @@ module.exports = (env = {}) => {
             'html-loader',
           ],
         },
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader: 'eslint-loader',
-          enforce: 'pre',
-          options: {
-            // Show errors as warnings during development to prevent start/test commands from exiting
-            failOnError: isBuild || ci,
-            emitWarning: !isBuild && !ci,
-            formatter: require('eslint/lib/cli-engine/formatters/stylish'),
-          },
-        },
         // extract global css into separate files
         {
           test: /\.scss$/,

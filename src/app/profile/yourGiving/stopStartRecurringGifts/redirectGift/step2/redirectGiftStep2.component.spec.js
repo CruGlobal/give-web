@@ -12,7 +12,7 @@ describe( 'your giving', () => {
 
           beforeEach( inject( ( $componentController ) => {
             $ctrl = $componentController( module.name, {}, {
-              onSelectResult: jasmine.createSpy( 'onSelectResult' )
+              onSelectResult: jest.fn()
             } );
           } ) );
 
@@ -24,6 +24,7 @@ describe( 'your giving', () => {
             it( 'should store the selectedRecipient', () => {
               let gift = { designationNumber: '0123456', designationName: 'Some Staff' };
               $ctrl.onSelection( gift );
+
               expect( $ctrl.selected ).toEqual( gift );
             } );
           } );

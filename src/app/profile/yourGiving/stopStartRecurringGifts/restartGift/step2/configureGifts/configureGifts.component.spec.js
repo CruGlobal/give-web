@@ -11,7 +11,7 @@ describe( 'your giving', () => {
           let $ctrl;
 
           beforeEach( inject( ( $componentController ) => {
-            $ctrl = $componentController( module.name, {}, jasmine.createSpyObj( 'bindings', ['next', 'previous'] ) );
+            $ctrl = $componentController( module.name, {}, {next: jest.fn(), previous: jest.fn()} );
           } ) );
 
           it( 'is defined', () => {

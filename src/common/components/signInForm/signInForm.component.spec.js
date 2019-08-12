@@ -15,7 +15,10 @@ describe( 'signInForm', function () {
 
   beforeEach( inject( function ( _$rootScope_, _$componentController_ ) {
     $rootScope = _$rootScope_;
-    bindings = jasmine.createSpyObj( 'bindings', ['onSuccess', 'onFailure'] );
+    bindings = {
+      onSuccess: jest.fn(),
+      onFailure: jest.fn()
+    };
 
     $ctrl = _$componentController_( module.name, {}, bindings );
   } ) );
@@ -27,6 +30,7 @@ describe( 'signInForm', function () {
   describe( '$onInit', () => {
     it( 'has no username', () => {
       $ctrl.$onInit();
+
       expect( $ctrl.username ).not.toBeDefined();
       expect( $ctrl.signInState).toEqual('identity');
     } );
@@ -50,6 +54,7 @@ describe( 'signInForm', function () {
       it( 'sets username', () => {
         expect( $ctrl.username ).not.toBeDefined();
         $ctrl.$onInit();
+
         expect( $ctrl.username ).toEqual( 'professorx@xavier.edu' );
       } );
     } );
@@ -61,7 +66,7 @@ describe( 'signInForm', function () {
       beforeEach( inject( function ( _$q_ ) {
         deferred = _$q_.defer();
         $ctrl.signInState = 'identity';
-        spyOn( $ctrl.sessionService, 'signIn' ).and.callFake( () => Observable.from( deferred.promise ) );
+        jest.spyOn( $ctrl.sessionService, 'signIn' ).mockImplementation( () => Observable.from( deferred.promise ) );
         $ctrl.username = 'professorx@xavier.edu';
         $ctrl.password = 'Cerebro123';
         $ctrl.signIn();
@@ -75,12 +80,14 @@ describe( 'signInForm', function () {
       it( 'signs in successfully', () => {
         deferred.resolve( {} );
         $rootScope.$digest();
+
         expect( bindings.onSuccess ).toHaveBeenCalled();
       } );
 
       it( 'requires multi-factor', () => {
         deferred.reject( {data: {error: 'invalid_grant', thekey_authn_error: 'mfa_required' } } );
         $rootScope.$digest();
+
         expect( bindings.onFailure ).not.toHaveBeenCalled();
         expect( $ctrl.signInState ).toEqual( 'mfa' );
         expect( $ctrl.errorMessage ).not.toBeDefined();
@@ -90,6 +97,7 @@ describe( 'signInForm', function () {
       it( 'has error signing in', () => {
         deferred.reject( {data: {error: 'invalid_grant', thekey_authn_error: 'invalid_credentials' } } );
         $rootScope.$digest();
+
         expect( bindings.onFailure ).toHaveBeenCalled();
         expect( $ctrl.errorMessage ).toEqual( 'Bad username or password' );
         expect( $ctrl.isSigningIn ).toEqual( false );
@@ -99,6 +107,7 @@ describe( 'signInForm', function () {
       it( 'has unknown error signing in', () => {
         deferred.reject( {data: {error: 'invalid_grant' } } );
         $rootScope.$digest();
+
         expect( bindings.onFailure ).toHaveBeenCalled();
         expect( $ctrl.errorMessage ).toEqual( 'generic' );
         expect( $ctrl.isSigningIn ).toEqual( false );
@@ -107,6 +116,7 @@ describe( 'signInForm', function () {
       it( 'has missing error signing in', () => {
         deferred.reject( {data: null} );
         $rootScope.$digest();
+
         expect( bindings.onFailure ).toHaveBeenCalled();
         expect( $ctrl.errorMessage ).toEqual( 'generic' );
         expect( $ctrl.isSigningIn ).toEqual( false );
@@ -121,6 +131,7 @@ describe( 'signInForm', function () {
           }
         } );
         $rootScope.$digest();
+
         expect( bindings.onFailure ).toHaveBeenCalled();
         expect( $ctrl.$log.error.logs[0] ).toEqual(['Sign In Error', {config: {data: {}}}]);
       });
@@ -131,7 +142,7 @@ describe( 'signInForm', function () {
       beforeEach( inject( function ( _$q_ ) {
         deferred = _$q_.defer();
         $ctrl.signInState = 'mfa';
-        spyOn( $ctrl.sessionService, 'signIn' ).and.callFake( () => Observable.from( deferred.promise ) );
+        jest.spyOn( $ctrl.sessionService, 'signIn' ).mockImplementation( () => Observable.from( deferred.promise ) );
         $ctrl.username = 'professorx@xavier.edu';
         $ctrl.password = 'Cerebro123';
         $ctrl.mfa_token = '123456';
@@ -140,6 +151,7 @@ describe( 'signInForm', function () {
 
       it( 'calls sessionService signIn', () => {
         $ctrl.signIn();
+
         expect( $ctrl.isSigningIn ).toEqual( true );
         expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', '123456', false, undefined );
       } );
@@ -147,6 +159,7 @@ describe( 'signInForm', function () {
       it( 'calls sessionService signIn with trust_device', () => {
         $ctrl.trust_device = true;
         $ctrl.signIn();
+
         expect( $ctrl.isSigningIn ).toEqual( true );
         expect( $ctrl.sessionService.signIn ).toHaveBeenCalledWith( 'professorx@xavier.edu', 'Cerebro123', '123456', true, undefined );
       } );
@@ -155,6 +168,7 @@ describe( 'signInForm', function () {
         $ctrl.signIn();
         deferred.resolve( {} );
         $rootScope.$digest();
+
         expect( bindings.onSuccess ).toHaveBeenCalled();
       } );
 
@@ -162,6 +176,7 @@ describe( 'signInForm', function () {
         $ctrl.signIn();
         deferred.reject( {data: {error: 'invalid_grant', thekey_authn_error: 'mfa_required' } } );
         $rootScope.$digest();
+
         expect( bindings.onFailure ).not.toHaveBeenCalled();
         expect( $ctrl.signInState ).toEqual( 'mfa' );
         expect( $ctrl.errorMessage ).toEqual( 'mfa' );

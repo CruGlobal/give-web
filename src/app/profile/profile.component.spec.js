@@ -3,6 +3,7 @@ import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import clone from 'lodash/clone';
 
 import {SignOutEvent} from 'common/services/session/session.service';
 import {titles} from './titles.fixture';
@@ -18,31 +19,31 @@ describe( 'ProfileComponent', function () {
       $window: {location: '/profile.html'}
     }, {
       donorEmailForm: {
-        $setPristine: jasmine.createSpy('$setPristine'),
+        $setPristine: jest.fn(),
         $dirty: true,
         $invalid: false,
         $valid: true
       },
       spouseEmailForm: {
-        $setPristine: jasmine.createSpy('$setPristine'),
+        $setPristine: jest.fn(),
         $dirty: true,
         $invalid: false,
         $valid: true
       },
       mailingAddressForm: {
-        $setPristine: jasmine.createSpy('$setPristine'),
+        $setPristine: jest.fn(),
         $dirty: true,
         $invalid: false,
         $valid: true
       },
       donorDetailsForm: {
-        $setPristine: jasmine.createSpy('$setPristine'),
+        $setPristine: jest.fn(),
         $dirty: true,
         $invalid: false,
         $valid: true
       },
       spouseDetailsForm: {
-        $setPristine: jasmine.createSpy('$setPristine'),
+        $setPristine: jest.fn(),
         $dirty: true,
         $invalid: false,
         $valid: true,
@@ -54,13 +55,13 @@ describe( 'ProfileComponent', function () {
         }
       },
       phoneNumberForms: [{
-        $setPristine: jasmine.createSpy('$setPristine'),
-        $setDirty: jasmine.createSpy('$setPristine'),
+        $setPristine: jest.fn(),
+        $setDirty: jest.fn(),
         $dirty: true,
         $invalid: false,
         $valid: true,
         phoneNumber: {
-          $setValidity: jasmine.createSpy('$setPristine')
+          $setValidity: jest.fn()
         }
       }]
     } );
@@ -78,32 +79,36 @@ describe( 'ProfileComponent', function () {
 
   describe( '$onInit()', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'loadDonorDetails' );
-      spyOn( $ctrl, 'loadMailingAddress' );
-      spyOn( $ctrl, 'loadEmail' );
-      spyOn( $ctrl, 'loadPhoneNumbers' );
-      spyOn( $ctrl, 'syncPhoneValidators' );
-      spyOn( $ctrl, 'sessionEnforcerService' );
-      spyOn( $ctrl.$rootScope, '$on' );
-      spyOn( $ctrl, 'signedOut' );
+      jest.spyOn( $ctrl, 'loadDonorDetails' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'loadMailingAddress' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'loadEmail' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'loadPhoneNumbers' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'syncPhoneValidators' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'sessionEnforcerService' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl.$rootScope, '$on' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'signedOut' ).mockImplementation(() => {});
     } );
 
     it('should call syncPhoneValidators', () =>{
       $ctrl.$onInit();
+
       expect( $ctrl.syncPhoneValidators ).toHaveBeenCalled();
     });
 
     it( 'adds listener for sign-out event', () => {
       $ctrl.$onInit();
-      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, jasmine.any( Function ) );
-      $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+
+      expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( SignOutEvent, expect.any( Function ) );
+      $ctrl.$rootScope.$on.mock.calls[0][1]();
+
       expect( $ctrl.signedOut ).toHaveBeenCalled();
     } );
 
     describe( 'sessionEnforcerService success', () => {
       it( 'executes success callback', () => {
         $ctrl.$onInit();
-        $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['sign-in']();
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['sign-in']();
+
         expect( $ctrl.loadDonorDetails ).toHaveBeenCalled();
         expect( $ctrl.loadMailingAddress ).toHaveBeenCalled();
         expect( $ctrl.loadEmail ).toHaveBeenCalled();
@@ -114,7 +119,8 @@ describe( 'ProfileComponent', function () {
     describe( 'sessionEnforcerService failure', () => {
       it( 'executes failure callback', () => {
         $ctrl.$onInit();
-        $ctrl.sessionEnforcerService.calls.argsFor( 0 )[1]['cancel']();
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']();
+
         expect( $ctrl.$window.location ).toEqual( '/' );
       } );
     } );
@@ -122,10 +128,11 @@ describe( 'ProfileComponent', function () {
 
   describe( '$onDestroy()', () => {
     it( 'cleans up the component', () => {
-      spyOn( $ctrl.sessionEnforcerService, 'cancel' );
+      jest.spyOn( $ctrl.sessionEnforcerService, 'cancel' ).mockImplementation(() => {});
 
       $ctrl.enforcerId = '1234567890';
       $ctrl.$onDestroy();
+
       expect( $ctrl.sessionEnforcerService.cancel ).toHaveBeenCalledWith( '1234567890' );
     } );
   } );
@@ -134,14 +141,16 @@ describe( 'ProfileComponent', function () {
     describe( 'default prevented', () => {
       it( 'does nothing', () => {
         $ctrl.signedOut( {defaultPrevented: true} );
+
         expect( $ctrl.$window.location ).toEqual( '/profile.html' );
       } );
     } );
 
     describe( 'default not prevented', () => {
       it( 'navigates to \'\/\'', () => {
-        let spy = jasmine.createSpy( 'preventDefault' );
+        let spy = jest.fn();
         $ctrl.signedOut( {defaultPrevented: false, preventDefault: spy} );
+
         expect( spy ).toHaveBeenCalled();
         expect( $ctrl.$window.location ).toEqual( '/' );
       } );
@@ -150,16 +159,18 @@ describe( 'ProfileComponent', function () {
 
   describe('loadDonorDetails()', () => {
     beforeEach(() => {
-      spyOn($ctrl, 'initTitles');
+      jest.spyOn($ctrl, 'initTitles').mockImplementation(() => {});
     });
+
     it('should load donor details on $onInit() and have a spouse info', () => {
       let data = {
         'spouse-name': {
           'family-name': 'abc'
         }
       };
-      spyOn($ctrl.profileService, 'getProfileDonorDetails').and.returnValue(Observable.of(data));
+      jest.spyOn($ctrl.profileService, 'getProfileDonorDetails').mockReturnValue(Observable.of(data));
       $ctrl.loadDonorDetails();
+
       expect($ctrl.donorDetails).toBe(data);
       expect($ctrl.hasSpouse).toBe(true);
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled();
@@ -172,17 +183,19 @@ describe( 'ProfileComponent', function () {
           'family-name': undefined
         }
       };
-      spyOn($ctrl.profileService, 'getProfileDonorDetails').and.returnValue(Observable.of(data));
+      jest.spyOn($ctrl.profileService, 'getProfileDonorDetails').mockReturnValue(Observable.of(data));
       $ctrl.loadDonorDetails();
+
       expect($ctrl.hasSpouse).toBe(false);
       expect($ctrl.initTitles).toHaveBeenCalled();
     });
 
     it('should handle and error of loading donor details on $onInit()', () => {
-      spyOn($ctrl.profileService, 'getProfileDonorDetails').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'getProfileDonorDetails').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.loadDonorDetails();
+
       expect($ctrl.donorDetailsError).toBe('loading');
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled();
       expect($ctrl.initTitles).not.toHaveBeenCalled();
@@ -198,16 +211,20 @@ describe( 'ProfileComponent', function () {
       this.expectedTitles = angular.copy(titles);
       this.expectedTitles[''] = '';
     });
+
     it('should load all the normal titles', () => {
       $ctrl.initTitles();
+
       expect($ctrl.availableTitles).toEqual(this.expectedTitles);
     });
+
     it('should additional leacy titles if they are in use in donorDetails', () => {
       $ctrl.donorDetails.name.title = 'Alderman';
       $ctrl.donorDetails['spouse-name'].title = 'Prof';
       $ctrl.initTitles();
       this.expectedTitles.Alderman = 'Alderman';
       this.expectedTitles.Prof = 'Professor';
+
       expect($ctrl.availableTitles).toEqual(this.expectedTitles);
     });
   });
@@ -225,11 +242,13 @@ describe( 'ProfileComponent', function () {
         }
       };
     });
+
     it('should update donor details', () => {
       $ctrl.donorDetails = this.donorDetails;
-      spyOn($ctrl.profileService, 'updateProfileDonorDetails').and.returnValue(Observable.of(''));
-      spyOn($ctrl,'updateEmail');
+      jest.spyOn($ctrl.profileService, 'updateProfileDonorDetails').mockReturnValue(Observable.of(''));
+      jest.spyOn($ctrl,'updateEmail').mockImplementation(() => {});
       $ctrl.updateDonorDetails();
+
       expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalledWith(this.donorDetails);
       expect($ctrl.donorDetailsForm.$setPristine).toHaveBeenCalled();
       expect($ctrl.updateEmail).toHaveBeenCalled();
@@ -238,24 +257,27 @@ describe( 'ProfileComponent', function () {
     it('should update donor details while adding a spouse', () => {
       $ctrl.donorDetails = this.donorDetails;
       $ctrl.addingSpouse = true;
-      spyOn($ctrl.profileService, 'updateProfileDonorDetails').and.returnValue(Observable.of(''));
-      spyOn($ctrl,'updateEmail');
+      jest.spyOn($ctrl.profileService, 'updateProfileDonorDetails').mockReturnValue(Observable.of(''));
+      jest.spyOn($ctrl,'updateEmail').mockImplementation(() => {});
       $ctrl.updateDonorDetails();
+
       expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalledWith({
         name: {
           'family-name': 'Lname',
           'given-name': 'Fname'
         }
       });
+
       expect($ctrl.donorDetailsForm.$setPristine).toHaveBeenCalled();
       expect($ctrl.updateEmail).toHaveBeenCalled();
     });
 
     it('should handle and error of updating donor details', () => {
-      spyOn($ctrl.profileService, 'updateProfileDonorDetails').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'updateProfileDonorDetails').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.updateDonorDetails();
+
       expect($ctrl.donorDetailsError).toBe('updating');
       expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalled();
     });
@@ -272,17 +294,19 @@ describe( 'ProfileComponent', function () {
           region: 'CA'
         }
       };
-      spyOn($ctrl.profileService, 'getMailingAddress').and.returnValue(Observable.of(data));
+      jest.spyOn($ctrl.profileService, 'getMailingAddress').mockReturnValue(Observable.of(data));
       $ctrl.loadMailingAddress();
+
       expect($ctrl.profileService.getMailingAddress).toHaveBeenCalled();
     });
 
 
     it('should handle and error of loading mailing address on $onInit()', () => {
-      spyOn($ctrl.profileService, 'getMailingAddress').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'getMailingAddress').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.loadMailingAddress();
+
       expect($ctrl.mailingAddressError).toBe('loading');
       expect($ctrl.profileService.getMailingAddress).toHaveBeenCalled();
     });
@@ -292,8 +316,9 @@ describe( 'ProfileComponent', function () {
     it('should load email on $onInit()', () => {
       let data = [{ email: 'donor@email.com' }, { email: 'spouse@email.com' }];
 
-      spyOn($ctrl.profileService, 'getEmails').and.returnValue(Observable.of(data));
+      jest.spyOn($ctrl.profileService, 'getEmails').mockReturnValue(Observable.of(data));
       $ctrl.loadEmail();
+
       expect($ctrl.donorEmail).toEqual({ email: 'donor@email.com' });
       expect($ctrl.spouseEmail).toEqual({ email: 'spouse@email.com' });
       expect($ctrl.profileService.getEmails).toHaveBeenCalled();
@@ -302,18 +327,20 @@ describe( 'ProfileComponent', function () {
     it('should load email on $onInit() and handle empty response', () => {
       let data = undefined;
 
-      spyOn($ctrl.profileService, 'getEmails').and.returnValue(Observable.of(data));
+      jest.spyOn($ctrl.profileService, 'getEmails').mockReturnValue(Observable.of(data));
       $ctrl.loadEmail();
+
       expect($ctrl.donorEmail).toEqual({ email: '' });
       expect($ctrl.spouseEmail).toEqual({ email: '' });
       expect($ctrl.profileService.getEmails).toHaveBeenCalled();
     });
 
     it('should handle and error of loading email on $onInit()', () => {
-      spyOn($ctrl.profileService, 'getEmails').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'getEmails').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.loadEmail();
+
       expect($ctrl.emailAddressError).toBe('loading');
       expect($ctrl.profileService.getEmails).toHaveBeenCalled();
     });
@@ -321,24 +348,27 @@ describe( 'ProfileComponent', function () {
 
   describe('updateEmail()', () => {
     it('should update donor email', () => {
-      spyOn($ctrl.profileService, 'updateEmail').and.returnValue(Observable.of({email: 'new email'}));
+      jest.spyOn($ctrl.profileService, 'updateEmail').mockReturnValue(Observable.of({email: 'new email'}));
       $ctrl.updateEmail(false);
+
       expect($ctrl.donorEmail).toEqual({email: 'new email'});
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled();
     });
 
     it('should update spouse email', () => {
-      spyOn($ctrl.profileService, 'updateEmail').and.returnValue(Observable.of({email: 'new email'}));
+      jest.spyOn($ctrl.profileService, 'updateEmail').mockReturnValue(Observable.of({email: 'new email'}));
       $ctrl.updateEmail(true);
+
       expect($ctrl.spouseEmail).toEqual({email: 'new email'});
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled();
     });
 
     it('should handle and error of updating email', () => {
-      spyOn($ctrl.profileService, 'updateEmail').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'updateEmail').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.updateEmail();
+
       expect($ctrl.emailAddressError).toBe('updating');
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled();
     });
@@ -349,6 +379,7 @@ describe( 'ProfileComponent', function () {
       $ctrl.phoneNumberForms = {};
       $ctrl.syncPhoneValidators();
       $ctrl.$scope.$apply();
+
       expect($ctrl.phoneNumberForms).toEqual({});
       $ctrl.phoneNumberForms[0] = {
         phoneNumber: {
@@ -356,6 +387,7 @@ describe( 'ProfileComponent', function () {
         }
       };
       $ctrl.$scope.$apply();
+
       expect( $ctrl.phoneNumberForms[0].phoneNumber.$validators.phone( '541-967-0010' ) ).toEqual( true );
       expect( $ctrl.phoneNumberForms[0].phoneNumber.$validators.phone( '123-456-7890' ) ).toEqual( false );
     });
@@ -363,17 +395,19 @@ describe( 'ProfileComponent', function () {
 
   describe('loadPhoneNumbers()', () => {
     it('should load phone numbers on $onInit()', () => {
-      spyOn($ctrl.profileService, 'getPhoneNumbers').and.returnValue(Observable.of([{}]));
+      jest.spyOn($ctrl.profileService, 'getPhoneNumbers').mockReturnValue(Observable.of([{}]));
       $ctrl.loadPhoneNumbers();
+
       expect($ctrl.phoneNumbers).toEqual([{ ownerChanged: false }]);
       expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled();
     });
 
     it('should handle and error of loading phone numbers on $onInit()', () => {
-      spyOn($ctrl.profileService, 'getPhoneNumbers').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'getPhoneNumbers').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.loadPhoneNumbers();
+
       expect($ctrl.phoneNumberError).toBe('loading');
       expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled();
     });
@@ -383,6 +417,7 @@ describe( 'ProfileComponent', function () {
     it('should add blank phone number to the list', () => {
       $ctrl.phoneNumbers = [];
       $ctrl.addPhoneNumber();
+
       expect($ctrl.phoneNumbers.length).toBe(1);
     });
   });
@@ -395,6 +430,7 @@ describe( 'ProfileComponent', function () {
         }
       ];
       $ctrl.updatePhoneNumbers();
+
       expect($ctrl.phoneNumbers.length).toBe(2);
       expect($ctrl.phoneNumbers[0].delete).toBe(true);
     });
@@ -407,9 +443,10 @@ describe( 'ProfileComponent', function () {
           } // existing phone number to update
         }
       ];
-      spyOn($ctrl.profileService, 'updatePhoneNumber').and.returnValue(Observable.of('data'));
-      spyOn($ctrl, 'resetPhoneNumberForms');
+      jest.spyOn($ctrl.profileService, 'updatePhoneNumber').mockReturnValue(Observable.of('data'));
+      jest.spyOn($ctrl, 'resetPhoneNumberForms').mockImplementation(() => {});
       $ctrl.updatePhoneNumbers();
+
       expect($ctrl.profileService.updatePhoneNumber).toHaveBeenCalled();
       expect($ctrl.resetPhoneNumberForms).toHaveBeenCalled();
     });
@@ -422,10 +459,11 @@ describe( 'ProfileComponent', function () {
           } // existing phone number to update
         }
       ];
-      spyOn($ctrl.profileService, 'updatePhoneNumber').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'updatePhoneNumber').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.updatePhoneNumbers();
+
       expect($ctrl.profileService.updatePhoneNumber).toHaveBeenCalled();
       expect($ctrl.phoneNumberError).toBe('updating');
     });
@@ -439,9 +477,10 @@ describe( 'ProfileComponent', function () {
           delete: true
         }
       ];
-      spyOn($ctrl.profileService, 'deletePhoneNumber').and.returnValue(Observable.of('data'));
-      spyOn($ctrl, 'resetPhoneNumberForms');
+      jest.spyOn($ctrl.profileService, 'deletePhoneNumber').mockReturnValue(Observable.of('data'));
+      jest.spyOn($ctrl, 'resetPhoneNumberForms').mockImplementation(() => {});
       $ctrl.updatePhoneNumbers();
+
       expect($ctrl.profileService.deletePhoneNumber).toHaveBeenCalled();
       expect($ctrl.resetPhoneNumberForms).toHaveBeenCalled();
     });
@@ -455,32 +494,39 @@ describe( 'ProfileComponent', function () {
           delete: true
         }
       ];
-      spyOn($ctrl.profileService, 'deletePhoneNumber').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'deletePhoneNumber').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.updatePhoneNumbers();
+
       expect($ctrl.profileService.deletePhoneNumber).toHaveBeenCalled();
       expect($ctrl.phoneNumberError).toBe('updating');
     });
 
     it('should add phone number', () => {
+      let addedNumbers;
       $ctrl.phoneNumbers = [
         {
           self: false,
           delete: false
         }
       ];
-      spyOn($ctrl.profileService, 'addPhoneNumber').and.returnValue(Observable.of({
-        self: '<new link>',
-        'phone-number': '444'
-      }));
-      $ctrl.profileService.addPhoneNumber.calls.saveArgumentsByValue();
-      spyOn($ctrl, 'resetPhoneNumberForms');
+      jest.spyOn($ctrl.profileService, 'addPhoneNumber').mockImplementation(phoneNumbers => {
+        addedNumbers = clone(phoneNumbers);
+        return Observable.of({
+          self: '<new link>',
+          'phone-number': '444'
+        });
+      });
+      jest.spyOn($ctrl, 'resetPhoneNumberForms').mockImplementation(() => {});
       $ctrl.updatePhoneNumbers();
-      expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalledWith({
+
+      expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
+      expect(addedNumbers).toEqual({
         self: false,
         delete: false
       });
+
       expect($ctrl.resetPhoneNumberForms).toHaveBeenCalled();
       expect($ctrl.phoneNumbers).toEqual([
         {
@@ -498,10 +544,11 @@ describe( 'ProfileComponent', function () {
           delete: false
         }
       ];
-      spyOn($ctrl.profileService, 'addPhoneNumber').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'addPhoneNumber').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.updatePhoneNumbers();
+
       expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
       expect($ctrl.phoneNumberError).toBe('updating');
     });
@@ -513,10 +560,11 @@ describe( 'ProfileComponent', function () {
           delete: false
         }
       ];
-      spyOn($ctrl.profileService, 'addPhoneNumber').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'addPhoneNumber').mockReturnValue(Observable.throw({
         data: 'Failed to create phone number because it already exists.'
       }));
       $ctrl.updatePhoneNumbers();
+
       expect($ctrl.profileService.addPhoneNumber).toHaveBeenCalled();
       expect($ctrl.phoneNumberError).toBe('duplicate');
     });
@@ -529,11 +577,13 @@ describe( 'ProfileComponent', function () {
         delete: false
       };
       $ctrl.deletePhoneNumber(phone, 0);
+
       expect($ctrl.phoneNumberForms[0].phoneNumber.$setValidity).toHaveBeenCalled();
       expect($ctrl.phoneNumberForms[0].$setPristine).toHaveBeenCalled();
 
       phone.self = {};
       $ctrl.deletePhoneNumber(phone, 0);
+
       expect($ctrl.phoneNumberForms[0].$setDirty).toHaveBeenCalled();
     });
   });
@@ -542,6 +592,7 @@ describe( 'ProfileComponent', function () {
     it('should return true if at least one phone number form is invalid', () => {
       expect($ctrl.invalidPhoneNumbers()).toBe(false);
       $ctrl.phoneNumberForms[0].$invalid = true;
+
       expect($ctrl.invalidPhoneNumbers()).toBe(true);
     });
   });
@@ -550,6 +601,7 @@ describe( 'ProfileComponent', function () {
     it('should return true if at least one phone number is $dirty', () => {
       expect($ctrl.dirtyPhoneNumbers()).toBe(true);
       $ctrl.phoneNumberForms[0].$dirty = false;
+
       expect($ctrl.dirtyPhoneNumbers()).toBe(false);
     });
   });
@@ -557,6 +609,7 @@ describe( 'ProfileComponent', function () {
   describe('resetPhoneNumberForms()', () => {
     it('should reset phone number forms after update', () => {
       $ctrl.resetPhoneNumberForms();
+
       expect($ctrl.phoneNumberForms[0].$setPristine).toHaveBeenCalled();
     });
   });
@@ -570,17 +623,20 @@ describe( 'ProfileComponent', function () {
         name: {}
       };
     });
+
     it('should update mailing address', () => {
-      spyOn($ctrl.profileService, 'updateMailingAddress').and.returnValue(Observable.of('data'));
+      jest.spyOn($ctrl.profileService, 'updateMailingAddress').mockReturnValue(Observable.of('data'));
       $ctrl.updateMailingAddress();
+
       expect($ctrl.mailingAddressForm.$setPristine).toHaveBeenCalled();
     });
 
     it('should fail updating mailing address', () => {
-      spyOn($ctrl.profileService, 'updateMailingAddress').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'updateMailingAddress').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.updateMailingAddress();
+
       expect($ctrl.mailingAddressError).toBe('updating');
     });
   });
@@ -596,23 +652,27 @@ describe( 'ProfileComponent', function () {
         }
       };
     });
+
     it('should save spouse info', () => {
-      spyOn($ctrl,'updateDonorDetails');
-      spyOn($ctrl.profileService, 'addSpouse').and.returnValue(Observable.of('data'));
+      jest.spyOn($ctrl,'updateDonorDetails').mockImplementation(() => {});
+      jest.spyOn($ctrl.profileService, 'addSpouse').mockReturnValue(Observable.of('data'));
       $ctrl.saveSpouse();
+
       expect($ctrl.profileService.addSpouse).toHaveBeenCalledWith('/donordetails/crugive/spousedetails', $ctrl.donorDetails['spouse-name']);
       expect($ctrl.updateDonorDetails).toHaveBeenCalled();
 
       $ctrl.spouseDetailsForm.title.$dirty = false;
       $ctrl.saveSpouse();
+
       expect($ctrl.updateDonorDetails).toHaveBeenCalled();
     });
 
     it('should handle fail of saving spouse info', () => {
-      spyOn($ctrl.profileService, 'addSpouse').and.returnValue(Observable.throw({
+      jest.spyOn($ctrl.profileService, 'addSpouse').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       $ctrl.saveSpouse();
+
       expect($ctrl.donorDetailsError).toBe('saving spouse');
     });
   });
@@ -623,9 +683,11 @@ describe( 'ProfileComponent', function () {
       $ctrl.emailAddressError = false;
       $ctrl.mailingAddressError = false;
       $ctrl.phoneNumberError = false;
+
       expect($ctrl.hasError()).toBe(false);
 
       $ctrl.phoneNumberError = true;
+
       expect($ctrl.hasError()).toBe(true);
     });
   });
@@ -640,14 +702,17 @@ describe( 'ProfileComponent', function () {
       $ctrl.mailingAddressForm.$invalid = false;
       $ctrl.phoneNumberForms[0].$invalid = false;
       $ctrl.addingSpouse = true;
+
       expect($ctrl.invalid()).toBe(false);
 
       $ctrl.mailingAddressForm.$invalid = true;
+
       expect($ctrl.invalid()).toBe(true);
 
       $ctrl.spouseEmailForm = false;
       $ctrl.addingSpouse = false;
       $ctrl.mailingAddressForm.$invalid = false;
+
       expect($ctrl.invalid()).toBe(false);
     });
   });
@@ -663,10 +728,12 @@ describe( 'ProfileComponent', function () {
       $ctrl.phoneNumberForms[0].$dirty = false;
       $ctrl.addingSpouse = true;
       $ctrl.hasSpouse = true;
+
       expect($ctrl.touched()).toBe(false);
 
       $ctrl.addingSpouse = false;
       $ctrl.hasSpouse = false;
+
       expect($ctrl.touched()).toBe(false);
     });
   });
@@ -677,21 +744,23 @@ describe( 'ProfileComponent', function () {
       $ctrl.emailLoading = false;
       $ctrl.mailingAddressLoading = false;
       $ctrl.phonesLoading = false;
+
       expect($ctrl.loading()).toBe(false);
 
       $ctrl.mailingAddressLoading = true;
+
       expect($ctrl.loading()).toBe(true);
     });
   });
 
   describe('onSubmit()', () => {
     it('should submit if forms are ready', () => {
-      spyOn($ctrl,'updateDonorDetails');
-      spyOn($ctrl,'updateEmail');
-      spyOn($ctrl,'saveSpouse');
-      spyOn($ctrl,'updatePhoneNumbers');
-      spyOn($ctrl,'updateMailingAddress');
-      $ctrl.$window.scrollTo = jasmine.createSpy('scrollTo');
+      jest.spyOn($ctrl,'updateDonorDetails').mockImplementation(() => {});
+      jest.spyOn($ctrl,'updateEmail').mockImplementation(() => {});
+      jest.spyOn($ctrl,'saveSpouse').mockImplementation(() => {});
+      jest.spyOn($ctrl,'updatePhoneNumbers').mockImplementation(() => {});
+      jest.spyOn($ctrl,'updateMailingAddress').mockImplementation(() => {});
+      $ctrl.$window.scrollTo = jest.fn();
       $ctrl.donorEmailForm.$dirty = true;
       $ctrl.spouseEmailForm.$dirty = true;
       $ctrl.donorDetailsForm.$dirty = true;
@@ -701,6 +770,7 @@ describe( 'ProfileComponent', function () {
       $ctrl.addingSpouse = undefined;
       $ctrl.spouseDetailsForm.$valid = true;
       $ctrl.onSubmit();
+
       expect($ctrl.updateDonorDetails).toHaveBeenCalled();
       expect($ctrl.updateEmail).toHaveBeenCalled();
       expect($ctrl.updatePhoneNumbers).toHaveBeenCalled();
@@ -711,6 +781,7 @@ describe( 'ProfileComponent', function () {
       $ctrl.addingSpouse = true;
       $ctrl.hasSpouse = true;
       $ctrl.onSubmit();
+
       expect($ctrl.updateEmail).toHaveBeenCalledWith(true);
       expect($ctrl.saveSpouse).toHaveBeenCalled();
     });

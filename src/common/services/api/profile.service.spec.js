@@ -117,7 +117,7 @@ describe('profile service', () => {
           delete paymentMethod._recurringgifts;
           return paymentMethod;
         });
-      expectedData[1].recurringGifts = [jasmine.any(RecurringGiftModel), jasmine.any(RecurringGiftModel)];
+      expectedData[1].recurringGifts = [expect.any(RecurringGiftModel), expect.any(RecurringGiftModel)];
       self.profileService.getPaymentMethodsWithDonations()
         .subscribe((data) => {
           expect(data).toEqual(expectedData);
@@ -209,6 +209,7 @@ describe('profile service', () => {
 
       self.$httpBackend.flush();
     });
+
     it('should send a request to save the credit card payment info with a billing address', () => {
       let paymentInfo = {
         address: {
@@ -261,10 +262,10 @@ describe('profile service', () => {
         .respond( 200, givingProfileResponse );
 
       self.profileService.getGivingProfile().subscribe( ( profile ) => {
-        expect( profile ).toEqual( jasmine.objectContaining( {
+        expect( profile ).toEqual( expect.objectContaining( {
           name:       'Mark & Julia Tubbs',
           email:      'mt@example.com',
-          address:    jasmine.any( Object ),
+          address:    expect.any( Object ),
           phone:      '(909) 337-2433',
           donorNumber: '447072430',
           yearToDate: 0
@@ -278,7 +279,7 @@ describe('profile service', () => {
         .respond( 200, omit( givingProfileResponse, ['_addspousedetails', '_emails', '_givingdashboard', '_phonenumbers', '_addresses', '_donordetails'] ) );
 
       self.profileService.getGivingProfile().subscribe( ( profile ) => {
-        expect( profile ).toEqual( jasmine.objectContaining( {
+        expect( profile ).toEqual( expect.objectContaining( {
           name: 'Mark Tubbs', email: undefined, address: undefined, phone: undefined, yearToDate: undefined, donorNumber: undefined
         } ) );
       } );
@@ -294,7 +295,7 @@ describe('profile service', () => {
         .respond( 200, orgGivingProfileResponse );
 
       self.profileService.getGivingProfile().subscribe( ( profile ) => {
-        expect( profile ).toEqual( jasmine.objectContaining( {
+        expect( profile ).toEqual( expect.objectContaining( {
           name: 'Organization XYZ'
         } ) );
       } );
@@ -304,7 +305,7 @@ describe('profile service', () => {
 
   describe('addPaymentMethod', () => {
     it('should save a new bank account payment method', () => {
-      spyOn(self.profileService,'addBankAccountPayment').and.returnValue(Observable.of('success'));
+      jest.spyOn(self.profileService,'addBankAccountPayment').mockReturnValue(Observable.of('success'));
       let paymentInfo = {
         'account-type': 'checking',
         'bank-name': 'First Bank',
@@ -317,10 +318,12 @@ describe('profile service', () => {
       }).subscribe((data) => {
         expect(data).toEqual('success');
       });
+
       expect(self.profileService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo);
     });
+
     it('should save a new credit card payment method', () => {
-      spyOn(self.profileService,'addCreditCardPayment').and.returnValue(Observable.of('credit card success'));
+      jest.spyOn(self.profileService,'addCreditCardPayment').mockReturnValue(Observable.of('credit card success'));
 
       let paymentInfo = {
         address: {
@@ -344,8 +347,10 @@ describe('profile service', () => {
       }).subscribe((data) => {
         expect(data).toEqual('credit card success');
       });
+
       expect(self.profileService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo);
     });
+
     it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
       self.profileService.addPaymentMethod({
           billingAddress: {}
@@ -368,6 +373,7 @@ describe('profile service', () => {
         .subscribe(null, () => fail());
       self.$httpBackend.flush();
     });
+
     it('should update a credit card', () => {
       self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
         { 'cardholder-name': 'Some Person', address: { 'street-address': 'Some Address||||||', 'extended-address': '', locality: '', 'postal-code': '', region: ''} }
@@ -376,6 +382,7 @@ describe('profile service', () => {
         .subscribe(null, () => fail());
       self.$httpBackend.flush();
     });
+
     it('should update a credit card with no billing address (api will use mailing address)', () => {
       self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
         { 'cardholder-name': 'Some Person' }
@@ -384,6 +391,7 @@ describe('profile service', () => {
         .subscribe(null, () => fail());
       self.$httpBackend.flush();
     });
+
     it('should handle a missing bank account or credit card', () => {
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, {})
         .subscribe(() => fail(), (error) => {

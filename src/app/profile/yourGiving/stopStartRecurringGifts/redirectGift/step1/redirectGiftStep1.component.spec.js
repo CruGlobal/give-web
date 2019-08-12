@@ -12,13 +12,13 @@ describe( 'your giving', () => {
 
           beforeEach( inject( ( $componentController ) => {
             $ctrl = $componentController( module.name, {}, {
-              onSelectGift: jasmine.createSpy( 'onSelectGift' )
+              onSelectGift: jest.fn()
             } );
           } ) );
 
           it( 'is defined', () => {
             expect( $ctrl ).toBeDefined();
-            expect( $ctrl.find ).toEqual( jasmine.any( Function ) );
+            expect( $ctrl.find ).toEqual( expect.any( Function ) );
           } );
 
           describe( 'selectGift()', () => {
@@ -30,6 +30,7 @@ describe( 'your giving', () => {
               $ctrl.gifts[0]._selectedGift = true;
               $ctrl.gifts[2]._selectedGift = false;
               $ctrl.selectGift();
+
               expect( $ctrl.onSelectGift ).toHaveBeenCalledWith( {
                 gift: {gift: 1, _selectedGift: true}
               } );
@@ -46,6 +47,7 @@ describe( 'your giving', () => {
               // gift-list-item selects the gift before calling giftSelected
               $ctrl.gifts[2]._selectedGift = true;
               $ctrl.giftSelected( $ctrl.gifts[2] );
+
               expect( $ctrl.gifts[2]._selectedGift ).toEqual( true );
               expect( $ctrl.gifts[0]._selectedGift ).toEqual( false );
             } );

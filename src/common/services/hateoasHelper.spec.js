@@ -22,18 +22,23 @@ describe('HATEOAS helper service', function() {
     it('should find the uri for a relationship', () => {
       expect(self.hateoasHelperService.getLink(cartResponse, 'order')).toEqual('orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=');
     });
+
     it('should remove the initial slash on the uri', () => {
       const data = {
         'links': [ { 'rel': 'testrelation', 'uri': '/some/path' } ]
       };
+
       expect(self.hateoasHelperService.getLink(data, 'testrelation')).toEqual('some/path');
     });
+
     it('should not remove the first char of the uri if it is not a slash', () => {
       const data = {
         'links': [ { 'rel': 'testrelation', 'uri': 'some/path' } ]
       };
+
       expect(self.hateoasHelperService.getLink(data, 'testrelation')).toEqual('some/path');
     });
+
     it('should return undefined for an unknown relationship', () => {
       expect(self.hateoasHelperService.getLink(cartResponse, 'nonexistent')).toBeUndefined();
     });
@@ -43,16 +48,21 @@ describe('HATEOAS helper service', function() {
     it('should get the object specified by a path array', () => {
       expect(self.hateoasHelperService.getElement(cartResponse, ['order', 'paymentmethodinfo', 'bankaccountform'])).toEqual(cartResponse._order[0]._paymentmethodinfo[0]._bankaccountform[0]);
     });
+
     it('should get the object specified by a path string', () => {
       expect(self.hateoasHelperService.getElement(cartResponse, 'order')).toEqual(cartResponse._order[0]);
     });
+
     it('should get the array specified by a path string', () => {
       cartResponse._order.push('item 2');
+
       expect(self.hateoasHelperService.getElement(cartResponse, 'order', true)).toEqual([cartResponse._order[0], 'item 2']);
     });
+
     it('should try the path without a prefixed underscore if it couldn\'t find the path with an underscore', () => {
       expect(self.hateoasHelperService.getElement({ test: ['some value'] }, 'test')).toEqual('some value');
     });
+
     it('should return undefined for an unknown element', () => {
       expect(self.hateoasHelperService.getElement(cartResponse, ['order', 'nonexistent'])).toBeUndefined();
     });
@@ -62,9 +72,11 @@ describe('HATEOAS helper service', function() {
     it('should join all zoom strings with a comma', () => {
       expect(self.hateoasHelperService.serializeZoom(self.zoom)).toEqual('order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform');
     });
+
     it('should join all zoom strings with a comma and remove array indicators', () => {
       self.zoom.bankaccountform += '[]';
       self.zoom.creditcardform += '[]';
+
       expect(self.hateoasHelperService.serializeZoom(self.zoom)).toEqual('order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform');
     });
   });
@@ -77,6 +89,7 @@ describe('HATEOAS helper service', function() {
         rawData: cartResponse
       });
     });
+
     it('should map nested objects', () => {
       let response = {
         _order: [
@@ -105,6 +118,7 @@ describe('HATEOAS helper service', function() {
       let zoom = {
         items: 'order:items[],order:items:instock'
       };
+
       expect(self.hateoasHelperService.mapZoomElements(response, zoom)).toEqual({
         items: [
           {
@@ -123,8 +137,10 @@ describe('HATEOAS helper service', function() {
         rawData: response
       });
     });
+
     it('should return undefined if the zoom isn\'t found', () => {
       self.zoom.creditcardform += '[]';
+
       expect(self.hateoasHelperService.mapZoomElements({}, self.zoom)).toEqual({
         bankaccountform: undefined,
         creditcardform: undefined,
@@ -184,8 +200,10 @@ describe('HATEOAS helper service', function() {
         }
       });
     });
+
     it('should return undefined if the zoom isn\'t found', () => {
       this.childZoomStrings = ['lineitems:element:code2', 'lineitems:element:rates2[]'];
+
       expect(self.hateoasHelperService.mapChildZoomElements(this.element, this.zoomString, this.childZoomStrings)).toEqual({
         _code: [
           {
@@ -216,6 +234,7 @@ describe('HATEOAS helper service', function() {
     it('should leave the string untouched if there are no square brackets', () => {
       expect(self.hateoasHelperService.stripArrayIndicators('sadf:jhksad:qwer!@#$%^&*()_+')).toEqual('sadf:jhksad:qwer!@#$%^&*()_+');
     });
+
     it('should remove square brackets from the string', () => {
       expect(self.hateoasHelperService.stripArrayIndicators('sadf:jhksad:qwer[]')).toEqual('sadf:jhksad:qwer');
       expect(self.hateoasHelperService.stripArrayIndicators(']sa[df:jhk]sad:qwer[]')).toEqual('sadf:jhksad:qwer');

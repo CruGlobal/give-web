@@ -14,14 +14,14 @@ describe( 'registerAccountModal', function () {
   beforeEach( inject( function ( _$componentController_ ) {
     bindings = {
       modalTitle: '',
-      onCancel:   jasmine.createSpy( 'onCancel' ),
-      onSuccess:  jasmine.createSpy( 'onSuccess' ),
-      setLoading: jasmine.createSpy( 'setLoading' )
+      onCancel:   jest.fn(),
+      onSuccess:  jest.fn(),
+      setLoading: jest.fn()
     };
     locals = {
-      orderService:        jasmine.createSpyObj( 'orderService', ['getDonorDetails'] ),
-      verificationService: jasmine.createSpyObj( 'verificationService', ['postDonorMatches'] ),
-      sessionService:      jasmine.createSpyObj( 'sessionService', ['getRole'] )
+      orderService:        {getDonorDetails: jest.fn()},
+      verificationService: {postDonorMatches: jest.fn()},
+      sessionService:      {getRole: jest.fn()}
     };
     $ctrl = _$componentController_( module.name, locals, bindings );
 
@@ -36,13 +36,13 @@ describe( 'registerAccountModal', function () {
 
   describe( '$onInit()', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'getDonorDetails' );
-      spyOn( $ctrl, 'stateChanged' );
+      jest.spyOn( $ctrl, 'getDonorDetails' ).mockImplementation(() => {});
+      jest.spyOn( $ctrl, 'stateChanged' ).mockImplementation(() => {});
     } );
 
     describe( 'with \'REGISTERED\' cortex-session', () => {
       beforeEach( () => {
-        $ctrl.sessionService.getRole.and.returnValue( Roles.registered );
+        $ctrl.sessionService.getRole.mockReturnValue( Roles.registered );
         $ctrl.$onInit();
       } );
 
@@ -51,9 +51,10 @@ describe( 'registerAccountModal', function () {
         expect( $ctrl.stateChanged ).not.toHaveBeenCalled();
       } );
     } );
+
     describe( 'with \'PUBLIC\' cortex-session', () => {
       beforeEach( () => {
-        $ctrl.sessionService.getRole.and.returnValue( Roles.public );
+        $ctrl.sessionService.getRole.mockReturnValue( Roles.public );
         $ctrl.$onInit();
       } );
 
@@ -66,16 +67,18 @@ describe( 'registerAccountModal', function () {
 
   describe( 'onIdentitySuccess()', () => {
     it( 'calls getDonorDetails', () => {
-      spyOn( $ctrl, 'getDonorDetails' );
+      jest.spyOn( $ctrl, 'getDonorDetails' ).mockImplementation(() => {});
       $ctrl.onIdentitySuccess();
+
       expect( $ctrl.getDonorDetails ).toHaveBeenCalled();
     } );
   } );
 
   describe( 'onContactInfoSuccess()', () => {
     it( 'calls postDonorMatches', () => {
-      spyOn( $ctrl, 'postDonorMatches' );
+      jest.spyOn( $ctrl, 'postDonorMatches' ).mockImplementation(() => {});
       $ctrl.onContactInfoSuccess();
+
       expect( $ctrl.postDonorMatches ).toHaveBeenCalled();
     } );
   } );
@@ -83,23 +86,25 @@ describe( 'registerAccountModal', function () {
   describe( 'onUserMatchSuccess()', () => {
     it( 'calls onSuccess', () => {
       $ctrl.onUserMatchSuccess();
+
       expect( $ctrl.onSuccess ).toHaveBeenCalled();
     } );
   } );
 
   describe( 'getDonorDetails()', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'stateChanged' );
+      jest.spyOn( $ctrl, 'stateChanged' ).mockImplementation(() => {});
     } );
 
     describe( 'orderService.getDonorDetails success', () => {
       describe( '\'registration-state\' COMPLETED', () => {
         it( 'changes state to \'contact-info\'', () => {
-          $ctrl.orderService.getDonorDetails.and.callFake( () => Observable.of( {'registration-state': 'COMPLETED'} ) );
+          $ctrl.orderService.getDonorDetails.mockImplementation( () => Observable.of( {'registration-state': 'COMPLETED'} ) );
           $ctrl.getDonorDetails();
+
           expect( $ctrl.modalTitle ).toEqual('Checking your donor account');
           expect( $ctrl.stateChanged ).toHaveBeenCalledWith('loading');
-          expect( $ctrl.stateChanged.calls.count() ).toEqual(1);
+          expect( $ctrl.stateChanged.mock.calls.length ).toEqual(1);
           expect( $ctrl.orderService.getDonorDetails ).toHaveBeenCalled();
           expect( $ctrl.onSuccess ).toHaveBeenCalled();
         } );
@@ -107,8 +112,9 @@ describe( 'registerAccountModal', function () {
 
       describe( '\'registration-state\' NEW', () => {
         it( 'changes state to \'contact-info\'', () => {
-          $ctrl.orderService.getDonorDetails.and.callFake( () => Observable.of( {'registration-state': 'NEW'} ) );
+          $ctrl.orderService.getDonorDetails.mockImplementation( () => Observable.of( {'registration-state': 'NEW'} ) );
           $ctrl.getDonorDetails();
+
           expect( $ctrl.orderService.getDonorDetails ).toHaveBeenCalled();
           expect( $ctrl.stateChanged ).toHaveBeenCalledWith( 'contact-info' );
         } );
@@ -117,8 +123,9 @@ describe( 'registerAccountModal', function () {
 
     describe( 'orderService.getDonorDetails failure', () => {
       it( 'changes state to \'contact-info\'', () => {
-        $ctrl.orderService.getDonorDetails.and.callFake( () => Observable.throw( {} ) );
+        $ctrl.orderService.getDonorDetails.mockImplementation( () => Observable.throw( {} ) );
         $ctrl.getDonorDetails();
+
         expect( $ctrl.orderService.getDonorDetails ).toHaveBeenCalled();
         expect( $ctrl.stateChanged ).toHaveBeenCalledWith( 'contact-info' );
       } );
@@ -127,13 +134,14 @@ describe( 'registerAccountModal', function () {
 
   describe( 'postDonorMatches()', () => {
     beforeEach( () => {
-      spyOn( $ctrl, 'stateChanged' );
+      jest.spyOn( $ctrl, 'stateChanged' ).mockImplementation(() => {});
     } );
 
     describe( 'verificationService.postDonorMatches success', () => {
       it( 'changes state to \'user-match\'', () => {
-        $ctrl.verificationService.postDonorMatches.and.callFake( () => Observable.of( {} ) );
+        $ctrl.verificationService.postDonorMatches.mockImplementation( () => Observable.of( {} ) );
         $ctrl.postDonorMatches();
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.verificationService.postDonorMatches ).toHaveBeenCalled();
         expect( $ctrl.stateChanged ).toHaveBeenCalledWith( 'user-match' );
@@ -142,8 +150,9 @@ describe( 'registerAccountModal', function () {
 
     describe( 'verificationService.postDonorMatches failure', () => {
       it( 'calls onCancel', () => {
-        $ctrl.verificationService.postDonorMatches.and.callFake( () => Observable.throw( {} ) );
+        $ctrl.verificationService.postDonorMatches.mockImplementation( () => Observable.throw( {} ) );
         $ctrl.postDonorMatches();
+
         expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: true} );
         expect( $ctrl.verificationService.postDonorMatches ).toHaveBeenCalled();
         expect( $ctrl.stateChanged ).not.toHaveBeenCalled();
@@ -155,17 +164,19 @@ describe( 'registerAccountModal', function () {
   describe( 'stateChanged( state )', () => {
     beforeEach( () => {
       $ctrl.state = 'unknown';
-      spyOn( $ctrl, 'setModalSize' );
-      spyOn($ctrl, 'scrollModalToTop');
+      jest.spyOn( $ctrl, 'setModalSize' ).mockImplementation(() => {});
+      jest.spyOn($ctrl, 'scrollModalToTop').mockImplementation(() => {});
     } );
 
     it('should scroll to the top of the modal', () => {
       $ctrl.stateChanged();
+
       expect($ctrl.scrollModalToTop).toHaveBeenCalled();
     });
 
     it( 'changes to \'sign-in\' state', () => {
       $ctrl.stateChanged( 'sign-in' );
+
       expect( $ctrl.setModalSize ).toHaveBeenCalledWith( 'sm' );
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
       expect( $ctrl.state ).toEqual( 'sign-in' );
@@ -173,6 +184,7 @@ describe( 'registerAccountModal', function () {
 
     it( 'changes to \'contact-info\' state', () => {
       $ctrl.stateChanged( 'contact-info' );
+
       expect( $ctrl.setModalSize ).toHaveBeenCalledWith();
       expect( $ctrl.setLoading ).toHaveBeenCalledWith( {loading: false} );
       expect( $ctrl.state ).toEqual( 'contact-info' );
@@ -182,18 +194,21 @@ describe( 'registerAccountModal', function () {
   describe( 'setModalSize( size )', () => {
     let modal;
     beforeEach( () => {
-      modal = jasmine.createSpyObj( 'modal', ['addClass', 'removeClass'] );
-      spyOn( angular, 'element' ).and.returnValue( modal );
+      modal = {addClass: jest.fn(), removeClass: jest.fn()};
+      jest.spyOn( angular, 'element' ).mockReturnValue( modal );
+      angular.element.cleanData = jest.fn();
     } );
 
     it( 'sets size to \'sm\'', () => {
       $ctrl.setModalSize( 'sm' );
+
       expect( modal.removeClass ).toHaveBeenCalledWith( 'modal-sm modal-md modal-lg' );
       expect( modal.addClass ).toHaveBeenCalledWith( 'modal-sm' );
     } );
 
     it( 'sets size missing param', () => {
       $ctrl.setModalSize();
+
       expect( modal.removeClass ).toHaveBeenCalledWith( 'modal-sm modal-md modal-lg' );
       expect( modal.addClass ).not.toHaveBeenCalled();
     } );

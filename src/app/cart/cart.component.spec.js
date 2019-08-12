@@ -15,9 +15,9 @@ describe('cart', () => {
   beforeEach(inject(function($componentController) {
     self.controller = $componentController(module.name, {
       cartService: {
-        get: jasmine.createSpy('get'),
-        loadCart: jasmine.createSpy('loadCart'),
-        deleteItem: jasmine.createSpy('deleteItem')
+        get: jest.fn(),
+        loadCart: jest.fn(),
+        deleteItem: jest.fn()
       },
       productModalService: {
         configureProduct: () => {}
@@ -41,33 +41,39 @@ describe('cart', () => {
 
   describe('$onInit()', () => {
     it('should call loadCart()', () => {
-      spyOn(self.controller, 'loadCart');
+      jest.spyOn(self.controller, 'loadCart').mockImplementation(() => {});
       self.controller.$onInit();
+
       expect(self.controller.loadCart).toHaveBeenCalledWith();
     });
   });
 
   describe('loadCart()', () => {
     it('should load cart data', () => {
-      self.controller.cartService.get.and.returnValue( Observable.of( 'data' ) );
+      self.controller.cartService.get.mockReturnValue( Observable.of( 'data' ) );
       self.controller.loadCart();
+
       expect(self.controller.cartService.get).toHaveBeenCalled();
       expect(self.controller.cartData).toEqual('data');
       expect(self.controller.loading).toEqual(false);
       expect(self.controller.updating).toEqual(false);
     });
+
     it('should reload cart data', () => {
-      self.controller.cartService.get.and.returnValue( Observable.of( 'data' ) );
+      self.controller.cartService.get.mockReturnValue( Observable.of( 'data' ) );
       self.controller.loadCart(true);
+
       expect(self.controller.cartService.get).toHaveBeenCalled();
       expect(self.controller.cartData).toEqual('data');
       expect(self.controller.loading).toEqual(false);
       expect(self.controller.updating).toEqual(false);
     });
+
     it('should handle an error loading cart data', () => {
       self.controller.cartData = 'previous data';
-      self.controller.cartService.get.and.returnValue( Observable.throw( 'error' ) );
+      self.controller.cartService.get.mockReturnValue( Observable.throw( 'error' ) );
       self.controller.loadCart();
+
       expect(self.controller.cartService.get).toHaveBeenCalled();
       expect(self.controller.cartData).toEqual('previous data');
       expect(self.controller.loading).toEqual(false);
@@ -76,12 +82,15 @@ describe('cart', () => {
         loading: true,
         updating: false
       });
+
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading cart', 'error']);
     });
+
     it('should handle an error reloading cart data', () => {
       self.controller.cartData = 'previous data';
-      self.controller.cartService.get.and.returnValue( Observable.throw( 'error' ) );
+      self.controller.cartService.get.mockReturnValue( Observable.throw( 'error' ) );
       self.controller.loadCart(true);
+
       expect(self.controller.cartService.get).toHaveBeenCalled();
       expect(self.controller.cartData).toEqual('previous data');
       expect(self.controller.loading).toEqual(false);
@@ -90,28 +99,33 @@ describe('cart', () => {
         loading: false,
         updating: true
       });
+
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading cart', 'error']);
     });
   });
 
   describe('removeItem()', () => {
     beforeEach(() => {
-      spyOn( self.controller.$scope, '$emit' );
+      jest.spyOn( self.controller.$scope, '$emit' ).mockImplementation(() => {});
     });
+
     it('should remove item from cart', () => {
       self.controller.cartData = { items: [{uri: 'uri1'}, {uri: 'uri2'}] };
-      spyOn(self.controller, 'loadCart');
-      self.controller.cartService.deleteItem.and.returnValue( Observable.of( 'data' ) );
+      jest.spyOn(self.controller, 'loadCart').mockImplementation(() => {});
+      self.controller.cartService.deleteItem.mockReturnValue( Observable.of( 'data' ) );
       self.controller.removeItem(self.controller.cartData.items[0]);
+
       expect(self.controller.cartService.deleteItem).toHaveBeenCalledWith('uri1');
       expect(self.controller.loadCart).toHaveBeenCalledWith(true);
       expect(self.controller.cartData.items).toEqual([{uri: 'uri2'}]);
       expect(self.controller.$scope.$emit).toHaveBeenCalledWith( cartUpdatedEvent );
     });
+
     it('should handle an error removing an item', () => {
       self.controller.cartData = { items: [{uri: 'uri1'}, {uri: 'uri2'}] };
-      self.controller.cartService.deleteItem.and.returnValue( Observable.throw( 'error' ) );
+      self.controller.cartService.deleteItem.mockReturnValue( Observable.throw( 'error' ) );
       self.controller.removeItem(self.controller.cartData.items[0]);
+
       expect(self.controller.cartService.deleteItem).toHaveBeenCalledWith('uri1');
       expect(self.controller.cartData.items).toEqual([{uri: 'uri1', removingError: true}, {uri: 'uri2'}]);
       expect(self.controller.$log.error.logs[0]).toEqual(['Error deleting item from cart', 'error']);
@@ -130,8 +144,8 @@ describe('cart', () => {
           }
         };
       };
-      spyOn(self.controller, 'loadCart');
-      spyOn(self.controller.productModalService, 'configureProduct').and.callFake(self.controller.callback);
+      jest.spyOn(self.controller, 'loadCart').mockImplementation(() => {});
+      jest.spyOn(self.controller.productModalService, 'configureProduct').mockImplementation(self.controller.callback);
       self.controller.cartData = { items: [{ code: '0123456', config: 'some config', uri: 'uri1'}, {uri: 'uri2'}] };
     });
 
@@ -139,6 +153,7 @@ describe('cart', () => {
       self.controller.isUpdated = true;
 
       self.controller.editItem(self.controller.cartData.items[0]);
+
       expect(self.controller.productModalService.configureProduct).toHaveBeenCalledWith('0123456', 'some config', true, 'uri1');
       expect(self.controller.loadCart).toHaveBeenCalledWith(true);
       expect(self.controller.cartData.items).toEqual([{uri: 'uri2'}]);
@@ -149,9 +164,11 @@ describe('cart', () => {
   describe('checkout()', () => {
     it('should return uri', () => {
       self.controller.checkout();
+
       expect(self.controller.$window.location).toBe('/checkout.html');
       self.controller.sessionService.getRole = () => 'foo';
       self.controller.checkout();
+
       expect(self.controller.$window.location).toBe('/sign-in.html');
     });
   });
@@ -164,18 +181,21 @@ describe('cart', () => {
     it('set continue browsing url', () => {
       self.controller.$document[0].referrer = 'https://give-stage2.cru.org/page-to-give-more';
       self.controller.setContinueBrowsingUrl();
+
       expect(self.controller.continueBrowsingUrl).toEqual('https://give-stage2.cru.org/page-to-give-more');
     });
 
     it('skip if not give url', () => {
       self.controller.$document[0].referrer = 'https://www.cru.org/another-page';
       self.controller.setContinueBrowsingUrl();
+
       expect(self.controller.continueBrowsingUrl).toEqual(null);
     });
 
     it('remove giving modal params', () => {
       self.controller.$document[0].referrer = 'https://give-stage2.cru.org/page-to-give-more?modal=give-gift';
       self.controller.setContinueBrowsingUrl();
+
       expect(self.controller.continueBrowsingUrl).toEqual('https://give-stage2.cru.org/page-to-give-more');
     });
   });

@@ -15,7 +15,7 @@ describe('PaymentMethodComponent', function () {
     fakeModal = function() {
       return {
         // eslint-disable-next-line jasmine/no-unsafe-spy
-        close: jasmine.createSpy('close'),
+        close: jest.fn(),
         result: {
           then: function(confirmCallback) {
             confirmCallback();
@@ -56,9 +56,7 @@ describe('PaymentMethodComponent', function () {
         type: 'elasticpath.bankaccounts.bank-account'
       }
     },
-    uibModal = jasmine.createSpyObj('$uibModal', ['open','close']);
-
-    uibModal.open.and.callFake(fakeModal);
+    uibModal = {open: jest.fn(fakeModal), close: jest.fn()};
 
   beforeEach(inject(function ($rootScope, $componentController) {
     var $scope = $rootScope.$new();
@@ -90,6 +88,7 @@ describe('PaymentMethodComponent', function () {
   describe('getExpiration()', () => {
     it('should return expiration date', () => {
       self.controller.model = modelCC;
+
       expect(self.controller.getExpiration()).toBe('05/2019');
     });
   });
@@ -97,8 +96,10 @@ describe('PaymentMethodComponent', function () {
   describe('isCard()', () => {
     it('should return true if payment method is a card', () => {
       self.controller.model = modelCC;
+
       expect(self.controller.isCard()).toBe(true);
       self.controller.model = modelEFT;
+
       expect(self.controller.isCard()).toBe(false);
     });
   });
@@ -121,10 +122,12 @@ describe('PaymentMethodComponent', function () {
 
       self.controller.model = modelEFT;
       self.controller.editPaymentMethod();
+
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
 
-      spyOn(self.controller, 'onPaymentFormStateChange');
-      self.controller.$uibModal.open.calls.first().args[0].resolve.onPaymentFormStateChange()({ $event: {} });
+      jest.spyOn(self.controller, 'onPaymentFormStateChange').mockImplementation(() => {});
+      self.controller.$uibModal.open.mock.calls[0][0].resolve.onPaymentFormStateChange()({ $event: {} });
+
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalled();
     });
   });
@@ -135,10 +138,11 @@ describe('PaymentMethodComponent', function () {
       self.controller.successMessage = {};
       self.controller.mailingAddress = 'address';
       self.controller.deletePaymentMethod();
+
       expect(self.controller.$uibModal.open).toHaveBeenCalled();
-      expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethod()).toEqual(modelEFT);
-      expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.mailingAddress()).toEqual('address');
-      expect(self.controller.$uibModal.open.calls.mostRecent().args[0].resolve.paymentMethodsList().length).toBe(1);
+      expect(self.controller.$uibModal.open.mock.calls[self.controller.$uibModal.open.mock.calls.length - 1][0].resolve.paymentMethod()).toEqual(modelEFT);
+      expect(self.controller.$uibModal.open.mock.calls[self.controller.$uibModal.open.mock.calls.length - 1][0].resolve.mailingAddress()).toEqual('address');
+      expect(self.controller.$uibModal.open.mock.calls[self.controller.$uibModal.open.mock.calls.length - 1][0].resolve.paymentMethodsList().length).toBe(1);
     });
   });
 
@@ -157,15 +161,17 @@ describe('PaymentMethodComponent', function () {
     it('should update paymentFormState', () => {
       self.controller.paymentFormResolve.state = 'unsubmitted';
       self.controller.onPaymentFormStateChange({ state: 'submitted' });
+
       expect(self.controller.paymentFormResolve.state).toEqual('submitted');
     });
 
     it('should throw an error', () => {
-      spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.throw({
+      jest.spyOn(self.controller.profileService, 'updatePaymentMethod').mockReturnValue(Observable.throw({
         data: 'some error'
       }));
       self.controller.successMessage = {};
       self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data });
+
       expect(self.controller.paymentFormResolve.state).toBe('error');
       expect(self.controller.paymentFormResolve.error).toBe('some error');
       expect(self.controller.$log.error.logs[0]).toEqual(['Error updating payment method', {data: 'some error'}]);
@@ -173,10 +179,11 @@ describe('PaymentMethodComponent', function () {
 
     it('should edit payment method', () => {
       self.controller.editPaymentMethodModal = {
-        close: jasmine.createSpy('close')
+        close: jest.fn()
       };
-      spyOn(self.controller.profileService, 'updatePaymentMethod').and.returnValue(Observable.of('data'));
+      jest.spyOn(self.controller.profileService, 'updatePaymentMethod').mockReturnValue(Observable.of('data'));
       self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data });
+
       expect(self.controller.model['card-number']).toBe('0000');
       expect(self.controller.editPaymentMethodModal.close).toHaveBeenCalled();
 
@@ -185,15 +192,17 @@ describe('PaymentMethodComponent', function () {
         'display-account-number': '9879'
       };
       self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data });
+
       expect(self.controller.model['display-account-number']).toBe('9879');
     });
   });
 
   describe('$onDestroy()', () => {
     it('should destroy modal instances if they exist', () => {
-      self.controller.deletePaymentMethodModal = jasmine.createSpyObj('deletePaymentMethodModal', ['dismiss']);
-      self.controller.editPaymentMethodModal = jasmine.createSpyObj('editPaymentMethodModal', ['dismiss']);
+      self.controller.deletePaymentMethodModal = {dismiss: jest.fn()};
+      self.controller.editPaymentMethodModal = {dismiss: jest.fn()};
       self.controller.$onDestroy();
+
       expect(self.controller.deletePaymentMethodModal.dismiss).toHaveBeenCalled();
       expect(self.controller.editPaymentMethodModal.dismiss).toHaveBeenCalled();
     });

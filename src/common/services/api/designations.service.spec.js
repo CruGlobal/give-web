@@ -29,7 +29,7 @@ describe('designation service', () => {
         keyword: 'steve'
       })
         .subscribe((data) => {
-          expect(data).toEqual([jasmine.objectContaining({
+          expect(data).toEqual([expect.objectContaining({
             'designationNumber': '0559826',
             'replacementDesignationNumber': '0559827',
             'name': 'John and Jane Doe',
@@ -38,13 +38,14 @@ describe('designation service', () => {
         });
       self.$httpBackend.flush();
     });
+
     it('should handle undefined fields', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/search?keyword=steve').respond(200, {hits:[{}]});
       self.designationsService.productSearch({
         keyword: 'steve'
       })
         .subscribe((data) => {
-          expect(data).toEqual([jasmine.objectContaining({
+          expect(data).toEqual([expect.objectContaining({
             designationNumber: null,
             replacementDesignationNumber: null,
             name: null,
@@ -100,6 +101,7 @@ describe('designation service', () => {
         });
       self.$httpBackend.flush();
     });
+
     it('should get product details for a uri', () => {
       self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, lookupResponse);
@@ -109,6 +111,7 @@ describe('designation service', () => {
         });
       self.$httpBackend.flush();
     });
+
     it('should handle an empty response', () => {
       self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, '');
@@ -121,6 +124,7 @@ describe('designation service', () => {
       self.$httpBackend.flush();
     });
   });
+
   describe('bulkLookup', () => {
     it('should take an array of designation numbers and return corresponding links for items', () => {
       self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/lookups/crugive/batches/items?followLocation=true',
@@ -145,11 +149,13 @@ describe('designation service', () => {
             {amount: 25, label: "for 10 Bibles", order: 1},
             {amount: 100, label: "for 40 Bibles", order: 2}
           ] );
+
           expect( itemConfig['default-campaign-code'] ).toEqual( '867EM1' );
           expect( itemConfig['jcr-title'] ).toEqual( 'PowerPacksTM for Inner City Children' );
         });
       self.$httpBackend.flush();
     });
+
     it('should handle an invalid campaign page', () => {
       const itemConfig = {amount: 50, 'campaign-page': 9876};
       self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
@@ -162,6 +168,7 @@ describe('designation service', () => {
         });
       self.$httpBackend.flush();
     });
+
     it('should handle no campaign page', () => {
       const itemConfig = {amount: 50};
       self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')

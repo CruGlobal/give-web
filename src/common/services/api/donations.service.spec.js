@@ -38,7 +38,7 @@ describe( 'donations service', () => {
         .expectGET( 'https://give-stage2.cru.org/cortex/donations/historical/crugive/recipient/recent' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients().subscribe( ( recipients ) => {
-        expect( recipients ).toEqual( jasmine.any( Array ) );
+        expect( recipients ).toEqual( expect.any( Array ) );
       } );
       $httpBackend.flush();
     } );
@@ -48,7 +48,7 @@ describe( 'donations service', () => {
         .expectGET( 'https://give-stage2.cru.org/cortex/donations/historical/crugive/recipient/2015' )
         .respond( 200, recipientResponse );
       donationsService.getRecipients( 2015 ).subscribe( ( recipients ) => {
-        expect( recipients ).toEqual( jasmine.any( Array ) );
+        expect( recipients ).toEqual( expect.any( Array ) );
       } );
       $httpBackend.flush();
     } );
@@ -60,7 +60,7 @@ describe( 'donations service', () => {
         .expectGET( 'https://give-stage2.cru.org/cortex/donations/historical/crugive/2016/9?zoom=element,element:paymentmethod,element:recurringdonation' )
         .respond( 200, historicalResponse );
       donationsService.getHistoricalGifts( 2016, 9 ).subscribe( ( historicalGifts ) => {
-        expect( historicalGifts ).toEqual( jasmine.any( Array ) );
+        expect( historicalGifts ).toEqual( expect.any( Array ) );
       } );
       $httpBackend.flush();
     } );
@@ -111,11 +111,11 @@ describe( 'donations service', () => {
       donationsService.getRecentRecipients()
         .subscribe( recentRecipients => {
           expect( recentRecipients ).toEqual( [
-            jasmine.objectContaining( {
+            expect.objectContaining( {
               "designation-name": "Brian and Jennifer Richardson (0679537)",
               "designation-number": "0679537"
             } ),
-            jasmine.objectContaining( {
+            expect.objectContaining( {
               "designation-name": "Steve Lamie (5460173)",
               "designation-number": "5460173"
             } )
@@ -141,9 +141,10 @@ describe( 'donations service', () => {
         "encrypted-account-number": "",
         "routing-number": "021000021"
       };
-      spyOn( profileService, 'getPaymentMethods' ).and.returnValue( Observable.of([ paymentMethod ]) );
-      spyOn( commonService, 'getNextDrawDate' ).and.returnValue( Observable.of('2015-06-09') );
+      jest.spyOn( profileService, 'getPaymentMethods' ).mockReturnValue( Observable.of([ paymentMethod ]) );
+      jest.spyOn( commonService, 'getNextDrawDate' ).mockReturnValue( Observable.of('2015-06-09') );
     });
+
     it( 'should load active recurring gifts', () => {
       $httpBackend
         .expectGET( 'https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=givingdashboard:managerecurringdonations' )
@@ -166,8 +167,9 @@ describe( 'donations service', () => {
           'updated-amount': '',
           'updated-designation-number': ''
         } );
+
         expect( gifts[0].parentDonation ).toEqual( {
-          'donation-lines': jasmine.any(Array),
+          'donation-lines': expect.any(Array),
           'donation-row-id': '1-GVVEB4',
           'donation-status': 'Active',
           'effective-status': 'Active',
@@ -176,6 +178,7 @@ describe( 'donations service', () => {
           'recurring-day-of-month': '15',
           'start-date': { 'display-value': '2015-09-29', value: 1443484800000 }
         } );
+
         expect( gifts[0].paymentMethods ).toEqual( [ paymentMethod ] );
         expect( gifts[0].nextDrawDate ).toEqual( '2015-06-09' );
       });
@@ -204,8 +207,9 @@ describe( 'donations service', () => {
           'updated-amount': '',
           'updated-designation-number': ''
         } );
+
         expect( gifts[0].parentDonation ).toEqual( {
-          'donation-lines': jasmine.any(Array),
+          'donation-lines': expect.any(Array),
           'donation-row-id': '1-400ZBL',
           'donation-status': 'Cancelled',
           'effective-status': 'Cancelled',
@@ -214,6 +218,7 @@ describe( 'donations service', () => {
           'recurring-day-of-month': '15',
           'start-date': { 'display-value': '2015-09-29', value: 1443484800000 }
         } );
+
         expect( gifts[0].paymentMethods ).toEqual( [ paymentMethod ] );
         expect( gifts[0].nextDrawDate ).toEqual( '2015-06-09' );
       });
@@ -397,23 +402,23 @@ describe( 'donations service', () => {
       donationsService.getSuggestedRecipients()
         .subscribe( ( suggestedRecipients ) => {
           expect( suggestedRecipients ).toEqual( [
-            jasmine.objectContaining( {
+            expect.objectContaining( {
               "designation-name": "Steve and Cheryl Bratton",
               "designation-number": "0478064"
             } ),
-            jasmine.objectContaining( {
+            expect.objectContaining( {
               "designation-name": "Matthew and Katie Watts",
               "designation-number": "0449995"
             } ),
-            jasmine.objectContaining( {
+            expect.objectContaining( {
               "designation-name": "James and Gail Rohland",
               "designation-number": "0138072"
             } ),
-            jasmine.objectContaining( {
+            expect.objectContaining( {
               "designation-name": "Aaron and Connie Thomson",
               "designation-number": "0774533"
             } ),
-            jasmine.objectContaining( {
+            expect.objectContaining( {
               "designation-name": "Red River Region Bridges",
               "designation-number": "2781843"
             } )

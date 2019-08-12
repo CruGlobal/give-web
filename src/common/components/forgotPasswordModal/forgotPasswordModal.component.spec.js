@@ -20,6 +20,7 @@ describe( 'forgotPasswordModal', function () {
   describe( '$onInit()', () => {
     it( 'initializes the componenet', () => {
       $ctrl.$onInit();
+
       expect( $ctrl.emailSent ).toEqual( false );
       expect( $ctrl.isLoading ).toEqual( false );
       expect( $ctrl.modalTitle ).toEqual( 'Reset Password' );
@@ -30,8 +31,8 @@ describe( 'forgotPasswordModal', function () {
     let deferred;
     beforeEach( inject( function ( _$q_ ) {
       deferred = _$q_.defer();
-      spyOn( $ctrl.sessionService, 'forgotPassword' ).and.callFake( () => Observable.from( deferred.promise ) );
-      spyOn( $ctrl, 'resetPasswordUrl' ).and.returnValue( 'http://example.com' );
+      jest.spyOn( $ctrl.sessionService, 'forgotPassword' ).mockImplementation( () => Observable.from( deferred.promise ) );
+      jest.spyOn( $ctrl, 'resetPasswordUrl' ).mockReturnValue( 'http://example.com' );
       $ctrl.email = 'professorx@xavier.edu';
       $ctrl.forgotPassword();
     } ) );
@@ -61,32 +62,39 @@ describe( 'forgotPasswordModal', function () {
         it( 'sets \'password_cant_change\' error', () => {
           deferred.reject( {status: 403, data: {error: 'password_cant_change'}} );
           $rootScope.$digest();
+
           expect( $ctrl.forgotError ).toEqual( true );
-          expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {password_cant_change: true} ) );
+          expect( $ctrl.errors ).toEqual( expect.objectContaining( {password_cant_change: true} ) );
         } );
       } );
+
       describe( '404 Not Found', () => {
         it( 'sets \'user_not_found\' error', () => {
           deferred.reject( {status: 404, data: {error: 'user_not_found'}} );
           $rootScope.$digest();
+
           expect( $ctrl.forgotError ).toEqual( true );
-          expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {user_not_found: true} ) );
+          expect( $ctrl.errors ).toEqual( expect.objectContaining( {user_not_found: true} ) );
         } );
       } );
+
       describe( '500 Internal Server Error', () => {
         it( 'sets \'unknown\' error', () => {
           deferred.reject( {status: 500, data: {error: 'unknown'}} );
           $rootScope.$digest();
+
           expect( $ctrl.forgotError ).toEqual( true );
-          expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {unknown: true} ) );
+          expect( $ctrl.errors ).toEqual( expect.objectContaining( {unknown: true} ) );
         } );
       } );
+
       describe( 'no response body', () => {
         it( 'sets \'unknown\' error', () => {
           deferred.reject( {status: -1 } );
           $rootScope.$digest();
+
           expect( $ctrl.forgotError ).toEqual( true );
-          expect( $ctrl.errors ).toEqual( jasmine.objectContaining( {unknown: true} ) );
+          expect( $ctrl.errors ).toEqual( expect.objectContaining( {unknown: true} ) );
         } );
       } );
     } );
@@ -95,8 +103,10 @@ describe( 'forgotPasswordModal', function () {
   describe( 'resetPasswordUrl()', () => {
     beforeEach( () => {
       $ctrl.$location = {
-        absUrl: jasmine.createSpy( 'absUrl' ).and.returnValue( 'http://example.com/index.html?key=value' ),
-        search: jasmine.createSpy( 'search' ).and.returnValue( {key: 'value'} )
+        absUrl: jest.fn( () => 'http://example.com/index.html?key=value' ),
+        search: jest.fn( () => ({
+          key: 'value'
+        }) )
       };
     } );
 

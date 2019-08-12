@@ -1,5 +1,6 @@
 import angular from 'angular';
 import moment from 'moment';
+import {advanceTo, clear} from 'jest-date-mock';
 import 'angular-mocks';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -12,6 +13,8 @@ import cartResponse from 'common/services/api/fixtures/cortex-cart.fixture';
 
 describe('cart service', () => {
   beforeEach(angular.mock.module(module.name));
+
+  afterEach(clear);
   let self = {};
 
   beforeEach(inject((cartService, $httpBackend) => {
@@ -26,11 +29,12 @@ describe('cart service', () => {
 
   describe('get', () => {
     beforeEach(() => {
-      spyOn(self.cartService.$cookies, 'put');
-      spyOn(self.cartService.$cookies, 'remove');
-      spyOn(self.cartService.commonService, 'getNextDrawDate').and.returnValue(Observable.of('2016-10-01'));
-      jasmine.clock().mockDate(moment('2016-09-01').toDate()); // Make sure current date is before next draw date
+      jest.spyOn(self.cartService.$cookies, 'put').mockImplementation(() => {});
+      jest.spyOn(self.cartService.$cookies, 'remove').mockImplementation(() => {});
+      jest.spyOn(self.cartService.commonService, 'getNextDrawDate').mockReturnValue(Observable.of('2016-10-01'));
+      advanceTo(moment('2016-09-01').toDate()); // Make sure current date is before next draw date
     });
+
     it('should handle an empty response', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
@@ -44,6 +48,7 @@ describe('cart service', () => {
         });
       self.$httpBackend.flush();
     });
+
     it('should handle a response with no line items', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
@@ -54,10 +59,11 @@ describe('cart service', () => {
       self.cartService.get()
         .subscribe((data) => {
           expect(data).toEqual({});
-          expect(self.cartService.$cookies.remove).toHaveBeenCalledWith('giveCartItemCount', jasmine.any(Object));
+          expect(self.cartService.$cookies.remove).toHaveBeenCalledWith('giveCartItemCount', expect.any(Object));
         });
       self.$httpBackend.flush();
     });
+
     it('should get cart, parse response, and show most recent items first', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
@@ -82,7 +88,7 @@ describe('cart service', () => {
             { frequency: 'Quarterly', amount: 50, total: '$50.00' }
           ]);
 
-          expect(self.cartService.$cookies.put).toHaveBeenCalledWith('giveCartItemCount', 3, jasmine.any(Object));
+          expect(self.cartService.$cookies.put).toHaveBeenCalledWith('giveCartItemCount', 3, expect.any(Object));
         });
       self.$httpBackend.flush();
     });
@@ -102,8 +108,9 @@ describe('cart service', () => {
 
   describe('addItem', () => {
     beforeEach(() => {
-      spyOn(self.cartService.sessionService, 'getRole').and.returnValue(Roles.registered);
+      jest.spyOn(self.cartService.sessionService, 'getRole').mockReturnValue(Roles.registered);
     });
+
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
@@ -120,12 +127,12 @@ describe('cart service', () => {
 
     describe('as a public user', () => {
       beforeEach(() => {
-        self.cartService.sessionService.getRole.and.returnValue(Roles.public);
+        self.cartService.sessionService.getRole.mockReturnValue(Roles.public);
       });
 
       describe('with existing cart', () => {
         beforeEach(() => {
-          spyOn(self.cartService, 'getTotalQuantity').and.returnValue(Observable.of(3));
+          jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(3));
         });
 
         it('should add an item', () => {
@@ -145,8 +152,8 @@ describe('cart service', () => {
 
       describe('with empty cart', () => {
         beforeEach(() => {
-          spyOn(self.cartService, 'getTotalQuantity').and.returnValue(Observable.of(0));
-          spyOn(self.cartService.sessionService, 'signOut').and.returnValue(Observable.of({}));
+          jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(0));
+          jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.of({}));
         });
 
         it('should delete cookies and addItem to cart', () => {
@@ -168,10 +175,11 @@ describe('cart service', () => {
 
   describe('editItem', () => {
     it('should delete the old item and add the new one', () => {
-      spyOn(self.cartService, 'deleteItem').and.returnValue(Observable.of({ data: null }));
-      spyOn(self.cartService, 'addItem').and.returnValue(Observable.of({ data: null }));
+      jest.spyOn(self.cartService, 'deleteItem').mockReturnValue(Observable.of({ data: null }));
+      jest.spyOn(self.cartService, 'addItem').mockReturnValue(Observable.of({ data: null }));
       self.cartService.editItem('<some old id>', '<new id>', { code: '<some code>'})
         .subscribe();
+
       expect(self.cartService.deleteItem).toHaveBeenCalledWith('<some old id>');
       expect(self.cartService.addItem).toHaveBeenCalledWith('<new id>', { code: '<some code>'}, true);
     });
@@ -191,10 +199,11 @@ describe('cart service', () => {
 
   describe('bulkAdd', () => {
     beforeEach(() => {
-      spyOn(self.cartService.designationsService, 'bulkLookup');
+      jest.spyOn(self.cartService.designationsService, 'bulkLookup').mockImplementation(() => {});
     });
+
     it('should throw an error if there are no designations found from lookup', () => {
-      self.cartService.designationsService.bulkLookup.and.returnValue(Observable.of({ links: [] }));
+      self.cartService.designationsService.bulkLookup.mockReturnValue(Observable.of({ links: [] }));
       self.cartService.bulkAdd([{ designationNumber: '0123456' }])
         .subscribe(
           () => fail('Observable should have thrown an error'),
@@ -203,9 +212,10 @@ describe('cart service', () => {
           }
         );
     });
+
     it('should combine the configured designations with their product uri and call addItemAndReplaceExisting for each designation', () => {
-      self.cartService.designationsService.bulkLookup.and.returnValue(Observable.of({ links: [ { uri: 'uri1'}, { uri: 'uri2'} ] }));
-      spyOn(self.cartService, 'addItemAndReplaceExisting').and.callFake( (cart, uri, configuredDesignation) => Observable.of({ configuredDesignation: configuredDesignation }));
+      self.cartService.designationsService.bulkLookup.mockReturnValue(Observable.of({ links: [ { uri: 'uri1'}, { uri: 'uri2'} ] }));
+      jest.spyOn(self.cartService, 'addItemAndReplaceExisting').mockImplementation( (cart, uri, configuredDesignation) => Observable.of({ configuredDesignation: configuredDesignation }));
       let outputValues = [];
       self.cartService.bulkAdd([{ designationNumber: '0123456' }, { designationNumber: '1234567' }])
         .subscribe(value => {
@@ -213,34 +223,38 @@ describe('cart service', () => {
           },
           () => fail('Observable should not have thrown an error'),
           () => {
-            expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(jasmine.any(Observable), 'uri1', { designationNumber: '0123456', uri: 'uri1' });
-            expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(jasmine.any(Observable), 'uri2', { designationNumber: '1234567', uri: 'uri2' });
+            expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'uri1', { designationNumber: '0123456', uri: 'uri1' });
+            expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'uri2', { designationNumber: '1234567', uri: 'uri2' });
             expect(outputValues).toEqual([ { configuredDesignation: { designationNumber: '0123456', uri: 'uri1' } }, { configuredDesignation: { designationNumber: '1234567', uri: 'uri2' } } ]);
           });
     });
+
     it('should provide cart as an observable that only performs a cart request once', () => {
-      self.cartService.designationsService.bulkLookup.and.returnValue(Observable.of({ links: [ { uri: 'uri1'} ] }));
-      spyOn(self.cartService, 'addItemAndReplaceExisting').and.returnValue(Observable.empty());
+      self.cartService.designationsService.bulkLookup.mockReturnValue(Observable.of({ links: [ { uri: 'uri1'} ] }));
+      jest.spyOn(self.cartService, 'addItemAndReplaceExisting').mockReturnValue(Observable.empty());
       self.cartService.bulkAdd([{ designationNumber: '0123456' }])
         .subscribe(null,
           () => fail('Observable should not have thrown an error'),
           () => {
-            spyOn(self.cartService, 'get').and.returnValue(Observable.empty());
-            const cartObservable = self.cartService.addItemAndReplaceExisting.calls.mostRecent().args[0];
+            jest.spyOn(self.cartService, 'get').mockReturnValue(Observable.empty());
+            const cartObservable = self.cartService.addItemAndReplaceExisting.mock.calls[self.cartService.addItemAndReplaceExisting.mock.calls.length - 1][0];
             cartObservable.subscribe();
             cartObservable.subscribe();
-            expect(self.cartService.get.calls.count()).toEqual(1);
+
+            expect(self.cartService.get.mock.calls.length).toEqual(1);
           });
     });
   });
+
   describe('addItemAndReplaceExisting', () => {
     const cartObservable = Observable.of({
       items: [{ code: '0123456', uri: 'oldUri' }],
     });
     beforeEach(() => {
-      spyOn(self.cartService, 'addItem').and.returnValue(Observable.of({}));
-      spyOn(self.cartService, 'editItem').and.returnValue(Observable.of({}));
+      jest.spyOn(self.cartService, 'addItem').mockReturnValue(Observable.of({}));
+      jest.spyOn(self.cartService, 'editItem').mockReturnValue(Observable.of({}));
     });
+
     it('should add items to cart if there are no conflicts', () => {
       self.cartService.addItemAndReplaceExisting(null, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
         .subscribe(
@@ -252,8 +266,9 @@ describe('cart service', () => {
           () => fail('Observable should not have thrown an error')
         );
     });
+
     it('should catch a generic error when adding item', () => {
-      self.cartService.addItem.and.returnValue(Observable.throw('some error'));
+      self.cartService.addItem.mockReturnValue(Observable.throw('some error'));
       self.cartService.addItemAndReplaceExisting(null, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
         .subscribe(
           response => {
@@ -264,8 +279,9 @@ describe('cart service', () => {
           () => fail('Observable should not have thrown an error') // We are catching and returning the value with an error key so we know which requests are failing
         );
     });
+
     it('should catch a conflict in the cart and replace that item', () => {
-      self.cartService.addItem.and.returnValue(Observable.throw({ status: 409 }));
+      self.cartService.addItem.mockReturnValue(Observable.throw({ status: 409 }));
       self.cartService.addItemAndReplaceExisting(cartObservable, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
         .subscribe(
           response => {
@@ -276,9 +292,10 @@ describe('cart service', () => {
           () => fail('Observable should not have thrown an error')
         );
     });
+
     it('should catch a conflict in the cart and catch an error replacing that item', () => {
-      self.cartService.addItem.and.returnValue(Observable.throw({ status: 409 }));
-      self.cartService.editItem.and.returnValue(Observable.throw('some error'));
+      self.cartService.addItem.mockReturnValue(Observable.throw({ status: 409 }));
+      self.cartService.editItem.mockReturnValue(Observable.throw('some error'));
       self.cartService.addItemAndReplaceExisting(cartObservable, 'uri1', { designationNumber: '0123456', amount: 51, uri: 'uri1' })
         .subscribe(
           response => {

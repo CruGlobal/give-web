@@ -17,29 +17,33 @@ describe( 'nav cart icon', function () {
   } );
 
   it( '$onInit()', () => {
-    spyOn( $ctrl.$rootScope, '$on' );
-    spyOn( $ctrl, 'giftAddedToCart' );
+    jest.spyOn( $ctrl.$rootScope, '$on' ).mockImplementation(() => {});
+    jest.spyOn( $ctrl, 'giftAddedToCart' ).mockImplementation(() => {});
 
     $ctrl.$onInit();
-    expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( giftAddedEvent, jasmine.any( Function ) );
-    $ctrl.$rootScope.$on.calls.argsFor( 0 )[1]();
+
+    expect( $ctrl.$rootScope.$on ).toHaveBeenCalledWith( giftAddedEvent, expect.any( Function ) );
+    $ctrl.$rootScope.$on.mock.calls[0][1]();
+
     expect( $ctrl.giftAddedToCart ).toHaveBeenCalled();
   } );
 
   describe( 'giftAddedToCart()', () => {
     it( 'opens nav cart when giftAdded', () => {
       $ctrl.giftAddedToCart();
+
       expect( $ctrl.cartOpen ).toEqual( true );
     } );
   } );
 
   describe( 'cartOpened()', () => {
     beforeEach( () => {
-      spyOn( $ctrl.$rootScope, '$emit' );
+      jest.spyOn( $ctrl.$rootScope, '$emit' ).mockImplementation(() => {});
     } );
 
     it( 'should send event to load cart if nav cart hasn\'t been opened before', () => {
       $ctrl.cartOpened();
+
       expect( $ctrl.cartOpenedPreviously ).toEqual( true );
       expect($ctrl.$rootScope.$emit).toHaveBeenCalledWith(cartUpdatedEvent);
     } );
@@ -47,6 +51,7 @@ describe( 'nav cart icon', function () {
     it( 'should not send event to load cart if nav cart has been opened before', () => {
       $ctrl.cartOpenedPreviously = true;
       $ctrl.cartOpened();
+
       expect( $ctrl.cartOpenedPreviously ).toEqual( true );
       expect($ctrl.$rootScope.$emit).not.toHaveBeenCalled();
     } );
