@@ -1,13 +1,9 @@
-import angular from 'angular';
-import template from './retryModal.tpl.html';
+import angular from 'angular'
+import template from './retryModal.tpl.html'
 
-let componentName = 'retryModal';
+const componentName = 'retryModal'
 
 class RetryModalController {
-
-  /* @ngInject */
-  constructor() {
-  }
 }
 
 export default angular
@@ -22,4 +18,4 @@ export default angular
       cancel: '&',
       previous: '&'
     }
-  });
+  })

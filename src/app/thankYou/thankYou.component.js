@@ -1,21 +1,15 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import commonModule from 'common/common.module';
-import thankYouSummary from './summary/thankYouSummary.component';
-import accountBenefits from './accountBenefits/accountBenefits.component';
-import help from '../checkout/help/help.component';
+import commonModule from 'common/common.module'
+import thankYouSummary from './summary/thankYouSummary.component'
+import accountBenefits from './accountBenefits/accountBenefits.component'
+import help from '../checkout/help/help.component'
 
+import template from './thankYou.tpl.html'
 
-import template from './thankYou.tpl.html';
+const componentName = 'thankYou'
 
-let componentName = 'thankYou';
-
-class ThankYouController{
-
-  /* @ngInject */
-  constructor(){
-
-  }
+class ThankYouController {
 }
 
 export default angular
@@ -28,4 +22,4 @@ export default angular
   .component(componentName, {
     controller: ThankYouController,
     templateUrl: template
-  });
+  })

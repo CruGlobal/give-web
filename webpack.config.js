@@ -1,18 +1,12 @@
-const webpack = require('webpack');
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const concat = require('lodash/concat');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
-
-const aemDomain = 'https://give-stage2.cru.org';
-
-const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
-const ci = process.env.CI === 'true';
-
-const fs = require('fs');
-
+const webpack = require('webpack')
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const concat = require('lodash/concat')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const aemDomain = 'https://give-stage2.cru.org'
+const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build')
+const fs = require('fs')
 const entryPoints = {
   common: 'common/common.module.js',
   app: [
@@ -27,14 +21,14 @@ const entryPoints = {
     'app/profile/profile.component.js',
     'app/profile/receipts/receipts.component.js',
     'app/profile/payment-methods/payment-methods.component.js',
-    'app/designationEditor/designationEditor.component.js',
+    'app/designationEditor/designationEditor.component.js'
   ],
   give: 'assets/scss/styles.scss',
   'branded-checkout': [
     'app/branded/branded-checkout.component.js',
-    'assets/scss/branded-checkout.scss',
-  ],
-};
+    'assets/scss/branded-checkout.scss'
+  ]
+}
 
 module.exports = (env = {}) => {
   return {
@@ -44,30 +38,30 @@ module.exports = (env = {}) => {
       filename: '[name].js',
       path: path.resolve(__dirname, 'dist'),
       devtoolModuleFilenameTemplate: info =>
-        info.resourcePath.replace(/^\.\//, ''),
+        info.resourcePath.replace(/^\.\//, '')
     },
     plugins: concat(
       [
         new MiniCssExtractPlugin({
           filename: '[name].min.css',
-          disable: !isBuild,
+          disable: !isBuild
         }),
         new CopyWebpackPlugin([
           {
             context: 'src',
             from: '**/*.+(json|svg|woff|ttf|png|ico|jpg|gif|eot)',
-            to: '[path][name].[ext]',
+            to: '[path][name].[ext]'
           },
           {
-            from: 'unsupportedBrowser.html',
-          },
+            from: 'unsupportedBrowser.html'
+          }
         ]),
         new webpack.EnvironmentPlugin({
-          TRAVIS_COMMIT: 'development',
+          TRAVIS_COMMIT: 'development'
         }),
-        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
       ],
-      env.analyze ? [new BundleAnalyzerPlugin()] : [],
+      env.analyze ? [new BundleAnalyzerPlugin()] : []
     ),
     module: {
       rules: [
@@ -81,20 +75,20 @@ module.exports = (env = {}) => {
                 presets: [['@babel/preset-env', { modules: false }]],
                 plugins: [
                   '@babel/plugin-transform-runtime',
-                  'angularjs-annotate',
-                ],
-              },
-            },
-          ],
+                  'angularjs-annotate'
+                ]
+              }
+            }
+          ]
         },
         {
           test: /\.html$/,
           use: [
             'ngtemplate-loader?relativeTo=' +
-              path.resolve(__dirname, './src') +
-              '/',
-            'html-loader',
-          ],
+            path.resolve(__dirname, './src') +
+            '/',
+            'html-loader'
+          ]
         },
         // extract global css into separate files
         {
@@ -102,15 +96,15 @@ module.exports = (env = {}) => {
           include: path.resolve(__dirname, './src/assets'),
           use: isBuild
             ? [
-                MiniCssExtractPlugin.loader,
-                'css-loader?-url',
-                'sass-loader?sourceMap',
-              ]
+              MiniCssExtractPlugin.loader,
+              'css-loader?-url',
+              'sass-loader?sourceMap'
+            ]
             : [
-                'style-loader',
-                'css-loader?-url&sourceMap',
-                'sass-loader?sourceMap',
-              ],
+              'style-loader',
+              'css-loader?-url&sourceMap',
+              'sass-loader?sourceMap'
+            ]
         },
         // inline css for components with the component's js
         {
@@ -119,44 +113,44 @@ module.exports = (env = {}) => {
           use: [
             'style-loader',
             'css-loader?sourceMap',
-            'sass-loader?sourceMap',
-          ],
-        },
-      ],
+            'sass-loader?sourceMap'
+          ]
+        }
+      ]
     },
     resolve: {
-      modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+      modules: [path.resolve(__dirname, 'src'), 'node_modules']
     },
     devtool: 'source-map',
     devServer: {
       https: {
         key: fs.readFileSync('./certs/private.key'),
         cert: fs.readFileSync('./certs/private.crt'),
-        ca: fs.readFileSync('./certs/private.pem'),
+        ca: fs.readFileSync('./certs/private.pem')
       },
       historyApiFallback: {
-        rewrites: [{ from: /\/(?!test\-release).+\.html/, to: '/index.html' }],
+        rewrites: [{ from: /\/(?!test-release).+\.html/, to: '/index.html' }]
       },
       proxy: {
         '/bin': {
           target: aemDomain,
-          changeOrigin: true,
+          changeOrigin: true
         },
         '/content': {
           target: aemDomain,
-          changeOrigin: true,
+          changeOrigin: true
         },
         '/etc': {
           target: aemDomain,
-          changeOrigin: true,
+          changeOrigin: true
         },
         '/designations': {
           target: aemDomain,
-          changeOrigin: true,
-        },
+          changeOrigin: true
+        }
       },
       port: 9000,
-      public: 'localhost.cru.org:9000',
-    },
-  };
-};
+      public: 'localhost.cru.org:9000'
+    }
+  }
+}

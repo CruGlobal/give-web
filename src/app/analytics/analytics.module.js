@@ -1,6 +1,7 @@
-import sessionService from 'common/services/session/session.service';
+import angular from 'angular'
+import sessionService from 'common/services/session/session.service'
 
 export default angular
-    .module('analytics', [
-      sessionService.name
-    ]);
+  .module('analytics', [
+    sessionService.name
+  ])

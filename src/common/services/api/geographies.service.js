@@ -1,22 +1,20 @@
-import angular from 'angular';
-import 'rxjs/add/operator/map';
-import map from 'lodash/map';
+import angular from 'angular'
+import 'rxjs/add/operator/map'
+import map from 'lodash/map'
 
-import cortexApiService from '../cortexApi.service';
-import hateoasHelperService from 'common/services/hateoasHelper.service';
+import cortexApiService from '../cortexApi.service'
+import hateoasHelperService from 'common/services/hateoasHelper.service'
 
-let serviceName = 'geographiesService';
+const serviceName = 'geographiesService'
 
 class Geographies {
-
-  /*@ngInject*/
-  constructor(cortexApiService, hateoasHelperService){
-    this.cortexApiService = cortexApiService;
-    this.hateoasHelperService = hateoasHelperService;
+  /* @ngInject */
+  constructor (cortexApiService, hateoasHelperService) {
+    this.cortexApiService = cortexApiService
+    this.hateoasHelperService = hateoasHelperService
   }
 
-
-  getCountries(){
+  getCountries () {
     return this.cortexApiService.get({
       path: ['geographies', this.cortexApiService.scope, 'countries'],
       zoom: {
@@ -25,11 +23,11 @@ class Geographies {
       cache: true
     })
       .map((data) => {
-        return data.countries;
-      });
+        return data.countries
+      })
   }
 
-  getRegions(country){
+  getRegions (country) {
     return this.cortexApiService.get({
       path: this.hateoasHelperService.getLink(country, 'regions'),
       zoom: {
@@ -38,23 +36,23 @@ class Geographies {
       cache: true
     })
       .map(data => {
-        const regions =  data.regions;
-        if(country && country.name === 'US'){
+        const regions = data.regions
+        if (country && country.name === 'US') {
           return map(regions, region => {
-            if(region.name === 'AA'){
-              region['display-name'] = 'Armed Forces Americas (AA)';
+            if (region.name === 'AA') {
+              region['display-name'] = 'Armed Forces Americas (AA)'
             }
-            if(region.name === 'AE'){
-              region['display-name'] = 'Armed Forces Europe (AE)';
+            if (region.name === 'AE') {
+              region['display-name'] = 'Armed Forces Europe (AE)'
             }
-            if(region.name === 'AP'){
-              region['display-name'] = 'Armed Forces Pacific (AP)';
+            if (region.name === 'AP') {
+              region['display-name'] = 'Armed Forces Pacific (AP)'
             }
-            return region;
-          });
+            return region
+          })
         }
-        return regions;
-      });
+        return regions
+      })
   }
 }
 
@@ -63,4 +61,4 @@ export default angular
     cortexApiService.name,
     hateoasHelperService.name
   ])
-  .service(serviceName, Geographies);
+  .service(serviceName, Geographies)

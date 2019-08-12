@@ -1,14 +1,14 @@
-import angular from 'angular';
-import capitalize from 'lodash/capitalize';
+import angular from 'angular'
+import capitalize from 'lodash/capitalize'
 
-let filterName = 'capitalize';
+const filterName = 'capitalize'
 
-function Capitalize(){
-  return (string) => capitalize(string);
+function Capitalize () {
+  return (string) => capitalize(string)
 }
 
 export default angular
   .module(filterName, [
 
   ])
-  .filter(filterName, Capitalize);
+  .filter(filterName, Capitalize)

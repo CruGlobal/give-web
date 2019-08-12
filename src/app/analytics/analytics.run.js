@@ -1,9 +1,10 @@
-import 'app/analytics/analytics.factory';
+import angular from 'angular'
+import 'app/analytics/analytics.factory'
 
 /* @ngInject */
-function dataLayer($window, analyticsFactory) {
-  if(!$window.location.hostname || $window.location.hostname.indexOf('give') == -1){
-    return;
+function dataLayer ($window, analyticsFactory) {
+  if (!$window.location.hostname || $window.location.hostname.indexOf('give') === -1) {
+    return
   }
 
   /* Build data layer */
@@ -13,14 +14,13 @@ function dataLayer($window, analyticsFactory) {
         angularLoaded: 'false'
       }
     }
-  };
+  }
 
-  const path = analyticsFactory.getPath();
+  const path = analyticsFactory.getPath()
 
-  analyticsFactory.setSiteSections(path);
-
+  analyticsFactory.setSiteSections(path)
 }
 
 export default angular
   .module('analytics')
-  .run(dataLayer);
+  .run(dataLayer)

@@ -1,18 +1,13 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
-import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component';
+import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component'
+import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component'
 
-import template from './configureRecentRecipients.tpl.html';
+import template from './configureRecentRecipients.tpl.html'
 
-let componentName = 'step3ConfigureRecentRecipients';
+const componentName = 'step3ConfigureRecentRecipients'
 
 class ConfigureRecentRecipientsController {
-
-  /* @ngInject */
-  constructor() {
-
-  }
 }
 
 export default angular
@@ -29,4 +24,4 @@ export default angular
       previous: '&',
       next: '&'
     }
-  });
+  })

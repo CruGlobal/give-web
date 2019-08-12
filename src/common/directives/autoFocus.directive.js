@@ -1,20 +1,20 @@
-import angular from 'angular';
+import angular from 'angular'
 
-let directiveName = 'autoFocus';
+const directiveName = 'autoFocus'
 
 /* @ngInject */
-function desigSrc($timeout) {
+function desigSrc ($timeout) {
   return {
     restrict: 'A',
-    link:     function ( scope, element ) {
+    link: function (scope, element) {
       $timeout(function () {
-        element[0].focus();
-      }, 300);
+        element[0].focus()
+      }, 300)
     }
-  };
+  }
 }
 
 export default angular
-  .module( directiveName, [
-  ] )
-  .directive( directiveName, desigSrc );
+  .module(directiveName, [
+  ])
+  .directive(directiveName, desigSrc)

@@ -1,27 +1,28 @@
-import angular from 'angular';
-let serviceName = 'modalStateService';
+import angular from 'angular'
 
-/*@ngInject*/
-function ModalStateService() {
-  const MODAL_PARAM = 'modal';
-  let registeredModals = {};
+const serviceName = 'modalStateService'
 
-  this.registerModal = registerModal;
+/* @ngInject */
+function ModalStateService () {
+  const MODAL_PARAM = 'modal'
+  const registeredModals = {}
 
-  function registerModal( name, injectableFn ) {
-    registeredModals[name] = injectableFn;
+  this.registerModal = registerModal
+
+  function registerModal (name, injectableFn) {
+    registeredModals[name] = injectableFn
   }
 
-  this.$get = /*@ngInject*/ ( $injector, $location, $document, $httpParamSerializer ) => {
+  this.$get = /* @ngInject */ ($injector, $location, $document, $httpParamSerializer) => {
     return {
-      name:        name,
+      name: name,
       invokeModal: invokeModal,
-      urlFor:      urlFor
-    };
+      urlFor: urlFor
+    }
 
-    function invokeModal( name ) {
-      if ( registeredModals.hasOwnProperty( name ) ) {
-        return $injector.invoke( registeredModals[name] );
+    function invokeModal (name) {
+      if (Object.prototype.hasOwnProperty.call(registeredModals, name)) {
+        return $injector.invoke(registeredModals[name])
       }
     }
 
@@ -30,39 +31,38 @@ function ModalStateService() {
      * @param name
      * @returns {*} current modal name or undefined
      */
-    function name( name ) {
-      if ( angular.isDefined( name ) ) {
-        $location.search( MODAL_PARAM, name );
+    function name (name) {
+      if (angular.isDefined(name)) {
+        $location.search(MODAL_PARAM, name)
       }
-      return $location.search()[MODAL_PARAM];
+      return $location.search()[MODAL_PARAM]
     }
 
-    function urlFor( name, params, url ) {
-      let a = $document[0].createElement( 'a' );
-      params = angular.isDefined( params ) ? params : $location.search();
-      a.href = angular.isDefined( url ) ? url : $location.absUrl();
-      params[MODAL_PARAM] = name;
-      a.search = $httpParamSerializer( params );
-      return a.href;
+    function urlFor (name, params, url) {
+      const a = $document[0].createElement('a')
+      params = angular.isDefined(params) ? params : $location.search()
+      a.href = angular.isDefined(url) ? url : $location.absUrl()
+      params[MODAL_PARAM] = name
+      a.search = $httpParamSerializer(params)
+      return a.href
     }
-  };
-}
-
-/*@ngInject*/
-function modalStateServiceRunner( modalStateService ) {
-  let name = modalStateService.name();
-  if ( angular.isDefined( name ) && name !== "" ) {
-    modalStateService.invokeModal( name );
   }
 }
 
-export function scrollModalToTop(){
-  // eslint-disable-next-line angular/document-service
-  const element = window.document.querySelector('.modal');
-  element && (element.scrollTop = 0);
+/* @ngInject */
+function modalStateServiceRunner (modalStateService) {
+  const name = modalStateService.name()
+  if (angular.isDefined(name) && name !== '') {
+    modalStateService.invokeModal(name)
+  }
+}
+
+export function scrollModalToTop () {
+  const element = window.document.querySelector('.modal')
+  element && (element.scrollTop = 0)
 }
 
 export default angular
-  .module( serviceName, [] )
-  .provider( serviceName, ModalStateService )
-  .run( modalStateServiceRunner );
+  .module(serviceName, [])
+  .provider(serviceName, ModalStateService)
+  .run(modalStateServiceRunner)

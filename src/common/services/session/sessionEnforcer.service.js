@@ -1,29 +1,29 @@
-import angular from 'angular';
-import includes from 'lodash/includes';
-import filter from 'lodash/filter';
-import find from 'lodash/find';
-import pick from 'lodash/pick';
-import values from 'lodash/values';
-import orderService from 'common/services/api/order.service';
-import sessionService, {Roles} from 'common/services/session/session.service';
-import sessionModalService from 'common/services/session/sessionModal.service';
+import angular from 'angular'
+import includes from 'lodash/includes'
+import filter from 'lodash/filter'
+import find from 'lodash/find'
+import pick from 'lodash/pick'
+import values from 'lodash/values'
+import orderService from 'common/services/api/order.service'
+import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionModalService from 'common/services/session/sessionModal.service'
 
-let serviceName = 'sessionEnforcerService';
+const serviceName = 'sessionEnforcerService'
 
 export const EnforcerCallbacks = {
   signIn: 'sign-in',
   cancel: 'cancel',
   change: 'change'
-};
+}
 
 export const EnforcerModes = {
   session: 'session',
-  donor:   'donor'
-};
+  donor: 'donor'
+}
 
-/*@ngInject*/
-function SessionEnforcerService( orderService, sessionService, sessionModalService ) {
-  let enforcers = {}, modal;
+/* @ngInject */
+function SessionEnforcerService (orderService, sessionService, sessionModalService) {
+  const enforcers = {}; let modal
 
   /**
    * Enforces Session and or Donor account
@@ -34,27 +34,27 @@ function SessionEnforcerService( orderService, sessionService, sessionModalServi
    * @param {boolean} [callbackOnInit=true]
    * @returns {*}
    */
-  function enforceRoles( roles, callbacks, mode, callbackOnInit ) {
+  function enforceRoles (roles, callbacks, mode, callbackOnInit) {
     // roles is required
-    if ( !angular.isArray( roles ) ) return false;
+    if (!angular.isArray(roles)) return false
     // Default mode is 'session'
-    mode = (angular.isUndefined( mode ) || !includes( values( EnforcerModes ), mode )) ? EnforcerModes.session : mode;
+    mode = (angular.isUndefined(mode) || !includes(values(EnforcerModes), mode)) ? EnforcerModes.session : mode
     // Donor mode requires roles to be ['REGISTERED'] only.
-    if ( mode === EnforcerModes.donor ) roles = [Roles.registered];
-    callbacks = angular.isDefined( callbacks ) ? callbacks : {};
-    let id = Date.now().toString();
+    if (mode === EnforcerModes.donor) roles = [Roles.registered]
+    callbacks = angular.isDefined(callbacks) ? callbacks : {}
+    const id = Date.now().toString()
     // Build enforcer object
-    enforcers[id] = angular.merge( {}, {
+    enforcers[id] = angular.merge({}, {
       id: id,
       roles: roles,
       mode: mode
-    }, pick( callbacks, values( EnforcerCallbacks ) ) );
+    }, pick(callbacks, values(EnforcerCallbacks)))
 
     // initialize the enforcer
-    initializeEnforcer( enforcers[id], angular.isUndefined( callbackOnInit ) ? true : !!callbackOnInit );
+    initializeEnforcer(enforcers[id], angular.isUndefined(callbackOnInit) ? true : !!callbackOnInit)
 
     // Return id, used to cancel enforcer
-    return id;
+    return id
   }
 
   /**
@@ -63,100 +63,95 @@ function SessionEnforcerService( orderService, sessionService, sessionModalServi
    * @param {int} id
    * @returns {boolean}
    */
-  enforceRoles.cancel = function ( id ) {
-    if ( id in enforcers ) {
-      delete enforcers[id];
-      return true;
+  enforceRoles.cancel = function (id) {
+    if (id in enforcers) {
+      delete enforcers[id]
+      return true
     }
-    return false;
-  };
+    return false
+  }
 
   // Watch for changes to session, fetch donorDetails
-  sessionService.sessionSubject.subscribe( () => {
+  sessionService.sessionSubject.subscribe(() => {
     // only fetch donor details if there is at least one donor mode enforcer
-    if ( find( enforcers, {mode: EnforcerModes.donor} ) ) {
-      orderService.getDonorDetails().subscribe( ( donorDetails ) => {
-        sessionChanged( donorDetails );
+    if (find(enforcers, { mode: EnforcerModes.donor })) {
+      orderService.getDonorDetails().subscribe((donorDetails) => {
+        sessionChanged(donorDetails)
       }, () => {
-        sessionChanged();
-      } );
+        sessionChanged()
+      })
+    } else {
+      sessionChanged()
     }
-    else {
-      sessionChanged();
-    }
-  } );
+  })
 
-  function sessionChanged( donorDetails ) {
-    donorDetails = angular.isDefined( donorDetails ) ? donorDetails : {'registration-state': 'NEW'};
-    let role = sessionService.getRole(),
-      enforced = filter( enforcers, ( enforcer ) => {
-        return (!includes( enforcer.roles, role )) || ( enforcer.mode === EnforcerModes.donor && donorDetails['registration-state'] !== 'COMPLETED');
-      } );
-    if ( enforced.length ) {
-      angular.forEach( enforced, ( enforcer ) => {
-        if ( angular.isFunction( enforcer[EnforcerCallbacks.change] ) ) enforcer[EnforcerCallbacks.change]( role );
-      } );
+  function sessionChanged (donorDetails) {
+    donorDetails = angular.isDefined(donorDetails) ? donorDetails : { 'registration-state': 'NEW' }
+    const role = sessionService.getRole()
+    const enforced = filter(enforcers, (enforcer) => {
+      return (!includes(enforcer.roles, role)) || (enforcer.mode === EnforcerModes.donor && donorDetails['registration-state'] !== 'COMPLETED')
+    })
+    if (enforced.length) {
+      angular.forEach(enforced, (enforcer) => {
+        if (angular.isFunction(enforcer[EnforcerCallbacks.change])) enforcer[EnforcerCallbacks.change](role)
+      })
 
-      if ( angular.isUndefined( modal ) ) {
-        modal = sessionModalService.open( find( enforced, {mode: EnforcerModes.donor} ) ? 'register-account' : 'sign-in', {
+      if (angular.isUndefined(modal)) {
+        modal = sessionModalService.open(find(enforced, { mode: EnforcerModes.donor }) ? 'register-account' : 'sign-in', {
           backdrop: 'static',
           keyboard: false
-        } ).result;
-        modal && modal.then( () => {
-          angular.forEach( enforced, ( enforcer ) => {
-            if ( angular.isFunction( enforcer[EnforcerCallbacks.signIn] ) ) enforcer[EnforcerCallbacks.signIn]();
-          } );
+        }).result
+        modal && modal.then(() => {
+          angular.forEach(enforced, (enforcer) => {
+            if (angular.isFunction(enforcer[EnforcerCallbacks.signIn])) enforcer[EnforcerCallbacks.signIn]()
+          })
         }, () => {
-          angular.forEach( enforced, ( enforcer ) => {
-            if ( angular.isFunction( enforcer[EnforcerCallbacks.cancel] ) ) enforcer[EnforcerCallbacks.cancel]();
-          } );
-        } );
-        modal && modal.finally( () => {
-          modal = undefined;
-        } );
+          angular.forEach(enforced, (enforcer) => {
+            if (angular.isFunction(enforcer[EnforcerCallbacks.cancel])) enforcer[EnforcerCallbacks.cancel]()
+          })
+        })
+        modal && modal.finally(() => {
+          modal = undefined
+        })
       }
     }
   }
 
-  function initializeEnforcer( enforcer, callbackOnInit ) {
+  function initializeEnforcer (enforcer, callbackOnInit) {
     // If current session role is included in enforced roles, call signIn callback
-    if ( callbackOnInit && includes( enforcer.roles, sessionService.getRole() ) ) {
-
+    if (callbackOnInit && includes(enforcer.roles, sessionService.getRole())) {
       // Donor mode is a special case, we need to also check donorDetails for a registration-state
-      if ( enforcer.mode === EnforcerModes.donor ) {
-        orderService.getDonorDetails().subscribe( ( donorDetails ) => {
-          if ( angular.isDefined( donorDetails['registration-state'] ) && donorDetails['registration-state'] === 'COMPLETED' ) {
+      if (enforcer.mode === EnforcerModes.donor) {
+        orderService.getDonorDetails().subscribe((donorDetails) => {
+          if (angular.isDefined(donorDetails['registration-state']) && donorDetails['registration-state'] === 'COMPLETED') {
             // User is REGISTERED and COMPLETED, Call signIn callback if present
-            if ( angular.isFunction( enforcer[EnforcerCallbacks.signIn] ) ) enforcer[EnforcerCallbacks.signIn]();
-          }
-          else {
+            if (angular.isFunction(enforcer[EnforcerCallbacks.signIn])) enforcer[EnforcerCallbacks.signIn]()
+          } else {
             // User is REGISTERED but not COMPLETED
             // Enforce current role
-            sessionChanged( donorDetails );
+            sessionChanged(donorDetails)
           }
         }, () => {
           // getDonorDetails failed, assume registration-state is NEW and enforce the current role.
-          sessionChanged();
-        } );
-      }
-      else {
+          sessionChanged()
+        })
+      } else {
         // Not donor mode, call signIn callback if present
-        if ( angular.isFunction( enforcer[EnforcerCallbacks.signIn] ) ) enforcer[EnforcerCallbacks.signIn]();
+        if (angular.isFunction(enforcer[EnforcerCallbacks.signIn])) enforcer[EnforcerCallbacks.signIn]()
       }
-    }
-    else {
+    } else {
       // Enforce current role on the new enforcer
-      sessionChanged();
+      sessionChanged()
     }
   }
 
-  return enforceRoles;
+  return enforceRoles
 }
 
 export default angular
-  .module( serviceName, [
+  .module(serviceName, [
     orderService.name,
     sessionService.name,
     sessionModalService.name
-  ] )
-  .factory( serviceName, SessionEnforcerService );
+  ])
+  .factory(serviceName, SessionEnforcerService)

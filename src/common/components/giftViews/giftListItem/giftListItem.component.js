@@ -1,30 +1,26 @@
-import angular from 'angular';
-import template from './giftListItem.tpl.html';
-import desigSrc from 'common/directives/desigSrc.directive';
+import angular from 'angular'
+import template from './giftListItem.tpl.html'
+import desigSrc from 'common/directives/desigSrc.directive'
 
-let componentName = 'giftListItem';
+const componentName = 'giftListItem'
 
 class GiftListItemController {
-
-  /* @ngInject */
-  constructor() {
-  }
 }
 
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     desigSrc.name
-  ] )
-  .component( componentName, {
-    controller:  GiftListItemController,
+  ])
+  .component(componentName, {
+    controller: GiftListItemController,
     templateUrl: template,
-    transclude:  {
-      'selectInput': '?label'
+    transclude: {
+      selectInput: '?label'
     },
-    bindings:    {
-      gift:        '=',
-      selectable:  '@',
+    bindings: {
+      gift: '=',
+      selectable: '@',
       selectLabel: '@',
-      onSelected:  '&'
+      onSelected: '&'
     }
-  } );
+  })

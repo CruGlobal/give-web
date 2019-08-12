@@ -1,16 +1,10 @@
-import angular from 'angular';
-import template from './recurring-gifts.tpl.html';
+import angular from 'angular'
+import template from './recurring-gifts.tpl.html'
 
-class recurringGiftsController{
-
-  /* @ngInject */
-  constructor(){
-
-  }
-
+class recurringGiftsController {
 }
 
-let componentName = 'recurringGifts';
+const componentName = 'recurringGifts'
 
 export default angular
   .module(componentName, [])
@@ -20,4 +14,4 @@ export default angular
     bindings: {
       gifts: '<'
     }
-  });
+  })

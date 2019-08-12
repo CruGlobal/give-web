@@ -1,31 +1,25 @@
-import angular from 'angular';
-import filter from 'lodash/filter';
+import angular from 'angular'
+import filter from 'lodash/filter'
 
-import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
+import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component'
 
-import template from './addRecentRecipients.tpl.html';
+import template from './addRecentRecipients.tpl.html'
 
-let componentName = 'step2AddRecentRecipients';
+const componentName = 'step2AddRecentRecipients'
 
 class AddRecentRecipientsController {
-
-  /* @ngInject */
-  constructor() {
-
-  }
-
-  $onInit(){
-    if(this.loadedNoRecentRecipients()){
-      this.next();
+  $onInit () {
+    if (this.loadedNoRecentRecipients()) {
+      this.next()
     }
   }
 
-  loadedNoRecentRecipients(){
-    return !this.loadingRecentRecipients && !this.hasRecentRecipients;
+  loadedNoRecentRecipients () {
+    return !this.loadingRecentRecipients && !this.hasRecentRecipients
   }
 
-  gatherSelections(){
-    this.next({ additions: filter(this.recentRecipients, {_selectedGift: true}) });
+  gatherSelections () {
+    this.next({ additions: filter(this.recentRecipients, { _selectedGift: true }) })
   }
 }
 
@@ -45,4 +39,4 @@ export default angular
       previous: '&',
       next: '&'
     }
-  });
+  })

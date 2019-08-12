@@ -1,112 +1,111 @@
-import angular from 'angular';
-import 'rxjs/add/operator/finally';
+import angular from 'angular'
+import 'rxjs/add/operator/finally'
 
-import commonModule from 'common/common.module';
+import commonModule from 'common/common.module'
 
-import step1 from './step-1/step-1.component';
-import step2 from './step-2/step-2.component';
-import step3 from './step-3/step-3.component';
-import cartSummary from './cart-summary/cart-summary.component';
-import help from './help/help.component';
+import step1 from './step-1/step-1.component'
+import step2 from './step-2/step-2.component'
+import step3 from './step-3/step-3.component'
+import cartSummary from './cart-summary/cart-summary.component'
+import help from './help/help.component'
 
-import showErrors from 'common/filters/showErrors.filter';
+import showErrors from 'common/filters/showErrors.filter'
 
-import cartService from 'common/services/api/cart.service';
-import designationsService from 'common/services/api/designations.service';
+import cartService from 'common/services/api/cart.service'
+import designationsService from 'common/services/api/designations.service'
 
-import sessionEnforcerService, {EnforcerCallbacks} from 'common/services/session/sessionEnforcer.service';
-import {Roles, SignOutEvent} from 'common/services/session/session.service';
+import sessionEnforcerService, { EnforcerCallbacks } from 'common/services/session/sessionEnforcer.service'
+import { Roles, SignOutEvent } from 'common/services/session/session.service'
 
-import analyticsFactory from 'app/analytics/analytics.factory';
-import 'common/lib/fakeLocalStorage';
+import analyticsFactory from 'app/analytics/analytics.factory'
+import 'common/lib/fakeLocalStorage'
 
-import template from './checkout.tpl.html';
+import template from './checkout.tpl.html'
 
-let componentName = 'checkout';
+const componentName = 'checkout'
 
-class CheckoutController{
-
+class CheckoutController {
   /* @ngInject */
-  constructor($window, $location, $rootScope, $log, cartService, designationsService, sessionEnforcerService, analyticsFactory){
-    this.$log = $log;
-    this.$window = $window;
-    this.$location = $location;
-    this.$rootScope = $rootScope;
-    this.cartService = cartService;
-    this.designationsService = designationsService;
-    this.sessionEnforcerService = sessionEnforcerService;
-    this.loadingCartData = true;
-    this.analyticsFactory = analyticsFactory;
+  constructor ($window, $location, $rootScope, $log, cartService, designationsService, sessionEnforcerService, analyticsFactory) {
+    this.$log = $log
+    this.$window = $window
+    this.$location = $location
+    this.$rootScope = $rootScope
+    this.cartService = cartService
+    this.designationsService = designationsService
+    this.sessionEnforcerService = sessionEnforcerService
+    this.loadingCartData = true
+    this.analyticsFactory = analyticsFactory
   }
 
-  $onInit() {
+  $onInit () {
     this.enforcerId = this.sessionEnforcerService([Roles.public, Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
-        this.loadCart();
+        this.loadCart()
       },
       [EnforcerCallbacks.cancel]: () => {
-        this.$window.location = '/cart.html';
+        this.$window.location = '/cart.html'
       }
-    });
-    this.$rootScope.$on( SignOutEvent, ( event ) => this.signedOut( event ) );
-    this.initStepParam(true);
-    this.listenForLocationChange();
-    this.analyticsFactory.pageLoaded(true);
+    })
+    this.$rootScope.$on(SignOutEvent, (event) => this.signedOut(event))
+    this.initStepParam(true)
+    this.listenForLocationChange()
+    this.analyticsFactory.pageLoaded(true)
   }
 
-  $onDestroy() {
-    this.sessionEnforcerService.cancel(this.enforcerId);
-    this.$locationChangeSuccessListener && this.$locationChangeSuccessListener();
+  $onDestroy () {
+    this.sessionEnforcerService.cancel(this.enforcerId)
+    this.$locationChangeSuccessListener && this.$locationChangeSuccessListener()
   }
 
-  initStepParam(replace){
-    this.changeStep(this.$location.search().step || 'contact', replace);
+  initStepParam (replace) {
+    this.changeStep(this.$location.search().step || 'contact', replace)
   }
 
-  listenForLocationChange() {
+  listenForLocationChange () {
     this.$locationChangeSuccessListener = this.$rootScope.$on('$locationChangeSuccess', () => {
-      this.initStepParam(this.$location.search().step || 'contact');
-      this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep);
-      this.analyticsFactory.track('aa-checkout-step-' + this.checkoutStep);
-    });
+      this.initStepParam(this.$location.search().step || 'contact')
+      this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep)
+      this.analyticsFactory.track('aa-checkout-step-' + this.checkoutStep)
+    })
   }
 
-  signedOut( event ) {
-    if ( !event.defaultPrevented ) {
-      event.preventDefault();
-      this.$window.location = '/cart.html';
+  signedOut (event) {
+    if (!event.defaultPrevented) {
+      event.preventDefault()
+      this.$window.location = '/cart.html'
     }
   }
 
-  changeStep(newStep, replace){
-    switch(newStep){
+  changeStep (newStep, replace) {
+    switch (newStep) {
       case 'cart':
-        this.$window.location = '/cart.html';
-        break;
+        this.$window.location = '/cart.html'
+        break
       case 'thankYou':
-        this.$window.location = '/thank-you.html';
-        break;
+        this.$window.location = '/thank-you.html'
+        break
       default:
-        this.$window.scrollTo(0, 0);
-        this.checkoutStep = newStep;
-        this.$location.search('step', this.checkoutStep);
-        replace && this.$location.replace();
-        break;
+        this.$window.scrollTo(0, 0)
+        this.checkoutStep = newStep
+        this.$location.search('step', this.checkoutStep)
+        replace && this.$location.replace()
+        break
     }
   }
 
-  loadCart(){
+  loadCart () {
     this.cartService.get()
-      .finally(()=> {
-        this.loadingCartData = false;
+      .finally(() => {
+        this.loadingCartData = false
       })
       .subscribe((data) => {
-          this.cartData = data;
-          this.analyticsFactory.buildProductVar(data);
-        },
-        (error) => {
-          this.$log.error("Error loading cart", error);
-        });
+        this.cartData = data
+        this.analyticsFactory.buildProductVar(data)
+      },
+      (error) => {
+        this.$log.error('Error loading cart', error)
+      })
   }
 }
 
@@ -127,4 +126,4 @@ export default angular
   .component(componentName, {
     controller: CheckoutController,
     templateUrl: template
-  });
+  })

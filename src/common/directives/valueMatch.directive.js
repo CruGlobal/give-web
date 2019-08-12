@@ -1,30 +1,30 @@
-import angular from 'angular';
+import angular from 'angular'
 
-let directiveName = 'valueMatch';
+const directiveName = 'valueMatch'
 
 /* @ngInject */
-function valueMatch() {
+function valueMatch () {
   var directiveDefinitionObject = {
     restrict: 'A',
-    require:  ['^ngModel', '^form'],
-    link:     function ( scope, element, attributes, controllers ) {
-      var ngModel = controllers[0],
-        formController = controllers[1],
-        valueModel = formController[attributes.valueMatch];
+    require: ['^ngModel', '^form'],
+    link: function (scope, element, attributes, controllers) {
+      var ngModel = controllers[0]
+      var formController = controllers[1]
+      var valueModel = formController[attributes.valueMatch]
 
       // Watch other model for changes
-      scope.$watch( () => valueModel.$viewValue, function () {
-        ngModel.$validate();
-      } );
+      scope.$watch(() => valueModel.$viewValue, function () {
+        ngModel.$validate()
+      })
 
-      ngModel.$validators.valueMatch = function ( modelValue ) {
-        return (!modelValue && !valueModel.$modelValue) || (modelValue === valueModel.$modelValue);
-      };
+      ngModel.$validators.valueMatch = function (modelValue) {
+        return (!modelValue && !valueModel.$modelValue) || (modelValue === valueModel.$modelValue)
+      }
     }
-  };
-  return directiveDefinitionObject;
+  }
+  return directiveDefinitionObject
 }
 
 export default angular
-  .module( directiveName, [] )
-  .directive( directiveName, valueMatch );
+  .module(directiveName, [])
+  .directive(directiveName, valueMatch)

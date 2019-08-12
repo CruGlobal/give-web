@@ -1,19 +1,19 @@
-import angular from 'angular';
-import 'angular-gettext';
-import 'angular-animate';
+import angular from 'angular'
+import 'angular-gettext'
+import 'angular-animate'
 
-import appConfig from './app.config';
-import loadingComponent from './components/loading/loading.component';
-import navCartIcon from 'common/components/nav/navCartIcon.component';
-import analyticsRun from 'app/analytics/analytics.run';
+import appConfig from './app.config'
+import loadingComponent from './components/loading/loading.component'
+import navCartIcon from 'common/components/nav/navCartIcon.component'
+import analyticsRun from 'app/analytics/analytics.run'
 
-import sessionModalService from "./services/session/sessionModal.service";
-import sessionService from "./services/session/session.service";
+import sessionModalService from './services/session/sessionModal.service'
+import sessionService from './services/session/session.service'
 
-let moduleName = 'common';
+const moduleName = 'common'
 
 export default angular
-  .module( moduleName, [
+  .module(moduleName, [
     'gettext',
     'ngAnimate',
     appConfig.name,
@@ -22,4 +22,4 @@ export default angular
     analyticsRun.name,
     sessionService.name,
     sessionModalService.name
-  ]);
+  ])

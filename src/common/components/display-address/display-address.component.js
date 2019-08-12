@@ -1,46 +1,45 @@
-import angular from 'angular';
-import get from 'lodash/get';
-import keyBy from 'lodash/keyBy';
+import angular from 'angular'
+import get from 'lodash/get'
+import keyBy from 'lodash/keyBy'
 
-import geographiesService from 'common/services/api/geographies.service';
+import geographiesService from 'common/services/api/geographies.service'
 
-import template from './display-address.tpl.html';
+import template from './display-address.tpl.html'
 
-let componentName = 'displayAddress';
+const componentName = 'displayAddress'
 
 class DisplayAddressController {
-
   /* @ngInject */
-  constructor($log, geographiesService) {
-    this.$log = $log;
-    this.geographiesService = geographiesService;
+  constructor ($log, geographiesService) {
+    this.$log = $log
+    this.geographiesService = geographiesService
   }
 
-  $onChanges(changes){
-    const country = get(changes, 'address.currentValue.country');
-    if(!this.countries && country && country !== 'US'){
-      this.loadCountryNames();
+  $onChanges (changes) {
+    const country = get(changes, 'address.currentValue.country')
+    if (!this.countries && country && country !== 'US') {
+      this.loadCountryNames()
     }
   }
 
-  loadCountryNames(){
+  loadCountryNames () {
     this.geographiesService.getCountries()
       .subscribe(countries => {
-        this.countries = keyBy(countries, 'name');
+        this.countries = keyBy(countries, 'name')
       }, error => {
-        this.$log.warn('Error loading countries for display address', error);
-      });
+        this.$log.warn('Error loading countries for display address', error)
+      })
   }
 }
 
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     geographiesService.name
-  ] )
-  .component( componentName, {
-    controller:  DisplayAddressController,
+  ])
+  .component(componentName, {
+    controller: DisplayAddressController,
     templateUrl: template,
-    bindings:    {
+    bindings: {
       address: '<'
     }
-  } );
+  })

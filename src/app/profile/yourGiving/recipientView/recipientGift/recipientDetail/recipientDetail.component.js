@@ -1,28 +1,24 @@
-import angular from 'angular';
-import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
-import template from './recipientDetail.tpl.html';
+import angular from 'angular'
+import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component'
+import template from './recipientDetail.tpl.html'
 
-let componentName = 'recipientDetail';
+const componentName = 'recipientDetail'
 
 class RecipientDetail {
-
-  /* @ngInject */
-  constructor() {
-  }
 }
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     paymentMethodDisplay.name
-  ] )
-  .directive( componentName, () => {
+  ])
+  .directive(componentName, () => {
     return {
-      templateUrl:      template,
-      restrict:         'A',
-      scope:            false,
+      templateUrl: template,
+      restrict: 'A',
+      scope: false,
       bindToController: {
         gift: `<${componentName}`
       },
-      controllerAs:     '$ctrl',
-      controller:       RecipientDetail
-    };
-  } );
+      controllerAs: '$ctrl',
+      controller: RecipientDetail
+    }
+  })

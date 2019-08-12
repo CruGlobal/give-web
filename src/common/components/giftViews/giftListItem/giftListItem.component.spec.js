@@ -1,19 +1,19 @@
-import angular from 'angular';
-import 'angular-mocks';
+import angular from 'angular'
+import 'angular-mocks'
 
-import module from './giftListItem.component';
+import module from './giftListItem.component'
 
-describe( 'giftViews', () => {
-  describe( 'giftListItem', () => {
-    beforeEach( angular.mock.module( module.name ) );
-    let $ctrl;
+describe('giftViews', () => {
+  describe('giftListItem', () => {
+    beforeEach(angular.mock.module(module.name))
+    let $ctrl
 
-    beforeEach( inject( ( $componentController ) => {
-      $ctrl = $componentController( module.name );
-    } ) );
+    beforeEach(inject(($componentController) => {
+      $ctrl = $componentController(module.name)
+    }))
 
-    it( 'is defined', () => {
-      expect( $ctrl ).toBeDefined();
-    } );
-  } );
-} );
+    it('is defined', () => {
+      expect($ctrl).toBeDefined()
+    })
+  })
+})

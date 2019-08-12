@@ -1,15 +1,12 @@
-/* eslint angular/module-getter:0, angular/document-service:0 */
+import angular from 'angular'
+import 'angular-environment'
 
-import angular from 'angular';
-import 'angular-environment';
-
-import rollbarConfig from './rollbar.config';
+import rollbarConfig from './rollbar.config'
 
 /* @ngInject */
-function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider) {
-  $httpProvider.useApplyAsync(true);
+function appConfig (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider) {
+  $httpProvider.useApplyAsync(true)
 
-  // eslint-disable-next-line angular/module-getter
   envServiceProvider.config({
     domains: {
       development: ['localhost', 'localhost.cru.org', 'cru-givedev.s3-website-us-east-1.amazonaws.com'],
@@ -23,7 +20,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
-        isBrandedCheckout: false,
+        isBrandedCheckout: false
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -31,7 +28,7 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
-        isBrandedCheckout: false,
+        isBrandedCheckout: false
       },
       production: {
         apiUrl: 'https://give.cru.org',
@@ -39,36 +36,36 @@ function appConfig(envServiceProvider, $compileProvider, $logProvider, $httpProv
         imgDomainDesignation: 'https://give.cru.org',
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give.cru.org',
-        isBrandedCheckout: false,
-      },
-    },
-  });
+        isBrandedCheckout: false
+      }
+    }
+  })
 
   // default the environment to production
-  envServiceProvider.set('production');
+  envServiceProvider.set('production')
 
   // run the environment check, so the comprobation is made
   // before controllers and services are built
-  envServiceProvider.check();
+  envServiceProvider.check()
 
-  $locationProvider.html5Mode( {
+  $locationProvider.html5Mode({
     enabled: true,
     requireBase: false,
     rewriteLinks: false
-  } );
+  })
 
   if (envServiceProvider.is('production') || envServiceProvider.is('staging')) {
-    $logProvider.debugEnabled(false);
-    $compileProvider.debugInfoEnabled(false);
+    $logProvider.debugEnabled(false)
+    $compileProvider.debugInfoEnabled(false)
   } else {
-    $logProvider.debugEnabled(true);
+    $logProvider.debugEnabled(true)
   }
 
-  $qProvider.errorOnUnhandledRejections(false);
+  $qProvider.errorOnUnhandledRejections(false)
 }
 
 export default angular.module('appConfig', [
-    'environment'
+  'environment'
 ])
   .config(appConfig)
-  .config(rollbarConfig);
+  .config(rollbarConfig)

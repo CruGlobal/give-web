@@ -1,78 +1,78 @@
-import angular from 'angular';
-import 'angular-mocks';
+import angular from 'angular'
+import 'angular-mocks'
 
-import module from './designationEditor.service';
-import designationConstants from './designationEditor.constants';
+import module from './designationEditor.service'
+import designationConstants from './designationEditor.constants'
 
-describe( 'donation editor service', () => {
-  beforeEach( angular.mock.module( module.name ) );
-  let designationEditorService, $httpBackend, designationNumber = '000555';
+describe('donation editor service', () => {
+  beforeEach(angular.mock.module(module.name))
+  let designationEditorService; let $httpBackend; const designationNumber = '000555'
 
-  beforeEach( inject( ( _designationEditorService_, _$httpBackend_ ) => {
-    designationEditorService = _designationEditorService_;
-    $httpBackend = _$httpBackend_;
-  } ) );
+  beforeEach(inject((_designationEditorService_, _$httpBackend_) => {
+    designationEditorService = _designationEditorService_
+    $httpBackend = _$httpBackend_
+  }))
 
-  afterEach( () => {
-    $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest();
-  } );
+  afterEach(() => {
+    $httpBackend.verifyNoOutstandingExpectation()
+    $httpBackend.verifyNoOutstandingRequest()
+  })
 
-  it( 'should return success if user has permission to edit', () => {
+  it('should return success if user has permission to edit', () => {
     $httpBackend
-      .expectHEAD( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
-      .respond( 200 );
+      .expectHEAD(designationConstants.designationEndpoint + '?designationNumber=' + designationNumber)
+      .respond(200)
 
     designationEditorService.checkPermission(designationNumber).then(() => {}, () => {
-      fail();
-    });
-    $httpBackend.flush();
+      fail()
+    })
+    $httpBackend.flush()
 
     $httpBackend
-      .expectHEAD( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
-      .respond( 422 );
+      .expectHEAD(designationConstants.designationEndpoint + '?designationNumber=' + designationNumber)
+      .respond(422)
 
     designationEditorService.checkPermission(designationNumber).then(() => {}, () => {
-      fail();
-    });
-    $httpBackend.flush();
-  } );
+      fail()
+    })
+    $httpBackend.flush()
+  })
 
-  it( 'should return error if user does not have permission to edit', () => {
+  it('should return error if user does not have permission to edit', () => {
     $httpBackend
-      .expectHEAD( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
-      .respond( 401 );
+      .expectHEAD(designationConstants.designationEndpoint + '?designationNumber=' + designationNumber)
+      .respond(401)
 
     designationEditorService.checkPermission(designationNumber).then(() => {
-      fail();
-    }, () => {});
-    $httpBackend.flush();
-  } );
+      fail()
+    }, () => {})
+    $httpBackend.flush()
+  })
 
-  it( 'should get designation content', () => {
+  it('should get designation content', () => {
     $httpBackend
-      .expectGET( designationConstants.designationEndpoint + '?designationNumber=' + designationNumber )
-      .respond( 200, {} );
+      .expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationNumber)
+      .respond(200, {})
 
-    designationEditorService.getContent(designationNumber);
-    $httpBackend.flush();
-  } );
+    designationEditorService.getContent(designationNumber)
+    $httpBackend.flush()
+  })
 
-  it( 'should call designation photos endpoint', () => {
+  it('should call designation photos endpoint', () => {
     $httpBackend
-      .expectGET( designationConstants.designationImagesEndpoint + '?designationNumber=' + designationNumber )
-      .respond( 200, [] );
+      .expectGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationNumber)
+      .respond(200, [])
 
-    designationEditorService.getPhotos(designationNumber);
-    $httpBackend.flush();
-  } );
+    designationEditorService.getPhotos(designationNumber)
+    $httpBackend.flush()
+  })
 
-  it( 'should call save endpoint', () => {
+  it('should call save endpoint', () => {
     $httpBackend
-      .expectPOST( designationConstants.designationEndpoint )
-      .respond( 200 );
+      .expectPOST(designationConstants.designationEndpoint)
+      .respond(200)
 
-    designationEditorService.save({});
-    $httpBackend.flush();
-  } );
-} );
+    designationEditorService.save({})
+    $httpBackend.flush()
+  })
+})

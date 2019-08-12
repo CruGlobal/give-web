@@ -1,28 +1,27 @@
-import angular from 'angular';
-import 'angular-ordinal';
+import angular from 'angular'
+import 'angular-ordinal'
 
-import {quarterlyMonths} from 'common/services/giftHelpers/giftDates.service';
+import { quarterlyMonths } from 'common/services/giftHelpers/giftDates.service'
 
-import template from './giftSummaryView.tpl.html';
+import template from './giftSummaryView.tpl.html'
 
-let componentName = 'giftSummaryView';
+const componentName = 'giftSummaryView'
 
 class GiftSummaryViewController {
-
   /* @ngInject */
-  constructor() {
-    this.quarterlyMonths = quarterlyMonths;
+  constructor () {
+    this.quarterlyMonths = quarterlyMonths
   }
 }
 
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     'ordinal'
-  ] )
-  .component( componentName, {
-    controller:  GiftSummaryViewController,
+  ])
+  .component(componentName, {
+    controller: GiftSummaryViewController,
     templateUrl: template,
-    bindings:    {
+    bindings: {
       gift: '<'
     }
-  } );
+  })

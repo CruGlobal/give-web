@@ -56,6 +56,7 @@
     "ngtemplate-loader": "^2.0.1",
     "node-sass": "4.12.0",
     "sass-loader": "^7.1.0",
+    "standard": "^13.1.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.35.2",
     "webpack-bundle-analyzer": "^3.3.2",
@@ -67,7 +68,7 @@
     "build": "webpack -p",
     "build:analyze": "webpack -p --env.analyze",
     "test": "jest",
-    "lint": "eslint 'src/**/*.js'"
+    "lint": "standard"
   },
   "jest": {
     "collectCoverage": true,
@@ -93,5 +94,14 @@
       "^.+\\.html$": "<rootDir>/jest/htmlTransform.js"
     },
     "verbose": true
+  },
+  "standard": {
+    "env": {
+      "jest": true
+    },
+    "ignore": [
+      "**/*.spec.js",
+      "**/*.fixture.js"
+    ]
   }
 }

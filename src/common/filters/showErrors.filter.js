@@ -1,14 +1,13 @@
-import angular from 'angular';
+import angular from 'angular'
 
-let filterName = 'showErrors';
+const filterName = 'showErrors'
 
-function ShowErrors(){
-  // eslint-disable-next-line angular/no-private-call
-  return (ngModelController) => ngModelController !== undefined && (ngModelController.$touched || ngModelController.$$parentForm.$submitted) && ngModelController.$invalid;
+function ShowErrors () {
+  return (ngModelController) => ngModelController !== undefined && (ngModelController.$touched || ngModelController.$$parentForm.$submitted) && ngModelController.$invalid
 }
 
 export default angular
   .module(filterName, [
 
   ])
-  .filter(filterName, ShowErrors);
+  .filter(filterName, ShowErrors)
