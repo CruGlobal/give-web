@@ -113,7 +113,7 @@
                    ng-click="$ctrl.changeAmount(a)"
                    ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
                    ng-repeat-start="a in $ctrl.selectableAmounts">
-              <span class="number">${{a}}</span>
+              <span class="number">&dollar;{{a}}</span>
             </label>
             <span ng-repeat-end></span>
             <label

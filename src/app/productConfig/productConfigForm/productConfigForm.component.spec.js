@@ -37,7 +37,8 @@ describe('product config form component', function () {
       uri: 'uri',
       defaultFrequency: 'MON',
       updateQueryParam: jest.fn(),
-      onStateChange: jest.fn()
+      onStateChange: jest.fn(),
+      $window: { location: '' }
     })
   }))
 
