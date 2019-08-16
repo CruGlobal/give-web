@@ -7,7 +7,7 @@ describe('Designation Editor Personal Options', function () {
   var $ctrl
 
   beforeEach(inject(function ($rootScope, $controller) {
-    var $scope = $rootScope.$new()
+    const $scope = $rootScope.$new()
 
     $ctrl = $controller(module.name, {
       designationNumber: '000555',
@@ -18,8 +18,10 @@ describe('Designation Editor Personal Options', function () {
         1: { 'jcr:primaryType': 'nt:unstructured', url: 'https://example.com', name: 'Name' }
       },
       showNewsletterForm: true,
+      hasNewsletter: true,
       $scope: $scope
     })
+    $scope.$close = jest.fn()
   }))
 
   it('to be defined', function () {
@@ -36,6 +38,17 @@ describe('Designation Editor Personal Options', function () {
   it('transforms giving links', function () {
     expect($ctrl.transformGivingLinks()).toEqual({
       1: { name: 'Name', url: 'https://example.com' }
+    })
+  })
+
+  describe('saveChanges()', () => {
+    it('should close modal and provide updated properties', () => {
+      $ctrl.showNewsletterForm = false
+      $ctrl.saveChanges()
+      expect($ctrl.$scope.$close).toHaveBeenCalledWith({
+        givingLinks: { 1: { name: 'Name', url: 'https://example.com' } },
+        showNewsletterForm: false
+      })
     })
   })
 })

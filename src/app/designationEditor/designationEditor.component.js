@@ -157,6 +157,7 @@ class DesignationEditorController {
         giveDomain: () => { return this.giveDomain },
         designationNumber: () => { return this.designationNumber },
         designationType: () => { return this.designationContent.designationType },
+        hasNewsletter: this.designationEditorService.hasNewsletter(this.designationNumber),
         givingLinks: () => { return this.designationContent.givingLinks },
         showNewsletterForm: () => { return this.designationContent.showNewsletterForm }
       }
