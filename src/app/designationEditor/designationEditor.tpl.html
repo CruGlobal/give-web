@@ -36,7 +36,7 @@
           </a>
 
           <button id="personalOptionsButton" type="button" class="btn btn-default" ng-click="$ctrl.editPersonalOptions()"
-                  ng-if="$ctrl.contentLoaded && $ctrl.designationContent.designationType == 'National Staff'" translate>
+                  ng-if="$ctrl.contentLoaded && $ctrl.isPerson()" translate>
             Page Options
           </button>
 
