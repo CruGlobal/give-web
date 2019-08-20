@@ -50,6 +50,13 @@ class designationEditorService {
     )
   }
 
+  subscribeToNewsletter (designationNumber, attributes) {
+    return this.$http.post(`${designationConstants.designationNewsletterSubscription}/${designationNumber}`,
+      attributes, {
+        withCredentials: true
+      })
+  }
+
   save (designationContent, designationNumber, campaignPage) {
     return this.$http.post(designationConstants.designationEndpoint, designationContent, {
       withCredentials: true,

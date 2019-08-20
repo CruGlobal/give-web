@@ -6,7 +6,9 @@ import designationConstants from './designationEditor.constants'
 
 describe('donation editor service', () => {
   beforeEach(angular.mock.module(module.name))
-  let designationEditorService; let $httpBackend; const designationNumber = '000555'
+  let designationEditorService
+  let $httpBackend
+  const designationNumber = '000555'
 
   beforeEach(inject((_designationEditorService_, _$httpBackend_) => {
     designationEditorService = _designationEditorService_
@@ -74,5 +76,41 @@ describe('donation editor service', () => {
 
     designationEditorService.save({})
     $httpBackend.flush()
+  })
+
+  describe('hasNewsletter (designationNumber)', () => {
+    it('should succeed if designationNumber has a newsletter', () => {
+      $httpBackend
+        .expectGET(`${designationConstants.designationNewsletter}/${designationNumber}`)
+        .respond(200, { user_exists: true })
+
+      const result = designationEditorService.hasNewsletter(designationNumber)
+      $httpBackend.flush()
+      expect(result).resolves.toBe(true)
+    })
+
+    it('should fail if designationNumber does not exist', () => {
+      $httpBackend
+        .expectGET(`${designationConstants.designationNewsletter}/${designationNumber}`)
+        .respond(404, { user_exists: false })
+
+      const result = designationEditorService.hasNewsletter(designationNumber)
+      $httpBackend.flush()
+      expect(result).resolves.toBe(false)
+    })
+  })
+
+  describe('subscribeToNewsletter (designationNumber, attributes)', () => {
+    it('should post attributes', () => {
+      $httpBackend
+        .expectPOST(`${designationConstants.designationNewsletterSubscription}/${designationNumber}`, {
+          first_name: 'Bob',
+          last_name: 'Montgomery'
+        })
+        .respond(200)
+
+      designationEditorService.subscribeToNewsletter(designationNumber, { first_name: 'Bob', last_name: 'Montgomery' })
+      $httpBackend.flush()
+    })
   })
 })

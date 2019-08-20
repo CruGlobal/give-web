@@ -1,0 +1,134 @@
+<div class="newsletter-modal">
+  <div class="modal-header">
+    <div class="modal-progress">
+      <span class="badge active">1</span>
+      <div class="spanner" ng-class="{active: $ctrl.step > 1}"></div>
+      <span class="badge" ng-class="{active: $ctrl.step > 1}">2</span>
+      <div class="spanner" ng-class="{active: $ctrl.step > 2}"></div>
+      <span class="badge" ng-class="{active: $ctrl.step > 2}">3</span>
+    </div>
+  </div>
+  <div class="modal-body" ng-switch="$ctrl.step">
+    <div ng-form="$ctrl.identityForm" ng-switch-when="1">
+      <div>
+        <h6>Sign-up to the Newsletter of {{$ctrl.displayName}}.</h6>
+      </div>
+      <div class="form-group">
+        <label for="nmFirstName">First Name</label>
+        <input name="firstName"
+               id="nmFirstName"
+               type="text"
+               class="form-control"
+               ng-model="$ctrl.attributes.first_name"
+               required>
+      </div>
+
+      <div class="form-group">
+        <label for="nmLastName">Last Name</label>
+        <input name="lastName"
+               id="nmLastName"
+               type="text"
+               class="form-control"
+               ng-model="$ctrl.attributes.last_name"
+               required>
+      </div>
+
+      <div class="form-group">
+        <label for="nmSendNewletter" translate>Newsletter Preference</label>
+        <select name="sendNewletter"
+                id="nmSendNewletter"
+                class="form-control"
+                ng-model="$ctrl.attributes.send_newsletter"
+                required>
+          <option value="Email">Email</option>
+          <option value="Physical">Physical</option>
+          <option value="Both">Both</option>
+        </select>
+      </div>
+    </div>
+    <div ng-form="$ctrl.detailsForm" ng-switch-when="2">
+      <loading type="overlay" ng-if="$ctrl.progress"/>
+      <div>
+        <h6>Sign-up to the Newsletter of {{$ctrl.displayName}}.</h6>
+      </div>
+      <div class="form-group" ng-if="$ctrl.includeEmailField">
+        <label for="nmEmail">Email Address</label>
+        <input name="email"
+               id="nmEmail"
+               type="email"
+               class="form-control"
+               ng-model="$ctrl.attributes.email"
+               required>
+      </div>
+
+      <div class="form-group" ng-if="$ctrl.includeAddressFields">
+        <label for="nmStreet">Street Address</label>
+        <input name="street"
+               id="nmStreet"
+               type="text"
+               class="form-control"
+               ng-model="$ctrl.attributes.street"
+               required>
+      </div>
+
+      <div class="form-group" ng-if="$ctrl.includeAddressFields">
+        <label for="nmCity">City</label>
+        <input name="city"
+               id="nmCity"
+               type="text"
+               class="form-control"
+               ng-model="$ctrl.attributes.city"
+               required>
+      </div>
+
+      <div class="form-group" ng-if="$ctrl.includeAddressFields">
+        <label for="nmState">State</label>
+        <input name="state"
+               id="nmState"
+               type="text"
+               class="form-control"
+               ng-model="$ctrl.attributes.state"
+               required>
+      </div>
+
+      <div class="form-group" ng-if="$ctrl.includeAddressFields">
+        <label for="nmPostalCode">Postal Code</label>
+        <input name="postal_code"
+               id="nmPostalCode"
+               type="text"
+               class="form-control"
+               ng-model="$ctrl.attributes.postal_code"
+               required>
+      </div>
+
+    </div>
+    <div ng-switch-when="3">
+      <div class="jumbotron" ng-if="$ctrl.success">
+        <h1>Congratulations!</h1>
+        <p>You've successfully signed up to receive the newsletter of {{$ctrl.displayName}}.</p>
+        <p>
+          <button type="button" class="btn btn-primary btn-lg" ng-click="$dismiss()">Close</button>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button"
+            class="btn btn-default"
+            ng-click="$dismiss()"
+            translate>Cancel
+    </button>
+    <div class="modal-navigation pull-right" ng-if="!$ctrl.success">
+      <button type="button"
+              class="btn btn-secondary"
+              ng-disabled="$ctrl.step == 1 || $ctrl.progress"
+              ng-click="$ctrl.prev()">Back
+      </button>
+      <button type="button"
+              class="btn btn-primary"
+              ng-disabled="($ctrl.step == 1 && !$ctrl.identityForm.$valid) || ($ctrl.step == 2 && !$ctrl.detailsForm.$valid) || $ctrl.progress || $ctrl.error"
+              ng-click="$ctrl.next()">Next
+      </button>
+    </div>
+  </div>
+</div>
