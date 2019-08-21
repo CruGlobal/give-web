@@ -81,7 +81,7 @@ describe('donation editor service', () => {
   describe('hasNewsletter (designationNumber)', () => {
     it('should succeed if designationNumber has a newsletter', () => {
       $httpBackend
-        .expectGET(`${designationConstants.designationNewsletter}/${designationNumber}`)
+        .expectGET(`${designationConstants.designationNewsletter}?designationNumber=${designationNumber}`)
         .respond(200, { user_exists: true })
 
       const result = designationEditorService.hasNewsletter(designationNumber)
@@ -91,7 +91,7 @@ describe('donation editor service', () => {
 
     it('should fail if designationNumber does not exist', () => {
       $httpBackend
-        .expectGET(`${designationConstants.designationNewsletter}/${designationNumber}`)
+        .expectGET(`${designationConstants.designationNewsletter}?designationNumber=${designationNumber}`)
         .respond(404, { user_exists: false })
 
       const result = designationEditorService.hasNewsletter(designationNumber)
@@ -103,7 +103,8 @@ describe('donation editor service', () => {
   describe('subscribeToNewsletter (designationNumber, attributes)', () => {
     it('should post attributes', () => {
       $httpBackend
-        .expectPOST(`${designationConstants.designationNewsletterSubscription}/${designationNumber}`, {
+        .expectPOST(designationConstants.designationNewsletterSubscription, {
+          designationNumber,
           first_name: 'Bob',
           last_name: 'Montgomery'
         })

@@ -42,7 +42,10 @@ class designationEditorService {
   }
 
   hasNewsletter (designationNumber) {
-    return this.$http.get(`${designationConstants.designationNewsletter}/${designationNumber}`, {
+    return this.$http.get(designationConstants.designationNewsletter, {
+      params: {
+        designationNumber: designationNumber
+      },
       withCredentials: true
     }).then(
       result => result.data.user_exists === true,
@@ -51,8 +54,11 @@ class designationEditorService {
   }
 
   subscribeToNewsletter (designationNumber, attributes) {
-    return this.$http.post(`${designationConstants.designationNewsletterSubscription}/${designationNumber}`,
-      attributes, {
+    return this.$http.post(designationConstants.designationNewsletterSubscription,
+      {
+        designationNumber,
+        ...attributes
+      }, {
         withCredentials: true
       })
   }
