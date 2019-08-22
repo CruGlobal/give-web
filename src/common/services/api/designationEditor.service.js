@@ -56,7 +56,7 @@ class designationEditorService {
   subscribeToNewsletter (designationNumber, attributes) {
     return this.$http.post(designationConstants.designationNewsletterSubscription,
       {
-        designationNumber,
+        designation_number: designationNumber,
         ...attributes
       }, {
         withCredentials: true

@@ -104,7 +104,7 @@ describe('donation editor service', () => {
     it('should post attributes', () => {
       $httpBackend
         .expectPOST(designationConstants.designationNewsletterSubscription, {
-          designationNumber,
+          designation_number: designationNumber,
           first_name: 'Bob',
           last_name: 'Montgomery'
         })
