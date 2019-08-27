@@ -96,6 +96,9 @@ module.exports = {
       }
     ]
   },
+  optimization: {
+    usedExports: true
+  },
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules']
   },
