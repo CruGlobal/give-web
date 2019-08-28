@@ -4,8 +4,9 @@ const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build')
 
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-module.exports = {
+module.exports = (env = {}) => ({
   mode: isBuild ? 'production' : 'development',
   entry: {
     app: [
@@ -51,7 +52,11 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       TRAVIS_COMMIT: 'development'
     }),
-    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
+    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /blah/),
+    new BundleAnalyzerPlugin({
+      analyzerMode: env.analyze ? 'static' : 'disabled',
+      generateStatsFile: !isBuild
+    })
   ],
   module: {
     rules: [
@@ -128,4 +133,4 @@ module.exports = {
     port: 9000,
     public: 'localhost.cru.org:9000'
   }
-}
+})
