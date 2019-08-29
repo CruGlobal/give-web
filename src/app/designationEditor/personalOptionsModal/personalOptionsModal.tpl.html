@@ -83,7 +83,8 @@
           </label>
         </div>
         <div class="form-group">
-          <span class="help-block">This option will be disabled if your designation number is not active in MPDX.</span>
+          <h6 ng-if="$ctrl.hasNewsletter">This form will allow donors to subscribe to your MPDX newsletter.</h6>
+          <h6 ng-if="!$ctrl.hasNewsletter">This option is disabled because you do not have an MPDX account. To sign up for one, visit <a href="mpdx.org" target="_blank">mpdx.org</a>.</h6>
         </div>
       </div>
     </div>
