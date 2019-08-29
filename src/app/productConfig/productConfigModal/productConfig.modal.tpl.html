@@ -22,7 +22,7 @@
   <div class="container-fluid">
     <button class="btn btn-md btn-primary btn-block-xs pull-right"
             type="button"
-            ng-if="$ctrl.state !== 'errorAlreadyInCart'"
+            ng-if="$ctrl.state !== 'errorAlreadyInCart' && $ctrl.state != 'givingLinks'"
             tabindex="-1"
             ng-switch="$ctrl.isEdit"
             ng-click="$ctrl.submitted = true"

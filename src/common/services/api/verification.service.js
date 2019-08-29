@@ -5,8 +5,7 @@ import cortexApiService from '../cortexApi.service'
 
 const serviceName = 'verificationService'
 
-/* @ngInject */
-function VerificationService (cortexApiService) {
+const VerificationService = /* @ngInject */ function (cortexApiService) {
   function getContacts () {
     return cortexApiService
       .get({

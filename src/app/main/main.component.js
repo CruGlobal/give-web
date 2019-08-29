@@ -27,8 +27,7 @@ class MainController {
   constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
-/* @ngInject */
-function routingConfig ($stateProvider, $locationProvider, $urlRouterProvider) {
+const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvider, $urlRouterProvider) {
   $stateProvider
     .state('cart', {
       url: '/cart.html',

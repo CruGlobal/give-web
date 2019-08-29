@@ -29,8 +29,7 @@ export const Sessions = {
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
 
-/* @ngInject */
-function session ($cookies, $rootScope, $http, $timeout, envService) {
+const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout

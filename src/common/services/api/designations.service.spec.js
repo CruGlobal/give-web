@@ -194,4 +194,18 @@ describe('designation service', () => {
       self.$httpBackend.flush()
     })
   })
+
+  describe('givingLinks', () => {
+    it('should load givingLinks from JCR', () => {
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+        .respond(200, designationResponse)
+      self.designationsService.givingLinks('0123456')
+        .subscribe(givingLinks => {
+          expect(givingLinks).toEqual([
+            { name: 'Name', url: 'https://example.com', order: 0 }
+          ])
+        })
+      self.$httpBackend.flush()
+    })
+  })
 })

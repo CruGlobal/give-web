@@ -11,8 +11,7 @@ import includes from 'lodash/includes'
 
 let Rollbar
 
-/* @ngInject */
-function rollbarConfig (envServiceProvider, $provide) {
+const rollbarConfig = /* @ngInject */ function (envServiceProvider, $provide) {
   const rollbarConfig = {
     accessToken: rollbarAccessToken,
     captureUncaught: true,

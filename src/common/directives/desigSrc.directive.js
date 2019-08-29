@@ -3,8 +3,7 @@ import appConfig from 'common/app.config'
 
 const directiveName = 'desigSrc'
 
-/* @ngInject */
-function desigSrc (envService) {
+const desigSrc = /* @ngInject */ function (envService) {
   return {
     restrict: 'A',
     link: function (scope, element, attributes) {

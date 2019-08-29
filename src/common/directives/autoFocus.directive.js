@@ -2,8 +2,7 @@ import angular from 'angular'
 
 const directiveName = 'autoFocus'
 
-/* @ngInject */
-function desigSrc ($timeout) {
+const desigSrc = /* @ngInject */ function ($timeout) {
   return {
     restrict: 'A',
     link: function (scope, element) {

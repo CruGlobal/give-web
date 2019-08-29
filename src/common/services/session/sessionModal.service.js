@@ -7,8 +7,7 @@ import analyticsFactory from 'app/analytics/analytics.factory'
 
 const serviceName = 'sessionModalService'
 
-/* @ngInject */
-function SessionModalService ($uibModal, $log, modalStateService, analyticsFactory) {
+const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStateService, analyticsFactory) {
   let currentModal
 
   function openModal (type, options, replace) {
