@@ -7,6 +7,8 @@ import giftSummaryView from 'common/components/giftViews/giftDetailsView/giftDet
 const componentName = 'stopGiftStep2'
 
 class StopGiftStep2Controller {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular

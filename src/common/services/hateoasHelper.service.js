@@ -13,6 +13,9 @@ import upperFirst from 'lodash/upperFirst'
 const serviceName = 'hateoasHelperService'
 
 class HateoasHelper {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
+
   getLink (response, relationshipName) {
     const linkObj = find(response && response.links, { rel: relationshipName })
     return linkObj

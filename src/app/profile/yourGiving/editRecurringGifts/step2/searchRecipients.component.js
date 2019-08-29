@@ -10,6 +10,9 @@ import template from './searchRecipients.tpl.html'
 const componentName = 'step2SearchRecipients'
 
 class SearchRecipientsController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
+
   onChange (selectedRecipients) {
     this.additionalRecipients = selectedRecipients
   }

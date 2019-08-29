@@ -6,6 +6,9 @@ import giftSearchView from 'common/components/giftViews/giftSearchView/giftSearc
 const componentName = 'redirectGiftStep2'
 
 class RedirectGiftStep2Controller {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
+
   onSelection (selectedRecipient) {
     this.selected = selectedRecipient
   }

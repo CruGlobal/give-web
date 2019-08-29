@@ -7,6 +7,9 @@ import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.
 const componentName = 'suggestedRecipients'
 
 class SuggestedRecipientsController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
+
   selectRecipients () {
     this.next({ selected: filter(this.gifts, { _selectedGift: true }) })
   }

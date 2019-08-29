@@ -9,6 +9,7 @@ import analyticsRun from 'app/analytics/analytics.run'
 
 import sessionModalService from './services/session/sessionModal.service'
 import sessionService from './services/session/session.service'
+import sessionEnforcerService from './services/session/sessionEnforcer.service'
 
 const moduleName = 'common'
 
@@ -21,5 +22,6 @@ export default angular
     loadingComponent.name,
     analyticsRun.name,
     sessionService.name,
-    sessionModalService.name
+    sessionModalService.name,
+    sessionEnforcerService.name
   ])

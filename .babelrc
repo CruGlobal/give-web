@@ -3,7 +3,6 @@
     "@babel/preset-env"
   ],
   "plugins": [
-    "@babel/plugin-transform-runtime",
-    "angularjs-annotate"
+    "@babel/plugin-transform-runtime"
   ]
 }

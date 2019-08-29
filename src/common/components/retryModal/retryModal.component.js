@@ -4,6 +4,8 @@ import template from './retryModal.tpl.html'
 const componentName = 'retryModal'
 
 class RetryModalController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular

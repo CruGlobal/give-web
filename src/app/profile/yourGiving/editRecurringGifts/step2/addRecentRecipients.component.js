@@ -8,6 +8,9 @@ import template from './addRecentRecipients.tpl.html'
 const componentName = 'step2AddRecentRecipients'
 
 class AddRecentRecipientsController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
+
   $onInit () {
     if (this.loadedNoRecentRecipients()) {
       this.next()

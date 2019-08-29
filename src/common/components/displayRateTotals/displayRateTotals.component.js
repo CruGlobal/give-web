@@ -5,6 +5,9 @@ import template from './displayRateTotals.tpl.html'
 const componentName = 'displayRateTotals'
 
 class DisplayRateTotalsController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
+
   rateTotalsComparator (freq1, freq2) {
     const order = {
       Single: 1,

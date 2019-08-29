@@ -5,6 +5,8 @@ import desigSrc from 'common/directives/desigSrc.directive'
 const componentName = 'giftListItem'
 
 class GiftListItemController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular
