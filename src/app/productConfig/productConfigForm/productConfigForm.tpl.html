@@ -72,7 +72,7 @@
                 <input name="suggestedAmount"
                        type="radio"
                        ng-click="$ctrl.changeAmount(suggested.amount)"
-                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.amount === suggested.amount">
+                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.amount === suggested.amount" />
                 {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
               </label>
             </div>
@@ -81,7 +81,7 @@
                 <label>
                   <input name="suggestedAmount"
                          type="radio"
-                         ng-checked="$ctrl.customInputActive">
+                         ng-checked="$ctrl.customInputActive" />
                   <input class="form-control form-control-subtle"
                          name="amount"
                          type="text"
@@ -91,7 +91,7 @@
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-focus="$ctrl.customInputActive = true;"
                          ng-required="$ctrl.customInputActive"
-                         placeholder="{{'Other' | translate}}">
+                         placeholder="{{'Other' | translate}}" />
                 </label>
                 <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
                      ng-if="($ctrl.itemConfigForm.amount | showErrors)">
@@ -130,7 +130,7 @@
                        ng-focus="$ctrl.customInputActive = true;"
                        tabindex="-1"
                        placeholder="{{'Other' | translate}}"
-                       required>
+                       required />
               </div>
             </label>
             <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
