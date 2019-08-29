@@ -21,8 +21,7 @@ export const EnforcerModes = {
   donor: 'donor'
 }
 
-/* @ngInject */
-function SessionEnforcerService (orderService, sessionService, sessionModalService) {
+const SessionEnforcerService = /* @ngInject */ function (orderService, sessionService, sessionModalService) {
   const enforcers = {}; let modal
 
   /**

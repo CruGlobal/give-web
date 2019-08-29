@@ -7,8 +7,7 @@ import merge from 'lodash/merge'
 import isEmpty from 'lodash/isEmpty'
 /* global localStorage */
 
-/* @ngInject */
-function analyticsFactory ($window, $timeout, sessionService) {
+const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionService) {
   return {
     buildProductVar: function (cartData) {
       try {

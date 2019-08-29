@@ -2,8 +2,7 @@ import angular from 'angular'
 
 const directiveName = 'valueMatch'
 
-/* @ngInject */
-function valueMatch () {
+const valueMatch = /* @ngInject */ function () {
   var directiveDefinitionObject = {
     restrict: 'A',
     require: ['^ngModel', '^form'],

@@ -3,8 +3,7 @@ import 'angular-environment'
 
 import rollbarConfig from './rollbar.config'
 
-/* @ngInject */
-function appConfig (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider) {
+const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider) {
   $httpProvider.useApplyAsync(true)
 
   envServiceProvider.config({

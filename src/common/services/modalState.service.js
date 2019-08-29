@@ -2,8 +2,7 @@ import angular from 'angular'
 
 const serviceName = 'modalStateService'
 
-/* @ngInject */
-function ModalStateService () {
+const ModalStateService = /* @ngInject */ function () {
   const MODAL_PARAM = 'modal'
   const registeredModals = {}
 
@@ -49,8 +48,7 @@ function ModalStateService () {
   }
 }
 
-/* @ngInject */
-function modalStateServiceRunner (modalStateService) {
+const modalStateServiceRunner = /* @ngInject */ function (modalStateService) {
   const name = modalStateService.name()
   if (angular.isDefined(name) && name !== '') {
     modalStateService.invokeModal(name)

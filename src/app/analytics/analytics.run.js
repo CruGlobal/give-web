@@ -1,8 +1,7 @@
 import angular from 'angular'
 import 'app/analytics/analytics.factory'
 
-/* @ngInject */
-function dataLayer ($window, analyticsFactory) {
+const dataLayer = /* @ngInject */ function ($window, analyticsFactory) {
   if (!$window.location.hostname || $window.location.hostname.indexOf('give') === -1) {
     return
   }

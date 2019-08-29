@@ -25,8 +25,7 @@ const componentName = 'main'
 class MainController {
 }
 
-/* @ngInject */
-function routingConfig ($stateProvider, $locationProvider, $urlRouterProvider) {
+const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvider, $urlRouterProvider) {
   $stateProvider
     .state('cart', {
       url: '/cart.html',

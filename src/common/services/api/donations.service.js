@@ -27,8 +27,7 @@ export const RecurringGiftsType = {
   cancelled: 'cancelledrecurringdonations'
 }
 
-/* @ngInject */
-function DonationsService (cortexApiService, profileService, commonService) {
+const DonationsService = /* @ngInject */ function (cortexApiService, profileService, commonService) {
   function getRecipients (year) {
     const path = ['donations', 'historical', cortexApiService.scope, 'recipient']
     path.push(angular.isDefined(year) ? year : 'recent')
