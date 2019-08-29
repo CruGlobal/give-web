@@ -5,7 +5,10 @@ import template from './recipientDetail.tpl.html'
 const componentName = 'recipientDetail'
 
 class RecipientDetail {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
+
 export default angular
   .module(componentName, [
     paymentMethodDisplay.name

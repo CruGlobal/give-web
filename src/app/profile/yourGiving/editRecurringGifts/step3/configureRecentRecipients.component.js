@@ -8,6 +8,8 @@ import template from './configureRecentRecipients.tpl.html'
 const componentName = 'step3ConfigureRecentRecipients'
 
 class ConfigureRecentRecipientsController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular

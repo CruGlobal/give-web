@@ -7,6 +7,8 @@ import template from './cart-summary.tpl.html'
 const componentName = 'checkoutCartSummary'
 
 class CartSummaryController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular

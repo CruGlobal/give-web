@@ -47,7 +47,7 @@ describe('productConfig module config', () => {
   })
 
   it('config to register \'give-gift\' modal', inject(function () {
-    expect(modalStateServiceProvider.registerModal).toHaveBeenLastCalledWith('give-gift', expect.arrayContaining([expect.any(Function)]))
+    expect(modalStateServiceProvider.registerModal).toHaveBeenLastCalledWith('give-gift', expect.any(Function))
   }))
 
   describe('invoke \'give-gift\' modal function', () => {

@@ -7,6 +7,8 @@ import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdat
 const componentName = 'configureGifts'
 
 class ConfigureGiftsController {
+  /* @ngInject */
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular
