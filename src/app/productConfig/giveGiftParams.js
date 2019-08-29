@@ -1,9 +1,9 @@
 export const giveGiftParams = {
-  designation:  'd',
+  designation: 'd',
   campaignPage: 'c',
-  amount:       'a',
-  frequency:    'f',
-  day:          'dd',
-  month:        'm',
+  amount: 'a',
+  frequency: 'f',
+  day: 'dd',
+  month: 'm',
   campaignCode: 'CampaignCode'
-};
+}

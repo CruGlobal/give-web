@@ -1,52 +1,51 @@
-import angular from 'angular';
-import 'angular-gettext';
+import angular from 'angular'
+import 'angular-gettext'
 
-import contactInfoComponent from 'common/components/contactInfo/contactInfo.component';
+import contactInfoComponent from 'common/components/contactInfo/contactInfo.component'
 
-import sessionService from 'common/services/session/session.service';
-import analyticsFactory from 'app/analytics/analytics.factory';
+import sessionService from 'common/services/session/session.service'
+import analyticsFactory from 'app/analytics/analytics.factory'
 
-import template from './contactInfoModal.tpl.html';
+import template from './contactInfoModal.tpl.html'
 
-let componentName = 'contactInfoModal';
+const componentName = 'contactInfoModal'
 
 class contactInfoModalController {
-
   /* @ngInject */
-  constructor( gettext, sessionService, analyticsFactory ) {
-    this.gettext = gettext;
-    this.sessionService = sessionService;
-    this.analyticsFactory = analyticsFactory;
+  constructor (gettext, sessionService, analyticsFactory) {
+    this.gettext = gettext
+    this.sessionService = sessionService
+    this.analyticsFactory = analyticsFactory
   }
 
-  $onInit() {
-    this.modalTitle = this.gettext( 'Your Contact Information' );
-    this.analyticsFactory.track('aa-registration-contact-information');
+  $onInit () {
+    this.modalTitle = this.gettext('Your Contact Information')
+    this.analyticsFactory.track('aa-registration-contact-information')
   }
 
-  onSubmit( success ) {
-    if ( success ) {
-      this.onSuccess();
+  onSubmit (success) {
+    if (success) {
+      this.onSuccess()
     } else {
-      this.submitted = false;
+      this.submitted = false
     }
   }
 }
 
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     'gettext',
     contactInfoComponent.name,
     sessionService.name,
     analyticsFactory.name
-  ] )
-  .component( componentName, {
-    controller:  contactInfoModalController,
+  ])
+  .component(componentName, {
+    controller: contactInfoModalController,
     templateUrl: template,
-    bindings:    {
-      modalTitle:    '=',
+    bindings: {
+      modalTitle: '=',
       onStateChange: '&',
-      onSuccess:     '&',
-      onCancel:      '&'
+      onSuccess: '&',
+      onCancel: '&'
     }
-  } );
+  })

@@ -1,35 +1,34 @@
-import angular from 'angular';
-import transform from 'lodash/transform';
-import sortBy from 'lodash/sortBy';
+import angular from 'angular'
+import transform from 'lodash/transform'
+import sortBy from 'lodash/sortBy'
 
-let controllerName = 'personalOptionsCtrl';
+const controllerName = 'personalOptionsCtrl'
 
 class ModalInstanceCtrl {
-
   /* @ngInject */
-  constructor(designationNumber, giveDomain, givingLinks) {
-    this.designationNumber = designationNumber;
-    this.giveDomain = giveDomain;
+  constructor (designationNumber, giveDomain, givingLinks) {
+    this.designationNumber = designationNumber
+    this.giveDomain = giveDomain
 
     this.givingLinks = transform(givingLinks, (result, value, key) => {
-      if(key === 'jcr:primaryType'){ return; }
+      if (key === 'jcr:primaryType') { return }
       result.push({
         name: value.name,
         url: value.url,
         order: Number(key)
-      });
-    }, []);
-    this.givingLinks = sortBy(this.givingLinks, 'order');
+      })
+    }, [])
+    this.givingLinks = sortBy(this.givingLinks, 'order')
   }
 
-  transformGivingLinks(){
+  transformGivingLinks () {
     return transform(this.givingLinks, (result, value, i) => {
-      delete value.order;
-      result[i+1] = value;
-    }, {});
+      delete value.order
+      result[i + 1] = value
+    }, {})
   }
 }
 
 export default angular
   .module(controllerName, [])
-  .controller(controllerName, ModalInstanceCtrl);
+  .controller(controllerName, ModalInstanceCtrl)

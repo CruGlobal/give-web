@@ -1,17 +1,12 @@
-const webpack = require('webpack');
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const concat = require('lodash/concat');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-const aemDomain = 'https://give-stage2.cru.org';
-
-const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build');
-const ci = process.env.CI === 'true';
-
-const fs = require('fs');
-
+const webpack = require('webpack')
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const concat = require('lodash/concat')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const aemDomain = 'https://give-stage2.cru.org'
+const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build')
+const fs = require('fs')
 const entryPoints = {
   common: 'common/common.module.js',
   app: [
@@ -29,22 +24,28 @@ const entryPoints = {
     'app/designationEditor/designationEditor.component.js'
   ],
   give: 'assets/scss/styles.scss',
-  'branded-checkout': ['app/branded/branded-checkout.component.js', 'assets/scss/branded-checkout.scss']
-};
+  'branded-checkout': [
+    'app/branded/branded-checkout.component.js',
+    'assets/scss/branded-checkout.scss'
+  ]
+}
 
-
-module.exports = env => {
-  env = env || {};
+module.exports = (env = {}) => {
   return {
+    mode: isBuild ? 'production' : 'development',
     entry: isBuild ? entryPoints : { main: 'app/main/main.component.js' },
     output: {
       filename: '[name].js',
       path: path.resolve(__dirname, 'dist'),
-      devtoolModuleFilenameTemplate: info => info.resourcePath.replace(/^\.\//, '')
+      devtoolModuleFilenameTemplate: info =>
+        info.resourcePath.replace(/^\.\//, '')
     },
     plugins: concat(
       [
-        new ExtractTextPlugin({ filename: "[name].min.css", disable: !isBuild }),
+        new MiniCssExtractPlugin({
+          filename: '[name].min.css',
+          disable: !isBuild
+        }),
         new CopyWebpackPlugin([
           {
             context: 'src',
@@ -56,12 +57,11 @@ module.exports = env => {
           }
         ]),
         new webpack.EnvironmentPlugin({
-          'TRAVIS_COMMIT': 'development'
+          TRAVIS_COMMIT: 'development'
         }),
-        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
       ],
-      env.analyze ? [ new BundleAnalyzerPlugin() ] : []
-
+      env.analyze ? [new BundleAnalyzerPlugin()] : []
     ),
     module: {
       rules: [
@@ -72,70 +72,64 @@ module.exports = env => {
             {
               loader: 'babel-loader',
               options: {
-                presets: [['env', { "modules": false }]],
-                plugins: ['transform-runtime', 'angularjs-annotate']
+                presets: [['@babel/preset-env', { modules: false }]],
+                plugins: [
+                  '@babel/plugin-transform-runtime',
+                  'angularjs-annotate'
+                ]
               }
             }
           ]
         },
         {
           test: /\.html$/,
-          use: ['ngtemplate-loader?relativeTo=' + path.resolve(__dirname, './src') + '/', 'html-loader']
-        },
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader: "eslint-loader",
-          enforce: "pre",
-          options: {
-            // Show errors as warnings during development to prevent start/test commands from exiting
-            failOnError: isBuild || ci,
-            emitWarning: !isBuild && !ci
-          }
+          use: [
+            'ngtemplate-loader?relativeTo=' +
+            path.resolve(__dirname, './src') +
+            '/',
+            'html-loader'
+          ]
         },
         // extract global css into separate files
         {
           test: /\.scss$/,
-          include: path.resolve(__dirname, "./src/assets"),
-          use: isBuild ?
-            ExtractTextPlugin.extract({
-              use: [
-                "css-loader?-url",
-                "sass-loader?sourceMap"
-              ]
-            }) :
-            [
-              "style-loader",
-              "css-loader?-url&sourceMap",
-              "sass-loader?sourceMap"
+          include: path.resolve(__dirname, './src/assets'),
+          use: isBuild
+            ? [
+              MiniCssExtractPlugin.loader,
+              'css-loader?-url',
+              'sass-loader?sourceMap'
+            ]
+            : [
+              'style-loader',
+              'css-loader?-url&sourceMap',
+              'sass-loader?sourceMap'
             ]
         },
         // inline css for components with the component's js
         {
           test: /\.(scss|css)$/,
-          exclude: path.resolve(__dirname, "./src/assets"),
+          exclude: path.resolve(__dirname, './src/assets'),
           use: [
-            "style-loader",
-            "css-loader?sourceMap",
-            "sass-loader?sourceMap"
+            'style-loader',
+            'css-loader?sourceMap',
+            'sass-loader?sourceMap'
           ]
         }
       ]
     },
     resolve: {
-      modules: [path.resolve(__dirname, "src"), "node_modules"]
+      modules: [path.resolve(__dirname, 'src'), 'node_modules']
     },
-    devtool: "source-map",
+    devtool: 'source-map',
     devServer: {
       https: {
         key: fs.readFileSync('./certs/private.key'),
         cert: fs.readFileSync('./certs/private.crt'),
-        ca: fs.readFileSync('./certs/private.pem'),
+        ca: fs.readFileSync('./certs/private.pem')
       },
       historyApiFallback: {
-        rewrites: [
-          { from: /\/(?!test\-release).+\.html/, to: '/index.html' }
-        ]
+        rewrites: [{ from: /\/(?!test-release).+\.html/, to: '/index.html' }]
       },
       proxy: {
         '/bin': {
@@ -156,7 +150,7 @@ module.exports = env => {
         }
       },
       port: 9000,
-      public: "localhost.cru.org:9000"
+      public: 'localhost.cru.org:9000'
     }
-  };
-};
+  }
+}

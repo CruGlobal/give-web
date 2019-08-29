@@ -1,33 +1,31 @@
-import angular from 'angular';
-import template from './suggestedRecipients.tpl.html';
-import filter from 'lodash/filter';
+import angular from 'angular'
+import template from './suggestedRecipients.tpl.html'
+import filter from 'lodash/filter'
 
-import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
+import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component'
 
-let componentName = 'suggestedRecipients';
+const componentName = 'suggestedRecipients'
 
 class SuggestedRecipientsController {
-
   /* @ngInject */
-  constructor() {
-  }
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 
-  selectRecipients() {
-    this.next( {selected: filter( this.gifts, {_selectedGift: true} )} );
+  selectRecipients () {
+    this.next({ selected: filter(this.gifts, { _selectedGift: true }) })
   }
 }
 
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     giftListItem.name
-  ] )
-  .component( componentName, {
-    controller:  SuggestedRecipientsController,
+  ])
+  .component(componentName, {
+    controller: SuggestedRecipientsController,
     templateUrl: template,
-    bindings:    {
-      gifts:    '<',
-      cancel:   '&',
+    bindings: {
+      gifts: '<',
+      cancel: '&',
       previous: '&',
-      next:     '&'
+      next: '&'
     }
-  } );
+  })

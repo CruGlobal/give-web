@@ -1,128 +1,126 @@
-import angular from 'angular';
-import isArray from 'lodash/isArray';
+import angular from 'angular'
+import isArray from 'lodash/isArray'
 
-import productConfigForm from '../productConfigForm/productConfigForm.component';
-import { giveGiftParams } from '../giveGiftParams';
-import modalStateService from 'common/services/modalState.service';
-import { mobileBreakpoint } from 'common/app.constants';
+import productConfigForm from '../productConfigForm/productConfigForm.component'
+import { giveGiftParams } from '../giveGiftParams'
+import modalStateService from 'common/services/modalState.service'
+import { mobileBreakpoint } from 'common/app.constants'
 
-import template from './productConfig.modal.tpl.html';
+import template from './productConfig.modal.tpl.html'
 
-const componentName = 'productConfigModal';
+const componentName = 'productConfigModal'
 
 class ProductConfigModalController {
-
   /* @ngInject */
-  constructor( $window, $location, modalStateService ) {
-    this.$window = $window;
-    this.$location = $location;
-    this.modalStateService = modalStateService;
+  constructor ($window, $location, modalStateService) {
+    this.$window = $window
+    this.$location = $location
+    this.modalStateService = modalStateService
   }
 
-  $onInit(){
-    this.initModalData();
-    this.initializeParams();
+  $onInit () {
+    this.initModalData()
+    this.initializeParams()
 
-    this.isMobile = this.$window.innerWidth <= mobileBreakpoint;
+    this.isMobile = this.$window.innerWidth <= mobileBreakpoint
   }
 
-  $onDestroy(){
+  $onDestroy () {
     // Clear the modal name and params when the modal closes
-    this.modalStateService.name( null );
-    angular.forEach( giveGiftParams, ( value ) => {
+    this.modalStateService.name(null)
+    angular.forEach(giveGiftParams, (value) => {
       // Remove all query params except CampaignCode
-      if( value !== giveGiftParams.campaignCode ) {
-        this.$location.search(value, null);
+      if (value !== giveGiftParams.campaignCode) {
+        this.$location.search(value, null)
       }
-    } );
+    })
   }
 
-  initModalData() {
-    this.code = this.resolve.code;
-    this.itemConfig = this.resolve.itemConfig || {};
-    this.isEdit = !!this.resolve.isEdit;
-    this.uri =  this.resolve.uri;
+  initModalData () {
+    this.code = this.resolve.code
+    this.itemConfig = this.resolve.itemConfig || {}
+    this.isEdit = !!this.resolve.isEdit
+    this.uri = this.resolve.uri
   }
 
-  initializeParams() {
-    if(this.isEdit){
-      return;
+  initializeParams () {
+    if (this.isEdit) {
+      return
     }
 
     // Add query params for current modal
-    this.modalStateService.name( 'give-gift' );
-    this.updateQueryParam( giveGiftParams.designation, this.code );
-    if(this.itemConfig['campaign-page']){
-      this.updateQueryParam( giveGiftParams.campaignPage, this.itemConfig['campaign-page'] );
+    this.modalStateService.name('give-gift')
+    this.updateQueryParam(giveGiftParams.designation, this.code)
+    if (this.itemConfig['campaign-page']) {
+      this.updateQueryParam(giveGiftParams.campaignPage, this.itemConfig['campaign-page'])
     }
 
     // Load query params to populate itemConfig
-    let params = this.$location.search();
+    const params = this.$location.search()
 
-    this.itemConfig.amount = params[giveGiftParams.amount];
+    this.itemConfig.amount = params[giveGiftParams.amount]
 
-    if ( params.hasOwnProperty( giveGiftParams.frequency ) ) {
-      this.defaultFrequency = params[giveGiftParams.frequency];
+    if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.frequency)) {
+      this.defaultFrequency = params[giveGiftParams.frequency]
     }
 
-    if ( params.hasOwnProperty( giveGiftParams.day ) ) {
-      this.itemConfig['recurring-day-of-month'] = params[giveGiftParams.day];
+    if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.day)) {
+      this.itemConfig['recurring-day-of-month'] = params[giveGiftParams.day]
     }
 
-    if ( params.hasOwnProperty( giveGiftParams.month ) ) {
-      this.itemConfig['recurring-start-month'] = params[giveGiftParams.month];
+    if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.month)) {
+      this.itemConfig['recurring-start-month'] = params[giveGiftParams.month]
     }
 
     // If CampaignCode exists in URL, use it, otherwise use default-campaign-code if set.
-    if ( params.hasOwnProperty( giveGiftParams.campaignCode ) ) {
-      this.itemConfig['campaign-code'] = isArray(params[giveGiftParams.campaignCode]) ?
-        params[giveGiftParams.campaignCode][0] : params[giveGiftParams.campaignCode];
+    if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.campaignCode)) {
+      this.itemConfig['campaign-code'] = isArray(params[giveGiftParams.campaignCode])
+        ? params[giveGiftParams.campaignCode][0] : params[giveGiftParams.campaignCode]
 
-      //make sure campaign code is alphanumeric and less than 30 characters
-      if(this.itemConfig['campaign-code'].match(/^[a-z0-9]+$/i) === null || this.itemConfig['campaign-code'].length > 30){
-        this.itemConfig['campaign-code'] = '';
+      // make sure campaign code is alphanumeric and less than 30 characters
+      if (this.itemConfig['campaign-code'].match(/^[a-z0-9]+$/i) === null || this.itemConfig['campaign-code'].length > 30) {
+        this.itemConfig['campaign-code'] = ''
       }
-    }
-    else if(this.itemConfig.hasOwnProperty('default-campaign-code')) {
-      this.itemConfig['campaign-code'] = this.itemConfig['default-campaign-code'];
+    } else if (Object.prototype.hasOwnProperty.call(this.itemConfig, 'default-campaign-code')) {
+      this.itemConfig['campaign-code'] = this.itemConfig['default-campaign-code']
     }
 
-    if ( params.hasOwnProperty( giveGiftParams.campaignPage ) && params[giveGiftParams.campaignPage] !== '' ) {
-      this.itemConfig['campaign-page'] = params[giveGiftParams.campaignPage];
+    if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.campaignPage) && params[giveGiftParams.campaignPage] !== '') {
+      this.itemConfig['campaign-page'] = params[giveGiftParams.campaignPage]
     }
   }
 
-  updateQueryParam(param, value){
-    if ( !this.isEdit ) this.$location.search( param, value );
+  updateQueryParam (param, value) {
+    if (!this.isEdit) this.$location.search(param, value)
   }
 
-  onStateChange(state){
-    this.state = state;
-    this.submitted = false;
-    switch(state){
+  onStateChange (state) {
+    this.state = state
+    this.submitted = false
+    switch (state) {
       case 'submitted':
-        this.close();
+        this.close()
 
-        if(this.isMobile && !this.isEdit){
-          this.$window.location = '/cart.html';
+        if (this.isMobile && !this.isEdit) {
+          this.$window.location = '/cart.html'
         }
-        break;
+        break
     }
   }
 }
 
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     'ordinal',
     productConfigForm.name,
     modalStateService.name
-  ] )
-  .component( componentName, {
-    controller:  ProductConfigModalController,
+  ])
+  .component(componentName, {
+    controller: ProductConfigModalController,
     templateUrl: template,
-    bindings:    {
+    bindings: {
       resolve: '<',
       close: '&',
       dismiss: '&'
     }
-  } );
+  })

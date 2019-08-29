@@ -1,43 +1,55 @@
-import {validPaymentMethods, validPaymentMethod} from './validPaymentMethods';
+import { validPaymentMethods, validPaymentMethod } from './validPaymentMethods'
+import { advanceTo, clear } from 'jest-date-mock'
 
 describe('validPaymentMethods', () => {
   beforeEach(() => {
-    jasmine.clock().mockDate(new Date(2015, 0, 10));
-  });
+    advanceTo(new Date(2015, 0, 10))
+  })
+
+  afterEach(clear)
+
   it('should return bank accounts', () => {
-    let paymentMethods = [{
+    const paymentMethods = [{
       self: {
         type: 'elasticpath.bankaccounts.bank-account'
       }
-    }];
-    expect(validPaymentMethods(paymentMethods)).toEqual(paymentMethods);
-  });
+    }]
+
+    expect(validPaymentMethods(paymentMethods)).toEqual(paymentMethods)
+  })
+
   it('should return active credit cards', () => {
-    let paymentMethods = [{
+    const paymentMethods = [{
       self: {
         type: 'cru.creditcards.named-credit-card'
       },
       'expiry-month': '01',
       'expiry-year': '2015'
-    }];
-    expect(validPaymentMethods(paymentMethods)).toEqual(paymentMethods);
-  });
+    }]
+
+    expect(validPaymentMethods(paymentMethods)).toEqual(paymentMethods)
+  })
+
   it('should filter out inactive credit cards', () => {
-    let paymentMethods = [{
+    const paymentMethods = [{
       self: {
         type: 'cru.creditcards.named-credit-card'
       },
       'expiry-month': '12',
       'expiry-year': '2014'
-    }];
-    expect(validPaymentMethods(paymentMethods)).toEqual([]);
-  });
+    }]
+
+    expect(validPaymentMethods(paymentMethods)).toEqual([])
+  })
+
   it('should handle no payment methods', () => {
-    let paymentMethods = [];
-    expect(validPaymentMethods(paymentMethods)).toEqual([]);
-  });
+    const paymentMethods = []
+
+    expect(validPaymentMethods(paymentMethods)).toEqual([])
+  })
+
   it('should handle several payment methods', () => {
-    let paymentMethods = [
+    const paymentMethods = [
       {
         self: {
           type: 'elasticpath.bankaccounts.bank-account'
@@ -83,47 +95,54 @@ describe('validPaymentMethods', () => {
         'expiry-month': '01',
         'expiry-year': '2016'
       }
-    ];
+    ]
+
     expect(validPaymentMethods(paymentMethods)).toEqual([
       paymentMethods[0],
       paymentMethods[1],
       paymentMethods[3],
       paymentMethods[4],
       paymentMethods[6]
-    ]);
-  });
-});
+    ])
+  })
+})
 
 describe('validPaymentMethod', () => {
   beforeEach(() => {
-    jasmine.clock().mockDate(new Date(2015, 0, 10));
-  });
+    advanceTo(new Date(2015, 0, 10))
+  })
+
   it('should consider bank accounts valid', () => {
-    let paymentMethod = {
+    const paymentMethod = {
       self: {
         type: 'elasticpath.bankaccounts.bank-account'
       }
-    };
-    expect(validPaymentMethod(paymentMethod)).toEqual(true);
-  });
+    }
+
+    expect(validPaymentMethod(paymentMethod)).toEqual(true)
+  })
+
   it('should consider unexpired credit cards valid', () => {
-    let paymentMethod = {
+    const paymentMethod = {
       self: {
         type: 'cru.creditcards.named-credit-card'
       },
       'expiry-month': '01',
       'expiry-year': '2015'
-    };
-    expect(validPaymentMethod(paymentMethod)).toEqual(true);
-  });
+    }
+
+    expect(validPaymentMethod(paymentMethod)).toEqual(true)
+  })
+
   it('should consider expired credit cards invalid', () => {
-    let paymentMethod = {
+    const paymentMethod = {
       self: {
         type: 'cru.creditcards.named-credit-card'
       },
       'expiry-month': '12',
       'expiry-year': '2014'
-    };
-    expect(validPaymentMethod(paymentMethod)).toEqual(false);
-  });
-});
+    }
+
+    expect(validPaymentMethod(paymentMethod)).toEqual(false)
+  })
+})

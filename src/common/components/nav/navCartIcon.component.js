@@ -1,31 +1,29 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import {giftAddedEvent} from 'common/components/nav/navCart/navCart.component';
-import navCart, {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
+import navCart, { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 
-import template from './navCartIcon.tpl.html';
+import template from './navCartIcon.tpl.html'
 
-let componentName = 'navCartIcon';
+const componentName = 'navCartIcon'
 
-class NavCartIconController{
-
+class NavCartIconController {
   /* @ngInject */
-  constructor($rootScope){
-    this.$rootScope = $rootScope;
+  constructor ($rootScope) {
+    this.$rootScope = $rootScope
   }
 
-  $onInit() {
-    this.$rootScope.$on(giftAddedEvent, () => this.giftAddedToCart() );
+  $onInit () {
+    this.$rootScope.$on(giftAddedEvent, () => this.giftAddedToCart())
   }
 
-  giftAddedToCart() {
-    this.cartOpen = true;
+  giftAddedToCart () {
+    this.cartOpen = true
   }
 
-  cartOpened(){
-    if(!this.cartOpenedPreviously){ // Load cart on initial open only. Events will take care of other reloads
-      this.cartOpenedPreviously = true;
-      this.$rootScope.$emit( cartUpdatedEvent );
+  cartOpened () {
+    if (!this.cartOpenedPreviously) { // Load cart on initial open only. Events will take care of other reloads
+      this.cartOpenedPreviously = true
+      this.$rootScope.$emit(cartUpdatedEvent)
     }
   }
 }
@@ -37,4 +35,4 @@ export default angular
   .component(componentName, {
     controller: NavCartIconController,
     templateUrl: template
-  });
+  })

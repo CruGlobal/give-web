@@ -1,134 +1,133 @@
-import angular from 'angular';
-import 'angular-messages';
-import assign from 'lodash/assign';
-import pick from 'lodash/pick';
-import find from 'lodash/find';
-import includes from 'lodash/includes';
-import startsWith from 'lodash/startsWith';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/forkJoin';
-import { parse, isValidNumber } from 'libphonenumber-js';
+import angular from 'angular'
+import 'angular-messages'
+import assign from 'lodash/assign'
+import pick from 'lodash/pick'
+import find from 'lodash/find'
+import includes from 'lodash/includes'
+import startsWith from 'lodash/startsWith'
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/forkJoin'
+import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
-import addressForm from 'common/components/addressForm/addressForm.component';
+import addressForm from 'common/components/addressForm/addressForm.component'
 
-import orderService from 'common/services/api/order.service';
-import sessionService, {SignInEvent, Roles} from 'common/services/session/session.service';
+import orderService from 'common/services/api/order.service'
+import sessionService, { SignInEvent, Roles } from 'common/services/session/session.service'
 
-import template from './contactInfo.tpl.html';
+import template from './contactInfo.tpl.html'
 
-let componentName = 'contactInfo';
+const componentName = 'contactInfo'
 
-class Step1Controller{
-
+class Step1Controller {
   /* @ngInject */
-  constructor($log, $scope, orderService, sessionService){
-    this.$log = $log;
-    this.$scope = $scope;
-    this.orderService = orderService;
-    this.sessionService = sessionService;
+  constructor ($log, $scope, orderService, sessionService) {
+    this.$log = $log
+    this.$scope = $scope
+    this.orderService = orderService
+    this.sessionService = sessionService
   }
 
-  $onInit(){
-    const donorDetailsDefaults = angular.copy(this.donorDetails);
+  $onInit () {
+    const donorDetailsDefaults = angular.copy(this.donorDetails)
 
     // init address to populate 'US state' dropdown
     this.donorDetails = {
       mailingAddress: {
         country: 'US'
       }
-    };
+    }
 
-    this.loadDonorDetails(donorDetailsDefaults);
-    this.waitForFormInitialization();
+    this.loadDonorDetails(donorDetailsDefaults)
+    this.waitForFormInitialization()
 
     this.$scope.$on(SignInEvent, () => {
-      this.loadDonorDetails();
-    });
+      this.loadDonorDetails()
+    })
   }
 
-  $onChanges(changes) {
+  $onChanges (changes) {
     if (changes.submitted.currentValue === true) {
-      this.submitDetails();
+      this.submitDetails()
     }
   }
 
-  waitForFormInitialization(){
-    let unregister = this.$scope.$watch('$ctrl.detailsForm', () => {
-      if(this.detailsForm) {
-        unregister();
-        this.addCustomValidators();
+  waitForFormInitialization () {
+    const unregister = this.$scope.$watch('$ctrl.detailsForm', () => {
+      if (this.detailsForm) {
+        unregister()
+        this.addCustomValidators()
       }
-    });
+    })
   }
 
-  addCustomValidators(){
+  addCustomValidators () {
     this.detailsForm.phoneNumber.$validators.phone = number => {
-      return !number || isValidNumber(parse(number, { country: { default: 'US' } }));
-    };
+      return !number || parsePhoneNumberFromString(number, 'US').isValid()
+    }
   }
 
-  loadDonorDetails(overrideDonorDetails){
-    this.loadingDonorDetailsError = false;
-    this.loadingDonorDetails = true;
+  loadDonorDetails (overrideDonorDetails) {
+    this.loadingDonorDetailsError = false
+    this.loadingDonorDetails = true
     this.orderService.getDonorDetails()
       .subscribe((data) => {
-        if(data['donor-type'] === ''){
-          data['donor-type'] = 'Household';
+        if (data['donor-type'] === '') {
+          data['donor-type'] = 'Household'
         }
-        this.loadingDonorDetails = false;
-        this.donorDetails = data;
-        this.nameFieldsDisabled = this.donorDetails['registration-state'] === 'COMPLETED';
-        this.spouseFieldsDisabled = !this.orderService.spouseEditableForOrder(this.donorDetails);
-        if(!this.nameFieldsDisabled && includes([Roles.registered, Roles.identified], this.sessionService.getRole())) {
+        this.loadingDonorDetails = false
+        this.donorDetails = data
+        this.nameFieldsDisabled = this.donorDetails['registration-state'] === 'COMPLETED'
+        this.spouseFieldsDisabled = !this.orderService.spouseEditableForOrder(this.donorDetails)
+        if (!this.nameFieldsDisabled && includes([Roles.registered, Roles.identified], this.sessionService.getRole())) {
           // Pre-populate first, last and email from session if missing from donorDetails
-          if(!this.donorDetails['name']['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
-            this.donorDetails['name']['given-name'] = this.sessionService.session.first_name;
+          if (!this.donorDetails['name']['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
+            this.donorDetails['name']['given-name'] = this.sessionService.session.first_name
           }
-          if(!this.donorDetails['name']['family-name'] && angular.isDefined(this.sessionService.session.last_name)) {
-            this.donorDetails['name']['family-name'] = this.sessionService.session.last_name;
+          if (!this.donorDetails['name']['family-name'] && angular.isDefined(this.sessionService.session.last_name)) {
+            this.donorDetails['name']['family-name'] = this.sessionService.session.last_name
           }
-          if(angular.isUndefined(this.donorDetails['email']) && angular.isDefined(this.sessionService.session.email)) {
-            this.donorDetails['email'] = this.sessionService.session.email;
+          if (angular.isUndefined(this.donorDetails['email']) && angular.isDefined(this.sessionService.session.email)) {
+            this.donorDetails['email'] = this.sessionService.session.email
           }
         }
 
-        const firstTimeLoading = !find(this.donorDetails.links, ['rel', 'donormatchesform']);
-        if(overrideDonorDetails && firstTimeLoading){
+        const firstTimeLoading = !find(this.donorDetails.links, ['rel', 'donormatchesform'])
+        if (overrideDonorDetails && firstTimeLoading) {
           this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
             'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
-          ]));
+          ]))
         }
       },
       error => {
-        this.loadingDonorDetails = false;
-        this.loadingDonorDetailsError = true;
-        this.$log.error('Error loading donorDetails.', error);
-      });
+        this.loadingDonorDetails = false
+        this.loadingDonorDetailsError = true
+        this.$log.error('Error loading donorDetails.', error)
+      })
   }
 
-  submitDetails(){
-    this.detailsForm.$setSubmitted();
-    if(this.detailsForm.$valid) {
-      let details = this.donorDetails;
-      this.submissionError = '';
+  submitDetails () {
+    this.detailsForm.$setSubmitted()
+    if (this.detailsForm.$valid) {
+      const details = this.donorDetails
+      this.submissionError = ''
 
-      let requests = [this.orderService.updateDonorDetails(details)];
+      const requests = [this.orderService.updateDonorDetails(details)]
       if (details.email) {
-        requests.push(this.orderService.addEmail(details.email, details.emailFormUri));
+        requests.push(this.orderService.addEmail(details.email, details.emailFormUri))
       }
       Observable.forkJoin(requests)
         .subscribe(() => {
-          this.onSubmit({success: true});
+          this.onSubmit({ success: true })
         }, (error) => {
-          this.$log.warn('Error saving donor contact info', error);
-          this.submissionError = error && error.data;
-          if(startsWith(this.submissionError, 'Invalid email address:')){
-            this.submissionError = 'Invalid email address';
+          this.$log.warn('Error saving donor contact info', error)
+          this.submissionError = error && error.data
+          if (startsWith(this.submissionError, 'Invalid email address:')) {
+            this.submissionError = 'Invalid email address'
           }
-          this.onSubmit({success: false});
-        });
-    }else{
-      this.onSubmit({success: false});
+          this.onSubmit({ success: false })
+        })
+    } else {
+      this.onSubmit({ success: false })
     }
   }
 }
@@ -148,4 +147,4 @@ export default angular
       donorDetails: '=?',
       onSubmit: '&'
     }
-  });
+  })

@@ -1,22 +1,21 @@
-import angular from 'angular';
-import template from './stopGiftStep1.tpl.html';
-import find from 'lodash/find';
-import filter from 'lodash/filter';
+import angular from 'angular'
+import template from './stopGiftStep1.tpl.html'
+import find from 'lodash/find'
+import filter from 'lodash/filter'
 
-import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
-import giftSummaryView from 'common/components/giftViews/giftSummaryView/giftSummaryView.component';
+import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component'
+import giftSummaryView from 'common/components/giftViews/giftSummaryView/giftSummaryView.component'
 
-let componentName = 'stopGiftStep1';
+const componentName = 'stopGiftStep1'
 
 class StopGiftStep1Controller {
-
   /* @ngInject */
-  constructor() {
-    this.find = find;
+  constructor () {
+    this.find = find
   }
 
-  selectGifts() {
-    this.onSelectGifts( {selectedGifts: filter( this.gifts, {_selectedGift: true} )} );
+  selectGifts () {
+    this.onSelectGifts({ selectedGifts: filter(this.gifts, { _selectedGift: true }) })
   }
 
   // giftSelected( gift ) {
@@ -30,19 +29,19 @@ class StopGiftStep1Controller {
 }
 
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     giftListItem.name,
     giftSummaryView.name
-  ] )
-  .component( componentName, {
-      controller:  StopGiftStep1Controller,
-      templateUrl: template,
-      bindings:    {
-        gifts:         '<',
-        onSelectGifts: '&',
-        cancel:        '&',
-        previous:      '&',
-        setLoading:    '&'
-      }
+  ])
+  .component(componentName, {
+    controller: StopGiftStep1Controller,
+    templateUrl: template,
+    bindings: {
+      gifts: '<',
+      onSelectGifts: '&',
+      cancel: '&',
+      previous: '&',
+      setLoading: '&'
     }
-  );
+  }
+  )

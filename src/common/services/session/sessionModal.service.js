@@ -1,100 +1,99 @@
-import angular from 'angular';
-import 'angular-ui-bootstrap';
-import modalStateService from 'common/services/modalState.service';
-import sessionModalComponent from './sessionModal.component';
-import sessionModalWindowTemplate from './sessionModalWindow.tpl.html';
-import analyticsFactory from 'app/analytics/analytics.factory';
+import angular from 'angular'
+import 'angular-ui-bootstrap'
+import modalStateService from 'common/services/modalState.service'
+import sessionModalComponent from './sessionModal.component'
+import sessionModalWindowTemplate from './sessionModalWindow.tpl.html'
+import analyticsFactory from 'app/analytics/analytics.factory'
 
-let serviceName = 'sessionModalService';
+const serviceName = 'sessionModalService'
 
-/*@ngInject*/
-function SessionModalService( $uibModal, $log, modalStateService, analyticsFactory ) {
-  let currentModal;
+/* @ngInject */
+function SessionModalService ($uibModal, $log, modalStateService, analyticsFactory) {
+  let currentModal
 
-  function openModal( type, options, replace ) {
-    if ( angular.isDefined( currentModal ) ) {
-      if ( replace === true ) {
-        currentModal.dismiss( 'replaced' );
-      }
-      else {
-        if(currentModal.type !== 'reset-password'){
-          $log.error( 'Attempted to open more than 1 modal' );
+  function openModal (type, options, replace) {
+    if (angular.isDefined(currentModal)) {
+      if (replace === true) {
+        currentModal.dismiss('replaced')
+      } else {
+        if (currentModal.type !== 'reset-password') {
+          $log.error('Attempted to open more than 1 modal')
         }
-        return false;
+        return false
       }
     }
-    type = angular.isDefined( type ) ? type : 'sign-in';
-    options = angular.isObject( options ) ? options : {};
-    let modalOptions = angular.merge( {}, {
-      component:         sessionModalComponent.name,
-      size:              'sm',
+    type = angular.isDefined(type) ? type : 'sign-in'
+    options = angular.isObject(options) ? options : {}
+    const modalOptions = angular.merge({}, {
+      component: sessionModalComponent.name,
+      size: 'sm',
       windowTemplateUrl: sessionModalWindowTemplate,
-      resolve:           {
+      resolve: {
         state: () => type
       }
-    }, options );
-    currentModal = $uibModal.open( modalOptions );
-    currentModal.type = type;
+    }, options)
+    currentModal = $uibModal.open(modalOptions)
+    currentModal.type = type
     currentModal.result
-      .finally( () => {
+      .finally(() => {
         // Clear the modal name when modals close
-        modalStateService.name( null );
+        modalStateService.name(null)
 
         // Destroy current modal
-        currentModal = undefined;
-      } );
+        currentModal = undefined
+      })
 
-    if(options.dismissAnalyticsEvent){
+    if (options.dismissAnalyticsEvent) {
       currentModal.result
-        .then( angular.noop, () => {
-          analyticsFactory.track(options.dismissAnalyticsEvent);
-        } );
+        .then(angular.noop, () => {
+          analyticsFactory.track(options.dismissAnalyticsEvent)
+        })
     }
 
-    if(options.openAnalyticsEvent){
-      currentModal.opened.then( () => {
-          analyticsFactory.track(options.openAnalyticsEvent);
-        }, angular.noop );
+    if (options.openAnalyticsEvent) {
+      currentModal.opened.then(() => {
+        analyticsFactory.track(options.openAnalyticsEvent)
+      }, angular.noop)
     }
 
-    return currentModal;
+    return currentModal
   }
 
   return {
-    open:            openModal,
-    currentModal:    () => currentModal,
-    signIn:          (lastPurchaseId) => openModal( 'sign-in', {
+    open: openModal,
+    currentModal: () => currentModal,
+    signIn: (lastPurchaseId) => openModal('sign-in', {
       resolve: { lastPurchaseId: () => lastPurchaseId },
       openAnalyticsEvent: 'aa-sign-in',
       dismissAnalyticsEvent: 'aa-sign-in-exit'
-    } ).result,
-    signUp:          () => openModal( 'sign-up' ).result,
-    forgotPassword:  () => openModal( 'forgot-password' ).result,
-    resetPassword:   () => openModal( 'reset-password', {backdrop: 'static'} ).result,
-    userMatch:       () => openModal( 'user-match', {
+    }).result,
+    signUp: () => openModal('sign-up').result,
+    forgotPassword: () => openModal('forgot-password').result,
+    resetPassword: () => openModal('reset-password', { backdrop: 'static' }).result,
+    userMatch: () => openModal('user-match', {
       backdrop: 'static',
       openAnalyticsEvent: 'aa-registration-match-is-this-you',
       dismissAnalyticsEvent: 'aa-registration-exit'
-    } ).result,
-    contactInfo:     () => openModal( 'contact-info', {size: '', backdrop: 'static'} ).result,
-    accountBenefits: (lastPurchaseId) => openModal( 'account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId } } ).result,
-    registerAccount: () => openModal( 'register-account', {backdrop: 'static', keyboard: false} ).result
-  };
+    }).result,
+    contactInfo: () => openModal('contact-info', { size: '', backdrop: 'static' }).result,
+    accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId } }).result,
+    registerAccount: () => openModal('register-account', { backdrop: 'static', keyboard: false }).result
+  }
 }
 
 export default angular
-  .module( serviceName, [
+  .module(serviceName, [
     'ui.bootstrap',
     modalStateService.name,
     sessionModalComponent.name,
     analyticsFactory.name
-  ] )
-  .factory( serviceName, SessionModalService )
-  .config( function ( modalStateServiceProvider ) {
+  ])
+  .factory(serviceName, SessionModalService)
+  .config(function (modalStateServiceProvider) {
     modalStateServiceProvider.registerModal(
       'reset-password',
-      /*@ngInject*/
-      function ( sessionModalService ) {
-        sessionModalService.resetPassword();
-      } );
-  } );
+      /* @ngInject */
+      function (sessionModalService) {
+        sessionModalService.resetPassword()
+      })
+  })

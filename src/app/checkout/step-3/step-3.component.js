@@ -1,162 +1,161 @@
-import angular from 'angular';
-import isString from 'lodash/isString';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
+import angular from 'angular'
+import isString from 'lodash/isString'
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/throw'
 
-import displayAddressComponent from 'common/components/display-address/display-address.component';
-import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
+import displayAddressComponent from 'common/components/display-address/display-address.component'
+import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
 
-import commonService from 'common/services/api/common.service';
-import cartService from 'common/services/api/cart.service';
-import orderService from 'common/services/api/order.service';
-import capitalizeFilter from 'common/filters/capitalize.filter';
-import desigSrcDirective from 'common/directives/desigSrc.directive';
-import {cartUpdatedEvent} from 'common/components/nav/navCart/navCart.component';
-import {SignInEvent} from 'common/services/session/session.service';
-import {startDate} from 'common/services/giftHelpers/giftDates.service';
+import commonService from 'common/services/api/common.service'
+import cartService from 'common/services/api/cart.service'
+import orderService from 'common/services/api/order.service'
+import capitalizeFilter from 'common/filters/capitalize.filter'
+import desigSrcDirective from 'common/directives/desigSrc.directive'
+import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { SignInEvent } from 'common/services/session/session.service'
+import { startDate } from 'common/services/giftHelpers/giftDates.service'
 
-import template from './step-3.tpl.html';
+import template from './step-3.tpl.html'
 
-import analyticsFactory from 'app/analytics/analytics.factory';
+import analyticsFactory from 'app/analytics/analytics.factory'
 
-let componentName = 'checkoutStep3';
+const componentName = 'checkoutStep3'
 
-class Step3Controller{
-
+class Step3Controller {
   /* @ngInject */
-  constructor(orderService, $window, $scope, $log, analyticsFactory, cartService, commonService){
-    this.orderService = orderService;
-    this.$window = $window;
-    this.$scope = $scope;
-    this.$log = $log;
-    this.analyticsFactory = analyticsFactory;
-    this.cartService = cartService;
-    this.commonService = commonService;
-    this.startDate = startDate;
+  constructor (orderService, $window, $scope, $log, analyticsFactory, cartService, commonService) {
+    this.orderService = orderService
+    this.$window = $window
+    this.$scope = $scope
+    this.$log = $log
+    this.analyticsFactory = analyticsFactory
+    this.cartService = cartService
+    this.commonService = commonService
+    this.startDate = startDate
 
     this.$scope.$on(SignInEvent, () => {
-      this.$onInit();
-    });
+      this.$onInit()
+    })
   }
 
-  $onInit(){
-    this.loadDonorDetails();
-    this.loadCurrentPayment();
-    this.checkErrors();
-    this.getNextDrawDate();
+  $onInit () {
+    this.loadDonorDetails()
+    this.loadCurrentPayment()
+    this.checkErrors()
+    this.getNextDrawDate()
   }
 
-  $onChanges(changes) {
+  $onChanges (changes) {
     if (changes.submit && changes.submit.currentValue === true) {
-      this.submitOrder();
+      this.submitOrder()
     }
   }
 
-  loadDonorDetails(){
+  loadDonorDetails () {
     this.orderService.getDonorDetails()
       .subscribe((data) => {
-          this.donorDetails = data;
-        },
-        error => {
-          this.$log.error('Error loading donorDetails', error);
-        });
+        this.donorDetails = data
+      },
+      error => {
+        this.$log.error('Error loading donorDetails', error)
+      })
   }
 
-  loadCurrentPayment(){
-    this.loadingCurrentPayment = true;
+  loadCurrentPayment () {
+    this.loadingCurrentPayment = true
     this.orderService.getCurrentPayment()
       .subscribe((data) => {
-          if(!data){
-            this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist');
-          }else if(data.self.type === 'elasticpath.bankaccounts.bank-account') {
-            this.bankAccountPaymentDetails = data;
-          }else if(data.self.type === 'cru.creditcards.named-credit-card'){
-            this.creditCardPaymentDetails = data;
-          }else{
-            this.$log.error('Error loading current payment info: current payment type is unknown');
-          }
-          this.loadingCurrentPayment = false;
-        },
-        error => {
-          this.loadingCurrentPayment = false;
-          this.$log.error('Error loading current payment info', error);
-        });
+        if (!data) {
+          this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist')
+        } else if (data.self.type === 'elasticpath.bankaccounts.bank-account') {
+          this.bankAccountPaymentDetails = data
+        } else if (data.self.type === 'cru.creditcards.named-credit-card') {
+          this.creditCardPaymentDetails = data
+        } else {
+          this.$log.error('Error loading current payment info: current payment type is unknown')
+        }
+        this.loadingCurrentPayment = false
+      },
+      error => {
+        this.loadingCurrentPayment = false
+        this.$log.error('Error loading current payment info', error)
+      })
   }
 
-  checkErrors(){
+  checkErrors () {
     this.orderService.checkErrors()
       .subscribe((data) => {
-          this.needinfoErrors = data;
-        },
-        error => {
-          this.$log.error('Error loading checkErrors', error);
-        });
+        this.needinfoErrors = data
+      },
+      error => {
+        this.$log.error('Error loading checkErrors', error)
+      })
   }
 
-  getNextDrawDate(){
+  getNextDrawDate () {
     this.commonService.getNextDrawDate().subscribe(nextDrawDate => {
-      this.nextDrawDate = nextDrawDate;
-    });
+      this.nextDrawDate = nextDrawDate
+    })
   }
 
-  updateGiftStartMonth(item, month){
-    item.config['recurring-start-month'] = month;
+  updateGiftStartMonth (item, month) {
+    item.config['recurring-start-month'] = month
 
-    this.cartData = null;
-    this.cartService.editItem( item.uri, item.productUri, item.config ).subscribe( () => {
-      this.loadCart();
-    });
+    this.cartData = null
+    this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
+      this.loadCart()
+    })
   }
 
-  canSubmitOrder(){
-    let enableSubmitBtn = !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.needinfoErrors);
-    enableSubmitBtn = enableSubmitBtn && !this.submittingOrder && this.submissionErrorStatus !== -1;
+  canSubmitOrder () {
+    let enableSubmitBtn = !!(this.cartData && this.donorDetails && (this.bankAccountPaymentDetails || this.creditCardPaymentDetails) && !this.needinfoErrors)
+    enableSubmitBtn = enableSubmitBtn && !this.submittingOrder && this.submissionErrorStatus !== -1
     this.onSubmitBtnChangeState({
       $event: {
         enabled: enableSubmitBtn
       }
-    });
-    return enableSubmitBtn;
+    })
+    return enableSubmitBtn
   }
 
-  submitOrder(){
-    delete this.submissionError;
-    delete this.submissionErrorStatus;
+  submitOrder () {
+    delete this.submissionError
+    delete this.submissionErrorStatus
     // Prevent multiple submissions
-    if(this.submittingOrder) return;
-    this.submittingOrder = true;
-    this.onSubmittingOrder({value: true});
+    if (this.submittingOrder) return
+    this.submittingOrder = true
+    this.onSubmittingOrder({ value: true })
 
-    let submitRequest;
-    if(this.bankAccountPaymentDetails){
-      submitRequest = this.orderService.submit();
-    }else if(this.creditCardPaymentDetails){
-      const cvv = this.orderService.retrieveCardSecurityCode();
-      submitRequest = this.orderService.submit(cvv);
-    }else{
-      submitRequest = Observable.throw({ data: 'Current payment type is unknown' });
+    let submitRequest
+    if (this.bankAccountPaymentDetails) {
+      submitRequest = this.orderService.submit()
+    } else if (this.creditCardPaymentDetails) {
+      const cvv = this.orderService.retrieveCardSecurityCode()
+      submitRequest = this.orderService.submit(cvv)
+    } else {
+      submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
     }
     submitRequest.subscribe(() => {
-        this.analyticsFactory.purchase(this.donorDetails, this.cartData);
-        this.submittingOrder = false;
-        this.onSubmittingOrder({value: false});
-        this.orderService.clearCardSecurityCodes();
-        this.onSubmitted();
-        this.$scope.$emit( cartUpdatedEvent );
-        this.changeStep({newStep: 'thankYou'});
-      },
-      error => {
-        this.submittingOrder = false;
-        this.onSubmittingOrder({value: false});
-        if(error.config && error.config.data && error.config.data['security-code']){
-          error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X'); // Mask security-code
-        }
-        this.$log.error('Error submitting purchase:', error);
-        this.onSubmitted();
-        this.submissionErrorStatus = error.status;
-        this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error'; // Keep prefix before first colon for easier ng-switch matching
-        this.$window.scrollTo(0, 0);
-      });
+      this.analyticsFactory.purchase(this.donorDetails, this.cartData)
+      this.submittingOrder = false
+      this.onSubmittingOrder({ value: false })
+      this.orderService.clearCardSecurityCodes()
+      this.onSubmitted()
+      this.$scope.$emit(cartUpdatedEvent)
+      this.changeStep({ newStep: 'thankYou' })
+    },
+    error => {
+      this.submittingOrder = false
+      this.onSubmittingOrder({ value: false })
+      if (error.config && error.config.data && error.config.data['security-code']) {
+        error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
+      }
+      this.$log.error('Error submitting purchase:', error)
+      this.onSubmitted()
+      this.submissionErrorStatus = error.status
+      this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
+      this.$window.scrollTo(0, 0)
+    })
   }
 }
 
@@ -184,4 +183,4 @@ export default angular
       onSubmittingOrder: '&',
       submittingOrder: '<'
     }
-  });
+  })

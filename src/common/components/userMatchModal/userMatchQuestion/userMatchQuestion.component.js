@@ -1,39 +1,37 @@
-import angular from 'angular';
-import template from './userMatchQuestion.tpl.html';
+import angular from 'angular'
+import template from './userMatchQuestion.tpl.html'
 
-let componentName = 'userMatchQuestion';
+const componentName = 'userMatchQuestion'
 
 class UserMatchQuestionController {
-
   /* @ngInject */
-  constructor() {
-    this.hasError = false;
+  constructor () {
+    this.hasError = false
   }
 
-  selectAnswer() {
-    this.hasError = false;
-    if ( !this.questionForm.$valid ) {
-      this.hasError = true;
-    }
-    else {
-      this.onQuestionAnswer( {
-        key:    this.question.key,
+  selectAnswer () {
+    this.hasError = false
+    if (!this.questionForm.$valid) {
+      this.hasError = true
+    } else {
+      this.onQuestionAnswer({
+        key: this.question.key,
         answer: this.answer.answer
-      } );
-      delete this.answer;
+      })
+      delete this.answer
     }
   }
 }
 
 export default angular
-  .module( componentName, [] )
-  .component( componentName, {
-    controller:  UserMatchQuestionController,
+  .module(componentName, [])
+  .component(componentName, {
+    controller: UserMatchQuestionController,
     templateUrl: template,
-    bindings:    {
-      question:         '<',
-      questionIndex:    '<',
-      questionCount:    '<',
+    bindings: {
+      question: '<',
+      questionIndex: '<',
+      questionCount: '<',
       onQuestionAnswer: '&'
     }
-  } );
+  })

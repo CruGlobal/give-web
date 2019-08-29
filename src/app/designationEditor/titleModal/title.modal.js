@@ -1,18 +1,16 @@
-import angular from 'angular';
+import angular from 'angular'
 
-let controllerName = 'titleCtrl';
+const controllerName = 'titleCtrl'
 
 class ModalInstanceCtrl {
-
   /* @ngInject */
-  constructor( receiptTitle, giveTitle ) {
-    this.receiptTitle = receiptTitle;
-    this.giveTitle = giveTitle;
+  constructor (receiptTitle, giveTitle) {
+    this.receiptTitle = receiptTitle
+    this.giveTitle = giveTitle
   }
 }
 
-
 export default angular
-  .module( controllerName, [
-  ] )
-  .controller( controllerName, ModalInstanceCtrl );
+  .module(controllerName, [
+  ])
+  .controller(controllerName, ModalInstanceCtrl)

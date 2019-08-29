@@ -1,23 +1,21 @@
-import angular from 'angular';
-import template from './stopStartStep0.tpl.html';
+import angular from 'angular'
+import template from './stopStartStep0.tpl.html'
 
-let componentName = 'stopStartStep0';
+const componentName = 'stopStartStep0'
 
 class StopStartStep0Controller {
-
   /* @ngInject */
-  constructor() {
-  }
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular
-  .module( componentName, [] )
-  .component( componentName, {
-    controller:  StopStartStep0Controller,
+  .module(componentName, [])
+  .component(componentName, {
+    controller: StopStartStep0Controller,
     templateUrl: template,
-    bindings:    {
-      giftAction:  '<',
+    bindings: {
+      giftAction: '<',
       changeState: '&',
-      cancel:      '&'
+      cancel: '&'
     }
-  } );
+  })

@@ -1,108 +1,112 @@
-import angular from 'angular';
-import 'angular-mocks';
-import module, {scrollModalToTop} from './modalState.service';
+import angular from 'angular'
+import 'angular-mocks'
+import module, { scrollModalToTop } from './modalState.service'
 
-describe( 'modalStateServiceProvider', () => {
-  beforeEach( angular.mock.module( module.name ) );
-  let modalStateServiceProvider;
+describe('modalStateServiceProvider', () => {
+  beforeEach(angular.mock.module(module.name))
+  let modalStateServiceProvider
 
-  beforeEach( () => {
-    angular.mock.module( function ( _modalStateServiceProvider_ ) {
-      modalStateServiceProvider = _modalStateServiceProvider_;
-      modalStateServiceProvider.registerModal( 'test-modal', angular.noop );
-    } );
-  } );
+  beforeEach(() => {
+    angular.mock.module(function (_modalStateServiceProvider_) {
+      modalStateServiceProvider = _modalStateServiceProvider_
+      modalStateServiceProvider.registerModal('test-modal', angular.noop)
+    })
+  })
 
-  it( 'to be defined', inject( function () {
-    expect( modalStateServiceProvider ).toBeDefined();
-    expect( modalStateServiceProvider.registerModal ).toBeDefined();
-  } ) );
+  it('to be defined', inject(function () {
+    expect(modalStateServiceProvider).toBeDefined()
+    expect(modalStateServiceProvider.registerModal).toBeDefined()
+  }))
 
-  describe( 'modalStateService.invokeModal()', () => {
-    let modalStateService, $injector;
+  describe('modalStateService.invokeModal()', () => {
+    let modalStateService, $injector
 
-    beforeEach( inject( function ( _modalStateService_, _$injector_ ) {
-      $injector = _$injector_;
-      modalStateService = _modalStateService_;
-      spyOn( $injector, 'invoke' );
-    } ) );
+    beforeEach(inject(function (_modalStateService_, _$injector_) {
+      $injector = _$injector_
+      modalStateService = _modalStateService_
+      jest.spyOn($injector, 'invoke').mockImplementation(() => {})
+    }))
 
-    it( 'invokes registered modal', () => {
-      modalStateService.invokeModal( 'test-modal' );
-      expect( $injector.invoke ).toHaveBeenCalledWith( jasmine.any( Function ) );
-    } );
+    it('invokes registered modal', () => {
+      modalStateService.invokeModal('test-modal')
 
-    it( 'does not invoke unknown modal', () => {
-      modalStateService.invokeModal( 'unknown' );
-      expect( $injector.invoke ).not.toHaveBeenCalled();
-    } );
-  } );
-} );
+      expect($injector.invoke).toHaveBeenCalledWith(expect.any(Function))
+    })
 
-describe( 'modalStateService', () => {
-  beforeEach( angular.mock.module( module.name ) );
-  let modalStateService, $rootScope, $location;
+    it('does not invoke unknown modal', () => {
+      modalStateService.invokeModal('unknown')
 
-  beforeEach( inject( function ( _modalStateService_, _$rootScope_, _$location_ ) {
-    modalStateService = _modalStateService_;
-    $rootScope = _$rootScope_;
-    $location = _$location_;
-  } ) );
+      expect($injector.invoke).not.toHaveBeenCalled()
+    })
+  })
+})
 
-  it( 'to be defined', () => {
-    expect( modalStateService ).toBeDefined();
-  } );
+describe('modalStateService', () => {
+  beforeEach(angular.mock.module(module.name))
+  let modalStateService, $rootScope, $location
 
-  describe( 'name', () => {
-    beforeEach( () => {
-      $location.search( 'modal', 'sample' );
-      $rootScope.$digest();
-      spyOn( $location, 'search' ).and.callThrough();
-    } );
+  beforeEach(inject(function (_modalStateService_, _$rootScope_, _$location_) {
+    modalStateService = _modalStateService_
+    $rootScope = _$rootScope_
+    $location = _$location_
+  }))
 
-    it( 'returns current modal name', () => {
-      expect( modalStateService.name() ).toEqual( 'sample' );
-      expect( $location.search ).toHaveBeenCalled();
-    } );
+  it('to be defined', () => {
+    expect(modalStateService).toBeDefined()
+  })
 
-    it( 'sets modal name', () => {
-      expect( modalStateService.name( 'test-modal' ) ).toEqual( 'test-modal' );
-      expect( $location.search ).toHaveBeenCalledWith( 'modal', 'test-modal' );
-    } );
+  describe('name', () => {
+    beforeEach(() => {
+      $location.search('modal', 'sample')
+      $rootScope.$digest()
+      jest.spyOn($location, 'search')
+    })
 
-    it( 'removes modal name', () => {
-      expect( modalStateService.name( null ) ).not.toBeDefined();
-      expect( $location.search ).toHaveBeenCalledWith( 'modal', null );
-    } );
-  } );
+    it('returns current modal name', () => {
+      expect(modalStateService.name()).toEqual('sample')
+      expect($location.search).toHaveBeenCalled()
+    })
 
-  describe( 'urlFor', () => {
-    it( 'correctly generates urls', () => {
-      expect( modalStateService.urlFor( 'test-modal' ) ).toEqual( 'http://server/?modal=test-modal' );
-      expect( modalStateService.urlFor( 'test-modal', {key: 'value'}, 'http://localhost/cart.html' ) )
-        .toEqual( 'http://localhost/cart.html?key=value&modal=test-modal' );
-    } );
-  } );
+    it('sets modal name', () => {
+      expect(modalStateService.name('test-modal')).toEqual('test-modal')
+      expect($location.search).toHaveBeenCalledWith('modal', 'test-modal')
+    })
 
-  describe( 'scrollModalToTop', () => {
-    it( 'scrolls .modal to top', () => {
+    it('removes modal name', () => {
+      expect(modalStateService.name(null)).not.toBeDefined()
+      expect($location.search).toHaveBeenCalledWith('modal', null)
+    })
+  })
+
+  describe('urlFor', () => {
+    it('correctly generates urls', () => {
+      expect(modalStateService.urlFor('test-modal')).toEqual('http://server/?modal=test-modal')
+      expect(modalStateService.urlFor('test-modal', { key: 'value' }, 'http://localhost/cart.html'))
+        .toEqual('http://localhost/cart.html?key=value&modal=test-modal')
+    })
+  })
+
+  describe('scrollModalToTop', () => {
+    it('scrolls .modal to top', () => {
       /* eslint-disable angular/document-service */
-      let element = { scrollTop: 5 };
-      spyOn(window.document, 'querySelector').and.returnValue(element);
-      scrollModalToTop();
-      expect(window.document.querySelector).toHaveBeenCalledWith('.modal');
-      expect(element).toEqual({ scrollTop: 0 });
+      const element = { scrollTop: 5 }
+      jest.spyOn(window.document, 'querySelector').mockReturnValue(element)
+      scrollModalToTop()
+
+      expect(window.document.querySelector).toHaveBeenCalledWith('.modal')
+      expect(element).toEqual({ scrollTop: 0 })
       /* eslint-enable angular/document-service */
-    } );
-    
-    it( 'completes gracefully even when a modal isn\'t found in the DOM', () => {
+    })
+
+    it('completes gracefully even when a modal isn\'t found in the DOM', () => {
       /* eslint-disable angular/document-service */
-      let element = null;
-      spyOn(window.document, 'querySelector').and.returnValue(element);
-      scrollModalToTop();
-      expect(window.document.querySelector).toHaveBeenCalledWith('.modal');
-      expect(element).toEqual(null);
+      const element = null
+      jest.spyOn(window.document, 'querySelector').mockReturnValue(element)
+      scrollModalToTop()
+
+      expect(window.document.querySelector).toHaveBeenCalledWith('.modal')
+      expect(element).toEqual(null)
       /* eslint-enable angular/document-service */
-    } );
-  } );
-} );
+    })
+  })
+})

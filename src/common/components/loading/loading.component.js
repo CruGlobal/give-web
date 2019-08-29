@@ -1,10 +1,10 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import './loading.scss';
+import './loading.scss'
 
-import template from './loading.tpl.html';
+import template from './loading.tpl.html'
 
-let componentName = 'loading';
+const componentName = 'loading'
 
 /**
  * --- Usage ---
@@ -31,12 +31,11 @@ let componentName = 'loading';
  * Any content provided inside the <loading></loading> tag will be placed above or before the loading indicator depending on the value of inline
  */
 
-class LoadingController{
-
+class LoadingController {
   /* @ngInject */
-  constructor(){
-    this.type = 'block';
-    this.inline = false;
+  constructor () {
+    this.type = 'block'
+    this.inline = false
   }
 }
 
@@ -50,4 +49,4 @@ export default angular
       inline: '@'
     },
     transclude: true
-  });
+  })

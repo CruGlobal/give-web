@@ -1,38 +1,37 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import paymentMethodDisplay from '../paymentMethodDisplay.component';
-import bankAccountForm from '../bankAccountForm/bankAccountForm.component';
-import creditCardForm from '../creditCardForm/creditCardForm.component';
+import paymentMethodDisplay from '../paymentMethodDisplay.component'
+import bankAccountForm from '../bankAccountForm/bankAccountForm.component'
+import creditCardForm from '../creditCardForm/creditCardForm.component'
 
-import template from './paymentMethodForm.tpl.html';
+import template from './paymentMethodForm.tpl.html'
 
-let componentName = 'paymentMethodForm';
+const componentName = 'paymentMethodForm'
 
-class PaymentMethodFormController{
-
+class PaymentMethodFormController {
   /* @ngInject */
-  constructor($log, envService){
-    this.$log = $log;
+  constructor ($log, envService) {
+    this.$log = $log
 
-    this.paymentType = 'bankAccount';
-    this.imgDomain = envService.read('imgDomain');
+    this.paymentType = 'bankAccount'
+    this.imgDomain = envService.read('imgDomain')
   }
 
-  $onInit(){
-    if(this.paymentMethod){
-      this.paymentType = this.paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' ? 'bankAccount' : 'creditCard';
-    }else if(this.defaultPaymentType === 'creditCard'){
-      this.paymentType = 'creditCard';
+  $onInit () {
+    if (this.paymentMethod) {
+      this.paymentType = this.paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' ? 'bankAccount' : 'creditCard'
+    } else if (this.defaultPaymentType === 'creditCard') {
+      this.paymentType = 'creditCard'
     }
   }
 
-  changePaymentType(type){
-    this.paymentType = type;
+  changePaymentType (type) {
+    this.paymentType = type
     this.onPaymentFormStateChange({
       $event: {
         state: 'unsubmitted'
       }
-    });
+    })
   }
 }
 
@@ -56,4 +55,4 @@ export default angular
       hidePaymentTypeOptions: '<',
       onPaymentFormStateChange: '&'
     }
-  });
+  })

@@ -1,40 +1,39 @@
-import './analytics.module';
-
-import get from 'lodash/get';
-import find from 'lodash/find';
-import sha3 from 'crypto-js/sha3';
-import merge from 'lodash/merge';
-import isEmpty from 'lodash/isEmpty';
+import './analytics.module'
+import angular from 'angular'
+import get from 'lodash/get'
+import find from 'lodash/find'
+import sha3 from 'crypto-js/sha3'
+import merge from 'lodash/merge'
+import isEmpty from 'lodash/isEmpty'
+/* global localStorage */
 
 /* @ngInject */
-function analyticsFactory($window, $timeout, sessionService) {
+function analyticsFactory ($window, $timeout, sessionService) {
   return {
-    buildProductVar: function(cartData) {
+    buildProductVar: function (cartData) {
       try {
-        var item, donationType;
+        var item, donationType
 
         // Instantiate cart data layer
-        const hash = sha3(cartData.id, { outputLength: 80 }); //limit hash to 20 characters
+        const hash = sha3(cartData.id, { outputLength: 80 }) // limit hash to 20 characters
         $window.digitalData.cart = {
           id: cartData.id,
           hash: cartData.id ? hash.toString() : null,
           item: []
-        };
+        }
 
         // Build cart data layer
         $window.digitalData.cart.price = {
           cartTotal: cartData && cartData.cartTotal
-        };
+        }
 
         if (cartData && cartData.items) {
-
           for (var i = 0; i < cartData.items.length; i++) {
-
             // Set donation type
             if (cartData.items[i].frequency.toLowerCase() === 'single') {
-              donationType = 'one-time donation';
+              donationType = 'one-time donation'
             } else {
-              donationType = 'recurring donation';
+              donationType = 'recurring donation'
             }
 
             item = {
@@ -52,75 +51,74 @@ function analyticsFactory($window, $timeout, sessionService) {
                   campaignCode: cartData.items[i].config['campaign-code']
                 }
               }
-            };
+            }
 
-            $window.digitalData.cart.item.push(item);
-
+            $window.digitalData.cart.item.push(item)
           }
         }
-      }catch(e){
+      } catch (e) {
         // Error caught in analyticsFactory.buildProductVar
       }
     },
-    cartAdd: function(itemConfig, productData) {
+    cartAdd: function (itemConfig, productData) {
       try {
-        var siteSubSection,
-          cart = {
-            item: [{
-              productInfo: {
-                productID: productData.designationNumber
-              },
-              price: {
-                basePrice: itemConfig.amount
-              },
-              attributes: {
-                siebel: {
-                  productType: 'designation'
-                }
+        var siteSubSection
+        var cart = {
+          item: [{
+            productInfo: {
+              productID: productData.designationNumber
+            },
+            price: {
+              basePrice: itemConfig.amount
+            },
+            attributes: {
+              siebel: {
+                productType: 'designation'
               }
-            }]
-          };
+            }
+          }]
+        }
 
         // Set site sub-section
         if (typeof $window.digitalData.page !== 'undefined') {
           if (typeof $window.digitalData.page.category !== 'undefined') {
-            $window.digitalData.page.category.subCategory1 = siteSubSection;
+            $window.digitalData.page.category.subCategory1 = siteSubSection
           } else {
             $window.digitalData.page.category = {
               subCategory1: siteSubSection
-            };
+            }
           }
         } else {
           $window.digitalData.page = {
             category: {
               subcategory1: siteSubSection
             }
-          };
+          }
         }
 
         // Set donation type
-        if (productData.frequency == 'NA') {
-          cart.item[0].attributes.donationType = 'one-time donation';
+        if (productData.frequency === 'NA') {
+          cart.item[0].attributes.donationType = 'one-time donation'
         } else {
-          cart.item[0].attributes.donationType = 'recurring donation';
+          cart.item[0].attributes.donationType = 'recurring donation'
         }
 
         // Set donation frequency
-        const frequencyObj = find(productData.frequencies, {name: productData.frequency});
-        cart.item[0].attributes.donationFrequency = frequencyObj && frequencyObj.display.toLowerCase();
+        const frequencyObj = find(productData.frequencies, { name: productData.frequency })
+        cart.item[0].attributes.donationFrequency = frequencyObj && frequencyObj.display.toLowerCase()
 
         // Set data layer
-        $window.digitalData.cart = cart;
+        $window.digitalData.cart = cart
 
         // Call DTM direct call rule
         if (typeof $window._satellite !== 'undefined') {
-          $window._satellite.track('aa-add-to-cart');
+          $window._satellite.track('aa-add-to-cart')
         }
-      }catch(e){
+      } catch (e) {
         // Error caught in analyticsFactory.cartAdd
       }
     },
-    cartRemove: function(item) {
+    cartRemove: function (item) {
       try {
         if (item) {
           $window.digitalData.cart.item = [{
@@ -131,124 +129,124 @@ function analyticsFactory($window, $timeout, sessionService) {
               basePrice: item.amount
             },
             attributes: {
-              donationType: item.frequency.toLowerCase() == 'single' ? 'one-time donation' : 'recurring donation',
+              donationType: item.frequency.toLowerCase() === 'single' ? 'one-time donation' : 'recurring donation',
               donationFrequency: item.frequency.toLowerCase(),
               siebel: {
                 productType: 'designation',
                 campaignCode: item.config['campaign-code']
               }
             }
-          }];
+          }]
 
-          $window._satellite.track('aa-cart-remove');
+          $window._satellite.track('aa-cart-remove')
         }
-      }catch(e){
+      } catch (e) {
         // Error caught in analyticsFactory.cartRemove
       }
     },
-    cartView: function(cartData, callType) {
+    cartView: function (cartData, callType) {
       try {
         // Build products variable
-        this.buildProductVar(cartData);
+        this.buildProductVar(cartData)
 
         // Call DTM direct call rule
-        if (typeof callType !== 'undefined' && callType == 'customLink') {
+        if (typeof callType !== 'undefined' && callType === 'customLink') {
           if (typeof $window._satellite !== 'undefined') {
-            $window.s.clearVars();
-            $window._satellite.track('aa-view-minicart');
+            $window.s.clearVars()
+            $window._satellite.track('aa-view-minicart')
           }
         }
-      }catch(e){
+      } catch (e) {
         // Error caught in analyticsFactory.cartView
       }
     },
-    editRecurringDonation: function(giftData) {
+    editRecurringDonation: function (giftData) {
       try {
-        var frequency = '';
+        var frequency = ''
 
         if (giftData && giftData.length) {
           if (get(giftData, '[0].gift["updated-rate"].recurrence.interval')) {
-            frequency = giftData[0].gift['updated-rate'].recurrence.interval.toLowerCase();
+            frequency = giftData[0].gift['updated-rate'].recurrence.interval.toLowerCase()
           } else {
-            const interval = get(giftData, '[0].parentDonation.rate.recurrence.interval');
-            frequency = interval && interval.toLowerCase();
+            const interval = get(giftData, '[0].parentDonation.rate.recurrence.interval')
+            frequency = interval && interval.toLowerCase()
           }
 
           if (typeof $window.digitalData !== 'undefined') {
             if (typeof $window.digitalData.recurringGift !== 'undefined') {
-              $window.digitalData.recurringGift.originalFrequency = frequency;
+              $window.digitalData.recurringGift.originalFrequency = frequency
             } else {
               $window.digitalData.recurringGift = {
                 originalFrequency: frequency
-              };
+              }
             }
           } else {
             $window.digitalData = {
               recurringGift: {
                 originalFrequency: frequency
               }
-            };
+            }
           }
         }
 
-        this.pageLoaded();
-      }catch(e){
+        this.pageLoaded()
+      } catch (e) {
         // Error caught in analyticsFactory.editRecurringDonation
       }
     },
-    getPath: function() {
+    getPath: function () {
       try {
-        var pagename = '',
-          delim = ' : ',
-          path = $window.location.pathname;
+        var pagename = ''
+        var delim = ' : '
+        var path = $window.location.pathname
 
         if (path !== '/') {
-          var extension = ['.html', '.htm'];
+          var extension = ['.html', '.htm']
 
           for (var i = 0; i < extension.length; i++) {
             if (path.indexOf(extension[i]) > -1) {
-              path = path.split(extension[i]);
-              path = path.splice(0, 1);
-              path = path.toString();
+              path = path.split(extension[i])
+              path = path.splice(0, 1)
+              path = path.toString()
 
-              break;
+              break
             }
           }
 
-          path = path.split('/');
+          path = path.split('/')
 
-          if (path[0].length == 0) {
-            path.shift();
+          if (path[0].length === 0) {
+            path.shift()
           }
 
           // Capitalize first letter of each page
-          for(i = 0 ; i < path.length ; i++){
-            path[i] = path[i].charAt(0).toUpperCase() + path[i].slice(1);
+          for (i = 0; i < path.length; i++) {
+            path[i] = path[i].charAt(0).toUpperCase() + path[i].slice(1)
           }
 
           // Set pageName
-          pagename = 'Give' + delim + path.join(delim);
+          pagename = 'Give' + delim + path.join(delim)
         } else {
           // Set pageName
-          pagename = 'Give' + delim + 'Home';
+          pagename = 'Give' + delim + 'Home'
         }
 
-        this.setPageNameObj(pagename);
+        this.setPageNameObj(pagename)
 
-        return path;
-      }catch(e){
+        return path
+      } catch (e) {
         // Error caught in analyticsFactory.getPath
       }
     },
-    getSetProductCategory: function(path) {
+    getSetProductCategory: function (path) {
       try {
-        var allElements = $window.document.getElementsByTagName('*');
+        var allElements = $window.document.getElementsByTagName('*')
 
         for (var i = 0, n = allElements.length; i < n; i++) {
-          var desigType = allElements[i].getAttribute('designationtype');
+          var desigType = allElements[i].getAttribute('designationtype')
 
           if (desigType !== null) {
-            const productConfig = $window.document.getElementsByTagName('product-config');
+            const productConfig = $window.document.getElementsByTagName('product-config')
             $window.digitalData.product = [{
               productInfo: {
                 productID: productConfig.length ? productConfig[0].getAttribute('product-code') : null
@@ -258,18 +256,18 @@ function analyticsFactory($window, $timeout, sessionService) {
                 siebelProductType: 'designation',
                 organizationId: path[0]
               }
-            }];
+            }]
 
-            return path[0];
+            return path[0]
           }
         }
 
-        return false;
-      }catch(e){
+        return false
+      } catch (e) {
         // Error caught in analyticsFactory.getSetProductCategory
       }
     },
-    giveGiftModal: function(productCode) {
+    giveGiftModal: function (productCode) {
       try {
         var product = [{
           productInfo: {
@@ -280,77 +278,77 @@ function analyticsFactory($window, $timeout, sessionService) {
               producttype: 'designation'
             }
           }
-        }];
+        }]
 
-        $window.digitalData.product = product;
-        this.setEvent('give gift modal');
-        this.pageLoaded();
-      }catch(e){
+        $window.digitalData.product = product
+        this.setEvent('give gift modal')
+        this.pageLoaded()
+      } catch (e) {
         // Error caught in analyticsFactory.giveGiftModal
       }
     },
-    pageLoaded: function(skipImageRequests) {
+    pageLoaded: function (skipImageRequests) {
       try {
-        let path = this.getPath();
-        this.getSetProductCategory(path);
-        this.setSiteSections(path);
-        this.setLoggedInStatus();
+        const path = this.getPath()
+        this.getSetProductCategory(path)
+        this.setSiteSections(path)
+        this.setLoggedInStatus()
 
         if (typeof $window.digitalData.page.attributes !== 'undefined') {
-          if ($window.digitalData.page.attributes.angularLoaded == 'true') {
-            $window.digitalData.page.attributes.angularLoaded = 'false';
+          if ($window.digitalData.page.attributes.angularLoaded === 'true') {
+            $window.digitalData.page.attributes.angularLoaded = 'false'
           } else {
-            $window.digitalData.page.attributes.angularLoaded = 'true';
+            $window.digitalData.page.attributes.angularLoaded = 'true'
           }
         } else {
           $window.digitalData.page.attributes = {
             angularLoaded: 'true'
-          };
+          }
         }
 
-        if(!skipImageRequests){
+        if (!skipImageRequests) {
           // Allow time for data layer changes to be consumed & fire image request
           $timeout(function () {
             try {
-              $window.s.t();
-              $window.s.clearVars();
-            }catch(e){
+              $window.s.t()
+              $window.s.clearVars()
+            } catch (e) {
               // Error caught in analyticsFactory.pageLoaded while trying to fire analytics image request or clearVars
             }
-          }, 1000);
+          }, 1000)
         }
-      }catch(e){
+      } catch (e) {
         // Error caught in analyticsFactory.pageLoaded
       }
     },
-    purchase: function(donorDetails, cartData) {
+    purchase: function (donorDetails, cartData) {
       try {
         // Build cart data layer
-        this.setDonorDetails(donorDetails);
-        this.buildProductVar(cartData);
-      }catch(e){
+        this.setDonorDetails(donorDetails)
+        this.buildProductVar(cartData)
+      } catch (e) {
         // Error caught in analyticsFactory.purchase
       }
     },
-    setPurchaseNumber: function(purchaseNumber) {
+    setPurchaseNumber: function (purchaseNumber) {
       try {
-        $window.digitalData.purchaseNumber = purchaseNumber;
-      }catch(e){
+        $window.digitalData.purchaseNumber = purchaseNumber
+      } catch (e) {
         // Error caught in analyticsFactory.setPurchaseNumber
       }
     },
-    search: function(params, results) {
+    search: function (params, results) {
       try {
         if (typeof params !== 'undefined') {
           if (typeof $window.digitalData.page !== 'undefined') {
             if (typeof $window.digitalData.page.pageInfo !== 'undefined') {
-              $window.digitalData.page.pageInfo.onsiteSearchTerm = params.keyword;
-              $window.digitalData.page.pageInfo.onsiteSearchFilter = params.type;
+              $window.digitalData.page.pageInfo.onsiteSearchTerm = params.keyword
+              $window.digitalData.page.pageInfo.onsiteSearchFilter = params.type
             } else {
               $window.digitalData.page.pageInfo = {
                 onsiteSearchTerm: params.keyword,
                 onsiteSearchFilter: params.type
-              };
+              }
             }
           } else {
             $window.digitalData.page = {
@@ -358,152 +356,150 @@ function analyticsFactory($window, $timeout, sessionService) {
                 onsiteSearchTerm: params.keyword,
                 onsiteSearchFilter: params.type
               }
-            };
+            }
           }
         }
 
         if (typeof results !== 'undefined' && results.length > 0) {
           if (typeof $window.digitalData.page !== 'undefined') {
             if (typeof $window.digitalData.page.pageInfo !== 'undefined') {
-              $window.digitalData.page.pageInfo.onsiteSearchResults = results.length;
+              $window.digitalData.page.pageInfo.onsiteSearchResults = results.length
             } else {
               $window.digitalData.page.pageInfo = {
                 onsiteSearchResults: results.length
-              };
+              }
             }
           } else {
             $window.digitalData.page = {
               pageInfo: {
                 onsiteSearchResults: results.length
               }
-            };
+            }
           }
         } else {
-          $window.digitalData.page.pageInfo.onsiteSearchResults = 0;
+          $window.digitalData.page.pageInfo.onsiteSearchResults = 0
         }
-      }catch(e){
+      } catch (e) {
         // Error caught in analyticsFactory.search
       }
     },
-    setLoggedInStatus: function(){
+    setLoggedInStatus: function () {
       try {
-        let profileInfo = {};
+        const profileInfo = {}
         if (typeof sessionService !== 'undefined') {
-          let ssoGuid;
+          let ssoGuid
           if (typeof sessionService.session['sso_guid'] !== 'undefined') {
-            ssoGuid = sessionService.session['sso_guid'];
-          }
-          else if (typeof sessionService.session['sub'] !== 'undefined') {
-            ssoGuid = sessionService.session['sub'].split('|').pop();
+            ssoGuid = sessionService.session['sso_guid']
+          } else if (typeof sessionService.session['sub'] !== 'undefined') {
+            ssoGuid = sessionService.session['sub'].split('|').pop()
           }
           if (typeof ssoGuid !== 'undefined' && ssoGuid !== 'cas') {
-            profileInfo['ssoGuid'] = ssoGuid;
+            profileInfo['ssoGuid'] = ssoGuid
           }
 
           if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
-            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id'];
+            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id']
           }
         }
 
         if (isEmpty(profileInfo)) {
-          return;
+          return
         }
 
         // Use lodash merge to deep merge with existing data or new empty hash
         $window.digitalData = merge($window.digitalData || {}, {
-          user: [{profile: [{profileInfo: profileInfo}]}]
-        });
-      }catch(e){
+          user: [{ profile: [{ profileInfo: profileInfo }] }]
+        })
+      } catch (e) {
         // Error caught in analyticsFactory.setLoggedInStatus
       }
     },
-    setDonorDetails: function(donorDetails) {
+    setDonorDetails: function (donorDetails) {
       try {
-        let profileInfo = {};
+        const profileInfo = {}
         if (typeof sessionService !== 'undefined') {
           if (typeof sessionService.session['sso_guid'] !== 'undefined') {
-            profileInfo['ssoGuid'] = sessionService.session['sso_guid'];
-          }
-          else if (typeof sessionService.session['sub'] !== 'undefined') {
-            profileInfo['ssoGuid'] = sessionService.session['sub'].split('|').pop();
+            profileInfo['ssoGuid'] = sessionService.session['sso_guid']
+          } else if (typeof sessionService.session['sub'] !== 'undefined') {
+            profileInfo['ssoGuid'] = sessionService.session['sub'].split('|').pop()
           }
 
           if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
-            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id'];
+            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id']
           }
 
           if (donorDetails) {
-            profileInfo['donorType'] = donorDetails['donor-type'].toLowerCase();
-            profileInfo['donorAcct'] = donorDetails['donor-number'].toLowerCase();
+            profileInfo['donorType'] = donorDetails['donor-type'].toLowerCase()
+            profileInfo['donorAcct'] = donorDetails['donor-number'].toLowerCase()
           }
         }
 
         // Use lodash merge to deep merge with existing data or new empty hash
         $window.digitalData = merge($window.digitalData || {}, {
-          user: [{profile: [{profileInfo: profileInfo}]}]
-        });
+          user: [{ profile: [{ profileInfo: profileInfo }] }]
+        })
 
         // Store data for use on following page load
-        localStorage.setItem('aaDonorType', $window.digitalData.user[0].profile[0].profileInfo.donorType);
-        localStorage.setItem('aaDonorAcct', $window.digitalData.user[0].profile[0].profileInfo.donorAcct);
-      }catch(e){
+        localStorage.setItem('aaDonorType', $window.digitalData.user[0].profile[0].profileInfo.donorType)
+        localStorage.setItem('aaDonorAcct', $window.digitalData.user[0].profile[0].profileInfo.donorAcct)
+      } catch (e) {
         // Error caught in analyticsFactory.setDonorDetails
       }
     },
-    setEvent: function(eventName) {
+    setEvent: function (eventName) {
       try {
         var evt = {
           eventInfo: {
             eventName: eventName
           }
-        };
+        }
 
-        $window.digitalData.event = [];
-        $window.digitalData.event.push(evt);
-      }catch(e){
+        $window.digitalData.event = []
+        $window.digitalData.event.push(evt)
+      } catch (e) {
         // Error caught in analyticsFactory.setEvent
       }
     },
-    setPageNameObj: function(pageName) {
+    setPageNameObj: function (pageName) {
       try {
         if (typeof $window.digitalData.page !== 'undefined') {
           if (typeof $window.digitalData.page.pageInfo !== 'undefined') {
-            $window.digitalData.page.pageInfo.pageName = pageName;
+            $window.digitalData.page.pageInfo.pageName = pageName
           } else {
             $window.digitalData.page.pageInfo = {
               pageName: pageName
-            };
+            }
           }
         } else {
           $window.digitalData.page = {
             pageInfo: {
               pageName: pageName
             }
-          };
+          }
         }
-      }catch(e){
+      } catch (e) {
         // Error caught in analyticsFactory.setPageNameObj
       }
     },
-    setSiteSections: function(path) {
-      try{
-        var primaryCat = 'give';
+    setSiteSections: function (path) {
+      try {
+        var primaryCat = 'give'
 
         if (!path) {
-          path = this.getPath();
+          path = this.getPath()
         }
 
         if (typeof $window.digitalData !== 'undefined') {
           if (typeof $window.digitalData.page !== 'undefined') {
             $window.digitalData.page.category = {
               primaryCategory: primaryCat
-            };
+            }
           } else {
             $window.digitalData.page = {
               category: {
                 primaryCategory: primaryCat
               }
-            };
+            }
           }
         } else {
           $window.digitalData = {
@@ -512,42 +508,40 @@ function analyticsFactory($window, $timeout, sessionService) {
                 primaryCategory: primaryCat
               }
             }
-          };
+          }
         }
 
         if (path.length >= 1) {
-
           // Check if product page
           if (/^\d+$/.test(path[0])) {
-            this.getSetProductCategory(path);
-            $window.digitalData.page.category.subCategory1 = 'designation detail';
+            this.getSetProductCategory(path)
+            $window.digitalData.page.category.subCategory1 = 'designation detail'
           } else {
-            $window.digitalData.page.category.subCategory1 = path[0] === '/' ? '' : path[0];
+            $window.digitalData.page.category.subCategory1 = path[0] === '/' ? '' : path[0]
           }
 
           if (path.length >= 2) {
-            $window.digitalData.page.category.subCategory2 = path[1];
+            $window.digitalData.page.category.subCategory2 = path[1]
 
             if (path.length >= 3) {
-              $window.digitalData.page.category.subCategory3 = path[2];
+              $window.digitalData.page.category.subCategory3 = path[2]
             }
           }
-
         }
-      }catch(e){
+      } catch (e) {
         // Error caught in analyticsFactory.setSiteSections
       }
     },
-    track: function(event){
-      try{
-        $window._satellite.track(event);
-      }catch(e){
+    track: function (event) {
+      try {
+        $window._satellite.track(event)
+      } catch (e) {
         // Error caught in analyticsFactory.track
       }
     }
-  };
+  }
 }
 
 export default angular
   .module('analytics')
-  .factory('analyticsFactory', analyticsFactory);
+  .factory('analyticsFactory', analyticsFactory)

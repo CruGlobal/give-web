@@ -1,69 +1,69 @@
-import angular from 'angular';
-import find from 'lodash/find';
+import angular from 'angular'
+import find from 'lodash/find'
 
-import geographiesService from 'common/services/api/geographies.service';
+import geographiesService from 'common/services/api/geographies.service'
 
-import template from './addressForm.tpl.html';
+import template from './addressForm.tpl.html'
 
-let componentName = 'addressForm';
+const componentName = 'addressForm'
 
 class AddressFormController {
   /* @ngInject */
-  constructor($log, geographiesService) {
-    this.$log = $log;
-    this.geographiesService = geographiesService;
+  constructor ($log, geographiesService) {
+    this.$log = $log
+    this.geographiesService = geographiesService
   }
 
-  $onInit(){
-    this.loadCountries();
+  $onInit () {
+    this.loadCountries()
   }
 
-  loadCountries(){
-    this.loadingCountriesError = false;
+  loadCountries () {
+    this.loadingCountriesError = false
     this.geographiesService.getCountries()
       .subscribe((data) => {
-        this.countries = data;
-        if(this.address){
-          this.refreshRegions(this.address.country, true);
+        this.countries = data
+        if (this.address) {
+          this.refreshRegions(this.address.country, true)
         }
       },
       error => {
-        this.loadingCountriesError = true;
-        this.$log.error('Error loading countries.', error);
-      });
+        this.loadingCountriesError = true
+        this.$log.error('Error loading countries.', error)
+      })
   }
 
-  refreshRegions(country, initial = false){
-    this.loadingRegionsError = false;
-    country = find(this.countries, {name: country});
-    if(!country){ return; }
+  refreshRegions (country, initial = false) {
+    this.loadingRegionsError = false
+    country = find(this.countries, { name: country })
+    if (!country) { return }
 
     this.geographiesService.getRegions(country)
       .subscribe((data) => {
-        this.regions = data;
+        this.regions = data
       },
       error => {
-        this.loadingRegionsError = true;
-        this.$log.error('Error loading regions.', error);
-      });
+        this.loadingRegionsError = true
+        this.$log.error('Error loading regions.', error)
+      })
 
-    if(!initial) {
-      this.address.streetAddress = '';
-      this.address.extendedAddress = '';
+    if (!initial) {
+      this.address.streetAddress = ''
+      this.address.extendedAddress = ''
     }
   }
 }
 
 export default angular
-  .module( componentName, [
+  .module(componentName, [
     geographiesService.name
-  ] )
-  .component( componentName, {
-    controller:  AddressFormController,
+  ])
+  .component(componentName, {
+    controller: AddressFormController,
     templateUrl: template,
-    bindings:    {
+    bindings: {
       address: '=',
       parentForm: '<',
       addressDisabled: '<'
     }
-  } );
+  })

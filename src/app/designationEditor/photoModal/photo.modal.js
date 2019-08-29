@@ -1,39 +1,37 @@
-import angular from 'angular';
-import 'angular-upload';
+import angular from 'angular'
+import 'angular-upload'
 
-import designationEditorService from 'common/services/api/designationEditor.service';
+import designationEditorService from 'common/services/api/designationEditor.service'
 
-let controllerName = 'photoCtrl';
+const controllerName = 'photoCtrl'
 
 class ModalInstanceCtrl {
-
   /* @ngInject */
-  constructor( $timeout, designationNumber, campaignPage, photos, photoLocation, selectedPhoto, designationEditorService ) {
-    this.$timeout = $timeout;
-    this.designationEditorService = designationEditorService;
+  constructor ($timeout, designationNumber, campaignPage, photos, photoLocation, selectedPhoto, designationEditorService) {
+    this.$timeout = $timeout
+    this.designationEditorService = designationEditorService
 
-    this.designationNumber = designationNumber;
-    this.campaignPage = campaignPage;
-    this.photoLocation = photoLocation;
-    this.selectedPhoto = selectedPhoto;
-    this.photos = photos;
+    this.designationNumber = designationNumber
+    this.campaignPage = campaignPage
+    this.photoLocation = photoLocation
+    this.selectedPhoto = selectedPhoto
+    this.photos = photos
   }
 
-  uploadComplete() {
-    //refresh photos (set timeout to give Adobe time to add to DAM)
+  uploadComplete () {
+    // refresh photos (set timeout to give Adobe time to add to DAM)
     this.$timeout(() => {
       this.designationEditorService.getPhotos(this.designationNumber).then((response) => {
-        this.photos = response.data;
-        this.uploading = false;
-      }, angular.noop);
-    }, 3500);
+        this.photos = response.data
+        this.uploading = false
+      }, angular.noop)
+    }, 3500)
   }
 }
 
-
 export default angular
-  .module( controllerName, [
+  .module(controllerName, [
     'lr.upload',
     designationEditorService.name
-  ] )
-  .controller( controllerName, ModalInstanceCtrl );
+  ])
+  .controller(controllerName, ModalInstanceCtrl)

@@ -1,33 +1,30 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import template from './displayRateTotals.tpl.html';
+import template from './displayRateTotals.tpl.html'
 
-let componentName = 'displayRateTotals';
+const componentName = 'displayRateTotals'
 
 class DisplayRateTotalsController {
-
   /* @ngInject */
-  constructor() {
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 
-  }
-
-  rateTotalsComparator(freq1, freq2){
-    let order = {
+  rateTotalsComparator (freq1, freq2) {
+    const order = {
       Single: 1,
       Monthly: 2,
       Quarterly: 3,
       Annually: 4
-    };
-    return order[freq1.value] < order[freq2.value] ? -1 : 1;
+    }
+    return order[freq1.value] < order[freq2.value] ? -1 : 1
   }
 }
 
 export default angular
-  .module( componentName, [] )
-  .component( componentName, {
-    controller:  DisplayRateTotalsController,
+  .module(componentName, [])
+  .component(componentName, {
+    controller: DisplayRateTotalsController,
     templateUrl: template,
-    bindings:    {
+    bindings: {
       rateTotals: '<'
     }
-  } );
+  })

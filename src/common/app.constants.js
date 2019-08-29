@@ -9,7 +9,7 @@ const ccpKey = '-----BEGIN PUBLIC KEY-----' +
   'LsYri8058wDNaeLPSUamUtjI6g7CP1UcLFB69NM3ZeCauUTp1BTUuLykOfu9GTF3' +
   'UjMD24Ez0avvTzMHqPEBPXfslqulqSERQ7b1E6CwXonFwYMEEcek8CWYd7YJGQ8b' +
   'HQIDAQAB' +
-  '-----END PUBLIC KEY-----';
+  '-----END PUBLIC KEY-----'
 
 const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
   'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1wOCSLbKrlAJKa21iWZa' +
@@ -19,13 +19,13 @@ const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
   'xMCKF2BquwQfEq8GyblHpjWI2SXWmB276NdKrCp/ZKH3vFoBSlLoPdVT4Qbd4sKi' +
   'PNnKvxIBooLPQLBOO0QGv6AIgyL4Jss+dAvn5O6lckwip9QRMfINNBX3Clhq53xE' +
   'FwIDAQAB' +
-  '-----END PUBLIC KEY-----';
+  '-----END PUBLIC KEY-----'
 
-const cortexScope = 'crugive';
+const cortexScope = 'crugive'
 
-const rollbarAccessToken = 'a5bb784f937841538494e747f70a4597';
+const rollbarAccessToken = 'a5bb784f937841538494e747f70a4597'
 
-const mobileBreakpoint = 575;
+const mobileBreakpoint = 575
 
 // See envServiceProvider.config in common/app.config.js for url configurations
 
@@ -35,4 +35,4 @@ export {
   cortexScope,
   rollbarAccessToken,
   mobileBreakpoint
-};
+}

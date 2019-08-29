@@ -119,5 +119,4 @@ export default [
     path: '/storyrunners-strategies',
     facet: 'ministry'
   }
-];
-
+]

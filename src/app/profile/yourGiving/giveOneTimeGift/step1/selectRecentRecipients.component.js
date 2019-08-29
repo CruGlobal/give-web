@@ -1,21 +1,18 @@
-import angular from 'angular';
-import filter from 'lodash/filter';
+import angular from 'angular'
+import filter from 'lodash/filter'
 
-import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component';
+import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.component'
 
-import template from './selectRecentRecipients.tpl.html';
+import template from './selectRecentRecipients.tpl.html'
 
-let componentName = 'step1SelectRecentRecipients';
+const componentName = 'step1SelectRecentRecipients'
 
 class SelectRecentRecipientsController {
-
   /* @ngInject */
-  constructor() {
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 
-  }
-
-  gatherSelections(search){
-    this.next({ selectedRecipients: filter(this.recentRecipients, {_selectedGift: true}), search: search });
+  gatherSelections (search) {
+    this.next({ selectedRecipients: filter(this.recentRecipients, { _selectedGift: true }), search: search })
   }
 }
 
@@ -31,4 +28,4 @@ export default angular
       dismiss: '&',
       next: '&'
     }
-  });
+  })

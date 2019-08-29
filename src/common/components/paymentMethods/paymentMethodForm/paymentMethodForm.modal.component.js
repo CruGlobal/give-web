@@ -1,17 +1,14 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import paymentMethodForm from './paymentMethodForm.component.js';
+import paymentMethodForm from './paymentMethodForm.component.js'
 
-import template from './paymentMethodForm.modal.tpl.html';
+import template from './paymentMethodForm.modal.tpl.html'
 
-let componentName = 'paymentMethodFormModal';
+const componentName = 'paymentMethodFormModal'
 
 class PaymentMethodFormModalController {
-
   /* @ngInject */
-  constructor() {
-
-  }
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular
@@ -25,4 +22,4 @@ export default angular
       resolve: '<',
       dismiss: '&'
     }
-  });
+  })

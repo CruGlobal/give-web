@@ -1,24 +1,21 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component';
+import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component'
 
-import template from './paymentMethodList.tpl.html';
+import template from './paymentMethodList.tpl.html'
 
-let componentName = 'step0PaymentMethodList';
+const componentName = 'step0PaymentMethodList'
 
 class PaymentMethodListController {
-
   /* @ngInject */
-  constructor() {
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 
-  }
-
-  $onInit(){
+  $onInit () {
     // Select the first payment method
-    this.selectedPaymentMethod = this.paymentMethods[0];
+    this.selectedPaymentMethod = this.paymentMethods[0]
   }
 
-  $onDestroy(){
+  $onDestroy () {
 
   }
 }
@@ -35,4 +32,4 @@ export default angular
       next: '&',
       dismiss: '&'
     }
-  });
+  })

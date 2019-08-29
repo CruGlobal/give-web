@@ -1,18 +1,14 @@
-import angular from 'angular';
+import angular from 'angular'
 
-import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component';
+import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
 
-import template from './cart-summary.tpl.html';
+import template from './cart-summary.tpl.html'
 
-let componentName = 'checkoutCartSummary';
+const componentName = 'checkoutCartSummary'
 
-class CartSummaryController{
-
+class CartSummaryController {
   /* @ngInject */
-  constructor(){
-
-  }
-
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 export default angular
@@ -29,4 +25,4 @@ export default angular
       onSubmit: '&',
       submittingOrder: '<'
     }
-  });
+  })

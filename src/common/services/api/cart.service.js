@@ -1,61 +1,60 @@
-import angular from 'angular';
-import 'angular-cookies';
-import moment from 'moment';
-import map from 'lodash/map';
-import omit from 'lodash/omit';
-import concat from 'lodash/concat';
-import find from 'lodash/find';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/defer';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/mergeAll';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/from';
+import angular from 'angular'
+import 'angular-cookies'
+import moment from 'moment'
+import map from 'lodash/map'
+import omit from 'lodash/omit'
+import concat from 'lodash/concat'
+import find from 'lodash/find'
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/defer'
+import 'rxjs/add/observable/forkJoin'
+import 'rxjs/add/observable/throw'
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/switchMap'
+import 'rxjs/add/operator/mergeAll'
+import 'rxjs/add/operator/mergeMap'
+import 'rxjs/add/operator/catch'
+import 'rxjs/add/observable/from'
 
-import cortexApiService from '../cortexApi.service';
-import commonService from './common.service';
-import designationsService from './designations.service';
-import hateoasHelperService from 'common/services/hateoasHelper.service';
-import sessionService, {Roles} from 'common/services/session/session.service';
-import {startMonth} from '../giftHelpers/giftDates.service';
+import cortexApiService from '../cortexApi.service'
+import commonService from './common.service'
+import designationsService from './designations.service'
+import hateoasHelperService from 'common/services/hateoasHelper.service'
+import sessionService, { Roles } from 'common/services/session/session.service'
+import { startMonth } from '../giftHelpers/giftDates.service'
 
-const cartTotalCookie = 'giveCartItemCount';
-const cartTotalCookieDomain = 'cru.org';
+const cartTotalCookie = 'giveCartItemCount'
+const cartTotalCookieDomain = 'cru.org'
 
-let serviceName = 'cartService';
+const serviceName = 'cartService'
 
 class Cart {
-
-  /*@ngInject*/
-  constructor(cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies){
-    this.cortexApiService = cortexApiService;
-    this.commonService = commonService;
-    this.designationsService = designationsService;
-    this.sessionService = sessionService;
-    this.hateoasHelperService = hateoasHelperService;
-    this.$cookies = $cookies;
+  /* @ngInject */
+  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies) {
+    this.cortexApiService = cortexApiService
+    this.commonService = commonService
+    this.designationsService = designationsService
+    this.sessionService = sessionService
+    this.hateoasHelperService = hateoasHelperService
+    this.$cookies = $cookies
   }
 
-  setCartCountCookie(quantity) {
-    if(quantity){
-      this.$cookies.put( cartTotalCookie, quantity, {
+  setCartCountCookie (quantity) {
+    if (quantity) {
+      this.$cookies.put(cartTotalCookie, quantity, {
         path: '/',
         domain: cartTotalCookieDomain,
         expires: moment().add(58, 'days').toISOString()
-      } );
-    }else{
-      this.$cookies.remove( cartTotalCookie, {
+      })
+    } else {
+      this.$cookies.remove(cartTotalCookie, {
         path: '/',
         domain: cartTotalCookieDomain
-      } );
+      })
     }
   }
 
-  get() {
+  get () {
     return Observable.forkJoin(this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
@@ -66,16 +65,16 @@ class Cart {
     }), this.commonService.getNextDrawDate())
       .map(([cartResponse, nextDrawDate]) => {
         if (!cartResponse || !cartResponse.lineItems) {
-          this.setCartCountCookie(0);
-          return {};
+          this.setCartCountCookie(0)
+          return {}
         }
 
-        let items = map(cartResponse.lineItems, item => {
-          let frequency = item.rate.recurrence.display;
-          let itemConfig = omit(item.itemfields, ['self', 'links']);
-          let giftStartDate = frequency !== 'Single' ?
-            startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null;
-          let giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0;
+        const items = map(cartResponse.lineItems, item => {
+          const frequency = item.rate.recurrence.display
+          const itemConfig = omit(item.itemfields, ['self', 'links'])
+          const giftStartDate = frequency !== 'Single'
+            ? startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null
+          const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
           return {
             uri: item.self.uri,
@@ -90,117 +89,118 @@ class Cart {
             giftStartDate: giftStartDate,
             giftStartDateDaysFromNow: giftStartDateDaysFromNow,
             giftStartDateWarning: giftStartDateDaysFromNow >= 275
-          };
-        });
+          }
+        })
 
-        let frequencyTotals = concat({
-            frequency: 'Single',
-            amount: cartResponse.total && cartResponse.total.cost.amount,
-            total: cartResponse.total && cartResponse.total.cost.display
-          },
-          map(cartResponse.rateTotals, rateTotal => {
-            return {
-              frequency: rateTotal.recurrence.display,
-              amount: rateTotal.cost.amount,
-              total: rateTotal.cost.display
-            };
-          })
-        );
+        const frequencyTotals = concat({
+          frequency: 'Single',
+          amount: cartResponse.total && cartResponse.total.cost.amount,
+          total: cartResponse.total && cartResponse.total.cost.display
+        },
+        map(cartResponse.rateTotals, rateTotal => {
+          return {
+            frequency: rateTotal.recurrence.display,
+            amount: rateTotal.cost.amount,
+            total: rateTotal.cost.display
+          }
+        })
+        )
 
-        //set cart item count cookie
-        this.setCartCountCookie(items.length);
+        // set cart item count cookie
+        this.setCartCountCookie(items.length)
 
         return {
           id: this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
           items: items.reverse(), // Show most recent cart items first
           frequencyTotals: frequencyTotals,
           cartTotal: frequencyTotals[0].amount
-        };
-      });
-  }
-
-  getTotalQuantity() {
-    return this.cortexApiService
-      .get({path: ['carts', this.cortexApiService.scope, 'default']})
-      .map((cart) => {
-        return cart['total-quantity'];
-      });
-  }
-
-  addItem(uri, data, disableSessionRestart) {
-    data.quantity = 1;
-
-    if(!disableSessionRestart && this.sessionService.getRole() == Roles.public) {
-      return this.getTotalQuantity().mergeMap((total) => {
-        if(total <= 0) {
-          return this.sessionService.signOut().mergeMap(() => {
-            return this._addItem(uri, data);
-          });
         }
-        return this._addItem(uri, data);
-      });
+      })
+  }
+
+  getTotalQuantity () {
+    return this.cortexApiService
+      .get({ path: ['carts', this.cortexApiService.scope, 'default'] })
+      .map((cart) => {
+        return cart['total-quantity']
+      })
+  }
+
+  addItem (uri, data, disableSessionRestart) {
+    data.quantity = 1
+
+    if (!disableSessionRestart && this.sessionService.getRole() === Roles.public) {
+      return this.getTotalQuantity().mergeMap((total) => {
+        if (total <= 0) {
+          return this.sessionService.signOut().mergeMap(() => {
+            return this._addItem(uri, data)
+          })
+        }
+        return this._addItem(uri, data)
+      })
     }
-    return this._addItem(uri, data);
+    return this._addItem(uri, data)
   }
 
   /**
    * @private
    */
-  _addItem(uri, data) {
+  _addItem (uri, data) {
     return this.cortexApiService.post({
       path: ['itemfieldslineitem', uri],
       data: data,
       followLocation: true
-    });
+    })
   }
 
-  editItem(oldUri, uri, data){
+  editItem (oldUri, uri, data) {
     return this.deleteItem(oldUri)
-      .switchMap(() => this.addItem(uri, data, true));
+      .switchMap(() => this.addItem(uri, data, true))
   }
 
-  deleteItem(uri){
+  deleteItem (uri) {
     return this.cortexApiService.delete({
       path: uri
-    });
+    })
   }
 
-  bulkAdd(configuredDesignations){
-    let rawCartObservable;
-    let cart = Observable.defer(() => {
-      return rawCartObservable = rawCartObservable || this.get(); // Only request cart once but wait until subscription before sending request
-    });
+  bulkAdd (configuredDesignations) {
+    let rawCartObservable
+    const cart = Observable.defer(() => {
+      rawCartObservable = rawCartObservable || this.get() // Only request cart once but wait until subscription before sending request
+      return rawCartObservable
+    })
     return this.designationsService.bulkLookup(map(configuredDesignations, 'designationNumber'))
       .mergeMap(response => {
-        if(!response.links || !response.links.length > 0){
-          return Observable.throw('No results found during lookup');
+        if (!response.links || !response.links.length > 0) {
+          return Observable.throw('No results found during lookup')
         }
         return map(response.links, (link, index) => {
-          let configuredDesignation = configuredDesignations[index];
-          configuredDesignation.uri = link.uri.replace(/^\//, '');
-          return this.addItemAndReplaceExisting(cart, configuredDesignation.uri, configuredDesignation);
-        });
+          const configuredDesignation = configuredDesignations[index]
+          configuredDesignation.uri = link.uri.replace(/^\//, '')
+          return this.addItemAndReplaceExisting(cart, configuredDesignation.uri, configuredDesignation)
+        })
       })
-      .mergeAll();
+      .mergeAll()
   }
 
-  addItemAndReplaceExisting(cart, uri, configuredDesignation){
-    return Observable.defer(() => this.addItem(uri, {amount: configuredDesignation.amount}))
+  addItemAndReplaceExisting (cart, uri, configuredDesignation) {
+    return Observable.defer(() => this.addItem(uri, { amount: configuredDesignation.amount }))
       .catch(response => {
-        if(response.status === 409){
+        if (response.status === 409) {
           return cart
             .switchMap(cart => {
-              const oldUri = find(cart.items, { code: configuredDesignation.designationNumber }).uri.replace(/^\//, '');
-              return this.editItem(oldUri, uri, {amount: configuredDesignation.amount});
-            });
-        }else{
-          return Observable.throw(response);
+              const oldUri = find(cart.items, { code: configuredDesignation.designationNumber }).uri.replace(/^\//, '')
+              return this.editItem(oldUri, uri, { amount: configuredDesignation.amount })
+            })
+        } else {
+          return Observable.throw(response)
         }
       })
       .map(() => ({ configuredDesignation: configuredDesignation }))
       .catch(response => {
-        return Observable.of({ error: response, configuredDesignation: configuredDesignation });
-      });
+        return Observable.of({ error: response, configuredDesignation: configuredDesignation })
+      })
   }
 }
 
@@ -213,4 +213,4 @@ export default angular
     hateoasHelperService.name,
     'ngCookies'
   ])
-  .service(serviceName, Cart);
+  .service(serviceName, Cart)
