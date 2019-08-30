@@ -6,8 +6,7 @@
         <a href="" ng-click="$ctrl.tab = 'newsletter'">
           MPDX Newsletter <span class="xs-hide">Form</span>
         </a>
-        <a href="" ng-click="$ctrl.tab = 'givingLinks'"
-           ng-if="$ctrl.designationType === 'National Staff'">
+        <a href="" ng-click="$ctrl.tab = 'givingLinks'">
           Giving Links
         </a>
       </li>
@@ -17,7 +16,7 @@
     <div class="tab-content">
       <div class="tab-pane"
            ng-class="{active: $ctrl.tab === 'givingLinks'}"
-           ng-if="$ctrl.tab === 'givingLinks' && $ctrl.designationType === 'National Staff'">
+           ng-if="$ctrl.tab === 'givingLinks'">
         <div class="form-group">
           <span class="help-block">Setup additional country giving links.</span>
         </div>
@@ -84,7 +83,7 @@
         </div>
         <div class="form-group">
           <h6 ng-if="$ctrl.hasNewsletter">This form will allow donors to subscribe to your MPDX newsletter.</h6>
-          <h6 ng-if="!$ctrl.hasNewsletter">This option is disabled because you do not have an MPDX account. To sign up for one, visit <a href="mpdx.org" target="_blank">mpdx.org</a>.</h6>
+          <h6 ng-if="!$ctrl.hasNewsletter">This option is disabled because you do not have an MPDX account. To sign up for one, visit <a href="https://mpdx.org" target="_blank">mpdx.org</a>.</h6>
         </div>
       </div>
     </div>
