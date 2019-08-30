@@ -110,6 +110,10 @@
           <button type="button" class="btn btn-primary btn-lg" ng-click="$dismiss()">Close</button>
         </p>
       </div>
+      <div ng-if="$ctrl.error">
+        <h5>Something went wrong with your request.</h5>
+        <p>Check that the information you've entered is correct. If the problem persists, please contact <a href="mailto:apps@cru.org">apps@cru.org</a> for assistance.</p>
+      </div>
     </div>
   </div>
   <div class="modal-footer">
