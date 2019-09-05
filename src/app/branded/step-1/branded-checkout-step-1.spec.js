@@ -69,8 +69,14 @@ describe('branded checkout step 1', () => {
       expect($ctrl.defaultFrequency).toEqual('ANNUAL')
     })
 
-    it('should validate campaignCode', () => {
+    it('should validate campaignCode (too long)', () => {
       $ctrl.campaignCode = 'abcdefghijklmnopqrstuvwxyz0123456789'
+      $ctrl.initItemConfig()
+      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+    })
+
+    it('should validate campaignCode (non alpha numeric)', () => {
+      $ctrl.campaignCode = '😅😳'
       $ctrl.initItemConfig()
       expect($ctrl.itemConfig['campaign-code']).toEqual('')
     })
