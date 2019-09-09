@@ -25,6 +25,9 @@ describe('NewsletterModalController', function () {
     expect($ctrl.attributes).toEqual({
       send_newsletter: 'Email'
     })
+    expect($ctrl.address).toEqual({
+      country: 'US'
+    })
   })
 
   describe('get includeEmailField', () => {
@@ -76,6 +79,15 @@ describe('NewsletterModalController', function () {
       let newsletterPromise
       beforeEach(inject((_$q_) => {
         newsletterPromise = _$q_.defer()
+        $ctrl.address = {
+          country: 'country',
+          streetAddress: 'street',
+          extendedAddress: 'street2',
+          intAddressLine3: 'street3',
+          locality: 'city',
+          postalCode: 'zip',
+          region: 'state'
+        }
       }))
 
       it('subscribes to newsletter', () => {
@@ -83,7 +95,16 @@ describe('NewsletterModalController', function () {
         $ctrl.step = 2
         $ctrl.next()
         expect($ctrl.progress).toEqual(true)
-        expect($ctrl.designationEditorService.subscribeToNewsletter).toHaveBeenCalledWith($ctrl.designationNumber, $ctrl.attributes)
+        expect($ctrl.designationEditorService.subscribeToNewsletter).toHaveBeenCalledWith($ctrl.designationNumber, {
+          send_newsletter: 'Email',
+          country: 'country',
+          street: 'street',
+          street2: 'street2',
+          street3: 'street3',
+          city: 'city',
+          postal_code: 'zip',
+          state: 'state'
+        })
 
         newsletterPromise.resolve({})
         $rootScope.$digest()
@@ -98,7 +119,9 @@ describe('NewsletterModalController', function () {
         $ctrl.step = 2
         $ctrl.next()
         expect($ctrl.progress).toEqual(true)
-        expect($ctrl.designationEditorService.subscribeToNewsletter).toHaveBeenCalledWith($ctrl.designationNumber, $ctrl.attributes)
+        expect($ctrl.designationEditorService.subscribeToNewsletter).toHaveBeenCalledWith($ctrl.designationNumber, expect.objectContaining({
+          send_newsletter: 'Email'
+        }))
 
         newsletterPromise.reject(new Error('error'))
         $rootScope.$digest()
@@ -107,6 +130,7 @@ describe('NewsletterModalController', function () {
         expect($ctrl.progress).toBe(false)
         expect($ctrl.step).toEqual(3)
         expect($ctrl.error).toBeInstanceOf(Error)
+        expect($ctrl.attributes).toEqual({ send_newsletter: 'Email' })
       })
     })
   })
