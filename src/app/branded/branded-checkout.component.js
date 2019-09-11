@@ -3,6 +3,7 @@ import 'angular-environment'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
 import changeCaseObject from 'change-case-object'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import commonModule from 'common/common.module'
 import step1 from './step-1/branded-checkout-step-1.component'
@@ -102,6 +103,7 @@ export default angular
     step2.name,
     thankYouSummary.name,
     sessionService.name,
+    uibModal,
     'environment'
   ]).config(($uibModalProvider, $windowProvider) => {
     const $document = angular.element($windowProvider.$get().document)
