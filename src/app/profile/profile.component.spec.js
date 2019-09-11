@@ -384,7 +384,7 @@ describe('ProfileComponent', function () {
       $ctrl.$scope.$apply()
 
       expect($ctrl.phoneNumberForms[0].phoneNumber.$validators.phone('541-967-0010')).toEqual(true)
-      expect($ctrl.phoneNumberForms[0].phoneNumber.$validators.phone('123-456-7890')).toEqual(false)
+      expect($ctrl.phoneNumberForms[0].phoneNumber.$validators.phone('123-abc-7890')).toEqual(false)
     })
   })
 

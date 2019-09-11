@@ -201,7 +201,7 @@
         <div class="col-sm-6">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">
             <label translate>Phone</label>
-            <input type="text" class="form-control  form-control-subtle" name="phoneNumber" ng-model="$ctrl.donorDetails['phone-number']" ng-disabled="$ctrl.donorDetails.staff">
+            <input type="tel" class="form-control form-control-subtle" name="phoneNumber" ng-model="$ctrl.donorDetails['phone-number']" ng-disabled="$ctrl.donorDetails.staff">
             <div role="alert" ng-messages="$ctrl.detailsForm.phoneNumber.$error" ng-if="($ctrl.detailsForm.phoneNumber | showErrors)">
               <div class="help-block" ng-message="phone" translate>The phone number entered is invalid</div>
             </div>
