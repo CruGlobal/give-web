@@ -85,8 +85,7 @@ describe('NewsletterModalController', function () {
           extendedAddress: 'street2',
           intAddressLine3: 'street3',
           locality: 'city',
-          postalCode: 'zip',
-          region: 'state'
+          postalCode: 'zip'
         }
       }))
 
@@ -98,12 +97,9 @@ describe('NewsletterModalController', function () {
         expect($ctrl.designationEditorService.subscribeToNewsletter).toHaveBeenCalledWith($ctrl.designationNumber, {
           send_newsletter: 'Email',
           country: 'country',
-          street: 'street',
-          street2: 'street2',
-          street3: 'street3',
+          street: `street\nstreet2\nstreet3`,
           city: 'city',
-          postal_code: 'zip',
-          state: 'state'
+          postal_code: 'zip'
         })
 
         newsletterPromise.resolve({})

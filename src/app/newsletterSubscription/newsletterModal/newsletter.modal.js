@@ -3,21 +3,19 @@ import designationEditorService from 'common/services/api/designationEditor.serv
 import loading from 'common/components/loading/loading.component'
 import addressForm from 'common/components/addressForm/addressForm.component'
 import forEach from 'lodash/forEach'
+import map from 'lodash/map'
+import compact from 'lodash/compact'
 
 import './newsletterModal.scss'
 
 const controllerName = 'newsletterModal'
-
 const addressPropertyMap = {
   country: 'country',
-  streetAddress: 'street',
-  extendedAddress: 'street2',
-  intAddressLine3: 'street3',
-  intAddressLine4: 'street4',
   locality: 'city',
   postalCode: 'postal_code',
   region: 'state'
 }
+const streetFields = ['streetAddress', 'extendedAddress', 'intAddressLine3', 'intAddressLine4']
 
 class NewsletterModalController {
   /* @ngInject */
@@ -39,10 +37,12 @@ class NewsletterModalController {
     if (this.step === 2) {
       this.progress = true
 
-      // Map address properties to attributes properties
-      forEach(this.address, (value, key) => {
-        this.attributes[addressPropertyMap[key]] = value
+      forEach(addressPropertyMap, (value, key) => {
+        this.attributes[value] = this.address[key]
       })
+
+      // Concatenate all defined street fields
+      this.attributes['street'] = compact(map(streetFields, key => this.address[key])).join(`\n`)
 
       this.designationEditorService.subscribeToNewsletter(this.designationNumber, this.attributes).then(() => {
         this.success = true
@@ -52,6 +52,7 @@ class NewsletterModalController {
         forEach(addressPropertyMap, (value) => {
           delete this.attributes[value]
         })
+        delete this.attributes['street']
       }).finally(() => {
         this.step = 3
         this.progress = false
