@@ -27,6 +27,10 @@ const rollbarAccessToken = 'a5bb784f937841538494e747f70a4597'
 
 const mobileBreakpoint = 575
 
+// Generic phone number regex, matches + and 011 prefixes.
+// See https://stackoverflow.com/a/19592342/2860048
+const phoneNumberRegex = /([0-9\s-]{7,})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/
+
 // See envServiceProvider.config in common/app.config.js for url configurations
 
 export {
@@ -34,5 +38,6 @@ export {
   ccpStagingKey,
   cortexScope,
   rollbarAccessToken,
-  mobileBreakpoint
+  mobileBreakpoint,
+  phoneNumberRegex
 }

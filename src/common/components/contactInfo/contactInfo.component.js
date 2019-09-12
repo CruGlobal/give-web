@@ -7,6 +7,7 @@ import includes from 'lodash/includes'
 import startsWith from 'lodash/startsWith'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/forkJoin'
+import { phoneNumberRegex } from 'common/app.constants'
 
 import addressForm from 'common/components/addressForm/addressForm.component'
 
@@ -60,9 +61,8 @@ class Step1Controller {
   }
 
   addCustomValidators () {
-    const re = /([0-9\s-]{7,})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/
     this.detailsForm.phoneNumber.$validators.phone = number => {
-      return !number || re.test(number)
+      return !number || phoneNumberRegex.test(number)
     }
   }
 
