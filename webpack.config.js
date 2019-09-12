@@ -4,6 +4,7 @@ const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build')
 
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = (env = {}) => ({
@@ -52,7 +53,8 @@ module.exports = (env = {}) => ({
     new webpack.EnvironmentPlugin({
       TRAVIS_COMMIT: 'development'
     }),
-    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /blah/),
+    // To strip all locales except “en”
+    new MomentLocalesPlugin(),
     new BundleAnalyzerPlugin({
       analyzerMode: env.analyze ? 'static' : 'disabled',
       generateStatsFile: !isBuild
