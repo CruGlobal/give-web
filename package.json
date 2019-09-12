@@ -4,7 +4,6 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.0.0",
     "angular": "1.7.8",
-    "angular-animate": "^1.7.8",
     "angular-cookies": "^1.7.8",
     "angular-environment": "https://github.com/jonshaffer/angular-environment.git#d3082c06fb16804d324faac9b7e753fd64a44e5d",
     "angular-filter": "^0.5.17",
