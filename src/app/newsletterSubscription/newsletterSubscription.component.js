@@ -1,4 +1,5 @@
 import angular from 'angular'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 import template from './newsletterSubscription.tpl.html'
 import commonModule from 'common/common.module'
 
@@ -30,7 +31,7 @@ export default angular
   .module(componentName, [
     commonModule.name,
     newsletterModalController.name,
-    'ui.bootstrap'
+    uibModal
   ])
   .component(componentName, {
     controller: NewsletterSubscriptionController,
