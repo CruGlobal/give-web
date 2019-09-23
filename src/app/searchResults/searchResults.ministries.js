@@ -50,13 +50,13 @@ export default [
   {
     name: 'EveryStudent.com',
     designationNumber: '2787935',
-    path: '/2787935',
+    path: '/give-everystudent',
     facet: 'ministry'
   },
   {
     name: 'Faculty Commons',
     designationNumber: '2271527',
-    path: '/2271527',
+    path: '/give-facultycommons',
     facet: 'ministry'
   },
   {
@@ -86,7 +86,7 @@ export default [
   {
     name: 'Inner City',
     designationNumber: '2272458',
-    path: '/2272458',
+    path: '/innercity-greatestneeds',
     facet: 'ministry'
   },
   {
