@@ -242,7 +242,11 @@ class DesignationEditorController {
   }
 
   images () {
-    return this.getImageUrls(this.designationContent['design-controller'].carousel)
+    const designController = this.designationContent['design-controller']
+    if (designController && designController['carousel']) {
+      return this.getImageUrls(designController['carousel'])
+    }
+    return []
   }
 
   editText (field) {
