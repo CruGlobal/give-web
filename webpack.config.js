@@ -6,30 +6,36 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const ManifestPlugin = require('webpack-manifest-plugin')
 
 module.exports = (env = {}) => ({
   mode: isBuild ? 'production' : 'development',
   entry: {
-    app: [
-      'app/cart/cart.component.js',
-      'app/checkout/checkout.component.js',
-      'app/thankYou/thankYou.component.js',
-      'app/productConfig/productConfig.component.js',
-      'app/signIn/signIn.component.js',
-      'app/searchResults/searchResults.component.js',
-      'app/profile/yourGiving/yourGiving.component.js',
-      'app/profile/profile.component.js',
-      'app/profile/receipts/receipts.component.js',
-      'app/profile/payment-methods/payment-methods.component.js',
-      'app/designationEditor/designationEditor.component.js'
-    ],
-    'branded-checkout': [
-      'app/branded/branded-checkout.component.js',
-      'assets/scss/branded-checkout.scss'
-    ],
-    give: 'assets/scss/styles.scss',
-    // Add `main` entry on development
-    ...(isBuild ? {} : { main: 'app/main/main.component.js' })
+    ...(isBuild ? {
+      app: 'loaders/app.js',
+      give: [
+        'app/cart/cart.component.js',
+        'app/checkout/checkout.component.js',
+        'app/thankYou/thankYou.component.js',
+        'app/productConfig/productConfig.component.js',
+        'app/signIn/signIn.component.js',
+        'app/searchResults/searchResults.component.js',
+        'app/profile/yourGiving/yourGiving.component.js',
+        'app/profile/profile.component.js',
+        'app/profile/receipts/receipts.component.js',
+        'app/profile/payment-methods/payment-methods.component.js',
+        'app/designationEditor/designationEditor.component.js',
+        'assets/scss/styles.scss'
+      ],
+      'branded-checkout': 'loaders/branded-checkout.js',
+      branded: [
+        'app/branded/branded-checkout.component.js',
+        'assets/scss/branded-checkout.scss'
+      ]
+    } : {
+      dev: 'loaders/dev.js',
+      main: 'app/main/main.component.js'
+    })
   },
   output: {
     filename: '[name].js',
@@ -56,8 +62,17 @@ module.exports = (env = {}) => ({
     // To strip all locales except “en”
     new MomentLocalesPlugin(),
     new BundleAnalyzerPlugin({
-      analyzerMode: env.analyze ? 'static' : 'disabled',
-      generateStatsFile: !isBuild
+      analyzerMode: env.analyze ? 'static' : 'disabled'
+    }),
+    new ManifestPlugin({
+      // Don't include assets or map files in the manifest
+      filter: file => file.isChunk && !/.*\.map$/.test(file.name),
+      map: file => {
+        if (file.name === 'angular.js') {
+          file.path = 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'
+        }
+        return file
+      }
     })
   ],
   module: {
@@ -104,7 +119,20 @@ module.exports = (env = {}) => ({
     ]
   },
   optimization: {
-    usedExports: true
+    usedExports: true,
+    splitChunks: {
+      chunks (chunk) {
+        // Don't chunk loader files
+        return !['dev', 'app', 'branded-checkout'].includes(chunk.name)
+      },
+      cacheGroups: {
+        angular: {
+          test: /[\\/]node_modules[\\/]angular[\\/]/,
+          name: 'angular',
+          chunks: 'all'
+        }
+      }
+    }
   },
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules']
