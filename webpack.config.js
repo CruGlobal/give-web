@@ -8,40 +8,37 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ManifestPlugin = require('webpack-manifest-plugin')
 
-module.exports = (env = {}) => ({
+const giveComponents = [
+  'app/cart/cart.component.js',
+  'app/checkout/checkout.component.js',
+  'app/thankYou/thankYou.component.js',
+  'app/productConfig/productConfig.component.js',
+  'app/signIn/signIn.component.js',
+  'app/searchResults/searchResults.component.js',
+  'app/profile/yourGiving/yourGiving.component.js',
+  'app/profile/profile.component.js',
+  'app/profile/receipts/receipts.component.js',
+  'app/profile/payment-methods/payment-methods.component.js',
+  'app/designationEditor/designationEditor.component.js',
+  'assets/scss/styles.scss'
+]
+
+const brandedComponents = [
+  'app/branded/branded-checkout.component.js',
+  'assets/scss/branded-checkout.scss'
+]
+
+const sharedConfig = {
   mode: isBuild ? 'production' : 'development',
-  entry: {
-    ...(isBuild ? {
-      app: 'loaders/app.js',
-      give: [
-        'app/cart/cart.component.js',
-        'app/checkout/checkout.component.js',
-        'app/thankYou/thankYou.component.js',
-        'app/productConfig/productConfig.component.js',
-        'app/signIn/signIn.component.js',
-        'app/searchResults/searchResults.component.js',
-        'app/profile/yourGiving/yourGiving.component.js',
-        'app/profile/profile.component.js',
-        'app/profile/receipts/receipts.component.js',
-        'app/profile/payment-methods/payment-methods.component.js',
-        'app/designationEditor/designationEditor.component.js',
-        'assets/scss/styles.scss'
-      ],
-      'branded-checkout': 'loaders/branded-checkout.js',
-      branded: [
-        'app/branded/branded-checkout.component.js',
-        'assets/scss/branded-checkout.scss'
-      ]
-    } : {
-      dev: 'loaders/dev.js',
-      main: 'app/main/main.component.js'
-    })
+  devtool: 'source-map',
+  entry: {},
+  resolve: {
+    modules: [path.resolve(__dirname, 'src'), 'node_modules']
   },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
-  devtool: 'source-map',
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
@@ -60,20 +57,7 @@ module.exports = (env = {}) => ({
       TRAVIS_COMMIT: 'development'
     }),
     // To strip all locales except “en”
-    new MomentLocalesPlugin(),
-    new BundleAnalyzerPlugin({
-      analyzerMode: env.analyze ? 'static' : 'disabled'
-    }),
-    new ManifestPlugin({
-      // Don't include assets or map files in the manifest
-      filter: file => file.isChunk && !/.*\.map$/.test(file.name),
-      map: file => {
-        if (file.name === 'angular.js') {
-          file.path = 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'
-        }
-        return file
-      }
-    })
+    new MomentLocalesPlugin()
   ],
   module: {
     rules: [
@@ -119,48 +103,103 @@ module.exports = (env = {}) => ({
     ]
   },
   optimization: {
-    usedExports: true,
-    splitChunks: {
-      chunks (chunk) {
-        // Don't chunk loader files
-        return !['dev', 'app', 'branded-checkout'].includes(chunk.name)
-      },
-      cacheGroups: {
-        angular: {
-          test: /[\\/]node_modules[\\/]angular[\\/]/,
-          name: 'angular',
-          chunks: 'all'
-        }
-      }
+    usedExports: true
+  }
+}
+
+const devServer = {
+  https: true,
+  historyApiFallback: {
+    rewrites: [{ from: /\/(?!test-release).+\.html/, to: '/index.html' }]
+  },
+  proxy: {
+    '/bin': {
+      target: 'https://give-stage2.cru.org',
+      changeOrigin: true
+    },
+    '/content': {
+      target: 'https://give-stage2.cru.org',
+      changeOrigin: true
+    },
+    '/etc': {
+      target: 'https://give-stage2.cru.org',
+      changeOrigin: true
+    },
+    '/designations': {
+      target: 'https://give-stage2.cru.org',
+      changeOrigin: true
     }
   },
-  resolve: {
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
-  },
-  devServer: {
-    https: true,
-    historyApiFallback: {
-      rewrites: [{ from: /\/(?!test-release).+\.html/, to: '/index.html' }]
+  port: 9000,
+  public: 'localhost.cru.org:9000'
+}
+
+module.exports = (env = {}) => [
+  // Manifest Loader build
+  {
+    ...sharedConfig,
+    entry: {
+      ...(isBuild ? {
+        'give.loader': 'loaders/give.js',
+        'branded-checkout.loader': 'loaders/branded.js',
+        'give.v2': giveComponents,
+        'branded-checkout.v2': brandedComponents
+      } : {
+        'dev.loader': 'loaders/dev.js',
+        'main.v2': 'app/main/main.component.js'
+      })
     },
-    proxy: {
-      '/bin': {
-        target: 'https://give-stage2.cru.org',
-        changeOrigin: true
+    output: {
+      filename (chunkData) {
+        return ['dev.loader', 'give.loader', 'branded-checkout.loader'].includes(chunkData.chunk.name)
+          ? '[name].js' : '[name].[contenthash].js'
       },
-      '/content': {
-        target: 'https://give-stage2.cru.org',
-        changeOrigin: true
-      },
-      '/etc': {
-        target: 'https://give-stage2.cru.org',
-        changeOrigin: true
-      },
-      '/designations': {
-        target: 'https://give-stage2.cru.org',
-        changeOrigin: true
+      path: path.resolve(__dirname, 'dist')
+    },
+    plugins: [
+      ...sharedConfig.plugins,
+      new BundleAnalyzerPlugin({
+        analyzerMode: env.analyze ? 'static' : 'disabled'
+      }),
+      new ManifestPlugin({
+        // Don't include assets or map files in the manifest
+        filter: file => file.isChunk && !/.*\.map$/.test(file.name),
+        seed: {
+          'fontawesome.css': '//give.cru.org/css/fontawesome.css'
+        }
+      })
+    ],
+    optimization: {
+      usedExports: true,
+      splitChunks: {
+        filename: '[name].[contenthash].js',
+        chunks (chunk) {
+          // Don't chunk loader files
+          return !['dev.loader', 'give.loader', 'branded-checkout.loader'].includes(chunk.name)
+        },
+        cacheGroups: {
+          angular: {
+            test: /[\\/]node_modules[\\/]angular[\\/]/,
+            name: 'angular',
+            chunks: 'all'
+          }
+        }
       }
     },
-    port: 9000,
-    public: 'localhost.cru.org:9000'
+    devServer
+  },
+  // Legacy build (single big file)
+  {
+    ...sharedConfig,
+    entry: {
+      give: giveComponents,
+      'branded-checkout': brandedComponents
+    },
+    plugins: [
+      ...sharedConfig.plugins,
+      new BundleAnalyzerPlugin({
+        analyzerMode: env.analyze ? 'static' : 'disabled'
+      })
+    ]
   }
-})
+]

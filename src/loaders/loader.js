@@ -1,5 +1,5 @@
 /* global XMLHttpRequest */
-const defaultChunks = ['angular.js']
+const defaultChunks = ['angular.js', 'fontawesome.css']
 
 const SCRIPT = /.*\.js$/
 const STYLE = /.*\.css$/
@@ -20,7 +20,7 @@ const addScriptTag = (filename) => {
     const script = document.createElement('script')
     script.addEventListener('load', resolve)
     script.src = filename
-    script.async = false
+    script.async = true
     document.head.appendChild(script)
   })
 }
@@ -37,10 +37,9 @@ const addStyleTag = (filename) => {
 
 const Loader = {
   start: async (chunks = []) => {
+    const script = document.currentScript
     const manifest = await loadManifest()
-    console.log(manifest)
     await Promise.all(defaultChunks.concat(chunks).map(name => {
-      console.log(name, manifest[name])
       if (SCRIPT.test(name)) {
         return addScriptTag(manifest[name])
       } else if (STYLE.test(name)) {
@@ -48,9 +47,9 @@ const Loader = {
       }
       return Promise.resolve()
     }))
-    console.log('Resources loaded!!')
     window.setTimeout(() => {
-      window.angular.bootstrap(document.body, ['main'], { strictDi: true })
+      const modules = (script.getAttribute('data-modules') || '').split(',')
+      window.angular.bootstrap(document.body, modules, { strictDi: true })
     }, 10)
   }
 }
