@@ -40,10 +40,6 @@ const sharedConfig = {
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: '[name].min.css',
-      disable: !isBuild
-    }),
     new CopyWebpackPlugin([
       {
         context: 'src',
@@ -140,23 +136,27 @@ module.exports = (env = {}) => [
     ...sharedConfig,
     entry: {
       ...(isBuild ? {
-        'give.loader': 'loaders/give.js',
-        'branded-checkout.loader': 'loaders/branded.js',
-        'give.v2': giveComponents,
-        'branded-checkout.v2': brandedComponents
+        'give.v2': 'loaders/give.js',
+        'branded-checkout.v2': 'loaders/branded.js',
+        give: giveComponents,
+        branded: brandedComponents
       } : {
-        'dev.loader': 'loaders/dev.js',
-        'main.v2': 'app/main/main.component.js'
+        'dev.v2': 'loaders/dev.js',
+        main: 'app/main/main.component.js'
       })
     },
     output: {
       filename (chunkData) {
-        return ['dev.loader', 'give.loader', 'branded-checkout.loader'].includes(chunkData.chunk.name)
+        return ['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunkData.chunk.name)
           ? '[name].js' : '[name].[contenthash].js'
       },
       path: path.resolve(__dirname, 'dist')
     },
     plugins: [
+      new MiniCssExtractPlugin({
+        filename: '[name].[contenthash].min.css',
+        disable: !isBuild
+      }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
@@ -175,7 +175,7 @@ module.exports = (env = {}) => [
         filename: '[name].[contenthash].js',
         chunks (chunk) {
           // Don't chunk loader files
-          return !['dev.loader', 'give.loader', 'branded-checkout.loader'].includes(chunk.name)
+          return !['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunk.name)
         },
         cacheGroups: {
           angular: {
@@ -196,6 +196,10 @@ module.exports = (env = {}) => [
       'branded-checkout': brandedComponents
     },
     plugins: [
+      new MiniCssExtractPlugin({
+        filename: '[name].min.css',
+        disable: !isBuild
+      }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
