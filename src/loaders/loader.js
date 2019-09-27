@@ -37,9 +37,8 @@ const addStyleTag = (filename) => {
 
 const Loader = {
   start: async (chunks = []) => {
-    const script = document.currentScript
     const manifest = await loadManifest()
-    await Promise.all(defaultChunks.concat(chunks).map(name => {
+    return Promise.all(defaultChunks.concat(chunks).map(name => {
       if (SCRIPT.test(name)) {
         return addScriptTag(manifest[name])
       } else if (STYLE.test(name)) {
@@ -47,10 +46,6 @@ const Loader = {
       }
       return Promise.resolve()
     }))
-    window.setTimeout(() => {
-      const modules = (script.getAttribute('data-modules') || '').split(',')
-      window.angular.bootstrap(document.body, modules, { strictDi: true })
-    }, 10)
   }
 }
 
