@@ -19,9 +19,10 @@ const giveComponents = [
   'app/profile/profile.component.js',
   'app/profile/receipts/receipts.component.js',
   'app/profile/payment-methods/payment-methods.component.js',
-  'app/designationEditor/designationEditor.component.js',
-  'assets/scss/styles.scss'
+  'app/designationEditor/designationEditor.component.js'
 ]
+
+const giveCss = ['assets/scss/styles.scss']
 
 const brandedComponents = [
   'app/branded/branded-checkout.component.js',
@@ -138,7 +139,7 @@ module.exports = (env = {}) => [
       ...(isBuild ? {
         'give.v2': 'loaders/give.js',
         'branded-checkout.v2': 'loaders/branded.js',
-        give: giveComponents,
+        give: [...giveComponents, ...giveCss],
         branded: brandedComponents
       } : {
         'dev.v2': 'loaders/dev.js',
@@ -192,7 +193,8 @@ module.exports = (env = {}) => [
   {
     ...sharedConfig,
     entry: {
-      give: giveComponents,
+      app: giveComponents,
+      give: giveCss,
       'branded-checkout': brandedComponents
     },
     plugins: [
