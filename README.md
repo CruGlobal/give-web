@@ -31,9 +31,6 @@ This includes legacy cru.org styling from cru.scss.
 
 Add the following code to your page where appropriate. You must change the value of `designation-number` to the designation number you want users to give to. As part of the setup process Cru should provide a `tsys-device` attribute which matches the TSYS config for your site.
 ```html
-<link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-
 <branded-checkout
     ng-app="brandedCheckout"
     designation-number="0763355"
@@ -41,16 +38,13 @@ Add the following code to your page where appropriate. You must change the value
     tsys-device="cru">
 </branded-checkout>
 
-<script src="https://give-static.cru.org/branded-checkout.js"></script>
+<script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
 ```
 
 #### Branded checkout full example with all attributes
 
 Add the following code to your page where appropriate. See the [Branded checkout config](#branded-checkout-config) section for details on setting these attributes.
 ```html
-<link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-
 <branded-checkout
     ng-app="brandedCheckout"
     designation-number="<designation number>"
@@ -67,7 +61,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)">
 </branded-checkout>
 
-<script src="https://give-static.cru.org/branded-checkout.js"></script>
+<script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
 <script>
   window.onOrderCompleted = function (purchaseData) {
     console.log('Order completed successfully', purchaseData);
@@ -164,6 +158,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
        api-url="https://brandedcheckout.myministry.com"
        tsys-device="myministry">
    </branded-checkout>
+   <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
    ```
 9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us.
 
