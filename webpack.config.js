@@ -51,7 +51,8 @@ const sharedConfig = {
       'branded-checkout.html'
     ]),
     new webpack.EnvironmentPlugin({
-      TRAVIS_COMMIT: 'development'
+      TRAVIS_COMMIT: 'development',
+      S3_GIVE_DOMAIN: ''
     }),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
@@ -165,6 +166,7 @@ module.exports = (env = {}) => [
       new ManifestPlugin({
         // Don't include assets or map files in the manifest
         filter: file => file.isChunk && !/.*\.map$/.test(file.name),
+        publicPath: '/',
         seed: {
           'fontawesome.css': '//give.cru.org/css/fontawesome.css'
         }

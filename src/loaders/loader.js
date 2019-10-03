@@ -10,7 +10,7 @@ const loadManifest = () => {
     manifestRequest.addEventListener('load', function () {
       resolve(JSON.parse(this.responseText))
     })
-    manifestRequest.open('GET', 'manifest.json')
+    manifestRequest.open('GET', process.env.S3_GIVE_DOMAIN + '/manifest.json')
     manifestRequest.send()
   })
 }
@@ -19,7 +19,7 @@ const addScriptTag = (filename) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.addEventListener('load', resolve)
-    script.src = filename
+    script.src = process.env.S3_GIVE_DOMAIN + filename
     script.async = true
     document.head.appendChild(script)
   })
@@ -29,7 +29,7 @@ const addStyleTag = (filename) => {
   return new Promise((resolve, reject) => {
     const link = document.createElement('link')
     link.addEventListener('load', resolve)
-    link.href = filename
+    link.href = process.env.S3_GIVE_DOMAIN + filename
     link.rel = 'stylesheet'
     document.head.appendChild(link)
   })
