@@ -150,13 +150,13 @@ module.exports = (env = {}) => [
     output: {
       filename (chunkData) {
         return ['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunkData.chunk.name)
-          ? '[name].js' : '[name].[contenthash].js'
+          ? '[name].js' : 'chunks/[name].[contenthash].js'
       },
       path: path.resolve(__dirname, 'dist')
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: '[name].[contenthash].min.css',
+        filename: 'chunks/[name].[contenthash].min.css',
         disable: !isBuild
       }),
       ...sharedConfig.plugins,
@@ -175,7 +175,7 @@ module.exports = (env = {}) => [
     optimization: {
       usedExports: true,
       splitChunks: {
-        filename: '[name].[contenthash].js',
+        filename: 'chunks/[name].[contenthash].js',
         chunks (chunk) {
           // Don't chunk loader files
           return !['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunk.name)
