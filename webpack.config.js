@@ -166,7 +166,7 @@ module.exports = (env = {}) => [
       new ManifestPlugin({
         // Don't include assets or map files in the manifest
         filter: file => file.isChunk && !/.*\.map$/.test(file.name),
-        publicPath: '/',
+        publicPath: (process.env.S3_GIVE_DOMAIN || '') + '/',
         seed: {
           'fontawesome.css': '//give.cru.org/css/fontawesome.css'
         }

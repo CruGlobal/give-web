@@ -19,7 +19,7 @@ const addScriptTag = (filename) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.addEventListener('load', resolve)
-    script.src = process.env.S3_GIVE_DOMAIN + filename
+    script.src = filename
     script.async = true
     document.head.appendChild(script)
   })
@@ -29,7 +29,7 @@ const addStyleTag = (filename) => {
   return new Promise((resolve, reject) => {
     const link = document.createElement('link')
     link.addEventListener('load', resolve)
-    link.href = process.env.S3_GIVE_DOMAIN + filename
+    link.href = filename
     link.rel = 'stylesheet'
     document.head.appendChild(link)
   })
