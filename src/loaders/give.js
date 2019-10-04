@@ -17,11 +17,11 @@ import Loader from './loader'
 (function () {
   Loader.start(['vendors~branded~give.js', 'give.js', 'give.css']).then(() => {
     const script = document.getElementById('give-web-script')
-    const modules = (script.getAttribute('data-modules') || '').split(',')
+    const modules = (script.getAttribute('data-modules') || 'productConfig').split(',')
     window.setTimeout(() => {
       const $injector = window.angular.bootstrap(document.body, modules, { strictDi: true })
       $injector.get('analyticsFactory').pageLoaded()
-      document.body.dispatchEvent(new CustomEvent('giveloaded', { bubbles: true, detail: { $injector } }))
+      document.body.dispatchEvent(new window.CustomEvent('giveloaded', { bubbles: true, detail: { $injector } }))
     }, 10)
   })
 })()
