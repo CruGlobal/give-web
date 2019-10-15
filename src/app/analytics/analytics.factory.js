@@ -37,7 +37,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
 
             item = {
               productInfo: {
-                productID: cartData.items[i].designationNumber
+                productID: cartData.items[i].designationNumber,
+                designationType: cartData.items[i].designationType
               },
               price: {
                 basePrice: cartData.items[i].amount
