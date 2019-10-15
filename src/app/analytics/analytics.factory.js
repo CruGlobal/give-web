@@ -124,7 +124,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         if (item) {
           $window.digitalData.cart.item = [{
             productInfo: {
-              productID: item.designationNumber
+              productID: item.designationNumber,
+              designationType: item.designationType
             },
             price: {
               basePrice: item.amount
