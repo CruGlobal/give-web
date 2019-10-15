@@ -7,3 +7,5 @@ coverage
 *.log
 *.back.*
 .sass-cache
+
+*.iml
