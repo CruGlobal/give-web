@@ -150,11 +150,19 @@ class DesignationsService {
         }
       })
 
+      let designationType
+      angular.forEach(data.definition['details'], (v, k) => {
+        if (v['name'] === 'designation_type') {
+          designationType = v['display-value']
+        }
+      })
+
       return {
         uri: this.hateoasHelperService.getLink(data.definition, 'item'),
         frequencies: choices,
         frequency: data.chosen.description.name,
         displayName: data.definition['display-name'],
+        designationType: designationType,
         code: data.code.code,
         designationNumber: data.code['product-code']
       }
