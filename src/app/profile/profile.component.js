@@ -7,7 +7,7 @@ import omit from 'lodash/omit'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/forkJoin'
 import 'rxjs/add/operator/do'
-import { parsePhoneNumberFromString } from 'libphonenumber-js'
+import { phoneNumberRegex } from 'common/app.constants'
 
 import template from './profile.tpl.html'
 
@@ -174,9 +174,7 @@ class ProfileController {
     this.$scope.$watchCollection('$ctrl.phoneNumberForms', forms => {
       angular.forEach(forms, form => {
         if (form && form.phoneNumber && form.phoneNumber.$validators) {
-          form.phoneNumber.$validators.phone = number => {
-            return parsePhoneNumberFromString(number, 'US').isValid()
-          }
+          form.phoneNumber.$validators.phone = number => phoneNumberRegex.test(number)
         }
       })
     })

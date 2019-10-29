@@ -11,6 +11,7 @@ import recipientDetail from './recipientDetail/recipientDetail.component'
 import productModalService from 'common/services/productModal.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import template from './recipientGift.tpl.html'
+import uibTooltip from 'angular-ui-bootstrap/src/tooltip'
 
 const componentName = 'recipientGift'
 
@@ -87,7 +88,8 @@ export default angular
     donationsService.name,
     productModalService.name,
     recipientDetail.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    uibTooltip
   ])
   .component(componentName, {
     controller: RecipientGift,

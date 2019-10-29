@@ -27,22 +27,6 @@ describe('rollbarConfig', () => {
       }
       module.rollbar.init = () => self.rollbarSpies
 
-      self.rollbarExtraArgs = {
-        stackTrace: [
-          {
-            functionName: 'a',
-            lineNumber: 1,
-            columnNumber: 1,
-            fileName: 'a.js'
-          }
-        ],
-        origin: '$log'
-      }
-
-      // Mock stacktrace
-      self.stacktraceLogSpy = jest.spyOn(module.stacktrace, 'get').mockImplementation(() =>
-        Observable.of(['ignored frame', self.rollbarExtraArgs.stackTrace[0]]).toPromise())
-
       // Init and run the test module
       angular.mock.module('testRollbarConfig')
 
@@ -59,7 +43,7 @@ describe('rollbarConfig', () => {
 
       expect(self.$log.log.logs[0]).toEqual(['test log'])
       self.$window.setTimeout(() => { // Use setTimout to wait until the event loop has been called once to process the stacktrace promise
-        expect(self.rollbarSpies.log).toHaveBeenCalledWith('"test log"', self.rollbarExtraArgs)
+        expect(self.rollbarSpies.log).toHaveBeenCalledWith('test log', expect.any(Error), { args: [] })
         done() // Tell jasmine that our async behavior has finished
       })
     })
@@ -71,7 +55,7 @@ describe('rollbarConfig', () => {
 
       expect(self.$log.debug.logs[0]).toEqual(['test debug'])
       self.$window.setTimeout(() => {
-        expect(self.rollbarSpies.debug).toHaveBeenCalledWith('"test debug"', self.rollbarExtraArgs)
+        expect(self.rollbarSpies.debug).toHaveBeenCalledWith('test debug', expect.any(Error), { args: [] })
         done()
       })
     })
@@ -83,7 +67,7 @@ describe('rollbarConfig', () => {
 
       expect(self.$log.info.logs[0]).toEqual(['test info'])
       self.$window.setTimeout(() => {
-        expect(self.rollbarSpies.info).toHaveBeenCalledWith('"test info"', self.rollbarExtraArgs)
+        expect(self.rollbarSpies.info).toHaveBeenCalledWith('test info', expect.any(Error), { args: [] })
         done()
       })
     })
@@ -95,7 +79,7 @@ describe('rollbarConfig', () => {
 
       expect(self.$log.warn.logs[0]).toEqual(['test warn'])
       self.$window.setTimeout(() => {
-        expect(self.rollbarSpies.warning).toHaveBeenCalledWith('"test warn"', self.rollbarExtraArgs)
+        expect(self.rollbarSpies.warning).toHaveBeenCalledWith('test warn', expect.any(Error), { args: [] })
         done()
       })
     })
@@ -106,27 +90,21 @@ describe('rollbarConfig', () => {
       self.$log.error('test error')
 
       expect(self.$log.error.logs[0]).toEqual(['test error'])
-      expect(self.stacktraceLogSpy).toHaveBeenCalledWith({ offline: true })
       self.$window.setTimeout(() => {
-        expect(self.rollbarSpies.error).toHaveBeenCalledWith('"test error"', self.rollbarExtraArgs)
+        expect(self.rollbarSpies.error).toHaveBeenCalledWith('test error', expect.any(Error), { args: [] })
         done()
       })
     })
 
     it('should send errors from $ExceptionHandler to rollbar', (done) => {
-      const stacktraceFromErrorSpy = jest.spyOn(module.stacktrace, 'fromError').mockImplementation(() =>
-        Observable.of(['non-ignored frame', self.rollbarExtraArgs.stackTrace[0]]).toPromise())
       jest.spyOn(self.$log, 'error')
       self.$log.error.logs = []
       const error = new Error('some exception')
       self.$log.error(error)
 
       expect(self.$log.error.logs[0]).toEqual([new Error('some exception')])
-      expect(stacktraceFromErrorSpy).toHaveBeenCalledWith(error, { offline: true })
       self.$window.setTimeout(() => {
-        self.rollbarExtraArgs.origin = '$ExceptionHandler'
-
-        expect(self.rollbarSpies.error).toHaveBeenCalledWith('some exception', { stackTrace: ['non-ignored frame', self.rollbarExtraArgs.stackTrace[0]], origin: '$ExceptionHandler' })
+        expect(self.rollbarSpies.error).toHaveBeenCalledWith('some exception', error, { args: [] })
         done()
       })
     })
@@ -134,13 +112,11 @@ describe('rollbarConfig', () => {
     it('should send a log to rollbar even the stacktrace fails', (done) => {
       jest.spyOn(self.$log, 'error')
       self.$log.error.logs = []
-      self.stacktraceLogSpy.mockImplementation(() => Observable.throw('error message when fetching stack').toPromise())
       self.$log.error('test error')
 
       expect(self.$log.error.logs[0]).toEqual(['test error'])
       self.$window.setTimeout(() => {
-        expect(self.rollbarSpies.error).toHaveBeenCalledWith('"test error"', { origin: '$log' })
-        expect(self.rollbarSpies.warning).toHaveBeenCalledWith('Error loading stackframes: error message when fetching stack')
+        expect(self.rollbarSpies.error).toHaveBeenCalledWith('test error', expect.any(Error), { args: [] })
         done()
       })
     })
@@ -164,97 +140,6 @@ describe('rollbarConfig', () => {
           }
         })
       })
-    })
-  })
-
-  describe('formatStacktraceForRollbar', () => {
-    it('should rename stack frame object keys', () => {
-      expect(module.formatStacktraceForRollbar([
-        {
-          functionName: 'a',
-          lineNumber: 1,
-          columnNumber: 1,
-          fileName: 'a.js'
-        },
-        {
-          functionName: 'b',
-          lineNumber: 2,
-          columnNumber: 2,
-          fileName: 'b.js'
-        }
-      ]))
-        .toEqual([
-          {
-            method: 'a',
-            lineno: 1,
-            colno: 1,
-            filename: 'a.js'
-          },
-          {
-            method: 'b',
-            lineno: 2,
-            colno: 2,
-            filename: 'b.js'
-          }
-        ])
-    })
-  })
-
-  describe('transformRollbarPayload', () => {
-    it('should convert the payload from message format to trace format', () => {
-      expect(module.transformRollbarPayload({
-        data: {
-          body: {
-            message: {
-              body: 'some error',
-              extra: {
-                stackTrace: [{
-                  functionName: 'a',
-                  lineNumber: 1,
-                  columnNumber: 1,
-                  fileName: 'a.js'
-                }],
-                origin: '$log'
-              }
-            }
-          }
-        }
-      }))
-        .toEqual({
-          data: {
-            body: {
-              trace: {
-                frames: [{
-                  method: 'a',
-                  lineno: 1,
-                  colno: 1,
-                  filename: 'a.js'
-                }],
-                exception: {
-                  message: 'some error',
-                  class: '$log'
-                }
-              }
-            }
-          }
-        })
-    })
-
-    it('should leave the payload unmodified if extra.stackTrace is missing', () => {
-      const payload = {
-        data: {
-          body: {
-            message: {
-              body: 'some error',
-              extra: {
-                somethingElse: 1
-              }
-            }
-          }
-        }
-      }
-
-      expect(module.transformRollbarPayload(payload)).toEqual(payload)
     })
   })
 

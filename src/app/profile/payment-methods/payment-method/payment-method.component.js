@@ -9,6 +9,8 @@ import profileService from 'common/services/api/profile.service'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import { scrollModalToTop } from 'common/services/modalState.service'
+import uibCollapse from 'angular-ui-bootstrap/src/collapse'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
 
@@ -121,7 +123,9 @@ export default angular
     paymentMethodFormModal.name,
     deletePaymentMethodModal.name,
     profileService.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    uibCollapse,
+    uibModal
   ])
   .component(componentName, {
     controller: PaymentMethodController,

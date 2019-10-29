@@ -1,6 +1,7 @@
 import angular from 'angular'
 
 import navCart, { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
 
 import template from './navCartIcon.tpl.html'
 
@@ -30,7 +31,8 @@ class NavCartIconController {
 
 export default angular
   .module(componentName, [
-    navCart.name
+    navCart.name,
+    uibDropdown
   ])
   .component(componentName, {
     controller: NavCartIconController,

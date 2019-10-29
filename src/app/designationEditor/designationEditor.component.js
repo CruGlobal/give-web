@@ -1,8 +1,8 @@
 import angular from 'angular'
 import 'angular-sanitize'
-import 'angular-ui-bootstrap'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import commonModule from 'common/common.module'
 import sessionEnforcerService, {
@@ -278,7 +278,8 @@ export default angular
     personalOptionsModalController.name,
     photoModalController.name,
     textEditorModalController.name,
-    websiteModalController.name
+    websiteModalController.name,
+    uibModal
   ])
   .component(componentName, {
     controller: DesignationEditorController,

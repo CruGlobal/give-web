@@ -84,7 +84,7 @@ describe('contactInfo', function () {
 
       expect(self.controller.detailsForm.phoneNumber.$validators.phone('541-967-0010')).toEqual(true)
       expect(self.controller.detailsForm.phoneNumber.$validators.phone('')).toEqual(true)
-      expect(self.controller.detailsForm.phoneNumber.$validators.phone('123-456-7890')).toEqual(false)
+      expect(self.controller.detailsForm.phoneNumber.$validators.phone('123-abc-7890')).toEqual(false)
     })
   })
 
