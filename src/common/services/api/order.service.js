@@ -17,14 +17,17 @@ import hateoasHelperService from 'common/services/hateoasHelper.service'
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
 
+import analyticsFactory from 'app/analytics/analytics.factory'
+
 const serviceName = 'orderService'
 
 class Order {
   /* @ngInject */
-  constructor (cortexApiService, cartService, hateoasHelperService, $window, $log) {
+  constructor (cortexApiService, cartService, hateoasHelperService, analyticsFactory, $window, $log) {
     this.cortexApiService = cortexApiService
     this.cartService = cartService
     this.hateoasHelperService = hateoasHelperService
+    this.analyticsFactory = analyticsFactory
     this.sessionStorage = $window.sessionStorage
     this.localStorage = $window.localStorage
     this.$log = $log
@@ -60,6 +63,7 @@ class Order {
   }
 
   updateDonorDetails (details) {
+    this.analyticsFactory.setDonorDetails(details)
     details = angular.copy(details)
     details['mailing-address'] = formatAddressForCortex(details.mailingAddress)
     delete details.mailingAddress
@@ -318,6 +322,7 @@ export default angular
   .module(serviceName, [
     cortexApiService.name,
     cartService.name,
-    hateoasHelperService.name
+    hateoasHelperService.name,
+    analyticsFactory.name
   ])
   .service(serviceName, Order)
