@@ -5,6 +5,7 @@ import filterByYear from './receipts.filter'
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
 import { Roles, SignOutEvent } from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
+import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
 
 class ReceiptsController {
   /* @ngInject */
@@ -107,7 +108,8 @@ export default angular
     commonModule.name,
     donationsService.name,
     filterByYear.name,
-    sessionEnforcerService.name
+    sessionEnforcerService.name,
+    uibDropdown
   ])
   .component(componentName, {
     controller: ReceiptsController,

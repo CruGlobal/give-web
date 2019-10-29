@@ -11,6 +11,7 @@ import { Roles, SignOutEvent } from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
 import { scrollModalToTop } from 'common/services/modalState.service'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 class PaymentMethodsController {
   /* @ngInject */
@@ -159,7 +160,8 @@ export default angular
     paymentMethod.name,
     profileService.name,
     paymentMethodDisplay.name,
-    sessionEnforcerService.name
+    sessionEnforcerService.name,
+    uibModal
   ])
   .component(componentName, {
     controller: PaymentMethodsController,
