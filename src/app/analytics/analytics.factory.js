@@ -37,7 +37,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
 
             item = {
               productInfo: {
-                productID: cartData.items[i].designationNumber
+                productID: cartData.items[i].designationNumber,
+                designationType: cartData.items[i].designationType
               },
               price: {
                 basePrice: cartData.items[i].amount
@@ -65,7 +66,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         var cart = {
           item: [{
             productInfo: {
-              productID: productData.designationNumber
+              productID: productData.designationNumber,
+              designationType: productData.designationType
             },
             price: {
               basePrice: itemConfig.amount
@@ -122,7 +124,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         if (item) {
           $window.digitalData.cart.item = [{
             productInfo: {
-              productID: item.designationNumber
+              productID: item.designationNumber,
+              designationType: item.designationType
             },
             price: {
               basePrice: item.amount

@@ -19,7 +19,8 @@ const giveComponents = [
   'app/profile/profile.component.js',
   'app/profile/receipts/receipts.component.js',
   'app/profile/payment-methods/payment-methods.component.js',
-  'app/designationEditor/designationEditor.component.js'
+  'app/designationEditor/designationEditor.component.js',
+  'app/newsletterSubscription/newsletterSubscription.component.js'
 ]
 
 const giveCss = ['assets/scss/styles.scss']

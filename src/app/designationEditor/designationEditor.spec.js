@@ -38,7 +38,8 @@ const designationSecurityResponse = {
   secondaryMiddleName: '',
   secondaryLastName: '',
   secondaryMaidenName: '',
-  secondarySuffix: ''
+  secondarySuffix: '',
+  showNewsletterForm: true
 }
 
 describe('Designation Editor', function () {
@@ -233,9 +234,10 @@ describe('Designation Editor', function () {
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer()
         jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: modalPromise.promise })
+        jest.spyOn($ctrl.designationEditorService, 'hasNewsletter').mockResolvedValue(true)
       }))
 
-      it('should open modal', () => {
+      it('should open modal', async () => {
         $ctrl.designationNumber = '000555'
         $ctrl.giveDomain = 'https://give.example.com'
         $ctrl.designationContent = designationSecurityResponse
@@ -245,14 +247,19 @@ describe('Designation Editor', function () {
         expect($ctrl.$uibModal.open).toHaveBeenCalled()
         expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
         expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.giveDomain()).toEqual($ctrl.giveDomain)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.designationType()).toEqual(designationSecurityResponse.designationType)
+        await expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.hasNewsletter).resolves.toBe(true)
         expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.givingLinks()).toEqual(designationSecurityResponse.givingLinks)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.showNewsletterForm()).toEqual(designationSecurityResponse.showNewsletterForm)
 
         modalPromise.resolve({
-          givingLinks: []
+          givingLinks: [],
+          showNewsletterForm: false
         })
         $rootScope.$digest()
 
         expect($ctrl.designationContent.suggestedAmounts).toEqual([])
+        expect($ctrl.designationContent.showNewsletterForm).toEqual(false)
       })
     })
 

@@ -191,3 +191,10 @@ Use the `cortexApiService` which provides convenience methods for sending reques
 
 ### Staging Environment
 Replace `https://give-static.cru.org` with `https://cru-givestage.s3.amazonaws.com` to use the staging environment. 
+
+### Deployments
+
+Travis auto-deploys master builds to a pre-prod s3 bucket.
+http://devtools.aws.cru.org:8080/view/Give%20Site/job/Give%20NG%20prod%20deploy/ copies
+to the live bucket, which backs CloudFront.
+
