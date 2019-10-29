@@ -1,0 +1,42 @@
+.newsletter-modal {
+  .modal-progress {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .badge {
+      padding: 10px 13px;
+      border-radius: 17px;
+      &.active {
+        background-color: #f8ae0c;
+      }
+    }
+    .spanner {
+      flex-grow: 3;
+      margin: 13px;
+      border: 3px solid #777;
+      border-radius: 3px;
+      &.active {
+        border-color: #f8ae0c;
+      }
+    }
+  }
+
+  .modal-navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .left {
+      align-self: flex-start;
+    }
+  }
+
+  h6 {
+    text-align: center;
+  }
+
+  .jumbotron {
+    text-align: center;
+    padding: 20px;
+  }
+}

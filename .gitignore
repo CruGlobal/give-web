@@ -8,3 +8,4 @@ coverage
 *.back.*
 .sass-cache
 stats.json
+*.iml

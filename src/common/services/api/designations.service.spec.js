@@ -88,6 +88,7 @@ describe('designation service', () => {
       ],
       frequency: 'NA',
       displayName: 'Steve Peck',
+      designationType: 'Staff',
       code: '0354433',
       designationNumber: '0354433'
     }
