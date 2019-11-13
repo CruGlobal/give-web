@@ -34,7 +34,7 @@
           <button class="btn btn-default"
                   type="button"
                   aria-label="Remove image"
-                  ng-click="$ctrl.selectedPhoto.splice($index, 1);"><i class="fa fa-trash"></i>
+                  ng-click="$ctrl.selectedPhoto.splice($index, 1); $ctrl.maxCarouselError = false;"><i class="fa fa-trash"></i>
           </button>
         </td>
       </tr>
@@ -47,6 +47,9 @@
   <div class="give-thumbs-container clearfix" ng-if="$ctrl.photos.length">
     <h3 translate>Available Photos</h3>
     <h5 translate>Click + to add photos to the carousel.</h5>
+    <div class="alert alert-danger" role="alert" ng-if="$ctrl.maxCarouselError">
+      <p translate>Your carousel can only hold {{$ctrl.maxNumberOfPhotos}} photos. Please remove one before adding another.</p>
+    </div>
     <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
       <div class="add-trigger" ng-click="$ctrl.addImageToCarousel(photo)">
         <i class="fa fa-plus" aria-label="Add to carousel"></i>
