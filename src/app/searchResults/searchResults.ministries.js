@@ -44,7 +44,7 @@ export default [
   {
     name: 'Cru Military',
     designationNumber: '2283732',
-    path: '/2283732',
+    path: '/militaryministry',
     facet: 'ministry'
   },
   {
@@ -117,6 +117,12 @@ export default [
     name: 'StoryRunners',
     designationNumber: '2852450',
     path: '/storyrunners-strategies',
+    facet: 'ministry'
+  },
+  {
+    name: 'Unto™',
+    designationNumber: '1071573',
+    path: '/1071573',
     facet: 'ministry'
   }
 ]

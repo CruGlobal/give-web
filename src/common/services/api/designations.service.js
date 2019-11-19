@@ -83,7 +83,8 @@ class DesignationsService {
       '1-103-1': 'U.S. Ministries',
       '1-108-1': 'East / Southern Africa',
       '1-108-2': 'Francophone Africa',
-      '1-108-3': 'West Africa'
+      '1-108-3': 'West Africa',
+      '1-2OMQSO2': 'Unto™'
     }
 
     params = angular.copy(params)
