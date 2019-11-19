@@ -44,7 +44,7 @@ export default [
   {
     name: 'Cru Military',
     designationNumber: '2283732',
-    path: '/2283732',
+    path: '/militaryministry',
     facet: 'ministry'
   },
   {
