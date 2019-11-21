@@ -68,7 +68,7 @@ export default [
   {
     name: 'Global Aid Network (GAiN)',
     designationNumber: '2807640',
-    path: '/2807640',
+    path: '/gain-greatestneeds',
     facet: 'ministry'
   },
   {
