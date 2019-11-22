@@ -2,13 +2,13 @@
 
   <div class="mb_x">
 
-    <h4 class="panel-title  border-bottom-small  visible" translate>Bank Account Payment</h4>
+    <h4 class="panel-title  border-bottom-small  visible" translate>{{BANK_ACCOUNT_PAYMENT}}</h4>
 
 
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group form-group-default is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.bankName | showErrors)}">
-          <label>Bank Name</label>
+          <label>{{BANK_NAME}}</label>
           <input type="text" class="form-control form-control-subtle" name="bankName" ng-model="$ctrl.bankPayment.bankName" ng-maxlength="30" required/>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.bankName.$error" ng-if="($ctrl.bankPaymentForm.bankName | showErrors)">
             <div class="help-block" ng-message="required" translate>You must enter a bank name</div>
@@ -18,12 +18,12 @@
       </div>
       <div class="col-sm-6">
         <div class="form-group form-group-default form-group-inline" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}">
-          <label class="label-block">Account Type</label>
+          <label class="label-block">{{ACCOUNT_TYPE}}</label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Checking" required> Checking <span class="hidden-md hide-modal">Account</span>
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Checking" required> {{CHECKING}}
           </label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Savings" required> Savings <span class="hidden-md hide-modal">Account</span>
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Savings" required> {{SAVINGS}}
           </label>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountType.$error" ng-if="($ctrl.bankPaymentForm.accountType | showErrors)">
             <div class="help-block" ng-message="required" translate>You must choose an account type</div>
