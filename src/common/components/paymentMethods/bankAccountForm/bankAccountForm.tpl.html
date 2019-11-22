@@ -2,31 +2,31 @@
 
   <div class="mb_x">
 
-    <h4 class="panel-title  border-bottom-small  visible" translate>{{BANK_ACCOUNT_PAYMENT}}</h4>
+    <h4 class="panel-title  border-bottom-small  visible" translate>{{'BANK_ACCOUNT_PAYMENT'}}</h4>
 
 
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group form-group-default is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.bankName | showErrors)}">
-          <label>{{BANK_NAME}}</label>
+          <label translate>{{'BANK_NAME'}}</label>
           <input type="text" class="form-control form-control-subtle" name="bankName" ng-model="$ctrl.bankPayment.bankName" ng-maxlength="30" required/>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.bankName.$error" ng-if="($ctrl.bankPaymentForm.bankName | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter a bank name</div>
-            <div class="help-block" ng-message="maxlength" translate>The bank name cannot be longer than 30 characters</div>
+            <div class="help-block" ng-message="required" translate>{{'BANK_NAME_ERROR'}}</div>
+            <div class="help-block" ng-message="maxlength" translate>{{'MAX_LENGTH_BANK_NAME_ERROR'}}</div>
           </div>
         </div>
       </div>
       <div class="col-sm-6">
         <div class="form-group form-group-default form-group-inline" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountType | showErrors)}">
-          <label class="label-block">{{ACCOUNT_TYPE}}</label>
+          <label class="label-block" translate>{{'ACCOUNT_TYPE'}}</label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Checking" required> {{CHECKING}}
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Checking" required> <translate>{{'CHECKING'}}</translate>
           </label>
           <label class="radio-inline">
-            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Savings" required> {{SAVINGS}}
+            <input type="radio" name="accountType" ng-model="$ctrl.bankPayment.accountType" value="Savings" required> <translate>{{'SAVINGS'}}</translate>
           </label>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountType.$error" ng-if="($ctrl.bankPaymentForm.accountType | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must choose an account type</div>
+            <div class="help-block" ng-message="required" translate>{{'ACCOUNT_TYPE_ERROR'}}</div>
           </div>
         </div>
       </div>
@@ -39,9 +39,9 @@
           <label>Routing #</label>
           <input type="text" class="form-control  form-control-subtle" name="routingNumber" autocomplete="off" ng-model="$ctrl.bankPayment.routingNumber" required>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.routingNumber.$error" ng-if="($ctrl.bankPaymentForm.routingNumber | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter a routing number</div>
-            <div class="help-block" ng-message="length" translate>This routing number must contain 9 digits</div>
-            <div class="help-block" ng-message="routingNumber" translate>This routing number is invalid</div>
+            <div class="help-block" ng-message="required" translate>{{'ROUTING_NUM_ERROR'}}</div>
+            <div class="help-block" ng-message="length" translate>{{'MIN_LENGTH_ROUTING_ERROR'}}</div>
+            <div class="help-block" ng-message="routingNumber" translate>{{'ROUTING_INVALID_ERROR'}}</div>
           </div>
         </div>
       </div>
@@ -50,9 +50,9 @@
           <label>Account #</label>
           <input type="text" class="form-control  form-control-subtle" name="accountNumber" autocomplete="off" ng-model="$ctrl.bankPayment.accountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountNumber.$error" ng-if="($ctrl.bankPaymentForm.accountNumber | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter an account number</div>
-            <div class="help-block" ng-message="minlength" translate>This account number must contain 2 or more digits</div>
-            <div class="help-block" ng-message="maxlength" translate>This account number must contain 17 or fewer digits</div>
+            <div class="help-block" ng-message="required" translate>{{'ACCOUNT_NUM_ERROR'}}</div>
+            <div class="help-block" ng-message="minlength" translate>{{'MIN_LENGTH_ACCOUNT_ERROR'}}</div>
+            <div class="help-block" ng-message="maxlength" translate>{{'MAX_LENGTH_ACCOUNT_ERROR'}}</div>
           </div>
         </div>
       </div>
@@ -61,8 +61,8 @@
           <label>Retype Account #</label>
           <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" autocomplete="off" ng-model="$ctrl.bankPayment.verifyAccountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="$ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error" ng-if="($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must retype your account number</div>
-            <div class="help-block" ng-message="verifyAccountNumber" translate>Your account numbers do not match</div>
+            <div class="help-block" ng-message="required" translate>{{'RETYPE_ACCT_NUM'}}</div>
+            <div class="help-block" ng-message="verifyAccountNumber" translate>{{'ACCT_NUM_MISMATCH'}}</div>
           </div>
         </div>
       </div>
@@ -71,7 +71,7 @@
 
     <div class="row">
       <div class="col-sm-12">
-        Locate your Routing and Account Numbers
+        <translate>{{'LOCATE_ROUTING_ACCT'}}</translate>
         <a href="" class="circle-it bank-explain-trigger" ng-click="$ctrl.showBankExplain = !$ctrl.showBankExplain">
           <i class="fa fa-question"></i>
         </a>
@@ -88,8 +88,8 @@
                   <img ng-src="{{$ctrl.imgDomain}}/assets/img/check-sample.png" alt="Sample Check"/>
                 </div>
                 <div class="col-sm-4">
-                  <h4>Where to find it.</h4>
-                  <p>Use your account and routing numbers from your check. Do not use your deposit slip.</p>
+                  <h4 translate>{{'WHERE_TO_FIND_BANK_NUMS_TITLE'}}</h4>
+                  <p translate>{{'WHERE_TO_FIND_BANK_NUMS_MESSAGE'}}</p>
                 </div>
               </div>
             </div>
@@ -100,21 +100,21 @@
   </div>
 
   <div>
-    <h4 class="panel-title  border-bottom-small  visible">Bank Account Agreement</h4>
+    <h4 class="panel-title  border-bottom-small  visible" translate>{{'BANK_AGREEMENT'}}</h4>
     <div class="row">
       <div class="col-sm-12">
         <div class="panel panel-default">
           <div class="panel-body">
-            <p>By selecting the "I Agree" checkbox below, I acknowledge that I have read, understand and agree to these Terms and Conditions, and that this agreement constitutes a "writing signed by me" under any applicable law or regulation. I authorize Cru to initiate electronic funds transfers (debits) from my account at the financial institution listed above, and to initiate deposits (credits) if necessary for any withdrawals made in error. This authority is to remain in full force and effect until Cru has received notification from me of its termination in such time as to afford Cru reasonable opportunity to act on it. All contributions to Cru are income tax-deductible and are made with the understanding that Cru has complete discretion and control over the use of all donated funds.</p>
+            <p translate>{{'BANK_AGREEMENT_MESSAGE'}}</p>
           </div>
         </div>
 
         <div class="form-group is-required mb0" ng-class="{'has-error': ($ctrl.bankPaymentForm.acceptedAgreement | showErrors)}">
           <label class="checkbox-inline">
-            <input type="checkbox" name="acceptedAgreement" ng-model="$ctrl.bankPayment.acceptedAgreement" required value="true"> I Agree
+            <input type="checkbox" name="acceptedAgreement" ng-model="$ctrl.bankPayment.acceptedAgreement" required value="true"> <translate>{{'I_AGREE'}}</translate>
           </label>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.acceptedAgreement.$error" ng-if="($ctrl.bankPaymentForm.acceptedAgreement | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must accept this agreement to pay with a bank account</div>
+            <div class="help-block" ng-message="required" translate>{{'MUST_AGREE_BANK_ACCT'}}</div>
           </div>
         </div>
 
