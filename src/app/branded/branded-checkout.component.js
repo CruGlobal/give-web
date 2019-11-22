@@ -104,8 +104,8 @@ export default angular
     thankYouSummary.name,
     sessionService.name,
     uibModal,
-    'environment',
-  ]).config(($uibModalProvider, $windowProvider, $translateProvider) => {
+    'environment'
+  ]).config(($uibModalProvider, $windowProvider) => {
     const $document = angular.element($windowProvider.$get().document)
     $uibModalProvider.options.appendTo = $document.find('branded-checkout').eq(0)
     if (!$uibModalProvider.options.appendTo.length) { $uibModalProvider.options.appendTo = $document.find('body').eq(0) }
