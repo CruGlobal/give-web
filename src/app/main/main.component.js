@@ -218,7 +218,18 @@ const translationConfig = /* @ngInject */ function ($translateProvider) {
     MAX_LENGTH_CARD_SEC_CODE: 'The security code cannot be more than 4 digits',
     LOCATION_OF_CODE_AMEX: '4 digit code on front of card',
     LOCATION_OF_CODE_OTHER: '3 digit code on back of card',
-    LOADING_ADDRESS: 'Loading mailing address...'
+    LOADING_ADDRESS: 'Loading mailing address...',
+    COUNTRY_LIST_ERROR: 'There was an error loading the list of countries. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
+    COUNTRY_SELECT_ERROR: 'You must select a country',
+    ADDRESS_ERROR: 'You must enter an address',
+    MAX_LENGTH_ADDRESS_ERROR: 'This field cannot be longer than 200 characters',
+    MAX_LENGTH_ADDRESS_OTHERS_ERROR: 'This field cannot be longer than 100 characters',
+    CITY_ERROR: 'You must enter a city',
+    MAX_LENGTH_CITY_ERROR: 'This field cannot be longer than 100 characters',
+    REGIONS_LOADING_ERROR: 'There was an error loading the list of regions/state. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
+    SELECT_STATE_ERROR: 'You must select a state / region',
+    ZIP_CODE_ERROR: 'You must enter a zip / postal code',
+    INVALID_US_ZIP_ERROR: 'You must enter a valid US zip code'
   })
   $translateProvider.translations('es', {
     GIVE_GIFT_HEADER: 'Dar regalo',
@@ -385,8 +396,5 @@ export default angular
   .config(translationConfig)
   .component(componentName, {
     controller: MainController,
-    templateUrl: template,
-    bindings: {
-      lang: '@'
-    }
+    templateUrl: template
   })

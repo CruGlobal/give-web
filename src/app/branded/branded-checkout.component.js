@@ -20,12 +20,13 @@ const componentName = 'brandedCheckout'
 
 class BrandedCheckoutController {
   /* @ngInject */
-  constructor ($window, analyticsFactory, tsysService, sessionService, envService) {
+  constructor ($window, analyticsFactory, tsysService, sessionService, envService, $translate) {
     this.$window = $window
     this.analyticsFactory = analyticsFactory
     this.tsysService = tsysService
     this.sessionService = sessionService
     this.envService = envService
+    this.$translate = $translate
   }
 
   $onInit () {
@@ -42,6 +43,7 @@ class BrandedCheckoutController {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
     }, angular.noop)
+    this.$translate.use(this.lang || 'es')
   }
 
   formatDonorDetails () {
@@ -126,6 +128,7 @@ export default angular
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',
-      onOrderFailed: '&'
+      onOrderFailed: '&',
+      lang: '@'
     }
   })
