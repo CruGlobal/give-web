@@ -229,7 +229,12 @@ const translationConfig = /* @ngInject */ function ($translateProvider) {
     REGIONS_LOADING_ERROR: 'There was an error loading the list of regions/state. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     SELECT_STATE_ERROR: 'You must select a state / region',
     ZIP_CODE_ERROR: 'You must enter a zip / postal code',
-    INVALID_US_ZIP_ERROR: 'You must enter a valid US zip code'
+    INVALID_US_ZIP_ERROR: 'You must enter a valid US zip code',
+    ROUTING_NUM_INVALID: 'The routing number you entered does not seem to be valid. Please verify that it is correct.',
+    ALREADY_ADDED_CARD: 'You have already added this credit card. If you wish to make changes please edit your existing credit card.',
+    EXPIRED_CARD_ERROR: 'This card has expired. Please use a different payment method.',
+    ALREADY_ADDED_BANK: 'You have already added this bank account. If you wish to make changes please edit your existing bank account.',
+    ERROR_SAVING_PAYMENT: 'There was an error saving your payment method. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.'
   })
   $translateProvider.translations('es', {
     GIVE_GIFT_HEADER: 'Dar regalo',
@@ -369,7 +374,23 @@ const translationConfig = /* @ngInject */ function ($translateProvider) {
     MAX_LENGTH_CARD_SEC_CODE: 'El código de seguridad no puede tener más de 4 dígitos.',
     LOCATION_OF_CODE_AMEX: 'Código de 4 dígitos en el frente de la tarjeta',
     LOCATION_OF_CODE_OTHER: 'Código de 3 dígitos en el reverso de la tarjeta',
-    LOADING_ADDRESS: 'Cargando dirección postal...'
+    LOADING_ADDRESS: 'Cargando dirección postal...',
+    COUNTRY_LIST_ERROR: 'There was an error loading the list of countries. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
+    COUNTRY_SELECT_ERROR: 'You must select a country',
+    ADDRESS_ERROR: 'You must enter an address',
+    MAX_LENGTH_ADDRESS_ERROR: 'This field cannot be longer than 200 characters',
+    MAX_LENGTH_ADDRESS_OTHERS_ERROR: 'This field cannot be longer than 100 characters',
+    CITY_ERROR: 'You must enter a city',
+    MAX_LENGTH_CITY_ERROR: 'This field cannot be longer than 100 characters',
+    REGIONS_LOADING_ERROR: 'There was an error loading the list of regions/state. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
+    SELECT_STATE_ERROR: 'You must select a state / region',
+    ZIP_CODE_ERROR: 'You must enter a zip / postal code',
+    INVALID_US_ZIP_ERROR: 'You must enter a valid US zip code',
+    ROUTING_NUM_INVALID: 'The routing number you entered does not seem to be valid. Please verify that it is correct.',
+    ALREADY_ADDED_CARD: 'You have already added this credit card. If you wish to make changes please edit your existing credit card.',
+    EXPIRED_CARD_ERROR: 'This card has expired. Please use a different payment method.',
+    ALREADY_ADDED_BANK: 'You have already added this bank account. If you wish to make changes please edit your existing bank account.',
+    ERROR_SAVING_PAYMENT: 'There was an error saving your payment method. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.'
   })
   $translateProvider.preferredLanguage('en')
 }

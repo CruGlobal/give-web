@@ -36,7 +36,7 @@
     <div class="row">
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.routingNumber | showErrors)}">
-          <label>Routing #</label>
+          <label translate>{{'ROUTING'}}</label>
           <input type="text" class="form-control  form-control-subtle" name="routingNumber" autocomplete="off" ng-model="$ctrl.bankPayment.routingNumber" required>
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.routingNumber.$error" ng-if="($ctrl.bankPaymentForm.routingNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'ROUTING_NUM_ERROR'}}</div>
@@ -47,7 +47,7 @@
       </div>
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.bankPaymentForm.accountNumber | showErrors)}">
-          <label>Account #</label>
+          <label translate>{{'ACCOUNT_NUM'}}</label>
           <input type="text" class="form-control  form-control-subtle" name="accountNumber" autocomplete="off" ng-model="$ctrl.bankPayment.accountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="!$ctrl.paymentMethod || $ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.accountNumber.$error" ng-if="($ctrl.bankPaymentForm.accountNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'ACCOUNT_NUM_ERROR'}}</div>
@@ -58,7 +58,7 @@
       </div>
       <div class="col-sm-4">
         <div class="form-group is-required no-wrap" ng-class="{'has-error': ($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)}">
-          <label>Retype Account #</label>
+          <label translate>{{'RETYPE_ACCOUNT_NUM'}}</label>
           <input type="text" class="form-control  form-control-subtle" name="verifyAccountNumber" autocomplete="off" ng-model="$ctrl.bankPayment.verifyAccountNumber" ng-attr-placeholder="************{{$ctrl.bankPayment.accountNumberPlaceholder}}" ng-required="$ctrl.bankPayment.accountNumber">
           <div role="alert" ng-messages="$ctrl.bankPaymentForm.verifyAccountNumber.$error" ng-if="($ctrl.bankPaymentForm.verifyAccountNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'RETYPE_ACCT_NUM'}}</div>

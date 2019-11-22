@@ -43,7 +43,7 @@ class BrandedCheckoutController {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
     }, angular.noop)
-    this.$translate.use(this.lang || 'es')
+    this.$translate.use(this.lang || 'en')
   }
 
   formatDonorDetails () {
