@@ -280,7 +280,9 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     FINAL_GIFT_THANK_YOU: 'Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ\'s kingdom. (Luke 6:38)',
     RECEIPT_MAILING_ADDRESS: 'Receipt Mailing Address',
     GIFT_SUMMARY: 'Gift Summary',
-    FIRST_GIFT: 'First Gift:'
+    FIRST_GIFT: 'First Gift:',
+    ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
+    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:'
   })
 
   $translateProvider.translations('es', {
@@ -485,7 +487,9 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     FINAL_GIFT_THANK_YOU: 'Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ\'s kingdom. (Luke 6:38)',
     RECEIPT_MAILING_ADDRESS: 'Receipt Mailing Address',
     GIFT_SUMMARY: 'Gift Summary',
-    FIRST_GIFT: 'First Gift:'
+    FIRST_GIFT: 'First Gift:',
+    ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
+    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:'
   })
   $translateProvider.preferredLanguage('en')
 }
