@@ -1,5 +1,6 @@
 import angular from 'angular'
 import 'angular-environment'
+import 'angular-translate'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
 import changeCaseObject from 'change-case-object'
@@ -106,7 +107,8 @@ export default angular
     thankYouSummary.name,
     sessionService.name,
     uibModal,
-    'environment'
+    'environment',
+    'pascalprecht.translate'
   ]).config(($uibModalProvider, $windowProvider) => {
     const $document = angular.element($windowProvider.$get().document)
     $uibModalProvider.options.appendTo = $document.find('branded-checkout').eq(0)
