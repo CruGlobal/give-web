@@ -1,9 +1,10 @@
 import angular from 'angular'
 import 'angular-environment'
+import 'angular-translate'
 
 import rollbarConfig from './rollbar.config'
 
-const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider) {
+const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
   $httpProvider.useApplyAsync(true)
 
   envServiceProvider.config({
@@ -76,9 +77,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
   }
 
   $qProvider.errorOnUnhandledRejections(false)
-}
 
-const translationConfig = /* @ngInject */ function ($translateProvider) {
   $translateProvider.translations('en', {
     GIVE_GIFT_HEADER: 'Give Gift',
     LOADING_GIFT_DETAILS: 'Loading gift details...',
@@ -400,4 +399,3 @@ export default angular.module('appConfig', [
 ])
   .config(appConfig)
   .config(rollbarConfig)
-  .config(translationConfig)
