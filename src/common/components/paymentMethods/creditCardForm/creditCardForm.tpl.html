@@ -51,18 +51,18 @@
                   autocomplete="cc-exp-month"
                   required
                   ng-model="$ctrl.creditCardPayment.expiryMonth">
-            <option value="01">01 - <translate>{{'MONTHS.JAN'}}</translate></option>
-            <option value="02">02 - <translate>{{'MONTHS.FEB'}}</translate></option>
-            <option value="03">03 - <translate>{{'MONTHS.MAR'}}</translate></option>
-            <option value="04">04 - <translate>{{'MONTHS.APR'}}</translate></option>
-            <option value="05">05 - <translate>{{'MONTHS.MAY'}}</translate></option>
-            <option value="06">06 - <translate>{{'MONTHS.JUN'}}</translate></option>
-            <option value="07">07 - <translate>{{'MONTHS.JUL'}}</translate></option>
-            <option value="08">08 - <translate>{{'MONTHS.AUG'}}</translate></option>
-            <option value="09">09 - <translate>{{'MONTHS.SEP'}}</translate></option>
-            <option value="10">10 - <translate>{{'MONTHS.OCT'}}</translate></option>
-            <option value="11">11 - <translate>{{'MONTHS.NOV'}}</translate></option>
-            <option value="12">12 - <translate>{{'MONTHS.DEC'}}</translate></option>
+            <option value="01" translate>01 - {{'MONTHS.JAN'}}</option>
+            <option value="02" translate>02 - {{'MONTHS.FEB'}}</option>
+            <option value="03" translate>03 - {{'MONTHS.MAR'}}</option>
+            <option value="04" translate>04 - {{'MONTHS.APR'}}</option>
+            <option value="05" translate>05 - {{'MONTHS.MAY'}}</option>
+            <option value="06" translate>06 - {{'MONTHS.JUN'}}</option>
+            <option value="07" translate>07 - {{'MONTHS.JUL'}}</option>
+            <option value="08" translate>08 - {{'MONTHS.AUG'}}</option>
+            <option value="09" translate>09 - {{'MONTHS.SEP'}}</option>
+            <option value="10" translate>10 - {{'MONTHS.OCT'}}</option>
+            <option value="11" translate>11 - {{'MONTHS.NOV'}}</option>
+            <option value="12" translate>12 - {{'MONTHS.DEC'}}</option>
           </select>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryMonth.$error" ng-if="($ctrl.creditCardPaymentForm.expiryMonth | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'CARD_EXP_MONTH_ERROR'}}</div>
