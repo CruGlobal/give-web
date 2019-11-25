@@ -21,7 +21,7 @@
             <div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_NUM_ERROR'}}</div>
             <div class="help-block" ng-message="maxLength" translate>{{'MAX_LENGTH_CARD_NUM_ERROR'}}</div>
             <div class="help-block" ng-message="knownType" translate>{{'CARD_TYPE_ERROR'}}</div>
-            <div class="help-block" ng-message="typeLength" translate='INVALID_TYPE_ERROR' translate-values-cardType="{{$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}}" translate-values-cardDigits="{{$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')}}"></div>
+            <div class="help-block" ng-message="typeLength" translate='INVALID_TYPE_ERROR' translate-value-cardType="{{$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}}" translate-value-cardDigits="{{$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')}}"></div>
             <div class="help-block" ng-message="checksum" translate>{{'INVALID_CARD_NUM_ERROR'}}</div>
           </div>
         </div>
