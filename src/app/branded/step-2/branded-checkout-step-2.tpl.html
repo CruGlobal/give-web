@@ -1,7 +1,7 @@
 <div class="panel">
   <div class="panel-body">
-    <h3 class="panel-name" translate>Review</h3>
-    <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorLoadingCart" translate>There was an error loading your gifts. You may <a id="retryLoadButton" href="" ng-click="$ctrl.loadCart()">retry</a> loading them. If you continue to see this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</div>
+    <h3 class="panel-name" translate>{{'REVIEW'}}</h3>
+    <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorLoadingCart" translate="RETRY_LOAD" translate-value-retryLoadFunction="{{$ctrl.loadCart()}}"></div>
     <checkout-step-3
       cart-data="$ctrl.cartData"
       change-step="$ctrl.changeStep(newStep)">

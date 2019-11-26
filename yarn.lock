@@ -1346,6 +1346,13 @@ angular-scroll@^1.0.2:
   resolved "https://registry.yarnpkg.com/angular-scroll/-/angular-scroll-1.0.2.tgz#2768ff35dbe1ce40e0c3fbedd4534888299c3e2d"
   integrity sha1-J2j/NdvhzkDgw/vt1FNIiCmcPi0=
 
+angular-translate@^2.18.1:
+  version "2.18.1"
+  resolved "https://registry.yarnpkg.com/angular-translate/-/angular-translate-2.18.1.tgz#b29ed0d2f9bac44075e7aad3284166c59e150791"
+  integrity sha512-Mw0kFBqsv5j8ItL9IhRZunIlVmIRW6iFsiTmRs9wGr2QTt8z4rehYlWyHos8qnXc/kyOYJiW50iH50CSNHGB9A==
+  dependencies:
+    angular ">=1.2.26 <=1.7"
+
 angular-ui-bootstrap@2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
@@ -1364,7 +1371,7 @@ angular-upload@^1.0.13:
   dependencies:
     angular ">=1.2.0"
 
-angular@*, angular@1.7.9, angular@>=1.2.0:
+angular@*, angular@1.7.9, angular@>=1.2.0, "angular@>=1.2.26 <=1.7":
   version "1.7.9"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.9.tgz#e52616e8701c17724c3c238cfe4f9446fd570bc4"
   integrity sha512-5se7ZpcOtu0MBFlzGv5dsM1quQDoDeUTwZrWjGtTNA7O88cD8TEk5IEKCTDa3uECV9XnvKREVUr7du1ACiWGFQ==
