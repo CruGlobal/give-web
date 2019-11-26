@@ -44,7 +44,7 @@ class BrandedCheckoutController {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
     }, angular.noop)
-    this.$translate.use(this.lang || 'en')
+    this.$translate.use(this.language || 'en')
   }
 
   formatDonorDetails () {
@@ -131,6 +131,6 @@ export default angular
       hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',
       onOrderFailed: '&',
-      lang: '@'
+      language: '@'
     }
   })
