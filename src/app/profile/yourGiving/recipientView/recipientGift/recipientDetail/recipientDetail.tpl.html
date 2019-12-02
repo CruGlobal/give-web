@@ -11,5 +11,5 @@
   <translate ng-if="!$ctrl.gift['historical-donation-line'].completed">Pending</translate>
   <translate ng-if="$ctrl.gift['historical-donation-line'].completed">Completed</translate>
   <translate ng-if="$ctrl.gift['historical-donation-line'].anonymous">, Anonymous</translate>
-  <translate ng-if="$ctrl.gift['historical-donation-line']['pass-through'] || $ctrl.gift['historical-donation-line']['master-account']">, Given through {{$ctrl.gift['historical-donation-line']['given-through-description']}}</translate>
+  <translate ng-if="$ctrl.gift['historical-donation-line']['pass-through'] || $ctrl.gift['historical-donation-line']['master-account']" translate-params-description="$ctrl.gift['historical-donation-line']['given-through-description']">, Given through {{description}}</translate>
 </td>

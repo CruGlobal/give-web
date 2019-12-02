@@ -131,7 +131,7 @@
                   <td class="td-frequency">
                     <span class="giftsum-about giftsum-title">{{item.rate.display}}</span>
                     <span class="giftsum-frequency giftsum-title">
-                                <span ng-if="item.rate.recurrence.interval !== 'NA'" translate>First Gift: {{item.rate['start-date'].value | date:'mediumDate':'UTC'}}</span>
+                                <span ng-if="item.rate.recurrence.interval !== 'NA'" translate translate-params-start-date="item.rate['start-date'].value | date:'mediumDate':'UTC'">First Gift: {{startDate}}</span>
                               </span>
                   </td>
                 </tr>

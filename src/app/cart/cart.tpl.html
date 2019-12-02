@@ -18,8 +18,8 @@
                 </div>
               </div>
               <div class="alert alert-danger" role="alert" ng-if="$ctrl.error">
-                <p ng-if="$ctrl.error.loading" translate>Error loading your cart. <a id="retryLoadButton" href="" ng-click="$ctrl.loadCart()">Retry</a></p>
-                <p ng-if="$ctrl.error.updating" translate>Error loading your updated cart. <a id="retryUpdateButton" href="" ng-click="$ctrl.loadCart(true)">Retry</a></p>
+                <p ng-if="$ctrl.error.loading"><translate>Error loading your cart.</translate> <a id="retryLoadButton" href="" ng-click="$ctrl.loadCart()" translate>Retry</a></p>
+                <p ng-if="$ctrl.error.updating"><translate>Error loading your updated cart.</translate> <a id="retryUpdateButton" href="" ng-click="$ctrl.loadCart(true)" translate>Retry</a></p>
               </div>
               <loading ng-if="$ctrl.loading">
                 <translate>Loading your gifts...</translate>

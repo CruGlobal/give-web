@@ -37,8 +37,8 @@
               <label translate>Recurring Gifts:</label>
               <ul class="list-unstyled list-recurring">
                 <li ng-repeat="recurring in $ctrl.recipient['recurring-donations']['donations']" ng-init="gift = $ctrl.recurringGift(recurring)">
-                  <h4 translate>{{gift.amount | currency:'$'}} {{gift.frequency}}</h4>
-                  <span class="meta" translate>Next Gift: {{gift.nextGiftDate.format('ll')}}</span>
+                  <h4>{{gift.amount | currency:'$'}} {{gift.frequency}}</h4>
+                  <span class="meta" translate translate-params-date="gift.nextGiftDate.format('ll')">Next Gift: {{date}}</span>
                 </li>
               </ul>
             </div>
@@ -56,13 +56,12 @@
         <button type="button"
                 class="btn btn-subtle btn-block mt- collapse-indicator split-col-right"
                 ng-class="{collapsed: !$ctrl.showDetails}"
-                ng-click="$ctrl.toggleDetails()"
-                translate>
+                ng-click="$ctrl.toggleDetails()">
           <i class="fa fa-exclamation-triangle text-danger"
              ng-if="$ctrl.loadingDetailsError"
              uib-tooltip="{{'Error loading detailed giving.' | translate}}">
           </i>
-          Details&nbsp;
+          <translate>Details</translate>&nbsp;
         </button>
         <div class="alert alert-danger text-sm-center" role="alert" ng-if="$ctrl.loadingDetailsError">
           <p translate>Error loading detailed giving. You can try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>

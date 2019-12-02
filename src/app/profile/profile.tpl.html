@@ -136,7 +136,7 @@
                       <loading type="overlay" ng-if="$ctrl.emailLoading"></loading>
                       <form name="$ctrl.donorEmailForm" novalidate>
                         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.donorEmailForm.donorsEmail | showErrors)}">
-                          <label translate>{{$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']}} Email</label>
+                          <label translate translate-params-name="$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']">{{name}} Email</label>
                           <input type="email"
                                  name="donorsEmail"
                                  class="form-control  form-control-subtle"
@@ -154,8 +154,8 @@
 
                       <form name="$ctrl.spouseEmailForm" novalidate ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.hasSpouse || $ctrl.addingSpouse)">
                         <div class="form-group" ng-class="{'has-error': ($ctrl.spouseEmailForm.spouseEmail | showErrors)}">
-                          <label translate>
-                            {{$ctrl.hasSpouse ? ($ctrl.donorDetails['spouse-name']['given-name'] + ' ' + $ctrl.donorDetails['spouse-name']['family-name']) : 'Spouse'}} Email
+                          <label translate translate-params-name="$ctrl.hasSpouse ? ($ctrl.donorDetails['spouse-name']['given-name'] + ' ' + $ctrl.donorDetails['spouse-name']['family-name']) : 'Spouse'">
+                            {{name}} Email
                           </label>
                           <input type="email"
                                  name="spouseEmail"

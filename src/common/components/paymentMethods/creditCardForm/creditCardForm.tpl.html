@@ -21,7 +21,7 @@
             <div class="help-block" ng-message="minLength" translate>This card number must contain at least 13 digits</div>
             <div class="help-block" ng-message="maxLength" translate>This card number cannot contain more than 16 digits</div>
             <div class="help-block" ng-message="knownType" translate>This card type is not recognized</div>
-            <div class="help-block" ng-message="typeLength" translate>This is an invalid {{$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}} number. It should have {{$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')}} digits.</div>
+            <div class="help-block" ng-message="typeLength" translate translate-params-digits-number="$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')" translate-params-card-type="$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)">This is an invalid {{cardType}} number. It should have {{digitsNumber}} digits.</div>
             <div class="help-block" ng-message="checksum" translate>This card number is invalid. At least one digit was entered incorrectly.</div>
           </div>
         </div>

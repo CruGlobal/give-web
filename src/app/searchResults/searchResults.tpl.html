@@ -2,13 +2,13 @@
   <section class="is-top">
     <div class="container">
       <h1 ng-if="!$ctrl.searchParams.type || $ctrl.searchParams.type === 'people'">
-          <span translate ng-if="$ctrl.searchParams.keyword">
-            Search Results for <strong>{{$ctrl.searchParams.keyword}}</strong>
+          <span translate ng-if="$ctrl.searchParams.keyword" translate-params-keyword="$ctrl.searchParams.keyword">
+            Search Results for <strong>{{keyword}}</strong>
           </span>
-        <span translate ng-if="$ctrl.searchParams.first_name || $ctrl.searchParams.last_name">
-            Search Results for <strong>{{$ctrl.searchParams.first_name}} {{$ctrl.searchParams.last_name}}</strong>
+        <span translate ng-if="$ctrl.searchParams.first_name || $ctrl.searchParams.last_name" translate-params-first-name="$ctrl.searchParams.first_name" translate-params-last-name="$ctrl.searchParams.last_name">
+            Search Results for <strong>{{firstName}} {{lastName}}</strong>
           </span>
-        <em ng-if="$ctrl.searchResults.length">({{$ctrl.searchResults.length}} results)</em>
+        <em ng-if="$ctrl.searchResults.length" translate translate-params-result-number="$ctrl.searchResults.length">({{resultNumber}} results)</em>
       </h1>
       <!-- Search Box -->
 
@@ -51,7 +51,7 @@
               <div class="col-sm-12 col-md-3">
                 <div class="is-advanced">
                   <form method="get" action="/search-results.html">
-                    <h4 translate>Search <button id="advancedSearchButton" type="button" class="btn btn-subtle pull-right visible-xs visible-sm is-toggle" ng-click="$ctrl.showAdvancedSearch = !$ctrl.showAdvancedSearch"><i class="fa fa-bars"></i></button></h4>
+                    <h4><translate>Search</translate> <button id="advancedSearchButton" type="button" class="btn btn-subtle pull-right visible-xs visible-sm is-toggle" ng-click="$ctrl.showAdvancedSearch = !$ctrl.showAdvancedSearch"><i class="fa fa-bars"></i></button></h4>
 
                     <div class="is-toggle-wrap" ng-class="{'open': $ctrl.showAdvancedSearch}">
                       <div class="is-widget">

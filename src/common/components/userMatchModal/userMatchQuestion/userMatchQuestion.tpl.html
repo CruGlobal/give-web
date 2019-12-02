@@ -1,4 +1,4 @@
-<p><strong translate>Question {{$ctrl.questionIndex}} of {{$ctrl.questionCount}}</strong></p>
+<p><strong translate translate-params-question-number="$ctrl.questionIndex" translate-params-total="$ctrl.questionCount">Question {{questionNumber}} of {{total}}</strong></p>
 <p>{{$ctrl.question['question-text']}}</p>
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError">
   <div translate>You must choose one.</div>
