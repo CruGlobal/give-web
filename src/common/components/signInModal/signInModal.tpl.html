@@ -6,7 +6,7 @@
     <h4 class="text-center" translate>If you already have a Cru username, use it to sign in so we can link it to your giving</h4>
   </div>
   <p ng-if="$ctrl.identified" class="text-center">
-    <strong translate>Welcome back, {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}!</strong>
+    <strong>Welcome back, {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}!</strong>
   </p>
   <sign-in-form on-success="$ctrl.onSuccess()" last-purchase-id="$ctrl.lastPurchaseId"></sign-in-form>
   <p class="text-center" ng-class="{'mt mb0': $ctrl.identified}">
@@ -14,7 +14,7 @@
     <a id="forgotPasswordLink" href="" ng-click="$ctrl.onStateChange({state: 'forgot-password'})" translate>Reset It</a>
   </p>
   <p class="text-center" ng-if="$ctrl.identified">
-    <span translate>Not {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}?</span>
+    <span>Not {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}?</span>
     <a id="signOutLink" href="" ng-click="$ctrl.signOut()" translate>Sign Out</a>
   </p>
   <div class="form-group" ng-if="!$ctrl.identified && !$ctrl.lastPurchaseId">

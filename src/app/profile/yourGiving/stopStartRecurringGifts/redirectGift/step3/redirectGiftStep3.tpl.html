@@ -9,7 +9,7 @@
           <h3 ng-switch-when="update" translate>Make Changes To Your Recurring Gifts</h3>
           <p ng-switch-when="update" translate>Please review the amount, payment method, and frequency of this gift below.</p>
           <h3 ng-switch-when="confirm" translate>Confirm Your Changes.</h3>
-          <p ng-switch-when="confirm" translate>We will stop your gift to <strong>{{$ctrl.stopGift.designationName}}</strong> and begin a new gift to <strong>{{$ctrl.gift.designationName}}</strong>.</p>
+          <p ng-switch-when="confirm">We will stop your gift to <strong>{{$ctrl.stopGift.designationName}}</strong> and begin a new gift to <strong>{{$ctrl.gift.designationName}}</strong>.</p>
           <p ng-switch-when="confirm" translate>Please review your changes and click "Confirm Changes."</p>
         </div>
       </div>
