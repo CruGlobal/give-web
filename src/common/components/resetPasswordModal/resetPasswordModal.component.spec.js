@@ -6,10 +6,9 @@ import module from './resetPasswordModal.component'
 
 describe('resetPasswordModal', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, $rootScope, $verifyNoPendingTasks
+  let $ctrl, $rootScope
 
-  beforeEach(inject(function (_$componentController_, _$rootScope_, _$verifyNoPendingTasks_) {
-    $verifyNoPendingTasks = _$verifyNoPendingTasks_
+  beforeEach(inject(function (_$componentController_, _$rootScope_) {
     $rootScope = _$rootScope_
     $ctrl = _$componentController_(
       module.name, {
@@ -73,7 +72,7 @@ describe('resetPasswordModal', function () {
       $ctrl.$onDestroy()
 
       expect($ctrl.removeQueryParams).toHaveBeenCalled()
-      $verifyNoPendingTasks('$timeout')
+      $ctrl.$timeout.verifyNoPendingTasks()
 
       expect($ctrl.$window.location.reload).not.toHaveBeenCalled()
     })

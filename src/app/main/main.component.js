@@ -24,7 +24,7 @@ const componentName = 'main'
 
 class MainController {
   /* @ngInject */
-  constructor () /* eslint-disable-line no-useless-constructor */ { }
+  constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
 
 const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvider, $urlRouterProvider) {

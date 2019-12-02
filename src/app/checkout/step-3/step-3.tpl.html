@@ -1,53 +1,55 @@
 <div class="loading-overlay-parent">
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.needinfoErrors || $ctrl.submissionError">
     <p ng-repeat="error in $ctrl.needinfoErrors" ng-switch="error">
-      <span ng-switch-when="email-info" translate>{{'REVIEW_EMAIL_ERROR'}}</span>
-      <span ng-switch-when="payment-method-info" translate>{{'REVIEW_PAYMENT_ERROR'}}</span>
-      <span ng-switch-when="billing-address-info" translate>{{'REVIEW_BILLING_ADDRESS_ERROR'}}</span>
+      <span ng-switch-when="email-info" translate>There was an issue with your email. Please verify that it is correct.</span>
+      <span ng-switch-when="payment-method-info" translate>There was an issue with your payment. Please verify that all your payment information is correct.</span>
+      <span ng-switch-when="billing-address-info" translate>There was an issue with your billing address. Please verify that your billing address is correct.</span>
       <span ng-switch-default translate>
         <span ng-if="$ctrl.submissionErrorStatus > -1" translate>
-          {{'REVIEW_MISSING_DATA_ERROR'}}
+          There was an unknown error indicating that the order is still missing data.
+          Please verify all your info, try refreshing the page, and, if you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
         </span>
        <span ng-if="$ctrl.submissionErrorStatus === -1" translate>
-         {{'REVIEW_TIME_OUT_ERROR'}}
+         There was an error receiving your gift submission status. Your connection dropped or timed out.
+         Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
        </span>
       </span>
     </p>
     <p ng-if="$ctrl.submissionError" ng-switch="$ctrl.submissionError">
       <span ng-switch-when="Current payment type is unknown" translate>
-        {{'REVIEW_SUBMITTING_PAYMENT_ERROR'}}
+        There was an error submitting your payment. Verify that your payment info is correct or try adding it again. If you are still seeing this message, please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
       </span>
       <span ng-switch-when="CardExpiredException" translate>
-        {{'REVIEW_CARD_EXPIRED_ERROR'}}
+        Your card is expired.
       </span>
       <span ng-switch-when="CardErrorException" translate>
-        {{'REVIEW_INVALID_CARD_ERROR'}}
+        The credit card number entered is invalid.
       </span>
       <span ng-switch-when="CardDeclinedException" translate>
-        {{'REVIEW_CARD_DECLINED_ERROR'}}
+        Your credit card was declined.
       </span>
       <span ng-switch-when="InsufficientFundException" translate>
-        {{'REVIEW_INSUFFICIENT_FUNDS_ERROR'}}
+        Your credit card was declined due to insufficient funds.
       </span>
       <span ng-switch-when="AuthorizedAmountExceededException" translate>
-        {{'REVIEW_EXCEEDS_BALANCE_ERROR'}}
+        This transaction exceeds your available card balance.
       </span>
       <span ng-switch-when="InvalidCVV2Exception" translate>
-        {{'REVIEW_INVALID_SEC_CODE_ERROR'}}
+        The security code entered for your card is invalid.
       </span>
       <span ng-switch-when="InvalidAddressException" translate>
-        {{'REVIEW_ADDRESS_MISMATCH_ERROR'}}
+        The billing address entered does not match the address associated with the card.
       </span>
       <span ng-switch-default translate>
-        {{'REVIEW_DEFAULT_ERROR'}}
+        There was an issue processing your request. Please contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
       </span>
     </p>
   </div>
   <div class="mb">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <translate>{{'CONTACT_INFORMATION'}}</translate>
-        <button id="changeContactButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'contact'})" translate>{{'CHANGE'}}</button>
+        <translate>Contact Information</translate>
+        <button id="changeContactButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'contact'})" translate>Change</button>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -83,8 +85,8 @@
   <div class="mb">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <translate>{{'PAYMENT_METHOD'}}</translate>
-        <button id="changePaymentButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'payment'})" translate>{{'CHANGE'}}</button>
+        <tranlsate>Payment Method</tranlsate>
+        <button id="changePaymentButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'payment'})" translate>Change</button>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -92,21 +94,21 @@
             <div class="row" ng-if="$ctrl.bankAccountPaymentDetails">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="" translate>{{'BANK_NAME'}}</label>
+                  <label class="" translate>Bank Name</label>
                   <p>{{$ctrl.bankAccountPaymentDetails['bank-name']}}</p>
                 </div>
                 <div class="form-group">
-                  <label class="" translate>{{'ACCOUNT_NUM_FULL'}}</label>
+                  <label class="" translate>Account Number</label>
                   <p class="number">************{{$ctrl.bankAccountPaymentDetails['display-account-number']}}</p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="" translate>{{'ACCOUNT_TYPE'}}</label>
+                  <label class="" translate>Account Type</label>
                   <p class="number">{{$ctrl.bankAccountPaymentDetails['account-type'] | capitalize}}</p>
                 </div>
                 <div class="form-group">
-                  <label class="" translate>{{'ROUTING_NUM_FULL'}}</label>
+                  <label class="" translate>Routing Number</label>
                   <p class="number">{{$ctrl.bankAccountPaymentDetails['routing-number']}}</p>
                 </div>
               </div>
@@ -114,27 +116,27 @@
             <div class="row" ng-if="$ctrl.creditCardPaymentDetails">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="" translate>{{'CARD_NAME'}}</label>
+                  <label class="" translate>Name on card</label>
                   <p>{{$ctrl.creditCardPaymentDetails['cardholder-name']}}</p>
                 </div>
                 <div class="form-group">
-                  <label class="" translate>{{'CARD_NUM_FULL'}}</label>
+                  <label class="" translate>Card Number</label>
                   <p class="number">************{{$ctrl.creditCardPaymentDetails['last-four-digits']}}</p>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="" translate>{{'CARD_TYPE'}}</label>
+                  <label class="" translate>Card Type</label>
                   <p class="number">{{$ctrl.creditCardPaymentDetails['card-type']}}</p>
                 </div>
                 <div class="form-group">
-                  <label class="" translate>{{'EXPIRES'}}</label>
+                  <label class="" translate>Expires</label>
                   <p class="number">{{$ctrl.creditCardPaymentDetails['expiry-month']}}/{{$ctrl.creditCardPaymentDetails['expiry-year']}}</p><!-- TODO: deal with localization -->
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <label class="" translate>{{'BILLING_ADDRESS'}}</label>
+                  <label class="" translate>Billing Address</label>
                   <display-address address="$ctrl.creditCardPaymentDetails.address"></display-address>
                 </div>
               </div>
@@ -149,28 +151,32 @@
   <div class="mb">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <translate>{{'REVIEW_GIFTS'}}</translate>
-        <button id="changeCartButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'cart'})" translate>{{'CHANGE'}}</button>
+        <tranlsate>Review Gifts</tranlsate>
+        <button id="changeCartButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'cart'})" translate>Change</button>
       </div>
       <div class="panel-body">
         <loading ng-if="!$ctrl.cartData"></loading>
         <table class="table giftsum-table" ng-if="$ctrl.cartData">
           <thead>
           <tr>
-            <th class="th-title-gift" translate>{{'GIFT'}}</th>
-            <th class="th-title-frequency" translate>{{'FREQUENCY'}}</th>
-            <th class="th-title-amount" translate>{{'AMOUNT'}}</th>
+            <th class="th-title-gift" translate>Gift</th>
+            <th class="th-title-frequency" translate>Frequency</th>
+            <th class="th-title-amount" translate>Amount</th>
           </tr>
           </thead>
           <tbody>
           <tr ng-repeat-start="i in $ctrl.cartData.items" ng-if="i.giftStartDateWarning">
             <td colspan="3">
               <div class="alert alert-warning text-center">
-                <strong translate>{{'WARNING'}}</strong>
-                <span translate="FUTURE_WARNING" translate-value-days="{{i.giftStartDateDaysFromNow}}"></span>
+                <strong>Warning!</strong>
+                You are about to give a gift starting {{i.giftStartDateDaysFromNow}} days in the future.
                 <div>
-                  <button class="btn btn-default" ng-click="i.giftStartDateWarning = false" translate="KEEP_DATE" translate-value-keepDate="{{i.giftStartDate.format('ll')}}"></button>
-                  <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('MM'))" translate="CHANGE_TO_DATE" translate-value-changeDate="{{$ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('ll')}}"></button>
+                  <button class="btn btn-default" ng-click="i.giftStartDateWarning = false">
+                    Keep {{i.giftStartDate.format('ll')}}
+                  </button>
+                  <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('MM'))">
+                    Change to {{$ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('ll')}}
+                  </button>
                 </div>
               </div>
             </td>
@@ -183,11 +189,13 @@
             </td>
             <td class="td-frequency">
               <span class="giftsum-frequency giftsum-title">{{i.frequency}}</span>
-              <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'" translate="STARTING_DATE" translate-value-startDate="{{i.giftStartDate.format('ll')}}"></span>
+              <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'" translate>
+                Starts on: {{i.giftStartDate.format('ll')}}
+              </span>
             </td>
             <td class="td-amount">
               <span class="giftsum-about giftsum-title">{{i.price}}</span>
-              <span class="giftsum-detail"><span class="visible-xs" translate>{{'GIFT_AMOUNT'}}</span></span>
+              <span class="giftsum-detail"><span class="visible-xs" translate>Gift Amount</span></span>
             </td>
           </tr>
           </tbody>
@@ -199,7 +207,7 @@
               </div>
               <div class="checkout-cta pull-right">
                 <button id="submitOrderButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!$ctrl.canSubmitOrder()" translate>
-                  {{'SUBMIT_GIFT'}}
+                  Submit Your Gift
                 </button>
               </div>
             </td>
@@ -210,6 +218,6 @@
     </div>
   </div>
   <loading type="overlay" ng-if="$ctrl.submittingOrder">
-    <translate>{{'SUBMITTING_GIFT'}}</translate>
+    <translate>Submitting your gift...</translate>
   </loading>
 </div>

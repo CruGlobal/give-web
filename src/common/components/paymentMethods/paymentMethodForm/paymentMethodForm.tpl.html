@@ -3,19 +3,19 @@
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.paymentFormState === 'error'">
   <p ng-switch="$ctrl.paymentFormError">
     <span ng-switch-when="Invalid routing number" translate>
-      {{'ROUTING_NUM_INVALID'}}
+      The routing number you entered does not seem to be valid. Please verify that it is correct.
     </span>
     <span ng-switch-when="This credit card already exists." translate>
-      {{'ALREADY_ADDED_CARD'}}
+      You have already added this credit card. If you wish to make changes please edit your existing credit card.
     </span>
     <span ng-switch-when="This card is already expired." translate>
-      {{'EXPIRED_CARD_ERROR'}}
+      This card has expired. Please use a different payment method.
     </span>
     <span ng-switch-when="This bank account already exists." translate>
-      {{'ALREADY_ADDED_BANK'}}
+      You have already added this bank account. If you wish to make changes please edit your existing bank account.
     </span>
     <span ng-switch-default translate>
-      {{'ERROR_SAVING_PAYMENT'}}
+      There was an error saving your payment method. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
     </span>
   </p>
 </div>
@@ -30,13 +30,13 @@
   <div class="row">
     <div class="col-md-6">
       <button id="addBankAccountButton" class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('bankAccount')" ng-class="{'on': $ctrl.paymentType === 'bankAccount'}">
-        <translate>{{'BANK_ACCOUNT'}}</translate>
+        Bank Account
         <img ng-src="{{$ctrl.imgDomain}}/assets/img/icon-bank.png" alt="Bank Account Icon"/>
       </button>
     </div>
     <div class="col-md-6">
       <button id="addCreditCardButton" class="tab-btn btn btn-lg btn-default btn-block" ng-click="$ctrl.changePaymentType('creditCard')" ng-class="{'on': $ctrl.paymentType === 'creditCard'}">
-        <translate>{{'CREDIT_CARD'}}</translate>
+        Credit Card
         <img ng-src="{{$ctrl.imgDomain}}/assets/img/icon-cc.png" alt="Credit Card Icon"/>
       </button>
     </div>

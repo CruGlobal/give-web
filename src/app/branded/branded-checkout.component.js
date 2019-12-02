@@ -1,6 +1,5 @@
 import angular from 'angular'
 import 'angular-environment'
-import 'angular-translate'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
 import changeCaseObject from 'change-case-object'
@@ -21,13 +20,12 @@ const componentName = 'brandedCheckout'
 
 class BrandedCheckoutController {
   /* @ngInject */
-  constructor ($window, analyticsFactory, tsysService, sessionService, envService, $translate) {
+  constructor ($window, analyticsFactory, tsysService, sessionService, envService) {
     this.$window = $window
     this.analyticsFactory = analyticsFactory
     this.tsysService = tsysService
     this.sessionService = sessionService
     this.envService = envService
-    this.$translate = $translate
   }
 
   $onInit () {
@@ -44,7 +42,6 @@ class BrandedCheckoutController {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
     }, angular.noop)
-    this.$translate.use(this.language || 'en')
   }
 
   formatDonorDetails () {
@@ -107,8 +104,7 @@ export default angular
     thankYouSummary.name,
     sessionService.name,
     uibModal,
-    'environment',
-    'pascalprecht.translate'
+    'environment'
   ]).config(($uibModalProvider, $windowProvider) => {
     const $document = angular.element($windowProvider.$get().document)
     $uibModalProvider.options.appendTo = $document.find('branded-checkout').eq(0)
@@ -130,7 +126,6 @@ export default angular
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',
-      onOrderFailed: '&',
-      language: '@'
+      onOrderFailed: '&'
     }
   })

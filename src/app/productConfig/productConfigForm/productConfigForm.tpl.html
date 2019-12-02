@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-6">
       <h4 class="give-gift-header" translate>
-        {{'GIVE_GIFT_HEADER'}}
+        Give a Gift
       </h4>
     </div>
     <div class="col-sm-6" ng-if="!$ctrl.loading && !$ctrl.errorLoading">
@@ -15,17 +15,17 @@
   </div>
 
   <loading ng-if="$ctrl.loading">
-    <translate>{{'LOADING_GIFT_DETAILS'}}</translate>
+    <translate>Loading gift details...</translate>
   </loading>
 
   <div ng-if="$ctrl.errorLoading" class="alert alert-danger" role="alert">
-    <p translate='LOADING_ERROR' translate-values="{loadData: $ctrl.loadData()}"></p>
+    <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.loadData()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
   </div>
 
   <div class="panel panel-default panel-plain mt" ng-if="$ctrl.showGivingLinks">
     <div class="panel panel-default give-modal-panel">
       <h4 class="panel-title border-bottom-small" translate>
-        {{'FROM_WHAT_COUNTRY'}}
+        We are so grateful for your generosity. We recognize that many people from different countries are partnering with our ministry for the fulfillment of the Great Commission. From which country would you like to give?
       </h4>
       <div class="panel-body pt0">
         <div class="row">
@@ -33,13 +33,13 @@
             <button class="btn btn-block btn-primary"
                     type="button"
                     ng-click="$ctrl.giveLink()"
-                    translate>{{'GIVE_THROUGH_US_SITE'}}</button>
+                    translate>Give through US give site</button>
           </div>
           <div class="col-xs-6 col-xs-offset-3 pt-" ng-repeat="link in $ctrl.givingLinks">
             <button class="btn btn-block btn-default"
                     type="button"
                     ng-click="$ctrl.giveLink(link.url)"
-                    translate translate-values='{name: link.name}'>{{'GIVE_THROUGH_SITE'}}</button>
+                    translate>Give through {{link.name}} give site</button>
           </div>
         </div>
       </div>
@@ -50,19 +50,19 @@
     <div class="panel panel-default panel-plain mt">
 
         <div ng-if="$ctrl.errorChangingFrequency" class="alert alert-danger" role="alert">
-          <p translate>{{'FREQUENCY_ERROR'}}</p>
+          <p translate>There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
         </div>
 
         <div ng-if="$ctrl.errorSavingGeneric" role="alert" class="alert alert-danger">
-          <p translate>{{'ADDING_CART_ERROR'}}</p>
+          <p translate>There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
         </div>
 
         <div ng-if="$ctrl.errorAlreadyInCart" class="alert alert-warning" role="alert">
-          <p translate>{{'GIFT_IN_CART_ERROR'}}</p>
+          <p translate>You already have this gift in your cart.</p>
         </div>
 
         <h4 class="panel-title border-bottom-small" translate>
-          {{'GIFT_AMOUNT'}}
+          Gift Amount
         </h4>
         <div class="panel-body pt0">
           <div ng-if="$ctrl.useSuggestedAmounts">
@@ -91,15 +91,15 @@
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-focus="$ctrl.customInputActive = true;"
                          ng-required="$ctrl.customInputActive"
-                         placeholder="{{'OTHER_PLACEHOLDER' | translate}}" />
+                         placeholder="{{'Other' | translate}}" />
                 </label>
                 <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
                      ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-                  <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
-                  <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
-                  <div class="help-block" ng-message="minimum" translate translate-values="{currencyLimit: (1 | currency)}">{{'AMOUNT_MIN_ERROR'}}</div>
-                  <div class="help-block" ng-message="maximum" translate translate-values="{currencyLimit: (10000000 | currency)}">
-                    {{'AMOUNT_MAX_ERROR'}}
+                  <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
+                  <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+                  <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+                  <div class="help-block" ng-message="maximum" translate>
+                    Amount must be less than {{ 10000000 | currency }}
                   </div>
                 </div>
               </div>
@@ -135,10 +135,11 @@
             </label>
             <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
                  ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-              <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
-              <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
-              <div class="help-block" ng-message="minimum" translate="AMOUNT_MIN_ERROR" translate-values="{currencyLimit: (1 | currency)}"></div>
-              <div class="help-block" ng-message="maximum" translate="AMOUNT_MAX_ERROR" translate-values="{currencyLimit: (10000000 | currency)}">
+              <div class="help-block" ng-message="pattern" translate>Your gift must be a valid dollar amount</div>
+              <div class="help-block" ng-message="required" translate>Amount must be not empty</div>
+              <div class="help-block" ng-message="minimum" translate>Amount must be at least {{ 1 | currency }}</div>
+              <div class="help-block" ng-message="maximum" translate>
+                Amount must be less than {{ 10000000 | currency }}
               </div>
             </div>
           </div>
@@ -146,7 +147,7 @@
       </div><!-- // panel -->
     <div class="panel panel-default give-modal-panel">
       <h4 class="panel-title border-bottom-small mt" translate>
-        {{'GIFT_FREQUENCY'}}
+        Gift Frequency
       </h4>
       <div class="panel-body">
         <div data-toggle="buttons">
@@ -156,27 +157,27 @@
                  ng-class="{'active': f.name === $ctrl.productData.frequency}"
                  ng-click="$ctrl.changeFrequency(f)">
                 <span class="giftsum-about giftsum-title" ng-switch="f.name">
-                  <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
+                  <span ng-switch-when="NA" translate>Single Gift</span>
                   <span ng-switch-default>{{f.display}}</span>
                 </span>
           </label>
           <span ng-repeat-end></span>
         </div>
         <loading inline="true" ng-if="$ctrl.changingFrequency" class="mt-- text-center">
-          <translate>{{'CHANGING_FREQUENCY'}}</translate>
+          <translate>Changing frequency...</translate>
         </loading>
       </div><!-- // panel-body -->
     </div><!-- // panel -->
     <div ng-if="$ctrl.productData.frequency !== 'NA'">
       <div class="panel panel-default give-modal-panel">
         <h4 class="panel-title border-bottom-small mt0 pt-" translate>
-          {{'RECURRING_START'}}
+          Transaction Start Date for Recurring Gifts
         </h4>
         <div class="panel-body pt0">
           <div class="row">
             <div class="col-sm-3">
               <div class="form-group">
-                <label translate>{{'MONTH'}}</label>
+                <label translate>Month</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
                           ng-model="$ctrl.itemConfig['recurring-start-month']"
@@ -188,7 +189,7 @@
             </div>
             <div class="col-sm-2">
               <div class="form-group">
-                <label translate>{{'DAY'}}</label>
+                <label translate>Day</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
                           ng-model="$ctrl.itemConfig['recurring-day-of-month']"
@@ -200,7 +201,7 @@
             </div>
             <div class="col-sm-4">
               <div class="form-group">
-                <label translate>{{'GIFT_START_DATE'}}</label>
+                <label translate>Your gift will start on</label>
                 <div class="form-group">
                   {{$ctrl.startMonth( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate ).format('ll')}}
                 </div>
@@ -212,7 +213,7 @@
     </div>
     <div class="panel panel-default give-modal-panel">
       <h4 class="panel-title border-bottom-small mt" translate>
-        {{'OPTIONAL'}}
+        Optional
       </h4>
       <div class="panel-body pt0">
         <ul class="list-unstyled">
@@ -222,8 +223,8 @@
                     class="btn btn-link"
                     tabindex="-1"
                     ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
-                    translate='SEND_MESSAGE_TO'
-            translate-values="{ministry: $ctrl.productData.displayName}">
+                    translate>
+              Send a Message to {{$ctrl.productData.displayName}}
             </button>
             <textarea class="staff-comments give-modal-comments"
                       name="recipientComments"
@@ -241,7 +242,7 @@
                     tabindex="-1"
                     ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
                     translate>
-              {{'SPECIAL_INSTRUCTIONS'}}
+              Special Handling Instructions for Processing This Gift
             </button>
             <textarea class="cru-comments give-modal-comments"
                       name="donationServicesComments"
@@ -250,7 +251,7 @@
                       ng-model="$ctrl.itemConfig['donation-services-comments']"
                       ng-if="$ctrl.showDSComments"
                       tabindex="-1"
-                      placeholder="{{'MESSAGE_EXAMPLE' | translate}}"
+                      placeholder="{{'For example: make this gift anonymous, stop my gift after 18 months, etc.' | translate}}"
                       style="display:block;"></textarea>
           </li>
         </ul>
