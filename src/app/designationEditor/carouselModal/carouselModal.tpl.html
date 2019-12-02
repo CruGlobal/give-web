@@ -50,6 +50,10 @@
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.maxCarouselError">
       <p translate>Your carousel can only hold {{$ctrl.maxNumberOfPhotos}} photos. Please remove one before adding another.</p>
     </div>
+    <p translate class="alert-info">
+      <strong>Please Note:</strong> The image carousel works best with images that are the same size and orientation.
+      Recommended image size is 1600 x 900 pixels, or aspect ratio 16:9.
+    </p>
     <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
       <div class="add-trigger" ng-click="$ctrl.addImageToCarousel(photo)">
         <i class="fa fa-plus" aria-label="Add to carousel"></i>
