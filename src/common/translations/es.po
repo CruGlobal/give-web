@@ -1,0 +1,2632 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"X-Generator: Poedit 2.2.4\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: es\n"
+
+#: src/app/searchResults/searchResults.tpl.html:11
+msgid "({{resultNumber}} results)"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:215
+msgid "+ Add Phone Number"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:120
+msgid "+ Add Your Spouse"
+msgstr ""
+
+#: src/app/profile/yourGiving/historicalView/historicalGift/historicalGift.tpl.html:26
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientDetail/recipientDetail.tpl.html:13
+msgid ", Anonymous"
+msgstr ""
+
+#: src/app/profile/yourGiving/historicalView/historicalGift/historicalGift.tpl.html:27
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientDetail/recipientDetail.tpl.html:14
+msgid ", Given through {{description}}"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:121
+msgid "- Remove Spouse"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:54
+msgid "01 - January"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:55
+msgid "02 - February"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:56
+msgid "03 - March"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:57
+msgid "04 - April"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:58
+msgid "05 - May"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:59
+msgid "06 - June"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:60
+msgid "07 - July"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:61
+msgid "08 - August"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:62
+msgid "09 - September"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:63
+msgid "10 - October"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:64
+msgid "11 - November"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:65
+msgid "12 - December"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:104
+msgid "3 digit code on back of card"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:105
+msgid "4 digit code on front of card"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:23
+msgid "Account #{{accountNumber}}"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:101
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:53
+msgid "Account Number"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:107
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:43
+msgid "Account Type"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/searchRecipients.tpl.html:23
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/searchRecipients.tpl.html:23
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/selectRecentRecipients.tpl.html:22
+msgid "Add"
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:5
+msgid "Add Cover Photo"
+msgstr ""
+
+#: src/app/checkout/step-2/existingPaymentMethods/existingPaymentMethods.tpl.html:15
+#: src/app/profile/payment-methods/payment-methods.tpl.html:16
+#: src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.tpl.html:31
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.tpl.html:10
+msgid "Add New Payment Method"
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:11
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:81
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.tpl.html:44
+msgid "Add Payment Method"
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:6
+msgid "Add Secondary Photo"
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:7
+msgid "Add Signature Photo"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step0/addUpdatePaymentMethod.tpl.html:52
+msgid "Add and Continue"
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/step2/enterAmounts.tpl.html:50
+msgid "Add to Cart"
+msgstr ""
+
+#: src/app/productConfig/productConfigModal/productConfig.modal.tpl.html:31
+msgid "Add to Gift Cart"
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/step2/enterAmounts.tpl.html:49
+msgid "Adding to Cart..."
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:27
+msgid "Address"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:60
+msgid "All Giving Opportunities"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:36
+#: src/app/checkout/cart-summary/cart-summary.tpl.html:8
+#: src/app/checkout/step-3/step-3.tpl.html:164
+#: src/app/profile/payment-methods/recurring-gifts/recurring-gifts.tpl.html:11
+#: src/app/profile/receipts/receipts.tpl.html:41
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:83
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:5
+msgid "Amount"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:17
+msgid "Amount cannot be more than $10,000,000"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:16
+msgid "Amount must be at least $1"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:100
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:140
+msgid "Amount must be at least {{amount}}"
+msgstr "La cantidad debe ser de al menos {{amount}}."
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:101
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:141
+msgid "Amount must be less than {{amount}}"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:139
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:99
+msgid "Amount must be not empty"
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:9
+msgid ""
+"An account with this Email Address already exists.<br>\n"
+"      Please <a id=\"signInLink2\" ng-click=\"$ctrl.onStateChange({state: "
+"'sign-in'})\">Sign In</a> or\n"
+"      <a id=\"forgotPasswordLink2\" ng-click=\"$ctrl.onStateChange({state: "
+"'forgot-password'})\">Reset your Password</a>."
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:4
+msgid ""
+"An email containing a link to reset your password has been sent to "
+"<em>{{email}}</em>."
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:4
+msgid ""
+"An error has occurred. (Invalid Password Reset Key)<br>\n"
+"        Please try sending another\n"
+"        <a id=\"forgotPasswordLink1\" ng-click=\"$ctrl.onStateChange({state: "
+"'forgot-password'})\">Reset Password</a> email, or\n"
+"        <a href=\"https://www.cru.org/about/contact-us.html\">Contact Us</a>."
+msgstr ""
+
+#: src/common/components/signInForm/signInForm.tpl.html:2
+#: src/common/components/signUpModal/signUpModal.tpl.html:13
+msgid ""
+"An error has occurred. Please try again or contact <a href=\"mailto:"
+"eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:3
+msgid ""
+"An error occurred during sign up.<br>Please Check your Email Address and "
+"Password and try again."
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:4
+msgid ""
+"An error occurred during sign up.<br>This is most likely caused by the use "
+"of a reserved domain name in your email address. You might try to\n"
+"      <a id=\"signInLink1\" ng-click=\"$ctrl.onStateChange({state: 'sign-"
+"in'})\">Sign In</a>,\n"
+"      <a id=\"forgotPasswordLink1\" ng-click=\"$ctrl.onStateChange({state: "
+"'forgot-password'})\">Reset your Password</a>or\n"
+"      <a href=\"https://www.cru.org/about/contact-us.html\">Contact Us</a>."
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:17
+msgid ""
+"An error occurred resetting your password.<br>\n"
+"        You may try again or\n"
+"        <a href=\"https://www.cru.org/about/contact-us.html\">contact us</"
+"a>\n"
+"        if you continue to experience issues."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:21
+msgid ""
+"An error occurred saving changes. You may try again by clicking \"Confirm "
+"Changes.\""
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:110
+msgid "An error occurred while processing your search query. Please try again."
+msgstr ""
+
+#: src/common/components/displayRateTotals/displayRateTotals.tpl.html:2
+msgid "Annual Gift Total:"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:46
+msgid "Annually"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:28
+msgid "As of {{date}}"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step0/addUpdatePaymentMethod.tpl.html:41
+#: src/app/profile/yourGiving/editRecurringGifts/step2/addRecentRecipients.tpl.html:47
+#: src/app/profile/yourGiving/editRecurringGifts/step2/searchRecipients.tpl.html:32
+#: src/app/profile/yourGiving/editRecurringGifts/step3/configureRecentRecipients.tpl.html:33
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:53
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/searchRecipients.tpl.html:32
+#: src/app/profile/yourGiving/giveOneTimeGift/step2/enterAmounts.tpl.html:39
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step1/redirectGiftStep1.tpl.html:32
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step2/redirectGiftStep2.tpl.html:32
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:48
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:64
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/restartGift.tpl.html:87
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suggestedRecipients/suggestedRecipients.tpl.html:30
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suspendedGifts/suspendedGifts.tpl.html:36
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step2/configureGifts/configureGifts.tpl.html:26
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:55
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step1/stopGiftStep1.tpl.html:32
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step2/stopGiftStep2.tpl.html:30
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:126
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:78
+#: src/common/components/retryModal/retryModal.tpl.html:24
+msgid "Back"
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:47
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:55
+msgid "Back to Sign In"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:5
+msgid "Bank Account Payment"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:97
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:38
+msgid "Bank Name"
+msgstr ""
+
+#: src/app/thankYou/accountBenefits/accountBenefits.tpl.html:4
+msgid "Benefits of registering for an account include:"
+msgstr ""
+
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:6
+msgid "Benefits of registering your account include:"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:139
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:80
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:124
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:139
+msgid "Billing Address"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:123
+msgid "By Date"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:126
+msgid "By Ministry"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:85
+msgid "By Month"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:78
+msgid "By Recipient"
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:55
+#: src/app/designationEditor/titleModal/titleModal.tpl.html:17
+#: src/app/newsletterSubscription/newsletterModal/newsletterModal.tpl.html:84
+#: src/app/profile/yourGiving/editRecurringGifts/editRecurringGifts.modal.tpl.html:46
+#: src/app/profile/yourGiving/editRecurringGifts/step0/addUpdatePaymentMethod.tpl.html:35
+#: src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.tpl.html:41
+#: src/app/profile/yourGiving/editRecurringGifts/step1/editRecurringGifts.tpl.html:44
+#: src/app/profile/yourGiving/giveOneTimeGift/giveOneTimeGift.modal.tpl.html:44
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/selectRecentRecipients.tpl.html:39
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:49
+#: src/app/profile/yourGiving/stopStartRecurringGifts/step0/stopStartStep0.tpl.html:63
+#: src/common/components/contactInfoModal/contactInfoModal.tpl.html:11
+#: src/common/components/contactInfoModal/contactInfoModal.tpl.html:5
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:127
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:66
+msgid "Cancel"
+msgstr ""
+
+#: src/app/productConfig/productConfigModal/productConfig.modal.tpl.html:33
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.tpl.html:47
+msgid "Cancel &amp; Return"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:10
+msgid "Card #"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:123
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:65
+msgid "Card Number"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:129
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:70
+msgid "Card Type"
+msgstr ""
+
+#: src/app/checkout/cart-summary/cart-summary.tpl.html:3
+msgid "Cart Summary"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:155
+#: src/app/checkout/step-3/step-3.tpl.html:52
+#: src/app/checkout/step-3/step-3.tpl.html:89
+msgid "Change"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/step0/stopStartStep0.tpl.html:36
+msgid "Change my giving to a new payment method"
+msgstr ""
+
+#: src/app/thankYou/accountBenefits/accountBenefits.tpl.html:10
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:12
+msgid "Change your bank account or credit card information"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:167
+msgid "Changing frequency..."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/editRecurringGifts.modal.tpl.html:10
+msgid "Checking Payment Methods"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:27
+msgid "Checking for existing information..."
+msgstr ""
+
+#: src/app/checkout/checkout.tpl.html:27
+#: src/common/components/nav/navCart/navCart.tpl.html:64
+msgid "Checkout"
+msgstr ""
+
+#: src/app/signIn/signIn.tpl.html:20
+msgid "Checkout as Guest"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:92
+msgid "City"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step1/redirectGiftStep1.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step2/redirectGiftStep2.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/restartGift.tpl.html:64
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suggestedRecipients/suggestedRecipients.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suspendedGifts/suspendedGifts.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/step0/stopStartStep0.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step1/stopGiftStep1.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step2/stopGiftStep2.tpl.html:2
+#: src/common/components/retryModal/retryModal.tpl.html:2
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:38
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:44
+msgid "Close"
+msgstr ""
+
+#: src/common/components/signInForm/signInForm.tpl.html:49
+msgid "Code"
+msgstr ""
+
+#: src/app/profile/yourGiving/historicalView/historicalGift/historicalGift.tpl.html:25
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientDetail/recipientDetail.tpl.html:12
+msgid "Completed"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:61
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:71
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step2/stopGiftStep2.tpl.html:33
+msgid "Confirm Changes"
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:123
+msgid "Confirm Changes &amp; Delete"
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:124
+msgid "Confirm Delete"
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:32
+#: src/common/components/signUpModal/signUpModal.tpl.html:88
+msgid "Confirm Password"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step2/stopGiftStep2.tpl.html:9
+msgid "Confirm Your Changes"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:11
+msgid "Confirm Your Changes."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:9
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:9
+msgid "Confirm your changes"
+msgstr ""
+
+#: src/app/checkout/checkout.tpl.html:31
+#: src/app/checkout/step-3/step-3.tpl.html:51
+#: src/common/components/contactInfo/contactInfo.tpl.html:199
+msgid "Contact Information"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:37
+msgid "Contact Phone:"
+msgstr ""
+
+#: src/app/branded/step-1/branded-checkout-step-1.tpl.html:42
+#: src/app/checkout/step-1/step-1.tpl.html:9
+#: src/app/profile/yourGiving/editRecurringGifts/step1/editRecurringGifts.tpl.html:52
+#: src/app/profile/yourGiving/editRecurringGifts/step2/addRecentRecipients.tpl.html:54
+#: src/app/profile/yourGiving/editRecurringGifts/step2/searchRecipients.tpl.html:39
+#: src/app/profile/yourGiving/editRecurringGifts/step3/configureRecentRecipients.tpl.html:40
+#: src/app/profile/yourGiving/giveOneTimeGift/giveOneTimeGift.modal.tpl.html:52
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/searchRecipients.tpl.html:39
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/selectRecentRecipients.tpl.html:46
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step1/redirectGiftStep1.tpl.html:39
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step2/redirectGiftStep2.tpl.html:39
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:55
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/restartGift.tpl.html:91
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suggestedRecipients/suggestedRecipients.tpl.html:37
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suspendedGifts/suspendedGifts.tpl.html:43
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step2/configureGifts/configureGifts.tpl.html:33
+#: src/app/profile/yourGiving/stopStartRecurringGifts/step0/stopStartStep0.tpl.html:70
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step1/stopGiftStep1.tpl.html:39
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:65
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:62
+#: src/common/components/userMatchModal/userMatchIdentity/userMatchIdentity.tpl.html:25
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:20
+#: src/common/components/userMatchModal/userMatchQuestion/userMatchQuestion.tpl.html:19
+msgid "Continue"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:86
+msgid "Continue Browsing"
+msgstr ""
+
+#: src/app/signIn/signIn.tpl.html:23
+msgid "Continue as Guest"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:4
+msgid "Country"
+msgstr ""
+
+#: src/common/components/signInModal/signInModal.tpl.html:4
+msgid "Create a Username &amp; Password"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:5
+msgid "Credit Card Payment"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:82
+msgid "Date"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:192
+msgid "Day"
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:10
+msgid "Delete Payment Method and Move Gifts"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:64
+#: src/app/searchResults/searchResults.tpl.html:154
+msgid "Details"
+msgstr ""
+
+#: src/common/components/signInModal/signInModal.tpl.html:22
+msgid "Don't have an account?"
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:33
+msgid "Done Editing"
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodDisplay.tpl.html:15
+msgid "EXPIRED"
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodDisplay.tpl.html:14
+msgid "EXPIRES"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:60
+msgid "Edit"
+msgstr ""
+
+#: src/app/checkout/cart-summary/cart-summary.tpl.html:30
+msgid "Edit Cart"
+msgstr ""
+
+#: src/app/designationEditButton/designationEditButton.tpl.html:1
+msgid "Edit Page"
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.tpl.html:11
+msgid "Edit Payment Method"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:50
+msgid "Edit Your Recurring Gifts"
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:85
+msgid ""
+"Edit this page and use this space to share with current and potential "
+"ministry partners about your vision and calling to Cru."
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:25
+#: src/common/components/signInForm/signInForm.tpl.html:15
+#: src/common/components/signInForm/signInForm.tpl.html:20
+msgid "Email"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:212
+msgid "Email Address"
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:10
+msgid ""
+"Email Address not Found.<br>\n"
+"        Perhaps you've never <a id=\"signUpLink\" ng-click=\"$ctrl."
+"onStateChange({state: 'sign-up'})\">signed up</a>? Questions,\n"
+"        <a href=\"https://www.cru.org/about/contact-us.html\">contact us</a>."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:133
+msgid "Email Addresses"
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:55
+msgid "Email address"
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:65
+msgid "Email address is not valid."
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:64
+msgid "Email address is required."
+msgstr ""
+
+#: src/common/components/signInForm/signInForm.tpl.html:40
+msgid "Enter a verification code from your Authenticator app to continue."
+msgstr ""
+
+#: src/common/components/giftViews/giftSearchView/giftSearchView.tpl.html:20
+msgid ""
+"Enter the name or account number of the recipient you would like to give to "
+"in the search box above"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step2/redirectGiftStep2.tpl.html:10
+msgid ""
+"Enter the name or account number of the recipient you would like to give to:"
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:8
+msgid ""
+"Enter your registered email address below and we'll send you a link to reset "
+"your password."
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:62
+msgid "Error loading detailed giving."
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:67
+msgid ""
+"Error loading detailed giving. You can try again. If you continue to see "
+"this message, contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for "
+"assistance."
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:21
+msgid "Error loading your cart."
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:22
+msgid "Error loading your updated cart."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:31
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:39
+msgid "Error processing this restart:"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:64
+msgid "Error removing"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:48
+msgid "Exp. Month"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:75
+msgid "Exp. Year"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:133
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:75
+msgid "Expires"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:33
+msgid "Explore"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:69
+msgid "Featured"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:117
+msgid "Featured Opportunities"
+msgstr ""
+
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:134
+msgid "First Gift: {{startDate}}"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:76
+#: src/common/components/contactInfo/contactInfo.tpl.html:52
+#: src/common/components/signUpModal/signUpModal.tpl.html:19
+msgid "First Name"
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:29
+msgid "First Name is required."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:105
+msgid "First name cannot be longer than 50 characters"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:104
+msgid "First name must not be empty"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:255
+msgid ""
+"For example: make this gift anonymous, stop my gift after 18 months, etc."
+msgstr ""
+
+#: src/app/signIn/signIn.tpl.html:14
+#: src/common/components/signInModal/signInModal.tpl.html:13
+msgid "Forgot your password?"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:35 src/app/checkout/step-3/step-3.tpl.html:163
+#: src/app/profile/payment-methods/recurring-gifts/recurring-gifts.tpl.html:12
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:41
+msgid "Frequency"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:34 src/app/checkout/step-3/step-3.tpl.html:162
+msgid "Gift"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:57 src/app/checkout/step-3/step-3.tpl.html:198
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:64
+msgid "Gift Amount"
+msgstr ""
+
+#: src/app/profile/receipts/receipts.tpl.html:42
+msgid "Gift Details"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:149
+msgid "Gift Frequency"
+msgstr ""
+
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:122
+msgid "Gift Summary"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:51
+msgid "Give a 1-Time Gift"
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:122
+#: src/app/designationEditor/designationEditor.tpl.html:49
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:4
+msgid "Give a Gift"
+msgstr "Dar un regalo"
+
+#: src/app/profile/yourGiving/historicalView/historicalGift/historicalGift.tpl.html:40
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:50
+msgid "Give a New Gift"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/searchRecipients.tpl.html:9
+msgid "Give a new recurring gift"
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/searchRecipients.tpl.html:9
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/selectRecentRecipients.tpl.html:9
+#: src/app/profile/yourGiving/giveOneTimeGift/step2/enterAmounts.tpl.html:9
+msgid "Give an Extra One-Time Gift"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:38
+msgid "Give as an Individual"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:41
+msgid "Give as an Organization"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:33
+msgid "Give through US give site"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:39
+msgid "Give through {{link.name}} give site"
+msgstr ""
+
+#: src/app/designationEditor/titleModal/titleModal.tpl.html:11
+msgid "Give.Cru.org Title"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:36
+msgid "Giving"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:186
+msgid "Home"
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/step2/enterAmounts.tpl.html:10
+msgid "How much would you like to give to these recipients?"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:65 src/app/profile/profile.tpl.html:96
+#: src/common/components/contactInfo/contactInfo.tpl.html:104
+#: src/common/components/contactInfo/contactInfo.tpl.html:170
+msgid "II"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:66 src/app/profile/profile.tpl.html:97
+#: src/common/components/contactInfo/contactInfo.tpl.html:105
+#: src/common/components/contactInfo/contactInfo.tpl.html:171
+msgid "III"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:67 src/app/profile/profile.tpl.html:98
+#: src/common/components/contactInfo/contactInfo.tpl.html:106
+#: src/common/components/contactInfo/contactInfo.tpl.html:172
+msgid "IV"
+msgstr ""
+
+#: src/common/components/signInModal/signInModal.tpl.html:6
+msgid ""
+"If you already have a Cru username, use it to sign in so we can link it to "
+"your giving"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:105
+msgid ""
+"If you are uncertain of the exact spelling, enter the first few letters and "
+"avoid searching by nicknames.\n"
+"                    If you still cannot find a staff member you are looking "
+"for, you can call 1-888-278-7233 for assistance."
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:111
+msgid ""
+"If you do not want this payment method to be displayed in your list of "
+"payment options, click \"Confirm Delete\" below"
+msgstr ""
+
+#: src/common/components/signInModal/signInModal.tpl.html:3
+msgid "If you don&apos;t have a Cru username, you can create one now"
+msgstr ""
+
+#: src/common/components/signInForm/signInForm.tpl.html:5
+msgid "Invalid Verification Code. Please try again."
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchIdentity/userMatchIdentity.tpl.html:1
+msgid "Is it you?"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:63 src/app/profile/profile.tpl.html:94
+#: src/common/components/contactInfo/contactInfo.tpl.html:102
+#: src/common/components/contactInfo/contactInfo.tpl.html:168
+msgid "Jr"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:81
+#: src/common/components/contactInfo/contactInfo.tpl.html:82
+#: src/common/components/signUpModal/signUpModal.tpl.html:37
+msgid "Last Name"
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:47
+msgid "Last Name is required."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:112
+msgid "Last name cannot be longer than 50 characters"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:111
+msgid "Last name must not be empty"
+msgstr ""
+
+#: src/app/profile/receipts/receipts.tpl.html:67
+msgid "Load More"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:67
+msgid "Loading <span class=\"hidden-xs\">your giving history</span>..."
+msgstr ""
+
+#: src/app/checkout/checkout.tpl.html:8
+msgid "Loading cart data..."
+msgstr ""
+
+#: src/app/branded/step-1/branded-checkout-step-1.tpl.html:4
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:18
+msgid "Loading gift details..."
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:75
+msgid "Loading gift history..."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/restartGift.tpl.html:72
+msgid "Loading gift information&hellip;"
+msgstr ""
+
+#: src/common/components/nav/navCart/navCart.tpl.html:6
+msgid "Loading gifts..."
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:127
+msgid "Loading mailing address..."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/editRecurringGifts.modal.tpl.html:23
+msgid "Loading payment information..."
+msgstr ""
+
+#: src/app/profile/payment-methods/payment-methods.tpl.html:22
+msgid "Loading payment methods..."
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/giveOneTimeGift.modal.tpl.html:10
+msgid "Loading recent recipients"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/addRecentRecipients.tpl.html:22
+#: src/app/profile/yourGiving/giveOneTimeGift/giveOneTimeGift.modal.tpl.html:23
+msgid "Loading recent recipients..."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step1/editRecurringGifts.tpl.html:21
+msgid "Loading recurring gifts..."
+msgstr ""
+
+#: src/common/components/giftViews/giftSearchView/giftSearchView.tpl.html:36
+msgid "Loading results..."
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:25
+msgid "Loading your gifts..."
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:130
+msgid "Loading your giving page..."
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:18
+msgid "Loading your giving profile..."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:252
+msgid "Loading&hellip;"
+msgstr ""
+
+#: src/app/signIn/signIn.tpl.html:10
+msgid "Logging in saves you time during checkout."
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/giveOneTimeGift.modal.tpl.html:11
+msgid "Looking up missionaries and ministries you have given to recently"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:132
+#: src/common/components/contactInfo/contactInfo.tpl.html:68
+msgid "MI"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:193
+msgid "Mailing Address"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:33
+msgid "Mailing Address:"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:9
+msgid "Make Changes To Your Recurring Gifts"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step2/configureGifts/configureGifts.tpl.html:9
+msgid "Make Changes to your Recurring Gifts"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step1/editRecurringGifts.tpl.html:9
+msgid "Make changes to your recurring gifts"
+msgstr ""
+
+#: src/app/profile/yourGiving/historicalView/historicalGift/historicalGift.tpl.html:46
+msgid "Manage Recurring Gift"
+msgstr ""
+
+#: src/app/thankYou/accountBenefits/accountBenefits.tpl.html:9
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:11
+msgid "Manage your recurring gifts"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:108 src/app/profile/profile.tpl.html:73
+msgid "Middle name cannot be longer than 15 characters"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:116
+#: src/app/searchResults/searchResults.tpl.html:66
+msgid "Ministries"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:115
+#: src/app/searchResults/searchResults.tpl.html:63
+msgid "Missionaries"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:39
+msgid "Missions Trips"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:187
+msgid "Mobile"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:180
+msgid "Month"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:44
+msgid "Monthly"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:86
+msgid "Monthly View"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:26
+msgid "Most Recent:"
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:66
+msgid "Must be 100 characters or less."
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:30
+#: src/common/components/signUpModal/signUpModal.tpl.html:48
+msgid "Must be 2 or more characters."
+msgstr ""
+
+#: src/common/components/signUpModal/signUpModal.tpl.html:31
+#: src/common/components/signUpModal/signUpModal.tpl.html:49
+msgid "Must be 50 characters or less."
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:26
+#: src/common/components/signUpModal/signUpModal.tpl.html:82
+msgid "Must be 8 or more characters."
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:27
+#: src/common/components/signUpModal/signUpModal.tpl.html:83
+msgid "Must include 1 letter and 1 number."
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:31
+msgid "Name On Card"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:119
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:60
+msgid "Name on card"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:138
+msgid "New"
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:15
+msgid "New Password"
+msgstr ""
+
+#: src/app/newsletterSubscription/newsletterModal/newsletterModal.tpl.html:37
+msgid "Newsletter Preference"
+msgstr ""
+
+#: src/app/profile/payment-methods/recurring-gifts/recurring-gifts.tpl.html:13
+msgid "Next Gift"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:41
+#: src/common/components/giftViews/giftDetailsView/giftDetailsView.tpl.html:12
+msgid "Next Gift: {{date}}"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:103
+msgid "Next gift will be on"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:78
+msgid "No Gift History"
+msgstr ""
+
+#: src/common/components/giftViews/giftSearchView/giftSearchView.tpl.html:25
+msgid "No search results found."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.tpl.html:9
+msgid "No valid payment methods found"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.tpl.html:10
+msgid ""
+"None of your payment methods are currently valid. Please update or add one "
+"below."
+msgstr ""
+
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:22
+msgid "Not Now"
+msgstr ""
+
+#: src/common/components/signInModal/signInModal.tpl.html:17
+msgid "Not {{firstName}} {{lastName}}?"
+msgstr ""
+
+#: src/common/components/giftViews/giftSummaryView/giftSummaryView.tpl.html:3
+msgid "On the {{$ctrl.gift.transactionDay | ordinal}} of each month"
+msgstr ""
+
+#: src/common/components/giftViews/giftSummaryView/giftSummaryView.tpl.html:6
+msgid ""
+"On the {{$ctrl.gift.transactionDay | ordinal}} of {{$ctrl."
+"quarterlyMonths(null, $ctrl.gift.nextGiftDate)}}"
+msgstr ""
+
+#: src/common/components/giftViews/giftDetailsView/giftDetailsView.tpl.html:3
+msgid "On the {{day}} of each month"
+msgstr ""
+
+#: src/common/components/giftViews/giftDetailsView/giftDetailsView.tpl.html:6
+msgid "On the {{day}} of {{month}}"
+msgstr ""
+
+#: src/common/components/giftViews/giftSummaryView/giftSummaryView.tpl.html:9
+msgid ""
+"On {{$ctrl.gift.nextGiftDate.format('MMMM')}} {{$ctrl.gift.transactionDay | "
+"ordinal}} of each year"
+msgstr ""
+
+#: src/common/components/giftViews/giftDetailsView/giftDetailsView.tpl.html:9
+msgid "On {{month}} {{day}} of each year"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:21
+msgid ""
+"One of the gifts you are modifying is no longer an active gift. We may have "
+"accidentally shown you an inactive gift in a previous step. You may try only "
+"editing one gift at a time to determine which gift cannot be changed. If you "
+"continue to experience problems, contact <a href=\"mailto:eGift@cru.org"
+"\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:24
+msgid "One-Time Gift"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:215
+msgid "Optional"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:228
+#: src/common/components/contactInfo/contactInfo.tpl.html:181
+msgid "Organization Name"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:185
+msgid "Organization name cannot be longer that 100 characters"
+msgstr ""
+
+#: src/app/designationEditor/pageOptionsModal/pageOptionsModal.tpl.html:15
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:132
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:94
+msgid "Other"
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:38
+#: src/app/designationEditor/designationEditor.tpl.html:43
+msgid "Page Options"
+msgstr ""
+
+#: src/common/components/signInForm/signInForm.tpl.html:27
+#: src/common/components/signInForm/signInForm.tpl.html:32
+#: src/common/components/signUpModal/signUpModal.tpl.html:71
+msgid "Password"
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:25
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:41
+#: src/common/components/signUpModal/signUpModal.tpl.html:81
+#: src/common/components/signUpModal/signUpModal.tpl.html:97
+msgid "Password is required."
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:42
+#: src/common/components/signUpModal/signUpModal.tpl.html:98
+msgid "Passwords must match."
+msgstr ""
+
+#: src/app/branded/step-1/branded-checkout-step-1.tpl.html:30
+msgid "Payment"
+msgstr ""
+
+#: src/app/checkout/checkout.tpl.html:39
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:84
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:32
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:26
+msgid "Payment Method"
+msgstr ""
+
+#: src/app/profile/payment-methods/payment-methods.tpl.html:4
+msgid "Payment method has been successfully added."
+msgstr ""
+
+#: src/app/profile/payment-methods/payment-methods.tpl.html:5
+msgid "Payment method has been successfully deleted."
+msgstr ""
+
+#: src/app/profile/payment-methods/payment-methods.tpl.html:6
+msgid "Payment method has been successfully updated."
+msgstr ""
+
+#: src/app/profile/yourGiving/historicalView/historicalGift/historicalGift.tpl.html:24
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientDetail/recipientDetail.tpl.html:11
+msgid "Pending"
+msgstr ""
+
+#: src/app/profile/payment-methods/recurring-gifts/recurring-gifts.tpl.html:10
+msgid "Person or Ministry"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:203
+msgid "Phone"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:175
+msgid "Phone Numbers"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/addRecentRecipients.tpl.html:29
+msgid "Please continue to review your changes."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/addRecentRecipients.tpl.html:32
+msgid "Please continue to search for new recipients."
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:18
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:19
+msgid "Please enter a valid number"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:10
+msgid ""
+"Please review the amount, payment method, and frequency of this gift below."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:13
+msgid "Please review your changes and click \"Confirm Changes.\""
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:85
+msgid "Proceed to Checkout"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:63
+msgid "Process Restarts"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:28
+msgid "Profile information was successfully updated."
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:45
+msgid "Quarterly"
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchQuestion/userMatchQuestion.tpl.html:1
+msgid "Question {{questionNumber}} of {{total}}"
+msgstr ""
+
+#: src/app/profile/receipts/receipts.tpl.html:40
+msgid "Receipt Date"
+msgstr ""
+
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:88
+msgid "Receipt Mailing Address"
+msgstr ""
+
+#: src/app/profile/receipts/receipts.tpl.html:10
+msgid "Receipts"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:73
+msgid "Recent Gift History"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:79
+msgid "Recipient View"
+msgstr ""
+
+#: src/app/profile/payment-methods/recurring-gifts/recurring-gifts.tpl.html:4
+msgid "Recurring Gifts Using This Payment Method:"
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:33
+msgid "Recurring Gifts Using this Payment Method"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:37
+msgid "Recurring Gifts:"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step1/redirectGiftStep1.tpl.html:23
+msgid "Redirect"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/redirectGift.tpl.html:2
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step1/redirectGiftStep1.tpl.html:9
+msgid "Redirect A Gift"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/step0/stopStartStep0.tpl.html:44
+msgid "Redirect a gift to a new recipient"
+msgstr ""
+
+#: src/app/thankYou/accountBenefits/accountBenefits.tpl.html:12
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:15
+msgid "Register Your Account"
+msgstr ""
+
+#: src/app/thankYou/accountBenefits/accountBenefits.tpl.html:3
+msgid "Register Your Account for Online Access"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:62
+msgid "Remove"
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:44
+msgid "Remove Cover"
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:45
+msgid "Remove Photo"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:70
+msgid "Removing..."
+msgstr ""
+
+#: src/app/signIn/signIn.tpl.html:15
+#: src/common/components/signInModal/signInModal.tpl.html:14
+msgid "Reset It"
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:34
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:45
+msgid "Reset My Password"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suggestedRecipients/suggestedRecipients.tpl.html:22
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suspendedGifts/suspendedGifts.tpl.html:22
+msgid "Restart"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/restartGift.tpl.html:71
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suggestedRecipients/suggestedRecipients.tpl.html:9
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suspendedGifts/suspendedGifts.tpl.html:9
+msgid "Restart A Gift"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/step0/stopStartStep0.tpl.html:28
+msgid "Restart my giving"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:21 src/app/cart/cart.tpl.html:22
+#: src/app/designationEditor/designationEditor.tpl.html:16
+#: src/app/designationEditor/designationEditor.tpl.html:8
+#: src/app/profile/yourGiving/editRecurringGifts/step1/editRecurringGifts.tpl.html:51
+#: src/app/profile/yourGiving/giveOneTimeGift/giveOneTimeGift.modal.tpl.html:51
+#: src/app/profile/yourGiving/historicalView/historicalView.tpl.html:6
+#: src/app/profile/yourGiving/recipientView/recipientView.tpl.html:6
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/restartGift.tpl.html:92
+#: src/app/profile/yourGiving/yourGiving.tpl.html:8
+#: src/common/components/addressForm/addressForm.tpl.html:120
+#: src/common/components/addressForm/addressForm.tpl.html:15
+#: src/common/components/contactInfo/contactInfo.tpl.html:32
+#: src/common/components/retryModal/retryModal.tpl.html:32
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:4
+msgid "Retry"
+msgstr ""
+
+#: src/app/checkout/step-1/step-1.tpl.html:14
+#: src/app/checkout/step-1/step-1.tpl.html:6
+msgid "Return to Cart"
+msgstr ""
+
+#: src/app/branded/step-2/branded-checkout-step-2.tpl.html:3
+msgid "Review"
+msgstr ""
+
+#: src/app/checkout/checkout.tpl.html:47
+msgid "Review and Submit Gift"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:111
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:48
+msgid "Routing Number"
+msgstr ""
+
+#: src/app/designationEditor/titleModal/titleModal.tpl.html:16
+msgid "Save &amp; Close"
+msgstr ""
+
+#: src/app/thankYou/accountBenefits/accountBenefits.tpl.html:6
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:8
+msgid "Save time during checkout"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:62
+msgid "Saving..."
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:21
+#: src/app/searchResults/searchResults.tpl.html:54
+#: src/app/searchResults/searchResults.tpl.html:86
+msgid "Search"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/searchRecipients.tpl.html:10
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/searchRecipients.tpl.html:10
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step2/redirectGiftStep2.tpl.html:9
+msgid "Search Missionaries and Ministries"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:8
+msgid "Search Results for <strong>{{firstName}} {{lastName}}</strong>"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:5
+msgid "Search Results for <strong>{{keyword}}</strong>"
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/selectRecentRecipients.tpl.html:30
+msgid "Search for others"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:91
+msgid "Security Code"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step2/redirectGiftStep2.tpl.html:23
+msgid "Select"
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:14
+msgid "Select a Photo to Upload"
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:42
+msgid "Select an action for these recurring gifts:"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:47
+msgid "Semi-Annually"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:221
+msgid "Send a Message to {{name}}"
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:42
+msgid "Sending link to your email..."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step3/configureRecentRecipients.tpl.html:9
+msgid "Set up your new recurring gifts"
+msgstr ""
+
+#: src/app/signIn/signIn.tpl.html:9
+#: src/common/components/signInForm/signInForm.tpl.html:68
+#: src/common/components/signUpModal/signUpModal.tpl.html:128
+msgid "Sign In"
+msgstr ""
+
+#: src/common/components/signInModal/signInModal.tpl.html:18
+msgid "Sign Out"
+msgstr ""
+
+#: src/common/components/signInModal/signInModal.tpl.html:24
+#: src/common/components/signUpModal/signUpModal.tpl.html:120
+msgid "Sign Up"
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:106
+msgid "Signature text"
+msgstr ""
+
+#: src/common/components/signInForm/signInForm.tpl.html:77
+msgid "Signing you in..."
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:160
+msgid "Single Gift"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:240
+msgid "Special Handling Instructions for Processing This Gift"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:117
+msgid "Spouse First Name"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:146
+msgid "Spouse Last Name"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:64 src/app/profile/profile.tpl.html:95
+#: src/common/components/contactInfo/contactInfo.tpl.html:103
+#: src/common/components/contactInfo/contactInfo.tpl.html:169
+msgid "Sr"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:49
+msgid "Starts on:"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:192
+msgid "Starts on: {{date}}"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:110
+msgid "State / Region"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:85
+msgid "Status"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step1/stopGiftStep1.tpl.html:23
+msgid "Stop"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step1/stopGiftStep1.tpl.html:9
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/stopGift.tpl.html:2
+msgid "Stop a Gift"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/step0/stopStartStep0.tpl.html:52
+msgid "Stop a gift"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:52
+msgid "Stop or Restart a Gift"
+msgstr ""
+
+#: src/common/components/contactInfoModal/contactInfoModal.tpl.html:8
+msgid "Submit"
+msgstr ""
+
+#: src/app/checkout/cart-summary/cart-summary.tpl.html:31
+#: src/app/checkout/step-3/step-3.tpl.html:209
+msgid "Submit Your Gift"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:221
+msgid "Submitting your gift..."
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:161
+#: src/common/components/contactInfo/contactInfo.tpl.html:98
+msgid "Suffix"
+msgstr ""
+
+#: src/common/components/nav/navCart/navCart.tpl.html:55
+msgid "TOTAL 1 Item"
+msgid_plural "TOTAL ({{$count}} Items)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:3
+msgid "Thank you for Your Gift"
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:34
+msgid ""
+"Thank you for completing account registration. Your account has been "
+"activated."
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:31
+msgid ""
+"Thank you for taking the time to answer our security questions. Your account "
+"is now activated."
+msgstr ""
+
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:24
+msgid ""
+"Thanks for making a difference in the lives of people both now and for "
+"eternity. May the Lord bless your investment in this work for Christ's "
+"kingdom. (Luke 6:38)"
+msgstr ""
+
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:2
+msgid ""
+"Thanks for your gift!\n"
+"    If you register your account now, it will be even easier to give when "
+"you come back to support your favorite missionaries and projects."
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:15
+msgid "The bank name cannot be longer than 30 characters"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:40
+msgid ""
+"The billing address entered does not match the address associated with the "
+"card."
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:25
+msgid "The credit card number entered is invalid."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:211
+#: src/common/components/contactInfo/contactInfo.tpl.html:206
+msgid "The phone number entered is invalid"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step2/stopGiftStep2.tpl.html:19
+msgid "The recurring gift to this recipient will be stopped:"
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.tpl.html:5
+msgid ""
+"The routing number you entered does not seem to be valid. Please verify that "
+"it is correct."
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:102
+msgid "The security code cannot be more than 4 digits"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:37
+msgid "The security code entered for your card is invalid."
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:101
+msgid "The security code must be at least 3 digits"
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/step2/enterAmounts.tpl.html:22
+msgid ""
+"There was an error adding some of your gifts to cart. The ones below were "
+"unable to be added to cart."
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:53
+msgid ""
+"There was an error configuring the frequency of your gift. You may try "
+"changing the frequency again but if you continue to experience issues, "
+"contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:98
+msgid "There was an error deleting your payment method."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/restartGift.tpl.html:81
+msgid ""
+"There was an error loading gift information. Please try again, or contact <a "
+"href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/giftViews/giftSearchView/giftSearchView.tpl.html:29
+msgid "There was an error loading results."
+msgstr ""
+
+#: src/app/branded/step-1/branded-checkout-step-1.tpl.html:17
+msgid ""
+"There was an error loading the details needed to configure your gift. You "
+"may <a href ng-click=\"$ctrl.initSessionAndCart()\">try again</a>. If you "
+"continue to experience issues, contact <a href=\"mailto:eGift@cru.org"
+"\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:22
+msgid ""
+"There was an error loading the details needed to configure your gift. You "
+"may <a href ng-click=\"$ctrl.loadData()\">try again</a>. If you continue to "
+"experience issues, contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</"
+"a> for assistance."
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:14
+msgid ""
+"There was an error loading the list of countries. If you continue to see "
+"this message, contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for "
+"assistance.\n"
+"            <button id=\"retryButton1\" type=\"button\" class=\"btn btn-"
+"default btn-sm\" ng-click=\"$ctrl.loadCountries()\" translate>Retry</button>"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:119
+msgid ""
+"There was an error loading the list of regions/state. If you continue to see "
+"this message, contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for "
+"assistance.\n"
+"              <button id=\"retryButton2\" type=\"button\" class=\"btn btn-"
+"default btn-sm\" ng-click=\"$ctrl.refreshRegions($ctrl.address."
+"addressCountry, true)\" translate>Retry</button>"
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:16
+msgid ""
+"There was an error loading the verification questions. Please try again. If "
+"you continue to see this message, contact <a href=\"mailto:eGift@cru.org"
+"\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/checkout/checkout.tpl.html:14
+msgid "There was an error loading your cart"
+msgstr ""
+
+#: src/common/components/nav/navCart/navCart.tpl.html:21
+msgid ""
+"There was an error loading your cart.\n"
+"      <br>\n"
+"        You can <a href ng-click=\"$ctrl.loadCart()\">try again</a>."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:13
+msgid "There was an error loading your email(s)"
+msgstr ""
+
+#: src/app/branded/step-2/branded-checkout-step-2.tpl.html:4
+msgid ""
+"There was an error loading your gifts. You may <a id=\"retryLoadButton\" "
+"href ng-click=\"$ctrl.loadCart()\">retry</a> loading them. If you continue "
+"to see this message, please contact <a href=\"mailto:eGift@cru.org"
+"\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientView.tpl.html:3
+msgid "There was an error loading your giving by recipient."
+msgstr ""
+
+#: src/app/profile/yourGiving/historicalView/historicalView.tpl.html:3
+msgid "There was an error loading your historical giving."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:22
+msgid "There was an error loading your mailing address"
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:3
+msgid ""
+"There was an error loading your page.\n"
+"      You can use the retry button to try loading it again.\n"
+"      If you continue to see this message, contact <a href=\"mailto:"
+"techhelp@cru.org\">techhelp@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/editRecurringGifts.modal.tpl.html:36
+msgid "There was an error loading your payment methods."
+msgstr ""
+
+#: src/app/profile/payment-methods/payment-methods.tpl.html:24
+msgid ""
+"There was an error loading your payment methods. You may <a href ng-click="
+"\"$ctrl.loadPaymentMethods()\">try again</a>."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:17
+msgid "There was an error loading your phone numbers"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:8
+msgid "There was an error loading your profile information"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:31
+msgid ""
+"There was an error loading your profile. You can use the retry button to try "
+"loading it again. If you continue to see this message, contact <a href="
+"\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:7
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:3
+msgid ""
+"There was an error loading your profile. You can use the retry button to try "
+"loading them again. If you continue to see this message, contact <a href="
+"\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/giveOneTimeGift.modal.tpl.html:35
+msgid "There was an error loading your recent recipients."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/redirectGift.tpl.html:6
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/stopGift.tpl.html:6
+msgid "There was an error loading your recurring gifts."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step1/editRecurringGifts.tpl.html:24
+msgid ""
+"There was an error loading your recurring gifts. You can use the retry "
+"button to try loading them again. If you continue to see this message, "
+"contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:19
+msgid ""
+"There was an error processing your restarts. Please try again, or contact <a "
+"href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:12
+msgid ""
+"There was an error receiving your gift submission status. Your connection "
+"dropped or timed out.\n"
+"         Please contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> "
+"for assistance."
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:2
+msgid "There was an error saving the title you have chosen."
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:8
+msgid ""
+"There was an error saving your answer. Please try again. If you continue to "
+"see this message, contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> "
+"for assistance."
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:14
+msgid ""
+"There was an error saving your contact info. Make sure your spouse's first "
+"and last name are correct."
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:20
+msgid ""
+"There was an error saving your contact info. Please try again or contact <a "
+"href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:17
+msgid ""
+"There was an error saving your contact info. Your session may have expired. "
+"If you continue to experience issues, try signing out and back in."
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:5
+msgid ""
+"There was an error saving your email address. Make sure it was entered "
+"correctly."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:23
+msgid ""
+"There was an error saving your gifts. Please check that all the entered "
+"information is valid and that you have a good internet connection. If you "
+"continue to see this message, contact <a href=\"mailto:eGift@cru.org"
+"\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:11
+msgid ""
+"There was an error saving your organization name. Make sure it is not longer "
+"than 100 characters."
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:11
+msgid ""
+"There was an error saving your page.\n"
+"      You can use the retry button to try saving it again.\n"
+"      If you continue to see this message, contact <a href=\"mailto:"
+"techhelp@cru.org\">techhelp@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.tpl.html:17
+msgid ""
+"There was an error saving your payment method. Please verify all your info "
+"and try again. If you are still seeing this message, contact <a href="
+"\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:8
+msgid ""
+"There was an error saving your phone number. Make sure it was entered "
+"correctly."
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:19
+msgid ""
+"There was an error submitting your payment. Verify that your payment info is "
+"correct or try adding it again. If you are still seeing this message, please "
+"contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:97
+msgid ""
+"There was an error updating the donations attached to this payment method."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:14
+msgid "There was an error updating your email(s)"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:23
+msgid "There was an error updating your mailing address"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:18
+msgid "There was an error updating your phone numbers"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:19
+msgid ""
+"There was an error updating your phone numbers. You appear to have entered "
+"duplicate phone numbers. Please verify that all of your phone numbers are "
+"unique."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:9
+msgid "There was an error updating your profile information"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:10
+msgid "There was an error updating your spouse's information"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:43
+msgid ""
+"There was an issue processing your request. Please contact <a href=\"mailto:"
+"eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:6
+msgid ""
+"There was an issue with your billing address. Please verify that your "
+"billing address is correct."
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:4
+msgid "There was an issue with your email. Please verify that it is correct."
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:5
+msgid ""
+"There was an issue with your payment. Please verify that all your payment "
+"information is correct."
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:57
+msgid ""
+"There was an unknown error adding your gift to the cart. Please verify all "
+"your info and try again. If you are still seeing this message, contact <a "
+"href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:8
+msgid ""
+"There was an unknown error indicating that the order is still missing data.\n"
+"          Please verify all your info, try refreshing the page, and, if you "
+"are still seeing this message, please contact <a href=\"mailto:eGift@cru.org"
+"\">eGift@cru.org</a> for assistance."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/step1/stopGiftStep1.tpl.html:10
+msgid ""
+"These are your current recurring gifts. Which gifts would you like to stop?"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:55
+msgid "This account number must contain 17 or fewer digits"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:54
+msgid "This account number must contain 2 or more digits"
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.tpl.html:11
+msgid "This card has expired. Please use a different payment method."
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:22
+msgid "This card number cannot contain more than 16 digits"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:25
+msgid ""
+"This card number is invalid. At least one digit was entered incorrectly."
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:21
+msgid "This card number must contain at least 13 digits"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:23
+msgid "This card type is not recognized"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:216
+msgid "This email address is not valid"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:150 src/app/profile/profile.tpl.html:168
+#: src/common/components/addressForm/addressForm.tpl.html:52
+#: src/common/components/addressForm/addressForm.tpl.html:67
+#: src/common/components/addressForm/addressForm.tpl.html:82
+#: src/common/components/contactInfo/contactInfo.tpl.html:217
+msgid "This field cannot be longer than 100 characters"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:140
+#: src/common/components/contactInfo/contactInfo.tpl.html:76
+msgid "This field cannot be longer than 15 characters"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:37
+msgid "This field cannot be longer than 200 characters"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:102
+#: src/common/components/contactInfo/contactInfo.tpl.html:126
+#: src/common/components/contactInfo/contactInfo.tpl.html:155
+#: src/common/components/contactInfo/contactInfo.tpl.html:62
+#: src/common/components/contactInfo/contactInfo.tpl.html:92
+msgid "This field cannot be longer than 50 characters"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suspendedGifts/suspendedGifts.tpl.html:25
+msgid ""
+"This gift cannot be changed online. For assistance,\n"
+"          please call us at (888) 278-7233 from 9am to 5pm ET, Monday - "
+"Friday, or email us at\n"
+"          <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a>."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:23
+msgid "This gift has been successfully restarted:"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:40
+msgid "This gift has been successfully saved:"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:24
+msgid ""
+"This is an invalid {{cardType}} number. It should have {{digitsNumber}} "
+"digits."
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:40
+msgid "This name cannot be longer than 50 characters"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:44
+msgid "This routing number is invalid"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:43
+msgid "This routing number must contain 9 digits"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:34
+msgid "This transaction exceeds your available card balance."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:125
+msgid ""
+"To change your name, please email us at <a href=\"mailto:egift@cru.org?"
+"subject=Name change request\">eGift@cru.org</a> or call us at <a href=\"tel:"
+"(888)278-7233\">(888)278-7233</a> from 9:00 a.m. to 5:00 p.m. ET, Monday-"
+"Friday."
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:18
+msgid ""
+"To protect your privacy, we need to ask you a few questions before we can "
+"give you access to your historical information. <!--You can up to one minute "
+"each to answer these questions.-->"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:56
+msgid "Transaction Day"
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:173
+msgid "Transaction Start Date for Recurring Gifts"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:189
+msgid "Unknown"
+msgstr ""
+
+#: src/app/productConfig/productConfigModal/productConfig.modal.tpl.html:30
+msgid "Update Gift"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:253
+msgid "Update My Profile"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step0/paymentMethodList.tpl.html:48
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.tpl.html:45
+msgid "Update Payment Method"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step0/addUpdatePaymentMethod.tpl.html:53
+msgid "Update and Continue"
+msgstr ""
+
+#: src/app/thankYou/accountBenefits/accountBenefits.tpl.html:7
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:9
+msgid "Update your contact info"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:16 src/app/cart/cart.tpl.html:79
+msgid "Updating cart..."
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:26
+msgid "Uploading..."
+msgstr ""
+
+#: src/app/designationEditor/photoModal/photoModal.tpl.html:51
+msgid "Use Photo"
+msgstr ""
+
+#: src/common/components/signInForm/signInForm.tpl.html:42
+msgid "Verification Code"
+msgstr ""
+
+#: src/app/productConfig/productConfigModal/productConfig.modal.tpl.html:40
+#: src/common/components/nav/navCart/navCart.tpl.html:31
+msgid "View Cart"
+msgstr ""
+
+#: src/app/profile/receipts/receipts.tpl.html:54
+msgid "View PDF"
+msgstr ""
+
+#: src/app/thankYou/accountBenefits/accountBenefits.tpl.html:8
+#: src/common/components/accountBenefitsModal/accountBenefitsModal.tpl.html:10
+msgid "View your donation history"
+msgstr ""
+
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:19
+msgid ""
+"We are processing your gift now. We'll send an email confirmation to\n"
+"      <strong>{{$ctrl.email}}</strong> as well as a tax-deductible receipt "
+"by postal mail."
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:27
+msgid ""
+"We are so grateful for your generosity. We recognize that many people from "
+"different countries are partnering with our ministry for the fulfillment of "
+"the Great Commission. From which country would you like to give?"
+msgstr ""
+
+#: src/app/checkout/step-2/step-2.tpl.html:3
+msgid ""
+"We ran into a problem trying to load your saved payment methods. Please "
+"enter your payment details below. Sorry for the inconvenience."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step3/redirectGiftStep3.tpl.html:12
+msgid ""
+"We will stop your gift to <strong>{{oldName}}</strong> and begin a new gift "
+"to <strong>{{newName}}</strong>."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step3/configureRecentRecipients.tpl.html:10
+msgid "We'll add them to your donation"
+msgstr ""
+
+#: src/app/designationEditor/designationEditor.tpl.html:114
+msgid "Website:"
+msgstr ""
+
+#: src/common/components/signInModal/signInModal.tpl.html:9
+msgid "Welcome back, {{firstName}} {{lastName}}!"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/step0/stopStartStep0.tpl.html:9
+msgid "What would you like to do?"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/step1/redirectGiftStep1.tpl.html:10
+msgid "Which gift would you like to redirect to a new recipient?"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:188
+msgid "Work"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/addRecentRecipients.tpl.html:10
+msgid "Would you like to add them to your recurring gifts?"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:26
+msgid "Year-to-Date Giving"
+msgstr ""
+
+#: src/app/profile/yourGiving/recipientView/recipientGift/recipientGift.tpl.html:16
+msgid "Year-to-date:"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:22
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step3/confirmGifts/confirmGifts.tpl.html:18
+msgid ""
+"You already have a recurring gift to one of these recipients. Check to make "
+"sure you haven't added a recipient multiple times."
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:61
+msgid "You already have this gift in your cart."
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:106
+msgid ""
+"You are deleting this payment method from your profile and\n"
+"                          <strong>stopping all future recurring gifts</"
+"strong>\n"
+"                          associated with this payment method. Please click "
+"\"Confirm Delete\" below to delete this payment method and stop associated "
+"recurring gifts, or click \"Back\" to select a different option."
+msgstr ""
+
+#: src/common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.tpl.html:102
+msgid ""
+"You are deleting this payment method from your profile and moving all future "
+"recurring gifts previously associated with this payment method to\n"
+"                          <payment-method-display payment-method=\"$ctrl."
+"selectedPaymentMethod\"></payment-method-display>. Please click \"Confirm "
+"Changes &amp; Delete\" below to remove this payment method and move "
+"recurring gifts, or click \"Back\" to select a different option."
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:9
+msgid ""
+"You are not allowed to reset your password here.<br>Please\n"
+"        <a href=\"https://www.cru.org/about/contact-us.html\">Contact Us</a>."
+msgstr ""
+
+#: src/common/components/forgotPasswordModal/forgotPasswordModal.tpl.html:14
+msgid ""
+"You are not allowed to reset your password here.<br>Please\n"
+"        <a href=\"https://www.cru.org/about/contact-us.html\">contact us</a>."
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:100
+msgid "You can search our staff by first or last name."
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/giveOneTimeGift.modal.tpl.html:36
+msgid "You can try loading them again or continue and add a new gift."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/editRecurringGifts.modal.tpl.html:37
+msgid ""
+"You can try loading them again or continue and add a new payment method."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/stopGift/stopGift.tpl.html:7
+msgid ""
+"You can use the retry button to try loading them again. If you continue to "
+"see this message,\n"
+"    contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> for "
+"assistance."
+msgstr ""
+
+#: src/app/profile/yourGiving/historicalView/historicalView.tpl.html:4
+#: src/app/profile/yourGiving/recipientView/recipientView.tpl.html:4
+#: src/app/profile/yourGiving/stopStartRecurringGifts/redirectGift/redirectGift.tpl.html:7
+msgid ""
+"You can use the retry button to try loading them again. If you continue to "
+"see this message, contact <a href=\"mailto:eGift@cru.org\">eGift@cru.org</a> "
+"for assistance."
+msgstr ""
+
+#: src/app/profile/receipts/receipts.tpl.html:62
+msgid "You don't have any receipts for {{year}}."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/addRecentRecipients.tpl.html:26
+msgid "You don't seem to have any recent recipients."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step1/editRecurringGifts.tpl.html:27
+msgid ""
+"You don't seem to have any recurring gifts to edit.\n"
+"            You may click continue to set up a new recurring gift."
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.tpl.html:14
+msgid ""
+"You have already added this bank account. If you wish to make changes please "
+"edit your existing bank account."
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodForm/paymentMethodForm.tpl.html:8
+msgid ""
+"You have already added this credit card. If you wish to make changes please "
+"edit your existing credit card."
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/step2/enterAmounts.tpl.html:30
+msgid ""
+"You have not selected any recipients. You may go back and add a recent "
+"recipient or search for other recipients"
+msgstr ""
+
+#: src/app/profile/payment-methods/payment-methods.tpl.html:27
+msgid "You haven't added any payment methods. Feel free to add one."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step4/confirmRecurringGifts.tpl.html:26
+msgid ""
+"You haven't made any changes to your recurring gifts. Feel free to go back "
+"and make some changes."
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:117
+msgid "You must accept this agreement to pay with a bank account"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:32
+msgid "You must choose a valid payment method"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:29
+msgid "You must choose an account type"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:68
+msgid "You must choose an expiration month"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:84
+msgid "You must choose an expiration year"
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchIdentity/userMatchIdentity.tpl.html:3
+#: src/common/components/userMatchModal/userMatchQuestion/userMatchQuestion.tpl.html:4
+msgid "You must choose one."
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:14
+msgid "You must enter a bank name"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:20
+msgid "You must enter a card number"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:101
+msgid "You must enter a city"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:61
+msgid "You must enter a first name"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:91
+msgid "You must enter a last name"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:210
+msgid "You must enter a phone number"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:42
+msgid "You must enter a routing number"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:140
+msgid "You must enter a valid US zip code"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:149 src/app/profile/profile.tpl.html:167
+msgid "You must enter a valid email address"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:139
+msgid "You must enter a zip / postal code"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:53
+msgid "You must enter an account number"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:36
+msgid "You must enter an address"
+msgstr ""
+
+#: src/common/components/giftViews/giftUpdateView/giftUpdateView.tpl.html:15
+msgid "You must enter an amount"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:148
+#: src/common/components/contactInfo/contactInfo.tpl.html:215
+msgid "You must enter an email address"
+msgstr ""
+
+#: src/common/components/contactInfo/contactInfo.tpl.html:184
+msgid "You must enter an organization name"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:39
+msgid "You must enter the name on the card"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:100
+msgid "You must enter the security code"
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/editRecurringGifts.modal.tpl.html:11
+msgid "You must have at least one valid payment method to continue"
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:64
+msgid "You must retype your account number"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:18
+msgid "You must select a country"
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:123
+msgid "You must select a state / region"
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suspendedGifts/suspendedGifts.tpl.html:10
+msgid ""
+"You paused your giving to these recipients. Which gifts would you like to "
+"restart? You will be able to make edits to these gifts on the next step."
+msgstr ""
+
+#: src/app/profile/yourGiving/stopStartRecurringGifts/restartGift/step1/suggestedRecipients/suggestedRecipients.tpl.html:10
+msgid ""
+"You were previously making gifts to these recipients. Would you like to "
+"start making recurring gifts to them?"
+msgstr ""
+
+#: src/app/signIn/signIn.tpl.html:21
+msgid ""
+"You will have an opportunity to register after completing your transaction."
+msgstr ""
+
+#: src/app/profile/yourGiving/editRecurringGifts/step2/addRecentRecipients.tpl.html:9
+msgid "You've also given to these recipients recently."
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:12
+msgid "Your Gift Cart"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:63
+msgid "Your Giving"
+msgstr ""
+
+#: src/app/branded/step-1/branded-checkout-step-1.tpl.html:24
+#: src/common/components/contactInfo/contactInfo.tpl.html:48
+msgid "Your Information"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:223
+msgid "Your Mailing Address"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:42
+msgid "Your Name"
+msgstr ""
+
+#: src/app/checkout/step-2/existingPaymentMethods/existingPaymentMethods.tpl.html:2
+#: src/app/profile/payment-methods/payment-methods.tpl.html:13
+msgid "Your Payment Methods"
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:34
+msgid "Your Profile"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:97
+msgid "Your Recent Gifts"
+msgstr ""
+
+#: src/common/components/userMatchModal/userMatchModal.tpl.html:42
+msgid "Your account is now activated."
+msgstr ""
+
+#: src/common/components/paymentMethods/bankAccountForm/bankAccountForm.tpl.html:65
+msgid "Your account numbers do not match"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:22
+msgid "Your card is expired."
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:27 src/app/checkout/checkout.tpl.html:11
+#: src/common/components/nav/navCart/navCart.tpl.html:13
+msgid "Your cart is empty"
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:11
+msgid "Your changes were successful."
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:69
+msgid "Your credit card is expired or you selected the wrong month or year"
+msgstr ""
+
+#: src/common/components/paymentMethods/creditCardForm/creditCardForm.tpl.html:85
+msgid "Your credit card is expired or you selected the wrong year"
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:31
+msgid "Your credit card was declined due to insufficient funds."
+msgstr ""
+
+#: src/app/checkout/step-3/step-3.tpl.html:28
+msgid "Your credit card was declined."
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:138
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:98
+msgid "Your gift must be a valid dollar amount"
+msgstr ""
+
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:9
+msgid ""
+"Your gift was submitted but we cannot provide a detailed summary at this "
+"time as your session has expired.\n"
+"        You will receive a confirmation email from us shortly, or you can "
+"review your donation now by looking at <a href=\"/your-giving.html\">Your "
+"Giving</a>."
+msgstr ""
+
+#: src/app/thankYou/summary/thankYouSummary.tpl.html:13
+msgid ""
+"Your gift was submitted but we cannot provide a detailed summary at this "
+"time.\n"
+"        You will receive a confirmation email from us shortly, or you can "
+"review your donation now by looking at <a href=\"/your-giving.html\">Your "
+"Giving</a>."
+msgstr ""
+
+#: src/app/productConfig/productConfigForm/productConfigForm.tpl.html:204
+msgid "Your gift will start on"
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:95
+msgid ""
+"Your giving has helped us become the largest mission agency in the world. "
+"Hundreds of thousands of\n"
+"                    people hear the good news of God's love because of the "
+"work of our many staff members and missions\n"
+"                    trip participants. They depend on the consistent "
+"financial support of partners like you to stay in the missions field."
+msgstr ""
+
+#: src/common/components/resetPasswordModal/resetPasswordModal.tpl.html:60
+msgid "Your password has successfully been updated."
+msgstr ""
+
+#: src/app/profile/yourGiving/yourGiving.tpl.html:10
+msgid "Your recurring gifts were updated successfully."
+msgstr ""
+
+#: src/app/searchResults/searchResults.tpl.html:104
+msgid "Your search did not find any results. Please try again."
+msgstr ""
+
+#: src/common/components/addressForm/addressForm.tpl.html:130
+msgid "Zip / Postal Code"
+msgstr ""
+
+#: src/app/checkout/step-2/existingPaymentMethods/existingPaymentMethods.tpl.html:8
+msgid "edit"
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodDisplay.tpl.html:27
+msgid "ends in ****{{$ctrl.paymentMethod['display-account-number']}}"
+msgstr ""
+
+#: src/common/components/paymentMethods/paymentMethodDisplay.tpl.html:12
+msgid "ends in ****{{$ctrl.paymentMethod['last-four-digits']}}"
+msgstr ""
+
+#: src/app/cart/cart.tpl.html:65
+msgid "gift"
+msgstr ""
+
+#: src/app/profile/yourGiving/giveOneTimeGift/step1/selectRecentRecipients.tpl.html:10
+msgid "to any of your favorite missionaries, projects or ministries."
+msgstr ""
+
+#: src/app/profile/profile.tpl.html:139 src/app/profile/profile.tpl.html:157
+msgid "{{name}} Email"
+msgstr ""
+
+#: src/common/components/displayRateTotals/displayRateTotals.tpl.html:3
+msgid "{{rateTotal.frequency}} Gift Total:"
+msgstr ""

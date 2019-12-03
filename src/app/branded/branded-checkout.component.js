@@ -10,8 +10,9 @@ import step1 from './step-1/branded-checkout-step-1.component'
 import step2 from './step-2/branded-checkout-step-2.component'
 import thankYouSummary from 'app/thankYou/summary/thankYouSummary.component'
 
-import sessionService from 'common/services/session/session.service'
+import givewebTranslations from 'common/translations/translations'
 
+import sessionService from 'common/services/session/session.service'
 import 'common/lib/fakeLocalStorage'
 
 import template from './branded-checkout.tpl.html'
@@ -43,8 +44,7 @@ class BrandedCheckoutController {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
     }, angular.noop)
-    this.gettextCatalog.setCurrentLanguage(this.language | 'en')
-    this.gettextCatalog.debug = true
+    this.gettextCatalog.setCurrentLanguage(this.language || 'en')
   }
 
   formatDonorDetails () {
@@ -107,7 +107,8 @@ export default angular
     thankYouSummary.name,
     sessionService.name,
     uibModal,
-    'environment'
+    'environment',
+    givewebTranslations.name
   ]).config(($uibModalProvider, $windowProvider) => {
     const $document = angular.element($windowProvider.$get().document)
     $uibModalProvider.options.appendTo = $document.find('branded-checkout').eq(0)
