@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 import Loader from './loader'
 
 (function () {

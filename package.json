@@ -2,6 +2,7 @@
   "name": "give-web",
   "version": "1.0.0",
   "dependencies": {
+    "@babel/polyfill": "^7.7.0",
     "@babel/runtime-corejs2": "^7.0.0",
     "angular": "1.7.9",
     "angular-cookies": "^1.7.8",

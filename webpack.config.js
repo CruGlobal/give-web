@@ -66,7 +66,12 @@ const sharedConfig = {
         use: [{
           loader: 'babel-loader',
           options: {
-            presets: [['@babel/preset-env', { modules: false }]],
+            presets: [['@babel/preset-env', {
+              modules: false,
+              targets: {
+                browsers: ['last 1 version', 'ie >= 11']
+              }
+            }]],
             plugins: [
               '@babel/plugin-transform-runtime',
               'angularjs-annotate'
