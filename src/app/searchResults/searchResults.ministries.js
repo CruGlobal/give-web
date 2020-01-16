@@ -2,7 +2,7 @@ export default [
   {
     name: 'Cru Greatest Needs',
     designationNumber: '0763355',
-    path: '/0763355',
+    path: '/cru-greatestneeds',
     facet: 'ministry'
   },
   {
