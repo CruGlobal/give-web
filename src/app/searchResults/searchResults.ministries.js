@@ -114,7 +114,7 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'unto™',
+    name: 'Unto™',
     designationNumber: '2807640',
     path: '/2807640',
     facet: 'ministry'
