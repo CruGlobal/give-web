@@ -19,7 +19,7 @@
   </loading>
 
   <div ng-if="$ctrl.errorLoading" class="alert alert-danger" role="alert">
-    <p translate='LOADING_ERROR' translate-values="{loadData: $ctrl.loadData()}"></p>
+    <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
   </div>
 
   <div class="panel panel-default panel-plain mt" ng-if="$ctrl.showGivingLinks">
