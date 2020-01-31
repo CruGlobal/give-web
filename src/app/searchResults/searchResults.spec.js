@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 
 import module from './searchResults.component'
-import ministries from './searchResults.ministries'
 
 describe('searchResults', function () {
   beforeEach(angular.mock.module(module.name))
@@ -57,12 +56,23 @@ describe('searchResults', function () {
     })
 
     it('pulls ministry list', () => {
-      jest.spyOn($ctrl.designationsService, 'productSearch').mockReturnValue(Observable.of([]))
+      jest.spyOn($ctrl.designationsService, 'ministriesList').mockReturnValue(Observable.of({
+            name: 'Cru Greatest Needs',
+            designationNumber: '0763355',
+            path: '/cru-greatestneeds',
+            facet: 'ministry'
+          }))
 
       $ctrl.$onInit()
       $ctrl.requestGiveSearch('ministries')
 
-      expect($ctrl.searchResults).toEqual(ministries)
+      expect($ctrl.searchResults).toEqual({
+            name: 'Cru Greatest Needs',
+            designationNumber: '0763355',
+            path: '/cru-greatestneeds',
+            facet: 'ministry'
+          })
+      expect($ctrl.loadingResults).toEqual(false)
     })
 
     it('handles no search query', () => {

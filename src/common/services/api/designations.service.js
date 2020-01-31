@@ -255,6 +255,22 @@ class DesignationsService {
         return givingLinks
       })
   }
+
+  ministriesList (pagePath) {
+    const path = pagePath + '/jcr:content/content-parsys/designation_search_r.json'
+    return Observable.from(this.$http.get(this.envService.read('apiUrl') + '/' + path))
+      .map((response) => {
+        return map(response.data.ministries, (item) => {
+          const ministry = JSON.parse(item)
+          return {
+            name: ministry.name || null,
+            designationNumber: ministry.designationNumber || null,
+            path: ministry.path || null,
+            facet: ministry.facet || null
+          }
+        })
+      })
+  }
 }
 
 export default angular
