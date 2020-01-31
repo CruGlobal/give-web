@@ -66,12 +66,6 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'Global Aid Network (GAiN)',
-    designationNumber: '2807640',
-    path: '/gain-greatestneeds',
-    facet: 'ministry'
-  },
-  {
     name: 'Global Greatest Needs',
     designationNumber: '0703618',
     path: '/2017-globalgreatestneeds.html',
@@ -121,8 +115,8 @@ export default [
   },
   {
     name: 'Unto™',
-    designationNumber: '1071573',
-    path: '/1071573',
+    designationNumber: '2807640',
+    path: '/2807640',
     facet: 'ministry'
   }
 ]
