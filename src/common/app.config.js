@@ -90,7 +90,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     GIFT_IN_CART_ERROR: 'You already have this gift in your cart.',
     GIFT_AMOUNT: 'Gift Amount',
     OTHER_PLACEHOLDER: 'Other',
-    GIFT_FREQUENCY: 'Gifts Frequency',
+    GIFT_FREQUENCY: 'Gift Frequency',
     VALID_DOLLAR_AMOUNT_ERROR: 'Your gift must be a valid dollar amount',
     AMOUNT_EMPTY_ERROR: 'Amount must be not empty',
     AMOUNT_MIN_ERROR: 'Amount must be at least {{currencyLimit}}',
