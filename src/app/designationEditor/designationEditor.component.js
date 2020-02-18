@@ -321,14 +321,16 @@ class DesignationEditorController {
 
   getImageUrls (obj) {
     const imageUrls = []
-    Object.keys(obj).forEach(key => {
-      if (angular.isObject(obj[key])) {
-        imageUrls.push(...this.getImageUrls(obj[key]))
-      }
-      if (key === 'fileReference') {
-        imageUrls.push(obj[key])
-      }
-    })
+    if (obj) {
+      Object.keys(obj).forEach(key => {
+        if (angular.isObject(obj[key])) {
+          imageUrls.push(...this.getImageUrls(obj[key]))
+        }
+        if (key === 'fileReference') {
+          imageUrls.push(obj[key])
+        }
+      })
+    }
     return imageUrls
   }
 
