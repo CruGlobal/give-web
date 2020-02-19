@@ -143,8 +143,10 @@ class UserMatchModalController {
     } else {
       this.verificationService.submitAnswers(this.answers).subscribe(() => {
         this.changeMatchState('success')
-      }, () => {
-        this.changeMatchState('success-failure')
+      },
+      error => {
+        this.$log.debug('Failed verification questions', error)
+        this.changeMatchState('failure')
       })
     }
   }
