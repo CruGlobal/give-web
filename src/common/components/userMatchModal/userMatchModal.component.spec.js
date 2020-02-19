@@ -302,7 +302,7 @@ describe('userMatchModal', function () {
         expect($ctrl.changeMatchState).toHaveBeenCalledWith('success')
       })
 
-      it('proceeds to success-failure on submitAnswers failure', () => {
+      it('proceeds to failure on submitAnswers failure', () => {
         jest.spyOn($ctrl.verificationService, 'submitAnswers').mockReturnValue(Observable.throw({}))
         $ctrl.questions = []
 
@@ -313,7 +313,7 @@ describe('userMatchModal', function () {
           answer: 'answer'
         }])
 
-        expect($ctrl.changeMatchState).toHaveBeenCalledWith('success-failure')
+        expect($ctrl.changeMatchState).toHaveBeenCalledWith('failure')
       })
     })
   })

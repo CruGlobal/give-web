@@ -38,8 +38,11 @@
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>
   </div>
-  <div ng-switch-when="success-failure" ng-init="$ctrl.analyticsFactory.track('aa-registration-match-new-account-success')">
-    <p translate>Your account is now activated.</p>
+  <div ng-switch-when="failure" ng-init="$ctrl.analyticsFactory.track('aa-registration-match-failed-questions')">
+    <p translate>
+      Unfortunately we are unable to verify your account.
+      Please contact us at 888-278-7233, option 1, option 1 or email eGift@cru.org.
+    </p>
     <p>
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>
