@@ -12,8 +12,9 @@ const componentName = 'userMatchModal'
 
 class UserMatchModalController {
   /* @ngInject */
-  constructor ($log, gettext, profileService, verificationService, analyticsFactory) {
+  constructor ($log, $window, gettext, profileService, verificationService, analyticsFactory) {
     this.$log = $log
+    this.$window = $window
     this.gettext = gettext
     this.profileService = profileService
     this.verificationService = verificationService
@@ -145,10 +146,15 @@ class UserMatchModalController {
         this.changeMatchState('success')
       },
       error => {
+        this.setLoading({ loading: false })
         this.$log.debug('Failed verification questions', error)
         this.changeMatchState('failure')
       })
     }
+  }
+
+  onFailure () {
+    this.$window.location = '/'
   }
 }
 
