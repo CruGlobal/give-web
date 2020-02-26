@@ -70,7 +70,7 @@ class BrandedCheckoutController {
         this.checkoutStep = 'thankYou'
         break
     }
-    this.$window.scrollTo(0, 0)
+    this.$window.document.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
   }
 
   previous () {
@@ -80,7 +80,7 @@ class BrandedCheckoutController {
         this.checkoutStep = 'giftContactPayment'
         break
     }
-    this.$window.scrollTo(0, 0)
+    this.$window.document.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
   }
 
   onThankYouPurchaseLoaded (purchase) {
