@@ -17,7 +17,7 @@ describe('userMatchModal', function () {
       onSuccess: jest.fn(),
       setLoading: jest.fn()
     }
-    $ctrl = _$componentController_(module.name, {}, bindings)
+    $ctrl = _$componentController_(module.name, { $window: { location: '/profile.html' } }, bindings)
   }))
 
   it('to be defined', function () {
@@ -315,6 +315,14 @@ describe('userMatchModal', function () {
 
         expect($ctrl.changeMatchState).toHaveBeenCalledWith('failure')
       })
+    })
+  })
+
+  describe('onFailure', () => {
+    it('returns the user to the home page', () => {
+      $ctrl.$onInit()
+      $ctrl.onFailure()
+      expect($ctrl.$window.location).toEqual('/')
     })
   })
 })
