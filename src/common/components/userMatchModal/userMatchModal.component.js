@@ -7,6 +7,7 @@ import userMatchQuestion from './userMatchQuestion/userMatchQuestion.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import template from './userMatchModal.tpl.html'
 import find from 'lodash/find'
+import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
 
 const componentName = 'userMatchModal'
 
@@ -165,7 +166,8 @@ export default angular
     profileService.name,
     userMatchIdentity.name,
     userMatchQuestion.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    failedVerificationModal.name
   ])
   .component(componentName, {
     controller: UserMatchModalController,
