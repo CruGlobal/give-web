@@ -2,9 +2,9 @@
   "name": "give-web",
   "version": "1.0.0",
   "dependencies": {
+    "@babel/polyfill": "^7.7.0",
     "@babel/runtime-corejs2": "^7.0.0",
-    "angular": "1.7.8",
-    "angular-animate": "^1.7.8",
+    "angular": "1.7.9",
     "angular-cookies": "^1.7.8",
     "angular-environment": "https://github.com/jonshaffer/angular-environment.git#d3082c06fb16804d324faac9b7e753fd64a44e5d",
     "angular-filter": "^0.5.17",
@@ -13,6 +13,7 @@
     "angular-ordinal": "^2.1.3",
     "angular-sanitize": "^1.7.8",
     "angular-scroll": "^1.0.2",
+    "angular-translate": "^2.18.1",
     "angular-ui-bootstrap": "2.5.6",
     "angular-ui-router": "^1.0.22",
     "angular-upload": "^1.0.13",
@@ -21,41 +22,39 @@
     "cru-payments": "^1.2.2",
     "crypto-js": "^3.1.9-1",
     "jwt-decode": "^2.2.0",
-    "libphonenumber-js": "^1.7.20",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "rollbar": "^2.7.1",
     "rxjs": "^5.2.0",
     "slick-carousel": "1.8.1",
-    "stacktrace-js": "^2.0.0",
     "textangularjs": "^2.1.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/runtime": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
     "angular-mocks": "^1.7.8",
-    "babel-eslint": "^10.0.2",
-    "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-angularjs-annotate": "^0.10.0",
-    "copy-webpack-plugin": "^5.0.3",
-    "css-loader": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "css-loader": "^3.2.0",
     "html-loader": "^0.5.5",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
     "jest-date-mock": "^1.0.7",
-    "mini-css-extract-plugin": "^0.7.0",
-    "ng-annotate-loader": "^0.6.1",
+    "mini-css-extract-plugin": "^0.8.0",
+    "moment-locales-webpack-plugin": "^1.1.0",
     "ngtemplate-loader": "^2.0.1",
     "node-sass": "4.12.0",
-    "sass-loader": "^7.1.0",
+    "sass-loader": "^7.3.1",
     "standard": "^13.1.0",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.35.2",
-    "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2"
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.2",
+    "webpack-bundle-analyzer": "^3.4.1",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0",
+    "webpack-manifest-plugin": "^2.1.1"
   },
   "scripts": {
     "start": "webpack-dev-server",
@@ -63,31 +62,6 @@
     "build:analyze": "webpack -p --env.analyze",
     "test": "jest",
     "lint": "standard"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "!**/*.fixture.js"
-    ],
-    "restoreMocks": true,
-    "setupFilesAfterEnv": [
-      "angular",
-      "angular-mocks",
-      "jest-date-mock",
-      "<rootDir>/jest/setup.js"
-    ],
-    "moduleNameMapper": {
-      "^.+\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
-    },
-    "modulePaths": [
-      "<rootDir>/src"
-    ],
-    "transform": {
-      "^.+\\.js?$": "babel-jest",
-      "^.+\\.html$": "<rootDir>/jest/htmlTransform.js"
-    },
-    "verbose": true
   },
   "standard": {
     "env": {

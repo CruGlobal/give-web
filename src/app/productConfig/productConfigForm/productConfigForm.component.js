@@ -119,7 +119,8 @@ class ProductConfigFormController {
         this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts)
       })
 
-    const givingLinksObservable = this.designationsService.givingLinks(this.code)
+    const givingLinksObservable = this.designationsService
+      .givingLinks(this.code, this.itemConfig['campaign-page'])
       .do(givingLinks => {
         this.givingLinks = givingLinks || []
       })

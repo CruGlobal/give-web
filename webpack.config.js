@@ -1,156 +1,219 @@
 const webpack = require('webpack')
 const path = require('path')
+const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build')
+
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const concat = require('lodash/concat')
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const aemDomain = 'https://give-stage2.cru.org'
-const isBuild = (process.env.npm_lifecycle_event || '').startsWith('build')
-const fs = require('fs')
-const entryPoints = {
-  common: 'common/common.module.js',
-  app: [
-    'common/common.module.js',
-    'app/cart/cart.component.js',
-    'app/checkout/checkout.component.js',
-    'app/thankYou/thankYou.component.js',
-    'app/productConfig/productConfig.component.js',
-    'app/signIn/signIn.component.js',
-    'app/searchResults/searchResults.component.js',
-    'app/profile/yourGiving/yourGiving.component.js',
-    'app/profile/profile.component.js',
-    'app/profile/receipts/receipts.component.js',
-    'app/profile/payment-methods/payment-methods.component.js',
-    'app/designationEditor/designationEditor.component.js'
-  ],
-  give: 'assets/scss/styles.scss',
-  'branded-checkout': [
-    'app/branded/branded-checkout.component.js',
-    'assets/scss/branded-checkout.scss'
-  ]
-}
+const ManifestPlugin = require('webpack-manifest-plugin')
 
-module.exports = (env = {}) => {
-  return {
-    mode: isBuild ? 'production' : 'development',
-    entry: isBuild ? entryPoints : { main: 'app/main/main.component.js' },
-    output: {
-      filename: '[name].js',
-      path: path.resolve(__dirname, 'dist'),
-      devtoolModuleFilenameTemplate: info =>
-        info.resourcePath.replace(/^\.\//, '')
-    },
-    plugins: concat(
-      [
-        new MiniCssExtractPlugin({
-          filename: '[name].min.css',
-          disable: !isBuild
-        }),
-        new CopyWebpackPlugin([
-          {
-            context: 'src',
-            from: '**/*.+(json|svg|woff|ttf|png|ico|jpg|gif|eot)',
-            to: '[path][name].[ext]'
-          },
-          {
-            from: 'unsupportedBrowser.html'
-          }
-        ]),
-        new webpack.EnvironmentPlugin({
-          TRAVIS_COMMIT: 'development'
-        }),
-        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/)
-      ],
-      env.analyze ? [new BundleAnalyzerPlugin()] : []
-    ),
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: [['@babel/preset-env', { modules: false }]],
-                plugins: [
-                  '@babel/plugin-transform-runtime',
-                  'angularjs-annotate'
-                ]
+const giveComponents = [
+  'app/cart/cart.component.js',
+  'app/checkout/checkout.component.js',
+  'app/thankYou/thankYou.component.js',
+  'app/productConfig/productConfig.component.js',
+  'app/signIn/signIn.component.js',
+  'app/searchResults/searchResults.component.js',
+  'app/profile/yourGiving/yourGiving.component.js',
+  'app/profile/profile.component.js',
+  'app/profile/receipts/receipts.component.js',
+  'app/profile/payment-methods/payment-methods.component.js',
+  'app/designationEditor/designationEditor.component.js',
+  'app/newsletterSubscription/newsletterSubscription.component.js'
+]
+
+const giveCss = ['assets/scss/styles.scss']
+
+const brandedComponents = [
+  'app/branded/branded-checkout.component.js',
+  'assets/scss/branded-checkout.scss'
+]
+
+const sharedConfig = {
+  mode: isBuild ? 'production' : 'development',
+  devtool: 'source-map',
+  entry: {},
+  resolve: {
+    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        context: 'src',
+        from: '**/*.+(eot|png|svg|ttf|woff)',
+        to: '[path][name].[ext]'
+      },
+      'unsupportedBrowser.html',
+      'branded-checkout.html'
+    ]),
+    new webpack.EnvironmentPlugin({
+      TRAVIS_COMMIT: 'development',
+      S3_GIVE_DOMAIN: ''
+    }),
+    // To strip all locales except “en”
+    new MomentLocalesPlugin()
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: [['@babel/preset-env', {
+              modules: false,
+              targets: {
+                browsers: ['last 1 version', 'ie >= 11']
               }
-            }
-          ]
-        },
-        {
-          test: /\.html$/,
-          use: [
-            'ngtemplate-loader?relativeTo=' +
-            path.resolve(__dirname, './src') +
-            '/',
-            'html-loader'
-          ]
-        },
-        // extract global css into separate files
-        {
-          test: /\.scss$/,
-          include: path.resolve(__dirname, './src/assets'),
-          use: isBuild
-            ? [
-              MiniCssExtractPlugin.loader,
-              'css-loader?-url',
-              'sass-loader?sourceMap'
+            }]],
+            plugins: [
+              '@babel/plugin-transform-runtime',
+              'angularjs-annotate'
             ]
-            : [
-              'style-loader',
-              'css-loader?-url&sourceMap',
-              'sass-loader?sourceMap'
-            ]
-        },
-        // inline css for components with the component's js
-        {
-          test: /\.(scss|css)$/,
-          exclude: path.resolve(__dirname, './src/assets'),
-          use: [
-            'style-loader',
-            'css-loader?sourceMap',
-            'sass-loader?sourceMap'
-          ]
-        }
-      ]
-    },
-    resolve: {
-      modules: [path.resolve(__dirname, 'src'), 'node_modules']
-    },
-    devtool: 'source-map',
-    devServer: {
-      https: {
-        key: fs.readFileSync('./certs/private.key'),
-        cert: fs.readFileSync('./certs/private.crt'),
-        ca: fs.readFileSync('./certs/private.pem')
+          }
+        }]
       },
-      historyApiFallback: {
-        rewrites: [{ from: /\/(?!test-release).+\.html/, to: '/index.html' }]
+      {
+        test: /\.html$/,
+        use: [
+          `ngtemplate-loader?relativeTo=${path.resolve(__dirname, './src')}/`,
+          'html-loader'
+        ]
       },
-      proxy: {
-        '/bin': {
-          target: aemDomain,
-          changeOrigin: true
-        },
-        '/content': {
-          target: aemDomain,
-          changeOrigin: true
-        },
-        '/etc': {
-          target: aemDomain,
-          changeOrigin: true
-        },
-        '/designations': {
-          target: aemDomain,
-          changeOrigin: true
-        }
+      {
+        test: /\.s?[ac]ss$/,
+        include: path.resolve(__dirname, './src/assets'),
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader?-url',
+          'sass-loader?sourceMap'
+        ]
       },
-      port: 9000,
-      public: 'localhost.cru.org:9000'
-    }
+      {
+        test: /\.s?[ac]ss$/,
+        exclude: path.resolve(__dirname, './src/assets'),
+        use: [
+          'style-loader',
+          'css-loader?sourceMap',
+          'sass-loader?sourceMap'
+        ]
+      }
+    ]
+  },
+  optimization: {
+    usedExports: true
   }
 }
+
+const devServer = {
+  https: true,
+  historyApiFallback: {
+    rewrites: [{ from: /\/(?!test-release).+\.html/, to: '/index.html' }]
+  },
+  proxy: {
+    '/bin': {
+      target: 'https://give-stage2.cru.org',
+      changeOrigin: true
+    },
+    '/content': {
+      target: 'https://give-stage2.cru.org',
+      changeOrigin: true
+    },
+    '/etc': {
+      target: 'https://give-stage2.cru.org',
+      changeOrigin: true
+    },
+    '/designations': {
+      target: 'https://give-stage2.cru.org',
+      changeOrigin: true
+    }
+  },
+  port: 9000,
+  public: 'localhost.cru.org:9000'
+}
+
+module.exports = (env = {}) => [
+  // Manifest Loader build
+  {
+    ...sharedConfig,
+    entry: {
+      ...(isBuild ? {
+        'give.v2': 'loaders/give.js',
+        'branded-checkout.v2': 'loaders/branded.js',
+        give: [...giveComponents, ...giveCss],
+        branded: brandedComponents
+      } : {
+        'dev.v2': 'loaders/dev.js',
+        main: 'app/main/main.component.js'
+      })
+    },
+    output: {
+      filename (chunkData) {
+        return ['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunkData.chunk.name)
+          ? '[name].js' : 'chunks/[name].[contenthash].js'
+      },
+      path: path.resolve(__dirname, 'dist')
+    },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: 'chunks/[name].[contenthash].min.css',
+        disable: !isBuild
+      }),
+      ...sharedConfig.plugins,
+      new BundleAnalyzerPlugin({
+        analyzerMode: env.analyze ? 'static' : 'disabled'
+      }),
+      new ManifestPlugin({
+        // Don't include assets or map files in the manifest
+        filter: file => file.isChunk && !/.*\.map$/.test(file.name),
+        publicPath: (process.env.S3_GIVE_DOMAIN || '') + '/',
+        seed: {
+          'fontawesome.css': '//give.cru.org/css/fontawesome.css'
+        }
+      })
+    ],
+    optimization: {
+      usedExports: true,
+      splitChunks: {
+        filename: 'chunks/[name].[contenthash].js',
+        chunks (chunk) {
+          // Don't chunk loader files
+          return !['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunk.name)
+        },
+        cacheGroups: {
+          angular: {
+            test: /[\\/]node_modules[\\/]angular[\\/]/,
+            name: 'angular',
+            chunks: 'all'
+          }
+        }
+      }
+    },
+    devServer
+  },
+  // Legacy build (single big file)
+  {
+    ...sharedConfig,
+    entry: {
+      app: giveComponents,
+      give: giveCss,
+      'branded-checkout': brandedComponents
+    },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: '[name].min.css',
+        disable: !isBuild
+      }),
+      ...sharedConfig.plugins,
+      new BundleAnalyzerPlugin({
+        analyzerMode: env.analyze ? 'static' : 'disabled'
+      })
+    ]
+  }
+]

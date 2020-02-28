@@ -1,28 +1,23 @@
 <div class="panel loading-overlay-parent">
   <div class="panel-body">
     <h2 class="panel-name" translate>
-      Thank you for Your Gift
+      {{'FINAL_THANK_YOU_HEADING'}}
     </h2>
 
     <loading type="overlay" ng-if="$ctrl.loading"></loading>
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError" ng-switch="$ctrl.loadingError">
       <p ng-switch-when="lastPurchaseLink missing" translate>
-        Your gift was submitted but we cannot provide a detailed summary at this time as your session has expired.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.
+        {{'FINAL_GIFT_SUMMARY_EXPIRATION_ERROR'}}
       </p>
       <p ng-switch-when="api error" translate>
-        Your gift was submitted but we cannot provide a detailed summary at this time.
-        You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.
+        {{'FINAL_GIFT_NO_SUMMARY_ERROR'}}
       </p>
     </div>
 
-    <p translate>
-      We are processing your gift now. We'll send an email confirmation to
-      <strong>{{$ctrl.email}}</strong> as well as a tax-deductible receipt by postal mail.
-    </p>
+    <p translate="FINAL_PROCESSING_GIFT" translate-value-userEmail="{{$ctrl.email}}"></p>
 
     <p translate>
-      Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ's kingdom. (Luke 6:38)
+      {{'FINAL_GIFT_THANK_YOU'}}
     </p>
 
     <div ng-if="!$ctrl.loading && !$ctrl.loadingError">
@@ -30,54 +25,54 @@
         <div class="col-md-6">
           <div class="panel panel-default">
             <div class="panel-heading" translate>
-              Payment Method
+              {{'PAYMENT_METHOD'}}
             </div>
 
             <div class="panel-body" ng-if="$ctrl.purchase.paymentMeans.self.type === 'elasticpath.bankaccountpurchases.payment-means-bank-account'">
               <div class="form-group">
-                <label translate>Bank Name</label>
+                <label translate>{{'BANK_NAME'}}</label>
                 <p>{{$ctrl.purchase.paymentMeans['bank-name']}}</p>
               </div>
 
               <div class="form-group">
-                <label translate>Account Type</label>
+                <label translate>{{'ACCOUNT_TYPE'}}</label>
                 <p>{{$ctrl.purchase.paymentMeans['account-type'] | capitalize}}</p>
               </div>
 
               <div class="form-group">
-                <label translate>Routing Number</label>
+                <label translate>{{'ROUTING_NUM_FULL'}}</label>
                 <p>{{$ctrl.purchase.paymentMeans['routing-number']}}</p>
               </div>
 
               <div class="form-group">
-                <label translate>Account Number</label>
+                <label translate>{{'ACCOUNT_NUM_FULL'}}</label>
                 <p>************{{$ctrl.purchase.paymentMeans['display-account-number']}}</p>
               </div>
             </div>
 
             <div class="panel-body" ng-if="$ctrl.purchase.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'">
               <div class="form-group">
-                <label translate>Name on card</label>
+                <label translate>{{'CARD_NAME'}}</label>
                 <p>{{$ctrl.purchase.paymentMeans['holder-name']}}</p>
               </div>
 
               <div class="form-group">
-                <label translate>Card Number</label>
+                <label translate>{{'CARD_NUM_FULL'}}</label>
                 <p>************{{$ctrl.purchase.paymentMeans['primary-account-number-id']}}</p>
               </div>
 
               <div class="form-group">
-                <label translate>Card Type</label>
+                <label translate>{{'CARD_TYPE'}}</label>
                 <p>{{$ctrl.purchase.paymentMeans['card-type']}}</p>
               </div>
 
               <div class="form-group">
-                <label translate>Expires</label>
+                <label translate>{{'EXPIRES'}}</label>
                 <p>{{$ctrl.purchase.paymentMeans['expiry-date'].month}}/{{$ctrl.purchase.paymentMeans['expiry-date'].year}}</p><!-- TODO: deal with localization -->
               </div>
 
               <div class="form-group">
-                <label translate>Billing Address</label>
+                <label translate>{{'BILLING_ADDRESS'}}</label>
                 <display-address address="$ctrl.purchase.paymentMeans.address"></display-address>
               </div>
             </div>
@@ -86,7 +81,7 @@
         <div class="col-md-6">
           <div class="panel panel-default">
             <div class="panel-heading" translate>
-              Receipt Mailing Address
+              {{'RECEIPT_MAILING_ADDRESS'}}
             </div>
 
             <div class="panel-body">
@@ -119,7 +114,7 @@
         <div class="col-md-12">
           <div class="panel panel-default">
             <div class="panel-body">
-              <h4 class="panel-name" translate>Gift Summary</h4>
+              <h4 class="panel-name" translate>{{'GIFT_SUMMARY'}}</h4>
 
               <table class="table giftsum-table giftsum-table-cart">
                 <tbody>
@@ -131,7 +126,7 @@
                   <td class="td-frequency">
                     <span class="giftsum-about giftsum-title">{{item.rate.display}}</span>
                     <span class="giftsum-frequency giftsum-title">
-                                <span ng-if="item.rate.recurrence.interval !== 'NA'" translate>First Gift: {{item.rate['start-date'].value | date:'mediumDate':'UTC'}}</span>
+                                <span ng-if="item.rate.recurrence.interval !== 'NA'"><translate>{{'FIRST_GIFT'}}</translate> {{item.rate['start-date'].value | date:'mediumDate':'UTC'}}</span>
                               </span>
                   </td>
                 </tr>

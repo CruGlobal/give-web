@@ -14,20 +14,20 @@
                          ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
     </product-config-form>
     <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
-      <p translate>There was an error loading the details needed to configure your gift. You may <a href ng-click="$ctrl.initSessionAndCart()">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+      <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
     </div>
   </div>
 </div>
 <div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
   <div class="panel">
     <div class="panel-body">
-      <h3 class="panel-name" translate>Your Information</h3>
+      <h3 class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
       <contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onContactInfoSubmit(success)" donor-details="$ctrl.donorDetails"></contact-info>
     </div>
   </div>
   <div class="panel">
     <div class="panel-body">
-      <h3 class="panel-name" translate>Payment</h3>
+      <h3 class="panel-name" translate>{{'PAYMENT'}}</h3>
       <checkout-step-2 hide-buttons="true"
                        submitted="$ctrl.submitted"
                        on-state-change="$ctrl.onPaymentStateChange(state)"
@@ -42,7 +42,7 @@
       <button class="btn btn-primary"
               ng-click="$ctrl.submit()"
               ng-disabled="$ctrl.errorLoadingProductConfig"
-              translate>Continue</button>
+              translate>{{'CONTINUE'}}</button>
     </div>
   </div>
 </div>

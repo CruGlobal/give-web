@@ -76,10 +76,18 @@ class Cart {
             ? startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null
           const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
+          let designationType
+          angular.forEach(item.itemDefinition['details'], (v, k) => {
+            if (v['name'] === 'designation_type') {
+              designationType = v['display-value']
+            }
+          })
+
           return {
             uri: item.self.uri,
             code: item.itemCode.code,
             displayName: item.itemDefinition['display-name'],
+            designationType: designationType,
             price: item.rate.cost.display,
             config: itemConfig,
             frequency: frequency,

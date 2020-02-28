@@ -2,12 +2,12 @@
 
   <div class="mb">
 
-    <h4 class="panel-title  border-bottom-small  visible" translate>Credit Card Payment</h4>
+    <h4 class="panel-title  border-bottom-small  visible" translate>{{'CREDIT_CARD_PAYMENT'}}</h4>
 
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardNumber | showErrors)}">
-          <label translate>Card #</label>
+          <label translate>{{'CARD_NUM'}}</label>
           <input type="text"
                  name="cardNumber"
                  autocomplete="cc-number"
@@ -17,18 +17,18 @@
                  ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
                  ng-disabled="$ctrl.disableCardNumber">
           <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="($ctrl.creditCardPaymentForm.cardNumber | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter a card number</div>
-            <div class="help-block" ng-message="minLength" translate>This card number must contain at least 13 digits</div>
-            <div class="help-block" ng-message="maxLength" translate>This card number cannot contain more than 16 digits</div>
-            <div class="help-block" ng-message="knownType" translate>This card type is not recognized</div>
-            <div class="help-block" ng-message="typeLength" translate>This is an invalid {{$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}} number. It should have {{$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')}} digits.</div>
-            <div class="help-block" ng-message="checksum" translate>This card number is invalid. At least one digit was entered incorrectly.</div>
+            <div class="help-block" ng-message="required" translate>{{'CARD_NUM_ERROR'}}</div>
+            <div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_NUM_ERROR'}}</div>
+            <div class="help-block" ng-message="maxLength" translate>{{'MAX_LENGTH_CARD_NUM_ERROR'}}</div>
+            <div class="help-block" ng-message="knownType" translate>{{'CARD_TYPE_ERROR'}}</div>
+            <div class="help-block" ng-message="typeLength" translate='INVALID_TYPE_ERROR' translate-value-cardType="{{$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}}" translate-value-cardDigits="{{$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')}}"></div>
+            <div class="help-block" ng-message="checksum" translate>{{'INVALID_CARD_NUM_ERROR'}}</div>
           </div>
         </div>
       </div>
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardholderName | showErrors)}">
-          <label translate>Name On Card</label>
+          <label translate>{{'CARD_NAME'}}</label>
           <input type="text"
                  name="cardholderName"
                  class="form-control  form-control-subtle"
@@ -36,8 +36,8 @@
                  ng-model="$ctrl.creditCardPayment.cardholderName"
                  ng-maxlength="50" required>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.cardholderName.$error" ng-if="($ctrl.creditCardPaymentForm.cardholderName | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter the name on the card</div>
-            <div class="help-block" ng-message="maxlength" translate>This name cannot be longer than 50 characters</div>
+            <div class="help-block" ng-message="required" translate>{{'CARD_NAME_ERROR'}}</div>
+            <div class="help-block" ng-message="maxlength" translate>{{'MAX_LENGTH_CARD_NAME_ERROR'}}</div>
           </div>
         </div>
       </div>
@@ -45,34 +45,34 @@
     <div class="row">
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryMonth | showErrors)}">
-          <label translate>Exp. Month</label>
+          <label translate>{{'EXP_MONTH'}}</label>
           <select class="form-control  form-control-subtle"
                   name="expiryMonth"
                   autocomplete="cc-exp-month"
                   required
                   ng-model="$ctrl.creditCardPayment.expiryMonth">
-            <option value="01" translate>01 - January</option>
-            <option value="02" translate>02 - February</option>
-            <option value="03" translate>03 - March</option>
-            <option value="04" translate>04 - April</option>
-            <option value="05" translate>05 - May</option>
-            <option value="06" translate>06 - June</option>
-            <option value="07" translate>07 - July</option>
-            <option value="08" translate>08 - August</option>
-            <option value="09" translate>09 - September</option>
-            <option value="10" translate>10 - October</option>
-            <option value="11" translate>11 - November</option>
-            <option value="12" translate>12 - December</option>
+            <option value="01" translate>01 - {{'MONTHS.JAN'}}</option>
+            <option value="02" translate>02 - {{'MONTHS.FEB'}}</option>
+            <option value="03" translate>03 - {{'MONTHS.MAR'}}</option>
+            <option value="04" translate>04 - {{'MONTHS.APR'}}</option>
+            <option value="05" translate>05 - {{'MONTHS.MAY'}}</option>
+            <option value="06" translate>06 - {{'MONTHS.JUN'}}</option>
+            <option value="07" translate>07 - {{'MONTHS.JUL'}}</option>
+            <option value="08" translate>08 - {{'MONTHS.AUG'}}</option>
+            <option value="09" translate>09 - {{'MONTHS.SEP'}}</option>
+            <option value="10" translate>10 - {{'MONTHS.OCT'}}</option>
+            <option value="11" translate>11 - {{'MONTHS.NOV'}}</option>
+            <option value="12" translate>12 - {{'MONTHS.DEC'}}</option>
           </select>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryMonth.$error" ng-if="($ctrl.creditCardPaymentForm.expiryMonth | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must choose an expiration month</div>
-            <div class="help-block" ng-message="expired" translate>Your credit card is expired or you selected the wrong month or year</div>
+            <div class="help-block" ng-message="required" translate>{{'CARD_EXP_MONTH_ERROR'}}</div>
+            <div class="help-block" ng-message="expired" translate>{{'CARD_EXPIRED_ERROR'}}</div>
           </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryYear | showErrors)}">
-          <label translate>Exp. Year</label>
+          <label translate>{{'EXP_YEAR'}}</label>
           <select class="form-control  form-control-subtle"
                   name="expiryYear"
                   autocomplete="cc-exp-year"
@@ -81,14 +81,14 @@
                   ng-options="year for year in $ctrl.expirationDateYears">
           </select>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryYear.$error" ng-if="($ctrl.creditCardPaymentForm.expiryYear | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must choose an expiration year</div>
-            <div class="help-block" ng-message="expired" translate>Your credit card is expired or you selected the wrong year</div>
+            <div class="help-block" ng-message="required" translate>{{'CARD_EXP_YEAR_ERROR'}}</div>
+            <div class="help-block" ng-message="expired" translate>{{'CARD_EXPIRED_ERROR'}}</div>
           </div>
         </div>
       </div>
       <div class="col-sm-4" ng-if="!$ctrl.hideCvv">
         <div class="form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
-          <label translate>Security Code</label>
+          <label translate>{{'SEC_CODE'}}</label>
           <input type="text"
                  name="securityCode"
                  autocomplete="cc-csc"
@@ -97,12 +97,12 @@
                  ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
                  ng-attr-placeholder="{{$ctrl.paymentMethod && !$ctrl.creditCardPayment.cardNumber ? '***' : ''}}">
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
-            <div class="help-block" ng-message="required" translate>You must enter the security code</div>
-            <div class="help-block" ng-message="minLength" translate>The security code must be at least 3 digits</div>
-            <div class="help-block" ng-message="maxLength" translate>The security code cannot be more than 4 digits</div>
+            <div class="help-block" ng-message="required" translate>{{'CARD_SEC_CODE_ERROR'}}</div>
+            <div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_SEC_CODE'}}</div>
+            <div class="help-block" ng-message="maxLength" translate>{{'MAX_LENGTH_CARD_SEC_CODE'}}</div>
             <div class="help-block" ng-message="cardTypeLength" ng-init="isAmex = $ctrl.cardInfo.type($ctrl.creditCardPayment.cardNumber) === 'American Express'">
-              <translate ng-if="!isAmex">3 digit code on back of card</translate>
-              <translate ng-if="isAmex">4 digit code on front of card</translate>
+              <translate ng-if="!isAmex">{{'LOCATION_OF_CODE_OTHER'}}</translate>
+              <translate ng-if="isAmex">{{'LOCATION_OF_CODE_AMEX'}}</translate>
             </div>
           </div>
         </div>
@@ -114,17 +114,17 @@
 
     <div class="">
       <label class="checkbox-inline">
-        <input name="useMailingAddress" type="checkbox" ng-model="$ctrl.useMailingAddress"> Same as Mailing Address
+        <input name="useMailingAddress" type="checkbox" ng-model="$ctrl.useMailingAddress"> <translate>{{'SAME_ADDRESS'}}</translate>
       </label>
     </div>
 
     <div class="billing-address-new-wrap mt- on" id="address-billing-current" ng-if="$ctrl.useMailingAddress">
       <div class="panel panel-default mb0">
         <div class="panel-body">
-          <h4 class="panel-title  border-bottom-small  visible" translate>Billing Address</h4>
+          <h4 class="panel-title  border-bottom-small  visible" translate>{{'BILLING_ADDRESS'}}</h4>
           <display-address address="$ctrl.mailingAddress"></display-address>
           <loading ng-if="!$ctrl.mailingAddress">
-            <translate>Loading mailing address...</translate>
+            <translate>{{'LOADING_ADDRESS'}}</translate>
           </loading>
         </div>
       </div>
@@ -135,8 +135,8 @@
         <div class="panel-body">
           <div class="mb">
             <h4 class="panel-title  border-bottom-small  visible">
-              <span ng-if="!$ctrl.paymentMethod" translate>New</span>
-              <span translate>Billing Address</span>
+              <span ng-if="!$ctrl.paymentMethod" translate>{{'NEW_ADDRESS'}}</span>
+              <span translate>{{'BILLING_ADDRESS'}}</span>
             </h4>
             <address-form address="$ctrl.creditCardPayment.address" parent-form="$ctrl.creditCardPaymentForm"></address-form>
           </div>

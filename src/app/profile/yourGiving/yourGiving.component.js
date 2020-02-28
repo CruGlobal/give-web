@@ -1,9 +1,10 @@
 import angular from 'angular'
-import 'angular-ui-bootstrap'
 import commonModule from 'common/common.module'
 import range from 'lodash/range'
 import map from 'lodash/map'
 import includes from 'lodash/includes'
+import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import displayAddress from 'common/components/display-address/display-address.component'
 import recipientView from './recipientView/recipientView.component'
@@ -181,7 +182,8 @@ export default angular
     sessionEnforcerService.name,
     sessionService.name,
     analyticsFactory.name,
-    'ui.bootstrap'
+    uibDropdown,
+    uibModal
   ])
   .component(componentName, {
     controller: YourGivingController,

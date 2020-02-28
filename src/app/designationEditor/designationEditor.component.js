@@ -1,8 +1,8 @@
 import angular from 'angular'
 import 'angular-sanitize'
-import 'angular-ui-bootstrap'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import commonModule from 'common/common.module'
 import sessionEnforcerService, {
@@ -156,20 +156,18 @@ class DesignationEditorController {
       controller: personalOptionsModalController.name,
       controllerAs: '$ctrl',
       resolve: {
-        giveDomain: () => {
-          return this.giveDomain
-        },
-        designationNumber: () => {
-          return this.designationNumber
-        },
-        givingLinks: () => {
-          return this.designationContent.givingLinks
-        }
+        giveDomain: () => { return this.giveDomain },
+        designationNumber: () => { return this.designationNumber },
+        designationType: () => { return this.designationContent.designationType },
+        hasNewsletter: this.designationEditorService.hasNewsletter(this.designationNumber),
+        givingLinks: () => { return this.designationContent.givingLinks },
+        showNewsletterForm: () => { return this.designationContent.showNewsletterForm }
       }
     }
     this.$uibModal.open(modalOptions).result
       .then((data) => {
         this.designationContent.givingLinks = data.givingLinks
+        this.designationContent.showNewsletterForm = data.showNewsletterForm
         this.save()
       }, angular.noop)
   }
@@ -358,7 +356,8 @@ export default angular
     personalOptionsModalController.name,
     photoModalController.name,
     textEditorModalController.name,
-    websiteModalController.name
+    websiteModalController.name,
+    uibModal
   ])
   .component(componentName, {
     controller: DesignationEditorController,

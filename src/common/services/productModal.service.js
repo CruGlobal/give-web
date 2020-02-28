@@ -1,5 +1,5 @@
 import angular from 'angular'
-import 'angular-ui-bootstrap'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 import 'rxjs/add/operator/toPromise'
 
 import productConfigModal from 'app/productConfig/productConfigModal/productConfig.modal.component'
@@ -41,7 +41,7 @@ class ProductModalService {
 
 export default angular
   .module(serviceName, [
-    'ui.bootstrap',
+    uibModal,
     productConfigModal.name
   ])
   .service(serviceName, ProductModalService)

@@ -19,13 +19,14 @@ describe('session service', function () {
   }))
 
   beforeEach(angular.mock.module(module.name))
-  let sessionService, $httpBackend, $cookies, $rootScope
+  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks
 
-  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_) {
+  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_) {
     sessionService = _sessionService_
     $httpBackend = _$httpBackend_
     $cookies = _$cookies_
     $rootScope = _$rootScope_
+    $verifyNoPendingTasks = _$verifyNoPendingTasks_
   }))
 
   afterEach(() => {
@@ -341,7 +342,7 @@ describe('session service', function () {
 
     afterEach(() => {
       clear()
-      $timeout.verifyNoPendingTasks()
+      $verifyNoPendingTasks('$timeout)')
     })
 
     describe('undefined \'give-session\'', () => {

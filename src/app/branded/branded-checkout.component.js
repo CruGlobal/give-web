@@ -1,8 +1,10 @@
 import angular from 'angular'
 import 'angular-environment'
+import 'angular-translate'
 import pick from 'lodash/pick'
 import omit from 'lodash/omit'
 import changeCaseObject from 'change-case-object'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import commonModule from 'common/common.module'
 import step1 from './step-1/branded-checkout-step-1.component'
@@ -19,12 +21,13 @@ const componentName = 'brandedCheckout'
 
 class BrandedCheckoutController {
   /* @ngInject */
-  constructor ($window, analyticsFactory, tsysService, sessionService, envService) {
+  constructor ($window, analyticsFactory, tsysService, sessionService, envService, $translate) {
     this.$window = $window
     this.analyticsFactory = analyticsFactory
     this.tsysService = tsysService
     this.sessionService = sessionService
     this.envService = envService
+    this.$translate = $translate
   }
 
   $onInit () {
@@ -41,6 +44,7 @@ class BrandedCheckoutController {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
     }, angular.noop)
+    this.$translate.use(this.language || 'en')
   }
 
   formatDonorDetails () {
@@ -66,7 +70,7 @@ class BrandedCheckoutController {
         this.checkoutStep = 'thankYou'
         break
     }
-    this.$window.scrollTo(0, 0)
+    this.$window.document.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
   }
 
   previous () {
@@ -76,7 +80,7 @@ class BrandedCheckoutController {
         this.checkoutStep = 'giftContactPayment'
         break
     }
-    this.$window.scrollTo(0, 0)
+    this.$window.document.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
   }
 
   onThankYouPurchaseLoaded (purchase) {
@@ -102,7 +106,9 @@ export default angular
     step2.name,
     thankYouSummary.name,
     sessionService.name,
-    'environment'
+    uibModal,
+    'environment',
+    'pascalprecht.translate'
   ]).config(($uibModalProvider, $windowProvider) => {
     const $document = angular.element($windowProvider.$get().document)
     $uibModalProvider.options.appendTo = $document.find('branded-checkout').eq(0)
@@ -124,6 +130,7 @@ export default angular
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',
-      onOrderFailed: '&'
+      onOrderFailed: '&',
+      language: '@'
     }
   })

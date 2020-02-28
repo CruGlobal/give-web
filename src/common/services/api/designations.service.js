@@ -83,7 +83,8 @@ class DesignationsService {
       '1-103-1': 'U.S. Ministries',
       '1-108-1': 'East / Southern Africa',
       '1-108-2': 'Francophone Africa',
-      '1-108-3': 'West Africa'
+      '1-108-3': 'West Africa',
+      '1-2OMQSO2': 'Unto™'
     }
 
     params = angular.copy(params)
@@ -150,11 +151,19 @@ class DesignationsService {
         }
       })
 
+      let designationType
+      angular.forEach(data.definition['details'], (v, k) => {
+        if (v['name'] === 'designation_type') {
+          designationType = v['display-value']
+        }
+      })
+
       return {
         uri: this.hateoasHelperService.getLink(data.definition, 'item'),
         frequencies: choices,
         frequency: data.chosen.description.name,
         displayName: data.definition['display-name'],
+        designationType: designationType,
         code: data.code.code,
         designationNumber: data.code['product-code']
       }
@@ -171,11 +180,19 @@ class DesignationsService {
     })
   }
 
-  suggestedAmounts (code, itemConfig) {
-    const c = code.split('').slice(0, 5).join('/')
-    const path = itemConfig['campaign-page']
-      ? `/content/give/us/en/campaigns/${c}/${code}/${itemConfig['campaign-page']}.infinity.json`
+  generatePath (code, campaignPage) {
+    const c = code
+      .split('')
+      .slice(0, 5)
+      .join('/')
+
+    return campaignPage
+      ? `/content/give/us/en/campaigns/${c}/${code}/${campaignPage}.infinity.json`
       : `/content/give/us/en/designations/${c}/${code}.infinity.json`
+  }
+
+  suggestedAmounts (code, itemConfig) {
+    const path = this.generatePath(code, itemConfig['campaign-page'])
     return Observable.from(this.$http.get(this.envService.read('publicGive') + path))
       .map((data) => {
         const suggestedAmounts = []
@@ -209,17 +226,15 @@ class DesignationsService {
   }
 
   facebookPixel (code) {
-    const c = code.split('').slice(0, 5).join('/')
-    const path = `/content/give/us/en/designations/${c}/${code}.infinity.json`
+    const path = this.generatePath(code)
     return Observable.from(this.$http.get(this.envService.read('publicGive') + path))
       .map((data) => {
         return data.data['jcr:content']['facebookPixelId']
       })
   }
 
-  givingLinks (code) {
-    const c = code.split('').slice(0, 5).join('/')
-    const path = `/content/give/us/en/designations/${c}/${code}.infinity.json`
+  givingLinks (code, campaignPage) {
+    const path = this.generatePath(code, campaignPage)
     return Observable.from(this.$http.get(this.envService.read('publicGive') + path))
       .map((data) => {
         const givingLinks = []

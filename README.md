@@ -31,28 +31,20 @@ This includes legacy cru.org styling from cru.scss.
 
 Add the following code to your page where appropriate. You must change the value of `designation-number` to the designation number you want users to give to. As part of the setup process Cru should provide a `tsys-device` attribute which matches the TSYS config for your site.
 ```html
-<link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-
 <branded-checkout
-    ng-app="brandedCheckout"
     designation-number="0763355"
     api-url="https://brandedcheckout.mydomain.com"
     tsys-device="cru">
 </branded-checkout>
 
-<script src="https://give-static.cru.org/branded-checkout.js"></script>
+<script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
 ```
 
 #### Branded checkout full example with all attributes
 
 Add the following code to your page where appropriate. See the [Branded checkout config](#branded-checkout-config) section for details on setting these attributes.
 ```html
-<link rel="stylesheet" href="https://give-static.cru.org/branded-checkout.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-
 <branded-checkout
-    ng-app="brandedCheckout"
     designation-number="<designation number>"
     api-url="brandedcheckout.mydomain.com"
     campaign-code="<campaign code>"
@@ -67,7 +59,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)">
 </branded-checkout>
 
-<script src="https://give-static.cru.org/branded-checkout.js"></script>
+<script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
 <script>
   window.onOrderCompleted = function (purchaseData) {
     console.log('Order completed successfully', purchaseData);
@@ -81,7 +73,6 @@ Add the following code to your page where appropriate. See the [Branded checkout
 #### Branded checkout config
 
 The `<branded-checkout>` element is where the branded checkout Angular app will be loaded. It is configured by providing HTML attributes that will be loaded by Angular. Attributes with values containing angle brackets (such as `<designation number>`) are placeholders and should be replaced with real values or, if not needed, the whole attribute should be omitted. The `<branded-checkout>` element accepts the following attributes:
-- `ng-app="brandedCheckout"` - tells Angular which module to load - **Required** - you could bootstrap Angular manually or include this `brandedCheckout` module in your own custom Angular module instead if desired
 - `api-url` - Custom API url. This is required to be on the same top level domain as the branded checkout form for use in browsers that block third party cookies. - **Required** if your domain is not a subdomain of cru.org
 - `designation-number` - the designation number you would like donors to give to - **Required**
 - `campaign-page` - the campaign page you would like to use, used for suggested amounts - *Optional*
@@ -159,11 +150,11 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 8. Add the `<branded-checkout>` tag to a page on the domain you've configured above. You can follow the documentation above for all the possible attributes and the required style and script tags. The email conversations above should have provided the values for the `api-url` (the subdomain that has a CNAME to give.cru.org) and `tsys-device` (the unique string identifier created by you or by DPS) attributes. You can add them like this:
    ```html
    <branded-checkout
-       ng-app="brandedCheckout"
        designation-number="0763355"
        api-url="https://brandedcheckout.myministry.com"
        tsys-device="myministry">
    </branded-checkout>
+   <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
    ```
 9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us.
 

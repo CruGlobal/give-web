@@ -260,7 +260,7 @@ $border-radius: 4px;
     p {
       line-height: 1.45em;
     }
-    a{
+    a:not(.btn) {
       color: #3a3a3a;
       text-decoration:none;
     }

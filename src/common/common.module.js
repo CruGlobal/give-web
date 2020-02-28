@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-gettext'
-import 'angular-animate'
+import 'angular-translate'
 
 import appConfig from './app.config'
 import loadingComponent from './components/loading/loading.component'
@@ -16,7 +16,7 @@ const moduleName = 'common'
 export default angular
   .module(moduleName, [
     'gettext',
-    'ngAnimate',
+    'pascalprecht.translate',
     appConfig.name,
     navCartIcon.name,
     loadingComponent.name,

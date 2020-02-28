@@ -8,3 +8,5 @@ coverage
 *.log
 *.back.*
 .sass-cache
+stats.json
+*.iml

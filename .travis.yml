@@ -10,18 +10,11 @@ cache:
   yarn: true
   directories:
   - node_modules
-env:
-  global:
-    - AWS_KEY=AKIAI6YF75KDZNQJBFXA
-    - secure: qOF4BXNkfWCOSqZ1X+HfeToxV2YxsAeFgdJD+aY39UU6LMG800XJIRlIFbDl6MDauFsYo3DMzxIxClqN5VNSV0/5x0Yrx0oMMEMl1WHO1AIJE0u3M18v70wROUW6O7Z4+eSkh9cAVAqpo2saAmaC7Vi2Jz1UlWbhTTd2CIKWSyKZgn6ZlzE8WC55gRtwwH4NlJixDSrwe/uReRdfvoH/WhWjpLxd1WeZGGpn2LuciciKc3Y0cc//vmz2E216OXmNW2veA8AU12BMPHi1PSaA10F8NxYnljmPOU2wAQDb4wHej0Hd9cQjz53365PJ8PpJNbZepYSjufEasdnW3fzO1TRbXi8TafuMcEKbs6k6ocVMyk8XMs0ZbLOavKnh+6Vhf++KAlWKKhXCdl2GQ2f/1B0uRHAH08ph4jREBK3AdBepZK/CeXL7Ti7+u9vFFC++sHtz1qFQpjv+k5Ip15KtbMDqfDASMDJdH2h3o/dLHpz9+tCE3fFMuRet/aRnsjJkULful83ywDlfDfX+79G/JJZum6gA/OCCFm8s8l+SEKz8zqMyYcYgEHyBad062GjYpZ6vWVv4gAgpQKLcICVsyoWt2OWNRv7AUn19bQgI1bxL/lFGjRlWBXrF0zQc4axC0VqoaHaq/Hcy7DnT7Ww9vjeBnLWEyu0DOFftpXNdC2Y=
-
-before_deploy:
-  - if [ "$TRAVIS_BRANCH" == "staging" ]; then mkdir -p dist; cp branded-checkout.html dist/index.html; fi
 
 deploy:
   - provider: s3
-    access_key_id: $AWS_KEY
-    secret_access_key: $AWS_SECRET
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: cru-givestage
     acl: public_read
     cache_control: "max-age=300"
@@ -31,10 +24,15 @@ deploy:
       branch: staging
 
   - provider: s3
-    access_key_id: $AWS_KEY
-    secret_access_key: $AWS_SECRET
-    bucket: cru-givepreprod
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: cru-giveprod
     acl: public_read
     cache_control: "max-age=3600"
     local-dir: dist
     skip_cleanup: true
+    on:
+      branch: master
+
+after_deploy:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"; fi

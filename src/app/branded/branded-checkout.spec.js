@@ -4,24 +4,32 @@ import 'angular-mocks'
 import module from './branded-checkout.component'
 import { Observable } from 'rxjs/Observable'
 
+const scrollIntoViewMock = jest.fn()
+
 describe('branded checkout', () => {
   beforeEach(angular.mock.module(module.name))
   let $ctrl
 
   beforeEach(inject($componentController => {
-    $ctrl = $componentController(module.name, {
-      $window: {
-        scrollTo: jest.fn()
+    $ctrl = $componentController(
+      module.name,
+      {
+        $window: {
+          document: {
+            querySelector: jest.fn(() => ({ scrollIntoView: scrollIntoViewMock })),
+          },
+        },
+        tsysService: {
+          setDevice: jest.fn(),
+        },
       },
-      tsysService: {
-        setDevice: jest.fn()
-      }
-    }, {
-      designationNumber: '1234567',
-      tsysDevice: 'test-env',
-      onOrderCompleted: jest.fn(),
-      onOrderFailed: jest.fn()
-    })
+      {
+        designationNumber: '1234567',
+        tsysDevice: 'test-env',
+        onOrderCompleted: jest.fn(),
+        onOrderFailed: jest.fn(),
+      },
+    );
   }))
 
   describe('$onInit', () => {
@@ -119,7 +127,7 @@ describe('branded checkout', () => {
 
   describe('next', () => {
     afterEach(() => {
-      expect($ctrl.$window.scrollTo).toHaveBeenCalledWith(0, 0)
+      expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' });
     })
 
     it('should transition from giftContactPayment to review', () => {
@@ -139,7 +147,7 @@ describe('branded checkout', () => {
 
   describe('previous', () => {
     afterEach(() => {
-      expect($ctrl.$window.scrollTo).toHaveBeenCalledWith(0, 0)
+      expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' })
     })
 
     it('should transition from review to giftContactPayment', () => {

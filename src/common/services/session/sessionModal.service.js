@@ -1,9 +1,9 @@
 import angular from 'angular'
-import 'angular-ui-bootstrap'
 import modalStateService from 'common/services/modalState.service'
 import sessionModalComponent from './sessionModal.component'
 import sessionModalWindowTemplate from './sessionModalWindow.tpl.html'
 import analyticsFactory from 'app/analytics/analytics.factory'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 const serviceName = 'sessionModalService'
 
@@ -82,7 +82,7 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
 
 export default angular
   .module(serviceName, [
-    'ui.bootstrap',
+    uibModal,
     modalStateService.name,
     sessionModalComponent.name,
     analyticsFactory.name

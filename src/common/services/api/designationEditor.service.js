@@ -41,6 +41,28 @@ class designationEditorService {
     })
   }
 
+  hasNewsletter (designationNumber) {
+    return this.$http.get(designationConstants.designationNewsletter, {
+      params: {
+        designationNumber: designationNumber
+      },
+      withCredentials: true
+    }).then(
+      result => result.data.user_exists === true,
+      errorResponse => false // TODO: check errorResponse json
+    )
+  }
+
+  subscribeToNewsletter (designationNumber, attributes) {
+    return this.$http.post(designationConstants.designationNewsletterSubscription,
+      {
+        designation_number: designationNumber,
+        ...attributes
+      }, {
+        withCredentials: true
+      })
+  }
+
   save (designationContent, designationNumber, campaignPage) {
     return this.$http.post(designationConstants.designationEndpoint, designationContent, {
       withCredentials: true,
@@ -53,6 +75,5 @@ class designationEditorService {
 }
 
 export default angular
-  .module(serviceName, [
-  ])
+  .module(serviceName, [])
   .service(serviceName, designationEditorService)

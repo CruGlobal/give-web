@@ -1,6 +1,6 @@
 import angular from 'angular'
 import find from 'lodash/find'
-import 'angular-ui-bootstrap'
+import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component'
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component'
@@ -130,7 +130,7 @@ class ExistingPaymentMethodsController {
 
 export default angular
   .module(componentName, [
-    'ui.bootstrap',
+    uibModal,
     paymentMethodDisplay.name,
     paymentMethodFormModal.name,
     orderService.name

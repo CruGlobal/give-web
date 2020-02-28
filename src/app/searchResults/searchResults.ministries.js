@@ -2,7 +2,7 @@ export default [
   {
     name: 'Cru Greatest Needs',
     designationNumber: '0763355',
-    path: '/0763355',
+    path: '/cru-greatestneeds',
     facet: 'ministry'
   },
   {
@@ -44,7 +44,7 @@ export default [
   {
     name: 'Cru Military',
     designationNumber: '2283732',
-    path: '/2283732',
+    path: '/militaryministry',
     facet: 'ministry'
   },
   {
@@ -63,12 +63,6 @@ export default [
     name: 'FamilyLife',
     designationNumber: '2294554',
     path: '/familylife-needs',
-    facet: 'ministry'
-  },
-  {
-    name: 'Global Aid Network (GAiN)',
-    designationNumber: '2807640',
-    path: '/2807640',
     facet: 'ministry'
   },
   {
@@ -117,6 +111,12 @@ export default [
     name: 'StoryRunners',
     designationNumber: '2852450',
     path: '/storyrunners-strategies',
+    facet: 'ministry'
+  },
+  {
+    name: 'Unto™',
+    designationNumber: '2807640',
+    path: '/2807640',
     facet: 'ministry'
   }
 ]
