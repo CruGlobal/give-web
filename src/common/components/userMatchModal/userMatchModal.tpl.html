@@ -38,11 +38,10 @@
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>
   </div>
-  <div ng-switch-when="success-failure" ng-init="$ctrl.analyticsFactory.track('aa-registration-match-new-account-success')">
-    <p translate>Your account is now activated.</p>
-    <p>
-      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
-    </p>
-  </div>
+  <failed-verification-modal ng-switch-when="failure"
+                             ng-init="$ctrl.analyticsFactory.track('aa-registration-match-failed-questions')"
+                             modal-title="$ctrl.modalTitle"
+                             on-ok="$ctrl.onFailure()">
+  </failed-verification-modal>
   <div ng-switch-default style="height: 100px;" ng-if="!$ctrl.loadingDonorDetailsError"></div>
 </div>

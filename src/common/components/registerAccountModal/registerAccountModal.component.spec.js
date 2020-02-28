@@ -120,6 +120,16 @@ describe('registerAccountModal', function () {
       })
     })
 
+    describe('\'registration-state\' FAILED', () => {
+      it('changes state to \'failed-verification\'', () => {
+        $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'FAILED' }))
+        $ctrl.getDonorDetails()
+
+        expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.stateChanged).toHaveBeenCalledWith('failed-verification')
+      })
+    })
+
     describe('orderService.getDonorDetails failure', () => {
       it('changes state to \'contact-info\'', () => {
         $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.throw({}))
@@ -187,6 +197,14 @@ describe('registerAccountModal', function () {
       expect($ctrl.setModalSize).toHaveBeenCalledWith()
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('contact-info')
+    })
+
+    it('changes to \'failed-verification\' state', () => {
+      $ctrl.stateChanged('failed-verification')
+
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
+      expect($ctrl.state).toEqual('failed-verification')
     })
   })
 
