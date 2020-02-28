@@ -3,6 +3,7 @@ dist
 .idea
 .DS_STORE
 coverage
+*.iml
 
 *.log
 *.back.*

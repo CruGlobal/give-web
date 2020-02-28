@@ -1,0 +1,94 @@
+<div class="modal-header pt">
+  <button id="closeButton" type="button" class="close" ng-click="$dismiss()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h3 class="modal-title text-center" translate>Secondary Photo Carousel</h3>
+</div>
+
+<div class="modal-body">
+  <div class="carousel-container">
+    <h3 ng-if="!$ctrl.selectedPhoto.length" translate>Photo carousel is empty.</h3>
+    <table class="table-condensed table-striped" ng-if="$ctrl.selectedPhoto.length">
+      <tbody>
+      <tr ng-repeat="pic in $ctrl.selectedPhoto">
+        <td>
+          <div class="btn-group-vertical btn-group-sm" role="group">
+            <button class="btn btn-default"
+                    type="button"
+                    aria-label="Reorder higher"
+                    ng-disabled="$index == 0"
+                    ng-click="$ctrl.reorderImageInCarousel($index, $index-1)"><i class="fa fa-sort-up"></i>
+            </button>
+            <button class="btn btn-default"
+                    type="button"
+                    aria-label="Reorder lower"
+                    ng-disabled="$index == $ctrl.selectedPhoto.length - 1"
+                    ng-click="$ctrl.reorderImageInCarousel($index, $index+1)"><i class="fa fa-sort-down"></i>
+            </button>
+          </div>
+        </td>
+        <td>
+          <img ng-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"/>
+        </td>
+        <td>
+          <button class="btn btn-default"
+                  type="button"
+                  aria-label="Remove image"
+                  ng-click="$ctrl.selectedPhoto.splice($index, 1); $ctrl.maxCarouselError = false;"><i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr/>
+
+  <div class="give-thumbs-container clearfix" ng-if="$ctrl.photos.length">
+    <h3 translate>Available Photos</h3>
+    <h5 translate>Click + to add photos to the carousel.</h5>
+    <div class="alert alert-danger" role="alert" ng-if="$ctrl.maxCarouselError">
+      <p translate>Your carousel can only hold {{$ctrl.maxNumberOfPhotos}} photos. Please remove one before adding another.</p>
+    </div>
+    <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
+      <div class="add-trigger" ng-click="$ctrl.addImageToCarousel(photo)">
+        <i class="fa fa-plus" aria-label="Add to carousel"></i>
+      </div>
+      <img ng-src="{{photo.thumbnail}}">
+    </div>
+  </div>
+
+  <hr/>
+
+  <p translate class="alert-info">
+    <strong>Please Note:</strong> The image carousel works best with images that are the same size
+    and orientation (all horizontal or all vertical).
+  </p>
+  <div class="upload-drag-target p mb">
+    <div class="form-group text-center">
+      <div ng-if="!$ctrl.uploading">
+        <label translate>Select a Photo to Upload</label>
+        <upload-button
+          class="form-control"
+          url="/bin/crugive/image?designationNumber={{$ctrl.designationNumber}}"
+          accept="image/*"
+          on-upload="$ctrl.uploading = true"
+          on-success="$ctrl.uploadComplete(response)"
+          on-error="$ctrl.uploading = false"/>
+      </div>
+
+      <label ng-if="$ctrl.uploading" translate>Uploading...</label>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-footer">
+  <button id="usePhotosButton" type="button" class="btn btn-primary pull-right"
+          ng-click="$close({
+    selected: $ctrl.selectedPhoto,
+    photos: $ctrl.photos
+  })" translate>Save Changes
+  </button>
+  <button id="cancelPhotoButton" type="button" class="btn btn-default" ng-click="$dismiss()" translate>Cancel</button>
+</div>

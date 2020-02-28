@@ -5,6 +5,7 @@
 // Mimics localStorage, including events.
 // It will work just like localStorage, except for the persistent storage part.
 
+/* istanbul ignore next */
 var fakeLocalStorage = function() {
   var fakeLocalStorage = {};
   var storage;
@@ -59,6 +60,7 @@ var fakeLocalStorage = function() {
 };
 
 // Example of how to use it
+/* istanbul ignore next */
 if (typeof window.localStorage === 'object') {
   // Safari will throw a fit if we try to use localStorage.setItem in private browsing mode.
   try {

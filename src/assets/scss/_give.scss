@@ -329,6 +329,7 @@ hr.horizontal-divider {
   color: $colorCru-white;
   font-size: 24px;
   text-align: center;
+  z-index: 1;
   &:hover {
     color: $colorCru-white;
   }

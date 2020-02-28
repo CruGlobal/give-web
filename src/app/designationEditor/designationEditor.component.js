@@ -24,6 +24,7 @@ import titleModalTemplate from './titleModal/titleModal.tpl.html'
 import pageOptionsModalTemplate from './pageOptionsModal/pageOptionsModal.tpl.html'
 import personalOptionsModalTemplate from './personalOptionsModal/personalOptionsModal.tpl.html'
 import photoModalTemplate from './photoModal/photoModal.tpl.html'
+import carouselModalTemplate from './carouselModal/carouselModal.tpl.html'
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html'
 import websiteModalTemplate from './websiteModal/websiteModal.tpl.html'
 
@@ -52,6 +53,7 @@ class DesignationEditorController {
   $onInit () {
     this.designationNumber = this.$location.search().d
     this.campaignPage = this.$location.search().campaign
+    this.carouselLoaded = false
 
     // designationNumber is required
     if (!this.designationNumber) {
@@ -170,17 +172,60 @@ class DesignationEditorController {
       }, angular.noop)
   }
 
+  selectPhotos (photoLocation, selectedPhotos) {
+    const imageUrls = this.getImageUrls(selectedPhotos)
+    const selectedUrls = imageUrls.map(url => ({ url }))
+
+    const modalOptions = {
+      templateUrl: carouselModalTemplate,
+      controller: photoModalController.name,
+      controllerAs: '$ctrl',
+      resolve: {
+        designationNumber: () => {
+          return this.designationContent.designationNumber
+        },
+        campaignPage: () => {
+          return this.campaignPage
+        },
+        photos: () => {
+          return this.designationPhotos
+        },
+        photoLocation: () => {
+          return photoLocation
+        },
+        selectedPhoto: () => {
+          return selectedUrls
+        }
+      }
+    }
+    this.$uibModal.open(modalOptions).result.then((data) => {
+      this.designationContent[photoLocation] = (data.selected || []).map(photo => photo.url)
+      this.designationPhotos = data.photos
+      this.save()
+    }, angular.noop)
+  }
+
   selectPhoto (photoLocation, selectedPhoto) {
     const modalOptions = {
       templateUrl: photoModalTemplate,
       controller: photoModalController.name,
       controllerAs: '$ctrl',
       resolve: {
-        designationNumber: () => { return this.designationContent.designationNumber },
-        campaignPage: () => { return this.campaignPage },
-        photos: () => { return this.designationPhotos },
-        photoLocation: () => { return photoLocation },
-        selectedPhoto: () => { return selectedPhoto }
+        designationNumber: () => {
+          return this.designationContent.designationNumber
+        },
+        campaignPage: () => {
+          return this.campaignPage
+        },
+        photos: () => {
+          return this.designationPhotos
+        },
+        photoLocation: () => {
+          return photoLocation
+        },
+        selectedPhoto: () => {
+          return selectedPhoto
+        }
       }
     }
     this.$uibModal.open(modalOptions).result.then((data) => {
@@ -192,6 +237,14 @@ class DesignationEditorController {
 
   photoUrl (originalUrl) {
     return find(this.designationPhotos, { original: originalUrl })
+  }
+
+  images () {
+    const designController = this.designationContent['design-controller']
+    if (designController && designController['carousel']) {
+      return this.getImageUrls(designController['carousel'])
+    }
+    return []
   }
 
   editText (field) {
@@ -262,6 +315,31 @@ class DesignationEditorController {
     return this.designationContent && includes([
       'Campaign'
     ], this.designationContent.designationType)
+  }
+
+  getImageUrls (obj) {
+    const imageUrls = []
+    if (obj) {
+      Object.keys(obj).forEach(key => {
+        if (angular.isObject(obj[key])) {
+          imageUrls.push(...this.getImageUrls(obj[key]))
+        }
+        if (key === 'fileReference') {
+          imageUrls.push(obj[key])
+        }
+      })
+    }
+    return imageUrls
+  }
+
+  carouselLoad () {
+    if (!this.carouselLoaded) {
+      this.$window.document.dispatchEvent(new Event('DOMContentLoaded', {
+        bubbles: true,
+        cancelable: true
+      }))
+      this.carouselLoaded = true
+    }
   }
 }
 

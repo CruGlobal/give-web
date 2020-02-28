@@ -17,7 +17,7 @@ describe('Designation Editor Photo', function () {
       campaignPage: '7818',
       photos: [],
       photoLocation: 'coverPhoto',
-      selectedPhoto: '/content/photo1.jpg',
+      selectedPhoto: [{ url: '/content/photo1.jpg' }],
       $scope: $scope
     })
   }))
@@ -29,13 +29,13 @@ describe('Designation Editor Photo', function () {
   it('to define modal resolves', function () {
     expect($ctrl.designationNumber).toEqual('000555')
     expect($ctrl.photoLocation).toEqual('coverPhoto')
-    expect($ctrl.selectedPhoto).toEqual('/content/photo1.jpg')
+    expect($ctrl.selectedPhoto).toEqual([{ url: '/content/photo1.jpg' }])
     expect($ctrl.photos).toBeDefined()
   })
 
   it('uploadComplete', function () {
-    const getPhotosPromise = $q.defer()
-    jest.spyOn($ctrl.designationEditorService, 'getPhotos').mockReturnValue(getPhotosPromise.promise)
+    let getPhotosPromise = $q.defer()
+    spyOn($ctrl.designationEditorService, 'getPhotos').and.returnValue(getPhotosPromise.promise)
 
     $ctrl.uploadComplete()
     $timeout.flush()
@@ -45,5 +45,43 @@ describe('Designation Editor Photo', function () {
 
     expect($ctrl.designationEditorService.getPhotos).toHaveBeenCalled()
     expect($ctrl.photos).toEqual([])
+  })
+
+  describe('addImageToCarousel(photo)', () => {
+    it('should add image to carousel', () => {
+      $ctrl.addImageToCarousel({ original: '/content/photo2.jpg' })
+      expect($ctrl.selectedPhoto).toEqual([
+        { url: '/content/photo1.jpg' },
+        { url: '/content/photo2.jpg' }
+      ])
+    })
+  })
+
+  describe('reorderImageInCarousel(index, newIndex)', () => {
+    beforeEach(() => {
+      $ctrl.selectedPhoto = [
+        { url: '/content/photo1.jpg' },
+        { url: '/content/photo2.jpg' },
+        { url: '/content/photo3.jpg' }
+      ]
+    })
+
+    it('reorders higher', () => {
+      $ctrl.reorderImageInCarousel(0, 1)
+      expect($ctrl.selectedPhoto).toEqual([
+        { url: '/content/photo2.jpg' },
+        { url: '/content/photo1.jpg' },
+        { url: '/content/photo3.jpg' }
+      ])
+    })
+
+    it('reorders lower', () => {
+      $ctrl.reorderImageInCarousel(2, 0)
+      expect($ctrl.selectedPhoto).toEqual([
+        { url: '/content/photo3.jpg' },
+        { url: '/content/photo1.jpg' },
+        { url: '/content/photo2.jpg' }
+      ])
+    })
   })
 })
