@@ -26,22 +26,38 @@
     </div>
   </div>
 
-  <div class="give-thumbs-container clearfix" ng-if="$ctrl.photos.length">
-    <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
-      <input type="radio" id="cover-thumb{{$index}}" ng-model="$ctrl.selectedPhoto" ng-value="photo.original">
-      <label for="cover-thumb{{$index}}">
-        <img ng-src="{{photo.thumbnail}}">
-      </label>
+  <div class="give-available-photos-container" ng-if="$ctrl.photos.length">
+    <div class="give-thumbs-container">
+      <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
+        <input
+          type="radio"
+          id="cover-thumb{{$index}}"
+          ng-model="$ctrl.selectedPhoto"
+          ng-value="photo.original"
+        />
+        <label for="cover-thumb{{$index}}">
+          <img ng-src="{{photo.thumbnail}}" />
+        </label>
+      </div>
     </div>
 
     <div class="cover-thumb">
-      <a id="removePhotoButton" href="" class="no-cover" ng-click="$close({
+      <a
+        id="removePhotoButton"
+        href=""
+        class="no-cover"
+        ng-click="$close({
         selected: '',
         photos: $ctrl.photos
-      })">
+      })"
+      >
         <i class="fa fa-ban" aria-hidden="true"></i>
-        <span ng-if="$ctrl.photoLocation === 'coverPhoto'" translate>Remove Cover</span>
-        <span ng-if="$ctrl.photoLocation !== 'coverPhoto'" translate>Remove Photo</span>
+        <span ng-if="$ctrl.photoLocation === 'coverPhoto'" translate
+          >Remove Cover</span
+        >
+        <span ng-if="$ctrl.photoLocation !== 'coverPhoto'" translate
+          >Remove Photo</span
+        >
       </a>
     </div>
   </div>

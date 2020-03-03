@@ -42,23 +42,28 @@
     </table>
   </div>
 
-  <hr/>
+  <hr />
 
-  <div class="give-thumbs-container clearfix" ng-if="$ctrl.photos.length">
+  <div class="give-available-photos-container" ng-if="$ctrl.photos.length">
     <h3 translate>Available Photos</h3>
     <h5 translate>Click + to add photos to the carousel.</h5>
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.maxCarouselError">
-      <p translate>Your carousel can only hold {{$ctrl.maxNumberOfPhotos}} photos. Please remove one before adding another.</p>
+      <p translate>
+        Your carousel can only hold {{$ctrl.maxNumberOfPhotos}} photos. Please
+        remove one before adding another.
+      </p>
     </div>
-    <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
-      <div class="add-trigger" ng-click="$ctrl.addImageToCarousel(photo)">
-        <i class="fa fa-plus" aria-label="Add to carousel"></i>
+    <div class="give-thumbs-container">
+      <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
+        <div class="add-trigger" ng-click="$ctrl.addImageToCarousel(photo)">
+          <i class="fa fa-plus" aria-label="Add to carousel"></i>
+        </div>
+        <img ng-src="{{photo.thumbnail}}" />
       </div>
-      <img ng-src="{{photo.thumbnail}}">
     </div>
   </div>
 
-  <hr/>
+  <hr />
 
   <p translate class="alert-info">
     <strong>Please Note:</strong> The image carousel works best with images that are the same size
