@@ -248,13 +248,13 @@ class DesignationEditorController {
 
   isPerson () {
     return this.designationContent && includes([
-      'National Staff', 'Staff', 'Student', 'Volunteer', 'People'
+      'National Staff', 'Staff', 'Student', 'Volunteer', 'People', 'Paid Staff', 'Student Pool', 'Trip Participant'
     ], this.designationContent.designationType)
   }
 
   isMinistry () {
     return this.designationContent && includes([
-      'Project', 'Scholarship', 'Ministry'
+      'Project', 'Scholarship', 'Ministry', 'Staff Pool', 'Student Operations'
     ], this.designationContent.designationType)
   }
 
