@@ -7,13 +7,15 @@ import userMatchQuestion from './userMatchQuestion/userMatchQuestion.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import template from './userMatchModal.tpl.html'
 import find from 'lodash/find'
+import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
 
 const componentName = 'userMatchModal'
 
 class UserMatchModalController {
   /* @ngInject */
-  constructor ($log, gettext, profileService, verificationService, analyticsFactory) {
+  constructor ($log, $window, gettext, profileService, verificationService, analyticsFactory) {
     this.$log = $log
+    this.$window = $window
     this.gettext = gettext
     this.profileService = profileService
     this.verificationService = verificationService
@@ -143,10 +145,17 @@ class UserMatchModalController {
     } else {
       this.verificationService.submitAnswers(this.answers).subscribe(() => {
         this.changeMatchState('success')
-      }, () => {
-        this.changeMatchState('success-failure')
+      },
+      error => {
+        this.setLoading({ loading: false })
+        this.$log.debug('Failed verification questions', error)
+        this.changeMatchState('failure')
       })
     }
+  }
+
+  onFailure () {
+    this.$window.location = '/'
   }
 }
 
@@ -157,7 +166,8 @@ export default angular
     profileService.name,
     userMatchIdentity.name,
     userMatchQuestion.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    failedVerificationModal.name
   ])
   .component(componentName, {
     controller: UserMatchModalController,

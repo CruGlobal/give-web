@@ -11,6 +11,7 @@ import signUpModal from 'common/components/signUpModal/signUpModal.component'
 import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPasswordModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
+import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
 
 const componentName = 'registerAccountModal'
 
@@ -67,6 +68,8 @@ class RegisterAccountModalController {
       // Workflow Complete if 'registration-state' is COMPLETED
       if (donorDetails['registration-state'] === 'COMPLETED') {
         this.onSuccess()
+      } else if (donorDetails['registration-state'] === 'FAILED') {
+        this.stateChanged('failed-verification')
       } else {
         // Proceed to Step 3
         this.stateChanged('contact-info')
@@ -122,6 +125,7 @@ export default angular
     signInModal.name,
     signUpModal.name,
     userMatchModal.name,
+    failedVerificationModal.name,
     verificationService.name
   ])
   .component(componentName, {
