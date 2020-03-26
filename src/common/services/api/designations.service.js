@@ -46,7 +46,7 @@ class DesignationsService {
       '1-TH-6': 'Christian Embassy - Washington, D.C.',
       '1-TH-7': 'Christian Embassy - New York',
       '1-TH-8': 'FamilyLife',
-      '1-TH-9': 'Global Aid Network USA',
+      '1-TH-9': 'Unto™',
       '1-TH-10': 'Gift and Estate Design',
       '1-TH-11': 'Global Executive Ministries',
       '1-TH-12': 'Cru Inner City',
@@ -83,8 +83,7 @@ class DesignationsService {
       '1-103-1': 'U.S. Ministries',
       '1-108-1': 'East / Southern Africa',
       '1-108-2': 'Francophone Africa',
-      '1-108-3': 'West Africa',
-      '1-2OMQSO2': 'Unto™'
+      '1-108-3': 'West Africa'
     }
 
     params = angular.copy(params)
