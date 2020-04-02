@@ -66,7 +66,7 @@ export default [
     facet: 'ministry'
   },
   {
-    name: 'Global Greatest Needs',
+    name: 'Global Strategies',
     designationNumber: '0703618',
     path: '/2017-globalgreatestneeds.html',
     facet: 'ministry'
