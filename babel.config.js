@@ -6,7 +6,7 @@ module.exports = {
         targets: {
           browsers: ['last 1 version', 'ie >= 11']
         }
-      },
+      }
     ],
     '@babel/preset-react'
   ],
