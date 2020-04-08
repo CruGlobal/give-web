@@ -73,7 +73,8 @@ const sharedConfig = {
                 browsers: ['last 1 version', 'ie >= 11']
               }
             }],
-            '@babel/preset-react'],
+            '@babel/preset-react',
+            '@babel/preset-typescript'],
             plugins: [
               '@babel/plugin-transform-runtime',
               'angularjs-annotate'
