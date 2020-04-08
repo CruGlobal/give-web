@@ -35,7 +35,8 @@ const sharedConfig = {
   devtool: 'source-map',
   entry: {},
   resolve: {
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   output: {
     filename: '[name].js',
@@ -61,7 +62,7 @@ const sharedConfig = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         use: [{
           loader: 'babel-loader',
