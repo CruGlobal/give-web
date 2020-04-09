@@ -15,7 +15,11 @@
       <div class="panel-body">
         <div class="checkbox checkbox-inline">
           <label ng-if="$ctrl.cartData.items.length === 1">
-            <input type="checkbox" name="coverFees" ng-model="$ctrl.coverFees" ng-value="true">
+            <input type="checkbox"
+                   name="coverFees"
+                   ng-model="$ctrl.coverFees"
+                   ng-value="true"
+                   ng-change="$ctrl.updatePrices()">
             <span class="cover-fees-text">
               I want my gift to go even further for ministry!
               To help cover credit / debit card processing fees, please adjust my gift amount to
@@ -27,7 +31,11 @@
           </label>
           <div ng-if="$ctrl.cartData.items.length > 1">
             <label>
-              <input type="checkbox" name="coverFees" ng-model="$ctrl.coverFees" ng-value="true">
+              <input type="checkbox"
+                     name="coverFees"
+                     ng-model="$ctrl.coverFees"
+                     ng-value="true"
+                     ng-change="$ctrl.updatePrices()">
                 I want my gifts to go even further for ministry!
                 To help cover credit / debit card processing fees, please adjust my gift amounts to
             </label>
