@@ -144,6 +144,27 @@ class ExistingPaymentMethodsController {
     const newAmount = (originalAmount * 0.0235) + originalAmount
     return this.$filter('number')(newAmount, 2)
   }
+
+  calculatePriceWithoutFees (originalAmount) {
+    originalAmount = parseFloat(originalAmount)
+    const newAmount = originalAmount / 1.0235
+    return this.$filter('number')(newAmount, 2)
+  }
+
+  updatePrices () {
+    angular.forEach(this.cartData.items, (item) => {
+      let newAmount
+      if (this.coverFees) {
+        newAmount = item.amountWithFee
+      } else {
+        newAmount = this.calculatePriceWithoutFees(item.amount)
+      }
+
+      item.amount = newAmount
+      item.config.amount = newAmount
+      item.price = `$${newAmount}`
+    })
+  }
 }
 
 export default angular
