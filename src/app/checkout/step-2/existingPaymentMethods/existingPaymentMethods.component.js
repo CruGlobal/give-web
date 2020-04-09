@@ -16,13 +16,15 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, $uibModal) {
+  constructor ($log, $scope, orderService, $uibModal, $filter) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
+    this.$filter = $filter
+    this.feesCalculated = false
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -34,6 +36,9 @@ class ExistingPaymentMethodsController {
   }
 
   $onChanges (changes) {
+    if (!this.feesCalculated && this.cartData) {
+      this.calculatePricesWithFees()
+    }
     if (changes.paymentFormState) {
       const state = changes.paymentFormState.currentValue
       this.paymentFormResolve.state = state
@@ -126,6 +131,19 @@ class ExistingPaymentMethodsController {
         })
     }
   }
+
+  calculatePricesWithFees () {
+    angular.forEach(this.cartData.items, (item) => {
+      item.amountWithFee = this.calculatePriceWithFees(item.amount)
+    })
+    this.feesCalculated = true
+  }
+
+  calculatePriceWithFees (originalAmount) {
+    originalAmount = parseFloat(originalAmount)
+    const newAmount = (originalAmount * 0.0235) + originalAmount
+    return this.$filter('number')(newAmount, 2)
+  }
 }
 
 export default angular
@@ -144,6 +162,7 @@ export default angular
       mailingAddress: '<',
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
+      cartData: '<',
       onPaymentFormStateChange: '&',
       onLoad: '&'
     }
