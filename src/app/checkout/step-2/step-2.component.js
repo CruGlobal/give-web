@@ -119,6 +119,7 @@ export default angular
       mailingAddress: '=?',
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
+      cartData: '<',
       changeStep: '&',
       onStateChange: '&'
     }
