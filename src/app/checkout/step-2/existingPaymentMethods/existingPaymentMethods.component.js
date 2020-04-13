@@ -36,7 +36,7 @@ class ExistingPaymentMethodsController {
   }
 
   $onChanges (changes) {
-    if (!this.feesCalculated && this.cartData) {
+    if (!this.feesCalculated && this.cartData && !this.cartData.coverFees) {
       this.calculatePricesWithFees()
     }
     if (changes.paymentFormState) {
@@ -154,7 +154,7 @@ class ExistingPaymentMethodsController {
   updatePrices () {
     angular.forEach(this.cartData.items, (item) => {
       let newAmount
-      if (this.coverFees) {
+      if (this.cartData.coverFees) {
         newAmount = item.amountWithFee
       } else {
         newAmount = this.calculatePriceWithoutFees(item.amount)

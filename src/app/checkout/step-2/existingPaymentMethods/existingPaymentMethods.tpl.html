@@ -17,7 +17,7 @@
           <label ng-if="$ctrl.cartData.items.length === 1">
             <input type="checkbox"
                    name="coverFees"
-                   ng-model="$ctrl.coverFees"
+                   ng-model="$ctrl.cartData.coverFees"
                    ng-value="true"
                    ng-change="$ctrl.updatePrices()">
             <span class="cover-fees-text">
@@ -33,7 +33,7 @@
             <label>
               <input type="checkbox"
                      name="coverFees"
-                     ng-model="$ctrl.coverFees"
+                     ng-model="$ctrl.cartData.coverFees"
                      ng-value="true"
                      ng-change="$ctrl.updatePrices()">
                 I want my gifts to go even further for ministry!
