@@ -164,6 +164,24 @@ class ExistingPaymentMethodsController {
       item.config.amount = parseFloat(newAmount)
       item.price = `$${newAmount}`
     })
+
+    this.recalculateFrequencyTotals()
+  }
+
+  recalculateFrequencyTotals () {
+    angular.forEach(this.cartData.frequencyTotals, rateTotal => {
+      rateTotal.total = '$0.00'
+      rateTotal.amount = 0
+    })
+
+    angular.forEach(this.cartData.items, item => {
+      angular.forEach(this.cartData.frequencyTotals, rateTotal => {
+        if (item.frequency === rateTotal.frequency) {
+          rateTotal.amount += item.amount
+          rateTotal.total = `$${this.$filter('number')(rateTotal.amount, 2)}`
+        }
+      })
+    })
   }
 }
 

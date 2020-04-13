@@ -339,6 +339,7 @@ describe('checkout', () => {
           ]
 
           self.controller.cartData.coverFees = true
+          jest.spyOn(self.controller, 'recalculateFrequencyTotals').mockImplementation(() => {})
           self.controller.updatePrices()
 
           expect(self.controller.cartData.items[0].price).toEqual('$2.05')
@@ -352,6 +353,8 @@ describe('checkout', () => {
           expect(self.controller.cartData.items[2].price).toEqual('$3.07')
           expect(self.controller.cartData.items[2].amount).toEqual(3.07)
           expect(self.controller.cartData.items[2].config.amount).toEqual(3.07)
+
+          expect(self.controller.recalculateFrequencyTotals).toHaveBeenCalled()
         })
 
         it('Should revert the item amounts when the user opts not to cover fees', () => {
@@ -377,6 +380,7 @@ describe('checkout', () => {
           ]
 
           self.controller.cartData.coverFees = false
+          jest.spyOn(self.controller, 'recalculateFrequencyTotals').mockImplementation(() => {})
           self.controller.updatePrices()
 
           expect(self.controller.cartData.items[0].price).toEqual('$2.00')
@@ -390,6 +394,146 @@ describe('checkout', () => {
           expect(self.controller.cartData.items[2].price).toEqual('$3.00')
           expect(self.controller.cartData.items[2].amount).toEqual(3)
           expect(self.controller.cartData.items[2].config.amount).toEqual(3)
+
+          expect(self.controller.recalculateFrequencyTotals).toHaveBeenCalled()
+        })
+      })
+
+      describe('recalculateFrequencyTotals', () => {
+        it('Should recalculate the frequency totals with added fees', () => {
+          self.controller.cartData.frequencyTotals = [
+            {
+              frequency: 'Single',
+              amount: 2,
+              total: '$2.00'
+            },
+            {
+              frequency: 'Monthly',
+              amount: 1,
+              total: '$1.00'
+            },
+            {
+              frequency: 'Quarterly',
+              amount: 3,
+              total: '$3.00'
+            },
+            {
+              frequency: 'Annually',
+              amount: 4,
+              total: '$4.00'
+            }
+          ]
+          self.controller.cartData.items = [
+            {
+              frequency: 'Single',
+              amount: 2.05
+            },
+            {
+              frequency: 'Monthly',
+              amount: 1.02
+            },
+            {
+              frequency: 'Quarterly',
+              amount: 3.07
+            },
+            {
+              frequency: 'Annually',
+              amount: 4.09
+            }
+          ]
+
+          self.controller.recalculateFrequencyTotals()
+
+          expect(self.controller.cartData.frequencyTotals).toEqual([
+            {
+              frequency: 'Single',
+              amount: 2.05,
+              total: '$2.05'
+            },
+            {
+              frequency: 'Monthly',
+              amount: 1.02,
+              total: '$1.02'
+            },
+            {
+              frequency: 'Quarterly',
+              amount: 3.07,
+              total: '$3.07'
+            },
+            {
+              frequency: 'Annually',
+              amount: 4.09,
+              total: '$4.09'
+            }
+          ])
+        })
+
+        it('Should recalculate the frequency totals without added fees', () => {
+          self.controller.cartData.frequencyTotals = [
+            {
+              frequency: 'Single',
+              amount: 2.05,
+              total: '$2.05'
+            },
+            {
+              frequency: 'Monthly',
+              amount: 1.02,
+              total: '$1.02'
+            },
+            {
+              frequency: 'Quarterly',
+              amount: 3.07,
+              total: '$3.07'
+            },
+            {
+              frequency: 'Annually',
+              amount: 4.09,
+              total: '$4.09'
+            }
+          ]
+          self.controller.cartData.items = [
+            {
+              frequency: 'Single',
+              amount: 2
+            },
+            {
+              frequency: 'Monthly',
+              amount: 1
+            },
+            {
+              frequency: 'Quarterly',
+              amount: 3
+            },
+            {
+              frequency: 'Annually',
+              amount: 4
+            }
+          ]
+
+          self.controller.recalculateFrequencyTotals()
+
+          expect(self.controller.cartData.frequencyTotals).toEqual([
+            {
+              frequency: 'Single',
+              amount: 2,
+              total: '$2.00'
+            },
+            {
+              frequency: 'Monthly',
+              amount: 1,
+              total: '$1.00'
+            },
+            {
+              frequency: 'Quarterly',
+              amount: 3,
+              total: '$3.00'
+            },
+            {
+              frequency: 'Annually',
+              amount: 4,
+              total: '$4.00'
+            }
+          ])
         })
       })
     })
