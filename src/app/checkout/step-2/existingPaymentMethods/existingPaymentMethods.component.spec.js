@@ -338,7 +338,7 @@ describe('checkout', () => {
             }
           ]
 
-          self.controller.coverFees = true
+          self.controller.cartData.coverFees = true
           self.controller.updatePrices()
 
           expect(self.controller.cartData.items[0].price).toEqual('$2.05')
@@ -376,8 +376,7 @@ describe('checkout', () => {
             }
           ]
 
-          self.controller.coverFees = false
-          // jest.spyOn(self.controller, 'calculatePriceWithoutFees').mockImplementation(input => input)
+          self.controller.cartData.coverFees = false
           self.controller.updatePrices()
 
           expect(self.controller.cartData.items[0].price).toEqual('$2.00')
