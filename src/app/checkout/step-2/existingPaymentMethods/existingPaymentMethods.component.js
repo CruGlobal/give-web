@@ -160,8 +160,8 @@ class ExistingPaymentMethodsController {
         newAmount = this.calculatePriceWithoutFees(item.amount)
       }
 
-      item.amount = newAmount
-      item.config.amount = newAmount
+      item.amount = parseFloat(newAmount)
+      item.config.amount = parseFloat(newAmount)
       item.price = `$${newAmount}`
     })
   }
