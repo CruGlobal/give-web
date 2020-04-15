@@ -754,6 +754,55 @@ describe('order service', () => {
     })
   })
 
+  describe('storeCoverFeeDecision', () => {
+    it('should save the choice to cover fees', () => {
+      self.orderService.storeCoverFeeDecision(true)
+      expect(self.$window.sessionStorage.getItem('coverFees')).toEqual('true')
+    })
+
+    it('should save the choice to not cover fees', () => {
+      self.orderService.storeCoverFeeDecision(false)
+      expect(self.$window.sessionStorage.getItem('coverFees')).toEqual('false')
+    })
+  })
+
+  describe('retrieveCoverFeeDecision', () => {
+    it('should remember the choice to cover fees', () => {
+      self.$window.sessionStorage.setItem('coverFees', 'true')
+      expect(self.orderService.retrieveCoverFeeDecision()).toEqual(true)
+    })
+
+    it('should remember the choice to not cover fees', () => {
+      self.$window.sessionStorage.setItem('coverFees', 'false')
+      expect(self.orderService.retrieveCoverFeeDecision()).toEqual(false)
+    })
+  })
+
+  describe('storeFeesApplied', () => {
+    it('should save the fact that fees have been applied to the cart on the server', () => {
+      self.orderService.storeFeesApplied(true)
+      expect(self.$window.sessionStorage.getItem('feesApplied')).toEqual('true')
+    })
+  })
+
+  describe('retrieveFeesApplied', () => {
+    it('should remember the fact that fees have been applied to the cart on the server', () => {
+      self.$window.sessionStorage.setItem('feesApplied', 'true')
+      expect(self.orderService.retrieveFeesApplied()).toEqual(true)
+    })
+  })
+
+  describe('clearCoverFees', () => {
+    it('should clear out any knowledge of the donor choosing whether or not to cover fees', () => {
+      self.$window.sessionStorage.setItem('coverFees', 'false')
+      self.$window.sessionStorage.setItem('feesApplied', 'true')
+      self.orderService.clearCoverFees()
+
+      expect(self.$window.sessionStorage.getItem('coverFees')).toBeNull()
+      expect(self.$window.sessionStorage.getItem('feesApplied')).toBeNull()
+    })
+  })
+
   describe('spouseEditableForOrder', () => {
     it('should not be editable for staff', () => {
       expect(self.orderService.spouseEditableForOrder({ staff: true })).toEqual(false)

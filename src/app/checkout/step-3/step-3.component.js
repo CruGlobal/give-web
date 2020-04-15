@@ -141,8 +141,7 @@ class Step3Controller {
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
       this.orderService.clearCardSecurityCodes()
-      this.sessionStorage.removeItem('coverFees')
-      this.sessionStorage.removeItem('feesApplied')
+      this.orderService.clearCoverFees()
       this.onSubmitted()
       this.$scope.$emit(cartUpdatedEvent)
       this.changeStep({ newStep: 'thankYou' })
