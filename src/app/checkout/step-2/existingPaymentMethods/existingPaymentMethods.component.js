@@ -17,7 +17,7 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, cartService, $uibModal, $filter, $window) {
+  constructor ($log, $scope, orderService, cartService, $uibModal, $filter) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
@@ -27,7 +27,6 @@ class ExistingPaymentMethodsController {
     this.validPaymentMethod = validPaymentMethod
     this.$filter = $filter
     this.feesCalculated = false
-    this.sessionStorage = $window.sessionStorage
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -39,21 +38,22 @@ class ExistingPaymentMethodsController {
   }
 
   $onChanges (changes) {
-    if (!this.feesCalculated && this.cartData) {
-      if (!this.cartData.coverFees && !JSON.parse(this.sessionStorage.getItem('coverFees'))) {
-        this.calculatePricesWithFees(false)
-      } else if (this.cartData.coverFees || JSON.parse(this.sessionStorage.getItem('coverFees'))) {
-        this.calculatePricesWithFees(JSON.parse(this.sessionStorage.getItem('feesApplied')))
-      }
-    }
-
+    const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
     if (this.cartData) {
+      if (!this.feesCalculated) {
+        if (!this.cartData.coverFees && !sessionCoverFees) {
+          this.calculatePricesWithFees(false)
+        } else if (this.cartData.coverFees || sessionCoverFees) {
+          const feesApplied = this.orderService.retrieveFeesApplied()
+          this.calculatePricesWithFees(feesApplied)
+        }
+      }
       // Intentionally using == null here to avoid checking both null and undefined
-      if (this.sessionStorage.getItem('coverFees') !== undefined && this.cartData.coverFees == null) {
-        this.cartData.coverFees = JSON.parse(this.sessionStorage.getItem('coverFees'))
+      if (sessionCoverFees !== undefined && this.cartData.coverFees == null) {
+        this.cartData.coverFees = sessionCoverFees
         this.updatePrices()
       } else if (this.cartData.coverFees !== null) {
-        this.sessionStorage.setItem('coverFees', angular.toJson(this.cartData.coverFees))
+        this.orderService.storeCoverFeeDecision(this.cartData.coverFees)
       }
     }
 
@@ -175,7 +175,7 @@ class ExistingPaymentMethodsController {
   }
 
   updatePrices () {
-    this.sessionStorage.setItem('coverFees', angular.toJson(this.cartData.coverFees))
+    this.orderService.storeCoverFeeDecision(this.cartData.coverFees)
 
     angular.forEach(this.cartData.items, (item) => {
       let newAmount
@@ -219,7 +219,7 @@ class ExistingPaymentMethodsController {
         item.config.amount = item.amountWithFee
       }
       this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
-        this.sessionStorage.setItem('feesApplied', angular.toJson(true))
+        this.orderService.storeFeesApplied(true)
         this.loadCart()
       })
     })
