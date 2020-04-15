@@ -43,8 +43,11 @@ describe('checkout', () => {
       })
 
       describe('$onChanges', () => {
-        it('should call selectPayment when called with a mock change object', () => {
+        beforeEach(() => {
           jest.spyOn(self.controller, 'selectPayment').mockImplementation(() => {})
+          jest.spyOn(self.controller, 'editGifts').mockImplementation(() => {})
+        })
+        it('should call selectPayment and editGifts when called with a mock change object', () => {
           self.controller.$onChanges({
             paymentFormState: {
               currentValue: 'submitted'
@@ -52,10 +55,10 @@ describe('checkout', () => {
           })
 
           expect(self.controller.selectPayment).toHaveBeenCalled()
+          expect(self.controller.editGifts).toHaveBeenCalled()
         })
 
         it('should not call selectPayment when form is unsubmitted', () => {
-          jest.spyOn(self.controller, 'selectPayment').mockImplementation(() => {})
           self.controller.$onChanges({
             paymentFormState: {
               currentValue: 'unsubmitted'
@@ -67,7 +70,6 @@ describe('checkout', () => {
 
         it('should not call selectPayment when paymentMethodFormModal is open', () => {
           self.controller.paymentMethodFormModal = {}
-          jest.spyOn(self.controller, 'selectPayment').mockImplementation(() => {})
           self.controller.$onChanges({
             paymentFormState: {
               currentValue: 'submitted'
