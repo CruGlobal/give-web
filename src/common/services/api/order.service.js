@@ -293,6 +293,27 @@ class Order {
     this.sessionStorage.removeItem('storedCvvs')
   }
 
+  storeCoverFeeDecision (coverFees) {
+    this.sessionStorage.setItem('coverFees', angular.toJson(coverFees))
+  }
+
+  retrieveCoverFeeDecision () {
+    return angular.fromJson(this.sessionStorage.getItem('coverFees'))
+  }
+
+  storeFeesApplied (feesApplied) {
+    this.sessionStorage.setItem('feesApplied', angular.toJson(feesApplied))
+  }
+
+  retrieveFeesApplied () {
+    return angular.fromJson(this.sessionStorage.getItem('feesApplied'))
+  }
+
+  clearCoverFees () {
+    this.sessionStorage.removeItem('coverFees')
+    this.sessionStorage.removeItem('feesApplied')
+  }
+
   storeLastPurchaseLink (link) {
     this.sessionStorage.setItem('lastPurchaseLink', link)
   }
