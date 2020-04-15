@@ -6,6 +6,7 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component'
 
 import orderService from 'common/services/api/order.service'
+import cartService from 'common/services/api/cart.service'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
@@ -16,10 +17,11 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, $uibModal, $filter, $window) {
+  constructor ($log, $scope, orderService, cartService, $uibModal, $filter, $window) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
+    this.cartService = cartService
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
@@ -60,6 +62,7 @@ class ExistingPaymentMethodsController {
       this.paymentFormResolve.state = state
       if (state === 'submitted' && !this.paymentMethodFormModal) {
         this.selectPayment()
+        this.editGifts()
       }
       if (state === 'success') {
         this.loadPaymentMethods()
@@ -209,6 +212,18 @@ class ExistingPaymentMethodsController {
       })
     })
   }
+
+  editGifts () {
+    angular.forEach(this.cartData.items, item => {
+      if (this.cartData.coverFees) {
+        item.config.amount = item.amountWithFee
+      }
+      this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
+        this.sessionStorage.setItem('feesApplied', angular.toJson(true))
+        this.loadCart()
+      })
+    })
+  }
 }
 
 export default angular
@@ -216,7 +231,8 @@ export default angular
     uibModal,
     paymentMethodDisplay.name,
     paymentMethodFormModal.name,
-    orderService.name
+    orderService.name,
+    cartService.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,
@@ -229,6 +245,7 @@ export default angular
       hidePaymentTypeOptions: '<',
       cartData: '<',
       onPaymentFormStateChange: '&',
-      onLoad: '&'
+      onLoad: '&',
+      loadCart: '&'
     }
   })
