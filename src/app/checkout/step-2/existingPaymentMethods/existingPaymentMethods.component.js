@@ -39,16 +39,15 @@ class ExistingPaymentMethodsController {
 
   $onChanges (changes) {
     const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
-    if (!this.feesCalculated && this.cartData) {
-      if (!this.cartData.coverFees && !sessionCoverFees) {
-        this.calculatePricesWithFees(false)
-      } else if (this.cartData.coverFees || sessionCoverFees) {
-        const feesApplied = this.orderService.retrieveFeesApplied()
-        this.calculatePricesWithFees(feesApplied)
-      }
-    }
-
     if (this.cartData) {
+      if (!this.feesCalculated) {
+        if (!this.cartData.coverFees && !sessionCoverFees) {
+          this.calculatePricesWithFees(false)
+        } else if (this.cartData.coverFees || sessionCoverFees) {
+          const feesApplied = this.orderService.retrieveFeesApplied()
+          this.calculatePricesWithFees(feesApplied)
+        }
+      }
       // Intentionally using == null here to avoid checking both null and undefined
       if (sessionCoverFees !== undefined && this.cartData.coverFees == null) {
         this.cartData.coverFees = sessionCoverFees
