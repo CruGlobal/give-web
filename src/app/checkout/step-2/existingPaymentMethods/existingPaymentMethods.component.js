@@ -17,7 +17,7 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, cartService, $uibModal, $filter) {
+  constructor ($log, $scope, orderService, cartService, $uibModal) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
@@ -25,7 +25,6 @@ class ExistingPaymentMethodsController {
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
-    this.$filter = $filter
     this.feesCalculated = false
 
     this.$scope.$on(SignInEvent, () => {
