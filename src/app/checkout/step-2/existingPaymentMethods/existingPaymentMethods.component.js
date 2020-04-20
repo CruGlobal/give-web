@@ -17,7 +17,7 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, cartService, $uibModal, $filter) {
+  constructor ($log, $scope, orderService, cartService, $uibModal) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
@@ -25,7 +25,6 @@ class ExistingPaymentMethodsController {
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
-    this.$filter = $filter
     this.feesCalculated = false
 
     this.$scope.$on(SignInEvent, () => {
@@ -42,10 +41,10 @@ class ExistingPaymentMethodsController {
     if (this.cartData) {
       if (!this.feesCalculated) {
         if (!this.cartData.coverFees && !sessionCoverFees) {
-          this.calculatePricesWithFees(false)
+          this.feesCalculated = this.orderService.calculatePricesWithFees(false, this.cartData.items)
         } else if (this.cartData.coverFees || sessionCoverFees) {
           const feesApplied = this.orderService.retrieveFeesApplied()
-          this.calculatePricesWithFees(feesApplied)
+          this.feesCalculated = this.orderService.calculatePricesWithFees(feesApplied, this.cartData.items)
         }
       }
       // Intentionally using == null here to avoid checking both null and undefined
@@ -151,66 +150,8 @@ class ExistingPaymentMethodsController {
     }
   }
 
-  calculatePricesWithFees (feesApplied) {
-    angular.forEach(this.cartData.items, (item) => {
-      if (feesApplied) {
-        item.amountWithFee = item.amount
-      } else {
-        item.amountWithFee = this.calculatePriceWithFees(item.amount)
-      }
-    })
-    this.feesCalculated = true
-  }
-
-  calculatePriceWithFees (originalAmount) {
-    originalAmount = parseFloat(originalAmount)
-    const newAmount = (originalAmount * 0.0235) + originalAmount
-    return this.$filter('number')(newAmount, 2)
-  }
-
-  calculatePriceWithoutFees (originalAmount) {
-    originalAmount = parseFloat(originalAmount)
-    const newAmount = originalAmount / 1.0235
-    return this.$filter('number')(newAmount, 2)
-  }
-
   updatePrices () {
-    this.orderService.storeCoverFeeDecision(this.cartData.coverFees)
-
-    angular.forEach(this.cartData.items, (item) => {
-      let newAmount
-      if (this.cartData.coverFees) {
-        newAmount = item.amountWithFee
-      } else {
-        if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
-          newAmount = this.calculatePriceWithoutFees(item.amount)
-        } else {
-          newAmount = this.$filter('number')(item.amount, 2)
-        }
-      }
-
-      item.amount = parseFloat(newAmount)
-      item.config.amount = parseFloat(newAmount)
-      item.price = `$${newAmount}`
-    })
-
-    this.recalculateFrequencyTotals()
-  }
-
-  recalculateFrequencyTotals () {
-    angular.forEach(this.cartData.frequencyTotals, rateTotal => {
-      rateTotal.total = '$0.00'
-      rateTotal.amount = 0
-    })
-
-    angular.forEach(this.cartData.items, item => {
-      angular.forEach(this.cartData.frequencyTotals, rateTotal => {
-        if (item.frequency === rateTotal.frequency) {
-          rateTotal.amount += item.amount
-          rateTotal.total = `$${this.$filter('number')(rateTotal.amount, 2)}`
-        }
-      })
-    })
+    this.orderService.updatePrices(this.cartData)
   }
 
   editGifts () {
