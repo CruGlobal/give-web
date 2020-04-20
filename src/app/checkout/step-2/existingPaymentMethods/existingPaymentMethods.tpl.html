@@ -10,7 +10,7 @@
     </div>
 
     <div class="panel panel-default tab-toggle mb0 mt"
-         ng-if="$ctrl.cartData && $ctrl.cartData.items && $ctrl.selectedPaymentMethod">
+         ng-if="$ctrl.cartData && $ctrl.cartData.items && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
       <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>
       <div class="panel-body">
         <div class="checkbox checkbox-inline">
