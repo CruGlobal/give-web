@@ -110,37 +110,6 @@ describe('checkout', () => {
 
           expect(self.controller.paymentFormResolve.error).toEqual('some error')
         })
-
-        it('should call calculatePricesWithFees if the calculation has not yet been done', () => {
-          jest.spyOn(self.controller.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
-          self.controller.cartData.items = [
-            {
-              price: '$2.00',
-              amount: 2,
-              config: {
-                amount: 2
-              }
-            }
-          ]
-          self.controller.$onChanges({})
-          expect(self.controller.orderService.calculatePricesWithFees).toHaveBeenCalled()
-        })
-
-        it('should not call calculatePricesWithFees if the calculation has already been done', () => {
-          jest.spyOn(self.controller.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
-          self.controller.feesCalculated = true
-          self.controller.cartData.items = [
-            {
-              price: '$2.00',
-              amount: 2,
-              config: {
-                amount: 2
-              }
-            }
-          ]
-          self.controller.$onChanges({})
-          expect(self.controller.orderService.calculatePricesWithFees).not.toHaveBeenCalled()
-        })
       })
 
       describe('loadPaymentMethods', () => {

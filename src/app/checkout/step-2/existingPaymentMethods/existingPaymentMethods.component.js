@@ -4,6 +4,7 @@ import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component'
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component'
+import coverFees from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import orderService from 'common/services/api/order.service'
 import cartService from 'common/services/api/cart.service'
@@ -25,7 +26,6 @@ class ExistingPaymentMethodsController {
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
-    this.feesCalculated = false
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -37,25 +37,6 @@ class ExistingPaymentMethodsController {
   }
 
   $onChanges (changes) {
-    const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
-    if (this.cartData) {
-      if (!this.feesCalculated) {
-        if (!this.cartData.coverFees && !sessionCoverFees) {
-          this.feesCalculated = this.orderService.calculatePricesWithFees(false, this.cartData.items)
-        } else if (this.cartData.coverFees || sessionCoverFees) {
-          const feesApplied = this.orderService.retrieveFeesApplied()
-          this.feesCalculated = this.orderService.calculatePricesWithFees(feesApplied, this.cartData.items)
-        }
-      }
-      // Intentionally using == null here to avoid checking both null and undefined
-      if (sessionCoverFees !== undefined && this.cartData.coverFees == null) {
-        this.cartData.coverFees = sessionCoverFees
-        this.updatePrices()
-      } else if (this.cartData.coverFees !== null) {
-        this.orderService.storeCoverFeeDecision(this.cartData.coverFees)
-      }
-    }
-
     if (changes.paymentFormState) {
       const state = changes.paymentFormState.currentValue
       this.paymentFormResolve.state = state
@@ -150,10 +131,6 @@ class ExistingPaymentMethodsController {
     }
   }
 
-  updatePrices () {
-    this.orderService.updatePrices(this.cartData)
-  }
-
   editGifts () {
     angular.forEach(this.cartData.items, item => {
       if (this.cartData.coverFees) {
@@ -172,6 +149,7 @@ export default angular
     uibModal,
     paymentMethodDisplay.name,
     paymentMethodFormModal.name,
+    coverFees.name,
     orderService.name,
     cartService.name
   ])
