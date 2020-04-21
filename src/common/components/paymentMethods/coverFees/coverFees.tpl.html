@@ -6,13 +6,15 @@
            ng-value="true"
            ng-change="$ctrl.updatePrices()">
     <span class="cover-fees-text">
-            I want my gift to go even further for ministry!
-            To help cover credit / debit card processing fees, please adjust my gift amount to
-            $<span ng-bind="$ctrl.cartData.items[0].amountWithFee"></span><span class="text-lowercase"
-                                                                                ng-if="$ctrl.cartData.items[0].frequency !== 'Single'">
-              {{$ctrl.cartData.items[0].frequency}}
-            </span>.
-          </span>
+      I want my gift to go even further for ministry!
+      To help cover credit / debit card processing fees, please adjust my gift amount to
+      $<span ng-bind="$ctrl.cartData.items[0].amountWithFee">
+
+      </span><span class="text-lowercase"
+                   ng-if="$ctrl.cartData.items[0].frequency !== 'Single'">
+        {{$ctrl.cartData.items[0].frequency}}
+      </span>.
+    </span>
   </label>
   <div ng-if="$ctrl.cartData.items.length > 1">
     <label>
@@ -28,15 +30,15 @@
       <li ng-repeat="cartItem in $ctrl.cartData.items">
         $<span ng-bind="cartItem.amountWithFee"></span>
         <span class="text-lowercase" ng-if="cartItem.frequency !== 'Single'">
-                  {{cartItem.frequency}}
-                </span>
+          {{cartItem.frequency}}
+        </span>
         <span class="text-lowercase" ng-if="cartItem.frequency === 'Single'">
-                  {{cartItem.frequency}} gift
-                </span>
+          {{cartItem.frequency}} gift
+        </span>
         for
         <span>
-                  {{cartItem.displayName}}
-                </span>
+          {{cartItem.displayName}}
+        </span>
       </li>
     </ul>
   </div>
