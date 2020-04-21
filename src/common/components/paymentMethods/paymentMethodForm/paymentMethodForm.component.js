@@ -53,6 +53,7 @@ export default angular
       mailingAddress: '<',
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
+      cartData: '<',
       onPaymentFormStateChange: '&'
     }
   })

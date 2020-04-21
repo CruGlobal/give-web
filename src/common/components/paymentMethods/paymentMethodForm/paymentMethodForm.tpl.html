@@ -50,6 +50,6 @@
 </div>
 <div class="tab-org cart-tab show" ng-if="$ctrl.paymentType === 'creditCard'">
 
-  <credit-card-form payment-form-state="$ctrl.paymentFormState" on-payment-form-state-change="$ctrl.onPaymentFormStateChange({ $event: $event })" payment-method="$ctrl.paymentMethod" disable-card-number="$ctrl.disableCardNumber" hide-cvv="$ctrl.hideCvv" mailing-address="$ctrl.mailingAddress"></credit-card-form>
+  <credit-card-form payment-form-state="$ctrl.paymentFormState" on-payment-form-state-change="$ctrl.onPaymentFormStateChange({ $event: $event })" payment-method="$ctrl.paymentMethod" disable-card-number="$ctrl.disableCardNumber" hide-cvv="$ctrl.hideCvv" mailing-address="$ctrl.mailingAddress" cart-data="$ctrl.cartData"></credit-card-form>
 
 </div>
