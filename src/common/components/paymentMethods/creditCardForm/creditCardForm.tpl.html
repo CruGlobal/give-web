@@ -146,4 +146,14 @@
 
   </div>
 
+  <div class="panel panel-default mt mb0"
+       ng-if="$ctrl.cartData && $ctrl.cartData.items">
+    <div class="panel-body">
+      <div class="mb">
+        <h4 class="panel-title border-bottom-small" translate>{{'OPTIONAL'}}</h4>
+        <cover-fees cart-data="$ctrl.cartData"></cover-fees>
+      </div>
+    </div>
+  </div>
+
 </form>
