@@ -514,6 +514,13 @@ describe('Designation Editor', function () {
 
       expect($ctrl.images()).toEqual(expectedImageUrls)
     })
+
+    it('should return an empty array if there is no carousel', () => {
+      $ctrl.designationContent = {
+        designationNumber: '0123456'
+      }
+      expect($ctrl.images()).toEqual([])
+    })
   })
 
   describe('getImageUrls', () => {
@@ -525,6 +532,11 @@ describe('Designation Editor', function () {
       ]
       const imageUrls = $ctrl.getImageUrls(designationSecurityResponse['design-controller'].carousel)
       expect(imageUrls).toEqual(expectedImageUrls)
+    })
+
+    it('should return empty array if there is no carousel', () => {
+      const imageUrls = $ctrl.getImageUrls(undefined)
+      expect(imageUrls).toEqual([])
     })
   })
 
