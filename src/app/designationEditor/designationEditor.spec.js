@@ -481,6 +481,26 @@ describe('Designation Editor', function () {
       expect($ctrl.isMinistry()).toEqual(false)
       expect($ctrl.isCampaign()).toEqual(false)
     })
+
+    it('Staff Pool', () => {
+      $ctrl.designationContent = {
+        designationType: 'Staff Pool'
+      }
+
+      expect($ctrl.isPerson()).toEqual(false)
+      expect($ctrl.isMinistry()).toEqual(true)
+      expect($ctrl.isCampaign()).toEqual(false)
+    })
+
+    it('Campaign', () => {
+      $ctrl.designationContent = {
+        designationType: 'Campaign'
+      }
+
+      expect($ctrl.isPerson()).toEqual(false)
+      expect($ctrl.isMinistry()).toEqual(false)
+      expect($ctrl.isCampaign()).toEqual(true)
+    })
   })
 
   describe('images', () => {

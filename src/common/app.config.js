@@ -78,6 +78,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
 
   $qProvider.errorOnUnhandledRejections(false)
 
+  $translateProvider.useSanitizeValueStrategy('sanitizeParameters')
   $translateProvider.translations('en', {
     GIVE_GIFT_HEADER: 'Give Gift',
     LOADING_GIFT_DETAILS: 'Loading gift details...',

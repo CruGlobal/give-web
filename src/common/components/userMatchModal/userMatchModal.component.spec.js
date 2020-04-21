@@ -17,7 +17,7 @@ describe('userMatchModal', function () {
       onSuccess: jest.fn(),
       setLoading: jest.fn()
     }
-    $ctrl = _$componentController_(module.name, {}, bindings)
+    $ctrl = _$componentController_(module.name, { $window: { location: '/profile.html' } }, bindings)
   }))
 
   it('to be defined', function () {
@@ -302,7 +302,7 @@ describe('userMatchModal', function () {
         expect($ctrl.changeMatchState).toHaveBeenCalledWith('success')
       })
 
-      it('proceeds to success-failure on submitAnswers failure', () => {
+      it('proceeds to failure on submitAnswers failure', () => {
         jest.spyOn($ctrl.verificationService, 'submitAnswers').mockReturnValue(Observable.throw({}))
         $ctrl.questions = []
 
@@ -313,8 +313,16 @@ describe('userMatchModal', function () {
           answer: 'answer'
         }])
 
-        expect($ctrl.changeMatchState).toHaveBeenCalledWith('success-failure')
+        expect($ctrl.changeMatchState).toHaveBeenCalledWith('failure')
       })
+    })
+  })
+
+  describe('onFailure', () => {
+    it('returns the user to the home page', () => {
+      $ctrl.$onInit()
+      $ctrl.onFailure()
+      expect($ctrl.$window.location).toEqual('/')
     })
   })
 })
