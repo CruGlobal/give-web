@@ -11,7 +11,10 @@
 
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="$ctrl.cartData && $ctrl.cartData.items && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
-      <cover-fees cart-data="$ctrl.cartData"></cover-fees>
+      <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>
+      <div class="panel-body">
+        <cover-fees cart-data="$ctrl.cartData"></cover-fees>
+      </div>
     </div>
 
     <div class="mt">
