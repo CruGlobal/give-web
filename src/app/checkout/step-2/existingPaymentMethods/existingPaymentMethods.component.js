@@ -42,7 +42,10 @@ class ExistingPaymentMethodsController {
       this.paymentFormResolve.state = state
       if (state === 'submitted' && !this.paymentMethodFormModal) {
         this.selectPayment()
-        this.editGifts()
+
+        if (this.cartData) {
+          this.orderService.editGifts(this.cartData)
+        }
       }
       if (state === 'success') {
         this.loadPaymentMethods()
@@ -144,18 +147,6 @@ class ExistingPaymentMethodsController {
       }
     }
   }
-
-  editGifts () {
-    angular.forEach(this.cartData.items, item => {
-      if (this.cartData.coverFees) {
-        item.config.amount = item.amountWithFee
-      }
-      this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
-        this.orderService.storeFeesApplied(true)
-        this.loadCart()
-      })
-    })
-  }
 }
 
 export default angular
@@ -178,7 +169,6 @@ export default angular
       hidePaymentTypeOptions: '<',
       cartData: '<',
       onPaymentFormStateChange: '&',
-      onLoad: '&',
-      loadCart: '&'
+      onLoad: '&'
     }
   })

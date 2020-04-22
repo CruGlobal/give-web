@@ -400,6 +400,17 @@ class Order {
     const newAmount = originalAmount / 1.0235
     return this.$filter('number')(newAmount, 2)
   }
+
+  editGifts (cartData) {
+    angular.forEach(cartData.items, item => {
+      if (cartData.coverFees) {
+        item.config.amount = item.amountWithFee
+      }
+      this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
+        this.storeFeesApplied(true)
+      })
+    })
+  }
 }
 
 export default angular
