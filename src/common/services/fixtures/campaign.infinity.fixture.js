@@ -30,6 +30,7 @@ export default {
     letterDate: '',
     websiteURL: '',
     defaultCampaign: '867EM1',
-    suggestedAmounts: { 'jcr:primaryType': 'nt:unstructured', 1: { 'jcr:primaryType': 'nt:unstructured', description: 'for 10 Bibles', amount: 25 }, 2: { 'jcr:primaryType': 'nt:unstructured', description: 'for 40 Bibles', amount: 100 } }
+    suggestedAmounts: { 'jcr:primaryType': 'nt:unstructured', 1: { 'jcr:primaryType': 'nt:unstructured', description: 'for 10 Bibles', amount: 25 }, 2: { 'jcr:primaryType': 'nt:unstructured', description: 'for 40 Bibles', amount: 100 } },
+    "design-controller":       {"carousel": {"image": {"fileReference": "/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg", "sling:resourceType": "Give/components/content/image", "jcr:primaryType": "nt:unstructured"}}}
   }
 }

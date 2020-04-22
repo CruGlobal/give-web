@@ -35,6 +35,7 @@ export default {
     websiteURL: '',
     defaultCampaign: '867EM1',
     suggestedAmounts: { 'jcr:primaryType': 'nt:unstructured' },
-    facebookPixelId: '123456'
+    facebookPixelId: '123456',
+    "design-controller":       {"carousel": {"image": {"fileReference": "/content/dam/give/designations/0/1/2/3/4/0123456/CMS1_085319.jpg", "sling:resourceType": "Give/components/content/image", "jcr:primaryType": "nt:unstructured"}}}
   }
 }

@@ -245,37 +245,54 @@ hr.horizontal-divider {
   height: 100%;
 }
 
-.give-thumbs-container {
-  .cover-thumb {
-    background: #eee;
-    position: relative;
-    width: 30%;
-    margin-right: 5%;
-    margin-bottom: $gutter*.75;
-    float: left;
+.give-available-photos-container {
+  margin-top: 20px;
+
+  .give-thumbs-container {
+    $column-count: 3;
+    $grid-gap: $gutter * 0.75;
+    display: grid;
+    grid-template-columns: repeat(
+      $column-count,
+      calc((100% - #{$grid-gap * ($column-count - 1)}) / #{$column-count})
+    );
+    @include respond-to(supertiny) {
+      $column-count: $column-count - 1;
+      grid-template-columns: repeat(
+        $column-count,
+        calc((100% - #{$grid-gap * ($column-count - 1)}) / #{$column-count})
+      );
+    }
+    grid-auto-rows: minmax(90px, auto);
+    gap: $grid-gap;
+    justify-content: stretch;
+    align-items: stretch;
+  }
+
+  h3,
+  h5 {
     text-align: center;
-    @include respond-to(small) {
-      &:nth-child(3n+0) {
-        margin-right: 0;
-      }
-    }
-    @include respond-to(medium) {
-      &:nth-child(3n+0) {
-        margin-right: 0;
-      }
-    }
-    @include respond-to(large) {
-      &:nth-child(3n+0) {
-        margin-right: 0;
-      }
-    }
-    @include respond-to(extrasmall) {
-      width: 48%;
-      margin-right: 4%;
-      &:nth-child(even) {
-        margin-right: 0;
-      }
-    }
+  }
+  .add-trigger {
+    background: #666062;
+    border-radius: 100px;
+    position: absolute;
+    cursor: pointer;
+    right: 5px;
+    top: 5px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
+    z-index: 1;
+  }
+  .cover-thumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     .no-cover {
       color: $colorCru-gray;
       position: absolute;
@@ -329,6 +346,7 @@ hr.horizontal-divider {
   color: $colorCru-white;
   font-size: 24px;
   text-align: center;
+  z-index: 1;
   &:hover {
     color: $colorCru-white;
   }

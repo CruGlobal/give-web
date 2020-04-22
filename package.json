@@ -65,11 +65,15 @@
   },
   "standard": {
     "env": {
-      "jest": true
+      "jest": true,
+      "browser": true
     },
     "ignore": [
       "**/*.spec.js",
       "**/*.fixture.js"
     ]
+  },
+  "resolutions": {
+    "webpack-dev-server/**/spdy-transport": "^3.0.0"
   }
 }
