@@ -185,6 +185,22 @@ describe('checkout', () => {
 
           expect(self.controller.selectedPaymentMethod).toEqual({ selectAction: 'first uri' })
         })
+
+        it('should check whether or not the fee coverage should be altered based on selected payment type', () => {
+          jest.spyOn(self.controller, 'switchPayment').mockImplementation(() => {})
+          self.controller.paymentMethods = [
+            {
+              selectAction: 'first uri'
+            },
+            {
+              selectAction: 'second uri',
+              chosen: true
+            }
+          ]
+
+          self.controller.selectDefaultPaymentMethod()
+          expect(self.controller.switchPayment).toHaveBeenCalled()
+        })
       })
 
       describe('openPaymentMethodFormModal', () => {
