@@ -21,8 +21,7 @@ describe('checkout', () => {
         self.controller = $componentController(module.name, {}, {
           onLoad: jest.fn(),
           onPaymentFormStateChange: jest.fn(),
-          cartData: { items: [] },
-          loadCart: jest.fn()
+          cartData: { items: [] }
         })
       }))
 
@@ -46,7 +45,7 @@ describe('checkout', () => {
       describe('$onChanges', () => {
         beforeEach(() => {
           jest.spyOn(self.controller, 'selectPayment').mockImplementation(() => {})
-          jest.spyOn(self.controller, 'editGifts').mockImplementation(() => {})
+          jest.spyOn(self.controller.orderService, 'editGifts').mockImplementation(() => {})
         })
         it('should call selectPayment and editGifts when called with a mock change object', () => {
           self.controller.$onChanges({
@@ -56,7 +55,7 @@ describe('checkout', () => {
           })
 
           expect(self.controller.selectPayment).toHaveBeenCalled()
-          expect(self.controller.editGifts).toHaveBeenCalled()
+          expect(self.controller.orderService.editGifts).toHaveBeenCalled()
         })
 
         it('should not call selectPayment when form is unsubmitted', () => {
@@ -294,45 +293,6 @@ describe('checkout', () => {
 
           self.controller.switchPayment()
           expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
-        })
-      })
-
-      describe('editGifts', () => {
-        beforeEach(() => {
-          jest.spyOn(self.controller.cartService, 'editItem').mockImplementation(() => Observable.of(''))
-          self.controller.cartData.items = [
-            {
-              uri: 'some/uri',
-              productUri: 'other/uri',
-              config: { amount: 1 },
-              amountWithFee: 1.02
-            }
-          ]
-        })
-
-        it('should update the item config amounts if the donor opted to cover fees', () => {
-          self.controller.cartData.coverFees = true
-
-          self.controller.editGifts()
-          expect(self.controller.cartData.items[0].config.amount).toEqual(1.02)
-        })
-
-        it('should not update the item config amounts if the donor chose not to cover fees', () => {
-          self.controller.cartData.coverFees = false
-
-          self.controller.editGifts()
-          expect(self.controller.cartData.items[0].config.amount).toEqual(1)
-        })
-
-        it('should call the API to edit the items in the cart', () => {
-          self.controller.editGifts()
-          expect(self.controller.cartService.editItem).toHaveBeenCalledWith('some/uri', 'other/uri', { amount: 1})
-        })
-
-        it('should store the fact that the user has made their fee decision and moved on', () => {
-          jest.spyOn(self.controller.orderService, 'storeFeesApplied').mockImplementation(() => {})
-          self.controller.editGifts()
-          expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
         })
       })
     })
