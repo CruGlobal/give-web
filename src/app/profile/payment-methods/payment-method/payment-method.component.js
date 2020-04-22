@@ -6,6 +6,7 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import profileService from 'common/services/api/profile.service'
+import orderService from 'common/services/api/order.service'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import { scrollModalToTop } from 'common/services/modalState.service'
@@ -18,11 +19,12 @@ const componentName = 'paymentMethod'
 
 class PaymentMethodController {
   /* @ngInject */
-  constructor ($log, envService, $uibModal, profileService, analyticsFactory) {
+  constructor ($log, envService, $uibModal, profileService, orderService, analyticsFactory) {
     this.$log = $log
     this.isCollapsed = true
     this.$uibModal = $uibModal
     this.profileService = profileService
+    this.orderService = orderService
     this.imgDomain = envService.read('imgDomain')
     this.paymentFormResolve = {}
     this.analyticsFactory = analyticsFactory
@@ -85,6 +87,9 @@ class PaymentMethodController {
           scrollModalToTop()
         }
         )
+      if (this.cartData) {
+        this.orderService.editGifts(this.cartData)
+      }
     }
   }
 
@@ -123,6 +128,7 @@ export default angular
     paymentMethodFormModal.name,
     deletePaymentMethodModal.name,
     profileService.name,
+    orderService.name,
     analyticsFactory.name,
     uibCollapse,
     uibModal
