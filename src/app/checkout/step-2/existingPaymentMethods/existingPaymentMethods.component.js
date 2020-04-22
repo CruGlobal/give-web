@@ -131,6 +131,19 @@ class ExistingPaymentMethodsController {
     }
   }
 
+  switchPayment () {
+    if (this.selectedPaymentMethod) {
+      if (this.selectedPaymentMethod['bank-name']) {
+        // This is an EFT payment method so we need to remove any fee coverage
+        if (this.orderService.retrieveCoverFeeDecision()) {
+          // Undo application of fees
+          this.cartData.coverFees = false
+          this.orderService.updatePrices(this.cartData)
+        }
+      }
+    }
+  }
+
   editGifts () {
     angular.forEach(this.cartData.items, item => {
       if (this.cartData.coverFees) {
