@@ -80,6 +80,7 @@ class ExistingPaymentMethodsController {
       // Select the first payment method
       this.selectedPaymentMethod = this.paymentMethods[0]
     }
+    this.switchPayment()
   }
 
   openPaymentMethodFormModal (existingPaymentMethod) {
