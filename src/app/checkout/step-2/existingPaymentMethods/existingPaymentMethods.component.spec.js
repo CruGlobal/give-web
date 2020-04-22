@@ -246,6 +246,39 @@ describe('checkout', () => {
           expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(null, 'chosen uri')
         })
       })
+
+      describe('switchPayment', () => {
+        beforeEach(() => {
+          jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
+        })
+
+        it('should remove fees if the newly selected payment method is EFT', () => {
+          self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
+          self.controller.cartData = { coverFees: true }
+          jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
+
+          self.controller.switchPayment()
+          expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith({ coverFees: false })
+        })
+
+        it('should not update prices if the user did not already opt to cover fees on a credit card', () => {
+          self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
+          self.controller.cartData = { coverFees: false }
+          jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => false)
+
+          self.controller.switchPayment()
+          expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
+        })
+
+        it('should not update prices if the user is switching to a credit card payment', () => {
+          self.controller.selectedPaymentMethod = { 'card-type': 'Visa' }
+          self.controller.cartData = { coverFees: true }
+          jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
+
+          self.controller.switchPayment()
+          expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
+        })
+      })
     })
   })
 })
