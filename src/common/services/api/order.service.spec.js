@@ -931,6 +931,19 @@ describe('order service', () => {
       expect(self.orderService.calculatePriceWithFees).toHaveBeenCalledWith(1)
       expect(self.orderService.calculatePriceWithFees).toHaveBeenCalledWith(3)
     })
+
+    it('Should recognize that the current amount is the amount with fees', () => {
+      const cartItems = [
+        { amount: 2.05 },
+        { amount: 1.02 },
+        { amount: 3.07 }
+      ]
+
+      self.orderService.calculatePricesWithFees(true, cartItems)
+      expect(cartItems[0].amountWithFee).toEqual(2.05)
+      expect(cartItems[1].amountWithFee).toEqual(1.02)
+      expect(cartItems[2].amountWithFee).toEqual(3.07)
+    })
   })
 
   describe('calculatePriceWithFees', () => {
@@ -1002,6 +1015,48 @@ describe('order service', () => {
           price: '$3.07',
           amount: 3.07,
           config: { amount: 3.07 },
+          amountWithFee: '3.07'
+        }
+      ]
+
+      cartData.coverFees = false
+      jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
+      self.orderService.updatePrices(cartData)
+
+      expect(cartData.items[0].price).toEqual('$2.00')
+      expect(cartData.items[0].amount).toEqual(2)
+      expect(cartData.items[0].config.amount).toEqual(2)
+
+      expect(cartData.items[1].price).toEqual('$1.00')
+      expect(cartData.items[1].amount).toEqual(1)
+      expect(cartData.items[1].config.amount).toEqual(1)
+
+      expect(cartData.items[2].price).toEqual('$3.00')
+      expect(cartData.items[2].amount).toEqual(3)
+      expect(cartData.items[2].config.amount).toEqual(3)
+
+      expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
+    })
+
+    it('Should keep the same price if the donor has chosen not to cover fees and never did', () => {
+      const cartData = {}
+      cartData.items = [
+        {
+          price: '$2.00',
+          amount: 2,
+          config: { amount: 2 },
+          amountWithFee: '2.05'
+        },
+        {
+          price: '$1.00',
+          amount: 1,
+          config: { amount: 1 },
+          amountWithFee: '1.02'
+        },
+        {
+          price: '$3.00',
+          amount: 3,
+          config: { amount: 3 },
           amountWithFee: '3.07'
         }
       ]
