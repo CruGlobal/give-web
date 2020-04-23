@@ -1168,8 +1168,18 @@ describe('order service', () => {
 
   describe('calculatePriceWithoutFees', () => {
     it('Should calculate the proper amount', () => {
-      const priceWithoutFees = self.orderService.calculatePriceWithoutFees(2.05)
+      let priceWithoutFees = self.orderService.calculatePriceWithoutFees(2.05)
       expect(priceWithoutFees).toEqual('2.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(10.24)
+      expect(priceWithoutFees).toEqual('10.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(102.41)
+      expect(priceWithoutFees).toEqual('100.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(1024.07)
+      expect(priceWithoutFees).toEqual('1,000.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(10240.66)
+      expect(priceWithoutFees).toEqual('10,000.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(102406.55)
+      expect(priceWithoutFees).toEqual('100,000.00')
     })
   })
 
