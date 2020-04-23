@@ -297,24 +297,24 @@ class Order {
   }
 
   storeCoverFeeDecision (coverFees) {
-    this.sessionStorage.setItem('coverFees', angular.toJson(coverFees))
+    this.localStorage.setItem('coverFees', angular.toJson(coverFees))
   }
 
   retrieveCoverFeeDecision () {
-    return angular.fromJson(this.sessionStorage.getItem('coverFees'))
+    return angular.fromJson(this.localStorage.getItem('coverFees'))
   }
 
   storeFeesApplied (feesApplied) {
-    this.sessionStorage.setItem('feesApplied', angular.toJson(feesApplied))
+    this.localStorage.setItem('feesApplied', angular.toJson(feesApplied))
   }
 
   retrieveFeesApplied () {
-    return angular.fromJson(this.sessionStorage.getItem('feesApplied'))
+    return angular.fromJson(this.localStorage.getItem('feesApplied'))
   }
 
   clearCoverFees () {
-    this.sessionStorage.removeItem('coverFees')
-    this.sessionStorage.removeItem('feesApplied')
+    this.localStorage.removeItem('coverFees')
+    this.localStorage.removeItem('feesApplied')
   }
 
   storeLastPurchaseLink (link) {
