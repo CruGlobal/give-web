@@ -948,8 +948,18 @@ describe('order service', () => {
 
   describe('calculatePriceWithFees', () => {
     it('Should calculate the proper amount', () => {
-      const priceWithFees = self.orderService.calculatePriceWithFees(2)
+      let priceWithFees = self.orderService.calculatePriceWithFees(2)
       expect(priceWithFees).toEqual('2.05')
+      priceWithFees = self.orderService.calculatePriceWithFees(10)
+      expect(priceWithFees).toEqual('10.24')
+      priceWithFees = self.orderService.calculatePriceWithFees(100)
+      expect(priceWithFees).toEqual('102.41')
+      priceWithFees = self.orderService.calculatePriceWithFees(1000)
+      expect(priceWithFees).toEqual('1,024.07')
+      priceWithFees = self.orderService.calculatePriceWithFees(10000)
+      expect(priceWithFees).toEqual('10,240.66')
+      priceWithFees = self.orderService.calculatePriceWithFees(100000)
+      expect(priceWithFees).toEqual('102,406.55')
     })
   })
 
