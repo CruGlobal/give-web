@@ -4,8 +4,10 @@ import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component'
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component'
+import coverFees from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import orderService from 'common/services/api/order.service'
+import cartService from 'common/services/api/cart.service'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
@@ -16,10 +18,11 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, $uibModal) {
+  constructor ($log, $scope, orderService, cartService, $uibModal) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
+    this.cartService = cartService
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
@@ -39,6 +42,10 @@ class ExistingPaymentMethodsController {
       this.paymentFormResolve.state = state
       if (state === 'submitted' && !this.paymentMethodFormModal) {
         this.selectPayment()
+
+        if (this.cartData) {
+          this.orderService.editGifts(this.cartData)
+        }
       }
       if (state === 'success') {
         this.loadPaymentMethods()
@@ -76,6 +83,7 @@ class ExistingPaymentMethodsController {
       // Select the first payment method
       this.selectedPaymentMethod = this.paymentMethods[0]
     }
+    this.switchPayment()
   }
 
   openPaymentMethodFormModal (existingPaymentMethod) {
@@ -126,6 +134,19 @@ class ExistingPaymentMethodsController {
         })
     }
   }
+
+  switchPayment () {
+    if (this.selectedPaymentMethod) {
+      if (this.selectedPaymentMethod['bank-name']) {
+        // This is an EFT payment method so we need to remove any fee coverage
+        if (this.orderService.retrieveCoverFeeDecision()) {
+          // Undo application of fees
+          this.cartData.coverFees = false
+          this.orderService.updatePrices(this.cartData)
+        }
+      }
+    }
+  }
 }
 
 export default angular
@@ -133,7 +154,9 @@ export default angular
     uibModal,
     paymentMethodDisplay.name,
     paymentMethodFormModal.name,
-    orderService.name
+    coverFees.name,
+    orderService.name,
+    cartService.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,
@@ -144,6 +167,7 @@ export default angular
       mailingAddress: '<',
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
+      cartData: '<',
       onPaymentFormStateChange: '&',
       onLoad: '&'
     }

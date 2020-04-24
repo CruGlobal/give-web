@@ -10,6 +10,7 @@ import 'rxjs/add/operator/mergeMap'
 
 import displayAddressComponent from 'common/components/display-address/display-address.component'
 import addressForm from 'common/components/addressForm/addressForm.component'
+import coverFees from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import showErrors from 'common/filters/showErrors.filter'
 import { scrollModalToTop } from 'common/services/modalState.service'
@@ -181,6 +182,7 @@ export default angular
     'ngMessages',
     displayAddressComponent.name,
     addressForm.name,
+    coverFees.name,
     showErrors.name,
     tsys.name
   ])
@@ -193,6 +195,7 @@ export default angular
       disableCardNumber: '<',
       hideCvv: '<',
       mailingAddress: '<',
+      cartData: '<',
       onPaymentFormStateChange: '&'
     }
   })

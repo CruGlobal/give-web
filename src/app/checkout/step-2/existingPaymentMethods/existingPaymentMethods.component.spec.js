@@ -20,9 +20,11 @@ describe('checkout', () => {
 
         self.controller = $componentController(module.name, {}, {
           onLoad: jest.fn(),
-          onPaymentFormStateChange: jest.fn()
+          onPaymentFormStateChange: jest.fn(),
+          cartData: { items: [] }
         })
       }))
+
 
       describe('$onInit', () => {
         it('should call loadPaymentMethods', () => {
@@ -41,8 +43,11 @@ describe('checkout', () => {
       })
 
       describe('$onChanges', () => {
-        it('should call selectPayment when called with a mock change object', () => {
+        beforeEach(() => {
           jest.spyOn(self.controller, 'selectPayment').mockImplementation(() => {})
+          jest.spyOn(self.controller.orderService, 'editGifts').mockImplementation(() => {})
+        })
+        it('should call selectPayment and editGifts when called with a mock change object', () => {
           self.controller.$onChanges({
             paymentFormState: {
               currentValue: 'submitted'
@@ -50,10 +55,10 @@ describe('checkout', () => {
           })
 
           expect(self.controller.selectPayment).toHaveBeenCalled()
+          expect(self.controller.orderService.editGifts).toHaveBeenCalled()
         })
 
         it('should not call selectPayment when form is unsubmitted', () => {
-          jest.spyOn(self.controller, 'selectPayment').mockImplementation(() => {})
           self.controller.$onChanges({
             paymentFormState: {
               currentValue: 'unsubmitted'
@@ -65,7 +70,6 @@ describe('checkout', () => {
 
         it('should not call selectPayment when paymentMethodFormModal is open', () => {
           self.controller.paymentMethodFormModal = {}
-          jest.spyOn(self.controller, 'selectPayment').mockImplementation(() => {})
           self.controller.$onChanges({
             paymentFormState: {
               currentValue: 'submitted'
@@ -181,6 +185,22 @@ describe('checkout', () => {
 
           expect(self.controller.selectedPaymentMethod).toEqual({ selectAction: 'first uri' })
         })
+
+        it('should check whether or not the fee coverage should be altered based on selected payment type', () => {
+          jest.spyOn(self.controller, 'switchPayment').mockImplementation(() => {})
+          self.controller.paymentMethods = [
+            {
+              selectAction: 'first uri'
+            },
+            {
+              selectAction: 'second uri',
+              chosen: true
+            }
+          ]
+
+          self.controller.selectDefaultPaymentMethod()
+          expect(self.controller.switchPayment).toHaveBeenCalled()
+        })
       })
 
       describe('openPaymentMethodFormModal', () => {
@@ -240,6 +260,39 @@ describe('checkout', () => {
           expect(self.controller.orderService.selectPaymentMethod).not.toHaveBeenCalled()
           expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } })
           expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(null, 'chosen uri')
+        })
+      })
+
+      describe('switchPayment', () => {
+        beforeEach(() => {
+          jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
+        })
+
+        it('should remove fees if the newly selected payment method is EFT', () => {
+          self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
+          self.controller.cartData = { coverFees: true }
+          jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
+
+          self.controller.switchPayment()
+          expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith({ coverFees: false })
+        })
+
+        it('should not update prices if the user did not already opt to cover fees on a credit card', () => {
+          self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
+          self.controller.cartData = { coverFees: false }
+          jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => false)
+
+          self.controller.switchPayment()
+          expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
+        })
+
+        it('should not update prices if the user is switching to a credit card payment', () => {
+          self.controller.selectedPaymentMethod = { 'card-type': 'Visa' }
+          self.controller.cartData = { coverFees: true }
+          jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
+
+          self.controller.switchPayment()
+          expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
         })
       })
     })

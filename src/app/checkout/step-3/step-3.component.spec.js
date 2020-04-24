@@ -36,7 +36,9 @@ describe('checkout', () => {
           checkErrors: () => Observable.of(['email-info']),
           submit: () => Observable.of('called submit'),
           retrieveCardSecurityCode: () => self.storedCvv,
-          clearCardSecurityCodes: jest.fn()
+          clearCardSecurityCodes: jest.fn(),
+          clearCoverFees: jest.fn(),
+          
         },
         $window: {
           scrollTo: jest.fn()

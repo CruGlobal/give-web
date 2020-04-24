@@ -43,6 +43,7 @@ describe('paymentMethodForm', () => {
   describe('changePaymentType', () => {
     beforeEach(() => {
       jest.spyOn(self.controller, 'onPaymentFormStateChange').mockImplementation(() => {})
+      jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
     })
 
     it('should set the payment type to credit card', () => {
@@ -57,6 +58,28 @@ describe('paymentMethodForm', () => {
 
       expect(self.controller.paymentType).toBe('bankAccount')
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'unsubmitted' } })
+    })
+
+    it('should update prices when setting payment type to bank account', () => {
+      self.controller.cartData = { coverFees: true }
+      self.controller.changePaymentType('bankAccount')
+
+      expect(self.controller.cartData.coverFees).toEqual(false)
+      expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(self.controller.cartData)
+    })
+
+    it('should not update prices when setting payment type to bank account', () => {
+      self.controller.cartData = undefined
+      self.controller.changePaymentType('bankAccount')
+
+      expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
+    })
+
+    it('should not update prices when setting payment type to credit card', () => {
+      self.controller.cartData = { coverFees: true }
+      self.controller.changePaymentType('creditCard')
+
+      expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
     })
   })
 })

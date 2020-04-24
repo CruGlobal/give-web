@@ -23,7 +23,7 @@ const serviceName = 'orderService'
 
 class Order {
   /* @ngInject */
-  constructor (cortexApiService, cartService, hateoasHelperService, analyticsFactory, $window, $log) {
+  constructor (cortexApiService, cartService, hateoasHelperService, analyticsFactory, $window, $log, $filter) {
     this.cortexApiService = cortexApiService
     this.cartService = cartService
     this.hateoasHelperService = hateoasHelperService
@@ -31,6 +31,9 @@ class Order {
     this.sessionStorage = $window.sessionStorage
     this.localStorage = $window.localStorage
     this.$log = $log
+    this.$filter = $filter
+
+    this.removeFeesDividend = this.calculateAmountWithFees(1)
   }
 
   getDonorDetails () {
@@ -293,6 +296,27 @@ class Order {
     this.sessionStorage.removeItem('storedCvvs')
   }
 
+  storeCoverFeeDecision (coverFees) {
+    this.localStorage.setItem('coverFees', angular.toJson(coverFees))
+  }
+
+  retrieveCoverFeeDecision () {
+    return angular.fromJson(this.localStorage.getItem('coverFees'))
+  }
+
+  storeFeesApplied (feesApplied) {
+    this.localStorage.setItem('feesApplied', angular.toJson(feesApplied))
+  }
+
+  retrieveFeesApplied () {
+    return angular.fromJson(this.localStorage.getItem('feesApplied'))
+  }
+
+  clearCoverFees () {
+    this.localStorage.removeItem('coverFees')
+    this.localStorage.removeItem('feesApplied')
+  }
+
   storeLastPurchaseLink (link) {
     this.sessionStorage.setItem('lastPurchaseLink', link)
   }
@@ -315,6 +339,87 @@ class Order {
     } else {
       return startedOrderWithoutSpouse
     }
+  }
+
+  calculatePricesWithFees (feesApplied, cartItems) {
+    angular.forEach(cartItems, (item) => {
+      if (feesApplied) {
+        item.amountWithFee = item.amount
+      } else {
+        item.amountWithFee = this.calculatePriceWithFees(item.amount)
+      }
+    })
+    return true
+  }
+
+  calculatePriceWithFees (originalAmount) {
+    const newAmount = this.calculateAmountWithFees(originalAmount)
+    return this.$filter('number')(newAmount, 2)
+  }
+
+  calculateAmountWithFees (originalAmount) {
+    originalAmount = parseFloat(originalAmount)
+    return (originalAmount * 0.0235) +
+      (originalAmount * 0.0235 * 0.0235) +
+      (originalAmount * 0.0235 * 0.0235 * 0.0235) +
+      (originalAmount * 0.0235 * 0.0235 * 0.0235 * 0.0235) +
+      originalAmount
+  }
+
+  updatePrices (cartData) {
+    this.storeCoverFeeDecision(cartData.coverFees)
+
+    angular.forEach(cartData.items, (item) => {
+      let newAmount
+      if (cartData.coverFees) {
+        newAmount = item.amountWithFee
+      } else {
+        if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
+          newAmount = this.calculatePriceWithoutFees(item.amount)
+        } else {
+          newAmount = this.$filter('number')(item.amount, 2)
+        }
+      }
+
+      item.amount = parseFloat(newAmount)
+      item.config.amount = parseFloat(newAmount)
+      item.price = `$${newAmount}`
+    })
+
+    this.recalculateFrequencyTotals(cartData)
+  }
+
+  recalculateFrequencyTotals (cartData) {
+    angular.forEach(cartData.frequencyTotals, rateTotal => {
+      rateTotal.total = '$0.00'
+      rateTotal.amount = 0
+    })
+
+    angular.forEach(cartData.items, item => {
+      angular.forEach(cartData.frequencyTotals, rateTotal => {
+        if (item.frequency === rateTotal.frequency) {
+          rateTotal.amount += item.amount
+          rateTotal.total = `$${this.$filter('number')(rateTotal.amount, 2)}`
+        }
+      })
+    })
+  }
+
+  calculatePriceWithoutFees (originalAmount) {
+    originalAmount = parseFloat(originalAmount)
+    const newAmount = originalAmount / this.removeFeesDividend
+    return this.$filter('number')(newAmount, 2)
+  }
+
+  editGifts (cartData) {
+    angular.forEach(cartData.items, item => {
+      if (cartData.coverFees) {
+        item.config.amount = item.amountWithFee
+      }
+      this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
+        this.storeFeesApplied(true)
+      })
+    })
   }
 }
 
