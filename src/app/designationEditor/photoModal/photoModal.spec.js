@@ -55,6 +55,12 @@ describe('Designation Editor Photo', function () {
         { url: '/content/photo2.jpg' }
       ])
     })
+
+    it('should fail to add an image to the carousel if the new image would exceed maximum number of images', () => {
+      $ctrl.maxNumberOfPhotos = 1
+      $ctrl.addImageToCarousel({ original: '/content/photo2.jpg' })
+      expect($ctrl.maxCarouselError).toEqual(true)
+    })
   })
 
   describe('reorderImageInCarousel(index, newIndex)', () => {
