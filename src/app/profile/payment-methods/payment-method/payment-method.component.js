@@ -59,6 +59,9 @@ class PaymentMethodController {
     if ($event.state === 'loading' && $event.payload) {
       this.profileService.updatePaymentMethod(this.model, $event.payload)
         .subscribe(() => {
+          if (this.cartData) {
+            this.orderService.editGifts(this.cartData)
+          }
           let editedData = {}
           if ($event.payload.creditCard) {
             editedData = $event.payload.creditCard
@@ -87,9 +90,6 @@ class PaymentMethodController {
           scrollModalToTop()
         }
         )
-      if (this.cartData) {
-        this.orderService.editGifts(this.cartData)
-      }
     }
   }
 
