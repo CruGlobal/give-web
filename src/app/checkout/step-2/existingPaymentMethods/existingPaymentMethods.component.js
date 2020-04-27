@@ -41,11 +41,11 @@ class ExistingPaymentMethodsController {
       const state = changes.paymentFormState.currentValue
       this.paymentFormResolve.state = state
       if (state === 'submitted' && !this.paymentMethodFormModal) {
-        this.selectPayment()
-
         if (this.cartData) {
           this.orderService.editGifts(this.cartData)
         }
+
+        this.selectPayment()
       }
       if (state === 'success') {
         this.loadPaymentMethods()
