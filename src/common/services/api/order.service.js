@@ -416,7 +416,7 @@ class Order {
       if (cartData.coverFees) {
         item.config.amount = item.amountWithFee
       }
-      this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
+      this.cartService.editItem(item.uri, item.productUri, item.config).pipe(() => {
         this.storeFeesApplied(true)
       })
     })
