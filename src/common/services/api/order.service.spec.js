@@ -1266,26 +1266,22 @@ describe('order service', () => {
 
       cartData.coverFees = true
 
-      self.orderService.editGifts(cartData)
-      expect(cartData.items[0].config.amount).toEqual(1.02)
+      Observable.forkJoin(self.orderService.editGifts(cartData)).subscribe(() => {
+        expect(cartData.items[0].config.amount).toEqual(1.02)
+      })
     })
 
     it('should not update the item config amounts if the donor chose not to cover fees', () => {
       cartData.coverFees = false
 
-      self.orderService.editGifts(cartData)
-      expect(cartData.items[0].config.amount).toEqual(1)
+      Observable.forkJoin(self.orderService.editGifts(cartData)).subscribe(() => {
+        expect(cartData.items[0].config.amount).toEqual(1)
+      })
     })
 
     it('should call the API to edit the items in the cart', () => {
       self.orderService.editGifts(cartData)
       expect(self.cartService.editItem).toHaveBeenCalledWith('some/uri', 'other/uri', { amount: 1})
-    })
-
-    it('should store the fact that the user has made their fee decision and moved on', () => {
-      jest.spyOn(self.orderService, 'storeFeesApplied').mockImplementation(() => {})
-      self.orderService.editGifts(cartData)
-      expect(self.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
     })
   })
 })

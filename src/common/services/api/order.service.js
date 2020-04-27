@@ -407,14 +407,14 @@ class Order {
   }
 
   editGifts (cartData) {
+    const observables = []
     angular.forEach(cartData.items, item => {
       if (cartData.coverFees) {
         item.config.amount = item.amountWithFee
       }
-      this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
-        this.storeFeesApplied(true)
-      })
+      observables.push(this.cartService.editItem(item.uri, item.productUri, item.config))
     })
+    return observables
   }
 }
 
