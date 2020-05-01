@@ -12,7 +12,7 @@ interface SelectInterface {
   retry: any
 }
 
-interface Option {
+export interface Option {
   name: string,
   'display-name': string
 }
