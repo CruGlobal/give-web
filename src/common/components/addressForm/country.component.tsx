@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import SelectInput, {Option} from '../form/SelectInput'
-// import {Address} from './addressForm.react.component'
 
 interface CountryInterface {
   addressDisabled: boolean,
