@@ -26,13 +26,12 @@ const SelectInput = (props: SelectInterface) => {
               required={required}
               onChange={props.onChange}
               disabled={props.disabled}
-              defaultValue={props.default}>
+              value={props.default}>
         {
           props.data.map((c) => {
             return (
               <option value={c.name}
-                      label={c['display-name']}
-                      selected={c.name === props.default}>
+                      label={c['display-name']}>
                 {c['display-name']}
               </option>
             )
