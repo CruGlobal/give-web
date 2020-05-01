@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import SelectInput, {Option} from '../form/SelectInput'
+import {Address} from "./addressForm.react.component";
 
 interface CountryInterface {
   addressDisabled: boolean,
@@ -8,16 +9,6 @@ interface CountryInterface {
   loadingCountriesError: boolean,
   loadCountries: () => void,
   refreshRegions: any
-}
-
-interface Address {
-  country: string,
-  locality: string,
-  postalCode: string,
-  streetAddress: string,
-  extendedAddress: string,
-  intAddressLine3: string,
-  intAddressLine4: string
 }
 
 const CountrySelect = (props: CountryInterface) => {
