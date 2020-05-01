@@ -42,12 +42,11 @@ const SelectInput = (props: SelectInterface) => {
       { props.loadingError &&
       <div role="alert">
         <div className="help-block">
-          <span translate="yes">{props.retryError}</span>
+          <span>{props.retryError}</span>
           <button id="retryButton1"
                   type="button"
                   className="btn btn-default btn-sm"
-                  onClick={props.retry}
-                  translate="yes">RETRY</button>
+                  onClick={props.retry}>RETRY</button>
         </div>
       </div>
       }
