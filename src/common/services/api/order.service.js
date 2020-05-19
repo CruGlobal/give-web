@@ -32,8 +32,6 @@ class Order {
     this.localStorage = $window.localStorage
     this.$log = $log
     this.$filter = $filter
-
-    this.removeFeesDividend = this.calculateAmountWithFees(1)
   }
 
   getDonorDetails () {
@@ -359,11 +357,7 @@ class Order {
 
   calculateAmountWithFees (originalAmount) {
     originalAmount = parseFloat(originalAmount)
-    return (originalAmount * 0.0235) +
-      (originalAmount * 0.0235 * 0.0235) +
-      (originalAmount * 0.0235 * 0.0235 * 0.0235) +
-      (originalAmount * 0.0235 * 0.0235 * 0.0235 * 0.0235) +
-      originalAmount
+    return originalAmount / 0.9765
   }
 
   updatePrices (cartData) {
@@ -407,7 +401,7 @@ class Order {
 
   calculatePriceWithoutFees (originalAmount) {
     originalAmount = parseFloat(originalAmount)
-    const newAmount = originalAmount / this.removeFeesDividend
+    const newAmount = originalAmount - (originalAmount * 0.0235)
     return this.$filter('number')(newAmount, 2)
   }
 
