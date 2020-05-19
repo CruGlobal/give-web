@@ -32,6 +32,7 @@ class Order {
     this.localStorage = $window.localStorage
     this.$log = $log
     this.$filter = $filter
+    this.FEE_DERIVATIVE = 0.9765 // 2.35% processing fee (calculated by 1 - 0.0235)
   }
 
   getDonorDetails () {
@@ -357,7 +358,7 @@ class Order {
 
   calculateAmountWithFees (originalAmount) {
     originalAmount = parseFloat(originalAmount)
-    return originalAmount / 0.9765
+    return originalAmount / this.FEE_DERIVATIVE
   }
 
   updatePrices (cartData) {
@@ -401,7 +402,7 @@ class Order {
 
   calculatePriceWithoutFees (originalAmount) {
     originalAmount = parseFloat(originalAmount)
-    const newAmount = originalAmount - (originalAmount * 0.0235)
+    const newAmount = originalAmount * this.FEE_DERIVATIVE
     return this.$filter('number')(newAmount, 2)
   }
 
