@@ -84,6 +84,12 @@ export default [
     facet: 'ministry'
   },
   {
+    name: 'International Ministries',
+    designationNumber: '0896754',
+    path: '/0896754',
+    facet: 'ministry'
+  },
+  {
     name: 'ISP',
     designationNumber: '2762704',
     path: '/2762704',
