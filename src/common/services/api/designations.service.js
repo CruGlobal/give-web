@@ -185,6 +185,11 @@ class DesignationsService {
       .slice(0, 5)
       .join('/')
 
+    const underscorePosition = code.indexOf('_')
+    if (underscorePosition > 0) {
+      code = code.substring(0, underscorePosition)
+    }
+
     return campaignPage
       ? `/content/give/us/en/campaigns/${c}/${code}/${campaignPage}.infinity.json`
       : `/content/give/us/en/designations/${c}/${code}.infinity.json`
