@@ -209,4 +209,36 @@ describe('designation service', () => {
       self.$httpBackend.flush()
     })
   })
+
+  describe('generatePath', () => {
+    it('should return the proper path for one time gift to non-campaign', () => {
+      const productCode = '0123456'
+
+      const path = self.designationsService.generatePath(productCode)
+      expect(path).toEqual('/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+    })
+
+    it('should return the proper path for one time gift to campaign', () => {
+      const productCode = '0123456'
+      const campaignPage = 'some-campaign'
+
+      const path = self.designationsService.generatePath(productCode, campaignPage)
+      expect(path).toEqual('/content/give/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
+    })
+
+    it('should return the proper path for recurring gift to non-campaign', () => {
+      const productCode = '0123456_mon'
+
+      const path = self.designationsService.generatePath(productCode)
+      expect(path).toEqual('/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+    })
+
+    it('should return the proper path for recurring gift to campaign', () => {
+      const productCode = '0123456_mon'
+      const campaignPage = 'some-campaign'
+
+      const path = self.designationsService.generatePath(productCode, campaignPage)
+      expect(path).toEqual('/content/give/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
+    })
+  })
 })
