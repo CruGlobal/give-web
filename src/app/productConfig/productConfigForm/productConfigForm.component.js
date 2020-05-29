@@ -68,7 +68,7 @@ class ProductConfigFormController {
   initItemConfig () {
     this.itemConfig = this.itemConfig || {}
 
-    const amount = parseInt(this.itemConfig.amount, 10)
+    const amount = parseFloat(this.itemConfig.amount)
     if (isNaN(amount)) {
       delete this.itemConfig.amount
     } else {

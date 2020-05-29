@@ -89,6 +89,24 @@ describe('product config form component', function () {
       expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined()
       expect($ctrl.itemConfig['recurring-start-month']).toBeUndefined()
     })
+
+    it('should handle a whole number amount', () => {
+      $ctrl.itemConfig.amount = 10
+      $ctrl.initItemConfig()
+      expect($ctrl.itemConfig.amount).toEqual(10)
+    })
+
+    it('should handle amount on first time through', () => {
+      $ctrl.itemConfig.amount = undefined
+      $ctrl.initItemConfig()
+      expect($ctrl.itemConfig.amount).toBeUndefined()
+    })
+
+    it('should handle amount with cents', () => {
+      $ctrl.itemConfig.amount = 10.25
+      $ctrl.initItemConfig()
+      expect($ctrl.itemConfig.amount).toEqual(10.25)
+    })
   })
 
   describe('$onChanges', () => {
