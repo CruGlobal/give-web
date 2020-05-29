@@ -185,9 +185,11 @@ class DesignationsService {
       .slice(0, 5)
       .join('/')
 
+    const [designationNumber] = code.split('_')
+
     return campaignPage
-      ? `/content/give/us/en/campaigns/${c}/${code}/${campaignPage}.infinity.json`
-      : `/content/give/us/en/designations/${c}/${code}.infinity.json`
+      ? `/content/give/us/en/campaigns/${c}/${designationNumber}/${campaignPage}.infinity.json`
+      : `/content/give/us/en/designations/${c}/${designationNumber}.infinity.json`
   }
 
   suggestedAmounts (code, itemConfig) {
