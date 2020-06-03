@@ -7,7 +7,7 @@
            ng-change="$ctrl.updatePrices()">
     <span class="cover-fees-text">
       I want my gift to go even further for ministry!
-      To help cover credit / debit card processing fees, please adjust my gift amount to
+      To help cover credit/debit card processing fees, please adjust my gift amount to
       $<span ng-bind="$ctrl.cartData.items[0].amountWithFee">
 
       </span><span class="text-lowercase"
@@ -23,8 +23,10 @@
              ng-model="$ctrl.cartData.coverFees"
              ng-value="true"
              ng-change="$ctrl.updatePrices()">
+      <span class="cover-fees-text">
       I want my gifts to go even further for ministry!
-      To help cover credit / debit card processing fees, please adjust my gift amounts to
+      To help cover credit/debit card processing fees, please adjust my gift amounts to:
+      </span>
     </label>
     <ul>
       <li ng-repeat="cartItem in $ctrl.cartData.items">
