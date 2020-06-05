@@ -134,6 +134,20 @@ describe('signInForm', function () {
         expect(bindings.onFailure).toHaveBeenCalled()
         expect($ctrl.$log.error.logs[0]).toEqual(['Sign In Error', { config: { data: {} } }])
       })
+
+      it('has Siebel down error signing in', () => {
+        deferred.reject(
+          {
+            data: {
+              code: 'SIEB-DOWN',
+              message: 'This functionality is not currently available. Please try again later.'
+            }
+          })
+        $rootScope.$digest()
+        expect(bindings.onFailure).toHaveBeenCalled()
+        expect($ctrl.errorMessage).toEqual('This functionality is not currently available. Please try again later.')
+        expect($ctrl.isSigningIn).toEqual(false)
+      })
     })
 
     describe('on \'mfa\' signInState', () => {
