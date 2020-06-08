@@ -51,6 +51,14 @@ class SignInFormController {
               this.signInState = 'identity'
               this.onFailure()
           }
+        } else if (error && error.data && error.data.code && error.data.code === 'SIEB-DOWN') {
+          if (error && error.config && error.config.data && error.config.data.password) {
+            delete error.config.data.password
+          }
+          this.$log.error('Siebel is down', error)
+          this.signInState = 'identity'
+          this.errorMessage = error.data.message
+          this.onFailure()
         } else {
           if (error && error.config && error.config.data && error.config.data.password) {
             delete error.config.data.password
