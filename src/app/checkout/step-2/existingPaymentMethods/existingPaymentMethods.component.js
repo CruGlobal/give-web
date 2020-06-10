@@ -44,7 +44,6 @@ class ExistingPaymentMethodsController {
       if (state === 'submitted' && !this.paymentMethodFormModal) {
         if (this.cartData) {
           Observable.forkJoin(this.orderService.editGifts(this.cartData)).subscribe(() => {
-            console.log('Made it to subscribe inside of forkJoin')
             this.orderService.storeFeesApplied(true)
             this.selectPayment()
           })

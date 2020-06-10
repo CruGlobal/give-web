@@ -412,10 +412,8 @@ class Order {
       if (cartData.coverFees) {
         item.config.amount = item.amountWithFee
       }
-      console.log(`Adding ${item.uri} to observables`)
       observables.push(this.cartService.editItem(item.uri, item.productUri, item.config))
     })
-    console.log(observables)
     return observables
   }
 }
