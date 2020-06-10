@@ -17,6 +17,7 @@ import 'rxjs/add/operator/do'
 
 import designationsService from 'common/services/api/designations.service'
 import cartService from 'common/services/api/cart.service'
+import orderService from 'common/services/api/order.service'
 import {
   possibleTransactionDays,
   possibleTransactionMonths,
@@ -36,13 +37,14 @@ const componentName = 'productConfigForm'
 
 class ProductConfigFormController {
   /* @ngInject */
-  constructor ($scope, $log, $filter, $window, designationsService, cartService, commonService, analyticsFactory) {
+  constructor ($scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory) {
     this.$scope = $scope
     this.$log = $log
     this.$filter = $filter
     this.$window = $window
     this.designationsService = designationsService
     this.cartService = cartService
+    this.orderService = orderService
     this.commonService = commonService
     this.possibleTransactionDays = possibleTransactionDays
     this.possibleTransactionMonths = possibleTransactionMonths
@@ -234,6 +236,7 @@ class ProductConfigFormController {
     this.itemConfig.amount = amount
     this.customAmount = ''
     this.customInputActive = false
+    this.orderService.clearCoverFees()
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 
@@ -241,6 +244,7 @@ class ProductConfigFormController {
     this.itemConfig.amount = amount
     this.customAmount = amount
     this.customInputActive = true
+    this.orderService.clearCoverFees()
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 
@@ -321,6 +325,7 @@ export default angular
     'ngSanitize',
     designationsService.name,
     cartService.name,
+    orderService.name,
     desigSrcDirective.name,
     showErrors.name,
     loading.name,
