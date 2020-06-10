@@ -14,6 +14,7 @@ import uibCollapse from 'angular-ui-bootstrap/src/collapse'
 import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
+import { Observable } from 'rxjs'
 
 const componentName = 'paymentMethod'
 
@@ -57,40 +58,50 @@ class PaymentMethodController {
   onPaymentFormStateChange ($event) {
     this.paymentFormResolve.state = $event.state
     if ($event.state === 'loading' && $event.payload) {
-      this.profileService.updatePaymentMethod(this.model, $event.payload)
-        .subscribe(() => {
-          if (this.cartData) {
-            this.orderService.editGifts(this.cartData)
-          }
-          let editedData = {}
-          if ($event.payload.creditCard) {
-            editedData = $event.payload.creditCard
-            // I'm not sure why this self assign was done. We could test without it...
-            // eslint-disable-next-line no-self-assign
-            editedData['last-four-digits'] = editedData['last-four-digits']
-            editedData.address = formatAddressForTemplate(editedData.address)
-          } else {
-            editedData = $event.payload.bankAccount
-          }
-          for (const key in editedData) {
-            this.model[key] = editedData[key]
-          }
-          this.successMessage = {
-            show: true,
-            type: 'paymentMethodUpdated'
-          }
-          this.paymentFormResolve.state = 'unsubmitted'
-          this.editPaymentMethodModal.close()
-          this.analyticsFactory.setEvent('add payment method')
-        },
-        error => {
-          this.$log.error('Error updating payment method', error)
-          this.paymentFormResolve.state = 'error'
-          this.paymentFormResolve.error = error.data
-          scrollModalToTop()
-        }
-        )
+      if (this.cartData) {
+        Observable.forkJoin(
+          this.profileService.updatePaymentMethod(this.model, $event.payload),
+          this.orderService.editGifts(this.cartData)
+        ).subscribe(() => {
+          this.handleStateChangeSuccess($event)
+        }, error => this.handleStateChangeError(error))
+      } else {
+        this.profileService.updatePaymentMethod(this.model, $event.payload)
+          .subscribe(() => {
+            this.handleStateChangeSuccess($event)
+          }, error => this.handleStateChangeError(error))
+      }
     }
+  }
+
+  handleStateChangeSuccess ($event) {
+    let editedData = {}
+    if ($event.payload.creditCard) {
+      editedData = $event.payload.creditCard
+      // I'm not sure why this self assign was done. We could test without it...
+      // eslint-disable-next-line no-self-assign
+      editedData['last-four-digits'] = editedData['last-four-digits']
+      editedData.address = formatAddressForTemplate(editedData.address)
+    } else {
+      editedData = $event.payload.bankAccount
+    }
+    for (const key in editedData) {
+      this.model[key] = editedData[key]
+    }
+    this.successMessage = {
+      show: true,
+      type: 'paymentMethodUpdated'
+    }
+    this.paymentFormResolve.state = 'unsubmitted'
+    this.editPaymentMethodModal.close()
+    this.analyticsFactory.setEvent('add payment method')
+  }
+
+  handleStateChangeError (error, $log) {
+    this.$log.error('Error updating payment method', error)
+    this.paymentFormResolve.state = 'error'
+    this.paymentFormResolve.error = error.data
+    scrollModalToTop()
   }
 
   deletePaymentMethod () {

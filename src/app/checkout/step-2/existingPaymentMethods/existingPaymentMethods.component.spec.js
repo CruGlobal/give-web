@@ -45,7 +45,9 @@ describe('checkout', () => {
       describe('$onChanges', () => {
         beforeEach(() => {
           jest.spyOn(self.controller, 'selectPayment').mockImplementation(() => {})
-          jest.spyOn(self.controller.orderService, 'editGifts').mockImplementation(() => {})
+          jest.spyOn(self.controller.orderService, 'editGifts').mockImplementation(() => {
+            return [Observable.of("success")]
+          })
         })
         it('should call selectPayment and editGifts when called with a mock change object', () => {
           self.controller.$onChanges({
@@ -56,6 +58,17 @@ describe('checkout', () => {
 
           expect(self.controller.selectPayment).toHaveBeenCalled()
           expect(self.controller.orderService.editGifts).toHaveBeenCalled()
+        })
+
+        it('should store the fact that the user has made their fee decision and moved on', () => {
+          jest.spyOn(self.controller.orderService, 'storeFeesApplied').mockImplementation(() => {})
+
+          self.controller.$onChanges({
+            paymentFormState: {
+              currentValue: 'submitted'
+            }
+          })
+          expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
         })
 
         it('should not call selectPayment when form is unsubmitted', () => {
