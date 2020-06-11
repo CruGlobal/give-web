@@ -13,7 +13,6 @@ import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
 
 import template from './existingPaymentMethods.tpl.html'
-import { Observable } from 'rxjs/Observable'
 
 const componentName = 'checkoutExistingPaymentMethods'
 
@@ -43,13 +42,9 @@ class ExistingPaymentMethodsController {
       this.paymentFormResolve.state = state
       if (state === 'submitted' && !this.paymentMethodFormModal) {
         if (this.cartData) {
-          Observable.forkJoin(this.orderService.editGifts(this.cartData)).subscribe(() => {
-            this.orderService.storeFeesApplied(true)
-            this.selectPayment()
-          })
-        } else {
-          this.selectPayment()
+          this.orderService.storeFeesApplied(true)
         }
+        this.selectPayment()
       }
       if (state === 'success') {
         this.loadPaymentMethods()

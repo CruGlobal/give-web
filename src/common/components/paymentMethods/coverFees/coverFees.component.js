@@ -36,6 +36,7 @@ class CoverFeesController {
       } else if (this.cartData.coverFees !== null) {
         this.orderService.storeCoverFeeDecision(this.cartData.coverFees)
       }
+      this.orderService.storeCartData(this.cartData)
     }
   }
 

@@ -38,7 +38,7 @@ describe('checkout', () => {
           retrieveCardSecurityCode: () => self.storedCvv,
           clearCardSecurityCodes: jest.fn(),
           clearCoverFees: jest.fn(),
-          
+          clearCartData: jest.fn()
         },
         $window: {
           scrollTo: jest.fn()

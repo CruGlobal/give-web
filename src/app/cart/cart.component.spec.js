@@ -101,6 +101,38 @@ describe('cart', () => {
 
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading cart', 'error'])
     })
+
+    it('should load cart from local storage if it is there', () => {
+      const cartData = { items: [] }
+      jest.spyOn(self.controller.orderService, 'retrieveCartData').mockReturnValue(cartData)
+      jest.spyOn(self.controller.cartService, 'get')
+      jest.spyOn(self.controller.analyticsFactory, 'buildProductVar')
+      jest.spyOn(self.controller.analyticsFactory, 'pageLoaded')
+      self.controller.loadCart()
+
+      expect(self.controller.loading).toEqual(false)
+      expect(self.controller.updating).toEqual(false)
+      expect(self.controller.cartData).toEqual(cartData)
+      expect(self.controller.cartService.get).not.toHaveBeenCalled()
+      expect(self.controller.analyticsFactory.buildProductVar).toHaveBeenCalledWith(cartData)
+      expect(self.controller.analyticsFactory.pageLoaded).toHaveBeenCalled()
+    })
+
+    it('should reload cart from local storage if it is there', () => {
+      const cartData = { items: [] }
+      jest.spyOn(self.controller.orderService, 'retrieveCartData').mockReturnValue(cartData)
+      jest.spyOn(self.controller.cartService, 'get')
+      jest.spyOn(self.controller.analyticsFactory, 'buildProductVar')
+      jest.spyOn(self.controller.analyticsFactory, 'pageLoaded')
+      self.controller.loadCart(true)
+
+      expect(self.controller.loading).toEqual(false)
+      expect(self.controller.updating).toEqual(false)
+      expect(self.controller.cartData).toEqual(cartData)
+      expect(self.controller.cartService.get).not.toHaveBeenCalled()
+      expect(self.controller.analyticsFactory.buildProductVar).toHaveBeenCalledWith(cartData)
+      expect(self.controller.analyticsFactory.pageLoaded).not.toHaveBeenCalled()
+    })
   })
 
   describe('removeItem()', () => {

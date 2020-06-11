@@ -14,7 +14,6 @@ import uibCollapse from 'angular-ui-bootstrap/src/collapse'
 import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
-import { Observable } from 'rxjs'
 
 const componentName = 'paymentMethod'
 
@@ -58,19 +57,13 @@ class PaymentMethodController {
   onPaymentFormStateChange ($event) {
     this.paymentFormResolve.state = $event.state
     if ($event.state === 'loading' && $event.payload) {
-      if (this.cartData) {
-        Observable.forkJoin(
-          this.profileService.updatePaymentMethod(this.model, $event.payload),
-          this.orderService.editGifts(this.cartData)
-        ).subscribe(() => {
+      this.profileService.updatePaymentMethod(this.model, $event.payload)
+        .subscribe(() => {
+          if (this.cartData) {
+            this.orderService.storeFeesApplied(true)
+          }
           this.handleStateChangeSuccess($event)
         }, error => this.handleStateChangeError(error))
-      } else {
-        this.profileService.updatePaymentMethod(this.model, $event.payload)
-          .subscribe(() => {
-            this.handleStateChangeSuccess($event)
-          }, error => this.handleStateChangeError(error))
-      }
     }
   }
 
