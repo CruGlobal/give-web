@@ -870,6 +870,34 @@ describe('order service', () => {
     })
   })
 
+  describe('addItemToCartData', () => {
+    it('should add an item to the cart in local storage', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+
+      const newItem = {
+        price: '$3.00',
+        amount: 3,
+        config: { amount: 3 }
+      }
+
+      const updatedCart = cartData
+      updatedCart.items.push(newItem)
+
+      self.orderService.addItemToCartData(newItem)
+      expect(self.orderService.retrieveCartData()).toEqual(updatedCart)
+    })
+  })
+
   describe('clearCartData', () => {
     it('should clear out cart data from local storage', () => {
       const cartData = {

@@ -270,9 +270,9 @@ class ProductConfigFormController {
       : this.cartService.addItem(this.productData.uri, data, this.disableSessionRestart)
 
     savingObservable.subscribe(data => {
+      this.orderService.clearCartData()
       if (this.isEdit) {
         this.orderService.clearCoverFees()
-        this.orderService.clearCartData()
         this.$scope.$emit(cartUpdatedEvent)
       } else {
         this.$scope.$emit(giftAddedEvent)
