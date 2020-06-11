@@ -2,6 +2,8 @@ import angular from 'angular'
 import 'angular-mocks'
 import module from './coverFees.component'
 
+import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+
 describe('coverFees', () => {
   beforeEach(angular.mock.module(module.name))
   const self = {}
@@ -95,6 +97,13 @@ describe('coverFees', () => {
       jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
       self.controller.updatePrices()
       expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(self.controller.cartData)
+    })
+
+    it('should notify listeners that the cart was updated', () => {
+      jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
+      jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
+      self.controller.updatePrices()
+      expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
     })
   })
 })
