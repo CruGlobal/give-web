@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import sessionService from 'common/services/session/session.service'
 import cartService from 'common/services/api/cart.service'
+import orderService from 'common/services/api/order.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
 
 import template from './navCart.tpl.html'
@@ -14,11 +15,12 @@ const componentName = 'navCart'
 
 class NavCartController {
   /* @ngInject */
-  constructor ($rootScope, $window, $log, cartService, sessionService, envService, analyticsFactory) {
+  constructor ($rootScope, $window, $log, cartService, orderService, sessionService, envService, analyticsFactory) {
     this.$rootScope = $rootScope
     this.$window = $window
     this.$log = $log
     this.cartService = cartService
+    this.orderService = orderService
     this.sessionService = sessionService
     this.envService = envService
     this.analyticsFactory = analyticsFactory
@@ -37,22 +39,33 @@ class NavCartController {
     this.firstLoad = false
     this.loading = true
     this.error = false
-    this.cartService.get()
-      .subscribe(data => {
-        this.cartData = data
-        this.loading = false
-        this.hasItems = !isEmpty(this.cartData.items)
-        this.analyticsFactory.buildProductVar(data)
-        if (setAnalyticsEvent && this.cartData.items.length === 1) {
-          this.analyticsFactory.setEvent('cart open')
-        }
-      },
-      error => {
-        this.$log.error('Error loading nav cart items', error)
-        this.error = true
-        this.loading = false
-        this.hasItems = false
-      })
+    const locallyStoredCart = this.orderService.retrieveCartData()
+    if (locallyStoredCart) {
+      this.cartData = locallyStoredCart
+      this.loading = false
+      this.hasItems = !isEmpty(this.cartData.items)
+      this.analyticsFactory.buildProductVar(locallyStoredCart)
+      if (setAnalyticsEvent && this.cartData.items.length === 1) {
+        this.analyticsFactory.setEvent('cart open')
+      }
+    } else {
+      this.cartService.get()
+        .subscribe(data => {
+          this.cartData = data
+          this.loading = false
+          this.hasItems = !isEmpty(this.cartData.items)
+          this.analyticsFactory.buildProductVar(data)
+          if (setAnalyticsEvent && this.cartData.items.length === 1) {
+            this.analyticsFactory.setEvent('cart open')
+          }
+        },
+        error => {
+          this.$log.error('Error loading nav cart items', error)
+          this.error = true
+          this.loading = false
+          this.hasItems = false
+        })
+    }
   }
 
   checkout () {
@@ -63,6 +76,7 @@ class NavCartController {
 export default angular
   .module(componentName, [
     cartService.name,
+    orderService.name,
     sessionService.name,
     analyticsFactory.name
   ])
