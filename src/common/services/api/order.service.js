@@ -249,19 +249,41 @@ class Order {
   }
 
   submit (cvv) {
-    return this.getPurchaseForm()
-      .mergeMap((data) => {
-        const postData = cvv ? { 'security-code': cvv } : {}
-        return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
-          data: postData,
-          followLocation: true
+    const locallyStoredCart = this.retrieveCartData()
+    let observables
+    if (locallyStoredCart && this.retrieveCoverFeeDecision()) {
+      observables = this.editGifts(locallyStoredCart)
+    }
+    if (observables) {
+      observables.push(this.getPurchaseForm())
+      return Observable.forkJoin(observables)
+        .mergeMap((data) => {
+          const postData = cvv ? { 'security-code': cvv } : {}
+          return this.cortexApiService.post({
+            path: this.hateoasHelperService.getLink(data[data.length - 1].enhancedpurchaseform, 'createenhancedpurchaseaction'),
+            data: postData,
+            followLocation: true
+          })
+        }, 1)
+        .do((data) => {
+          this.storeLastPurchaseLink(data.self.uri)
+          this.cartService.setCartCountCookie(0)
         })
-      })
-      .do((data) => {
-        this.storeLastPurchaseLink(data.self.uri)
-        this.cartService.setCartCountCookie(0)
-      })
+    } else {
+      return this.getPurchaseForm()
+        .mergeMap((data) => {
+          const postData = cvv ? { 'security-code': cvv } : {}
+          return this.cortexApiService.post({
+            path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
+            data: postData,
+            followLocation: true
+          })
+        })
+        .do((data) => {
+          this.storeLastPurchaseLink(data.self.uri)
+          this.cartService.setCartCountCookie(0)
+        })
+    }
   }
 
   storeCardSecurityCode (cvv, uri) {
@@ -316,6 +338,24 @@ class Order {
     this.localStorage.removeItem('feesApplied')
   }
 
+  storeCartData (cartData) {
+    this.localStorage.setItem('cartData', angular.toJson(cartData))
+  }
+
+  retrieveCartData () {
+    return angular.fromJson(this.localStorage.getItem('cartData'))
+  }
+
+  addItemToCartData (item) {
+    const cartData = this.retrieveCartData()
+    cartData.items.push(item)
+    this.storeCartData(cartData)
+  }
+
+  clearCartData () {
+    this.localStorage.removeItem('cartData')
+  }
+
   storeLastPurchaseLink (link) {
     this.sessionStorage.setItem('lastPurchaseLink', link)
   }
@@ -363,6 +403,7 @@ class Order {
 
   updatePrices (cartData) {
     this.storeCoverFeeDecision(cartData.coverFees)
+    let newTotal = 0
 
     angular.forEach(cartData.items, (item) => {
       let newAmount
@@ -379,9 +420,12 @@ class Order {
       item.amount = parseFloat(newAmount)
       item.config.amount = parseFloat(newAmount)
       item.price = `$${newAmount}`
+      newTotal += item.amount
     })
 
+    cartData.cartTotal = newTotal
     this.recalculateFrequencyTotals(cartData)
+    this.storeCartData(cartData)
   }
 
   recalculateFrequencyTotals (cartData) {
@@ -412,10 +456,8 @@ class Order {
       if (cartData.coverFees) {
         item.config.amount = item.amountWithFee
       }
-      console.log(`Adding ${item.uri} to observables`)
       observables.push(this.cartService.editItem(item.uri, item.productUri, item.config))
     })
-    console.log(observables)
     return observables
   }
 }

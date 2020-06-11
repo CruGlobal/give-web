@@ -673,6 +673,38 @@ describe('order service', () => {
 
       self.$httpBackend.flush()
     })
+
+    it('should edit the gifts on the server if there are fees and send a request to finalize the purchase', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      self.$window.localStorage.setItem('coverFees', 'true')
+      self.$window.localStorage.setItem('feesApplied', 'true')
+      jest.spyOn(self.orderService, 'editGifts').mockImplementation(() => {
+        return [ Observable.of('') ]
+      })
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        { }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(self.orderService.editGifts).toHaveBeenCalled()
+          expect(data).toEqual(purchaseResponse)
+        })
+
+      self.$httpBackend.flush()
+    })
   })
 
   describe('storeCardSecurityCode', () => {
@@ -801,6 +833,87 @@ describe('order service', () => {
 
       expect(self.$window.localStorage.getItem('coverFees')).toBeNull()
       expect(self.$window.localStorage.getItem('feesApplied')).toBeNull()
+    })
+  })
+
+  describe('storeCartData', () => {
+    it('should save the cart data', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.orderService.storeCartData(cartData)
+      expect(self.$window.localStorage.getItem('cartData')).toEqual(angular.toJson(cartData))
+    })
+  })
+
+  describe('retrieveCartData', () => {
+    it('should get the cart data with fee information in it', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      expect(self.orderService.retrieveCartData()).toEqual(cartData)
+    })
+  })
+
+  describe('addItemToCartData', () => {
+    it('should add an item to the cart in local storage', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+
+      const newItem = {
+        price: '$3.00',
+        amount: 3,
+        config: { amount: 3 }
+      }
+
+      const updatedCart = cartData
+      updatedCart.items.push(newItem)
+
+      self.orderService.addItemToCartData(newItem)
+      expect(self.orderService.retrieveCartData()).toEqual(updatedCart)
+    })
+  })
+
+  describe('clearCartData', () => {
+    it('should clear out cart data from local storage', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      self.orderService.clearCartData()
+
+      expect(self.$window.localStorage.getItem('cartData')).toBeNull()
     })
   })
 
@@ -986,8 +1099,9 @@ describe('order service', () => {
           amountWithFee: '3.07'
         }
       ]
-
       cartData.coverFees = true
+      cartData.cartTotal = 6.0
+
       jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
       self.orderService.updatePrices(cartData)
 
@@ -1003,6 +1117,7 @@ describe('order service', () => {
       expect(cartData.items[2].amount).toEqual(3.07)
       expect(cartData.items[2].config.amount).toEqual(3.07)
 
+      expect(cartData.cartTotal).toEqual(6.14)
       expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
     })
 
@@ -1028,8 +1143,9 @@ describe('order service', () => {
           amountWithFee: '3.07'
         }
       ]
-
       cartData.coverFees = false
+      cartData.cartTotal = 6.14
+
       jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
       self.orderService.updatePrices(cartData)
 
@@ -1045,6 +1161,7 @@ describe('order service', () => {
       expect(cartData.items[2].amount).toEqual(3)
       expect(cartData.items[2].config.amount).toEqual(3)
 
+      expect(cartData.cartTotal).toEqual(6.0)
       expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
     })
 
@@ -1070,8 +1187,9 @@ describe('order service', () => {
           amountWithFee: '3.07'
         }
       ]
-
       cartData.coverFees = false
+      cartData.cartTotal = 6.0
+
       jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
       self.orderService.updatePrices(cartData)
 
@@ -1087,7 +1205,14 @@ describe('order service', () => {
       expect(cartData.items[2].amount).toEqual(3)
       expect(cartData.items[2].config.amount).toEqual(3)
 
+      expect(cartData.cartTotal).toEqual(6.0)
       expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
+    })
+
+    it('Should store the updated cart data in local storage', () => {
+      const cartData = { items: [] }
+      self.orderService.updatePrices(cartData)
+      expect(self.$window.localStorage.getItem('cartData')).toEqual(angular.toJson(cartData))
     })
   })
 

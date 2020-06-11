@@ -3,6 +3,7 @@ import orderService from 'common/services/api/order.service'
 import template from './coverFees.tpl.html'
 import angular from 'angular'
 import cartService from '../../../services/api/cart.service'
+import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 
 const componentName = 'coverFees'
 
@@ -36,11 +37,13 @@ class CoverFeesController {
       } else if (this.cartData.coverFees !== null) {
         this.orderService.storeCoverFeeDecision(this.cartData.coverFees)
       }
+      this.orderService.storeCartData(this.cartData)
     }
   }
 
   updatePrices () {
     this.orderService.updatePrices(this.cartData)
+    this.$scope.$emit(cartUpdatedEvent)
   }
 }
 

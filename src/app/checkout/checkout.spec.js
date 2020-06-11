@@ -193,5 +193,18 @@ describe('checkout', function () {
       expect(self.controller.loadingCartData).toEqual(false)
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading cart', 'some error'])
     })
+
+    it('should use the cart data from local storage if it is there', () => {
+      const cartData = { items: [] }
+      jest.spyOn(self.controller.orderService, 'retrieveCartData').mockReturnValue(cartData)
+      jest.spyOn(self.controller.cartService, 'get')
+      jest.spyOn(self.controller.analyticsFactory, 'buildProductVar')
+      self.controller.loadCart()
+
+      expect(self.controller.loadingCartData).toEqual(false)
+      expect(self.controller.cartData).toEqual(cartData)
+      expect(self.controller.cartService.get).not.toHaveBeenCalled()
+      expect(self.controller.analyticsFactory.buildProductVar).toHaveBeenCalledWith(cartData)
+    })
   })
 })

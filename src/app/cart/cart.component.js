@@ -4,6 +4,7 @@ import pull from 'lodash/pull'
 import includes from 'lodash/includes'
 
 import cartService from 'common/services/api/cart.service'
+import orderService from 'common/services/api/order.service'
 import sessionService from 'common/services/session/session.service'
 import productModalService from 'common/services/productModal.service'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
@@ -19,13 +20,14 @@ const componentName = 'cart'
 
 class CartController {
   /* @ngInject */
-  constructor ($scope, $window, $log, $document, analyticsFactory, cartService, sessionService, productModalService, envService) {
+  constructor ($scope, $window, $log, $document, analyticsFactory, cartService, orderService, sessionService, productModalService, envService) {
     this.$scope = $scope
     this.$window = $window
     this.$log = $log
     this.$document = $document
     this.productModalService = productModalService
     this.cartService = cartService
+    this.orderService = orderService
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.envService = envService
@@ -43,26 +45,37 @@ class CartController {
     } else {
       this.loading = true
     }
-    this.cartService.get()
-      .subscribe(data => {
-        this.cartData = data
-        this.loading = false
-        this.updating = false
+    const locallyStoredCart = this.orderService.retrieveCartData()
+    if (locallyStoredCart) {
+      this.cartData = locallyStoredCart
+      this.loading = false
+      this.updating = false
+      if (!reload) {
+        this.analyticsFactory.pageLoaded()
+      }
+      this.analyticsFactory.buildProductVar(locallyStoredCart)
+    } else {
+      this.cartService.get()
+        .subscribe(data => {
+          this.cartData = data
+          this.loading = false
+          this.updating = false
 
-        if (!reload) {
-          this.analyticsFactory.pageLoaded()
-        }
-        this.analyticsFactory.buildProductVar(data)
-      },
-      error => {
-        this.$log.error('Error loading cart', error)
-        this.loading = false
-        this.updating = false
-        this.error = {
-          loading: !reload,
-          updating: !!reload
-        }
-      })
+          if (!reload) {
+            this.analyticsFactory.pageLoaded()
+          }
+          this.analyticsFactory.buildProductVar(data)
+        },
+        error => {
+          this.$log.error('Error loading cart', error)
+          this.loading = false
+          this.updating = false
+          this.error = {
+            loading: !reload,
+            updating: !!reload
+          }
+        })
+    }
   }
 
   removeItem (item) {
@@ -72,6 +85,10 @@ class CartController {
       .subscribe(() => {
         this.analyticsFactory.cartRemove(item)
         pull(this.cartData.items, item)
+
+        if (this.orderService.retrieveCartData()) {
+          this.orderService.storeCartData(this.cartData)
+        }
         this.loadCart(true)
         this.$scope.$emit(cartUpdatedEvent)
       },
@@ -118,6 +135,7 @@ export default angular
     commonModule.name,
     displayRateTotals.name,
     cartService.name,
+    orderService.name,
     productModalService.name,
     sessionService.name,
     desigSrcDirective.name,
