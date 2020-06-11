@@ -148,11 +148,13 @@ describe('cart', () => {
         ]
       }
       self.controller.cartService.get.mockReturnValue(Observable.of(returnedCart))
+      jest.spyOn(self.controller.orderService, 'storeFeesApplied').mockImplementation(() => {})
       jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
       jest.spyOn(self.controller.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
       jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
 
       self.controller.loadCart()
+      expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
       expect(self.controller.orderService.calculatePricesWithFees).toHaveBeenCalledWith(false, returnedCart.items)
       expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(returnedCart)
     })
