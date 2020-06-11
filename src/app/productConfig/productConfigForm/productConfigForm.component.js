@@ -276,7 +276,9 @@ class ProductConfigFormController {
         this.$scope.$emit(cartUpdatedEvent)
       } else {
         if (this.orderService.retrieveCartData()) {
-          this.orderService.addItemToCartData(this.itemConfig)
+          const cartItem = this.productData
+          cartItem.config = this.itemConfig
+          this.orderService.addItemToCartData(cartItem)
         }
         this.$scope.$emit(giftAddedEvent)
         this.analyticsFactory.cartAdd(this.itemConfig, this.productData, 'cart modal')
