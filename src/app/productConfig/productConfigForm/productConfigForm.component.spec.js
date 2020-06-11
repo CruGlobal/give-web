@@ -514,7 +514,9 @@ describe('product config form component', function () {
           jest.spyOn($ctrl.orderService, 'addItemToCartData')
 
           $ctrl.saveGiftToCart()
-          expect($ctrl.orderService.addItemToCartData).toHaveBeenCalledWith($ctrl.itemConfig)
+          const cartItem = $ctrl.productData
+          cartItem.config = $ctrl.itemConfig
+          expect($ctrl.orderService.addItemToCartData).toHaveBeenCalledWith(cartItem)
         } else {
           jest.spyOn($ctrl.orderService, 'clearCoverFees')
           jest.spyOn($ctrl.orderService, 'clearCartData')
