@@ -397,6 +397,7 @@ class Order {
 
   updatePrices (cartData) {
     this.storeCoverFeeDecision(cartData.coverFees)
+    let newTotal = 0
 
     angular.forEach(cartData.items, (item) => {
       let newAmount
@@ -413,8 +414,10 @@ class Order {
       item.amount = parseFloat(newAmount)
       item.config.amount = parseFloat(newAmount)
       item.price = `$${newAmount}`
+      newTotal += item.amount
     })
 
+    cartData.cartTotal = newTotal
     this.recalculateFrequencyTotals(cartData)
     this.storeCartData(cartData)
   }
