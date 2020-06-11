@@ -508,22 +508,20 @@ describe('product config form component', function () {
         expect($ctrl.errorSavingGeneric).toEqual(false)
       })
 
-      it('should update the locally stored cart with the new information', () => {
-        if (!isEdit) {
-          jest.spyOn($ctrl.orderService, 'retrieveCartData').mockReturnValue({ items: [] })
-          jest.spyOn($ctrl.orderService, 'addItemToCartData')
+      it('should clear the locally stored cart when modifying the cart', () => {
+        jest.spyOn($ctrl.orderService, 'clearCartData')
+        $ctrl.saveGiftToCart()
+        expect($ctrl.orderService.clearCartData).toHaveBeenCalled()
+      })
 
-          $ctrl.saveGiftToCart()
-          const cartItem = $ctrl.productData
-          cartItem.config = $ctrl.itemConfig
-          expect($ctrl.orderService.addItemToCartData).toHaveBeenCalledWith(cartItem)
-        } else {
+      it('should clear the cover fee decision when editing an item in the cart', () => {
+        if (isEdit) {
           jest.spyOn($ctrl.orderService, 'clearCoverFees')
-          jest.spyOn($ctrl.orderService, 'clearCartData')
 
           $ctrl.saveGiftToCart()
           expect($ctrl.orderService.clearCoverFees).toHaveBeenCalled()
-          expect($ctrl.orderService.clearCartData).toHaveBeenCalled()
+        } else {
+          $ctrl.saveGiftToCart()
         }
       })
     }

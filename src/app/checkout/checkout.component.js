@@ -108,6 +108,11 @@ class CheckoutController {
           this.loadingCartData = false
         })
         .subscribe((data) => {
+          if (this.orderService.retrieveCoverFeeDecision()) {
+            // We should only ever get here if the user has already decided to add fees, but then added a new gift
+            this.orderService.calculatePricesWithFees(false, data.items)
+            this.orderService.updatePrices(data)
+          }
           this.cartData = data
           this.analyticsFactory.buildProductVar(data)
         },
