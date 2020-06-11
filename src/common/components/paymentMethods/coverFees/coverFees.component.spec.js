@@ -80,6 +80,14 @@ describe('coverFees', () => {
 
       expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(true)
     })
+
+    it('should store the cart data on page load', () => {
+      jest.spyOn(self.controller.orderService, 'storeCartData').mockImplementation(() => {})
+      self.controller.cartData = { items: [] }
+
+      self.controller.$onInit()
+      expect(self.controller.orderService.storeCartData).toHaveBeenCalledWith(self.controller.cartData)
+    })
   })
 
   describe('updatePrices', () => {

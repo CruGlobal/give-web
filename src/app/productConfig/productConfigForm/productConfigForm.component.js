@@ -236,7 +236,6 @@ class ProductConfigFormController {
     this.itemConfig.amount = amount
     this.customAmount = ''
     this.customInputActive = false
-    this.orderService.clearCoverFees()
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 
@@ -244,7 +243,6 @@ class ProductConfigFormController {
     this.itemConfig.amount = amount
     this.customAmount = amount
     this.customInputActive = true
-    this.orderService.clearCoverFees()
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 
@@ -273,6 +271,8 @@ class ProductConfigFormController {
 
     savingObservable.subscribe(data => {
       if (this.isEdit) {
+        this.orderService.clearCoverFees()
+        this.orderService.clearCartData()
         this.$scope.$emit(cartUpdatedEvent)
       } else {
         this.$scope.$emit(giftAddedEvent)

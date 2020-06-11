@@ -142,6 +142,7 @@ class Step3Controller {
       this.onSubmittingOrder({ value: false })
       this.orderService.clearCardSecurityCodes()
       this.orderService.clearCoverFees()
+      this.orderService.clearCartData()
       this.onSubmitted()
       this.$scope.$emit(cartUpdatedEvent)
       this.changeStep({ newStep: 'thankYou' })
