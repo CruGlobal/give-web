@@ -489,6 +489,23 @@ describe('product config form component', function () {
         expect($ctrl.errorAlreadyInCart).toEqual(true)
         expect($ctrl.errorSavingGeneric).toEqual(false)
       })
+
+      it('should update the locally stored cart with the new information', () => {
+        if (!isEdit) {
+          jest.spyOn($ctrl.orderService, 'retrieveCartData').mockReturnValue({ items: [] })
+          jest.spyOn($ctrl.orderService, 'addItemToCartData')
+
+          $ctrl.saveGiftToCart()
+          expect($ctrl.orderService.addItemToCartData).toHaveBeenCalledWith($ctrl.itemConfig)
+        } else {
+          jest.spyOn($ctrl.orderService, 'clearCoverFees')
+          jest.spyOn($ctrl.orderService, 'clearCartData')
+
+          $ctrl.saveGiftToCart()
+          expect($ctrl.orderService.clearCoverFees).toHaveBeenCalled()
+          expect($ctrl.orderService.clearCartData).toHaveBeenCalled()
+        }
+      })
     }
   })
 

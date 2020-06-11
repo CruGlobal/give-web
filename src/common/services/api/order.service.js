@@ -346,6 +346,12 @@ class Order {
     return angular.fromJson(this.localStorage.getItem('cartData'))
   }
 
+  addItemToCartData (item) {
+    const cartData = this.retrieveCartData()
+    cartData.items.push(item)
+    this.storeCartData(cartData)
+  }
+
   clearCartData () {
     this.localStorage.removeItem('cartData')
   }
