@@ -1214,6 +1214,24 @@ describe('order service', () => {
       self.orderService.updatePrices(cartData)
       expect(self.$window.localStorage.getItem('cartData')).toEqual(angular.toJson(cartData))
     })
+
+    it('should handle large incoming numbers properly', () => {
+      const cartData = {
+        items: [
+          {
+            amount: 25000,
+            price: '$25,000.00',
+            config: {
+              amount: 25000
+            }
+          }
+        ],
+        cartTotal: 25000
+      }
+
+      self.orderService.updatePrices(cartData)
+      expect(cartData.cartTotal).toEqual(25000)
+    })
   })
 
   describe('recalculateFrequencyTotals', () => {
