@@ -419,7 +419,7 @@ class Order {
 
       item.amount = parseFloat(newAmount)
       item.config.amount = parseFloat(newAmount)
-      item.price = `$${newAmount}`
+      item.price = `$${this.$filter('number')(newAmount, 2)}`
       newTotal += item.amount
     })
 

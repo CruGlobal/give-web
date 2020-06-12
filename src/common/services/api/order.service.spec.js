@@ -1093,14 +1093,14 @@ describe('order service', () => {
           amountWithFee: '1.02'
         },
         {
-          price: '$3.00',
-          amount: 3,
-          config: { amount: 3 },
-          amountWithFee: '3.07'
+          price: '$50.00',
+          amount: 50,
+          config: { amount: 50 },
+          amountWithFee: '51.2'
         }
       ]
       cartData.coverFees = true
-      cartData.cartTotal = 6.0
+      cartData.cartTotal = 53.0
 
       jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
       self.orderService.updatePrices(cartData)
@@ -1113,11 +1113,11 @@ describe('order service', () => {
       expect(cartData.items[1].amount).toEqual(1.02)
       expect(cartData.items[1].config.amount).toEqual(1.02)
 
-      expect(cartData.items[2].price).toEqual('$3.07')
-      expect(cartData.items[2].amount).toEqual(3.07)
-      expect(cartData.items[2].config.amount).toEqual(3.07)
+      expect(cartData.items[2].price).toEqual('$51.20')
+      expect(cartData.items[2].amount).toEqual(51.20)
+      expect(cartData.items[2].config.amount).toEqual(51.20)
 
-      expect(cartData.cartTotal).toEqual(6.14)
+      expect(cartData.cartTotal).toEqual(54.27)
       expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
     })
 
