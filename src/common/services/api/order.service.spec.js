@@ -1030,6 +1030,7 @@ describe('order service', () => {
       ]
 
       jest.spyOn(self.orderService, 'calculatePriceWithFees').mockImplementation(input => input)
+      jest.spyOn(self.orderService, 'calculateAmountWithFees').mockImplementation(input => input)
 
       expect(cartItems[0].amountWithFee).not.toBeDefined()
       expect(cartItems[1].amountWithFee).not.toBeDefined()
@@ -1043,6 +1044,9 @@ describe('order service', () => {
       expect(self.orderService.calculatePriceWithFees).toHaveBeenCalledWith(2)
       expect(self.orderService.calculatePriceWithFees).toHaveBeenCalledWith(1)
       expect(self.orderService.calculatePriceWithFees).toHaveBeenCalledWith(3)
+      expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(2)
+      expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(1)
+      expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(3)
     })
 
     it('Should recognize that the current amount is the amount with fees', () => {
@@ -1062,17 +1066,17 @@ describe('order service', () => {
   describe('calculatePriceWithFees', () => {
     it('Should calculate the proper amount', () => {
       let priceWithFees = self.orderService.calculatePriceWithFees(2)
-      expect(priceWithFees).toEqual('2.05')
+      expect(priceWithFees).toEqual('$2.05')
       priceWithFees = self.orderService.calculatePriceWithFees(10)
-      expect(priceWithFees).toEqual('10.24')
+      expect(priceWithFees).toEqual('$10.24')
       priceWithFees = self.orderService.calculatePriceWithFees(100)
-      expect(priceWithFees).toEqual('102.41')
+      expect(priceWithFees).toEqual('$102.41')
       priceWithFees = self.orderService.calculatePriceWithFees(1000)
-      expect(priceWithFees).toEqual('1,024.07')
+      expect(priceWithFees).toEqual('$1,024.07')
       priceWithFees = self.orderService.calculatePriceWithFees(10000)
-      expect(priceWithFees).toEqual('10,240.66')
+      expect(priceWithFees).toEqual('$10,240.66')
       priceWithFees = self.orderService.calculatePriceWithFees(100000)
-      expect(priceWithFees).toEqual('102,406.55')
+      expect(priceWithFees).toEqual('$102,406.55')
     })
   })
 
@@ -1093,14 +1097,14 @@ describe('order service', () => {
           amountWithFee: '1.02'
         },
         {
-          price: '$3.00',
-          amount: 3,
-          config: { amount: 3 },
-          amountWithFee: '3.07'
+          price: '$50.00',
+          amount: 50,
+          config: { amount: 50 },
+          amountWithFee: '51.2'
         }
       ]
       cartData.coverFees = true
-      cartData.cartTotal = 6.0
+      cartData.cartTotal = 53.0
 
       jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
       self.orderService.updatePrices(cartData)
@@ -1113,11 +1117,11 @@ describe('order service', () => {
       expect(cartData.items[1].amount).toEqual(1.02)
       expect(cartData.items[1].config.amount).toEqual(1.02)
 
-      expect(cartData.items[2].price).toEqual('$3.07')
-      expect(cartData.items[2].amount).toEqual(3.07)
-      expect(cartData.items[2].config.amount).toEqual(3.07)
+      expect(cartData.items[2].price).toEqual('$51.20')
+      expect(cartData.items[2].amount).toEqual(51.20)
+      expect(cartData.items[2].config.amount).toEqual(51.20)
 
-      expect(cartData.cartTotal).toEqual(6.14)
+      expect(cartData.cartTotal).toEqual(54.27)
       expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
     })
 
@@ -1213,6 +1217,24 @@ describe('order service', () => {
       const cartData = { items: [] }
       self.orderService.updatePrices(cartData)
       expect(self.$window.localStorage.getItem('cartData')).toEqual(angular.toJson(cartData))
+    })
+
+    it('should handle large incoming numbers properly', () => {
+      const cartData = {
+        items: [
+          {
+            amount: 25000,
+            price: '$25,000.00',
+            config: {
+              amount: 25000
+            }
+          }
+        ],
+        cartTotal: 25000
+      }
+
+      self.orderService.updatePrices(cartData)
+      expect(cartData.cartTotal).toEqual(25000)
     })
   })
 

@@ -8,6 +8,7 @@ import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
+import round from 'lodash/round'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
 
 import cortexApiService from '../cortexApi.service'
@@ -384,8 +385,10 @@ class Order {
     angular.forEach(cartItems, (item) => {
       if (feesApplied) {
         item.amountWithFee = item.amount
+        item.priceWithFee = item.price
       } else {
-        item.amountWithFee = this.calculatePriceWithFees(item.amount)
+        item.amountWithFee = round(this.calculateAmountWithFees(item.amount), 2)
+        item.priceWithFee = this.calculatePriceWithFees(item.amount)
       }
     })
     return true
@@ -393,7 +396,7 @@ class Order {
 
   calculatePriceWithFees (originalAmount) {
     const newAmount = this.calculateAmountWithFees(originalAmount)
-    return this.$filter('number')(newAmount, 2)
+    return `$${this.$filter('number')(newAmount, 2)}`
   }
 
   calculateAmountWithFees (originalAmount) {
@@ -411,15 +414,15 @@ class Order {
         newAmount = item.amountWithFee
       } else {
         if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
-          newAmount = this.calculatePriceWithoutFees(item.amount)
+          newAmount = this.calculateAmountWithoutFees(item.amount)
         } else {
-          newAmount = this.$filter('number')(item.amount, 2)
+          newAmount = item.amount
         }
       }
 
-      item.amount = parseFloat(newAmount)
-      item.config.amount = parseFloat(newAmount)
-      item.price = `$${newAmount}`
+      item.amount = round(parseFloat(newAmount), 2)
+      item.config.amount = item.amount
+      item.price = `$${this.$filter('number')(newAmount, 2)}`
       newTotal += item.amount
     })
 
@@ -445,9 +448,13 @@ class Order {
   }
 
   calculatePriceWithoutFees (originalAmount) {
-    originalAmount = parseFloat(originalAmount)
-    const newAmount = originalAmount * this.FEE_DERIVATIVE
+    const newAmount = this.calculateAmountWithoutFees(originalAmount)
     return this.$filter('number')(newAmount, 2)
+  }
+
+  calculateAmountWithoutFees (originalAmount) {
+    originalAmount = parseFloat(originalAmount)
+    return originalAmount * this.FEE_DERIVATIVE
   }
 
   editGifts (cartData) {
