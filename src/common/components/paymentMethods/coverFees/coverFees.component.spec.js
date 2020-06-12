@@ -90,6 +90,24 @@ describe('coverFees', () => {
       self.controller.$onInit()
       expect(self.controller.orderService.storeCartData).toHaveBeenCalledWith(self.controller.cartData)
     })
+
+    it('should handle large incoming numbers properly', () => {
+      self.controller.cartData = {
+        items: [
+          {
+            amount: 25000,
+            price: '$25,000.00',
+            config: {
+              amount: 25000
+            }
+          }
+        ],
+        cartTotal: 25000
+      }
+
+      self.controller.$onInit()
+      expect(self.controller.cartData.cartTotal).toEqual(25000)
+    })
   })
 
   describe('updatePrices', () => {
