@@ -35,13 +35,8 @@ class SearchResultsController {
     this.searchParams.type = params.type
     this.featuredGroupBy = 'startMonth'
 
-    this.tab = this.$window.location.hostname &&
-      (includes(this.$window.location.hostname, 'give') || includes(this.$window.location.hostname, 'localhost'))
-      ? 'give' : 'cru'
-    if (this.tab === 'give') {
-      this.requestGiveSearch(this.searchParams.type)
-      this.analyticsFactory.pageLoaded()
-    }
+    this.requestGiveSearch(this.searchParams.type)
+    this.analyticsFactory.pageLoaded()
   }
 
   requestGiveSearch (type) {
@@ -83,17 +78,6 @@ class SearchResultsController {
         this.analyticsFactory.setEvent('search filter')
       }
     }
-  }
-
-  redirectSearch (site) {
-    const path = site === 'give'
-      ? this.envService.read('publicGive') + '/search-results.html?'
-      : this.envService.read('publicCru') + '/search.html?'
-
-    const term = this.searchParams.keyword || this.searchParams.first_name + ' ' + this.searchParams.last_name
-    this.$window.location = path + this.$httpParamSerializer({
-      q: term
-    })
   }
 }
 
