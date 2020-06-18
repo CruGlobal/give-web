@@ -34,16 +34,6 @@ describe('searchResults', function () {
       expect($ctrl.requestGiveSearch).toHaveBeenCalled()
     })
 
-    it('do not request search onInit if cru search', () => {
-      $ctrl.$window.location = 'https://www.cru.org/'
-
-      jest.spyOn($ctrl, 'requestGiveSearch').mockImplementation(() => {})
-
-      $ctrl.$onInit()
-
-      expect($ctrl.requestGiveSearch).not.toHaveBeenCalled()
-    })
-
     it('changes type', () => {
       $ctrl.$onInit()
 
@@ -97,31 +87,6 @@ describe('searchResults', function () {
 
       expect($ctrl.searchResults).toEqual(null)
       expect($ctrl.searchError).toEqual(true)
-    })
-  })
-
-  describe('redirectSearch', () => {
-    it('navigates to cru.org search page, keyword search', () => {
-      $ctrl.$onInit()
-
-      $ctrl.searchParams = {
-        keyword: 'steve'
-      }
-      $ctrl.redirectSearch('cru')
-
-      expect($ctrl.$window.location).toEqual('https://stage.cru.org/search.html?q=steve')
-    })
-
-    it('navigates to cru.org search page, first/last name search', () => {
-      $ctrl.$onInit()
-
-      $ctrl.searchParams = {
-        first_name: 'steve',
-        last_name: 'doe'
-      }
-      $ctrl.redirectSearch('give')
-
-      expect($ctrl.$window.location).toEqual('https://give-stage2.cru.org/search-results.html?q=steve+doe')
     })
   })
 })

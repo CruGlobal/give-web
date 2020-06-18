@@ -27,25 +27,10 @@
     </div>
   </section>
 
-  <section class="is-tabs">
-    <ul class="nav nav-tabs nav-search-tabs text-center">
-      <li role="presentation" ng-if="$ctrl.searchParams.keyword" ng-class="{'active': $ctrl.tab === 'cru'}">
-        <a id="exploreLink" href="" ng-click="$ctrl.redirectSearch('cru')" translate>Explore</a>
-      </li>
-      <li role="presentation" ng-class="{'active': $ctrl.tab === 'give'}">
-        <a id="givingLink" href="" ng-click="$ctrl.redirectSearch('give')" translate>Giving</a>
-      </li>
-      <li role="presentation">
-        <a id="missionTripsLink" href="https://www.cru.org/opportunities/mission-trips/upcoming.html" translate>Missions Trips</a>
-      </li>
-    </ul>
-  </section>
-
-
-  <div class="container">
+  <div class="container margin-top-30">
     <div class="row">
       <div class="col-md-12">
-        <div class="panel loading-overlay-parent" ng-if="$ctrl.tab === 'give'">
+        <div class="panel loading-overlay-parent">
           <div class="panel-body">
             <div class="row">
               <div class="col-sm-12 col-md-3">
