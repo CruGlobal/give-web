@@ -5,7 +5,6 @@ import includes from 'lodash/includes'
 import commonModule from 'common/common.module'
 import designationsService from 'common/services/api/designations.service'
 import productConfigComponent from 'app/productConfig/productConfig.component'
-import ministries from './searchResults.ministries'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 import analyticsFactory from 'app/analytics/analytics.factory'
 
@@ -44,7 +43,17 @@ class SearchResultsController {
     this.searchParams.type = type
 
     if (!this.searchParams.keyword && includes(['ministries', '', undefined], this.searchParams.type)) {
-      this.searchResults = ministries
+      const path = this.$location.path()
+      this.designationsService.ministriesList(path.substring(0, path.indexOf('.html')))
+        .subscribe((results) => {
+          this.searchResults = results
+          this.loadingResults = false
+        }, (error) => {
+          this.searchResults = null
+          this.searchError = true
+          this.loadingResults = false
+          this.$log.error('Error loading ministries list', error)
+        })
     } else if (!this.searchParams.keyword &&
       !this.searchParams.first_name &&
       !this.searchParams.last_name &&
