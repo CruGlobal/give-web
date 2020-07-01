@@ -48,30 +48,13 @@ class CartController {
     const locallyStoredCart = this.orderService.retrieveCartData()
     if (locallyStoredCart) {
       this.cartData = locallyStoredCart
-      this.loading = false
-      this.updating = false
-      if (!reload) {
-        this.analyticsFactory.pageLoaded()
-      }
-      this.analyticsFactory.buildProductVar(locallyStoredCart)
+      this.setLoadCartVars(reload)
     } else {
       this.cartService.get()
         .subscribe(data => {
-          if (this.orderService.retrieveCoverFeeDecision()) {
-            // We should only ever get here if the user has already decided to add fees, but then added a new gift
-            data.coverFees = true
-            this.orderService.storeFeesApplied(true)
-            this.orderService.calculatePricesWithFees(false, data.items)
-            this.orderService.updatePrices(data)
-          }
+          this.orderService.addFeesToNewGiftIfNecessary(data)
           this.cartData = data
-          this.loading = false
-          this.updating = false
-
-          if (!reload) {
-            this.analyticsFactory.pageLoaded()
-          }
-          this.analyticsFactory.buildProductVar(data)
+          this.setLoadCartVars(reload)
         },
         error => {
           this.$log.error('Error loading cart', error)
@@ -83,6 +66,16 @@ class CartController {
           }
         })
     }
+  }
+
+  setLoadCartVars (reload) {
+    this.loading = false
+    this.updating = false
+
+    if (!reload) {
+      this.analyticsFactory.pageLoaded()
+    }
+    this.analyticsFactory.buildProductVar(this.cartData)
   }
 
   removeItem (item) {

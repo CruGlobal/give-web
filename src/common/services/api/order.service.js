@@ -465,6 +465,16 @@ class Order {
       return this.cartService.editItem(item.uri, item.productUri, item.config)
     })
   }
+
+  addFeesToNewGiftIfNecessary (data) {
+    if (this.retrieveCoverFeeDecision()) {
+      // We should only ever get here if the user has already decided to add fees, but then added a new gift
+      data.coverFees = true
+      this.storeFeesApplied(true)
+      this.calculatePricesWithFees(false, data.items)
+      this.updatePrices(data)
+    }
+  }
 }
 
 export default angular
