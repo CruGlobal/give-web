@@ -4,6 +4,7 @@ import omit from 'lodash/omit'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
+import moment from 'moment'
 
 import module from './order.service'
 
@@ -861,7 +862,25 @@ describe('order service', () => {
             price: '$2.00',
             amount: 2,
             config: { amount: 2 },
-            amountWithFee: '2.05'
+            amountWithFee: '2.05',
+            frequency: 'Single'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      expect(self.orderService.retrieveCartData()).toEqual(cartData)
+    })
+
+    it('should turn the gift start date into a moment', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05',
+            frequency: 'Monthly',
+            giftStartDate: moment.utc('2020-07-01T18:26:48.944Z')
           }
         ]
       }
@@ -878,7 +897,8 @@ describe('order service', () => {
             price: '$2.00',
             amount: 2,
             config: { amount: 2 },
-            amountWithFee: '2.05'
+            amountWithFee: '2.05',
+            frequency: 'Single'
           }
         ]
       }
@@ -887,7 +907,8 @@ describe('order service', () => {
       const newItem = {
         price: '$3.00',
         amount: 3,
-        config: { amount: 3 }
+        config: { amount: 3 },
+        frequency: 'Single'
       }
 
       const updatedCart = cartData
