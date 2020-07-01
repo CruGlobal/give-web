@@ -51,6 +51,7 @@ class ProductConfigFormController {
     this.startDate = startDate
     this.startMonth = startMonth
     this.analyticsFactory = analyticsFactory
+    this.amountChanged = false
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000]
   }
@@ -233,6 +234,7 @@ class ProductConfigFormController {
 
   changeAmount (amount) {
     this.itemConfigForm.$setDirty()
+    this.checkAmountChanged(amount)
     this.itemConfig.amount = amount
     this.customAmount = ''
     this.customInputActive = false
@@ -240,10 +242,17 @@ class ProductConfigFormController {
   }
 
   changeCustomAmount (amount) {
+    this.checkAmountChanged(amount)
     this.itemConfig.amount = amount
     this.customAmount = amount
     this.customInputActive = true
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
+  }
+
+  checkAmountChanged (amount) {
+    if (this.itemConfig.amount && amount) {
+      this.amountChanged = this.itemConfig.amount !== amount
+    }
   }
 
   changeStartDay (day, month) {
@@ -272,7 +281,9 @@ class ProductConfigFormController {
     savingObservable.subscribe(data => {
       this.orderService.clearCartData()
       if (this.isEdit) {
-        this.orderService.clearCoverFees()
+        if (this.amountChanged) {
+          this.orderService.clearCoverFees()
+        }
         this.$scope.$emit(cartUpdatedEvent)
       } else {
         this.$scope.$emit(giftAddedEvent)

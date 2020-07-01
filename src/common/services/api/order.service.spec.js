@@ -4,6 +4,7 @@ import omit from 'lodash/omit'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
+import moment from 'moment'
 
 import module from './order.service'
 
@@ -861,7 +862,25 @@ describe('order service', () => {
             price: '$2.00',
             amount: 2,
             config: { amount: 2 },
-            amountWithFee: '2.05'
+            amountWithFee: '2.05',
+            frequency: 'Single'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      expect(self.orderService.retrieveCartData()).toEqual(cartData)
+    })
+
+    it('should turn the gift start date into a moment', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05',
+            frequency: 'Monthly',
+            giftStartDate: moment.utc('2020-07-01T18:26:48.944Z')
           }
         ]
       }
@@ -878,7 +897,8 @@ describe('order service', () => {
             price: '$2.00',
             amount: 2,
             config: { amount: 2 },
-            amountWithFee: '2.05'
+            amountWithFee: '2.05',
+            frequency: 'Single'
           }
         ]
       }
@@ -887,7 +907,8 @@ describe('order service', () => {
       const newItem = {
         price: '$3.00',
         amount: 3,
-        config: { amount: 3 }
+        config: { amount: 3 },
+        frequency: 'Single'
       }
 
       const updatedCart = cartData
@@ -1111,15 +1132,15 @@ describe('order service', () => {
 
       expect(cartData.items[0].price).toEqual('$2.05')
       expect(cartData.items[0].amount).toEqual(2.05)
-      expect(cartData.items[0].config.amount).toEqual(2.05)
+      expect(cartData.items[0].config.amount).toEqual(2)
 
       expect(cartData.items[1].price).toEqual('$1.02')
       expect(cartData.items[1].amount).toEqual(1.02)
-      expect(cartData.items[1].config.amount).toEqual(1.02)
+      expect(cartData.items[1].config.amount).toEqual(1)
 
       expect(cartData.items[2].price).toEqual('$51.20')
       expect(cartData.items[2].amount).toEqual(51.20)
-      expect(cartData.items[2].config.amount).toEqual(51.20)
+      expect(cartData.items[2].config.amount).toEqual(50)
 
       expect(cartData.cartTotal).toEqual(54.27)
       expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
@@ -1131,19 +1152,19 @@ describe('order service', () => {
         {
           price: '$2.05',
           amount: 2.05,
-          config: { amount: 2.05 },
+          config: { amount: 2 },
           amountWithFee: '2.05'
         },
         {
           price: '$1.02',
           amount: 1.02,
-          config: { amount: 1.02 },
+          config: { amount: 1 },
           amountWithFee: '1.02'
         },
         {
           price: '$3.07',
           amount: 3.07,
-          config: { amount: 3.07 },
+          config: { amount: 3 },
           amountWithFee: '3.07'
         }
       ]
