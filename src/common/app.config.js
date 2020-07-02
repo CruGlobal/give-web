@@ -191,7 +191,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     MIN_LENGTH_CARD_NUM_ERROR: 'This card number must contain at least 13 digits',
     MAX_LENGTH_CARD_NUM_ERROR: 'This card number cannot contain more than 16 digits',
     CARD_TYPE_ERROR: 'This card type is not recognized',
-    INVALID_TYPE_ERROR: 'This is an invalid {{cardType}} number. It should have {{cardDigits}} digits.',
+    INVALID_TYPE_ERROR: 'This is an invalid {{cardtype}} number. It should have {{carddigits}} digits.',
     INVALID_CARD_NUM_ERROR: 'This card number is invalid. At least one digit was entered incorrectly.',
     CARD_NAME_ERROR: 'You must enter the name on the card',
     MAX_LENGTH_CARD_NAME_ERROR: 'This name cannot be longer than 50 characters',
@@ -277,7 +277,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     FINAL_GIFT_NO_SUMMARY_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time.
         You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
     FINAL_PROCESSING_GIFT: `We are processing your gift now. We'll send an email confirmation to
-      <strong>{{userEmail}}</strong> as well as a tax-deductible receipt by postal mail.`,
+      <strong>{{useremail}}</strong> as well as a tax-deductible receipt by postal mail.`,
     FINAL_GIFT_THANK_YOU: 'Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ\'s kingdom. (Luke 6:38)',
     RECEIPT_MAILING_ADDRESS: 'Receipt Mailing Address',
     GIFT_SUMMARY: 'Gift Summary',
@@ -398,7 +398,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     MIN_LENGTH_CARD_NUM_ERROR: 'Este número de tarjeta debe contener al menos 13 dígitos',
     MAX_LENGTH_CARD_NUM_ERROR: 'Este número de tarjeta no puede contener más de 16 dígitos.',
     CARD_TYPE_ERROR: 'Este tipo de tarjeta no se reconoce',
-    INVALID_TYPE_ERROR: 'Este es un número no válido {{cardType}}. Debe tener {{cardDigits}} dígitos.',
+    INVALID_TYPE_ERROR: 'Este es un número no válido {{cardtype}}. Debe tener {{carddigits}} dígitos.',
     INVALID_CARD_NUM_ERROR: 'Este número de tarjeta no es válido. Al menos un dígito se ingresó incorrectamente.',
     CARD_NAME_ERROR: 'Debes ingresar el nombre en la tarjeta',
     MAX_LENGTH_CARD_NAME_ERROR: 'Este nombre no puede tener más de 50 caracteres.',
@@ -484,7 +484,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     FINAL_GIFT_NO_SUMMARY_ERROR: `Your gift was submitted but we cannot provide a detailed summary at this time.
         You will receive a confirmation email from us shortly, or you can review your donation now by looking at <a href="/your-giving.html">Your Giving</a>.`,
     FINAL_PROCESSING_GIFT: `We are processing your gift now. We'll send an email confirmation to
-      <strong>{{userEmail}}</strong> as well as a tax-deductible receipt by postal mail.`,
+      <strong>{{useremail}}</strong> as well as a tax-deductible receipt by postal mail.`,
     FINAL_GIFT_THANK_YOU: 'Thanks for making a difference in the lives of people both now and for eternity. May the Lord bless your investment in this work for Christ\'s kingdom. (Luke 6:38)',
     RECEIPT_MAILING_ADDRESS: 'Receipt Mailing Address',
     GIFT_SUMMARY: 'Gift Summary',
