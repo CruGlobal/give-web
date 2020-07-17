@@ -67,7 +67,7 @@ class CartController {
         })
     }
 
-    if (this.orderService.retrieveCoverFeeDecision() && this.orderService.retrieveFeesApplied()) {
+    if (this.orderService.retrieveCoverFeeDecision()) {
       this.donorCoveredFees = true
     }
   }
