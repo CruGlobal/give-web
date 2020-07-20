@@ -158,6 +158,24 @@ describe('cart', () => {
       expect(self.controller.orderService.calculatePricesWithFees).toHaveBeenCalledWith(false, returnedCart.items)
       expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(returnedCart)
     })
+
+    it('should recognize when a donor has covered fees', () => {
+      self.controller.cartService.get.mockReturnValue(Observable.of({}))
+      jest.spyOn(self.controller.orderService, 'retrieveCartData').mockImplementation(() => null)
+      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
+      self.controller.loadCart(true)
+
+      expect(self.controller.donorCoveredFees).toEqual(true)
+    })
+
+    it('should recognize when a donor has not covered fees', () => {
+      self.controller.cartService.get.mockReturnValue(Observable.of({}))
+      jest.spyOn(self.controller.orderService, 'retrieveCartData').mockImplementation(() => null)
+      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => false)
+      self.controller.loadCart(true)
+
+      expect(self.controller.donorCoveredFees).toEqual(false)
+    })
   })
 
   describe('removeItem()', () => {
@@ -168,6 +186,7 @@ describe('cart', () => {
 
     it('should remove item from cart', () => {
       jest.spyOn(self.controller, 'loadCart').mockImplementation(() => {})
+      jest.spyOn(self.controller.orderService, 'retrieveCartData').mockImplementation(() => null)
       self.controller.cartService.deleteItem.mockReturnValue(Observable.of('data'))
       self.controller.removeItem(self.controller.cartData.items[0])
 
