@@ -393,6 +393,20 @@ describe('product config form component', function () {
     })
   })
 
+  describe('checkAmountChanged()', () => {
+    it('returns true if the amount changed', () => {
+      $ctrl.itemConfig = { amount: 1 }
+      $ctrl.checkAmountChanged(2)
+      expect($ctrl.amountChanged).toEqual(true)
+    })
+
+    it('returns false if the amount did not change', () => {
+      $ctrl.itemConfig = { amount: 2 }
+      $ctrl.checkAmountChanged(2)
+      expect($ctrl.amountChanged).toEqual(false)
+    })
+  })
+
   describe('changeStartDay()', () => {
     it('sets day query param', () => {
       $ctrl.errorAlreadyInCart = true
@@ -506,6 +520,36 @@ describe('product config form component', function () {
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorAlreadyInCart' })
         expect($ctrl.errorAlreadyInCart).toEqual(true)
         expect($ctrl.errorSavingGeneric).toEqual(false)
+      })
+
+      it('should clear the locally stored cart when modifying the cart', () => {
+        jest.spyOn($ctrl.orderService, 'clearCartData')
+        $ctrl.saveGiftToCart()
+        expect($ctrl.orderService.clearCartData).toHaveBeenCalled()
+      })
+
+      it('should clear the cover fee decision when editing the amount of an item in the cart', () => {
+        if (isEdit) {
+          jest.spyOn($ctrl.orderService, 'clearCoverFees')
+
+          $ctrl.amountChanged = true
+          $ctrl.saveGiftToCart()
+          expect($ctrl.orderService.clearCoverFees).toHaveBeenCalled()
+        } else {
+          $ctrl.saveGiftToCart()
+        }
+      })
+
+      it('should not clear the cover fee decision when editing something other than the amount of an item in the cart', () => {
+        if (isEdit) {
+          jest.spyOn($ctrl.orderService, 'clearCoverFees')
+
+          $ctrl.amountChanged = false
+          $ctrl.saveGiftToCart()
+          expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
+        } else {
+          $ctrl.saveGiftToCart()
+        }
       })
     }
   })

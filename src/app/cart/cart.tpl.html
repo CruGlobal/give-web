@@ -73,6 +73,14 @@
                   </tr>
                   </tbody>
                   <tfoot>
+                  <tr ng-if="$ctrl.donorCoveredFees">
+                    <td colspan="4">
+                      <p class="alert alert-info">
+                        Gift amount includes previously selected option to help cover credit/debit card processing fees.
+                        This option can be adjusted again during checkout.
+                      </p>
+                    </td>
+                  </tr>
                   <tr>
                     <td colspan="4">
                       <loading inline="true" class="mb-- text-right" ng-if="$ctrl.updating">

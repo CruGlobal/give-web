@@ -116,6 +116,47 @@ describe('navCart', () => {
       expect($ctrl.error).toEqual(true)
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading nav cart items', 'some error'])
     })
+
+    it('should load cart from local storage if it is there', () => {
+      const cartData = { items: [ {} ] }
+      jest.spyOn($ctrl.orderService, 'retrieveCartData').mockReturnValue(cartData)
+      jest.spyOn($ctrl.cartService, 'get')
+      jest.spyOn($ctrl.analyticsFactory, 'buildProductVar')
+      jest.spyOn($ctrl.analyticsFactory, 'setEvent')
+      $ctrl.loadCart(true)
+
+      expect($ctrl.loading).toEqual(false)
+      expect($ctrl.hasItems).toEqual(true)
+      expect($ctrl.cartData).toEqual(cartData)
+      expect($ctrl.cartService.get).not.toHaveBeenCalled()
+      expect($ctrl.analyticsFactory.buildProductVar).toHaveBeenCalledWith(cartData)
+      expect($ctrl.analyticsFactory.setEvent).toHaveBeenCalledWith('cart open')
+    })
+
+    it('should add fee amounts to the cart if the fees have been chosen and a gift was added', () => {
+      const returnedCart = {
+        items: [
+          {
+            amount: 1,
+            price: '$1.00'
+          },
+          {
+            amount: 2,
+            price: '$2.00'
+          }
+        ]
+      }
+      $ctrl.cartService.get.mockReturnValue(Observable.of(returnedCart))
+      jest.spyOn($ctrl.orderService, 'storeFeesApplied').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
+      jest.spyOn($ctrl.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'updatePrices').mockImplementation(() => {})
+
+      $ctrl.loadCart()
+      expect($ctrl.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
+      expect($ctrl.orderService.calculatePricesWithFees).toHaveBeenCalledWith(false, returnedCart.items)
+      expect($ctrl.orderService.updatePrices).toHaveBeenCalledWith(returnedCart)
+    })
   })
 
   describe('checkout', () => {

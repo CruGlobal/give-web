@@ -71,6 +71,9 @@ class Step2Controller {
         ? this.orderService.updatePaymentMethod($event.paymentMethodToUpdate, $event.payload)
         : this.orderService.addPaymentMethod($event.payload)
       request.subscribe(() => {
+        if (this.cartData) {
+          this.orderService.storeFeesApplied(true)
+        }
         if (!$event.stayOnStep) {
           this.changeStep({ newStep: 'review' })
           this.onStateChange({ state: 'submitted' })
@@ -119,6 +122,7 @@ export default angular
       mailingAddress: '=?',
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
+      cartData: '<',
       changeStep: '&',
       onStateChange: '&'
     }

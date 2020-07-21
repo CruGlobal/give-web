@@ -21,7 +21,7 @@
             <div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_NUM_ERROR'}}</div>
             <div class="help-block" ng-message="maxLength" translate>{{'MAX_LENGTH_CARD_NUM_ERROR'}}</div>
             <div class="help-block" ng-message="knownType" translate>{{'CARD_TYPE_ERROR'}}</div>
-            <div class="help-block" ng-message="typeLength" translate='INVALID_TYPE_ERROR' translate-value-cardType="{{$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}}" translate-value-cardDigits="{{$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')}}"></div>
+            <div class="help-block" ng-message="typeLength" translate='INVALID_TYPE_ERROR' translate-value-cardtype="{{$ctrl.cardInfo.type($ctrl.creditCardPaymentForm.cardNumber.$viewValue)}}" translate-value-carddigits="{{$ctrl.cardInfo.expectedLengthForType($ctrl.creditCardPaymentForm.cardNumber.$viewValue).join(' or ')}}"></div>
             <div class="help-block" ng-message="checksum" translate>{{'INVALID_CARD_NUM_ERROR'}}</div>
           </div>
         </div>
@@ -144,6 +144,16 @@
       </div>
     </div>
 
+  </div>
+
+  <div class="panel panel-default mt mb0"
+       ng-if="$ctrl.cartData && $ctrl.cartData.items">
+    <div class="panel-body">
+      <div class="mb">
+        <h4 class="panel-title border-bottom-small" translate>{{'OPTIONAL'}}</h4>
+        <cover-fees cart-data="$ctrl.cartData"></cover-fees>
+      </div>
+    </div>
   </div>
 
 </form>

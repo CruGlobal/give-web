@@ -5,6 +5,7 @@ import showErrors from 'common/filters/showErrors.filter'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import sessionService, { Roles } from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
+import orderService from 'common/services/api/order.service'
 
 import template from './signIn.tpl.html'
 
@@ -12,14 +13,16 @@ const componentName = 'signIn'
 
 class SignInController {
   /* @ngInject */
-  constructor ($window, sessionService, analyticsFactory, sessionModalService) {
+  constructor ($window, sessionService, analyticsFactory, sessionModalService, orderService) {
     this.$window = $window
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.sessionModalService = sessionModalService
+    this.orderService = orderService
   }
 
   $onInit () {
+    this.orderService.storeCartData(null)
     this.subscription = this.sessionService.sessionSubject.subscribe(() => this.sessionChanged())
     this.analyticsFactory.pageLoaded()
   }
@@ -56,6 +59,7 @@ export default angular
     analyticsFactory.name,
     sessionService.name,
     sessionModalService.name,
+    orderService.name,
     signInForm.name,
     showErrors.name
   ])

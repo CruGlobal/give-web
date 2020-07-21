@@ -6,6 +6,7 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import deletePaymentMethodModal from 'common/components/paymentMethods/deletePaymentMethod/deletePaymentMethod.modal.component.js'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import profileService from 'common/services/api/profile.service'
+import orderService from 'common/services/api/order.service'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import { scrollModalToTop } from 'common/services/modalState.service'
@@ -18,11 +19,12 @@ const componentName = 'paymentMethod'
 
 class PaymentMethodController {
   /* @ngInject */
-  constructor ($log, envService, $uibModal, profileService, analyticsFactory) {
+  constructor ($log, envService, $uibModal, profileService, orderService, analyticsFactory) {
     this.$log = $log
     this.isCollapsed = true
     this.$uibModal = $uibModal
     this.profileService = profileService
+    this.orderService = orderService
     this.imgDomain = envService.read('imgDomain')
     this.paymentFormResolve = {}
     this.analyticsFactory = analyticsFactory
@@ -57,35 +59,42 @@ class PaymentMethodController {
     if ($event.state === 'loading' && $event.payload) {
       this.profileService.updatePaymentMethod(this.model, $event.payload)
         .subscribe(() => {
-          let editedData = {}
-          if ($event.payload.creditCard) {
-            editedData = $event.payload.creditCard
-            // I'm not sure why this self assign was done. We could test without it...
-            // eslint-disable-next-line no-self-assign
-            editedData['last-four-digits'] = editedData['last-four-digits']
-            editedData.address = formatAddressForTemplate(editedData.address)
-          } else {
-            editedData = $event.payload.bankAccount
+          if (this.cartData) {
+            this.orderService.storeFeesApplied(true)
           }
-          for (const key in editedData) {
-            this.model[key] = editedData[key]
-          }
-          this.successMessage = {
-            show: true,
-            type: 'paymentMethodUpdated'
-          }
-          this.paymentFormResolve.state = 'unsubmitted'
-          this.editPaymentMethodModal.close()
-          this.analyticsFactory.setEvent('add payment method')
-        },
-        error => {
-          this.$log.error('Error updating payment method', error)
-          this.paymentFormResolve.state = 'error'
-          this.paymentFormResolve.error = error.data
-          scrollModalToTop()
-        }
-        )
+          this.handleStateChangeSuccess($event)
+        }, error => this.handleStateChangeError(error))
     }
+  }
+
+  handleStateChangeSuccess ($event) {
+    let editedData = {}
+    if ($event.payload.creditCard) {
+      editedData = $event.payload.creditCard
+      // I'm not sure why this self assign was done. We could test without it...
+      // eslint-disable-next-line no-self-assign
+      editedData['last-four-digits'] = editedData['last-four-digits']
+      editedData.address = formatAddressForTemplate(editedData.address)
+    } else {
+      editedData = $event.payload.bankAccount
+    }
+    for (const key in editedData) {
+      this.model[key] = editedData[key]
+    }
+    this.successMessage = {
+      show: true,
+      type: 'paymentMethodUpdated'
+    }
+    this.paymentFormResolve.state = 'unsubmitted'
+    this.editPaymentMethodModal.close()
+    this.analyticsFactory.setEvent('add payment method')
+  }
+
+  handleStateChangeError (error, $log) {
+    this.$log.error('Error updating payment method', error)
+    this.paymentFormResolve.state = 'error'
+    this.paymentFormResolve.error = error.data
+    scrollModalToTop()
   }
 
   deletePaymentMethod () {
@@ -123,6 +132,7 @@ export default angular
     paymentMethodFormModal.name,
     deletePaymentMethodModal.name,
     profileService.name,
+    orderService.name,
     analyticsFactory.name,
     uibCollapse,
     uibModal

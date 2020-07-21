@@ -8,6 +8,7 @@ import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
+import round from 'lodash/round'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
 
 import cortexApiService from '../cortexApi.service'
@@ -18,12 +19,13 @@ import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
+import moment from 'moment'
 
 const serviceName = 'orderService'
 
 class Order {
   /* @ngInject */
-  constructor (cortexApiService, cartService, hateoasHelperService, analyticsFactory, $window, $log) {
+  constructor (cortexApiService, cartService, hateoasHelperService, analyticsFactory, $window, $log, $filter) {
     this.cortexApiService = cortexApiService
     this.cartService = cartService
     this.hateoasHelperService = hateoasHelperService
@@ -31,6 +33,8 @@ class Order {
     this.sessionStorage = $window.sessionStorage
     this.localStorage = $window.localStorage
     this.$log = $log
+    this.$filter = $filter
+    this.FEE_DERIVATIVE = 0.9765 // 2.35% processing fee (calculated by 1 - 0.0235)
   }
 
   getDonorDetails () {
@@ -247,19 +251,41 @@ class Order {
   }
 
   submit (cvv) {
-    return this.getPurchaseForm()
-      .mergeMap((data) => {
-        const postData = cvv ? { 'security-code': cvv } : {}
-        return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
-          data: postData,
-          followLocation: true
+    const locallyStoredCart = this.retrieveCartData()
+    let observables
+    if (locallyStoredCart && this.retrieveCoverFeeDecision()) {
+      observables = this.editGifts(locallyStoredCart)
+    }
+    if (observables) {
+      observables.push(this.getPurchaseForm())
+      return Observable.forkJoin(observables)
+        .mergeMap((data) => {
+          const postData = cvv ? { 'security-code': cvv } : {}
+          return this.cortexApiService.post({
+            path: this.hateoasHelperService.getLink(data[data.length - 1].enhancedpurchaseform, 'createenhancedpurchaseaction'),
+            data: postData,
+            followLocation: true
+          })
+        }, 1)
+        .do((data) => {
+          this.storeLastPurchaseLink(data.self.uri)
+          this.cartService.setCartCountCookie(0)
         })
-      })
-      .do((data) => {
-        this.storeLastPurchaseLink(data.self.uri)
-        this.cartService.setCartCountCookie(0)
-      })
+    } else {
+      return this.getPurchaseForm()
+        .mergeMap((data) => {
+          const postData = cvv ? { 'security-code': cvv } : {}
+          return this.cortexApiService.post({
+            path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
+            data: postData,
+            followLocation: true
+          })
+        })
+        .do((data) => {
+          this.storeLastPurchaseLink(data.self.uri)
+          this.cartService.setCartCountCookie(0)
+        })
+    }
   }
 
   storeCardSecurityCode (cvv, uri) {
@@ -293,6 +319,57 @@ class Order {
     this.sessionStorage.removeItem('storedCvvs')
   }
 
+  storeCoverFeeDecision (coverFees) {
+    this.localStorage.setItem('coverFees', angular.toJson(coverFees))
+  }
+
+  retrieveCoverFeeDecision () {
+    return angular.fromJson(this.localStorage.getItem('coverFees'))
+  }
+
+  storeFeesApplied (feesApplied) {
+    this.localStorage.setItem('feesApplied', angular.toJson(feesApplied))
+  }
+
+  retrieveFeesApplied () {
+    return angular.fromJson(this.localStorage.getItem('feesApplied'))
+  }
+
+  clearCoverFees () {
+    this.localStorage.removeItem('coverFees')
+    this.localStorage.removeItem('feesApplied')
+  }
+
+  storeCartData (cartData) {
+    this.localStorage.setItem('cartData', angular.toJson(cartData))
+  }
+
+  retrieveCartData () {
+    const cartData = angular.fromJson(this.localStorage.getItem('cartData'))
+    if (cartData) {
+      this.turnDateStringsToDates(cartData)
+    }
+    return cartData
+  }
+
+  turnDateStringsToDates (cartData) {
+    cartData.items.map(item => {
+      if (item.frequency !== 'Single') {
+        item.giftStartDate = moment.utc(item.giftStartDate)
+      }
+    })
+  }
+
+  addItemToCartData (item) {
+    const cartData = this.retrieveCartData()
+    cartData.items.push(item)
+    this.storeCartData(cartData)
+  }
+
+  clearCartData () {
+    this.localStorage.removeItem('cartData')
+  }
+
   storeLastPurchaseLink (link) {
     this.sessionStorage.setItem('lastPurchaseLink', link)
   }
@@ -314,6 +391,100 @@ class Order {
       return !hasSpouse
     } else {
       return startedOrderWithoutSpouse
+    }
+  }
+
+  calculatePricesWithFees (feesApplied, cartItems) {
+    angular.forEach(cartItems, (item) => {
+      if (feesApplied) {
+        item.amountWithFee = item.amount
+        item.priceWithFee = item.price
+      } else {
+        item.amountWithFee = round(this.calculateAmountWithFees(item.amount), 2)
+        item.priceWithFee = this.calculatePriceWithFees(item.amount)
+      }
+    })
+    return true
+  }
+
+  calculatePriceWithFees (originalAmount) {
+    const newAmount = this.calculateAmountWithFees(originalAmount)
+    return `$${this.$filter('number')(newAmount, 2)}`
+  }
+
+  calculateAmountWithFees (originalAmount) {
+    originalAmount = parseFloat(originalAmount)
+    return originalAmount / this.FEE_DERIVATIVE
+  }
+
+  updatePrices (cartData) {
+    this.storeCoverFeeDecision(cartData.coverFees)
+    let newTotal = 0
+
+    angular.forEach(cartData.items, (item) => {
+      let newAmount
+      if (cartData.coverFees) {
+        newAmount = item.amountWithFee
+      } else {
+        if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
+          newAmount = this.calculateAmountWithoutFees(item.amount)
+        } else {
+          newAmount = item.amount
+        }
+      }
+
+      item.amount = round(parseFloat(newAmount), 2)
+      item.price = `$${this.$filter('number')(newAmount, 2)}`
+      newTotal += item.amount
+    })
+
+    cartData.cartTotal = newTotal
+    this.recalculateFrequencyTotals(cartData)
+    this.storeCartData(cartData)
+  }
+
+  recalculateFrequencyTotals (cartData) {
+    angular.forEach(cartData.frequencyTotals, rateTotal => {
+      rateTotal.total = '$0.00'
+      rateTotal.amount = 0
+    })
+
+    angular.forEach(cartData.items, item => {
+      angular.forEach(cartData.frequencyTotals, rateTotal => {
+        if (item.frequency === rateTotal.frequency) {
+          rateTotal.amount += item.amount
+          rateTotal.total = `$${this.$filter('number')(rateTotal.amount, 2)}`
+        }
+      })
+    })
+  }
+
+  calculatePriceWithoutFees (originalAmount) {
+    const newAmount = this.calculateAmountWithoutFees(originalAmount)
+    return this.$filter('number')(newAmount, 2)
+  }
+
+  calculateAmountWithoutFees (originalAmount) {
+    originalAmount = parseFloat(originalAmount)
+    return originalAmount * this.FEE_DERIVATIVE
+  }
+
+  editGifts (cartData) {
+    return cartData.items.map(item => {
+      if (cartData.coverFees) {
+        item.config.amount = item.amountWithFee
+      }
+      return this.cartService.editItem(item.uri, item.productUri, item.config)
+    })
+  }
+
+  addFeesToNewGiftIfNecessary (data) {
+    if (this.retrieveCoverFeeDecision()) {
+      // We should only ever get here if the user has already decided to add fees, but then added a new gift
+      data.coverFees = true
+      this.storeFeesApplied(true)
+      this.calculatePricesWithFees(false, data.items)
+      this.updatePrices(data)
     }
   }
 }

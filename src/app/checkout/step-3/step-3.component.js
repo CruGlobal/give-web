@@ -32,6 +32,7 @@ class Step3Controller {
     this.cartService = cartService
     this.commonService = commonService
     this.startDate = startDate
+    this.sessionStorage = $window.sessionStorage
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -140,6 +141,8 @@ class Step3Controller {
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
       this.orderService.clearCardSecurityCodes()
+      this.orderService.clearCoverFees()
+      this.orderService.clearCartData()
       this.onSubmitted()
       this.$scope.$emit(cartUpdatedEvent)
       this.changeStep({ newStep: 'thankYou' })

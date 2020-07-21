@@ -17,6 +17,7 @@ import 'rxjs/add/operator/do'
 
 import designationsService from 'common/services/api/designations.service'
 import cartService from 'common/services/api/cart.service'
+import orderService from 'common/services/api/order.service'
 import {
   possibleTransactionDays,
   possibleTransactionMonths,
@@ -36,19 +37,21 @@ const componentName = 'productConfigForm'
 
 class ProductConfigFormController {
   /* @ngInject */
-  constructor ($scope, $log, $filter, $window, designationsService, cartService, commonService, analyticsFactory) {
+  constructor ($scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory) {
     this.$scope = $scope
     this.$log = $log
     this.$filter = $filter
     this.$window = $window
     this.designationsService = designationsService
     this.cartService = cartService
+    this.orderService = orderService
     this.commonService = commonService
     this.possibleTransactionDays = possibleTransactionDays
     this.possibleTransactionMonths = possibleTransactionMonths
     this.startDate = startDate
     this.startMonth = startMonth
     this.analyticsFactory = analyticsFactory
+    this.amountChanged = false
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000]
   }
@@ -231,6 +234,7 @@ class ProductConfigFormController {
 
   changeAmount (amount) {
     this.itemConfigForm.$setDirty()
+    this.checkAmountChanged(amount)
     this.itemConfig.amount = amount
     this.customAmount = ''
     this.customInputActive = false
@@ -238,10 +242,17 @@ class ProductConfigFormController {
   }
 
   changeCustomAmount (amount) {
+    this.checkAmountChanged(amount)
     this.itemConfig.amount = amount
     this.customAmount = amount
     this.customInputActive = true
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
+  }
+
+  checkAmountChanged (amount) {
+    if (this.itemConfig.amount && amount) {
+      this.amountChanged = this.itemConfig.amount !== amount
+    }
   }
 
   changeStartDay (day, month) {
@@ -268,7 +279,11 @@ class ProductConfigFormController {
       : this.cartService.addItem(this.productData.uri, data, this.disableSessionRestart)
 
     savingObservable.subscribe(data => {
+      this.orderService.clearCartData()
       if (this.isEdit) {
+        if (this.amountChanged) {
+          this.orderService.clearCoverFees()
+        }
         this.$scope.$emit(cartUpdatedEvent)
       } else {
         this.$scope.$emit(giftAddedEvent)
@@ -321,6 +336,7 @@ export default angular
     'ngSanitize',
     designationsService.name,
     cartService.name,
+    orderService.name,
     desigSrcDirective.name,
     showErrors.name,
     loading.name,

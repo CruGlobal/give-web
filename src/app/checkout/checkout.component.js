@@ -12,6 +12,7 @@ import help from './help/help.component'
 import showErrors from 'common/filters/showErrors.filter'
 
 import cartService from 'common/services/api/cart.service'
+import orderService from 'common/services/api/order.service'
 import designationsService from 'common/services/api/designations.service'
 
 import sessionEnforcerService, { EnforcerCallbacks } from 'common/services/session/sessionEnforcer.service'
@@ -26,12 +27,13 @@ const componentName = 'checkout'
 
 class CheckoutController {
   /* @ngInject */
-  constructor ($window, $location, $rootScope, $log, cartService, designationsService, sessionEnforcerService, analyticsFactory) {
+  constructor ($window, $location, $rootScope, $log, cartService, orderService, designationsService, sessionEnforcerService, analyticsFactory) {
     this.$log = $log
     this.$window = $window
     this.$location = $location
     this.$rootScope = $rootScope
     this.cartService = cartService
+    this.orderService = orderService
     this.designationsService = designationsService
     this.sessionEnforcerService = sessionEnforcerService
     this.loadingCartData = true
@@ -95,17 +97,25 @@ class CheckoutController {
   }
 
   loadCart () {
-    this.cartService.get()
-      .finally(() => {
-        this.loadingCartData = false
-      })
-      .subscribe((data) => {
-        this.cartData = data
-        this.analyticsFactory.buildProductVar(data)
-      },
-      (error) => {
-        this.$log.error('Error loading cart', error)
-      })
+    const locallyStoredCart = this.orderService.retrieveCartData()
+    if (locallyStoredCart) {
+      this.cartData = locallyStoredCart
+      this.loadingCartData = false
+      this.analyticsFactory.buildProductVar(locallyStoredCart)
+    } else {
+      this.cartService.get()
+        .finally(() => {
+          this.loadingCartData = false
+        })
+        .subscribe((data) => {
+          this.orderService.addFeesToNewGiftIfNecessary(data)
+          this.cartData = data
+          this.analyticsFactory.buildProductVar(data)
+        },
+        (error) => {
+          this.$log.error('Error loading cart', error)
+        })
+    }
   }
 }
 
@@ -118,6 +128,7 @@ export default angular
     help.name,
     cartSummary.name,
     cartService.name,
+    orderService.name,
     designationsService.name,
     sessionEnforcerService.name,
     showErrors.name,
