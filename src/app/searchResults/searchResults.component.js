@@ -44,7 +44,7 @@ class SearchResultsController {
 
     if (!this.searchParams.keyword && includes(['ministries', '', undefined], this.searchParams.type)) {
       const path = this.$location.path()
-      this.designationsService.ministriesList(path.substring(0, path.indexOf('.html')))
+      this.designationsService.ministriesList(path.substring(1, path.indexOf('.html')))
         .subscribe((results) => {
           this.searchResults = results
           this.loadingResults = false
