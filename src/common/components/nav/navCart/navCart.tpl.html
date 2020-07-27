@@ -52,7 +52,15 @@
 
   <div class="row repeating-row sub-total" ng-if="$ctrl.hasItems">
     <div class="col-xs-9">
-      <p translate translate-n="$ctrl.cartData.items.length" translate-plural="TOTAL ({{$count}} Items)">TOTAL 1 Item</p>
+      <p>
+        <ng-pluralize
+          count="$ctrl.cartData.items.length"
+          when="{'0': 'TOTAL (0 Items)',
+                     'one': 'TOTAL (1 Item)',
+                     'other': 'TOTAL ({} Items)'}"
+        >
+        </ng-pluralize>
+      </p>
     </div>
     <div class="col-xs-3 text-right">
       <p>{{$ctrl.cartData.cartTotal | currency}}</p>
