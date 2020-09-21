@@ -123,6 +123,7 @@ export default angular
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
       cartData: '<',
+      brandedCheckoutItem: '<',
       changeStep: '&',
       onStateChange: '&'
     }
