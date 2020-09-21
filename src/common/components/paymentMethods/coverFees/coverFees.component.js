@@ -56,6 +56,7 @@ export default angular
     controller: CoverFeesController,
     templateUrl: template,
     bindings: {
-      cartData: '<'
+      cartData: '<',
+      brandedCheckoutItem: '<'
     }
   })
