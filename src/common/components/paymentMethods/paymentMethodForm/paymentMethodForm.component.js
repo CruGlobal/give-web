@@ -61,6 +61,7 @@ export default angular
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
       cartData: '<',
+      brandedCheckoutItem: '<',
       onPaymentFormStateChange: '&'
     }
   })

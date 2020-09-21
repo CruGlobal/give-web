@@ -196,6 +196,7 @@ export default angular
       hideCvv: '<',
       mailingAddress: '<',
       cartData: '<',
+      brandedCheckoutItem: '<',
       onPaymentFormStateChange: '&'
     }
   })
