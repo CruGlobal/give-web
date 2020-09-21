@@ -352,6 +352,27 @@ class Order {
     return cartData
   }
 
+  storeBrandedCoverFeeDecision (coverFees) {
+    this.localStorage.setItem('brandedCoverFees', angular.toJson(coverFees))
+  }
+
+  retrieveBrandedCoverFeeDecision () {
+    return angular.fromJson(this.localStorage.getItem('brandedCoverFees'))
+  }
+
+  storeBrandedFeesApplied (feesApplied) {
+    this.localStorage.setItem('brandedFeesApplied', angular.toJson(feesApplied))
+  }
+
+  retrieveBrandedFeesApplied () {
+    return angular.fromJson(this.localStorage.getItem('brandedFeesApplied'))
+  }
+
+  clearBrandedCoverFees () {
+    this.localStorage.removeItem('brandedCoverFees')
+    this.localStorage.removeItem('brandedFeesApplied')
+  }
+
   turnDateStringsToDates (cartData) {
     cartData.items.map(item => {
       if (item.frequency !== 'Single') {
