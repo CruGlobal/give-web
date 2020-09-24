@@ -45,6 +45,11 @@ class CoverFeesController {
     this.orderService.updatePrices(this.cartData)
     this.$scope.$emit(cartUpdatedEvent)
   }
+
+  updatePrice () {
+    this.orderService.storeBrandedCoverFeeDecision(this.brandedCheckoutItem.coverFees)
+    this.orderService.updatePrice(this.brandedCheckoutItem, this.brandedCheckoutItem.coverFees)
+  }
 }
 
 export default angular
