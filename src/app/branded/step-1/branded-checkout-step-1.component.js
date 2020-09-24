@@ -45,6 +45,7 @@ class BrandedCheckoutStep1Controller {
         break
     }
     this.itemConfig['recurring-day-of-month'] = this.day
+    this.itemConfig.frequency = this.frequency
   }
 
   initCart () {
