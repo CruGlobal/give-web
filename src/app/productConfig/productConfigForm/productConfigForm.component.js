@@ -33,11 +33,14 @@ import analyticsFactory from 'app/analytics/analytics.factory'
 
 import template from './productConfigForm.tpl.html'
 
+export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent'
+
 const componentName = 'productConfigForm'
 
 class ProductConfigFormController {
   /* @ngInject */
-  constructor ($scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory) {
+  constructor ($rootScope, $scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory) {
+    this.$rootScope = $rootScope
     this.$scope = $scope
     this.$log = $log
     this.$filter = $filter
@@ -60,6 +63,15 @@ class ProductConfigFormController {
     this.initItemConfig()
     this.loadData()
     this.waitForFormInitialization()
+
+    this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
+      this.initItemConfig()
+      if (this.selectableAmounts.includes(this.itemConfig.amount)) {
+        this.changeAmount(this.itemConfig.amount)
+      } else {
+        this.changeCustomAmount(this.itemConfig.amount)
+      }
+    })
   }
 
   $onChanges (changes) {
