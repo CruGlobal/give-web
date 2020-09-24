@@ -73,7 +73,10 @@ class Step2Controller {
       request.subscribe(() => {
         if (this.cartData) {
           this.orderService.storeFeesApplied(true)
+        } else if (this.brandedCheckoutItem) {
+          this.orderService.storeBrandedFeesApplied(true)
         }
+
         if (!$event.stayOnStep) {
           this.changeStep({ newStep: 'review' })
           this.onStateChange({ state: 'submitted' })
