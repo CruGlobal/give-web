@@ -4,6 +4,7 @@ import template from './coverFees.tpl.html'
 import angular from 'angular'
 import cartService from '../../../services/api/cart.service'
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { brandedCoverFeeCheckedEvent } from 'app/productConfig/productConfigForm/productConfigForm.component'
 
 const componentName = 'coverFees'
 
@@ -66,6 +67,7 @@ class CoverFeesController {
   updatePrice () {
     this.orderService.storeBrandedCoverFeeDecision(this.brandedCheckoutItem.coverFees)
     this.orderService.updatePrice(this.brandedCheckoutItem, this.brandedCheckoutItem.coverFees)
+    this.$scope.$emit(brandedCoverFeeCheckedEvent)
   }
 }
 
