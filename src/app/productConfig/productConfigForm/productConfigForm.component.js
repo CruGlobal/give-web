@@ -210,6 +210,11 @@ class ProductConfigFormController {
     this.errorChangingFrequency = false
     const lastFrequency = this.productData.frequency
     this.productData.frequency = product.name
+
+    if (this.isBrandedCheckout) {
+      this.itemConfig.frequency = product.display
+    }
+
     this.updateQueryParam({ key: giveGiftParams.frequency, value: product.name })
     if (product.selectAction) {
       this.changingFrequency = true
@@ -351,6 +356,7 @@ export default angular
       isEdit: '<',
       uri: '<',
       defaultFrequency: '<',
+      isBrandedCheckout: '<',
       disableSessionRestart: '@',
       updateQueryParam: '&',
       submitted: '<',

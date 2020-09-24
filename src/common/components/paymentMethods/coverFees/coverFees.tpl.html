@@ -11,7 +11,7 @@
       <span ng-bind="$ctrl.brandedCheckoutItem.priceWithFee">
 
       </span><span class="text-lowercase"
-                   ng-if="$ctrl.brandedCheckoutItem.frequency !== 'Single'">
+                   ng-if="$ctrl.brandedCheckoutItem.frequency && $ctrl.brandedCheckoutItem.frequency.toLowerCase() !== 'single'">
         {{$ctrl.brandedCheckoutItem.frequency}}.
       </span>
     </span>
