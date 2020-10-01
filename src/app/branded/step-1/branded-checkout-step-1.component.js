@@ -6,6 +6,7 @@ import contactInfo from 'common/components/contactInfo/contactInfo.component'
 import checkoutStep2 from 'app/checkout/step-2/step-2.component'
 
 import cartService from 'common/services/api/cart.service'
+import orderService from 'common/services/api/order.service'
 
 import template from './branded-checkout-step-1.tpl.html'
 
@@ -13,9 +14,10 @@ const componentName = 'brandedCheckoutStep1'
 
 class BrandedCheckoutStep1Controller {
   /* @ngInject */
-  constructor ($log, cartService) {
+  constructor ($log, cartService, orderService) {
     this.$log = $log
     this.cartService = cartService
+    this.orderService = orderService
   }
 
   $onInit () {
@@ -62,6 +64,13 @@ class BrandedCheckoutStep1Controller {
 
         // add campaign page
         this.itemConfig['campaign-page'] = this.campaignPage
+
+        if (this.orderService.retrieveBrandedCoverFeeDecision()) {
+          this.itemConfig.priceWithFee = item.price
+          this.itemConfig.price = item.price
+          this.itemConfig.amountWithFee = item.amount
+          this.itemConfig.coverFees = true
+        }
       }
       this.loadingProductConfig = false
     },
@@ -152,7 +161,8 @@ export default angular
     productConfigForm.name,
     contactInfo.name,
     checkoutStep2.name,
-    cartService.name
+    cartService.name,
+    orderService.name
   ])
   .component(componentName, {
     controller: BrandedCheckoutStep1Controller,
