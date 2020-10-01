@@ -88,12 +88,14 @@ describe('product config form component', function () {
     it('should handle brandedCoverFeeCheckedEvent for custom amounts', () => {
       jest.spyOn($ctrl, 'initItemConfig').mockImplementation(() => {})
       jest.spyOn($ctrl, 'changeCustomAmount').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'updateDecimalPlaces').mockImplementation(() => {})
       $ctrl.itemConfig.amount = 1.02
 
       $ctrl.$onInit()
       $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
       expect($ctrl.initItemConfig).toHaveBeenCalled()
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(1.02, true)
+      expect($ctrl.updateDecimalPlaces).toHaveBeenCalled()
     })
   })
 
@@ -271,6 +273,14 @@ describe('product config form component', function () {
 
       expect($ctrl.itemConfig.amount).toEqual(14)
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
+    })
+
+    it('should update the decimal places', () => {
+      jest.spyOn($ctrl, 'updateDecimalPlaces').mockImplementation(() => {})
+
+      $ctrl.itemConfig.amount = 14
+      $ctrl.setDefaultAmount()
+      expect($ctrl.updateDecimalPlaces).toHaveBeenCalled()
     })
   })
 
@@ -625,6 +635,20 @@ describe('product config form component', function () {
     it('should navigate to other giving link', () => {
       $ctrl.giveLink('https://example.com')
       expect($ctrl.$window.location).toEqual('https://example.com')
+    })
+  })
+
+  describe('updateDecimalPlaces', () => {
+    it('should make a whole dollar amount set to 2 decimal places', () => {
+      $ctrl.customAmount = 5
+      $ctrl.updateDecimalPlaces()
+      expect($ctrl.customAmount).toEqual('5.00')
+    })
+
+    it('should make a single decimal place amount set to 2 decimal places', () => {
+      $ctrl.customAmount = 51.2
+      $ctrl.updateDecimalPlaces()
+      expect($ctrl.customAmount).toEqual('51.20')
     })
   })
 })
