@@ -53,6 +53,7 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
 
       expect($ctrl.defaultFrequency).toEqual('MON')
+      expect($ctrl.itemConfig.frequency).toEqual('monthly')
     })
 
     it('should initialize quarterly gifts', () => {
@@ -60,6 +61,7 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
 
       expect($ctrl.defaultFrequency).toEqual('QUARTERLY')
+      expect($ctrl.itemConfig.frequency).toEqual('quarterly')
     })
 
     it('should initialize annual gifts', () => {
@@ -67,6 +69,7 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
 
       expect($ctrl.defaultFrequency).toEqual('ANNUAL')
+      expect($ctrl.itemConfig.frequency).toEqual('annually')
     })
 
     it('should validate campaignCode (too long)', () => {
