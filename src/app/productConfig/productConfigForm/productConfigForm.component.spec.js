@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 
-import module from './productConfigForm.component'
+import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { giveGiftParams } from '../giveGiftParams'
 
@@ -47,6 +47,7 @@ describe('product config form component', function () {
   })
 
   it('to be defined', () => {
+    expect($ctrl.$rootScope).toBeDefined()
     expect($ctrl.$scope).toBeDefined()
     expect($ctrl.$log).toBeDefined()
     expect($ctrl.designationsService).toBeDefined()
@@ -56,15 +57,43 @@ describe('product config form component', function () {
   })
 
   describe('$onInit', () => {
-    it('should call the initialization functions', () => {
+    beforeEach(() => {
       jest.spyOn($ctrl, 'initItemConfig').mockImplementation(() => {})
       jest.spyOn($ctrl, 'loadData').mockImplementation(() => {})
       jest.spyOn($ctrl, 'waitForFormInitialization').mockImplementation(() => {})
+    })
+
+    it('should call the initialization functions', () => {
+      jest.spyOn($ctrl.$rootScope, '$on').mockImplementation(() => {})
       $ctrl.$onInit()
 
       expect($ctrl.initItemConfig).toHaveBeenCalled()
       expect($ctrl.loadData).toHaveBeenCalled()
       expect($ctrl.waitForFormInitialization).toHaveBeenCalled()
+      expect($ctrl.$rootScope.$on).toHaveBeenCalledWith(brandedCoverFeeCheckedEvent, expect.any(Function))
+      $ctrl.$rootScope.$on.mock.calls[0][1]()
+    })
+
+    it('should handle brandedCoverFeeCheckedEvent for selectable amounts', () => {
+      jest.spyOn($ctrl, 'initItemConfig').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'changeAmount').mockImplementation(() => {})
+      $ctrl.itemConfig.amount = 50
+
+      $ctrl.$onInit()
+      $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
+      expect($ctrl.initItemConfig).toHaveBeenCalled()
+      expect($ctrl.changeAmount).toHaveBeenCalledWith(50, true)
+    })
+
+    it('should handle brandedCoverFeeCheckedEvent for custom amounts', () => {
+      jest.spyOn($ctrl, 'initItemConfig').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'changeCustomAmount').mockImplementation(() => {})
+      $ctrl.itemConfig.amount = 1.02
+
+      $ctrl.$onInit()
+      $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
+      expect($ctrl.initItemConfig).toHaveBeenCalled()
+      expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(1.02, true)
     })
   })
 
