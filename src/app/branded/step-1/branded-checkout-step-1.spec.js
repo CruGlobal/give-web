@@ -87,7 +87,8 @@ describe('branded checkout step 1', () => {
 
   describe('initCart', () => {
     beforeEach(() => {
-      jest.spyOn($ctrl.cartService, 'get').mockReturnValue(Observable.of({ items: [{ code: '1234567', config: {} }] }))
+      jest.spyOn($ctrl.cartService, 'get')
+        .mockReturnValue(Observable.of({ items: [{ code: '1234567', config: {}, price: '$1.02', amount: 1.02 }] }))
       $ctrl.donorDetails = { mailingAddress: {} }
     })
 
@@ -123,6 +124,15 @@ describe('branded checkout step 1', () => {
       expect($ctrl.loadingProductConfig).toEqual(false)
       expect($ctrl.errorLoadingProductConfig).toEqual(true)
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading cart data for branded checkout step 1', 'some error'])
+    })
+
+    it('should set amounts that coverFees cares about', () => {
+      jest.spyOn($ctrl.orderService, 'retrieveBrandedCoverFeeDecision').mockReturnValue(true)
+      $ctrl.initCart()
+
+      expect($ctrl.itemConfig.priceWithFee).toEqual('$1.02')
+      expect($ctrl.itemConfig.price).toEqual('$1.02')
+      expect($ctrl.itemConfig.amountWithFee).toEqual(1.02)
     })
   })
 
