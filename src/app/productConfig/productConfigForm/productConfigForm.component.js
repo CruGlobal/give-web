@@ -31,6 +31,8 @@ import { giveGiftParams } from '../giveGiftParams'
 import loading from 'common/components/loading/loading.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
 
+import { brandedCheckoutAmountUpdatedEvent } from 'common/components/paymentMethods/coverFees/coverFees.component'
+
 import template from './productConfigForm.tpl.html'
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent'
@@ -67,9 +69,9 @@ class ProductConfigFormController {
     this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
       this.initItemConfig()
       if (this.selectableAmounts.includes(this.itemConfig.amount)) {
-        this.changeAmount(this.itemConfig.amount)
+        this.changeAmount(this.itemConfig.amount, true)
       } else {
-        this.changeCustomAmount(this.itemConfig.amount)
+        this.changeCustomAmount(this.itemConfig.amount, true)
       }
     })
   }
@@ -249,20 +251,30 @@ class ProductConfigFormController {
     }
   }
 
-  changeAmount (amount) {
+  changeAmount (amount, retainCoverFees) {
     this.itemConfigForm.$setDirty()
     this.checkAmountChanged(amount)
     this.itemConfig.amount = amount
     this.customAmount = ''
     this.customInputActive = false
+    if (!retainCoverFees && this.amountChanged) {
+      this.orderService.clearBrandedCoverFees()
+      this.itemConfig.coverFees = false
+      this.$scope.$emit(brandedCheckoutAmountUpdatedEvent)
+    }
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 
-  changeCustomAmount (amount) {
+  changeCustomAmount (amount, retainCoverFees) {
     this.checkAmountChanged(amount)
     this.itemConfig.amount = amount
     this.customAmount = amount
     this.customInputActive = true
+    if (!retainCoverFees && this.amountChanged) {
+      this.orderService.clearBrandedCoverFees()
+      this.itemConfig.coverFees = false
+      this.$scope.$emit(brandedCheckoutAmountUpdatedEvent)
+    }
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 

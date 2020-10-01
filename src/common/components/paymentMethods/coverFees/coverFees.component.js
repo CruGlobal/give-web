@@ -6,11 +6,14 @@ import cartService from '../../../services/api/cart.service'
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { brandedCoverFeeCheckedEvent } from 'app/productConfig/productConfigForm/productConfigForm.component'
 
+export const brandedCheckoutAmountUpdatedEvent = 'brandedCheckoutAmountUpdatedEvent'
+
 const componentName = 'coverFees'
 
 class CoverFeesController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, cartService) {
+  constructor ($rootScope, $log, $scope, orderService, cartService) {
+    this.$rootScope = $rootScope
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
@@ -21,6 +24,11 @@ class CoverFeesController {
   }
 
   $onInit () {
+    this.$rootScope.$on(brandedCheckoutAmountUpdatedEvent, () => {
+      this.feesCalculated = false
+      this.$onInit()
+    })
+
     if (this.cartData) {
       const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
       const feesApplied = this.orderService.retrieveFeesApplied()
