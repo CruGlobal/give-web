@@ -396,6 +396,12 @@ describe('product config form component', function () {
       expect($ctrl.changingFrequency).toEqual(false)
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' })
     })
+
+    it('should expose the frequency display value to the itemConfig on branded checkout', () => {
+      $ctrl.isBrandedCheckout = true
+      $ctrl.changeFrequency({ name: 'NA', selectAction: '/a', display: 'Single' })
+      expect($ctrl.itemConfig.frequency).toEqual('Single')
+    })
   })
 
   describe('changeAmount()', () => {
