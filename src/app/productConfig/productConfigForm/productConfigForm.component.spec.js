@@ -9,6 +9,7 @@ import 'rxjs/add/observable/throw'
 import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { giveGiftParams } from '../giveGiftParams'
+import { brandedCheckoutAmountUpdatedEvent } from '../../../common/components/paymentMethods/coverFees/coverFees.component'
 
 describe('product config form component', function () {
   beforeEach(angular.mock.module(module.name))
@@ -414,6 +415,45 @@ describe('product config form component', function () {
       expect($ctrl.customInputActive).toEqual(false)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 100 })
     })
+
+    it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 50
+      $ctrl.changeAmount(100)
+
+      expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.coverFees).toEqual(false)
+      expect($ctrl.$scope.$emit).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent)
+    })
+
+    it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 50
+      $ctrl.changeAmount(100, true)
+
+      expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
+    })
+
+    it('should not clear cover fees if we did not change the amount', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 50
+      $ctrl.changeAmount(50)
+
+      expect($ctrl.amountChanged).toEqual(false)
+      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
+    })
   })
 
   describe('changeCustomAmount()', () => {
@@ -425,6 +465,45 @@ describe('product config form component', function () {
       expect($ctrl.customAmount).toEqual(300)
       expect($ctrl.customInputActive).toEqual(true)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 300 })
+    })
+
+    it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 51.2
+      $ctrl.changeCustomAmount(1)
+
+      expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.coverFees).toEqual(false)
+      expect($ctrl.$scope.$emit).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent)
+    })
+
+    it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 51.2
+      $ctrl.changeCustomAmount(1, true)
+
+      expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
+    })
+
+    it('should not clear cover fees if we did not change the amount', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 5
+      $ctrl.changeAmount(5)
+
+      expect($ctrl.amountChanged).toEqual(false)
+      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
   })
 
