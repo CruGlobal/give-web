@@ -6,13 +6,15 @@ import creditCardForm from '../creditCardForm/creditCardForm.component'
 import orderService from '../../../services/api/order.service'
 
 import template from './paymentMethodForm.tpl.html'
+import { brandedCoverFeeCheckedEvent } from '../../../../app/productConfig/productConfigForm/productConfigForm.component'
 
 const componentName = 'paymentMethodForm'
 
 class PaymentMethodFormController {
   /* @ngInject */
-  constructor ($log, envService, orderService) {
+  constructor ($log, $scope, envService, orderService) {
     this.$log = $log
+    this.$scope = $scope
 
     this.paymentType = 'bankAccount'
     this.imgDomain = envService.read('imgDomain')
@@ -36,6 +38,7 @@ class PaymentMethodFormController {
       this.brandedCheckoutItem.coverFees = false
       this.orderService.storeBrandedCoverFeeDecision(false)
       this.orderService.updatePrice(this.brandedCheckoutItem, false)
+      this.$scope.$emit(brandedCoverFeeCheckedEvent)
     }
     this.paymentType = type
     this.onPaymentFormStateChange({
