@@ -33,7 +33,7 @@
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/plugin-transform-runtime": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-env": "^7.11.5",
     "@babel/runtime": "^7.5.5",
     "angular-mocks": "^1.7.8",
     "babel-loader": "^8.0.6",

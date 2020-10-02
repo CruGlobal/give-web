@@ -69,7 +69,7 @@ const sharedConfig = {
             presets: [['@babel/preset-env', {
               modules: false,
               targets: {
-                browsers: ['last 1 version', 'ie >= 11']
+                browsers: ['defaults', 'ie >= 11']
               }
             }]],
             plugins: [
