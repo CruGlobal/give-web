@@ -35,7 +35,7 @@
                        mailing-address="$ctrl.donorDetails.mailingAddress"
                        default-payment-type="$ctrl.defaultPaymentType"
                        hide-payment-type-options="$ctrl.hidePaymentTypeOptions"
-                       branded-checkout-item="$ctrl.itemConfig">
+                       branded-checkout-item="$ctrl.showCoverFees === 'true' ? $ctrl.itemConfig : undefined">
       </checkout-step-2>
     </div>
   </div>

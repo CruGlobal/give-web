@@ -177,6 +177,7 @@ export default angular
       donorDetails: '<',
       defaultPaymentType: '<',
       hidePaymentTypeOptions: '<',
+      showCoverFees: '<',
       next: '&',
       onPaymentFailed: '&'
     }
