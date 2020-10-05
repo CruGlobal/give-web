@@ -136,6 +136,7 @@ export default angular
       hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',
       onOrderFailed: '&',
-      language: '@'
+      language: '@',
+      showCoverFees: '@'
     }
   })
