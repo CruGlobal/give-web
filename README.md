@@ -55,6 +55,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     day="<day>"
     default-payment-type="creditCard"
     donor-details="<window variable containing default values for donor's name and contact info>"
+    show-cover-fees="true"
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)">
 </branded-checkout>
@@ -123,6 +124,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
         email: 'email@example.com'
     };
     ```
+- `show-cover-fees` - true if you want to show the checkbox that allows donors to cover processing fees, otherwise leave the attribute off.
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - *Optional* -  provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
   - `$event.purchase` - contains the order's details that are loaded for the thank you page
