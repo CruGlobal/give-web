@@ -76,7 +76,6 @@ describe('product config form component', function () {
     })
 
     it('should handle brandedCoverFeeCheckedEvent for selectable amounts', () => {
-      jest.spyOn($ctrl, 'initItemConfig').mockImplementation(() => {})
       jest.spyOn($ctrl, 'changeAmount').mockImplementation(() => {})
       $ctrl.itemConfig.amount = 50
 
@@ -87,7 +86,6 @@ describe('product config form component', function () {
     })
 
     it('should handle brandedCoverFeeCheckedEvent for custom amounts', () => {
-      jest.spyOn($ctrl, 'initItemConfig').mockImplementation(() => {})
       jest.spyOn($ctrl, 'changeCustomAmount').mockImplementation(() => {})
       jest.spyOn($ctrl, 'updateDecimalPlaces').mockImplementation(() => {})
       $ctrl.itemConfig.amount = 1.02
