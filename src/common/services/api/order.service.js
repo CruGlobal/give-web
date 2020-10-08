@@ -352,6 +352,27 @@ class Order {
     return cartData
   }
 
+  storeBrandedCoverFeeDecision (coverFees) {
+    this.localStorage.setItem('brandedCoverFees', angular.toJson(coverFees))
+  }
+
+  retrieveBrandedCoverFeeDecision () {
+    return angular.fromJson(this.localStorage.getItem('brandedCoverFees'))
+  }
+
+  storeBrandedFeesApplied (feesApplied) {
+    this.localStorage.setItem('brandedFeesApplied', angular.toJson(feesApplied))
+  }
+
+  retrieveBrandedFeesApplied () {
+    return angular.fromJson(this.localStorage.getItem('brandedFeesApplied'))
+  }
+
+  clearBrandedCoverFees () {
+    this.localStorage.removeItem('brandedCoverFees')
+    this.localStorage.removeItem('brandedFeesApplied')
+  }
+
   turnDateStringsToDates (cartData) {
     cartData.items.map(item => {
       if (item.frequency !== 'Single') {
@@ -422,25 +443,29 @@ class Order {
     let newTotal = 0
 
     angular.forEach(cartData.items, (item) => {
-      let newAmount
-      if (cartData.coverFees) {
-        newAmount = item.amountWithFee
-      } else {
-        if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
-          newAmount = this.calculateAmountWithoutFees(item.amount)
-        } else {
-          newAmount = item.amount
-        }
-      }
-
-      item.amount = round(parseFloat(newAmount), 2)
-      item.price = `$${this.$filter('number')(newAmount, 2)}`
-      newTotal += item.amount
+      newTotal += this.updatePrice(item, cartData.coverFees)
     })
 
     cartData.cartTotal = newTotal
     this.recalculateFrequencyTotals(cartData)
     this.storeCartData(cartData)
+  }
+
+  updatePrice (item, coverFees) {
+    let newAmount
+    if (coverFees) {
+      newAmount = item.amountWithFee
+    } else {
+      if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
+        newAmount = this.calculateAmountWithoutFees(item.amount)
+      } else {
+        newAmount = item.amount
+      }
+    }
+
+    item.amount = round(parseFloat(newAmount), 2)
+    item.price = `$${this.$filter('number')(newAmount, 2)}`
+    return item.amount
   }
 
   recalculateFrequencyTotals (cartData) {

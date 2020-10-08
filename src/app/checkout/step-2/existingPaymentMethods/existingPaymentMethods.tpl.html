@@ -10,10 +10,10 @@
     </div>
 
     <div class="panel panel-default tab-toggle mb0 mt"
-         ng-if="$ctrl.cartData && $ctrl.cartData.items && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
+         ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
       <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>
       <div class="panel-body">
-        <cover-fees cart-data="$ctrl.cartData"></cover-fees>
+        <cover-fees cart-data="$ctrl.cartData" branded-checkout-item="$ctrl.brandedCheckoutItem"></cover-fees>
       </div>
     </div>
 

@@ -208,6 +208,25 @@ describe('checkout', () => {
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' })
         expect(self.controller.orderService.updatePaymentMethod).toHaveBeenCalledWith('selected payment method', { creditCard: {} })
       })
+
+      it('should set feesApplied for standard checkout', () => {
+        jest.spyOn(self.controller.orderService, 'updatePaymentMethod').mockReturnValue(Observable.of(''))
+        self.controller.cartData = {}
+        jest.spyOn(self.controller.orderService, 'storeFeesApplied')
+
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: { creditCard: {} }, update: true, paymentMethodToUpdate: 'selected payment method' })
+        expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
+      })
+
+      it('should set feesApplied for branded checkout', () => {
+        jest.spyOn(self.controller.orderService, 'updatePaymentMethod').mockReturnValue(Observable.of(''))
+        self.controller.cartData = undefined
+        self.controller.brandedCheckoutItem = {}
+        jest.spyOn(self.controller.orderService, 'storeBrandedFeesApplied')
+
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: { creditCard: {} }, update: true, paymentMethodToUpdate: 'selected payment method' })
+        expect(self.controller.orderService.storeBrandedFeesApplied).toHaveBeenCalledWith(true)
+      })
     })
   })
 })

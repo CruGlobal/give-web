@@ -147,11 +147,11 @@
   </div>
 
   <div class="panel panel-default mt mb0"
-       ng-if="$ctrl.cartData && $ctrl.cartData.items">
+       ng-if="($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem">
     <div class="panel-body">
       <div class="mb">
         <h4 class="panel-title border-bottom-small" translate>{{'OPTIONAL'}}</h4>
-        <cover-fees cart-data="$ctrl.cartData"></cover-fees>
+        <cover-fees cart-data="$ctrl.cartData" branded-checkout-item="$ctrl.brandedCheckoutItem"></cover-fees>
       </div>
     </div>
   </div>

@@ -6,9 +6,10 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 
-import module from './productConfigForm.component'
+import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { giveGiftParams } from '../giveGiftParams'
+import { brandedCheckoutAmountUpdatedEvent } from '../../../common/components/paymentMethods/coverFees/coverFees.component'
 
 describe('product config form component', function () {
   beforeEach(angular.mock.module(module.name))
@@ -47,6 +48,7 @@ describe('product config form component', function () {
   })
 
   it('to be defined', () => {
+    expect($ctrl.$rootScope).toBeDefined()
     expect($ctrl.$scope).toBeDefined()
     expect($ctrl.$log).toBeDefined()
     expect($ctrl.designationsService).toBeDefined()
@@ -56,15 +58,43 @@ describe('product config form component', function () {
   })
 
   describe('$onInit', () => {
-    it('should call the initialization functions', () => {
+    beforeEach(() => {
       jest.spyOn($ctrl, 'initItemConfig').mockImplementation(() => {})
       jest.spyOn($ctrl, 'loadData').mockImplementation(() => {})
       jest.spyOn($ctrl, 'waitForFormInitialization').mockImplementation(() => {})
+    })
+
+    it('should call the initialization functions', () => {
+      jest.spyOn($ctrl.$rootScope, '$on').mockImplementation(() => {})
       $ctrl.$onInit()
 
       expect($ctrl.initItemConfig).toHaveBeenCalled()
       expect($ctrl.loadData).toHaveBeenCalled()
       expect($ctrl.waitForFormInitialization).toHaveBeenCalled()
+      expect($ctrl.$rootScope.$on).toHaveBeenCalledWith(brandedCoverFeeCheckedEvent, expect.any(Function))
+      $ctrl.$rootScope.$on.mock.calls[0][1]()
+    })
+
+    it('should handle brandedCoverFeeCheckedEvent for selectable amounts', () => {
+      jest.spyOn($ctrl, 'changeAmount').mockImplementation(() => {})
+      $ctrl.itemConfig.amount = 50
+
+      $ctrl.$onInit()
+      $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
+      expect($ctrl.initItemConfig).toHaveBeenCalled()
+      expect($ctrl.changeAmount).toHaveBeenCalledWith(50, true)
+    })
+
+    it('should handle brandedCoverFeeCheckedEvent for custom amounts', () => {
+      jest.spyOn($ctrl, 'changeCustomAmount').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'updateDecimalPlaces').mockImplementation(() => {})
+      $ctrl.itemConfig.amount = 1.02
+
+      $ctrl.$onInit()
+      $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
+      expect($ctrl.initItemConfig).toHaveBeenCalled()
+      expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(1.02, true)
+      expect($ctrl.updateDecimalPlaces).toHaveBeenCalled()
     })
   })
 
@@ -243,6 +273,14 @@ describe('product config form component', function () {
       expect($ctrl.itemConfig.amount).toEqual(14)
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
     })
+
+    it('should update the decimal places', () => {
+      jest.spyOn($ctrl, 'updateDecimalPlaces').mockImplementation(() => {})
+
+      $ctrl.itemConfig.amount = 14
+      $ctrl.setDefaultAmount()
+      expect($ctrl.updateDecimalPlaces).toHaveBeenCalled()
+    })
   })
 
   describe('setDefaultFrequency', () => {
@@ -367,6 +405,12 @@ describe('product config form component', function () {
       expect($ctrl.changingFrequency).toEqual(false)
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' })
     })
+
+    it('should expose the frequency display value to the itemConfig on branded checkout', () => {
+      $ctrl.isBrandedCheckout = true
+      $ctrl.changeFrequency({ name: 'NA', selectAction: '/a', display: 'Single' })
+      expect($ctrl.itemConfig.frequency).toEqual('Single')
+    })
   })
 
   describe('changeAmount()', () => {
@@ -379,6 +423,45 @@ describe('product config form component', function () {
       expect($ctrl.customInputActive).toEqual(false)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 100 })
     })
+
+    it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 50
+      $ctrl.changeAmount(100)
+
+      expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.coverFees).toEqual(false)
+      expect($ctrl.$scope.$emit).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent)
+    })
+
+    it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 50
+      $ctrl.changeAmount(100, true)
+
+      expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
+    })
+
+    it('should not clear cover fees if we did not change the amount', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 50
+      $ctrl.changeAmount(50)
+
+      expect($ctrl.amountChanged).toEqual(false)
+      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
+    })
   })
 
   describe('changeCustomAmount()', () => {
@@ -390,6 +473,45 @@ describe('product config form component', function () {
       expect($ctrl.customAmount).toEqual(300)
       expect($ctrl.customInputActive).toEqual(true)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 300 })
+    })
+
+    it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 51.2
+      $ctrl.changeCustomAmount(1)
+
+      expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.coverFees).toEqual(false)
+      expect($ctrl.$scope.$emit).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent)
+    })
+
+    it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 51.2
+      $ctrl.changeCustomAmount(1, true)
+
+      expect($ctrl.amountChanged).toEqual(true)
+      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
+    })
+
+    it('should not clear cover fees if we did not change the amount', () => {
+      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
+
+      $ctrl.itemConfig.coverFees = true
+      $ctrl.itemConfig.amount = 5
+      $ctrl.changeAmount(5)
+
+      expect($ctrl.amountChanged).toEqual(false)
+      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
   })
 
@@ -596,6 +718,20 @@ describe('product config form component', function () {
     it('should navigate to other giving link', () => {
       $ctrl.giveLink('https://example.com')
       expect($ctrl.$window.location).toEqual('https://example.com')
+    })
+  })
+
+  describe('updateDecimalPlaces', () => {
+    it('should make a whole dollar amount set to 2 decimal places', () => {
+      $ctrl.customAmount = 5
+      $ctrl.updateDecimalPlaces()
+      expect($ctrl.customAmount).toEqual('5.00')
+    })
+
+    it('should make a single decimal place amount set to 2 decimal places', () => {
+      $ctrl.customAmount = 51.2
+      $ctrl.updateDecimalPlaces()
+      expect($ctrl.customAmount).toEqual('51.20')
     })
   })
 })

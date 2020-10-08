@@ -1,8 +1,9 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module from './coverFees.component'
+import module, { brandedCheckoutAmountUpdatedEvent } from './coverFees.component'
 
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { brandedCoverFeeCheckedEvent } from '../../../../app/productConfig/productConfigForm/productConfigForm.component'
 
 describe('coverFees', () => {
   beforeEach(angular.mock.module(module.name))
@@ -20,10 +21,11 @@ describe('coverFees', () => {
       jest.spyOn(self.controller.orderService, 'retrieveFeesApplied').mockImplementation(() => false)
     })
 
-    it('should do nothing if cart data is not defined', () => {
+    it('should do nothing if cart data and brandedCheckoutItem is not defined', () => {
       jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
       jest.spyOn(self.controller, 'updatePrices').mockImplementation(() => {})
       self.controller.cartData = undefined
+      self.controller.brandedCheckoutItem = undefined
 
       self.controller.$onInit()
 
@@ -46,6 +48,15 @@ describe('coverFees', () => {
         .toHaveBeenCalledWith(true, self.controller.cartData.items)
     })
 
+    it('should take prior fee application into account when doing calculation when covering fees - BC', () => {
+      jest.spyOn(self.controller.orderService, 'retrieveBrandedFeesApplied').mockImplementation(() => true)
+      self.controller.brandedCheckoutItem = { coverFees: true }
+      self.controller.cartData = undefined
+      self.controller.$onInit()
+      expect(self.controller.orderService.calculatePricesWithFees)
+        .toHaveBeenCalledWith(true, [self.controller.brandedCheckoutItem])
+    })
+
     it('should take prior fee application into account when doing calculation when session covering fees', () => {
       jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
       jest.spyOn(self.controller.orderService, 'retrieveFeesApplied').mockImplementation(() => true)
@@ -54,6 +65,17 @@ describe('coverFees', () => {
       self.controller.$onInit()
       expect(self.controller.orderService.calculatePricesWithFees)
         .toHaveBeenCalledWith(true, self.controller.cartData.items)
+    })
+
+    it('should take prior fee application into account when doing calculation when session covering fees - BC', () => {
+      jest.spyOn(self.controller.orderService, 'retrieveBrandedCoverFeeDecision').mockImplementation(() => true)
+      jest.spyOn(self.controller.orderService, 'retrieveBrandedFeesApplied').mockImplementation(() => true)
+
+      self.controller.brandedCheckoutItem = { coverFees: false }
+      self.controller.cartData = undefined
+      self.controller.$onInit()
+      expect(self.controller.orderService.calculatePricesWithFees)
+        .toHaveBeenCalledWith(true, [self.controller.brandedCheckoutItem])
     })
 
     it('should not calculate prices if the calculation has already been done', () => {
@@ -73,6 +95,18 @@ describe('coverFees', () => {
       expect(self.controller.updatePrices).toHaveBeenCalled()
     })
 
+    it('should synchronize the brandedCheckoutItem when there is a fee decision in the session', () => {
+      jest.spyOn(self.controller.orderService, 'retrieveBrandedCoverFeeDecision').mockImplementation(() => true)
+      jest.spyOn(self.controller, 'updatePrice').mockImplementation(() => {})
+      self.controller.cartData = undefined
+      self.controller.brandedCheckoutItem = { coverFees: null }
+
+      self.controller.$onInit()
+
+      expect(self.controller.brandedCheckoutItem.coverFees).toEqual(true)
+      expect(self.controller.updatePrice).toHaveBeenCalled()
+    })
+
     it('should synchronize the session if there is a fee decision in the cart data', () => {
       jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => undefined)
       jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
@@ -81,6 +115,17 @@ describe('coverFees', () => {
       self.controller.$onInit()
 
       expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(true)
+    })
+
+    it('should synchronize the session if there is a fee decision in the brandedCheckoutItem', () => {
+      jest.spyOn(self.controller.orderService, 'retrieveBrandedCoverFeeDecision').mockImplementation(() => undefined)
+      jest.spyOn(self.controller.orderService, 'storeBrandedCoverFeeDecision').mockImplementation(() => {})
+      self.controller.brandedCheckoutItem = { coverFees: true }
+      self.controller.cartData = undefined
+
+      self.controller.$onInit()
+
+      expect(self.controller.orderService.storeBrandedCoverFeeDecision).toHaveBeenCalledWith(true)
     })
 
     it('should store the cart data on page load', () => {
@@ -108,6 +153,23 @@ describe('coverFees', () => {
       self.controller.$onInit()
       expect(self.controller.cartData.cartTotal).toEqual(25000)
     })
+
+    it('should listen for changes on amount in branded checkout', () => {
+      jest.spyOn(self.controller.$rootScope, '$on').mockImplementation(() => {})
+      self.controller.$onInit()
+      expect(self.controller.$rootScope.$on).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent, expect.any(Function))
+      self.controller.$rootScope.$on.mock.calls[0][1]()
+    })
+
+    it('should reload the cover fees component if gift amount changed in branded checkout', () => {
+      jest.spyOn(self.controller, '$onInit')
+      self.controller.feesCalculated = true
+      self.controller.cartData = undefined
+      self.controller.$rootScope.$emit(brandedCheckoutAmountUpdatedEvent)
+
+      expect(self.controller.$onInit).toHaveBeenCalled()
+      expect(self.controller.feesCalculated).toEqual(false)
+    })
   })
 
   describe('updatePrices', () => {
@@ -122,6 +184,32 @@ describe('coverFees', () => {
       jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
       self.controller.updatePrices()
       expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+    })
+  })
+
+  describe('updatePrice', () => {
+    beforeEach(() => {
+      self.controller.brandedCheckoutItem = { coverFees: true }
+    })
+    it('should update the price', () => {
+      jest.spyOn(self.controller.orderService, 'updatePrice').mockImplementation(() => {})
+      self.controller.updatePrice()
+      expect(self.controller.orderService.updatePrice)
+        .toHaveBeenCalledWith(self.controller.brandedCheckoutItem, self.controller.brandedCheckoutItem.coverFees)
+    })
+
+    it('should store cover fee decision', () => {
+      jest.spyOn(self.controller.orderService, 'updatePrice').mockImplementation(() => {})
+      jest.spyOn(self.controller.orderService, 'storeBrandedCoverFeeDecision').mockImplementation(() => {})
+      self.controller.updatePrice()
+      expect(self.controller.orderService.storeBrandedCoverFeeDecision).toHaveBeenCalledWith(true)
+    })
+
+    it('should notify listeners that the checkbox was checked', () => {
+      jest.spyOn(self.controller.orderService, 'updatePrice').mockImplementation(() => {})
+      jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
+      self.controller.updatePrice()
+      expect(self.controller.$scope.$emit).toHaveBeenCalledWith(brandedCoverFeeCheckedEvent)
     })
   })
 })

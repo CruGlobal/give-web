@@ -11,7 +11,8 @@
                          submitted="$ctrl.submitted"
                          on-state-change="$ctrl.onGiftConfigStateChange(state)"
                          disable-session-restart="true"
-                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
+                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
+                         is-branded-checkout="true">
     </product-config-form>
     <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
       <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
@@ -33,7 +34,8 @@
                        on-state-change="$ctrl.onPaymentStateChange(state)"
                        mailing-address="$ctrl.donorDetails.mailingAddress"
                        default-payment-type="$ctrl.defaultPaymentType"
-                       hide-payment-type-options="$ctrl.hidePaymentTypeOptions">
+                       hide-payment-type-options="$ctrl.hidePaymentTypeOptions"
+                       branded-checkout-item="$ctrl.showCoverFees === 'true' ? $ctrl.itemConfig : undefined">
       </checkout-step-2>
     </div>
   </div>

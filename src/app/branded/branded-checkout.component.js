@@ -12,6 +12,7 @@ import step2 from './step-2/branded-checkout-step-2.component'
 import thankYouSummary from 'app/thankYou/summary/thankYouSummary.component'
 
 import sessionService from 'common/services/session/session.service'
+import orderService from 'common/services/api/order.service'
 
 import 'common/lib/fakeLocalStorage'
 
@@ -21,13 +22,16 @@ const componentName = 'brandedCheckout'
 
 class BrandedCheckoutController {
   /* @ngInject */
-  constructor ($window, analyticsFactory, tsysService, sessionService, envService, $translate) {
+  constructor ($window, analyticsFactory, tsysService, sessionService, envService, orderService, $translate) {
     this.$window = $window
     this.analyticsFactory = analyticsFactory
     this.tsysService = tsysService
     this.sessionService = sessionService
     this.envService = envService
+    this.orderService = orderService
     this.$translate = $translate
+
+    this.orderService.clearBrandedCoverFees()
   }
 
   $onInit () {
@@ -106,6 +110,7 @@ export default angular
     step2.name,
     thankYouSummary.name,
     sessionService.name,
+    orderService.name,
     uibModal,
     'environment',
     'pascalprecht.translate'
@@ -131,6 +136,7 @@ export default angular
       hidePaymentTypeOptions: '@',
       onOrderCompleted: '&',
       onOrderFailed: '&',
-      language: '@'
+      language: '@',
+      showCoverFees: '@'
     }
   })
