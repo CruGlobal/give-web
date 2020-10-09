@@ -20,15 +20,15 @@ class CoverFeesController {
     this.cartService = cartService
     this.feesCalculated = false
 
-    this.$onInit()
-  }
-
-  $onInit () {
     this.$rootScope.$on(brandedCheckoutAmountUpdatedEvent, () => {
       this.feesCalculated = false
       this.$onInit()
     })
 
+    this.$onInit()
+  }
+
+  $onInit () {
     if (this.cartData) {
       const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
       const feesApplied = this.orderService.retrieveFeesApplied()
