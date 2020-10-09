@@ -154,13 +154,6 @@ describe('coverFees', () => {
       expect(self.controller.cartData.cartTotal).toEqual(25000)
     })
 
-    it('should listen for changes on amount in branded checkout', () => {
-      jest.spyOn(self.controller.$rootScope, '$on').mockImplementation(() => {})
-      self.controller.$onInit()
-      expect(self.controller.$rootScope.$on).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent, expect.any(Function))
-      self.controller.$rootScope.$on.mock.calls[0][1]()
-    })
-
     it('should reload the cover fees component if gift amount changed in branded checkout', () => {
       jest.spyOn(self.controller, '$onInit')
       self.controller.feesCalculated = true
