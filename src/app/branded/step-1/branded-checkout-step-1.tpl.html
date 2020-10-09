@@ -11,8 +11,7 @@
                          submitted="$ctrl.submitted"
                          on-state-change="$ctrl.onGiftConfigStateChange(state)"
                          disable-session-restart="true"
-                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
-                         is-branded-checkout="true">
+                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
     </product-config-form>
     <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
       <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>

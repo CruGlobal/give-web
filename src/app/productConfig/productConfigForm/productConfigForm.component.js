@@ -41,7 +41,7 @@ const componentName = 'productConfigForm'
 
 class ProductConfigFormController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory) {
+  constructor ($rootScope, $scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory, envService) {
     this.$rootScope = $rootScope
     this.$scope = $scope
     this.$log = $log
@@ -56,6 +56,7 @@ class ProductConfigFormController {
     this.startDate = startDate
     this.startMonth = startMonth
     this.analyticsFactory = analyticsFactory
+    this.envService = envService
     this.amountChanged = false
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000]
@@ -225,7 +226,7 @@ class ProductConfigFormController {
     const lastFrequency = this.productData.frequency
     this.productData.frequency = product.name
 
-    if (this.isBrandedCheckout) {
+    if (this.envService.read('isBrandedCheckout')) {
       this.itemConfig.frequency = product.display
     }
 
@@ -380,7 +381,6 @@ export default angular
       isEdit: '<',
       uri: '<',
       defaultFrequency: '<',
-      isBrandedCheckout: '<',
       disableSessionRestart: '@',
       updateQueryParam: '&',
       submitted: '<',
