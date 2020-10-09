@@ -397,7 +397,12 @@ describe('product config form component', function () {
     })
 
     it('should expose the frequency display value to the itemConfig on branded checkout', () => {
-      $ctrl.isBrandedCheckout = true
+      jest.spyOn($ctrl.envService, 'read').mockImplementation((key) => {
+        if (key === 'isBrandedCheckout') {
+          return true
+        }
+        return false
+      })
       $ctrl.changeFrequency({ name: 'NA', selectAction: '/a', display: 'Single' })
       expect($ctrl.itemConfig.frequency).toEqual('Single')
     })
