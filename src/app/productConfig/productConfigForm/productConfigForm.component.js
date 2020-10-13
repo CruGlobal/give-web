@@ -283,6 +283,9 @@ class ProductConfigFormController {
     if (this.itemConfig.amount && amount) {
       this.amountChanged = this.itemConfig.amount !== amount
     }
+    if (!this.itemConfig.amount && amount) {
+      this.amountChanged = true
+    }
   }
 
   changeStartDay (day, month) {

@@ -522,6 +522,12 @@ describe('product config form component', function () {
       $ctrl.checkAmountChanged(2)
       expect($ctrl.amountChanged).toEqual(false)
     })
+
+    it('returns true if the item config amount was not defined but the amount is', () => {
+      $ctrl.itemConfig = {}
+      $ctrl.checkAmountChanged(5)
+      expect($ctrl.amountChanged).toEqual(true)
+    })
   })
 
   describe('changeStartDay()', () => {
