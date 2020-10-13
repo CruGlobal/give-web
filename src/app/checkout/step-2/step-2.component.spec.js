@@ -222,10 +222,10 @@ describe('checkout', () => {
         jest.spyOn(self.controller.orderService, 'updatePaymentMethod').mockReturnValue(Observable.of(''))
         self.controller.cartData = undefined
         self.controller.brandedCheckoutItem = {}
-        jest.spyOn(self.controller.orderService, 'storeBrandedFeesApplied')
+        jest.spyOn(self.controller.orderService, 'storeFeesApplied')
 
         self.controller.onPaymentFormStateChange({ state: 'loading', payload: { creditCard: {} }, update: true, paymentMethodToUpdate: 'selected payment method' })
-        expect(self.controller.orderService.storeBrandedFeesApplied).toHaveBeenCalledWith(true)
+        expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
       })
     })
   })

@@ -31,7 +31,7 @@ class BrandedCheckoutController {
     this.orderService = orderService
     this.$translate = $translate
 
-    this.orderService.clearBrandedCoverFees()
+    this.orderService.clearCoverFees()
   }
 
   $onInit () {

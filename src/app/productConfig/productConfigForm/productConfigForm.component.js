@@ -259,7 +259,7 @@ class ProductConfigFormController {
     this.customAmount = ''
     this.customInputActive = false
     if (!retainCoverFees && this.amountChanged) {
-      this.orderService.clearBrandedCoverFees()
+      this.orderService.clearCoverFees()
       this.itemConfig.coverFees = false
       this.$scope.$emit(brandedCheckoutAmountUpdatedEvent)
     }
@@ -272,7 +272,7 @@ class ProductConfigFormController {
     this.customAmount = amount
     this.customInputActive = true
     if (!retainCoverFees && this.amountChanged) {
-      this.orderService.clearBrandedCoverFees()
+      this.orderService.clearCoverFees()
       this.itemConfig.coverFees = false
       this.$scope.$emit(brandedCheckoutAmountUpdatedEvent)
     }

@@ -36,7 +36,7 @@ class PaymentMethodFormController {
     }
     if (this.brandedCheckoutItem && type === 'bankAccount') {
       this.brandedCheckoutItem.coverFees = false
-      this.orderService.storeBrandedCoverFeeDecision(false)
+      this.orderService.storeCoverFeeDecision(false)
       this.orderService.updatePrice(this.brandedCheckoutItem, false)
       this.$scope.$emit(brandedCoverFeeCheckedEvent)
     }
