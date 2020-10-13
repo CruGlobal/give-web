@@ -74,7 +74,7 @@ class Step2Controller {
         if (this.cartData) {
           this.orderService.storeFeesApplied(true)
         } else if (this.brandedCheckoutItem) {
-          this.orderService.storeBrandedFeesApplied(true)
+          this.orderService.storeFeesApplied(true)
         }
 
         if (!$event.stayOnStep) {

@@ -65,7 +65,7 @@ class BrandedCheckoutStep1Controller {
         // add campaign page
         this.itemConfig['campaign-page'] = this.campaignPage
 
-        if (this.orderService.retrieveBrandedCoverFeeDecision()) {
+        if (this.orderService.retrieveCoverFeeDecision()) {
           this.itemConfig.priceWithFee = item.price
           this.itemConfig.price = item.price
           this.itemConfig.amountWithFee = item.amount

@@ -127,7 +127,7 @@ describe('branded checkout step 1', () => {
     })
 
     it('should set amounts that coverFees cares about', () => {
-      jest.spyOn($ctrl.orderService, 'retrieveBrandedCoverFeeDecision').mockReturnValue(true)
+      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
       $ctrl.initCart()
 
       expect($ctrl.itemConfig.priceWithFee).toEqual('$1.02')

@@ -38,8 +38,7 @@ describe('checkout', () => {
           retrieveCardSecurityCode: () => self.storedCvv,
           clearCardSecurityCodes: jest.fn(),
           clearCoverFees: jest.fn(),
-          clearCartData: jest.fn(),
-          clearBrandedCoverFees: jest.fn()
+          clearCartData: jest.fn()
         },
         $window: {
           scrollTo: jest.fn()
@@ -429,7 +428,6 @@ describe('checkout', () => {
 
           expect(self.controller.orderService.clearCoverFees).toHaveBeenCalled()
           expect(self.controller.orderService.clearCartData).toHaveBeenCalled()
-          expect(self.controller.orderService.clearBrandedCoverFees).toHaveBeenCalled()
         })
       })
     })

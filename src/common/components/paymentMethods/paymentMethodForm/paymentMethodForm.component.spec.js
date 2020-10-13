@@ -46,7 +46,7 @@ describe('paymentMethodForm', () => {
       jest.spyOn(self.controller, 'onPaymentFormStateChange').mockImplementation(() => {})
       jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
       jest.spyOn(self.controller.orderService, 'updatePrice').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'storeBrandedCoverFeeDecision').mockImplementation(() => {})
+      jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
     })
 
     it('should set the payment type to credit card', () => {
@@ -93,7 +93,7 @@ describe('paymentMethodForm', () => {
       self.controller.changePaymentType('bankAccount')
 
       expect(self.controller.brandedCheckoutItem.coverFees).toEqual(false)
-      expect(self.controller.orderService.storeBrandedCoverFeeDecision).toHaveBeenCalledWith(false)
+      expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(false)
       expect(self.controller.orderService.updatePrice).toHaveBeenCalledWith(self.controller.brandedCheckoutItem, false)
       expect(self.controller.$scope.$emit).toHaveBeenCalledWith(brandedCoverFeeCheckedEvent)
     })
@@ -104,7 +104,7 @@ describe('paymentMethodForm', () => {
       self.controller.changePaymentType('creditCard')
 
       expect(self.controller.brandedCheckoutItem.coverFees).toEqual(true)
-      expect(self.controller.orderService.storeBrandedCoverFeeDecision).not.toHaveBeenCalled()
+      expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
       expect(self.controller.orderService.updatePrice).not.toHaveBeenCalled()
     })
   })

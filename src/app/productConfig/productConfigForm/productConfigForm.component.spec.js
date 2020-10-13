@@ -420,7 +420,7 @@ describe('product config form component', function () {
     })
 
     it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -433,7 +433,7 @@ describe('product config form component', function () {
     })
 
     it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -446,7 +446,7 @@ describe('product config form component', function () {
     })
 
     it('should not clear cover fees if we did not change the amount', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -471,7 +471,7 @@ describe('product config form component', function () {
     })
 
     it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -484,7 +484,7 @@ describe('product config form component', function () {
     })
 
     it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -497,7 +497,7 @@ describe('product config form component', function () {
     })
 
     it('should not clear cover fees if we did not change the amount', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
