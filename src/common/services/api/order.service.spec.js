@@ -1050,7 +1050,6 @@ describe('order service', () => {
         { amount: 3 }
       ]
 
-      jest.spyOn(self.orderService, 'calculatePriceWithFees').mockImplementation(input => input)
       jest.spyOn(self.orderService, 'calculateAmountWithFees').mockImplementation(input => input)
 
       expect(cartItems[0].amountWithFee).not.toBeDefined()
@@ -1062,9 +1061,6 @@ describe('order service', () => {
       expect(cartItems[1].amountWithFee).toBeDefined()
       expect(cartItems[2].amountWithFee).toBeDefined()
 
-      expect(self.orderService.calculatePriceWithFees).toHaveBeenCalledWith(2)
-      expect(self.orderService.calculatePriceWithFees).toHaveBeenCalledWith(1)
-      expect(self.orderService.calculatePriceWithFees).toHaveBeenCalledWith(3)
       expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(2)
       expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(1)
       expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(3)
@@ -1081,23 +1077,6 @@ describe('order service', () => {
       expect(cartItems[0].amountWithFee).toEqual(2.05)
       expect(cartItems[1].amountWithFee).toEqual(1.02)
       expect(cartItems[2].amountWithFee).toEqual(3.07)
-    })
-  })
-
-  describe('calculatePriceWithFees', () => {
-    it('Should calculate the proper amount', () => {
-      let priceWithFees = self.orderService.calculatePriceWithFees(2)
-      expect(priceWithFees).toEqual('$2.05')
-      priceWithFees = self.orderService.calculatePriceWithFees(10)
-      expect(priceWithFees).toEqual('$10.24')
-      priceWithFees = self.orderService.calculatePriceWithFees(100)
-      expect(priceWithFees).toEqual('$102.41')
-      priceWithFees = self.orderService.calculatePriceWithFees(1000)
-      expect(priceWithFees).toEqual('$1,024.07')
-      priceWithFees = self.orderService.calculatePriceWithFees(10000)
-      expect(priceWithFees).toEqual('$10,240.66')
-      priceWithFees = self.orderService.calculatePriceWithFees(100000)
-      expect(priceWithFees).toEqual('$102,406.55')
     })
   })
 
