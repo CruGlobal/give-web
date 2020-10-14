@@ -87,14 +87,12 @@ describe('product config form component', function () {
 
     it('should handle brandedCoverFeeCheckedEvent for custom amounts', () => {
       jest.spyOn($ctrl, 'changeCustomAmount').mockImplementation(() => {})
-      jest.spyOn($ctrl, 'updateDecimalPlaces').mockImplementation(() => {})
       $ctrl.itemConfig.amount = 1.02
 
       $ctrl.$onInit()
       $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
       expect($ctrl.initItemConfig).toHaveBeenCalled()
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(1.02, true)
-      expect($ctrl.updateDecimalPlaces).toHaveBeenCalled()
     })
   })
 
@@ -273,14 +271,6 @@ describe('product config form component', function () {
       expect($ctrl.itemConfig.amount).toEqual(14)
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
     })
-
-    it('should update the decimal places', () => {
-      jest.spyOn($ctrl, 'updateDecimalPlaces').mockImplementation(() => {})
-
-      $ctrl.itemConfig.amount = 14
-      $ctrl.setDefaultAmount()
-      expect($ctrl.updateDecimalPlaces).toHaveBeenCalled()
-    })
   })
 
   describe('setDefaultFrequency', () => {
@@ -407,7 +397,12 @@ describe('product config form component', function () {
     })
 
     it('should expose the frequency display value to the itemConfig on branded checkout', () => {
-      $ctrl.isBrandedCheckout = true
+      jest.spyOn($ctrl.envService, 'read').mockImplementation((key) => {
+        if (key === 'isBrandedCheckout') {
+          return true
+        }
+        return false
+      })
       $ctrl.changeFrequency({ name: 'NA', selectAction: '/a', display: 'Single' })
       expect($ctrl.itemConfig.frequency).toEqual('Single')
     })
@@ -425,7 +420,7 @@ describe('product config form component', function () {
     })
 
     it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -438,7 +433,7 @@ describe('product config form component', function () {
     })
 
     it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -451,7 +446,7 @@ describe('product config form component', function () {
     })
 
     it('should not clear cover fees if we did not change the amount', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -476,7 +471,7 @@ describe('product config form component', function () {
     })
 
     it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -489,7 +484,7 @@ describe('product config form component', function () {
     })
 
     it('should not clear cover fees if we are explicitly retaining them and the amount changed', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -502,7 +497,7 @@ describe('product config form component', function () {
     })
 
     it('should not clear cover fees if we did not change the amount', () => {
-      jest.spyOn($ctrl.orderService, 'clearBrandedCoverFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.coverFees = true
@@ -526,6 +521,12 @@ describe('product config form component', function () {
       $ctrl.itemConfig = { amount: 2 }
       $ctrl.checkAmountChanged(2)
       expect($ctrl.amountChanged).toEqual(false)
+    })
+
+    it('returns true if the item config amount was not defined but the amount is', () => {
+      $ctrl.itemConfig = {}
+      $ctrl.checkAmountChanged(5)
+      expect($ctrl.amountChanged).toEqual(true)
     })
   })
 
@@ -718,20 +719,6 @@ describe('product config form component', function () {
     it('should navigate to other giving link', () => {
       $ctrl.giveLink('https://example.com')
       expect($ctrl.$window.location).toEqual('https://example.com')
-    })
-  })
-
-  describe('updateDecimalPlaces', () => {
-    it('should make a whole dollar amount set to 2 decimal places', () => {
-      $ctrl.customAmount = 5
-      $ctrl.updateDecimalPlaces()
-      expect($ctrl.customAmount).toEqual('5.00')
-    })
-
-    it('should make a single decimal place amount set to 2 decimal places', () => {
-      $ctrl.customAmount = 51.2
-      $ctrl.updateDecimalPlaces()
-      expect($ctrl.customAmount).toEqual('51.20')
     })
   })
 })

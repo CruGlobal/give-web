@@ -20,40 +20,34 @@ class CoverFeesController {
     this.cartService = cartService
     this.feesCalculated = false
 
-    this.$onInit()
-  }
-
-  $onInit () {
     this.$rootScope.$on(brandedCheckoutAmountUpdatedEvent, () => {
       this.feesCalculated = false
       this.$onInit()
     })
 
-    if (this.cartData) {
-      const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
-      const feesApplied = this.orderService.retrieveFeesApplied()
-      this.determineFeesCalculated(sessionCoverFees, this.cartData, this.cartData.items, feesApplied)
+    this.$onInit()
+  }
 
-      // Intentionally using == null here to avoid checking both null and undefined
-      if (sessionCoverFees !== undefined && this.cartData.coverFees == null) {
-        this.cartData.coverFees = sessionCoverFees
-        this.updatePrices()
-      } else if (this.cartData.coverFees !== null) {
-        this.orderService.storeCoverFeeDecision(this.cartData.coverFees)
-      }
+  $onInit () {
+    const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
+    const feesApplied = this.orderService.retrieveFeesApplied()
+    if (this.cartData) {
+      this.initializeData(sessionCoverFees, this.cartData, this.cartData.items, feesApplied)
       this.orderService.storeCartData(this.cartData)
     } else if (this.brandedCheckoutItem) {
-      const sessionCoverFees = this.orderService.retrieveBrandedCoverFeeDecision()
-      const feesApplied = this.orderService.retrieveBrandedFeesApplied()
-      this.determineFeesCalculated(sessionCoverFees, this.brandedCheckoutItem, [this.brandedCheckoutItem], feesApplied)
+      this.initializeData(sessionCoverFees, this.brandedCheckoutItem, [this.brandedCheckoutItem], feesApplied)
+    }
+  }
 
-      // Intentionally using == null here to avoid checking both null and undefined
-      if (sessionCoverFees !== undefined && this.brandedCheckoutItem.coverFees == null) {
-        this.brandedCheckoutItem.coverFees = sessionCoverFees
-        this.updatePrice()
-      } else if (this.brandedCheckoutItem.coverFees !== null) {
-        this.orderService.storeBrandedCoverFeeDecision(this.brandedCheckoutItem.coverFees)
-      }
+  initializeData (sessionCoverFees, container, items, feesApplied) {
+    this.determineFeesCalculated(sessionCoverFees, container, items, feesApplied)
+
+    // Intentionally using == null here to avoid checking both null and undefined
+    if (sessionCoverFees !== undefined && container.coverFees == null) {
+      container.coverFees = sessionCoverFees
+      this.updatePrices()
+    } else if (container.coverFees !== null) {
+      this.orderService.storeCoverFeeDecision(container.coverFees)
     }
   }
 
@@ -68,14 +62,14 @@ class CoverFeesController {
   }
 
   updatePrices () {
-    this.orderService.updatePrices(this.cartData)
-    this.$scope.$emit(cartUpdatedEvent)
-  }
-
-  updatePrice () {
-    this.orderService.storeBrandedCoverFeeDecision(this.brandedCheckoutItem.coverFees)
-    this.orderService.updatePrice(this.brandedCheckoutItem, this.brandedCheckoutItem.coverFees)
-    this.$scope.$emit(brandedCoverFeeCheckedEvent)
+    if (this.brandedCheckoutItem) {
+      this.orderService.storeCoverFeeDecision(this.brandedCheckoutItem.coverFees)
+      this.orderService.updatePrice(this.brandedCheckoutItem, this.brandedCheckoutItem.coverFees)
+      this.$scope.$emit(brandedCoverFeeCheckedEvent)
+    } else if (this.cartData) {
+      this.orderService.updatePrices(this.cartData)
+      this.$scope.$emit(cartUpdatedEvent)
+    }
   }
 }
 
