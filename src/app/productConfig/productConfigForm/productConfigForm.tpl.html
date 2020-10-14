@@ -90,7 +90,6 @@
                          ng-model="$ctrl.customAmount"
                          ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                          ng-focus="$ctrl.customInputActive = true;"
-                         ng-blur="$ctrl.updateDecimalPlaces()"
                          ng-required="$ctrl.customInputActive"
                          placeholder="{{'OTHER_PLACEHOLDER' | translate}}" />
                 </label>
@@ -129,7 +128,6 @@
                        ng-model="$ctrl.customAmount"
                        ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
                        ng-focus="$ctrl.customInputActive = true;"
-                       ng-blur="$ctrl.updateDecimalPlaces()"
                        tabindex="-1"
                        placeholder="{{'Other' | translate}}"
                        required />

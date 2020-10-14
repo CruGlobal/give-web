@@ -73,7 +73,6 @@ class ProductConfigFormController {
         this.changeAmount(this.itemConfig.amount, true)
       } else {
         this.changeCustomAmount(this.itemConfig.amount, true)
-        this.updateDecimalPlaces()
       }
     })
   }
@@ -173,7 +172,6 @@ class ProductConfigFormController {
     if (this.itemConfig.amount) {
       if (amountOptions.indexOf(this.itemConfig.amount) === -1) {
         this.changeCustomAmount(this.itemConfig.amount)
-        this.updateDecimalPlaces()
       }
     } else {
       this.itemConfig.amount = amountOptions[0]
@@ -294,10 +292,6 @@ class ProductConfigFormController {
     this.errorAlreadyInCart = false
     this.updateQueryParam({ key: giveGiftParams.day, value: day })
     this.updateQueryParam({ key: giveGiftParams.month, value: month })
-  }
-
-  updateDecimalPlaces () {
-    this.customAmount = this.$filter('number')(this.customAmount, 2)
   }
 
   saveGiftToCart () {
