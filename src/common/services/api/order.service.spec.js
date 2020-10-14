@@ -1050,20 +1050,14 @@ describe('order service', () => {
         { amount: 3 }
       ]
 
-      jest.spyOn(self.orderService, 'calculateAmountWithFees').mockImplementation(input => input)
-
       expect(cartItems[0].amountWithFee).not.toBeDefined()
       expect(cartItems[1].amountWithFee).not.toBeDefined()
       expect(cartItems[2].amountWithFee).not.toBeDefined()
       self.orderService.calculatePricesWithFees(false, cartItems)
 
-      expect(cartItems[0].amountWithFee).toBeDefined()
-      expect(cartItems[1].amountWithFee).toBeDefined()
-      expect(cartItems[2].amountWithFee).toBeDefined()
-
-      expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(2)
-      expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(1)
-      expect(self.orderService.calculateAmountWithFees).toHaveBeenCalledWith(3)
+      expect(cartItems[0].amountWithFee).toEqual(2.05)
+      expect(cartItems[1].amountWithFee).toEqual(1.02)
+      expect(cartItems[2].amountWithFee).toEqual(3.07)
     })
 
     it('Should recognize that the current amount is the amount with fees', () => {
