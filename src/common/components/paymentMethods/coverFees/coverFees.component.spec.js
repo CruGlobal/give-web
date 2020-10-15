@@ -163,20 +163,57 @@ describe('coverFees', () => {
       expect(self.controller.$onInit).toHaveBeenCalled()
       expect(self.controller.feesCalculated).toEqual(false)
     })
+
+    it('should configure a common "item" object for the template if the cart has one item', () => {
+      const cartItem = {}
+      self.controller.cartData = { items: [cartItem], coverFees: true }
+      const expectedItem = cartItem
+      expectedItem.coverFees = true
+
+      self.controller.$onInit()
+      expect(self.controller.item).toEqual(expectedItem)
+    })
+
+    it('should configure a common "item" object for the template if we are in branded checkout', () => {
+      const brandedCheckoutItem = { coverFees: true }
+      self.controller.brandedCheckoutItem = brandedCheckoutItem
+      self.controller.cartData = undefined
+
+      self.controller.$onInit()
+      expect(self.controller.item).toEqual(brandedCheckoutItem)
+    })
+
+    it('should not configure a common "item" object if the cart has multiple items', () => {
+      self.controller.cartData = { items: [{}, {}] }
+      self.controller.$onInit()
+      expect(self.controller.item).not.toBeDefined()
+    })
   })
 
   describe('updatePrices', () => {
-    it('should should update the prices', () => {
+    beforeEach(() => {
       jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
+    })
+
+    it('should should update the prices', () => {
       self.controller.updatePrices()
       expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(self.controller.cartData)
     })
 
     it('should notify listeners that the cart was updated', () => {
-      jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
       jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
       self.controller.updatePrices()
       expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+    })
+
+    it('should keep the coverFees decision in sync with the template object', () => {
+      self.controller.brandedCheckoutItem = undefined
+      self.controller.cartData.coverFees = false
+      self.controller.item = { coverFees: true }
+
+      self.controller.updatePrices()
+
+      expect(self.controller.cartData.coverFees).toEqual(true)
     })
 
     it('should update the price for branded checkout', () => {
