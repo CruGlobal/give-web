@@ -398,18 +398,11 @@ class Order {
     angular.forEach(cartItems, (item) => {
       if (feesApplied) {
         item.amountWithFee = item.amount
-        item.priceWithFee = item.price
       } else {
         item.amountWithFee = round(this.calculateAmountWithFees(item.amount), 2)
-        item.priceWithFee = this.calculatePriceWithFees(item.amount)
       }
     })
     return true
-  }
-
-  calculatePriceWithFees (originalAmount) {
-    const newAmount = this.calculateAmountWithFees(originalAmount)
-    return `$${this.$filter('number')(newAmount, 2)}`
   }
 
   calculateAmountWithFees (originalAmount) {
@@ -419,13 +412,8 @@ class Order {
 
   updatePrices (cartData) {
     this.storeCoverFeeDecision(cartData.coverFees)
-    let newTotal = 0
 
-    angular.forEach(cartData.items, (item) => {
-      newTotal += this.updatePrice(item, cartData.coverFees)
-    })
-
-    cartData.cartTotal = newTotal
+    cartData.cartTotal = cartData.items.reduce((total, item) => total + this.updatePrice(item, cartData.coverFees), 0)
     this.recalculateFrequencyTotals(cartData)
     this.storeCartData(cartData)
   }
