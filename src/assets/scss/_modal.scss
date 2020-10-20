@@ -17,7 +17,7 @@
     }
 
     button.close {
-      background: url("assets/img/close-mobile.png");
+      background: url("/assets/img/close-mobile.png");
       background-size: contain;
       width: 27px;
       height: 27px;
@@ -34,7 +34,7 @@
 
     @media (min-width: 992px) {
       button.close {
-        background: url("assets/img/close-icon.png");
+        background: url("/assets/img/close-icon.png");
         background-size: contain;
         width: 36px;
         height: 36px;
