@@ -80,7 +80,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
 
   $translateProvider.useSanitizeValueStrategy('sanitizeParameters')
   $translateProvider.translations('en', {
-    GIVE_GIFT_HEADER: 'Give Gift',
+    GIVE_GIFT_HEADER: 'Give a Gift',
     LOADING_GIFT_DETAILS: 'Loading gift details...',
     LOADING_ERROR: 'There was an error loading the details needed to configure your gift. You may <a href ng-click="{{loadData}}">try again</a>. If you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     FROM_WHAT_COUNTRY: 'We are so grateful for your generosity. We recognize that many people from different countries are partnering with our ministry for the fulfillment of the Great Commission. From which country would you like to give?',
