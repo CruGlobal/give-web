@@ -160,7 +160,7 @@ describe('cart', () => {
     })
 
     it('should recognize when a donor has covered fees', () => {
-      self.controller.cartService.get.mockReturnValue(Observable.of({}))
+      self.controller.cartService.get.mockReturnValue(Observable.of({ items: [] }))
       jest.spyOn(self.controller.orderService, 'retrieveCartData').mockImplementation(() => null)
       jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
       self.controller.loadCart(true)

@@ -31,13 +31,18 @@ import { giveGiftParams } from '../giveGiftParams'
 import loading from 'common/components/loading/loading.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
 
+import { brandedCheckoutAmountUpdatedEvent } from 'common/components/paymentMethods/coverFees/coverFees.component'
+
 import template from './productConfigForm.tpl.html'
+
+export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent'
 
 const componentName = 'productConfigForm'
 
 class ProductConfigFormController {
   /* @ngInject */
-  constructor ($scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory) {
+  constructor ($rootScope, $scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory, envService) {
+    this.$rootScope = $rootScope
     this.$scope = $scope
     this.$log = $log
     this.$filter = $filter
@@ -51,6 +56,7 @@ class ProductConfigFormController {
     this.startDate = startDate
     this.startMonth = startMonth
     this.analyticsFactory = analyticsFactory
+    this.envService = envService
     this.amountChanged = false
 
     this.selectableAmounts = [50, 100, 250, 500, 1000, 5000]
@@ -60,6 +66,15 @@ class ProductConfigFormController {
     this.initItemConfig()
     this.loadData()
     this.waitForFormInitialization()
+
+    this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
+      this.initItemConfig()
+      if (this.selectableAmounts.includes(this.itemConfig.amount)) {
+        this.changeAmount(this.itemConfig.amount, true)
+      } else {
+        this.changeCustomAmount(this.itemConfig.amount, true)
+      }
+    })
   }
 
   $onChanges (changes) {
@@ -210,6 +225,11 @@ class ProductConfigFormController {
     this.errorChangingFrequency = false
     const lastFrequency = this.productData.frequency
     this.productData.frequency = product.name
+
+    if (this.envService.read('isBrandedCheckout')) {
+      this.itemConfig.frequency = product.display
+    }
+
     this.updateQueryParam({ key: giveGiftParams.frequency, value: product.name })
     if (product.selectAction) {
       this.changingFrequency = true
@@ -232,26 +252,39 @@ class ProductConfigFormController {
     }
   }
 
-  changeAmount (amount) {
+  changeAmount (amount, retainCoverFees) {
     this.itemConfigForm.$setDirty()
     this.checkAmountChanged(amount)
     this.itemConfig.amount = amount
     this.customAmount = ''
     this.customInputActive = false
+    if (!retainCoverFees && this.amountChanged) {
+      this.orderService.clearCoverFees()
+      this.itemConfig.coverFees = false
+      this.$scope.$emit(brandedCheckoutAmountUpdatedEvent)
+    }
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 
-  changeCustomAmount (amount) {
+  changeCustomAmount (amount, retainCoverFees) {
     this.checkAmountChanged(amount)
     this.itemConfig.amount = amount
     this.customAmount = amount
     this.customInputActive = true
+    if (!retainCoverFees && this.amountChanged) {
+      this.orderService.clearCoverFees()
+      this.itemConfig.coverFees = false
+      this.$scope.$emit(brandedCheckoutAmountUpdatedEvent)
+    }
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 
   checkAmountChanged (amount) {
     if (this.itemConfig.amount && amount) {
       this.amountChanged = this.itemConfig.amount !== amount
+    }
+    if (!this.itemConfig.amount && amount) {
+      this.amountChanged = true
     }
   }
 

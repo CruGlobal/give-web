@@ -421,6 +421,14 @@ describe('checkout', () => {
           expect(self.controller.submissionError).toEqual('Current payment type is unknown')
           expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0)
         })
+
+        it('should clear out cover fee data', () => {
+          self.controller.creditCardPaymentDetails = {}
+          self.controller.submitOrder()
+
+          expect(self.controller.orderService.clearCoverFees).toHaveBeenCalled()
+          expect(self.controller.orderService.clearCartData).toHaveBeenCalled()
+        })
       })
     })
   })

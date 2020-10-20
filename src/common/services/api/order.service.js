@@ -398,18 +398,11 @@ class Order {
     angular.forEach(cartItems, (item) => {
       if (feesApplied) {
         item.amountWithFee = item.amount
-        item.priceWithFee = item.price
       } else {
         item.amountWithFee = round(this.calculateAmountWithFees(item.amount), 2)
-        item.priceWithFee = this.calculatePriceWithFees(item.amount)
       }
     })
     return true
-  }
-
-  calculatePriceWithFees (originalAmount) {
-    const newAmount = this.calculateAmountWithFees(originalAmount)
-    return `$${this.$filter('number')(newAmount, 2)}`
   }
 
   calculateAmountWithFees (originalAmount) {
@@ -419,28 +412,27 @@ class Order {
 
   updatePrices (cartData) {
     this.storeCoverFeeDecision(cartData.coverFees)
-    let newTotal = 0
 
-    angular.forEach(cartData.items, (item) => {
-      let newAmount
-      if (cartData.coverFees) {
-        newAmount = item.amountWithFee
-      } else {
-        if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
-          newAmount = this.calculateAmountWithoutFees(item.amount)
-        } else {
-          newAmount = item.amount
-        }
-      }
-
-      item.amount = round(parseFloat(newAmount), 2)
-      item.price = `$${this.$filter('number')(newAmount, 2)}`
-      newTotal += item.amount
-    })
-
-    cartData.cartTotal = newTotal
+    cartData.cartTotal = cartData.items.reduce((total, item) => total + this.updatePrice(item, cartData.coverFees), 0)
     this.recalculateFrequencyTotals(cartData)
     this.storeCartData(cartData)
+  }
+
+  updatePrice (item, coverFees) {
+    let newAmount
+    if (coverFees) {
+      newAmount = item.amountWithFee
+    } else {
+      if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
+        newAmount = this.calculateAmountWithoutFees(item.amount)
+      } else {
+        newAmount = item.amount
+      }
+    }
+
+    item.amount = round(parseFloat(newAmount), 2)
+    item.price = `$${this.$filter('number')(newAmount, 2)}`
+    return item.amount
   }
 
   recalculateFrequencyTotals (cartData) {

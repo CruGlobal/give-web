@@ -53,6 +53,7 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
 
       expect($ctrl.defaultFrequency).toEqual('MON')
+      expect($ctrl.itemConfig.frequency).toEqual('monthly')
     })
 
     it('should initialize quarterly gifts', () => {
@@ -60,6 +61,7 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
 
       expect($ctrl.defaultFrequency).toEqual('QUARTERLY')
+      expect($ctrl.itemConfig.frequency).toEqual('quarterly')
     })
 
     it('should initialize annual gifts', () => {
@@ -67,6 +69,7 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
 
       expect($ctrl.defaultFrequency).toEqual('ANNUAL')
+      expect($ctrl.itemConfig.frequency).toEqual('annually')
     })
 
     it('should validate campaignCode (too long)', () => {
@@ -84,7 +87,8 @@ describe('branded checkout step 1', () => {
 
   describe('initCart', () => {
     beforeEach(() => {
-      jest.spyOn($ctrl.cartService, 'get').mockReturnValue(Observable.of({ items: [{ code: '1234567', config: {} }] }))
+      jest.spyOn($ctrl.cartService, 'get')
+        .mockReturnValue(Observable.of({ items: [{ code: '1234567', config: {}, price: '$1.02', amount: 1.02 }] }))
       $ctrl.donorDetails = { mailingAddress: {} }
     })
 
@@ -120,6 +124,13 @@ describe('branded checkout step 1', () => {
       expect($ctrl.loadingProductConfig).toEqual(false)
       expect($ctrl.errorLoadingProductConfig).toEqual(true)
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading cart data for branded checkout step 1', 'some error'])
+    })
+
+    it('should set amounts that coverFees cares about', () => {
+      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
+      $ctrl.initCart()
+
+      expect($ctrl.itemConfig.amountWithFee).toEqual(1.02)
     })
   })
 
