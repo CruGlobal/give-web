@@ -9,8 +9,9 @@ const componentName = 'navCartIcon'
 
 class NavCartIconController {
   /* @ngInject */
-  constructor ($rootScope) {
+  constructor ($rootScope, analyticsFactory) {
     this.$rootScope = $rootScope
+    this.analyticsFactory = analyticsFactory
   }
 
   $onInit () {
@@ -26,6 +27,10 @@ class NavCartIconController {
       this.cartOpenedPreviously = true
       this.$rootScope.$emit(cartUpdatedEvent)
     }
+  }
+
+  miniCartViewAnalyticsEvent () {
+    this.analyticsFactory.cartView(null, 'mini-cart')
   }
 }
 

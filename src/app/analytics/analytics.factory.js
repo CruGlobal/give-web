@@ -110,6 +110,26 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
 
         // Set data layer
         $window.digitalData.cart = cart
+        // Send GTM Advance Ecommerce event
+        if (typeof $window.dataLayer !== 'undefined') {
+          $window.dataLayer.push({
+            event: 'add-to-cart',
+            ecommerce: {
+              currencyCode: 'USD',
+              add: {
+                products: [{
+                  name: productData.displayName.toLowerCase(),
+                  id: productData.designationNumber.toLowerCase(),
+                  price: itemConfig.amount.toString(),
+                  brand: 'cru',
+                  category: productData.designationType.toLowerCase(),
+                  variant: frequencyObj.display.toLowerCase(),
+                  quantity: '1'
+                }]
+              }
+            }
+          })
+        }
 
         // Call DTM direct call rule
         if (typeof $window._satellite !== 'undefined') {
@@ -139,8 +159,29 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               }
             }
           }]
-
-          $window._satellite.track('aa-cart-remove')
+          if (typeof $window._satellite !== 'undefined') {
+            $window._satellite.track('aa-cart-remove')
+          }
+          // Send GTM Advance Ecommerce event
+          if (typeof $window.dataLayer !== 'undefined') {
+            $window.dataLayer.push({
+              event: 'remove-from-cart',
+              ecommerce: {
+                currencyCode: 'USD',
+                remove: {
+                  products: [{
+                    name: item.displayName.toLowerCase(),
+                    id: item.designationNumber,
+                    price: item.amount.toString(),
+                    brand: 'cru',
+                    category: item.designationType.toLowerCase(),
+                    variant: item.frequency.toLowerCase(),
+                    quantity: '1'
+                  }]
+                }
+              }
+            })
+          }
         }
       } catch (e) {
         // Error caught in analyticsFactory.cartRemove
@@ -150,7 +191,12 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
       try {
         // Build products variable
         this.buildProductVar(cartData)
-
+        // Send GTM Advance Ecommerce event
+        if (typeof $window.dataLayer !== 'undefined') {
+          $window.dataLayer.push({
+            event: callType === 'mini-cart' ? 'view-mini-cart' : 'view-cart'
+          })
+        }
         // Call DTM direct call rule
         if (typeof callType !== 'undefined' && callType === 'customLink') {
           if (typeof $window._satellite !== 'undefined') {
@@ -539,6 +585,16 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         $window._satellite.track(event)
       } catch (e) {
         // Error caught in analyticsFactory.track
+      }
+    },
+    trackGTM: function (eventName, data) {
+      try {
+        $window.dataLayer.push({
+          event: eventName,
+          ...data
+        })
+      } catch (e) {
+        // Error caught in analyticsFactory.trackGTM
       }
     }
   }

@@ -36,6 +36,7 @@ class CartController {
   $onInit () {
     this.loadCart()
     this.setContinueBrowsingUrl()
+    this.analyticsFactory.cartView()
   }
 
   loadCart (reload) {

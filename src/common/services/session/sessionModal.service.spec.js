@@ -53,6 +53,7 @@ describe('sessionModalService', function () {
         deferred = _$q_.defer()
         analyticsFactory = _analyticsFactory_
         jest.spyOn(analyticsFactory, 'track').mockImplementation(() => {})
+        jest.spyOn(analyticsFactory, 'trackGTM').mockImplementation(() => {})
         $uibModal.open.mockReturnValue({ result: { finally: angular.noop, then: angular.noop }, opened: deferred.promise })
       }))
 
@@ -64,6 +65,7 @@ describe('sessionModalService', function () {
         $rootScope.$digest()
 
         expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
+        expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in')
       })
     })
 
@@ -76,6 +78,7 @@ describe('sessionModalService', function () {
         analyticsFactory = _analyticsFactory_
         jest.spyOn(modalStateService, 'name').mockImplementation(() => {})
         jest.spyOn(analyticsFactory, 'track').mockImplementation(() => {})
+        jest.spyOn(analyticsFactory, 'trackGTM').mockImplementation(() => {})
         $uibModal.open.mockReturnValue({ result: deferred.promise })
       }))
 
@@ -86,6 +89,7 @@ describe('sessionModalService', function () {
 
         expect(modalStateService.name).toHaveBeenCalledWith(null)
         expect(analyticsFactory.track).not.toHaveBeenCalled()
+        expect(analyticsFactory.trackGTM).not.toHaveBeenCalled()
       })
 
       it('sends analytics event', () => {
@@ -96,6 +100,7 @@ describe('sessionModalService', function () {
         $rootScope.$digest()
 
         expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
+        expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in-exit')
       })
     })
 

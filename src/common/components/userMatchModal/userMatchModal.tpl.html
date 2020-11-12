@@ -21,17 +21,17 @@
     </p>
   </div>
   <user-match-question ng-switch-when="question"
-                       ng-init="$ctrl.analyticsFactory.track('aa-registration-match-security-question'+$ctrl.questionCount)"
+                       ng-init="$ctrl.analyticsFactory.track('aa-registration-match-security-question'+$ctrl.questionCount); $ctrl.analyticsFactory.trackGTM('ga-registration-match-security-question'+$ctrl.questionCount)"
                        question="$ctrl.question"
                        question-index="$ctrl.questionIndex"
                        question-count="$ctrl.questionCount"
                        on-question-answer="$ctrl.onQuestionAnswer(key, answer)">
   </user-match-question>
   <div ng-switch-when="success">
-    <p ng-if="!$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('aa-registration-match-linked-account-success')">
+    <p ng-if="!$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('aa-registration-match-linked-account-success'); $ctrl.analyticsFactory.trackGTM('ga-registration-match-linked-account-success')">
       Thank you for taking the time to answer our security questions. Your account is now activated.
     </p>
-    <p ng-if="$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('aa-registration-no-match-new-account-success')">
+    <p ng-if="$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('aa-registration-no-match-new-account-success'); $ctrl.analyticsFactory.trackGTM('ga-registration-no-match-new-account-success')">
       Thank you for completing account registration. Your account has been activated.
     </p>
     <p>
@@ -39,7 +39,7 @@
     </p>
   </div>
   <failed-verification-modal ng-switch-when="failure"
-                             ng-init="$ctrl.analyticsFactory.track('aa-registration-match-failed-questions')"
+                             ng-init="$ctrl.analyticsFactory.track('aa-registration-match-failed-questions'); $ctrl.analyticsFactory.trackGTM('ga-registration-match-failed-questions')"
                              modal-title="$ctrl.modalTitle"
                              on-ok="$ctrl.onFailure()">
   </failed-verification-modal>
