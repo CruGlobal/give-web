@@ -119,7 +119,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               add: {
                 products: [{
                   name: productData.displayName.toLowerCase(),
-                  id: productData.designationNumber.toLowerCase(),
+                  id: productData.designationNumber,
                   price: itemConfig.amount.toString(),
                   brand: 'cru',
                   category: productData.designationType.toLowerCase(),
@@ -187,18 +187,16 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.cartRemove
       }
     },
-    cartView: function (cartData, callType) {
+    cartView: function (isMiniCart = false) {
       try {
-        // Build products variable
-        this.buildProductVar(cartData)
         // Send GTM Advance Ecommerce event
         if (typeof $window.dataLayer !== 'undefined') {
           $window.dataLayer.push({
-            event: callType === 'mini-cart' ? 'view-mini-cart' : 'view-cart'
+            event: isMiniCart ? 'view-mini-cart' : 'view-cart'
           })
         }
         // Call DTM direct call rule
-        if (typeof callType !== 'undefined' && callType === 'customLink') {
+        if (isMiniCart) {
           if (typeof $window._satellite !== 'undefined') {
             $window.s.clearVars()
             $window._satellite.track('aa-view-minicart')
@@ -587,11 +585,10 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.track
       }
     },
-    trackGTM: function (eventName, data) {
+    trackGTM: function (eventName) {
       try {
         $window.dataLayer.push({
-          event: eventName,
-          ...data
+          event: eventName
         })
       } catch (e) {
         // Error caught in analyticsFactory.trackGTM
