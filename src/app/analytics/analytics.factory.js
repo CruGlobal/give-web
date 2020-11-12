@@ -195,13 +195,6 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
             event: isMiniCart ? 'view-mini-cart' : 'view-cart'
           })
         }
-        // Call DTM direct call rule
-        if (isMiniCart) {
-          if (typeof $window._satellite !== 'undefined') {
-            $window.s.clearVars()
-            $window._satellite.track('aa-view-minicart')
-          }
-        }
       } catch (e) {
         // Error caught in analyticsFactory.cartView
       }
