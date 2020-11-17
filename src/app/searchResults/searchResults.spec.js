@@ -98,5 +98,13 @@ describe('searchResults', function () {
       expect($ctrl.searchResults).toEqual(null)
       expect($ctrl.searchError).toEqual(true)
     })
+
+    it('fires productViewDetailsAnalyticsEvent', () => {
+      jest.spyOn($ctrl.analyticsFactory, 'productViewDetailsEvent').mockReturnValue(() => {})
+
+      $ctrl.productViewDetailsAnalyticsEvent('product')
+
+      expect($ctrl.analyticsFactory.productViewDetailsEvent).toHaveBeenCalledWith('product')
+    })
   })
 })

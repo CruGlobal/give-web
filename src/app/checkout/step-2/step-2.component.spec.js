@@ -117,6 +117,15 @@ describe('checkout', () => {
       })
     })
 
+    describe('handlePaymentChange', () => {
+      it('should change default payment type', () => {
+        jest.spyOn(self.controller, 'handlePaymentChange').mockImplementation(() => {})
+        self.controller.handlePaymentChange({'account-type': 'checking'})
+
+        expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'account-type': 'checking'})
+      })
+    })
+
     describe('onPaymentFormStateChange', () => {
       beforeEach(() => {
         jest.spyOn(self.controller.$window, 'scrollTo').mockImplementation(() => {})

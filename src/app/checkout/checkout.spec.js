@@ -113,11 +113,14 @@ describe('checkout', function () {
   describe('listenForLocationChange', () => {
     it('should watch the url and update the state', () => {
       jest.spyOn(self.controller, 'initStepParam').mockImplementation(() => {})
+      jest.spyOn(self.controller.cartService, 'get').mockReturnValue(Observable.of('cartData'))
+      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepEvent').mockImplementation(() => {})  
       self.controller.listenForLocationChange()
       self.controller.$location.search('step', 'review')
       self.controller.$rootScope.$digest()
 
       expect(self.controller.initStepParam).toHaveBeenCalledWith('review')
+      expect(self.controller.analyticsFactory.checkoutStepEvent).toHaveBeenCalledWith('review', 'cartData')
     })
   })
 

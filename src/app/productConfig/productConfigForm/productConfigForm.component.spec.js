@@ -164,6 +164,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 5 }, { amount: 10 }]))
 
       jest.spyOn($ctrl.designationsService, 'givingLinks').mockReturnValue(Observable.of([]))
+      jest.spyOn($ctrl.analyticsFactory, 'giveGiftModal').mockReturnValue(() => {})
     })
 
     it('should get productData, nextDrawDate, suggestedAmounts and givingLinks', () => {
@@ -187,6 +188,7 @@ describe('product config form component', function () {
 
       expect($ctrl.loading).toEqual(false)
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' })
+      expect($ctrl.analyticsFactory.giveGiftModal($ctrl.productData))
     })
 
     it('should not use suggested amounts if they are not provided', () => {

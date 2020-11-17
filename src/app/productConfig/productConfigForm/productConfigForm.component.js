@@ -152,7 +152,7 @@ class ProductConfigFormController {
           this.loading = false
         },
         () => {
-          this.analyticsFactory.giveGiftModal(this.code)
+          this.analyticsFactory.giveGiftModal(this.productData)
           this.loading = false
           // Show givingLinks if they exist and it isn't an edit
           if (this.givingLinks.length > 0 && !this.isEdit) {

@@ -8,6 +8,7 @@ import coverFees from 'common/components/paymentMethods/coverFees/coverFees.comp
 
 import orderService from 'common/services/api/order.service'
 import cartService from 'common/services/api/cart.service'
+import analyticsFactory from 'app/analytics/analytics.factory'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
@@ -18,11 +19,12 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, cartService, $uibModal) {
+  constructor ($log, $scope, orderService, cartService, $uibModal, analyticsFactory) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
     this.cartService = cartService
+    this.analyticsFactory = analyticsFactory
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
@@ -61,7 +63,7 @@ class ExistingPaymentMethodsController {
         if (data.length > 0) {
           this.paymentMethods = data
           this.selectDefaultPaymentMethod()
-          this.onLoad({ success: true, hasExistingPaymentMethods: true })
+          this.onLoad({ success: true, hasExistingPaymentMethods: true, selectedPaymentMethod: this.selectedPaymentMethod })
         } else {
           this.onLoad({ success: true, hasExistingPaymentMethods: false })
         }
@@ -136,6 +138,7 @@ class ExistingPaymentMethodsController {
 
   switchPayment () {
     if (this.selectedPaymentMethod) {
+      this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
       if (this.selectedPaymentMethod['bank-name']) {
         // This is an EFT payment method so we need to remove any fee coverage
         if (this.orderService.retrieveCoverFeeDecision()) {
@@ -155,7 +158,8 @@ export default angular
     paymentMethodFormModal.name,
     coverFees.name,
     orderService.name,
-    cartService.name
+    cartService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,
@@ -169,6 +173,7 @@ export default angular
       cartData: '<',
       brandedCheckoutItem: '<',
       onPaymentFormStateChange: '&',
+      onPaymentChange: '&',
       onLoad: '&'
     }
   })

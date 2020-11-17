@@ -21,14 +21,17 @@ import hateoasHelperService from 'common/services/hateoasHelper.service'
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
 
+import analyticsFactory from 'app/analytics/analytics.factory'
+
 const serviceName = 'profileService'
 
 class Profile {
   /* @ngInject */
-  constructor ($log, cortexApiService, hateoasHelperService) {
+  constructor ($log, cortexApiService, hateoasHelperService, analyticsFactory) {
     this.$log = $log
     this.cortexApiService = cortexApiService
     this.hateoasHelperService = hateoasHelperService
+    this.analyticsFactory = analyticsFactory
   }
 
   getGivingProfile () {
@@ -297,8 +300,10 @@ class Profile {
 
   addPaymentMethod (paymentInfo) {
     if (paymentInfo.bankAccount) {
+      this.analyticsFactory.trackGTM('add-payment-method')
       return this.addBankAccountPayment(paymentInfo.bankAccount)
     } else if (paymentInfo.creditCard) {
+      this.analyticsFactory.trackGTM('add-payment-method')
       return this.addCreditCardPayment(paymentInfo.creditCard)
     } else {
       return Observable.throw('Error adding payment method. The data passed to profileService.addPaymentMethod did not contain bankAccount or creditCard data')
@@ -323,6 +328,7 @@ class Profile {
   }
 
   deletePaymentMethod (uri) {
+    this.analyticsFactory.trackGTM('delete-payment-method')
     return this.cortexApiService.delete({
       path: uri
     })
@@ -353,6 +359,7 @@ class Profile {
 export default angular
   .module(serviceName, [
     cortexApiService.name,
-    hateoasHelperService.name
+    hateoasHelperService.name,
+    analyticsFactory.name
   ])
   .service(serviceName, Profile)

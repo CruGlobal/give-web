@@ -136,7 +136,7 @@
                     <div class="is-row-actions hidden-xs">
                       <product-config product-code="{{r.designationNumber}}" campaign-page="{{r.campaignPage}}" button-label="Give a Gift" button-size="sm"></product-config>
                       &nbsp;
-                      <a ng-href="{{r.path}}" class="btn btn-sm btn-subtle" translate>Details</a>
+                      <a ng-href="{{r.path}}" class="btn btn-sm btn-subtle" ng-click="$ctrl.productViewDetailsAnalyticsEvent(r)" translate>Details</a>
                     </div>
                   </div>
                 </div>

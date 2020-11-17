@@ -213,21 +213,25 @@ describe('contactInfo', function () {
       self.controller.donorDetails = {
         'given-name': 'Fname',
         email: 'someone@asdf.com',
-        emailFormUri: '/emails/crugive'
+        emailFormUri: '/emails/crugive',
+        'donor-type': 'Staff'
       }
       jest.spyOn(self.controller.orderService, 'updateDonorDetails').mockReturnValue(Observable.of('donor details success'))
       jest.spyOn(self.controller.orderService, 'addEmail').mockReturnValue(Observable.of('email success'))
+      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepOptionEvent').mockImplementation(() => {})
       self.controller.submitDetails()
 
       expect(self.controller.detailsForm.$setSubmitted).toHaveBeenCalled()
       expect(self.controller.orderService.updateDonorDetails).toHaveBeenCalledWith({
         'given-name': 'Fname',
         email: 'someone@asdf.com',
-        emailFormUri: '/emails/crugive'
+        emailFormUri: '/emails/crugive',
+        'donor-type': 'Staff'
       })
 
       expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('someone@asdf.com', '/emails/crugive')
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: true })
+      expect(self.controller.analyticsFactory.checkoutStepOptionEvent).toHaveBeenCalledWith( self.controller.donorDetails['donor-type'], 'contact')
     })
 
     it('should handle an error saving donor details', () => {
