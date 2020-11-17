@@ -8,7 +8,6 @@ import coverFees from 'common/components/paymentMethods/coverFees/coverFees.comp
 
 import orderService from 'common/services/api/order.service'
 import cartService from 'common/services/api/cart.service'
-import analyticsFactory from 'app/analytics/analytics.factory'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
@@ -19,12 +18,11 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, cartService, $uibModal, analyticsFactory) {
+  constructor ($log, $scope, orderService, cartService, $uibModal) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
     this.cartService = cartService
-    this.analyticsFactory = analyticsFactory
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
@@ -158,8 +156,7 @@ export default angular
     paymentMethodFormModal.name,
     coverFees.name,
     orderService.name,
-    cartService.name,
-    analyticsFactory.name
+    cartService.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,

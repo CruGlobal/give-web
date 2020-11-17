@@ -362,7 +362,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
       try {
         var product = [{
           productInfo: {
-            productID: productData.code
+            productID: productData.designationNumber
           },
           attributes: {
             siebel: {
@@ -379,7 +379,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
             detail: {
               products: [{
                 name: productData.displayName.toLowerCase(),
-                id: productData.code,
+                id: productData.designationNumber,
                 price: undefined,
                 brand: 'cru',
                 category: productData.designationType.toLowerCase(),
