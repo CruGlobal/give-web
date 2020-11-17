@@ -41,9 +41,11 @@ describe('cart', () => {
   describe('$onInit()', () => {
     it('should call loadCart()', () => {
       jest.spyOn(self.controller, 'loadCart').mockImplementation(() => {})
+      jest.spyOn(self.controller.analyticsFactory, 'cartView').mockImplementation(() => {})
       self.controller.$onInit()
 
       expect(self.controller.loadCart).toHaveBeenCalledWith()
+      expect(self.controller.analyticsFactory.cartView).toHaveBeenCalled()
     })
   })
 
@@ -181,6 +183,7 @@ describe('cart', () => {
   describe('removeItem()', () => {
     beforeEach(() => {
       jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
+      jest.spyOn(self.controller.analyticsFactory, 'cartRemove').mockImplementation(() => {})
       self.controller.cartData = { items: [{ uri: 'uri1' }, { uri: 'uri2' }] }
     })
 
@@ -194,6 +197,7 @@ describe('cart', () => {
       expect(self.controller.loadCart).toHaveBeenCalledWith(true)
       expect(self.controller.cartData.items).toEqual([{ uri: 'uri2' }])
       expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+      expect(self.controller.analyticsFactory.cartRemove).toHaveBeenCalledWith({ removing: true, uri: 'uri1' })
     })
 
     it('should handle an error removing an item', () => {
@@ -204,6 +208,7 @@ describe('cart', () => {
       expect(self.controller.cartData.items).toEqual([{ uri: 'uri1', removingError: true }, { uri: 'uri2' }])
       expect(self.controller.$log.error.logs[0]).toEqual(['Error deleting item from cart', 'error'])
       expect(self.controller.$scope.$emit).not.toHaveBeenCalled()
+      expect(self.controller.analyticsFactory.cartRemove).not.toHaveBeenCalled()
     })
 
     it('should remove item from locally stored cart', () => {

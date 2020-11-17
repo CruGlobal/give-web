@@ -320,7 +320,7 @@ class ProductConfigFormController {
         this.$scope.$emit(cartUpdatedEvent)
       } else {
         this.$scope.$emit(giftAddedEvent)
-        this.analyticsFactory.cartAdd(this.itemConfig, this.productData, 'cart modal')
+        this.analyticsFactory.cartAdd(this.itemConfig, this.productData)
       }
       this.uri = data.self.uri
       this.submittingGift = false

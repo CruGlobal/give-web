@@ -606,6 +606,7 @@ describe('product config form component', function () {
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'submitted' })
         expect($ctrl.errorAlreadyInCart).toEqual(false)
         expect($ctrl.errorSavingGeneric).toEqual(false)
+        $ctrl.isEdit ? expect($ctrl.analyticsFactory.cartAdd).not.toHaveBeenCalled() : expect($ctrl.analyticsFactory.cartAdd).toHaveBeenCalledWith($ctrl.itemConfig, $ctrl.productData)
       })
 
       it('should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
