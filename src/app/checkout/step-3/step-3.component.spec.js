@@ -451,7 +451,6 @@ describe('checkout', () => {
           self.controller.bankAccountPaymentDetails = {}
           self.controller.submitOrder()
 
-          // expect(self.controller.$log.error.logs[0]).toEqual(['Error loading purchase data for transaction event', { data: 'error retrieving last purchase link' }])
           expect(self.controller.analyticsFactory.transactionEvent).not.toHaveBeenCalled()
         })
       })
