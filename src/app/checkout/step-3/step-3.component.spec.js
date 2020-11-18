@@ -36,9 +36,13 @@ describe('checkout', () => {
           checkErrors: () => Observable.of(['email-info']),
           submit: () => Observable.of('called submit'),
           retrieveCardSecurityCode: () => self.storedCvv,
+          retrieveLastPurchaseLink: () => Observable.of('purchaseLink'),
           clearCardSecurityCodes: jest.fn(),
           clearCoverFees: jest.fn(),
           clearCartData: jest.fn()
+        },
+        profileService: {
+          getPurchase: () => Observable.of('purchaseData')
         },
         $window: {
           scrollTo: jest.fn()
@@ -319,6 +323,9 @@ describe('checkout', () => {
     describe('submitOrder', () => {
       beforeEach(() => {
         jest.spyOn(self.controller.orderService, 'submit')
+        jest.spyOn(self.controller.profileService, 'getPurchase')
+        jest.spyOn(self.controller.analyticsFactory, 'transactionEvent').mockImplementation(() => {})
+        self.controller.cartData = 'cartData'
       })
 
       describe('another order submission in progress', () => {
@@ -333,6 +340,7 @@ describe('checkout', () => {
 
       describe('submit single order', () => {
         beforeEach(() => {
+          jest.spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').mockReturnValue(Observable.of('purchaseLink'))
           jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
         })
 
@@ -340,6 +348,9 @@ describe('checkout', () => {
           expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({ value: true })
           expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
           expect(self.controller.onSubmitted).toHaveBeenCalled()
+          expect(self.controller.orderService.retrieveLastPurchaseLink).toHaveBeenCalled()
+          expect(self.controller.profileService.getPurchase).toHaveBeenCalled()
+          expect(self.controller.analyticsFactory.transactionEvent).toHaveBeenCalledWith('purchaseData', 'cartData')
         })
 
         it('should submit the order normally if paying with a bank account', () => {

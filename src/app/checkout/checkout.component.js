@@ -69,6 +69,9 @@ class CheckoutController {
       this.initStepParam(this.$location.search().step || 'contact')
       this.analyticsFactory.setEvent('checkout step ' + this.checkoutStep)
       this.analyticsFactory.track('aa-checkout-step-' + this.checkoutStep)
+      this.cartService.get().subscribe((cartData) => {
+        this.analyticsFactory.checkoutStepEvent(this.$location.search().step, cartData)
+      })
     })
   }
 

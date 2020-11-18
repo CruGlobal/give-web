@@ -25,6 +25,7 @@
       payment-form-state="$ctrl.paymentFormState"
       payment-form-error="$ctrl.paymentFormError"
       on-payment-form-state-change="$ctrl.onPaymentFormStateChange($event)"
+      on-payment-change="$ctrl.handlePaymentChange(selectedPaymentMethod)"
       on-load="$ctrl.handleExistingPaymentLoading(success, hasExistingPaymentMethods, error)"
       mailing-address="$ctrl.mailingAddress"
       default-payment-type="$ctrl.defaultPaymentType"

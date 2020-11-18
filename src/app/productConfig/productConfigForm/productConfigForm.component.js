@@ -152,7 +152,7 @@ class ProductConfigFormController {
           this.loading = false
         },
         () => {
-          this.analyticsFactory.giveGiftModal(this.code)
+          this.analyticsFactory.giveGiftModal(this.productData)
           this.loading = false
           // Show givingLinks if they exist and it isn't an edit
           if (this.givingLinks.length > 0 && !this.isEdit) {
@@ -320,7 +320,7 @@ class ProductConfigFormController {
         this.$scope.$emit(cartUpdatedEvent)
       } else {
         this.$scope.$emit(giftAddedEvent)
-        this.analyticsFactory.cartAdd(this.itemConfig, this.productData, 'cart modal')
+        this.analyticsFactory.cartAdd(this.itemConfig, this.productData)
       }
       this.uri = data.self.uri
       this.submittingGift = false

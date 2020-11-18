@@ -9,6 +9,7 @@ import displayRateTotals from 'common/components/displayRateTotals/displayRateTo
 import commonService from 'common/services/api/common.service'
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
+import profileService from 'common/services/api/profile.service'
 import capitalizeFilter from 'common/filters/capitalize.filter'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
@@ -23,12 +24,13 @@ const componentName = 'checkoutStep3'
 
 class Step3Controller {
   /* @ngInject */
-  constructor (orderService, $window, $scope, $log, analyticsFactory, cartService, commonService) {
+  constructor (orderService, $window, $scope, $log, analyticsFactory, cartService, commonService, profileService) {
     this.orderService = orderService
     this.$window = $window
     this.$scope = $scope
     this.$log = $log
     this.analyticsFactory = analyticsFactory
+    this.profileService = profileService
     this.cartService = cartService
     this.commonService = commonService
     this.startDate = startDate
@@ -159,6 +161,20 @@ class Step3Controller {
       this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
       this.$window.scrollTo(0, 0)
     })
+    // Get the purchase link to load purchase data
+    const lastPurchaseLink = this.orderService.retrieveLastPurchaseLink()
+    if (!lastPurchaseLink) {
+      return
+    }
+    // Load purchase data
+    this.profileService.getPurchase(lastPurchaseLink)
+      .subscribe((data) => {
+      // Run ecommerce transaction event
+        this.analyticsFactory.transactionEvent(data, this.cartData)
+      },
+      (error) => {
+        this.$log.error('Error loading purchase data for transaction event', error)
+      })
   }
 }
 
@@ -169,6 +185,7 @@ export default angular
     orderService.name,
     capitalizeFilter.name,
     desigSrcDirective.name,
+    profileService.name,
     analyticsFactory.name,
     cartService.name,
     commonService.name

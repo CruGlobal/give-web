@@ -61,7 +61,7 @@ class ExistingPaymentMethodsController {
         if (data.length > 0) {
           this.paymentMethods = data
           this.selectDefaultPaymentMethod()
-          this.onLoad({ success: true, hasExistingPaymentMethods: true })
+          this.onLoad({ success: true, hasExistingPaymentMethods: true, selectedPaymentMethod: this.selectedPaymentMethod })
         } else {
           this.onLoad({ success: true, hasExistingPaymentMethods: false })
         }
@@ -136,6 +136,7 @@ class ExistingPaymentMethodsController {
 
   switchPayment () {
     if (this.selectedPaymentMethod) {
+      this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
       if (this.selectedPaymentMethod['bank-name']) {
         // This is an EFT payment method so we need to remove any fee coverage
         if (this.orderService.retrieveCoverFeeDecision()) {
@@ -169,6 +170,7 @@ export default angular
       cartData: '<',
       brandedCheckoutItem: '<',
       onPaymentFormStateChange: '&',
+      onPaymentChange: '&',
       onLoad: '&'
     }
   })

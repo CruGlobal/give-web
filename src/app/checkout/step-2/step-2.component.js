@@ -49,6 +49,10 @@ class Step2Controller {
       })
   }
 
+  handlePaymentChange (selectedPaymentMethod) {
+    this.defaultPaymentType = selectedPaymentMethod['account-type']
+  }
+
   handleExistingPaymentLoading (success, hasExistingPaymentMethods, error) {
     if (success) {
       this.existingPaymentMethods = hasExistingPaymentMethods
@@ -62,6 +66,7 @@ class Step2Controller {
 
   submit () {
     this.onPaymentFormStateChange({ state: 'submitted' })
+    this.analyticsFactory.checkoutStepOptionEvent(this.defaultPaymentType, 'payment')
   }
 
   onPaymentFormStateChange ($event) {

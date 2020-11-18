@@ -56,4 +56,17 @@ describe('nav cart icon', function () {
       expect($ctrl.$rootScope.$emit).not.toHaveBeenCalled()
     })
   })
+
+  describe('miniCartViewAnalyticsEvent()', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl, 'miniCartViewAnalyticsEvent')
+      jest.spyOn($ctrl.analyticsFactory, 'cartView').mockImplementation(() => {})
+    })
+
+    it('should fire the analytics event', () => {
+        $ctrl.miniCartViewAnalyticsEvent()
+        expect($ctrl.miniCartViewAnalyticsEvent).toHaveBeenCalled()
+        expect($ctrl.analyticsFactory.cartView).toHaveBeenCalledWith(true)
+    })
+  })
 })

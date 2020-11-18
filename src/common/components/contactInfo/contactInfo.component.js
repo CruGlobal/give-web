@@ -14,17 +14,20 @@ import addressForm from 'common/components/addressForm/addressForm.component'
 import orderService from 'common/services/api/order.service'
 import sessionService, { SignInEvent, Roles } from 'common/services/session/session.service'
 
+import analyticsFactory from 'app/analytics/analytics.factory'
+
 import template from './contactInfo.tpl.html'
 
 const componentName = 'contactInfo'
 
 class Step1Controller {
   /* @ngInject */
-  constructor ($log, $scope, orderService, sessionService) {
+  constructor ($log, $scope, orderService, sessionService, analyticsFactory) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
     this.sessionService = sessionService
+    this.analyticsFactory = analyticsFactory
   }
 
   $onInit () {
@@ -118,6 +121,7 @@ class Step1Controller {
       Observable.forkJoin(requests)
         .subscribe(() => {
           this.onSubmit({ success: true })
+          this.analyticsFactory.checkoutStepOptionEvent(this.donorDetails['donor-type'], 'contact')
         }, (error) => {
           this.$log.warn('Error saving donor contact info', error)
           this.submissionError = error && error.data
@@ -137,7 +141,8 @@ export default angular
     'ngMessages',
     addressForm.name,
     orderService.name,
-    sessionService.name
+    sessionService.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: Step1Controller,

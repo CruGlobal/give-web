@@ -164,6 +164,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 5 }, { amount: 10 }]))
 
       jest.spyOn($ctrl.designationsService, 'givingLinks').mockReturnValue(Observable.of([]))
+      jest.spyOn($ctrl.analyticsFactory, 'giveGiftModal').mockReturnValue(() => {})
     })
 
     it('should get productData, nextDrawDate, suggestedAmounts and givingLinks', () => {
@@ -187,6 +188,7 @@ describe('product config form component', function () {
 
       expect($ctrl.loading).toEqual(false)
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' })
+      expect($ctrl.analyticsFactory.giveGiftModal($ctrl.productData))
     })
 
     it('should not use suggested amounts if they are not provided', () => {
@@ -604,6 +606,7 @@ describe('product config form component', function () {
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'submitted' })
         expect($ctrl.errorAlreadyInCart).toEqual(false)
         expect($ctrl.errorSavingGeneric).toEqual(false)
+        $ctrl.isEdit ? expect($ctrl.analyticsFactory.cartAdd).not.toHaveBeenCalled() : expect($ctrl.analyticsFactory.cartAdd).toHaveBeenCalledWith($ctrl.itemConfig, $ctrl.productData)
       })
 
       it('should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
