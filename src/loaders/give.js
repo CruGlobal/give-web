@@ -22,6 +22,7 @@ import Loader from './loader'
     window.setTimeout(() => {
       const $injector = window.angular.bootstrap(document.body, modules, { strictDi: true })
       $injector.get('analyticsFactory').pageLoaded()
+      $injector.get('analyticsFactory').pageReadyForOptimize()
       document.body.dispatchEvent(new window.CustomEvent('giveloaded', { bubbles: true, detail: { $injector } }))
     }, 10)
   })
