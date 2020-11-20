@@ -415,7 +415,15 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         }
 
         if (typeof $window.dataLayer !== 'undefined') {
-          $window.dataLayer.push({ event: 'angular.loaded' })
+          let found = false
+          angular.forEach($window.dataLayer, (value) => {
+            if (value.event && value.event === 'angular.loaded') {
+              found = true
+            }
+          })
+          if (!found) {
+            $window.dataLayer.push({ event: 'angular.loaded' })
+          }
         }
 
         if (!skipImageRequests) {
