@@ -414,18 +414,6 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
           }
         }
 
-        if (typeof $window.dataLayer !== 'undefined') {
-          let found = false
-          angular.forEach($window.dataLayer, (value) => {
-            if (value.event && value.event === 'angular.loaded') {
-              found = true
-            }
-          })
-          if (!found) {
-            $window.dataLayer.push({ event: 'angular.loaded' })
-          }
-        }
-
         if (!skipImageRequests) {
           // Allow time for data layer changes to be consumed & fire image request
           $timeout(function () {
@@ -439,6 +427,19 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         }
       } catch (e) {
         // Error caught in analyticsFactory.pageLoaded
+      }
+    },
+    pageReadyForOptimize: function () {
+      if (typeof $window.dataLayer !== 'undefined') {
+        let found = false
+        angular.forEach($window.dataLayer, (value) => {
+          if (value.event && value.event === 'angular.loaded') {
+            found = true
+          }
+        })
+        if (!found) {
+          $window.dataLayer.push({ event: 'angular.loaded' })
+        }
       }
     },
     productViewDetailsEvent: function (product) {
