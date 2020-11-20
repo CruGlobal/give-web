@@ -111,18 +111,21 @@ describe('checkout', () => {
     describe('submit', () => {
       it('should change form state', () => {
         jest.spyOn(self.controller, 'onPaymentFormStateChange').mockImplementation(() => {})
+        jest.spyOn(self.controller.analyticsFactory, 'checkoutStepOptionEvent').mockImplementation(() => {})
         self.controller.submit()
 
         expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'submitted' })
+        expect(self.controller.analyticsFactory.checkoutStepOptionEvent).toHaveBeenCalledWith(self.controller.defaultPaymentType ,'payment')
       })
     })
 
     describe('handlePaymentChange', () => {
       it('should change default payment type', () => {
-        jest.spyOn(self.controller, 'handlePaymentChange').mockImplementation(() => {})
+        jest.spyOn(self.controller, 'handlePaymentChange')
         self.controller.handlePaymentChange({'account-type': 'checking'})
 
         expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'account-type': 'checking'})
+        expect(self.controller.defaultPaymentType).toEqual('checking')
       })
     })
 

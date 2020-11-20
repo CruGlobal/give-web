@@ -441,6 +441,33 @@ describe('checkout', () => {
           expect(self.controller.orderService.clearCartData).toHaveBeenCalled()
         })
       })
+
+      describe('error retrieving lastPurchaseLink when submitting single order', () => {
+        beforeEach(() => {
+          jest.spyOn(self.controller.orderService, 'retrieveLastPurchaseLink').mockReturnValue(undefined)
+        })
+
+        it('should just return if no purchase link is found', () => {
+          self.controller.bankAccountPaymentDetails = {}
+          self.controller.submitOrder()
+
+          expect(self.controller.analyticsFactory.transactionEvent).not.toHaveBeenCalled()
+        })
+      })
+
+      describe('error with getPurchase when submitting single order', () => {
+        beforeEach(() => {
+          jest.spyOn(self.controller.profileService, 'getPurchase').mockReturnValue(Observable.throw('some error'))
+        })
+
+        it('should just return if no purchase link is found', () => {
+          self.controller.bankAccountPaymentDetails = {}
+          self.controller.submitOrder()
+
+          expect(self.controller.$log.error.logs[0]).toEqual(['Error loading purchase data for transaction event', 'some error'])
+          expect(self.controller.analyticsFactory.transactionEvent).not.toHaveBeenCalled()
+        })
+      })
     })
   })
 })

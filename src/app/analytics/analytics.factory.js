@@ -414,6 +414,10 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
           }
         }
 
+        if (typeof $window.dataLayer !== 'undefined') {
+          $window.dataLayer.push({ event: 'angular.loaded' })
+        }
+
         if (!skipImageRequests) {
           // Allow time for data layer changes to be consumed & fire image request
           $timeout(function () {
