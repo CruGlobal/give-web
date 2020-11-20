@@ -2,6 +2,7 @@ import angular from 'angular'
 
 import navCart, { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
+import analyticsFactory from 'app/analytics/analytics.factory'
 
 import template from './navCartIcon.tpl.html'
 
@@ -9,8 +10,9 @@ const componentName = 'navCartIcon'
 
 class NavCartIconController {
   /* @ngInject */
-  constructor ($rootScope) {
+  constructor ($rootScope, analyticsFactory) {
     this.$rootScope = $rootScope
+    this.analyticsFactory = analyticsFactory
   }
 
   $onInit () {
@@ -27,11 +29,16 @@ class NavCartIconController {
       this.$rootScope.$emit(cartUpdatedEvent)
     }
   }
+
+  miniCartViewAnalyticsEvent () {
+    this.analyticsFactory.cartView(true)
+  }
 }
 
 export default angular
   .module(componentName, [
     navCart.name,
+    analyticsFactory.name,
     uibDropdown
   ])
   .component(componentName, {

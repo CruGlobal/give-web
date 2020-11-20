@@ -20,6 +20,7 @@ describe('checkout', () => {
 
         self.controller = $componentController(module.name, {}, {
           onLoad: jest.fn(),
+          onPaymentChange: jest.fn(),
           onPaymentFormStateChange: jest.fn(),
           cartData: { items: [] }
         })
@@ -140,7 +141,7 @@ describe('checkout', () => {
 
           expect(self.controller.paymentMethods).toEqual(['first payment method'])
           expect(self.controller.selectDefaultPaymentMethod).toHaveBeenCalled()
-          expect(self.controller.onLoad).toHaveBeenCalledWith({ success: true, hasExistingPaymentMethods: true })
+          expect(self.controller.onLoad).toHaveBeenCalledWith({ success: true, hasExistingPaymentMethods: true, selectedPaymentMethod: self.controller.selectedPaymentMethod })
         })
 
         it('should try load existing payment methods even if none exist', () => {
@@ -284,6 +285,7 @@ describe('checkout', () => {
 
           self.controller.switchPayment()
           expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith({ coverFees: false })
+          expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: self.controller.selectedPaymentMethod })
         })
 
         it('should not update prices if the user did not already opt to cover fees on a credit card', () => {

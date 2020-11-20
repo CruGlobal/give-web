@@ -79,6 +79,10 @@ class SearchResultsController {
       }
     }
   }
+
+  productViewDetailsAnalyticsEvent (product) {
+    this.analyticsFactory.productViewDetailsEvent(product)
+  }
 }
 
 export default angular

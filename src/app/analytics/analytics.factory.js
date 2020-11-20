@@ -110,6 +110,26 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
 
         // Set data layer
         $window.digitalData.cart = cart
+        // Send GTM Advance Ecommerce event
+        if (typeof $window.dataLayer !== 'undefined') {
+          $window.dataLayer.push({
+            event: 'add-to-cart',
+            ecommerce: {
+              currencyCode: 'USD',
+              add: {
+                products: [{
+                  name: productData.displayName.toLowerCase(),
+                  id: productData.designationNumber,
+                  price: itemConfig.amount.toString(),
+                  brand: 'cru',
+                  category: productData.designationType.toLowerCase(),
+                  variant: frequencyObj.display.toLowerCase(),
+                  quantity: '1'
+                }]
+              }
+            }
+          })
+        }
 
         // Call DTM direct call rule
         if (typeof $window._satellite !== 'undefined') {
@@ -139,27 +159,96 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               }
             }
           }]
-
-          $window._satellite.track('aa-cart-remove')
+          if (typeof $window._satellite !== 'undefined') {
+            $window._satellite.track('aa-cart-remove')
+          }
+          // Send GTM Advance Ecommerce event
+          if (typeof $window.dataLayer !== 'undefined') {
+            $window.dataLayer.push({
+              event: 'remove-from-cart',
+              ecommerce: {
+                currencyCode: 'USD',
+                remove: {
+                  products: [{
+                    name: item.displayName.toLowerCase(),
+                    id: item.designationNumber,
+                    price: item.amount.toString(),
+                    brand: 'cru',
+                    category: item.designationType.toLowerCase(),
+                    variant: item.frequency.toLowerCase(),
+                    quantity: '1'
+                  }]
+                }
+              }
+            })
+          }
         }
       } catch (e) {
         // Error caught in analyticsFactory.cartRemove
       }
     },
-    cartView: function (cartData, callType) {
+    cartView: function (isMiniCart = false) {
       try {
-        // Build products variable
-        this.buildProductVar(cartData)
-
-        // Call DTM direct call rule
-        if (typeof callType !== 'undefined' && callType === 'customLink') {
-          if (typeof $window._satellite !== 'undefined') {
-            $window.s.clearVars()
-            $window._satellite.track('aa-view-minicart')
-          }
+        // Send GTM Advance Ecommerce event
+        if (typeof $window.dataLayer !== 'undefined') {
+          $window.dataLayer.push({
+            event: isMiniCart ? 'view-mini-cart' : 'view-cart'
+          })
         }
       } catch (e) {
         // Error caught in analyticsFactory.cartView
+      }
+    },
+    checkoutStepEvent: function (step, cart) {
+      const cartObject = cart.items.map((cartItem) => {
+        return {
+          name: cartItem.displayName.toLowerCase(),
+          id: cartItem.code,
+          price: cartItem.amount.toString(),
+          branch: 'cru',
+          category: cartItem.designationType.toLowerCase(),
+          variant: cartItem.frequency.toLowerCase(),
+          quantity: '1'
+        }
+      })
+      try {
+        if (typeof $window.dataLayer !== 'undefined') {
+          $window.dataLayer.push({
+            event: 'checkout-step',
+            cartId: cart.id,
+            ecommerce: {
+              currencyCode: 'USD',
+              checkout: {
+                actionField: {
+                  step: step,
+                  option: ''
+                },
+                products: [
+                  ...cartObject
+                ]
+              }
+            }
+          })
+        }
+      } catch (e) {
+        // Error caught in analyticsFactory.checkoutStepEvent
+      }
+    },
+    checkoutStepOptionEvent: function (option, step) {
+      try {
+        $window.dataLayer.push({
+          event: 'checkout-option',
+          ecommerce: {
+            checkout_option: {
+              actionField: {
+                step: step.toLowerCase(),
+                option: option.toLowerCase()
+              }
+            }
+          }
+        })
+      } catch (e) {
+        // Error caught in analyticsFactory.checkoutStepOptionEvent
       }
     },
     editRecurringDonation: function (giftData) {
@@ -269,11 +358,11 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.getSetProductCategory
       }
     },
-    giveGiftModal: function (productCode) {
+    giveGiftModal: function (productData) {
       try {
         var product = [{
           productInfo: {
-            productID: productCode
+            productID: productData.designationNumber
           },
           attributes: {
             siebel: {
@@ -283,6 +372,23 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         }]
 
         $window.digitalData.product = product
+        $window.dataLayer.push({
+          event: 'give-gift-modal',
+          ecommerce: {
+            currencyCode: 'USD',
+            detail: {
+              products: [{
+                name: productData.displayName.toLowerCase(),
+                id: productData.designationNumber,
+                price: undefined,
+                brand: 'cru',
+                category: productData.designationType.toLowerCase(),
+                variant: undefined,
+                quantity: '1'
+              }]
+            }
+          }
+        })
         this.setEvent('give gift modal')
         this.pageLoaded()
       } catch (e) {
@@ -323,6 +429,36 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.pageLoaded
       }
     },
+    productViewDetailsEvent: function (product) {
+      try {
+        if (typeof $window.dataLayer !== 'undefined') {
+          $window.dataLayer.push({
+            event: 'product-detail-click',
+            ecommerce: {
+              currencyCode: 'USD',
+              click: {
+                actionField: {
+                  list: 'search results'
+                },
+                products: [
+                  {
+                    name: product.name,
+                    id: product.designationNumber,
+                    price: undefined,
+                    brand: 'cru',
+                    category: product.type,
+                    variant: undefined,
+                    position: undefined
+                  }
+                ]
+              }
+            }
+          })
+        }
+      } catch (e) {
+        // Error caught in analyticsFactory.productViewDetailsEvent
+      }
+    },
     purchase: function (donorDetails, cartData) {
       try {
         // Build cart data layer
@@ -337,6 +473,46 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         $window.digitalData.purchaseNumber = purchaseNumber
       } catch (e) {
         // Error caught in analyticsFactory.setPurchaseNumber
+      }
+    },
+    transactionEvent: function (purchaseData, cartData) {
+      try {
+        const cartObject = cartData.items.map((cartItem) => {
+          return {
+            name: cartItem.displayName.toLowerCase(),
+            id: cartItem.code,
+            price: cartItem.amount.toString(),
+            branch: 'cru',
+            category: cartItem.designationType.toLowerCase(),
+            variant: cartItem.frequency.toLowerCase(),
+            quantity: '1'
+          }
+        })
+
+        if (typeof $window.dataLayer !== 'undefined') {
+          $window.dataLayer.push({
+            event: 'transaction',
+            paymentType: purchaseData.paymentMeans['account-type'].toLowerCase(),
+            ecommerce: {
+              currencyCode: 'USD',
+              purchase: {
+                actionField: {
+                  id: purchaseData.rawData['purchase-number'],
+                  affiliation: undefined,
+                  revenue: purchaseData.rawData['monetary-total'][0].amount.toString(),
+                  shipping: undefined,
+                  tax: undefined,
+                  coupon: undefined
+                },
+                products: [
+                  ...cartObject
+                ]
+              }
+            }
+          })
+        }
+      } catch (e) {
+        // Error in analyticsFactory.transactionEvent
       }
     },
     search: function (params, results) {
@@ -539,6 +715,15 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         $window._satellite.track(event)
       } catch (e) {
         // Error caught in analyticsFactory.track
+      }
+    },
+    trackGTM: function (eventName) {
+      try {
+        $window.dataLayer.push({
+          event: eventName
+        })
+      } catch (e) {
+        // Error caught in analyticsFactory.trackGTM
       }
     }
   }

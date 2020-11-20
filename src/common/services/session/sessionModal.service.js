@@ -46,12 +46,34 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       currentModal.result
         .then(angular.noop, () => {
           analyticsFactory.track(options.dismissAnalyticsEvent)
+          switch (type) {
+            case 'sign-in':
+            case 'sign-up':
+              analyticsFactory.trackGTM('ga-sign-in-exit')
+              break
+            case 'user-match':
+              analyticsFactory.trackGTM('ga-registration-exit')
+              break
+            default:
+              break
+          }
         })
     }
 
     if (options.openAnalyticsEvent) {
       currentModal.opened.then(() => {
         analyticsFactory.track(options.openAnalyticsEvent)
+        switch (type) {
+          case 'sign-in':
+          case 'sign-up':
+            analyticsFactory.trackGTM('ga-sign-in')
+            break
+          case 'user-match':
+            analyticsFactory.trackGTM('ga-registration-match-is-this-you')
+            break
+          default:
+            break
+        }
       }, angular.noop)
     }
 

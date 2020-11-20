@@ -54,9 +54,11 @@ describe('sessionModalController', function () {
 
   describe('$ctrl.onSignUpSuccess', () => {
     it('should close modal', () => {
+      jest.spyOn($ctrl.analyticsFactory, 'trackGTM').mockImplementation(() => {})
       $ctrl.onSignUpSuccess()
 
       expect($ctrl.close).toHaveBeenCalled()
+      expect($ctrl.analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in-create-login')
     })
   })
 

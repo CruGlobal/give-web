@@ -141,6 +141,7 @@ class YourGivingController {
         this.reload = true
       }, () => {
         this.analyticsFactory.track('aa-edit-recurring-exit')
+        this.analyticsFactory.trackGTM('ga-edit-recurring-exit')
       })
   }
 
