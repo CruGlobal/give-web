@@ -81,6 +81,7 @@ class ThankYouSummaryController {
 
         this.analyticsFactory.pageLoaded()
         this.analyticsFactory.setPurchaseNumber(data.rawData['purchase-number'])
+        this.analyticsFactory.transactionEvent(this.purchase)
       },
       (error) => {
         this.$log.error('Error loading purchase data for thank you component', error)

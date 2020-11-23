@@ -464,6 +464,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Build cart data layer
         this.setDonorDetails(donorDetails)
         this.buildProductVar(cartData)
+        // Stringify the cartObject and store in localStorage for the transactionEvent
+        localStorage.setItem('transactionCart', JSON.stringify(cartData))
       } catch (e) {
         // Error caught in analyticsFactory.purchase
       }
@@ -475,42 +477,55 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.setPurchaseNumber
       }
     },
-    transactionEvent: function (purchaseData, cartData) {
+    transactionEvent: function (purchaseData) {
       try {
-        const cartObject = cartData.items.map((cartItem) => {
-          return {
-            name: cartItem.displayName.toLowerCase(),
-            id: cartItem.code,
-            price: cartItem.amount.toString(),
-            branch: 'cru',
-            category: cartItem.designationType.toLowerCase(),
-            variant: cartItem.frequency.toLowerCase(),
-            quantity: '1'
-          }
-        })
-
-        if (typeof $window.dataLayer !== 'undefined') {
-          $window.dataLayer.push({
-            event: 'transaction',
-            paymentType: purchaseData.paymentMeans['account-type'].toLowerCase(),
-            ecommerce: {
-              currencyCode: 'USD',
-              purchase: {
-                actionField: {
-                  id: purchaseData.rawData['purchase-number'],
-                  affiliation: undefined,
-                  revenue: purchaseData.rawData['monetary-total'][0].amount.toString(),
-                  shipping: undefined,
-                  tax: undefined,
-                  coupon: undefined
-                },
-                products: [
-                  ...cartObject
-                ]
-              }
+        // Parse the cart object of the last purchase
+        const transactionCart = JSON.parse(localStorage.getItem('transactionCart'))
+        // The purchaseId number from the last purchase
+        const lastTransactionId = localStorage.getItem('transactionId')
+        // The purchaseId number from the pruchase data being passed in
+        const currentTransactionId = purchaseData.rawData['purchase-number']
+        // If the lastTransactionId and the current one do not match, we need to send an analytics event for the transaction
+        if (lastTransactionId !== currentTransactionId) {
+          // Set the transactionId in localStorage to be the one that is passed in
+          localStorage.setItem('transactionId', currentTransactionId)
+          const cartObject = transactionCart.items.map((cartItem) => {
+            return {
+              name: cartItem.displayName.toLowerCase(),
+              id: cartItem.code,
+              price: cartItem.amount.toString(),
+              branch: 'cru',
+              category: cartItem.designationType.toLowerCase(),
+              variant: cartItem.frequency.toLowerCase(),
+              quantity: '1'
             }
           })
+          // Send the transaction event if the dataLayer is defined
+          if (typeof $window.dataLayer !== 'undefined') {
+            $window.dataLayer.push({
+              event: 'transaction',
+              paymentType: purchaseData.paymentMeans['account-type'].toLowerCase(),
+              ecommerce: {
+                currencyCode: 'USD',
+                purchase: {
+                  actionField: {
+                    id: purchaseData.rawData['purchase-number'],
+                    affiliation: undefined,
+                    revenue: purchaseData.rawData['monetary-total'][0].amount.toString(),
+                    shipping: undefined,
+                    tax: undefined,
+                    coupon: undefined
+                  },
+                  products: [
+                    ...cartObject
+                  ]
+                }
+              }
+            })
+          }
         }
+        // Remove the transactionCart from localStorage since it is no longer needed
+        localStorage.removeItem('transactionCart')
       } catch (e) {
         // Error in analyticsFactory.transactionEvent
       }
