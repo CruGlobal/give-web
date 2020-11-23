@@ -429,6 +429,19 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.pageLoaded
       }
     },
+    pageReadyForOptimize: function () {
+      if (typeof $window.dataLayer !== 'undefined') {
+        let found = false
+        angular.forEach($window.dataLayer, (value) => {
+          if (value.event && value.event === 'angular.loaded') {
+            found = true
+          }
+        })
+        if (!found) {
+          $window.dataLayer.push({ event: 'angular.loaded' })
+        }
+      }
+    },
     productViewDetailsEvent: function (product) {
       try {
         if (typeof $window.dataLayer !== 'undefined') {
