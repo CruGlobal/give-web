@@ -482,13 +482,13 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Parse the cart object of the last purchase
         const transactionCart = JSON.parse(localStorage.getItem('transactionCart'))
         // The purchaseId number from the last purchase
-        const lastTransactionId = localStorage.getItem('transactionId')
+        const lastTransactionId = sessionStorage.getItem('transactionId')
         // The purchaseId number from the pruchase data being passed in
         const currentTransactionId = purchaseData.rawData['purchase-number']
         // If the lastTransactionId and the current one do not match, we need to send an analytics event for the transaction
         if (lastTransactionId !== currentTransactionId) {
           // Set the transactionId in localStorage to be the one that is passed in
-          localStorage.setItem('transactionId', currentTransactionId)
+          sessionStorage.setItem('transactionId', currentTransactionId)
           const cartObject = transactionCart.items.map((cartItem) => {
             return {
               name: cartItem.displayName.toLowerCase(),
