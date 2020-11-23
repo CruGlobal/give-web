@@ -161,20 +161,6 @@ class Step3Controller {
       this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
       this.$window.scrollTo(0, 0)
     })
-    // Get the purchase link to load purchase data
-    const lastPurchaseLink = this.orderService.retrieveLastPurchaseLink()
-    if (!lastPurchaseLink) {
-      return
-    }
-    // Load purchase data
-    this.profileService.getPurchase(lastPurchaseLink)
-      .subscribe((data) => {
-      // Run ecommerce transaction event
-        this.analyticsFactory.transactionEvent(data, this.cartData)
-      },
-      (error) => {
-        this.$log.error('Error loading purchase data for transaction event', error)
-      })
   }
 }
 
