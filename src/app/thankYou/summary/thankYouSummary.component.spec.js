@@ -105,6 +105,7 @@ describe('thank you summary', () => {
   describe('loadLastPurchase', () => {
     it('should load all data from the last completed purchase', () => {
       jest.spyOn(self.controller.profileService, 'getPurchase')
+      jest.spyOn(self.controller.analyticsFactory, 'transactionEvent')
       self.controller.loadLastPurchase()
 
       expect(self.controller.profileService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=')
@@ -127,6 +128,7 @@ describe('thank you summary', () => {
       expect(self.controller.onPurchaseLoaded).toHaveBeenCalledWith({
         $event: { purchase: self.mockPurchase }
       })
+      expect(self.controller.analyticsFactory.transactionEvent).toHaveBeenCalledWith(self.mockPurchase)
     })
 
     it('should not request purchase data if lastPurchaseLink is not defined', () => {
