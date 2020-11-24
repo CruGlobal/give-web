@@ -507,7 +507,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               name: cartItem.displayName.toLowerCase(),
               id: cartItem.code,
               price: cartItem.amount.toString(),
-              branch: 'cru',
+              brand: 'cru',
               category: cartItem.designationType.toLowerCase(),
               variant: cartItem.frequency.toLowerCase(),
               quantity: '1'
