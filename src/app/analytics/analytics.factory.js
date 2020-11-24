@@ -200,6 +200,18 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
       }
     },
     checkoutStepEvent: function (step, cart) {
+      let stepNumber
+      switch (step) {
+        case 'contact':
+          stepNumber = 1
+          break
+        case 'payment':
+          stepNumber = 2
+          break
+        case 'review':
+          stepNumber = 3
+          break
+      }
       const cartObject = cart.items.map((cartItem) => {
         return {
           name: cartItem.displayName.toLowerCase(),
@@ -220,7 +232,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               currencyCode: 'USD',
               checkout: {
                 actionField: {
-                  step: step,
+                  step: stepNumber,
                   option: ''
                 },
                 products: [
