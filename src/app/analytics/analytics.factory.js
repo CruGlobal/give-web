@@ -247,13 +247,25 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
       }
     },
     checkoutStepOptionEvent: function (option, step) {
+      let stepNumber
+      switch (step) {
+        case 'contact':
+          stepNumber = 1
+          break
+        case 'payment':
+          stepNumber = 2
+          break
+        case 'review':
+          stepNumber = 3
+          break
+      }
       try {
         $window.dataLayer.push({
           event: 'checkout-option',
           ecommerce: {
             checkout_option: {
               actionField: {
-                step: step.toLowerCase(),
+                step: stepNumber,
                 option: option.toLowerCase()
               }
             }
