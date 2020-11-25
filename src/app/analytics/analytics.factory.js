@@ -522,11 +522,13 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         const lastTransactionId = sessionStorage.getItem('transactionId')
         // The purchaseId number from the pruchase data being passed in
         const currentTransactionId = purchaseData && purchaseData.rawData['purchase-number']
+        let purchaseTotal = 0
         // If the lastTransactionId and the current one do not match, we need to send an analytics event for the transaction
         if (purchaseData && lastTransactionId !== currentTransactionId) {
           // Set the transactionId in localStorage to be the one that is passed in
           sessionStorage.setItem('transactionId', currentTransactionId)
           const cartObject = transactionCart.items.map((cartItem) => {
+            purchaseTotal += cartItem.amount
             return {
               name: cartItem.displayName.toLowerCase(),
               id: cartItem.code,
@@ -548,7 +550,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                   actionField: {
                     id: purchaseData.rawData['purchase-number'],
                     affiliation: undefined,
-                    revenue: purchaseData.rawData['monetary-total'][0].amount.toString(),
+                    revenue: purchaseTotal.toString(),
                     shipping: undefined,
                     tax: undefined,
                     coupon: undefined
