@@ -215,7 +215,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
       const cartObject = cart.items.map((cartItem) => {
         return {
           name: cartItem.displayName.toLowerCase(),
-          id: cartItem.code,
+          id: cartItem.designationNumber,
           price: cartItem.amount.toString(),
           branch: 'cru',
           category: cartItem.designationType.toLowerCase(),
@@ -531,7 +531,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
             purchaseTotal += cartItem.amount
             return {
               name: cartItem.displayName.toLowerCase(),
-              id: cartItem.code,
+              id: cartItem.designationNumber,
               price: cartItem.amount.toString(),
               brand: 'cru',
               category: cartItem.designationType.toLowerCase(),
