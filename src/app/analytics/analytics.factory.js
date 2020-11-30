@@ -542,7 +542,6 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
           // Send the transaction event if the dataLayer is defined
           if (typeof $window.dataLayer !== 'undefined') {
             $window.dataLayer.push({
-              event: 'transaction',
               paymentType: purchaseData.paymentMeans['account-type'].toLowerCase(),
               ecommerce: {
                 currencyCode: 'USD',
