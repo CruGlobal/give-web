@@ -50,7 +50,7 @@ class Step2Controller {
   }
 
   handlePaymentChange (selectedPaymentMethod) {
-    this.defaultPaymentType = selectedPaymentMethod['account-type']
+    this.defaultPaymentType = selectedPaymentMethod['account-type'] ? selectedPaymentMethod['account-type'] : selectedPaymentMethod['card-type']
   }
 
   handleExistingPaymentLoading (success, hasExistingPaymentMethods, error) {
