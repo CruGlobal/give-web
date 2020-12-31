@@ -938,6 +938,18 @@ describe('order service', () => {
       self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
       expect(self.orderService.retrieveCartData()).toEqual(cartData)
     })
+
+    it('should not turn the gift start date into a moment if the cart does not exist', () => {
+      jest.spyOn(self.orderService, 'turnDateStringsToDates')
+      self.$window.localStorage.setItem('cartData', null)
+      expect(self.orderService.turnDateStringsToDates).not.toHaveBeenCalled()
+    })
+
+    it('should not turn the gift start date into a moment if the cart does not have items', () => {
+      jest.spyOn(self.orderService, 'turnDateStringsToDates')
+      self.$window.localStorage.setItem('cartData', '{}')
+      expect(self.orderService.turnDateStringsToDates).not.toHaveBeenCalled()
+    })
   })
 
   describe('addItemToCartData', () => {
@@ -1280,6 +1292,12 @@ describe('order service', () => {
 
       self.orderService.updatePrices(cartData)
       expect(cartData.cartTotal).toEqual(25000)
+    })
+
+    it('should not try to calculate cartTotal if there is no items object', () => {
+      const cartData = {}
+      self.orderService.updatePrices(cartData)
+      expect(cartData.cartTotal).not.toBeDefined()
     })
   })
 

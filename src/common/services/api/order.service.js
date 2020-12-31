@@ -346,7 +346,7 @@ class Order {
 
   retrieveCartData () {
     const cartData = angular.fromJson(this.localStorage.getItem('cartData'))
-    if (cartData) {
+    if (cartData && cartData.items) {
       this.turnDateStringsToDates(cartData)
     }
     return cartData
@@ -413,7 +413,9 @@ class Order {
   updatePrices (cartData) {
     this.storeCoverFeeDecision(cartData.coverFees)
 
-    cartData.cartTotal = cartData.items.reduce((total, item) => total + this.updatePrice(item, cartData.coverFees), 0)
+    if (cartData.items) {
+      cartData.cartTotal = cartData.items.reduce((total, item) => total + this.updatePrice(item, cartData.coverFees), 0)
+    }
     this.recalculateFrequencyTotals(cartData)
     this.storeCartData(cartData)
   }
