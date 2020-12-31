@@ -308,7 +308,7 @@ class ProductConfigFormController {
     const data = this.productData.frequency === 'NA' ? omit(this.itemConfig, ['recurring-start-month', 'recurring-day-of-month']) : this.itemConfig
 
     const savingObservable = this.isEdit
-      ? this.cartService.editItem(this.uri, this.productData.uri, data)
+      ? Observable.forkJoin(this.cartService.editItem(this.uri, this.productData.uri, data))
       : this.cartService.addItem(this.productData.uri, data, this.disableSessionRestart)
 
     savingObservable.subscribe(data => {
@@ -322,7 +322,11 @@ class ProductConfigFormController {
         this.$scope.$emit(giftAddedEvent)
         this.analyticsFactory.cartAdd(this.itemConfig, this.productData)
       }
-      this.uri = data.self.uri
+      if (Array.isArray(data)) {
+        this.uri = data[0].self.uri
+      } else {
+        this.uri = data.self.uri
+      }
       this.submittingGift = false
       this.onStateChange({ state: 'submitted' })
     }, error => {
