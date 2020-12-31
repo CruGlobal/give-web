@@ -731,7 +731,7 @@ describe('order service', () => {
         console.log('Adding item')
         return Observable.of('').pipe(delay(100))
       })
-      const editItemSpy = jest.spyOn(self.cartService, 'editItem')
+      const editItemSpy = jest.spyOn(self.cartService, 'editItemSequential')
       getPurchaseFormMock.mockRestore()
       const getPurchaseFormSpy = jest.spyOn(self.cortexApiService, 'get').mockImplementation(() => {
         console.log('GET purchase form')
@@ -1461,7 +1461,7 @@ describe('order service', () => {
   describe('editGifts', () => {
     const cartData = {}
     beforeEach(() => {
-      jest.spyOn(self.cartService, 'editItem').mockImplementation(() => Observable.of(''))
+      jest.spyOn(self.cartService, 'editItemSequential').mockImplementation(() => Observable.of(''))
       cartData.items = [
         {
           uri: 'some/uri',
@@ -1504,7 +1504,7 @@ describe('order service', () => {
 
     it('should call the API to edit the items in the cart', () => {
       self.orderService.editGifts(cartData)
-      expect(self.cartService.editItem).toHaveBeenCalledWith('some/uri', 'other/uri', { amount: 1})
+      expect(self.cartService.editItemSequential).toHaveBeenCalledWith('some/uri', 'other/uri', { amount: 1})
     })
   })
 

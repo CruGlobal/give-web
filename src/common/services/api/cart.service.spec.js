@@ -189,10 +189,10 @@ describe('cart service', () => {
       }
       jest.spyOn(self.cartService, 'deleteItem').mockReturnValue(Observable.of(''))
       jest.spyOn(self.cartService, 'addItem').mockReturnValue(Observable.of(addData))
-      Observable.forkJoin(self.cartService.editItem('<some old id>', '<new id>', { code: '<some code>' }))
+      self.cartService.editItem('<some old id>', '<new id>', { code: '<some code>' })
         .subscribe((data) => {
           expect(data).toBeDefined()
-          expect(data[0]).toEqual(addData)
+          expect(data).toEqual(addData)
           done()
         })
     })
