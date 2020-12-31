@@ -112,7 +112,6 @@ class CheckoutController {
         })
         .subscribe((data) => {
           this.orderService.addFeesToNewGiftIfNecessary(data)
-          this.orderService.storeCartData(data)
           this.cartData = data
           this.analyticsFactory.buildProductVar(data)
         },

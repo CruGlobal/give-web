@@ -167,11 +167,12 @@ describe('navCart', () => {
       jest.spyOn($ctrl.cartService, 'get').mockReturnValue(Observable.of(returnedCart))
       jest.spyOn($ctrl.orderService, 'storeFeesApplied').mockImplementation(() => {})
       jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
+      jest.spyOn($ctrl.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
       jest.spyOn($ctrl.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
-      jest.spyOn($ctrl.orderService, 'updatePrices').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
 
       $ctrl.loadCart()
-      expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(returnedCart);
+      expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(returnedCart)
     })
   })
 
