@@ -163,6 +163,11 @@ class Cart {
   }
 
   editItem (oldUri, uri, data) {
+    return this.deleteItem(oldUri)
+      .switchMap(() => this.addItem(uri, data, true))
+  }
+
+  editItemSequential (oldUri, uri, data) {
     return Observable.concat(
       this.deleteItem(oldUri),
       this.addItem(uri, data, true)

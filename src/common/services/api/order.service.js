@@ -468,7 +468,7 @@ class Order {
       if (cartData.coverFees) {
         item.config.amount = item.amountWithFee
       }
-      return this.cartService.editItem(item.uri, item.productUri, item.config)
+      return this.cartService.editItemSequential(item.uri, item.productUri, item.config)
     })
   }
 
