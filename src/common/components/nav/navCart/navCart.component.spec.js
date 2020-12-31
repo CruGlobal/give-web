@@ -20,6 +20,10 @@ describe('navCart', () => {
     })
   }))
 
+  beforeEach(() => {
+    jest.spyOn($ctrl.orderService, 'storeCartData').mockImplementation(() => {})
+  })
+
   describe('$onInit', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'loadCart').mockImplementation(() => {})
@@ -133,19 +137,20 @@ describe('navCart', () => {
       expect($ctrl.analyticsFactory.setEvent).toHaveBeenCalledWith('cart open')
     })
 
+    const returnedCart = {
+      items: [
+        {
+          amount: 1,
+          price: '$1.00'
+        },
+        {
+          amount: 2,
+          price: '$2.00'
+        }
+      ]
+    }
+
     it('should add fee amounts to the cart if the fees have been chosen and a gift was added', () => {
-      const returnedCart = {
-        items: [
-          {
-            amount: 1,
-            price: '$1.00'
-          },
-          {
-            amount: 2,
-            price: '$2.00'
-          }
-        ]
-      }
       $ctrl.cartService.get.mockReturnValue(Observable.of(returnedCart))
       jest.spyOn($ctrl.orderService, 'storeFeesApplied').mockImplementation(() => {})
       jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
@@ -156,6 +161,17 @@ describe('navCart', () => {
       expect($ctrl.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
       expect($ctrl.orderService.calculatePricesWithFees).toHaveBeenCalledWith(false, returnedCart.items)
       expect($ctrl.orderService.updatePrices).toHaveBeenCalledWith(returnedCart)
+    })
+
+    it('should save the loaded gift cart into local storage', () => {
+      jest.spyOn($ctrl.cartService, 'get').mockReturnValue(Observable.of(returnedCart))
+      jest.spyOn($ctrl.orderService, 'storeFeesApplied').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
+      jest.spyOn($ctrl.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
+      jest.spyOn($ctrl.orderService, 'updatePrices').mockImplementation(() => {})
+
+      $ctrl.loadCart()
+      expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(returnedCart);
     })
   })
 
