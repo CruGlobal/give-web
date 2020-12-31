@@ -182,6 +182,20 @@ describe('cart service', () => {
       expect(self.cartService.deleteItem).toHaveBeenCalledWith('<some old id>')
       expect(self.cartService.addItem).toHaveBeenCalledWith('<new id>', { code: '<some code>' }, true)
     })
+
+    it('should give me data from the add item', done => {
+      const addData = {
+        self: { uri: 'some-uri' }
+      }
+      jest.spyOn(self.cartService, 'deleteItem').mockReturnValue(Observable.of(''))
+      jest.spyOn(self.cartService, 'addItem').mockReturnValue(Observable.of(addData))
+      Observable.forkJoin(self.cartService.editItem('<some old id>', '<new id>', { code: '<some code>' }))
+        .subscribe((data) => {
+          expect(data).toBeDefined()
+          expect(data[0]).toEqual(addData)
+          done()
+        })
+    })
   })
 
   describe('deleteItem', () => {
