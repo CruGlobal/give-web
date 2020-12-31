@@ -54,6 +54,7 @@ class CartController {
       this.cartService.get()
         .subscribe(data => {
           this.orderService.addFeesToNewGiftIfNecessary(data)
+          this.orderService.storeCartData(data)
           this.cartData = data
           this.setLoadCartVars(reload)
         },
