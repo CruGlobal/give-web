@@ -3,6 +3,7 @@ import 'angular-mocks'
 import omit from 'lodash/omit'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
+import { delay } from 'rxjs/operators'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
 import moment from 'moment'
 
@@ -21,9 +22,10 @@ describe('order service', () => {
   beforeEach(angular.mock.module(module.name))
   var self = {}
 
-  beforeEach(inject((orderService, cartService, $httpBackend, $window, $log) => {
+  beforeEach(inject((orderService, cartService, cortexApiService, $httpBackend, $window, $log) => {
     self.orderService = orderService
     self.cartService = cartService
+    self.cortexApiService = cortexApiService
     self.$httpBackend = $httpBackend
     self.$window = $window
     self.$log = $log
@@ -642,9 +644,10 @@ describe('order service', () => {
   })
 
   describe('submit', () => {
+    let getPurchaseFormMock
     beforeEach(() => {
       // Avoid another http request while testing
-      jest.spyOn(self.orderService, 'getPurchaseForm').mockReturnValue(Observable.of(purchaseFormResponseZoomMapped))
+      getPurchaseFormMock = jest.spyOn(self.orderService, 'getPurchaseForm').mockReturnValue(Observable.of(purchaseFormResponseZoomMapped))
     })
 
     it('should send a request to finalize the purchase', () => {
@@ -675,23 +678,24 @@ describe('order service', () => {
       self.$httpBackend.flush()
     })
 
+    const cartData = {
+      items: [
+        {
+          price: '$2.00',
+          amount: 2,
+          config: { amount: 2 },
+          amountWithFee: '2.05'
+        },
+        {
+          price: '$1.00',
+          amount: 1,
+          config: { amount: 1 },
+          amountWithFee: '1.02'
+        }
+      ]
+    }
+
     it('should edit the gifts on the server if there are fees and send a request to finalize the purchase', done => {
-      const cartData = {
-        items: [
-          {
-            price: '$2.00',
-            amount: 2,
-            config: { amount: 2 },
-            amountWithFee: '2.05'
-          },
-          {
-            price: '$1.00',
-            amount: 1,
-            config: { amount: 1 },
-            amountWithFee: '1.02'
-          }
-        ]
-      }
       self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
       self.$window.localStorage.setItem('coverFees', 'true')
       self.$window.localStorage.setItem('feesApplied', 'true')
@@ -712,6 +716,46 @@ describe('order service', () => {
         })
 
       self.$httpBackend.flush()
+    })
+
+    it('should do the edit gifts and submit purchase in order', done => {
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      self.$window.localStorage.setItem('coverFees', 'true')
+      self.$window.localStorage.setItem('feesApplied', 'true')
+
+      const deleteItemSpy = jest.spyOn(self.cartService, 'deleteItem').mockImplementation(() => {
+        console.log('Deleting item')
+        return Observable.of('')
+      })
+      const addItemSpy = jest.spyOn(self.cartService, 'addItem').mockImplementation(() => {
+        console.log('Adding item')
+        return Observable.of('').pipe(delay(100))
+      })
+      const editItemSpy = jest.spyOn(self.cartService, 'editItem')
+      getPurchaseFormMock.mockRestore()
+      const getPurchaseFormSpy = jest.spyOn(self.cortexApiService, 'get').mockImplementation(() => {
+        console.log('GET purchase form')
+        return Observable.of(purchaseFormResponse)
+      })
+      const getPurchaseSpy = jest.spyOn(self.cortexApiService, 'post').mockImplementation(() => {
+        console.log('POST purchase')
+        return Observable.of(purchaseResponse)
+      })
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(editItemSpy).toHaveBeenCalledTimes(2)
+          expect(deleteItemSpy).toHaveBeenCalledTimes(2)
+          expect(addItemSpy).toHaveBeenCalledTimes(2)
+          expect(getPurchaseFormSpy).toHaveBeenCalled()
+          expect(getPurchaseSpy).toHaveBeenCalled()
+          expect(editItemSpy).toHaveBeenCalledBefore(getPurchaseFormSpy)
+          expect(deleteItemSpy).toHaveBeenCalledBefore(getPurchaseFormSpy)
+          expect(addItemSpy).toHaveBeenCalledBefore(getPurchaseFormSpy)
+          expect(getPurchaseFormSpy).toHaveBeenCalledBefore(getPurchaseSpy)
+          expect(data).toEqual(purchaseResponse)
+          done()
+        })
     })
   })
 
