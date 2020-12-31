@@ -325,7 +325,7 @@ class Order {
 
   retrieveCartData () {
     const cartData = angular.fromJson(this.localStorage.getItem('cartData'))
-    if (cartData) {
+    if (cartData && cartData.items) {
       this.turnDateStringsToDates(cartData)
     }
     return cartData
