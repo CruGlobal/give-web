@@ -17,6 +17,10 @@ describe('checkout', function () {
     })
   }))
 
+  beforeEach(() => {
+    jest.spyOn(self.controller.orderService, 'storeCartData').mockImplementation(() => {})
+  })
+
   it('to be defined', function () {
     expect(self.controller).toBeDefined()
     expect(self.controller.loadingCartData).toEqual(true)
@@ -210,19 +214,20 @@ describe('checkout', function () {
       expect(self.controller.analyticsFactory.buildProductVar).toHaveBeenCalledWith(cartData)
     })
 
+    const returnedCart = {
+      items: [
+        {
+          amount: 1,
+          price: '$1.00'
+        },
+        {
+          amount: 2,
+          price: '$2.00'
+        }
+      ]
+    }
+
     it('should add fee amounts to the cart if the fees have been chosen and a gift was added', () => {
-      const returnedCart = {
-        items: [
-          {
-            amount: 1,
-            price: '$1.00'
-          },
-          {
-            amount: 2,
-            price: '$2.00'
-          }
-        ]
-      }
       jest.spyOn(self.controller.cartService, 'get').mockReturnValue(Observable.of(returnedCart))
       jest.spyOn(self.controller.orderService, 'storeFeesApplied').mockImplementation(() => {})
       jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
@@ -233,6 +238,17 @@ describe('checkout', function () {
       expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
       expect(self.controller.orderService.calculatePricesWithFees).toHaveBeenCalledWith(false, returnedCart.items)
       expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(returnedCart)
+    })
+
+    it('should save the loaded gift cart into local storage', () => {
+      jest.spyOn(self.controller.cartService, 'get').mockReturnValue(Observable.of(returnedCart))
+      jest.spyOn(self.controller.orderService, 'storeFeesApplied').mockImplementation(() => {})
+      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
+      jest.spyOn(self.controller.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
+      jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
+
+      self.controller.loadCart()
+      expect(self.controller.orderService.storeCartData).toHaveBeenCalledWith(returnedCart);
     })
   })
 })
