@@ -1246,6 +1246,12 @@ describe('order service', () => {
       self.orderService.updatePrices(cartData)
       expect(cartData.cartTotal).toEqual(25000)
     })
+
+    it('should not try to calculate cartTotal if there is no items object', () => {
+      const cartData = {}
+      self.orderService.updatePrices(cartData)
+      expect(cartData.cartTotal).not.toBeDefined()
+    })
   })
 
   describe('recalculateFrequencyTotals', () => {
