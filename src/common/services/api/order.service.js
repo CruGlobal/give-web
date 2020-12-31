@@ -441,7 +441,7 @@ class Order {
   }
 
   addFeesToNewGiftIfNecessary (data) {
-    if (this.retrieveCoverFeeDecision()) {
+    if (data.items && this.retrieveCoverFeeDecision()) {
       // We should only ever get here if the user has already decided to add fees, but then added a new gift
       data.coverFees = true
       this.storeFeesApplied(true)
