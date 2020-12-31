@@ -15,6 +15,7 @@ import 'rxjs/add/operator/mergeAll'
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/from'
+import 'rxjs/add/observable/concat'
 
 import cortexApiService from '../cortexApi.service'
 import commonService from './common.service'
@@ -162,8 +163,10 @@ class Cart {
   }
 
   editItem (oldUri, uri, data) {
-    return this.deleteItem(oldUri)
-      .switchMap(() => this.addItem(uri, data, true))
+    return Observable.concat(
+      this.deleteItem(oldUri),
+      this.addItem(uri, data, true)
+    )
   }
 
   deleteItem (uri) {
