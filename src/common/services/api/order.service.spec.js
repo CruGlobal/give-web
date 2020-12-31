@@ -675,7 +675,7 @@ describe('order service', () => {
       self.$httpBackend.flush()
     })
 
-    it('should edit the gifts on the server if there are fees and send a request to finalize the purchase', () => {
+    it('should edit the gifts on the server if there are fees and send a request to finalize the purchase', done => {
       const cartData = {
         items: [
           {
@@ -702,6 +702,7 @@ describe('order service', () => {
         .subscribe((data) => {
           expect(self.orderService.editGifts).toHaveBeenCalled()
           expect(data).toEqual(purchaseResponse)
+          done()
         })
 
       self.$httpBackend.flush()
