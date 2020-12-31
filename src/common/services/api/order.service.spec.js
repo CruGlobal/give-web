@@ -683,6 +683,12 @@ describe('order service', () => {
             amount: 2,
             config: { amount: 2 },
             amountWithFee: '2.05'
+          },
+          {
+            price: '$1.00',
+            amount: 1,
+            config: { amount: 1 },
+            amountWithFee: '1.02'
           }
         ]
       }
@@ -690,7 +696,7 @@ describe('order service', () => {
       self.$window.localStorage.setItem('coverFees', 'true')
       self.$window.localStorage.setItem('feesApplied', 'true')
       jest.spyOn(self.orderService, 'editGifts').mockImplementation(() => {
-        return [ Observable.of('') ]
+        return [Observable.of('1'), Observable.of('2')]
       })
 
       self.$httpBackend.expectPOST(
@@ -1400,8 +1406,21 @@ describe('order service', () => {
           productUri: 'other/uri',
           config: { amount: 1 },
           amountWithFee: 1.02
+        },
+        {
+          uri: 'some/uri2',
+          productUri: 'other/uri2',
+          config: { amount: 2 },
+          amountWithFee: 2.05
         }
       ]
+    })
+
+    it('should return an array of observables', () => {
+      cartData.coverFees = true
+      const observables = self.orderService.editGifts(cartData)
+      expect(Array.isArray(observables)).toEqual(true)
+      expect(observables.length).toEqual(2)
     })
 
     it('should update the item config amounts if the donor opted to cover fees', () => {
