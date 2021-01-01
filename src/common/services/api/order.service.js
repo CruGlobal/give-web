@@ -251,41 +251,19 @@ class Order {
   }
 
   submit (cvv) {
-    const locallyStoredCart = this.retrieveCartData()
-    let observables
-    if (locallyStoredCart && this.retrieveCoverFeeDecision()) {
-      observables = this.editGifts(locallyStoredCart)
-    }
-    if (observables) {
-      observables.push(this.getPurchaseForm())
-      return Observable.forkJoin(observables)
-        .mergeMap((data) => {
-          const postData = cvv ? { 'security-code': cvv } : {}
-          return this.cortexApiService.post({
-            path: this.hateoasHelperService.getLink(data[data.length - 1].enhancedpurchaseform, 'createenhancedpurchaseaction'),
-            data: postData,
-            followLocation: true
-          })
-        }, 1)
-        .do((data) => {
-          this.storeLastPurchaseLink(data.self.uri)
-          this.cartService.setCartCountCookie(0)
+    return this.getPurchaseForm()
+      .mergeMap((data) => {
+        const postData = cvv ? { 'security-code': cvv } : {}
+        return this.cortexApiService.post({
+          path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
+          data: postData,
+          followLocation: true
         })
-    } else {
-      return this.getPurchaseForm()
-        .mergeMap((data) => {
-          const postData = cvv ? { 'security-code': cvv } : {}
-          return this.cortexApiService.post({
-            path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
-            data: postData,
-            followLocation: true
-          })
-        })
-        .do((data) => {
-          this.storeLastPurchaseLink(data.self.uri)
-          this.cartService.setCartCountCookie(0)
-        })
-    }
+      })
+      .do((data) => {
+        this.storeLastPurchaseLink(data.self.uri)
+        this.cartService.setCartCountCookie(0)
+      })
   }
 
   storeCardSecurityCode (cvv, uri) {
