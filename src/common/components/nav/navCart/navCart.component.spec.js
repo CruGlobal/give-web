@@ -121,7 +121,7 @@ describe('navCart', () => {
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading nav cart items', 'some error'])
     })
 
-    it('should load cart from local storage if it is there', () => {
+    xit('should load cart from local storage if it is there', () => {
       const cartData = { items: [ {} ] }
       jest.spyOn($ctrl.orderService, 'retrieveCartData').mockReturnValue(cartData)
       jest.spyOn($ctrl.cartService, 'get')
