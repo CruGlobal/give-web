@@ -1404,41 +1404,4 @@ describe('order service', () => {
       expect(priceWithoutFees).toEqual('100,000.00')
     })
   })
-
-  describe('editGifts', () => {
-    const cartData = {}
-    beforeEach(() => {
-      jest.spyOn(self.cartService, 'editItem').mockImplementation(() => Observable.of(''))
-      cartData.items = [
-        {
-          uri: 'some/uri',
-          productUri: 'other/uri',
-          config: { amount: 1 },
-          amountWithFee: 1.02
-        }
-      ]
-    })
-
-    it('should update the item config amounts if the donor opted to cover fees', () => {
-
-      cartData.coverFees = true
-
-      Observable.forkJoin(self.orderService.editGifts(cartData)).subscribe(() => {
-        expect(cartData.items[0].config.amount).toEqual(1.02)
-      })
-    })
-
-    it('should not update the item config amounts if the donor chose not to cover fees', () => {
-      cartData.coverFees = false
-
-      Observable.forkJoin(self.orderService.editGifts(cartData)).subscribe(() => {
-        expect(cartData.items[0].config.amount).toEqual(1)
-      })
-    })
-
-    it('should call the API to edit the items in the cart', () => {
-      self.orderService.editGifts(cartData)
-      expect(self.cartService.editItem).toHaveBeenCalledWith('some/uri', 'other/uri', { amount: 1})
-    })
-  })
 })
