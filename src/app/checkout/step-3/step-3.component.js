@@ -152,6 +152,11 @@ class Step3Controller {
     error => {
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
+
+      // Empty out cart data from local storage and reload the current cart into it
+      this.orderService.clearCartData()
+      this.loadCart()
+
       if (error.config && error.config.data && error.config.data['security-code']) {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }
