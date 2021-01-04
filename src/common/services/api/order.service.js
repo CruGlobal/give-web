@@ -254,6 +254,7 @@ class Order {
     return this.getPurchaseForm()
       .mergeMap((data) => {
         const postData = cvv ? { 'security-code': cvv } : {}
+        postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
           data: postData,
