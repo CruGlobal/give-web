@@ -650,7 +650,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        {}
+        { 'cover-cc-fees': false }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -664,7 +664,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase and with a CVV', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'security-code': '123' }
+        { 'security-code': '123', 'cover-cc-fees': false }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit('123')
@@ -675,32 +675,48 @@ describe('order service', () => {
       self.$httpBackend.flush()
     })
 
-    it('should edit the gifts on the server if there are fees and send a request to finalize the purchase', () => {
-      const cartData = {
-        items: [
-          {
-            price: '$2.00',
-            amount: 2,
-            config: { amount: 2 },
-            amountWithFee: '2.05'
-          }
-        ]
-      }
-      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+    it('should send the (true) cover fees flag to the server', () => {
       self.$window.localStorage.setItem('coverFees', 'true')
-      self.$window.localStorage.setItem('feesApplied', 'true')
-      jest.spyOn(self.orderService, 'editGifts').mockImplementation(() => {
-        return [ Observable.of('') ]
-      })
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { }
+        { 'cover-cc-fees': true }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
         .subscribe((data) => {
-          expect(self.orderService.editGifts).toHaveBeenCalled()
+          expect(data).toEqual(purchaseResponse)
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should send the (false) cover fees flag to the server', () => {
+      self.$window.localStorage.setItem('coverFees', 'false')
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        { 'cover-cc-fees': false }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(data).toEqual(purchaseResponse)
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should send the (false) cover fees flag to the server if the flag is not set in local storage', () => {
+      expect(self.$window.localStorage.getItem('coverFees')).toEqual(null)
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        { 'cover-cc-fees': false }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
         })
 
