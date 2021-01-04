@@ -36,7 +36,7 @@ describe('signIn', function () {
       expect($ctrl.$window.location).toEqual('/sign-in.html')
     })
 
-    xit('clears the locally stored cart', () => {
+    it('clears the locally stored cart', () => {
       expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(null)
     })
   })
@@ -58,7 +58,7 @@ describe('signIn', function () {
       expect($ctrl.$window.location).toEqual('/sign-in.html')
     })
 
-    xit('clears the locally stored cart', () => {
+    it('clears the locally stored cart', () => {
       expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(null)
     })
   })
@@ -80,7 +80,7 @@ describe('signIn', function () {
       expect($ctrl.$window.location).toEqual('/checkout.html')
     })
 
-    xit('clears the locally stored cart', () => {
+    it('clears the locally stored cart', () => {
       expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(null)
     })
   })
