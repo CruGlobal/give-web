@@ -440,15 +440,6 @@ class Order {
     return originalAmount * this.FEE_DERIVATIVE
   }
 
-  editGifts (cartData) {
-    return cartData.items.map(item => {
-      if (cartData.coverFees) {
-        item.config.amount = item.amountWithFee
-      }
-      return this.cartService.editItem(item.uri, item.productUri, item.config)
-    })
-  }
-
   addFeesToNewGiftIfNecessary (data) {
     if (this.retrieveCoverFeeDecision()) {
       // We should only ever get here if the user has already decided to add fees, but then added a new gift
