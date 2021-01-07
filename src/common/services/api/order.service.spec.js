@@ -653,7 +653,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        {}
+        { 'cover-cc-fees': false }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -667,7 +667,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase and with a CVV', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'security-code': '123' }
+        { 'security-code': '123', 'cover-cc-fees': false }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit('123')
@@ -678,39 +678,48 @@ describe('order service', () => {
       self.$httpBackend.flush()
     })
 
-    const cartData = {
-      items: [
-        {
-          price: '$2.00',
-          amount: 2,
-          config: { amount: 2 },
-          amountWithFee: '2.05'
-        },
-        {
-          price: '$1.00',
-          amount: 1,
-          config: { amount: 1 },
-          amountWithFee: '1.02'
-        }
-      ]
-    }
-
-    it('should edit the gifts on the server if there are fees and send a request to finalize the purchase', done => {
-      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+    it('should send the (true) cover fees flag to the server', () => {
       self.$window.localStorage.setItem('coverFees', 'true')
-      self.$window.localStorage.setItem('feesApplied', 'true')
-      jest.spyOn(self.orderService, 'editGifts').mockImplementation(() => {
-        return [Observable.of('1'), Observable.of('2')]
-      })
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { }
+        { 'cover-cc-fees': true }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
         .subscribe((data) => {
-          expect(self.orderService.editGifts).not.toHaveBeenCalled()
+          expect(data).toEqual(purchaseResponse)
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should send the (false) cover fees flag to the server', () => {
+      self.$window.localStorage.setItem('coverFees', 'false')
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        { 'cover-cc-fees': false }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(data).toEqual(purchaseResponse)
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should send the (false) cover fees flag to the server if the flag is not set in local storage', () => {
+      expect(self.$window.localStorage.getItem('coverFees')).toEqual(null)
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        { 'cover-cc-fees': false }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
           done()
         })
@@ -1455,56 +1464,6 @@ describe('order service', () => {
       expect(priceWithoutFees).toEqual('10,000.00')
       priceWithoutFees = self.orderService.calculatePriceWithoutFees(102406.55)
       expect(priceWithoutFees).toEqual('100,000.00')
-    })
-  })
-
-  describe('editGifts', () => {
-    const cartData = {}
-    beforeEach(() => {
-      jest.spyOn(self.cartService, 'editItemSequential').mockImplementation(() => Observable.of(''))
-      cartData.items = [
-        {
-          uri: 'some/uri',
-          productUri: 'other/uri',
-          config: { amount: 1 },
-          amountWithFee: 1.02
-        },
-        {
-          uri: 'some/uri2',
-          productUri: 'other/uri2',
-          config: { amount: 2 },
-          amountWithFee: 2.05
-        }
-      ]
-    })
-
-    it('should return an array of observables', () => {
-      cartData.coverFees = true
-      const observables = self.orderService.editGifts(cartData)
-      expect(Array.isArray(observables)).toEqual(true)
-      expect(observables.length).toEqual(2)
-    })
-
-    it('should update the item config amounts if the donor opted to cover fees', () => {
-
-      cartData.coverFees = true
-
-      Observable.forkJoin(self.orderService.editGifts(cartData)).subscribe(() => {
-        expect(cartData.items[0].config.amount).toEqual(1.02)
-      })
-    })
-
-    it('should not update the item config amounts if the donor chose not to cover fees', () => {
-      cartData.coverFees = false
-
-      Observable.forkJoin(self.orderService.editGifts(cartData)).subscribe(() => {
-        expect(cartData.items[0].config.amount).toEqual(1)
-      })
-    })
-
-    it('should call the API to edit the items in the cart', () => {
-      self.orderService.editGifts(cartData)
-      expect(self.cartService.editItemSequential).toHaveBeenCalledWith('some/uri', 'other/uri', { amount: 1})
     })
   })
 

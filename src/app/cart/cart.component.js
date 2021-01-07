@@ -46,21 +46,27 @@ class CartController {
     } else {
       this.loading = true
     }
-    this.cartService.get()
-      .subscribe(data => {
-        this.orderService.addFeesToNewGiftIfNecessary(data)
-        this.cartData = data
-        this.setLoadCartVars(reload)
-      },
-      error => {
-        this.$log.error('Error loading cart', error)
-        this.loading = false
-        this.updating = false
-        this.error = {
-          loading: !reload,
-          updating: !!reload
-        }
-      })
+    const locallyStoredCart = this.orderService.retrieveCartData()
+    if (locallyStoredCart) {
+      this.cartData = locallyStoredCart
+      this.setLoadCartVars(reload)
+    } else {
+      this.cartService.get()
+        .subscribe(data => {
+          this.orderService.addFeesToNewGiftIfNecessary(data)
+          this.cartData = data
+          this.setLoadCartVars(reload)
+        },
+        error => {
+          this.$log.error('Error loading cart', error)
+          this.loading = false
+          this.updating = false
+          this.error = {
+            loading: !reload,
+            updating: !!reload
+          }
+        })
+    }
 
     this.donorCoveredFees = !!this.orderService.retrieveCoverFeeDecision()
   }

@@ -254,6 +254,7 @@ class Order {
     return this.getPurchaseForm()
       .mergeMap((data) => {
         const postData = cvv ? { 'security-code': cvv } : {}
+        postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
           data: postData,
@@ -439,15 +440,6 @@ class Order {
   calculateAmountWithoutFees (originalAmount) {
     originalAmount = parseFloat(originalAmount)
     return originalAmount * this.FEE_DERIVATIVE
-  }
-
-  editGifts (cartData) {
-    return cartData.items.map(item => {
-      if (cartData.coverFees) {
-        item.config.amount = item.amountWithFee
-      }
-      return this.cartService.editItemSequential(item.uri, item.productUri, item.config)
-    })
   }
 
   addFeesToNewGiftIfNecessary (data) {

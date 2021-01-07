@@ -108,7 +108,7 @@ describe('cart', () => {
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading cart', 'error'])
     })
 
-    xit('should load cart from local storage if it is there', () => {
+    it('should load cart from local storage if it is there', () => {
       const cartData = { items: [] }
       jest.spyOn(self.controller.orderService, 'retrieveCartData').mockReturnValue(cartData)
       jest.spyOn(self.controller.cartService, 'get')
@@ -124,7 +124,7 @@ describe('cart', () => {
       expect(self.controller.analyticsFactory.pageLoaded).toHaveBeenCalled()
     })
 
-    xit('should reload cart from local storage if it is there', () => {
+    it('should reload cart from local storage if it is there', () => {
       const cartData = { items: [] }
       jest.spyOn(self.controller.orderService, 'retrieveCartData').mockReturnValue(cartData)
       jest.spyOn(self.controller.cartService, 'get')
@@ -228,7 +228,7 @@ describe('cart', () => {
       expect(self.controller.analyticsFactory.cartRemove).not.toHaveBeenCalled()
     })
 
-    xit('should remove item from locally stored cart', () => {
+    it('should remove item from locally stored cart', () => {
       jest.spyOn(self.controller, 'loadCart').mockImplementation(() => {})
       jest.spyOn(self.controller.orderService, 'retrieveCartData').mockReturnValue(self.controller.cartData)
       jest.spyOn(self.controller.orderService, 'storeCartData')
