@@ -726,46 +726,6 @@ describe('order service', () => {
 
       self.$httpBackend.flush()
     })
-
-    xit('should do the edit gifts and submit purchase in order', done => {
-      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
-      self.$window.localStorage.setItem('coverFees', 'true')
-      self.$window.localStorage.setItem('feesApplied', 'true')
-
-      const deleteItemSpy = jest.spyOn(self.cartService, 'deleteItem').mockImplementation(() => {
-        console.log('Deleting item')
-        return Observable.of('')
-      })
-      const addItemSpy = jest.spyOn(self.cartService, 'addItem').mockImplementation(() => {
-        console.log('Adding item')
-        return Observable.of('').pipe(delay(100))
-      })
-      const editItemSpy = jest.spyOn(self.cartService, 'editItemSequential')
-      getPurchaseFormMock.mockRestore()
-      const getPurchaseFormSpy = jest.spyOn(self.cortexApiService, 'get').mockImplementation(() => {
-        console.log('GET purchase form')
-        return Observable.of(purchaseFormResponse)
-      })
-      const getPurchaseSpy = jest.spyOn(self.cortexApiService, 'post').mockImplementation(() => {
-        console.log('POST purchase')
-        return Observable.of(purchaseResponse)
-      })
-
-      self.orderService.submit()
-        .subscribe((data) => {
-          expect(editItemSpy).toHaveBeenCalledTimes(2)
-          expect(deleteItemSpy).toHaveBeenCalledTimes(2)
-          expect(addItemSpy).toHaveBeenCalledTimes(2)
-          expect(getPurchaseFormSpy).toHaveBeenCalled()
-          expect(getPurchaseSpy).toHaveBeenCalled()
-          expect(editItemSpy).toHaveBeenCalledBefore(getPurchaseFormSpy)
-          expect(deleteItemSpy).toHaveBeenCalledBefore(getPurchaseFormSpy)
-          expect(addItemSpy).toHaveBeenCalledBefore(getPurchaseFormSpy)
-          expect(getPurchaseFormSpy).toHaveBeenCalledBefore(getPurchaseSpy)
-          expect(data).toEqual(purchaseResponse)
-          done()
-        })
-    })
   })
 
   describe('storeCardSecurityCode', () => {
