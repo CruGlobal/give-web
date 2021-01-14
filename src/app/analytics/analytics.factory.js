@@ -118,7 +118,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               currencyCode: 'USD',
               add: {
                 products: [{
-                  name: productData.displayName.toLowerCase(),
+                  name: productData.designationNumber,
                   id: productData.designationNumber,
                   price: itemConfig.amount.toString(),
                   brand: 'cru',
@@ -170,7 +170,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                 currencyCode: 'USD',
                 remove: {
                   products: [{
-                    name: item.displayName.toLowerCase(),
+                    name: item.designationNumber,
                     id: item.designationNumber,
                     price: item.amount.toString(),
                     brand: 'cru',
@@ -214,7 +214,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
       }
       const cartObject = cart.items.map((cartItem) => {
         return {
-          name: cartItem.displayName.toLowerCase(),
+          name: cartItem.designationNumber,
           id: cartItem.designationNumber,
           price: cartItem.amount.toString(),
           branch: 'cru',
@@ -402,7 +402,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
             currencyCode: 'USD',
             detail: {
               products: [{
-                name: productData.displayName.toLowerCase(),
+                name: productData.designationNumber,
                 id: productData.designationNumber,
                 price: undefined,
                 brand: 'cru',
@@ -479,7 +479,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                 },
                 products: [
                   {
-                    name: product.name,
+                    name: product.designationNumber,
                     id: product.designationNumber,
                     price: undefined,
                     brand: 'cru',
@@ -530,7 +530,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
           const cartObject = transactionCart.items.map((cartItem) => {
             purchaseTotal += cartItem.amount
             return {
-              name: cartItem.displayName.toLowerCase(),
+              name: cartItem.designationNumber,
               id: cartItem.designationNumber,
               price: cartItem.amount.toString(),
               brand: 'cru',
