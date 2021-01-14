@@ -536,7 +536,10 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               brand: 'cru',
               category: cartItem.designationType.toLowerCase(),
               variant: cartItem.frequency.toLowerCase(),
-              quantity: '1'
+              quantity: '1',
+              dimension3: cartItem.frequency.toLowerCase() === 'single' ? 'one-time' : 'recurring',
+              dimension4: cartItem.frequency.toLowerCase(),
+              dimension8: cartItem.designationType.toLowerCase()
             }
           })
           // Send the transaction event if the dataLayer is defined
