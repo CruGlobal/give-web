@@ -306,17 +306,8 @@ class Order {
     return angular.fromJson(this.localStorage.getItem('coverFees'))
   }
 
-  storeFeesApplied (feesApplied) {
-    this.localStorage.setItem('feesApplied', angular.toJson(feesApplied))
-  }
-
-  retrieveFeesApplied () {
-    return angular.fromJson(this.localStorage.getItem('feesApplied'))
-  }
-
   clearCoverFees () {
     this.localStorage.removeItem('coverFees')
-    this.localStorage.removeItem('feesApplied')
   }
 
   storeCartData (cartData) {
@@ -446,7 +437,6 @@ class Order {
     if (data.items && this.retrieveCoverFeeDecision()) {
       // We should only ever get here if the user has already decided to add fees, but then added a new gift
       data.coverFees = true
-      this.storeFeesApplied(true)
       this.calculatePricesWithFees(false, data.items)
       this.updatePrices(data)
     }

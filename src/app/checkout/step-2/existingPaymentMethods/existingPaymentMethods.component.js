@@ -41,9 +41,6 @@ class ExistingPaymentMethodsController {
       const state = changes.paymentFormState.currentValue
       this.paymentFormResolve.state = state
       if (state === 'submitted' && !this.paymentMethodFormModal) {
-        if (this.cartData) {
-          this.orderService.storeFeesApplied(true)
-        }
         this.selectPayment()
       }
       if (state === 'success') {

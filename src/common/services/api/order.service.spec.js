@@ -828,13 +828,6 @@ describe('order service', () => {
     })
   })
 
-  describe('storeFeesApplied', () => {
-    it('should save the fact that fees have been applied to the cart on the server', () => {
-      self.orderService.storeFeesApplied(true)
-      expect(self.$window.localStorage.getItem('feesApplied')).toEqual('true')
-    })
-  })
-
   describe('retrieveFeesApplied', () => {
     it('should remember the fact that fees have been applied to the cart on the server', () => {
       self.$window.localStorage.setItem('feesApplied', 'true')
@@ -845,11 +838,9 @@ describe('order service', () => {
   describe('clearCoverFees', () => {
     it('should clear out any knowledge of the donor choosing whether or not to cover fees', () => {
       self.$window.localStorage.setItem('coverFees', 'false')
-      self.$window.localStorage.setItem('feesApplied', 'true')
       self.orderService.clearCoverFees()
 
       expect(self.$window.localStorage.getItem('coverFees')).toBeNull()
-      expect(self.$window.localStorage.getItem('feesApplied')).toBeNull()
     })
   })
 
@@ -1426,29 +1417,24 @@ describe('order service', () => {
   describe('addFeesToNewGiftIfNecessary', () => {
     it('should not add fees if the donor has not chosen to cover fees', () => {
       jest.spyOn(self.orderService, 'retrieveCoverFeeDecision').mockImplementationOnce(() => false)
-      jest.spyOn(self.orderService, 'storeFeesApplied')
       jest.spyOn(self.orderService, 'calculatePricesWithFees')
       jest.spyOn(self.orderService, 'updatePrices')
       self.orderService.addFeesToNewGiftIfNecessary({ items: [] })
-      expect(self.orderService.storeFeesApplied).not.toHaveBeenCalled()
       expect(self.orderService.calculatePricesWithFees).not.toHaveBeenCalled()
       expect(self.orderService.updatePrices).not.toHaveBeenCalled()
     })
 
     it('should not add fees if the cart has no items object', () => {
       jest.spyOn(self.orderService, 'retrieveCoverFeeDecision').mockImplementationOnce(() => true)
-      jest.spyOn(self.orderService, 'storeFeesApplied')
       jest.spyOn(self.orderService, 'calculatePricesWithFees')
       jest.spyOn(self.orderService, 'updatePrices')
       self.orderService.addFeesToNewGiftIfNecessary({})
-      expect(self.orderService.storeFeesApplied).not.toHaveBeenCalled()
       expect(self.orderService.calculatePricesWithFees).not.toHaveBeenCalled()
       expect(self.orderService.updatePrices).not.toHaveBeenCalled()
     })
 
     it('should add fees to the new gift', () => {
       jest.spyOn(self.orderService, 'retrieveCoverFeeDecision').mockImplementationOnce(() => true)
-      jest.spyOn(self.orderService, 'storeFeesApplied')
       jest.spyOn(self.orderService, 'calculatePricesWithFees')
       jest.spyOn(self.orderService, 'updatePrices')
 
@@ -1456,7 +1442,6 @@ describe('order service', () => {
         items: []
       }
       self.orderService.addFeesToNewGiftIfNecessary(data)
-      expect(self.orderService.storeFeesApplied).toHaveBeenCalled()
       expect(self.orderService.calculatePricesWithFees).toHaveBeenCalled()
       expect(self.orderService.updatePrices).toHaveBeenCalled()
       expect(data.coverFees).toEqual(true)

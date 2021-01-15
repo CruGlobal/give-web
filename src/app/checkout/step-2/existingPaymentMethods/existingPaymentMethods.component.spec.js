@@ -57,17 +57,6 @@ describe('checkout', () => {
           expect(self.controller.selectPayment).toHaveBeenCalled()
         })
 
-        it('should store the fact that the user has made their fee decision and moved on', () => {
-          jest.spyOn(self.controller.orderService, 'storeFeesApplied').mockImplementation(() => {})
-
-          self.controller.$onChanges({
-            paymentFormState: {
-              currentValue: 'submitted'
-            }
-          })
-          expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
-        })
-
         it('should not call selectPayment when form is unsubmitted', () => {
           self.controller.$onChanges({
             paymentFormState: {
