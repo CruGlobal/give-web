@@ -89,9 +89,11 @@ class Cart {
             displayName: item.itemDefinition['display-name'],
             designationType: designationType,
             price: item.rate.cost.display,
+            priceWithFees: item.rate.cost['display-with-fees'],
             config: itemConfig,
             frequency: frequency,
             amount: item.rate.cost.amount,
+            amountWithFees: item.rate.cost['amount-with-fees'],
             designationNumber: item.itemCode['product-code'],
             productUri: item.item.self.uri,
             giftStartDate: giftStartDate,
@@ -109,7 +111,9 @@ class Cart {
           return {
             frequency: rateTotal.recurrence.display,
             amount: rateTotal.cost.amount,
-            total: rateTotal.cost.display
+            amountWithFees: rateTotal.cost['amount-with-fees'],
+            total: rateTotal.cost.display,
+            totalWithFees: rateTotal.cost['display-with-fees']
           }
         })
         )
