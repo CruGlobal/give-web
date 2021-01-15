@@ -68,6 +68,10 @@ class CoverFeesController {
     }
   }
 
+  storeCoverFeeDecision () {
+    this.orderService.storeCoverFeeDecision(this.coverFees)
+  }
+
   updatePrices () {
     if (this.brandedCheckoutItem) {
       this.orderService.storeCoverFeeDecision(this.brandedCheckoutItem.coverFees)
