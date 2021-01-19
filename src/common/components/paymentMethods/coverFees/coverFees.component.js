@@ -44,8 +44,6 @@ class CoverFeesController {
   }
 
   initializeData (sessionCoverFees, container, items, feesApplied) {
-    this.determineFeesCalculated(sessionCoverFees, container, items, feesApplied)
-
     // Intentionally using == null here to avoid checking both null and undefined
     if (sessionCoverFees !== undefined && container.coverFees == null) {
       container.coverFees = sessionCoverFees
@@ -55,16 +53,6 @@ class CoverFeesController {
       this.updatePrices()
     } else if (container.coverFees !== null) {
       this.orderService.storeCoverFeeDecision(container.coverFees)
-    }
-  }
-
-  determineFeesCalculated (sessionCoverFees, container, items, feesApplied) {
-    if (!this.feesCalculated) {
-      if (!container.coverFees && !sessionCoverFees) {
-        this.feesCalculated = this.orderService.calculatePricesWithFees(false, items)
-      } else if (container.coverFees || sessionCoverFees) {
-        this.feesCalculated = this.orderService.calculatePricesWithFees(feesApplied, items)
-      }
     }
   }
 
