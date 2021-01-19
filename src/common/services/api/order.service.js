@@ -8,7 +8,6 @@ import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
-import round from 'lodash/round'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
 
 import cortexApiService from '../cortexApi.service'
@@ -34,7 +33,6 @@ class Order {
     this.localStorage = $window.localStorage
     this.$log = $log
     this.$filter = $filter
-    this.FEE_DERIVATIVE = 0.9765 // 2.35% processing fee (calculated by 1 - 0.0235)
   }
 
   getDonorDetails () {
@@ -362,64 +360,6 @@ class Order {
     } else {
       return startedOrderWithoutSpouse
     }
-  }
-
-  calculateAmountWithFees (originalAmount) {
-    originalAmount = parseFloat(originalAmount)
-    return originalAmount / this.FEE_DERIVATIVE
-  }
-
-  updatePrices (cartData) {
-    this.storeCoverFeeDecision(cartData.coverFees)
-
-    if (cartData.items) {
-      cartData.cartTotal = cartData.items.reduce((total, item) => total + this.updatePrice(item, cartData.coverFees), 0)
-    }
-    this.recalculateFrequencyTotals(cartData)
-    this.storeCartData(cartData)
-  }
-
-  updatePrice (item, coverFees) {
-    let newAmount
-    if (coverFees) {
-      newAmount = item.amountWithFee
-    } else {
-      if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
-        newAmount = this.calculateAmountWithoutFees(item.amount)
-      } else {
-        newAmount = item.amount
-      }
-    }
-
-    item.amount = round(parseFloat(newAmount), 2)
-    item.price = `$${this.$filter('number')(newAmount, 2)}`
-    return item.amount
-  }
-
-  recalculateFrequencyTotals (cartData) {
-    angular.forEach(cartData.frequencyTotals, rateTotal => {
-      rateTotal.total = '$0.00'
-      rateTotal.amount = 0
-    })
-
-    angular.forEach(cartData.items, item => {
-      angular.forEach(cartData.frequencyTotals, rateTotal => {
-        if (item.frequency === rateTotal.frequency) {
-          rateTotal.amount += item.amount
-          rateTotal.total = `$${this.$filter('number')(rateTotal.amount, 2)}`
-        }
-      })
-    })
-  }
-
-  calculatePriceWithoutFees (originalAmount) {
-    const newAmount = this.calculateAmountWithoutFees(originalAmount)
-    return this.$filter('number')(newAmount, 2)
-  }
-
-  calculateAmountWithoutFees (originalAmount) {
-    originalAmount = parseFloat(originalAmount)
-    return originalAmount * this.FEE_DERIVATIVE
   }
 }
 

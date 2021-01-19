@@ -139,7 +139,6 @@ class ExistingPaymentMethodsController {
         if (this.orderService.retrieveCoverFeeDecision()) {
           // Undo application of fees
           this.cartData.coverFees = false
-          this.orderService.updatePrices(this.cartData)
         }
       }
     }
