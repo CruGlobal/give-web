@@ -18,7 +18,6 @@ import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
-import moment from 'moment'
 
 const serviceName = 'orderService'
 
@@ -306,36 +305,6 @@ class Order {
 
   clearCoverFees () {
     this.localStorage.removeItem('coverFees')
-  }
-
-  storeCartData (cartData) {
-    this.localStorage.setItem('cartData', angular.toJson(cartData))
-  }
-
-  retrieveCartData () {
-    const cartData = angular.fromJson(this.localStorage.getItem('cartData'))
-    if (cartData && cartData.items) {
-      this.turnDateStringsToDates(cartData)
-    }
-    return cartData
-  }
-
-  turnDateStringsToDates (cartData) {
-    cartData.items.map(item => {
-      if (item.frequency !== 'Single') {
-        item.giftStartDate = moment.utc(item.giftStartDate)
-      }
-    })
-  }
-
-  addItemToCartData (item) {
-    const cartData = this.retrieveCartData()
-    cartData.items.push(item)
-    this.storeCartData(cartData)
-  }
-
-  clearCartData () {
-    this.localStorage.removeItem('cartData')
   }
 
   storeLastPurchaseLink (link) {

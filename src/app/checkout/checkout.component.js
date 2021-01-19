@@ -100,24 +100,17 @@ class CheckoutController {
   }
 
   loadCart () {
-    const locallyStoredCart = this.orderService.retrieveCartData()
-    if (locallyStoredCart) {
-      this.cartData = locallyStoredCart
-      this.loadingCartData = false
-      this.analyticsFactory.buildProductVar(locallyStoredCart)
-    } else {
-      this.cartService.get()
-        .finally(() => {
-          this.loadingCartData = false
-        })
-        .subscribe((data) => {
-          this.cartData = data
-          this.analyticsFactory.buildProductVar(data)
-        },
-        (error) => {
-          this.$log.error('Error loading cart', error)
-        })
-    }
+    this.cartService.get()
+      .finally(() => {
+        this.loadingCartData = false
+      })
+      .subscribe((data) => {
+        this.cartData = data
+        this.analyticsFactory.buildProductVar(data)
+      },
+      (error) => {
+        this.$log.error('Error loading cart', error)
+      })
   }
 }
 

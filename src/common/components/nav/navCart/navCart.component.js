@@ -39,23 +39,17 @@ class NavCartController {
     this.firstLoad = false
     this.loading = true
     this.error = false
-    const locallyStoredCart = this.orderService.retrieveCartData()
-    if (locallyStoredCart) {
-      this.cartData = locallyStoredCart
-      this.setLoadCartVars(setAnalyticsEvent)
-    } else {
-      this.cartService.get()
-        .subscribe(data => {
-          this.cartData = data
-          this.setLoadCartVars(setAnalyticsEvent)
-        },
-        error => {
-          this.$log.error('Error loading nav cart items', error)
-          this.error = true
-          this.loading = false
-          this.hasItems = false
-        })
-    }
+    this.cartService.get()
+      .subscribe(data => {
+        this.cartData = data
+        this.setLoadCartVars(setAnalyticsEvent)
+      },
+      error => {
+        this.$log.error('Error loading nav cart items', error)
+        this.error = true
+        this.loading = false
+        this.hasItems = false
+      })
   }
 
   setLoadCartVars (setAnalyticsEvent) {

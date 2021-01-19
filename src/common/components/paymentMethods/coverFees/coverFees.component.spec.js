@@ -18,14 +18,12 @@ describe('coverFees', () => {
   describe('$onInit', () => {
     it('should do nothing if cart data and brandedCheckoutItem is not defined', () => {
       jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'storeCartData').mockImplementation(() => {})
       self.controller.cartData = undefined
       self.controller.brandedCheckoutItem = undefined
 
       self.controller.$onInit()
 
       expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
-      expect(self.controller.orderService.storeCartData).not.toHaveBeenCalled()
     })
 
     it('should synchronize the cartData when there is a fee decision in the session', () => {
@@ -66,14 +64,6 @@ describe('coverFees', () => {
       self.controller.$onInit()
 
       expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(true)
-    })
-
-    it('should store the cart data on page load', () => {
-      jest.spyOn(self.controller.orderService, 'storeCartData').mockImplementation(() => {})
-      self.controller.cartData = { items: [] }
-
-      self.controller.$onInit()
-      expect(self.controller.orderService.storeCartData).toHaveBeenCalledWith(self.controller.cartData)
     })
 
     it('should handle large incoming numbers properly', () => {

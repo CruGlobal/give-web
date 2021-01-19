@@ -46,26 +46,20 @@ class CartController {
     } else {
       this.loading = true
     }
-    const locallyStoredCart = this.orderService.retrieveCartData()
-    if (locallyStoredCart) {
-      this.cartData = locallyStoredCart
-      this.setLoadCartVars(reload)
-    } else {
-      this.cartService.get()
-        .subscribe(data => {
-          this.cartData = data
-          this.setLoadCartVars(reload)
-        },
-        error => {
-          this.$log.error('Error loading cart', error)
-          this.loading = false
-          this.updating = false
-          this.error = {
-            loading: !reload,
-            updating: !!reload
-          }
-        })
-    }
+    this.cartService.get()
+      .subscribe(data => {
+        this.cartData = data
+        this.setLoadCartVars(reload)
+      },
+      error => {
+        this.$log.error('Error loading cart', error)
+        this.loading = false
+        this.updating = false
+        this.error = {
+          loading: !reload,
+          updating: !!reload
+        }
+      })
 
     this.donorCoveredFees = !!this.orderService.retrieveCoverFeeDecision()
   }
@@ -88,9 +82,6 @@ class CartController {
         this.analyticsFactory.cartRemove(item)
         pull(this.cartData.items, item)
 
-        if (this.orderService.retrieveCartData()) {
-          this.orderService.storeCartData(this.cartData)
-        }
         this.loadCart(true)
         this.$scope.$emit(cartUpdatedEvent)
       },

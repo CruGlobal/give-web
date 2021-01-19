@@ -648,12 +648,6 @@ describe('product config form component', function () {
         expect($ctrl.errorSavingGeneric).toEqual(false)
       })
 
-      it('should clear the locally stored cart when modifying the cart', () => {
-        jest.spyOn($ctrl.orderService, 'clearCartData')
-        $ctrl.saveGiftToCart()
-        expect($ctrl.orderService.clearCartData).toHaveBeenCalled()
-      })
-
       it('should clear the cover fee decision when editing the amount of an item in the cart', () => {
         if (isEdit) {
           jest.spyOn($ctrl.orderService, 'clearCoverFees')

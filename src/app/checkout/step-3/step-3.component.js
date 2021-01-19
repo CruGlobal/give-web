@@ -144,7 +144,6 @@ class Step3Controller {
       this.onSubmittingOrder({ value: false })
       this.orderService.clearCardSecurityCodes()
       this.orderService.clearCoverFees()
-      this.orderService.clearCartData()
       this.onSubmitted()
       this.$scope.$emit(cartUpdatedEvent)
       this.changeStep({ newStep: 'thankYou' })
@@ -153,8 +152,6 @@ class Step3Controller {
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
 
-      // Empty out cart data from local storage and reload the current cart into it
-      this.orderService.clearCartData()
       this.loadCart()
 
       if (error.config && error.config.data && error.config.data['security-code']) {
