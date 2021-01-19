@@ -136,10 +136,7 @@ class ExistingPaymentMethodsController {
       this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
       if (this.selectedPaymentMethod['bank-name']) {
         // This is an EFT payment method so we need to remove any fee coverage
-        if (this.orderService.retrieveCoverFeeDecision()) {
-          // Undo application of fees
-          this.orderService.storeCoverFeeDecision(false)
-        }
+        this.orderService.storeCoverFeeDecision(false)
       }
     }
   }
