@@ -421,14 +421,6 @@ class Order {
     originalAmount = parseFloat(originalAmount)
     return originalAmount * this.FEE_DERIVATIVE
   }
-
-  addFeesToNewGiftIfNecessary (data) {
-    if (data.items && this.retrieveCoverFeeDecision()) {
-      // We should only ever get here if the user has already decided to add fees, but then added a new gift
-      data.coverFees = true
-      this.updatePrices(data)
-    }
-  }
 }
 
 export default angular

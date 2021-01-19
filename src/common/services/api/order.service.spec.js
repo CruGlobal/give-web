@@ -1375,32 +1375,4 @@ describe('order service', () => {
       expect(priceWithoutFees).toEqual('100,000.00')
     })
   })
-
-  describe('addFeesToNewGiftIfNecessary', () => {
-    it('should not add fees if the donor has not chosen to cover fees', () => {
-      jest.spyOn(self.orderService, 'retrieveCoverFeeDecision').mockImplementationOnce(() => false)
-      jest.spyOn(self.orderService, 'updatePrices')
-      self.orderService.addFeesToNewGiftIfNecessary({ items: [] })
-      expect(self.orderService.updatePrices).not.toHaveBeenCalled()
-    })
-
-    it('should not add fees if the cart has no items object', () => {
-      jest.spyOn(self.orderService, 'retrieveCoverFeeDecision').mockImplementationOnce(() => true)
-      jest.spyOn(self.orderService, 'updatePrices')
-      self.orderService.addFeesToNewGiftIfNecessary({})
-      expect(self.orderService.updatePrices).not.toHaveBeenCalled()
-    })
-
-    it('should add fees to the new gift', () => {
-      jest.spyOn(self.orderService, 'retrieveCoverFeeDecision').mockImplementationOnce(() => true)
-      jest.spyOn(self.orderService, 'updatePrices')
-
-      const data = {
-        items: []
-      }
-      self.orderService.addFeesToNewGiftIfNecessary(data)
-      expect(self.orderService.updatePrices).toHaveBeenCalled()
-      expect(data.coverFees).toEqual(true)
-    })
-  })
 })
