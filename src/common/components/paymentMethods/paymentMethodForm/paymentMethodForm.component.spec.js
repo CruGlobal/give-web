@@ -67,5 +67,10 @@ describe('paymentMethodForm', () => {
       self.controller.changePaymentType('bankAccount')
       expect(self.controller.$scope.$emit).toHaveBeenCalledWith(brandedCoverFeeCheckedEvent)
     })
+
+    it('should set cover fee decision to false when switching to bank account', () => {
+      self.controller.changePaymentType('bankAccount')
+      expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(false)
+    })
   })
 })

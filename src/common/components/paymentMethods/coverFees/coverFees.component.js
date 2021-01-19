@@ -25,27 +25,12 @@ class CoverFeesController {
   }
 
   $onInit () {
-    const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
     if (this.cartData) {
       if (this.cartData.items && this.cartData.items.length === 1) {
         this.item = this.cartData.items[0]
       }
-      this.initializeData(sessionCoverFees, this.cartData, this.cartData.items)
     } else if (this.brandedCheckoutItem) {
       this.item = this.brandedCheckoutItem
-      this.initializeData(sessionCoverFees, this.brandedCheckoutItem, [this.brandedCheckoutItem])
-    }
-  }
-
-  initializeData (sessionCoverFees, container, items) {
-    // Intentionally using == null here to avoid checking both null and undefined
-    if (sessionCoverFees !== undefined && container.coverFees == null) {
-      container.coverFees = sessionCoverFees
-      if (this.item) {
-        this.item.coverFees = container.coverFees
-      }
-    } else if (container.coverFees !== null) {
-      this.orderService.storeCoverFeeDecision(container.coverFees)
     }
   }
 
