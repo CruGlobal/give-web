@@ -364,17 +364,6 @@ class Order {
     }
   }
 
-  calculatePricesWithFees (feesApplied, cartItems) {
-    angular.forEach(cartItems, (item) => {
-      if (feesApplied) {
-        item.amountWithFee = item.amount
-      } else {
-        item.amountWithFee = round(this.calculateAmountWithFees(item.amount), 2)
-      }
-    })
-    return true
-  }
-
   calculateAmountWithFees (originalAmount) {
     originalAmount = parseFloat(originalAmount)
     return originalAmount / this.FEE_DERIVATIVE
@@ -437,7 +426,6 @@ class Order {
     if (data.items && this.retrieveCoverFeeDecision()) {
       // We should only ever get here if the user has already decided to add fees, but then added a new gift
       data.coverFees = true
-      this.calculatePricesWithFees(false, data.items)
       this.updatePrices(data)
     }
   }
