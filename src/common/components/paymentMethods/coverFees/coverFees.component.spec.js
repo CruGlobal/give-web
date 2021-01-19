@@ -16,10 +16,6 @@ describe('coverFees', () => {
   }))
 
   describe('$onInit', () => {
-    beforeEach(() => {
-      jest.spyOn(self.controller.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
-    })
-
     it('should do nothing if cart data and brandedCheckoutItem is not defined', () => {
       jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
       jest.spyOn(self.controller.orderService, 'storeCartData').mockImplementation(() => {})
