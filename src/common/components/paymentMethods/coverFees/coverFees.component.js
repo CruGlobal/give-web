@@ -18,10 +18,8 @@ class CoverFeesController {
     this.$scope = $scope
     this.orderService = orderService
     this.cartService = cartService
-    this.feesCalculated = false
 
     this.$rootScope.$on(brandedCheckoutAmountUpdatedEvent, () => {
-      this.feesCalculated = false
       this.$onInit()
     })
 
@@ -30,20 +28,19 @@ class CoverFeesController {
 
   $onInit () {
     const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
-    const feesApplied = this.orderService.retrieveFeesApplied()
     if (this.cartData) {
       if (this.cartData.items && this.cartData.items.length === 1) {
         this.item = this.cartData.items[0]
       }
-      this.initializeData(sessionCoverFees, this.cartData, this.cartData.items, feesApplied)
+      this.initializeData(sessionCoverFees, this.cartData, this.cartData.items)
       this.orderService.storeCartData(this.cartData)
     } else if (this.brandedCheckoutItem) {
       this.item = this.brandedCheckoutItem
-      this.initializeData(sessionCoverFees, this.brandedCheckoutItem, [this.brandedCheckoutItem], feesApplied)
+      this.initializeData(sessionCoverFees, this.brandedCheckoutItem, [this.brandedCheckoutItem])
     }
   }
 
-  initializeData (sessionCoverFees, container, items, feesApplied) {
+  initializeData (sessionCoverFees, container, items) {
     // Intentionally using == null here to avoid checking both null and undefined
     if (sessionCoverFees !== undefined && container.coverFees == null) {
       container.coverFees = sessionCoverFees

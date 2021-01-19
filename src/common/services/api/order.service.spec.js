@@ -828,13 +828,6 @@ describe('order service', () => {
     })
   })
 
-  describe('retrieveFeesApplied', () => {
-    it('should remember the fact that fees have been applied to the cart on the server', () => {
-      self.$window.localStorage.setItem('feesApplied', 'true')
-      expect(self.orderService.retrieveFeesApplied()).toEqual(true)
-    })
-  })
-
   describe('clearCoverFees', () => {
     it('should clear out any knowledge of the donor choosing whether or not to cover fees', () => {
       self.$window.localStorage.setItem('coverFees', 'false')
