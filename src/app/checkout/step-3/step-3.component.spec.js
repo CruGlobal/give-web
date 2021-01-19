@@ -38,8 +38,7 @@ describe('checkout', () => {
           retrieveCardSecurityCode: () => self.storedCvv,
           retrieveLastPurchaseLink: () => Observable.of('purchaseLink'),
           clearCardSecurityCodes: jest.fn(),
-          clearCoverFees: jest.fn(),
-          clearCartData: jest.fn()
+          clearCoverFees: jest.fn()
         },
         profileService: {
           getPurchase: () => Observable.of('purchaseData')
@@ -363,7 +362,6 @@ describe('checkout', () => {
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalled()
-          expect(self.controller.orderService.clearCartData).toHaveBeenCalled()
           expect(self.controller.loadCart).toHaveBeenCalled()
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
@@ -434,7 +432,6 @@ describe('checkout', () => {
           self.controller.submitOrder()
 
           expect(self.controller.orderService.clearCoverFees).toHaveBeenCalled()
-          expect(self.controller.orderService.clearCartData).toHaveBeenCalled()
         })
       })
     })

@@ -22,7 +22,6 @@ class SignInController {
   }
 
   $onInit () {
-    this.orderService.storeCartData(null)
     this.subscription = this.sessionService.sessionSubject.subscribe(() => this.sessionChanged())
     this.analyticsFactory.pageLoaded()
   }

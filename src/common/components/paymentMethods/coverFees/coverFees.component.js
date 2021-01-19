@@ -31,7 +31,6 @@ class CoverFeesController {
         this.item = this.cartData.items[0]
       }
       this.initializeData(sessionCoverFees, this.cartData, this.cartData.items)
-      this.orderService.storeCartData(this.cartData)
     } else if (this.brandedCheckoutItem) {
       this.item = this.brandedCheckoutItem
       this.initializeData(sessionCoverFees, this.brandedCheckoutItem, [this.brandedCheckoutItem])
