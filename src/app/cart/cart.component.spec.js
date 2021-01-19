@@ -136,29 +136,6 @@ describe('cart', () => {
       expect(self.controller.analyticsFactory.pageLoaded).not.toHaveBeenCalled()
     })
 
-    it('should add fee amounts to the cart if the fees have been chosen and a gift was added', () => {
-      const returnedCart = {
-        items: [
-          {
-            amount: 1,
-            price: '$1.00'
-          },
-          {
-            amount: 2,
-            price: '$2.00'
-          }
-        ]
-      }
-      self.controller.cartService.get.mockReturnValue(Observable.of(returnedCart))
-      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
-      jest.spyOn(self.controller.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
-
-      self.controller.loadCart()
-      expect(self.controller.orderService.calculatePricesWithFees).toHaveBeenCalledWith(false, returnedCart.items)
-      expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(returnedCart)
-    })
-
     it('should recognize when a donor has covered fees', () => {
       self.controller.cartService.get.mockReturnValue(Observable.of({ items: [] }))
       jest.spyOn(self.controller.orderService, 'retrieveCartData').mockImplementation(() => null)

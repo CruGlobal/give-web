@@ -64,11 +64,6 @@ class BrandedCheckoutStep1Controller {
 
         // add campaign page
         this.itemConfig['campaign-page'] = this.campaignPage
-
-        if (this.orderService.retrieveCoverFeeDecision()) {
-          this.itemConfig.amountWithFee = item.amount
-          this.itemConfig.coverFees = true
-        }
       }
       this.loadingProductConfig = false
     },

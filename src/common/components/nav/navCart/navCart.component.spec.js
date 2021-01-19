@@ -132,29 +132,6 @@ describe('navCart', () => {
       expect($ctrl.analyticsFactory.buildProductVar).toHaveBeenCalledWith(cartData)
       expect($ctrl.analyticsFactory.setEvent).toHaveBeenCalledWith('cart open')
     })
-
-    it('should add fee amounts to the cart if the fees have been chosen and a gift was added', () => {
-      const returnedCart = {
-        items: [
-          {
-            amount: 1,
-            price: '$1.00'
-          },
-          {
-            amount: 2,
-            price: '$2.00'
-          }
-        ]
-      }
-      $ctrl.cartService.get.mockReturnValue(Observable.of(returnedCart))
-      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
-      jest.spyOn($ctrl.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
-      jest.spyOn($ctrl.orderService, 'updatePrices').mockImplementation(() => {})
-
-      $ctrl.loadCart()
-      expect($ctrl.orderService.calculatePricesWithFees).toHaveBeenCalledWith(false, returnedCart.items)
-      expect($ctrl.orderService.updatePrices).toHaveBeenCalledWith(returnedCart)
-    })
   })
 
   describe('checkout', () => {
