@@ -265,11 +265,12 @@ describe('checkout', () => {
       describe('switchPayment', () => {
         it('should remove fees if the newly selected payment method is EFT', () => {
           self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
-          self.controller.cartData = { coverFees: true }
           jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
+          jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
 
           self.controller.switchPayment()
           expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: self.controller.selectedPaymentMethod })
+          expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(false)
         })
       })
     })

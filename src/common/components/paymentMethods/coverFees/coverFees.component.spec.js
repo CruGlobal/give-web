@@ -26,46 +26,6 @@ describe('coverFees', () => {
       expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
     })
 
-    it('should synchronize the cartData when there is a fee decision in the session', () => {
-      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
-      self.controller.cartData.coverFees = null
-
-      self.controller.$onInit()
-
-      expect(self.controller.cartData.coverFees).toEqual(true)
-    })
-
-    it('should synchronize the brandedCheckoutItem when there is a fee decision in the session', () => {
-      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
-      self.controller.cartData = undefined
-      self.controller.brandedCheckoutItem = { coverFees: null }
-
-      self.controller.$onInit()
-
-      expect(self.controller.brandedCheckoutItem.coverFees).toEqual(true)
-    })
-
-    it('should synchronize the session if there is a fee decision in the cart data', () => {
-      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => undefined)
-      jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
-      self.controller.cartData.coverFees = true
-
-      self.controller.$onInit()
-
-      expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(true)
-    })
-
-    it('should synchronize the session if there is a fee decision in the brandedCheckoutItem', () => {
-      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => undefined)
-      jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
-      self.controller.brandedCheckoutItem = { coverFees: true }
-      self.controller.cartData = undefined
-
-      self.controller.$onInit()
-
-      expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(true)
-    })
-
     it('should handle large incoming numbers properly', () => {
       self.controller.cartData = {
         items: [
@@ -94,16 +54,15 @@ describe('coverFees', () => {
 
     it('should configure a common "item" object for the template if the cart has one item', () => {
       const cartItem = {}
-      self.controller.cartData = { items: [cartItem], coverFees: true }
+      self.controller.cartData = { items: [cartItem] }
       const expectedItem = cartItem
-      expectedItem.coverFees = true
 
       self.controller.$onInit()
       expect(self.controller.item).toEqual(expectedItem)
     })
 
     it('should configure a common "item" object for the template if we are in branded checkout', () => {
-      const brandedCheckoutItem = { coverFees: true }
+      const brandedCheckoutItem = { amount: 1.02 }
       self.controller.brandedCheckoutItem = brandedCheckoutItem
       self.controller.cartData = undefined
 

@@ -138,7 +138,7 @@ class ExistingPaymentMethodsController {
         // This is an EFT payment method so we need to remove any fee coverage
         if (this.orderService.retrieveCoverFeeDecision()) {
           // Undo application of fees
-          this.cartData.coverFees = false
+          this.orderService.storeCoverFeeDecision(false)
         }
       }
     }
