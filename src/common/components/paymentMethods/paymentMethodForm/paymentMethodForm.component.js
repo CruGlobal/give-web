@@ -32,12 +32,10 @@ class PaymentMethodFormController {
   changePaymentType (type) {
     if (this.cartData && type === 'bankAccount') {
       this.cartData.coverFees = false
-      this.orderService.updatePrices(this.cartData)
     }
     if (this.brandedCheckoutItem && type === 'bankAccount') {
       this.brandedCheckoutItem.coverFees = false
       this.orderService.storeCoverFeeDecision(false)
-      this.orderService.updatePrice(this.brandedCheckoutItem, false)
       this.$scope.$emit(brandedCoverFeeCheckedEvent)
     }
     this.paymentType = type
