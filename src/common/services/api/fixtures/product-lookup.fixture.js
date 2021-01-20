@@ -77,8 +77,19 @@ export default {
       uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
       href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
     }],
-    code: '0354433',
-    'product-code': '0354433'
+    code: '0354433'
+  }],
+  _offer: [{
+    _code: [{
+      self: {
+        type: "offers.code-for-offer",
+        uri: "/offers/code/offers/crugive/qgqvbjrwgu2teobt=",
+        href: "http://localhost:9080/cortex/offers/code/offers/crugive/qgqvbjrwgu2teobt="
+      },
+      messages: [],
+      links: [],
+      code: "655283"
+    }]
   }],
   _definition: [{
     self: {

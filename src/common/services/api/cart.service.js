@@ -154,9 +154,25 @@ class Cart {
    * @private
    */
   _addItem (uri, data) {
+     const obj = {
+      ...data     
+    }
+    const res = {};
+    //conveting payload keys lowercase to uppercase and conveted format as per API request
+    for (const [key, value] of Object.entries(obj)) {
+      res[key.toUpperCase()] = value;
+    }
+    delete res['QUANTITY'];
+    const payLoad = {
+      configuration: {
+      ...res
+      },
+      quantity: data.quantity
+    }
+
     return this.cortexApiService.post({
-      path: ['itemfieldslineitem', uri],
-      data: data,
+      path: uri,
+      data: payLoad,
       followLocation: true
     })
   }

@@ -113,7 +113,7 @@ describe('cart service', () => {
 
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+        'https://give-stage2.cru.org/cortex/carts/items/crugive/<some id>?followLocation=true',
         {
           amount: 50,
           quantity: 1
@@ -137,7 +137,7 @@ describe('cart service', () => {
 
         it('should add an item', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/carts/items/crugive/<some id>?followLocation=true',
             {
               amount: 50,
               quantity: 1
