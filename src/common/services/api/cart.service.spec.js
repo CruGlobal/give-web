@@ -111,7 +111,7 @@ describe('cart service', () => {
       jest.spyOn(self.cartService.sessionService, 'getRole').mockReturnValue(Roles.registered)
     })
 
-    xit('should add an item', () => {
+    it('should add an item', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/carts/items/crugive/<some id>?followLocation=true',
         {
@@ -135,7 +135,7 @@ describe('cart service', () => {
           jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(3))
         })
 
-        xit('should add an item', () => {
+        it('should add an item', () => {
           self.$httpBackend.expectPOST(
             'https://give-stage2.cru.org/cortex/carts/items/crugive/<some id>?followLocation=true',
             {
@@ -156,7 +156,7 @@ describe('cart service', () => {
           jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.of({}))
         })
 
-        xit('should delete cookies and addItem to cart', () => {
+        it('should delete cookies and addItem to cart', () => {
           self.$httpBackend.expectPOST(
             'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
             {
