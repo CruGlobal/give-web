@@ -115,7 +115,9 @@ describe('cart service', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
         {
-          "configuration":{AMOUNT: 50},
+          configuration:{
+            AMOUNT: 50
+          },
           quantity: 1
         }
       ).respond(200)
@@ -135,12 +137,14 @@ describe('cart service', () => {
           jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(3))
         })
 
-        xit('should add an item', () => {
+        it('should add an item', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
             {
-              amount: 50,
-              quantity: 1
+              configuration: {
+                  AMOUNT:50
+              },
+              quantity:1
             }
           ).respond(200)
 
@@ -159,7 +163,12 @@ describe('cart service', () => {
         it('should delete cookies and addItem to cart', () => {
           self.$httpBackend.expectPOST(
             'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
-            {configuration:{AMOUNT:50},quantity:1}
+            {
+              configuration:{
+                AMOUNT:50
+              },
+              quantity:1
+            }
           ).respond(200)
 
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
