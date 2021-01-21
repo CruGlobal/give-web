@@ -158,7 +158,7 @@ class Cart {
       ...data
     }
     const res = {}
-    //  converted payload keys lowercase to uppercase and conveted format as per API request
+    //  Converted payload keys lowercase to uppercase and converted format as per API request
     for (const [key, value] of Object.entries(obj)) {
       res[key.toUpperCase()] = value
     }
