@@ -217,11 +217,10 @@ class DesignationsService {
           if (data.data['jcr:content'].defaultCampaign && !itemConfig['campaign-code']) {
             itemConfig['default-campaign-code'] = data.data['jcr:content'].defaultCampaign
           }
-
           // Copy jcr:title
-          // if (data.data['jcr:content']['jcr:title']) {
-          //   itemConfig['jcr-title'] = data.data['jcr:content']['jcr:title']
-          // }
+          if (data.data['jcr:content']['jcr:title']) {
+            itemConfig['jcr-title'] = data.data['jcr:content']['jcr:title']
+          }
         }
         return suggestedAmounts
       })

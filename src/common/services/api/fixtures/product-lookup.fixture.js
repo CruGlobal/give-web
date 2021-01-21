@@ -84,7 +84,7 @@ export default {
       self: {
         type: "offers.code-for-offer",
         uri: "/offers/code/offers/crugive/qgqvbjrwgu2teobt=",
-        href: "http://localhost:9080/cortex/offers/code/offers/crugive/qgqvbjrwgu2teobt="
+        href: "https://give-stage2.cru.org/cortex/offers/code/offers/crugive/qgqvbjrwgu2teobt="
       },
       messages: [],
       links: [],
