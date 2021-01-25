@@ -17,10 +17,6 @@ describe('checkout', function () {
     })
   }))
 
-  beforeEach(() => {
-    jest.spyOn(self.controller.orderService, 'storeCartData').mockImplementation(() => {})
-  })
-
   it('to be defined', function () {
     expect(self.controller).toBeDefined()
     expect(self.controller.loadingCartData).toEqual(true)

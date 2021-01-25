@@ -20,10 +20,6 @@ describe('navCart', () => {
     })
   }))
 
-  beforeEach(() => {
-    jest.spyOn($ctrl.orderService, 'storeCartData').mockImplementation(() => {})
-  })
-
   describe('$onInit', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'loadCart').mockImplementation(() => {})

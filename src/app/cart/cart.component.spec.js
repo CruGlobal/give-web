@@ -34,10 +34,6 @@ describe('cart', () => {
     })
   }))
 
-  beforeEach(() => {
-    jest.spyOn(self.controller.orderService, 'storeCartData').mockImplementation(() => {})
-  })
-
   it('to be defined', () => {
     expect(self.controller).toBeDefined()
   })
@@ -122,18 +118,6 @@ describe('cart', () => {
       self.controller.loadCart(true)
 
       expect(self.controller.donorCoveredFees).toEqual(false)
-    })
-
-    it('should save the loaded gift cart into local storage', () => {
-      jest.spyOn(self.controller.cartService, 'get').mockReturnValue(Observable.of(returnedCart))
-      jest.spyOn(self.controller.orderService, 'storeFeesApplied').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
-      jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
-
-      self.controller.loadCart()
-      expect(self.controller.orderService.storeCartData).toHaveBeenCalledWith(returnedCart);
     })
   })
 
