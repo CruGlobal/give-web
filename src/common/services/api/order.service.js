@@ -8,7 +8,6 @@ import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
-import round from 'lodash/round'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
 
 import cortexApiService from '../cortexApi.service'
@@ -19,7 +18,6 @@ import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
-import moment from 'moment'
 
 const serviceName = 'orderService'
 
@@ -34,7 +32,6 @@ class Order {
     this.localStorage = $window.localStorage
     this.$log = $log
     this.$filter = $filter
-    this.FEE_DERIVATIVE = 0.9765 // 2.35% processing fee (calculated by 1 - 0.0235)
   }
 
   getDonorDetails () {
@@ -306,47 +303,8 @@ class Order {
     return angular.fromJson(this.localStorage.getItem('coverFees'))
   }
 
-  storeFeesApplied (feesApplied) {
-    this.localStorage.setItem('feesApplied', angular.toJson(feesApplied))
-  }
-
-  retrieveFeesApplied () {
-    return angular.fromJson(this.localStorage.getItem('feesApplied'))
-  }
-
   clearCoverFees () {
     this.localStorage.removeItem('coverFees')
-    this.localStorage.removeItem('feesApplied')
-  }
-
-  storeCartData (cartData) {
-    this.localStorage.setItem('cartData', angular.toJson(cartData))
-  }
-
-  retrieveCartData () {
-    const cartData = angular.fromJson(this.localStorage.getItem('cartData'))
-    if (cartData && cartData.items) {
-      this.turnDateStringsToDates(cartData)
-    }
-    return cartData
-  }
-
-  turnDateStringsToDates (cartData) {
-    cartData.items.map(item => {
-      if (item.frequency !== 'Single') {
-        item.giftStartDate = moment.utc(item.giftStartDate)
-      }
-    })
-  }
-
-  addItemToCartData (item) {
-    const cartData = this.retrieveCartData()
-    cartData.items.push(item)
-    this.storeCartData(cartData)
-  }
-
-  clearCartData () {
-    this.localStorage.removeItem('cartData')
   }
 
   storeLastPurchaseLink (link) {
@@ -370,85 +328,6 @@ class Order {
       return !hasSpouse
     } else {
       return startedOrderWithoutSpouse
-    }
-  }
-
-  calculatePricesWithFees (feesApplied, cartItems) {
-    angular.forEach(cartItems, (item) => {
-      if (feesApplied) {
-        item.amountWithFee = item.amount
-      } else {
-        item.amountWithFee = round(this.calculateAmountWithFees(item.amount), 2)
-      }
-    })
-    return true
-  }
-
-  calculateAmountWithFees (originalAmount) {
-    originalAmount = parseFloat(originalAmount)
-    return originalAmount / this.FEE_DERIVATIVE
-  }
-
-  updatePrices (cartData) {
-    this.storeCoverFeeDecision(cartData.coverFees)
-
-    if (cartData.items) {
-      cartData.cartTotal = cartData.items.reduce((total, item) => total + this.updatePrice(item, cartData.coverFees), 0)
-    }
-    this.recalculateFrequencyTotals(cartData)
-    this.storeCartData(cartData)
-  }
-
-  updatePrice (item, coverFees) {
-    let newAmount
-    if (coverFees) {
-      newAmount = item.amountWithFee
-    } else {
-      if (parseFloat(item.amount) === parseFloat(item.amountWithFee)) {
-        newAmount = this.calculateAmountWithoutFees(item.amount)
-      } else {
-        newAmount = item.amount
-      }
-    }
-
-    item.amount = round(parseFloat(newAmount), 2)
-    item.price = `$${this.$filter('number')(newAmount, 2)}`
-    return item.amount
-  }
-
-  recalculateFrequencyTotals (cartData) {
-    angular.forEach(cartData.frequencyTotals, rateTotal => {
-      rateTotal.total = '$0.00'
-      rateTotal.amount = 0
-    })
-
-    angular.forEach(cartData.items, item => {
-      angular.forEach(cartData.frequencyTotals, rateTotal => {
-        if (item.frequency === rateTotal.frequency) {
-          rateTotal.amount += item.amount
-          rateTotal.total = `$${this.$filter('number')(rateTotal.amount, 2)}`
-        }
-      })
-    })
-  }
-
-  calculatePriceWithoutFees (originalAmount) {
-    const newAmount = this.calculateAmountWithoutFees(originalAmount)
-    return this.$filter('number')(newAmount, 2)
-  }
-
-  calculateAmountWithoutFees (originalAmount) {
-    originalAmount = parseFloat(originalAmount)
-    return originalAmount * this.FEE_DERIVATIVE
-  }
-
-  addFeesToNewGiftIfNecessary (data) {
-    if (data.items && this.retrieveCoverFeeDecision()) {
-      // We should only ever get here if the user has already decided to add fees, but then added a new gift
-      data.coverFees = true
-      this.storeFeesApplied(true)
-      this.calculatePricesWithFees(false, data.items)
-      this.updatePrices(data)
     }
   }
 }

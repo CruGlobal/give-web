@@ -125,13 +125,6 @@ describe('branded checkout step 1', () => {
       expect($ctrl.errorLoadingProductConfig).toEqual(true)
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading cart data for branded checkout step 1', 'some error'])
     })
-
-    it('should set amounts that coverFees cares about', () => {
-      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
-      $ctrl.initCart()
-
-      expect($ctrl.itemConfig.amountWithFee).toEqual(1.02)
-    })
   })
 
   describe('submit', () => {
