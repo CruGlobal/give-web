@@ -1,6 +1,7 @@
 import angular from 'angular'
 
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
+import coverFeesFilter from 'common/filters/coverFees.filter'
 
 import template from './cart-summary.tpl.html'
 
@@ -13,7 +14,8 @@ class CartSummaryController {
 
 export default angular
   .module(componentName, [
-    displayRateTotals.name
+    displayRateTotals.name,
+    coverFeesFilter.name
   ])
   .component(componentName, {
     controller: CartSummaryController,

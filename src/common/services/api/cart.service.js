@@ -105,7 +105,9 @@ class Cart {
         const frequencyTotals = concat({
           frequency: 'Single',
           amount: cartResponse.total && cartResponse.total.cost.amount,
-          total: cartResponse.total && cartResponse.total.cost.display
+          amountWithFees: cartResponse.total && cartResponse.total.cost['amount-with-fees'],
+          total: cartResponse.total && cartResponse.total.cost.display,
+          totalWithFees: cartResponse.total && cartResponse.total.cost['display-with-fees']
         },
         map(cartResponse.rateTotals, rateTotal => {
           return {
