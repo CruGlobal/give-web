@@ -3,7 +3,6 @@ import 'angular-cookies'
 import moment from 'moment'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
-import concat from 'lodash/concat'
 import find from 'lodash/find'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/defer'
@@ -102,14 +101,11 @@ class Cart {
           }
         })
 
-        const frequencyTotals = concat({
-          frequency: 'Single',
-          amount: cartResponse.total && cartResponse.total.cost.amount,
-          amountWithFees: cartResponse.total && cartResponse.total.cost['amount-with-fees'],
-          total: cartResponse.total && cartResponse.total.cost.display,
-          totalWithFees: cartResponse.total && cartResponse.total.cost['display-with-fees']
-        },
-        map(cartResponse.rateTotals, rateTotal => {
+        let cartTotal
+        const frequencyTotals = map(cartResponse.rateTotals, rateTotal => {
+          if (rateTotal.recurrence.interval === 'NA') {
+            cartTotal = rateTotal.cost.amount
+          }
           return {
             frequency: rateTotal.recurrence.display,
             amount: rateTotal.cost.amount,
@@ -118,7 +114,6 @@ class Cart {
             totalWithFees: rateTotal.cost['display-with-fees']
           }
         })
-        )
 
         // set cart item count cookie
         this.setCartCountCookie(items.length)
@@ -127,7 +122,7 @@ class Cart {
           id: this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
           items: items.reverse(), // Show most recent cart items first
           frequencyTotals: frequencyTotals,
-          cartTotal: frequencyTotals[0].amount
+          cartTotal: cartTotal || frequencyTotals[0].amount
         }
       })
   }
