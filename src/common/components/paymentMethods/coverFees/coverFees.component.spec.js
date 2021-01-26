@@ -16,6 +16,10 @@ describe('coverFees', () => {
   }))
 
   describe('$onInit', () => {
+    beforeEach(() => {
+      jest.spyOn(self.controller, 'updatePriceWithFees').mockImplementation(() => {})
+    })
+
     it('should do nothing if cart data and brandedCheckoutItem is not defined', () => {
       jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
       self.controller.cartData = undefined
@@ -24,6 +28,7 @@ describe('coverFees', () => {
       self.controller.$onInit()
 
       expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
+      expect(self.controller.updatePriceWithFees).not.toHaveBeenCalled()
     })
 
     it('should handle large incoming numbers properly', () => {
@@ -74,6 +79,26 @@ describe('coverFees', () => {
       self.controller.cartData = { items: [{}, {}] }
       self.controller.$onInit()
       expect(self.controller.item).not.toBeDefined()
+    })
+
+    it('should not call updatePriceWithFees on standard checkout', () => {
+      self.controller.cartData = { items: [{ amount: 50 }] }
+      expect(self.controller.updatePriceWithFees).not.toHaveBeenCalled()
+    })
+
+    it('should call updatePriceWithFees on branded checkout', () => {
+      self.controller.cartData = undefined
+      self.controller.brandedCheckoutItem = { amount: 50 }
+      self.controller.$onInit()
+      expect(self.controller.updatePriceWithFees).toHaveBeenCalled()
+    })
+  })
+
+  describe('updatePriceWithFees', () => {
+    it('should calculate the price to show the user', () => {
+      self.controller.item = { amount: 50 }
+      self.controller.updatePriceWithFees()
+      expect(self.controller.item.priceWithFees).toEqual('$51.20')
     })
   })
 })
