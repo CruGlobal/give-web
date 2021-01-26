@@ -27,6 +27,8 @@ class CoverFeesController {
   }
 
   $onInit () {
+    this.coverFees = this.orderService.retrieveCoverFeeDecision()
+
     if (this.cartData) {
       if (this.cartData.items && this.cartData.items.length === 1) {
         this.item = this.cartData.items[0]
