@@ -6,6 +6,7 @@ const filterName = 'coverFeesFilter'
 const PRICE = 'price'
 const AMOUNT = 'amount'
 const TOTAL = 'total'
+const CART_TOTAL = 'cartTotal'
 
 function CoverFees (orderService) {
   this.orderService = orderService
@@ -18,6 +19,14 @@ function CoverFees (orderService) {
           return item.amountWithFees
         case TOTAL:
           return item.totalWithFees
+        case CART_TOTAL:
+          let total
+          angular.forEach(item.frequencyTotals, (frequencyTotal) => {
+            if (frequencyTotal.frequency === 'Single') {
+              total = frequencyTotal.totalWithFees
+            }
+          })
+          return total
       }
     } else {
       switch (type) {
@@ -27,6 +36,8 @@ function CoverFees (orderService) {
           return item.amount
         case TOTAL:
           return item.total
+        case CART_TOTAL:
+          return item.cartTotal
       }
     }
   }
