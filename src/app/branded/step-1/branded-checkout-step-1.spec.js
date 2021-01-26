@@ -42,6 +42,7 @@ describe('branded checkout step 1', () => {
         'campaign-code': '1234',
         'campaign-page': '135',
         amount: '75',
+        priceWithFees: '$76.80',
         'recurring-day-of-month': '9'
       })
 
