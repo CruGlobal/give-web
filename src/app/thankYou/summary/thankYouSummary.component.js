@@ -1,5 +1,4 @@
 import angular from 'angular'
-import concat from 'lodash/concat'
 import map from 'lodash/map'
 
 import displayAddressComponent from 'common/components/display-address/display-address.component'
@@ -59,20 +58,13 @@ class ThankYouSummaryController {
         this.purchase = data
 
         // Map rate totals to match format from order endpoint
-        this.rateTotals = concat(
-          [{
-            frequency: 'Single',
-            total: this.purchase.rawData['monetary-total'][0].display,
-            amount: this.purchase.rawData['monetary-total'][0].amount
-          }],
-          map(this.purchase.rateTotals, (rateTotal) => {
-            return {
-              frequency: rateTotal.recurrence.display,
-              total: rateTotal.cost.display,
-              amount: rateTotal.cost.amount
-            }
-          })
-        )
+        this.rateTotals = map(this.purchase.rateTotals, (rateTotal) => {
+          return {
+            frequency: rateTotal.recurrence.display,
+            total: rateTotal.cost.display,
+            amount: rateTotal.cost.amount
+          }
+        })
         delete this.loadingError
         this.loading = false
         this.onPurchaseLoaded({
