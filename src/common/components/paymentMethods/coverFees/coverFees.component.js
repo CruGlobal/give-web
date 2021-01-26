@@ -20,6 +20,7 @@ class CoverFeesController {
 
     this.$rootScope.$on(brandedCheckoutAmountUpdatedEvent, () => {
       this.$onInit()
+      this.updatePriceWithFees()
     })
 
     this.$onInit()
@@ -34,10 +35,14 @@ class CoverFeesController {
       this.item = this.brandedCheckoutItem
 
       if (!this.item.priceWithFees) {
-        const amountWithFees = this.item.amount / FEE_DERIVATIVE
-        this.item.priceWithFees = this.$filter('currency')(amountWithFees, '$', 2)
+        this.updatePriceWithFees()
       }
     }
+  }
+
+  updatePriceWithFees () {
+    const amountWithFees = this.item.amount / FEE_DERIVATIVE
+    this.item.priceWithFees = this.$filter('currency')(amountWithFees, '$', 2)
   }
 
   storeCoverFeeDecision () {
