@@ -2,9 +2,6 @@ import angular from 'angular'
 import 'angular-mocks'
 import module, { brandedCheckoutAmountUpdatedEvent } from './coverFees.component'
 
-import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
-import { brandedCoverFeeCheckedEvent } from '../../../../app/productConfig/productConfigForm/productConfigForm.component'
-
 describe('coverFees', () => {
   beforeEach(angular.mock.module(module.name))
   const self = {}
