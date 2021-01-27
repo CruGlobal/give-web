@@ -98,4 +98,22 @@ describe('coverFees', () => {
       expect(self.controller.item.priceWithFees).toEqual('$51.20')
     })
   })
+
+  describe('storeCoverFeeDecision', () => {
+    beforeEach(() => {
+      jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
+    })
+
+    it('should store true for the cover fee decision', () => {
+      self.controller.coverFees = true
+      self.controller.storeCoverFeeDecision()
+      expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(true)
+    })
+
+    it('should store false for the cover fee decision', () => {
+      self.controller.coverFees = false
+      self.controller.storeCoverFeeDecision()
+      expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(false)
+    })
+  })
 })
