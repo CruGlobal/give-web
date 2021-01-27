@@ -40,6 +40,6 @@ function CoverFees (orderService) {
 
 export default angular
   .module(filterName, [
-
+    orderService.name
   ])
   .filter(filterName, [orderService.name, CoverFees])
