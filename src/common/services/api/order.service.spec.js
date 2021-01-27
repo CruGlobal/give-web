@@ -4,7 +4,6 @@ import omit from 'lodash/omit'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
-import moment from 'moment'
 
 import module from './order.service'
 
