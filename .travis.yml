@@ -3,7 +3,7 @@ node_js: "8"
 script:
   - yarn lint
   - yarn test
-  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "ep-upgrade" ]); then yarn run build; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "staging" ] || [ "$TRAVIS_BRANCH" == "ep-upgrade" ]); then yarn run build; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 cache:
@@ -14,7 +14,7 @@ deploy:
   - provider: s3
     access_key_id: $8_1_AWS_ACCESS_KEY_ID
     secret_access_key: $8_1_AWS_SECRET_ACCESS_KEY
-    bucket: cru-give-web-assets-dev
+    bucket: cru-give-web-assets-stage
     acl: public_read
     cache_control: "max-age=300"
     local-dir: dist
@@ -22,4 +22,4 @@ deploy:
     on:
       branch: ep-upgrade
 after_deploy:
-  - if [ "$TRAVIS_BRANCH" == "ep-upgrade" ]; then aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "staging" ] || [ "$TRAVIS_BRANCH" == "ep-upgrade" ]; then aws cloudfront create-invalidation --distribution-id E1SO6EV9EEML00 --paths "/*"; fi
