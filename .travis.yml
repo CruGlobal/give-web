@@ -22,4 +22,4 @@ deploy:
     on:
       branch: ep-upgrade
 after_deploy:
-  - if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "staging" ] || [ "$TRAVIS_BRANCH" == "ep-upgrade" ]; then aws cloudfront create-invalidation --distribution-id E1SO6EV9EEML00 --paths "/*"; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "ep-upgrade" ]; then aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"; fi
