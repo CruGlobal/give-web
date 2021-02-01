@@ -195,6 +195,7 @@ export default {
         },
         links: [],
         amount: 50,
+        'amount-with-fees': 51.2,
         'campaign-code': '',
         'donation-services-comments': '',
         'recipient-comments': '',
@@ -214,7 +215,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
         }],
-        cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+        cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
         display: '$50.00 Single',
         recurrence: { display: 'Single', interval: 'NA' }
       }],
@@ -231,7 +232,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
         }],
-        cost: [{ amount: 50.00, currency: 'USD', display: '$50.00' }]
+        cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }]
       }],
       quantity: 1
     }, {
@@ -390,6 +391,7 @@ export default {
         },
         links: [],
         amount: 50,
+        'amount-with-fees': 51.2,
         'campaign-code': '',
         'donation-services-comments': '',
         'recipient-comments': '',
@@ -409,7 +411,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
         }],
-        cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+        cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
         display: '$50.00 Annually',
         recurrence: { display: 'Annually', interval: 'ANNUAL' },
         'start-date': { 'display-value': '2016-12-09', value: 1481241600000 }
@@ -427,7 +429,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
         }],
-        cost: [{ amount: 0.00, currency: 'USD', display: '$0.00' }]
+        cost: [{ amount: 0.00, 'amount-with-fees': 0.00, currency: 'USD', display: '$0.00', 'display-with-fees': '$0.00' }]
       }],
       quantity: 1
     }, {
@@ -586,6 +588,7 @@ export default {
         },
         links: [],
         amount: 50,
+        'amount-with-fees': 51.2,
         'campaign-code': '',
         'donation-services-comments': '',
         'recipient-comments': '',
@@ -605,7 +608,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         }],
-        cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+        cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
         display: '$50.00 Quarterly',
         recurrence: { display: 'Quarterly', interval: 'QUARTERLY' },
         'start-date': { 'display-value': '2016-12-09', value: 1481241600000 }
@@ -623,7 +626,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         }],
-        cost: [{ amount: 0.00, currency: 'USD', display: '$0.00' }]
+        cost: [{ amount: 0.00, 'amount-with-fees': 0.00, currency: 'USD', display: '$0.00', 'display-with-fees': '$0.00' }]
       }],
       quantity: 1
     }]
@@ -636,7 +639,7 @@ export default {
         href: 'https://give-stage2.cru.org/cortex/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5ve2uj7yoedlqvvku6dckreequ4fjocxvq4fiksnxbkzqvqnhbkw6d4j5muuklojm3teszeyoagpqvkizlu4s32enpmfkkvo7bkewrigbp4fjodqrk4fjbsnz2cs5cliv5hbqvpj4ut2='
       },
       links: [],
-      cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+      cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
       display: '$50.00 Annually',
       recurrence: { display: 'Annually', interval: 'ANNUAL' }
     }, {
@@ -646,9 +649,19 @@ export default {
         href: 'https://give-stage2.cru.org/cortex/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5ve2ukaem24fnkvhqysujbentbllqvkl5bdc7ryk3byerswjxblk7b7g5u4fld2fyvhui26ykuvk56cui4xutthyksvkpknkhbkg4lmyk24fks7iiyx4ocwyobemwcpj45e6kkjpndxw4dmn4='
       },
       links: [],
-      cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+      cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
       display: '$50.00 Quarterly',
       recurrence: { display: 'Quarterly', interval: 'QUARTERLY' }
+    }, {
+      self: {
+        type: 'elasticpath.ratetotals.rate-total',
+        uri: '/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5ve2uj7yoedlqvvku6dckreequ4fjocxvq4fiksnxbkzqvqnhbkw6d4j5muuklojm3teszeyoagpqvkizlu4s32enpmfkkvo7bkewrigbp4fjodqrk4fjbsnz2cs5cliv5hbqvpj4ut2=',
+        href: 'https://give-stage2.cru.org/cortex/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5vu2uj7ykztlqvqkm6tckbiyk3gjqvfyobvsqbuh4yc63l4jz4dso2chfxvqpbrfixtan3pla6dckrpga5xk5c5ykshk3lkk3byersyjxblg66drfqwtqvrpey4fl6cvqr4fj3jykzhs4bkk7byaz6cxu='
+      },
+      links: [],
+      cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
+      display: '$50.00 Single',
+      recurrence: { display: 'Single', interval: 'NA' }
     }]
   }],
   _total: [{

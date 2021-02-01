@@ -186,7 +186,7 @@
               <span class="giftsum-date giftsum-detail" ng-if="i.frequency !== 'Single'" translate="STARTING_DATE" translate-value-startdate="{{i.giftStartDate.format('ll')}}"></span>
             </td>
             <td class="td-amount">
-              <span class="giftsum-about giftsum-title">{{i.price}}</span>
+              <span class="giftsum-about giftsum-title">{{i.price | coverFeesFilter:i:'price'}}</span>
               <span class="giftsum-detail"><span class="visible-xs" translate>{{'GIFT_AMOUNT'}}</span></span>
             </td>
           </tr>
