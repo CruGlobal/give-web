@@ -3,6 +3,8 @@ import orderService from 'common/services/api/order.service'
 import template from './coverFees.tpl.html'
 import angular from 'angular'
 import cartService from '../../../services/api/cart.service'
+import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { brandedCoverFeeCheckedEvent } from 'app/productConfig/productConfigForm/productConfigForm.component'
 
 export const brandedCheckoutAmountUpdatedEvent = 'brandedCheckoutAmountUpdatedEvent'
 
@@ -10,45 +12,74 @@ const componentName = 'coverFees'
 
 class CoverFeesController {
   /* @ngInject */
-  constructor ($rootScope, $log, $scope, $filter, orderService, cartService) {
+  constructor ($rootScope, $log, $scope, orderService, cartService) {
     this.$rootScope = $rootScope
     this.$log = $log
     this.$scope = $scope
-    this.$filter = $filter
     this.orderService = orderService
     this.cartService = cartService
+    this.feesCalculated = false
 
     this.$rootScope.$on(brandedCheckoutAmountUpdatedEvent, () => {
+      this.feesCalculated = false
       this.$onInit()
-      this.updatePriceWithFees()
     })
 
     this.$onInit()
   }
 
   $onInit () {
-    this.coverFees = this.orderService.retrieveCoverFeeDecision()
-
+    const sessionCoverFees = this.orderService.retrieveCoverFeeDecision()
+    const feesApplied = this.orderService.retrieveFeesApplied()
     if (this.cartData) {
       if (this.cartData.items && this.cartData.items.length === 1) {
         this.item = this.cartData.items[0]
       }
+      this.initializeData(sessionCoverFees, this.cartData, this.cartData.items, feesApplied)
+      this.orderService.storeCartData(this.cartData)
     } else if (this.brandedCheckoutItem) {
       this.item = this.brandedCheckoutItem
+      this.initializeData(sessionCoverFees, this.brandedCheckoutItem, [this.brandedCheckoutItem], feesApplied)
+    }
+  }
 
-      if (!this.item.priceWithFees) {
-        this.updatePriceWithFees()
+  initializeData (sessionCoverFees, container, items, feesApplied) {
+    this.determineFeesCalculated(sessionCoverFees, container, items, feesApplied)
+
+    // Intentionally using == null here to avoid checking both null and undefined
+    if (sessionCoverFees !== undefined && container.coverFees == null) {
+      container.coverFees = sessionCoverFees
+      if (this.item) {
+        this.item.coverFees = container.coverFees
+      }
+      this.updatePrices()
+    } else if (container.coverFees !== null) {
+      this.orderService.storeCoverFeeDecision(container.coverFees)
+    }
+  }
+
+  determineFeesCalculated (sessionCoverFees, container, items, feesApplied) {
+    if (!this.feesCalculated) {
+      if (!container.coverFees && !sessionCoverFees) {
+        this.feesCalculated = this.orderService.calculatePricesWithFees(false, items)
+      } else if (container.coverFees || sessionCoverFees) {
+        this.feesCalculated = this.orderService.calculatePricesWithFees(feesApplied, items)
       }
     }
   }
 
-  updatePriceWithFees () {
-    const amountWithFees = this.item.amount / FEE_DERIVATIVE
-    this.item.priceWithFees = this.$filter('currency')(amountWithFees, '$', 2)
-  }
-
-  storeCoverFeeDecision () {
-    this.orderService.storeCoverFeeDecision(this.coverFees)
+  updatePrices () {
+    if (this.brandedCheckoutItem) {
+      this.orderService.storeCoverFeeDecision(this.brandedCheckoutItem.coverFees)
+      this.orderService.updatePrice(this.brandedCheckoutItem, this.brandedCheckoutItem.coverFees)
+      this.$scope.$emit(brandedCoverFeeCheckedEvent)
+    } else if (this.cartData) {
+      if (this.item) {
+        this.cartData.coverFees = this.item.coverFees
+      }
+      this.orderService.updatePrices(this.cartData)
+      this.$scope.$emit(cartUpdatedEvent)
+    }
   }
 }
 
@@ -65,5 +96,3 @@ export default angular
       brandedCheckoutItem: '<'
     }
   })
-
-export const FEE_DERIVATIVE = 0.9765 // 2.35% processing fee (calculated by 1 - 0.0235)

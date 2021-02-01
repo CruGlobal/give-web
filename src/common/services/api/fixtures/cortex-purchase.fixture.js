@@ -272,16 +272,6 @@ export default {
       cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
       display: '$50.00 Monthly',
       recurrence: { display: 'Monthly', interval: 'MON' }
-    }, {
-      self: {
-        type: 'elasticpath.ratetotals.rate-total',
-        uri: '/ratetotals/purchases/crugive/giydanju=/a5ve2uj7yoadlqvvku6dckreernmfj6cxvqt6mtooquwyscpppble4jqgnzusp3tfhbkyi3jnhbk46lujmsmhadhykvemv6cwpblg7odrjp4fmwcwjnugwj3lizd65tmee=',
-        href: 'https://give-stage2.cru.org/cortex/ratetotals/purchases/crugive/giydanju=/a5ve2uj7yoadlqvvku6dckreernmfj6cxvqt6mtooquwyscpppble4jqgnzusp3tfhbkyi3jnhbk46lujmsmhadhykvemv6cwpblg7odrjp4fmwcwjnugwj3lizd65tmee='
-      },
-      links: [],
-      cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
-      display: '$50.00 Single',
-      recurrence: { display: 'Single', interval: 'NA' }
     }]
   }],
   'monetary-total': [{ amount: 50.00, currency: 'USD', display: '$50.00' }],

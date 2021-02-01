@@ -1,7 +1,5 @@
 import angular from 'angular'
 
-import coverFeesFilter from 'common/filters/coverFees.filter'
-
 import template from './displayRateTotals.tpl.html'
 
 const componentName = 'displayRateTotals'
@@ -22,9 +20,7 @@ class DisplayRateTotalsController {
 }
 
 export default angular
-  .module(componentName, [
-    coverFeesFilter.name
-  ])
+  .module(componentName, [])
   .component(componentName, {
     controller: DisplayRateTotalsController,
     templateUrl: template,

@@ -193,6 +193,17 @@ describe('PaymentMethodComponent', function () {
 
       expect(self.controller.model['display-account-number']).toBe('9879')
     })
+
+    it('should store fees applied information if in checkout', () => {
+      self.controller.editPaymentMethodModal = {
+        close: jest.fn()
+      }
+      self.controller.cartData = { items: [] }
+      jest.spyOn(self.controller.profileService, 'updatePaymentMethod').mockReturnValue(Observable.of('data'))
+      jest.spyOn(self.controller.orderService, 'storeFeesApplied')
+      self.controller.onPaymentFormStateChange({ state: 'loading', payload: self.controller.data })
+      expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
+    })
   })
 
   describe('$onDestroy()', () => {

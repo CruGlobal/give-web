@@ -59,6 +59,9 @@ class PaymentMethodController {
     if ($event.state === 'loading' && $event.payload) {
       this.profileService.updatePaymentMethod(this.model, $event.payload)
         .subscribe(() => {
+          if (this.cartData) {
+            this.orderService.storeFeesApplied(true)
+          }
           this.handleStateChangeSuccess($event)
         }, error => this.handleStateChangeError(error))
     }
