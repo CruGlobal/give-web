@@ -31,6 +31,14 @@ describe('thank you summary', () => {
       },
       rateTotals: [{
         cost: {
+          display: '$50.00',
+          amount: 50
+        },
+        recurrence: {
+          display: 'Single'
+        }
+      }, {
+        cost: {
           display: '$20.00',
           amount: 20
         },
