@@ -8,17 +8,14 @@ import checkoutStep2 from 'app/checkout/step-2/step-2.component'
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
 
-import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
-
 import template from './branded-checkout-step-1.tpl.html'
 
 const componentName = 'brandedCheckoutStep1'
 
 class BrandedCheckoutStep1Controller {
   /* @ngInject */
-  constructor ($log, $filter, cartService, orderService) {
+  constructor ($log, cartService, orderService) {
     this.$log = $log
-    this.$filter = $filter
     this.cartService = cartService
     this.orderService = orderService
   }
@@ -38,13 +35,6 @@ class BrandedCheckoutStep1Controller {
     }
     this.itemConfig['campaign-page'] = this.campaignPage
     this.itemConfig.amount = this.amount
-
-    // These lines calculate the price with fees for amounts coming in from the client site via component config
-    if (this.amount) {
-      const amountWithFees = this.amount / FEE_DERIVATIVE
-      this.itemConfig.priceWithFees = this.$filter('currency')(amountWithFees, '$', 2)
-    }
-
     switch (this.frequency) {
       case 'monthly':
         this.defaultFrequency = 'MON'
@@ -74,6 +64,11 @@ class BrandedCheckoutStep1Controller {
 
         // add campaign page
         this.itemConfig['campaign-page'] = this.campaignPage
+
+        if (this.orderService.retrieveCoverFeeDecision()) {
+          this.itemConfig.amountWithFee = item.amount
+          this.itemConfig.coverFees = true
+        }
       }
       this.loadingProductConfig = false
     },

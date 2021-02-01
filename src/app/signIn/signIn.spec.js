@@ -23,6 +23,7 @@ describe('signIn', function () {
     beforeEach(() => {
       jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('GUEST')
       jest.spyOn($ctrl, 'sessionChanged')
+      jest.spyOn($ctrl.orderService, 'storeCartData')
       $ctrl.$onInit()
     })
 
@@ -33,6 +34,10 @@ describe('signIn', function () {
     it('has does not change location', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/sign-in.html')
+    })
+
+    xit('clears the locally stored cart', () => {
+      expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(null)
     })
   })
 
@@ -40,6 +45,7 @@ describe('signIn', function () {
     beforeEach(() => {
       jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('IDENTIFIED')
       jest.spyOn($ctrl, 'sessionChanged')
+      jest.spyOn($ctrl.orderService, 'storeCartData')
       $ctrl.$onInit()
     })
 
@@ -51,12 +57,17 @@ describe('signIn', function () {
       expect($ctrl.sessionChanged).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/sign-in.html')
     })
+
+    xit('clears the locally stored cart', () => {
+      expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(null)
+    })
   })
 
   describe('as \'REGISTERED\'', () => {
     beforeEach(() => {
       jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('REGISTERED')
       jest.spyOn($ctrl, 'sessionChanged')
+      jest.spyOn($ctrl.orderService, 'storeCartData')
       $ctrl.$onInit()
     })
 
@@ -67,6 +78,10 @@ describe('signIn', function () {
     it('navigates to checkout', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/checkout.html')
+    })
+
+    xit('clears the locally stored cart', () => {
+      expect($ctrl.orderService.storeCartData).toHaveBeenCalledWith(null)
     })
   })
 

@@ -3,6 +3,7 @@ import 'angular-cookies'
 import moment from 'moment'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
+import concat from 'lodash/concat'
 import find from 'lodash/find'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/defer'
@@ -88,11 +89,9 @@ class Cart {
             displayName: item.itemDefinition['display-name'],
             designationType: designationType,
             price: item.rate.cost.display,
-            priceWithFees: item.rate.cost['display-with-fees'],
             config: itemConfig,
             frequency: frequency,
             amount: item.rate.cost.amount,
-            amountWithFees: item.rate.cost['amount-with-fees'],
             designationNumber: item.itemCode['product-code'],
             productUri: item.item.self.uri,
             giftStartDate: giftStartDate,
@@ -101,19 +100,19 @@ class Cart {
           }
         })
 
-        let cartTotal
-        const frequencyTotals = map(cartResponse.rateTotals, rateTotal => {
-          if (rateTotal.recurrence.interval === 'NA') {
-            cartTotal = rateTotal.cost.amount
-          }
+        const frequencyTotals = concat({
+          frequency: 'Single',
+          amount: cartResponse.total && cartResponse.total.cost.amount,
+          total: cartResponse.total && cartResponse.total.cost.display
+        },
+        map(cartResponse.rateTotals, rateTotal => {
           return {
             frequency: rateTotal.recurrence.display,
             amount: rateTotal.cost.amount,
-            amountWithFees: rateTotal.cost['amount-with-fees'],
-            total: rateTotal.cost.display,
-            totalWithFees: rateTotal.cost['display-with-fees']
+            total: rateTotal.cost.display
           }
         })
+        )
 
         // set cart item count cookie
         this.setCartCountCookie(items.length)
@@ -122,7 +121,7 @@ class Cart {
           id: this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
           items: items.reverse(), // Show most recent cart items first
           frequencyTotals: frequencyTotals,
-          cartTotal: cartTotal || frequencyTotals[0].amount
+          cartTotal: frequencyTotals[0].amount
         }
       })
   }

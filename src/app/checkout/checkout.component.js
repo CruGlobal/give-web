@@ -105,6 +105,7 @@ class CheckoutController {
         this.loadingCartData = false
       })
       .subscribe((data) => {
+        this.orderService.addFeesToNewGiftIfNecessary(data)
         this.cartData = data
         this.analyticsFactory.buildProductVar(data)
       },

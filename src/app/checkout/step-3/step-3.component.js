@@ -144,6 +144,7 @@ class Step3Controller {
       this.onSubmittingOrder({ value: false })
       this.orderService.clearCardSecurityCodes()
       this.orderService.clearCoverFees()
+      this.orderService.clearCartData()
       this.onSubmitted()
       this.$scope.$emit(cartUpdatedEvent)
       this.changeStep({ newStep: 'thankYou' })
@@ -151,9 +152,6 @@ class Step3Controller {
     error => {
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
-
-      this.loadCart()
-
       if (error.config && error.config.data && error.config.data['security-code']) {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }

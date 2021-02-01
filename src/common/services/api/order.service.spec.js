@@ -4,6 +4,7 @@ import omit from 'lodash/omit'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
+import moment from 'moment'
 
 import module from './order.service'
 
@@ -649,7 +650,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': false }
+        {}
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -663,7 +664,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase and with a CVV', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'security-code': '123', 'cover-cc-fees': false }
+        { 'security-code': '123' }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit('123')
@@ -674,48 +675,32 @@ describe('order service', () => {
       self.$httpBackend.flush()
     })
 
-    it('should send the (true) cover fees flag to the server', () => {
+    it('should edit the gifts on the server if there are fees and send a request to finalize the purchase', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
       self.$window.localStorage.setItem('coverFees', 'true')
+      self.$window.localStorage.setItem('feesApplied', 'true')
+      jest.spyOn(self.orderService, 'editGifts').mockImplementation(() => {
+        return [ Observable.of('') ]
+      })
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': true }
+        { }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
         .subscribe((data) => {
-          expect(data).toEqual(purchaseResponse)
-        })
-
-      self.$httpBackend.flush()
-    })
-
-    it('should send the (false) cover fees flag to the server', () => {
-      self.$window.localStorage.setItem('coverFees', 'false')
-
-      self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': false }
-      ).respond(200, purchaseResponse)
-
-      self.orderService.submit()
-        .subscribe((data) => {
-          expect(data).toEqual(purchaseResponse)
-        })
-
-      self.$httpBackend.flush()
-    })
-
-    it('should send the (false) cover fees flag to the server if the flag is not set in local storage', () => {
-      expect(self.$window.localStorage.getItem('coverFees')).toEqual(null)
-
-      self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': false }
-      ).respond(200, purchaseResponse)
-
-      self.orderService.submit()
-        .subscribe((data) => {
+          expect(self.orderService.editGifts).toHaveBeenCalled()
           expect(data).toEqual(purchaseResponse)
         })
 
@@ -827,12 +812,129 @@ describe('order service', () => {
     })
   })
 
+  describe('storeFeesApplied', () => {
+    it('should save the fact that fees have been applied to the cart on the server', () => {
+      self.orderService.storeFeesApplied(true)
+      expect(self.$window.localStorage.getItem('feesApplied')).toEqual('true')
+    })
+  })
+
+  describe('retrieveFeesApplied', () => {
+    it('should remember the fact that fees have been applied to the cart on the server', () => {
+      self.$window.localStorage.setItem('feesApplied', 'true')
+      expect(self.orderService.retrieveFeesApplied()).toEqual(true)
+    })
+  })
+
   describe('clearCoverFees', () => {
     it('should clear out any knowledge of the donor choosing whether or not to cover fees', () => {
       self.$window.localStorage.setItem('coverFees', 'false')
+      self.$window.localStorage.setItem('feesApplied', 'true')
       self.orderService.clearCoverFees()
 
       expect(self.$window.localStorage.getItem('coverFees')).toBeNull()
+      expect(self.$window.localStorage.getItem('feesApplied')).toBeNull()
+    })
+  })
+
+  describe('storeCartData', () => {
+    it('should save the cart data', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.orderService.storeCartData(cartData)
+      expect(self.$window.localStorage.getItem('cartData')).toEqual(angular.toJson(cartData))
+    })
+  })
+
+  describe('retrieveCartData', () => {
+    it('should get the cart data with fee information in it', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05',
+            frequency: 'Single'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      expect(self.orderService.retrieveCartData()).toEqual(cartData)
+    })
+
+    it('should turn the gift start date into a moment', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05',
+            frequency: 'Monthly',
+            giftStartDate: moment.utc('2020-07-01T18:26:48.944Z')
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      expect(self.orderService.retrieveCartData()).toEqual(cartData)
+    })
+  })
+
+  describe('addItemToCartData', () => {
+    it('should add an item to the cart in local storage', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05',
+            frequency: 'Single'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+
+      const newItem = {
+        price: '$3.00',
+        amount: 3,
+        config: { amount: 3 },
+        frequency: 'Single'
+      }
+
+      const updatedCart = cartData
+      updatedCart.items.push(newItem)
+
+      self.orderService.addItemToCartData(newItem)
+      expect(self.orderService.retrieveCartData()).toEqual(updatedCart)
+    })
+  })
+
+  describe('clearCartData', () => {
+    it('should clear out cart data from local storage', () => {
+      const cartData = {
+        items: [
+          {
+            price: '$2.00',
+            amount: 2,
+            config: { amount: 2 },
+            amountWithFee: '2.05'
+          }
+        ]
+      }
+      self.$window.localStorage.setItem('cartData', angular.toJson(cartData))
+      self.orderService.clearCartData()
+
+      expect(self.$window.localStorage.getItem('cartData')).toBeNull()
     })
   })
 
@@ -937,6 +1039,390 @@ describe('order service', () => {
 
       expect(self.$window.localStorage.getItem('startedOrderWithoutSpouse')).toEqual('true')
       expect(self.$window.localStorage.getItem('currentOrder')).toEqual('order id 2')
+    })
+  })
+
+  describe('calculatePricesWithFees', () => {
+    it('Should calculate each amount', () => {
+      const cartItems = [
+        { amount: 2 },
+        { amount: 1 },
+        { amount: 3 }
+      ]
+
+      expect(cartItems[0].amountWithFee).not.toBeDefined()
+      expect(cartItems[1].amountWithFee).not.toBeDefined()
+      expect(cartItems[2].amountWithFee).not.toBeDefined()
+      self.orderService.calculatePricesWithFees(false, cartItems)
+
+      expect(cartItems[0].amountWithFee).toEqual(2.05)
+      expect(cartItems[1].amountWithFee).toEqual(1.02)
+      expect(cartItems[2].amountWithFee).toEqual(3.07)
+    })
+
+    it('Should recognize that the current amount is the amount with fees', () => {
+      const cartItems = [
+        { amount: 2.05 },
+        { amount: 1.02 },
+        { amount: 3.07 }
+      ]
+
+      self.orderService.calculatePricesWithFees(true, cartItems)
+      expect(cartItems[0].amountWithFee).toEqual(2.05)
+      expect(cartItems[1].amountWithFee).toEqual(1.02)
+      expect(cartItems[2].amountWithFee).toEqual(3.07)
+    })
+  })
+
+  describe('updatePrices', () => {
+    it('Should update the item amounts when the user opts to cover fees', () => {
+      const cartData = {}
+      cartData.items = [
+        {
+          price: '$2.00',
+          amount: 2,
+          config: { amount: 2 },
+          amountWithFee: '2.05'
+        },
+        {
+          price: '$1.00',
+          amount: 1,
+          config: { amount: 1 },
+          amountWithFee: '1.02'
+        },
+        {
+          price: '$50.00',
+          amount: 50,
+          config: { amount: 50 },
+          amountWithFee: '51.2'
+        }
+      ]
+      cartData.coverFees = true
+      cartData.cartTotal = 53.0
+
+      jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
+      self.orderService.updatePrices(cartData)
+
+      expect(cartData.items[0].price).toEqual('$2.05')
+      expect(cartData.items[0].amount).toEqual(2.05)
+      expect(cartData.items[0].config.amount).toEqual(2)
+
+      expect(cartData.items[1].price).toEqual('$1.02')
+      expect(cartData.items[1].amount).toEqual(1.02)
+      expect(cartData.items[1].config.amount).toEqual(1)
+
+      expect(cartData.items[2].price).toEqual('$51.20')
+      expect(cartData.items[2].amount).toEqual(51.20)
+      expect(cartData.items[2].config.amount).toEqual(50)
+
+      expect(cartData.cartTotal).toEqual(54.27)
+      expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
+    })
+
+    it('Should revert the item amounts when the user opts not to cover fees', () => {
+      const cartData = {}
+      cartData.items = [
+        {
+          price: '$2.05',
+          amount: 2.05,
+          config: { amount: 2 },
+          amountWithFee: '2.05'
+        },
+        {
+          price: '$1.02',
+          amount: 1.02,
+          config: { amount: 1 },
+          amountWithFee: '1.02'
+        },
+        {
+          price: '$3.07',
+          amount: 3.07,
+          config: { amount: 3 },
+          amountWithFee: '3.07'
+        }
+      ]
+      cartData.coverFees = false
+      cartData.cartTotal = 6.14
+
+      jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
+      self.orderService.updatePrices(cartData)
+
+      expect(cartData.items[0].price).toEqual('$2.00')
+      expect(cartData.items[0].amount).toEqual(2)
+      expect(cartData.items[0].config.amount).toEqual(2)
+
+      expect(cartData.items[1].price).toEqual('$1.00')
+      expect(cartData.items[1].amount).toEqual(1)
+      expect(cartData.items[1].config.amount).toEqual(1)
+
+      expect(cartData.items[2].price).toEqual('$3.00')
+      expect(cartData.items[2].amount).toEqual(3)
+      expect(cartData.items[2].config.amount).toEqual(3)
+
+      expect(cartData.cartTotal).toEqual(6.0)
+      expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
+    })
+
+    it('Should keep the same price if the donor has chosen not to cover fees and never did', () => {
+      const cartData = {}
+      cartData.items = [
+        {
+          price: '$2.00',
+          amount: 2,
+          config: { amount: 2 },
+          amountWithFee: '2.05'
+        },
+        {
+          price: '$1.00',
+          amount: 1,
+          config: { amount: 1 },
+          amountWithFee: '1.02'
+        },
+        {
+          price: '$3.00',
+          amount: 3,
+          config: { amount: 3 },
+          amountWithFee: '3.07'
+        }
+      ]
+      cartData.coverFees = false
+      cartData.cartTotal = 6.0
+
+      jest.spyOn(self.orderService, 'recalculateFrequencyTotals').mockImplementation(() => {})
+      self.orderService.updatePrices(cartData)
+
+      expect(cartData.items[0].price).toEqual('$2.00')
+      expect(cartData.items[0].amount).toEqual(2)
+      expect(cartData.items[0].config.amount).toEqual(2)
+
+      expect(cartData.items[1].price).toEqual('$1.00')
+      expect(cartData.items[1].amount).toEqual(1)
+      expect(cartData.items[1].config.amount).toEqual(1)
+
+      expect(cartData.items[2].price).toEqual('$3.00')
+      expect(cartData.items[2].amount).toEqual(3)
+      expect(cartData.items[2].config.amount).toEqual(3)
+
+      expect(cartData.cartTotal).toEqual(6.0)
+      expect(self.orderService.recalculateFrequencyTotals).toHaveBeenCalled()
+    })
+
+    it('Should store the updated cart data in local storage', () => {
+      const cartData = { items: [] }
+      self.orderService.updatePrices(cartData)
+      expect(self.$window.localStorage.getItem('cartData')).toEqual(angular.toJson(cartData))
+    })
+
+    it('should handle large incoming numbers properly', () => {
+      const cartData = {
+        items: [
+          {
+            amount: 25000,
+            price: '$25,000.00',
+            config: {
+              amount: 25000
+            }
+          }
+        ],
+        cartTotal: 25000
+      }
+
+      self.orderService.updatePrices(cartData)
+      expect(cartData.cartTotal).toEqual(25000)
+    })
+  })
+
+  describe('recalculateFrequencyTotals', () => {
+    it('Should recalculate the frequency totals with added fees', () => {
+      const cartData = {}
+      cartData.frequencyTotals = [
+        {
+          frequency: 'Single',
+          amount: 2,
+          total: '$2.00'
+        },
+        {
+          frequency: 'Monthly',
+          amount: 1,
+          total: '$1.00'
+        },
+        {
+          frequency: 'Quarterly',
+          amount: 3,
+          total: '$3.00'
+        },
+        {
+          frequency: 'Annually',
+          amount: 4,
+          total: '$4.00'
+        }
+      ]
+      cartData.items = [
+        {
+          frequency: 'Single',
+          amount: 2.05
+        },
+        {
+          frequency: 'Monthly',
+          amount: 1.02
+        },
+        {
+          frequency: 'Quarterly',
+          amount: 3.07
+        },
+        {
+          frequency: 'Annually',
+          amount: 4.09
+        }
+      ]
+
+      self.orderService.recalculateFrequencyTotals(cartData)
+
+      expect(cartData.frequencyTotals).toEqual([
+        {
+          frequency: 'Single',
+          amount: 2.05,
+          total: '$2.05'
+        },
+        {
+          frequency: 'Monthly',
+          amount: 1.02,
+          total: '$1.02'
+        },
+        {
+          frequency: 'Quarterly',
+          amount: 3.07,
+          total: '$3.07'
+        },
+        {
+          frequency: 'Annually',
+          amount: 4.09,
+          total: '$4.09'
+        }
+      ])
+    })
+
+    it('Should recalculate the frequency totals without added fees', () => {
+      const cartData = {}
+      cartData.frequencyTotals = [
+        {
+          frequency: 'Single',
+          amount: 2.05,
+          total: '$2.05'
+        },
+        {
+          frequency: 'Monthly',
+          amount: 1.02,
+          total: '$1.02'
+        },
+        {
+          frequency: 'Quarterly',
+          amount: 3.07,
+          total: '$3.07'
+        },
+        {
+          frequency: 'Annually',
+          amount: 4.09,
+          total: '$4.09'
+        }
+      ]
+      cartData.items = [
+        {
+          frequency: 'Single',
+          amount: 2
+        },
+        {
+          frequency: 'Monthly',
+          amount: 1
+        },
+        {
+          frequency: 'Quarterly',
+          amount: 3
+        },
+        {
+          frequency: 'Annually',
+          amount: 4
+        }
+      ]
+
+      self.orderService.recalculateFrequencyTotals(cartData)
+
+      expect(cartData.frequencyTotals).toEqual([
+        {
+          frequency: 'Single',
+          amount: 2,
+          total: '$2.00'
+        },
+        {
+          frequency: 'Monthly',
+          amount: 1,
+          total: '$1.00'
+        },
+        {
+          frequency: 'Quarterly',
+          amount: 3,
+          total: '$3.00'
+        },
+        {
+          frequency: 'Annually',
+          amount: 4,
+          total: '$4.00'
+        }
+      ])
+    })
+  })
+
+  describe('calculatePriceWithoutFees', () => {
+    it('Should calculate the proper amount', () => {
+      let priceWithoutFees = self.orderService.calculatePriceWithoutFees(2.05)
+      expect(priceWithoutFees).toEqual('2.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(10.24)
+      expect(priceWithoutFees).toEqual('10.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(102.41)
+      expect(priceWithoutFees).toEqual('100.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(1024.07)
+      expect(priceWithoutFees).toEqual('1,000.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(10240.66)
+      expect(priceWithoutFees).toEqual('10,000.00')
+      priceWithoutFees = self.orderService.calculatePriceWithoutFees(102406.55)
+      expect(priceWithoutFees).toEqual('100,000.00')
+    })
+  })
+
+  describe('editGifts', () => {
+    const cartData = {}
+    beforeEach(() => {
+      jest.spyOn(self.cartService, 'editItem').mockImplementation(() => Observable.of(''))
+      cartData.items = [
+        {
+          uri: 'some/uri',
+          productUri: 'other/uri',
+          config: { amount: 1 },
+          amountWithFee: 1.02
+        }
+      ]
+    })
+
+    it('should update the item config amounts if the donor opted to cover fees', () => {
+
+      cartData.coverFees = true
+
+      Observable.forkJoin(self.orderService.editGifts(cartData)).subscribe(() => {
+        expect(cartData.items[0].config.amount).toEqual(1.02)
+      })
+    })
+
+    it('should not update the item config amounts if the donor chose not to cover fees', () => {
+      cartData.coverFees = false
+
+      Observable.forkJoin(self.orderService.editGifts(cartData)).subscribe(() => {
+        expect(cartData.items[0].config.amount).toEqual(1)
+      })
+    })
+
+    it('should call the API to edit the items in the cart', () => {
+      self.orderService.editGifts(cartData)
+      expect(self.cartService.editItem).toHaveBeenCalledWith('some/uri', 'other/uri', { amount: 1})
     })
   })
 })

@@ -48,6 +48,7 @@ class CartController {
     }
     this.cartService.get()
       .subscribe(data => {
+        this.orderService.addFeesToNewGiftIfNecessary(data)
         this.cartData = data
         this.setLoadCartVars(reload)
       },
@@ -82,6 +83,9 @@ class CartController {
         this.analyticsFactory.cartRemove(item)
         pull(this.cartData.items, item)
 
+        if (this.orderService.retrieveCartData()) {
+          this.orderService.storeCartData(this.cartData)
+        }
         this.loadCart(true)
         this.$scope.$emit(cartUpdatedEvent)
       },

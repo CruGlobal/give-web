@@ -83,9 +83,9 @@ describe('cart service', () => {
 
           expect(data.cartTotal).toEqual(50)
           expect(data.frequencyTotals).toEqual([
-            { frequency: 'Single', amount: 50, amountWithFees: 51.2, total: '$50.00', totalWithFees: '$51.20' },
-            { frequency: 'Annually', amount: 50, amountWithFees: 51.2, total: '$50.00', totalWithFees: '$51.20' },
-            { frequency: 'Quarterly', amount: 50, amountWithFees: 51.2, total: '$50.00', totalWithFees: '$51.20' }
+            { frequency: 'Single', amount: 50, total: '$50.00' },
+            { frequency: 'Annually', amount: 50, total: '$50.00' },
+            { frequency: 'Quarterly', amount: 50, total: '$50.00' }
           ])
 
           expect(self.cartService.$cookies.put).toHaveBeenCalledWith('giveCartItemCount', 3, expect.any(Object))
