@@ -43,7 +43,7 @@
           <p class="designation-number">#{{i.designationNumber}}</p>
         </div>
         <div class="col-xs-3 text-right">
-          <p class="price">{{i.price}}</p>
+          <p class="price">{{i.price | coverFeesFilter:i:'price'}}</p>
           <p class="frequency">{{i.frequency}}</p>
         </div>
       </div>
@@ -63,7 +63,7 @@
       </p>
     </div>
     <div class="col-xs-3 text-right">
-      <p>{{$ctrl.cartData.cartTotal | currency}}</p>
+      <p>{{$ctrl.cartData.cartTotal | coverFeesFilter:$ctrl.cartData:'cartTotal'}}</p>
     </div>
   </div>
 

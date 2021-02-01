@@ -196,43 +196,5 @@ describe('checkout', function () {
       expect(self.controller.loadingCartData).toEqual(false)
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading cart', 'some error'])
     })
-
-    xit('should use the cart data from local storage if it is there', () => {
-      const cartData = { items: [] }
-      jest.spyOn(self.controller.orderService, 'retrieveCartData').mockReturnValue(cartData)
-      jest.spyOn(self.controller.cartService, 'get')
-      jest.spyOn(self.controller.analyticsFactory, 'buildProductVar')
-      self.controller.loadCart()
-
-      expect(self.controller.loadingCartData).toEqual(false)
-      expect(self.controller.cartData).toEqual(cartData)
-      expect(self.controller.cartService.get).not.toHaveBeenCalled()
-      expect(self.controller.analyticsFactory.buildProductVar).toHaveBeenCalledWith(cartData)
-    })
-
-    it('should add fee amounts to the cart if the fees have been chosen and a gift was added', () => {
-      const returnedCart = {
-        items: [
-          {
-            amount: 1,
-            price: '$1.00'
-          },
-          {
-            amount: 2,
-            price: '$2.00'
-          }
-        ]
-      }
-      jest.spyOn(self.controller.cartService, 'get').mockReturnValue(Observable.of(returnedCart))
-      jest.spyOn(self.controller.orderService, 'storeFeesApplied').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
-      jest.spyOn(self.controller.orderService, 'calculatePricesWithFees').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
-
-      self.controller.loadCart()
-      expect(self.controller.orderService.storeFeesApplied).toHaveBeenCalledWith(true)
-      expect(self.controller.orderService.calculatePricesWithFees).toHaveBeenCalledWith(false, returnedCart.items)
-      expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(returnedCart)
-    })
   })
 })
