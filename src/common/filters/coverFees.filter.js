@@ -4,7 +4,6 @@ import orderService from 'common/services/api/order.service'
 const filterName = 'coverFeesFilter'
 
 const PRICE = 'price'
-const AMOUNT = 'amount'
 const TOTAL = 'total'
 const CART_TOTAL = 'cartTotal'
 
@@ -15,8 +14,6 @@ function CoverFees (orderService) {
       switch (type) {
         case PRICE:
           return item.priceWithFees
-        case AMOUNT:
-          return item.amountWithFees
         case TOTAL:
           return item.totalWithFees
         case CART_TOTAL:
@@ -32,8 +29,6 @@ function CoverFees (orderService) {
       switch (type) {
         case PRICE:
           return item.price
-        case AMOUNT:
-          return item.amount
         case TOTAL:
           return item.total
         case CART_TOTAL:
@@ -45,6 +40,6 @@ function CoverFees (orderService) {
 
 export default angular
   .module(filterName, [
-
+    orderService.name
   ])
   .filter(filterName, [orderService.name, CoverFees])
