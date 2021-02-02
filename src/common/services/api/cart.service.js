@@ -131,8 +131,8 @@ class Cart {
       id: this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
       items: items.reverse(), // Show most recent cart items first
       frequencyTotals: frequencyTotals,
-      cartTotal: cartTotal || frequencyTotals[0].amount,
-      cartTotalDisplay: cartTotalDisplay
+      cartTotal: cartTotal || (cartResponse.total && cartResponse.total.cost.amount),
+      cartTotalDisplay: cartTotalDisplay || (cartResponse.total && cartResponse.total.cost.display)
     }
   }
 

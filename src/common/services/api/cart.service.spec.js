@@ -95,19 +95,25 @@ describe('cart service', () => {
   })
 
   describe('handleCartResponse', () => {
+    const zoom = {
+      lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
+      rateTotals: 'ratetotals:element[]',
+      total: 'total,total:cost'
+    }
+    let transformedCartResponse
+
     beforeEach(() => {
       jest.spyOn(self.cartService.$cookies, 'put').mockImplementation(() => {})
       jest.spyOn(self.cartService.$cookies, 'remove').mockImplementation(() => {})
       advanceTo(moment('2016-09-01').toDate()) // Make sure current date is before next draw date
+      transformedCartResponse = self.cartService.hateoasHelperService.mapZoomElements(cartResponse, zoom)
+      transformedCartResponse.rateTotals[0].cost.amount = 51
+      transformedCartResponse.rateTotals[0].cost['amount-with-fees'] = 52.23
+      transformedCartResponse.rateTotals[0].cost.display = '$51.00'
+      transformedCartResponse.rateTotals[0].cost['display-with-fees'] = '$52.23'
     })
 
     it('should get cart, parse response, and show most recent items first', () => {
-      const zoom = {
-        lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
-        rateTotals: 'ratetotals:element[]',
-        total: 'total,total:cost'
-      }
-      const transformedCartResponse = self.cartService.hateoasHelperService.mapZoomElements(cartResponse, zoom)
       const data = self.cartService.handleCartResponse(transformedCartResponse, '2016-10-01')
       // verify response
       expect(data.items.length).toEqual(3)
@@ -120,11 +126,27 @@ describe('cart service', () => {
       expect(data.cartTotalDisplay).toEqual('$50.00')
       expect(data.frequencyTotals).toEqual([
         { frequency: 'Single', amount: 50, amountWithFees: 51.2, total: '$50.00', totalWithFees: '$51.20' },
-        { frequency: 'Annually', amount: 50, amountWithFees: 51.2, total: '$50.00', totalWithFees: '$51.20' },
+        { frequency: 'Annually', amount: 51, amountWithFees: 52.23, total: '$51.00', totalWithFees: '$52.23' },
         { frequency: 'Quarterly', amount: 50, amountWithFees: 51.2, total: '$50.00', totalWithFees: '$51.20' }
       ])
 
       expect(self.cartService.$cookies.put).toHaveBeenCalledWith('giveCartItemCount', 3, expect.any(Object))
+    })
+
+    it('should handle total correctly if the order changes from the API', () => {
+      transformedCartResponse.rateTotals.unshift(transformedCartResponse.rateTotals.pop())
+
+      const data = self.cartService.handleCartResponse(transformedCartResponse, '2016-10-01')
+      expect(data.cartTotal).toEqual(50)
+      expect(data.cartTotalDisplay).toEqual('$50.00')
+    })
+
+    it('should handle fallback total', () => {
+      transformedCartResponse.rateTotals.pop()
+
+      const data = self.cartService.handleCartResponse(transformedCartResponse, '2016-10-01')
+      expect(data.cartTotal).toEqual(50)
+      expect(data.cartTotalDisplay).toEqual('$50.00')
     })
   })
 
