@@ -118,6 +118,9 @@ class Cart {
         totalWithFees: rateTotal.cost['display-with-fees']
       }
     })
+    if (cartTotal) {
+      frequencyTotals.unshift(frequencyTotals.pop())
+    }
 
     // set cart item count cookie
     this.setCartCountCookie(items.length)
