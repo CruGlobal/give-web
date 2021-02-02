@@ -31,7 +31,8 @@ describe('coverFees filter', () => {
     frequencyTotals: [
       { frequency: 'Single', totalWithFees: priceWithFees }
     ],
-    cartTotal: price
+    cartTotal: amount,
+    cartTotalDisplay: price
   }
 
   it('should use the original price', () => {
@@ -56,7 +57,7 @@ describe('coverFees filter', () => {
 
   it('should use the original cartTotal', () => {
     jest.spyOn(self.orderService, 'retrieveCoverFeeDecision').mockImplementationOnce(() => false)
-    expect(self.$filter('coverFeesFilter')(price, item, 'cartTotal')).toEqual(item.cartTotal)
+    expect(self.$filter('coverFeesFilter')(price, item, 'cartTotal')).toEqual(item.cartTotalDisplay)
   })
 
   it('should use the cartTotal with fees', () => {

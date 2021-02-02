@@ -106,9 +106,11 @@ class Cart {
     })
 
     let cartTotal
+    let cartTotalDisplay
     const frequencyTotals = map(cartResponse.rateTotals, rateTotal => {
       if (rateTotal.recurrence.interval === 'NA') {
         cartTotal = rateTotal.cost.amount
+        cartTotalDisplay = rateTotal.cost.display
       }
       return {
         frequency: rateTotal.recurrence.display,
@@ -129,7 +131,8 @@ class Cart {
       id: this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
       items: items.reverse(), // Show most recent cart items first
       frequencyTotals: frequencyTotals,
-      cartTotal: cartTotal || frequencyTotals[0].amount
+      cartTotal: cartTotal || frequencyTotals[0].amount,
+      cartTotalDisplay: cartTotalDisplay
     }
   }
 

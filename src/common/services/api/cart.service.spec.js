@@ -117,6 +117,7 @@ describe('cart service', () => {
       expect(data.items[1].giftStartDate.toString()).toEqual(moment('2016-10-09').toString())
 
       expect(data.cartTotal).toEqual(50)
+      expect(data.cartTotalDisplay).toEqual('$50.00')
       expect(data.frequencyTotals).toEqual([
         { frequency: 'Single', amount: 50, amountWithFees: 51.2, total: '$50.00', totalWithFees: '$51.20' },
         { frequency: 'Annually', amount: 50, amountWithFees: 51.2, total: '$50.00', totalWithFees: '$51.20' },
