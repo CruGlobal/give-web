@@ -32,7 +32,7 @@ function CoverFees (orderService) {
         case TOTAL:
           return item.total
         case CART_TOTAL:
-          return item.cartTotal
+          return item.cartTotalDisplay
       }
     }
   }
