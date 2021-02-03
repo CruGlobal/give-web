@@ -11,6 +11,9 @@ cache:
   directories:
   - node_modules
 
+before_deploy:
+  - pip install --user awscli
+
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
