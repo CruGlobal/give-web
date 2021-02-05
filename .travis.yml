@@ -11,6 +11,29 @@ cache:
   directories:
   - node_modules
 deploy:
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: cru-givestage
+    acl: public_read
+    cache_control: "max-age=300"
+    local-dir: dist
+    skip_cleanup: true
+    on:
+      branch: staging
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: cru-giveprod
+    acl: public_read
+    cache_control: "max-age=3600"
+    local-dir: dist
+    skip_cleanup: true
+    on:
+      branch: master
+
   - provider: s3
     access_key_id: $8_1_AWS_ACCESS_KEY_ID
     secret_access_key: $8_1_AWS_SECRET_ACCESS_KEY
@@ -20,6 +43,20 @@ deploy:
     local-dir: dist
     skip_cleanup: true
     on:
-      branch: ep-upgrade
+      branch: ep-upgrade-stage
+
+  - provider: s3
+    access_key_id: $8_1_PROD_AWS_ACCESS_KEY_ID
+    secret_access_key: $8_1_PROD_AWS_SECRET_ACCESS_KEY
+    bucket: cru-give-web-assets-prod
+    acl: public_read
+    cache_control: "max-age=300"
+    local-dir: dist
+    skip_cleanup: true
+    on:
+      branch: ep-upgrade-prod
+
 after_deploy:
-  - if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "ep-upgrade" ]; then aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"; fi
+  - if [ "$TRAVIS_BRANCH" == "master" ] ; then aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"; fi
+  - if [ "$TRAVIS_BRANCH" == "ep-upgrade-stage" ]; then aws cloudfront create-invalidation --distribution-id  E3M9MWXONGADRF --paths "/*"; fi
+  - if [ "$TRAVIS_BRANCH" == "ep-upgrade-prod" ]; then aws cloudfront create-invalidation --distribution-id E30QUUH0C7A1J3 --paths "/*"; fi
