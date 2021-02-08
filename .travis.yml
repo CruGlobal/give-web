@@ -38,8 +38,8 @@ deploy:
       branch: master
 
   - provider: s3
-    access_key_id: $8_1_AWS_ACCESS_KEY_ID
-    secret_access_key: $8_1_AWS_SECRET_ACCESS_KEY
+    access_key_id: $AWS_ACCESS_KEY_ID_8_1
+    secret_access_key: $AWS_SECRET_ACCESS_KEY_8_1
     bucket: cru-give-web-assets-stage
     acl: public_read
     cache_control: "max-age=300"
@@ -49,8 +49,8 @@ deploy:
       branch: ep-upgrade-stage
 
   - provider: s3
-    access_key_id: $8_1_PROD_AWS_ACCESS_KEY_ID
-    secret_access_key: $8_1_PROD_AWS_SECRET_ACCESS_KEY
+    access_key_id: $AWS_ACCESS_KEY_ID_8_1_PROD
+    secret_access_key: $AWS_SECRET_ACCESS_KEY_8_1_PROD
     bucket: cru-give-web-assets-prod
     acl: public_read
     cache_control: "max-age=300"
