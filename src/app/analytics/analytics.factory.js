@@ -537,9 +537,14 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               category: cartItem.designationType.toLowerCase(),
               variant: cartItem.frequency.toLowerCase(),
               quantity: '1',
+              dimension1: localStorage.getItem('gaDonorType'),
+              dimension2: localStorage.getItem('gaDonorAcct') || undefined,
               dimension3: cartItem.frequency.toLowerCase() === 'single' ? 'one-time' : 'recurring',
               dimension4: cartItem.frequency.toLowerCase(),
-              dimension8: cartItem.designationType.toLowerCase()
+              dimension6: purchaseData.paymentMeans['account-type'] ? purchaseData.paymentMeans['account-type'].toLowerCase() : purchaseData.paymentMeans['card-type'].toLowerCase(),
+              dimension7: purchaseData.rawData['purchase-number'],
+              dimension8: 'designation',
+              dimension9: cartItem.config['campaign-code'] !== '' ? cartItem.config['campaign-code'] : undefined
             }
           })
           // Send the transaction event if the dataLayer is defined
@@ -675,8 +680,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         })
 
         // Store data for use on following page load
-        localStorage.setItem('aaDonorType', $window.digitalData.user[0].profile[0].profileInfo.donorType)
-        localStorage.setItem('aaDonorAcct', $window.digitalData.user[0].profile[0].profileInfo.donorAcct)
+        localStorage.setItem('gaDonorType', $window.digitalData.user[0].profile[0].profileInfo.donorType)
+        localStorage.setItem('gaDonorAcct', $window.digitalData.user[0].profile[0].profileInfo.donorAcct)
       } catch (e) {
         // Error caught in analyticsFactory.setDonorDetails
       }

@@ -121,6 +121,8 @@ class Cart {
         totalWithFees: rateTotal.cost['display-with-fees']
       }
     })
+    // The API returns Single gift rate totals as the last item in the list, so we should move it to the first item
+    // to preserve the ordering in the UI (Single gift totals first).
     if (cartTotal) {
       frequencyTotals.unshift(frequencyTotals.pop())
     }
