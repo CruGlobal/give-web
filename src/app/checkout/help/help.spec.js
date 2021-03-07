@@ -17,7 +17,7 @@ describe('Checkout Help', function () {
   })
 
   it('get help block content from AEM', function () {
-    $httpBackend.expectGET('/designations/jcr:content/need-help-ipar/contentfragment.html')
+    $httpBackend.expectGET('/designations/jcr:content/give-need-help.html')
       .respond(200, '<p>Help Content</p>')
 
     $ctrl.$onInit()
@@ -27,7 +27,7 @@ describe('Checkout Help', function () {
   })
 
   it('should log an error on failure', () => {
-    $httpBackend.expectGET('/designations/jcr:content/need-help-ipar/contentfragment.html').respond(500, 'some error')
+    $httpBackend.expectGET('/designations/jcr:content/give-need-help.html').respond(500, 'some error')
     $ctrl.$onInit()
     $httpBackend.flush()
 
