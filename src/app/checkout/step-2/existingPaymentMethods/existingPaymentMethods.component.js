@@ -41,9 +41,6 @@ class ExistingPaymentMethodsController {
       const state = changes.paymentFormState.currentValue
       this.paymentFormResolve.state = state
       if (state === 'submitted' && !this.paymentMethodFormModal) {
-        if (this.cartData) {
-          this.orderService.storeFeesApplied(true)
-        }
         this.selectPayment()
       }
       if (state === 'success') {
@@ -139,11 +136,7 @@ class ExistingPaymentMethodsController {
       this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
       if (this.selectedPaymentMethod['bank-name']) {
         // This is an EFT payment method so we need to remove any fee coverage
-        if (this.orderService.retrieveCoverFeeDecision()) {
-          // Undo application of fees
-          this.cartData.coverFees = false
-          this.orderService.updatePrices(this.cartData)
-        }
+        this.orderService.storeCoverFeeDecision(false)
       }
     }
   }

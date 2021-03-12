@@ -44,8 +44,6 @@ describe('paymentMethodForm', () => {
   describe('changePaymentType', () => {
     beforeEach(() => {
       jest.spyOn(self.controller, 'onPaymentFormStateChange').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'updatePrices').mockImplementation(() => {})
-      jest.spyOn(self.controller.orderService, 'updatePrice').mockImplementation(() => {})
       jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
     })
 
@@ -63,49 +61,16 @@ describe('paymentMethodForm', () => {
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'unsubmitted' } })
     })
 
-    it('should update prices when setting payment type to bank account', () => {
-      self.controller.cartData = { coverFees: true }
-      self.controller.changePaymentType('bankAccount')
-
-      expect(self.controller.cartData.coverFees).toEqual(false)
-      expect(self.controller.orderService.updatePrices).toHaveBeenCalledWith(self.controller.cartData)
-    })
-
-    it('should not update prices when setting payment type to bank account', () => {
-      self.controller.cartData = undefined
-      self.controller.brandedCheckoutItem = undefined
-      self.controller.changePaymentType('bankAccount')
-
-      expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
-    })
-
-    it('should not update prices when setting payment type to credit card', () => {
-      self.controller.cartData = { coverFees: true }
-      self.controller.changePaymentType('creditCard')
-
-      expect(self.controller.orderService.updatePrices).not.toHaveBeenCalled()
-    })
-
-    it('should update price when setting payment type to bank account', () => {
+    it('should tell branded checkout to update its amount textbox when switching to bank account', () => {
       jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
-      self.controller.cartData = undefined
-      self.controller.brandedCheckoutItem = { coverFees: true }
+      self.controller.brandedCheckoutItem = {}
       self.controller.changePaymentType('bankAccount')
-
-      expect(self.controller.brandedCheckoutItem.coverFees).toEqual(false)
-      expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(false)
-      expect(self.controller.orderService.updatePrice).toHaveBeenCalledWith(self.controller.brandedCheckoutItem, false)
       expect(self.controller.$scope.$emit).toHaveBeenCalledWith(brandedCoverFeeCheckedEvent)
     })
 
-    it('should not update price when setting payment type to credit card', () => {
-      self.controller.cartData = undefined
-      self.controller.brandedCheckoutItem = { coverFees: true }
-      self.controller.changePaymentType('creditCard')
-
-      expect(self.controller.brandedCheckoutItem.coverFees).toEqual(true)
-      expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
-      expect(self.controller.orderService.updatePrice).not.toHaveBeenCalled()
+    it('should set cover fee decision to false when switching to bank account', () => {
+      self.controller.changePaymentType('bankAccount')
+      expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(false)
     })
   })
 })

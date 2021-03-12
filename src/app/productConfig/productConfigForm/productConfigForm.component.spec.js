@@ -425,12 +425,11 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.coverFees = true
       $ctrl.itemConfig.amount = 50
       $ctrl.changeAmount(100)
 
       expect($ctrl.amountChanged).toEqual(true)
-      expect($ctrl.itemConfig.coverFees).toEqual(false)
+      expect($ctrl.orderService.clearCoverFees).toHaveBeenCalled()
       expect($ctrl.$scope.$emit).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent)
     })
 
@@ -438,12 +437,11 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.coverFees = true
       $ctrl.itemConfig.amount = 50
       $ctrl.changeAmount(100, true)
 
       expect($ctrl.amountChanged).toEqual(true)
-      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
       expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
 
@@ -451,12 +449,11 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.coverFees = true
       $ctrl.itemConfig.amount = 50
       $ctrl.changeAmount(50)
 
       expect($ctrl.amountChanged).toEqual(false)
-      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
       expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
   })
@@ -476,12 +473,11 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.coverFees = true
       $ctrl.itemConfig.amount = 51.2
       $ctrl.changeCustomAmount(1)
 
       expect($ctrl.amountChanged).toEqual(true)
-      expect($ctrl.itemConfig.coverFees).toEqual(false)
+      expect($ctrl.orderService.clearCoverFees).toHaveBeenCalled()
       expect($ctrl.$scope.$emit).toHaveBeenCalledWith(brandedCheckoutAmountUpdatedEvent)
     })
 
@@ -489,12 +485,11 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.coverFees = true
       $ctrl.itemConfig.amount = 51.2
       $ctrl.changeCustomAmount(1, true)
 
       expect($ctrl.amountChanged).toEqual(true)
-      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
       expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
 
@@ -502,12 +497,11 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.coverFees = true
       $ctrl.itemConfig.amount = 5
       $ctrl.changeAmount(5)
 
       expect($ctrl.amountChanged).toEqual(false)
-      expect($ctrl.itemConfig.coverFees).toEqual(true)
+      expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
       expect($ctrl.$scope.$emit).not.toHaveBeenCalled()
     })
   })
@@ -646,12 +640,6 @@ describe('product config form component', function () {
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorAlreadyInCart' })
         expect($ctrl.errorAlreadyInCart).toEqual(true)
         expect($ctrl.errorSavingGeneric).toEqual(false)
-      })
-
-      xit('should clear the locally stored cart when modifying the cart', () => {
-        jest.spyOn($ctrl.orderService, 'clearCartData')
-        $ctrl.saveGiftToCart()
-        expect($ctrl.orderService.clearCartData).toHaveBeenCalled()
       })
 
       it('should clear the cover fee decision when editing the amount of an item in the cart', () => {
