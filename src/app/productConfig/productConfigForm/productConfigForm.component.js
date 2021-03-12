@@ -69,10 +69,11 @@ class ProductConfigFormController {
 
     this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
       this.initItemConfig()
-      if (this.selectableAmounts.includes(this.itemConfig.amount)) {
-        this.changeAmount(this.itemConfig.amount, true)
+      //Based on EP 8.1 JSON Object amount has been changed to uppercase
+      if (this.selectableAmounts.includes(this.itemConfig.AMOUNT)) {
+        this.changeAmount(this.itemConfig.AMOUNT, true)
       } else {
-        this.changeCustomAmount(this.itemConfig.amount, true)
+        this.changeCustomAmount(this.itemConfig.AMOUNT, true)
       }
     })
   }
@@ -86,11 +87,12 @@ class ProductConfigFormController {
   initItemConfig () {
     this.itemConfig = this.itemConfig || {}
 
-    const amount = parseFloat(this.itemConfig.amount)
+    //Based on EP 8.1 JSON Object amount has been changed to uppercase
+    const amount = parseFloat(this.itemConfig.AMOUNT)
     if (isNaN(amount)) {
-      delete this.itemConfig.amount
+      delete this.itemConfig.AMOUNT
     } else {
-      this.itemConfig.amount = amount
+      this.itemConfig.AMOUNT = amount
     }
 
     if (inRange(parseInt(this.itemConfig['recurring-day-of-month'], 10), 1, 29)) {
@@ -164,17 +166,18 @@ class ProductConfigFormController {
         })
   }
 
+  //Based on EP 8.1 JSON Object amount has been changed to uppercase
   setDefaultAmount () {
     const amountOptions = isEmpty(this.suggestedAmounts)
       ? this.selectableAmounts
-      : map(this.suggestedAmounts, 'amount')
+      : map(this.suggestedAmounts, 'AMOUNT')
 
-    if (this.itemConfig.amount) {
-      if (amountOptions.indexOf(this.itemConfig.amount) === -1) {
-        this.changeCustomAmount(this.itemConfig.amount)
+    if (this.itemConfig.AMOUNT) {
+      if (amountOptions.indexOf(this.itemConfig.AMOUNT) === -1) {
+        this.changeCustomAmount(this.itemConfig.AMOUNT)
       }
     } else {
-      this.itemConfig.amount = amountOptions[0]
+      this.itemConfig.AMOUNT = amountOptions[0]
     }
   }
 
@@ -188,8 +191,8 @@ class ProductConfigFormController {
   }
 
   waitForFormInitialization () {
-    const unregister = this.$scope.$watch('$ctrl.itemConfigForm.amount', () => {
-      if (this.itemConfigForm && this.itemConfigForm.amount) {
+    const unregister = this.$scope.$watch('$ctrl.itemConfigForm.AMOUNT', () => {
+      if (this.itemConfigForm && this.itemConfigForm.AMOUNT) {
         unregister()
         this.addCustomValidators()
       }
@@ -197,14 +200,14 @@ class ProductConfigFormController {
   }
 
   addCustomValidators () {
-    this.itemConfigForm.amount.$parsers.push(value => value.replace('$', '').replace(',', '')) // Ignore a dollar sign and comma if included by the user
-    this.itemConfigForm.amount.$validators.minimum = value => {
+    this.itemConfigForm.AMOUNT.$parsers.push(value => value.replace('$', '').replace(',', '')) // Ignore a dollar sign and comma if included by the user
+    this.itemConfigForm.AMOUNT.$validators.minimum = value => {
       return !this.customInputActive || value * 1.0 >= 1
     }
-    this.itemConfigForm.amount.$validators.maximum = value => {
+    this.itemConfigForm.AMOUNT.$validators.maximum = value => {
       return !this.customInputActive || value * 1.0 < 10000000
     }
-    this.itemConfigForm.amount.$validators.pattern = value => {
+    this.itemConfigForm.AMOUNT.$validators.pattern = value => {
       const regex = /^([0-9]*)(\.[0-9]{1,2})?$/
       return !this.customInputActive || regex.test(value)
     }
@@ -255,7 +258,7 @@ class ProductConfigFormController {
   changeAmount (amount, retainCoverFees) {
     this.itemConfigForm.$setDirty()
     this.checkAmountChanged(amount)
-    this.itemConfig.amount = amount
+    this.itemConfig.AMOUNT = amount
     this.customAmount = ''
     this.customInputActive = false
     if (!retainCoverFees && this.amountChanged) {
@@ -267,7 +270,7 @@ class ProductConfigFormController {
 
   changeCustomAmount (amount, retainCoverFees) {
     this.checkAmountChanged(amount)
-    this.itemConfig.amount = amount
+    this.itemConfig.AMOUNT = amount
     this.customAmount = amount
     this.customInputActive = true
     if (!retainCoverFees && this.amountChanged) {
@@ -278,10 +281,10 @@ class ProductConfigFormController {
   }
 
   checkAmountChanged (amount) {
-    if (this.itemConfig.amount && amount) {
-      this.amountChanged = this.itemConfig.amount !== amount
+    if (this.itemConfig.AMOUNT && amount) {
+      this.amountChanged = this.itemConfig.AMOUNT !== amount
     }
-    if (!this.itemConfig.amount && amount) {
+    if (!this.itemConfig.AMOUNT && amount) {
       this.amountChanged = true
     }
   }

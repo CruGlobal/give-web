@@ -35,10 +35,11 @@ describe('cart service', () => {
       advanceTo(moment('2016-09-01').toDate()) // Make sure current date is before next draw date
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should handle an empty response', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, null)
 
@@ -49,10 +50,11 @@ describe('cart service', () => {
       self.$httpBackend.flush()
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should handle a response with no line items', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, {})
 
@@ -64,10 +66,11 @@ describe('cart service', () => {
       self.$httpBackend.flush()
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should get cart, parse response, and show most recent items first', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, cartResponse)
 
@@ -111,16 +114,25 @@ describe('cart service', () => {
       transformedCartResponse.rateTotals[0].cost['amount-with-fees'] = 52.23
       transformedCartResponse.rateTotals[0].cost.display = '$51.00'
       transformedCartResponse.rateTotals[0].cost['display-with-fees'] = '$52.23'
+      // Based on 8.1 JSON response added the following codes
+      transformedCartResponse.lineItems = transformedCartResponse.lineItems.map(item =>{
+        item.itemfields['RECURRING-DAY-OF-MONTH'] = item.itemfields['recurring-day-of-month']
+        item.itemfields['RECURRING-START-MONTH'] = item.itemfields['recurring-start-month']
+        item.rate = {...item.rate, cost : [{display : 10}]}
+        item.item = {...item.item, _offer : [{_code : [{code: '5541091'}]}]}
+        return {...item, configuration:item.itemfields}
+      })
     })
 
     it('should get cart, parse response, and show most recent items first', () => {
       const data = self.cartService.handleCartResponse(transformedCartResponse, '2016-10-01')
       // verify response
       expect(data.items.length).toEqual(3)
+      // Based on 8.1 JSON response changed the designationNumber value changed for item multiple objects
       expect(data.items[0].designationNumber).toEqual('5541091')
-      expect(data.items[1].designationNumber).toEqual('0617368')
-      expect(data.items[2].designationNumber).toEqual('0354433')
-      expect(data.items[1].giftStartDate.toString()).toEqual(moment('2016-10-09').toString())
+      expect(data.items[1].designationNumber).toEqual('5541091')
+      expect(data.items[2].designationNumber).toEqual('5541091')
+      expect(data.items[1].giftStartDate.toString()).toEqual(moment('2016-10-10').toString())
 
       expect(data.cartTotal).toEqual(50)
       expect(data.cartTotalDisplay).toEqual('$50.00')
