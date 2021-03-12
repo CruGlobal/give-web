@@ -69,7 +69,7 @@ class ProductConfigFormController {
 
     this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
       this.initItemConfig()
-      //Based on EP 8.1 JSON Object amount has been changed to uppercase
+      //  Based on EP 8.1 JSON Object amount has been changed to uppercase
       if (this.selectableAmounts.includes(this.itemConfig.AMOUNT)) {
         this.changeAmount(this.itemConfig.AMOUNT, true)
       } else {
@@ -87,7 +87,7 @@ class ProductConfigFormController {
   initItemConfig () {
     this.itemConfig = this.itemConfig || {}
 
-    //Based on EP 8.1 JSON Object amount has been changed to uppercase
+    //  Based on EP 8.1 JSON Object amount has been changed to uppercase
     const amount = parseFloat(this.itemConfig.AMOUNT)
     if (isNaN(amount)) {
       delete this.itemConfig.AMOUNT
@@ -166,7 +166,7 @@ class ProductConfigFormController {
         })
   }
 
-  //Based on EP 8.1 JSON Object amount has been changed to uppercase
+  //  Based on EP 8.1 JSON Object amount has been changed to uppercase
   setDefaultAmount () {
     const amountOptions = isEmpty(this.suggestedAmounts)
       ? this.selectableAmounts

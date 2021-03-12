@@ -75,9 +75,9 @@ class Cart {
   handleCartResponse (cartResponse, nextDrawDate) {
     const items = map(cartResponse.lineItems, item => {
       const frequency = item.rate.recurrence.display
-      // Changed the 'itemfields' property to 'configuration' with in the item object.
+      //  Changed the 'itemfields' property to 'configuration' with in the item object.
       const itemConfig = omit(item.configuration, ['self', 'links'])
-      //Based on EP 8.1 JSON Object item config properties are changed to uppercase
+      //  Based on EP 8.1 JSON Object item config properties are changed to uppercase
       const giftStartDate = frequency !== 'Single'
         ? startMonth(itemConfig['RECURRING-DAY-OF-MONTH'], itemConfig['RECURRING-START-MONTH'], nextDrawDate) : null
       const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
