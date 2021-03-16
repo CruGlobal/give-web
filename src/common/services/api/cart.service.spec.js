@@ -136,7 +136,6 @@ describe('cart service', () => {
     it('should get cart, parse response, and show most recent items first', () => {
       const data = self.cartService.handleCartResponse(transformedCartResponse, '2016-10-01')
       // verify response
-      console.log(data.items);
       expect(data.items.length).toEqual(3)
       // Based on 8.1 JSON response changed the designationNumber value changed for item multiple objects
       expect(data.items[0].designationNumber).toEqual('5541091')
