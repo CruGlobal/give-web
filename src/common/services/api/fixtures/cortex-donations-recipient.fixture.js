@@ -2,12 +2,12 @@ export default {
   self: {
     type: 'elasticpath.donations.recipient-donation-history-list',
     uri: '/donations/historical/crugive/recipient/recent',
-    href: 'http://localhost:9080/cortex/donations/historical/crugive/recipient/recent'
+    href: 'https://give-stage2.cru.org/cortex/donations/historical/crugive/recipient/recent'
   },
   links: [{
     rel: 'givingdashboard',
     uri: '/giving/crugive',
-    href: 'http://localhost:9080/cortex/giving/crugive'
+    href: 'https://give-stage2.cru.org/cortex/giving/crugive'
   }],
   'donation-summaries': [{
     'designation-active': true,

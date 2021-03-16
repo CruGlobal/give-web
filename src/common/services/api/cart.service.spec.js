@@ -35,10 +35,11 @@ describe('cart service', () => {
       advanceTo(moment('2016-09-01').toDate()) // Make sure current date is before next draw date
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should handle an empty response', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, null)
 
@@ -49,10 +50,11 @@ describe('cart service', () => {
       self.$httpBackend.flush()
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should handle a response with no line items', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, {})
 
@@ -64,10 +66,11 @@ describe('cart service', () => {
       self.$httpBackend.flush()
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should get cart, parse response, and show most recent items first', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, cartResponse)
 
@@ -111,12 +114,30 @@ describe('cart service', () => {
       transformedCartResponse.rateTotals[0].cost['amount-with-fees'] = 52.23
       transformedCartResponse.rateTotals[0].cost.display = '$51.00'
       transformedCartResponse.rateTotals[0].cost['display-with-fees'] = '$52.23'
+      // Based on 8.1 JSON response added the following codes
+      transformedCartResponse.lineItems = transformedCartResponse.lineItems.map((item, index) =>{
+        item.itemfields['RECURRING-DAY-OF-MONTH'] = item.itemfields['recurring-day-of-month']
+        item.itemfields['RECURRING-START-MONTH'] = item.itemfields['recurring-start-month']
+        item.rate = {...item.rate, cost : [{display : 10}]}
+        // Based on EP 8.1 JSON Object, added mock values of designation number for first three items. 
+        if(index === 0){
+          item.item = {...item.item, _offer : [{_code : [{code: '0354433'}]}]} 
+        }
+        if(index === 1){
+          item.item = {...item.item, _offer : [{_code : [{code: '0617368'}]}]} 
+        }
+        if(index === 2){
+          item.item = {...item.item, _offer : [{_code : [{code: '5541091'}]}]} 
+        }
+        return {...item, configuration:item.itemfields}
+      })
     })
 
     it('should get cart, parse response, and show most recent items first', () => {
       const data = self.cartService.handleCartResponse(transformedCartResponse, '2016-10-01')
       // verify response
       expect(data.items.length).toEqual(3)
+      // Based on 8.1 JSON response changed the designationNumber value changed for item multiple objects
       expect(data.items[0].designationNumber).toEqual('5541091')
       expect(data.items[1].designationNumber).toEqual('0617368')
       expect(data.items[2].designationNumber).toEqual('0354433')
@@ -169,9 +190,11 @@ describe('cart service', () => {
 
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+        'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
         {
-          amount: 50,
+          configuration:{
+            AMOUNT: 50
+          },
           quantity: 1
         }
       ).respond(200)
@@ -193,10 +216,12 @@ describe('cart service', () => {
 
         it('should add an item', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
             {
-              amount: 50,
-              quantity: 1
+              configuration: {
+                  AMOUNT:50
+              },
+              quantity:1
             }
           ).respond(200)
 
@@ -214,10 +239,12 @@ describe('cart service', () => {
 
         it('should delete cookies and addItem to cart', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
             {
-              amount: 50,
-              quantity: 1
+              configuration:{
+                AMOUNT:50
+              },
+              quantity:1
             }
           ).respond(200)
 

@@ -32,7 +32,7 @@ describe('product config form component', function () {
       },
       code: '1234567',
       itemConfig: {
-        amount: '85'
+        AMOUNT: '85'
       },
       isEdit: false,
       uri: 'uri',
@@ -77,7 +77,7 @@ describe('product config form component', function () {
 
     it('should handle brandedCoverFeeCheckedEvent for selectable amounts', () => {
       jest.spyOn($ctrl, 'changeAmount').mockImplementation(() => {})
-      $ctrl.itemConfig.amount = 50
+      $ctrl.itemConfig.AMOUNT = 50
 
       $ctrl.$onInit()
       $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
@@ -87,7 +87,7 @@ describe('product config form component', function () {
 
     it('should handle brandedCoverFeeCheckedEvent for custom amounts', () => {
       jest.spyOn($ctrl, 'changeCustomAmount').mockImplementation(() => {})
-      $ctrl.itemConfig.amount = 1.02
+      $ctrl.itemConfig.AMOUNT = 1.02
 
       $ctrl.$onInit()
       $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
@@ -102,38 +102,38 @@ describe('product config form component', function () {
       $ctrl.itemConfig['recurring-start-month'] = '8'
       $ctrl.initItemConfig()
 
-      expect($ctrl.itemConfig.amount).toEqual(85)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(85)
       expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('09')
       expect($ctrl.itemConfig['recurring-start-month']).toEqual('08')
     })
 
     it('should handle out of range values', () => {
-      $ctrl.itemConfig.amount = 'invalid'
+      $ctrl.itemConfig.AMOUNT = 'invalid'
       $ctrl.itemConfig['recurring-day-of-month'] = '29'
       $ctrl.itemConfig['recurring-start-month'] = '13'
       $ctrl.initItemConfig()
 
-      expect($ctrl.itemConfig.amount).toBeUndefined()
+      expect($ctrl.itemConfig.AMOUNT).toBeUndefined()
       expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined()
       expect($ctrl.itemConfig['recurring-start-month']).toBeUndefined()
     })
 
     it('should handle a whole number amount', () => {
-      $ctrl.itemConfig.amount = 10
+      $ctrl.itemConfig.AMOUNT = 10
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig.amount).toEqual(10)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(10)
     })
 
     it('should handle amount on first time through', () => {
-      $ctrl.itemConfig.amount = undefined
+      $ctrl.itemConfig.AMOUNT = undefined
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig.amount).toBeUndefined()
+      expect($ctrl.itemConfig.AMOUNT).toBeUndefined()
     })
 
     it('should handle amount with cents', () => {
-      $ctrl.itemConfig.amount = 10.25
+      $ctrl.itemConfig.AMOUNT = 10.25
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig.amount).toEqual(10.25)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(10.25)
     })
   })
 
@@ -230,47 +230,47 @@ describe('product config form component', function () {
     it('should set the default amount if there are no suggested amounts', () => {
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(50)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(50)
     })
 
     it('should set the default amount if there are suggested amounts', () => {
-      $ctrl.suggestedAmounts = [{ amount: 14 }]
+      $ctrl.suggestedAmounts = [{ AMOUNT: 14 }]
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(14)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(14)
     })
 
     it('should use an existing selectableAmounts', () => {
-      $ctrl.itemConfig.amount = 100
+      $ctrl.itemConfig.AMOUNT = 100
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(100)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(100)
       expect($ctrl.changeCustomAmount).not.toHaveBeenCalled()
     })
 
     it('should use an existing suggestedAmounts', () => {
-      $ctrl.itemConfig.amount = 14
-      $ctrl.suggestedAmounts = [{ amount: 14 }]
+      $ctrl.itemConfig.AMOUNT = 14
+      $ctrl.suggestedAmounts = [{ AMOUNT: 14 }]
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(14)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(14)
       expect($ctrl.changeCustomAmount).not.toHaveBeenCalled()
     })
 
     it('should initialize the custom value without suggestedAmounts', () => {
-      $ctrl.itemConfig.amount = 14
+      $ctrl.itemConfig.AMOUNT = 14
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(14)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(14)
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
     })
 
     it('should initialize the custom value with suggestedAmounts', () => {
-      $ctrl.itemConfig.amount = 14
-      $ctrl.suggestedAmounts = [{ amount: 25 }]
+      $ctrl.itemConfig.AMOUNT = 14
+      $ctrl.suggestedAmounts = [{ AMOUNT: 25 }]
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(14)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(14)
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
     })
   })
@@ -298,7 +298,7 @@ describe('product config form component', function () {
       $ctrl.itemConfigForm = {
         $valid: true,
         $dirty: false,
-        amount: {}
+        AMOUNT: {}
       }
       $ctrl.$scope.$digest()
 
@@ -309,7 +309,7 @@ describe('product config form component', function () {
 
   describe('addCustomValidators()', () => {
     beforeEach(() => {
-      $ctrl.itemConfigForm.amount = {
+      $ctrl.itemConfigForm.AMOUNT = {
         $validators: {},
         $parsers: []
       }
@@ -319,28 +319,28 @@ describe('product config form component', function () {
       $ctrl.customInputActive = true
       $ctrl.addCustomValidators()
 
-      expect($ctrl.itemConfigForm.amount.$parsers[0]('$10')).toBe('10')
-      expect($ctrl.itemConfigForm.amount.$parsers[0]('$10,000')).toBe('10000')
+      expect($ctrl.itemConfigForm.AMOUNT.$parsers[0]('$10')).toBe('10')
+      expect($ctrl.itemConfigForm.AMOUNT.$parsers[0]('$10,000')).toBe('10000')
 
-      expect($ctrl.itemConfigForm.amount.$validators.minimum('1')).toBe(true)
-      expect($ctrl.itemConfigForm.amount.$validators.minimum('0.9')).toBe(false)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('1')).toBe(true)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('0.9')).toBe(false)
 
-      expect($ctrl.itemConfigForm.amount.$validators.maximum('9999999.99')).toBe(true)
-      expect($ctrl.itemConfigForm.amount.$validators.maximum('10000000')).toBe(false)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('9999999.99')).toBe(true)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('10000000')).toBe(false)
 
-      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.4')).toBe(true)
-      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.')).toBe(false)
-      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.235')).toBe(false)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.4')).toBe(true)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.')).toBe(false)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.235')).toBe(false)
     })
 
     it('should pass validation in any \'bad\' case', () => {
       $ctrl.customInputActive = false
       $ctrl.addCustomValidators()
 
-      expect($ctrl.itemConfigForm.amount.$validators.minimum('0.3')).toBe(true)
-      expect($ctrl.itemConfigForm.amount.$validators.minimum('dlksfjs')).toBe(true)
-      expect($ctrl.itemConfigForm.amount.$validators.maximum('4542452454524.99')).toBe(true)
-      expect($ctrl.itemConfigForm.amount.$validators.pattern('1.214')).toBe(true)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('0.3')).toBe(true)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('dlksfjs')).toBe(true)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('4542452454524.99')).toBe(true)
+      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('1.214')).toBe(true)
     })
   })
 
@@ -415,7 +415,7 @@ describe('product config form component', function () {
       $ctrl.changeAmount(100)
 
       expect($ctrl.itemConfigForm.$setDirty).toHaveBeenCalled()
-      expect($ctrl.itemConfig.amount).toEqual(100)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(100)
       expect($ctrl.customAmount).toBe('')
       expect($ctrl.customInputActive).toEqual(false)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 100 })
@@ -425,7 +425,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 50
+      $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(100)
 
       expect($ctrl.amountChanged).toEqual(true)
@@ -437,7 +437,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 50
+      $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(100, true)
 
       expect($ctrl.amountChanged).toEqual(true)
@@ -449,7 +449,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 50
+      $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(50)
 
       expect($ctrl.amountChanged).toEqual(false)
@@ -463,7 +463,7 @@ describe('product config form component', function () {
       $ctrl.itemConfig = {}
       $ctrl.changeCustomAmount(300)
 
-      expect($ctrl.itemConfig.amount).toEqual(300)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(300)
       expect($ctrl.customAmount).toEqual(300)
       expect($ctrl.customInputActive).toEqual(true)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 300 })
@@ -473,7 +473,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 51.2
+      $ctrl.itemConfig.AMOUNT = 51.2
       $ctrl.changeCustomAmount(1)
 
       expect($ctrl.amountChanged).toEqual(true)
@@ -485,7 +485,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 51.2
+      $ctrl.itemConfig.AMOUNT = 51.2
       $ctrl.changeCustomAmount(1, true)
 
       expect($ctrl.amountChanged).toEqual(true)
@@ -497,7 +497,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 5
+      $ctrl.itemConfig.AMOUNT = 5
       $ctrl.changeAmount(5)
 
       expect($ctrl.amountChanged).toEqual(false)
@@ -508,13 +508,13 @@ describe('product config form component', function () {
 
   describe('checkAmountChanged()', () => {
     it('returns true if the amount changed', () => {
-      $ctrl.itemConfig = { amount: 1 }
+      $ctrl.itemConfig = { AMOUNT: 1 }
       $ctrl.checkAmountChanged(2)
       expect($ctrl.amountChanged).toEqual(true)
     })
 
     it('returns false if the amount did not change', () => {
-      $ctrl.itemConfig = { amount: 2 }
+      $ctrl.itemConfig = { AMOUNT: 2 }
       $ctrl.checkAmountChanged(2)
       expect($ctrl.amountChanged).toEqual(false)
     })
@@ -561,8 +561,8 @@ describe('product config form component', function () {
       const operation = isEdit ? 'editItem' : 'addItem'
       const cartEvent = isEdit ? cartUpdatedEvent : giftAddedEvent
       const operationArgs = isEdit
-        ? ['uri', 'items/crugive/<some id>', { amount: 85 }]
-        : ['items/crugive/<some id>', { amount: 85 }, undefined]
+        ? ['uri', 'items/crugive/<some id>', { AMOUNT: 85 }]
+        : ['items/crugive/<some id>', { AMOUNT: 85 }, undefined]
       beforeEach(() => {
         $ctrl.isEdit = isEdit
         jest.spyOn($ctrl.cartService, operation).mockReturnValue(Observable.of({ self: { uri: 'uri' } }))
