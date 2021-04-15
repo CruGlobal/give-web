@@ -1,5 +1,4 @@
 import angular from 'angular'
-import { rollbarAccessToken } from 'common/app.constants'
 import 'angular-environment'
 import rollbar from 'rollbar'
 import defaults from 'lodash/defaults'
@@ -10,7 +9,7 @@ let Rollbar
 
 const rollbarConfig = /* @ngInject */ function (envServiceProvider, $provide) {
   const config = {
-    accessToken: rollbarAccessToken,
+    accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     captureUncaught: false,
     captureUnhandledRejections: false,
     environment: envServiceProvider.get(),
