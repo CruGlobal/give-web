@@ -23,8 +23,6 @@ const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
 
 const cortexScope = 'crugive'
 
-const rollbarAccessToken = 'a5bb784f937841538494e747f70a4597'
-
 const mobileBreakpoint = 575
 
 // Generic phone number regex, matches + and 011 prefixes.
@@ -37,7 +35,6 @@ export {
   ccpKey,
   ccpStagingKey,
   cortexScope,
-  rollbarAccessToken,
   mobileBreakpoint,
   phoneNumberRegex
 }
