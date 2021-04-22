@@ -53,7 +53,8 @@ const sharedConfig = {
     ]),
     new webpack.EnvironmentPlugin({
       TRAVIS_COMMIT: 'development',
-      S3_GIVE_DOMAIN: ''
+      S3_GIVE_DOMAIN: '',
+      ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token'
     }),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
