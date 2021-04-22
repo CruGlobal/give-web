@@ -96,7 +96,7 @@ class Order {
         .do((data) => {
           this.paymentMethodForms = data
 
-          if (!this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction')) {
+          if (!this.hateoasHelperService.getLink(data.bankAccount, 'createpaymentinstrumentaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction')) {
             this.$log.warn('Payment form request contains empty link', data)
           }
         })
@@ -107,7 +107,7 @@ class Order {
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction'),
+          path: this.hateoasHelperService.getLink(data.bankAccount, 'createpaymentinstrumentaction'),
           data: paymentInfo,
           followLocation: true
         })

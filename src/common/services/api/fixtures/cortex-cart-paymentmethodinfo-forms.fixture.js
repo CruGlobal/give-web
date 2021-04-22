@@ -58,7 +58,7 @@ export default {
               },
               links: [
                 {
-                  rel: 'createbankaccountfororderaction',
+                  rel: 'createpaymentinstrumentaction',
                   uri: '/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=',
                   href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq='
                 }
