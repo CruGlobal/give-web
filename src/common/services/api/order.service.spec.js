@@ -20,9 +20,10 @@ describe('order service', () => {
   beforeEach(angular.mock.module(module.name))
   var self = {}
 
-  beforeEach(inject((orderService, cartService, $httpBackend, $window, $log) => {
+  beforeEach(inject((orderService, cartService, tsysService, $httpBackend, $window, $log) => {
     self.orderService = orderService
     self.cartService = cartService
+    self.tsysService = tsysService
     self.$httpBackend = $httpBackend
     self.$window = $window
     self.$log = $log
@@ -644,6 +645,7 @@ describe('order service', () => {
     beforeEach(() => {
       // Avoid another http request while testing
       jest.spyOn(self.orderService, 'getPurchaseForm').mockReturnValue(Observable.of(purchaseFormResponseZoomMapped))
+      jest.spyOn(self.tsysService, 'getDevice').mockReturnValue(undefined)
     })
 
     it('should send a request to finalize the purchase', () => {

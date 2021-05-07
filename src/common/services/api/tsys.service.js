@@ -11,6 +11,10 @@ class Tsys {
     this.device = ''
   }
 
+  getDevice () {
+    return this.device
+  }
+
   setDevice (device) {
     this.device = device
   }
