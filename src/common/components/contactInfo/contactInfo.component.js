@@ -40,6 +40,8 @@ class Step1Controller {
       }
     }
 
+    this.requestRadioStation = !!(radioStationApiUrl) && !!(radioStationRadius)
+
     this.loadDonorDetails(donorDetailsDefaults)
     this.loadRadioStations()
     this.waitForFormInitialization()
@@ -54,7 +56,7 @@ class Step1Controller {
       this.submitDetails()
     }
     if (changes.donorDetails.address.postalCode) {
-      this.loadDonorDetails()
+      this.loadRadioStations()
     }
   }
 
@@ -169,6 +171,7 @@ export default angular
       submitted: '<',
       donorDetails: '=?',
       onSubmit: '&',
-      requestRadioStation: '<'
+      radioStationApiUrl: '<',
+      radioStationRadius: '<'
     }
   })

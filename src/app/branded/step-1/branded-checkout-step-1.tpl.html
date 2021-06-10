@@ -22,7 +22,14 @@
   <div class="panel">
     <div class="panel-body">
       <h3 class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
-      <contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onContactInfoSubmit(success)" donor-details="$ctrl.donorDetails"></contact-info>
+      <contact-info
+        submitted="$ctrl.submitted"
+        on-submit="$ctrl.onContactInfoSubmit(success)"
+        donor-details="$ctrl.donorDetails"
+        radio-station-api-url="$ctrl.radioStationApiUrl"
+        radio-station-radius="$ctrl.radioStationRadius"
+      >
+      </contact-info>
     </div>
   </div>
   <div class="panel">
