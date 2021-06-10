@@ -225,11 +225,9 @@
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'RADIO_STATION'}}</h4>
       <div class="form-group">
         <select class="form-control form-control-subtle"
-                name="radioStation"
-                ng-model="$ctrl.radioStation"
-                ng-options="v.name as v['display-name'] for v in $ctrl.countries | orderBy:'\'display-name\''"
-                ng-change="$ctrl.refreshRegions($ctrl.address.country)"
-                ng-disabled="$ctrl.addressDisabled">
+          name="radioStation"
+          ng-model="$ctrl.radioStation"
+          ng-options="v.Description as v['Description'] for v in $ctrl.radioStations | orderBy:'\'Description\''"
         </select>
         <div role="alert" ng-if="$ctrl.loadingRadioStationsError">
           <div class="help-block"><translate>{{'RADIO_STATION_LIST_ERROR'}}</translate>
