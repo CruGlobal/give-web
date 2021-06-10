@@ -41,6 +41,7 @@ class Step1Controller {
     }
 
     this.loadDonorDetails(donorDetailsDefaults)
+    this.loadRadioStations()
     this.waitForFormInitialization()
 
     this.$scope.$on(SignInEvent, () => {
@@ -51,6 +52,9 @@ class Step1Controller {
   $onChanges (changes) {
     if (changes.submitted.currentValue === true) {
       this.submitDetails()
+    }
+    if (changes.donorDetails.address.postalCode) {
+      this.loadDonorDetails()
     }
   }
 
@@ -108,6 +112,20 @@ class Step1Controller {
       })
   }
 
+  loadRadioStations () {
+    if (this.requestRadioStation) {
+      this.loadingRadioStationsError = false
+      this.geographiesService.getRadioStations(this.donorDetails.address.postalCode) //Need new service
+        .subscribe((data) => {
+          this.radioStations = data
+        },
+        error => {
+          this.loadingRadioStationsError = true
+          this.$log.error('Error loading radio stations.', error)
+        })
+    }
+  }
+
   submitDetails () {
     this.detailsForm.$setSubmitted()
     if (this.detailsForm.$valid) {
@@ -150,6 +168,7 @@ export default angular
     bindings: {
       submitted: '<',
       donorDetails: '=?',
-      onSubmit: '&'
+      onSubmit: '&',
+      requestRadioStation: '<'
     }
   })
