@@ -22,10 +22,11 @@ const componentName = 'contactInfo'
 
 class Step1Controller {
   /* @ngInject */
-  constructor ($log, $scope, orderService, sessionService, analyticsFactory) {
+  constructor ($log, $scope, orderService, radioStationService, sessionService, analyticsFactory) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
+    this.radioStationService = radioStationService
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
   }
@@ -117,7 +118,11 @@ class Step1Controller {
   loadRadioStations () {
     if (this.requestRadioStation) {
       this.loadingRadioStationsError = false
-      this.geographiesService.getRadioStations(this.donorDetails.address.postalCode) //Need new service
+      this.radioStationService.getRadioStations(
+        this.radioStationApiUrl,
+        this.donorDetails.address.postalCode,
+        this.radioStationRadius
+      )
         .subscribe((data) => {
           this.radioStations = data
         },
@@ -161,6 +166,7 @@ export default angular
     'ngMessages',
     addressForm.name,
     orderService.name,
+    radioStationService.name,
     sessionService.name,
     analyticsFactory.name
   ])
