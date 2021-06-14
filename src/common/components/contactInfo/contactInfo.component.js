@@ -43,6 +43,8 @@ class Step1Controller {
 
     this.requestRadioStation = !!(radioStationApiUrl) && !!(radioStationRadius)
 
+    this.radioStation = undefined
+
     this.loadDonorDetails(donorDetailsDefaults)
     this.loadRadioStations()
     this.waitForFormInitialization()
