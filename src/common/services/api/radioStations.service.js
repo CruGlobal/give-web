@@ -6,6 +6,7 @@ import 'rxjs/add/operator/combineLatest'
 import 'rxjs/add/operator/pluck'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
+import appConfig from 'common/app.config'
 
 const serviceName = 'radioStationsService'
 
@@ -20,12 +21,14 @@ class RadioStations {
   }
 
   getRadioStations(radioStationApiUrl, postalCode, radioStationRadius) {
+    debugger
     return Observable.from(this.$http({
       method: 'GET',
       url: radioStationApiUrl + '/' + postalCode + '/' + radioStationRadius,
       withCredentials: true
     }))
       .map((response) => {
+        debugger
         return response.data
       })
   }
@@ -33,6 +36,7 @@ class RadioStations {
 
 export default angular
   .module(serviceName, [
-    'environment'
+    'environment',
+    appConfig.name,
   ])
   .service(serviceName, RadioStations)
