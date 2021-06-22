@@ -52,6 +52,10 @@ class AddressFormController {
       this.address.extendedAddress = ''
     }
   }
+
+  onPostalCodeChanged () {
+    debugger;
+  }
 }
 
 export default angular
@@ -64,6 +68,7 @@ export default angular
     bindings: {
       address: '=',
       parentForm: '<',
+      onAddressChanged: '&',
       addressDisabled: '<'
     }
   })

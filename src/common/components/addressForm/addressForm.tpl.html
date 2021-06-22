@@ -134,6 +134,7 @@
                ng-model="$ctrl.address.postalCode"
                required
                ng-pattern="/^\d{5}(?:[-\s]\d{4})?$/"
+               ng-change="$ctrl.onPostalCodeChanged()"
                ng-disabled="$ctrl.addressDisabled">
         <div role="alert" ng-messages="$ctrl.parentForm.addressPostalCode.$error" ng-if="($ctrl.parentForm.addressPostalCode | showErrors)">
           <div class="help-block" ng-message="required" translate>{{'ZIP_CODE_ERROR'}}</div>
