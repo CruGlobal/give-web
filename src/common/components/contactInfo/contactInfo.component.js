@@ -42,7 +42,7 @@ class Step1Controller {
       }
     }
 
-    this.requestRadioStation = !!(radioStationApiUrl) && !!(radioStationRadius)
+    this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
 
     this.radioStation = undefined
 
@@ -58,9 +58,6 @@ class Step1Controller {
   $onChanges (changes) {
     if (changes.submitted.currentValue === true) {
       this.submitDetails()
-    }
-    if (changes.donorDetails.address.postalCode) {
-      this.loadRadioStations()
     }
   }
 
@@ -119,11 +116,16 @@ class Step1Controller {
   }
 
   loadRadioStations () {
-    if (this.requestRadioStation) {
+    const postalCode = this.donorDetails.mailingAddress?.postalCode;
+    debugger
+
+    if (this.requestRadioStation && postalCode) {
+      debugger
       this.loadingRadioStationsError = false
+
       this.radioStationsService.getRadioStations(
         this.radioStationApiUrl,
-        this.donorDetails.address.postalCode,
+        postalCode,
         this.radioStationRadius
       )
         .subscribe((data) => {
