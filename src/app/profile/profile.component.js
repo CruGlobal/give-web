@@ -63,6 +63,8 @@ class ProfileController {
     this.syncPhoneValidators()
 
     this.analyticsFactory.pageLoaded()
+
+    this.preferrenceCenterLink = ""
   }
 
   $onDestroy () {
@@ -176,6 +178,13 @@ class ProfileController {
     this.profileService.connectToAdobeCampaign(email).map((response) => { 
       debugger
     })
+  }
+
+  navigateToPreferrenceCenter () {
+    debugger
+    if (this.donorEmail && this.preferrenceCenterLink) {
+      debugger
+    }
   }
 
   syncPhoneValidators () {

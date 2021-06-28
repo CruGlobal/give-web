@@ -137,20 +137,21 @@
                       <form name="$ctrl.donorEmailForm" novalidate>
                         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.donorEmailForm.donorsEmail | showErrors)}">
                           <label>{{$ctrl.donorDetails.name['given-name'] + ' ' + $ctrl.donorDetails.name['family-name']}} Email</label>
-                          <input type="email"
-                                 name="donorsEmail"
-                                 class="form-control  form-control-subtle"
-                                 ng-model="$ctrl.donorEmail.email"
-                                 maxlength="100"
-                                 required
-                                 ng-disabled="$ctrl.donorDetails.staff">
-                          <button id="linkToPreferrenceCenter"
-                            type="submit"
-                            class="btn btn-primary btn-lg pull-right"
-                            ng-click="$ctrl.linkToPreferrenceCenter()"
-                            ng-disabled="$ctrl.donorDetails.staff">
+                          <div class="email-row">
+                            <input type="email"
+                              name="donorsEmail"
+                              class="form-control  form-control-subtle"
+                              ng-model="$ctrl.donorEmail.email"
+                              maxlength="100"
+                              required
+                              ng-disabled="$ctrl.donorDetails.staff">
+                            <button id="linkToPreferrenceCenter"
+                              class="btn btn-primary"
+                              ng-click="$ctrl.navigateToPreferrenceCenter()"
+                              ng-disabled="$ctrl.preferrenceCenterLink">
                               Press
-                          </button>
+                            </button>
+                          </div>
                           <div role="alert" ng-messages="$ctrl.donorEmailForm.$error" ng-if="($ctrl.donorEmailForm.donorsEmail | showErrors)">
                             <div class="help-block" ng-message="required" translate>You must enter an email address</div>
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>

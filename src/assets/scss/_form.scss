@@ -1,4 +1,26 @@
 
+.email-row {
+  //position: relative;
+  select.form-control-subtle {
+    display: inline-block !important;
+    width: 23%;
+    margin-right: -4px;
+  }
+  input[type=email] {
+    //display: inline-block !important;
+    width: 100% !important;
+    //margin: 0 1% 0 2% !important;
+    //float: left;
+    vertical-align: bottom;
+  }
+  button {
+    //display: inline-block !important;
+    width: 100px !important;
+    //margin: 0 1% 0 2% !important;
+    float: right;
+  }
+}
+
 .form-group.has-error {
   .form-control {
     box-shadow: inset 0px 0px 0px 1px $state-danger-text;
