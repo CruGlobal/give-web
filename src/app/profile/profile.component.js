@@ -170,6 +170,14 @@ class ProfileController {
       )
   }
 
+  generateLinkToPreferrenceCenter () {
+    const email = this.donorEmail
+    debugger
+    this.profileService.connectToAdobeCampaign(email).map((response) => { 
+      debugger
+    })
+  }
+
   syncPhoneValidators () {
     this.$scope.$watchCollection('$ctrl.phoneNumberForms', forms => {
       angular.forEach(forms, form => {

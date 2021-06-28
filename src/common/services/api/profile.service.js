@@ -27,7 +27,8 @@ const serviceName = 'profileService'
 
 class Profile {
   /* @ngInject */
-  constructor ($log, cortexApiService, hateoasHelperService, analyticsFactory) {
+  constructor ($http, $log, cortexApiService, hateoasHelperService, analyticsFactory) {
+    this.$http = $http
     this.$log = $log
     this.cortexApiService = cortexApiService
     this.hateoasHelperService = hateoasHelperService
@@ -123,6 +124,22 @@ class Profile {
       path: ['emails', this.cortexApiService.scope, spouse ? 'spouse' : ''],
       data: { email: data.email },
       followLocation: true
+    })
+  }
+
+  connectToAdobeCampaign (email) {
+    debugger
+    return Observable.from(this.$http({
+      method: 'POST',
+      url: 'mc.adobe.io/instance/campaign/profileAndServicesExt/profile/byEmail',
+      params: undefined,
+      data: { email },
+      cache: undefined,
+      withCredentials: true
+    }))
+    .map((response) => {
+      debugger
+      return response
     })
   }
 

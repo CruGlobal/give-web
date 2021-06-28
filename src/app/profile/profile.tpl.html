@@ -144,6 +144,13 @@
                                  maxlength="100"
                                  required
                                  ng-disabled="$ctrl.donorDetails.staff">
+                          <button id="linkToPreferrenceCenter"
+                            type="submit"
+                            class="btn btn-primary btn-lg pull-right"
+                            ng-click="$ctrl.linkToPreferrenceCenter()"
+                            ng-disabled="$ctrl.donorDetails.staff">
+                              Press
+                          </button>
                           <div role="alert" ng-messages="$ctrl.donorEmailForm.$error" ng-if="($ctrl.donorEmailForm.donorsEmail | showErrors)">
                             <div class="help-block" ng-message="required" translate>You must enter an email address</div>
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
