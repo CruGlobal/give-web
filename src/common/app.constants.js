@@ -12,13 +12,13 @@ const ccpKey = '-----BEGIN PUBLIC KEY-----' +
   '-----END PUBLIC KEY-----'
 
 const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
-  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1wOCSLbKrlAJKa21iWZa' +
-  '4KwkEbTW1DIJLZ7kULHqOq//0TOUjIfW6DX4dULSND25uWi2hHQA2+q8uuaYCVfC' +
-  'h2IvOUygOwJyNRTwpQtlIKgq1C7xnsnO4COA8hmnkr2aAxTX1aynGWw/3gvsx2y/' +
-  'pML4UM+LeiHdrVv7zSaW92MZd+bhf4Lu3CA2doyY6uobq/+P087dLqBXS61OZSAR' +
-  'xMCKF2BquwQfEq8GyblHpjWI2SXWmB276NdKrCp/ZKH3vFoBSlLoPdVT4Qbd4sKi' +
-  'PNnKvxIBooLPQLBOO0QGv6AIgyL4Jss+dAvn5O6lckwip9QRMfINNBX3Clhq53xE' +
-  'FwIDAQAB' +
+  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn7LClo93AYVUhsWlPyo1' +
+  'hT5xWKDtH8yjjPUyMRGanZQS2ZMypqDbzDD4a1fwK6YaA1OXeURaJs2Z9xUZW5Fr' +
+  'DxQSlJkocASRnUNvlSao4RGbZJmzdjPWBwKYGUno0BeCEVmABwe4dvmpyY-SNL1P' +
+  'mDB07t9X-XBj-a07Libf3RYB-1TDqdtmqPn93ERn1BoweZQXBBAIDlnI_s6ug5IK' +
+  'z7Ye8G7B_sKQ5w9kbLR8RaTRACm3i00TnCIWAKUmr9LxQSsXxXnYhIjrjEZ314-O' +
+  'y8obUvshcr8TckfhXtrisla1jorLCHA7h1CoPf8B52CGkihQVSTxFTvUde5IZhOJ' +
+  '_QIDAQAB' +
   '-----END PUBLIC KEY-----'
 
 const cortexScope = 'crugive'
