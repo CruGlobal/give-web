@@ -1,14 +1,14 @@
 // These CCP keys are used as backup keys if a network request for one fails.
 // They should be updated annually (around mid-April) as CCP rotates encryption keys.
-// Last updated 06/22/2017
+// Last updated 07/01/2021
 const ccpKey = '-----BEGIN PUBLIC KEY-----' +
-  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnY7iTAnM/B1uFZ2AH0yj' +
-  'pmwiBzzk7p6aFBfScpJ9ZMPwD3PjujTzobZpRm2pXF2XoaWqccZQyQ02TW6IfnFT' +
-  '/+6/y/hmsMv2E3Lr7kILpJbHwAitFt2jNCXFYH25o0azq46Cy429tTHyVYDzrm27' +
-  'pAvHwblPLTiS+/urMAOoBeq4Quk8P/9xP0Ia5z7hrL85sPxBRSIqzOtNmw2ce/V4' +
-  'LsYri8058wDNaeLPSUamUtjI6g7CP1UcLFB69NM3ZeCauUTp1BTUuLykOfu9GTF3' +
-  'UjMD24Ez0avvTzMHqPEBPXfslqulqSERQ7b1E6CwXonFwYMEEcek8CWYd7YJGQ8b' +
-  'HQIDAQAB' +
+  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvmjduk8T8riKsMGoX3Hm' +
+  'eQxCtUcRYqAUlsr5sVVu8ZFWAZC-JPbaNIGrzngZZin6J6E4DByk_rjKU9yKnSAo' +
+  'qJrl3ad7aYyCEQOoa3zi7JOFxA9s4hFs4w8UFkGS35aOEZ0m3l7tA7CV0lCeZ8IQ' +
+  '_Niltz72ulfW6RdTrCkL30zmx2f_UdaSwtgnHVi-YkV4VZUGu42jLFYGVjQsXRNq' +
+  'KRv92Y1vZ7FXlyTra5sije4ywxHmPntEKPEoKQbcdPmO8bUR9NwM_pvyx1SDysye' +
+  '4vS1vJn6VV80tudOegMT3jeQqY8xOLSZcr9Vx5lK0UDY1cAKGyA14TLgXB0qtdC7' +
+  'LQIDAQAB' +
   '-----END PUBLIC KEY-----'
 
 const ccpStagingKey = '-----BEGIN PUBLIC KEY-----' +
