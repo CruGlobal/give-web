@@ -52,53 +52,38 @@ describe('sessionModalService', function () {
         $rootScope = _$rootScope_
         deferred = _$q_.defer()
         analyticsFactory = _analyticsFactory_
-        jest.spyOn(analyticsFactory, 'track').mockImplementation(() => {})
         jest.spyOn(analyticsFactory, 'trackGTM').mockImplementation(() => {})
         $uibModal.open.mockReturnValue({ result: { finally: angular.noop, then: angular.noop }, opened: deferred.promise })
       }))
 
       it('sends analytics event for sign-up', () => {
         sessionModalService.open('sign-up', {
-          openAnalyticsEvent: 'eventA'
+          openAnalyticsEvent: 'ga-sign-in'
         })
         deferred.resolve()
         $rootScope.$digest()
 
-        expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
         expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in')
       })
 
       it('send analytics event for sign-in', () => {
         sessionModalService.open('sign-in', {
-          openAnalyticsEvent: 'eventA'
+          openAnalyticsEvent: 'ga-sign-in'
         })
         deferred.resolve()
         $rootScope.$digest()
 
-        expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
         expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in')
       })
 
       it('send analytics event for user-match', () => {
         sessionModalService.open('user-match', {
-          openAnalyticsEvent: 'eventA'
+          openAnalyticsEvent: 'ga-registration-match-is-this-you'
         })
         deferred.resolve()
         $rootScope.$digest()
 
-        expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
         expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-registration-match-is-this-you')
-      })
-
-      it('does not send gtm analytics event when case does not exist', () => {
-        sessionModalService.open('some-random-type', {
-          openAnalyticsEvent: 'eventA'
-        })
-        deferred.resolve()
-        $rootScope.$digest()
-
-        expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
-        expect(analyticsFactory.trackGTM).not.toHaveBeenCalled()
       })
     })
 
@@ -110,7 +95,6 @@ describe('sessionModalService', function () {
         deferred = _$q_.defer()
         analyticsFactory = _analyticsFactory_
         jest.spyOn(modalStateService, 'name').mockImplementation(() => {})
-        jest.spyOn(analyticsFactory, 'track').mockImplementation(() => {})
         jest.spyOn(analyticsFactory, 'trackGTM').mockImplementation(() => {})
         $uibModal.open.mockReturnValue({ result: deferred.promise })
       }))
@@ -121,52 +105,37 @@ describe('sessionModalService', function () {
         $rootScope.$digest()
 
         expect(modalStateService.name).toHaveBeenCalledWith(null)
-        expect(analyticsFactory.track).not.toHaveBeenCalled()
         expect(analyticsFactory.trackGTM).not.toHaveBeenCalled()
       })
 
       it('sends analytics event for sign-up', () => {
         sessionModalService.open('sign-up', {
-          dismissAnalyticsEvent: 'eventA'
+          dismissAnalyticsEvent: 'ga-sign-in-exit'
         })
         deferred.reject()
         $rootScope.$digest()
 
-        expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
         expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in-exit')
       })
 
       it('sends analytics event for sign-in', () => {
         sessionModalService.open('sign-in', {
-          dismissAnalyticsEvent: 'eventA'
+          dismissAnalyticsEvent: 'ga-sign-in-exit'
         })
         deferred.reject()
         $rootScope.$digest()
 
-        expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
         expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in-exit')
       })
 
       it('sends analytics event for user-match', () => {
         sessionModalService.open('user-match', {
-          dismissAnalyticsEvent: 'eventA'
+          dismissAnalyticsEvent: 'ga-registration-exit'
         })
         deferred.reject()
         $rootScope.$digest()
 
-        expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
         expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-registration-exit')
-      })
-
-      it('does not send gtm analytics event when case does not exist', () => {
-        sessionModalService.open('some-random-type', {
-          dismissAnalyticsEvent: 'eventA'
-        })
-        deferred.reject()
-        $rootScope.$digest()
-
-        expect(analyticsFactory.track).toHaveBeenCalledWith('eventA')
-        expect(analyticsFactory.trackGTM).not.toHaveBeenCalled()
       })
     })
 

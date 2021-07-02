@@ -130,11 +130,6 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
             }
           })
         }
-
-        // Call DTM direct call rule
-        if (typeof $window._satellite !== 'undefined') {
-          $window._satellite.track('aa-add-to-cart')
-        }
       } catch (e) {
         // Error caught in analyticsFactory.cartAdd
       }
@@ -159,9 +154,6 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               }
             }
           }]
-          if (typeof $window._satellite !== 'undefined') {
-            $window._satellite.track('aa-cart-remove')
-          }
           // Send GTM Advance Ecommerce event
           if (typeof $window.dataLayer !== 'undefined') {
             $window.dataLayer.push({
@@ -769,13 +761,6 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         }
       } catch (e) {
         // Error caught in analyticsFactory.setSiteSections
-      }
-    },
-    track: function (event) {
-      try {
-        $window._satellite.track(event)
-      } catch (e) {
-        // Error caught in analyticsFactory.track
       }
     },
     trackGTM: function (eventName) {

@@ -45,35 +45,13 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
     if (options.dismissAnalyticsEvent) {
       currentModal.result
         .then(angular.noop, () => {
-          analyticsFactory.track(options.dismissAnalyticsEvent)
-          switch (type) {
-            case 'sign-in':
-            case 'sign-up':
-              analyticsFactory.trackGTM('ga-sign-in-exit')
-              break
-            case 'user-match':
-              analyticsFactory.trackGTM('ga-registration-exit')
-              break
-            default:
-              break
-          }
+          analyticsFactory.trackGTM(options.dismissAnalyticsEvent)
         })
     }
 
     if (options.openAnalyticsEvent) {
       currentModal.opened.then(() => {
-        analyticsFactory.track(options.openAnalyticsEvent)
-        switch (type) {
-          case 'sign-in':
-          case 'sign-up':
-            analyticsFactory.trackGTM('ga-sign-in')
-            break
-          case 'user-match':
-            analyticsFactory.trackGTM('ga-registration-match-is-this-you')
-            break
-          default:
-            break
-        }
+        analyticsFactory.trackGTM(options.openAnalyticsEvent)
       }, angular.noop)
     }
 
@@ -85,16 +63,16 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
     currentModal: () => currentModal,
     signIn: (lastPurchaseId) => openModal('sign-in', {
       resolve: { lastPurchaseId: () => lastPurchaseId },
-      openAnalyticsEvent: 'aa-sign-in',
-      dismissAnalyticsEvent: 'aa-sign-in-exit'
+      openAnalyticsEvent: 'ga-sign-in',
+      dismissAnalyticsEvent: 'ga-sign-in-exit'
     }).result,
     signUp: () => openModal('sign-up').result,
     forgotPassword: () => openModal('forgot-password').result,
     resetPassword: () => openModal('reset-password', { backdrop: 'static' }).result,
     userMatch: () => openModal('user-match', {
       backdrop: 'static',
-      openAnalyticsEvent: 'aa-registration-match-is-this-you',
-      dismissAnalyticsEvent: 'aa-registration-exit'
+      openAnalyticsEvent: 'ga-registration-match-is-this-you',
+      dismissAnalyticsEvent: 'ga-registration-exit'
     }).result,
     contactInfo: () => openModal('contact-info', { size: '', backdrop: 'static' }).result,
     accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId } }).result,

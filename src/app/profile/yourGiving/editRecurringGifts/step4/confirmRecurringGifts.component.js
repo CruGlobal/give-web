@@ -31,7 +31,6 @@ class ConfirmRecurringGiftsController {
   }
 
   saveChanges () {
-    this.analyticsFactory.track('aa-edit-recurring-submit')
     this.analyticsFactory.trackGTM('ga-edit-recurring-submit')
     this.saving = true
     this.savingError = ''

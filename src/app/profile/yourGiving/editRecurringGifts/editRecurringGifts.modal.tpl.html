@@ -61,7 +61,7 @@
     payment-methods="$ctrl.paymentMethods"
     dismiss="$ctrl.dismiss()"
     next="$ctrl.next(paymentMethod)"
-    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-select-payment-method'); $ctrl.analyticsFactory.trackGTM('ga-edit-recurring-select-payment-method')">
+    ng-init="$ctrl.analyticsFactory.trackGTM('ga-edit-recurring-select-payment-method')">
   </step-0-payment-method-list>
 
   <step-0-add-update-payment-method
@@ -71,9 +71,7 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(paymentMethod)"
-    ng-init="$ctrl.analyticsFactory.track($ctrl.paymentMethod ?
-      'aa-edit-recurring-edit-payment-method' : 'aa-edit-recurring-add-payment-method'); $ctrl.analyticsFactory.trackGTM($ctrl.paymentMethod ?
-      'ga-edit-recurring-edit-payment-method' : 'ga-edit-recurring-add-payment-method')">
+    ng-init="$ctrl.analyticsFactory.trackGTM($ctrl.paymentMethod ? 'ga-edit-recurring-edit-payment-method' : 'ga-edit-recurring-add-payment-method')">
   </step-0-add-update-payment-method>
 
   <step-1-edit-recurring-gifts
@@ -81,7 +79,7 @@
     recurring-gifts="$ctrl.recurringGifts"
     dismiss="$ctrl.dismiss()"
     next="$ctrl.next(null, recurringGifts)"
-    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-configure'); $ctrl.analyticsFactory.trackGTM('ga-edit-recurring-configure')">
+    ng-init="$ctrl.analyticsFactory.trackGTM('ga-edit-recurring-configure')">
   </step-1-edit-recurring-gifts>
 
   <step-2-add-recent-recipients
@@ -93,7 +91,7 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)"
-    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-add-recent'); $ctrl.analyticsFactory.trackGTM('ga-edit-recurring-add-recent')">
+    ng-init="$ctrl.analyticsFactory.trackGTM('ga-edit-recurring-add-recent')">
   </step-2-add-recent-recipients>
 
   <step-2-search-recipients
@@ -101,7 +99,7 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)"
-    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-search'); $ctrl.analyticsFactory.trackGTM('ga-edit-recurring-search')">
+    ng-init="$ctrl.analyticsFactory.trackGTM('ga-edit-recurring-search')">
   </step-2-search-recipients>
 
   <step-3-configure-recent-recipients
@@ -110,7 +108,7 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next(null, null, additions)"
-    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-configure-new-gifts'); $ctrl.analyticsFactory.trackGTM('ga-edit-recurring-configure-new-gifts')">
+    ng-init="$ctrl.analyticsFactory.trackGTM('ga-edit-recurring-configure-new-gifts')">
   </step-3-configure-recent-recipients>
 
   <step-4-confirm
@@ -120,6 +118,6 @@
     dismiss="$ctrl.dismiss()"
     previous="$ctrl.previous()"
     next="$ctrl.next()"
-    ng-init="$ctrl.analyticsFactory.track('aa-edit-recurring-review'); $ctrl.analyticsFactory.trackGTM('ga-edit-recurring-review')">
+    ng-init="$ctrl.analyticsFactory.trackGTM('ga-edit-recurring-review')">
   </step-4-confirm>
 </div>
