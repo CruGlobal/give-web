@@ -46,7 +46,6 @@ class ProfileController {
     this.phonesLoading = true
     this.mailingAddressLoading = true
 
-    //results$: Observable
     this.emailSubject = new Subject()
     this.generateLinkState = 'initial'
   }
@@ -191,21 +190,20 @@ class ProfileController {
         debugger
         this.generateLinkState = 'generating'
       })
-      .subscribe(results => {
+      .subscribe((email) => {
         debugger
         this.generateLinkState = 'results'
+
+        this.profileService.connectToAdobeCampaign(email).map((response) => { 
+          debugger
+          this.generateLinkState = 'inital'
+        })
       },
       error => {
         debugger
         this.generateLinkState = 'error'
+        this.$log.error('Error loading PKey from Adobe', error)
       })
-
-
-    /*const email = this.donorEmail
-    debugger
-    this.profileService.connectToAdobeCampaign(email).map((response) => { 
-      debugger
-    })*/
   }
 
   onEmailChanged() {

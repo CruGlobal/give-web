@@ -131,7 +131,7 @@ class Profile {
     debugger
     return Observable.from(this.$http({
       method: 'POST',
-      url: 'mc.adobe.io/instance/campaign/profileAndServicesExt/profile/byEmail',
+      url: 'https://mc.adobe.io/instance/campaign/profileAndServicesExt/profile/byEmail',
       params: undefined,
       data: { email },
       cache: undefined,
