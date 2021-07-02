@@ -191,17 +191,13 @@ class ProfileController {
         debugger
         this.generateLinkState = 'generating'
       })
-      .switchMap(query => {
-        debugger
-        this.searchState = 'initial'
-      })
       .subscribe(results => {
         debugger
-        this.searchState = 'results'
+        this.generateLinkState = 'results'
       },
       error => {
         debugger
-        this.searchState = 'error'
+        this.generateLinkState = 'error'
       })
 
 
@@ -213,7 +209,7 @@ class ProfileController {
   }
 
   onEmailChanged() {
-    this.emailSubject.next(this.donorEmail.email)
+    this.emailSubject.next(this.newEmail)
   }
 
   navigateToPreferrenceCenter () {
