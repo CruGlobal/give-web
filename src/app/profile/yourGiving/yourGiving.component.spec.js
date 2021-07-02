@@ -205,12 +205,10 @@ describe('your giving', function () {
     it('should call analytics event on dismiss', () => {
       const thenSpy = jest.fn()
       jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: { then: thenSpy } })
-      jest.spyOn($ctrl.analyticsFactory, 'track').mockReturnValue(null)
       jest.spyOn($ctrl.analyticsFactory, 'trackGTM').mockReturnValue(null)
       $ctrl.openEditRecurringGiftsModal()
       thenSpy.mock.calls[0][1]()
 
-      expect($ctrl.analyticsFactory.track).toHaveBeenCalledWith('aa-edit-recurring-exit')
       expect($ctrl.analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-edit-recurring-exit')
     });
   })
@@ -224,15 +222,6 @@ describe('your giving', function () {
       expect($ctrl.$uibModal.open).toHaveBeenCalledWith(expect.objectContaining({ component: 'giveOneTimeGiftModal' }))
     });
 
-    it('should call analytics event on dismiss', () => {
-      const thenSpy = jest.fn()
-      jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: { then: thenSpy } })
-      jest.spyOn($ctrl.analyticsFactory, 'track').mockReturnValue(null)
-      $ctrl.openGiveOneTimeGiftModal()
-      thenSpy.mock.calls[0][1]()
-
-      expect($ctrl.analyticsFactory.track).toHaveBeenCalledWith('aa-give-extra-1-time-exit')
-    });
   })
 
   describe('openStopStartRecurringGiftsModal', () => {
@@ -247,16 +236,6 @@ describe('your giving', function () {
 
       expect($ctrl.stopStartGiftsSuccess).toEqual(true)
       expect($ctrl.reload).toEqual(true)
-    });
-
-    it('should call analytics event on dismiss', () => {
-      const thenSpy = jest.fn()
-      jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: { then: thenSpy } })
-      jest.spyOn($ctrl.analyticsFactory, 'track').mockReturnValue(null)
-      $ctrl.openStopStartRecurringGiftsModal()
-      thenSpy.mock.calls[0][1]()
-
-      expect($ctrl.analyticsFactory.track).toHaveBeenCalledWith('aa-stop-restart-exit')
     });
   })
 
