@@ -144,6 +144,7 @@
                               ng-model="$ctrl.donorEmail.email"
                               maxlength="100"
                               required
+                              ng-change="$ctrl.onEmailChanged()"
                               ng-disabled="$ctrl.donorDetails.staff">
                             <button id="linkToPreferrenceCenter"
                               class="btn btn-primary"

@@ -5,8 +5,13 @@ import assign from 'lodash/assign'
 import pickBy from 'lodash/pickBy'
 import omit from 'lodash/omit'
 import { Observable } from 'rxjs/Observable'
+import { Subject } from 'rxjs/Subject'
 import 'rxjs/add/observable/forkJoin'
+import 'rxjs/add/observable/empty'
+import 'rxjs/add/operator/debounceTime'
+import 'rxjs/add/operator/distinctUntilChanged'
 import 'rxjs/add/operator/do'
+import 'rxjs/add/operator/switchMap'
 import { phoneNumberRegex } from 'common/app.constants'
 
 import template from './profile.tpl.html'
@@ -40,6 +45,10 @@ class ProfileController {
     this.emailLoading = true
     this.phonesLoading = true
     this.mailingAddressLoading = true
+
+    //results$: Observable
+    this.emailSubject = new Subject()
+    this.generateLinkState = 'initial'
   }
 
   $onInit () {
@@ -65,6 +74,8 @@ class ProfileController {
     this.analyticsFactory.pageLoaded()
 
     this.preferrenceCenterLink = ""
+
+    this.generateLinkToPreferrenceCenter()
   }
 
   $onDestroy () {
@@ -172,12 +183,37 @@ class ProfileController {
       )
   }
 
-  generateLinkToPreferrenceCenter () {
-    const email = this.donorEmail
+  generateLinkToPreferrenceCenter() {
+    this.emailSubject
+      .debounceTime(600)
+      .distinctUntilChanged()
+      .do(() => {
+        debugger
+        this.generateLinkState = 'generating'
+      })
+      .switchMap(query => {
+        debugger
+        this.searchState = 'initial'
+      })
+      .subscribe(results => {
+        debugger
+        this.searchState = 'results'
+      },
+      error => {
+        debugger
+        this.searchState = 'error'
+      })
+
+
+    /*const email = this.donorEmail
     debugger
     this.profileService.connectToAdobeCampaign(email).map((response) => { 
       debugger
-    })
+    })*/
+  }
+
+  onEmailChanged() {
+    this.emailSubject.next(this.donorEmail.email)
   }
 
   navigateToPreferrenceCenter () {
