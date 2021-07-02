@@ -205,11 +205,11 @@ describe('your giving', function () {
     it('should call analytics event on dismiss', () => {
       const thenSpy = jest.fn()
       jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: { then: thenSpy } })
-      jest.spyOn($ctrl.analyticsFactory, 'trackGTM').mockReturnValue(null)
+      jest.spyOn($ctrl.analyticsFactory, 'track').mockReturnValue(null)
       $ctrl.openEditRecurringGiftsModal()
       thenSpy.mock.calls[0][1]()
 
-      expect($ctrl.analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-edit-recurring-exit')
+      expect($ctrl.analyticsFactory.track).toHaveBeenCalledWith('ga-edit-recurring-exit')
     });
   })
 

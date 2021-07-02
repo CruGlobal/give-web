@@ -763,13 +763,13 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.setSiteSections
       }
     },
-    trackGTM: function (eventName) {
+    track: function (eventName) {
       try {
         $window.dataLayer.push({
           event: eventName
         })
       } catch (e) {
-        // Error caught in analyticsFactory.trackGTM
+        // Error caught in analyticsFactory.track
       }
     }
   }

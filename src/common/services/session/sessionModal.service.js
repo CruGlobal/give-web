@@ -45,13 +45,13 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
     if (options.dismissAnalyticsEvent) {
       currentModal.result
         .then(angular.noop, () => {
-          analyticsFactory.trackGTM(options.dismissAnalyticsEvent)
+          analyticsFactory.track(options.dismissAnalyticsEvent)
         })
     }
 
     if (options.openAnalyticsEvent) {
       currentModal.opened.then(() => {
-        analyticsFactory.trackGTM(options.openAnalyticsEvent)
+        analyticsFactory.track(options.openAnalyticsEvent)
       }, angular.noop)
     }
 

@@ -52,7 +52,7 @@ describe('sessionModalService', function () {
         $rootScope = _$rootScope_
         deferred = _$q_.defer()
         analyticsFactory = _analyticsFactory_
-        jest.spyOn(analyticsFactory, 'trackGTM').mockImplementation(() => {})
+        jest.spyOn(analyticsFactory, 'track').mockImplementation(() => {})
         $uibModal.open.mockReturnValue({ result: { finally: angular.noop, then: angular.noop }, opened: deferred.promise })
       }))
 
@@ -63,7 +63,7 @@ describe('sessionModalService', function () {
         deferred.resolve()
         $rootScope.$digest()
 
-        expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in')
+        expect(analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in')
       })
 
       it('send analytics event for sign-in', () => {
@@ -73,7 +73,7 @@ describe('sessionModalService', function () {
         deferred.resolve()
         $rootScope.$digest()
 
-        expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in')
+        expect(analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in')
       })
 
       it('send analytics event for user-match', () => {
@@ -83,7 +83,7 @@ describe('sessionModalService', function () {
         deferred.resolve()
         $rootScope.$digest()
 
-        expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-registration-match-is-this-you')
+        expect(analyticsFactory.track).toHaveBeenCalledWith('ga-registration-match-is-this-you')
       })
     })
 
@@ -95,7 +95,7 @@ describe('sessionModalService', function () {
         deferred = _$q_.defer()
         analyticsFactory = _analyticsFactory_
         jest.spyOn(modalStateService, 'name').mockImplementation(() => {})
-        jest.spyOn(analyticsFactory, 'trackGTM').mockImplementation(() => {})
+        jest.spyOn(analyticsFactory, 'track').mockImplementation(() => {})
         $uibModal.open.mockReturnValue({ result: deferred.promise })
       }))
 
@@ -105,7 +105,7 @@ describe('sessionModalService', function () {
         $rootScope.$digest()
 
         expect(modalStateService.name).toHaveBeenCalledWith(null)
-        expect(analyticsFactory.trackGTM).not.toHaveBeenCalled()
+        expect(analyticsFactory.track).not.toHaveBeenCalled()
       })
 
       it('sends analytics event for sign-up', () => {
@@ -115,7 +115,7 @@ describe('sessionModalService', function () {
         deferred.reject()
         $rootScope.$digest()
 
-        expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in-exit')
+        expect(analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in-exit')
       })
 
       it('sends analytics event for sign-in', () => {
@@ -125,7 +125,7 @@ describe('sessionModalService', function () {
         deferred.reject()
         $rootScope.$digest()
 
-        expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-sign-in-exit')
+        expect(analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in-exit')
       })
 
       it('sends analytics event for user-match', () => {
@@ -135,7 +135,7 @@ describe('sessionModalService', function () {
         deferred.reject()
         $rootScope.$digest()
 
-        expect(analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-registration-exit')
+        expect(analyticsFactory.track).toHaveBeenCalledWith('ga-registration-exit')
       })
     })
 
