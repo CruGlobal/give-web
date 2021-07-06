@@ -300,10 +300,10 @@ class Profile {
 
   addPaymentMethod (paymentInfo) {
     if (paymentInfo.bankAccount) {
-      this.analyticsFactory.trackGTM('add-payment-method')
+      this.analyticsFactory.track('add-payment-method')
       return this.addBankAccountPayment(paymentInfo.bankAccount)
     } else if (paymentInfo.creditCard) {
-      this.analyticsFactory.trackGTM('add-payment-method')
+      this.analyticsFactory.track('add-payment-method')
       return this.addCreditCardPayment(paymentInfo.creditCard)
     } else {
       return Observable.throw('Error adding payment method. The data passed to profileService.addPaymentMethod did not contain bankAccount or creditCard data')
@@ -328,7 +328,7 @@ class Profile {
   }
 
   deletePaymentMethod (uri) {
-    this.analyticsFactory.trackGTM('delete-payment-method')
+    this.analyticsFactory.track('delete-payment-method')
     return this.cortexApiService.delete({
       path: uri
     })
