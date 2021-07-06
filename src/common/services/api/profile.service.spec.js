@@ -307,7 +307,7 @@ describe('profile service', () => {
   describe('addPaymentMethod', () => {
     it('should save a new bank account payment method', () => {
       jest.spyOn(self.profileService, 'addBankAccountPayment').mockReturnValue(Observable.of('success'))
-      jest.spyOn(self.analyticsFactory, 'trackGTM').mockReturnValue(() => {})
+      jest.spyOn(self.analyticsFactory, 'track').mockReturnValue(() => {})
       const paymentInfo = {
         'account-type': 'checking',
         'bank-name': 'First Bank',
@@ -322,12 +322,12 @@ describe('profile service', () => {
       })
 
       expect(self.profileService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo)
-      expect(self.analyticsFactory.trackGTM).toHaveBeenCalledWith('add-payment-method')
+      expect(self.analyticsFactory.track).toHaveBeenCalledWith('add-payment-method')
     })
 
     it('should save a new credit card payment method', () => {
       jest.spyOn(self.profileService, 'addCreditCardPayment').mockReturnValue(Observable.of('credit card success'))
-      jest.spyOn(self.analyticsFactory, 'trackGTM').mockReturnValue(() => {})
+      jest.spyOn(self.analyticsFactory, 'track').mockReturnValue(() => {})
 
       const paymentInfo = {
         address: {
@@ -353,7 +353,7 @@ describe('profile service', () => {
       })
 
       expect(self.profileService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo)
-      expect(self.analyticsFactory.trackGTM).toHaveBeenCalledWith('add-payment-method')
+      expect(self.analyticsFactory.track).toHaveBeenCalledWith('add-payment-method')
     })
 
     it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
@@ -407,7 +407,7 @@ describe('profile service', () => {
 
   describe('deletePaymentMethod', () => {
     it('should delete payment method', () => {
-      jest.spyOn(self.analyticsFactory, 'trackGTM').mockReturnValue(() => {})
+      jest.spyOn(self.analyticsFactory, 'track').mockReturnValue(() => {})
       const uri = '/uri'
       self.$httpBackend.expectDELETE('https://give-stage2.cru.org/cortex' + uri)
         .respond(200, 'success')
@@ -416,7 +416,7 @@ describe('profile service', () => {
           expect(data).toEqual('success')
         })
       self.$httpBackend.flush()
-      expect(self.analyticsFactory.trackGTM).toHaveBeenCalledWith('delete-payment-method')
+      expect(self.analyticsFactory.track).toHaveBeenCalledWith('delete-payment-method')
     })
   })
 

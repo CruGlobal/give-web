@@ -28,7 +28,6 @@ class EnterAmountsController {
   addToCart () {
     this.addingToCart = true
     this.next({ selectedRecipients: this.selectedRecipients })
-    this.analyticsFactory.track('aa-give-extra-1-time-add-to-cart')
   }
 }
 

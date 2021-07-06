@@ -40,8 +40,7 @@ class SessionModalController {
   }
 
   onSignUpSuccess () {
-    this.analyticsFactory.track('aa-sign-in-create-login')
-    this.analyticsFactory.trackGTM('ga-sign-in-create-login')
+    this.analyticsFactory.track('ga-sign-in-create-login')
     this.close()
   }
 

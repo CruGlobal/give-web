@@ -53,7 +53,7 @@ describe('editRecurringGiftsModal', () => {
           addedGifts = clone(gifts)
           return Observable.of('add gifts response')
         })
-        jest.spyOn(self.controller.analyticsFactory, 'trackGTM').mockImplementation(() => {})
+        jest.spyOn(self.controller.analyticsFactory, 'track').mockImplementation(() => {})
         self.controller.saveChanges()
 
         expect(self.controller.donationsService.updateRecurringGifts).toHaveBeenCalledWith(expect.anything())
@@ -66,7 +66,7 @@ describe('editRecurringGiftsModal', () => {
         expect(self.controller.additions).toEqual([])
         expect(self.controller.next).toHaveBeenCalled()
         expect(self.controller.savingError).toEqual('')
-        expect(self.controller.analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-edit-recurring-submit')
+        expect(self.controller.analyticsFactory.track).toHaveBeenCalledWith('ga-edit-recurring-submit')
       })
 
       it('should handle an error updating recurring gifts', () => {

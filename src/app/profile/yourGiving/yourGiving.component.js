@@ -118,8 +118,6 @@ class YourGivingController {
       this.view = givingViews[0]
     }
     this.$location.search(queryParams.view, this.view)
-
-    this.analyticsFactory.track(this.view === 'historical' ? 'aa-your-giving-historical-view' : 'aa-your-giving-recipient-view')
   }
 
   setViewLoading (loading) {
@@ -140,8 +138,7 @@ class YourGivingController {
         this.recurringGiftsUpdateSuccess = true
         this.reload = true
       }, () => {
-        this.analyticsFactory.track('aa-edit-recurring-exit')
-        this.analyticsFactory.trackGTM('ga-edit-recurring-exit')
+        this.analyticsFactory.track('ga-edit-recurring-exit')
       })
   }
 
@@ -150,8 +147,6 @@ class YourGivingController {
       component: 'giveOneTimeGiftModal',
       backdrop: 'static', // Disables closing on click
       windowTemplateUrl: giveModalWindowTemplate
-    }).result.then(angular.noop, () => {
-      this.analyticsFactory.track('aa-give-extra-1-time-exit')
     })
   }
 
@@ -165,8 +160,6 @@ class YourGivingController {
       .result.then(() => {
         this.stopStartGiftsSuccess = true
         this.reload = true
-      }, () => {
-        this.analyticsFactory.track('aa-stop-restart-exit')
       })
   }
 }
