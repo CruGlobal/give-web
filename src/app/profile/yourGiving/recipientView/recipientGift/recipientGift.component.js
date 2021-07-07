@@ -72,7 +72,6 @@ class RecipientGift {
   }
 
   giveNewGift () {
-    this.analyticsFactory.track('aa-your-giving-give-new-gift')
     this.productModalService.configureProduct(this.recipient['designation-number'])
   }
 
