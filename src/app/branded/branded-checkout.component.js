@@ -98,7 +98,6 @@ class BrandedCheckoutController {
   fireAnalyticsEvents (...checkoutSteps) {
     checkoutSteps.forEach(checkoutStep => {
       this.analyticsFactory.setEvent('checkout step ' + checkoutStep)
-      this.analyticsFactory.track('aa-checkout-step-' + checkoutStep)
     })
   }
 }
