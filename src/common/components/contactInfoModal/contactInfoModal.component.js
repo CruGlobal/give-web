@@ -20,8 +20,7 @@ class contactInfoModalController {
 
   $onInit () {
     this.modalTitle = this.gettext('Your Contact Information')
-    this.analyticsFactory.track('aa-registration-contact-information')
-    this.analyticsFactory.trackGTM('ga-registration-contact-information')
+    this.analyticsFactory.track('ga-registration-contact-information')
   }
 
   onSubmit (success) {

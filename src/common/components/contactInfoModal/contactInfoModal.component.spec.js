@@ -15,11 +15,11 @@ describe('contactInfoModal', function () {
 
   describe('$onInit', () => {
     it('should set the modal title', () => {
-      jest.spyOn(self.controller.analyticsFactory, 'trackGTM').mockImplementation(() => {})
+      jest.spyOn(self.controller.analyticsFactory, 'track').mockImplementation(() => {})
       self.controller.$onInit()
 
       expect(self.controller.modalTitle).toEqual('Your Contact Information')
-      expect(self.controller.analyticsFactory.trackGTM).toHaveBeenCalledWith('ga-registration-contact-information')
+      expect(self.controller.analyticsFactory.track).toHaveBeenCalledWith('ga-registration-contact-information')
     })
   })
 

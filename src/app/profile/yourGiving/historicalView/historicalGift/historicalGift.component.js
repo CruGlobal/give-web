@@ -14,7 +14,6 @@ class HistoricalGift {
   }
 
   giveNewGift () {
-    this.analyticsFactory.track('aa-your-giving-give-new-gift')
     this.productModalService.configureProduct(this.gift['historical-donation-line']['designation-number'])
   }
 

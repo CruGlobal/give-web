@@ -28,15 +28,13 @@
                         gifts="$ctrl.suggestedRecipients"
                         cancel="$ctrl.cancel()"
                         previous="$ctrl.previous()"
-                        next="$ctrl.next(selected)"
-                        ng-init="$ctrl.analyticsFactory.track('aa-restart-select-recipients')">
+                        next="$ctrl.next(selected)">
   </suggested-recipients>
 
   <redirect-gift-step-2 ng-switch-when="search"
                         on-select-result="$ctrl.next(selected)"
                         cancel="$ctrl.cancel()"
-                        previous="$ctrl.previous()"
-                        ng-init="$ctrl.analyticsFactory.track('aa-restart-search')">
+                        previous="$ctrl.previous()">
   </redirect-gift-step-2>
 
   <!-- Step 2 -->
@@ -44,8 +42,7 @@
                    gifts="$ctrl.gifts"
                    cancel="$ctrl.cancel()"
                    previous="$ctrl.previous()"
-                   next="$ctrl.next(null, configured)"
-                   ng-init="$ctrl.analyticsFactory.track('aa-restart-configure')">
+                   next="$ctrl.next(null, configured)">
   </configure-gifts>
 
   <!-- Step 3 -->
@@ -54,8 +51,7 @@
                  cancel="$ctrl.cancel()"
                  previous="$ctrl.previous()"
                  next="$ctrl.next()"
-                 set-loading="$ctrl.setLoading({loading: loading})"
-                 ng-init="$ctrl.analyticsFactory.track('aa-restart-review')">
+                 set-loading="$ctrl.setLoading({loading: loading})">
   </confirm-gifts>
 
   <!-- Loading -->
