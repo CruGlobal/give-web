@@ -46,8 +46,9 @@ class ProfileController {
     this.phonesLoading = true
     this.mailingAddressLoading = true
 
-    this.emailSubject = new Subject()
-    this.generateLinkState = 'initial'
+    //this.emailSubject = new Subject()
+    //this.generateLinkState = 'initial'
+    this.preferrenceCenterLink = ""
   }
 
   $onInit () {
@@ -72,9 +73,7 @@ class ProfileController {
 
     this.analyticsFactory.pageLoaded()
 
-    this.preferrenceCenterLink = ""
-
-    this.generateLinkToPreferrenceCenter()
+    //this.generateLinkToPreferrenceCenter()
   }
 
   $onDestroy () {
@@ -146,11 +145,15 @@ class ProfileController {
     this.profileService.getEmails()
       .subscribe(
         emails => {
+          debugger
           this.donorEmail = emails ? emails[0] : { email: '' }
           this.spouseEmail = emails ? emails[1] : { email: '' }
           this.emailLoading = false
+
+          this.generateLinkToPreferrenceCenter()
         },
         error => {
+          debugger
           this.emailAddressError = 'loading'
           this.emailLoading = false
           this.$log.error('Failed loading email.', error)
@@ -159,6 +162,7 @@ class ProfileController {
   }
 
   updateEmail (spouse) {
+    debugger
     const email = spouse ? this.spouseEmail : this.donorEmail
     this.emailLoading = true
     this.profileService.updateEmail(email, spouse)
@@ -182,7 +186,11 @@ class ProfileController {
       )
   }
 
-  generateLinkToPreferrenceCenter() {
+  onEmailChanged() {
+    //this.emailSubject.next(this.newEmail)
+  }
+
+  /*debounceEmailSubject() {
     this.emailSubject
       .debounceTime(600)
       .distinctUntilChanged()
@@ -204,10 +212,20 @@ class ProfileController {
         this.generateLinkState = 'error'
         this.$log.error('Error loading PKey from Adobe', error)
       })
-  }
+  }*/
 
-  onEmailChanged() {
-    this.emailSubject.next(this.newEmail)
+  generateLinkToPreferrenceCenter() {
+    //this.generateLinkState = 'generating'
+    const email = this.donorEmail
+
+    if (email) {
+      this.profileService.connectToAdobeCampaign(email).map((response) => { 
+        debugger
+        //this.generateLinkState = 'inital'
+      })
+    } else {
+      debugger
+    }
   }
 
   navigateToPreferrenceCenter () {

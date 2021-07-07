@@ -110,6 +110,7 @@ class Profile {
   }
 
   getEmails () { // for now zero indexed element is a donor's email and the element with index '1' is spouse's email. TODO: submit ticket to BE team to get rid of 'magic numbers'
+    debugger
     return this.cortexApiService.get({
       path: ['profiles', this.cortexApiService.scope, 'default'],
       zoom: {
