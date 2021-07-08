@@ -117,10 +117,8 @@ class Step1Controller {
 
   loadRadioStations () {
     const postalCode = this.donorDetails.mailingAddress?.postalCode;
-    debugger
 
     if (this.requestRadioStation && postalCode) {
-      debugger
       this.loadingRadioStationsError = false
 
       this.radioStationsService.getRadioStations(
@@ -139,6 +137,7 @@ class Step1Controller {
   }
 
   submitDetails () {
+    debugger
     this.detailsForm.$setSubmitted()
     if (this.detailsForm.$valid) {
       const details = this.donorDetails
