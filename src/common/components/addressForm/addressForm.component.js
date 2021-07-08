@@ -54,7 +54,6 @@ class AddressFormController {
   }
 
   onPostalCodeChanged () {
-    debugger
     this.onAddressChanged()
   }
 }
