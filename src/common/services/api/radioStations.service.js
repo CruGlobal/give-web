@@ -2,7 +2,6 @@ import angular from 'angular'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
-import 'rxjs/add/operator/combineLatest'
 import 'rxjs/add/operator/pluck'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
@@ -12,12 +11,8 @@ const serviceName = 'radioStationsService'
 
 class RadioStations {
   /* @ngInject */
-  constructor ($http, $window, $log, $filter) {
+  constructor ($http) {
     this.$http = $http
-    this.sessionStorage = $window.sessionStorage
-    this.localStorage = $window.localStorage
-    this.$log = $log
-    this.$filter = $filter
   }
 
   getRadioStations(radioStationApiUrl, postalCode, radioStationRadius) {
