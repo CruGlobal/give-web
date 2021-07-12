@@ -1,6 +1,7 @@
 import angular from 'angular'
 import 'angular-mocks'
 import omit from 'lodash/omit'
+import cloneDeep from 'lodash/cloneDeep'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
@@ -36,9 +37,14 @@ describe('order service', () => {
     self.$httpBackend.verifyNoOutstandingRequest()
   })
 
+  const paymentMethodForms = cloneDeep(cartResponse._order[0]._paymentmethodinfo[0]._element)
+  angular.forEach(paymentMethodForms, form => {
+    form.paymentinstrumentform = form._paymentinstrumentform[0]
+    delete form._paymentinstrumentform
+  })
+
   const cartResponseZoomMapped = {
-    bankAccount: cartResponse._order[0]._paymentmethodinfo[0]._bankaccountform[0],
-    creditCard: cartResponse._order[0]._paymentmethodinfo[0]._creditcardform[0],
+    paymentMethodForms: paymentMethodForms,
     rawData: cartResponse
   }
 
@@ -165,11 +171,13 @@ describe('order service', () => {
 
   describe('getPaymentMethodForms', () => {
     function setupRequest () {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:element,order:paymentmethodinfo:element:paymentinstrumentform')
         .respond(200, cartResponse)
     }
 
     function initiateRequest (done) {
+
+
       self.orderService.getPaymentMethodForms()
         .subscribe((data) => {
           expect(data).toEqual(cartResponseZoomMapped)
@@ -200,10 +208,19 @@ describe('order service', () => {
         'encrypted-account-number': '**fake*encrypted**123456789012**',
         'routing-number': '123456789'
       }
+      const expectedPostData = {
+        'payment-instrument-identification-form': {
+          'account-type': 'checking',
+          'bank-name': 'First Bank',
+          'display-account-number': '************9012',
+          'encrypted-account-number': '**fake*encrypted**123456789012**',
+          'routing-number': '123456789'
+        }
+      }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
-        paymentInfo
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mjswgobwmy2gkljtgazwcljumfsweljzmu2teljzmmytazrsge3wkodfmu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form?followLocation=true',
+        expectedPostData
       ).respond(200, 'success')
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -234,12 +251,19 @@ describe('order service', () => {
         cvv: '456'
       }
 
-      const paymentInfoWithoutCVV = angular.copy(paymentInfo)
-      delete paymentInfoWithoutCVV.cvv
+      const expectedPostData = {
+        'payment-instrument-identification-form': {
+          'card-number': '**fake*encrypted**1234567890123456**',
+          'card-type': 'VISA',
+          'cardholder-name': 'Test Name',
+          'expiry-month': '06',
+          'expiry-year': '12'
+        }
+      }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
-        paymentInfoWithoutCVV
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?followLocation=true',
+        expectedPostData
       ).respond(200, { self: { uri: 'new cc uri' } })
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -274,20 +298,27 @@ describe('order service', () => {
         cvv: '789'
       }
 
-      const paymentInfoWithoutCVV = angular.copy(paymentInfo)
-      delete paymentInfoWithoutCVV.cvv
-      paymentInfoWithoutCVV.address = {
-        'country-name': 'US',
-        'street-address': '123 First St',
-        'extended-address': 'Apt 123',
-        locality: 'Sacramento',
-        'postal-code': '12345',
-        region: 'CA'
+      const expectedPostData = {
+        address: {
+          'country-name': 'US',
+          'street-address': '123 First St',
+          'extended-address': 'Apt 123',
+          locality: 'Sacramento',
+          'postal-code': '12345',
+          region: 'CA'
+        },
+        'payment-instrument-identification-form': {
+          'card-number': '**fake*encrypted**1234567890123456**',
+          'card-type': 'VISA',
+          'cardholder-name': 'Test Name',
+          'expiry-month': '06',
+          'expiry-year': '12'
+        }
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=?followLocation=true',
-        paymentInfoWithoutCVV
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?followLocation=true',
+        expectedPostData
       ).respond(200, { self: { uri: 'new cc uri' } })
 
       // cache getPaymentForms response to avoid another http request while testing

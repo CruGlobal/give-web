@@ -89,16 +89,17 @@ class Order {
       return this.cortexApiService.get({
         path: ['carts', this.cortexApiService.scope, 'default'],
         zoom: {
-          bankAccount: 'order:paymentmethodinfo:bankaccountform',
-          creditCard: 'order:paymentmethodinfo:creditcardform'
+          paymentMethodForms: 'order:paymentmethodinfo:element[],order:paymentmethodinfo:element:paymentinstrumentform'
         }
       })
         .do((data) => {
           this.paymentMethodForms = data
 
-          if (!this.hateoasHelperService.getLink(data.bankAccount, 'createpaymentinstrumentaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction')) {
-            this.$log.warn('Payment form request contains empty link', data)
-          }
+          angular.forEach(data.paymentMethodForms, paymentMethodForm => {
+            if (!this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')) {
+              this.$log.warn('Payment form request contains empty link', data)
+            }
+          })
         })
     }
   }
@@ -106,9 +107,10 @@ class Order {
   addBankAccountPayment (paymentInfo) {
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'bank-name')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.bankAccount, 'createpaymentinstrumentaction'),
-          data: paymentInfo,
+          path: link,
+          data: { 'payment-instrument-identification-form': paymentInfo },
           followLocation: true
         })
       })
@@ -117,19 +119,36 @@ class Order {
   addCreditCardPayment (paymentInfo) {
     const cvv = paymentInfo.cvv
     paymentInfo = omit(paymentInfo, 'cvv')
+
+    const dataToSend = {}
+
     if (paymentInfo.address) {
-      paymentInfo.address = formatAddressForCortex(paymentInfo.address)
+      dataToSend.address = formatAddressForCortex(paymentInfo.address)
+      paymentInfo.address = undefined
     }
+    dataToSend['payment-instrument-identification-form'] = paymentInfo
+
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'card-number')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction'),
-          data: paymentInfo,
+          path: link,
+          data: dataToSend,
           followLocation: true
         }).do(creditCard => {
           this.storeCardSecurityCode(cvv, creditCard.self.uri)
         })
       })
+  }
+
+  determinePaymentMethodFormLink (data, fieldName) {
+    let link = ''
+    angular.forEach(data.paymentMethodForms, paymentMethodForm => {
+      if (paymentMethodForm.paymentinstrumentform['payment-instrument-identification-form'][fieldName] !== undefined) {
+        link = this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')
+      }
+    })
+    return link
   }
 
   addPaymentMethod (paymentInfo) {
