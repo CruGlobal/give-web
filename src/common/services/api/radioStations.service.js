@@ -16,12 +16,14 @@ class RadioStations {
   }
 
   getRadioStations(radioStationApiUrl, postalCode, radioStationRadius) {
+    debugger
     return Observable.from(this.$http({
       method: 'GET',
       url: radioStationApiUrl + '/' + postalCode + '/' + radioStationRadius,
       withCredentials: true
     }))
       .map((response) => {
+        debugger
         return response.data?.GetMediaNearPostalCodeResult
       })
   }

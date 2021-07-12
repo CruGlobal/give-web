@@ -45,7 +45,7 @@ class Step1Controller {
     this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
 
     this.radioStationName = undefined
-    this.radioStationCallLetters = undefined
+    this.radioStationData = undefined
 
     this.loadDonorDetails(donorDetailsDefaults)
     this.loadRadioStations()
@@ -138,10 +138,11 @@ class Step1Controller {
   }
 
   onSelectRadioStation () {
-    this.radioStationCallLetters = this.radioStations.filter((station) => station.description === this.radioStationName)[0]
+    this.radioStationData = this.radioStations.filter((station) => station.description === this.radioStationName)[0]
   }
 
   submitDetails () {
+    debugger
     this.detailsForm.$setSubmitted()
     if (this.detailsForm.$valid) {
       const details = this.donorDetails
@@ -151,8 +152,9 @@ class Step1Controller {
       if (details.email) {
         requests.push(this.orderService.addEmail(details.email, details.emailFormUri))
       }
-      if (this.radioStationCallLetters) {
+      if (this.radioStationData) {
         debugger
+        this.orderService.storeRadioStationData(this.radioStationData)
       }
 
       Observable.forkJoin(requests)
