@@ -283,7 +283,10 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     GIFT_SUMMARY: 'Gift Summary',
     FIRST_GIFT: 'First Gift:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
-    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:'
+    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
+    RADIO_STATION: 'Radio Station',
+    RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
+    RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
   })
 
   $translateProvider.translations('es', {
