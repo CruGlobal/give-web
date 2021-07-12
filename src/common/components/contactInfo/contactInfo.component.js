@@ -142,7 +142,6 @@ class Step1Controller {
   }
 
   submitDetails () {
-    debugger
     this.detailsForm.$setSubmitted()
     if (this.detailsForm.$valid) {
       const details = this.donorDetails
@@ -153,7 +152,6 @@ class Step1Controller {
         requests.push(this.orderService.addEmail(details.email, details.emailFormUri))
       }
       if (this.radioStationData) {
-        debugger
         this.orderService.storeRadioStationData(this.radioStationData)
       }
 
