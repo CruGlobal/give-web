@@ -73,9 +73,9 @@
             <div>
               {{$ctrl.donorDetails.email}}
             </div>
-            <div class="form-group" ng-if="$ctrl.radioStationName">
-              <label class="" translate>{{'RADIO_STATION'}}</label>
-              <p>{{$ctrl.radioStationName}}</p>
+            <div ng-if="$ctrl.donorDetails && $ctrl.radioStationName">
+              <translate>{{'PREFERRED_RADIO_STATION'}}</translate>
+              {{$ctrl.radioStationName}}
             </div>
             <loading ng-if="!$ctrl.donorDetails"></loading>
           </div>
