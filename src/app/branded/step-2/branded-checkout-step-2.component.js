@@ -14,10 +14,13 @@ class BrandedCheckoutStep2Controller {
     this.$log = $log
     this.cartService = cartService
     this.orderService = orderService
+
+    this.radioStationName = undefined
   }
 
   $onInit () {
     this.loadCart()
+    this.loadRadioStation()
   }
 
   loadCart () {
@@ -33,7 +36,7 @@ class BrandedCheckoutStep2Controller {
   }
 
   loadRadioStation () {
-    this.radioStationName = this.orderService.retrieveRadioStationData().description
+    this.radioStationName = this.orderService.retrieveRadioStationName()
   }
 
   changeStep (newStep) {

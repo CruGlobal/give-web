@@ -138,7 +138,7 @@ class Step1Controller {
   }
 
   onSelectRadioStation () {
-    this.radioStationData = this.radioStations.filter((station) => station.description === this.radioStationName)[0]
+    this.radioStationData = this.radioStations.filter((station) => station.Description === this.radioStationName)[0]
   }
 
   submitDetails () {

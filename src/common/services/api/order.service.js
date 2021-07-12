@@ -252,7 +252,7 @@ class Order {
       .mergeMap((data) => {
         const postData = cvv ? { 'security-code': cvv } : {}
         postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
-        postData['radio-call-letters'] = this.retrieveRadioStationData()?.mediaId
+        postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
           data: postData,
@@ -317,11 +317,16 @@ class Order {
   }
 
   storeRadioStationData (radioStationData) {
-    this.sessionStorage.setItem('radioStation', radioStationData)
+    this.sessionStorage.setItem('radioStationName', radioStationData.Description)
+    this.sessionStorage.setItem('radioStationCallLetters', radioStationData.MediaId)
   }
 
-  retrieveRadioStationData () {
-    return this.sessionStorage.getItem('radioStation')
+  retrieveRadioStationName () {
+    return this.sessionStorage.getItem('radioStationName')
+  }
+  
+  retrieveRadioStationCallLetters () {
+    return this.sessionStorage.getItem('radioStationCallLetters')
   }
 
   spouseEditableForOrder (donorDetails) {
