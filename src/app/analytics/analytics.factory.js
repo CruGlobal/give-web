@@ -542,7 +542,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
           if (typeof $window.dataLayer !== 'undefined') {
             $window.dataLayer.push({
               event: 'transaction',
-              paymentType: purchaseData.paymentMeans['account-type'] ? purchaseData.paymentMeans['account-type'].toLowerCase() : purchaseData.paymentMeans['card-type'].toLowerCase(),
+              paymentType: purchaseData.paymentMeans['account-type'] ? 'bank account' : 'credit card',
               ecommerce: {
                 currencyCode: 'USD',
                 purchase: {
