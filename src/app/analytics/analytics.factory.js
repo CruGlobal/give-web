@@ -532,7 +532,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               dimension1: localStorage.getItem('gaDonorType'),
               dimension3: cartItem.frequency.toLowerCase() === 'single' ? 'one-time' : 'recurring',
               dimension4: cartItem.frequency.toLowerCase(),
-              dimension6: purchaseData.paymentMeans['account-type'] ? purchaseData.paymentMeans['account-type'].toLowerCase() : purchaseData.paymentMeans['card-type'].toLowerCase(),
+              dimension6: purchaseData.paymentMeans['account-type'] ? 'bank account' : 'credit card',
               dimension7: purchaseData.rawData['purchase-number'],
               dimension8: 'designation',
               dimension9: cartItem.config['campaign-code'] !== '' ? cartItem.config['campaign-code'] : undefined
