@@ -48,7 +48,7 @@ describe('order service', () => {
   }
 
   describe('getDonorDetails', () => {
-    it('should load the donorDetails', () => {
+    it('should load the donorDetails', (done) => {
       const donorDetailsResponseZoomMapped = {
         donorDetails: donorDetailsResponse._order[0]._donordetails[0],
         email: donorDetailsResponse._order[0]._emailinfo[0]._email[0],
@@ -67,11 +67,12 @@ describe('order service', () => {
       self.orderService.getDonorDetails()
         .subscribe((data) => {
           expect(data).toEqual(expectedDonorDetails)
+          done()
         })
       self.$httpBackend.flush()
     })
 
-    it('should set the mailingAddress country to US if undefined', () => {
+    it('should set the mailingAddress country to US if undefined', (done) => {
       donorDetailsResponse._order[0]._donordetails[0]['mailing-address']['country-name'] = ''
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
         .respond(200, donorDetailsResponse)
@@ -80,11 +81,12 @@ describe('order service', () => {
           expect(data).toEqual(expect.objectContaining({
             mailingAddress: expect.objectContaining({ country: 'US' })
           }))
+          done()
         })
       self.$httpBackend.flush()
     })
 
-    it('should handle an undefined response', () => {
+    it('should handle an undefined response', (done) => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
         .respond(200, {})
       self.orderService.getDonorDetails()
@@ -95,13 +97,14 @@ describe('order service', () => {
             email: undefined,
             emailFormUri: undefined
           })
+          done()
         })
       self.$httpBackend.flush()
     })
   })
 
   describe('updateDonorDetails', () => {
-    it('should send a request to save the donor details', () => {
+    it('should send a request to save the donor details', (done) => {
       self.$httpBackend.expectPUT(
         'https://give-stage2.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu=',
         {
@@ -139,13 +142,14 @@ describe('order service', () => {
       })
         .subscribe((data) => {
           expect(data).toEqual('somedata')
+          done()
         })
       self.$httpBackend.flush()
     })
   })
 
   describe('addEmail', () => {
-    it('should send a request to save the email', () => {
+    it('should send a request to save the email', (done) => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/emails/crugive',
         { email: 'someemail@somedomain.com' }
@@ -153,6 +157,7 @@ describe('order service', () => {
       self.orderService.addEmail('someemail@somedomain.com', '/emails/crugive')
         .subscribe((data) => {
           expect(data).toEqual('somedata')
+          done()
         })
       self.$httpBackend.flush()
     })
@@ -164,29 +169,30 @@ describe('order service', () => {
         .respond(200, cartResponse)
     }
 
-    function initiateRequest () {
+    function initiateRequest (done) {
       self.orderService.getPaymentMethodForms()
         .subscribe((data) => {
           expect(data).toEqual(cartResponseZoomMapped)
+          done()
         })
     }
 
-    it('should send a request to get the payment form links', () => {
+    it('should send a request to get the payment form links', (done) => {
       setupRequest()
-      initiateRequest()
+      initiateRequest(done)
       self.$httpBackend.flush()
     })
 
-    it('should use the cached response if called a second time', () => {
+    it('should use the cached response if called a second time', (done) => {
       setupRequest()
-      initiateRequest()
+      initiateRequest(done)
       self.$httpBackend.flush()
-      initiateRequest()
+      initiateRequest(done)
     })
   })
 
   describe('addBankAccountPayment', () => {
-    it('should send a request to save the bank account payment info', () => {
+    it('should send a request to save the bank account payment info', (done) => {
       const paymentInfo = {
         'account-type': 'checking',
         'bank-name': 'First Bank',
@@ -206,6 +212,7 @@ describe('order service', () => {
       self.orderService.addBankAccountPayment(paymentInfo)
         .subscribe((data) => {
           expect(data).toEqual('success')
+          done()
         })
 
       self.$httpBackend.flush()
@@ -217,7 +224,7 @@ describe('order service', () => {
       jest.spyOn(self.orderService, 'storeCardSecurityCode').mockImplementation(() => {})
     })
 
-    it('should send a request to save the credit card payment info with no billing address', () => {
+    it('should send a request to save the credit card payment info with no billing address', (done) => {
       const paymentInfo = {
         'card-number': '**fake*encrypted**1234567890123456**',
         'card-type': 'VISA',
@@ -241,6 +248,7 @@ describe('order service', () => {
       self.orderService.addCreditCardPayment(paymentInfo)
         .subscribe((data) => {
           expect(data).toEqual({ self: { uri: 'new cc uri' } })
+          done()
         })
 
       self.$httpBackend.flush()
@@ -248,7 +256,7 @@ describe('order service', () => {
       expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith('456', 'new cc uri')
     })
 
-    it('should send a request to save the credit card payment info with a billing address', () => {
+    it('should send a request to save the credit card payment info with a billing address', (done) => {
       const paymentInfo = {
         address: {
           country: 'US',
@@ -288,6 +296,7 @@ describe('order service', () => {
       self.orderService.addCreditCardPayment(paymentInfo)
         .subscribe((data) => {
           expect(data).toEqual({ self: { uri: 'new cc uri' } })
+          done()
         })
 
       self.$httpBackend.flush()
@@ -297,7 +306,7 @@ describe('order service', () => {
   })
 
   describe('addPaymentMethod', () => {
-    it('should save a new bank account payment method', () => {
+    it('should save a new bank account payment method', (done) => {
       jest.spyOn(self.orderService, 'addBankAccountPayment').mockReturnValue(Observable.of('success'))
       const paymentInfo = {
         'account-type': 'checking',
@@ -310,12 +319,13 @@ describe('order service', () => {
         bankAccount: paymentInfo
       }).subscribe((data) => {
         expect(data).toEqual('success')
+        done()
       })
 
       expect(self.orderService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo)
     })
 
-    it('should save a new credit card payment method', () => {
+    it('should save a new credit card payment method', (done) => {
       jest.spyOn(self.orderService, 'addCreditCardPayment').mockReturnValue(Observable.of({ self: { uri: 'new payment method uri' } }))
       const paymentInfo = {
         address: {
@@ -337,6 +347,7 @@ describe('order service', () => {
         creditCard: paymentInfo
       }).subscribe((data) => {
         expect(data).toEqual({ self: { uri: 'new payment method uri' } })
+        done()
       })
 
       expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo)
@@ -486,7 +497,7 @@ describe('order service', () => {
       }]
     })
 
-    it('should load a user\'s existing payment methods', () => {
+    it('should load a user\'s existing payment methods', (done) => {
       self.$httpBackend.expectGET(
         'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse)
@@ -494,12 +505,13 @@ describe('order service', () => {
       self.orderService.getExistingPaymentMethods()
         .subscribe(data => {
           expect(data).toEqual(expectedResponse)
+          done()
         })
 
       self.$httpBackend.flush()
     })
 
-    it('should load a user\'s existing payment methods even if there is no chosen one', () => {
+    it('should load a user\'s existing payment methods even if there is no chosen one', (done) => {
       // Move the payment method in chosen to be one of the choices for this test
       clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._choice.push(clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen[0])
       delete clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen
@@ -514,12 +526,13 @@ describe('order service', () => {
       self.orderService.getExistingPaymentMethods()
         .subscribe(data => {
           expect(data).toEqual(expectedResponse)
+          done()
         })
 
       self.$httpBackend.flush()
     })
 
-    it('should load a user\'s existing payment methods even if there is no choice element and only a chosen one', () => {
+    it('should load a user\'s existing payment methods even if there is no choice element and only a chosen one', (done) => {
       // Delete all the choices so there is only a chosen element for this test
       delete clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._choice
 
@@ -533,12 +546,13 @@ describe('order service', () => {
       self.orderService.getExistingPaymentMethods()
         .subscribe(data => {
           expect(data).toEqual(expectedResponse)
+          done()
         })
 
       self.$httpBackend.flush()
     })
 
-    it('should format payment addresses while loading existing payment methods', () => {
+    it('should format payment addresses while loading existing payment methods', (done) => {
       clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen[0]._description[0].address = { 'country-name': 'US' }
       expectedResponse[0].address = { country: 'US', streetAddress: undefined, extendedAddress: undefined, locality: undefined, region: undefined, postalCode: undefined }
 
@@ -549,6 +563,7 @@ describe('order service', () => {
       self.orderService.getExistingPaymentMethods()
         .subscribe(data => {
           expect(data).toEqual(expectedResponse)
+          done()
         })
 
       self.$httpBackend.flush()
@@ -556,7 +571,7 @@ describe('order service', () => {
   })
 
   describe('selectPaymentMethod', () => {
-    it('should post the URI of the selected payment method for cortex to select it', () => {
+    it('should post the URI of the selected payment method for cortex to select it', (done) => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/paymentmethods/crugive/giydembug4=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq=',
         {}
@@ -565,6 +580,7 @@ describe('order service', () => {
       self.orderService.selectPaymentMethod('/paymentmethods/crugive/giydembug4=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq=')
         .subscribe((data) => {
           expect(data).toEqual('success')
+          done()
         })
 
       self.$httpBackend.flush()
@@ -572,19 +588,20 @@ describe('order service', () => {
   })
 
   describe('getCurrentPayment', () => {
-    it('should retrieve the current payment details', () => {
+    it('should retrieve the current payment details', (done) => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
         .respond(200, paymentMethodBankAccountResponse)
 
       self.orderService.getCurrentPayment()
         .subscribe((data) => {
           expect(data).toEqual(paymentMethodBankAccountResponse._order[0]._paymentmethodinfo[0]._paymentmethod[0])
+          done()
         })
 
       self.$httpBackend.flush()
     })
 
-    it('should retrieve the current payment details with a billing address', () => {
+    it('should retrieve the current payment details with a billing address', (done) => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
         .respond(200, paymentMethodCreditCardResponse)
 
@@ -600,6 +617,7 @@ describe('order service', () => {
       self.orderService.getCurrentPayment()
         .subscribe((data) => {
           expect(data).toEqual(expectedPaymentInfo)
+          done()
         })
 
       self.$httpBackend.flush()
@@ -607,33 +625,36 @@ describe('order service', () => {
   })
 
   describe('getPurchaseForms', () => {
-    it('should send a request to get the payment form links', () => {
+    it('should send a request to get the payment form links', (done) => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:enhancedpurchaseform').respond(200, purchaseFormResponse)
       self.orderService.getPurchaseForm()
         .subscribe((data) => {
           expect(data).toEqual(purchaseFormResponseZoomMapped)
+          done()
         })
       self.$httpBackend.flush()
     })
   })
 
   describe('checkErrors', () => {
-    it('should send a request to get the payment form links', () => {
+    it('should send a request to get the payment form links', (done) => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, needInfoResponse)
       self.orderService.checkErrors()
         .subscribe((data) => {
           expect(data).toEqual(['email-info', 'billing-address-info', 'payment-method-info'])
+          done()
         })
       self.$httpBackend.flush()
 
       expect(self.$log.error.logs[0]).toEqual(['The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', ['email-info', 'billing-address-info', 'payment-method-info']])
     })
 
-    it('should return undefined and not log anything if there are no errors', () => {
+    it('should return undefined and not log anything if there are no errors', (done) => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, undefined)
       self.orderService.checkErrors()
         .subscribe((data) => {
           expect(data).toBeUndefined()
+          done()
         })
       self.$httpBackend.flush()
       self.$log.assertEmpty()
@@ -646,7 +667,7 @@ describe('order service', () => {
       jest.spyOn(self.orderService, 'getPurchaseForm').mockReturnValue(Observable.of(purchaseFormResponseZoomMapped))
     })
 
-    it('should send a request to finalize the purchase', () => {
+    it('should send a request to finalize the purchase', (done) => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
         { 'cover-cc-fees': false }
@@ -655,12 +676,13 @@ describe('order service', () => {
       self.orderService.submit()
         .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
+          done()
         })
 
       self.$httpBackend.flush()
     })
 
-    it('should send a request to finalize the purchase and with a CVV', () => {
+    it('should send a request to finalize the purchase and with a CVV', (done) => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
         { 'security-code': '123', 'cover-cc-fees': false }
@@ -669,12 +691,13 @@ describe('order service', () => {
       self.orderService.submit('123')
         .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
+          done()
         })
 
       self.$httpBackend.flush()
     })
 
-    it('should send the (true) cover fees flag to the server', () => {
+    it('should send the (true) cover fees flag to the server', (done) => {
       self.$window.localStorage.setItem('coverFees', 'true')
 
       self.$httpBackend.expectPOST(
@@ -685,12 +708,13 @@ describe('order service', () => {
       self.orderService.submit()
         .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
+          done()
         })
 
       self.$httpBackend.flush()
     })
 
-    it('should send the (false) cover fees flag to the server', () => {
+    it('should send the (false) cover fees flag to the server', (done) => {
       self.$window.localStorage.setItem('coverFees', 'false')
 
       self.$httpBackend.expectPOST(
@@ -701,12 +725,13 @@ describe('order service', () => {
       self.orderService.submit()
         .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
+          done()
         })
 
       self.$httpBackend.flush()
     })
 
-    it('should send the (false) cover fees flag to the server if the flag is not set in local storage', () => {
+    it('should send the (false) cover fees flag to the server if the flag is not set in local storage', (done) => {
       expect(self.$window.localStorage.getItem('coverFees')).toEqual(null)
 
       self.$httpBackend.expectPOST(
@@ -717,6 +742,7 @@ describe('order service', () => {
       self.orderService.submit()
         .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
+          done()
         })
 
       self.$httpBackend.flush()
