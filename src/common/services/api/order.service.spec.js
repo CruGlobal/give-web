@@ -649,7 +649,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': false }
+        { 'cover-cc-fees': false, 'radio-call-letters': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -663,7 +663,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase and with a CVV', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'security-code': '123', 'cover-cc-fees': false }
+        { 'security-code': '123', 'cover-cc-fees': false, 'radio-call-letters': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit('123')
@@ -679,7 +679,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': true }
+        { 'cover-cc-fees': true, 'radio-call-letters': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -695,7 +695,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': false }
+        { 'cover-cc-fees': false, 'radio-call-letters': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -711,7 +711,23 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': false }
+        { 'cover-cc-fees': false, 'radio-call-letters': null }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(data).toEqual(purchaseResponse)
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should send the radio cover letters to the server', () => {
+      self.$window.sessionStorage.setItem('radioStationCallLetters', 'WXYZ')
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        { 'cover-cc-fees': false, 'radio-call-letters': 'WXYZ' }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -833,6 +849,28 @@ describe('order service', () => {
       self.orderService.clearCoverFees()
 
       expect(self.$window.localStorage.getItem('coverFees')).toBeNull()
+    })
+  })
+
+  describe('storeRadioStationData', () => {
+    it('should save the choice of radio station', () => {
+      self.orderService.storeRadioStationData({ Description: 'Radio Station', MediaId: 'WXYZ' })
+      expect(self.$window.sessionStorage.getItem('radioStationName')).toEqual('Radio Station')
+      expect(self.$window.sessionStorage.getItem('radioStationCallLetters')).toEqual('WXYZ')
+    })
+  })
+
+  describe('retrieveRadioStationName', () => {
+    it('should remember the choice of radio station name', () => {
+      self.$window.sessionStorage.setItem('radioStationName', 'Radio Station')
+      expect(self.orderService.retrieveRadioStationName()).toEqual('Radio Station')
+    })
+  })
+
+  describe('retrieveRadioStationCallLetters', () => {
+    it('should remember the choice of radio station call letters', () => {
+      self.$window.sessionStorage.setItem('radioStationCallLetters', 'WXYZ')
+      expect(self.orderService.retrieveRadioStationCallLetters()).toEqual('WXYZ')
     })
   })
 

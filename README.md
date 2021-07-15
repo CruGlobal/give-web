@@ -57,7 +57,9 @@ Add the following code to your page where appropriate. See the [Branded checkout
     donor-details="<window variable containing default values for donor's name and contact info>"
     show-cover-fees="true"
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
-    on-order-failed="$event.$window.onOrderFailed($event.donorDetails)">
+    on-order-failed="$event.$window.onOrderFailed($event.donorDetails)"
+    radio-station-api-url="https://api.domain.com/getStations"
+    radio-station-radius="100">
 </branded-checkout>
 
 <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
@@ -128,6 +130,9 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `on-order-completed` - an Angular expression that is executed when the order was submitted successfully - *Optional* -  provides 2 variables:
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
   - `$event.purchase` - contains the order's details that are loaded for the thank you page
+- `radio-station-api-url` - Provides a URL path for fetching a list of radio stations in the donor's vicinity - *Optional*
+- `radio-station-radius` - Provides a radius (in miles) for fetching a list of radio stations in the donor's vicinity - *Optional*
+
 
 #### Server-side configuration for a new branded checkout domain
 1. Figure out what domain you will be hosting the branded checkout form on. For example, `myministry.org`
