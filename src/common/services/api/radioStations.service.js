@@ -5,7 +5,8 @@ import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/pluck'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
-import appConfig from 'common/app.config'
+import 'rxjs/add/operator/do'
+import 'rxjs/add/observable/from'
 
 const serviceName = 'radioStationsService'
 
@@ -28,8 +29,5 @@ class RadioStations {
 }
 
 export default angular
-  .module(serviceName, [
-    'environment',
-    appConfig.name,
-  ])
+  .module(serviceName, [])
   .service(serviceName, RadioStations)
