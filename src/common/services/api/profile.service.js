@@ -13,6 +13,7 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
 
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
+import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 // import RecurringGiftModel from 'common/models/recurringGift.model'
 
 import cortexApiService from '../cortexApi.service'
@@ -203,10 +204,10 @@ class Profile {
       .map((paymentMethods) => {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
           paymentMethod.id = paymentMethod.self.uri.split('/').pop()
-          if (paymentMethod.address) {
-            paymentMethod.address = formatAddressForTemplate(paymentMethod.address)
+          if (paymentMethod['payment-instrument-identification-attributes']['street-address']) {
+            paymentMethod.address = formatAddressForTemplate(paymentMethod['payment-instrument-identification-attributes'])
           }
-          return paymentMethod
+          return extractPaymentAttributes(paymentMethod)
         })
         return sortPaymentMethods(paymentMethods)
       })
@@ -219,10 +220,10 @@ class Profile {
     })
       .map((paymentMethod) => {
         paymentMethod.id = paymentMethod.self.uri.split('/').pop()
-        if (paymentMethod.address) {
-          paymentMethod.address = formatAddressForTemplate(paymentMethod.address)
+        if (paymentMethod['payment-instrument-identification-attributes']['street-address']) {
+          paymentMethod.address = formatAddressForTemplate(paymentMethod['payment-instrument-identification-attributes'])
         }
-        return paymentMethod
+        return extractPaymentAttributes(paymentMethod)
       })
   }
 
@@ -236,8 +237,8 @@ class Profile {
       .pluck('paymentMethods')
       .map(paymentMethods => {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
-          if (paymentMethod.address) {
-            paymentMethod.address = formatAddressForTemplate(paymentMethod.address)
+          if (paymentMethod['payment-instrument-identification-attributes']['street-address']) {
+            paymentMethod.address = formatAddressForTemplate(paymentMethod['payment-instrument-identification-attributes'])
           }
           // TODO: Implement when this is on the server
           // paymentMethod.recurringGifts = flatMap(paymentMethod.recurringgifts.donations, donation => {
@@ -246,7 +247,7 @@ class Profile {
           //   })
           // })
           // delete paymentMethod.recurringgifts
-          return paymentMethod
+          return extractPaymentAttributes(paymentMethod)
         })
         return sortPaymentMethods(paymentMethods)
       })
@@ -259,16 +260,17 @@ class Profile {
       return this.cortexApiService.get({
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
-          bankAccount: 'selfservicepaymentinstruments:createbankaccountform',
-          creditCard: 'selfservicepaymentinstruments:createcreditcardform'
+          paymentMethodForms: 'paymentmethods:element[],paymentmethods:element:paymentinstrumentform'
         }
       })
         .do((data) => {
           this.paymentMethodForms = data
 
-          if (!this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardaction')) {
-            this.$log.warn('Payment form request contains empty link', data)
-          }
+          angular.forEach(this.paymentMethodForms, paymentMethodForm => {
+            if (!this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')) {
+              this.$log.warn('Payment form request contains empty link', data)
+            }
+          })
         })
     }
   }
@@ -276,9 +278,10 @@ class Profile {
   addBankAccountPayment (paymentInfo) {
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'bank-name')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountaction'),
-          data: paymentInfo,
+          path: link,
+          data: { 'payment-instrument-identification-form': paymentInfo },
           followLocation: true
         })
       })
@@ -286,17 +289,34 @@ class Profile {
 
   addCreditCardPayment (paymentInfo) {
     paymentInfo = omit(paymentInfo, 'cvv')
+
+    const dataToSend = {}
+
     if (paymentInfo.address) {
-      paymentInfo.address = formatAddressForCortex(paymentInfo.address)
+      dataToSend.address = formatAddressForCortex(paymentInfo.address)
+      paymentInfo.address = undefined
     }
+    dataToSend['payment-instrument-identification-form'] = paymentInfo
+
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'card-number')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardaction'),
-          data: paymentInfo,
+          path: link,
+          data: dataToSend,
           followLocation: true
         })
       })
+  }
+
+  determinePaymentMethodFormLink (data, fieldName) {
+    let link = ''
+    angular.forEach(data.paymentMethodForms, paymentMethodForm => {
+      if (paymentMethodForm.paymentinstrumentform['payment-instrument-identification-form'][fieldName] !== undefined) {
+        link = this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')
+      }
+    })
+    return link
   }
 
   addPaymentMethod (paymentInfo) {

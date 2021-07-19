@@ -21,10 +21,16 @@ import phoneNumbersResponse from 'common/services/api/fixtures/cortex-profile-ph
 import selfserviceDonorDetailsResponse from 'common/services/api/fixtures/cortex-profile-selfservicedonordetails.fixture.js'
 import mailingAddressResponse from 'common/services/api/fixtures/cortex-profile-mailingaddress.fixture.js'
 import RecurringGiftModel from 'common/models/recurringGift.model'
+import cartResponse from './fixtures/cortex-cart-paymentmethodinfo-forms.fixture'
+
+const paymentMethodForms = cloneDeep(paymentmethodsFormsResponse._paymentmethods[0]._element)
+angular.forEach(paymentMethodForms, form => {
+  form.paymentinstrumentform = form._paymentinstrumentform[0]
+  delete form._paymentinstrumentform
+})
 
 const paymentmethodsFormsResponseZoomMapped = {
-  bankAccount: paymentmethodsFormsResponse._selfservicepaymentinstruments[0]._createbankaccountform[0],
-  creditCard: paymentmethodsFormsResponse._selfservicepaymentinstruments[0]._createcreditcardform[0],
+  paymentMethodForms: paymentMethodForms,
   rawData: paymentmethodsFormsResponse
 }
 
@@ -129,7 +135,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethodForms', () => {
     function setupRequest () {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:createbankaccountform,selfservicepaymentinstruments:createcreditcardform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=paymentmethods:element,paymentmethods:element:paymentinstrumentform')
         .respond(200, paymentmethodsFormsResponse)
     }
 
@@ -164,9 +170,13 @@ describe('profile service', () => {
         'routing-number': '123456789'
       }
 
+      const expectedPostData = {
+        'payment-instrument-identification-form': paymentInfo
+      }
+
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/bankaccounts/selfservicepaymentinstruments/crugive?followLocation=true',
-        paymentInfo
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form?followLocation=true',
+        expectedPostData
       ).respond(200, 'success')
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -192,12 +202,14 @@ describe('profile service', () => {
         cvv: 'someEncryptedCVV...'
       }
 
-      const paymentInfoWithoutCVV = angular.copy(paymentInfo)
-      delete paymentInfoWithoutCVV.cvv
+      const expectedPostData = {
+        'payment-instrument-identification-form': paymentInfo
+      }
+      delete expectedPostData['payment-instrument-identification-form'].cvv
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentinstruments/crugive?followLocation=true',
-        paymentInfoWithoutCVV
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?followLocation=true',
+        expectedPostData
       ).respond(200, 'success')
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -229,20 +241,27 @@ describe('profile service', () => {
         cvv: 'someEncryptedCVV...'
       }
 
-      const paymentInfoWithoutCVV = angular.copy(paymentInfo)
-      delete paymentInfoWithoutCVV.cvv
-      paymentInfoWithoutCVV.address = {
-        'country-name': 'US',
-        'street-address': '123 First St',
-        'extended-address': 'Apt 123',
-        locality: 'Sacramento',
-        'postal-code': '12345',
-        region: 'CA'
+      const expectedPostData = {
+        address: {
+          'country-name': 'US',
+          'street-address': '123 First St',
+          'extended-address': 'Apt 123',
+          locality: 'Sacramento',
+          'postal-code': '12345',
+          region: 'CA'
+        },
+        'payment-instrument-identification-form': {
+          'card-number': '**fake*encrypted**1234567890123456**',
+          'card-type': 'VISA',
+          'cardholder-name': 'Test Name',
+          'expiry-month': '06',
+          'expiry-year': '12'
+        }
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentinstruments/crugive?followLocation=true',
-        paymentInfoWithoutCVV
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?followLocation=true',
+        expectedPostData
       ).respond(200, 'success')
 
       // cache getPaymentForms response to avoid another http request while testing
