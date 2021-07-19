@@ -7,5 +7,6 @@ export function validPaymentMethods (paymentMethods) {
 }
 
 export function validPaymentMethod (paymentMethod) {
-  return paymentMethod['account-type'] || moment({ year: paymentMethod['expiry-year'], month: parseInt(paymentMethod['expiry-month']) - 1 }).isSameOrAfter(moment(), 'month')
+  return paymentMethod['account-type'] ||
+    moment({ year: paymentMethod['expiry-year'], month: parseInt(paymentMethod['expiry-month']) - 1 }).isSameOrAfter(moment(), 'month')
 }
