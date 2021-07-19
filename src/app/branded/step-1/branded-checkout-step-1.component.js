@@ -182,6 +182,8 @@ export default angular
       hidePaymentTypeOptions: '<',
       showCoverFees: '<',
       next: '&',
-      onPaymentFailed: '&'
+      onPaymentFailed: '&',
+      radioStationApiUrl: '<',
+      radioStationRadius: '<'
     }
   })

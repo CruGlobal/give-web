@@ -19,7 +19,8 @@ describe('addressForm', function () {
         $valid: false,
         $setSubmitted: jest.fn()
       },
-      onSubmit: jest.fn()
+      onSubmit: jest.fn(),
+      onAddressChanged: jest.fn()
     })
   }))
 
@@ -112,6 +113,16 @@ describe('addressForm', function () {
 
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading regions.', 'some error'])
       expect(self.controller.loadingRegionsError).toEqual(true)
+    })
+  })
+
+  describe('onPostalCodeChanged', () => {
+    it('should trigger onAddressChanged callback', () => {
+      self.controller.countries = countriesResponse._element
+      jest.spyOn(self.controller, 'onAddressChanged')
+      self.controller.onPostalCodeChanged()
+
+      expect(self.controller.onAddressChanged).toHaveBeenCalledWith()
     })
   })
 })

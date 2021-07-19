@@ -130,6 +130,8 @@ export default angular
       frequency: '@',
       day: '@',
       apiUrl: '@',
+      radioStationApiUrl: '@',
+      radioStationRadius: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',

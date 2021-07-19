@@ -4,7 +4,8 @@
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorLoadingCart" translate="RETRY_LOAD" translate-value-retryLoadFunction="{{$ctrl.loadCart()}}"></div>
     <checkout-step-3
       cart-data="$ctrl.cartData"
-      change-step="$ctrl.changeStep(newStep)">
+      change-step="$ctrl.changeStep(newStep)"
+      radio-station-name="$ctrl.radioStationName">
     </checkout-step-3>
   </div>
 </div>

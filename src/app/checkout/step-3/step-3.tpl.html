@@ -73,6 +73,10 @@
             <div>
               {{$ctrl.donorDetails.email}}
             </div>
+            <div ng-if="$ctrl.donorDetails && $ctrl.radioStationName">
+              <translate>{{'PREFERRED_RADIO_STATION'}}</translate>
+              {{$ctrl.radioStationName}}
+            </div>
             <loading ng-if="!$ctrl.donorDetails"></loading>
           </div>
         </div>

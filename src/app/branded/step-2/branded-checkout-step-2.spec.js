@@ -20,9 +20,11 @@ describe('branded checkout step 2', () => {
   describe('$onInit', () => {
     it('should load cart', () => {
       jest.spyOn($ctrl, 'loadCart').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'loadRadioStation').mockImplementation(() => {})
       $ctrl.$onInit()
 
       expect($ctrl.loadCart).toHaveBeenCalled()
+      expect($ctrl.loadRadioStation).toHaveBeenCalled()
     })
   })
 
@@ -42,6 +44,15 @@ describe('branded checkout step 2', () => {
       expect($ctrl.cartData).toBeUndefined()
       expect($ctrl.errorLoadingCart).toEqual(true)
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading cart data for branded checkout step 2', 'some error'])
+    })
+  })
+
+  describe('loadRadioStation', () => {
+    it('should load radio station name', () => {
+      jest.spyOn($ctrl.orderService, 'retrieveRadioStationName').mockReturnValue('some data')
+      $ctrl.loadRadioStation()
+
+      expect($ctrl.radioStationName).toEqual('some data')
     })
   })
 
