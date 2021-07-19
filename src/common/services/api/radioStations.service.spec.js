@@ -18,7 +18,7 @@ describe('radio station service', () => {
   })
 
   describe('getRadioStations', () => {
-    it('returns list of radio stations', () => {
+    it('returns a list of radio stations', () => {
       const expectedRadioStations = [{ Description: 'Radio Station', MediaId: 'WXYZ' }, { Description: 'Other Station', MediaId: 'ZYXW' }]
   
       self.$httpBackend.expectGET('https://api.domain.com/getStations/33333/100')
