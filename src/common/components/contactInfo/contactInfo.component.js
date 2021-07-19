@@ -117,7 +117,7 @@ class Step1Controller {
   }
 
   loadRadioStations () {
-    const postalCode = this.donorDetails.mailingAddress?.postalCode;
+    const postalCode = this.donorDetails.mailingAddress.postalCode
 
     if (this.requestRadioStation && postalCode) {
       this.loadingRadioStationsError = false

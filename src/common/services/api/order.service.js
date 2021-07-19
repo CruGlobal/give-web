@@ -324,7 +324,7 @@ class Order {
   retrieveRadioStationName () {
     return this.sessionStorage.getItem('radioStationName')
   }
-  
+
   retrieveRadioStationCallLetters () {
     return this.sessionStorage.getItem('radioStationCallLetters')
   }
