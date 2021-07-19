@@ -23,8 +23,8 @@ import mailingAddressResponse from 'common/services/api/fixtures/cortex-profile-
 import RecurringGiftModel from 'common/models/recurringGift.model'
 
 const paymentmethodsFormsResponseZoomMapped = {
-  bankAccount: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createbankaccountform[0],
-  creditCard: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createcreditcardform[0],
+  bankAccount: paymentmethodsFormsResponse._selfservicepaymentinstruments[0]._createbankaccountform[0],
+  creditCard: paymentmethodsFormsResponse._selfservicepaymentinstruments[0]._createcreditcardform[0],
   rawData: paymentmethodsFormsResponse
 }
 
@@ -57,10 +57,10 @@ describe('profile service', () => {
 
   describe('getPaymentMethods', () => {
     it('should load the user\'s saved payment methods', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:element')
         .respond(200, paymentmethodsResponse)
 
-      const expectedPaymentMethods = angular.copy(paymentmethodsResponse._selfservicepaymentmethods[0]._element)
+      const expectedPaymentMethods = angular.copy(paymentmethodsResponse._selfservicepaymentinstruments[0]._element)
       expectedPaymentMethods[0].id = expectedPaymentMethods[0].self.uri.split('/').pop()
       expectedPaymentMethods[1].id = expectedPaymentMethods[1].self.uri.split('/').pop()
       expectedPaymentMethods[0].address = {
@@ -84,7 +84,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethod', () => {
     it('should load a user\'s payment method', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydiojyg4=')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/giydiojyg4=')
         .respond(200, paymentmethodResponse)
 
       const expectedPaymentMethod = angular.copy(paymentmethodResponse)
@@ -97,7 +97,7 @@ describe('profile service', () => {
         region: 'IN',
         'street-address': '198 W King St'
       }
-      self.profileService.getPaymentMethod('/selfservicepaymentmethods/crugive/giydiojyg4=')
+      self.profileService.getPaymentMethod('/selfservicepaymentinstruments/crugive/giydiojyg4=')
         .subscribe((data) => {
           expect(data.id).toEqual(expectedPaymentMethod.id)
           expect(data.address['card-number']).toEqual(expectedPaymentMethod.address['card-number'])
@@ -109,10 +109,10 @@ describe('profile service', () => {
 
   describe('getPaymentMethodsWithDonations', () => {
     it('should load the user\'s saved payment methods with donations', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:element,selfservicepaymentinstruments:element:recurringgifts')
         .respond(200, paymentmethodsWithDonationsResponse)
 
-      const expectedData = cloneDeep(paymentmethodsWithDonationsResponse._selfservicepaymentmethods[0]._element)
+      const expectedData = cloneDeep(paymentmethodsWithDonationsResponse._selfservicepaymentinstruments[0]._element)
         .map(paymentMethod => {
           paymentMethod.recurringGifts = []
           delete paymentMethod._recurringgifts
@@ -129,7 +129,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethodForms', () => {
     function setupRequest () {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:createbankaccountform,selfservicepaymentinstruments:createcreditcardform')
         .respond(200, paymentmethodsFormsResponse)
     }
 
@@ -165,7 +165,7 @@ describe('profile service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive?followLocation=true',
+        'https://give-stage2.cru.org/cortex/bankaccounts/selfservicepaymentinstruments/crugive?followLocation=true',
         paymentInfo
       ).respond(200, 'success')
 
@@ -196,7 +196,7 @@ describe('profile service', () => {
       delete paymentInfoWithoutCVV.cvv
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
+        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentinstruments/crugive?followLocation=true',
         paymentInfoWithoutCVV
       ).respond(200, 'success')
 
@@ -241,7 +241,7 @@ describe('profile service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
+        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentinstruments/crugive?followLocation=true',
         paymentInfoWithoutCVV
       ).respond(200, 'success')
 

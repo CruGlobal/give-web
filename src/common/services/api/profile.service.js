@@ -195,7 +195,7 @@ class Profile {
     return this.cortexApiService.get({
       path: ['profiles', this.cortexApiService.scope, 'default'],
       zoom: {
-        paymentMethods: 'selfservicepaymentmethods:element[]'
+        paymentMethods: 'selfservicepaymentinstruments:element[]'
       },
       cache: !!cache
     })
@@ -230,7 +230,7 @@ class Profile {
     return this.cortexApiService.get({
       path: ['profiles', this.cortexApiService.scope, 'default'],
       zoom: {
-        paymentMethods: 'selfservicepaymentmethods:element[],selfservicepaymentmethods:element:recurringgifts'
+        paymentMethods: 'selfservicepaymentinstruments:element[],selfservicepaymentinstruments:element:recurringgifts'
       }
     })
       .pluck('paymentMethods')
@@ -258,8 +258,8 @@ class Profile {
       return this.cortexApiService.get({
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
-          bankAccount: 'selfservicepaymentmethods:createbankaccountform',
-          creditCard: 'selfservicepaymentmethods:createcreditcardform'
+          bankAccount: 'selfservicepaymentinstruments:createbankaccountform',
+          creditCard: 'selfservicepaymentinstruments:createcreditcardform'
         }
       })
         .do((data) => {

@@ -37,7 +37,7 @@ describe('recurringGift model', () => {
     RecurringGiftModel.nextDrawDate = '2015-05-20'
     RecurringGiftModel.paymentMethods = [
       {
-        self: { uri: '/selfservicepaymentmethods/crugive/giydgnrxgm=' },
+        self: { uri: '/selfservicepaymentinstruments/crugive/giydgnrxgm=' },
         'account-type': 'Savings'
       }
     ]
@@ -221,7 +221,7 @@ describe('recurringGift model', () => {
 
     it('should lookup payment method object if it hasn\'t yet', () => {
       const paymentMethod = {
-        self: { uri: '/selfservicepaymentmethods/crugive/giydgnrxgm=' },
+        self: { uri: '/selfservicepaymentinstruments/crugive/giydgnrxgm=' },
         'account-type': 'Savings'
       }
 

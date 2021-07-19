@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.profiles.profile',
-    uri: '/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentmethods:element',
-    href: 'https://give-stage2.cru.org/cortex/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentmethods:element'
+    uri: '/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentinstruments:element',
+    href: 'https://give-stage2.cru.org/cortex/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentinstruments:element'
   },
   links: [{
     rel: 'addresses',
@@ -46,11 +46,11 @@ export default {
     uri: '/purchases/crugive',
     href: 'https://give-stage2.cru.org/cortex/purchases/crugive'
   }, {
-    rel: 'selfservicepaymentmethods',
+    rel: 'selfservicepaymentinstruments',
     rev: 'profile',
     type: 'elasticpath.collections.links',
-    uri: '/selfservicepaymentmethods/crugive',
-    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+    uri: '/selfservicepaymentinstruments/crugive',
+    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive'
   }, {
     rel: 'wishlists',
     rev: 'profile',
@@ -58,17 +58,17 @@ export default {
     uri: '/wishlists/crugive',
     href: 'https://give-stage2.cru.org/cortex/wishlists/crugive'
   }],
-  _selfservicepaymentmethods: [{
+  _selfservicepaymentinstruments: [{
     _element: [{
       self: {
         type: 'paymentinstruments.payment-instrument',
-        uri: '/selfservicepaymentmethods/crugive/giydgnrxgm=',
-        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydgnrxgm='
+        uri: '/selfservicepaymentinstruments/crugive/giydgnrxgm=',
+        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/giydgnrxgm='
       },
       links: [{
         rel: 'list',
-        uri: '/selfservicepaymentmethods/crugive',
-        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+        uri: '/selfservicepaymentinstruments/crugive',
+        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive'
       }, {
         rel: 'recurringgifts',
         uri: '/donations/recurring/crugive/paymentmethods/giydgnrxgm=',
@@ -91,13 +91,13 @@ export default {
     }, {
       self: {
         type: 'paymentinstruments.payment-instrument',
-        uri: '/selfservicepaymentmethods/crugive/giydcnzyga=',
-        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydcnzyga='
+        uri: '/selfservicepaymentinstruments/crugive/giydcnzyga=',
+        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/giydcnzyga='
       },
       links: [{
         rel: 'list',
-        uri: '/selfservicepaymentmethods/crugive',
-        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+        uri: '/selfservicepaymentinstruments/crugive',
+        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive'
       }, {
         rel: 'recurringgifts',
         uri: '/donations/recurring/crugive/paymentmethods/giydcnzyga=',
