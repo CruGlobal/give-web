@@ -192,7 +192,13 @@
     <div class="mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'MAILING_ADDRESS'}}</h4>
 
-      <address-form address="$ctrl.donorDetails.mailingAddress" parent-form="$ctrl.detailsForm" on-address-changed="$ctrl.loadRadioStations()" address-disabled="$ctrl.donorDetails.staff"></address-form>
+      <address-form
+        address="$ctrl.donorDetails.mailingAddress"
+        parent-form="$ctrl.detailsForm"
+        on-address-changed="$ctrl.loadRadioStations()"
+        address-disabled="$ctrl.donorDetails.staff"
+      >
+      </address-form>
     </div>
 
     <div class="mb">
