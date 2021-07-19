@@ -219,7 +219,7 @@ describe('order service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mjswgobwmy2gkljtgazwcljumfsweljzmu2teljzmmytazrsge3wkodfmu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form?followLocation=true',
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mjswgobwmy2gkljtgazwcljumfsweljzmu2teljzmmytazrsge3wkodfmu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, 'success')
 
@@ -262,7 +262,7 @@ describe('order service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?followLocation=true',
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, { self: { uri: 'new cc uri' } })
 
@@ -317,7 +317,7 @@ describe('order service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?followLocation=true',
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, { self: { uri: 'new cc uri' } })
 
@@ -737,7 +737,7 @@ describe('order service', () => {
 
     it('should send a request to finalize the purchase', (done) => {
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
         { 'cover-cc-fees': false }
       ).respond(200, purchaseResponse)
 
@@ -752,7 +752,7 @@ describe('order service', () => {
 
     it('should send a request to finalize the purchase and with a CVV', (done) => {
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
         { 'security-code': '123', 'cover-cc-fees': false }
       ).respond(200, purchaseResponse)
 
@@ -769,7 +769,7 @@ describe('order service', () => {
       self.$window.localStorage.setItem('coverFees', 'true')
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
         { 'cover-cc-fees': true }
       ).respond(200, purchaseResponse)
 
@@ -786,7 +786,7 @@ describe('order service', () => {
       self.$window.localStorage.setItem('coverFees', 'false')
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
         { 'cover-cc-fees': false }
       ).respond(200, purchaseResponse)
 
@@ -803,7 +803,7 @@ describe('order service', () => {
       expect(self.$window.localStorage.getItem('coverFees')).toEqual(null)
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
         { 'cover-cc-fees': false }
       ).respond(200, purchaseResponse)
 

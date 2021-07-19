@@ -175,7 +175,7 @@ describe('profile service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form?followLocation=true',
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, 'success')
 
@@ -208,7 +208,7 @@ describe('profile service', () => {
       delete expectedPostData['payment-instrument-identification-form'].cvv
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?followLocation=true',
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, 'success')
 
@@ -260,7 +260,7 @@ describe('profile service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?followLocation=true',
+        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, 'success')
 
@@ -548,9 +548,9 @@ describe('profile service', () => {
 
   describe('updateEmail', () => {
     it('should add spouse\'s details', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/spouse?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/spouse?FollowLocation=true')
         .respond(200, 'spouse success')
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/?FollowLocation=true')
         .respond(200, 'donor success')
 
       self.profileService.updateEmail({}, true)
@@ -621,9 +621,9 @@ describe('profile service', () => {
 
   describe('addPhoneNumber', () => {
     it('should add phone number', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/spouse?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/spouse?FollowLocation=true')
         .respond(200, 'spouse success')
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/?FollowLocation=true')
         .respond(200, 'donor success')
       const phoneNumber = {
         spouse: true

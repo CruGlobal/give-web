@@ -190,7 +190,7 @@ describe('cart service', () => {
 
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
+        'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
         {
           configuration:{
             AMOUNT: 50
@@ -216,7 +216,7 @@ describe('cart service', () => {
 
         it('should add an item', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
               configuration: {
                   AMOUNT:50
@@ -239,7 +239,7 @@ describe('cart service', () => {
 
         it('should delete cookies and addItem to cart', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
               configuration:{
                 AMOUNT:50

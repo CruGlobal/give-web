@@ -94,7 +94,7 @@ describe('donations service', () => {
         }
       }]
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/receipts/items?followLocation=true')
+        .expectPOST('https://give-stage2.cru.org/cortex/receipts/items?FollowLocation=true')
         .respond(200, receiptsResponse)
       donationsService.getReceipts({}).subscribe((receipts) => {
         expect(receipts).toEqual(response)
