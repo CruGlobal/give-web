@@ -733,6 +733,7 @@ describe('order service', () => {
       self.orderService.submit()
         .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
+          done()
         })
 
       self.$httpBackend.flush()
