@@ -26,6 +26,7 @@ describe('radio station service', () => {
       self.radioStationsService.getRadioStations('https://api.domain.com/getStations', '33333', '100')
         .subscribe((data) => {
           expect(data).toEqual(expectedRadioStations)
+          done()
         })
       self.$httpBackend.flush()
     })
