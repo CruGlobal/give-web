@@ -213,7 +213,7 @@ describe('contactInfo', function () {
       self.controller.loadRadioStations()
 
       expect(self.controller.radioStationsService.getRadioStations).not.toHaveBeenCalled()
-      expect(self.controller.radioStations).toEqual(undefined)
+      expect(self.controller.radioStations).toBeUndefined()
     })
 
     it('should not load if no postal code selected', () => {
@@ -226,7 +226,7 @@ describe('contactInfo', function () {
       self.controller.loadRadioStations()
 
       expect(self.controller.radioStationsService.getRadioStations).not.toHaveBeenCalled()
-      expect(self.controller.radioStations).toEqual(undefined)
+      expect(self.controller.radioStations).toBeUndefined()
     })
 
     it('should load if requesting radio station and postal code selected', () => {
@@ -252,7 +252,7 @@ describe('contactInfo', function () {
       self.controller.loadRadioStations()
 
       expect(self.controller.radioStationsService.getRadioStations).toHaveBeenCalledWith(radioStationApiUrl, postalCode, radioStationRadius)
-      expect(self.controller.radioStations).toEqual(undefined)
+      expect(self.controller.radioStations).toBeUndefined()
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading radio stations.', 'some error'])
     })
   })
@@ -295,7 +295,6 @@ describe('contactInfo', function () {
         emailFormUri: '/emails/crugive',
         'donor-type': 'Staff'
       }
-      self.controller.radioStationData = radioStationData
 
       jest.spyOn(self.controller.orderService, 'updateDonorDetails').mockReturnValue(Observable.of('donor details success'))
       jest.spyOn(self.controller.orderService, 'addEmail').mockReturnValue(Observable.of('email success'))
@@ -311,9 +310,24 @@ describe('contactInfo', function () {
         'donor-type': 'Staff'
       })
       expect(self.controller.orderService.addEmail).toHaveBeenCalledWith('someone@asdf.com', '/emails/crugive')
-      expect(self.controller.orderService.storeRadioStationData).toHaveBeenCalledWith(radioStationData)
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: true })
       expect(self.controller.analyticsFactory.checkoutStepOptionEvent).toHaveBeenCalledWith( self.controller.donorDetails['donor-type'], 'contact')
+    })
+
+    it('should save radio station', () => {
+      self.controller.detailsForm.$valid = true
+      self.controller.donorDetails = {
+        'given-name': 'Fname',
+        'donor-type': 'Staff'
+      }
+      self.controller.radioStationData = radioStationData
+
+      jest.spyOn(self.controller.orderService, 'updateDonorDetails').mockReturnValue(Observable.of('donor details success'))
+      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepOptionEvent').mockImplementation(() => {})
+      jest.spyOn(self.controller.orderService, 'storeRadioStationData').mockImplementation(() => {})
+      self.controller.submitDetails()
+
+      expect(self.controller.orderService.storeRadioStationData).toHaveBeenCalledWith(radioStationData) 
     })
 
     it('should handle an error saving donor details', () => {
