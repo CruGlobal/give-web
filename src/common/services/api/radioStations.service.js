@@ -1,12 +1,6 @@
 import angular from 'angular'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/mergeMap'
-import 'rxjs/add/operator/pluck'
-import 'rxjs/add/observable/of'
-import 'rxjs/add/observable/throw'
-import 'rxjs/add/operator/do'
-import 'rxjs/add/observable/from'
 
 const serviceName = 'radioStationsService'
 
