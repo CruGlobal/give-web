@@ -109,7 +109,8 @@ class DesignationsService {
           type: hit.designation_type || null,
           facet: hit.facet || null,
           startMonth: hit.start_date ? moment(hit.start_date).format('YYYY-MM-01') : null,
-          ministry: hit.organization_id ? ministryIds[hit.organization_id] : null
+          ministry: hit.organization_id ? ministryIds[hit.organization_id] : null,
+          orgId: hit.organization_id ? hit.organization_id : 'cru'
         }
       })
     })
@@ -151,9 +152,13 @@ class DesignationsService {
       })
 
       let designationType
+      let orgId
       angular.forEach(data.definition['details'], (v, k) => {
         if (v['name'] === 'designation_type') {
           designationType = v['display-value']
+        }
+        if (v['name'] === 'org_id') {
+          orgId = v['display-value']
         }
       })
 
@@ -164,7 +169,8 @@ class DesignationsService {
         displayName: data.definition['display-name'],
         designationType: designationType,
         code: data.code.code,
-        designationNumber: data.code['product-code']
+        designationNumber: data.code['product-code'],
+        orgId: orgId
       }
     })
   }
