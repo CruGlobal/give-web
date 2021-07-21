@@ -140,7 +140,7 @@ class PaymentMethodsController {
   }
 
   isCard (paymentMethod) {
-    return paymentMethod.self.type === 'cru.creditcards.named-credit-card'
+    return !!paymentMethod['card-type']
   }
 
   signedOut (event) {

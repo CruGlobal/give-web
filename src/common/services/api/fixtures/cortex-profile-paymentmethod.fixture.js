@@ -1,6 +1,6 @@
 export default {
   self: {
-    type: 'cru.creditcards.named-credit-card',
+    type: 'paymentinstruments.payment-instrument',
     uri: '/selfservicepaymentmethods/crugive/giydiojyg4=',
     href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydiojyg4='
   },

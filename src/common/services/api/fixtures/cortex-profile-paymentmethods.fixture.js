@@ -61,7 +61,7 @@ export default {
   _selfservicepaymentmethods: [{
     _element: [{
       self: {
-        type: 'cru.creditcards.named-credit-card',
+        type: 'paymentinstruments.payment-instrument',
         uri: '/selfservicepaymentmethods/crugive/giydgnrxgm=',
         href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydgnrxgm='
       },
@@ -90,7 +90,7 @@ export default {
       'expiry-year': '2019'
     }, {
       self: {
-        type: 'elasticpath.bankaccounts.bank-account',
+        type: 'paymentinstruments.payment-instrument',
         uri: '/selfservicepaymentmethods/crugive/giydcnzyga=',
         href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydcnzyga='
       },

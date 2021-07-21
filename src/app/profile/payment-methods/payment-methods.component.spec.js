@@ -188,14 +188,16 @@ describe('PaymentMethodsComponent', function () {
     it('should return true if payment method is a card', () => {
       expect($ctrl.isCard({
         self: {
-          type: 'cru.creditcards.named-credit-card'
-        }
+          type: 'paymentinstruments.payment-instrument'
+        },
+        'card-type': 'Visa'
       })).toBe(true)
 
       expect($ctrl.isCard({
         self: {
-          type: 'elasticpath.bankaccounts.bank-account'
-        }
+          type: 'paymentinstruments.payment-instrument'
+        },
+        'account-type': 'Checking'
       })).toBe(false)
     })
   })
