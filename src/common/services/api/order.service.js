@@ -9,6 +9,7 @@ import 'rxjs/add/observable/throw'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
+import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 
 import cortexApiService from '../cortexApi.service'
 import cartService from './cart.service'
@@ -193,8 +194,8 @@ class Order {
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        choices: 'order:paymentmethodinfo:selector:choice[],order:paymentmethodinfo:selector:choice:description',
-        chosen: 'order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        choices: 'order:paymentinstrumentselector:choice[],order:paymentinstrumentselector:choice:description',
+        chosen: 'order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
       }
     })
       .map(selector => {
@@ -205,10 +206,11 @@ class Order {
         }
         return map(paymentMethods, paymentMethod => {
           paymentMethod.description.selectAction = paymentMethod.self.uri
-          if (paymentMethod.description.address) {
-            paymentMethod.description.address = formatAddressForTemplate(paymentMethod.description.address)
+          if (paymentMethod.description['payment-instrument-identification-attributes']['street-address']) {
+            paymentMethod.description.address =
+              formatAddressForTemplate(paymentMethod.description['payment-instrument-identification-attributes'])
           }
-          return paymentMethod.description
+          return extractPaymentAttributes(paymentMethod.description)
         })
       })
       .map(paymentMethods => {
@@ -227,15 +229,15 @@ class Order {
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        paymentMethod: 'order:paymentmethodinfo:paymentmethod'
+        paymentMethod: 'order:paymentinstrumentselector:chosen:description'
       }
     })
       .pluck('paymentMethod')
       .map(data => {
-        if (data && data.address) {
-          data.address = formatAddressForTemplate(data.address)
+        if (data && data['payment-instrument-identification-attributes']['street-address']) {
+          data.address = formatAddressForTemplate(data['payment-instrument-identification-attributes'])
         }
-        return data
+        return extractPaymentAttributes(data)
       })
   }
 

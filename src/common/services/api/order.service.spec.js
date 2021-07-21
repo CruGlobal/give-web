@@ -457,80 +457,79 @@ describe('order service', () => {
       clonedPaymentMethodSelectorResponse = angular.copy(paymentMethodSelectorResponse)
       expectedResponse = [{
         self: {
-          type: 'elasticpath.bankaccounts.bank-account',
-          uri: '/paymentmethods/crugive/giydcmzyge=',
-          href: 'https://give-stage2.cru.org/cortex/paymentmethods/crugive/giydcmzyge='
+          type: 'paymentinstruments.payment-instrument',
+          uri: '/paymentinstruments/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/orderpaymentinstrument/gazdgmlgha3gmllbha4wmljugi3dmljzguygmllemrsgimtegrqwmnlfmq=',
+          href: 'https://give-stage2.cru.org/cortex/paymentinstruments/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/orderpaymentinstrument/gazdgmlgha3gmllbha4wmljugi3dmljzguygmllemrsgimtegrqwmnlfmq='
         },
-        links: [{
-          rel: 'list',
-          type: 'elasticpath.collections.links',
-          uri: '/paymentmethods/crugive',
-          href: 'https://give-stage2.cru.org/cortex/paymentmethods/crugive'
-        }, {
-          rel: 'bankaccount',
-          type: 'elasticpath.bankaccounts.bank-account',
-          uri: '/bankaccounts/paymentmethods/crugive/giydcmzyge=',
-          href: 'https://give-stage2.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcmzyge='
-        }],
+        messages: [],
+        links: [],
+        'default-on-profile': true,
+        'limit-amount': {
+          amount: 0,
+          currency: 'USD',
+          display: '$0.00'
+        },
+        name: 'Cru Payment Instrument',
         'account-type': 'Checking',
         'bank-name': 'First Bank',
         'display-account-number': '6548',
-        'encrypted-account-number': 'FAecKEPeUdW6KjbHo/na/hXlAS9OjZR51dlBgKKInf2mJh4bSP9WMvsKfAAL1rW7o6P9Rmx87dp0rDz0NArbWGIdsYeoFVOaIATzQqAe4ECuy0gfHcDva26HmgriGqRWkWPDeQvEdU9jENu0XKskxAjk2sBLJOHhoTCi8+LTLUrNwu40CSdT/PGNK8/lnO27wTZDPmc221xJ6hzB/F+0sRRvJhWky2oxA491MG+SRk7lWhccqSq5KtrijfA88Ebb/EivnsSJwqZgv/WNIP2u/V3dsMF1YRtyEsEAkmgxCCYBye2TT5ehIVOChQdlUbHxF+z/izrmn+0u2IYXvyX4dw==',
+        'encrypted-account-number': '0d640924-8399-48b5-851e-808e308c2a8a:GT1pVOxr5KenKbRrvYUpnw',
         'routing-number': '121042882',
+        'saved-on-profile': true,
         chosen: true,
-        selectAction: '/paymentmethods/crugive/giydcmzyge=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq='
+        selectAction: '/paymentinstruments/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/paymentinstrumentselector/qk2wgylsoqww64temvzc22loon2he5lnmvxhjwjegazdgmlgha3gmllbha4wmljugi3dmljzguygmllemrsgimtegrqwmnlfmsvgs3ttorzhk3lfnz2nsjbrmftgmojugmzs2mrqha4s2nbqgqzs2ojwgztc2m3emvrtamrtha4tszlc='
       }, {
         self: {
-          type: 'elasticpath.bankaccounts.bank-account',
-          uri: '/paymentmethods/crugive/giydcnzyga=',
-          href: 'https://give-stage2.cru.org/cortex/paymentmethods/crugive/giydcnzyga='
+          type: 'paymentinstruments.payment-instrument',
+          uri: '/paymentinstruments/crugive/gu4tmyjrgzsggljug5sdiljugzrgellcgvswmljwmftgcnbqmqztonzwmm=',
+          href: 'https://give-stage2.cru.org/cortex/paymentinstruments/crugive/gu4tmyjrgzsggljug5sdiljugzrgellcgvswmljwmftgcnbqmqztonzwmm='
         },
-        links: [{
-          rel: 'list',
-          type: 'elasticpath.collections.links',
-          uri: '/paymentmethods/crugive',
-          href: 'https://give-stage2.cru.org/cortex/paymentmethods/crugive'
-        }, {
-          rel: 'bankaccount',
-          type: 'elasticpath.bankaccounts.bank-account',
-          uri: '/bankaccounts/paymentmethods/crugive/giydcnzyga=',
-          href: 'https://give-stage2.cru.org/cortex/bankaccounts/paymentmethods/crugive/giydcnzyga='
-        }],
+        messages: [],
+        links: [],
+        'default-on-profile': false,
+        name: 'Cru Payment Instrument',
         'account-type': 'Savings',
         'bank-name': '2nd Bank',
         'display-account-number': '3456',
         'encrypted-account-number': '',
         'routing-number': '021000021',
-        selectAction: '/paymentmethods/crugive/giydcnzyga=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq='
+        selectAction: '/paymentinstruments/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/paymentinstrumentselector/qkzwg5ltorxw2zlsfvuw443uoj2w2zlootmsinjzgzqtcntemmwtin3egqwtintcmiwwenlfmywtmylgme2dazbtg43tmy5knfxhg5dsovwwk3tu3esdknzzg5sdizjxfu3dinlbfu2dendcfu4tiyjtfu2giyjyge3wcmbwmfsgc='
       }, {
         self: {
-          type: 'cru.creditcards.named-credit-card',
-          uri: '/paymentmethods/crugive/giydembug4=',
-          href: 'https://give-stage2.cru.org/cortex/paymentmethods/crugive/giydembug4='
+          type: 'paymentinstruments.payment-instrument',
+          uri: '/paymentinstruments/crugive/gnrgmnlbgm4wgljwmfstcljug5stallbg44welldgrtdgmtggiydmm3bmi=',
+          href: 'https://give-stage2.cru.org/cortex/paymentinstruments/crugive/gnrgmnlbgm4wgljwmfstcljug5stallbg44welldgrtdgmtggiydmm3bmi='
         },
-        links: [{
-          rel: 'list',
-          type: 'elasticpath.collections.links',
-          uri: '/paymentmethods/crugive',
-          href: 'https://give-stage2.cru.org/cortex/paymentmethods/crugive'
-        }, {
-          rel: 'creditcard',
-          type: 'cru.creditcards.named-credit-card',
-          uri: '/creditcards/paymentmethods/crugive/giydembug4=',
-          href: 'https://give-stage2.cru.org/cortex/creditcards/paymentmethods/crugive/giydembug4='
-        }],
-        'card-number': '1111',
+        messages: [],
+        links: [],
+        'default-on-profile': false,
+        name: 'Cru Payment Instrument',
+        'last-four-digits': '1111',
         'card-type': 'Visa',
         'cardholder-name': 'Test Card',
         'expiry-month': '11',
         'expiry-year': '2019',
-        selectAction: '/paymentmethods/crugive/giydembug4=/selector/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq='
+        'country-name': 'US',
+        'extended-address': '',
+        locality: 'Sacramento',
+        'postal-code': '12345',
+        region: 'CA',
+        'street-address': '1234 First Street',
+        address: {
+          country: 'US',
+          extendedAddress: '',
+          locality: 'Sacramento',
+          postalCode: '12345',
+          region: 'CA',
+          streetAddress: '1234 First Street'
+        },
+        selectAction: '/paymentinstruments/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/paymentinstrumentselector/qkzwg5ltorxw2zlsfvuw443uoj2w2zlootmsim3cmy2wcmzzmmwtmylfgewtin3fgawwcnzzmiwwgndggmzgmmrqgyzwcyvknfxhg5dsovwwk3tu3esdinbwge4tonlgfu2wenbzfu2doytbfvqtimjqfu2gmnbvha2dmnrrgi2wg='
       }]
     })
 
     it('should load a user\'s existing payment methods', (done) => {
       self.$httpBackend.expectGET(
-        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:choice,order:paymentinstrumentselector:choice:description,order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse)
 
       self.orderService.getExistingPaymentMethods()
@@ -544,11 +543,11 @@ describe('order service', () => {
 
     it('should load a user\'s existing payment methods even if there is no chosen one', (done) => {
       // Move the payment method in chosen to be one of the choices for this test
-      clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._choice.push(clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen[0])
-      delete clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen
+      clonedPaymentMethodSelectorResponse._order[0]._paymentinstrumentselector[0]._choice.push(clonedPaymentMethodSelectorResponse._order[0]._paymentinstrumentselector[0]._chosen[0])
+      delete clonedPaymentMethodSelectorResponse._order[0]._paymentinstrumentselector[0]._chosen
 
       self.$httpBackend.expectGET(
-        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:choice,order:paymentinstrumentselector:choice:description,order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse)
 
       // Since there is no chosen element, this payment method should not be marked as chosen
@@ -565,10 +564,10 @@ describe('order service', () => {
 
     it('should load a user\'s existing payment methods even if there is no choice element and only a chosen one', (done) => {
       // Delete all the choices so there is only a chosen element for this test
-      delete clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._choice
+      delete clonedPaymentMethodSelectorResponse._order[0]._paymentinstrumentselector[0]._choice
 
       self.$httpBackend.expectGET(
-        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:choice,order:paymentinstrumentselector:choice:description,order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse)
 
       // Since there are no choices, there should only be one the one chosen paymentMethod
@@ -584,11 +583,12 @@ describe('order service', () => {
     })
 
     it('should format payment addresses while loading existing payment methods', (done) => {
-      clonedPaymentMethodSelectorResponse._order[0]._paymentmethodinfo[0]._selector[0]._chosen[0]._description[0].address = { 'country-name': 'US' }
-      expectedResponse[0].address = { country: 'US', streetAddress: undefined, extendedAddress: undefined, locality: undefined, region: undefined, postalCode: undefined }
+      clonedPaymentMethodSelectorResponse._order[0]._paymentinstrumentselector[0]._choice[0]._description[0]['payment-instrument-identification-attributes']['extended-address'] = 'Apt B'
+      expectedResponse[2].address = { country: 'US', streetAddress: '1234 First Street', extendedAddress: 'Apt B', locality: 'Sacramento', region: 'CA', postalCode: '12345' }
+      expectedResponse[2]['extended-address'] = 'Apt B'
 
       self.$httpBackend.expectGET(
-        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:selector:choice,order:paymentmethodinfo:selector:choice:description,order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        'https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:choice,order:paymentinstrumentselector:choice:description,order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
       ).respond(200, clonedPaymentMethodSelectorResponse)
 
       self.orderService.getExistingPaymentMethods()
@@ -620,12 +620,35 @@ describe('order service', () => {
 
   describe('getCurrentPayment', () => {
     it('should retrieve the current payment details', (done) => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:chosen:description')
         .respond(200, paymentMethodBankAccountResponse)
+
+      const expectedResponse = {
+        self: {
+          type: 'paymentinstruments.payment-instrument',
+          uri: '/paymentinstruments/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/orderpaymentinstrument/gnstmzrymiytoljugbrdmljuheygellcmy2gmllcgm4dsnjygu2gmnryme=',
+          href: 'https://give-stage2.cru.org/cortex/paymentinstruments/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/orderpaymentinstrument/gnstmzrymiytoljugbrdmljuheygellcmy2gmllcgm4dsnjygu2gmnryme='
+        },
+        messages: [],
+        links: [],
+        'default-on-profile': false,
+        'limit-amount': {
+          amount: 0,
+          currency: 'USD',
+          display: '$0.00'
+        },
+        name: 'Cru Payment Instrument',
+        'account-type': 'checking',
+        'bank-name': 'My Bank Name',
+        'display-account-number': '3456',
+        'encrypted-account-number': '4e981aa5-993a-4771-85fa-bbcd322ce189:SHv8dEQBg8XSO5P0SFXwQg',
+        'routing-number': '000000000',
+        'saved-on-profile': true
+      }
 
       self.orderService.getCurrentPayment()
         .subscribe((data) => {
-          expect(data).toEqual(paymentMethodBankAccountResponse._order[0]._paymentmethodinfo[0]._paymentmethod[0])
+          expect(data).toEqual(expectedResponse)
           done()
         })
 
@@ -633,10 +656,10 @@ describe('order service', () => {
     })
 
     it('should retrieve the current payment details with a billing address', (done) => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:paymentmethod')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:chosen:description')
         .respond(200, paymentMethodCreditCardResponse)
 
-      const expectedPaymentInfo = angular.copy(paymentMethodCreditCardResponse._order[0]._paymentmethodinfo[0]._paymentmethod[0])
+      const expectedPaymentInfo = angular.copy(paymentMethodCreditCardResponse._order[0]._paymentinstrumentselector[0]._chosen[0]._description[0])
       expectedPaymentInfo.address = {
         country: 'US',
         extendedAddress: '',
@@ -645,6 +668,20 @@ describe('order service', () => {
         region: 'CA',
         streetAddress: '1234 First Street'
       }
+      expectedPaymentInfo['payment-instrument-identification-attributes'] = undefined
+      expectedPaymentInfo['last-four-digits'] = '1118'
+      expectedPaymentInfo['card-type'] = 'MasterCard'
+      expectedPaymentInfo['cardholder-name'] = 'Test Person'
+      expectedPaymentInfo.description = 'MasterCard - 1118'
+      expectedPaymentInfo['expiry-month'] = '08'
+      expectedPaymentInfo['expiry-year'] = '2020'
+      expectedPaymentInfo['country-name'] = 'US'
+      expectedPaymentInfo['extended-address'] = ''
+      expectedPaymentInfo.locality = 'Sacramento'
+      expectedPaymentInfo['postal-code'] = '12345'
+      expectedPaymentInfo.region = 'CA'
+      expectedPaymentInfo['street-address'] = '1234 First Street'
+
       self.orderService.getCurrentPayment()
         .subscribe((data) => {
           expect(data).toEqual(expectedPaymentInfo)
