@@ -38,7 +38,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
             item = {
               productInfo: {
                 productID: cartData.items[i].designationNumber,
-                designationType: cartData.items[i].designationType
+                designationType: cartData.items[i].designationType,
+                orgId: cartData.items[i].orgId ? cartData.items[i].orgId : 'cru'
               },
               price: {
                 basePrice: cartData.items[i].amount
@@ -121,7 +122,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                   name: productData.designationNumber,
                   id: productData.designationNumber,
                   price: itemConfig.amount.toString(),
-                  brand: 'cru',
+                  brand: productData.orgId,
                   category: productData.designationType.toLowerCase(),
                   variant: frequencyObj.display.toLowerCase(),
                   quantity: '1'
@@ -165,7 +166,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                     name: item.designationNumber,
                     id: item.designationNumber,
                     price: item.amount.toString(),
-                    brand: 'cru',
+                    brand: item.orgId,
                     category: item.designationType.toLowerCase(),
                     variant: item.frequency.toLowerCase(),
                     quantity: '1'
@@ -209,7 +210,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
           name: cartItem.designationNumber,
           id: cartItem.designationNumber,
           price: cartItem.amount.toString(),
-          brand: 'cru',
+          brand: cartItem.orgId,
           category: cartItem.designationType.toLowerCase(),
           variant: cartItem.frequency.toLowerCase(),
           quantity: '1'
@@ -397,7 +398,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                 name: productData.designationNumber,
                 id: productData.designationNumber,
                 price: undefined,
-                brand: 'cru',
+                brand: productData.orgId,
                 category: productData.designationType.toLowerCase(),
                 variant: undefined,
                 quantity: '1'
@@ -474,7 +475,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                     name: product.designationNumber,
                     id: product.designationNumber,
                     price: undefined,
-                    brand: 'cru',
+                    brand: product.orgId,
                     category: product.type,
                     variant: undefined,
                     position: undefined
@@ -525,7 +526,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               name: cartItem.designationNumber,
               id: cartItem.designationNumber,
               price: cartItem.amount.toString(),
-              brand: 'cru',
+              brand: cartItem.orgId,
               category: cartItem.designationType.toLowerCase(),
               variant: cartItem.frequency.toLowerCase(),
               quantity: '1',
