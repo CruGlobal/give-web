@@ -83,15 +83,20 @@ class Cart {
       const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
       let designationType
+      let orgId
       angular.forEach(item.itemDefinition['details'], (v, k) => {
         if (v['name'] === 'designation_type') {
           designationType = v['display-value']
+        }
+        if (v['name'] === 'org_id') {
+          orgId = v['display-value']
         }
       })
 
       return {
         uri: item.self.uri,
         code: item.itemCode.code,
+        orgId: orgId,
         displayName: item.itemDefinition['display-name'],
         designationType: designationType,
         price: item.rate.cost[0].display, // cost object was changed to array
