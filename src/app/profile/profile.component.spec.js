@@ -158,6 +158,7 @@ describe('ProfileComponent', function () {
   describe('loadDonorDetails()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'initTitles').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'setPKeys').mockImplementation(() => {})
     })
 
     it('should load donor details on $onInit() and have a spouse info', () => {
@@ -173,6 +174,7 @@ describe('ProfileComponent', function () {
       expect($ctrl.hasSpouse).toBe(true)
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled()
       expect($ctrl.initTitles).toHaveBeenCalled()
+      expect($ctrl.setPKeys).toHaveBeenCalled()
     })
 
     it('should load donor details on $onInit() without spouse info', () => {
@@ -186,6 +188,7 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.hasSpouse).toBe(false)
       expect($ctrl.initTitles).toHaveBeenCalled()
+      expect($ctrl.setPKeys).toHaveBeenCalled()
     })
 
     it('should handle and error of loading donor details on $onInit()', () => {
@@ -197,6 +200,7 @@ describe('ProfileComponent', function () {
       expect($ctrl.donorDetailsError).toBe('loading')
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled()
       expect($ctrl.initTitles).not.toHaveBeenCalled()
+      expect($ctrl.setPKeys).not.toHaveBeenCalled()
     })
   })
 
@@ -342,12 +346,17 @@ describe('ProfileComponent', function () {
   })
 
   describe('updateEmail()', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl, 'loadDonorDetails').mockImplementation(() => {})
+    })
+
     it('should update donor email', () => {
       jest.spyOn($ctrl.profileService, 'updateEmail').mockReturnValue(Observable.of({ email: 'new email' }))
       $ctrl.updateEmail(false)
 
       expect($ctrl.donorEmail).toEqual({ email: 'new email' })
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled()
+      expect($ctrl.loadDonorDetails).toHaveBeenCalled()
     })
 
     it('should update spouse email', () => {
@@ -356,6 +365,7 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.spouseEmail).toEqual({ email: 'new email' })
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled()
+      expect($ctrl.loadDonorDetails).toHaveBeenCalled()
     })
 
     it('should handle and error of updating email', () => {
@@ -366,6 +376,78 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.emailAddressError).toBe('updating')
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled()
+      expect($ctrl.loadDonorDetails).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('setPKeys()', () => {
+    const primaryPKey = '123456';
+    const spousePKey = '654321';
+
+    it('should set PKey for primary email', () => {
+      $ctrl.donorDetails = {
+        'acs-profile-pkey': primaryPKey,
+        'acs-spouse-profile-pkey': undefined,
+      }
+
+      $ctrl.setPKeys()
+
+      expect($ctrl.profilePKey).toEqual(primaryPKey)
+      expect($ctrl.spousePKey).toEqual(undefined)
+    })
+
+    it('should set PKey for spouse email', () => {
+      $ctrl.donorDetails = {
+        'acs-profile-pkey': undefined,
+        'acs-spouse-profile-pkey': spousePKey,
+      }
+
+      $ctrl.setPKeys()
+
+      expect($ctrl.profilePKey).toEqual(undefined)
+      expect($ctrl.spousePKey).toEqual(spousePKey)
+    })
+
+    it('should set PKey for both primary and spouse emails' , () => {
+      $ctrl.donorDetails = {
+        'acs-profile-pkey': primaryPKey,
+        'acs-spouse-profile-pkey': spousePKey,
+      }
+
+      $ctrl.setPKeys()
+
+      expect($ctrl.profilePKey).toEqual(primaryPKey)
+      expect($ctrl.spousePKey).toEqual(spousePKey)
+    })
+
+    it('should set PKey to undefined for both primary and spouse emails', () => {
+      $ctrl.donorDetails = {
+        'acs-profile-pkey': undefined,
+        'acs-spouse-profile-pkey': undefined,
+      }
+
+      $ctrl.setPKeys()
+
+      expect($ctrl.profilePKey).toEqual(undefined)
+      expect($ctrl.spousePKey).toEqual(undefined)
+    })
+  })
+
+  describe('linkToAdobeCampaign()', () => {
+    beforeEach(() => {
+      jest.spyOn(window, 'open').mockImplementation(() => {})
+    })
+
+    it('should open tab if pKey is present', () => {
+      $ctrl.linkToAdobeCampaign('123456')
+
+      expect(window.open).toHaveBeenCalledWith('https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=123456')
+    })
+
+    it('should not open tab if pKey is undefined', () => {
+      $ctrl.linkToAdobeCampaign(undefined)
+
+      expect(window.open).not.toHaveBeenCalled()
     })
   })
 
