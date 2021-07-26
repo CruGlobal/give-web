@@ -40,7 +40,10 @@ class Step1Controller {
       }
     }
 
+    this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
+
     this.loadDonorDetails(donorDetailsDefaults)
+    this.loadRadioStations()
     this.waitForFormInitialization()
 
     this.$scope.$on(SignInEvent, () => {
@@ -150,6 +153,8 @@ export default angular
     bindings: {
       submitted: '<',
       donorDetails: '=?',
-      onSubmit: '&'
+      onSubmit: '&',
+      radioStationApiUrl: '<',
+      radioStationRadius: '<'
     }
   })
