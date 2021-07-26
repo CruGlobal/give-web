@@ -113,6 +113,27 @@ class Step1Controller {
       })
   }
 
+  loadRadioStations () {
+    const postalCode = this.donorDetails.mailingAddress.postalCode
+
+    if (this.requestRadioStation && postalCode) {
+      this.loadingRadioStationsError = false
+
+      this.radioStationsService.getRadioStations(
+        this.radioStationApiUrl,
+        postalCode,
+        this.radioStationRadius
+      )
+        .subscribe((data) => {
+          this.radioStations = data
+        },
+        error => {
+          this.loadingRadioStationsError = true
+          this.$log.error('Error loading radio stations.', error)
+        })
+    }
+  }
+
   submitDetails () {
     this.detailsForm.$setSubmitted()
     if (this.detailsForm.$valid) {
