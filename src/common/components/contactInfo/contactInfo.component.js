@@ -12,6 +12,7 @@ import { phoneNumberRegex } from 'common/app.constants'
 import addressForm from 'common/components/addressForm/addressForm.component'
 
 import orderService from 'common/services/api/order.service'
+import radioStationsService from 'common/services/api/radioStations.service'
 import sessionService, { SignInEvent, Roles } from 'common/services/session/session.service'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
@@ -22,10 +23,11 @@ const componentName = 'contactInfo'
 
 class Step1Controller {
   /* @ngInject */
-  constructor ($log, $scope, orderService, sessionService, analyticsFactory) {
+  constructor ($log, $scope, orderService, radioStationsService, sessionService, analyticsFactory) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
+    this.radioStationsService = radioStationsService
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
   }
@@ -144,6 +146,7 @@ export default angular
     'ngMessages',
     addressForm.name,
     orderService.name,
+    radioStationsService.name,
     sessionService.name,
     analyticsFactory.name
   ])
