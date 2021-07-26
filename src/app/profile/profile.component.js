@@ -85,6 +85,7 @@ class ProfileController {
           this.donorDetails = donorDetails
           this.hasSpouse = !!this.donorDetails['spouse-name']['family-name']
           this.initTitles()
+          this.setPKeys()
           this.donorDetailsLoading = false
         },
         error => {
@@ -161,6 +162,7 @@ class ProfileController {
           }
           this.success = true
           this.emailLoading = false
+          this.loadDonorDetails()
         },
         error => {
           this.emailAddressError = 'updating'
@@ -168,6 +170,11 @@ class ProfileController {
           this.emailLoading = false
         }
       )
+  }
+
+  setPKeys () {
+    this.profilePKey = this.donorDetails['acs-profile-pkey']
+    this.spousePKey = this.donorDetails['acs-spouse-profile-pkey']
   }
 
   syncPhoneValidators () {
