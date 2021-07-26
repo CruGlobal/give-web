@@ -226,5 +226,26 @@
         </div>
       </div>
     </div>
+
+    <div class="mb" ng-if="$ctrl.requestRadioStation">
+      <h4 class="panel-title  border-bottom-small  visible" translate>{{'RADIO_STATION'}}</h4>
+      <div class="form-group">
+        <select class="form-control form-control-subtle"
+          name="radioStation"
+          ng-model="$ctrl.radioStationName"
+          ng-change="$ctrl.onSelectRadioStation()"
+          ng-options="v.Description as v['Description'] for v in $ctrl.radioStations | orderBy:Description"
+        >
+        </select>
+        <div role="alert" ng-if="$ctrl.loadingRadioStationsError">
+          <div class="help-block"><translate>{{'RADIO_STATION_LIST_ERROR'}}</translate>
+            <button id="retryButton1" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.loadRadioStations()" translate>{{'RETRY'}}</button>
+          </div>
+        </div>
+        <div role="alert" ng-messages="$ctrl.parentForm.radioStation.$error" ng-if="($ctrl.parentForm.radioStation | showErrors)">
+          <div class="help-block" ng-message="required" translate>{{'RADIO_STATION_SELECT_ERROR'}}</div>
+        </div>
+      </div>
+    </div>
   </form>
 </div>
