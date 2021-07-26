@@ -54,10 +54,11 @@ class Cart {
   }
 
   get () {
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     return Observable.forkJoin(this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
+        lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
         rateTotals: 'ratetotals:element[]',
         total: 'total,total:cost'
       }
@@ -74,9 +75,11 @@ class Cart {
   handleCartResponse (cartResponse, nextDrawDate) {
     const items = map(cartResponse.lineItems, item => {
       const frequency = item.rate.recurrence.display
-      const itemConfig = omit(item.itemfields, ['self', 'links'])
+      //  Changed the 'itemfields' property to 'configuration' with in the item object.
+      const itemConfig = omit(item.configuration, ['self', 'links'])
+      //  Based on EP 8.1 JSON Object item config properties are changed to uppercase
       const giftStartDate = frequency !== 'Single'
-        ? startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null
+        ? startMonth(itemConfig['RECURRING-DAY-OF-MONTH'], itemConfig['RECURRING-START-MONTH'], nextDrawDate) : null
       const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
       let designationType
@@ -96,13 +99,13 @@ class Cart {
         orgId: orgId,
         displayName: item.itemDefinition['display-name'],
         designationType: designationType,
-        price: item.rate.cost.display,
+        price: item.rate.cost[0].display, // cost object was changed to array
         priceWithFees: item.rate.cost['display-with-fees'],
         config: itemConfig,
         frequency: frequency,
-        amount: item.rate.cost.amount,
+        amount: item.rate.cost[0].amount, // cost object was changed to array
         amountWithFees: item.rate.cost['amount-with-fees'],
-        designationNumber: item.itemCode['product-code'],
+        designationNumber: item.item._offer[0]._code[0]['code'], // product code is fetched from offer resource
         productUri: item.item.self.uri,
         giftStartDate: giftStartDate,
         giftStartDateDaysFromNow: giftStartDateDaysFromNow,
@@ -171,9 +174,25 @@ class Cart {
    * @private
    */
   _addItem (uri, data) {
+    const obj = {
+      ...data
+    }
+    const res = {}
+    //  Converted payload keys lowercase to uppercase and converted format as per API request
+    for (const [key, value] of Object.entries(obj)) {
+      res[key.toUpperCase()] = value
+    }
+    delete res['QUANTITY']
+    const payLoad = {
+      configuration: {
+        ...res
+      },
+      quantity: data.quantity
+    }
+
     return this.cortexApiService.post({
-      path: ['itemfieldslineitem', uri],
-      data: data,
+      path: uri,
+      data: payLoad,
       followLocation: true
     })
   }
