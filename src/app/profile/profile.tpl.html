@@ -152,6 +152,17 @@
                         </div>
                       </form>
 
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <button
+                            class="btn btn-primary btn-md pull-right"
+                            ng-if="$ctrl.profilePKey"
+                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)">
+                            <translate>Email Preferences</translate>
+                          </button>
+                        </div>
+                      </div>
+
                       <form name="$ctrl.spouseEmailForm" novalidate ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.hasSpouse || $ctrl.addingSpouse)">
                         <div class="form-group" ng-class="{'has-error': ($ctrl.spouseEmailForm.spouseEmail | showErrors)}">
                           <label translate>
@@ -169,6 +180,17 @@
                           </div>
                         </div>
                       </form>
+
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <button
+                            class="btn btn-primary btn-md pull-right"
+                            ng-if="$ctrl.spousePKey"
+                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)">
+                            <translate>Email Preferences</translate>
+                          </button>
+                        </div>
+                      </div>
                     </div>
 
                     <!--Phone Numbers-->
