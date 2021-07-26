@@ -148,6 +148,10 @@ class Step1Controller {
       if (details.email) {
         requests.push(this.orderService.addEmail(details.email, details.emailFormUri))
       }
+      if (this.radioStationData) {
+        this.orderService.storeRadioStationData(this.radioStationData)
+      }
+
       Observable.forkJoin(requests)
         .subscribe(() => {
           this.onSubmit({ success: true })
