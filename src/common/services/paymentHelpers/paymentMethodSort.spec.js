@@ -3,35 +3,35 @@ import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort
 describe('paymentMethodSort', () => {
   const checkingAccount1 = {
     self: {
-      type: 'elasticpath.bankaccounts.bank-account'
+      type: 'paymentinstruments.payment-instrument'
     },
     'account-type': 'Checking',
     'bank-name': 'First Bank'
   }
   const checkingAccount2 = {
     self: {
-      type: 'elasticpath.bankaccounts.bank-account'
+      type: 'paymentinstruments.payment-instrument'
     },
     'account-type': 'Checking',
     'bank-name': 'Second Bank'
   }
   const savingsAccount1 = {
     self: {
-      type: 'elasticpath.bankaccounts.bank-account'
+      type: 'paymentinstruments.payment-instrument'
     },
     'account-type': 'Savings',
     'bank-name': 'Third Bank'
   }
   const savingsAccount2 = {
     self: {
-      type: 'elasticpath.bankaccounts.bank-account'
+      type: 'paymentinstruments.payment-instrument'
     },
     'account-type': 'Savings',
     'bank-name': 'Third Bank'
   }
   const creditCard1 = {
     self: {
-      type: 'cru.creditcards.named-credit-card'
+      type: 'paymentinstruments.payment-instrument'
     },
     'card-type': 'Visa',
     'expiry-month': '11',
@@ -39,7 +39,7 @@ describe('paymentMethodSort', () => {
   }
   const creditCard2 = {
     self: {
-      type: 'cru.creditcards.named-credit-card'
+      type: 'paymentinstruments.payment-instrument'
     },
     'card-type': 'Visa',
     'expiry-month': '12',
@@ -47,7 +47,7 @@ describe('paymentMethodSort', () => {
   }
   const creditCard3 = {
     self: {
-      type: 'cru.creditcards.named-credit-card'
+      type: 'paymentinstruments.payment-instrument'
     },
     'card-type': 'Visa',
     'expiry-month': '12',

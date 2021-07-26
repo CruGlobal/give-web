@@ -35,7 +35,7 @@ class CortexApi {
       config.params.zoom = this.hateoasHelperService.serializeZoom(config.zoom)
     }
     if (config.followLocation) {
-      config.params.followLocation = true
+      config.params.FollowLocation = true
     }
     if (!config.cache && this.envService.read('isBrandedCheckout')) {
       config.params.nocache = new Date().getTime()

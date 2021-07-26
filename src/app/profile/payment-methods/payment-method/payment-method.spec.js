@@ -40,7 +40,7 @@ describe('PaymentMethodComponent', function () {
       donations: []
     },
     self: {
-      type: 'cru.creditcards.named-credit-card',
+      type: 'paymentinstruments.payment-instrument',
       uri: ''
     }
   }
@@ -53,7 +53,7 @@ describe('PaymentMethodComponent', function () {
       donations: []
     },
     self: {
-      type: 'elasticpath.bankaccounts.bank-account'
+      type: 'paymentinstruments.payment-instrument'
     }
   }
   var uibModal = { open: jest.fn(fakeModal), close: jest.fn() }
