@@ -2,6 +2,7 @@ import angular from 'angular'
 
 import checkoutStep3 from 'app/checkout/step-3/step-3.component'
 import cartService from 'common/services/api/cart.service'
+import orderService from '../../../common/services/api/order.service'
 
 import template from './branded-checkout-step-2.tpl.html'
 
@@ -9,13 +10,15 @@ const componentName = 'brandedCheckoutStep2'
 
 class BrandedCheckoutStep2Controller {
   /* @ngInject */
-  constructor ($log, cartService) {
+  constructor ($log, cartService, orderService) {
     this.$log = $log
     this.cartService = cartService
+    this.orderService = orderService
   }
 
   $onInit () {
     this.loadCart()
+    this.loadRadioStation()
   }
 
   loadCart () {
@@ -30,6 +33,10 @@ class BrandedCheckoutStep2Controller {
       )
   }
 
+  loadRadioStation () {
+    this.radioStationName = this.orderService.retrieveRadioStationName()
+  }
+
   changeStep (newStep) {
     if (newStep === 'thankYou') {
       this.next()
@@ -42,7 +49,8 @@ class BrandedCheckoutStep2Controller {
 export default angular
   .module(componentName, [
     checkoutStep3.name,
-    cartService.name
+    cartService.name,
+    orderService.name
   ])
   .component(componentName, {
     controller: BrandedCheckoutStep2Controller,
