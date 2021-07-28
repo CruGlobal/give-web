@@ -64,7 +64,7 @@ describe('order service', () => {
 
       //
       const expectedDonorDetails = omit(donorDetailsResponseZoomMapped.donorDetails, 'mailing-address')
-      expectedDonorDetails.mailingAddress = formatAddressForTemplate(donorDetailsResponseZoomMapped.donorDetails['mailing-address'])
+      expectedDonorDetails.mailingAddress = formatAddressForTemplate(donorDetailsResponseZoomMapped.donorDetails['mailing-address'].address)
       expectedDonorDetails.email = donorDetailsResponseZoomMapped.email.email
       expectedDonorDetails.emailFormUri = donorDetailsResponseZoomMapped.emailForm.links[0].uri
 
@@ -120,12 +120,14 @@ describe('order service', () => {
             href: 'https://give-stage2.cru.org/cortex/donordetails/orders/crugive/mjstoztgmqydaljrmeytqljumm3dmljymnrdallbhfsdqnbrmq2wimrqgu='
           },
           'mailing-address': {
-            'country-name': 'US',
-            'street-address': '123 First St',
-            'extended-address': 'Apt 123',
-            locality: 'Sacramento',
-            'postal-code': '12345',
-            region: 'CA'
+            address: {
+              'country-name': 'US',
+              'street-address': '123 First St',
+              'extended-address': 'Apt 123',
+              locality: 'Sacramento',
+              'postal-code': '12345',
+              region: 'CA'
+            }
           },
           otherStuff: 'is also here'
         }

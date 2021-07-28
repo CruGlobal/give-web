@@ -48,7 +48,7 @@ class Order {
         let donorDetails = { name: {}, mailingAddress: {} }
         if (data.donorDetails) {
           donorDetails = data.donorDetails
-          donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'])
+          donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'].address)
           delete donorDetails['mailing-address']
         }
 
@@ -67,7 +67,7 @@ class Order {
   updateDonorDetails (details) {
     this.analyticsFactory.setDonorDetails(details)
     details = angular.copy(details)
-    details['mailing-address'] = formatAddressForCortex(details.mailingAddress)
+    details['mailing-address'] = { address: formatAddressForCortex(details.mailingAddress) }
     delete details.mailingAddress
 
     return this.cortexApiService.put({
