@@ -18,13 +18,24 @@ import brandedCheckoutComponent from '../branded/branded-checkout.component'
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component'
 import receiptsComponent from '../profile/receipts/receipts.component'
 
+import sessionService from 'common/services/session/session.service'
+
 import template from './main.tpl.html'
 
 const componentName = 'main'
 
 class MainController {
   /* @ngInject */
-  constructor () /* eslint-disable-line no-useless-constructor */ { }
+  constructor ($window, sessionService) {
+    this.$window = $window
+    this.sessionService = sessionService
+  }
+
+  signOut () {
+    this.sessionService.signOut().subscribe(() => {
+      this.$window.location = '/cart.html'
+    })
+  }
 }
 
 const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvider, $urlRouterProvider) {
@@ -93,6 +104,7 @@ export default angular
     paymentMethodsComponent.name,
     receiptsComponent.name,
     brandedCheckoutComponent.name,
+    sessionService.name,
     'ui.router'
   ])
   .config(routingConfig)

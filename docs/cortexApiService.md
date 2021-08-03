@@ -186,11 +186,13 @@ This will return: (the `rawData` key shows what the original response looked lik
     "donorDetails": {
         "donor-type": "Household",
         "mailing-address": {
-            "country-name": "US",
-            "locality": "sdag",
-            "postal-code": "12423",
-            "region": "AR",
-            "street-address": "dsfg"
+            address: {
+                "country-name": "US",
+                "locality": "sdag",
+                "postal-code": "12423",
+                "region": "AR",
+                "street-address": "dsfg"
+            }
         },
         "name": {
             "family-name": "Lname",
@@ -280,11 +282,13 @@ This will return: (the `rawData` key shows what the original response looked lik
             {
                 "donor-type": "Household",
                 "mailing-address": {
-                    "country-name": "US",
-                    "locality": "sdag",
-                    "postal-code": "12423",
-                    "region": "AR",
-                    "street-address": "dsfg"
+                    address: {
+                        "country-name": "US",
+                        "locality": "sdag",
+                        "postal-code": "12423",
+                        "region": "AR",
+                        "street-address": "dsfg"
+                    }
                 },
                 "name": {
                     "family-name": "Lname",
