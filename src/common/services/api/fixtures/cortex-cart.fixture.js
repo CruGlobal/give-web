@@ -187,21 +187,6 @@ export default {
           'display-name': 'Steve Peck'
         }]
       }],
-      _itemfields: [{
-        self: {
-          type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
-          uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
-          href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
-        },
-        links: [],
-        amount: 50,
-        'amount-with-fees': 51.2,
-        'campaign-code': '',
-        'donation-services-comments': '',
-        'recipient-comments': '',
-        'recurring-day-of-month': '',
-        'recurring-start-month': ''
-      }],
       _rate: [{
         self: {
           type: 'elasticpath.extendedrates.extended-rate',
@@ -234,6 +219,15 @@ export default {
         }],
         cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }]
       }],
+      configuration: {
+        AMOUNT: '50',
+        AMOUNT_WITH_FEES: '51.2',
+        CAMPAIGN_CODE: '',
+        DONATION_SERVICES_COMMENTS: '',
+        RECIPIENT_COMMENTS: '',
+        RECURRING_DAY_OF_MONTH: '',
+        RECURRING_START_MONTH: ''
+      },
       quantity: 1
     }, {
       self: {
@@ -383,21 +377,6 @@ export default {
           'display-name': 'Courtney Evans'
         }]
       }],
-      _itemfields: [{
-        self: {
-          type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
-          uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
-          href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
-        },
-        links: [],
-        amount: 50,
-        'amount-with-fees': 51.2,
-        'campaign-code': '',
-        'donation-services-comments': '',
-        'recipient-comments': '',
-        'recurring-day-of-month': '09',
-        'recurring-start-month': '10'
-      }],
       _rate: [{
         self: {
           type: 'elasticpath.extendedrates.extended-rate',
@@ -431,6 +410,15 @@ export default {
         }],
         cost: [{ amount: 0.00, 'amount-with-fees': 0.00, currency: 'USD', display: '$0.00', 'display-with-fees': '$0.00' }]
       }],
+      configuration: {
+        AMOUNT: 50,
+        AMOUNT_WITH_FEES: 51.2,
+        CAMPAIGN_CODE: '',
+        DONATION_SERVICES_COMMENTS: '',
+        RECIPIENT_COMMENTS: '',
+        RECURRING_DAY_OF_MONTH: '9',
+        RECURRING_START_MONTH: '10'
+      },
       quantity: 1
     }, {
       self: {
@@ -580,21 +568,6 @@ export default {
           'display-name': 'Addison Lyons'
         }]
       }],
-      _itemfields: [{
-        self: {
-          type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
-          uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
-          href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
-        },
-        links: [],
-        amount: 50,
-        'amount-with-fees': 51.2,
-        'campaign-code': '',
-        'donation-services-comments': '',
-        'recipient-comments': '',
-        'recurring-day-of-month': '09',
-        'recurring-start-month': '10'
-      }],
       _rate: [{
         self: {
           type: 'elasticpath.extendedrates.extended-rate',
@@ -628,6 +601,15 @@ export default {
         }],
         cost: [{ amount: 0.00, 'amount-with-fees': 0.00, currency: 'USD', display: '$0.00', 'display-with-fees': '$0.00' }]
       }],
+      configuration: {
+        AMOUNT: 50,
+        AMOUNT_WITH_FEES: 51.2,
+        CAMPAIGN_CODE: '',
+        DONATION_SERVICES_COMMENTS: '',
+        RECIPIENT_COMMENTS: '',
+        RECURRING_DAY_OF_MONTH: '9',
+        RECURRING_START_MONTH: '10'
+      },
       quantity: 1
     }]
   }],

@@ -116,8 +116,6 @@ describe('cart service', () => {
       transformedCartResponse.rateTotals[0].cost['display-with-fees'] = '$52.23'
       // Based on 8.1 JSON response added the following codes
       transformedCartResponse.lineItems = transformedCartResponse.lineItems.map((item, index) =>{
-        item.itemfields['RECURRING-DAY-OF-MONTH'] = item.itemfields['recurring-day-of-month']
-        item.itemfields['RECURRING-START-MONTH'] = item.itemfields['recurring-start-month']
         item.rate = {...item.rate, cost : [{display : 10}]}
         // Based on EP 8.1 JSON Object, added mock values of designation number for first three items. 
         if(index === 0){
@@ -129,7 +127,7 @@ describe('cart service', () => {
         if(index === 2){
           item.item = {...item.item, _offer : [{_code : [{code: '5541091'}]}]} 
         }
-        return {...item, configuration:item.itemfields}
+        return {...item}
       })
     })
 
