@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.carts.cart',
-    uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:itemfields,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,total:cost',
-    href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:itemfields,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,total:cost'
+    uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:item:offer:code,lineitems:element:itemfields,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,total:cost',
+    href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:item:offer:code,lineitems:element:itemfields,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,total:cost'
   },
   links: [{
     rel: 'lineitems',
@@ -71,6 +71,11 @@ export default {
         type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
         uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
         href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
+      }, {
+        rel: 'offer',
+        type: 'offers.offer',
+        uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+        href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
       }, {
         rel: 'price',
         rev: 'lineitem',
@@ -185,6 +190,24 @@ export default {
             value: 'false'
           }, { 'display-name': 'Status', 'display-value': 'Active', name: 'status', value: 'Active' }],
           'display-name': 'Steve Peck'
+        }],
+        _offer: [{
+          _code: [{
+            self: {
+              type: 'offers.code-for-offer',
+              uri: '/offers/code/offers/crugive/qgqvbjzqgu2tanjrga=',
+              href: 'https://give-stage2.cru.org/cortex/offers/code/offers/crugive/qgqvbjzqgu2tanjrga='
+            },
+            messages: [],
+            links: [{
+              rel: 'offer',
+              rev: 'code',
+              type: 'offers.offer',
+              uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+              href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
+            }],
+            code: '0354433'
+          }]
         }]
       }],
       _rate: [{
@@ -261,6 +284,11 @@ export default {
         type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
         uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
         href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
+      }, {
+        rel: 'offer',
+        type: 'offers.offer',
+        uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+        href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
       }, {
         rel: 'price',
         rev: 'lineitem',
@@ -375,6 +403,24 @@ export default {
             value: 'false'
           }, { 'display-name': 'Status', 'display-value': 'Active', name: 'status', value: 'Active' }],
           'display-name': 'Courtney Evans'
+        }],
+        _offer: [{
+          _code: [{
+            self: {
+              type: 'offers.code-for-offer',
+              uri: '/offers/code/offers/crugive/qgqvbjzqgu2tanjrga=',
+              href: 'https://give-stage2.cru.org/cortex/offers/code/offers/crugive/qgqvbjzqgu2tanjrga='
+            },
+            messages: [],
+            links: [{
+              rel: 'offer',
+              rev: 'code',
+              type: 'offers.offer',
+              uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+              href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
+            }],
+            code: '0617368'
+          }]
         }]
       }],
       _rate: [{
@@ -452,6 +498,11 @@ export default {
         type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
         uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
         href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
+      }, {
+        rel: 'offer',
+        type: 'offers.offer',
+        uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+        href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
       }, {
         rel: 'price',
         rev: 'lineitem',
@@ -566,6 +617,24 @@ export default {
             value: 'false'
           }, { 'display-name': 'Status', 'display-value': 'Active', name: 'status', value: 'Active' }],
           'display-name': 'Addison Lyons'
+        }],
+        _offer: [{
+          _code: [{
+            self: {
+              type: 'offers.code-for-offer',
+              uri: '/offers/code/offers/crugive/qgqvbjzqgu2tanjrga=',
+              href: 'https://give-stage2.cru.org/cortex/offers/code/offers/crugive/qgqvbjzqgu2tanjrga='
+            },
+            messages: [],
+            links: [{
+              rel: 'offer',
+              rev: 'code',
+              type: 'offers.offer',
+              uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+              href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
+            }],
+            code: '5541091'
+          }]
         }]
       }],
       _rate: [{
