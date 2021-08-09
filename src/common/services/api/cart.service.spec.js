@@ -114,18 +114,12 @@ describe('cart service', () => {
       transformedCartResponse.rateTotals[0].cost['amount-with-fees'] = 52.23
       transformedCartResponse.rateTotals[0].cost.display = '$51.00'
       transformedCartResponse.rateTotals[0].cost['display-with-fees'] = '$52.23'
-      // Based on 8.1 JSON response added the following codes
-      transformedCartResponse.lineItems = transformedCartResponse.lineItems.map((item) => {
-        item.rate = { ...item.rate, cost: [{ display: 10 }] }
-        return { ...item }
-      })
     })
 
     it('should get cart, parse response, and show most recent items first', () => {
       const data = self.cartService.handleCartResponse(transformedCartResponse, '2016-10-01')
       // verify response
       expect(data.items.length).toEqual(3)
-      // Based on 8.1 JSON response changed the designationNumber value changed for item multiple objects
       expect(data.items[0].designationNumber).toEqual('5541091')
       expect(data.items[1].designationNumber).toEqual('0617368')
       expect(data.items[2].designationNumber).toEqual('0354433')

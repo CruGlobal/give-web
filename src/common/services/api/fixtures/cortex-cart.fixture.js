@@ -222,7 +222,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
         }],
-        cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
+        cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 Single',
         recurrence: { display: 'Single', interval: 'NA' }
       }],
@@ -434,7 +434,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
         }],
-        cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
+        cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 Annually',
         recurrence: { display: 'Annually', interval: 'ANNUAL' },
         'start-date': { 'display-value': '2016-12-09', value: 1481241600000 }
@@ -647,7 +647,7 @@ export default {
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         }],
-        cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
+        cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 Quarterly',
         recurrence: { display: 'Quarterly', interval: 'QUARTERLY' },
         'start-date': { 'display-value': '2016-12-09', value: 1481241600000 }
