@@ -122,25 +122,24 @@ export default {
       }],
       _item: [{
         self: {
-          type: 'elasticpath.extlookups.product-code',
-          uri: '/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-          href: 'https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+          type: 'items.item',
+          uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
+          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
         },
         _code: [{
           self: {
-            type: 'elasticpath.extlookups.product-code',
-            uri: '/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-            href: 'https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+            type: 'items.code-for-item',
+            uri: '/items/code/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
+            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
           },
           links: [{
             rel: 'item',
             rev: 'code',
-            type: 'elasticpath.items.item',
+            type: 'items.item',
             uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
             href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
           }],
-          code: '0354433',
-          'product-code': '0354433'
+          code: '0354433'
         }],
         _definition: [{
           self: {
@@ -335,25 +334,24 @@ export default {
       }],
       _item: [{
         self: {
-          type: 'elasticpath.extlookups.product-code',
-          uri: '/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-          href: 'https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+          type: 'items.item',
+          uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
+          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
         },
         _code: [{
           self: {
-            type: 'elasticpath.extlookups.product-code',
-            uri: '/lookups/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
-            href: 'https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+            type: 'items.code-for-item',
+            uri: '/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           },
           links: [{
             rel: 'item',
             rev: 'code',
-            type: 'elasticpath.items.item',
+            type: 'items.item',
             uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
             href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           }],
-          code: '0617368_annual',
-          'product-code': '0617368'
+          code: '0617368_annual'
         }],
         _definition: [{
           self: {
@@ -549,25 +547,24 @@ export default {
       }],
       _item: [{
         self: {
-          type: 'elasticpath.extlookups.product-code',
-          uri: '/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-          href: 'https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+          type: 'items.item',
+          uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
+          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
         },
         _code: [{
           self: {
-            type: 'elasticpath.extlookups.product-code',
-            uri: '/lookups/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
-            href: 'https://give-stage2.cru.org/cortex/lookups/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
+            type: 'items.code-for-item',
+            uri: '/items/code/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
+            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
           },
           links: [{
             rel: 'item',
             rev: 'code',
-            type: 'elasticpath.items.item',
+            type: 'items.item',
             uri: '/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
             href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
           }],
-          code: '5541091_quarterly',
-          'product-code': '5541091'
+          code: '5541091_quarterly'
         }],
         _definition: [{
           self: {
