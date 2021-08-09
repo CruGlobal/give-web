@@ -1,120 +1,130 @@
 export default {
   self: {
-    type: 'elasticpath.carts.cart',
-    uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:item:offer:code,lineitems:element:itemfields,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,total:cost',
-    href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:item:offer:code,lineitems:element:itemfields,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,total:cost'
+    type: 'carts.cart',
+    uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:itemfields,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,total:cost',
+    href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:itemfields,lineitems:element:rate,lineitems:element:total,ratetotals:element,total,total:cost'
   },
+  messages: [],
   links: [{
     rel: 'lineitems',
     rev: 'cart',
-    type: 'elasticpath.collections.links',
+    type: 'carts.line-items',
     uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems',
     href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems'
   }, {
+    rel: 'additemstocartform',
+    type: 'carts.add-items-to-cart-form',
+    uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/form',
+    href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/form'
+  }, {
+    rel: 'descriptor',
+    type: 'carts.cart-descriptor',
+    uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/descriptor',
+    href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/descriptor'
+  }, {
     rel: 'discount',
-    type: 'elasticpath.discounts.discount',
+    type: 'discounts.discount-for-cart',
     uri: '/discounts/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=',
     href: 'https://give-stage2.cru.org/cortex/discounts/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu='
   }, {
     rel: 'order',
     rev: 'cart',
-    type: 'elasticpath.orders.order',
+    type: 'orders.order',
     uri: '/orders/crugive/g5qtmyzzmmzdqllega3gkljugi2ggllbgi4daljtgntdizbqmvtdeyjymu=',
     href: 'https://give-stage2.cru.org/cortex/orders/crugive/g5qtmyzzmmzdqllega3gkljugi2ggllbgi4daljtgntdizbqmvtdeyjymu='
   }, {
     rel: 'appliedpromotions',
-    type: 'elasticpath.collections.links',
+    rev: 'cart',
+    type: 'promotions.applied-promotions-for-cart',
     uri: '/promotions/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/applied',
     href: 'https://give-stage2.cru.org/cortex/promotions/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/applied'
   }, {
     rel: 'ratetotals',
-    type: 'elasticpath.ratetotals.rate-total',
+    type: 'ratetotals.ratetotals-for-cart',
     uri: '/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=',
     href: 'https://give-stage2.cru.org/cortex/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu='
   }, {
     rel: 'total',
     rev: 'cart',
-    type: 'elasticpath.totals.total',
+    type: 'totals.cart-total',
     uri: '/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=',
     href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu='
   }],
   _lineitems: [{
     _element: [{
       self: {
-        type: 'elasticpath.carts.line-item',
+        type: 'carts.line-item',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
       },
+      messages: [],
       links: [{
         rel: 'availability',
         rev: 'lineitem',
-        type: 'elasticpath.availabilities.availability',
+        type: 'availabilities.availability-for-cart-line-item',
         uri: '/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
         href: 'https://give-stage2.cru.org/cortex/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
       }, {
+        rel: 'dependentlineitems',
+        type: 'carts.dependent-line-items',
+        uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=/dependents',
+        href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=/dependents'
+      }, {
         rel: 'item',
-        type: 'elasticpath.items.item',
-        uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-        href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+        type: 'items.item',
+        uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+        href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
       }, {
         rel: 'cart',
-        type: 'elasticpath.carts.cart',
+        type: 'carts.cart',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu='
       }, {
         rel: 'list',
-        type: 'elasticpath.collections.links',
+        type: 'carts.line-items',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems'
       }, {
-        rel: 'itemfields',
-        type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
-        uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
-        href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
-      }, {
-        rel: 'offer',
-        type: 'offers.offer',
-        uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
-        href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
-      }, {
         rel: 'price',
         rev: 'lineitem',
-        type: 'elasticpath.prices.cart-line-item-price',
+        type: 'prices.price-for-cart-line-item',
         uri: '/prices/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
         href: 'https://give-stage2.cru.org/cortex/prices/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
       }, {
         rel: 'appliedpromotions',
-        type: 'elasticpath.collections.links',
+        rev: 'lineitem',
+        type: 'promotions.applied-promotions-for-cart-line-item',
         uri: '/promotions/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=/applied',
         href: 'https://give-stage2.cru.org/cortex/promotions/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=/applied'
       }, {
         rel: 'rate',
         rev: 'lineitem',
-        type: 'elasticpath.rates.rate',
-        uri: '/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
-        href: 'https://give-stage2.cru.org/cortex/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
+        type: 'rate.resource-rates',
+        uri: '/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
+        href: 'https://give-stage2.cru.org/cortex/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
       }, {
         rel: 'total',
         rev: 'lineitem',
-        type: 'elasticpath.totals.total',
+        type: 'totals.cart-line-item-total',
         uri: '/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
         href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
       }, {
         rel: 'movetowishlistform',
-        type: 'elasticpath.wishlists.line-item',
+        type: 'wishlists.move-to-wishlist-form',
         uri: '/wishlists/crugive/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=/form',
         href: 'https://give-stage2.cru.org/cortex/wishlists/crugive/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=/form'
       }],
       _availability: [{
         self: {
-          type: 'elasticpath.availabilities.availability',
+          type: 'availabilities.availability-for-cart-line-item',
           uri: '/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
           href: 'https://give-stage2.cru.org/cortex/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
         },
+        messages: [],
         links: [{
           rel: 'lineitem',
           rev: 'availability',
-          type: 'elasticpath.carts.line-item',
+          type: 'carts.line-item',
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
         }],
@@ -123,56 +133,119 @@ export default {
       _item: [{
         self: {
           type: 'items.item',
-          uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+          uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
         },
+        messages: [],
+        links: [{
+          rel: 'availability',
+          rev: 'item',
+          type: 'availabilities.availability-for-item',
+          uri: '/availabilities/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/availabilities/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'addtocartform',
+          type: 'carts.add-to-default-cart-form',
+          uri: '/carts/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/form',
+          href: 'https://give-stage2.cru.org/cortex/carts/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/form'
+        }, {
+          rel: 'cartmemberships',
+          type: 'carts.read-cart-memberships',
+          uri: '/carts/memberships/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/carts/memberships/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'definition',
+          rev: 'item',
+          type: 'itemdefinitions.item-definition',
+          uri: '/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'code',
+          rev: 'item',
+          type: 'items.code-for-item',
+          uri: '/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'offer',
+          type: 'offers.offer',
+          uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+          href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
+        }, {
+          rel: 'price',
+          rev: 'item',
+          type: 'prices.price-for-item',
+          uri: '/prices/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/prices/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'appliedpromotions',
+          rev: 'item',
+          type: 'promotions.applied-promotions-for-item',
+          uri: '/promotions/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/applied',
+          href: 'https://give-stage2.cru.org/cortex/promotions/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/applied'
+        }, {
+          rel: 'recommendations',
+          type: 'recommendations.item-recommendation-groups',
+          uri: '/recommendations/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/recommendations/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'addtowishlistform',
+          type: 'wishlists.add-item-to-wishlist-form',
+          uri: '/wishlists/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/form',
+          href: 'https://give-stage2.cru.org/cortex/wishlists/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/form'
+        }, {
+          rel: 'wishlistmemberships',
+          type: 'wishlists.read-wishlist-memberships',
+          uri: '/wishlists/memberships/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/wishlists/memberships/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }],
         _code: [{
           self: {
             type: 'items.code-for-item',
-            uri: '/items/code/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+            uri: '/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           },
+          messages: [],
           links: [{
             rel: 'item',
             rev: 'code',
             type: 'items.item',
-            uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-            href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+            uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+            href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           }],
           code: '0354433'
         }],
         _definition: [{
           self: {
-            type: 'elasticpath.itemdefinitions.item-definition',
-            uri: '/itemdefinitions/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-            href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+            type: 'itemdefinitions.item-definition',
+            uri: '/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+            href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           },
+          messages: [],
           links: [{
             rel: 'item',
             rev: 'definition',
-            type: 'elasticpath.items.item',
-            uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-            href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+            type: 'items.item',
+            uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+            href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           }, {
             rel: 'options',
             rev: 'definition',
-            type: 'elasticpath.collections.links',
-            uri: '/itemdefinitions/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options',
-            href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmfpwpqvqli7teksyhu=/options'
-          }, {
-            rel: 'assets',
-            rev: 'definition',
-            type: 'elasticpath.collections.links',
-            uri: '/assets/itemdefinitions/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-            href: 'https://give-stage2.cru.org/cortex/assets/itemdefinitions/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+            type: 'itemdefinitions.item-definition-options',
+            uri: '/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/options',
+            href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/options'
           }, {
             rel: 'fromprice',
             rev: 'definition',
-            type: 'elasticpath.prices.price-range',
-            uri: '/prices/itemdefinitions/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-            href: 'https://give-stage2.cru.org/cortex/prices/itemdefinitions/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+            type: 'prices.price-for-itemdefinition',
+            uri: '/prices/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+            href: 'https://give-stage2.cru.org/cortex/prices/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           }],
           details: [{
+            'display-name': 'Designation Email',
+            'display-value': '0354433@test.com',
+            name: 'designation_email',
+            value: '0354433@test.com'
+          }, {
             'display-name': 'Designation Type',
             'display-value': 'Staff',
             name: 'designation_type',
@@ -211,31 +284,27 @@ export default {
       }],
       _rate: [{
         self: {
-          type: 'elasticpath.extendedrates.extended-rate',
-          uri: '/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
-          href: 'https://give-stage2.cru.org/cortex/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
+          type: 'rate.resource-rates',
+          uri: '/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
+          href: 'https://give-stage2.cru.org/cortex/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
         },
-        links: [{
-          rel: 'lineitem',
-          rev: 'rate',
-          type: 'elasticpath.carts.line-item',
-          uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
-          href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
-        }],
+        messages: [],
+        links: [],
         cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 Single',
         recurrence: { display: 'Single', interval: 'NA' }
       }],
       _total: [{
         self: {
-          type: 'elasticpath.totals.total',
+          type: 'totals.cart-line-item-total',
           uri: '/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
           href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
         },
+        messages: [],
         links: [{
           rel: 'lineitem',
           rev: 'total',
-          type: 'elasticpath.carts.line-item',
+          type: 'carts.line-item',
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/gm4gcmrrmnsdcljqmfsdeljumiydcljzgqytaljug5rtknzzmfrtonjvmy='
         }],
@@ -253,80 +322,76 @@ export default {
       quantity: 1
     }, {
       self: {
-        type: 'elasticpath.carts.line-item',
+        type: 'carts.line-item',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
       },
       links: [{
         rel: 'availability',
         rev: 'lineitem',
-        type: 'elasticpath.availabilities.availability',
+        type: 'availabilities.availability-for-cart-line-item',
         uri: '/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
         href: 'https://give-stage2.cru.org/cortex/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
       }, {
+        rel: 'dependentlineitems',
+        type: 'carts.dependent-line-items',
+        uri: '/carts/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=/dependents',
+        href: 'https://give-stage2.cru.org/cortex/carts/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=/dependents'
+      }, {
         rel: 'item',
-        type: 'elasticpath.items.item',
+        type: 'items.item',
         uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
         href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
       }, {
         rel: 'cart',
-        type: 'elasticpath.carts.cart',
+        type: 'carts.cart',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu='
       }, {
         rel: 'list',
-        type: 'elasticpath.collections.links',
+        type: 'carts.line-items',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems'
       }, {
-        rel: 'itemfields',
-        type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
-        uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
-        href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
-      }, {
-        rel: 'offer',
-        type: 'offers.offer',
-        uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
-        href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
-      }, {
         rel: 'price',
         rev: 'lineitem',
-        type: 'elasticpath.prices.cart-line-item-price',
+        type: 'prices.price-for-cart-line-item',
         uri: '/prices/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
         href: 'https://give-stage2.cru.org/cortex/prices/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
       }, {
         rel: 'appliedpromotions',
-        type: 'elasticpath.collections.links',
+        type: 'promotions.applied-promotions-for-cart-line-item',
         uri: '/promotions/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=/applied',
         href: 'https://give-stage2.cru.org/cortex/promotions/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=/applied'
       }, {
         rel: 'rate',
         rev: 'lineitem',
-        type: 'elasticpath.rates.rate',
-        uri: '/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
-        href: 'https://give-stage2.cru.org/cortex/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
+        type: 'rate.resource-rates',
+        uri: '/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
+        href: 'https://give-stage2.cru.org/cortex/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
       }, {
         rel: 'total',
         rev: 'lineitem',
-        type: 'elasticpath.totals.total',
+        type: 'totals.cart-line-item-total',
         uri: '/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
         href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
       }, {
         rel: 'movetowishlistform',
-        type: 'elasticpath.wishlists.line-item',
+        type: 'wishlists.move-to-wishlist-form',
         uri: '/wishlists/crugive/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=/form',
         href: 'https://give-stage2.cru.org/cortex/wishlists/crugive/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=/form'
       }],
       _availability: [{
         self: {
-          type: 'elasticpath.availabilities.availability',
+          type: 'availabilities.availability-for-cart-line-item',
           uri: '/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
           href: 'https://give-stage2.cru.org/cortex/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
         },
+        messages: [],
         links: [{
           rel: 'lineitem',
           rev: 'availability',
-          type: 'elasticpath.carts.line-item',
+          type: 'carts.line-item',
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
         }],
@@ -335,15 +400,77 @@ export default {
       _item: [{
         self: {
           type: 'items.item',
-          uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+          uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
         },
+        links: [{
+          rel: 'availability',
+          rev: 'item',
+          type: 'availabilities.availability-for-item',
+          uri: '/availabilities/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/availabilities/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'addtocartform',
+          type: 'carts.add-to-default-cart-form',
+          uri: '/carts/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/form',
+          href: 'https://give-stage2.cru.org/cortex/carts/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/form'
+        }, {
+          rel: 'cartmemberships',
+          type: 'carts.read-cart-memberships',
+          uri: '/carts/memberships/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/carts/memberships/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'definition',
+          rev: 'item',
+          type: 'itemdefinitions.item-definition',
+          uri: '/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'code',
+          rev: 'item',
+          type: 'items.code-for-item',
+          uri: '/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'offer',
+          type: 'offers.offer',
+          uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+          href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
+        }, {
+          rel: 'price',
+          rev: 'item',
+          type: 'prices.price-for-item',
+          uri: '/prices/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/prices/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'appliedpromotions',
+          rev: 'item',
+          type: 'promotions.applied-promotions-for-item',
+          uri: '/promotions/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/applied',
+          href: 'https://give-stage2.cru.org/cortex/promotions/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/applied'
+        }, {
+          rel: 'recommendations',
+          type: 'recommendations.item-recommendation-groups',
+          uri: '/recommendations/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/recommendations/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }, {
+          rel: 'addtowishlistform',
+          type: 'wishlists.add-item-to-wishlist-form',
+          uri: '/wishlists/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/form',
+          href: 'https://give-stage2.cru.org/cortex/wishlists/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/form'
+        }, {
+          rel: 'wishlistmemberships',
+          type: 'wishlists.read-wishlist-memberships',
+          uri: '/wishlists/memberships/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/wishlists/memberships/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
+        }],
         _code: [{
           self: {
             type: 'items.code-for-item',
             uri: '/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
             href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           },
+          messages: [],
           links: [{
             rel: 'item',
             rev: 'code',
@@ -355,36 +482,36 @@ export default {
         }],
         _definition: [{
           self: {
-            type: 'elasticpath.itemdefinitions.item-definition',
+            type: 'itemdefinitions.item-definition',
             uri: '/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
             href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           },
+          messages: [],
           links: [{
             rel: 'item',
             rev: 'definition',
-            type: 'elasticpath.items.item',
+            type: 'items.item',
             uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
             href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           }, {
             rel: 'options',
             rev: 'definition',
-            type: 'elasticpath.collections.links',
+            type: 'itemdefinitions.item-definition-options',
             uri: '/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/options',
             href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=/options'
           }, {
-            rel: 'assets',
-            rev: 'definition',
-            type: 'elasticpath.collections.links',
-            uri: '/assets/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
-            href: 'https://give-stage2.cru.org/cortex/assets/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
-          }, {
             rel: 'fromprice',
             rev: 'definition',
-            type: 'elasticpath.prices.price-range',
+            type: 'prices.price-for-itemdefinition',
             uri: '/prices/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
             href: 'https://give-stage2.cru.org/cortex/prices/itemdefinitions/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
           }],
           details: [{
+            'display-name': 'Designation Email',
+            'display-value': '0617368@test.com',
+            name: 'designation_email',
+            value: '0617368@test.com'
+          }, {
             'display-name': 'Designation Type',
             'display-value': 'Staff',
             name: 'designation_type',
@@ -423,17 +550,12 @@ export default {
       }],
       _rate: [{
         self: {
-          type: 'elasticpath.extendedrates.extended-rate',
-          uri: '/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
-          href: 'https://give-stage2.cru.org/cortex/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
+          type: 'rate.resource-rates',
+          uri: '/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
+          href: 'https://give-stage2.cru.org/cortex/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
         },
-        links: [{
-          rel: 'lineitem',
-          rev: 'rate',
-          type: 'elasticpath.carts.line-item',
-          uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
-          href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
-        }],
+        messages: [],
+        links: [],
         cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 Annually',
         recurrence: { display: 'Annually', interval: 'ANNUAL' },
@@ -441,14 +563,15 @@ export default {
       }],
       _total: [{
         self: {
-          type: 'elasticpath.totals.total',
+          type: 'totals.cart-line-item-total',
           uri: '/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
           href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
         },
+        messages: [],
         links: [{
           rel: 'lineitem',
           rev: 'total',
-          type: 'elasticpath.carts.line-item',
+          type: 'carts.line-item',
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mm4genbwmm4dmljumm3dkljugmyggljzha4gcljtmnsgintggazdqndbga='
         }],
@@ -466,80 +589,77 @@ export default {
       quantity: 1
     }, {
       self: {
-        type: 'elasticpath.carts.line-item',
+        type: 'carts.line-item',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
       },
+      messages: [],
       links: [{
         rel: 'availability',
         rev: 'lineitem',
-        type: 'elasticpath.availabilities.availability',
+        type: 'availabilities.availability-for-cart-line-item',
         uri: '/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
         href: 'https://give-stage2.cru.org/cortex/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
       }, {
         rel: 'item',
-        type: 'elasticpath.items.item',
+        type: 'items.item',
         uri: '/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
         href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
       }, {
+        rel: 'dependentlineitems',
+        type: 'carts.dependent-line-items',
+        uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=/dependents',
+        href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=/dependents'
+      }, {
         rel: 'cart',
-        type: 'elasticpath.carts.cart',
+        type: 'carts.cart',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu='
       }, {
         rel: 'list',
-        type: 'elasticpath.collections.links',
+        type: 'carts.line-items',
         uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems',
         href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems'
       }, {
-        rel: 'itemfields',
-        type: 'elasticpath.itemfieldslineitem.item-fields-line-item',
-        uri: '/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
-        href: 'https://give-stage2.cru.org/cortex/itemfieldslineitem/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
-      }, {
-        rel: 'offer',
-        type: 'offers.offer',
-        uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
-        href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
-      }, {
         rel: 'price',
         rev: 'lineitem',
-        type: 'elasticpath.prices.cart-line-item-price',
+        type: 'prices.price-for-cart-line-item',
         uri: '/prices/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
         href: 'https://give-stage2.cru.org/cortex/prices/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
       }, {
         rel: 'appliedpromotions',
-        type: 'elasticpath.collections.links',
+        type: 'promotions.applied-promotions-for-cart-line-item',
         uri: '/promotions/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=/applied',
         href: 'https://give-stage2.cru.org/cortex/promotions/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=/applied'
       }, {
         rel: 'rate',
         rev: 'lineitem',
-        type: 'elasticpath.rates.rate',
-        uri: '/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
-        href: 'https://give-stage2.cru.org/cortex/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
+        type: 'rate.resource-rates',
+        uri: '/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
+        href: 'https://give-stage2.cru.org/cortex/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
       }, {
         rel: 'total',
         rev: 'lineitem',
-        type: 'elasticpath.totals.total',
+        type: 'totals.cart-line-item-total',
         uri: '/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
         href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
       }, {
         rel: 'movetowishlistform',
-        type: 'elasticpath.wishlists.line-item',
+        type: 'wishlists.move-to-wishlist-form',
         uri: '/wishlists/crugive/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=/form',
         href: 'https://give-stage2.cru.org/cortex/wishlists/crugive/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=/form'
       }],
       _availability: [{
         self: {
-          type: 'elasticpath.availabilities.availability',
+          type: 'availabilities.availability-for-cart-line-item',
           uri: '/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
           href: 'https://give-stage2.cru.org/cortex/availabilities/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         },
+        messages: [],
         links: [{
           rel: 'lineitem',
           rev: 'availability',
-          type: 'elasticpath.carts.line-item',
+          type: 'carts.line-item',
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         }],
@@ -548,15 +668,78 @@ export default {
       _item: [{
         self: {
           type: 'items.item',
-          uri: '/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
-          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmfpwpqvqli7teksyhu='
+          uri: '/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj=',
+          href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmhbyaz6cxnlea46cwdbky2odrru4fpk5ijitxqvj='
         },
+        messages: [],
+        links: [{
+          rel: 'availability',
+          rev: 'item',
+          type: 'availabilities.availability-for-item',
+          uri: '/availabilities/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
+          href: 'https://give-stage2.cru.org/cortex/availabilities/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
+        }, {
+          rel: 'addtocartform',
+          type: 'carts.add-to-default-cart-form',
+          uri: '/carts/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=/form',
+          href: 'https://give-stage2.cru.org/cortex/carts/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=/form'
+        }, {
+          rel: 'cartmemberships',
+          type: 'carts.read-cart-memberships',
+          uri: '/carts/memberships/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
+          href: 'https://give-stage2.cru.org/cortex/carts/memberships/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
+        }, {
+          rel: 'definition',
+          rev: 'item',
+          type: 'itemdefinitions.item-definition',
+          uri: '/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
+          href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
+        }, {
+          rel: 'code',
+          rev: 'item',
+          type: 'items.code-for-item',
+          uri: '/items/code/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
+          href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
+        }, {
+          rel: 'offer',
+          type: 'offers.offer',
+          uri: '/offers/crugive/qgqvbjzqgu2tanjrga=',
+          href: 'https://give-stage2.cru.org/cortex/offers/crugive/qgqvbjzqgu2tanjrga='
+        }, {
+          rel: 'price',
+          rev: 'item',
+          type: 'prices.price-for-item',
+          uri: '/prices/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
+          href: 'https://give-stage2.cru.org/cortex/prices/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
+        }, {
+          rel: 'appliedpromotions',
+          rev: 'item',
+          type: 'promotions.applied-promotions-for-item',
+          uri: '/promotions/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=/applied',
+          href: 'https://give-stage2.cru.org/cortex/promotions/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=/applied'
+        }, {
+          rel: 'recommendations',
+          type: 'recommendations.item-recommendation-groups',
+          uri: '/recommendations/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
+          href: 'https://give-stage2.cru.org/cortex/recommendations/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
+        }, {
+          rel: 'addtowishlistform',
+          type: 'wishlists.add-item-to-wishlist-form',
+          uri: '/wishlists/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=/form',
+          href: 'https://give-stage2.cru.org/cortex/wishlists/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=/form'
+        }, {
+          rel: 'wishlistmemberships',
+          type: 'wishlists.read-wishlist-memberships',
+          uri: '/wishlists/memberships/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
+          href: 'https://give-stage2.cru.org/cortex/wishlists/memberships/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
+        }],
         _code: [{
           self: {
             type: 'items.code-for-item',
             uri: '/items/code/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
             href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
           },
+          messages: [],
           links: [{
             rel: 'item',
             rev: 'code',
@@ -568,36 +751,36 @@ export default {
         }],
         _definition: [{
           self: {
-            type: 'elasticpath.itemdefinitions.item-definition',
+            type: 'itemdefinitions.item-definition',
             uri: '/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
             href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
           },
+          messages: [],
           links: [{
             rel: 'item',
             rev: 'definition',
-            type: 'elasticpath.items.item',
+            type: 'items.item',
             uri: '/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
             href: 'https://give-stage2.cru.org/cortex/items/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
           }, {
             rel: 'options',
             rev: 'definition',
-            type: 'elasticpath.collections.links',
+            type: 'itemdefinitions.item-definition-options',
             uri: '/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=/options',
             href: 'https://give-stage2.cru.org/cortex/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=/options'
           }, {
-            rel: 'assets',
-            rev: 'definition',
-            type: 'elasticpath.collections.links',
-            uri: '/assets/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
-            href: 'https://give-stage2.cru.org/cortex/assets/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
-          }, {
             rel: 'fromprice',
             rev: 'definition',
-            type: 'elasticpath.prices.price-range',
+            type: 'prices.price-for-itemdefinition',
             uri: '/prices/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq=',
             href: 'https://give-stage2.cru.org/cortex/prices/itemdefinitions/crugive/a5t4fmspmixhxqvvle6xglbyf7byzqvlyocflqvfovwva4gcuhbyq='
           }],
           details: [{
+            'display-name': 'Designation Email',
+            'display-value': '5541091@test.com',
+            name: 'designation_email',
+            value: '5541091@test.com'
+          }, {
             'display-name': 'Designation Type',
             'display-value': 'Student',
             name: 'designation_type',
@@ -636,14 +819,15 @@ export default {
       }],
       _rate: [{
         self: {
-          type: 'elasticpath.extendedrates.extended-rate',
-          uri: '/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
-          href: 'https://give-stage2.cru.org/cortex/rates/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
+          type: 'rate.resource-rates',
+          uri: '/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
+          href: 'https://give-stage2.cru.org/cortex/rate/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         },
+        messages: [],
         links: [{
           rel: 'lineitem',
           rev: 'rate',
-          type: 'elasticpath.carts.line-item',
+          type: 'carts.line-item',
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         }],
@@ -654,14 +838,15 @@ export default {
       }],
       _total: [{
         self: {
-          type: 'elasticpath.totals.total',
+          type: 'totals.cart-line-item-total',
           uri: '/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
           href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         },
+        messages: [],
         links: [{
           rel: 'lineitem',
           rev: 'total',
-          type: 'elasticpath.carts.line-item',
+          type: 'carts.line-item',
           uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe=',
           href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/lineitems/mqzwgobwhaywgljrmu3dsljugfrgmljzhe3tcljxgq3tgzdegi3danruhe='
         }],
@@ -682,30 +867,33 @@ export default {
   _ratetotals: [{
     _element: [{
       self: {
-        type: 'elasticpath.ratetotals.rate-total',
+        type: 'ratetotals.ratetotal-for-cart',
         uri: '/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5ve2uj7yoedlqvvku6dckreequ4fjocxvq4fiksnxbkzqvqnhbkw6d4j5muuklojm3teszeyoagpqvkizlu4s32enpmfkkvo7bkewrigbp4fjodqrk4fjbsnz2cs5cliv5hbqvpj4ut2=',
         href: 'https://give-stage2.cru.org/cortex/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5ve2uj7yoedlqvvku6dckreequ4fjocxvq4fiksnxbkzqvqnhbkw6d4j5muuklojm3teszeyoagpqvkizlu4s32enpmfkkvo7bkewrigbp4fjodqrk4fjbsnz2cs5cliv5hbqvpj4ut2='
       },
+      messages: [],
       links: [],
       cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
       display: '$50.00 Annually',
       recurrence: { display: 'Annually', interval: 'ANNUAL' }
     }, {
       self: {
-        type: 'elasticpath.ratetotals.rate-total',
+        type: 'ratetotals.ratetotal-for-cart',
         uri: '/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5ve2ukaem24fnkvhqysujbentbllqvkl5bdc7ryk3byerswjxblk7b7g5u4fld2fyvhui26ykuvk56cui4xutthyksvkpknkhbkg4lmyk24fks7iiyx4ocwyobemwcpj45e6kkjpndxw4dmn4=',
         href: 'https://give-stage2.cru.org/cortex/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5ve2ukaem24fnkvhqysujbentbllqvkl5bdc7ryk3byerswjxblk7b7g5u4fld2fyvhui26ykuvk56cui4xutthyksvkpknkhbkg4lmyk24fks7iiyx4ocwyobemwcpj45e6kkjpndxw4dmn4='
       },
+      messages: [],
       links: [],
       cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
       display: '$50.00 Quarterly',
       recurrence: { display: 'Quarterly', interval: 'QUARTERLY' }
     }, {
       self: {
-        type: 'elasticpath.ratetotals.rate-total',
+        type: 'ratetotals.ratetotal-for-cart',
         uri: '/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5ve2uj7yoedlqvvku6dckreequ4fjocxvq4fiksnxbkzqvqnhbkw6d4j5muuklojm3teszeyoagpqvkizlu4s32enpmfkkvo7bkewrigbp4fjodqrk4fjbsnz2cs5cliv5hbqvpj4ut2=',
         href: 'https://give-stage2.cru.org/cortex/ratetotals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=/a5vu2uj7ykztlqvqkm6tckbiyk3gjqvfyobvsqbuh4yc63l4jz4dso2chfxvqpbrfixtan3pla6dckrpga5xk5c5ykshk3lkk3byersyjxblg66drfqwtqvrpey4fl6cvqr4fj3jykzhs4bkk7byaz6cxu='
       },
+      messages: [],
       links: [],
       cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
       display: '$50.00 Single',
@@ -714,14 +902,15 @@ export default {
   }],
   _total: [{
     self: {
-      type: 'elasticpath.totals.total',
+      type: 'totals.cart-total',
       uri: '/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=',
       href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu='
     },
+    messages: [],
     links: [{
       rel: 'cart',
       rev: 'total',
-      type: 'elasticpath.carts.cart',
+      type: 'carts.cart',
       uri: '/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu=',
       href: 'https://give-stage2.cru.org/cortex/carts/crugive/gztgmzlemnqtmljsmezwmljug5sgeljzgu2wcllbhe4wentfgi4dazjxmu='
     }],
