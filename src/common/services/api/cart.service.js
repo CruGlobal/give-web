@@ -79,7 +79,7 @@ class Cart {
       const itemConfig = omit(item.configuration, ['self', 'links'])
       //  Based on EP 8.1 JSON Object item config properties are changed to uppercase
       const giftStartDate = frequency !== 'Single'
-        ? startMonth(itemConfig['RECURRING-DAY-OF-MONTH'], itemConfig['RECURRING-START-MONTH'], nextDrawDate) : null
+        ? startMonth(itemConfig['RECURRING_DAY_OF_MONTH'], itemConfig['RECURRING_START_MONTH'], nextDrawDate) : null
       const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
       let designationType
