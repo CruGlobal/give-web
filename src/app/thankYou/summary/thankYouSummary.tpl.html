@@ -121,7 +121,7 @@
                 <tr class="giftsum-gift-row" ng-repeat="item in $ctrl.purchase.lineItems" ng-init="$ctrl.loadFacebookPixel(item)">
                   <td class="td-gift">
                     <span class="giftsum-person giftsum-title">{{item.name}}</span>
-                    <p>#{{item.code['product-code']}}</p>
+                    <p>#{{item.itemOfferCode.code}}</p>
                   </td>
                   <td class="td-frequency">
                     <span class="giftsum-about giftsum-title">{{item.rate.display}}</span>

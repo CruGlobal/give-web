@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.purchases.purchase',
-    uri: '/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentinstruments:element,ratetotals:element,billingaddress',
-    href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentinstruments:element,ratetotals:element,billingaddress'
+    uri: '/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:rate,paymentinstruments:element,ratetotals:element,billingaddress',
+    href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:rate,paymentinstruments:element,ratetotals:element,billingaddress'
   },
   links: [{
     rel: 'list',
@@ -137,11 +137,6 @@ export default {
         uri: '/purchases/crugive/giydanju=/lineitems',
         href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems'
       }, {
-        rel: 'code',
-        type: 'elasticpath.extlookups.product-code',
-        uri: '/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
-        href: 'https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
-      }, {
         rel: 'options',
         rev: 'lineitem',
         type: 'elasticpath.collections.links',
@@ -153,16 +148,6 @@ export default {
         type: 'elasticpath.rates.rate',
         uri: '/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
         href: 'https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
-      }],
-      _code: [{
-        self: {
-          type: 'elasticpath.extlookups.product-code',
-          uri: '/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
-          href: 'https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
-        },
-        links: [],
-        code: '0798349',
-        'product-code': '0798349'
       }],
       _rate: [{
         self: {
@@ -185,7 +170,35 @@ export default {
       'line-extension-tax': [{ amount: 0.00, currency: 'USD', display: '$0.00' }],
       'line-extension-total': [{ amount: 50.00, currency: 'USD', display: '$50.00' }],
       name: 'E-Ministry',
-      quantity: 1
+      quantity: 1,
+      _item: [{
+        _code: [{
+          self: {
+            type: 'items.code-for-item',
+            uri: '/items/code/items/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
+            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
+          },
+          links: [],
+          code: '0798349'
+        }],
+        _offer: [{
+          _code: [{
+            self: {
+              type: 'offers.code-for-offer',
+              uri: '/offers/code/offers/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
+              href: 'https://give-stage2.cru.org/cortex/offers/code/offers/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
+            },
+            messages: [],
+            links: [{
+              rel: 'offer',
+              rev: 'code',
+              type: 'offers.offer',
+              uri: '/offers/code/offers/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
+            }],
+            code: '0798349'
+          }]
+        }]
+      }]
     }, {
       self: {
         type: 'elasticpath.purchases.line-item',
@@ -220,16 +233,6 @@ export default {
         uri: '/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
         href: 'https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
       }],
-      _code: [{
-        self: {
-          type: 'elasticpath.extlookups.product-code',
-          uri: '/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
-          href: 'https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
-        },
-        links: [],
-        code: '0775813_mon',
-        'product-code': '0775813'
-      }],
       _rate: [{
         self: {
           type: 'elasticpath.rates.rate',
@@ -251,7 +254,35 @@ export default {
       'line-extension-tax': [{ amount: 0.00, currency: 'USD', display: '$0.00' }],
       'line-extension-total': [{ amount: 0.00, currency: 'USD', display: '$0.00' }],
       name: 'Half a Team Motorbike',
-      quantity: 1
+      quantity: 1,
+      _item: [{
+        _code: [{
+          self: {
+            type: 'items.code-for-item',
+            uri: '/items/code/items/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
+            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
+          },
+          links: [],
+          code: '0775813_mon'
+        }],
+        _offer: [{
+          _code: [{
+            self: {
+              type: 'offers.code-for-offer',
+              uri: '/offers/code/offers/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
+              href: 'https://give-stage2.cru.org/cortex/offers/code/offers/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
+            },
+            messages: [],
+            links: [{
+              rel: 'offer',
+              rev: 'code',
+              type: 'offers.offer',
+              uri: '/offers/code/offers/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
+            }],
+            code: '0775813'
+          }]
+        }]
+      }]
     }]
   }],
   _paymentinstruments: [{
