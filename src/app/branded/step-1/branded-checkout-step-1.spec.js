@@ -277,6 +277,29 @@ describe('branded checkout step 1', () => {
     })
   })
 
+  describe('onSelectPremiumOption', () => {
+    beforeEach(() => {
+      $ctrl.initItemConfig()
+      $ctrl.premiumCode = '112233'
+    })
+
+    it('premium selected', () => {
+      $ctrl.premiumSelected = true
+
+      $ctrl.onSelectPremiumOption()
+
+      expect($ctrl.itemConfig['premium-code']).toEqual($ctrl.premiumCode)
+    })
+
+    it('premium deselected', () => {
+      $ctrl.premiumSelected = false
+
+      $ctrl.onSelectPremiumOption()
+
+      expect($ctrl.itemConfig['premium-code']).toEqual(undefined)
+    })
+  })
+
   describe('checkSuccessfulSubmission', () => {
     beforeEach(() => {
       $ctrl.resetSubmission()
