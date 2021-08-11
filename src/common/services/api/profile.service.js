@@ -362,7 +362,8 @@ class Profile {
         donorDetails: 'donordetails',
         paymentInstruments: 'paymentinstruments:element',
         lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
-        rateTotals: 'ratetotals:element[]'
+        rateTotals: 'ratetotals:element[]',
+        billingAddress: 'billingaddress'
       }
     })
       .map((data) => {
@@ -371,8 +372,8 @@ class Profile {
 
         data.paymentInstruments = extractPaymentAttributes(data.paymentInstruments)
         if (data.paymentInstruments['card-number']) { // only credit card type has billing address
-          data.paymentInstruments.address = formatAddressForTemplate(data.paymentInstruments['billing-address'].address)
-          delete data.paymentInstruments['billing-address']
+          data.paymentInstruments.address = formatAddressForTemplate(data.billingAddress.address)
+          delete data.billingAddress
         }
         return data
       })
