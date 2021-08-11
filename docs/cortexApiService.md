@@ -175,7 +175,7 @@ cortexApiService.get({
         path: '/purchases/crugive/giydanby=',
         zoom: {
           donorDetails: 'donordetails',
-          paymentMeans: 'paymentmeans:element',
+          paymentInstruments: 'paymentinstruments:element',
           lineItems: 'lineitems:element,lineitems:element:code,lineitems:element:rate',
         }
       });
@@ -212,7 +212,7 @@ This will return: (the `rawData` key shows what the original response looked lik
             "title": "Mrs."
         }
     },
-    "paymentMeans": {
+    "paymentInstruments": {
         "billing-address": {
             "address": {
                 "country-name": "US",
@@ -360,7 +360,7 @@ This will return: (the `rawData` key shows what the original response looked lik
                 ]
             }
         ],
-        "_paymentmeans": [
+        "_paymentinstruments": [
             {
                 "_element": [
                     {

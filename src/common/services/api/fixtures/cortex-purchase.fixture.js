@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.purchases.purchase',
-    uri: '/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentmeans:element,ratetotals:element',
-    href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentmeans:element,ratetotals:element'
+    uri: '/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentinstruments:element,ratetotals:element,billingaddress',
+    href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentinstruments:element,ratetotals:element,billingaddress'
   },
   links: [{
     rel: 'list',
@@ -42,11 +42,9 @@ export default {
     uri: '/purchases/crugive/giydanju=/billingaddress',
     href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/billingaddress'
   }, {
-    rel: 'paymentmeans',
-    rev: 'purchase',
-    type: 'elasticpath.collections.links',
-    uri: '/purchases/crugive/giydanju=/paymentmeans',
-    href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans'
+    rel: 'paymentinstruments',
+    type: 'paymentinstruments.purchase-payment-instruments',
+    href: 'https://give-stage2.cru.org/cortex/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument'
   }, {
     rel: 'ratetotals',
     type: 'elasticpath.ratetotals.rate-total',
@@ -59,6 +57,37 @@ export default {
     uri: '/shipments/purchases/crugive/giydanju=',
     href: 'https://give-stage2.cru.org/cortex/shipments/purchases/crugive/giydanju='
   }],
+  _billingaddress: [
+    {
+      self: {
+        type: 'purchases.purchase-billingaddress',
+        uri: '/purchases/crugive/giydcnzv=/billingaddress',
+        href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydcnzv=/billingaddress'
+      },
+      messages: [],
+      links: [
+        {
+          rel: 'purchase',
+          type: 'purchases.purchase',
+          href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydcnzv='
+        }
+      ],
+      address: {
+        'country-name': 'US',
+        'extended-address': 'Apt 45',
+        locality: 'State',
+        'postal-code': '12345',
+        region: 'AL',
+        'street-address': '123 Asdf St'
+      },
+      name: {
+        'family-name': 'Lname',
+        'given-name': 'Fname'
+      },
+      organization: null,
+      'phone-number': null
+    }
+  ],
   _donordetails: [{
     self: {
       type: 'elasticpath.donordetails.donor',
@@ -225,40 +254,32 @@ export default {
       quantity: 1
     }]
   }],
-  _paymentmeans: [{
+  _paymentinstruments: [{
     _element: [{
       self: {
-        type: 'elasticpath.purchases.purchase.paymentmeans',
-        uri: '/purchases/crugive/giydanju=/paymentmeans/giydamzyge=',
-        href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans/giydamzyge='
+        type: 'paymentinstruments.purchase-payment-instrument',
+        uri: '/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument/giydamzyge=',
+        href: 'https://give-stage2.cru.org/cortex/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument/giydamzyge='
       },
       links: [{
-        rel: 'list',
-        type: 'elasticpath.collections.links',
-        uri: '/purchases/crugive/giydanju=/paymentmeans',
-        href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans'
+        rel: 'paymentinstruments',
+        type: 'paymentinstruments.purchase-payment-instruments',
+        href: 'https://give-stage2.cru.org/cortex/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument'
       }, {
-        rel: 'purchase',
-        type: 'elasticpath.purchases.purchase',
-        uri: '/purchases/crugive/giydanju=',
-        href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju='
+        rel: 'paymentmethod',
+        type: 'paymentinstruments.purchase-payment-method',
+        href: 'https://give-stage2.cru.org/cortex/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument/giydamzyge=/purchasepaymentmethod/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm='
       }],
-      'billing-address': {
-        address: {
-          'country-name': 'US',
-          'extended-address': 'Apt 45',
-          locality: 'State',
-          'postal-code': '12345',
-          region: 'AL',
-          'street-address': '123 Asdf St'
-        },
-        name: { 'family-name': 'Lname', 'given-name': 'Fname' }
-      },
-      'card-type': 'Visa',
-      'expiry-date': { month: '12', year: '2019' },
-      'holder-name': 'sadf',
-      'primary-account-number-id': '*******************************************************cNKg',
-      'telephone-type': 'voice'
+      name: 'Cru Payment Instrument',
+      'payment-instrument-identification-attributes': {
+        'card-number': 'aw3afa8af1111',
+        'card-type': 'Visa',
+        'expiry-month': '12',
+        'expiry-year': '2019',
+        'cardholder-name': 'sadf',
+        description: 'Visa - 1111',
+        'last-four-digits': '1111'
+      }
     }]
   }],
   _ratetotals: [{
