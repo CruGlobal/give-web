@@ -100,11 +100,11 @@ class Cart {
         displayName: item.itemDefinition['display-name'],
         designationType: designationType,
         price: item.rate.cost[0].display, // cost object was changed to array
-        priceWithFees: item.rate.cost['display-with-fees'],
+        priceWithFees: item.rate.cost[0]['display-with-fees'],
         config: itemConfig,
         frequency: frequency,
         amount: item.rate.cost[0].amount, // cost object was changed to array
-        amountWithFees: item.rate.cost['amount-with-fees'],
+        amountWithFees: item.rate.cost[0]['amount-with-fees'],
         designationNumber: item.item._offer[0]._code[0]['code'], // product code is fetched from offer resource
         productUri: item.item.self.uri,
         giftStartDate: giftStartDate,
