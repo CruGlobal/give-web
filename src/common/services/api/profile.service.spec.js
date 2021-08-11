@@ -445,7 +445,7 @@ describe('profile service', () => {
 
       const expectedPurchaseData = {
         donorDetails: modifiedPurchaseResponse._donordetails[0],
-        paymentMeans: modifiedPurchaseResponse._paymentmeans[0]._element[0],
+        paymentInstruments: modifiedPurchaseResponse._paymentinstruments[0]._element[0],
         lineItems: [
           assign(omit(modifiedPurchaseResponse._lineitems[0]._element[0], ['_code', '_rate']), {
             code: modifiedPurchaseResponse._lineitems[0]._element[0]._code[0],
@@ -462,10 +462,10 @@ describe('profile service', () => {
 
       expectedPurchaseData.donorDetails.mailingAddress = formatAddressForTemplate(expectedPurchaseData.donorDetails['mailing-address'])
       delete expectedPurchaseData.donorDetails['mailing-address']
-      expectedPurchaseData.paymentMeans.address = formatAddressForTemplate(expectedPurchaseData.paymentMeans['billing-address'].address)
-      delete expectedPurchaseData.paymentMeans['billing-address']
+      expectedPurchaseData.paymentInstruments.address = formatAddressForTemplate(expectedPurchaseData.paymentInstruments['billing-address'].address)
+      delete expectedPurchaseData.paymentInstruments['billing-address']
 
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/purchases/crugive/giydanbt=?zoom=donordetails,paymentmeans:element,lineitems:element,lineitems:element:code,lineitems:element:rate,ratetotals:element')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/purchases/crugive/giydanbt=?zoom=donordetails,paymentinstruments:element,lineitems:element,lineitems:element:code,lineitems:element:rate,ratetotals:element')
         .respond(200, purchaseResponse)
       self.profileService.getPurchase('/purchases/crugive/giydanbt=')
         .subscribe((data) => {
