@@ -187,6 +187,7 @@ export default angular
       onPaymentFailed: '&',
       premiumCode: '<',
       premiumName: '<',
+      premiumImageUrl: '<',
       radioStationApiUrl: '<',
       radioStationRadius: '<'
     }

@@ -132,6 +132,7 @@ export default angular
       apiUrl: '@',
       premiumCode: '@',
       premiumName: '@',
+      premiumImageUrl: '@',
       radioStationApiUrl: '@',
       radioStationRadius: '@',
       donorDetailsVariable: '@donorDetails',
