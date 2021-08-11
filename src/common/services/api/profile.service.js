@@ -373,8 +373,8 @@ class Profile {
         data.paymentInstruments = extractPaymentAttributes(data.paymentInstruments)
         if (data.paymentInstruments['card-number']) { // only credit card type has billing address
           data.paymentInstruments.address = formatAddressForTemplate(data.billingAddress.address)
-          delete data.billingAddress
         }
+        delete data.billingAddress
         return data
       })
   }
