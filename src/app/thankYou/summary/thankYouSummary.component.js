@@ -92,7 +92,8 @@ class ThankYouSummaryController {
   loadFacebookPixel (item) {
     if (!item.itemCode || !item.itemCode.code) { return }
 
-    const designation = item.itemCode.code; const value = item.rate.cost.amount
+    const designation = item.itemCode.code
+    const value = item.rate.cost.amount
 
     this.designationsService.facebookPixel(designation).subscribe((pixelId) => {
       if (!pixelId) { return }
