@@ -509,6 +509,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     transactionEvent: function (purchaseData) {
       try {
+        // The value of whether or not user is covering credit card fees for the transaction
+        const coverFees = localStorage.getItem('coverFees')
         // Parse the cart object of the last purchase
         const transactionCart = JSON.parse(localStorage.getItem('transactionCart'))
         // The purchaseId number from the last purchase
@@ -561,6 +563,12 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                 }
               }
             })
+            // Send cover fees event if value is true
+            if (coverFees) {
+              $window.dataLayer.push({
+                event: 'ga-cover-fees-checkbox'
+              })
+            }
           }
         }
         // Remove the transactionCart from localStorage since it is no longer needed
