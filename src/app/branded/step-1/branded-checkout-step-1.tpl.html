@@ -55,7 +55,8 @@
                 type="radio"
                 name="premiumSelect"
                 ng-model="$ctrl.premiumSelected"
-                ng-value="true">
+                ng-value="true"
+                ng-change="$ctrl.onSelectPremiumOption()">
                 {{$ctrl.premiumName}}
             </label>
           </div>
@@ -65,7 +66,8 @@
                 type="radio"
                 name="premiumSelect"
                 ng-model="$ctrl.premiumSelected"
-                ng-value="false">
+                ng-value="false"
+                ng-change="$ctrl.onSelectPremiumOption()">
                 <translate>{{'NO_THANK_YOU'}}</translate>
             </label>
           </div>

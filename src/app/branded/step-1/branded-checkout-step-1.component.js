@@ -150,6 +150,14 @@ class BrandedCheckoutStep1Controller {
     }
   }
 
+  onSelectPremiumOption () {
+    if (this.premiumSelected) {
+      this.itemConfig['premium-code'] = this.premiumCode
+    } else {
+      this.itemConfig['premium-code'] = undefined
+    }
+  }
+
   checkSuccessfulSubmission () {
     if (every(this.submission, 'completed')) {
       if (every(this.submission, { error: false })) {
@@ -189,6 +197,7 @@ export default angular
       premiumName: '<',
       premiumImageUrl: '<',
       radioStationApiUrl: '<',
-      radioStationRadius: '<'
+      radioStationRadius: '<',
+      itemConfig: '='
     }
   })
