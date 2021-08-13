@@ -93,7 +93,7 @@ class ThankYouSummaryController {
     if (!item.itemCode || !item.itemCode.code) { return }
 
     const designation = item.itemCode.code
-    const value = item.rate.cost.amount
+    const value = item.rate.cost[0].amount
 
     this.designationsService.facebookPixel(designation).subscribe((pixelId) => {
       if (!pixelId) { return }

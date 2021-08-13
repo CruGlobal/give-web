@@ -151,7 +151,7 @@ export default {
       }],
       _rate: [{
         self: {
-          type: 'elasticpath.rates.rate',
+          type: 'rate.purchase-rate',
           uri: '/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
           href: 'https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
         },
@@ -162,7 +162,7 @@ export default {
           uri: '/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
           href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
         }],
-        cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+        cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 One Time',
         recurrence: { display: 'One Time', interval: 'NA' }
       }],
@@ -246,7 +246,7 @@ export default {
           uri: '/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
           href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
         }],
-        cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+        cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 Monthly',
         recurrence: { display: 'Monthly', interval: 'MON' }
       }],
@@ -331,7 +331,7 @@ export default {
         href: 'https://give-stage2.cru.org/cortex/ratetotals/purchases/crugive/giydanju=/a5ve2uj7yoadlqvvku6dckreernmfj6cxvqt6mtooquwyscpppble4jqgnzusp3tfhbkyi3jnhbk46lujmsmhadhykvemv6cwpblg7odrjp4fmwcwjnugwj3lizd65tmee='
       },
       links: [],
-      cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+      cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
       display: '$50.00 Single',
       recurrence: { display: 'Single', interval: 'NA' }
     }]

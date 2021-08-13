@@ -187,7 +187,7 @@ describe('thank you summary', () => {
           code: '555111'
         },
         rate: {
-          cost: { amount: 100 }
+          cost: [{ amount: 100 }]
         }
       })
 
@@ -205,7 +205,7 @@ describe('thank you summary', () => {
           code: '555111'
         },
         rate: {
-          cost: { amount: 100 }
+          cost: [{ amount: 100 }]
         }
       })
 
