@@ -49,6 +49,8 @@ class BrandedCheckoutController {
       this.fireAnalyticsEvents('contact', 'payment')
     }, angular.noop)
     this.$translate.use(this.language || 'en')
+
+    this.itemConfig = {}
   }
 
   formatDonorDetails () {
