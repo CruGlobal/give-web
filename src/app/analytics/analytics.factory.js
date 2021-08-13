@@ -489,13 +489,15 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.productViewDetailsEvent
       }
     },
-    purchase: function (donorDetails, cartData) {
+    purchase: function (donorDetails, cartData, coverFeeDecision) {
       try {
         // Build cart data layer
         this.setDonorDetails(donorDetails)
         this.buildProductVar(cartData)
         // Stringify the cartObject and store in localStorage for the transactionEvent
         localStorage.setItem('transactionCart', JSON.stringify(cartData))
+        // Store value of coverFeeDecision in sessionStorage for the transactionEvent
+        sessionStorage.setItem('coverFeeDecision', coverFeeDecision)
       } catch (e) {
         // Error caught in analyticsFactory.purchase
       }
@@ -510,7 +512,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     transactionEvent: function (purchaseData) {
       try {
         // The value of whether or not user is covering credit card fees for the transaction
-        const coverFees = localStorage.getItem('coverFees')
+        const coverFeeDecision = sessionStorage.getItem('coverFeeDecision')
         // Parse the cart object of the last purchase
         const transactionCart = JSON.parse(localStorage.getItem('transactionCart'))
         // The purchaseId number from the last purchase
@@ -564,7 +566,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               }
             })
             // Send cover fees event if value is true
-            if (coverFees) {
+            if (coverFeeDecision) {
               $window.dataLayer.push({
                 event: 'ga-cover-fees-checkbox'
               })
@@ -573,6 +575,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         }
         // Remove the transactionCart from localStorage since it is no longer needed
         localStorage.removeItem('transactionCart')
+        // Remove the coverFeeDecision from sessionStorage since it is no longer needed
+        sessionStorage.removeItem('coverFeeDecision')
       } catch (e) {
         // Error in analyticsFactory.transactionEvent
       }
