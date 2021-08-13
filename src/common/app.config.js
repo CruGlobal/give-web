@@ -283,7 +283,9 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     GIFT_SUMMARY: 'Gift Summary',
     FIRST_GIFT: 'First Gift:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
-    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:'
+    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
+    PREMIUM: 'Premium',
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
   })
 
   $translateProvider.translations('es', {
@@ -490,7 +492,9 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     GIFT_SUMMARY: 'Gift Summary',
     FIRST_GIFT: 'First Gift:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
-    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:'
+    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
+    PREMIUM: 'Premium',
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
   })
   $translateProvider.preferredLanguage('en')
 }
