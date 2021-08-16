@@ -57,6 +57,8 @@ export default angular
     templateUrl: template,
     bindings: {
       previous: '&',
-      next: '&'
+      next: '&',
+      premiumName: '<',
+      itemConfig: '<'
     }
   })

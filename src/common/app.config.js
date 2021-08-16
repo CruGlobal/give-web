@@ -290,7 +290,9 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
-    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
+    PREMIUM: 'Premium',
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
   })
 
   $translateProvider.translations('es', {
@@ -501,7 +503,9 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
-    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
+    PREMIUM: 'Premium',
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
   })
   $translateProvider.preferredLanguage('en')
 }

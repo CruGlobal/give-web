@@ -49,6 +49,8 @@ class BrandedCheckoutController {
       this.fireAnalyticsEvents('contact', 'payment')
     }, angular.noop)
     this.$translate.use(this.language || 'en')
+
+    this.itemConfig = {}
   }
 
   formatDonorDetails () {
@@ -130,6 +132,9 @@ export default angular
       frequency: '@',
       day: '@',
       apiUrl: '@',
+      premiumCode: '@',
+      premiumName: '@',
+      premiumImageUrl: '@',
       radioStationApiUrl: '@',
       radioStationRadius: '@',
       donorDetailsVariable: '@donorDetails',
