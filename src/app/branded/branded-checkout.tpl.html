@@ -25,7 +25,9 @@
         <branded-checkout-step-2
           ng-if="$ctrl.checkoutStep === 'review'"
           next="$ctrl.next()"
-          previous="$ctrl.previous(newStep)">
+          previous="$ctrl.previous(newStep)"
+          premium-name="$ctrl.premiumName"
+          item-config="$ctrl.itemConfig">
         </branded-checkout-step-2>
         <thank-you-summary
           ng-if="$ctrl.checkoutStep === 'thankYou'"

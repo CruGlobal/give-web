@@ -221,6 +221,8 @@ export default angular
       onSubmitted: '&',
       onSubmittingOrder: '&',
       submittingOrder: '<',
-      radioStationName: '<'
+      radioStationName: '<',
+      premiumName: '<',
+      brandedCheckoutItem: '<'
     }
   })
