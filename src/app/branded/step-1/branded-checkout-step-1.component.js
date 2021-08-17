@@ -186,6 +186,7 @@ export default angular
       next: '&',
       onPaymentFailed: '&',
       premiumCode: '<',
-      premiumName: '<'
+      premiumName: '<',
+      premiumImageUrl: '<'
     }
   })
