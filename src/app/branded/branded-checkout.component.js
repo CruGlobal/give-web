@@ -181,6 +181,7 @@ export default angular
       premiumCode: '@',
       premiumName: '@',
       radioStationApiUrl: '@',
+      premiumImageUrl: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
