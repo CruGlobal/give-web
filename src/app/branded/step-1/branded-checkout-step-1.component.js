@@ -29,6 +29,8 @@ class BrandedCheckoutStep1Controller {
     this.resetSubmission()
     this.initItemConfig()
     this.initCart()
+
+    this.premiumSelected = false
   }
 
   initItemConfig () {
@@ -187,6 +189,8 @@ export default angular
       showCoverFees: '<',
       next: '&',
       onPaymentFailed: '&',
-      radioStationApiUrl: '<'
+      radioStationApiUrl: '<',
+      premiumCode: '<',
+      premiumName: '<'
     }
   })

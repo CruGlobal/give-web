@@ -178,6 +178,8 @@ export default angular
       frequency: '@',
       day: '@',
       apiUrl: '@',
+      premiumCode: '@',
+      premiumName: '@',
       radioStationApiUrl: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
