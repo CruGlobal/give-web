@@ -130,6 +130,8 @@ export default angular
       frequency: '@',
       day: '@',
       apiUrl: '@',
+      premiumCode: '@',
+      premiumName: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
