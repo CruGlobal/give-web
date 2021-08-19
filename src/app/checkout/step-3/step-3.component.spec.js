@@ -21,6 +21,7 @@ describe('checkout', () => {
         }
       }
       self.storedCvv = null
+      self.coverFeeDecision = false
 
       self.controller = $componentController(module.name, {
         // Mock services
@@ -37,6 +38,7 @@ describe('checkout', () => {
           submit: () => Observable.of('called submit'),
           retrieveCardSecurityCode: () => self.storedCvv,
           retrieveLastPurchaseLink: () => Observable.of('purchaseLink'),
+          retrieveCoverFeeDecision: () => self.coverFeeDecision,
           clearCardSecurityCodes: jest.fn(),
           clearCoverFees: jest.fn()
         },
@@ -323,6 +325,7 @@ describe('checkout', () => {
       beforeEach(() => {
         jest.spyOn(self.controller.orderService, 'submit')
         jest.spyOn(self.controller.profileService, 'getPurchase')
+        jest.spyOn(self.controller.analyticsFactory, 'purchase')
       })
 
       describe('another order submission in progress', () => {
@@ -351,6 +354,7 @@ describe('checkout', () => {
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalled()
+          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
@@ -363,6 +367,7 @@ describe('checkout', () => {
 
           expect(self.controller.orderService.submit).toHaveBeenCalled()
           expect(self.controller.loadCart).toHaveBeenCalled()
+          expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
           expect(self.controller.changeStep).not.toHaveBeenCalled()
@@ -373,9 +378,11 @@ describe('checkout', () => {
         it('should submit the order with a CVV if paying with a credit card', () => {
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = '1234'
+          self.coverFeeDecision = true
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
@@ -384,9 +391,11 @@ describe('checkout', () => {
         it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = undefined
+          self.coverFeeDecision = true
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalledWith(undefined)
+          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
@@ -399,6 +408,7 @@ describe('checkout', () => {
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
           expect(self.controller.changeStep).not.toHaveBeenCalled()
