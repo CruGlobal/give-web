@@ -63,6 +63,7 @@ deploy:
       branch: ep-upgrade-prod
 
 after_deploy:
+  - if [ "$TRAVIS_BRANCH" == "staging" ]; then aws cloudfront create-invalidation --distribution-id EPXENORNKOQM --paths "/*"; fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"; fi
   - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID_8_1 -s $AWS_SECRET_ACCESS_KEY_8_1 -c E3M9MWXONGADRF -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST -o 'ep-upgrade-stage'
   - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID_8_1_PROD -s $AWS_SECRET_ACCESS_KEY_8_1_PROD -c E30QUUH0C7A1J3 -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST -o 'ep-upgrade-prod'
