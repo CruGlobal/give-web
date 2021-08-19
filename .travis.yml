@@ -38,4 +38,5 @@ deploy:
       branch: master
 
 after_deploy:
+  - if [ "$TRAVIS_BRANCH" == "staging" ]; then aws cloudfront create-invalidation --distribution-id EPXENORNKOQM --paths "/*"; fi
   - if [ "$TRAVIS_BRANCH" == "master" ]; then aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"; fi
