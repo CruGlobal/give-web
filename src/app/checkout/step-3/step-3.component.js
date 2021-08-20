@@ -46,6 +46,8 @@ class Step3Controller {
     this.loadCurrentPayment()
     this.checkErrors()
     this.getNextDrawDate()
+
+    this.premiumSelectLabel = `'${this.premiumName}'`
   }
 
   $onChanges (changes) {

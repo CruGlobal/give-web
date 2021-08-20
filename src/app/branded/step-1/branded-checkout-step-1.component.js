@@ -29,6 +29,7 @@ class BrandedCheckoutStep1Controller {
     this.initCart()
 
     this.premiumSelected = false
+    this.premiumSelectLabel = `'${this.premiumName}'`
   }
 
   initItemConfig () {
