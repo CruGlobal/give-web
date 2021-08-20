@@ -284,7 +284,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     FIRST_GIFT: 'First Gift:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
-    PREMIUM: 'Premium',
+    CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
   })
 
@@ -493,7 +493,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     FIRST_GIFT: 'First Gift:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
-    PREMIUM: 'Premium',
+    CHOOSE_RESOURCE: 'Choose a Resource',
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
   })
   $translateProvider.preferredLanguage('en')
