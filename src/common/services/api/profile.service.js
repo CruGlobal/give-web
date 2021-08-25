@@ -338,13 +338,15 @@ class Profile {
       paymentInfo = paymentInfo.creditCard
       if (paymentInfo.address) {
         paymentInfo.address = formatAddressForCortex(paymentInfo.address)
+        paymentInfo = { ...paymentInfo, ...paymentInfo.address }
+        delete paymentInfo.address
       }
     } else {
       return Observable.throw('Error updating payment method. The data passed to profileService.updatePaymentMethod did not contain bankAccount or creditCard data.')
     }
     return this.cortexApiService.put({
       path: originalPaymentInfo.self.uri,
-      data: paymentInfo
+      data: { 'payment-instrument-identification-attributes': paymentInfo }
     })
   }
 
