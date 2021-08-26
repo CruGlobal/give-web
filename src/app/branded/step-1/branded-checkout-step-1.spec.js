@@ -84,6 +84,12 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
       expect($ctrl.itemConfig['campaign-code']).toEqual('')
     })
+
+    it('should persist premium-code in item config', () => {
+      $ctrl.itemConfig = { 'premium-code': '112233' }
+      $ctrl.initItemConfig()
+      expect($ctrl.itemConfig['premium-code']).toEqual('112233')
+    })
   })
 
   describe('initCart', () => {
@@ -268,6 +274,29 @@ describe('branded checkout step 1', () => {
 
       expect($ctrl.checkSuccessfulSubmission).toHaveBeenCalled()
       expect($ctrl.onPaymentFailed).toHaveBeenCalled()
+    })
+  })
+
+  describe('onSelectPremiumOption', () => {
+    beforeEach(() => {
+      $ctrl.initItemConfig()
+      $ctrl.premiumCode = '112233'
+    })
+
+    it('premium selected', () => {
+      $ctrl.premiumSelected = true
+
+      $ctrl.onSelectPremiumOption()
+
+      expect($ctrl.itemConfig['premium-code']).toEqual($ctrl.premiumCode)
+    })
+
+    it('premium deselected', () => {
+      $ctrl.premiumSelected = false
+
+      $ctrl.onSelectPremiumOption()
+
+      expect($ctrl.itemConfig['premium-code']).toEqual(undefined)
     })
   })
 

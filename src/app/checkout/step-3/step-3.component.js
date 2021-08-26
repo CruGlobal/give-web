@@ -189,6 +189,8 @@ export default angular
       onSubmitBtnChangeState: '&',
       onSubmitted: '&',
       onSubmittingOrder: '&',
-      submittingOrder: '<'
+      submittingOrder: '<',
+      premiumName: '<',
+      brandedCheckoutItem: '<'
     }
   })

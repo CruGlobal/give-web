@@ -30,6 +30,8 @@ class BrandedCheckoutStep1Controller {
   }
 
   initItemConfig () {
+    this.defaultItemConfig = angular.copy(this.itemConfig)
+
     this.itemConfig = {}
     this.itemConfig['campaign-code'] = this.campaignCode
     if (this.itemConfig['campaign-code'] &&
@@ -58,6 +60,13 @@ class BrandedCheckoutStep1Controller {
     }
     this.itemConfig['recurring-day-of-month'] = this.day
     this.itemConfig.frequency = this.frequency
+
+    this.premiumSelected = false
+
+    if (this.defaultItemConfig && this.defaultItemConfig['premium-code']) {
+      this.itemConfig['premium-code'] = this.defaultItemConfig['premium-code']
+      this.premiumSelected = true
+    }
   }
 
   initCart () {
@@ -148,6 +157,14 @@ class BrandedCheckoutStep1Controller {
     }
   }
 
+  onSelectPremiumOption () {
+    if (this.premiumSelected) {
+      this.itemConfig['premium-code'] = this.premiumCode
+    } else {
+      this.itemConfig['premium-code'] = undefined
+    }
+  }
+
   checkSuccessfulSubmission () {
     if (every(this.submission, 'completed')) {
       if (every(this.submission, { error: false })) {
@@ -182,6 +199,10 @@ export default angular
       hidePaymentTypeOptions: '<',
       showCoverFees: '<',
       next: '&',
-      onPaymentFailed: '&'
+      onPaymentFailed: '&',
+      premiumCode: '<',
+      premiumName: '<',
+      premiumImageUrl: '<',
+      itemConfig: '='
     }
   })
