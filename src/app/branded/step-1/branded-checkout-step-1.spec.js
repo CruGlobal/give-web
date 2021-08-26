@@ -84,6 +84,12 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
       expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('')
     })
+
+    it('should persist premium-code in item config', () => {
+      $ctrl.itemConfig = { 'premium-code': '112233' }
+      $ctrl.initItemConfig()
+      expect($ctrl.itemConfig['premium-code']).toEqual('112233')
+    })
   })
 
   describe('initCart', () => {
