@@ -29,11 +29,11 @@ class BrandedCheckoutStep1Controller {
     this.resetSubmission()
     this.initItemConfig()
     this.initCart()
-
-    this.premiumSelected = false
   }
 
   initItemConfig () {
+    this.defaultItemConfig = angular.copy(this.itemConfig)
+
     this.itemConfig = {}
     this.itemConfig.CAMPAIGN_CODE = this.campaignCode
     if (this.itemConfig.CAMPAIGN_CODE &&
@@ -62,6 +62,13 @@ class BrandedCheckoutStep1Controller {
     }
     this.itemConfig.RECURRING_DAY_OF_MONTH = this.day
     this.itemConfig.frequency = this.frequency
+
+    this.premiumSelected = false
+
+    if (this.defaultItemConfig && this.defaultItemConfig['premium-code']) {
+      this.itemConfig['premium-code'] = this.defaultItemConfig['premium-code']
+      this.premiumSelected = true
+    }
   }
 
   initCart () {
