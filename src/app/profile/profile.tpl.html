@@ -151,17 +151,7 @@
                           </div>
                         </div>
                       </form>
-
-                      <div class="row">
-                        <div class="col-sm-12">
-                          <button
-                            class="btn btn-primary btn-md pull-right"
-                            ng-if="$ctrl.profilePKey"
-                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)">
-                            <translate>Email Preferences</translate>
-                          </button>
-                        </div>
-                      </div>
+                      <a id="donorEmailPreferences" href="" ng-if="$ctrl.profilePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)" translate>Edit Email Preferences</a>
 
                       <form name="$ctrl.spouseEmailForm" novalidate ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.hasSpouse || $ctrl.addingSpouse)">
                         <div class="form-group" ng-class="{'has-error': ($ctrl.spouseEmailForm.spouseEmail | showErrors)}">
@@ -180,18 +170,8 @@
                           </div>
                         </div>
                       </form>
+                      <a id="spouseEmailPreferences" href="" ng-if="$ctrl.spousePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)" translate>Edit Email Preferences</a>
 
-                      <div class="row">
-                        <div class="col-sm-12">
-                          <button
-                            class="btn btn-primary btn-md pull-right"
-                            ng-if="$ctrl.spousePKey"
-                            ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)">
-                            <translate>Email Preferences</translate>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
 
                     <!--Phone Numbers-->
                     <h4 class="panel-title  border-bottom-small visible mt" translate>Phone Numbers</h4>
