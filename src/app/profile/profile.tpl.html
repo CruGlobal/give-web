@@ -149,9 +149,9 @@
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
                             <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                           </div>
+                          <a id="donorEmailPreferences" href="" ng-if="$ctrl.profilePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)" translate>Edit Email Preferences</a>
                         </div>
                       </form>
-                      <a id="donorEmailPreferences" href="" ng-if="$ctrl.profilePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)" translate>Edit Email Preferences</a>
 
                       <form name="$ctrl.spouseEmailForm" novalidate ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.hasSpouse || $ctrl.addingSpouse)">
                         <div class="form-group" ng-class="{'has-error': ($ctrl.spouseEmailForm.spouseEmail | showErrors)}">
@@ -168,9 +168,9 @@
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
                             <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                           </div>
+                          <a id="spouseEmailPreferences" href="" ng-if="$ctrl.spousePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)" translate>Edit Email Preferences</a>
                         </div>
                       </form>
-                      <a id="spouseEmailPreferences" href="" ng-if="$ctrl.spousePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)" translate>Edit Email Preferences</a>
                     </div>
 
                     <!--Phone Numbers-->
