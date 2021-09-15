@@ -391,7 +391,7 @@ describe('profile service', () => {
   describe('updatePaymentMethod', () => {
     it('should update a bank account', () => {
       self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
-        { 'bank-name': 'Some Bank' }
+        { 'payment-instrument-identification-attributes': { 'bank-name': 'Some Bank' } }
       ).respond(200, null)
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { bankAccount: { 'bank-name': 'Some Bank' } })
         .subscribe(null, () => fail())
@@ -400,7 +400,16 @@ describe('profile service', () => {
 
     it('should update a credit card', () => {
       self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
-        { 'cardholder-name': 'Some Person', address: { 'street-address': 'Some Address||||||', 'extended-address': '', locality: '', 'postal-code': '', region: '' } }
+        {
+          'payment-instrument-identification-attributes': {
+            'cardholder-name': 'Some Person',
+            'street-address': 'Some Address||||||',
+            'extended-address': '',
+            locality: '',
+            'postal-code': '',
+            region: ''
+          }
+        }
       ).respond(200, null)
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { creditCard: { 'cardholder-name': 'Some Person', address: { streetAddress: 'Some Address' } } })
         .subscribe(null, () => fail())
@@ -409,7 +418,7 @@ describe('profile service', () => {
 
     it('should update a credit card with no billing address (api will use mailing address)', () => {
       self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
-        { 'cardholder-name': 'Some Person' }
+        { 'payment-instrument-identification-attributes': { 'cardholder-name': 'Some Person' } }
       ).respond(200, null)
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { creditCard: { 'cardholder-name': 'Some Person', address: undefined } })
         .subscribe(null, () => fail())
