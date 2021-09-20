@@ -437,23 +437,25 @@ describe('order service', () => {
       runTestWith = (paymentInfo, expectedRequestData, expectedCvv) => {
         jest.spyOn(self.orderService, 'storeCardSecurityCode').mockImplementation(() => {})
         jest.spyOn(self.orderService, 'selectPaymentMethod').mockReturnValue(Observable.of('placeholder'))
-        self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:creditcardupdateform')
+        self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description')
           .respond(200, {
             _order: [{
-              _paymentmethodinfo: [{
-                _creditcardupdateform: [{
-                  links: [
-                    {
-                      rel: 'updatecreditcardfororderaction',
-                      uri: '/creditcards/orders/crugive/default=/update/<payment id>='
+              _paymentinstrumentselector: [{
+                _chosen: [{
+                  _description: [{
+                    self: {
+                      uri: '/paymentinstruments/orders/crugive/<order id>=/orderpaymentinstrument/<payment id>='
                     }
-                  ]
+                  }],
+                  self: {
+                    uri: '/paymentinstruments/orders/crugive/<order id>=/paymentinstrumentselector/<selector id>='
+                  }
                 }]
               }]
             }]
           })
 
-        self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/creditcards/orders/crugive/default=/update/<payment id>=',
+        self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentinstruments/orders/crugive/<order id>=/orderpaymentinstrument/<payment id>=',
           expectedRequestData)
           .respond(200, {})
 
@@ -470,18 +472,36 @@ describe('order service', () => {
     })
 
     it('should update the given payment method', () => {
-      runTestWith({ 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa', cvv: '963' },
-        { 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa' }, '963')
+      runTestWith(
+        { 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa', cvv: '963' },
+        {
+          'payment-instrument-identification-attributes': {
+            'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa'
+          }
+        },
+        '963')
     })
 
     it('should update the given payment method with an address', () => {
-      runTestWith({ 'cardholder-name': 'New name', cvv: '789', address: { country: 'US' } },
-        { 'cardholder-name': 'New name', address: { 'country-name': 'US' } }, '789')
+      runTestWith(
+        { 'cardholder-name': 'New name', cvv: '789', address: { country: 'US' } },
+        {
+          'payment-instrument-identification-attributes': {
+            'cardholder-name': 'New name', 'country-name': 'US'
+          }
+        },
+        '789')
     })
 
     it('should call storeCardSecurityCode with undefined when the cvv wasn\'t changed', () => {
-      runTestWith({ 'cardholder-name': 'New name', 'card-number': '0000' },
-        { 'cardholder-name': 'New name', 'card-number': '0000' }, undefined)
+      runTestWith(
+        { 'cardholder-name': 'New name', 'card-number': '0000' },
+        {
+          'payment-instrument-identification-attributes': {
+            'cardholder-name': 'New name', 'card-number': '0000'
+          }
+        },
+        undefined)
     })
   })
 

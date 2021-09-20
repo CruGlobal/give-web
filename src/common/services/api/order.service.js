@@ -178,23 +178,36 @@ class Order {
       paymentInfo.address = formatAddressForCortex(paymentInfo.address)
     }
 
+    let dataToSubmit = { ...paymentInfo, ...paymentInfo.address }
+    dataToSubmit = omit(dataToSubmit, ['cvv', 'address'])
+    dataToSubmit = { 'payment-instrument-identification-attributes': dataToSubmit }
+
+    if (paymentMethod.self.type === 'paymentinstruments.order-payment-instrument') {
+      return this.updatePaymentMethodInCortex(paymentMethod.self.uri, dataToSubmit, paymentInfo.cvv, paymentMethod)
+    }
+
     return this.selectPaymentMethod(paymentMethod.selectAction)
       .mergeMap(() => {
         return this.cortexApiService.get({
           path: ['carts', this.cortexApiService.scope, 'default'],
           zoom: {
-            updateForm: 'order:paymentmethodinfo:creditcardupdateform'
+            chosen: 'order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
           }
         })
       })
       .mergeMap(data => {
-        return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.updateForm, 'updatecreditcardfororderaction'),
-          data: omit(paymentInfo, 'cvv')
-        })
-          .do(() => {
-            this.storeCardSecurityCode(paymentInfo.cvv, paymentMethod.self.uri)
-          })
+        const uri = data.chosen ? data.chosen.description.self.uri : paymentMethod.self.uri
+        return this.updatePaymentMethodInCortex(uri, dataToSubmit, paymentInfo.cvv, paymentMethod)
+      })
+  }
+
+  updatePaymentMethodInCortex (uri, dataToSubmit, cvv, paymentMethod) {
+    return this.cortexApiService.put({
+      path: uri,
+      data: dataToSubmit
+    })
+      .do(() => {
+        this.storeCardSecurityCode(cvv, paymentMethod.self.uri)
       })
   }
 
