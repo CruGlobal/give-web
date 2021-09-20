@@ -5,6 +5,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
+import { Roles } from 'common/services/session/session.service'
 
 import module from './order.service'
 
@@ -21,9 +22,10 @@ describe('order service', () => {
   beforeEach(angular.mock.module(module.name))
   var self = {}
 
-  beforeEach(inject((orderService, cartService, $httpBackend, $window, $log) => {
+  beforeEach(inject((orderService, cartService, sessionService, $httpBackend, $window, $log) => {
     self.orderService = orderService
     self.cartService = cartService
+    self.sessionService = sessionService
     self.$httpBackend = $httpBackend
     self.$window = $window
     self.$log = $log
@@ -355,7 +357,22 @@ describe('order service', () => {
         done()
       })
 
-      expect(self.orderService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo)
+      expect(self.orderService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo, false)
+    })
+
+    it('should tell the system to save the new bank account on the donor profile', done => {
+      jest.spyOn(self.sessionService, 'getRole').mockReturnValue(Roles.registered)
+      jest.spyOn(self.orderService, 'addBankAccountPayment').mockReturnValue(Observable.of('success'))
+
+      const paymentInfo = {}
+      self.orderService.addPaymentMethod({
+        bankAccount: paymentInfo
+      }).subscribe((data) => {
+        expect(data).toEqual('success')
+        done()
+      })
+
+      expect(self.orderService.addBankAccountPayment).toHaveBeenCalledWith(paymentInfo, true)
     })
 
     it('should save a new credit card payment method', (done) => {
@@ -383,7 +400,22 @@ describe('order service', () => {
         done()
       })
 
-      expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo)
+      expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo, false)
+    })
+
+    it('should tell the system to save the new credit card on the donor profile', done => {
+      jest.spyOn(self.sessionService, 'getRole').mockReturnValue(Roles.registered)
+      jest.spyOn(self.orderService, 'addCreditCardPayment').mockReturnValue(Observable.of('success'))
+
+      const paymentInfo = {}
+      self.orderService.addPaymentMethod({
+        creditCard: paymentInfo
+      }).subscribe((data) => {
+        expect(data).toEqual('success')
+        done()
+      })
+
+      expect(self.orderService.addCreditCardPayment).toHaveBeenCalledWith(paymentInfo, true)
     })
 
     it('should throw an error if the payment info doesn\'t contain a bank account or credit card', () => {
