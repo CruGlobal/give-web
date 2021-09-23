@@ -434,9 +434,10 @@ describe('order service', () => {
   describe('updatePaymentMethod', () => {
     let runTestWith
     beforeEach(() => {
+      jest.spyOn(self.orderService, 'storeCardSecurityCode').mockImplementation(() => {})
+      jest.spyOn(self.orderService, 'selectPaymentMethod').mockReturnValue(Observable.of('placeholder'))
+
       runTestWith = (paymentInfo, expectedRequestData, expectedCvv) => {
-        jest.spyOn(self.orderService, 'storeCardSecurityCode').mockImplementation(() => {})
-        jest.spyOn(self.orderService, 'selectPaymentMethod').mockReturnValue(Observable.of('placeholder'))
         self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description')
           .respond(200, {
             _order: [{
@@ -502,6 +503,37 @@ describe('order service', () => {
           }
         },
         undefined)
+    })
+
+    it('should update a credit card that has already been selected', () => {
+      const paymentInfo = { 'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa', cvv: '963' }
+      const expectedRequestData = {
+        'payment-instrument-identification-attributes': {
+          'cardholder-name': 'New name', 'last-four-digits': '8888', 'card-type': 'Visa'
+        }
+      }
+      const expectedCvv = '963'
+      const expectedPaymentMethodUri = '/paymentinstruments/orders/crugive/<order id>=/orderpaymentinstrument/<payment id>='
+      const paymentMethod = {
+        selectAction: '<select uri>',
+        self: {
+          uri: expectedPaymentMethodUri,
+          type: 'paymentinstruments.order-payment-instrument'
+        }
+      }
+
+      self.$httpBackend.expectPUT(`https://give-stage2.cru.org/cortex${expectedPaymentMethodUri}`,
+        expectedRequestData)
+        .respond(200, {})
+
+      self.orderService.updatePaymentMethod(paymentMethod, { creditCard: paymentInfo })
+        .subscribe()
+
+      expect(self.orderService.selectPaymentMethod).not.toHaveBeenCalled()
+
+      self.$httpBackend.flush()
+
+      expect(self.orderService.storeCardSecurityCode).toHaveBeenCalledWith(expectedCvv, expectedPaymentMethodUri)
     })
   })
 
