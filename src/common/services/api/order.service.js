@@ -126,7 +126,13 @@ class Order {
     const dataToSend = {}
 
     if (paymentInfo.address) {
-      dataToSend.address = formatAddressForCortex(paymentInfo.address)
+      dataToSend['billing-address'] = {
+        name: {
+          'family-name': 'na',
+          'given-name': 'na'
+        },
+        address: formatAddressForCortex(paymentInfo.address)
+      }
       paymentInfo.address = undefined
     }
     dataToSend['payment-instrument-identification-form'] = paymentInfo
