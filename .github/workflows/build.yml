@@ -4,82 +4,93 @@ on:
   push: 
     branches: [staging, master]
   pull_request:
-    branches: [staging]
+    branches: [staging, master]
 
 jobs:
-  stage_build:
+  lint:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/staging'
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: 8
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache --check-cache
+        run: yarn install --immutable --immutable-cache
       
-      - name: Tests
-        run: yarn lint && yarn test
+      - name: Lint Check
+        run: yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 8
+      
+      - name: Install Dependencies
+        run: yarn install --immutable --immutable-cache
+      
+      - name: Lint Check
+        run: yarn test
+  
+  codecov:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 8
+      
+      - name: Install Dependencies
+        run: yarn install --immutable --immutable-cache
+      
+      - name: Build App
+        run: yarn run build 
+      
+      - name: Upload Codecov Reports
+        uses: codecov/codecov-action@v2
+    
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [lint, test, codecov]
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 8
+      
+      - name: Install Dependencies
+        run: yarn install --immutable --immutable-cache
       
       - name: Build App
         run: yarn run build
-        
-      - name: Upload Codecov Reports
-        uses: codecov/codecov-action@v2
-      
-      - name: Install AWS CLI
-        run: pip install --user awscli
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         
-      - name: Deploy to S3
+      - name: Deploy to S3 | Staging
+        if: github.ref == 'refs/heads/staging'
         run: aws s3 sync ./public/ s3://cru-givestage --delete
-      
-      - name: AWS Cloudfront
-        run: aws cloudfront create-invalidation --distribution-id EPXENORNKOQM --paths "/*"
 
-  prod_build:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 8
-        
-      - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache --check-cache
-      
-      - name: Tests
-        run: yarn lint && yarn test
-      
-      - name: Build App
-        run: yarn run build
-        
-      - name: Upload Codecov Reports
-        uses: codecov/codecov-action@v2
-      
-      - name: Install AWS CLI
-        run: pip install --user awscli
-      
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        
-      - name: Deploy to S3
+      - name: Deploy to S3 | Production
+        if: github.ref == 'refs/heads/master'
         run: aws s3 sync ./public/ s3://cru-giveprod --delete
-      - name: AWS Cloudfront
+      
+      - name: AWS Cloudfront | Staging
+        if: github.ref == 'refs/heads/staging'
+        run: aws cloudfront create-invalidation --distribution-id EPXENORNKOQM --paths "/*"
+      
+      - name: AWS Cloudfront | Production
+        if: github.ref == 'refs/heads/master'
         run: aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"
