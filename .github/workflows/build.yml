@@ -1,0 +1,85 @@
+name: Build
+
+on:
+  push: 
+    branches: [staging, master]
+  pull_request:
+    branches: [staging]
+
+jobs:
+  stage_build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/staging'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 8
+      
+      - name: Install Dependencies
+        run: yarn install --immutable --immutable-cache --check-cache
+      
+      - name: Tests
+        run: yarn lint && yarn test
+      
+      - name: Build App
+        run: yarn run build
+        
+      - name: Upload Codecov Reports
+        uses: codecov/codecov-action@v2
+      
+      - name: Install AWS CLI
+        run: pip install --user awscli
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        
+      - name: Deploy to S3
+        run: aws s3 sync ./public/ s3://cru-givestage --delete
+      
+      - name: AWS Cloudfront
+        run: aws cloudfront create-invalidation --distribution-id EPXENORNKOQM --paths "/*"
+
+  prod_build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 8
+        
+      - name: Install Dependencies
+        run: yarn install --immutable --immutable-cache --check-cache
+      
+      - name: Tests
+        run: yarn lint && yarn test
+      
+      - name: Build App
+        run: yarn run build
+        
+      - name: Upload Codecov Reports
+        uses: codecov/codecov-action@v2
+      
+      - name: Install AWS CLI
+        run: pip install --user awscli
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        
+      - name: Deploy to S3
+        run: aws s3 sync ./public/ s3://cru-giveprod --delete
+      - name: AWS Cloudfront
+        run: aws cloudfront create-invalidation --distribution-id E51L08TW3241I --paths "/*"
