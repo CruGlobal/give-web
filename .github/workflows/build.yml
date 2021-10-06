@@ -26,7 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
+        with:
+          # Help Codecov detect commit SHA
+          fetch-depth: 2
+      
       - uses: actions/setup-node@v2
         with:
           node-version: 8
@@ -34,28 +37,12 @@ jobs:
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache
       
-      - name: Lint Check
+      - name: Run Tests
         run: yarn test
-  
-  codecov:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 8
-      
-      - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
-      
-      - name: Build App
-        run: yarn run build 
       
       - name: Upload Codecov Reports
-        uses: codecov/codecov-action@v2
-    
-  
+        uses: codecov/codecov-action@v2 
+   
   deploy:
     runs-on: ubuntu-latest
     needs: [lint, test, codecov]
