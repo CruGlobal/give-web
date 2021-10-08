@@ -69,13 +69,10 @@ jobs:
       # Deploying to S3 with the --delete flag can be problematic if a cached file references a deleted file
       # Solution: deploy once without deleting old files, invalidate the Cloudfront cache, then deploy a second time with the flag to delete previous files
       - name: Deploy to S3
-        # if: github.ref == 'refs/heads/master'
         run: aws s3 sync dist ${{ secrets.AWS_WEB_STATIC_BUCKET_NAME }} --region us-east-1 --acl public-read --cache-control 'public, max-age=300'
       
       - name: AWS Cloudfront
-        if: github.ref == 'refs/heads/master'
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
       
       - name: Deploy to S3 and Delete Previous Files
-        if: github.ref == 'refs/heads/master'
         run: aws s3 sync dist  ${{ secrets.AWS_WEB_STATIC_BUCKET_NAME }} --region us-east-1 --acl public-read --cache-control 'public, max-age=300' --delete
