@@ -45,6 +45,8 @@ jobs:
    
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref == 'refs/heads/master' && 'production' || 'staging' }}
     needs: [lint, test]
     if: github.event_name == 'push'
     steps:
