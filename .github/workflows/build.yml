@@ -48,7 +48,7 @@ jobs:
     environment:
       name: ${{ github.ref == 'refs/heads/master' && 'production' || 'staging' }}
     needs: [lint, test]
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging')
     steps:
       - uses: actions/checkout@v2
 
