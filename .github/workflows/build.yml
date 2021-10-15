@@ -52,7 +52,7 @@ jobs:
     environment:
       name: ${{ github.ref == 'refs/heads/master' && 'production' || 'staging' }}
     env:
-      S3_GIVE_DOMAIN: ${{ github.ref == 'refs/heads/master' && '//give-static.cru.org' || '//give-stage-static.cru.org' }}
+      S3_GIVE_DOMAIN: //${{ secrets.GIVE_WEB_HOSTNAME }}
     needs: [lint, test]
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging')
     steps:
