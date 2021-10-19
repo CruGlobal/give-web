@@ -10,7 +10,7 @@ const loadManifest = () => {
     manifestRequest.addEventListener('load', function () {
       resolve(JSON.parse(this.responseText))
     })
-    manifestRequest.open('GET', process.env.GIVE_WEB_HOSTNAME + '/manifest.json')
+    manifestRequest.open('GET', process.env.S3_GIVE_DOMAIN + '/manifest.json')
     manifestRequest.send()
   })
 }
