@@ -64,10 +64,13 @@ jobs:
         run: yarn install --immutable --immutable-cache
       
       - name: Build App
+        env:
+          S3_GIVE_DOMAIN: //${{ secrets.GIVE_WEB_HOSTNAME }}
+          ROLLBAR_ACCESS_TOKEN: ${{ secrets.ROLLBAR_ACCESS_TOKEN }}
         run: yarn run build
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@master
+        uses: aws-actions/configure-aws-credentials@036a4a1ddf2c0e7a782dca6e083c6c53e5d90321
         with:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}

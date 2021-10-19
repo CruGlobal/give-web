@@ -52,7 +52,7 @@ const sharedConfig = {
       'branded-checkout.html'
     ]),
     new webpack.EnvironmentPlugin({
-      TRAVIS_COMMIT: 'development',
+      GITHUB_SHA: 'development',
       S3_GIVE_DOMAIN: '',
       ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token'
     }),
