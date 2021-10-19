@@ -2,7 +2,7 @@ name: Build
 
 on:
   push: 
-    branches: [staging, master, EP-2293-gha]
+    branches: [staging, master, gha-test]
   pull_request:
     branches: [staging, master]
 
