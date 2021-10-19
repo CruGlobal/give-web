@@ -53,7 +53,7 @@ const sharedConfig = {
     ]),
     new webpack.EnvironmentPlugin({
       GITHUB_SHA: 'development',
-      S3_GIVE_DOMAIN: '',
+      GIVE_WEB_HOSTNAME: '',
       ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token'
     }),
     // To strip all locales except “en”
