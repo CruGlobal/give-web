@@ -11,18 +11,26 @@ export type Scalars = {
   Float: number;
 };
 
-export type Book = {
-  __typename?: 'Book';
-  author?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+export type Cart = {
+  __typename?: 'Cart';
+  items: Array<CartItem>;
+  total: Scalars['Float'];
+};
+
+export type CartItem = {
+  __typename?: 'CartItem';
+  code: Scalars['String'];
+  displayName: Scalars['String'];
+  orgId: Scalars['String'];
+  price: Scalars['Float'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  books?: Maybe<Array<Maybe<Book>>>;
+  cart?: Maybe<Cart>;
 };
 
-export type BooksQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCartQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BooksQuery = { __typename?: 'Query', books?: Array<{ __typename?: 'Book', title?: string | null | undefined, author?: string | null | undefined } | null | undefined> | null | undefined };
+export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', items: Array<{ __typename?: 'CartItem', displayName: string }> } | null | undefined };
