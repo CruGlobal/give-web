@@ -5,8 +5,12 @@ export interface GetCartData {
   
 }
 
+export interface GetCartIncluded {
+  
+}
 
-const CartDataHandler = (data: GetCartData): Cart => {
+
+const CartDataHandler = (data: GetCartData, included: GetCartIncluded): Cart => {
   //TODO: parse REST data into GQL Schema type
 
   return { 
@@ -22,16 +26,4 @@ const CartDataHandler = (data: GetCartData): Cart => {
   };
 };
 
-const CartResolver = {
-  Query: {
-    cart: (
-      _source,
-      {},
-      { datasources },
-    ) => {
-      return datasources.restApi.getCart();
-    },
-  },
-};
-
-export { CartDataHandler, CartResolver };
+export { CartDataHandler }

@@ -2,37 +2,26 @@ import { ApolloServer } from 'apollo-server';
 import { RESTDataSource } from 'apollo-datasource-rest';
 
 import schema from './Schema';
-import { GetCartData, CartDataHandler } from './Schema/Cart/datahandler';
-
-const books: Book[] = [
-  {
-    title: 'The Awakening',
-    author: 'Kate Chopin',
-  },
-  {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
-];
-
-const resolvers = {
-  Query: {
-    books: () => books,
-  },
-};
+import { GetCartData, CartDataHandler, GetCartIncluded } from './Schema/Cart/datahandler';
 
 class RestApi extends RESTDataSource {
   constructor() {
     super();
     this.baseURL = 'https://give-stage2.cru.org';
+
+
   }
 
   async getCart() {
     //TODO: define path for query
-    const { data, included }: { data: GetCartData, included: any } = await this.get(``);
+    const { data, included }: { data: GetCartData, included: GetCartIncluded } = await this.get(`carts/`);
 
-    return CartDataHandler(data);
+    return CartDataHandler(data, included);
   }
+}
+
+export interface Context {
+  dataSources: { restApi: RestApi };
 }
 
 const server  = new ApolloServer({

@@ -1,12 +1,14 @@
+import { Resolvers } from 'src/types/graphql.generated';
 
-const CartResolvers = {
+
+const CartResolvers: Resolvers = {
   Query: {
     cart: (
       _source,
       {},
-      { datasources },
+      { dataSources },
     ) => {
-      return datasources.restApi.getCart();
+      return dataSources.restApi.getCart();
     },
   },
 };
