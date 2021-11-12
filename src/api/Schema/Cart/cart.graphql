@@ -3,13 +3,17 @@ extend type Query {
 }
 
 type Cart {
+  id: String!
   items: [CartItem!]!
-  total: Float!
+  cartTotal: Float!
+  cartTotalDisplay: String!
 }
 
 type CartItem {
+  amount: Float!
   code: String!
   displayName: String!
-  orgId: String!
-  price: Float!
+  orgId: String
+  price: String!
+  uri: String!
 }

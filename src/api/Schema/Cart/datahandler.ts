@@ -1,6 +1,6 @@
-import { Cart } from "src/types/graphql.generated";
+import { Cart, CartItem } from 'src/types/graphql.generated';
+import { startMonth } from 'src/common/services/giftHelpers/giftDates.service';
 
-//TODO: fill out interface with REST data
 export interface GetCartResponse {
   lineItems: {
     item: {
@@ -13,55 +13,118 @@ export interface GetCartResponse {
       'product-code': string;
     };
     itemDefinition: {
-      'details': any;
+      'details': any[];
       'display-name': string;
     };
     rate: {
       cost: {
         amount: number;
         'amount-with-fees': number;
+        display: string;
+        'display-with-fees': string;
       };
       recurrence: {
         display: string;
       };
-      self: {
-        uri: string;
-      };
     };
     'recurring-day-of-month': any;
     'recurring-start-month': any;
+    self: {
+      uri: string;
+    };
   }[];
   rateTotals: {
     cost: {
       amount: number;
       'amount-with-fees': number;
-      display: number;
-      'display-with-fees': number;
+      display: string;
+      'display-with-fees': string;
     };
     recurrence: {
+      display: string;
       interval: string;
     };
   }[];
   total: {
-
+    cost: {
+      amount: number;
+      display: string;
+    }
   }
 }
 
+//Convert REST response to GraphQL types
+const CartDataHandler = (data: GetCartResponse, nextDrawDate: any): Cart => {
 
-const CartDataHandler = (data: GetCartResponse): Cart => {
-  //TODO: parse REST data into GQL Schema type
+  const items = data.lineItems.map((item): CartItem => {
+    const frequency = item.rate.recurrence.display
+    //const itemConfig = omit(item.itemfields, ['self', 'links'])
+    const giftStartDate = frequency !== 'Single'
+      ? startMonth(item['recurring-day-of-month'], item['recurring-start-month'], nextDrawDate) : null
+    const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
-  return { 
-    items: [
-      {
-        code: 'abc',
-        displayName: 'Donation',
-        orgId: 'Cru',
-        price: 100.0,
-      },
-    ],
-    total: 100.0,
-  };
+    let designationType: string | undefined;
+    let orgId: string | undefined;
+    item.itemDefinition['details'].forEach((v) => {
+      if (v['name'] === 'designation_type') {
+        designationType = v['display-value']
+      }
+      if (v['name'] === 'org_id') {
+        orgId = v['display-value']
+      }
+    })
+
+    return {
+      uri: item.self.uri,
+      code: item.itemCode.code,
+      orgId: orgId,
+      displayName: item.itemDefinition['display-name'],
+      //designationType: designationType,
+      price: item.rate.cost.display,
+      //priceWithFees: item.rate.cost['display-with-fees'],
+      //config: itemConfig,
+      //frequency: frequency,
+      amount: item.rate.cost.amount,
+      //amountWithFees: item.rate.cost['amount-with-fees'],
+      //designationNumber: item.itemCode['product-code'],
+      //productUri: item.item.self.uri,
+      //giftStartDate: giftStartDate,
+      //giftStartDateDaysFromNow: giftStartDateDaysFromNow,
+      //giftStartDateWarning: giftStartDateDaysFromNow >= 275
+    }
+  })
+
+  let cartTotal: number | undefined;
+  let cartTotalDisplay: string | undefined;
+  const frequencyTotals = data.rateTotals.map(rateTotal => {
+    if (rateTotal.recurrence.interval === 'NA') {
+      cartTotal = rateTotal.cost.amount
+      cartTotalDisplay = rateTotal.cost.display
+    }
+    return {
+      frequency: rateTotal.recurrence.display,
+      amount: rateTotal.cost.amount,
+      amountWithFees: rateTotal.cost['amount-with-fees'],
+      total: rateTotal.cost.display,
+      totalWithFees: rateTotal.cost['display-with-fees']
+    }
+  })
+  // The API returns Single gift rate totals as the last item in the list, so we should move it to the first item
+  // to preserve the ordering in the UI (Single gift totals first).
+  if (cartTotal) {
+    //frequencyTotals.unshift(frequencyTotals.pop())
+  }
+
+  // set cart item count cookie
+  //this.setCartCountCookie(items.length)
+
+  return {
+    id: '1', //this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
+    items: items.reverse(), // Show most recent cart items first
+    //frequencyTotals: frequencyTotals,
+    cartTotal: cartTotal || (data.total && data.total.cost.amount),
+    cartTotalDisplay: cartTotalDisplay || (data.total && data.total.cost.display)
+  }
 };
 
 export { CartDataHandler }

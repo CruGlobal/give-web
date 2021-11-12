@@ -16,16 +16,20 @@ export type Scalars = {
 
 export type Cart = {
   __typename?: 'Cart';
+  cartTotal: Scalars['Float'];
+  cartTotalDisplay: Scalars['String'];
+  id: Scalars['String'];
   items: Array<CartItem>;
-  total: Scalars['Float'];
 };
 
 export type CartItem = {
   __typename?: 'CartItem';
+  amount: Scalars['Float'];
   code: Scalars['String'];
   displayName: Scalars['String'];
-  orgId: Scalars['String'];
-  price: Scalars['Float'];
+  orgId?: Maybe<Scalars['String']>;
+  price: Scalars['String'];
+  uri: Scalars['String'];
 };
 
 export type Query = {
@@ -110,8 +114,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Cart: ResolverTypeWrapper<Cart>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
-  CartItem: ResolverTypeWrapper<CartItem>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  CartItem: ResolverTypeWrapper<CartItem>;
   Query: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
@@ -120,23 +124,27 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Cart: Cart;
   Float: Scalars['Float'];
-  CartItem: CartItem;
   String: Scalars['String'];
+  CartItem: CartItem;
   Query: {};
   Boolean: Scalars['Boolean'];
 }>;
 
 export type CartResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = ResolversObject<{
+  cartTotal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  cartTotalDisplay?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   items?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>;
-  total?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CartItemResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CartItem'] = ResolversParentTypes['CartItem']> = ResolversObject<{
+  amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  orgId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  orgId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  price?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

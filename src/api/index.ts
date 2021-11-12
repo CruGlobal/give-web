@@ -2,7 +2,7 @@ import { ApolloServer } from 'apollo-server';
 import { RESTDataSource } from 'apollo-datasource-rest';
 
 import schema from './Schema';
-import { GetCartData, CartDataHandler, GetCartIncluded } from './Schema/Cart/datahandler';
+import { CartDataHandler, GetCartResponse } from './Schema/Cart/datahandler';
 import { cortexScope } from '../common/app.constants';
 
 class RestApi extends RESTDataSource {
@@ -22,9 +22,9 @@ class RestApi extends RESTDataSource {
       total: 'total,total:cost'
     }*/
 
-    const { data, included }: { data: GetCartData, included: GetCartIncluded } = await this.get(`cortex/carts/${cortexScope}/default`);
+    const { data }: { data: GetCartResponse } = await this.get(`cortex/carts/${cortexScope}/default`);
 
-    return CartDataHandler(data);
+    return CartDataHandler(data, {});
   }
 }
 
