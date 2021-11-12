@@ -3,20 +3,28 @@ import { RESTDataSource } from 'apollo-datasource-rest';
 
 import schema from './Schema';
 import { GetCartData, CartDataHandler, GetCartIncluded } from './Schema/Cart/datahandler';
+import { cortexScope } from '../common/app.constants';
 
 class RestApi extends RESTDataSource {
+
   constructor() {
+
     super();
+
     this.baseURL = 'https://give-stage2.cru.org';
-
-
   }
 
   async getCart() {
-    //TODO: define path for query
-    const { data, included }: { data: GetCartData, included: GetCartIncluded } = await this.get(`carts/`);
 
-    return CartDataHandler(data, included);
+    /*zoom: {
+      lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
+      rateTotals: 'ratetotals:element[]',
+      total: 'total,total:cost'
+    }*/
+
+    const { data, included }: { data: GetCartData, included: GetCartIncluded } = await this.get(`cortex/carts/${cortexScope}/default`);
+
+    return CartDataHandler(data);
   }
 }
 
