@@ -64,6 +64,7 @@ class Cart {
       }
     }), this.commonService.getNextDrawDate())
       .map(([cartResponse, nextDrawDate]) => {
+        debugger;
         if (!cartResponse || !cartResponse.lineItems) {
           this.setCartCountCookie(0)
           return {}

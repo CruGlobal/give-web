@@ -1,60 +1,126 @@
 import { Cart, CartItem } from 'src/types/graphql.generated';
 import { startMonth } from 'src/common/services/giftHelpers/giftDates.service';
 
+interface RESTResponseLink {
+  href: string;
+  rel: string;
+  rev: string;
+  type: string;
+  uri: string;
+}
+
+interface RESTResponseSelfReference {
+  href: string;
+  type: string;
+  uri: string;
+}
+
 export interface GetCartResponse {
   lineItems: {
+    availability: {
+      links: RESTResponseLink[];
+      self: RESTResponseSelfReference;
+      state: string;
+    };
     item: {
-      self: {
-        uri: string;
-      };
+      links:RESTResponseLink[];
+      self: RESTResponseSelfReference;
     };
     itemCode: {
-      code: string;
-      'product-code': string;
+      code: string;
+      links: RESTResponseLink[];
+      "product-code": string;
+      self: RESTResponseSelfReference;
     };
     itemDefinition: {
-      'details': any[];
-      'display-name': string;
+      details: {
+        "display-name": string;
+        "display-value": string;
+        name: string;
+        value: string;
+      }[];
+      "display-name": string;
+      links: RESTResponseLink[];
+      self: RESTResponseSelfReference;
     };
+    itemfields: {
+      amount: number;
+      "amount-with-fees": number;
+      "campaign-code": string;
+      "donation-services-comments": string;
+      links: RESTResponseLink[];
+      "premium-code": string;
+      "recipient-comments": string;
+      "recurring-day-of-month": string;
+      "recurring-start-of-month": string;
+      self: RESTResponseSelfReference;
+    };
+    links: RESTResponseLink[];
+    quantity: number;
     rate: {
       cost: {
         amount: number;
-        'amount-with-fees': number;
+        "amount-with-fees": number;
+        currency: string;
         display: string;
-        'display-with-fees': string;
-      };
+        "display-with-fees": string;
+      }
+      display: string;
+      links: RESTResponseLink[];
       recurrence: {
         display: string;
+        interval: string;
+      };
+      self: RESTResponseSelfReference;
+      "start-date": {
+        "display-value": string;
+        value: number;
       };
     };
-    'recurring-day-of-month': any;
-    'recurring-start-month': any;
-    self: {
-      uri: string;
+    self: RESTResponseSelfReference;
+    total: {
+      cost: {
+        amount: number;
+        currency: string;
+        display: string;
+      }[];
+      links: RESTResponseLink[];
+      self: RESTResponseSelfReference;
     };
   }[];
   rateTotals: {
     cost: {
       amount: number;
-      'amount-with-fees': number;
+      "amount-with-fees": number;
       display: string;
-      'display-with-fees': string;
+      "display-with-fees": string;
     };
+    display: string;
+    links: RESTResponseLink[];
     recurrence: {
       display: string;
       interval: string;
     };
+    self: RESTResponseSelfReference;
   }[];
+  rawData: {
+    links: RESTResponseLink[];
+    self: RESTResponseSelfReference;
+    "total-quantity": number;
+  };
   total: {
     cost: {
       amount: number;
+      currerncy: string;
       display: string;
-    }
+    };
+    links: RESTResponseLink[];
+    self: RESTResponseSelfReference;
   }
 }
 
 //Convert REST response to GraphQL types
-const CartDataHandler = (data: GetCartResponse, nextDrawDate: any): Cart => {
+const CartDataHandler = (data: GetCartResponse, nextDrawDate: string): Cart => {
 
   const items = data.lineItems.map((item): CartItem => {
     const frequency = item.rate.recurrence.display

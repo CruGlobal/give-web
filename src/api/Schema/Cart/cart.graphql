@@ -5,15 +5,55 @@ extend type Query {
 type Cart {
   id: String!
   items: [CartItem!]!
-  cartTotal: Float!
-  cartTotalDisplay: String!
+  rateTotal: [CartRateTotal!]!
+  total: CartTotal!
 }
 
 type CartItem {
   amount: Float!
+  amountWithFees: Float!
+  campaignCode: Strting!
   code: String!
+  details: [CartItemDetail!]!
   displayName: String!
   orgId: String
+  premiumCode: String!
   price: String!
+  productCode: String!
+  recurrence: {
+    display: String!
+    interval: String!
+  }
+  startDate: {
+    displayValue: String!
+    value: Int!
+  }
   uri: String!
+}
+
+type CartRateTotal {
+  cost: {
+    amount: Float!
+    amountWithFees: Float!
+    display: String!
+    displayWithFees: String!
+  }
+  display: String!
+  recurrence: {
+    display: String!
+    interval: String!
+  }
+}
+
+type CartTotal {
+  amount: Float!
+  currency: String!
+  display: String!
+}
+
+type CartItemDetail {
+  displayName: String!
+  displayValue: String!
+  name: String!
+  value: String!
 }
