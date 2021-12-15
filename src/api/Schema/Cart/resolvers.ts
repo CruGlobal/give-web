@@ -1,4 +1,4 @@
-import { Resolvers } from 'src/types/graphql.generated';
+import { Resolvers } from '../../../../graphql/schema.graphql';
 
 
 const CartResolvers: Resolvers = {

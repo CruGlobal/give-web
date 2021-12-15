@@ -1,6 +1,12 @@
-extend type Query {
-  cart: Cart
-}
+directive @external on FIELD_DEFINITION
+
+directive @requires(fields: _FieldSet!) on FIELD_DEFINITION
+
+directive @provides(fields: _FieldSet!) on FIELD_DEFINITION
+
+directive @key(fields: _FieldSet!) on OBJECT | INTERFACE
+
+scalar _FieldSet
 
 type Cart {
   id: String!
@@ -28,18 +34,6 @@ type CartItem {
   uri: String!
 }
 
-type CartRateTotal {
-  cost: CartRateTotalCost!
-  display: String!
-  recurrence: CartItemRecurrence!
-}
-
-type CartTotal {
-  amount: Float!
-  currency: String!
-  display: String!
-}
-
 type CartItemDetail {
   displayName: String!
   displayValue: String!
@@ -57,10 +51,26 @@ type CartItemStartDate {
   value: Int!
 }
 
+type CartRateTotal {
+  cost: CartRateTotalCost!
+  display: String!
+  recurrence: CartItemRecurrence!
+}
+
 type CartRateTotalCost {
   amount: Float!
   amountWithFees: Float!
   currency: String!
   display: String!
   displayWithFees: String!
+}
+
+type CartTotal {
+  amount: Float!
+  currency: String!
+  display: String!
+}
+
+type Query {
+  cart: Cart
 }

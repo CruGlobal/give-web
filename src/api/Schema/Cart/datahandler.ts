@@ -1,4 +1,4 @@
-import { Cart, CartItem } from 'src/types/graphql.generated';
+import { Cart, CartItem } from '../../../../graphql/types.generated';
 import { startMonth } from 'src/common/services/giftHelpers/giftDates.service';
 
 interface RESTResponseLink {
@@ -11,8 +11,8 @@ interface RESTResponseLink {
 
 interface RESTResponseSelfReference {
   href: string;
-  type: string;
-  uri: string;
+  type: string;
+  uri: string;
 }
 
 export interface GetCartResponse {
@@ -20,14 +20,14 @@ export interface GetCartResponse {
     availability: {
       links: RESTResponseLink[];
       self: RESTResponseSelfReference;
-      state: string;
+      state: string;
     };
     item: {
       links: RESTResponseLink[];
       self: RESTResponseSelfReference;
     };
     itemCode: {
-      code: string;
+      code: string;
       links: RESTResponseLink[];
       "product-code": string;
       self: RESTResponseSelfReference;
@@ -123,7 +123,7 @@ export interface GetCartResponse {
 //Convert REST response to GraphQL types
 const CartDataHandler = (data: GetCartResponse, nextDrawDate: string): Cart => {
 
-  const items = data.lineItems.map((item): CartItem => {
+  /*const items = data.lineItems.map((item): CartItem => {
     const frequency = item.rate.recurrence.display
     //const itemConfig = omit(item.itemfields, ['self', 'links'])
     const giftStartDate = frequency !== 'Single'
@@ -184,14 +184,16 @@ const CartDataHandler = (data: GetCartResponse, nextDrawDate: string): Cart => {
 
   // set cart item count cookie
   //this.setCartCountCookie(items.length)
-
+  
   return {
     id: '1', //this.hateoasHelperService.getLink(cartResponse.total, 'cart').split('/').pop(),
     items: items.reverse(), // Show most recent cart items first
     //frequencyTotals: frequencyTotals,
     cartTotal: cartTotal || (data.total && data.total.cost.amount),
     cartTotalDisplay: cartTotalDisplay || (data.total && data.total.cost.display)
-  }
+  }*/
+
+  return { id: '1' };
 };
 
 export { CartDataHandler }
