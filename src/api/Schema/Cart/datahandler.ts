@@ -23,7 +23,7 @@ export interface GetCartResponse {
       state: string;
     };
     item: {
-      links:RESTResponseLink[];
+      links: RESTResponseLink[];
       self: RESTResponseSelfReference;
     };
     itemCode: {
@@ -92,6 +92,7 @@ export interface GetCartResponse {
     cost: {
       amount: number;
       "amount-with-fees": number;
+      currency: string;
       display: string;
       "display-with-fees": string;
     };
@@ -111,7 +112,7 @@ export interface GetCartResponse {
   total: {
     cost: {
       amount: number;
-      currerncy: string;
+      currency: string;
       display: string;
     };
     links: RESTResponseLink[];

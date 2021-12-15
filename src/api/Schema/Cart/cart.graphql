@@ -20,10 +20,13 @@ type CartItem {
   premiumCode: String!
   price: String!
   productCode: String!
+  quantity: Int!
   recurrence: {
     display: String!
     interval: String!
   }
+  recurringDayOfMonth: String!
+  recurringStartOfMonth: String!;
   startDate: {
     displayValue: String!
     value: Int!
@@ -35,6 +38,7 @@ type CartRateTotal {
   cost: {
     amount: Float!
     amountWithFees: Float!
+    currency: String!
     display: String!
     displayWithFees: String!
   }
