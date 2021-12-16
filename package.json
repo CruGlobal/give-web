@@ -2,6 +2,8 @@
   "name": "give-web",
   "version": "1.0.0",
   "dependencies": {
+    "@apollo/client": "^3.4.16",
+    "@apollo/federation": "^0.33.8",
     "@babel/polyfill": "^7.7.0",
     "@babel/runtime-corejs2": "^7.0.0",
     "angular": "1.7.9",
@@ -17,10 +19,14 @@
     "angular-ui-bootstrap": "2.5.6",
     "angular-ui-router": "^1.0.22",
     "angular-upload": "^1.0.13",
+    "apollo-datasource-rest": "^3.4.0",
+    "apollo-server": "^3.4.0",
     "bootstrap-sass": "3.4.1",
     "change-case-object": "^2.0.0",
     "cru-payments": "^1.2.2",
     "crypto-js": "^3.1.9-1",
+    "graphql": "^16.0.1",
+    "graphql-tag": "^2.12.5",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
@@ -32,9 +38,12 @@
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
+    "@babel/node": "^7.16.0",
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.16.0",
     "@babel/runtime": "^7.5.5",
+    "@types/graphql": "^14.5.0",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
@@ -70,7 +79,9 @@
     "build": "webpack -p",
     "build:analyze": "webpack -p --env.analyze",
     "test": "jest",
-    "lint": "standard"
+    "lint": "standard",
+    "lint:ts": "tsc",
+    "gql:server": "babel-node --extensions \".ts\" src/api/index.ts"
   },
   "standard": {
     "env": {

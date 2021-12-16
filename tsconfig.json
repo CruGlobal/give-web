@@ -17,5 +17,5 @@
     "jsx": "preserve"
   },
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", ".env"]
+  "include": ["app.d.ts", "**/*.ts", "**/*.tsx", ".env"]
 }

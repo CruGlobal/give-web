@@ -5,7 +5,8 @@ module.exports = {
       targets: {
         browsers: ['defaults', 'ie >= 11']
       }
-    }]
+    }],
+    "@babel/preset-typescript"
   ],
   plugins: [
     '@babel/plugin-transform-runtime'
