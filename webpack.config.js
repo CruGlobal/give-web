@@ -80,6 +80,7 @@ const sharedConfig = {
           }
         }]
       },
+      { test: /\.(tsx|ts)$/, loader: 'ts-loader' },
       {
         test: /\.html$/,
         use: [

@@ -1,16 +1,27 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "plugins": ["jasmine"],
   "env": {
     "browser": true,
     "jasmine": true
   },
-  "extends": ["angular", "plugin:jasmine/recommended"],
+  "extends": [
+    "angular",
+    "plugin:jasmine/recommended",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "globals": {
-    "inject": true,
-    "require": true
+    "inject": true
   },
   "rules": {
+    "import/no-duplicates": "error",
+    "import/extensions": "error",
+    "import/order": "error",
+    "import/newline-after-import": "error",
+    "import/no-named-default": "error",
+    "import/no-anonymous-default-export": "error",
+    "import/dynamic-import-chunkname": "error",
     "no-alert": "error",
     "no-array-constructor": "off",
     "no-bitwise": "off",
@@ -213,6 +224,11 @@
     "spaced-comment": "off",
     "strict": "off",
     "template-curly-spacing": "off",
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
     "use-isnan": "error",
     "valid-jsdoc": "off",
     "valid-typeof": "error",
