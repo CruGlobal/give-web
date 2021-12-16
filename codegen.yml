@@ -1,0 +1,26 @@
+overwrite: true
+schema: "./src/api/Schema/**/*.graphql"
+documents: "**/*.graphql"
+generates:
+  ./graphql/types.generated.ts:
+    plugins:
+      - add:
+        content: '/* eslint-disable */'
+      - typescript
+  ./:
+    preset: near-operation-file
+    presetConfig:
+      baseTypesPath: graphql/types.generated.ts
+    plugins:
+      - add:
+        content: '/* eslint-disable */'
+      - typescript-operations
+      - typescript-react-apollo
+  ./graphql/schema.graphql:
+    plugins:
+      - schema-ast
+    config:
+      federation: true
+  ./graphql/possibleTypes.generated.ts:
+    plugins:
+      - fragment-matcher
