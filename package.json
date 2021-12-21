@@ -43,6 +43,17 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.16.0",
     "@babel/runtime": "^7.5.5",
+    "@graphql-codegen/cli": "^2.3.0",
+    "@graphql-codegen/fragment-matcher": "^3.2.0",
+    "@graphql-codegen/introspection": "2.1.0",
+    "@graphql-codegen/near-operation-file-preset": "^2.2.2",
+    "@graphql-codegen/schema-ast": "^2.4.0",
+    "@graphql-codegen/typescript": "2.3.1",
+    "@graphql-codegen/typescript-apollo-angular": "^3.3.0",
+    "@graphql-codegen/typescript-graphql-files-modules": "^2.1.0",
+    "@graphql-codegen/typescript-operations": "^2.2.0",
+    "@graphql-codegen/typescript-react-apollo": "3.2.1",
+    "@graphql-codegen/typescript-resolvers": "^2.4.0",
     "@types/graphql": "^14.5.0",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
@@ -81,7 +92,8 @@
     "test": "jest",
     "lint": "standard",
     "lint:ts": "tsc",
-    "gql:server": "babel-node --extensions \".ts\" src/api/index.ts"
+    "gql:server": "babel-node --extensions \".ts\" src/api/index.ts",
+    "gql:codegen": "graphql-codegen --config codegen.yml"
   },
   "standard": {
     "env": {
