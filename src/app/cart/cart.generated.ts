@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as Types from '../../../graphql/types.generated';
 
 import { gql } from '@apollo/client';

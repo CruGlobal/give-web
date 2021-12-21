@@ -1,6 +1,6 @@
-graphql
 node_modules
 dist
+graphql
 .idea
 .DS_STORE
 coverage
