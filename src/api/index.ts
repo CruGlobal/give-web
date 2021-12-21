@@ -14,18 +14,12 @@ class RestApi extends RESTDataSource {
     this.baseURL = 'https://give-stage2.cru.org';
   }
 
-  /*async getCart() {
-
-    zoom: {
-      lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
-      rateTotals: 'ratetotals:element[]',
-      total: 'total,total:cost'
-    }
+  async getCart() {
 
     const { data }: { data: GetCartResponse } = await this.get(`cortex/carts/${cortexScope}/default`);
 
-    return CartDataHandler(data, {});
-  }*/
+    return CartDataHandler(data);
+  }
 }
 
 export interface Context {

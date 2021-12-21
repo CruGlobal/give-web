@@ -3,7 +3,6 @@ extend type Query {
 }
 
 type Cart {
-  id: String!
   items: [CartItem!]!
   rateTotal: [CartRateTotal!]!
   total: CartTotal!
@@ -14,6 +13,7 @@ type CartItem {
   amountWithFees: Float!
   campaignCode: String!
   code: String!
+  designationType: String
   details: [CartItemDetail!]!
   displayName: String!
   orgId: String
@@ -24,7 +24,9 @@ type CartItem {
   recurrence: CartItemRecurrence!
   recurringDayOfMonth: String!
   recurringStartOfMonth: String!
+  secureDesignationFlag: Boolean!
   startDate: CartItemStartDate!
+  status: String
   uri: String!
 }
 
