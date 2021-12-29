@@ -5,6 +5,7 @@ graphql/
 .DS_STORE
 coverage
 *.iml
+*.env
 
 *.log
 *.back.*

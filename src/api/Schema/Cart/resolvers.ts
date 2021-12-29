@@ -1,9 +1,9 @@
-import { Resolvers } from '../../../../graphql/schema.graphql';
+import { Resolvers } from "@apollo/client";
 
 
 const CartResolvers: Resolvers = {
   Query: {
-    cart: (
+    cart: async (
       _source,
       {},
       { dataSources },

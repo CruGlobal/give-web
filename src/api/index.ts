@@ -11,13 +11,22 @@ class RestApi extends RESTDataSource {
 
     super();
 
-    this.baseURL = 'https://give-stage2.cru.org';
+    this.baseURL = process.env.API_URL;
   }
 
   async getCart() {
 
-    const { data }: { data: GetCartResponse } = await this.get(`cortex/carts/${cortexScope}/default`);
-
+    const { data }: { data: GetCartResponse } = await this.get(
+      `cortex/carts/${cortexScope}/default`,
+      {
+        zoom: {
+          lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
+          rateTotals: 'ratetotals:element[]',
+          total: 'total,total:cost'
+        },
+      },
+    );
+    
     return CartDataHandler(data);
   }
 }
