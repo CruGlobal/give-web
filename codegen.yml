@@ -10,6 +10,7 @@ generates:
     presetConfig:
       baseTypesPath: graphql/types.generated.ts
     plugins:
+      - typescript
       - typescript-operations
       - typescript-react-apollo
   ./graphql/schema.graphql:

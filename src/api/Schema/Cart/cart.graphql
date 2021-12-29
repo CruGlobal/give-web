@@ -3,66 +3,64 @@ extend type Query {
 }
 
 type Cart {
-  items: [CartItem!]!
-  rateTotal: [CartRateTotal!]!
-  total: CartTotal!
+  id: ID!
+  gifts: [Gift!]!
+  totalGifts: Int!
+  #rateTotal: [CartRateTotal!]!
+  #total: CartTotal!
 }
 
-type CartItem {
+type Gift {
+  recipient: GiftRecipient!
   amount: Float!
-  amountWithFees: Float!
-  campaignCode: String!
-  code: String!
-  designationType: String
-  details: [CartItemDetail!]!
-  displayName: String!
-  orgId: String
-  premiumCode: String!
-  price: String!
-  productCode: String!
-  quantity: Int!
-  recurrence: CartItemRecurrence!
-  recurringDayOfMonth: String!
-  recurringStartOfMonth: String!
-  secureDesignationFlag: Boolean!
-  startDate: CartItemStartDate!
-  status: String
-  uri: String!
+  commentsToDSG: String
+  commentsToRecipient: String
+  recurrence: GiftRecurrence!
+  recurringDayOfMonth: String
+  #amountWithFees: Float!
+  #campaignCode: String!
+  #code: String!
+  #details: [CartItemDetail!]!
+  #displayName: String!
+  #orgId: String
+  #premiumCode: String!
+  #price: String!
+  #productCode: String!
+  #quantity: Int!
+  #recurringStartOfMonth: String!
+  #startDate: CartItemStartDate!
+  #uri: String!
 }
 
-type CartRateTotal {
-  cost: CartRateTotalCost!
-  display: String!
-  recurrence: CartItemRecurrence!
+type GiftRecipient {
+  id: ID!
+  designationNumber: String!
+  #webTitle: String!
+  type: GiftRecipientType!
+  status: GiftRecipientStatus!
+  organizationId: String!
+  email: String
+  replacementDesignation: String
 }
 
-type CartTotal {
-  amount: Float!
-  currency: String!
-  display: String!
+enum GiftRecurrence {
+  SINGLE
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUALLY
+  ANNUALLY
 }
 
-type CartItemDetail {
-  displayName: String!
-  displayValue: String!
-  name: String!
-  value: String!
+enum GiftRecipientType {
+  NATIONAL_STAFF
+  PROJECT
+  SCHOLARSHIP
+  STAFF
+  STUDENT
+  VOLUNTEER
 }
 
-type CartItemRecurrence {
-  display: String!
-  interval: String!
-}
-
-type CartItemStartDate {
-  displayValue: String!
-  value: Int!
-}
-
-type CartRateTotalCost {
-  amount: Float!
-  amountWithFees: Float!
-  currency: String!
-  display: String!
-  displayWithFees: String!
+enum GiftRecipientStatus {
+  ACTIVE
+  INACTIVE
 }
