@@ -1,7 +1,11 @@
 query GetCart {
   cart {
-    items {
-      displayName
+    gifts {
+      amount
+      recipient {
+        designationNumber
+      }
+      recurrence
     }
   }
 }

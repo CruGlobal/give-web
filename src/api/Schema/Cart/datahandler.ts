@@ -1,4 +1,4 @@
-import { Cart, CartItem, CartItemDetail, CartItemStartDate, CartRateTotal, CartRateTotalCost, CartTotal } from '../../../../graphql/types.generated';
+import { Cart, Gift, GiftRecipient, GiftRecipientStatus, GiftRecipientType, GiftRecurrence } from '../../../../graphql/types.generated';
 
 interface RESTResponseLink {
   href: string;
@@ -27,6 +27,7 @@ export interface GetCartResponse {
 }
 
 interface CartResponseLineItem {
+  id: string;
   availability: {
     links: RESTResponseLink[];
     self: RESTResponseSelfReference;
@@ -43,12 +44,7 @@ interface CartResponseLineItem {
     self: RESTResponseSelfReference;
   };
   itemDefinition: {
-    details: {
-      "display-name": string;
-      "display-value": string;
-      name: string;
-      value: string;
-    }[];
+    details: CartItemDetail[];
     "display-name": string;
     links: RESTResponseLink[];
     self: RESTResponseSelfReference;
@@ -99,6 +95,13 @@ interface CartResponseLineItem {
   };
 }
 
+interface CartItemDetail {
+  "display-name": string;
+  "display-value": string;
+  name: string;
+  value: string;
+}
+
 interface CartResponseRateTotal {
   cost: {
     amount: number;
@@ -129,76 +132,96 @@ interface CartResponseTotal {
 //Convert REST response to GraphQL types
 const CartDataHandler = (data: GetCartResponse): Cart => {
 
+  const gifts = data.lineItems.map(gift => createGift(gift));
+
   return {
-    items: data.lineItems.map(item => createCartItem(item)),
-    rateTotal: data.rateTotals.map(rateTotal => createCartRateTotal(rateTotal)),
-    total: createCartTotal(data.total),
+    id: data.id,
+    gifts,
+    totalGifts: gifts.length,
   };
 };
 
-const createCartItem = (item: CartResponseLineItem): CartItem => {
+const createGift = (item: CartResponseLineItem): Gift => {
 
-  const { itemCode, itemDefinition, itemfields, quantity, rate } = item;
+  const { itemfields } = item;
 
-  const details: CartItemDetail[] = itemDefinition.details.map(detail => ({
-    displayName: detail['display-name'],
-    displayValue: detail['display-value'],
-    name: detail.name,
-    value: detail.value,
-  }));
+  const recipient = createGiftRecipient(item);
 
-  const designationType = details.find(detail => detail.name == "designation_type")?.value
-  const orgId = details.find(detail => detail.name == "org_id")?.value
-  const secureDesignationFlag = !!(details.find(detail => detail.name == "secure_flag")?.value)
-  const status = details.find(detail => detail.name == "status")?.value
-  const startDate: CartItemStartDate = {
-    displayValue: rate['start-date']['display-value'],
-    value: rate['start-date'].value,
-  };
+  let recurrence: GiftRecurrence;
+  switch (item.rate.recurrence.interval) {
+    case 'NA':
+      recurrence = GiftRecurrence.Single;
+
+    case 'MON':
+      recurrence = GiftRecurrence.Monthly;
+
+    case 'QUARTERLY':
+      recurrence = GiftRecurrence.Quarterly;
+
+    case 'ANNUAL':
+      recurrence = GiftRecurrence.Annually;
+    
+    default:
+      recurrence = GiftRecurrence.Single;
+  }
 
   return {
     amount: itemfields.amount,
-    amountWithFees: itemfields['amount-with-fees'],
-    campaignCode: itemfields['campaign-code'],
-    code: itemCode.code,
-    designationType,
-    details,
-    displayName: itemDefinition['display-name'],
-    orgId,
-    premiumCode: itemfields['premium-code'],
-    price: "",
-    productCode: itemCode['product-code'],
-    quantity,
-    recurrence: rate.recurrence,
+    commentsToDSG: itemfields['donation-services-comments'],
+    commentsToRecipient: itemfields['recipient-comments'],
+    recipient,
+    recurrence,
     recurringDayOfMonth: itemfields['recurring-day-of-month'],
-    recurringStartOfMonth: itemfields['recurring-start-of-month'],
-    secureDesignationFlag,
-    startDate,
-    status,
-    uri: "",
   }
 }
 
-const createCartRateTotal = (rateTotal: CartResponseRateTotal): CartRateTotal => {
+const createGiftRecipient = (item: CartResponseLineItem): GiftRecipient => {
 
-  const cost: CartRateTotalCost = {
-    amount: rateTotal.cost.amount,
-    amountWithFees: rateTotal.cost['amount-with-fees'],
-    currency: rateTotal.cost.currency,
-    display: rateTotal.cost.display,
-    displayWithFees: rateTotal.cost['display-with-fees'],
-  };
+  const details: CartItemDetail[] = item.itemDefinition.details;
+
+  let type: GiftRecipientType;
+  switch (details.find(detail => detail.name === "designation_type")?.value) {
+    case 'National Staff':
+      type = GiftRecipientType.NationalStaff;
+
+    case 'Project':
+      type = GiftRecipientType.Project;
+
+    case 'Scholarship':
+      type = GiftRecipientType.Scholarship;
+
+    case 'Staff':
+      type = GiftRecipientType.Staff;
+    
+    case 'Student':
+      type = GiftRecipientType.Student;
+    
+    case 'Volunteer':
+      type = GiftRecipientType.Volunteer;
+      
+    default:
+        type = GiftRecipientType.Staff;
+  }
+  
+  let status: GiftRecipientStatus;  
+  switch (details.find(detail => detail.name == "status")?.value) {
+    case 'Active':
+      status = GiftRecipientStatus.Active;
+
+    case 'Inactive':
+      status = GiftRecipientStatus.Inactive;
+
+    default:
+      status = GiftRecipientStatus.Inactive;
+  }
 
   return {
-    cost,
-    display: rateTotal.display,
-    recurrence: rateTotal.recurrence,
+    id: item.id,
+    designationNumber: item.itemCode['product-code'],
+    type,
+    status,
+    organizationId: "",
   }
-}
-
-const createCartTotal = (total: CartResponseTotal): CartTotal => {
-
-  return total.cost;
 }
 
 export { CartDataHandler }

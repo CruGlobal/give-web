@@ -11,10 +11,10 @@ type Cart {
 }
 
 type Gift {
-  recipient: GiftRecipient!
   amount: Float!
   commentsToDSG: String
   commentsToRecipient: String
+  recipient: GiftRecipient!
   recurrence: GiftRecurrence!
   recurringDayOfMonth: String
   #amountWithFees: Float!
