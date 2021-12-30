@@ -1,4 +1,4 @@
-import { Cart, Gift, GiftRecipient, GiftRecipientStatus, GiftRecipientType, GiftRecurrence } from '../../../../graphql/types.generated';
+import { Cart, Gift, GiftCost, GiftRecipient, GiftRecipientStatus, GiftRecipientType, GiftRecurrence, GiftRecurrenceFrequency, GiftTotal } from '../../../../graphql/types.generated';
 
 interface RESTResponseLink {
   href: string;
@@ -132,11 +132,13 @@ interface CartResponseTotal {
 //Convert REST response to GraphQL types
 const CartDataHandler = (data: GetCartResponse): Cart => {
 
-  const gifts = data.lineItems.map(gift => createGift(gift));
+  const gifts = data.lineItems.map(item => createGift(item));
+  const giftTotals = data.rateTotals.map(rateTotal => createGiftTotal(rateTotal));
 
   return {
     id: data.id,
     gifts,
+    giftTotals,
     totalGifts: gifts.length,
   };
 };
@@ -145,39 +147,47 @@ const createGift = (item: CartResponseLineItem): Gift => {
 
   const { itemfields } = item;
 
-  const recipient = createGiftRecipient(item);
-
-  let recurrence: GiftRecurrence;
-  switch (item.rate.recurrence.interval) {
-    case 'NA':
-      recurrence = GiftRecurrence.Single;
-
-    case 'MON':
-      recurrence = GiftRecurrence.Monthly;
-
-    case 'QUARTERLY':
-      recurrence = GiftRecurrence.Quarterly;
-
-    case 'ANNUAL':
-      recurrence = GiftRecurrence.Annually;
-    
-    default:
-      recurrence = GiftRecurrence.Single;
-  }
-
   return {
-    amount: itemfields.amount,
+    campaignCode: itemfields['campaign-code'],
     commentsToDSG: itemfields['donation-services-comments'],
     commentsToRecipient: itemfields['recipient-comments'],
-    recipient,
-    recurrence,
-    recurringDayOfMonth: itemfields['recurring-day-of-month'],
+    cost: createGiftCost(item),
+    premiumCode: itemfields['premium-code'],
+    recipient: createGiftRecipient(item),
+    recurrence: createGiftRecurrence(item),
   }
-}
+};
+
+const createGiftCost = (item: CartResponseLineItem): GiftCost => {
+
+  const { cost } = item.rate;
+
+  return {
+    amount: cost.amount,
+    amountWithFees: cost['amount-with-fees'],
+    currency: cost.currency,
+    display: cost.display,
+    displayWithFees: cost['display-with-fees'],
+  };
+};
 
 const createGiftRecipient = (item: CartResponseLineItem): GiftRecipient => {
 
-  const details: CartItemDetail[] = item.itemDefinition.details;
+  const { id, itemCode, itemDefinition } = item;
+
+  const details: CartItemDetail[] = itemDefinition.details;
+    
+  let status: GiftRecipientStatus;  
+  switch (details.find(detail => detail.name == "status")?.value) {
+    case 'Active':
+      status = GiftRecipientStatus.Active;
+
+    case 'Inactive':
+      status = GiftRecipientStatus.Inactive;
+
+    default:
+      status = GiftRecipientStatus.Inactive;
+  }
 
   let type: GiftRecipientType;
   switch (details.find(detail => detail.name === "designation_type")?.value) {
@@ -202,26 +212,63 @@ const createGiftRecipient = (item: CartResponseLineItem): GiftRecipient => {
     default:
         type = GiftRecipientType.Staff;
   }
-  
-  let status: GiftRecipientStatus;  
-  switch (details.find(detail => detail.name == "status")?.value) {
-    case 'Active':
-      status = GiftRecipientStatus.Active;
-
-    case 'Inactive':
-      status = GiftRecipientStatus.Inactive;
-
-    default:
-      status = GiftRecipientStatus.Inactive;
-  }
 
   return {
-    id: item.id,
-    designationNumber: item.itemCode['product-code'],
-    type,
+    id,
+    designationNumber: itemCode['product-code'],
+    displayName: itemDefinition['display-name'],
+    organizationId: details.find(detail => detail.name === "org_id")?.value || "",
     status,
-    organizationId: "",
+    type,
   }
-}
+};
+
+const createGiftRecurrence = (item: CartResponseLineItem): GiftRecurrence => {
+
+  const { itemfields, rate } = item;
+
+  return {
+    recurrenceFrequency: parseRecurrenceFrequency(rate.recurrence.interval),
+    recurringDayOfMonth: itemfields['recurring-day-of-month'],
+    recurringStartMonth: itemfields['recurring-start-of-month'],
+  };
+};
+
+const createGiftTotal = (rateTotal: CartResponseRateTotal): GiftTotal => {
+
+  const { cost, display, recurrence } = rateTotal;
+
+  return {
+    cost: {
+      amount: cost.amount,
+      amountWithFees: cost['amount-with-fees'],
+      currency: cost.currency,
+      display: cost.display,
+      displayWithFees: cost['display-with-fees'],
+    },
+    displayTotal: display,
+    recurrenceFrequency: parseRecurrenceFrequency(recurrence.interval),
+  }
+};
+
+const parseRecurrenceFrequency = (recurrence: string): GiftRecurrenceFrequency => {
+  
+  switch (recurrence) {
+    case 'NA':
+      return GiftRecurrenceFrequency.Single;
+
+    case 'MON':
+      return GiftRecurrenceFrequency.Monthly;
+
+    case 'QUARTERLY':
+      return GiftRecurrenceFrequency.Quarterly;
+
+    case 'ANNUAL':
+      return GiftRecurrenceFrequency.Annually;
+    
+    default:
+      return GiftRecurrenceFrequency.Single;
+  };
+};
 
 export { CartDataHandler }

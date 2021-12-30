@@ -5,45 +5,52 @@ extend type Query {
 type Cart {
   id: ID!
   gifts: [Gift!]!
+  giftTotals: [GiftTotal!]!
   totalGifts: Int!
-  #rateTotal: [CartRateTotal!]!
-  #total: CartTotal!
 }
 
 type Gift {
-  amount: Float!
+  campaignCode: String!
   commentsToDSG: String
   commentsToRecipient: String
+  cost: GiftCost!
+  premiumCode: String!
   recipient: GiftRecipient!
   recurrence: GiftRecurrence!
-  recurringDayOfMonth: String
-  #amountWithFees: Float!
-  #campaignCode: String!
-  #code: String!
-  #details: [CartItemDetail!]!
-  #displayName: String!
-  #orgId: String
-  #premiumCode: String!
-  #price: String!
-  #productCode: String!
-  #quantity: Int!
-  #recurringStartOfMonth: String!
-  #startDate: CartItemStartDate!
-  #uri: String!
+}
+
+type GiftCost {
+  amount: Float!
+  amountWithFees: Float!
+  currency: String!
+  display: String!
+  displayWithFees: String!
 }
 
 type GiftRecipient {
   id: ID!
   designationNumber: String!
-  #webTitle: String!
-  type: GiftRecipientType!
-  status: GiftRecipientStatus!
-  organizationId: String!
+  displayName: String!
   email: String
+  organizationId: String!
   replacementDesignation: String
+  status: GiftRecipientStatus!
+  type: GiftRecipientType!
 }
 
-enum GiftRecurrence {
+type GiftRecurrence {
+  recurrenceFrequency: GiftRecurrenceFrequency!
+  recurringDayOfMonth: String
+  recurringStartMonth: String
+}
+
+type GiftTotal {
+  cost: GiftCost!
+  displayTotal: String!
+  recurrenceFrequency: GiftRecurrenceFrequency!
+}
+
+enum GiftRecurrenceFrequency {
   SINGLE
   MONTHLY
   QUARTERLY

@@ -18,6 +18,7 @@ export type Scalars = {
 
 export type Cart = {
   __typename?: 'Cart';
+  giftTotals: Array<GiftTotal>;
   gifts: Array<Gift>;
   id: Scalars['ID'];
   totalGifts: Scalars['Int'];
@@ -25,17 +26,28 @@ export type Cart = {
 
 export type Gift = {
   __typename?: 'Gift';
-  amount: Scalars['Float'];
+  campaignCode: Scalars['String'];
   commentsToDSG?: Maybe<Scalars['String']>;
   commentsToRecipient?: Maybe<Scalars['String']>;
+  cost: GiftCost;
+  premiumCode: Scalars['String'];
   recipient: GiftRecipient;
   recurrence: GiftRecurrence;
-  recurringDayOfMonth?: Maybe<Scalars['String']>;
+};
+
+export type GiftCost = {
+  __typename?: 'GiftCost';
+  amount: Scalars['Float'];
+  amountWithFees: Scalars['Float'];
+  currency: Scalars['String'];
+  display: Scalars['String'];
+  displayWithFees: Scalars['String'];
 };
 
 export type GiftRecipient = {
   __typename?: 'GiftRecipient';
   designationNumber: Scalars['String'];
+  displayName: Scalars['String'];
   email?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   organizationId: Scalars['String'];
@@ -58,13 +70,27 @@ export enum GiftRecipientType {
   Volunteer = 'VOLUNTEER'
 }
 
-export enum GiftRecurrence {
+export type GiftRecurrence = {
+  __typename?: 'GiftRecurrence';
+  recurrenceFrequency: GiftRecurrenceFrequency;
+  recurringDayOfMonth?: Maybe<Scalars['String']>;
+  recurringStartMonth?: Maybe<Scalars['String']>;
+};
+
+export enum GiftRecurrenceFrequency {
   Annually = 'ANNUALLY',
   Monthly = 'MONTHLY',
   Quarterly = 'QUARTERLY',
   SemiAnnually = 'SEMI_ANNUALLY',
   Single = 'SINGLE'
 }
+
+export type GiftTotal = {
+  __typename?: 'GiftTotal';
+  cost: GiftCost;
+  displayTotal: Scalars['String'];
+  recurrenceFrequency: GiftRecurrenceFrequency;
+};
 
 export type Query = {
   __typename?: 'Query';
@@ -74,14 +100,16 @@ export type Query = {
 export type GetCartQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', gifts: Array<{ __typename?: 'Gift', amount: number }> } | null | undefined };
+export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', gifts: Array<{ __typename?: 'Gift', recipient: { __typename?: 'GiftRecipient', designationNumber: string } }> } | null | undefined };
 
 
 export const GetCartDocument = gql`
     query GetCart {
   cart {
     gifts {
-      amount
+      recipient {
+        designationNumber
+      }
     }
   }
 }
