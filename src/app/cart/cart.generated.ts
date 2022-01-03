@@ -100,17 +100,46 @@ export type Query = {
 export type GetCartQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', gifts: Array<{ __typename?: 'Gift', recipient: { __typename?: 'GiftRecipient', designationNumber: string } }> } | null | undefined };
+export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', id: string, totalGifts: number, gifts: Array<{ __typename?: 'Gift', cost: { __typename?: 'GiftCost', amount: number, amountWithFees: number, currency: string, display: string, displayWithFees: string }, recipient: { __typename?: 'GiftRecipient', id: string, designationNumber: string, displayName: string, status: Types.GiftRecipientStatus, type: Types.GiftRecipientType }, recurrence: { __typename?: 'GiftRecurrence', recurrenceFrequency: Types.GiftRecurrenceFrequency, recurringDayOfMonth?: string | null | undefined, recurringStartMonth?: string | null | undefined } }>, giftTotals: Array<{ __typename?: 'GiftTotal', displayTotal: string, recurrenceFrequency: Types.GiftRecurrenceFrequency, cost: { __typename?: 'GiftCost', amount: number, amountWithFees: number, currency: string, display: string, displayWithFees: string } }> } | null | undefined };
 
 
 export const GetCartDocument = gql`
     query GetCart {
   cart {
+    id
     gifts {
+      cost {
+        amount
+        amountWithFees
+        currency
+        display
+        displayWithFees
+      }
       recipient {
+        id
         designationNumber
+        displayName
+        status
+        type
+      }
+      recurrence {
+        recurrenceFrequency
+        recurringDayOfMonth
+        recurringStartMonth
       }
     }
+    giftTotals {
+      cost {
+        amount
+        amountWithFees
+        currency
+        display
+        displayWithFees
+      }
+      displayTotal
+      recurrenceFrequency
+    }
+    totalGifts
   }
 }
     `;

@@ -1,9 +1,38 @@
 query GetCart {
   cart {
+    id
     gifts {
+      cost {
+        amount
+        amountWithFees
+        currency
+        display
+        displayWithFees
+      }
       recipient {
+        id
         designationNumber
+        displayName
+        status
+        type
+      }
+      recurrence {
+        recurrenceFrequency
+        recurringDayOfMonth
+        recurringStartMonth
       }
     }
+    giftTotals {
+      cost {
+        amount
+        amountWithFees
+        currency
+        display
+        displayWithFees
+      }
+      displayTotal
+      recurrenceFrequency
+    }
+    totalGifts
   }
 }
