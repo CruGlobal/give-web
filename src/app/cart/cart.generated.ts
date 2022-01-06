@@ -102,7 +102,7 @@ export type Query = {
 export type GetCartQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', id: string, totalGifts: number, gifts: Array<{ __typename?: 'Gift', cost: { __typename?: 'GiftCost', amount: number, amountWithFees: number, currency: string, display: string, displayWithFees: string }, recipient: { __typename?: 'GiftRecipient', id: string, designationNumber: string, displayName: string }, recurrence: { __typename?: 'GiftRecurrence', recurrenceFrequency: Types.GiftRecurrenceFrequency, recurringDayOfMonth?: string | null | undefined, recurringStartMonth?: string | null | undefined } }>, giftTotals: Array<{ __typename?: 'GiftTotal', displayTotal: string, recurrenceFrequency: Types.GiftRecurrenceFrequency, cost: { __typename?: 'GiftCost', amount: number, amountWithFees: number, currency: string, display: string, displayWithFees: string } }> } | null | undefined };
+export type GetCartQuery = { __typename?: 'Query', nextDrawDate: string, cart?: { __typename?: 'Cart', id: string, totalGifts: number, gifts: Array<{ __typename?: 'Gift', cost: { __typename?: 'GiftCost', amount: number, amountWithFees: number, currency: string, display: string, displayWithFees: string }, recipient: { __typename?: 'GiftRecipient', id: string, designationNumber: string, displayName: string }, recurrence: { __typename?: 'GiftRecurrence', recurrenceFrequency: Types.GiftRecurrenceFrequency, recurringDayOfMonth?: string | null | undefined, recurringStartMonth?: string | null | undefined } }>, giftTotals: Array<{ __typename?: 'GiftTotal', displayTotal: string, recurrenceFrequency: Types.GiftRecurrenceFrequency, cost: { __typename?: 'GiftCost', amount: number, amountWithFees: number, currency: string, display: string, displayWithFees: string } }> } | null | undefined };
 
 
 export const GetCartDocument = gql`
@@ -125,6 +125,7 @@ export const GetCartDocument = gql`
     }
     totalGifts
   }
+  nextDrawDate
 }
     ${CartItemFragmentDoc}`;
 

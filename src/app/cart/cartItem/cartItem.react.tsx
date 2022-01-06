@@ -63,13 +63,13 @@ const CartItem = ({ item, nextDrawDate }: CartItemProps) => {
   };
   
   return (
-    <div>
-      <div>
+    <tr>
+      <td>
         <image desig-src={designationNumber} />
         <link onClick={navToDesignationPage}>{displayName}</link>
         <text>{`#${designationNumber}`}</text>
-      </div>
-      <div>
+      </td>
+      <td>
         <text>{frequency}</text>
         { giftStartDate ? (
           <div>
@@ -77,17 +77,17 @@ const CartItem = ({ item, nextDrawDate }: CartItemProps) => {
             {/*Display Error*/}
           </div>
         ): null }
-      </div>
-      <div>
+      </td>
+      <td>
         <text>{costDisplay}</text>
-      </div>
-      <div>
+      </td>
+      <td>
         <link onClick={editItem}>Edit</link>
         <text>|</text>
         <link onClick={removeItem}>Remove</link>
         {/*Display Error*/}
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 };
 

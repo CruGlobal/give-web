@@ -1,7 +1,8 @@
 import angular from 'angular';
-import { table } from 'console';
 import { react2angular } from 'react2angular';
-import { useGetCartQuery, Gift, GiftRecurrenceFrequency } from './cart.generated';
+
+import { useGetCartQuery } from './cart.generated';
+import { CartItem } from './cartItem/cartItem.react';
 
 
 const componentName = 'CartReact'
@@ -14,32 +15,8 @@ const CartReact = () => {
 
   const { data, loading } = useGetCartQuery();
 
-  const gifts: Gift[] = data?.cart?.gifts || []
-
-  const cartItem = (gift: Gift) => {
-
-    const { recipient, recurrence } = gift;
-
-    return (
-      <tr>
-        <td>
-          <img desig-src={recipient.designationNumber} />
-          <span>{recipient.displayName}</span>
-          <span>{recipient.designationNumber}</span>
-        </td>
-        <td>
-          <span>{recurrence.recurrenceFrequency}</span>
-          { recurrence.recurrenceFrequency === GiftRecurrenceFrequency.Single ? (
-            <span>
-              <span>Starts on:</span>
-              <span>{recurrence.recurringDayOfMonth}</span>
-              <span>{recurrence.recurringStartMonth}</span>
-            </span>
-          ): null}
-        </td>
-      </tr>
-    );
-  };
+  const nextDrawDate = data?.nextDrawDate || null;
+  const gifts = data?.cart?.gifts || [];
 
   return (
     <table style={{ flex: 1 }}>
@@ -51,7 +28,13 @@ const CartReact = () => {
         </tr>
       </thead>
       <tbody>
-        { gifts.map(gift => cartItem(gift)) || null }
+        { loading ? (
+            <div>
+              <text>Loading</text>
+            </div>
+          ) : gifts && nextDrawDate ? (
+            gifts?.map(gift => (<CartItem item={gift} nextDrawDate={nextDrawDate} />))
+          ) : null }
       </tbody>
     </table>
   );
