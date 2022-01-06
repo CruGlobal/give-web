@@ -9,7 +9,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const ManifestPlugin = require('webpack-manifest-plugin')
 
 const giveComponents = [
-  'app/cart/cart.component.js',
+  'app/cart/cart.react.tsx',
   'app/checkout/checkout.component.js',
   'app/thankYou/thankYou.component.js',
   'app/productConfig/productConfig.component.js',

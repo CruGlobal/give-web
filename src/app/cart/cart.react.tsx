@@ -5,13 +5,13 @@ import { useGetCartQuery } from './cart.generated';
 import { CartItem } from './cartItem/cartItem.react';
 
 
-const componentName = 'CartReact'
+const componentName = 'cartReact'
 
 interface CartProps {
 
 }
 
-const CartReact = () => {
+const Cart = () => {
 
   const { data, loading } = useGetCartQuery();
 
@@ -40,8 +40,8 @@ const CartReact = () => {
   );
 };
 
-const Cart = angular
-  .module(componentName)
-  .component(componentName, react2angular(CartReact));
+const CartReact = angular
+  .module(componentName, [])
+  .component(componentName, react2angular(Cart));
 
 export { Cart, CartReact }
