@@ -3,6 +3,7 @@ import { RESTDataSource } from 'apollo-datasource-rest';
 
 import schema from './Schema';
 import { CartDataHandler, GetCartResponse } from './Schema/Cart/datahandler';
+import { NextDrawDateDataHandler, GetNextDrawDateResponse } from './Schema/NextDrawDate/datahandler';
 import { cortexScope } from '../common/app.constants';
 
 class RestApi extends RESTDataSource {
@@ -28,6 +29,15 @@ class RestApi extends RESTDataSource {
     );
     
     return CartDataHandler(data);
+  }
+
+  async getNextDrawDate() {
+
+    const { data }: { data: GetNextDrawDateResponse } = await this.get(
+      `cortex/nextdrawdate`,
+    );
+    
+    return NextDrawDateDataHandler(data);
   }
 }
 
