@@ -11,7 +11,7 @@ generates:
       baseTypesPath: graphql/types.generated.ts
     plugins:
       - typescript
-      - typescript-operations
+      - typescript-apollo-angular
       - typescript-react-apollo
   ./graphql/schema.graphql:
     plugins:

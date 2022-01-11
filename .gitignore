@@ -1,14 +1,20 @@
+#Dependencies
 node_modules
+
+# Local Env Files
+.env
+
+# GraphQL Codegen
+graphql
+*.generated.ts
+
+# Misc
 dist
-graphql/
+coverage
+stats.json
 .idea
 .DS_STORE
-coverage
+.sass-cache
 *.iml
-*.env
-
 *.log
 *.back.*
-.sass-cache
-stats.json
-*.iml
