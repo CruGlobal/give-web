@@ -40,7 +40,7 @@ class Order {
       zoom: {
         donorDetails: 'order:donordetails',
         email: 'order:emailinfo:email',
-        emailForm: 'order:emailinfo:emailform'
+        emailForm: 'order:emailinfo:orderemailform'
       }
     })
       .map(data => {
