@@ -6,7 +6,7 @@ node_modules
 
 # GraphQL Codegen
 graphql
-src/**/*.generated.ts
+**/*.generated.ts
 
 # Misc
 dist
