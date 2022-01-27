@@ -148,9 +148,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
           data: {}
         }))
         .map((response) => response.data)
-    return skipEvent ? observable : observable.finally(() => {
-      $rootScope.$broadcast(SignOutEvent)
-    })
+    return skipEvent
+      ? observable
+      : observable.finally(() => {
+        $rootScope.$broadcast(SignOutEvent)
+      })
   }
 
   /* Private Methods */
@@ -228,7 +230,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function casApiUrl (path) {
-    var apiUrl = envService.read('apiUrl') + '/cas'
+    const apiUrl = envService.read('apiUrl') + '/cas'
     return apiUrl + path
   }
 }

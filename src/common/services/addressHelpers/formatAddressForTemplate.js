@@ -5,8 +5,8 @@ function formatAddressForTemplate (address) {
   if (output.country === 'US') {
     output.streetAddress = address['street-address']
     output.extendedAddress = address['extended-address']
-    output.locality = address['locality']
-    output.region = address['region']
+    output.locality = address.locality
+    output.region = address.region
     output.postalCode = address['postal-code']
   } else if (address['street-address']) {
     const intAddress = address['street-address'].split('||')

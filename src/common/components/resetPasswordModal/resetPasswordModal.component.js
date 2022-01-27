@@ -27,10 +27,10 @@ class ResetPasswordModalController {
     const params = this.$location.search()
     this.modalTitle = this.gettext('Reset Password')
     if (Object.prototype.hasOwnProperty.call(params, 'e')) {
-      this.email = params['e']
+      this.email = params.e
     }
     if (Object.prototype.hasOwnProperty.call(params, 'k')) {
-      this.resetKey = params['k']
+      this.resetKey = params.k
     }
     // Change state to forgot-password if we are missing required fields.
     if (angular.isUndefined(this.email) || angular.isUndefined(this.resetKey)) {
@@ -73,7 +73,7 @@ class ResetPasswordModalController {
             break
           default:
             this.$log.error('Error resetting password', omit(error, ['config.data.password', 'config.data.resetKey']))
-            this.errors['unknown'] = true
+            this.errors.unknown = true
         }
       })
   }
