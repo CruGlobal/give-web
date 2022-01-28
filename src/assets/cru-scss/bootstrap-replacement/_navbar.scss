@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 // scss-lint:disable SelectorDepth, NestingDepth
 
 /*------------------------------------*\
@@ -243,7 +245,7 @@ $navbar-margin-bottom: 46px;
 // the nav the full height of the horizontal nav (above 768px).
 .navbar-nav {
     @include mq($nav-break-min) {
-        margin: ($navbar-padding-vertical / 2) (-$navbar-padding-horizontal);
+        margin:  math.div($navbar-padding-vertical, 2) (-$navbar-padding-horizontal);
     }
 
     @media (max-width: $grid-float-breakpoint-max) {

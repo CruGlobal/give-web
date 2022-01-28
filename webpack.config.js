@@ -93,7 +93,15 @@ const sharedConfig = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader?-url',
-          'sass-loader?sourceMap'
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                quietDeps: true
+              }
+            }
+          }
         ]
       },
       {
@@ -102,7 +110,15 @@ const sharedConfig = {
         use: [
           'style-loader',
           'css-loader?sourceMap',
-          'sass-loader?sourceMap'
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                quietDeps: true
+              }
+            }
+          }
         ]
       }
     ]

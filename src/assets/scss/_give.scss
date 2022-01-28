@@ -566,7 +566,7 @@ hr.horizontal-divider {
 @media screen and (min-width: 550px ) and (max-width: 991px ) {
   .split-row {
     width: 100%;
-    margin-top: $gutter/2;
+    margin-top: $gutter*0.5;
 
     .split-col-left, .split-col-right {
       width: 45%;

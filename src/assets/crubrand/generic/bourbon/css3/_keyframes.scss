@@ -1,4 +1,11 @@
 // Adds keyframes blocks for supported prefixes, removing redundant prefixes in the block's content
+
+$prefix-for-webkit: null;
+$prefix-for-mozilla: null;
+$prefix-for-microsoft: null;
+$prefix-for-opera: null;
+$prefix-for-spec: null;
+
 @mixin keyframes($name) {
   $original-prefix-for-webkit:    $prefix-for-webkit;
   $original-prefix-for-mozilla:   $prefix-for-mozilla;

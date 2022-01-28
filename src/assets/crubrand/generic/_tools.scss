@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /*------------------------------------*\
  #TOOLS
 \*------------------------------------*/
@@ -8,7 +10,7 @@
 $rem-base: 16px !default;
 
 @function strip-units($num) {
-    @return $num / ($num * 0 + 1);
+    @return math.div($num, ($num * 0 + 1));
 }
 
 /**
@@ -17,12 +19,12 @@ $rem-base: 16px !default;
  */
 // scss-lint:disable NameFormat 
 @function parseInt($n) { /* 2 */
-    @return $n / ($n * 0 + 1);
+    @return math.div($n, ($n * 0 + 1));
 }
 // scss-lint:enable NameFormat
 
 @function convert-to-rem($value, $base-value: $rem-base) {
-    $value: strip-units($value) / strip-units($base-value) * 1rem;
+    $value: math.div(strip-units($value), strip-units($base-value)) * 1rem;
     
     // scss-lint:disable ZeroUnit
     @if ($value == 0rem) { 
@@ -56,11 +58,11 @@ $rem-base: 16px !default;
 }
 
 @function quarter($value) {
-    @return round($value / 4);
+    @return round(math.div($value, 4));
 }
 
 @function half($value) {
-    @return round($value / 2);
+    @return round(math.div($value, 2));
 }
 
 @function double($value) {
@@ -75,7 +77,7 @@ $rem-base: 16px !default;
  * Use this em function instead of the other
  */
 @function em($value, $context: $rem-base) {
-    $value: strip-units($value) / strip-units($context) * 1em;
+    $value: math.div(strip-units($value), strip-units($context)) * 1em;
     
     // scss-lint:disable ZeroUnit
     @if ($value == 0em) { 
