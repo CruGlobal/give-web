@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /*------------------------------------*\
     #MIXINS/SPACING
 \*------------------------------------*/
@@ -10,7 +12,7 @@
  *
  * DO NOT USE AT THE MOMENT
  */
-$base-vertical-grid: $base-spacing-unit / 4;
+$base-vertical-grid: math.div($base-spacing-unit, 4);
 
 @mixin vertical-calc($from: 1, $to: 12, $grid: $base-vertical-grid) {
     @if $from >= 1 and $to <= 12 {
