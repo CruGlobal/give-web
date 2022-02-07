@@ -1,9 +1,11 @@
+@use 'sass:math';
+
 /*------------------------------------*\
     #NAVIGATION
 \*------------------------------------*/
 
-$site-nav-height: ($header-height - $gold-bar-size) / 2;
-$action-nav-height: ($header-height - $gold-bar-size) / 2;
+$site-nav-height: math.div(($header-height - $gold-bar-size), 2);
+$action-nav-height:  math.div(($header-height - $gold-bar-size), 2);
 
 .globalNavigation {
     position: absolute;
@@ -612,7 +614,7 @@ $action-nav-height: ($header-height - $gold-bar-size) / 2;
 
 .has-submenu:hover:before{
     @extend [class^="icon-"], [class*=" icon-"];
-    @extend .icon-right-arrow:before;
+    @extend .icon-right-arrow, :before;
 
     float: right;
     padding-top: 10px;
