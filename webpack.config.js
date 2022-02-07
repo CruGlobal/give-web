@@ -160,20 +160,23 @@ module.exports = (env = {}) => [
   {
     ...sharedConfig,
     entry: {
-      ...(isBuild ? {
-        'give.v2': 'loaders/give.js',
-        'branded-checkout.v2': 'loaders/branded.js',
-        give: [...giveComponents, ...giveCss],
-        branded: brandedComponents
-      } : {
-        'dev.v2': 'loaders/dev.js',
-        main: 'app/main/main.component.js'
-      })
+      ...(isBuild
+        ? {
+            'give.v2': 'loaders/give.js',
+            'branded-checkout.v2': 'loaders/branded.js',
+            give: [...giveComponents, ...giveCss],
+            branded: brandedComponents
+          }
+        : {
+            'dev.v2': 'loaders/dev.js',
+            main: 'app/main/main.component.js'
+          })
     },
     output: {
       filename (chunkData) {
         return ['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunkData.chunk.name)
-          ? '[name].js' : 'chunks/[name].[contenthash].js'
+          ? '[name].js'
+          : 'chunks/[name].[contenthash].js'
       },
       path: path.resolve(__dirname, 'dist')
     },

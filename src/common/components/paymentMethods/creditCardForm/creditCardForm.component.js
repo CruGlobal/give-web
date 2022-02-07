@@ -130,9 +130,9 @@ class CreditCardController {
       })
       const tokenObservable = this.paymentMethod && !this.creditCardPayment.cardNumber
         ? Observable.of({
-          tsepToken: this.paymentMethod['last-four-digits'],
-          maskedCardNumber: this.paymentMethod['last-four-digits']
-        }) // Send masked card number when card number is not updated
+            tsepToken: this.paymentMethod['last-four-digits'],
+            maskedCardNumber: this.paymentMethod['last-four-digits']
+          }) // Send masked card number when card number is not updated
         : this.tsysService.getManifest()
           .mergeMap(data => {
             cruPayments.creditCard.init(this.envService.get(), data.deviceId, data.manifest)

@@ -3,13 +3,13 @@ import angular from 'angular'
 const directiveName = 'valueMatch'
 
 const valueMatch = /* @ngInject */ function () {
-  var directiveDefinitionObject = {
+  const directiveDefinitionObject = {
     restrict: 'A',
     require: ['^ngModel', '^form'],
     link: function (scope, element, attributes, controllers) {
-      var ngModel = controllers[0]
-      var formController = controllers[1]
-      var valueModel = formController[attributes.valueMatch]
+      const ngModel = controllers[0]
+      const formController = controllers[1]
+      const valueModel = formController[attributes.valueMatch]
 
       // Watch other model for changes
       scope.$watch(() => valueModel.$viewValue, function () {

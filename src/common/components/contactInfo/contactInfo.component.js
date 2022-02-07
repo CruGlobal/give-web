@@ -88,14 +88,14 @@ class Step1Controller {
         this.spouseFieldsDisabled = !this.orderService.spouseEditableForOrder(this.donorDetails)
         if (!this.nameFieldsDisabled && includes([Roles.registered, Roles.identified], this.sessionService.getRole())) {
           // Pre-populate first, last and email from session if missing from donorDetails
-          if (!this.donorDetails['name']['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
-            this.donorDetails['name']['given-name'] = this.sessionService.session.first_name
+          if (!this.donorDetails.name['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
+            this.donorDetails.name['given-name'] = this.sessionService.session.first_name
           }
-          if (!this.donorDetails['name']['family-name'] && angular.isDefined(this.sessionService.session.last_name)) {
-            this.donorDetails['name']['family-name'] = this.sessionService.session.last_name
+          if (!this.donorDetails.name['family-name'] && angular.isDefined(this.sessionService.session.last_name)) {
+            this.donorDetails.name['family-name'] = this.sessionService.session.last_name
           }
-          if (angular.isUndefined(this.donorDetails['email']) && angular.isDefined(this.sessionService.session.email)) {
-            this.donorDetails['email'] = this.sessionService.session.email
+          if (angular.isUndefined(this.donorDetails.email) && angular.isDefined(this.sessionService.session.email)) {
+            this.donorDetails.email = this.sessionService.session.email
           }
         }
 
