@@ -26,6 +26,15 @@ describe('order service', () => {
     })
   })
 
+  describe('getDevice', () => {
+    it('should get the branded checkout TSYS device', () => {
+      self.tsysService.device = 'test-env'
+      const device = self.tsysService.getDevice()
+
+      expect(device).toEqual('test-env')
+    })
+  })
+
   describe('getManifest', () => {
     it('should load the device id and manifest for TSYS tokenization', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/tsys/manifest')
