@@ -241,8 +241,8 @@ class DesignationEditorController {
 
   images () {
     const designController = this.designationContent['design-controller']
-    if (designController && designController['carousel']) {
-      return this.getImageUrls(designController['carousel'])
+    if (designController && designController.carousel) {
+      return this.getImageUrls(designController.carousel)
     }
     return []
   }

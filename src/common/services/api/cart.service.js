@@ -77,16 +77,17 @@ class Cart {
       const frequency = item.rate.recurrence.display
       const itemConfig = omit(item.itemfields, ['self', 'links'])
       const giftStartDate = frequency !== 'Single'
-        ? startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null
+        ? startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate)
+        : null
       const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
       let designationType
       let orgId
-      angular.forEach(item.itemDefinition['details'], (v, k) => {
-        if (v['name'] === 'designation_type') {
+      angular.forEach(item.itemDefinition.details, (v, k) => {
+        if (v.name === 'designation_type') {
           designationType = v['display-value']
         }
-        if (v['name'] === 'org_id') {
+        if (v.name === 'org_id') {
           orgId = v['display-value']
         }
       })

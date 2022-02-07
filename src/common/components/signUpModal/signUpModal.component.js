@@ -43,7 +43,7 @@ class SignUpModalController {
             this.signUpErrors[error.status] = true
             break
           default:
-            this.signUpErrors['generic'] = true
+            this.signUpErrors.generic = true
         }
         this.isLoading = false
       })
