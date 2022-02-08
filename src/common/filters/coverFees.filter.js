@@ -12,11 +12,13 @@ function CoverFees (orderService) {
   return (input, item, type) => {
     if (this.orderService.retrieveCoverFeeDecision()) {
       switch (type) {
-        case PRICE:
+        case PRICE: {
           return item.priceWithFees
-        case TOTAL:
+        }
+        case TOTAL: {
           return item.totalWithFees
-        case CART_TOTAL:
+        }
+        case CART_TOTAL: {
           let total
           angular.forEach(item.frequencyTotals, (frequencyTotal) => {
             if (frequencyTotal.frequency === 'Single') {
@@ -24,6 +26,7 @@ function CoverFees (orderService) {
             }
           })
           return total
+        }
       }
     } else {
       switch (type) {

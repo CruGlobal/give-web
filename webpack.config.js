@@ -35,7 +35,8 @@ const sharedConfig = {
   devtool: 'source-map',
   entry: {},
   resolve: {
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   output: {
     filename: '[name].js',
@@ -62,7 +63,7 @@ const sharedConfig = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         use: [{
           loader: 'babel-loader',
@@ -72,13 +73,18 @@ const sharedConfig = {
               targets: {
                 browsers: ['defaults', 'ie >= 11']
               }
-            }]],
+            }],
+            '@babel/preset-typescript'],
             plugins: [
               '@babel/plugin-transform-runtime',
               'angularjs-annotate'
             ]
           }
         }]
+      },
+      {
+        test: /\.(tsx|ts)$/,
+        loader: 'ts-loader'
       },
       {
         test: /\.html$/,
@@ -160,20 +166,23 @@ module.exports = (env = {}) => [
   {
     ...sharedConfig,
     entry: {
-      ...(isBuild ? {
-        'give.v2': 'loaders/give.js',
-        'branded-checkout.v2': 'loaders/branded.js',
-        give: [...giveComponents, ...giveCss],
-        branded: brandedComponents
-      } : {
-        'dev.v2': 'loaders/dev.js',
-        main: 'app/main/main.component.js'
-      })
+      ...(isBuild
+        ? {
+            'give.v2': 'loaders/give.js',
+            'branded-checkout.v2': 'loaders/branded.js',
+            give: [...giveComponents, ...giveCss],
+            branded: brandedComponents
+          }
+        : {
+            'dev.v2': 'loaders/dev.js',
+            main: 'app/main/main.component.js'
+          })
     },
     output: {
       filename (chunkData) {
         return ['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunkData.chunk.name)
-          ? '[name].js' : 'chunks/[name].[contenthash].js'
+          ? '[name].js'
+          : 'chunks/[name].[contenthash].js'
       },
       path: path.resolve(__dirname, 'dist')
     },
