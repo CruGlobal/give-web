@@ -173,7 +173,7 @@ class DesignationsService {
         displayName: data.definition['display-name'],
         designationType: designationType,
         code: data.code.code,
-        designationNumber: data.offer['code'],
+        designationNumber: data.offer.code,
         orgId: orgId
       }
     })

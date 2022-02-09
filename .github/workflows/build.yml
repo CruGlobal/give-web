@@ -2,9 +2,9 @@ name: Build
 
 on:
   push: 
-    branches: [staging, master]
+    branches: [staging, master, ep-upgrade-stage, ep-upgrade-prod, ep-upgrade]
   pull_request:
-    branches: [staging, master]
+    branches: [staging, master, ep-upgrade-stage, ep-upgrade-prod, ep-upgrade]
 
 permissions:
   id-token: write
