@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /*------------------------------------*\
     #SIGN-IN
 \*------------------------------------*/
@@ -56,8 +58,8 @@
     background-color: $colorGrayscale-background;
 
     @include mq(991, max) {
-        padding-left:  $base-spacing-unit / 2;
-        padding-right:  $base-spacing-unit / 2;
+        padding-left:   math.div($base-spacing-unit, 2);
+        padding-right:   math.div($base-spacing-unit, 2);
     }
 }
 

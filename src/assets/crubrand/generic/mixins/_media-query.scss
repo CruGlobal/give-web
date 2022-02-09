@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /*------------------------------------*\
     #MIXINS/MEDIA-QUERY
 \*------------------------------------*/
@@ -17,13 +19,13 @@ $query-unit: 16px;
             @content;
         }
    
-        @media screen and (#{$query1}-#{$query2}: strip-units($point) / strip-units($query-unit) + em) {
+        @media screen and (#{$query1}-#{$query2}: (math.div(strip-units($point), strip-units($query-unit)) + em)) {
             @content;
         }
     } 
     
     @else {
-        @media screen and (#{$query1}-#{$query2}: strip-units($point) / strip-units($query-unit) + em) {
+        @media screen and (#{$query1}-#{$query2}: (math.div(strip-units($point), strip-units($query-unit)) + em)) {
             @content;
         }
     }

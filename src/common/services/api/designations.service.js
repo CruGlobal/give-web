@@ -125,19 +125,21 @@ class DesignationsService {
       chosen: 'definition:options:element:selector:chosen,definition:options:element:selector:chosen:description'
     }
 
-    const httpRequest = selectQuery ? this.cortexApiService.post({
-      path: query,
-      data: {},
-      followLocation: true,
-      zoom: zoomObj
-    }) : this.cortexApiService.post({
-      path: ['items', this.cortexApiService.scope, 'lookups/form'],
-      followLocation: true,
-      data: {
-        code: query
-      },
-      zoom: zoomObj
-    })
+    const httpRequest = selectQuery
+      ? this.cortexApiService.post({
+          path: query,
+          data: {},
+          followLocation: true,
+          zoom: zoomObj
+        })
+      : this.cortexApiService.post({
+        path: ['items', this.cortexApiService.scope, 'lookups/form'],
+        followLocation: true,
+        data: {
+          code: query
+        },
+        zoom: zoomObj
+      })
 
     return httpRequest.map(data => {
       if (!data.code) throw new Error('Product lookup response contains no code data')
@@ -155,11 +157,11 @@ class DesignationsService {
 
       let designationType
       let orgId
-      angular.forEach(data.definition['details'], (v, k) => {
-        if (v['name'] === 'designation_type') {
+      angular.forEach(data.definition.details, (v, k) => {
+        if (v.name === 'designation_type') {
           designationType = v['display-value']
         }
-        if (v['name'] === 'org_id') {
+        if (v.name === 'org_id') {
           orgId = v['display-value']
         }
       })
@@ -237,7 +239,7 @@ class DesignationsService {
     const path = this.generatePath(code)
     return Observable.from(this.$http.get(this.envService.read('publicGive') + path))
       .map((data) => {
-        return data.data['jcr:content']['facebookPixelId']
+        return data.data['jcr:content'].facebookPixelId
       })
   }
 

@@ -94,7 +94,7 @@
 }
 
 .tab-btn {
-  margin-bottom: $gutter/4;
+  margin-bottom: $gutter*0.25;
   background: $colorCru-white;
   input[type=radio] {
     position: absolute;

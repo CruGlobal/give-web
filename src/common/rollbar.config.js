@@ -38,7 +38,7 @@ const rollbarConfig = /* @ngInject */ function (envServiceProvider, $provide) {
         javascript: {
           source_map_enabled: true,
           guess_uncaught_frames: true,
-          code_version: process.env.TRAVIS_COMMIT
+          code_version: process.env.GITHUB_SHA
         }
       }
     }

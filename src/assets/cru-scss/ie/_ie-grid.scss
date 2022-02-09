@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 //
 // Grid system
 // --------------------------------------------------
@@ -62,7 +64,7 @@ $grid-columns: 12;
 @mixin calc-grid-column-ie($index, $class, $type) {
     @if ($type == width) and ($index > 0) {
         .col-#{$class}-#{$index} {
-            width: percentage(($index / $grid-columns)) !important;
+            width: percentage(math.div($index, $grid-columns)) !important;
         }
     }
 }

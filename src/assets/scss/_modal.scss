@@ -61,8 +61,8 @@
 
       &:after {
         border-bottom: 1px solid lighten($colorGrayscale-text, 60%);
-        margin-bottom: $gutter/2;
-        padding-bottom: $gutter/2;
+        margin-bottom: $gutter*0.5;
+        padding-bottom: $gutter*0.5;
         margin-right: 15px;
         margin-left: 15px;
         display: block;

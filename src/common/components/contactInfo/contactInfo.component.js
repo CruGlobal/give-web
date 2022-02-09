@@ -12,6 +12,7 @@ import { phoneNumberRegex } from 'common/app.constants'
 import addressForm from 'common/components/addressForm/addressForm.component'
 
 import orderService from 'common/services/api/order.service'
+import radioStationsService from 'common/services/api/radioStations.service'
 import sessionService, { SignInEvent, Roles } from 'common/services/session/session.service'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
@@ -22,10 +23,11 @@ const componentName = 'contactInfo'
 
 class Step1Controller {
   /* @ngInject */
-  constructor ($log, $scope, orderService, sessionService, analyticsFactory) {
+  constructor ($log, $scope, orderService, radioStationsService, sessionService, analyticsFactory) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
+    this.radioStationsService = radioStationsService
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
   }
@@ -40,7 +42,10 @@ class Step1Controller {
       }
     }
 
+    this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
+
     this.loadDonorDetails(donorDetailsDefaults)
+    this.loadRadioStations()
     this.waitForFormInitialization()
 
     this.$scope.$on(SignInEvent, () => {
@@ -83,14 +88,14 @@ class Step1Controller {
         this.spouseFieldsDisabled = !this.orderService.spouseEditableForOrder(this.donorDetails)
         if (!this.nameFieldsDisabled && includes([Roles.registered, Roles.identified], this.sessionService.getRole())) {
           // Pre-populate first, last and email from session if missing from donorDetails
-          if (!this.donorDetails['name']['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
-            this.donorDetails['name']['given-name'] = this.sessionService.session.first_name
+          if (!this.donorDetails.name['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
+            this.donorDetails.name['given-name'] = this.sessionService.session.first_name
           }
-          if (!this.donorDetails['name']['family-name'] && angular.isDefined(this.sessionService.session.last_name)) {
-            this.donorDetails['name']['family-name'] = this.sessionService.session.last_name
+          if (!this.donorDetails.name['family-name'] && angular.isDefined(this.sessionService.session.last_name)) {
+            this.donorDetails.name['family-name'] = this.sessionService.session.last_name
           }
-          if (angular.isUndefined(this.donorDetails['email']) && angular.isDefined(this.sessionService.session.email)) {
-            this.donorDetails['email'] = this.sessionService.session.email
+          if (angular.isUndefined(this.donorDetails.email) && angular.isDefined(this.sessionService.session.email)) {
+            this.donorDetails.email = this.sessionService.session.email
           }
         }
 
@@ -108,6 +113,31 @@ class Step1Controller {
       })
   }
 
+  loadRadioStations () {
+    const postalCode = this.donorDetails.mailingAddress.postalCode
+
+    if (this.requestRadioStation && postalCode) {
+      this.loadingRadioStationsError = false
+
+      this.radioStationsService.getRadioStations(
+        this.radioStationApiUrl,
+        postalCode,
+        this.radioStationRadius
+      )
+        .subscribe((data) => {
+          this.radioStations = data
+        },
+        error => {
+          this.loadingRadioStationsError = true
+          this.$log.error('Error loading radio stations.', error)
+        })
+    }
+  }
+
+  onSelectRadioStation () {
+    this.radioStationData = this.radioStations.filter((station) => station.Description === this.radioStationName)[0]
+  }
+
   submitDetails () {
     this.detailsForm.$setSubmitted()
     if (this.detailsForm.$valid) {
@@ -118,6 +148,10 @@ class Step1Controller {
       if (details.email) {
         requests.push(this.orderService.addEmail(details.email, details.emailFormUri))
       }
+      if (this.radioStationData) {
+        this.orderService.storeRadioStationData(this.radioStationData)
+      }
+
       Observable.forkJoin(requests)
         .subscribe(() => {
           this.onSubmit({ success: true })
@@ -141,6 +175,7 @@ export default angular
     'ngMessages',
     addressForm.name,
     orderService.name,
+    radioStationsService.name,
     sessionService.name,
     analyticsFactory.name
   ])
@@ -150,6 +185,8 @@ export default angular
     bindings: {
       submitted: '<',
       donorDetails: '=?',
-      onSubmit: '&'
+      onSubmit: '&',
+      radioStationApiUrl: '<',
+      radioStationRadius: '<'
     }
   })

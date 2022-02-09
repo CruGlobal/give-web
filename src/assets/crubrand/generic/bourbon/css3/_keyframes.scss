@@ -1,4 +1,7 @@
 // Adds keyframes blocks for supported prefixes, removing redundant prefixes in the block's content
+
+@use '../settings/prefixer';
+
 @mixin keyframes($name) {
   $original-prefix-for-webkit:    $prefix-for-webkit;
   $original-prefix-for-mozilla:   $prefix-for-mozilla;

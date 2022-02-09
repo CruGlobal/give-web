@@ -11,7 +11,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
   return {
     buildProductVar: function (cartData) {
       try {
-        var item, donationType
+        let item, donationType
 
         // Instantiate cart data layer
         const hash = sha3(cartData.id, { outputLength: 80 }) // limit hash to 20 characters
@@ -27,7 +27,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         }
 
         if (cartData && cartData.items) {
-          for (var i = 0; i < cartData.items.length; i++) {
+          for (let i = 0; i < cartData.items.length; i++) {
             // Set donation type
             if (cartData.items[i].frequency.toLowerCase() === 'single') {
               donationType = 'one-time donation'
@@ -63,8 +63,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     cartAdd: function (itemConfig, productData) {
       try {
-        var siteSubSection
-        var cart = {
+        let siteSubSection
+        const cart = {
           item: [{
             productInfo: {
               productID: productData.designationNumber,
@@ -270,7 +270,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     editRecurringDonation: function (giftData) {
       try {
-        var frequency = ''
+        let frequency = ''
 
         if (giftData && giftData.length) {
           if (get(giftData, '[0].gift["updated-rate"].recurrence.interval')) {
@@ -304,14 +304,14 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     getPath: function () {
       try {
-        var pagename = ''
-        var delim = ' : '
-        var path = $window.location.pathname
+        let pagename = ''
+        const delim = ' : '
+        let path = $window.location.pathname
 
         if (path !== '/') {
-          var extension = ['.html', '.htm']
+          const extension = ['.html', '.htm']
 
-          for (var i = 0; i < extension.length; i++) {
+          for (let i = 0; i < extension.length; i++) {
             if (path.indexOf(extension[i]) > -1) {
               path = path.split(extension[i])
               path = path.splice(0, 1)
@@ -328,7 +328,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
           }
 
           // Capitalize first letter of each page
-          for (i = 0; i < path.length; i++) {
+          for (let i = 0; i < path.length; i++) {
             path[i] = path[i].charAt(0).toUpperCase() + path[i].slice(1)
           }
 
@@ -348,10 +348,10 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     getSetProductCategory: function (path) {
       try {
-        var allElements = $window.document.getElementsByTagName('*')
+        const allElements = $window.document.getElementsByTagName('*')
 
-        for (var i = 0, n = allElements.length; i < n; i++) {
-          var desigType = allElements[i].getAttribute('designationtype')
+        for (let i = 0, n = allElements.length; i < n; i++) {
+          const desigType = allElements[i].getAttribute('designationtype')
 
           if (desigType !== null) {
             const productConfig = $window.document.getElementsByTagName('product-config')
@@ -377,7 +377,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     giveGiftModal: function (productData) {
       try {
-        var product = [{
+        const product = [{
           productInfo: {
             productID: productData.designationNumber
           },
@@ -489,13 +489,15 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         // Error caught in analyticsFactory.productViewDetailsEvent
       }
     },
-    purchase: function (donorDetails, cartData) {
+    purchase: function (donorDetails, cartData, coverFeeDecision) {
       try {
         // Build cart data layer
         this.setDonorDetails(donorDetails)
         this.buildProductVar(cartData)
         // Stringify the cartObject and store in localStorage for the transactionEvent
         localStorage.setItem('transactionCart', JSON.stringify(cartData))
+        // Store value of coverFeeDecision in sessionStorage for the transactionEvent
+        sessionStorage.setItem('coverFeeDecision', coverFeeDecision)
       } catch (e) {
         // Error caught in analyticsFactory.purchase
       }
@@ -509,6 +511,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     transactionEvent: function (purchaseData) {
       try {
+        // The value of whether or not user is covering credit card fees for the transaction
+        const coverFeeDecision = sessionStorage.getItem('coverFeeDecision')
         // Parse the cart object of the last purchase
         const transactionCart = JSON.parse(localStorage.getItem('transactionCart'))
         // The purchaseId number from the last purchase
@@ -561,10 +565,18 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
                 }
               }
             })
+            // Send cover fees event if value is true
+            if (coverFeeDecision) {
+              $window.dataLayer.push({
+                event: 'ga-cover-fees-checkbox'
+              })
+            }
           }
         }
         // Remove the transactionCart from localStorage since it is no longer needed
         localStorage.removeItem('transactionCart')
+        // Remove the coverFeeDecision from sessionStorage since it is no longer needed
+        sessionStorage.removeItem('coverFeeDecision')
       } catch (e) {
         // Error in analyticsFactory.transactionEvent
       }
@@ -620,17 +632,17 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
         const profileInfo = {}
         if (typeof sessionService !== 'undefined') {
           let ssoGuid
-          if (typeof sessionService.session['sso_guid'] !== 'undefined') {
-            ssoGuid = sessionService.session['sso_guid']
-          } else if (typeof sessionService.session['sub'] !== 'undefined') {
-            ssoGuid = sessionService.session['sub'].split('|').pop()
+          if (typeof sessionService.session.sso_guid !== 'undefined') {
+            ssoGuid = sessionService.session.sso_guid
+          } else if (typeof sessionService.session.sub !== 'undefined') {
+            ssoGuid = sessionService.session.sub.split('|').pop()
           }
           if (typeof ssoGuid !== 'undefined' && ssoGuid !== 'cas') {
-            profileInfo['ssoGuid'] = ssoGuid
+            profileInfo.ssoGuid = ssoGuid
           }
 
-          if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
-            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id']
+          if (typeof sessionService.session.gr_master_person_id !== 'undefined') {
+            profileInfo.grMasterPersonId = sessionService.session.gr_master_person_id
           }
         }
 
@@ -650,19 +662,19 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
       try {
         const profileInfo = {}
         if (typeof sessionService !== 'undefined') {
-          if (typeof sessionService.session['sso_guid'] !== 'undefined') {
-            profileInfo['ssoGuid'] = sessionService.session['sso_guid']
-          } else if (typeof sessionService.session['sub'] !== 'undefined') {
-            profileInfo['ssoGuid'] = sessionService.session['sub'].split('|').pop()
+          if (typeof sessionService.session.sso_guid !== 'undefined') {
+            profileInfo.ssoGuid = sessionService.session.sso_guid
+          } else if (typeof sessionService.session.sub !== 'undefined') {
+            profileInfo.ssoGuid = sessionService.session.sub.split('|').pop()
           }
 
-          if (typeof sessionService.session['gr_master_person_id'] !== 'undefined') {
-            profileInfo['grMasterPersonId'] = sessionService.session['gr_master_person_id']
+          if (typeof sessionService.session.gr_master_person_id !== 'undefined') {
+            profileInfo.grMasterPersonId = sessionService.session.gr_master_person_id
           }
 
           if (donorDetails) {
-            profileInfo['donorType'] = donorDetails['donor-type'].toLowerCase()
-            profileInfo['donorAcct'] = donorDetails['donor-number'].toLowerCase()
+            profileInfo.donorType = donorDetails['donor-type'].toLowerCase()
+            profileInfo.donorAcct = donorDetails['donor-number'].toLowerCase()
           }
         }
 
@@ -680,7 +692,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     setEvent: function (eventName) {
       try {
-        var evt = {
+        const evt = {
           eventInfo: {
             eventName: eventName
           }
@@ -715,7 +727,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     },
     setSiteSections: function (path) {
       try {
-        var primaryCat = 'give'
+        const primaryCat = 'give'
 
         if (!path) {
           path = this.getPath()

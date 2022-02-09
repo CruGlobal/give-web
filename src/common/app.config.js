@@ -17,14 +17,11 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
       staging: [
         'give-stage2.cru.org',
         'stage.cru.org',
-        'dev.aws.cru.org',
-        'devauth.aws.cru.org',
-        'devpub.aws.cru.org',
         'uatauth.aws.cru.org',
         'uatpub.aws.cru.org',
         'uatdisp.aws.cru.org',
         'cru-givestage.s3.amazonaws.com',
-        'cru-givestage.s3-website-us-east-1.amazonaws.com'
+        'give-stage-static.cru.org'
       ],
       production: []
     },
@@ -35,6 +32,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
         isBrandedCheckout: false
       },
       staging: {
@@ -43,6 +41,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
         isBrandedCheckout: false
       },
       production: {
@@ -51,6 +50,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         imgDomainDesignation: 'https://give.cru.org',
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give.cru.org',
+        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
         isBrandedCheckout: false
       }
     }
@@ -283,7 +283,11 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     GIFT_SUMMARY: 'Gift Summary',
     FIRST_GIFT: 'First Gift:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
-    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:'
+    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
+    RADIO_STATION: 'Radio Station',
+    RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
+    RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
   })
 
   $translateProvider.translations('es', {
@@ -490,7 +494,11 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     GIFT_SUMMARY: 'Gift Summary',
     FIRST_GIFT: 'First Gift:',
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
-    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:'
+    FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
+    RADIO_STATION: 'Radio Station',
+    RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
+    RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
   })
   $translateProvider.preferredLanguage('en')
 }

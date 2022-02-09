@@ -3548,7 +3548,7 @@ min-height: 100vh;
             .subnav__link--primary{
                 &:before{
                    @extend [class^="icon-"], [class*=" icon-"];
-    @extend .icon-right-arrow:before;
+    @extend .icon-right-arrow, :before;
 
     float: right;
     padding-top: 5px !important;

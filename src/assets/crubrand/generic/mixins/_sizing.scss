@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /*------------------------------------*\
     #MIXINS/SIZING
 \*------------------------------------*/
@@ -29,7 +31,7 @@ $sizeValue: strip-units(16px);
 
             @if $unit == "px" {  /* 7 */
                 $px : append($px, $value);
-                $rem: append($rem, ($val / $sizeValue + rem));
+                $rem: append($rem, math.div($val, $sizeValue) + rem);
             }
 
             @if $unit == "rem" { /* 7 */
@@ -52,11 +54,11 @@ $sizeValue: strip-units(16px);
 
 @mixin rem($property, $size-value) {
     #{$property}: strip-units($size-value) * 1px;
-    #{$property}: strip-units($size-value / $base-font-size) * 1rem;
+    #{$property}: strip-units(math.div($size-value, $base-font-size)) * 1rem;
 }
 
 @mixin em($property, $size-value) {
-    #{$property}: strip-units($size-value / 16) * 1em;
+    #{$property}: strip-units(math.div($size-value, 16)) * 1em;
 }
 
 

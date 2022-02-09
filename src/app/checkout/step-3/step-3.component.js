@@ -139,7 +139,7 @@ class Step3Controller {
       submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
     }
     submitRequest.subscribe(() => {
-      this.analyticsFactory.purchase(this.donorDetails, this.cartData)
+      this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
       this.orderService.clearCardSecurityCodes()
@@ -189,6 +189,7 @@ export default angular
       onSubmitBtnChangeState: '&',
       onSubmitted: '&',
       onSubmittingOrder: '&',
-      submittingOrder: '<'
+      submittingOrder: '<',
+      radioStationName: '<'
     }
   })

@@ -79,16 +79,17 @@ class Cart {
       const itemConfig = omit(item.configuration, ['self', 'links'])
       //  Based on EP 8.1 JSON Object item config properties are changed to uppercase
       const giftStartDate = frequency !== 'Single'
-        ? startMonth(itemConfig['RECURRING-DAY-OF-MONTH'], itemConfig['RECURRING-START-MONTH'], nextDrawDate) : null
+        ? startMonth(itemConfig['RECURRING-DAY-OF-MONTH'], itemConfig['RECURRING-START-MONTH'], nextDrawDate)
+        : null
       const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
       let designationType
       let orgId
-      angular.forEach(item.itemDefinition['details'], (v, k) => {
-        if (v['name'] === 'designation_type') {
+      angular.forEach(item.itemDefinition.details, (v, k) => {
+        if (v.name === 'designation_type') {
           designationType = v['display-value']
         }
-        if (v['name'] === 'org_id') {
+        if (v.name === 'org_id') {
           orgId = v['display-value']
         }
       })
