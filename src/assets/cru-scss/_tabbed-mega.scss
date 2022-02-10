@@ -1,8 +1,9 @@
+@use 'sass:math';
 
 /**
  * $LOCAL-VARIABLES
  */
-$half-spacing-unit: round($base-spacing-unit / 2);
+$half-spacing-unit: round(math.div($base-spacing-unit, 2));
 $nav-link-height: 45px;
 
 
@@ -614,7 +615,7 @@ $nav-link-height: 45px;
 
 .has-submenu:hover:before{
     @extend [class^="icon-"], [class*=" icon-"];
-    @extend .icon-right-arrow:before;
+    @extend .icon-right-arrow, :before;
 
     float: right;
     padding-top: 3px;

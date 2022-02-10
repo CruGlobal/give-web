@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 branded-checkout{
   @import '../cru-scss/cru';
   @import 'give';
@@ -10,7 +12,7 @@ branded-checkout{
   @import 'mobile';
 
   font-family: $data-font;
-  font-size: ($font-size-base / 16px) * 1em;
+  font-size: math.div($font-size-base, 16px) * 1em;
   line-height: $line-height-base;
   color: $text-color;
   background-color: $body-bg;

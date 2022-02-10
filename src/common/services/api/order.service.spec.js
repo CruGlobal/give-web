@@ -70,7 +70,7 @@ describe('order service', () => {
       expectedDonorDetails.email = donorDetailsResponseZoomMapped.email.email
       expectedDonorDetails.emailFormUri = donorDetailsResponseZoomMapped.emailForm.links[0].uri
 
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:orderemailform')
         .respond(200, donorDetailsResponse)
       self.orderService.getDonorDetails()
         .subscribe((data) => {
@@ -82,7 +82,7 @@ describe('order service', () => {
 
     it('should set the mailingAddress country to US if undefined', (done) => {
       donorDetailsResponse._order[0]._donordetails[0]['mailing-address']['country-name'] = ''
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:orderemailform')
         .respond(200, donorDetailsResponse)
       self.orderService.getDonorDetails()
         .subscribe((data) => {
@@ -95,7 +95,7 @@ describe('order service', () => {
     })
 
     it('should handle an undefined response', (done) => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:emailform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:orderemailform')
         .respond(200, {})
       self.orderService.getDonorDetails()
         .subscribe((data) => {

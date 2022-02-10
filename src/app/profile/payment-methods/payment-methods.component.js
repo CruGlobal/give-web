@@ -102,7 +102,7 @@ class PaymentMethodsController {
         show: true,
         type: 'paymentMethodAdded'
       }
-      data['_recurringgifts'] = [{ donations: [] }]
+      data._recurringgifts = [{ donations: [] }]
       this.paymentMethods.push(extractPaymentAttributes(data))
       this.$timeout(() => {
         this.successMessage.show = false

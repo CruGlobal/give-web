@@ -56,13 +56,14 @@ class Profile {
           name: angular.isDefined(data.donorDetails) && data.donorDetails['donor-type'] === 'Organization'
             ? data.donorDetails['organization-name']
             : (spouse['given-name'])
-              ? `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}`
-              : `${donor['given-name']} ${donor['family-name']}`,
+                ? `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}`
+                : `${donor['given-name']} ${donor['family-name']}`,
           donorNumber: angular.isDefined(data.donorDetails) ? data.donorDetails['donor-number'] : undefined,
           email: angular.isDefined(data.emailAddress) ? data.emailAddress.email : undefined,
           phone: angular.isDefined(phone) ? phone['phone-number'] : undefined,
           address: angular.isDefined(data.mailingAddress)
-            ? formatAddressForTemplate(data.mailingAddress.address) : undefined,
+            ? formatAddressForTemplate(data.mailingAddress.address)
+            : undefined,
           yearToDate: angular.isDefined(data.yearToDate) ? data.yearToDate['year-to-date-amount'] : undefined
         }
       })

@@ -3,6 +3,8 @@
 //************************************************************************//
 // Variables located in /settings/_prefixer.scss
 
+@use '../settings/prefixer';
+
 @mixin prefixer ($property, $value, $prefixes) {
   @each $prefix in $prefixes {
     @if $prefix == webkit {

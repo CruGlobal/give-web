@@ -79,16 +79,17 @@ class Cart {
       const itemConfig = omit(item.configuration, ['self', 'links'])
       //  Based on EP 8.1 JSON Object item config properties are changed to uppercase
       const giftStartDate = frequency !== 'Single'
-        ? startMonth(itemConfig['RECURRING_DAY_OF_MONTH'], itemConfig['RECURRING_START_MONTH'], nextDrawDate) : null
+        ? startMonth(itemConfig.RECURRING_DAY_OF_MONTH, itemConfig.RECURRING_START_MONTH, nextDrawDate)
+        : null
       const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
       let designationType
       let orgId
-      angular.forEach(item.itemDefinition['details'], (v, k) => {
-        if (v['name'] === 'designation_type') {
+      angular.forEach(item.itemDefinition.details, (v, k) => {
+        if (v.name === 'designation_type') {
           designationType = v['display-value']
         }
-        if (v['name'] === 'org_id') {
+        if (v.name === 'org_id') {
           orgId = v['display-value']
         }
       })
@@ -105,7 +106,7 @@ class Cart {
         frequency: frequency,
         amount: item.rate.cost[0].amount, // cost object was changed to array
         amountWithFees: item.rate.cost[0]['amount-with-fees'],
-        designationNumber: item.item._offer[0]._code[0]['code'], // product code is fetched from offer resource
+        designationNumber: item.item._offer[0]._code[0].code, // product code is fetched from offer resource
         productUri: item.item.self.uri,
         giftStartDate: giftStartDate,
         giftStartDateDaysFromNow: giftStartDateDaysFromNow,
@@ -182,7 +183,7 @@ class Cart {
     for (const [key, value] of Object.entries(obj)) {
       res[key.toUpperCase()] = value
     }
-    delete res['QUANTITY']
+    delete res.QUANTITY
     const payLoad = {
       configuration: {
         ...res

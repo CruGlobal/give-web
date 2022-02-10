@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 //
 // Variables
 // --------------------------------------------------
@@ -46,7 +48,7 @@ $font-size-h5:         $font-size-base;
 $font-size-h6:         $font-size-base;
 
 //** Unit-less `line-height` for use in components like buttons.
-$line-height-base:     $line-height-pixel / $font-size-base;
+$line-height-base:     math.div($line-height-pixel, $font-size-base);
 
 //** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
 $line-height-computed: floor($font-size-base * $line-height-base);
@@ -63,17 +65,17 @@ $headings-line-height: 100%;
 //
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
-$padding-base-vertical:   floor($line-height-pixel / 6);
-$padding-base-horizontal: floor($line-height-pixel / 2);
+$padding-base-vertical:   floor(math.div($line-height-pixel, 6));
+$padding-base-horizontal: floor(math.div($line-height-pixel, 2));
 
-$padding-large-vertical:    floor($line-height-pixel / 2.2);
-$padding-large-horizontal:  floor($line-height-pixel / 1.2);
+$padding-large-vertical:    floor(math.div($line-height-pixel, 2.2));
+$padding-large-horizontal:  floor(math.div($line-height-pixel, 1.2));
 
-$padding-small-vertical:    floor($line-height-pixel / 8);
-$padding-small-horizontal:  floor($line-height-pixel / 3);
+$padding-small-vertical:    floor(math.div($line-height-pixel, 8));
+$padding-small-horizontal:  floor(math.div($line-height-pixel, 3));
 
-$padding-xs-vertical:       floor($line-height-pixel / 12);
-$padding-xs-horizontal:     floor($line-height-pixel / 4);
+$padding-xs-vertical:       floor(math.div($line-height-pixel, 12));
+$padding-xs-horizontal:     floor(math.div($line-height-pixel, 4));
 
 $border-radius-base:      2px;
 $border-radius-large:     3px;
@@ -337,8 +339,8 @@ $container-lg:            $container-large-desktop;
 $navbar-height:                      72px;
 $navbar-margin-bottom:               $line-height-computed;
 $navbar-border-radius:               0;
-$navbar-padding-horizontal:          floor(($grid-gutter-width / 2));
-$navbar-padding-vertical:            (($navbar-height - $line-height-computed) / 2);
+$navbar-padding-horizontal:          floor(math.div($grid-gutter-width, 2));
+$navbar-padding-vertical:            math.div(($navbar-height - $line-height-computed), 2);
 $navbar-collapse-max-height:         340px;
 
 $navbar-default-color:               #777;
@@ -685,7 +687,7 @@ $list-group-link-heading-color:  #333;
 
 $panel-bg:              #fff;
 $panel-body-padding:    $line-height-pixel;
-$panel-heading-padding: $line-height-pixel / 2.5 $line-height-pixel;
+$panel-heading-padding: math.div($line-height-pixel, 2.5) $line-height-pixel;
 $panel-border-radius:   $border-radius-base;
 $panel-box-shadow:      0 0px 6px rgba(0, 0, 0, 0.08);
 
@@ -697,7 +699,7 @@ $panel-box-shadow:      0 0px 6px rgba(0, 0, 0, 0.08);
 //##
 //** Badge background color in active nav link
 $badge-line-height:   100%;
-$badge-border-radius: 5px/10px;
+$badge-border-radius: math.div(5px, 10px);
 
 
 
@@ -707,8 +709,8 @@ $badge-border-radius: 5px/10px;
 //
 //##
 
-$breadcrumb-padding-vertical:   $line-height-pixel / 4;
-$breadcrumb-padding-horizontal: $line-height-pixel / 2;
+$breadcrumb-padding-vertical:   math.div($line-height-pixel, 4);
+$breadcrumb-padding-horizontal: math.div($line-height-pixel, 2);
 
 
 

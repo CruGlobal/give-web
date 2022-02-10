@@ -1,9 +1,11 @@
+@use 'sass:math';
+
 /*------------------------------------*\
     $IE-NAVIGATION
 \*------------------------------------*/
 
-$site-nav-height: ($header-height - $gold-bar-size) / 2;
-$action-nav-height: ($header-height - $gold-bar-size) / 2;
+$site-nav-height:  math.div(($header-height - $gold-bar-size), 2);
+$action-nav-height: math.div(($header-height - $gold-bar-size), 2);
 
 .globalNavigation {
     z-index: 1031;

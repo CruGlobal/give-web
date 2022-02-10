@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /*------------------------------------*\
  #BOOTSTRAP/SCAFFOLDING
 \*------------------------------------*/
@@ -19,7 +21,7 @@
 
 // Body reset
 html {
-    font-size: ($font-size-base / 16px) * 1em;
+    font-size: math.div($font-size-base, 16px) * 1em;
     line-height: $line-height-base;
     font-family: $font-family-base;
     color: $text-color;

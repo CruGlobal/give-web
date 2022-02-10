@@ -149,6 +149,7 @@
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
                             <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                           </div>
+                          <a id="donorEmailPreferences" href="" ng-if="$ctrl.profilePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)" translate>Edit Email Preferences</a>
                         </div>
                       </form>
 
@@ -167,6 +168,7 @@
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
                             <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                           </div>
+                          <a id="spouseEmailPreferences" href="" ng-if="$ctrl.spousePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)" translate>Edit Email Preferences</a>
                         </div>
                       </form>
                     </div>

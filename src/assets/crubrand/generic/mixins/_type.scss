@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /*------------------------------------*\
  #MIXINS/TYPE
 \*------------------------------------*/
@@ -13,12 +15,12 @@
 @mixin font-size($font-size, $line-height: true) {
     // scss-lint:disable DuplicateProperty
     font-size: $font-size;
-    font-size: ($font-size / $font-size-base) * 1rem;
+    font-size: math.div($font-size, $font-size-base) * 1rem;
     // scss-lint:enable DuplicateProperty
     
 
     @if $line-height == true {
-        line-height: ceil($font-size / $base-line-height) * ($base-line-height / $font-size);
+        line-height: ceil(math.div($font-size, $base-line-height)) * math.div($base-line-height, $font-size);
     }
 }
 
