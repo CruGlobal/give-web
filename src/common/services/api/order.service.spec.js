@@ -60,7 +60,7 @@ describe('order service', () => {
       const donorDetailsResponseZoomMapped = {
         donorDetails: donorDetailsResponse._order[0]._donordetails[0],
         email: donorDetailsResponse._order[0]._emailinfo[0]._email[0],
-        emailForm: donorDetailsResponse._order[0]._emailinfo[0]._emailform[0],
+        orderEmailForm: donorDetailsResponse._order[0]._emailinfo[0]._orderemailform[0],
         rawData: donorDetailsResponse
       }
 
@@ -68,7 +68,7 @@ describe('order service', () => {
       const expectedDonorDetails = omit(donorDetailsResponseZoomMapped.donorDetails, 'mailing-address')
       expectedDonorDetails.mailingAddress = formatAddressForTemplate(donorDetailsResponseZoomMapped.donorDetails['mailing-address'].address)
       expectedDonorDetails.email = donorDetailsResponseZoomMapped.email.email
-      expectedDonorDetails.emailFormUri = donorDetailsResponseZoomMapped.emailForm.links[0].uri
+      expectedDonorDetails.emailFormUri = donorDetailsResponseZoomMapped.orderEmailForm.links[0].uri
 
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:donordetails,order:emailinfo:email,order:emailinfo:orderemailform')
         .respond(200, donorDetailsResponse)
