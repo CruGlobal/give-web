@@ -87,16 +87,17 @@ export default {
         }],
         email: 'asdf@asdf.com'
       }],
-      _emailform: [{
+      _orderemailform: [{
         self: {
-          type: 'elasticpath.emails.email',
-          uri: '/emails/crugive/form',
-          href: 'https://give-stage2.cru.org/cortex/emails/crugive/form'
+          type: 'extemails.add-email-order-form',
+          uri: '/extemails/crugive/orders/form',
+          href: 'https://give-stage2.cru.org/cortex/extemails/crugive/orders/form'
         },
         links: [{
           rel: 'createemailaction',
-          uri: '/emails/crugive',
-          href: 'https://give-stage2.cru.org/cortex/emails/crugive'
+          type: 'extemails.add-email-order-form',
+          uri: '/extemails/crugive/orders/form',
+          href: 'https://give-stage2.cru.org/cortex/extemails/crugive/orders/form'
         }],
         email: ''
       }]
