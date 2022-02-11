@@ -755,7 +755,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase and with a CVV', (done) => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-      { 'security-code': '123', 'cover-cc-fees': false, 'radio-call-letters': null }
+        { 'security-code': '123', 'cover-cc-fees': false, 'radio-call-letters': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit('123')
