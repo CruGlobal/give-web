@@ -362,7 +362,7 @@ class Profile {
       zoom: {
         donorDetails: 'donordetails',
         paymentInstruments: 'paymentinstruments:element',
-        lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
+        lineItems: 'lineitems:element[],lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:rate',
         rateTotals: 'ratetotals:element[]',
         billingAddress: 'billingaddress'
       }

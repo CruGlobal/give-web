@@ -183,11 +183,11 @@ describe('thank you summary', () => {
       )
 
       self.controller.loadFacebookPixel({
-        code: {
+        itemCode: {
           code: '555111'
         },
         rate: {
-          cost: { amount: 100 }
+          cost: [{ amount: 100 }]
         }
       })
 
@@ -201,11 +201,11 @@ describe('thank you summary', () => {
       )
 
       self.controller.loadFacebookPixel({
-        code: {
+        itemCode: {
           code: '555111'
         },
         rate: {
-          cost: { amount: 100 }
+          cost: [{ amount: 100 }]
         }
       })
 
