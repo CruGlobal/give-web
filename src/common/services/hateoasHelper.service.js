@@ -19,8 +19,10 @@ class HateoasHelper {
   getLink (response, relationshipName) {
     const linkObj = find(response && response.links, { rel: relationshipName })
     if (linkObj) {
-      return linkObj.uri ? linkObj.uri.replace(/^\//, '') // remove initial slash
-        : linkObj.href ? linkObj.href.replace(/^https?:\/{2}:?[0-9]{0,4}[a-z].*\/cortex(.*)/, '$1')
+      return linkObj.uri
+        ? linkObj.uri.replace(/^\//, '') // remove initial slash
+        : linkObj.href
+          ? linkObj.href.replace(/^https?:\/{2}:?[0-9]{0,4}[a-z].*\/cortex(.*)/, '$1')
           : undefined
     }
     return undefined
