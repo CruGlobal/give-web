@@ -95,7 +95,9 @@
     "build:analyze": "webpack -p --env.analyze",
     "test": "jest",
     "lint": "standard",
-    "lint:ts": "tsc"
+    "lint:ts": "tsc",
+    "gql:server": "babel-node --extensions \".ts\" src/api/index.ts",
+    "gql:codegen": "graphql-codegen --config codegen.yml"
   },
   "standard": {
     "env": {
