@@ -14,6 +14,7 @@ import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaym
 import cortexApiService from '../cortexApi.service'
 import cartService from './cart.service'
 import hateoasHelperService from 'common/services/hateoasHelper.service'
+import sessionService, { Roles } from 'common/services/session/session.service'
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
@@ -24,10 +25,11 @@ const serviceName = 'orderService'
 
 class Order {
   /* @ngInject */
-  constructor (cortexApiService, cartService, hateoasHelperService, analyticsFactory, $window, $log, $filter) {
+  constructor (cortexApiService, cartService, hateoasHelperService, sessionService, analyticsFactory, $window, $log, $filter) {
     this.cortexApiService = cortexApiService
     this.cartService = cartService
     this.hateoasHelperService = hateoasHelperService
+    this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.sessionStorage = $window.sessionStorage
     this.localStorage = $window.localStorage
@@ -105,19 +107,19 @@ class Order {
     }
   }
 
-  addBankAccountPayment (paymentInfo) {
+  addBankAccountPayment (paymentInfo, saveOnProfile) {
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
         const link = this.determinePaymentMethodFormLink(data, 'bank-name')
         return this.cortexApiService.post({
           path: link,
-          data: { 'payment-instrument-identification-form': paymentInfo },
+          data: { 'payment-instrument-identification-form': paymentInfo, 'save-on-profile': saveOnProfile },
           followLocation: true
         })
       })
   }
 
-  addCreditCardPayment (paymentInfo) {
+  addCreditCardPayment (paymentInfo, saveOnProfile) {
     const cvv = paymentInfo.cvv
     paymentInfo = omit(paymentInfo, 'cvv')
 
@@ -128,6 +130,7 @@ class Order {
       paymentInfo.address = undefined
     }
     dataToSend['payment-instrument-identification-form'] = paymentInfo
+    dataToSend['save-on-profile'] = saveOnProfile
 
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
@@ -153,10 +156,15 @@ class Order {
   }
 
   addPaymentMethod (paymentInfo) {
+    const role = this.sessionService.getRole()
+    let saveOnProfile = false
+    if (Roles.registered === role) {
+      saveOnProfile = true
+    }
     if (paymentInfo.bankAccount) {
-      return this.addBankAccountPayment(paymentInfo.bankAccount)
+      return this.addBankAccountPayment(paymentInfo.bankAccount, saveOnProfile)
     } else if (paymentInfo.creditCard) {
-      return this.addCreditCardPayment(paymentInfo.creditCard)
+      return this.addCreditCardPayment(paymentInfo.creditCard, saveOnProfile)
     } else {
       return Observable.throw('Error adding payment method. The data passed to orderService.addPaymentMethod did not contain bankAccount or creditCard data')
     }
@@ -372,6 +380,7 @@ export default angular
     cortexApiService.name,
     cartService.name,
     hateoasHelperService.name,
+    sessionService.name,
     analyticsFactory.name
   ])
   .service(serviceName, Order)
