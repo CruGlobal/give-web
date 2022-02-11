@@ -54,12 +54,14 @@ export default {
       }],
       'donor-type': 'Household',
       'mailing-address': {
-        'country-name': 'US',
-        'extended-address': '',
-        locality: '',
-        'postal-code': '',
-        region: '',
-        'street-address': ''
+        address: {
+          'country-name': 'US',
+          'extended-address': '',
+          locality: '',
+          'postal-code': '',
+          region: '',
+          'street-address': ''
+        }
       },
       name: { 'family-name': 'Lname', 'given-name': 'Fname', 'middle-initial': 'm', suffix: 'Jr.', title: 'Mr.' },
       'organization-name': '',

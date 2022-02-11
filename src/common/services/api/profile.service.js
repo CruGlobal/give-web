@@ -79,7 +79,7 @@ class Profile {
       })
       .pluck('donorDetails')
       .map((donorDetails) => {
-        donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'])
+        donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'].address)
         delete donorDetails['mailing-address']
         return donorDetails
       })
@@ -367,7 +367,7 @@ class Profile {
       }
     })
       .map((data) => {
-        data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address'])
+        data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address'].address)
         delete data.donorDetails['mailing-address']
         if (data.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans') { // only credit card type has billing address
           data.paymentMeans.address = formatAddressForTemplate(data.paymentMeans['billing-address'].address)
