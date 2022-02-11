@@ -36,7 +36,7 @@ class PaymentMethodController {
   }
 
   isCard () {
-    return this.model.self.type === 'cru.creditcards.named-credit-card'
+    return !!this.model['card-type']
   }
 
   editPaymentMethod () {

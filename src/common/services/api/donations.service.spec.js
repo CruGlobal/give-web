@@ -94,7 +94,7 @@ describe('donations service', () => {
         }
       }]
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/receipts/items?followLocation=true')
+        .expectPOST('https://give-stage2.cru.org/cortex/receipts/items?FollowLocation=true')
         .respond(200, receiptsResponse)
       donationsService.getReceipts({}).subscribe((receipts) => {
         expect(receipts).toEqual(response)
@@ -131,8 +131,8 @@ describe('donations service', () => {
       paymentMethod = {
         self: {
           type: 'elasticpath.bankaccounts.bank-account',
-          uri: '/selfservicepaymentmethods/crugive/giydcnzyga=',
-          href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydcnzyga='
+          uri: '/selfservicepaymentinstruments/crugive/giydcnzyga=',
+          href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/giydcnzyga='
         },
         'account-type': 'Savings',
         'bank-name': '2nd Bank',

@@ -9,6 +9,7 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
 import { Roles, SignOutEvent } from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
+import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
 import { scrollModalToTop } from 'common/services/modalState.service'
 import uibModal from 'angular-ui-bootstrap/src/modal'
@@ -102,7 +103,7 @@ class PaymentMethodsController {
         type: 'paymentMethodAdded'
       }
       data._recurringgifts = [{ donations: [] }]
-      this.paymentMethods.push(data)
+      this.paymentMethods.push(extractPaymentAttributes(data))
       this.$timeout(() => {
         this.successMessage.show = false
       }, 60000)
@@ -139,7 +140,7 @@ class PaymentMethodsController {
   }
 
   isCard (paymentMethod) {
-    return paymentMethod.self.type === 'cru.creditcards.named-credit-card'
+    return !!paymentMethod['card-type']
   }
 
   signedOut (event) {

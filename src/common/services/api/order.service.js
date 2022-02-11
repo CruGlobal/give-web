@@ -9,6 +9,7 @@ import 'rxjs/add/observable/throw'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
+import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 
 import cortexApiService from '../cortexApi.service'
 import cartService from './cart.service'
@@ -89,16 +90,17 @@ class Order {
       return this.cortexApiService.get({
         path: ['carts', this.cortexApiService.scope, 'default'],
         zoom: {
-          bankAccount: 'order:paymentmethodinfo:bankaccountform',
-          creditCard: 'order:paymentmethodinfo:creditcardform'
+          paymentMethodForms: 'order:paymentmethodinfo:element[],order:paymentmethodinfo:element:paymentinstrumentform'
         }
       })
         .do((data) => {
           this.paymentMethodForms = data
 
-          if (!this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction')) {
-            this.$log.warn('Payment form request contains empty link', data)
-          }
+          angular.forEach(data.paymentMethodForms, paymentMethodForm => {
+            if (!this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')) {
+              this.$log.warn('Payment form request contains empty link', data)
+            }
+          })
         })
     }
   }
@@ -106,9 +108,10 @@ class Order {
   addBankAccountPayment (paymentInfo) {
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'bank-name')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction'),
-          data: paymentInfo,
+          path: link,
+          data: { 'payment-instrument-identification-form': paymentInfo },
           followLocation: true
         })
       })
@@ -117,19 +120,36 @@ class Order {
   addCreditCardPayment (paymentInfo) {
     const cvv = paymentInfo.cvv
     paymentInfo = omit(paymentInfo, 'cvv')
+
+    const dataToSend = {}
+
     if (paymentInfo.address) {
-      paymentInfo.address = formatAddressForCortex(paymentInfo.address)
+      dataToSend.address = formatAddressForCortex(paymentInfo.address)
+      paymentInfo.address = undefined
     }
+    dataToSend['payment-instrument-identification-form'] = paymentInfo
+
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'card-number')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction'),
-          data: paymentInfo,
+          path: link,
+          data: dataToSend,
           followLocation: true
         }).do(creditCard => {
           this.storeCardSecurityCode(cvv, creditCard.self.uri)
         })
       })
+  }
+
+  determinePaymentMethodFormLink (data, fieldName) {
+    let link = ''
+    angular.forEach(data.paymentMethodForms, paymentMethodForm => {
+      if (paymentMethodForm.paymentinstrumentform['payment-instrument-identification-form'][fieldName] !== undefined) {
+        link = this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')
+      }
+    })
+    return link
   }
 
   addPaymentMethod (paymentInfo) {
@@ -174,8 +194,8 @@ class Order {
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        choices: 'order:paymentmethodinfo:selector:choice[],order:paymentmethodinfo:selector:choice:description',
-        chosen: 'order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        choices: 'order:paymentinstrumentselector:choice[],order:paymentinstrumentselector:choice:description',
+        chosen: 'order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
       }
     })
       .map(selector => {
@@ -186,10 +206,11 @@ class Order {
         }
         return map(paymentMethods, paymentMethod => {
           paymentMethod.description.selectAction = paymentMethod.self.uri
-          if (paymentMethod.description.address) {
-            paymentMethod.description.address = formatAddressForTemplate(paymentMethod.description.address)
+          if (paymentMethod.description['payment-instrument-identification-attributes']['street-address']) {
+            paymentMethod.description.address =
+              formatAddressForTemplate(paymentMethod.description['payment-instrument-identification-attributes'])
           }
-          return paymentMethod.description
+          return extractPaymentAttributes(paymentMethod.description)
         })
       })
       .map(paymentMethods => {
@@ -208,15 +229,15 @@ class Order {
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        paymentMethod: 'order:paymentmethodinfo:paymentmethod'
+        paymentMethod: 'order:paymentinstrumentselector:chosen:description'
       }
     })
       .pluck('paymentMethod')
       .map(data => {
-        if (data && data.address) {
-          data.address = formatAddressForTemplate(data.address)
+        if (data && data['payment-instrument-identification-attributes']['street-address']) {
+          data.address = formatAddressForTemplate(data['payment-instrument-identification-attributes'])
         }
-        return data
+        return extractPaymentAttributes(data)
       })
   }
 

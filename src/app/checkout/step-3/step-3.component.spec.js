@@ -153,7 +153,7 @@ describe('checkout', () => {
 
     describe('loadCurrentPayment', () => {
       it('should load bank account payment details', () => {
-        self.loadedPayment.self.type = 'elasticpath.bankaccounts.bank-account'
+        self.loadedPayment['account-type'] = 'Checking'
         self.controller.loadCurrentPayment()
 
         expect(self.controller.bankAccountPaymentDetails).toEqual(self.loadedPayment)
@@ -164,7 +164,7 @@ describe('checkout', () => {
       })
 
       it('should load credit card payment details', () => {
-        self.loadedPayment.self.type = 'cru.creditcards.named-credit-card'
+        self.loadedPayment['card-type'] = 'Visa'
         self.controller.loadCurrentPayment()
 
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined()

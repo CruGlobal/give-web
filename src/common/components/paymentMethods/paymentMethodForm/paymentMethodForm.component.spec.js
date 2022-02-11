@@ -23,11 +23,11 @@ describe('paymentMethodForm', () => {
     })
 
     it('should choose the correct payment method type from the paymentMethod if it exists', () => {
-      self.controller.paymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account' } }
+      self.controller.paymentMethod = { self: { type: 'selfservicepaymentinstruments.self-service-payment-instrument' }, 'account-type': 'Checking' }
       self.controller.$onInit()
 
       expect(self.controller.paymentType).toEqual('bankAccount')
-      self.controller.paymentMethod = { self: { type: 'cru.creditcards.named-credit-card' } }
+      self.controller.paymentMethod = { self: { type: 'selfservicepaymentinstruments.self-service-payment-instrument' }, 'card-type': 'Visa' }
       self.controller.$onInit()
 
       expect(self.controller.paymentType).toEqual('creditCard')

@@ -61,7 +61,7 @@ describe('verification service', () => {
     const answers = [{ key: 'a', answer: '1' }, { key: 'b', answer: '2' }]
     it('submits donor verification answers', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/verifyregistrations/crugive?followLocation=true', {
+        .expectPOST('https://give-stage2.cru.org/cortex/verifyregistrations/crugive?FollowLocation=true', {
           'verification-questions': answers,
           'that-is-not-me': 'false'
         })
@@ -74,7 +74,7 @@ describe('verification service', () => {
   describe('thatIsNotMe()', () => {
     it('submits \'that-is-not-me\' donor verification', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/verifyregistrations/crugive?followLocation=true', {
+        .expectPOST('https://give-stage2.cru.org/cortex/verifyregistrations/crugive?FollowLocation=true', {
           'that-is-not-me': 'true'
         })
         .respond(201, {})
