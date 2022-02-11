@@ -21,9 +21,9 @@ describe('thank you summary', () => {
         },
         'registration-state': 'MATCHED'
       },
-      paymentMeans: {
+      paymentInstruments: {
         self: {
-          type: 'elasticpath.purchases.purchase.paymentmeans'
+          type: 'paymentinstruments.purchase-payment-instrument'
         },
         address: {
           'street-address': '123 Billing St'

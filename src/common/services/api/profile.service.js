@@ -361,18 +361,21 @@ class Profile {
       path: uri,
       zoom: {
         donorDetails: 'donordetails',
-        paymentMeans: 'paymentmeans:element',
+        paymentInstruments: 'paymentinstruments:element',
         lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
-        rateTotals: 'ratetotals:element[]'
+        rateTotals: 'ratetotals:element[]',
+        billingAddress: 'billingaddress'
       }
     })
       .map((data) => {
         data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address'].address)
         delete data.donorDetails['mailing-address']
-        if (data.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans') { // only credit card type has billing address
-          data.paymentMeans.address = formatAddressForTemplate(data.paymentMeans['billing-address'].address)
-          delete data.paymentMeans['billing-address']
+
+        data.paymentInstruments = extractPaymentAttributes(data.paymentInstruments)
+        if (data.paymentInstruments['card-number']) { // only credit card type has billing address
+          data.paymentInstruments.address = formatAddressForTemplate(data.billingAddress.address)
         }
+        delete data.billingAddress
         return data
       })
   }

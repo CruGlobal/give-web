@@ -157,7 +157,7 @@ describe('HATEOAS helper service', function () {
             someKey: 'someValue'
           }
         ],
-        paymentmeans: [
+        paymentInstruments: [
           {
             _creditcard: [
               {
@@ -168,7 +168,7 @@ describe('HATEOAS helper service', function () {
         ]
       }
       this.zoomString = 'lineitems:element'
-      this.childZoomStrings = ['lineitems:element:code', 'lineitems:element:rates[]', 'lineitems:element:paymentmeans:creditcard']
+      this.childZoomStrings = ['lineitems:element:code', 'lineitems:element:rates[]', 'lineitems:element:paymentInstruments:creditcard']
     })
 
     it('should take an element and map the child zoom strings to keys', () => {
@@ -181,7 +181,7 @@ describe('HATEOAS helper service', function () {
             someKey: 'someValue'
           }
         ],
-        paymentmeans: [
+        paymentInstruments: [
           {
             _creditcard: [
               {
@@ -190,7 +190,7 @@ describe('HATEOAS helper service', function () {
             ]
           }
         ],
-        paymentmeansCreditcard: {
+        paymentInstrumentsCreditcard: {
           someKey: 'someValue'
         }
       })
@@ -210,7 +210,7 @@ describe('HATEOAS helper service', function () {
             someKey: 'someValue'
           }
         ],
-        paymentmeans: [
+        paymentInstruments: [
           {
             _creditcard: [
               {
