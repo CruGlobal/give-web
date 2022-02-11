@@ -74,6 +74,7 @@ const sharedConfig = {
                 browsers: ['defaults', 'ie >= 11']
               }
             }],
+            '@babel/preset-react',
             '@babel/preset-typescript'],
             plugins: [
               '@babel/plugin-transform-runtime',
