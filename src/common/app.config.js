@@ -49,6 +49,15 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
         isBrandedCheckout: false
       },
+      nonprod: {
+        apiUrl: 'https://give-stage2-next.cru.org',
+        imgDomain: '//give-nonprod-static.cru.org',
+        imgDomainDesignation: 'https://give-stage2-next.cru.org',
+        publicCru: 'https://stage.cru.org',
+        publicGive: 'https://give-stage2-next.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false
+      },
       production: {
         apiUrl: 'https://give.cru.org',
         imgDomain: '//give-static.cru.org',
