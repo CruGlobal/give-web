@@ -21,7 +21,9 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         'uatpub.aws.cru.org',
         'uatdisp.aws.cru.org',
         'cru-givestage.s3.amazonaws.com',
-        'give-stage-static.cru.org'
+        'give-stage-static.cru.org',
+        'cru-give-web-assets-nonprod.s3.amazonaws.com',
+        'give-nonprod-static.cru.org'
       ],
       production: []
     },
