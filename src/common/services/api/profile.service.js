@@ -294,7 +294,7 @@ class Profile {
     const dataToSend = {}
 
     if (paymentInfo.address) {
-      dataToSend.address = formatAddressForCortex(paymentInfo.address)
+      dataToSend['billing-address'] = { address: formatAddressForCortex(paymentInfo.address) }
       paymentInfo.address = undefined
     }
     dataToSend['payment-instrument-identification-form'] = paymentInfo

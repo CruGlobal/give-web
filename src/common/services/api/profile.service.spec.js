@@ -242,13 +242,15 @@ describe('profile service', () => {
       }
 
       const expectedPostData = {
-        address: {
-          'country-name': 'US',
-          'street-address': '123 First St',
-          'extended-address': 'Apt 123',
-          locality: 'Sacramento',
-          'postal-code': '12345',
-          region: 'CA'
+        'billing-address': {
+          address: {
+            'country-name': 'US',
+            'street-address': '123 First St',
+            'extended-address': 'Apt 123',
+            locality: 'Sacramento',
+            'postal-code': '12345',
+            region: 'CA'
+          }
         },
         'payment-instrument-identification-form': {
           'card-number': '**fake*encrypted**1234567890123456**',

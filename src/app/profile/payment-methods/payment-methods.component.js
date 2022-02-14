@@ -115,7 +115,11 @@ class PaymentMethodsController {
     if ($event.state === 'loading' && $event.payload) {
       this.profileService.addPaymentMethod($event.payload)
         .subscribe(data => {
-          data.address = data.address && formatAddressForTemplate(data.address)
+          if (data.address) {
+            data.address = formatAddressForTemplate(data.address)
+          } else if (data['payment-instrument-identification-attributes']['street-address']) {
+            data.address = formatAddressForTemplate(data['payment-instrument-identification-attributes'])
+          }
           this.paymentMethodFormModal.close(data)
           this.paymentFormResolve.state = 'unsubmitted'
         },
