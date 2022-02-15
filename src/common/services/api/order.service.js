@@ -286,7 +286,7 @@ class Order {
       }
     })
     .map((data) => {
-      const needInfo = data.needInfo.messages
+      const needInfo = data.needInfo?.messages
       const errors = map(needInfo, 'id')
       return (errors && errors.length > 0) ? ({errors, needInfo}) : undefined
     })
