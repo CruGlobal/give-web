@@ -1,9 +1,9 @@
 <div class="loading-overlay-parent">
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.needinfoErrors || $ctrl.submissionError">
     <p ng-repeat="error in $ctrl.needinfoErrors" ng-switch="error">
-      <span ng-switch-when="email-info" translate>{{'REVIEW_EMAIL_ERROR'}}</span>
-      <span ng-switch-when="payment-method-info" translate>{{'REVIEW_PAYMENT_ERROR'}}</span>
-      <span ng-switch-when="billing-address-info" translate>{{'REVIEW_BILLING_ADDRESS_ERROR'}}</span>
+      <span ng-switch-when="need.email" translate>{{'REVIEW_EMAIL_ERROR'}}</span>
+      <span ng-switch-when="need.payment.method" translate>{{'REVIEW_PAYMENT_ERROR'}}</span>
+      <span ng-switch-when="need.billing.address" translate>{{'REVIEW_BILLING_ADDRESS_ERROR'}}</span>
       <span ng-switch-default translate>
         <span ng-if="$ctrl.submissionErrorStatus > -1" translate>
           {{'REVIEW_MISSING_DATA_ERROR'}}
