@@ -1,5 +1,5 @@
 import angular from 'angular'
-import {Observable} from 'rxjs/Observable'
+import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/combineLatest'
@@ -14,7 +14,7 @@ import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaym
 import cortexApiService from '../cortexApi.service'
 import cartService from './cart.service'
 import hateoasHelperService from 'common/services/hateoasHelper.service'
-import sessionService, {Roles} from 'common/services/session/session.service'
+import sessionService, { Roles } from 'common/services/session/session.service'
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
@@ -285,18 +285,18 @@ class Order {
         needInfo: 'order'
       }
     })
-    .map((data) => {
-      const needInfo = data.needInfo?.messages
-      const errors = map(needInfo, 'id')
-      return (errors && errors.length > 0) ? ({errors, needInfo}) : undefined
-    })
-    .do(entry => {
-      entry?.errors && this.$log.error(
-        'The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.',
-        entry.needInfo.map(info => info['debug-message'])
-      )
-    })
-    .map(entry => entry?.errors)
+      .map((data) => {
+        const needInfo = data.needInfo?.messages
+        const errors = map(needInfo, 'id')
+        return (errors && errors.length > 0) ? ({ errors, needInfo }) : undefined
+      })
+      .do(entry => {
+        entry?.errors && this.$log.error(
+          'The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.',
+          entry.needInfo.map(info => info['debug-message'])
+        )
+      })
+      .map(entry => entry?.errors)
   }
 
   submit (cvv) {
