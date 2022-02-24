@@ -292,6 +292,12 @@ class ProductConfigFormController {
     this.updateQueryParam({ key: giveGiftParams.month, value: month })
   }
 
+  clearComments () {
+    if (this.itemConfig['donation-services-comments']) {
+      this.itemConfig['recipient-comments'] = ''
+    }
+  }
+
   saveGiftToCart () {
     this.itemConfigForm.$setSubmitted()
     this.submittingGift = false

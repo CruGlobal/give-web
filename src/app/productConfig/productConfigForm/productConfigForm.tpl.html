@@ -232,6 +232,7 @@
                       ng-model="$ctrl.itemConfig['recipient-comments']"
                       ng-if="$ctrl.showRecipientComments"
                       tabindex="-1"
+                      placeholder="{{$ctrl.itemConfig['donation-services-comments'] && ('COMMENTS_DISABLED' | translate)}}"
                       style="display:block;"
                       ng-disabled="!$ctrl.itemConfig['donation-services-comments']"></textarea>
           </li>
@@ -250,6 +251,7 @@
                       maxlength="250"
                       ng-model="$ctrl.itemConfig['donation-services-comments']"
                       ng-if="$ctrl.showDSComments"
+                      ng-change="$ctrl.clearComments()"
                       tabindex="-1"
                       placeholder="{{'MESSAGE_EXAMPLE' | translate}}"
                       style="display:block;"></textarea>
