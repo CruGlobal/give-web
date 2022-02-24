@@ -232,7 +232,8 @@
                       ng-model="$ctrl.itemConfig['recipient-comments']"
                       ng-if="$ctrl.showRecipientComments"
                       tabindex="-1"
-                      style="display:block;"></textarea>
+                      style="display:block;"
+                      ng-disabled="!$ctrl.itemConfig['donation-services-comments']"></textarea>
           </li>
           <li>
             <button type="button"
