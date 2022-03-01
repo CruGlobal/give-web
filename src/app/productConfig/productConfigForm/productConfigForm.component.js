@@ -47,6 +47,7 @@ class ProductConfigFormController {
     this.$log = $log
     this.$filter = $filter
     this.$window = $window
+    this.sessionStorage = $window.sessionStorage
     this.designationsService = designationsService
     this.cartService = cartService
     this.orderService = orderService
@@ -293,8 +294,16 @@ class ProductConfigFormController {
   }
 
   clearComments () {
-    if (this.itemConfig['donation-services-comments']) {
+    const dsComments = this.itemConfig['donation-services-comments']
+    const recipientComments = this.itemConfig['recipient-comments']
+    const storedRecipientComments = this.sessionStorage.getItem('recipientComments')
+
+    if (dsComments && recipientComments) {
+      this.sessionStorage.setItem('recipientComments', recipientComments)
       this.itemConfig['recipient-comments'] = ''
+    } else if (!dsComments && !recipientComments && storedRecipientComments) {
+      this.itemConfig['recipient-comments'] = storedRecipientComments
+      this.sessionStorage.removeItem('recipientComments')
     }
   }
 
