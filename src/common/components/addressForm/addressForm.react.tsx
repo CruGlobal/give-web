@@ -69,38 +69,38 @@ const AddressForm = ({
     const errors: FormikErrors<Address> = {};
 
     if (loadingCountriesError) {
-      errors.country = 'COUNTRY_LIST_ERROR';
+      errors.country = 'There was an error loading the list of countries. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.';
     } else if (!values.country) {
-      errors.country = 'COUNTRY_SELECT_ERROR';
+      errors.country = 'You must select a country';
     }
     if (!values.streetAddress) {
-      errors.streetAddress = 'ADDRESS_ERROR';
+      errors.streetAddress = 'You must enter an address';
     } else if (values.streetAddress.length > 200) {
-      errors.streetAddress = 'MAX_LENGTH_ADDRESS_ERROR';
+      errors.streetAddress = 'This field cannot be longer than 200 characters';
     }
     if (values.extendedAddress && values.extendedAddress.length > 100) {
-      errors.extendedAddress = 'MAX_LENGTH_ADDRESS_OTHERS_ERROR';
+      errors.extendedAddress = 'This field cannot be longer than 100 characters';
     }
     if (values.intAddressLine3 && values.intAddressLine3.length > 100) {
-      errors.intAddressLine3 = 'MAX_LENGTH_ADDRESS_OTHERS_ERROR';
+      errors.intAddressLine3 = 'This field cannot be longer than 100 characters';
     }
     if (values.intAddressLine4 && values.intAddressLine4.length > 100) {
-      errors.intAddressLine4 = 'MAX_LENGTH_ADDRESS_OTHERS_ERROR';
+      errors.intAddressLine4 = 'This field cannot be longer than 100 characters';
     }
     if (!values.locality) {
-      errors.locality = 'CITY_ERROR';
+      errors.locality = 'You must enter a city';
     } else if (values.locality.length > 50) {
-      errors.locality = 'MAX_LENGTH_CITY_ERROR';
+      errors.locality = 'This field cannot be longer than 100 characters';
     }
     if (loadingRegionsError) {
-      errors.country = 'REGIONS_LOADING_ERROR';
+      errors.country = 'There was an error loading the list of regions/state. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.';
     } else if (!values.region) {
-      errors.region = 'SELECT_STATE_ERROR';
+      errors.region = 'You must select a state / region';
     }
     if (!values.postalCode) {
-      errors.postalCode = 'ZIP_CODE_ERROR';
+      errors.postalCode = 'You must enter a zip / postal code';
     } else if (!/^\d{5}(?:[-\s]\d{4})?$/.test(values.postalCode)) {
-      errors.postalCode = 'INVALID_US_ZIP_ERROR';
+      errors.postalCode = 'You must enter a valid US zip code';
     }
 
     return errors;
