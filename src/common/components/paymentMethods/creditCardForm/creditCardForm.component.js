@@ -115,6 +115,10 @@ class CreditCardController {
     }
   }
 
+  updateAddress = (updatedAddress) => {
+    this.creditCardPayment.address = updatedAddress
+  }
+
   initializeExpirationDateOptions () {
     const currentYear = (new Date()).getFullYear()
     this.expirationDateYears = range(currentYear, currentYear + 20)

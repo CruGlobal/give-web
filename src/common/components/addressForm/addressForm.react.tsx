@@ -7,10 +7,12 @@ import find from 'lodash/find';
 import CountrySelect from './countrySelect';
 import RegionSelect from './regionSelect';
 import TextInput from '../form/textInput';
+import FormikAutoSave from '../form/formikAutoSave';
 
 interface AddressFormProps {
   address: Address,
   addressDisabled?: boolean,
+  onAddressChanged: (updatedAddress: Address) => void,
   geographiesService: any,
   $log: any
 }
@@ -44,6 +46,7 @@ const componentName = 'reactAddressForm';
 const AddressForm = ({
   address,
   addressDisabled = false,
+  onAddressChanged,
   geographiesService,
   $log
 }: AddressFormProps) => {
@@ -106,6 +109,10 @@ const AddressForm = ({
     return errors;
   };
 
+  const handleAddressChanged = (values: Address) => {
+    onAddressChanged(values);
+  };
+
   const loadCountries = () => {
     setLoadingCountriesError(false);
 
@@ -158,7 +165,7 @@ const AddressForm = ({
     <Formik
       initialValues={address}
       validate={validator}
-      onSubmit={}
+      onSubmit={handleAddressChanged}
     >
       {({
         values,
@@ -168,6 +175,7 @@ const AddressForm = ({
         handleBlur,
       }) => (
         <>
+          <FormikAutoSave debounceMs={600} />
           <div className="row">
             <div className="col-sm-12">
               <CountrySelect
@@ -296,6 +304,6 @@ const AddressForm = ({
 
 export default angular
   .module(componentName, [])
-  .component(componentName, react2angular(AddressForm, ['address', 'addressDisabled'], ['geographiesService', '$log']))
+  .component(componentName, react2angular(AddressForm, ['address', 'addressDisabled', 'onAddressChanged'], ['geographiesService', '$log']))
 
 export { AddressForm }
