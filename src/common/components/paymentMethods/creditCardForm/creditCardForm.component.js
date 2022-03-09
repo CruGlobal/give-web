@@ -9,7 +9,7 @@ import 'rxjs/add/operator/combineLatest'
 import 'rxjs/add/operator/mergeMap'
 
 import displayAddressComponent from 'common/components/display-address/display-address.component'
-import addressForm from 'common/components/addressForm/addressForm.component'
+import addressForm from 'common/components/addressForm/addressForm.react'
 import coverFees from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import showErrors from 'common/filters/showErrors.filter'
