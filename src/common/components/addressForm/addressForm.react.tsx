@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import angular from 'angular';
 import { react2angular } from 'react2angular';
-import { Formik, FormikErrors } from 'formik';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import find from 'lodash/find';
 
 import CountrySelect from './countrySelect';
@@ -68,46 +69,31 @@ const AddressForm = ({
     return 0;
   };
 
-  const validator = (values: Address): FormikErrors<Address> => {
-    const errors: FormikErrors<Address> = {};
-
-    if (loadingCountriesError) {
-      errors.country = 'There was an error loading the list of countries. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.';
-    } else if (!values.country) {
-      errors.country = 'You must select a country';
-    }
-    if (!values.streetAddress) {
-      errors.streetAddress = 'You must enter an address';
-    } else if (values.streetAddress.length > 200) {
-      errors.streetAddress = 'This field cannot be longer than 200 characters';
-    }
-    if (values.extendedAddress && values.extendedAddress.length > 100) {
-      errors.extendedAddress = 'This field cannot be longer than 100 characters';
-    }
-    if (values.intAddressLine3 && values.intAddressLine3.length > 100) {
-      errors.intAddressLine3 = 'This field cannot be longer than 100 characters';
-    }
-    if (values.intAddressLine4 && values.intAddressLine4.length > 100) {
-      errors.intAddressLine4 = 'This field cannot be longer than 100 characters';
-    }
-    if (!values.locality) {
-      errors.locality = 'You must enter a city';
-    } else if (values.locality.length > 50) {
-      errors.locality = 'This field cannot be longer than 100 characters';
-    }
-    if (loadingRegionsError) {
-      errors.country = 'There was an error loading the list of regions/state. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.';
-    } else if (!values.region) {
-      errors.region = 'You must select a state / region';
-    }
-    if (!values.postalCode) {
-      errors.postalCode = 'You must enter a zip / postal code';
-    } else if (!/^\d{5}(?:[-\s]\d{4})?$/.test(values.postalCode)) {
-      errors.postalCode = 'You must enter a valid US zip code';
-    }
-
-    return errors;
-  };
+  const AddressSchema = Yup.object().shape({
+    country: Yup.string()
+      .required('You must select a country'),
+    streetAddress: Yup.string()
+      .max(200, 'This field cannot be longer than 200 characters')
+      .required('You must enter an address'),
+    extendedAddress: Yup.string()
+      .max(100, 'This field cannot be longer than 100 characters'),
+    intAddressLine3: Yup.string()
+      .max(100, 'This field cannot be longer than 100 characters'),
+    intAddressLine4: Yup.string()
+      .max(100, 'This field cannot be longer than 100 characters'),
+    locality: Yup.string()
+      .max(50, 'This field cannot be longer than 100 characters')
+      .required('You must enter a city'),
+    region: Yup.string()
+      .required('You must select a state / region'),
+    postalCode: Yup.string()
+      .test(
+        'is-postal-code',
+        () => 'You must enter a valid US zip code',
+        (value) => value == null || /^\d{5}(?:[-\s]\d{4})?$/.test(value)
+      )
+      .required('You must enter a zip / postal code')
+  });
 
   const handleAddressChanged = (values: Address) => {
     onAddressChanged(values);
@@ -164,7 +150,7 @@ const AddressForm = ({
   return (
     <Formik
       initialValues={address}
-      validate={validator}
+      validationSchema={AddressSchema}
       onSubmit={handleAddressChanged}
     >
       {({
@@ -186,7 +172,12 @@ const AddressForm = ({
                 onSelectCountry={setCountryName}
                 refreshCountries={loadCountries}
                 value={values.country}
-                error={touched.country && errors.country || undefined}
+                error={loadingCountriesError
+                  ? 'There was an error loading the list of countries. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.'
+                  : touched.country && errors.country 
+                    ? errors.country
+                    : undefined
+                }
                 canRetry={loadingCountriesError}
               />
             </div>
@@ -276,7 +267,12 @@ const AddressForm = ({
                       onBlur={handleBlur}
                       refreshRegions={refreshRegions}
                       value={values.region}
-                      error={touched.region && errors.region || undefined}
+                      error={loadingRegionsError
+                        ? 'There was an error loading the list of regions/state. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.'
+                        : touched.region && errors.region 
+                          ? errors.region
+                          : undefined
+                      }
                       canRetry={loadingRegionsError}
                     />
                   </div>
