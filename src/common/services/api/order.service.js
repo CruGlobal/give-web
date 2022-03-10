@@ -282,17 +282,21 @@ class Order {
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        needInfo: 'order:needinfo[]'
+        order: 'order'
       }
     })
       .map((data) => {
-        const needInfo = data.needInfo
-        const errors = map(needInfo, 'name')
-        return (errors && errors.length > 0) ? errors : undefined
+        const messages = data.order?.messages
+        const messageIds = map(messages, 'id')
+        return (messageIds && messageIds.length > 0) ? ({ messageIds: messageIds, messages: messages }) : undefined
       })
-      .do((errors) => {
-        errors && this.$log.error('The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', errors)
+      .do(entry => {
+        entry?.messageIds && this.$log.error(
+          'The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.',
+          entry.messages.map(message => message['debug-message'])
+        )
       })
+      .map(entry => entry?.messageIds)
   }
 
   submit (cvv) {
