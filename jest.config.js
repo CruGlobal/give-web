@@ -2,6 +2,8 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
+    'src/**/*.ts',
+    'src/**/*.tsx',
     '!**/*.fixture.js'
   ],
   restoreMocks: true,

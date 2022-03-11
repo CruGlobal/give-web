@@ -28,8 +28,9 @@ const TextInput = ({
   error,
 }: TextInputProps) => (
   <div className={`form-group${required && ' is-required' || ''}${error && ' has-error' || ''}`}>
-    { title && <label>{title}</label> }
+    { title && <label data-testid="TextInputLabel">{title}</label> }
     <input
+      data-testid="TextInputField"
       type={type}
       className="form-control form-control-subtle"
       name={name}
@@ -43,7 +44,7 @@ const TextInput = ({
     />
     { error && (
       <div role="alert">
-        <div className="help-block">{error}</div>
+        <div className="help-block" data-testid="TextInputError">{error}</div>
       </div>
     )}
   </div>

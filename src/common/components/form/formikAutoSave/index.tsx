@@ -1,6 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
+
+//Based on https://itnext.io/formik-introduction-autosave-react-19d4c15cfb90
 
 interface FormikAutoSaveProps {
   debounceMs: number,
@@ -9,20 +11,16 @@ interface FormikAutoSaveProps {
 const FormikAutoSave = ({ debounceMs }: FormikAutoSaveProps) => {
   const { submitForm, values } = useFormikContext();
 
-  const [initialValues] = useState(values);
-
   const debouncedSubmit = useCallback(
     debounce(() => submitForm(), debounceMs),
     [debounceMs, submitForm]
   );
 
   useEffect(() => {
-    if (values != initialValues) {
-      debouncedSubmit();
-    }
+    debouncedSubmit();
   }, [debouncedSubmit, values]);
   
-  return (<></>);
+  return null;
 };
 
 export default FormikAutoSave;

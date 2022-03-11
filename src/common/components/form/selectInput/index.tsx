@@ -36,9 +36,10 @@ const SelectInput = ({
 
   return (
     <div className={`form-group${required && ' is-required' || ''}${error && ' has-error' || ''}`}>
-      { title && <label>{title}</label> }
+      { title && <label data-testid="SelectInputLabel">{title}</label> }
       <div className="form-group">
         <select
+          data-testid="SelectInputField"
           className="form-control form-control-subtle"
           name={name}
           required={required}
@@ -52,10 +53,11 @@ const SelectInput = ({
         { error && (
           <div role="alert">
             <div className="help-block">
-              <span>{error}</span>
+              <span data-testid="SelectInputError">{error}</span>
               { retry && (
                 <button
                   id="retryButton"
+                  data-testid="SelectInputRetryButton"
                   type="button"
                   className="btn btn-default btn-sm"
                   onClick={retry}
