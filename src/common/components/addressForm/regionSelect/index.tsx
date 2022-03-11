@@ -32,18 +32,20 @@ const RegionSelect = ({
   };
 
   return (
-    <SelectInput
-      title="State"
-      name="region"
-      required={true}
-      disabled={addressDisabled}
-      options={regions}
-      onChange={handleChange}
-      onBlur={onBlur}
-      value={value}
-      error={error}
-      retry={error && canRetry ? handleRetry : undefined}
-    />
+    <div className={`form-group is-required'${error && ' has-error' || ''}`}>
+      <SelectInput
+        title="State"
+        name="region"
+        required={true}
+        disabled={addressDisabled}
+        options={regions}
+        onChange={handleChange}
+        onBlur={onBlur}
+        value={value}
+        error={error}
+        retry={error && canRetry ? handleRetry : undefined}
+      />
+    </div>
   );
 };
 

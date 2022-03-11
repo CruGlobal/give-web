@@ -35,18 +35,20 @@ const CountrySelect = ({
   };
 
   return (
-    <SelectInput
-      title="Country"
-      name={"country"}
-      required={true}
-      disabled={addressDisabled}
-      options={countries}
-      onChange={handleChange}
-      onBlur={onBlur}
-      value={value}
-      error={error}
-      retry={error && canRetry ? handleRetry : undefined}
-    />
+    <div className={`form-group is-required'${error && ' has-error' || ''}`}>
+      <SelectInput
+        title="Country"
+        name={"country"}
+        required={true}
+        disabled={addressDisabled}
+        options={countries}
+        onChange={handleChange}
+        onBlur={onBlur}
+        value={value}
+        error={error}
+        retry={error && canRetry ? handleRetry : undefined}
+      />
+    </div>
   );
 };
 

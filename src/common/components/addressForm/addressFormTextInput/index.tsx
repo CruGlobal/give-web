@@ -1,10 +1,10 @@
 import React, { ChangeEvent, FocusEvent, HTMLInputTypeAttribute } from 'react';
+import TextInput from '../../form/textInput';
 
-interface TextInputProps {
+interface AddressFormTextInputProps {
   title?: string,
   type?: HTMLInputTypeAttribute,
   name: string,
-  className?: string,
   required?: boolean,
   maxLength?: number,
   pattern?: string,
@@ -15,11 +15,10 @@ interface TextInputProps {
   error?: string,
 }
 
-const TextInput = ({
+const AddressFormTextInput = ({
   title,
   type = 'text',
   name,
-  className,
   required = false,
   maxLength,
   pattern,
@@ -28,13 +27,11 @@ const TextInput = ({
   onBlur,
   value,
   error,
-}: TextInputProps) => (
-  <>
-    { title && <label data-testid="TextInputLabel">{title}</label> }
-    <input
-      data-testid="TextInputField"
+}: AddressFormTextInputProps) => (
+  <div className={`form-group${required && ' is-required' || ''}${error && ' has-error' || ''}`}>
+    <TextInput
+      title={title}
       type={type}
-      className={className || "form-control form-control-subtle"} 
       name={name}
       required={required}
       maxLength={maxLength}
@@ -43,13 +40,9 @@ const TextInput = ({
       onChange={onChange}
       onBlur={onBlur}
       value={value}
+      error={error}
     />
-    { error && (
-      <div role="alert">
-        <div className="help-block" data-testid="TextInputError">{error}</div>
-      </div>
-    )}
-  </>
+  </div>
 );
 
-export default TextInput;
+export default AddressFormTextInput;

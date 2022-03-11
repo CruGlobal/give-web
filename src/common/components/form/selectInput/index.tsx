@@ -3,6 +3,7 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 interface SelectInputProps {
   title?: string,
   name: string,
+  className?: string,
   required?: boolean,
   disabled?: boolean,
   options: Option[],
@@ -21,6 +22,7 @@ export interface Option {
 const SelectInput = ({
   title,
   name,
+  className,
   required,
   disabled,
   options,
@@ -35,12 +37,12 @@ const SelectInput = ({
   );
 
   return (
-    <div className={`form-group${required && ' is-required' || ''}${error && ' has-error' || ''}`}>
+    <>
       { title && <label data-testid="SelectInputLabel">{title}</label> }
       <div className="form-group">
         <select
           data-testid="SelectInputField"
-          className="form-control form-control-subtle"
+          className={className || "form-control form-control-subtle"} 
           name={name}
           required={required}
           disabled={disabled}
@@ -56,7 +58,6 @@ const SelectInput = ({
               <span data-testid="SelectInputError">{error}</span>
               { retry && (
                 <button
-                  id="retryButton"
                   data-testid="SelectInputRetryButton"
                   type="button"
                   className="btn btn-default btn-sm"
@@ -69,7 +70,7 @@ const SelectInput = ({
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
