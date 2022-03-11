@@ -1,0 +1,19 @@
+fragment CartItem on Gift {
+  cost {
+    amount
+    amountWithFees
+    currency
+    display
+    displayWithFees
+  }
+  recipient {
+    id
+    designationNumber
+    displayName
+  }
+  recurrence {
+    recurrenceFrequency
+    recurringDayOfMonth
+    recurringStartMonth
+  }
+}

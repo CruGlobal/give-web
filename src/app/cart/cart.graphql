@@ -1,0 +1,21 @@
+query GetCart {
+  cart {
+    id
+    gifts {
+      ...CartItem
+    }
+    giftTotals {
+      cost {
+        amount
+        amountWithFees
+        currency
+        display
+        displayWithFees
+      }
+      displayTotal
+      recurrenceFrequency
+    }
+    totalGifts
+  }
+  nextDrawDate
+}

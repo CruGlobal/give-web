@@ -4,7 +4,7 @@ import 'angular-ui-router'
 import '../../assets/scss/styles.scss'
 
 import commonModule from 'common/common.module'
-import cartComponent from '../cart/cart.component'
+import cartReact from '../cart/cart.react'
 import checkoutComponent from '../checkout/checkout.component'
 import thankYouComponent from '../thankYou/thankYou.component'
 import productConfigComponent from '../productConfig/productConfig.component'
@@ -31,7 +31,7 @@ const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvide
   $stateProvider
     .state('cart', {
       url: '/cart.html',
-      template: '<cart></cart>'
+      template: '<cart-react></cart-react>'
     })
     .state('sign-in', {
       url: '/sign-in.html',
@@ -81,7 +81,7 @@ const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvide
 export default angular
   .module(componentName, [
     commonModule.name,
-    cartComponent.name,
+    cartReact.name,
     checkoutComponent.name,
     thankYouComponent.name,
     yourGivingComponent.name,
