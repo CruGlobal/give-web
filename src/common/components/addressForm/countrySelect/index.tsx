@@ -2,7 +2,7 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 import SelectInput, { Option } from '../../form/selectInput';
 
 interface CountrySelectProps {
-  addressDisabled: boolean,
+  addressDisabled?: boolean,
   countries: Option[],
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void,
   onBlur: (event: FocusEvent<HTMLSelectElement>) => void,
@@ -10,11 +10,11 @@ interface CountrySelectProps {
   refreshCountries: () => void,
   value: string,
   error?: string,
-  canRetry: boolean,
+  canRetry?: boolean,
 }
 
 const CountrySelect = ({
-  addressDisabled,
+  addressDisabled = false,
   countries,
   onChange,
   onBlur,
@@ -22,7 +22,7 @@ const CountrySelect = ({
   refreshCountries,
   value,
   error,
-  canRetry,
+  canRetry = false,
 }: CountrySelectProps) => {
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -37,7 +37,7 @@ const CountrySelect = ({
   return (
     <SelectInput
       title="Country"
-      name="country"
+      name={"country"}
       required={true}
       disabled={addressDisabled}
       options={countries}
