@@ -36,7 +36,7 @@ interface GeographiesLink {
   uri: string,
 }
 
-interface GeographiesItem {
+export interface GeographiesItem {
   "display-name": string,
   links: GeographiesLink[],
   name: string,
@@ -44,7 +44,7 @@ interface GeographiesItem {
 
 const componentName = 'reactAddressForm';
 
-const AddressForm = ({
+export const AddressForm = ({
   address,
   addressDisabled = false,
   onAddressChanged,
@@ -147,6 +147,13 @@ const AddressForm = ({
     countryContext && loadRegions(countryContext);
   }
 
+  const onSelectCountry = (newCountryName?: string) => {
+    setCountryName(newCountryName);
+
+    const countryContext = newCountryName && findCountry(countries, newCountryName);
+    countryContext && loadRegions(countryContext);
+  }
+
   return (
     <Formik
       initialValues={address}
@@ -169,7 +176,7 @@ const AddressForm = ({
                 countries={countries.map(country => ({ name: country.name, displayName: country['display-name']}))}             
                 onChange={handleChange}
                 onBlur={handleBlur}
-                onSelectCountry={setCountryName}
+                onSelectCountry={onSelectCountry}
                 refreshCountries={loadCountries}
                 value={values.country}
                 error={loadingCountriesError
@@ -301,5 +308,3 @@ const AddressForm = ({
 export default angular
   .module(componentName, [])
   .component(componentName, react2angular(AddressForm, ['address', 'addressDisabled', 'onAddressChanged'], ['geographiesService', '$log']))
-
-export { AddressForm }
