@@ -1,0 +1,73 @@
+extend type Query {
+  cart: Cart
+}
+
+type Cart {
+  id: ID!
+  gifts: [Gift!]!
+  giftTotals: [GiftTotal!]!
+  totalGifts: Int!
+}
+
+type Gift {
+  campaignCode: String!
+  commentsToDSG: String
+  commentsToRecipient: String
+  cost: GiftCost!
+  premiumCode: String!
+  recipient: GiftRecipient!
+  recurrence: GiftRecurrence!
+}
+
+type GiftCost {
+  amount: Float!
+  amountWithFees: Float!
+  currency: String!
+  display: String!
+  displayWithFees: String!
+}
+
+type GiftRecipient {
+  id: ID!
+  designationNumber: String!
+  displayName: String!
+  email: String
+  organizationId: String!
+  replacementDesignation: String
+  status: GiftRecipientStatus!
+  type: GiftRecipientType!
+}
+
+type GiftRecurrence {
+  recurrenceFrequency: GiftRecurrenceFrequency!
+  recurringDayOfMonth: String
+  recurringStartMonth: String
+}
+
+type GiftTotal {
+  cost: GiftCost!
+  displayTotal: String!
+  recurrenceFrequency: GiftRecurrenceFrequency!
+}
+
+enum GiftRecurrenceFrequency {
+  SINGLE
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUALLY
+  ANNUALLY
+}
+
+enum GiftRecipientType {
+  NATIONAL_STAFF
+  PROJECT
+  SCHOLARSHIP
+  STAFF
+  STUDENT
+  VOLUNTEER
+}
+
+enum GiftRecipientStatus {
+  ACTIVE
+  INACTIVE
+}
