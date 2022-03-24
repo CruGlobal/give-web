@@ -3,7 +3,7 @@ import pick from 'lodash/pick'
 import find from 'lodash/find'
 import omit from 'lodash/omit'
 import map from 'lodash/map'
-// import flatMap from 'lodash/flatMap'
+import flatMap from 'lodash/flatMap'
 import assign from 'lodash/assign'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
@@ -14,7 +14,7 @@ import 'rxjs/add/operator/mergeMap'
 
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
 import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
-// import RecurringGiftModel from 'common/models/recurringGift.model'
+import RecurringGiftModel from 'common/models/recurringGift.model'
 
 import cortexApiService from '../cortexApi.service'
 import hateoasHelperService from 'common/services/hateoasHelper.service'
@@ -241,13 +241,12 @@ class Profile {
           if (paymentMethod['payment-instrument-identification-attributes']['street-address']) {
             paymentMethod.address = formatAddressForTemplate(paymentMethod['payment-instrument-identification-attributes'])
           }
-          // TODO: Implement when this is on the server
-          // paymentMethod.recurringGifts = flatMap(paymentMethod.recurringgifts.donations, donation => {
-          //   return map(donation['donation-lines'], donationLine => {
-          //     return new RecurringGiftModel(donationLine, donation)
-          //   })
-          // })
-          // delete paymentMethod.recurringgifts
+          paymentMethod.recurringGifts = flatMap(paymentMethod.recurringgifts.donations, donation => {
+            return map(donation['donation-lines'], donationLine => {
+              return new RecurringGiftModel(donationLine, donation)
+            })
+          })
+          delete paymentMethod.recurringgifts
           return extractPaymentAttributes(paymentMethod)
         })
         return sortPaymentMethods(paymentMethods)

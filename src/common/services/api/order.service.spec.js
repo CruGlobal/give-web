@@ -798,19 +798,23 @@ describe('order service', () => {
 
   describe('checkErrors', () => {
     it('should send a request to get the payment form links', (done) => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, needInfoResponse)
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order').respond(200, needInfoResponse)
       self.orderService.checkErrors()
         .subscribe((data) => {
-          expect(data).toEqual(['email-info', 'billing-address-info', 'payment-method-info'])
+          expect(data).toEqual(['need.email', 'need.billing.address', 'need.payment.method'])
           done()
         })
       self.$httpBackend.flush()
 
-      expect(self.$log.error.logs[0]).toEqual(['The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', ['email-info', 'billing-address-info', 'payment-method-info']])
+      expect(self.$log.error.logs[0]).toEqual(['The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.',
+        ['Customer email address must be specified.',
+         'Billing address must be specified.',
+         'Payment method must be specified.'
+        ]])
     })
 
     it('should return undefined and not log anything if there are no errors', (done) => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:needinfo').respond(200, undefined)
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order').respond(200, undefined)
       self.orderService.checkErrors()
         .subscribe((data) => {
           expect(data).toBeUndefined()
