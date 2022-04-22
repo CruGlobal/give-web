@@ -153,7 +153,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     BILLING_ADDRESS: 'Billing Address',
     NEW_ADDRESS: 'New',
     ERROR_SAVING_TITLE: 'There was an error saving the title you have chosen.',
-    ERROR_SAVING_EMAIL: 'There was an error saving your email address. Make sure it was entered correctly.',
+    ERROR_SAVING_EMAIL: 'The email address used was invalid. Please make sure to use a valid email address, and that it is entered correctly.',
     ERROR_SAVING_PHONE: 'There was an error saving your phone number. Make sure it was entered correctly.',
     ERROR_SAVING_ORGANIZATION: 'There was an error saving your organization name. Make sure it is not longer than 100 characters.',
     ERROR_SAVING_CONTACT_SPOUSE: 'There was an error saving your contact info. Make sure your spouse\'s first and last name are correct.',
