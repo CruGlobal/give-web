@@ -62,7 +62,7 @@ const DonationsService = /* @ngInject */ function (cortexApiService, profileServ
   function getReceipts (data) {
     return cortexApiService
       .post({
-        path: '/receipts/items',
+        path: '/receipts/form',
         followLocation: true,
         data: data
       })
