@@ -536,22 +536,6 @@ describe('product config form component', function () {
     })
   })
 
-  describe('clearComments()', () => {
-    it('clears recipient comments when donation services comments get added', () => {
-      $ctrl.itemConfig = { 'recipient-comments': 'hello world', 'donation-services-comments': 'hello world' }
-      $ctrl.clearComments()
-
-      expect($ctrl.itemConfig).toEqual({ 'recipient-comments': '', 'donation-services-comments': 'hello world' })
-    })
-
-    it('keeps recipient comments when donation services comments are empty', () => {
-      $ctrl.itemConfig = { 'recipient-comments': 'hello world', 'donation-services-comments': '' }
-      $ctrl.clearComments()
-
-      expect($ctrl.itemConfig).toEqual({ 'recipient-comments': 'hello world', 'donation-services-comments': '' })
-    })
-  })
-
   describe('saveGiftToCart()', () => {
     beforeEach(() => {
       // Make sure it resets errors
