@@ -234,7 +234,7 @@
                       tabindex="-1"
                       placeholder="{{$ctrl.itemConfig['donation-services-comments'] && ('COMMENTS_DISABLED' | translate)}}"
                       style="display:block;"
-                      ng-disabled="$ctrl.itemConfig['donation-services-comments']"></textarea>
+                      ng-disabled="!$ctrl.itemConfig['donation-services-comments']"></textarea>
           </li>
           <li>
             <button type="button"
