@@ -113,7 +113,7 @@ class ProductConfigFormController {
     this.errorLoading = false
 
     this.showRecipientComments = !!this.itemConfig['recipient-comments']
-    this.showDSComments = !!this.itemConfig['donation-services-comments']
+    this.showDSComments = !!this.itemConfig.donation_services_comments
 
     const productLookupObservable = this.designationsService.productLookup(this.code)
       .do(productData => {
