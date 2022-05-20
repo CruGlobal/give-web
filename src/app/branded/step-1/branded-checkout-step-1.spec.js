@@ -39,7 +39,7 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
 
       expect($ctrl.itemConfig).toEqual({
-        'campaign-code': '1234',
+        campaign_code: '1234',
         'campaign-page': '135',
         amount: '75',
         priceWithFees: '$76.80',
@@ -76,13 +76,13 @@ describe('branded checkout step 1', () => {
     it('should validate campaignCode (too long)', () => {
       $ctrl.campaignCode = 'abcdefghijklmnopqrstuvwxyz0123456789'
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.campaign_code).toEqual('')
     })
 
     it('should validate campaignCode (non alpha numeric)', () => {
       $ctrl.campaignCode = '😅😳'
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.campaign_code).toEqual('')
     })
   })
 

@@ -137,7 +137,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('LEGACY')
+      expect($ctrl.itemConfig.campaign_code).toEqual('LEGACY')
     })
 
     it('sets campaignCode if multiple are set in url', () => {
@@ -146,7 +146,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('LEGACY')
+      expect($ctrl.itemConfig.campaign_code).toEqual('LEGACY')
     })
 
     it('sets campaignCode if default-campaign-code is set', () => {
@@ -154,7 +154,7 @@ describe('product config modal', function () {
       $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT'
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('DEFAULT')
+      expect($ctrl.itemConfig.campaign_code).toEqual('DEFAULT')
     })
 
     it('cleans campaignCode if containing invalid characters', () => {
@@ -163,7 +163,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.campaign_code).toEqual('')
     })
 
     it('cleans campaignCode if longer than 30 characters', () => {
@@ -172,7 +172,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.campaign_code).toEqual('')
     })
   })
 
