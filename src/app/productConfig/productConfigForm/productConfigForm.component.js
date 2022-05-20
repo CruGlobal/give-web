@@ -95,16 +95,16 @@ class ProductConfigFormController {
       this.itemConfig.AMOUNT = amount
     }
 
-    if (inRange(parseInt(this.itemConfig['recurring-day-of-month'], 10), 1, 29)) {
-      this.itemConfig['recurring-day-of-month'] = padStart(this.itemConfig['recurring-day-of-month'], 2, '0')
+    if (inRange(parseInt(this.itemConfig.recurring_day_of_month, 10), 1, 29)) {
+      this.itemConfig.recurring_day_of_month = padStart(this.itemConfig.recurring_day_of_month, 2, '0')
     } else {
-      delete this.itemConfig['recurring-day-of-month']
+      delete this.itemConfig.recurring_day_of_month
     }
 
-    if (inRange(parseInt(this.itemConfig['recurring-start-month'], 10), 1, 13)) {
-      this.itemConfig['recurring-start-month'] = padStart(this.itemConfig['recurring-start-month'], 2, '0')
+    if (inRange(parseInt(this.itemConfig.recurring_start_month, 10), 1, 13)) {
+      this.itemConfig.recurring_start_month = padStart(this.itemConfig.recurring_start_month, 2, '0')
     } else {
-      delete this.itemConfig['recurring-start-month']
+      delete this.itemConfig.recurring_start_month
     }
   }
 
@@ -112,8 +112,8 @@ class ProductConfigFormController {
     this.loading = true
     this.errorLoading = false
 
-    this.showRecipientComments = !!this.itemConfig['recipient-comments']
-    this.showDSComments = !!this.itemConfig['donation-services-comments']
+    this.showRecipientComments = !!this.itemConfig.recipient_comments
+    this.showDSComments = !!this.itemConfig.donation_services_comments
 
     const productLookupObservable = this.designationsService.productLookup(this.code)
       .do(productData => {
@@ -125,11 +125,11 @@ class ProductConfigFormController {
     const nextDrawDateObservable = this.commonService.getNextDrawDate()
       .do(nextDrawDate => {
         this.nextDrawDate = nextDrawDate
-        if (!this.itemConfig['recurring-day-of-month'] && this.nextDrawDate) {
-          this.itemConfig['recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD')
+        if (!this.itemConfig.recurring_day_of_month && this.nextDrawDate) {
+          this.itemConfig.recurring_day_of_month = startDate(null, this.nextDrawDate).format('DD')
         }
-        if (!this.itemConfig['recurring-start-month'] && this.nextDrawDate) {
-          this.itemConfig['recurring-start-month'] = startDate(null, this.nextDrawDate).format('MM')
+        if (!this.itemConfig.recurring_start_month && this.nextDrawDate) {
+          this.itemConfig.recurring_start_month = startDate(null, this.nextDrawDate).format('MM')
         }
       })
 
@@ -306,7 +306,7 @@ class ProductConfigFormController {
     this.submittingGift = true
     this.onStateChange({ state: 'submitting' })
 
-    const data = this.productData.frequency === 'NA' ? omit(this.itemConfig, ['recurring-start-month', 'recurring-day-of-month']) : this.itemConfig
+    const data = this.productData.frequency === 'NA' ? omit(this.itemConfig, ['recurring_start_month', 'recurring_day_of_month']) : this.itemConfig
 
     const savingObservable = this.isEdit
       ? this.cartService.editItem(this.uri, this.productData.uri, data)

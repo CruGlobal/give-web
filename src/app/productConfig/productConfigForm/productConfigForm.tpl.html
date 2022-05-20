@@ -179,9 +179,9 @@
                 <label translate>{{'MONTH'}}</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['recurring-start-month']"
+                          ng-model="$ctrl.itemConfig['recurring_start_month']"
                           ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring_day_of_month'], $ctrl.itemConfig['recurring_start_month'])">
                   </select>
                 </div>
               </div>
@@ -191,9 +191,9 @@
                 <label translate>{{'DAY'}}</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['recurring-day-of-month']"
-                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
+                          ng-model="$ctrl.itemConfig['recurring_day_of_month']"
+                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['recurring_start_month'], $ctrl.nextDrawDate)"
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring_day_of_month'], $ctrl.itemConfig['recurring_start_month'])">
                   </select>
                 </div>
               </div>
@@ -202,7 +202,7 @@
               <div class="form-group">
                 <label translate>{{'GIFT_START_DATE'}}</label>
                 <div class="form-group">
-                  {{$ctrl.startMonth( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate ).format('ll')}}
+                  {{$ctrl.startMonth( $ctrl.itemConfig['recurring_day_of_month'], $ctrl.itemConfig['recurring_start_month'], $ctrl.nextDrawDate ).format('ll')}}
                 </div>
               </div>
             </div>
@@ -229,7 +229,7 @@
                       name="recipientComments"
                       rows="3"
                       maxlength="250"
-                      ng-model="$ctrl.itemConfig['recipient-comments']"
+                      ng-model="$ctrl.itemConfig.recipient_comments"
                       ng-if="$ctrl.showRecipientComments"
                       tabindex="-1"
                       style="display:block;"></textarea>
@@ -247,7 +247,7 @@
                       name="donationServicesComments"
                       rows="3"
                       maxlength="250"
-                      ng-model="$ctrl.itemConfig['donation-services-comments']"
+                      ng-model="$ctrl.itemConfig.donation_services_comments"
                       ng-if="$ctrl.showDSComments"
                       tabindex="-1"
                       placeholder="{{'MESSAGE_EXAMPLE' | translate}}"
