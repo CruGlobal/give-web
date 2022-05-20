@@ -43,7 +43,7 @@ describe('branded checkout step 1', () => {
         'campaign-page': '135',
         amount: '75',
         priceWithFees: '$76.80',
-        'recurring-day-of-month': '9'
+        'recurring_day_of_month': '9'
       })
 
       expect($ctrl.defaultFrequency).toBeUndefined()
