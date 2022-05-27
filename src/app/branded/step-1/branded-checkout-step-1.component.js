@@ -31,10 +31,10 @@ class BrandedCheckoutStep1Controller {
 
   initItemConfig () {
     this.itemConfig = {}
-    this.itemConfig['campaign-code'] = this.campaignCode
-    if (this.itemConfig['campaign-code'] &&
-      (this.itemConfig['campaign-code'].match(/^[a-z0-9]+$/i) === null || this.itemConfig['campaign-code'].length > 30)) {
-      this.itemConfig['campaign-code'] = ''
+    this.itemConfig.campaign_code = this.campaignCode
+    if (this.itemConfig.campaign_code &&
+      (this.itemConfig.campaign_code.match(/^[a-z0-9]+$/i) === null || this.itemConfig.campaign_code.length > 30)) {
+      this.itemConfig.campaign_code = ''
     }
     this.itemConfig['campaign-page'] = this.campaignPage
     this.itemConfig.amount = this.amount
@@ -56,7 +56,7 @@ class BrandedCheckoutStep1Controller {
         this.defaultFrequency = 'ANNUAL'
         break
     }
-    this.itemConfig['recurring-day-of-month'] = this.day
+    this.itemConfig.recurring_day_of_month = this.day
     this.itemConfig.frequency = this.frequency
   }
 

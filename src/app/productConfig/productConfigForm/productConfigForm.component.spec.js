@@ -98,24 +98,24 @@ describe('product config form component', function () {
 
   describe('initItemConfig', () => {
     it('should format item config values', () => {
-      $ctrl.itemConfig['recurring-day-of-month'] = '9'
-      $ctrl.itemConfig['recurring-start-month'] = '8'
+      $ctrl.itemConfig['recurring_day_of_month'] = '9'
+      $ctrl.itemConfig['recurring_start_month'] = '8'
       $ctrl.initItemConfig()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(85)
-      expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('09')
-      expect($ctrl.itemConfig['recurring-start-month']).toEqual('08')
+      expect($ctrl.itemConfig['recurring_day_of_month']).toEqual('09')
+      expect($ctrl.itemConfig['recurring_start_month']).toEqual('08')
     })
 
     it('should handle out of range values', () => {
       $ctrl.itemConfig.AMOUNT = 'invalid'
-      $ctrl.itemConfig['recurring-day-of-month'] = '29'
-      $ctrl.itemConfig['recurring-start-month'] = '13'
+      $ctrl.itemConfig['recurring_day_of_month'] = '29'
+      $ctrl.itemConfig['recurring_start_month'] = '13'
       $ctrl.initItemConfig()
 
       expect($ctrl.itemConfig.AMOUNT).toBeUndefined()
-      expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined()
-      expect($ctrl.itemConfig['recurring-start-month']).toBeUndefined()
+      expect($ctrl.itemConfig['recurring_day_of_month']).toBeUndefined()
+      expect($ctrl.itemConfig['recurring_start_month']).toBeUndefined()
     })
 
     it('should handle a whole number amount', () => {
@@ -178,8 +178,8 @@ describe('product config form component', function () {
       expect($ctrl.setDefaultFrequency).toHaveBeenCalled()
 
       expect($ctrl.nextDrawDate).toEqual('2016-10-02')
-      expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('02')
-      expect($ctrl.itemConfig['recurring-start-month']).toEqual('10')
+      expect($ctrl.itemConfig['recurring_day_of_month']).toEqual('02')
+      expect($ctrl.itemConfig['recurring_start_month']).toEqual('10')
 
       expect($ctrl.suggestedAmounts).toEqual([{ amount: 5 }, { amount: 10 }])
       expect($ctrl.useSuggestedAmounts).toEqual(true)
@@ -603,8 +603,8 @@ describe('product config form component', function () {
         $ctrl.isEdit ? expect($ctrl.analyticsFactory.cartAdd).not.toHaveBeenCalled() : expect($ctrl.analyticsFactory.cartAdd).toHaveBeenCalledWith($ctrl.itemConfig, $ctrl.productData)
       })
 
-      it('should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
-        $ctrl.itemConfig['recurring-day-of-month'] = '01'
+      it('should submit a gift successfully and omit recurring_day_of_month if frequency is single', () => {
+        $ctrl.itemConfig['recurring_day_of_month'] = '01'
         $ctrl.itemConfigForm.$dirty = true
         $ctrl.productData.frequency = 'NA'
         $ctrl.saveGiftToCart()
