@@ -47,7 +47,9 @@ class BrandedCheckoutController {
     this.sessionService.signOut().subscribe(() => {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
-    }, angular.noop)
+    }, (err) => {
+      console.error(err)
+    })
     this.$translate.use(this.language || 'en')
   }
 
