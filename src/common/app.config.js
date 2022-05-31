@@ -316,7 +316,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     OPTIONAL: 'Opcional',
     SEND_MESSAGE_TO: 'Enviar un mensaje al {{ministry}}',
     SPECIAL_INSTRUCTIONS: 'Instrucciones especiales de manejo para procesar este regalo',
-    MESSAGE_EXAMPLE: 'Por ejemplo: hacer este regalo anónimo, detener mi regalo después de 18 meses, etc.',
+    MESSAGE_EXAMPLE: 'Por ejemplo: Detener mi donación después de 18 meses, hacer esta donación anónima (nota: favor de quitar cualquier mensaje al ministerio o al misionero para permanecer en el anonimato), etc.',
     YOUR_INFORMATION: 'Tu información',
     PAYMENT: 'Pago',
     CONTINUE: 'Continuar',
