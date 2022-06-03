@@ -235,10 +235,17 @@ class DesignationsService {
   }
 
   facebookPixel (code) {
+    return Observable.from(this.designationData(code))
+      .map(data => {
+        return data.facebookPixelId
+      })
+  }
+
+  designationData (code) {
     const path = this.generatePath(code)
     return Observable.from(this.$http.get(this.envService.read('publicGive') + path))
       .map((data) => {
-        return data.data['jcr:content'].facebookPixelId
+        return data.data['jcr:content']
       })
   }
 

@@ -7,6 +7,8 @@ import lookupResponse from 'common/services/api/fixtures/product-lookup.fixture'
 import bulkLookupResponse from 'common/services/api/fixtures/product-lookup-bulk.fixture'
 import campaignResponse from '../fixtures/campaign.infinity.fixture'
 import designationResponse from '../fixtures/designation.infinity.fixture'
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/of'
 
 describe('designation service', () => {
   beforeEach(angular.mock.module(module.name))
@@ -186,11 +188,23 @@ describe('designation service', () => {
 
   describe('facebookPixel', () => {
     it('should load facebook pixel id from JCR', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
-        .respond(200, designationResponse)
+      jest.spyOn(self.designationsService, 'designationData').mockReturnValue(
+        Observable.of(designationResponse['jcr:content'])
+      )
       self.designationsService.facebookPixel('0123456')
         .subscribe(pixelId => {
           expect(pixelId).toEqual('123456')
+        })
+    })
+  })
+
+  describe('designationData', () => {
+    it('should load designation data from the JCR', () => {
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+        .respond(200, designationResponse)
+      self.designationsService.designationData('0123456')
+        .subscribe(data => {
+          expect(data).toEqual(designationResponse['jcr:content'])
         })
       self.$httpBackend.flush()
     })

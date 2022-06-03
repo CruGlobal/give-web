@@ -46,6 +46,15 @@ describe('thank you summary', () => {
           display: 'Monthly'
         }
       }],
+      lineItems: [{
+        code: {
+          code: '0123456'
+        }
+      }, {
+        code: {
+          code: '1234567'
+        }
+      }],
       rawData: {
         'monetary-total': [
           {
@@ -77,6 +86,8 @@ describe('thank you summary', () => {
       jest.spyOn(self.controller.$rootScope, '$on').mockImplementation(() => {})
       jest.spyOn(self.controller, 'signedOut').mockImplementation(() => {})
       jest.spyOn(self.controller, 'loadLastPurchase').mockImplementation(() => {})
+      jest.spyOn(self.controller, 'loadEmail').mockImplementation(() => {})
+      jest.spyOn(self.controller, 'loadThankYouImage').mockImplementation(() => {})
     })
 
     it('should call all methods needed to load data for the component', () => {
@@ -87,6 +98,8 @@ describe('thank you summary', () => {
 
       expect(self.controller.signedOut).toHaveBeenCalled()
       expect(self.controller.loadLastPurchase).toHaveBeenCalled()
+      expect(self.controller.loadEmail).toHaveBeenCalled()
+      expect(self.controller.loadThankYouImage).toHaveBeenCalled()
     })
   })
 
@@ -211,6 +224,74 @@ describe('thank you summary', () => {
 
       expect(self.controller.designationsService.facebookPixel).toHaveBeenCalled()
       expect(self.controller.$window.document.body.innerHTML).toContain('img')
+    })
+  })
+
+  describe('loadThankYouImage', () => {
+    const defaultImage = '/content/dam/give/thank-you-images/some/image.jpg'
+    beforeEach(() => {
+      jest.spyOn(self.controller.thankYouService, 'getDefaultThankYouImage').mockReturnValue(
+        Observable.of(defaultImage)
+      )
+      self.controller.purchase = self.mockPurchase
+    })
+
+    it('should return the default image if there are no specific images', () => {
+      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValue(
+        Observable.of({
+          organizationId: '1-TF-1'
+        })
+      )
+
+      self.controller.loadThankYouImage()
+      expect(self.controller.thankYouImage).toEqual(defaultImage)
+    })
+
+    it('should return the specific ministry image if there is only one to pick from', () => {
+      const onlyImage = '/content/dam/give/thank-you-images/1-TF-1.jpg'
+      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValue(
+        Observable.of({
+          organizationId: '1-TF-1',
+          thankYouImage: onlyImage
+        })
+      )
+
+      self.controller.loadThankYouImage()
+      expect(self.controller.thankYouImage).toEqual(onlyImage)
+    })
+
+    it('should return the default image if there are multiple orgIds in the order', () => {
+      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValueOnce(
+        Observable.of({
+          organizationId: '1-TF-1',
+          thankYouImage: '/content/dam/give/thank-you-images/1-TF-1.jpg'
+        })
+      ).mockReturnValueOnce(
+        Observable.of({
+          organizationId: self.controller.STAFF_ORG_ID,
+          thankYouImage: `/content/dam/give/thank-you-images/${self.controller.STAFF_ORG_ID}.jpg`
+        })
+      )
+
+      self.controller.loadThankYouImage()
+      expect(self.controller.thankYouImage).toEqual(defaultImage)
+    })
+
+    it('should use the staff orgId if orgId is not set', () => {
+      const onlyImage = `/content/dam/give/thank-you-images/${self.controller.STAFF_ORG_ID}.jpg`
+      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValueOnce(
+        Observable.of({
+          thankYouImage: onlyImage
+        })
+      ).mockReturnValueOnce(
+        Observable.of({
+          organizationId: self.controller.STAFF_ORG_ID,
+          thankYouImage: onlyImage
+        })
+      )
+
+      self.controller.loadThankYouImage()
+      expect(self.controller.thankYouImage).toEqual(onlyImage)
     })
   })
 })
