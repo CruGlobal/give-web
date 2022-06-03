@@ -13,12 +13,27 @@ class ThankYouService {
     this.$location = $location
     this.envService = envService
     this.jsonDataPath = '/content/dam/give/thank-you-images/thank-you-page-configuration/jcr:content/data/master.json'
+    this.thankYouData = this.getThankYouData()
   }
 
   getDefaultThankYouImage () {
+    return Observable.from(this.thankYouData)
+      .map((data) => {
+        return data.defaultImage
+      })
+  }
+
+  shouldShowThankYouImage () {
+    return Observable.from(this.thankYouData)
+      .map((data) => {
+        return data.showThankYouImage
+      })
+  }
+
+  getThankYouData () {
     return Observable.from(this.$http.get(this.envService.read('publicGive') + this.jsonDataPath))
       .map((response) => {
-        return response.data.defaultImage
+        return response.data
       })
   }
 }

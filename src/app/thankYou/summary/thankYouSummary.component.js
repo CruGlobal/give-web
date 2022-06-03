@@ -112,6 +112,12 @@ class ThankYouSummaryController {
     })
   }
 
+  shouldShowThankYouImage () {
+    return this.thankYouService.shouldShowThankYouImage().subscribe((data) => {
+      return data
+    })
+  }
+
   loadThankYouImage () {
     this.thankYouService.getDefaultThankYouImage().subscribe((defaultImage) => {
       const orgIds = new Set()

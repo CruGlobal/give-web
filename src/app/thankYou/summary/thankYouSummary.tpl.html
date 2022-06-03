@@ -148,4 +148,4 @@
 
   </div>
 </div><!-- // panel -->
-<img ng-if="$ctrl.thankYouImage" ng-src="{{$ctrl.thankYouImage}}" />
+<img ng-if="$ctrl.shouldShowThankYouImage() && $ctrl.thankYouImage" ng-src="{{$ctrl.thankYouImage}}" />
