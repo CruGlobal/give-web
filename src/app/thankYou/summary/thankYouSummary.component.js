@@ -41,7 +41,6 @@ class ThankYouSummaryController {
     this.$rootScope.$on(SignOutEvent, (event) => this.signedOut(event))
     this.loadLastPurchase()
     this.loadEmail()
-    this.loadThankYouImage()
   }
 
   signedOut (event) {
@@ -71,6 +70,8 @@ class ThankYouSummaryController {
             amount: rateTotal.cost.amount
           }
         })
+        this.loadThankYouImage()
+
         delete this.loadingError
         this.loading = false
         this.onPurchaseLoaded({
