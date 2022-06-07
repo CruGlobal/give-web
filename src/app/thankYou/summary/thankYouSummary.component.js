@@ -12,7 +12,10 @@ import profileService from 'common/services/api/profile.service'
 import sessionService, { SignOutEvent } from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
 import designationsService from 'common/services/api/designations.service'
+import thankYouService from '../../../common/services/api/thankYou.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
+
+import { Observable } from 'rxjs/Observable'
 
 import template from './thankYouSummary.tpl.html'
 /* global Image */
@@ -21,21 +24,24 @@ const componentName = 'thankYouSummary'
 
 class ThankYouSummaryController {
   /* @ngInject */
-  constructor ($rootScope, $window, analyticsFactory, orderService, profileService, sessionModalService, designationsService, $log) {
+  constructor ($rootScope, $window, analyticsFactory, orderService, profileService, sessionModalService, designationsService, thankYouService, $log) {
     this.$rootScope = $rootScope
     this.$window = $window
     this.orderService = orderService
     this.profileService = profileService
     this.sessionModalService = sessionModalService
     this.designationsService = designationsService
+    this.thankYouService = thankYouService
     this.analyticsFactory = analyticsFactory
     this.$log = $log
+    this.STAFF_ORG_ID = '1-TG-11'
   }
 
   $onInit () {
     this.$rootScope.$on(SignOutEvent, (event) => this.signedOut(event))
     this.loadLastPurchase()
     this.loadEmail()
+    this.loadThankYouImage()
   }
 
   signedOut (event) {
@@ -92,7 +98,8 @@ class ThankYouSummaryController {
   loadFacebookPixel (item) {
     if (!item.code || !item.code.code) { return }
 
-    const designation = item.code.code; const value = item.rate.cost.amount
+    const designation = item.code.code
+    const value = item.rate.cost.amount
 
     this.designationsService.facebookPixel(designation).subscribe((pixelId) => {
       if (!pixelId) { return }
@@ -103,6 +110,42 @@ class ThankYouSummaryController {
       pixel.style.display = 'none'
 
       angular.element(this.$window.document.body).append(pixel)
+    })
+  }
+
+  shouldShowThankYouImage () {
+    return this.thankYouService.shouldShowThankYouImage().subscribe((data) => {
+      return data
+    })
+  }
+
+  loadThankYouImage () {
+    this.thankYouService.getDefaultThankYouImage().subscribe((defaultImage) => {
+      const orgIds = new Set()
+      const thankYouImages = new Set()
+      const observables = []
+      this.purchase.lineItems.forEach(lineItem => {
+        observables.push(this.designationsService.designationData(lineItem.code.code))
+      })
+      Observable.forkJoin(...observables).subscribe((data) => {
+        data.forEach((dataItem) => {
+          orgIds.add(dataItem.organizationId ? dataItem.organizationId : this.STAFF_ORG_ID)
+          if (dataItem.thankYouImage) {
+            thankYouImages.add(dataItem.thankYouImage)
+          }
+        })
+        if (orgIds.size !== 1 || thankYouImages.size === 0) {
+          this.thankYouImage = defaultImage
+        } else {
+          const thankYouImageIterator = thankYouImages.values()
+          this.thankYouImage = thankYouImageIterator.next().value
+        }
+      }, (err) => {
+        this.$log.error('Error loading image', err)
+        this.thankYouImage = defaultImage
+      })
+    }, (err) => {
+      this.$log.error('Error loading image', err)
     })
   }
 }
@@ -118,6 +161,7 @@ export default angular
     sessionService.name,
     sessionModalService.name,
     designationsService.name,
+    thankYouService.name,
     analyticsFactory.name
   ])
   .component(componentName, {
