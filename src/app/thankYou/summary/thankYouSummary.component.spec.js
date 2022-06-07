@@ -87,7 +87,6 @@ describe('thank you summary', () => {
       jest.spyOn(self.controller, 'signedOut').mockImplementation(() => {})
       jest.spyOn(self.controller, 'loadLastPurchase').mockImplementation(() => {})
       jest.spyOn(self.controller, 'loadEmail').mockImplementation(() => {})
-      jest.spyOn(self.controller, 'loadThankYouImage').mockImplementation(() => {})
     })
 
     it('should call all methods needed to load data for the component', () => {
@@ -99,7 +98,6 @@ describe('thank you summary', () => {
       expect(self.controller.signedOut).toHaveBeenCalled()
       expect(self.controller.loadLastPurchase).toHaveBeenCalled()
       expect(self.controller.loadEmail).toHaveBeenCalled()
-      expect(self.controller.loadThankYouImage).toHaveBeenCalled()
     })
   })
 
@@ -127,6 +125,7 @@ describe('thank you summary', () => {
     it('should load all data from the last completed purchase', () => {
       jest.spyOn(self.controller.profileService, 'getPurchase')
       jest.spyOn(self.controller.analyticsFactory, 'transactionEvent')
+      jest.spyOn(self.controller, 'loadThankYouImage').mockImplementation(() => {})
       self.controller.loadLastPurchase()
 
       expect(self.controller.profileService.getPurchase).toHaveBeenCalledWith('/purchases/crugive/iiydanbt=')
@@ -144,6 +143,7 @@ describe('thank you summary', () => {
         }
       ])
 
+      expect(self.controller.loadThankYouImage).toHaveBeenCalled()
       expect(self.controller.loading).toEqual(false)
       expect(self.controller.loadingError).toBeUndefined()
       expect(self.controller.onPurchaseLoaded).toHaveBeenCalledWith({
