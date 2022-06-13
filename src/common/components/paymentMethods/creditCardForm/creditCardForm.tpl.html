@@ -155,7 +155,9 @@
               <span ng-if="!$ctrl.paymentMethod" translate>{{'NEW_ADDRESS'}}</span>
               <span translate>{{'BILLING_ADDRESS'}}</span>
             </h4>
-            <address-form address="$ctrl.creditCardPayment.address" parent-form="$ctrl.creditCardPaymentForm"></address-form>
+            <address-form address="$ctrl.creditCardPayment.address"
+                          parent-form="$ctrl.creditCardPaymentForm"
+                          compact-address="$ctrl.brandedCheckoutItem"></address-form>
           </div>
         </div>
       </div>
