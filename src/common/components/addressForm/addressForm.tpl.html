@@ -87,7 +87,7 @@
 </div>
 <div ng-if="$ctrl.address.country === 'US'">
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
       <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressLocality | showErrors)}">
         <label translate>{{'CITY'}}</label>
         <input type="text"
@@ -103,9 +103,7 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-3">
       <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressRegion | showErrors) || $ctrl.loadingRegionsError}">
         <label translate>{{'STATE'}}</label>
         <div class="form-group">
@@ -116,8 +114,10 @@
                   ng-disabled="$ctrl.addressDisabled">
           </select>
           <div role="alert" ng-if="$ctrl.loadingRegionsError">
-            <div class="help-block"> <translate>{{'REGIONS_LOADING_ERROR'}}</translate>
-              <button id="retryButton2" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>{{'RETRY'}}</button></div>
+            <div class="help-block">
+              <translate>{{'REGIONS_LOADING_ERROR'}}</translate>
+              <button id="retryButton2" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>{{'RETRY'}}</button>
+            </div>
           </div>
           <div role="alert" ng-messages="$ctrl.parentForm.addressRegion.$error" ng-if="($ctrl.parentForm.addressRegion | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'SELECT_STATE_ERROR'}}</div>
@@ -125,7 +125,7 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-3">
       <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressPostalCode | showErrors)}">
         <label translate>{{'ZIP'}}</label>
         <input type="text"
