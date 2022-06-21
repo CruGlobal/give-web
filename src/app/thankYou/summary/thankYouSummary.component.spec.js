@@ -244,6 +244,7 @@ describe('thank you summary', () => {
           organizationId: '1-TF-1'
         })
       )
+      jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(Observable.of({}))
 
       self.controller.loadThankYouImage()
       expect(self.controller.thankYouImage).toEqual(defaultImage)
@@ -251,10 +252,14 @@ describe('thank you summary', () => {
 
     it('should return the specific ministry image if there is only one to pick from', () => {
       const onlyImage = '/content/dam/give/thank-you-images/1-TF-1.jpg'
+      jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(
+        Observable.of({
+          thankYouImage: onlyImage
+        })
+      )
       jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValue(
         Observable.of({
-          organizationId: '1-TF-1',
-          thankYouImage: onlyImage
+          organizationId: '1-TF-1'
         })
       )
 
@@ -265,13 +270,16 @@ describe('thank you summary', () => {
     it('should return the default image if there are multiple orgIds in the order', () => {
       jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValueOnce(
         Observable.of({
-          organizationId: '1-TF-1',
-          thankYouImage: '/content/dam/give/thank-you-images/1-TF-1.jpg'
+          organizationId: '1-TF-1'
         })
       ).mockReturnValueOnce(
         Observable.of({
-          organizationId: self.controller.STAFF_ORG_ID,
-          thankYouImage: `/content/dam/give/thank-you-images/${self.controller.STAFF_ORG_ID}.jpg`
+          organizationId: self.controller.STAFF_ORG_ID
+        })
+      )
+      jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(
+        Observable.of({
+          thankYouImage: '/content/dam/give/thank-you-images/1-TF-1.jpg'
         })
       )
 
@@ -281,14 +289,16 @@ describe('thank you summary', () => {
 
     it('should use the staff orgId if orgId is not set', () => {
       const onlyImage = `/content/dam/give/thank-you-images/${self.controller.STAFF_ORG_ID}.jpg`
-      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValueOnce(
+      jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(
         Observable.of({
           thankYouImage: onlyImage
         })
+      )
+      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValueOnce(
+        Observable.of({})
       ).mockReturnValueOnce(
         Observable.of({
-          organizationId: self.controller.STAFF_ORG_ID,
-          thankYouImage: onlyImage
+          organizationId: self.controller.STAFF_ORG_ID
         })
       )
 
