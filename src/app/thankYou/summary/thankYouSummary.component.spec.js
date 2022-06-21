@@ -230,8 +230,10 @@ describe('thank you summary', () => {
   describe('loadThankYouImage', () => {
     const defaultImage = '/content/dam/give/thank-you-images/some/image.jpg'
     beforeEach(() => {
-      jest.spyOn(self.controller.thankYouService, 'getDefaultThankYouImage').mockReturnValue(
-        Observable.of(defaultImage)
+      jest.spyOn(self.controller.thankYouService, 'getThankYouData').mockReturnValue(
+        Observable.of({
+          defaultImage: defaultImage
+        })
       )
       self.controller.purchase = self.mockPurchase
     })

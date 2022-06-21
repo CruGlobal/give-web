@@ -121,7 +121,7 @@ class ThankYouSummaryController {
   }
 
   loadThankYouImage () {
-    this.thankYouService.getDefaultThankYouImage().subscribe((defaultImage) => {
+    this.thankYouService.getThankYouData().subscribe((thankYouData) => {
       const orgIds = new Set()
       const thankYouImages = new Set()
       const observables = []
@@ -136,14 +136,16 @@ class ThankYouSummaryController {
           }
         })
         if (orgIds.size !== 1 || thankYouImages.size === 0) {
-          this.thankYouImage = defaultImage
+          this.thankYouImage = thankYouData.defaultImage
+          this.thankYouImageLink = thankYouData.defaultThankYouImageLink
         } else {
           const thankYouImageIterator = thankYouImages.values()
           this.thankYouImage = thankYouImageIterator.next().value
         }
       }, (err) => {
         this.$log.error('Error loading image', err)
-        this.thankYouImage = defaultImage
+        this.thankYouImage = thankYouData.defaultImage
+        this.thankYouImageLink = thankYouData.defaultThankYouImageLink
       })
     }, (err) => {
       this.$log.error('Error loading image', err)

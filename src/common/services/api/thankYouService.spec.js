@@ -25,15 +25,6 @@ describe('thank you service', () => {
     self.$httpBackend.verifyNoOutstandingRequest()
   })
 
-  describe('getDefaultThankYouImage', () => {
-    it('should get the default thank you page image', () => {
-      self.thankYouService.getDefaultThankYouImage()
-        .subscribe((defaultImage) => {
-          expect(defaultImage).toEqual(thankYouResponse.defaultImage)
-        })
-    })
-  })
-
   describe('getThankYouData', () => {
     it('should get the thank you data', () => {
       self.thankYouService.$location = {

@@ -16,13 +16,6 @@ class ThankYouService {
     this.thankYouData = this.getThankYouData()
   }
 
-  getDefaultThankYouImage () {
-    return Observable.from(this.thankYouData)
-      .map((data) => {
-        return data.defaultImage
-      })
-  }
-
   shouldShowThankYouImage () {
     return Observable.from(this.thankYouData)
       .map((data) => {
