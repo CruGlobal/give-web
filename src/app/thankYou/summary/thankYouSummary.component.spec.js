@@ -229,21 +229,19 @@ describe('thank you summary', () => {
 
   describe('loadThankYouImage', () => {
     const defaultImage = '/content/dam/give/thank-you-images/some/image.jpg'
+    const defaultImageLink = 'https://localhost.cru.org:9000'
     beforeEach(() => {
       jest.spyOn(self.controller.thankYouService, 'getThankYouData').mockReturnValue(
         Observable.of({
-          defaultImage: defaultImage
+          defaultImage: defaultImage,
+          defaultThankYouImageLink: defaultImageLink
         })
       )
       self.controller.purchase = self.mockPurchase
     })
 
     it('should return the default image if there are no specific images', () => {
-      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValue(
-        Observable.of({
-          organizationId: '1-TF-1'
-        })
-      )
+      setupSingleOrgId()
       jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(Observable.of({}))
 
       self.controller.loadThankYouImage()
@@ -257,26 +255,14 @@ describe('thank you summary', () => {
           thankYouImage: onlyImage
         })
       )
-      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValue(
-        Observable.of({
-          organizationId: '1-TF-1'
-        })
-      )
+      setupSingleOrgId()
 
       self.controller.loadThankYouImage()
       expect(self.controller.thankYouImage).toEqual(onlyImage)
     })
 
     it('should return the default image if there are multiple orgIds in the order', () => {
-      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValueOnce(
-        Observable.of({
-          organizationId: '1-TF-1'
-        })
-      ).mockReturnValueOnce(
-        Observable.of({
-          organizationId: self.controller.STAFF_ORG_ID
-        })
-      )
+      setupMultipleOrgIds()
       jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(
         Observable.of({
           thankYouImage: '/content/dam/give/thank-you-images/1-TF-1.jpg'
@@ -305,5 +291,51 @@ describe('thank you summary', () => {
       self.controller.loadThankYouImage()
       expect(self.controller.thankYouImage).toEqual(onlyImage)
     })
+
+    it('should return a customized thank you image link if one is set and there is only one orgId', () => {
+      const customLink = 'https://custom.com'
+      jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(
+        Observable.of({
+          thankYouImageLink: customLink
+        })
+      )
+      setupSingleOrgId()
+
+      self.controller.loadThankYouImage()
+      expect(self.controller.thankYouImageLink).toEqual(customLink)
+    })
+
+    it('should return the default thank you image link if there are multiple orgIds', () => {
+      const customLink = 'https://custom.com'
+      jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(
+        Observable.of({
+          thankYouImageLink: customLink
+        })
+      )
+      setupMultipleOrgIds()
+
+      self.controller.loadThankYouImage()
+      expect(self.controller.thankYouImageLink).toEqual(defaultImageLink)
+    })
+
+    const setupSingleOrgId = () => {
+      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValue(
+        Observable.of({
+          organizationId: '1-TF-1'
+        })
+      )
+    }
+
+    const setupMultipleOrgIds = () => {
+      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValueOnce(
+        Observable.of({
+          organizationId: '1-TF-1'
+        })
+      ).mockReturnValueOnce(
+        Observable.of({
+          organizationId: self.controller.STAFF_ORG_ID
+        })
+      )
+    }
   })
 })

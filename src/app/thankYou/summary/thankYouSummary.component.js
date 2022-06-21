@@ -138,6 +138,7 @@ class ThankYouSummaryController {
           const orgId = orgIds.values().next().value
           this.thankYouService.getOrgIdThankYouData(orgId).subscribe((orgIdData) => {
             this.thankYouImage = orgIdData.thankYouImage || thankYouData.defaultImage
+            this.thankYouImageLink = orgIdData.thankYouImageLink || thankYouData.defaultThankYouImageLink
           })
         }
       }, (err) => {
