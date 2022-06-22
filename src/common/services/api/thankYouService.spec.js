@@ -2,6 +2,7 @@ import angular from 'angular'
 import 'angular-mocks'
 import module from './thankYou.service'
 import thankYouResponse from './fixtures/thank-you.fixture'
+import orgIdResponse from './fixtures/thank-you-1-tg-11.fixture'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 
@@ -25,15 +26,6 @@ describe('thank you service', () => {
     self.$httpBackend.verifyNoOutstandingRequest()
   })
 
-  describe('getDefaultThankYouImage', () => {
-    it('should get the default thank you page image', () => {
-      self.thankYouService.getDefaultThankYouImage()
-        .subscribe((defaultImage) => {
-          expect(defaultImage).toEqual(thankYouResponse.defaultImage)
-        })
-    })
-  })
-
   describe('getThankYouData', () => {
     it('should get the thank you data', () => {
       self.thankYouService.$location = {
@@ -55,6 +47,18 @@ describe('thank you service', () => {
         .subscribe((data) => {
           expect(data).toEqual(thankYouResponse.showThankYouImage)
         })
+    })
+  })
+
+  describe('getOrgIdThankYouData', () => {
+    it('should return orgId specific thank you image data', () => {
+      self.$httpBackend.expectGET(`https://give-stage2.cru.org${self.thankYouService.thankYouImagePath}/1-tg-11/jcr:content/data/master.json`)
+        .respond(200, thankYouResponse)
+      self.thankYouService.getOrgIdThankYouData('1-TG-11')
+        .subscribe((data) => {
+          expect(data).toEqual(orgIdResponse)
+        })
+      self.$httpBackend.flush()
     })
   })
 })

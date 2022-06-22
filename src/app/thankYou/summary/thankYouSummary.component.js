@@ -121,29 +121,30 @@ class ThankYouSummaryController {
   }
 
   loadThankYouImage () {
-    this.thankYouService.getDefaultThankYouImage().subscribe((defaultImage) => {
+    this.thankYouService.getThankYouData().subscribe((thankYouData) => {
+      this.thankYouImage = thankYouData.defaultImage
+      this.thankYouImageLink = thankYouData.defaultThankYouImageLink
       const orgIds = new Set()
-      const thankYouImages = new Set()
       const observables = []
+
       this.purchase.lineItems.forEach(lineItem => {
         observables.push(this.designationsService.designationData(lineItem.code.code))
       })
       Observable.forkJoin(...observables).subscribe((data) => {
         data.forEach((dataItem) => {
           orgIds.add(dataItem.organizationId ? dataItem.organizationId : this.STAFF_ORG_ID)
-          if (dataItem.thankYouImage) {
-            thankYouImages.add(dataItem.thankYouImage)
-          }
         })
-        if (orgIds.size !== 1 || thankYouImages.size === 0) {
-          this.thankYouImage = defaultImage
-        } else {
-          const thankYouImageIterator = thankYouImages.values()
-          this.thankYouImage = thankYouImageIterator.next().value
+        if (orgIds.size === 1) {
+          const orgId = orgIds.values().next().value
+          this.thankYouService.getOrgIdThankYouData(orgId).subscribe((orgIdData) => {
+            this.thankYouImage = orgIdData.thankYouImage || thankYouData.defaultImage
+            this.thankYouImageLink = orgIdData.thankYouImageLink || thankYouData.defaultThankYouImageLink
+          })
         }
       }, (err) => {
         this.$log.error('Error loading image', err)
-        this.thankYouImage = defaultImage
+        this.thankYouImage = thankYouData.defaultImage
+        this.thankYouImageLink = thankYouData.defaultThankYouImageLink
       })
     }, (err) => {
       this.$log.error('Error loading image', err)

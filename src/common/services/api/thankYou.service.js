@@ -12,15 +12,9 @@ class ThankYouService {
     this.$http = $http
     this.$location = $location
     this.envService = envService
-    this.jsonDataPath = '/content/dam/give/thank-you-images/thank-you-page-configuration/jcr:content/data/master.json'
+    this.thankYouImagePath = '/content/dam/give/thank-you-images'
+    this.jsonDataPath = `${this.thankYouImagePath}/thank-you-page-configuration/jcr:content/data/master.json`
     this.thankYouData = this.getThankYouData()
-  }
-
-  getDefaultThankYouImage () {
-    return Observable.from(this.thankYouData)
-      .map((data) => {
-        return data.defaultImage
-      })
   }
 
   shouldShowThankYouImage () {
@@ -32,6 +26,14 @@ class ThankYouService {
 
   getThankYouData () {
     return Observable.from(this.$http.get(this.envService.read('publicGive') + this.jsonDataPath))
+      .map((response) => {
+        return response.data
+      })
+  }
+
+  getOrgIdThankYouData (orgId) {
+    const orgIdJsonPath = `${this.thankYouImagePath}/${orgId.toLowerCase()}/jcr:content/data/master.json`
+    return Observable.from(this.$http.get(this.envService.read('publicGive') + orgIdJsonPath))
       .map((response) => {
         return response.data
       })
