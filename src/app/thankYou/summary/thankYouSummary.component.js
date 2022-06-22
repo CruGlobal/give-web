@@ -122,8 +122,11 @@ class ThankYouSummaryController {
 
   loadThankYouImage () {
     this.thankYouService.getThankYouData().subscribe((thankYouData) => {
+      this.thankYouImage = thankYouData.defaultImage
+      this.thankYouImageLink = thankYouData.defaultThankYouImageLink
       const orgIds = new Set()
       const observables = []
+
       this.purchase.lineItems.forEach(lineItem => {
         observables.push(this.designationsService.designationData(lineItem.code.code))
       })
@@ -131,10 +134,7 @@ class ThankYouSummaryController {
         data.forEach((dataItem) => {
           orgIds.add(dataItem.organizationId ? dataItem.organizationId : this.STAFF_ORG_ID)
         })
-        if (orgIds.size !== 1) {
-          this.thankYouImage = thankYouData.defaultImage
-          this.thankYouImageLink = thankYouData.defaultThankYouImageLink
-        } else {
+        if (orgIds.size === 1) {
           const orgId = orgIds.values().next().value
           this.thankYouService.getOrgIdThankYouData(orgId).subscribe((orgIdData) => {
             this.thankYouImage = orgIdData.thankYouImage || thankYouData.defaultImage
