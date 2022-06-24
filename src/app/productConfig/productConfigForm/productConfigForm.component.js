@@ -96,16 +96,16 @@ class ProductConfigFormController {
       this.itemConfig.AMOUNT = amount
     }
 
-    if (inRange(parseInt(this.itemConfig.recurring_day_of_month, 10), 1, 29)) {
-      this.itemConfig.recurring_day_of_month = padStart(this.itemConfig.recurring_day_of_month, 2, '0')
+    if (inRange(parseInt(this.itemConfig.RECURRING_DAY_OF_MONTH, 10), 1, 29)) {
+      this.itemConfig.RECURRING_DAY_OF_MONTH = padStart(this.itemConfig.RECURRING_DAY_OF_MONTH, 2, '0')
     } else {
-      delete this.itemConfig.recurring_day_of_month
+      delete this.itemConfig.RECURRING_DAY_OF_MONTH
     }
 
-    if (inRange(parseInt(this.itemConfig.recurring_start_month, 10), 1, 13)) {
-      this.itemConfig.recurring_start_month = padStart(this.itemConfig.recurring_start_month, 2, '0')
+    if (inRange(parseInt(this.itemConfig.RECURRING_START_MONTH, 10), 1, 13)) {
+      this.itemConfig.RECURRING_START_MONTH = padStart(this.itemConfig.RECURRING_START_MONTH, 2, '0')
     } else {
-      delete this.itemConfig.recurring_start_month
+      delete this.itemConfig.RECURRING_START_MONTH
     }
   }
 
@@ -126,11 +126,11 @@ class ProductConfigFormController {
     const nextDrawDateObservable = this.commonService.getNextDrawDate()
       .do(nextDrawDate => {
         this.nextDrawDate = nextDrawDate
-        if (!this.itemConfig.recurring_day_of_month && this.nextDrawDate) {
-          this.itemConfig.recurring_day_of_month = startDate(null, this.nextDrawDate).format('DD')
+        if (!this.itemConfig.RECURRING_DAY_OF_MONTH && this.nextDrawDate) {
+          this.itemConfig.RECURRING_DAY_OF_MONTH = startDate(null, this.nextDrawDate).format('DD')
         }
-        if (!this.itemConfig.recurring_start_month && this.nextDrawDate) {
-          this.itemConfig.recurring_start_month = startDate(null, this.nextDrawDate).format('MM')
+        if (!this.itemConfig.RECURRING_START_MONTH && this.nextDrawDate) {
+          this.itemConfig.RECURRING_START_MONTH = startDate(null, this.nextDrawDate).format('MM')
         }
       })
 
@@ -341,7 +341,7 @@ class ProductConfigFormController {
 
   omitIrrelevantData (itemConfig) {
     const data = this.productData.frequency === 'NA'
-      ? omit(itemConfig, ['recurring_start_month', 'recurring_day_of_month', 'jcr-title', 'AMOUNT_WITH_FEES'])
+      ? omit(itemConfig, ['RECURRING_START_MONTH', 'RECURRING_DAY_OF_MONTH', 'jcr-title', 'AMOUNT_WITH_FEES'])
       : omit(itemConfig, ['jcr-title', 'AMOUNT_WITH_FEES'])
     // I tried using lodash.isEmpty instead of my own predicate, but for some reason it was deleting the AMOUNT value
     return omitBy(data, (value) => {

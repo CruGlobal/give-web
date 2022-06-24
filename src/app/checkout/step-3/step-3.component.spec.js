@@ -138,12 +138,12 @@ describe('checkout', () => {
           uri: '/uri',
           productUri: '/uri',
           config: {
-            'recurring_start_month': '07'
+            'RECURRING_START_MONTH': '07'
           }
         }
         self.controller.updateGiftStartMonth(item, '05')
 
-        item.config['recurring_start_month'] = '05'
+        item.config['RECURRING_START_MONTH'] = '05'
 
         expect(self.controller.cartService.editItem).toHaveBeenCalledWith(item.uri, item.productUri, item.config)
 

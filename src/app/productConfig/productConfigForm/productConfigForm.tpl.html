@@ -179,9 +179,9 @@
                 <label translate>{{'MONTH'}}</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['recurring_start_month']"
+                          ng-model="$ctrl.itemConfig['RECURRING_START_MONTH']"
                           ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring_day_of_month'], $ctrl.itemConfig['recurring_start_month'])">
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
                   </select>
                 </div>
               </div>
@@ -191,9 +191,9 @@
                 <label translate>{{'DAY'}}</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['recurring_day_of_month']"
-                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['recurring_start_month'], $ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring_day_of_month'], $ctrl.itemConfig['recurring_start_month'])">
+                          ng-model="$ctrl.itemConfig['RECURRING_DAY_OF_MONTH']"
+                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate)"
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
                   </select>
                 </div>
               </div>
@@ -202,7 +202,7 @@
               <div class="form-group">
                 <label translate>{{'GIFT_START_DATE'}}</label>
                 <div class="form-group">
-                  {{$ctrl.startMonth( $ctrl.itemConfig['recurring_day_of_month'], $ctrl.itemConfig['recurring_start_month'], $ctrl.nextDrawDate ).format('ll')}}
+                  {{$ctrl.startMonth( $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate ).format('ll')}}
                 </div>
               </div>
             </div>

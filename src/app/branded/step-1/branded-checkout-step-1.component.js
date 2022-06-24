@@ -56,7 +56,7 @@ class BrandedCheckoutStep1Controller {
         this.defaultFrequency = 'ANNUAL'
         break
     }
-    this.itemConfig.recurring_day_of_month = this.day
+    this.itemConfig.RECURRING_DAY_OF_MONTH = this.day
     this.itemConfig.frequency = this.frequency
   }
 

@@ -65,11 +65,11 @@ class ProductConfigModalController {
     }
 
     if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.day)) {
-      this.itemConfig.recurring_day_of_month = params[giveGiftParams.day]
+      this.itemConfig.RECURRING_DAY_OF_MONTH = params[giveGiftParams.day]
     }
 
     if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.month)) {
-      this.itemConfig.recurring_start_month = params[giveGiftParams.month]
+      this.itemConfig.RECURRING_START_MONTH = params[giveGiftParams.month]
     }
 
     // If CampaignCode exists in URL, use it, otherwise use default-campaign-code if set.

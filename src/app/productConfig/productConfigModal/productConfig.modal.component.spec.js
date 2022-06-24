@@ -114,8 +114,8 @@ describe('product config modal', function () {
       expect($ctrl.$location.search).toHaveBeenCalled()
       expect($ctrl.itemConfig.amount).toEqual('150')
       expect($ctrl.defaultFrequency).toEqual('QUARTERLY')
-      expect($ctrl.itemConfig['recurring_day_of_month']).toEqual('21')
-      expect($ctrl.itemConfig['recurring_start_month']).toEqual('07')
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('21')
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('07')
       expect($ctrl.itemConfig['campaign-page']).toEqual('testCampaign')
     })
 
@@ -127,7 +127,7 @@ describe('product config modal', function () {
       expect($ctrl.$location.search).toHaveBeenCalled()
       expect($ctrl.itemConfig.amount).toBeUndefined()
       expect($ctrl.defaultFrequency).toBeUndefined()
-      expect($ctrl.itemConfig['recurring_day_of_month']).toBeUndefined()
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toBeUndefined()
       expect($ctrl.itemConfig['campaign-page']).toBeUndefined()
     })
 

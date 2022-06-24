@@ -102,7 +102,7 @@ class Step3Controller {
   }
 
   updateGiftStartMonth (item, month) {
-    item.config.recurring_start_month = month
+    item.config.RECURRING_START_MONTH = month
 
     this.cartData = null
     this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
