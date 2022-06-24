@@ -306,7 +306,9 @@ class ProductConfigFormController {
     this.submittingGift = true
     this.onStateChange({ state: 'submitting' })
 
-    const data = this.productData.frequency === 'NA' ? omit(this.itemConfig, ['recurring_start_month', 'recurring_day_of_month']) : this.itemConfig
+    const data = this.productData.frequency === 'NA'
+      ? omit(this.itemConfig, ['recurring_start_month', 'recurring_day_of_month', 'jcr-title'])
+      : omit(this.itemConfig, ['jcr-title'])
 
     const savingObservable = this.isEdit
       ? this.cartService.editItem(this.uri, this.productData.uri, data)
