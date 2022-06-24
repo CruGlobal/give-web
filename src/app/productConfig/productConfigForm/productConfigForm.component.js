@@ -341,8 +341,8 @@ class ProductConfigFormController {
 
   omitIrrelevantData (itemConfig) {
     const data = this.productData.frequency === 'NA'
-      ? omit(itemConfig, ['recurring_start_month', 'recurring_day_of_month', 'jcr-title'])
-      : omit(itemConfig, ['jcr-title'])
+      ? omit(itemConfig, ['recurring_start_month', 'recurring_day_of_month', 'jcr-title', 'AMOUNT_WITH_FEES'])
+      : omit(itemConfig, ['jcr-title', 'AMOUNT_WITH_FEES'])
     // I tried using lodash.isEmpty instead of my own predicate, but for some reason it was deleting the AMOUNT value
     return omitBy(data, (value) => {
       return value === ''
