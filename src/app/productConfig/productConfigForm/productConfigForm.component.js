@@ -5,6 +5,7 @@ import 'angular-sanitize'
 import indexOf from 'lodash/indexOf'
 import find from 'lodash/find'
 import omit from 'lodash/omit'
+import omitBy from 'lodash/omitBy'
 import map from 'lodash/map'
 import includes from 'lodash/includes'
 import isEmpty from 'lodash/isEmpty'
@@ -306,9 +307,7 @@ class ProductConfigFormController {
     this.submittingGift = true
     this.onStateChange({ state: 'submitting' })
 
-    const data = this.productData.frequency === 'NA'
-      ? omit(this.itemConfig, ['recurring_start_month', 'recurring_day_of_month', 'jcr-title'])
-      : omit(this.itemConfig, ['jcr-title'])
+    const data = this.omitIrrelevantData(this.itemConfig)
 
     const savingObservable = this.isEdit
       ? this.cartService.editItem(this.uri, this.productData.uri, data)
@@ -337,6 +336,16 @@ class ProductConfigFormController {
         this.onStateChange({ state: 'errorSubmitting' })
       }
       this.submittingGift = false
+    })
+  }
+
+  omitIrrelevantData (itemConfig) {
+    const data = this.productData.frequency === 'NA'
+      ? omit(itemConfig, ['recurring_start_month', 'recurring_day_of_month', 'jcr-title'])
+      : omit(itemConfig, ['jcr-title'])
+    // I tried using lodash.isEmpty instead of my own predicate, but for some reason it was deleting the AMOUNT value
+    return omitBy(data, (value) => {
+      return value === ''
     })
   }
 
