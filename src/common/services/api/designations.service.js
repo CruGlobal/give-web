@@ -222,7 +222,7 @@ class DesignationsService {
           }
 
           // Copy default-campaign-code to config
-          if (data.data['jcr:content'].defaultCampaign && !itemConfig.campaign_code) {
+          if (data.data['jcr:content'].defaultCampaign && !itemConfig.CAMPAIGN_CODE) {
             itemConfig['default-campaign-code'] = data.data['jcr:content'].defaultCampaign
           }
           // Copy jcr:title

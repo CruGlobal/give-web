@@ -31,10 +31,10 @@ class BrandedCheckoutStep1Controller {
 
   initItemConfig () {
     this.itemConfig = {}
-    this.itemConfig.campaign_code = this.campaignCode
-    if (this.itemConfig.campaign_code &&
-      (this.itemConfig.campaign_code.match(/^[a-z0-9]+$/i) === null || this.itemConfig.campaign_code.length > 30)) {
-      this.itemConfig.campaign_code = ''
+    this.itemConfig.CAMPAIGN_CODE = this.campaignCode
+    if (this.itemConfig.CAMPAIGN_CODE &&
+      (this.itemConfig.CAMPAIGN_CODE.match(/^[a-z0-9]+$/i) === null || this.itemConfig.CAMPAIGN_CODE.length > 30)) {
+      this.itemConfig.CAMPAIGN_CODE = ''
     }
     this.itemConfig['campaign-page'] = this.campaignPage
     this.itemConfig.amount = this.amount

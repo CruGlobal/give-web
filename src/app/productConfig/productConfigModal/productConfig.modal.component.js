@@ -74,16 +74,16 @@ class ProductConfigModalController {
 
     // If CampaignCode exists in URL, use it, otherwise use default-campaign-code if set.
     if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.campaignCode)) {
-      this.itemConfig.campaign_code = isArray(params[giveGiftParams.campaignCode])
+      this.itemConfig.CAMPAIGN_CODE = isArray(params[giveGiftParams.campaignCode])
         ? params[giveGiftParams.campaignCode][0]
         : params[giveGiftParams.campaignCode]
 
       // make sure campaign code is alphanumeric and less than 30 characters
-      if (this.itemConfig.campaign_code.match(/^[a-z0-9]+$/i) === null || this.itemConfig.campaign_code.length > 30) {
-        this.itemConfig.campaign_code = ''
+      if (this.itemConfig.CAMPAIGN_CODE.match(/^[a-z0-9]+$/i) === null || this.itemConfig.CAMPAIGN_CODE.length > 30) {
+        this.itemConfig.CAMPAIGN_CODE = ''
       }
     } else if (Object.prototype.hasOwnProperty.call(this.itemConfig, 'default-campaign-code')) {
-      this.itemConfig.campaign_code = this.itemConfig['default-campaign-code']
+      this.itemConfig.CAMPAIGN_CODE = this.itemConfig['default-campaign-code']
     }
 
     if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.campaignPage) && params[giveGiftParams.campaignPage] !== '') {
