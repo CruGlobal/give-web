@@ -174,7 +174,7 @@
                 <span translate="FUTURE_WARNING" translate-value-days="{{i.giftStartDateDaysFromNow}}"></span>
                 <div>
                   <button class="btn btn-default" ng-click="i.giftStartDateWarning = false" translate="KEEP_DATE" translate-value-keepdate="{{i.giftStartDate.format('ll')}}"></button>
-                  <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['recurring_day_of_month'], $ctrl.nextDrawDate).format('MM'))" translate="CHANGE_TO_DATE" translate-value-changedate="{{$ctrl.startDate(i.config['recurring_day_of_month'], $ctrl.nextDrawDate).format('ll')}}"></button>
+                  <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['RECURRING_DAY_OF_MONTH'], $ctrl.nextDrawDate).format('MM'))" translate="CHANGE_TO_DATE" translate-value-changedate="{{$ctrl.startDate(i.config['RECURRING_DAY_OF_MONTH'], $ctrl.nextDrawDate).format('ll')}}"></button>
                 </div>
               </div>
             </td>
