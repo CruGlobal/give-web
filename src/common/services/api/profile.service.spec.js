@@ -598,7 +598,7 @@ describe('profile service', () => {
           'phone-number': '(343) 454-3344',
           'phone-number-type': 'Mobile',
           primary: false,
-          spouse: false
+          'is-spouse': false
         },
         {
           self: {
@@ -618,7 +618,7 @@ describe('profile service', () => {
           'phone-number': '(565) 777-5656',
           'phone-number-type': 'Mobile',
           primary: false,
-          spouse: true
+          'is-spouse': true
         }
       ]
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/phonenumbers/crugive?zoom=element,spouse')
@@ -633,18 +633,18 @@ describe('profile service', () => {
 
   describe('addPhoneNumber', () => {
     it('should add phone number', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/spouse?FollowLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/spouse/form?FollowLocation=true')
         .respond(200, 'spouse success')
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/?FollowLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/form?FollowLocation=true')
         .respond(200, 'donor success')
       const phoneNumber = {
-        spouse: true
+        'is-spouse': true
       }
       self.profileService.addPhoneNumber(phoneNumber)
         .subscribe((data) => {
           expect(data).toEqual('spouse success')
         })
-      phoneNumber.spouse = false
+      phoneNumber['is-spouse'] = false
       self.profileService.addPhoneNumber(phoneNumber)
         .subscribe((data) => {
           expect(data).toEqual('donor success')

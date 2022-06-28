@@ -140,11 +140,11 @@ class Profile {
       .map(data => {
         const phoneNumbers = []
         angular.forEach(data.donor, item => {
-          item.spouse = false
+          item['is-spouse'] = false
           phoneNumbers.push(item)
         })
         angular.forEach(data.spouse, item => {
-          item.spouse = true
+          item['is-spouse'] = true
           phoneNumbers.push(item)
         })
         return phoneNumbers
@@ -153,7 +153,7 @@ class Profile {
 
   addPhoneNumber (number) {
     return this.cortexApiService.post({
-      path: ['phonenumbers', this.cortexApiService.scope, number.spouse ? 'spouse/form' : 'form'],
+      path: ['phonenumbers', this.cortexApiService.scope, number['is-spouse'] ? 'spouse/form' : 'form'],
       data: number,
       followLocation: true
     })
