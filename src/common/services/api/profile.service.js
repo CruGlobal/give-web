@@ -153,7 +153,7 @@ class Profile {
 
   addPhoneNumber (number) {
     return this.cortexApiService.post({
-      path: ['phonenumbers', this.cortexApiService.scope, number.spouse ? 'spouse' : ''],
+      path: ['phonenumbers', this.cortexApiService.scope, number.spouse ? 'spouse/form' : 'form'],
       data: number,
       followLocation: true
     })
