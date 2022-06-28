@@ -84,10 +84,6 @@ const sharedConfig = {
         }]
       },
       {
-        test: /\.(tsx|ts)$/,
-        loader: 'ts-loader'
-      },
-      {
         test: /\.html$/,
         use: [
           `ngtemplate-loader?relativeTo=${path.resolve(__dirname, './src')}/`,

@@ -2,6 +2,8 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
+    'src/**/*.ts',
+    'src/**/*.tsx',
     '!**/*.fixture.js'
   ],
   restoreMocks: true,
@@ -11,6 +13,7 @@ module.exports = {
     'jest-date-mock',
     '<rootDir>/jest/setup.js'
   ],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
     '^.+\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js'
   },
@@ -18,7 +21,7 @@ module.exports = {
     '<rootDir>/src'
   ],
   transform: {
-    '^.+\\.js?$': 'babel-jest',
+    '\\.[jt]sx?$': 'babel-jest',
     '^.+\\.html$': '<rootDir>/jest/htmlTransform.js'
   }
 }
