@@ -560,9 +560,9 @@ describe('profile service', () => {
 
   describe('updateEmail', () => {
     it('should add spouse\'s details', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/spouse?FollowLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/spouseemails/crugive/spouse/form?FollowLocation=true')
         .respond(200, 'spouse success')
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/?FollowLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/form?FollowLocation=true')
         .respond(200, 'donor success')
 
       self.profileService.updateEmail({}, true)
