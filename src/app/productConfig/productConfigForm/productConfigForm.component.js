@@ -5,6 +5,7 @@ import 'angular-sanitize'
 import indexOf from 'lodash/indexOf'
 import find from 'lodash/find'
 import omit from 'lodash/omit'
+import omitBy from 'lodash/omitBy'
 import map from 'lodash/map'
 import includes from 'lodash/includes'
 import isEmpty from 'lodash/isEmpty'
@@ -95,16 +96,16 @@ class ProductConfigFormController {
       this.itemConfig.AMOUNT = amount
     }
 
-    if (inRange(parseInt(this.itemConfig.recurring_day_of_month, 10), 1, 29)) {
-      this.itemConfig.recurring_day_of_month = padStart(this.itemConfig.recurring_day_of_month, 2, '0')
+    if (inRange(parseInt(this.itemConfig.RECURRING_DAY_OF_MONTH, 10), 1, 29)) {
+      this.itemConfig.RECURRING_DAY_OF_MONTH = padStart(this.itemConfig.RECURRING_DAY_OF_MONTH, 2, '0')
     } else {
-      delete this.itemConfig.recurring_day_of_month
+      delete this.itemConfig.RECURRING_DAY_OF_MONTH
     }
 
-    if (inRange(parseInt(this.itemConfig.recurring_start_month, 10), 1, 13)) {
-      this.itemConfig.recurring_start_month = padStart(this.itemConfig.recurring_start_month, 2, '0')
+    if (inRange(parseInt(this.itemConfig.RECURRING_START_MONTH, 10), 1, 13)) {
+      this.itemConfig.RECURRING_START_MONTH = padStart(this.itemConfig.RECURRING_START_MONTH, 2, '0')
     } else {
-      delete this.itemConfig.recurring_start_month
+      delete this.itemConfig.RECURRING_START_MONTH
     }
   }
 
@@ -112,8 +113,8 @@ class ProductConfigFormController {
     this.loading = true
     this.errorLoading = false
 
-    this.showRecipientComments = !!this.itemConfig.recipient_comments
-    this.showDSComments = !!this.itemConfig.donation_services_comments
+    this.showRecipientComments = !!this.itemConfig.RECIPIENT_COMMENTS
+    this.showDSComments = !!this.itemConfig.DONATION_SERVICES_COMMENTS
 
     const productLookupObservable = this.designationsService.productLookup(this.code)
       .do(productData => {
@@ -125,11 +126,11 @@ class ProductConfigFormController {
     const nextDrawDateObservable = this.commonService.getNextDrawDate()
       .do(nextDrawDate => {
         this.nextDrawDate = nextDrawDate
-        if (!this.itemConfig.recurring_day_of_month && this.nextDrawDate) {
-          this.itemConfig.recurring_day_of_month = startDate(null, this.nextDrawDate).format('DD')
+        if (!this.itemConfig.RECURRING_DAY_OF_MONTH && this.nextDrawDate) {
+          this.itemConfig.RECURRING_DAY_OF_MONTH = startDate(null, this.nextDrawDate).format('DD')
         }
-        if (!this.itemConfig.recurring_start_month && this.nextDrawDate) {
-          this.itemConfig.recurring_start_month = startDate(null, this.nextDrawDate).format('MM')
+        if (!this.itemConfig.RECURRING_START_MONTH && this.nextDrawDate) {
+          this.itemConfig.RECURRING_START_MONTH = startDate(null, this.nextDrawDate).format('MM')
         }
       })
 
@@ -306,7 +307,7 @@ class ProductConfigFormController {
     this.submittingGift = true
     this.onStateChange({ state: 'submitting' })
 
-    const data = this.productData.frequency === 'NA' ? omit(this.itemConfig, ['recurring_start_month', 'recurring_day_of_month']) : this.itemConfig
+    const data = this.omitIrrelevantData(this.itemConfig)
 
     const savingObservable = this.isEdit
       ? this.cartService.editItem(this.uri, this.productData.uri, data)
@@ -335,6 +336,16 @@ class ProductConfigFormController {
         this.onStateChange({ state: 'errorSubmitting' })
       }
       this.submittingGift = false
+    })
+  }
+
+  omitIrrelevantData (itemConfig) {
+    const data = this.productData.frequency === 'NA'
+      ? omit(itemConfig, ['RECURRING_START_MONTH', 'RECURRING_DAY_OF_MONTH', 'jcr-title', 'AMOUNT_WITH_FEES'])
+      : omit(itemConfig, ['jcr-title', 'AMOUNT_WITH_FEES'])
+    // I tried using lodash.isEmpty instead of my own predicate, but for some reason it was deleting the AMOUNT value
+    return omitBy(data, (value) => {
+      return value === ''
     })
   }
 
