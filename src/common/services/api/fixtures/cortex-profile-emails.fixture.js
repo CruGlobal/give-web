@@ -75,17 +75,8 @@ export default {
         uri: '/emails/crugive/on2gs3saon2gs3romnxw2=',
         href: 'https://give-stage2.cru.org/cortex/emails/crugive/on2gs3saon2gs3romnxw2='
       },
-      links: [{
-        rel: 'list',
-        type: 'elasticpath.collections.links',
-        uri: '/emails/crugive',
-        href: 'https://give-stage2.cru.org/cortex/emails/crugive'
-      }, {
-        rel: 'profile',
-        type: 'elasticpath.profiles.profile',
-        uri: '/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=',
-        href: 'https://give-stage2.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
-      }],
+      messages: [],
+      links: [],
       email: 'stin@stin.com'
     }, {
       self: {
@@ -93,17 +84,8 @@ export default {
         uri: '/emails/crugive/on2gs3tfonzua43unfxc433sm4=',
         href: 'https://give-stage2.cru.org/cortex/emails/crugive/on2gs3tfonzua43unfxc433sm4='
       },
-      links: [{
-        rel: 'list',
-        type: 'elasticpath.collections.links',
-        uri: '/emails/crugive',
-        href: 'https://give-stage2.cru.org/cortex/emails/crugive'
-      }, {
-        rel: 'profile',
-        type: 'elasticpath.profiles.profile',
-        uri: '/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge=',
-        href: 'https://give-stage2.cru.org/cortex/profiles/crugive/gzsdkojsmvsdcljsmu2geljumqzgmljyg5qtillemy4ggnryhbrwezbzge='
-      }],
+      messages: [],
+      links: [],
       email: 'stiness@stin.org'
     }]
   }],

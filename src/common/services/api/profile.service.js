@@ -121,8 +121,9 @@ class Profile {
   }
 
   updateEmail (data, spouse) {
+    const initialPath = spouse ? 'spouseemails' : 'emails'
     return this.cortexApiService.post({
-      path: ['emails', this.cortexApiService.scope, spouse ? 'spouse' : ''],
+      path: [initialPath, this.cortexApiService.scope, spouse ? 'spouse/form' : 'form'],
       data: { email: data.email },
       followLocation: true
     })
