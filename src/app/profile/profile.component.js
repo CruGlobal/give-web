@@ -218,7 +218,7 @@ class ProfileController {
       'phone-number': '',
       'phone-number-type': 'Mobile',
       primary: false,
-      spouse: false
+      'is-spouse': false
     })
   }
 
@@ -236,7 +236,7 @@ class ProfileController {
           'phone-number': item['phone-number'],
           'phone-number-type': item['phone-number-type'],
           primary: false,
-          spouse: item.spouse
+          'is-spouse': item['is-spouse']
         })
       }
       if (item.self && item.delete === undefined) { // update existing phone number
