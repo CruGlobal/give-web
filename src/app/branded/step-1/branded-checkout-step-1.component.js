@@ -184,6 +184,7 @@ export default angular
       next: '&',
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
-      radioStationRadius: '<'
+      radioStationRadius: '<',
+      hideSpouseDetails: '<'
     }
   })
