@@ -47,7 +47,7 @@
     <div class="mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label translate>{{'FIRST_NAME'}}</label>
             <input type="text"
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-1">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.nameMiddleInitial | showErrors)}">
             <label translate>{{'MIDDLE_ABBREV'}}</label>
             <input type="text"
@@ -77,7 +77,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameFamilyName | showErrors)}">
             <label translate>{{'LAST_NAME'}}</label>
             <input type="text"
@@ -108,10 +108,28 @@
             </div>
           </div>
         </div>
+        <div class="col-sm-2" ng-if="$ctrl.hideSpouseDetails">
+          <button type="button" 
+                  id="showSpouseButton"
+                  class="btn btn-link"
+                  style="font-weight:bold"
+                  ng-if="!$ctrl.showSpouseDetails"
+                  ng-click="$ctrl.showSpouseDetails = !$ctrl.showSpouseDetails"
+                  translate='SHOW_SPOUSE'>
+          </button>
+          <button type="button"
+                  id="hideSpouseButton"
+                  class="btn btn-link"
+                  style="font-weight:bold"
+                  ng-if="$ctrl.showSpouseDetails"
+                  ng-click="$ctrl.showSpouseDetails = !$ctrl.showSpouseDetails"
+                  translate='HIDE_SPOUSE'>
+          </button>
+        </div>
 
       </div>
 
-      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
+      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.showSpouseDetails || !$ctrl.hideSpouseDetails)">
         <div class="col-sm-4">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
             <label translate>{{'SPOUSE_FIRST_NAME'}}</label>
