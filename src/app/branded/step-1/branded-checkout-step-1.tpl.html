@@ -9,6 +9,8 @@
                          default-frequency="$ctrl.defaultFrequency"
                          uri="$ctrl.item.uri"
                          submitted="$ctrl.submitted"
+                         hide-quarterly="$ctrl.hideQuarterly"
+                         hide-annual="$ctrl.hideAnnual"
                          on-state-change="$ctrl.onGiftConfigStateChange(state)"
                          disable-session-restart="true"
                          ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
