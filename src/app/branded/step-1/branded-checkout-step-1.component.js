@@ -189,6 +189,8 @@ export default angular
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
       radioStationRadius: '<',
-      hideSpouseDetails: '<'
+      hideSpouseDetails: '<',
+      hideAnnual: '<',
+      hideQuarterly: '<'
     }
   })

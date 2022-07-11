@@ -18,7 +18,9 @@
           on-payment-failed="$ctrl.onPaymentFailed($event.donorDetails)"
           radio-station-api-url="$ctrl.radioStationApiUrl"
           radio-station-radius="$ctrl.radioStationRadius"
-          hide-spouse-details="$ctrl.hideSpouseDetails">
+          hide-spouse-details="$ctrl.hideSpouseDetails"
+          hide-quarterly="$ctrl.hideQuarterly"
+          hide-annual="$ctrl.hideAnnual">
         </branded-checkout-step-1>
         <branded-checkout-step-2
           ng-if="$ctrl.checkoutStep === 'review'"
