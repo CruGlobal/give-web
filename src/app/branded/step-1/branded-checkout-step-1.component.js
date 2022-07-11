@@ -288,6 +288,8 @@ export default angular
       onSubmittingOrder: '&',
       onSubmitted: '&',
       useV3: '<',
-      loadingAndSubmitting: '<'
+      loadingAndSubmitting: '<',
+      hideAnnual: '<',
+      hideQuarterly: '<'
     }
   })
