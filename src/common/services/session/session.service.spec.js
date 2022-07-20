@@ -5,6 +5,8 @@ import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { advanceBy, advanceTo, clear } from 'jest-date-mock'
+import 'rxjs/add/observable/of'
+
 /* global inject */
 
 describe('session service', function () {
@@ -274,6 +276,67 @@ describe('session service', function () {
           expect(data).toEqual({})
         })
       $httpBackend.flush()
+    })
+  })
+
+  describe('handleOktaRedirect', () => {
+    it('should handle a successful login', done => {
+      sessionService.authClient.shouldSucceed()
+      sessionService.authClient.setupForRedirect()
+
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'wee'
+      }).respond(200, 'success')
+      sessionService.handleOktaRedirect().toPromise().then(() => {
+        $httpBackend.flush()
+        done()
+      })
+    })
+
+    it('should pass along lastPurchaseId', done => {
+      sessionService.authClient.shouldSucceed()
+      sessionService.authClient.setupForRedirect()
+
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'wee',
+        lastPurchaseId: 'gxbcdviu='
+      }).respond(200, 'success')
+
+      sessionService.handleOktaRedirect('gxbcdviu=').toPromise().then(() => {
+        $httpBackend.flush()
+        done()
+      })
+    })
+
+    it('should handle a failed login', done => {
+      sessionService.authClient.shouldFail()
+      sessionService.authClient.setupForRedirect()
+      sessionService.handleOktaRedirect().subscribe(() => {
+        fail()
+      }, error => {
+        expect(error).toBeDefined()
+        done()
+      })
+    })
+
+    it('should redirect to Okta if the login has not yet happened', done => {
+      sessionService.authClient.setLoginRedirect(true)
+      sessionService.authClient.setAuthenticated(false)
+      sessionService.authClient.shouldSucceed()
+      sessionService.handleOktaRedirect().subscribe(() => {
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
+        done()
+      })
+    })
+
+    it('should ignore a non-login attempt', done => {
+      sessionService.authClient.setLoginRedirect(false)
+      sessionService.handleOktaRedirect().subscribe((data) => {
+        expect(sessionService.authClient.token.parseFromUrl).not.toHaveBeenCalled()
+        expect(data).toEqual(false)
+        done()
+      })
+
     })
   })
 
