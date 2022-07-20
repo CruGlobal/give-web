@@ -368,7 +368,7 @@ describe('session service', function () {
       })
 
       it('make http request to cas/downgrade', (done) => {
-        $httpBackend.expectPOST('https://give-stage2.cru.org/cas/downgrade', {}).respond(204, {})
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/downgrade', {}).respond(204, {})
         sessionService.downgradeToGuest().subscribe((data) => {
           expect(data).toEqual({})
         })
@@ -392,7 +392,7 @@ describe('session service', function () {
       })
 
       it('make http request to cas/downgrade', (done) => {
-        $httpBackend.expectPOST('https://give-stage2.cru.org/cas/downgrade', {}).respond(204, {})
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/downgrade', {}).respond(204, {})
         sessionService.downgradeToGuest(true).subscribe((data) => {
           expect(data).toEqual({})
         })
