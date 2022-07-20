@@ -11,7 +11,7 @@
   <sign-in-form on-success="$ctrl.onSuccess()" last-purchase-id="$ctrl.lastPurchaseId"></sign-in-form>
   <p class="text-center" ng-class="{'mt mb0': $ctrl.identified}">
     <span translate>Forgot your password?</span>
-    <a id="forgotPasswordLink" href="" ng-click="$ctrl.onStateChange({state: 'forgot-password'})" translate>Reset It</a>
+    <a id="forgotPasswordLink" ng-href="{{$ctrl.getOktaUrl()}}/signin/forgot-password" target="_blank" translate>Reset It</a>
   </p>
   <p class="text-center" ng-if="$ctrl.identified">
     <span>Not {{$ctrl.sessionService.session.first_name}} {{$ctrl.sessionService.session.last_name}}?</span>

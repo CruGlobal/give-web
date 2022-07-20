@@ -28,6 +28,10 @@ class SignInModalController {
   signOut () {
     this.identified = false
   }
+
+  getOktaUrl () {
+    return this.sessionService.getOktaUrl()
+  }
 }
 
 export default angular

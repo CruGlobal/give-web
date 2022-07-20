@@ -19,7 +19,7 @@
                 <sign-in-form></sign-in-form>
 
                 <div class="text-center self-service">
-                  <a href="" ng-click="$ctrl.resetPassword()" translate>Forgot your password?</a>
+                  <a ng-href="{{$ctrl.getOktaUrl()}}/signin/forgot-password" target="_blank" translate>Forgot your password?</a>
                 </div>
               </div>
             </div>
