@@ -13,8 +13,9 @@ const componentName = 'signIn'
 
 class SignInController {
   /* @ngInject */
-  constructor ($window, sessionService, analyticsFactory, sessionModalService, orderService) {
+  constructor ($window, $log, sessionService, analyticsFactory, sessionModalService, orderService) {
     this.$window = $window
+    this.$log = $log
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.sessionModalService = sessionModalService

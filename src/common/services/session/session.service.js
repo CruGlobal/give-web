@@ -3,6 +3,7 @@ import 'angular-cookies'
 import jwtDecode from 'jwt-decode'
 import { Observable } from 'rxjs/Observable'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import { OktaAuth } from '@okta/okta-auth-js'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
@@ -34,6 +35,12 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
   const maximumTimeout = 30 * 1000
+  const authClient = new OktaAuth({
+    issuer: envService.read('oktaUrl'),
+    clientId: envService.read('oktaClientId'),
+    redirectUri: `${window.location.origin}${window.location.pathname}`,
+    scopes: ['openid', 'email', 'profile']
+  })
 
   // Set initial session on load
   updateCurrentSession($cookies.get(Sessions.role))
@@ -46,10 +53,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   return {
     session: session,
     sessionSubject: sessionSubject,
+    authClient: authClient, // Exposed for tests only
     getRole: currentRole,
     signIn: signIn,
     signOut: signOut,
     signUp: signUp,
+    handleOktaRedirect: handleOktaRedirect,
+    oktaSignIn: oktaSignIn,
+    oktaSignOut: oktaSignOut,
     forgotPassword: forgotPassword,
     resetPassword: resetPassword,
     downgradeToGuest: downgradeToGuest
@@ -135,6 +146,55 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         }
       }))
       .mergeMap(() => signIn(email, password))
+  }
+
+  function handleOktaRedirect (lastPurchaseId) {
+    if (authClient.isLoginRedirect()) {
+      return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
+        authClient.tokenManager.setTokens(tokenResponse.tokens)
+        return oktaSignIn(lastPurchaseId)
+      }))
+    } else {
+      return Observable.of(false)
+    }
+  }
+
+  function oktaSignIn (lastPurchaseId) {
+    return Observable.from(internalSignIn(lastPurchaseId))
+      .map((response) => response ? response.data : response)
+      .finally(() => {
+        $rootScope.$broadcast(SignInEvent)
+      })
+  }
+
+  async function internalSignIn (lastPurchaseId) {
+    const isAuthenticated = await authClient.isAuthenticated()
+    if (!isAuthenticated) {
+      authClient.token.getWithRedirect()
+      return
+    }
+    const tokens = await authClient.tokenManager.getTokens()
+    const data = { access_token: tokens.accessToken.accessToken }
+    // Only send lastPurchaseId if present and currently public
+    if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
+      data.lastPurchaseId = lastPurchaseId
+    }
+    return $http({
+      method: 'POST',
+      url: oktaApiUrl('login'),
+      data: data,
+      withCredentials: true
+    })
+  }
+
+  function oktaSignOut () {
+    authClient.signOut()
+    return Observable
+      .from($http({
+        method: 'DELETE',
+        url: oktaApiUrl('logout'),
+        withCredentials: true
+      }))
   }
 
   function downgradeToGuest (skipEvent = false) {
@@ -232,6 +292,10 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   function casApiUrl (path) {
     const apiUrl = envService.read('apiUrl') + '/cas'
     return apiUrl + path
+  }
+
+  function oktaApiUrl (path) {
+    return `${envService.read('apiUrl')}/okta/${path}`
   }
 }
 
