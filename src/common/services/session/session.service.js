@@ -27,10 +27,16 @@ export const Sessions = {
   profile: 'cru-profile'
 }
 
+export const OktaStorage = {
+  state: 'okta-oauth-state',
+  nonce: 'okta-oauth-nonce',
+  redirectParams: 'okta-oauth-redirect-params'
+}
+
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
 
-const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, envService) {
+const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
@@ -188,13 +194,16 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function oktaSignOut () {
-    authClient.signOut()
-    return Observable
-      .from($http({
-        method: 'DELETE',
-        url: oktaApiUrl('logout'),
-        withCredentials: true
-      }))
+    return Observable.from(internalSignOut())
+  }
+
+  function internalSignOut () {
+    clearStorageForOktaLogout()
+    return $http({
+      method: 'DELETE',
+      url: oktaApiUrl('logout'),
+      withCredentials: true
+    })
   }
 
   function downgradeToGuest (skipEvent = false) {
@@ -216,6 +225,15 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   /* Private Methods */
+
+  function clearStorageForOktaLogout () {
+    $window.localStorage.clear()
+    const cookieConfig = { path: '/' }
+    $cookies.remove(OktaStorage.state, cookieConfig)
+    $cookies.remove(OktaStorage.nonce, cookieConfig)
+    $cookies.remove(OktaStorage.redirectParams, cookieConfig)
+  }
+
   function updateCurrentSession (encoded_value) {
     let cortexRole = {}; let cruProfile = {}
     if (angular.isDefined(encoded_value)) {

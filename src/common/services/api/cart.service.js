@@ -158,7 +158,7 @@ class Cart {
     if (!disableSessionRestart && this.sessionService.getRole() === Roles.public) {
       return this.getTotalQuantity().mergeMap((total) => {
         if (total <= 0) {
-          return this.sessionService.signOut().mergeMap(() => {
+          return this.sessionService.oktaSignOut().mergeMap(() => {
             return this._addItem(uri, data)
           })
         }

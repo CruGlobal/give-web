@@ -44,7 +44,7 @@ class BrandedCheckoutController {
     this.analyticsFactory.pageLoaded(true)
     this.formatDonorDetails()
 
-    this.sessionService.signOut().subscribe(() => {
+    this.sessionService.oktaSignOut().subscribe(() => {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
     }, (err) => {
