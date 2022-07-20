@@ -48,8 +48,8 @@ class SignInController {
     })
   }
 
-  resetPassword () {
-    this.sessionModalService.forgotPassword()
+  getOktaUrl () {
+    return this.sessionService.getOktaUrl()
   }
 }
 

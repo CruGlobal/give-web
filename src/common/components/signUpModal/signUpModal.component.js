@@ -53,6 +53,10 @@ class SignUpModalController {
     this.signUpErrors = {}
     this.hasError = false
   }
+
+  getOktaUrl () {
+    return this.sessionService.getOktaUrl()
+  }
 }
 
 export default angular

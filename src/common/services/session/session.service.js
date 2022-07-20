@@ -67,9 +67,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     handleOktaRedirect: handleOktaRedirect,
     oktaSignIn: oktaSignIn,
     oktaSignOut: oktaSignOut,
-    forgotPassword: forgotPassword,
-    resetPassword: resetPassword,
-    downgradeToGuest: downgradeToGuest
+    downgradeToGuest: downgradeToGuest,
+    getOktaUrl: getOktaUrl
   }
 
   /* Public Methods */
@@ -121,37 +120,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         }
       }))
       .map((response) => response.data)
-  }
-
-  function forgotPassword (email, passwordResetUrl) {
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Send-Forgot-Password-Email
-    return Observable
-      .from($http({
-        method: 'POST',
-        url: casApiUrl('/send_forgot_password_email'),
-        withCredentials: true,
-        data: {
-          email: email,
-          passwordResetUrl: passwordResetUrl
-        }
-      }))
-      .map((response) => response.data)
-  }
-
-  function resetPassword (email, password, resetKey) {
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Set-Password-By-Reset-Key
-    return Observable
-      .from($http({
-        method: 'POST',
-        url: casApiUrl('/reset_password'),
-        withCredentials: true,
-        data: {
-          email: email,
-          password: password,
-          resetKey: resetKey
-        }
-      }))
-      .mergeMap(() => signIn(email, password))
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -222,6 +190,10 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       : observable.finally(() => {
         $rootScope.$broadcast(SignOutEvent)
       })
+  }
+
+  function getOktaUrl () {
+    return envService.read('oktaUrl')
   }
 
   /* Private Methods */
