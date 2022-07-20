@@ -211,7 +211,7 @@ describe('registerAccountModal', function () {
   describe('setModalSize( size )', () => {
     let modal
     beforeEach(() => {
-      modal = { addClass: jest.fn(), removeClass: jest.fn() }
+      modal = { addClass: jest.fn(), removeClass: jest.fn(), data: jest.fn() }
       jest.spyOn(angular, 'element').mockReturnValue(modal)
       angular.element.cleanData = jest.fn()
     })

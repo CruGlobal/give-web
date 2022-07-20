@@ -9,10 +9,6 @@
                  on-state-change="$ctrl.stateChanged(state)"
                  on-success="$ctrl.onIdentitySuccess()">
   </sign-up-modal>
-  <forgot-password-modal ng-switch-when="forgot-password"
-                         modal-title="$ctrl.modalTitle"
-                         on-state-change="$ctrl.stateChanged(state)">
-  </forgot-password-modal>
   <div ng-switch-when="loading">
     <loading></loading>
   </div>

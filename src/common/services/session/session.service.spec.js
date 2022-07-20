@@ -29,15 +29,16 @@ describe('session service', function () {
   }))
 
   beforeEach(angular.mock.module(module.name))
-  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks, $window
+  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks, $window, envService
 
-  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_, _$window_) {
+  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _envService_) {
     sessionService = _sessionService_
     $httpBackend = _$httpBackend_
     $cookies = _$cookies_
     $rootScope = _$rootScope_
     $verifyNoPendingTasks = _$verifyNoPendingTasks_
     $window = _$window_
+    envService = _envService_
   }))
 
   afterEach(() => {
@@ -341,6 +342,12 @@ describe('session service', function () {
         done()
       })
 
+    })
+  })
+
+  describe('getOktaUrl', () => {
+    it('should return the oktaUrl from the environment', () => {
+      expect(sessionService.getOktaUrl()).toEqual(envService.read('oktaUrl'))
     })
   })
 

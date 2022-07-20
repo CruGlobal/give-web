@@ -8,7 +8,6 @@ import { scrollModalToTop } from 'common/services/modalState.service'
 
 import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
-import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPasswordModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
@@ -119,7 +118,6 @@ class RegisterAccountModalController {
 export default angular
   .module(componentName, [
     contactInfoModal.name,
-    forgotPasswordModal.name,
     orderService.name,
     sessionService.name,
     signInModal.name,

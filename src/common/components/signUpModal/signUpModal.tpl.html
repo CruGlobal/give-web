@@ -4,12 +4,12 @@
     <div ng-message="400" translate>An error occurred during sign up.<br />Please Check your Email Address and Password and try again.</div>
     <div ng-message="403" translate>An error occurred during sign up.<br />This is most likely caused by the use of a reserved domain name in your email address. You might try to
       <a id="signInLink1" ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a>,
-      <a id="forgotPasswordLink1" ng-click="$ctrl.onStateChange({state: 'forgot-password'})">Reset your Password</a>or
+      <a id="forgotPasswordLink1" ng-href="{{$ctrl.getOktaUrl()}}/signin/forgot-password" target="_blank">Reset your Password</a>or
       <a href="https://www.cru.org/about/contact-us.html">Contact Us</a>.
     </div>
     <div ng-message="409" translate>An account with this Email Address already exists.<br />Please
       <a id="signInLink2" ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a> or
-      <a id="forgotPasswordLink2" ng-click="$ctrl.onStateChange({state: 'forgot-password'})">Reset your Password</a>.
+      <a id="forgotPasswordLink2" ng-href="{{$ctrl.getOktaUrl()}}/signin/forgot-password" target="_blank">Reset your Password</a>.
     </div>
     <div ng-message="generic" translate>An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</div>
   </div>
