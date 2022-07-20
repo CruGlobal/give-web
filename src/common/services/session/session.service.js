@@ -212,7 +212,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       : Observable
         .from($http({
           method: 'POST',
-          url: casApiUrl('/downgrade'),
+          url: oktaApiUrl('downgrade'),
           withCredentials: true,
           data: {}
         }))
