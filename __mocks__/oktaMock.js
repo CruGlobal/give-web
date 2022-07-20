@@ -4,6 +4,9 @@ export class OktaAuth {
     this.loginRedirect = false
     this.authenticated = false
 
+    this.signOut = jest.fn()
+    this.signOut.mockImplementation(() => Promise.resolve())
+
     this.token = {
       parseFromUrl: jest.fn(),
       getWithRedirect: jest.fn()
@@ -42,10 +45,6 @@ export class OktaAuth {
 
   isAuthenticated () {
     return Promise.resolve(this.authenticated)
-  }
-
-  signOut () {
-    // Do nothing
   }
 
   shouldSucceed () {

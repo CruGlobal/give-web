@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent } from './session.service'
+import module, { OktaStorage, Roles, Sessions, SignOutEvent } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -18,17 +18,26 @@ describe('session service', function () {
       spy.verifyNoPendingTasks = $delegate.verifyNoPendingTasks
       return spy
     })
+
+    $provide.decorator('$window', function ($delegate) {
+      const spy = jest.fn($delegate)
+      spy.localStorage = { clear: jest.fn() }
+      spy.sessionStorage = $delegate.sessionStorage
+      spy.document = $delegate.document
+      return spy
+    })
   }))
 
   beforeEach(angular.mock.module(module.name))
-  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks
+  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks, $window
 
-  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_) {
+  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_, _$window_) {
     sessionService = _sessionService_
     $httpBackend = _$httpBackend_
     $cookies = _$cookies_
     $rootScope = _$rootScope_
     $verifyNoPendingTasks = _$verifyNoPendingTasks_
+    $window = _$window_
   }))
 
   afterEach(() => {
@@ -244,38 +253,33 @@ describe('session service', function () {
     })
   })
 
-  describe('forgotPassword', () => {
-    it('makes http request to cas/send_forgot_password_email', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/send_forgot_password_email', {
-        email: 'professorx@xavier.edu',
-        passwordResetUrl: 'http://example.com/index.html?theme=cru#reset-password'
-      }).respond(200, {})
+  describe('oktaSignOut', () => {
+    it('makes an http request to okta/logout', () => {
+      $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
+        .respond(200, {})
       sessionService
-        .forgotPassword('professorx@xavier.edu', 'http://example.com/index.html?theme=cru#reset-password')
-        .subscribe((data) => {
-          expect(data).toEqual({})
+        .oktaSignOut()
+        .subscribe((response) => {
+          expect(response.data).toEqual({})
         })
       $httpBackend.flush()
     })
-  })
 
-  describe('resetPassword', () => {
-    it('makes http request to cas/reset_password and then sign in', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/reset_password', {
-        email: 'professorx@xavier.edu',
-        password: 'Cerebro123',
-        resetKey: 'abc123def456'
-      }).respond(200, {})
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'professorx@xavier.edu',
-        password: 'Cerebro123'
-      }).respond(200, 'success')
+    it('should clear extra storage', () => {
+      $cookies.put(OktaStorage.state, 'a')
+      $cookies.put(OktaStorage.nonce, 'b')
+      $cookies.put(OktaStorage.redirectParams, 'c')
+      expect($cookies.get(OktaStorage.state)).toEqual('a')
+      expect($cookies.get(OktaStorage.nonce)).toEqual('b')
+      expect($cookies.get(OktaStorage.redirectParams)).toEqual('c')
       sessionService
-        .resetPassword('professorx@xavier.edu', 'Cerebro123', 'abc123def456')
-        .subscribe((data) => {
-          expect(data).toEqual({})
+        .oktaSignOut()
+        .subscribe(() => {
+          expect($window.localStorage.clear).toHaveBeenCalled()
+          expect($cookies.get(OktaStorage.state)).not.toBeDefined()
+          expect($cookies.get(OktaStorage.nonce)).not.toBeDefined()
+          expect($cookies.get(OktaStorage.redirectParams)).not.toBeDefined()
         })
-      $httpBackend.flush()
     })
   })
 
