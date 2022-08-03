@@ -23,12 +23,16 @@ class SignInFormController {
       this.username = this.sessionService.session.email
     }
     this.sessionService.handleOktaRedirect()
-      .subscribe(() => {
-        console.log('Finished handling redirect from Okta.')
+      .subscribe((data) => {
+        if (data) {
+          console.log('Successfully redirected from Okta')
+          this.onSuccess()
+        }
       },
       error => {
         this.errorMessage = 'generic'
         this.$log.error('Failed to redirect from Okta', error)
+        this.onFailure()
       })
   }
 

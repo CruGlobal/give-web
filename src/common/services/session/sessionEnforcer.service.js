@@ -113,6 +113,24 @@ const SessionEnforcerService = /* @ngInject */ function (orderService, sessionSe
           modal = undefined
         })
       }
+    } else {
+      angular.forEach(enforcers, (enforcer) => {
+        if (includes(enforcer.roles, role)) {
+          if (angular.isUndefined(modal)) {
+            if (sessionModalService.currentModal()) {
+              sessionModalService.currentModal().dismiss()
+            }
+          } else {
+            if (angular.isFunction(enforcer[EnforcerCallbacks.signIn])) {
+              enforcer[EnforcerCallbacks.signIn]()
+              if (sessionModalService.currentModal()) {
+                sessionModalService.currentModal().close()
+              }
+            }
+            modal = undefined
+          }
+        }
+      })
     }
   }
 

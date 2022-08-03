@@ -16,7 +16,8 @@ const componentName = 'sessionModal'
 
 class SessionModalController {
   /* @ngInject */
-  constructor (sessionService, analyticsFactory) {
+  constructor ($rootScope, sessionService, analyticsFactory) {
+    this.$rootScope = $rootScope
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.isLoading = false
@@ -26,6 +27,9 @@ class SessionModalController {
   $onInit () {
     this.stateChanged(this.resolve.state)
     this.lastPurchaseId = this.resolve.lastPurchaseId
+    if (this.sessionService.isOktaRedirecting()) {
+      this.setLoading({ loading: true })
+    }
   }
 
   stateChanged (state) {

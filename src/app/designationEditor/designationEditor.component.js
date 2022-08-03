@@ -29,6 +29,8 @@ import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html'
 import websiteModalTemplate from './websiteModal/websiteModal.tpl.html'
 
 import './designationEditor.scss'
+import { concatMap } from 'rxjs/operators/concatMap'
+import { Observable } from 'rxjs/Observable'
 
 const componentName = 'designationEditor'
 
@@ -59,6 +61,21 @@ class DesignationEditorController {
     if (!this.designationNumber) {
       this.$window.location = '/'
     }
+
+    this.sessionService.handleOktaRedirect().pipe(
+      concatMap(data => {
+        return data.subscribe ? data : Observable.of(data)
+      })
+    ).subscribe((data) => {
+      if (data) {
+        this.sessionService.removeOktaRedirectIndicator()
+      }
+    },
+    error => {
+      this.errorMessage = 'generic'
+      this.$log.error('Failed to redirect from Okta', error)
+      this.sessionService.removeOktaRedirectIndicator()
+    })
 
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {

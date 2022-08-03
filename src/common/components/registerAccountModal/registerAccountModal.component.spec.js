@@ -21,7 +21,7 @@ describe('registerAccountModal', function () {
     locals = {
       orderService: { getDonorDetails: jest.fn() },
       verificationService: { postDonorMatches: jest.fn() },
-      sessionService: { getRole: jest.fn() }
+      sessionService: { getRole: jest.fn(), isOktaRedirecting: jest.fn() }
     }
     $ctrl = _$componentController_(module.name, locals, bindings)
   }))
