@@ -19,6 +19,7 @@ import cruPayments from 'cru-payments/dist/cru-payments'
 import tsys from 'common/services/api/tsys.service'
 
 import template from './creditCardForm.tpl.html'
+import creditCardNumberDirective from '../../../directives/creditCardNumber.directive'
 
 const componentName = 'creditCardForm'
 
@@ -184,7 +185,8 @@ export default angular
     addressForm.name,
     coverFees.name,
     showErrors.name,
-    tsys.name
+    tsys.name,
+    creditCardNumberDirective.name
   ])
   .component(componentName, {
     controller: CreditCardController,
