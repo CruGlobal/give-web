@@ -21,7 +21,8 @@
                  ng-model="$ctrl.creditCardPayment.cardNumber"
                  ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
                  ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
-                 ng-disabled="$ctrl.disableCardNumber">
+                 ng-disabled="$ctrl.disableCardNumber"
+                 credit-card-number>
           <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="($ctrl.creditCardPaymentForm.cardNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'CARD_NUM_ERROR'}}</div>
             <div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_NUM_ERROR'}}</div>
