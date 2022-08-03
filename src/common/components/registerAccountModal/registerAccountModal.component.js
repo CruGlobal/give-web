@@ -101,7 +101,9 @@ class RegisterAccountModalController {
         this.setModalSize('sm')
     }
     this.state = state
-    this.setLoading({ loading: false })
+    if (!this.sessionService.isOktaRedirecting()) {
+      this.setLoading({ loading: false })
+    }
     this.scrollModalToTop()
   }
 

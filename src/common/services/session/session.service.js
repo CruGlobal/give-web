@@ -33,6 +33,8 @@ export const OktaStorage = {
   redirectParams: 'okta-oauth-redirect-params'
 }
 
+export const redirectingIndicator = 'redirectingFromOkta'
+
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
 
@@ -68,7 +70,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     oktaSignIn: oktaSignIn,
     oktaSignOut: oktaSignOut,
     downgradeToGuest: downgradeToGuest,
-    getOktaUrl: getOktaUrl
+    getOktaUrl: getOktaUrl,
+    removeOktaRedirectIndicator: removeOktaRedirectIndicator,
+    isOktaRedirecting: isOktaRedirecting
   }
 
   /* Public Methods */
@@ -134,6 +138,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function oktaSignIn (lastPurchaseId) {
+    setOktaRedirecting()
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
       .finally(() => {
@@ -196,7 +201,19 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     return envService.read('oktaUrl')
   }
 
+  function removeOktaRedirectIndicator () {
+    $window.sessionStorage.removeItem(redirectingIndicator)
+  }
+
+  function isOktaRedirecting () {
+    return $window.sessionStorage.getItem(redirectingIndicator)
+  }
+
   /* Private Methods */
+  function setOktaRedirecting () {
+    $window.sessionStorage.setItem(redirectingIndicator, 'true')
+  }
+
   function clearStorageForOktaLogout () {
     $window.localStorage.clear()
     const cookieConfig = { path: '/' }

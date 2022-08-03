@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { OktaStorage, Roles, Sessions, SignOutEvent } from './session.service'
+import module, { OktaStorage, Roles, Sessions, SignOutEvent, redirectingIndicator } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -348,6 +348,26 @@ describe('session service', function () {
   describe('getOktaUrl', () => {
     it('should return the oktaUrl from the environment', () => {
       expect(sessionService.getOktaUrl()).toEqual(envService.read('oktaUrl'))
+    })
+  })
+
+  describe('removeOktaRedirectIndicator', () => {
+    it('should remove the Okta redirect session storage variable', () => {
+      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      sessionService.removeOktaRedirectIndicator()
+      expect($window.sessionStorage.getItem(redirectingIndicator)).toEqual(null)
+    })
+  })
+
+  describe('isOktaRedirecting', () => {
+    it('should be true if the session storage variable is set', () => {
+      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      expect(sessionService.isOktaRedirecting()).toBeTruthy()
+    })
+
+    it('should be false if the session storage variable is not set', () => {
+      $window.sessionStorage.removeItem(redirectingIndicator)
+      expect(sessionService.isOktaRedirecting()).toBeFalsy()
     })
   })
 
