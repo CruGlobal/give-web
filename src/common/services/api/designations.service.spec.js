@@ -128,7 +128,7 @@ describe('designation service', () => {
 
   describe('bulkLookup', () => {
     it('should take an array of designation numbers and return corresponding links for items', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/lookups/crugive/batches/items?FollowLocation=true',
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/items/crugive/lookups/batches/form?FollowLocation=true',
         { codes: ['0123456', '1234567'] })
         .respond(200, bulkLookupResponse)
       self.designationsService.bulkLookup(['0123456', '1234567'])

@@ -287,9 +287,9 @@ describe('cart service', () => {
         },
         () => fail('Observable should not have thrown an error'),
         () => {
-          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'uri1', { designationNumber: '0123456', uri: 'uri1' })
-          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'uri2', { designationNumber: '1234567', uri: 'uri2' })
-          expect(outputValues).toEqual([{ configuredDesignation: { designationNumber: '0123456', uri: 'uri1' } }, { configuredDesignation: { designationNumber: '1234567', uri: 'uri2' } }])
+          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'carts/uri1/form', { designationNumber: '0123456', uri: 'carts/uri1/form' })
+          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'carts/uri2/form', { designationNumber: '1234567', uri: 'carts/uri2/form' })
+          expect(outputValues).toEqual([{ configuredDesignation: { designationNumber: '0123456', uri: 'carts/uri1/form' } }, { configuredDesignation: { designationNumber: '1234567', uri: 'carts/uri2/form' } }])
         })
     })
 
