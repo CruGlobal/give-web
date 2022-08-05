@@ -222,7 +222,7 @@ class Cart {
         }
         return map(response.links, (link, index) => {
           const configuredDesignation = configuredDesignations[index]
-          configuredDesignation.uri = link.uri.replace(/^\//, '')
+          configuredDesignation.uri = `carts/${link.uri.replace(/^\//, '')}/form`
           return this.addItemAndReplaceExisting(cart, configuredDesignation.uri, configuredDesignation)
         })
       })

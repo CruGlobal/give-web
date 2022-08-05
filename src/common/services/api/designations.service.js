@@ -181,7 +181,7 @@ class DesignationsService {
 
   bulkLookup (designationNumbers) {
     return this.cortexApiService.post({
-      path: ['lookups', this.cortexApiService.scope, 'batches', 'items'],
+      path: ['items', this.cortexApiService.scope, 'lookups', 'batches', 'form'],
       data: {
         codes: designationNumbers
       },
