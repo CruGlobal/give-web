@@ -198,6 +198,9 @@ export default angular
       premiumImageUrl: '<',
       radioStationApiUrl: '<',
       radioStationRadius: '<',
-      itemConfig: '='
+      itemConfig: '=',
+      hideSpouseDetails: '<',
+      hideAnnual: '<',
+      hideQuarterly: '<'
     }
   })

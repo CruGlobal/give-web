@@ -9,6 +9,8 @@
                          default-frequency="$ctrl.defaultFrequency"
                          uri="$ctrl.item.uri"
                          submitted="$ctrl.submitted"
+                         hide-quarterly="$ctrl.hideQuarterly"
+                         hide-annual="$ctrl.hideAnnual"
                          on-state-change="$ctrl.onGiftConfigStateChange(state)"
                          disable-session-restart="true"
                          ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
@@ -27,7 +29,8 @@
         on-submit="$ctrl.onContactInfoSubmit(success)"
         donor-details="$ctrl.donorDetails"
         radio-station-api-url="$ctrl.radioStationApiUrl"
-        radio-station-radius="$ctrl.radioStationRadius">
+        radio-station-radius="$ctrl.radioStationRadius"
+        hide-spouse-details="$ctrl.hideSpouseDetails">
       </contact-info>
     </div>
   </div>
