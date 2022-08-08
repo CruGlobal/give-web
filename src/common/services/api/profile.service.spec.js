@@ -621,7 +621,7 @@ describe('profile service', () => {
           'is-spouse': true
         }
       ]
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/phonenumbers/crugive?zoom=element,spouse')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/phonenumbers/crugive?zoom=element')
         .respond(200, phoneNumbersResponse)
       self.profileService.getPhoneNumbers()
         .subscribe((data) => {
