@@ -47,7 +47,7 @@
     <div class="mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
       <div class="row">
-        <div class="col-sm-3">
+        <div ng-class="{'col-sm-3': $ctrl.hideSpouseDetails, 'col-sm-4': !$ctrl.hideSpouseDetails}">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label translate>{{'FIRST_NAME'}}</label>
             <input type="text"
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-1">
+        <div ng-class="{'col-sm-1': $ctrl.hideSpouseDetails, 'col-sm-2': !$ctrl.hideSpouseDetails}">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.nameMiddleInitial | showErrors)}">
             <label translate>{{'MIDDLE_ABBREV'}}</label>
             <input type="text"
@@ -77,7 +77,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-3">
+        <div ng-class="{'col-sm-3': $ctrl.hideSpouseDetails, 'col-sm-4': !$ctrl.hideSpouseDetails}">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameFamilyName | showErrors)}">
             <label translate>{{'LAST_NAME'}}</label>
             <input type="text"
