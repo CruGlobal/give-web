@@ -3,7 +3,7 @@ import template from './receipts.tpl.html'
 import donationsService from 'common/services/api/donations.service'
 import filterByYear from './receipts.filter'
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
-import sessionService, { Roles, SignOutEvent } from 'common/services/session/session.service'
+import sessionService, { LoginOktaOnlyEvent, Roles, SignOutEvent } from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
 import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
 import { concatMap } from 'rxjs/operators/concatMap'
@@ -32,6 +32,14 @@ class ReceiptsController {
       })
     ).subscribe((data) => {
       if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
         this.sessionService.removeOktaRedirectIndicator()
       }
     },

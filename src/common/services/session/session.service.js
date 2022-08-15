@@ -37,6 +37,7 @@ export const redirectingIndicator = 'redirectingFromOkta'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
+export const LoginOktaOnlyEvent = 'loginAsOktaOnlyUser'
 
 const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, envService) {
   const session = {}
@@ -72,7 +73,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     downgradeToGuest: downgradeToGuest,
     getOktaUrl: getOktaUrl,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
-    isOktaRedirecting: isOktaRedirecting
+    isOktaRedirecting: isOktaRedirecting,
+    updateCurrentProfile: updateCurrentProfile
   }
 
   /* Public Methods */
@@ -209,6 +211,18 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     return $window.sessionStorage.getItem(redirectingIndicator)
   }
 
+  function updateCurrentProfile () {
+    let cruProfile = {}
+
+    if (angular.isDefined($cookies.get(Sessions.profile))) {
+      cruProfile = jwtDecode($cookies.get(Sessions.profile))
+      session.first_name = cruProfile.first_name
+      session.last_name = cruProfile.last_name
+    }
+
+    return cruProfile
+  }
+
   /* Private Methods */
   function setOktaRedirecting () {
     $window.sessionStorage.setItem(redirectingIndicator, 'true')
@@ -224,7 +238,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function updateCurrentSession () {
     const cortexRole = decodeCookie(Sessions.role)
-    const cruProfile = decodeCookie(Sessions.profile)
+    const cruProfile = updateCurrentProfile()
     const giveSession = decodeCookie(Sessions.give)
 
     // Set give-session expiration timeout if defined

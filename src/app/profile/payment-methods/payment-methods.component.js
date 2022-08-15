@@ -7,7 +7,7 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component'
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
-import { Roles, SignOutEvent } from 'common/services/session/session.service'
+import { LoginOktaOnlyEvent, Roles, SignOutEvent } from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
 import { scrollModalToTop } from 'common/services/modalState.service'
@@ -51,6 +51,14 @@ class PaymentMethodsController {
       })
     ).subscribe((data) => {
       if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
         this.sessionService.removeOktaRedirectIndicator()
       }
     },

@@ -10,7 +10,7 @@ import sessionEnforcerService, {
   EnforcerCallbacks,
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService, { LoginOktaOnlyEvent, Roles } from 'common/services/session/session.service'
 import designationEditorService from 'common/services/api/designationEditor.service'
 
 import titleModalController from './titleModal/title.modal'
@@ -37,7 +37,7 @@ const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($log, $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService, designationEditorService) {
+  constructor ($log, $q, $uibModal, $location, $window, $rootScope, envService, sessionService, sessionEnforcerService, designationEditorService) {
     this.$log = $log
     this.sessionService = sessionService
     this.sessionEnforcerService = sessionEnforcerService
@@ -51,6 +51,7 @@ class DesignationEditorController {
     this.$q = $q
     this.$uibModal = $uibModal
     this.$window = $window
+    this.$rootScope = $rootScope
   }
 
   $onInit () {
@@ -69,6 +70,14 @@ class DesignationEditorController {
       })
     ).subscribe((data) => {
       if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
         this.sessionService.removeOktaRedirectIndicator()
       }
     },

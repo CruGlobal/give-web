@@ -2,7 +2,8 @@ import angular from 'angular'
 import 'angular-mocks'
 import module from './designationEditor.component'
 import designationConstants from 'common/services/api/designationEditor.constants'
-import { Roles } from 'common/services/session/session.service'
+import { LoginOktaOnlyEvent, Roles } from 'common/services/session/session.service'
+import { Observable } from 'rxjs/Observable'
 
 const designationSecurityResponse = {
   designationNumber: '000555',
@@ -70,6 +71,7 @@ describe('Designation Editor', function () {
     $httpBackend = _$httpBackend_
     $q = _$q_
     $rootScope = _$rootScope_
+    $rootScope.$broadcast = jest.spyOn(_$rootScope_, '$broadcast')
     $ctrl = _$componentController_(module.name,
       {
         $window: {
@@ -140,6 +142,34 @@ describe('Designation Editor', function () {
 
         expect($ctrl.$window.location).toEqual('/')
       })
+    })
+
+    describe('sessionEnforcerService change', () => {
+      beforeEach(() => {
+        jest.spyOn($ctrl.sessionService, 'handleOktaRedirect').mockImplementation(() => Observable.of(Observable.of('success')))
+        $ctrl.$onInit()
+      })
+
+      it('broadcasts an event if registered/new', () => {
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['change'](Roles.registered, 'NEW')
+        expect($ctrl.$rootScope.$broadcast).toHaveBeenCalledWith(LoginOktaOnlyEvent, 'register-account')
+      })
+
+      it('does not broadcast an event if not registered/new', () => {
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['change'](Roles.registered, 'COMPLETED')
+        expect($ctrl.$rootScope.$broadcast).not.toHaveBeenCalled()
+      })
+    })
+
+    it('handles an Okta redirect error', () => {
+      const error = new Error()
+      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {})
+      jest.spyOn($ctrl.sessionService, 'handleOktaRedirect').mockImplementation(() => Observable.of(Observable.throw(error)))
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
+      $ctrl.$onInit()
+      expect($ctrl.errorMessage).toEqual('generic')
+      expect($ctrl.$log.error).toHaveBeenCalledWith('Failed to redirect from Okta', error)
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
   })
 
