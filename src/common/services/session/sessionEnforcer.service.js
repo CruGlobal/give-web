@@ -92,7 +92,9 @@ const SessionEnforcerService = /* @ngInject */ function (orderService, sessionSe
     })
     if (enforced.length) {
       angular.forEach(enforced, (enforcer) => {
-        if (angular.isFunction(enforcer[EnforcerCallbacks.change])) enforcer[EnforcerCallbacks.change](role)
+        if (angular.isFunction(enforcer[EnforcerCallbacks.change])) {
+          enforcer[EnforcerCallbacks.change](role, donorDetails['registration-state'])
+        }
       })
 
       if (angular.isUndefined(modal)) {

@@ -2,7 +2,7 @@ import angular from 'angular'
 import template from './registerAccountModal.tpl.html'
 
 import orderService from 'common/services/api/order.service'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService, { Roles, LoginOktaOnlyEvent } from 'common/services/session/session.service'
 import verificationService from 'common/services/api/verification.service'
 import { scrollModalToTop } from 'common/services/modalState.service'
 
@@ -23,7 +23,8 @@ class RegisterAccountModalController {
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor (orderService, sessionService, verificationService, gettext) {
+  constructor ($rootScope, orderService, sessionService, verificationService, gettext) {
+    this.$rootScope = $rootScope
     this.orderService = orderService
     this.sessionService = sessionService
     this.verificationService = verificationService
@@ -32,6 +33,10 @@ class RegisterAccountModalController {
   }
 
   $onInit () {
+    this.$rootScope.$on(LoginOktaOnlyEvent, () => {
+      this.getDonorDetails()
+    })
+
     // Step 1. Sign-In/Up (skipped if already Signed In)
     if (this.sessionService.getRole() === Roles.registered) {
       // Proceed to Step 2

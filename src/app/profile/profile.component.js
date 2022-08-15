@@ -18,7 +18,7 @@ import sessionEnforcerService, {
   EnforcerCallbacks,
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
-import sessionService, { Roles, SignOutEvent } from 'common/services/session/session.service'
+import sessionService, { Roles, SignOutEvent, LoginOktaOnlyEvent } from 'common/services/session/session.service'
 import showErrors from 'common/filters/showErrors.filter'
 import commonModule from 'common/common.module'
 import { titles, legacyTitles } from './titles.fixture'
@@ -52,6 +52,14 @@ class ProfileController {
       })
     ).subscribe((data) => {
       if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
         this.sessionService.removeOktaRedirectIndicator()
       }
     },
