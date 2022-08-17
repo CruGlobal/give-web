@@ -227,6 +227,13 @@ describe('thank you summary', () => {
     })
   })
 
+  describe('shouldShowThankYouImage', () => {
+    it('should not show if we are in branded checkout', () => {
+      self.controller.isBrandedCheckout = true
+      expect(self.controller.shouldShowThankYouImage()).toEqual(false)
+    })
+  })
+
   describe('loadThankYouImage', () => {
     const defaultImage = '/content/dam/give/thank-you-images/some/image.jpg'
     const defaultImageLink = 'https://localhost.cru.org:9000'

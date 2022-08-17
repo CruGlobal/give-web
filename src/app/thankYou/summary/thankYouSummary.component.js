@@ -115,6 +115,9 @@ class ThankYouSummaryController {
   }
 
   shouldShowThankYouImage () {
+    if (this.isBrandedCheckout) {
+      return false
+    }
     return this.thankYouService.shouldShowThankYouImage().subscribe((data) => {
       return data
     })
@@ -170,6 +173,7 @@ export default angular
     controller: ThankYouSummaryController,
     templateUrl: template,
     bindings: {
-      onPurchaseLoaded: '&'
+      onPurchaseLoaded: '&',
+      isBrandedCheckout: '<'
     }
   })
