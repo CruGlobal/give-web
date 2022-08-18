@@ -148,10 +148,10 @@
 
   </div>
 </div><!-- // panel -->
-<a ng-if="$ctrl.shouldShowThankYouImage() && $ctrl.thankYouImage && $ctrl.thankYouImageLink"
+<a ng-if="$ctrl.showImage && $ctrl.thankYouImage && $ctrl.thankYouImageLink"
    ng-href="{{$ctrl.thankYouImageLink}}"
    target="_blank">
   <img ng-src="{{$ctrl.thankYouImage}}" />
 </a>
-<img ng-if="$ctrl.shouldShowThankYouImage() && $ctrl.thankYouImage && !$ctrl.thankYouImageLink"
+<img ng-if="$ctrl.showImage && $ctrl.thankYouImage && !$ctrl.thankYouImageLink"
      ng-src="{{$ctrl.thankYouImage}}" />

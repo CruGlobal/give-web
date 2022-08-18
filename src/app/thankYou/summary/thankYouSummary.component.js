@@ -41,6 +41,7 @@ class ThankYouSummaryController {
     this.$rootScope.$on(SignOutEvent, (event) => this.signedOut(event))
     this.loadLastPurchase()
     this.loadEmail()
+    this.shouldShowThankYouImage()
   }
 
   signedOut (event) {
@@ -116,10 +117,10 @@ class ThankYouSummaryController {
 
   shouldShowThankYouImage () {
     if (this.isBrandedCheckout) {
-      return false
+      this.showImage = false
     }
     return this.thankYouService.shouldShowThankYouImage().subscribe((data) => {
-      return data
+      this.showImage = data
     })
   }
 
@@ -135,13 +136,19 @@ class ThankYouSummaryController {
       })
       Observable.forkJoin(...observables).subscribe((data) => {
         data.forEach((dataItem) => {
-          orgIds.add(dataItem.organizationId ? dataItem.organizationId : this.STAFF_ORG_ID)
+          if (dataItem.organizationId && dataItem.organizationId !== this.STAFF_ORG_ID) {
+            orgIds.add(dataItem.organizationId)
+          }
         })
         if (orgIds.size === 1) {
           const orgId = orgIds.values().next().value
           this.thankYouService.getOrgIdThankYouData(orgId).subscribe((orgIdData) => {
             this.thankYouImage = orgIdData.thankYouImage || thankYouData.defaultImage
-            this.thankYouImageLink = orgIdData.thankYouImageLink || thankYouData.defaultThankYouImageLink
+            if (this.thankYouImage === orgIdData.thankYouImage) {
+              this.thankYouImageLink = orgIdData.thankYouImageLink
+            } else {
+              this.thankYouImageLink = thankYouData.defaultThankYouImageLink
+            }
           })
         }
       }, (err) => {
