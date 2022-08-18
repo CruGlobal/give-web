@@ -327,6 +327,20 @@ describe('thank you summary', () => {
       expect(self.controller.thankYouImageLink).toEqual(defaultImageLink)
     })
 
+    it('should return the default image and link when there is an error loading designation data', () => {
+      jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValue(Observable.throw(new Error()))
+      self.controller.loadThankYouImage()
+      expect(self.controller.thankYouImage).toEqual(defaultImage)
+      expect(self.controller.thankYouImageLink).toEqual(defaultImageLink)
+    })
+
+    it('should not set image details if there is an error loading thank you image details', () => {
+      jest.spyOn(self.controller.thankYouService, 'getThankYouData').mockReturnValue(Observable.throw(new Error()))
+      self.controller.loadThankYouImage()
+      expect(self.controller.thankYouImage).not.toBeDefined()
+      expect(self.controller.thankYouImageLink).not.toBeDefined()
+    })
+
     const setupSingleOrgId = () => {
       jest.spyOn(self.controller.designationsService, 'designationData').mockReturnValue(
         Observable.of({
