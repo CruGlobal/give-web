@@ -230,12 +230,14 @@ describe('thank you summary', () => {
   describe('shouldShowThankYouImage', () => {
     it('should not show if we are in branded checkout', () => {
       self.controller.isBrandedCheckout = true
-      expect(self.controller.shouldShowThankYouImage()).toEqual(false)
+      self.controller.shouldShowThankYouImage()
+      expect(self.controller.showImage).toEqual(false)
     })
 
     it('should show the thank you image', () => {
       jest.spyOn(self.controller.thankYouService, 'shouldShowThankYouImage').mockReturnValue(Observable.of(true))
-      expect(self.controller.shouldShowThankYouImage()).toBeTruthy()
+      self.controller.shouldShowThankYouImage()
+      expect(self.controller.showImage).toEqual(true)
     })
   })
 

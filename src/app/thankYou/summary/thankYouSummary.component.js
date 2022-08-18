@@ -41,6 +41,7 @@ class ThankYouSummaryController {
     this.$rootScope.$on(SignOutEvent, (event) => this.signedOut(event))
     this.loadLastPurchase()
     this.loadEmail()
+    this.shouldShowThankYouImage()
   }
 
   signedOut (event) {
@@ -116,10 +117,10 @@ class ThankYouSummaryController {
 
   shouldShowThankYouImage () {
     if (this.isBrandedCheckout) {
-      return false
+      this.showImage = false
     }
     return this.thankYouService.shouldShowThankYouImage().subscribe((data) => {
-      return data
+      this.showImage = data
     })
   }
 
