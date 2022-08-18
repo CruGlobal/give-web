@@ -303,6 +303,7 @@ describe('thank you summary', () => {
       const customLink = 'https://custom.com'
       jest.spyOn(self.controller.thankYouService, 'getOrgIdThankYouData').mockReturnValue(
         Observable.of({
+          thankYouImage: '/some/custom/image.jpg',
           thankYouImageLink: customLink
         })
       )
