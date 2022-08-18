@@ -232,6 +232,11 @@ describe('thank you summary', () => {
       self.controller.isBrandedCheckout = true
       expect(self.controller.shouldShowThankYouImage()).toEqual(false)
     })
+
+    it('should show the thank you image', () => {
+      jest.spyOn(self.controller.thankYouService, 'shouldShowThankYouImage').mockReturnValue(Observable.of(true))
+      expect(self.controller.shouldShowThankYouImage()).toBeTruthy()
+    })
   })
 
   describe('loadThankYouImage', () => {
