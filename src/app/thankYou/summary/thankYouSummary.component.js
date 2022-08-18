@@ -135,7 +135,9 @@ class ThankYouSummaryController {
       })
       Observable.forkJoin(...observables).subscribe((data) => {
         data.forEach((dataItem) => {
-          orgIds.add(dataItem.organizationId ? dataItem.organizationId : this.STAFF_ORG_ID)
+          if (dataItem.organizationId && dataItem.organizationId !== this.STAFF_ORG_ID) {
+            orgIds.add(dataItem.organizationId)
+          }
         })
         if (orgIds.size === 1) {
           const orgId = orgIds.values().next().value
