@@ -43,19 +43,23 @@ class SessionModalController {
   }
 
   onSignInSuccess () {
+    this.sessionService.removeOktaRedirectIndicator()
     this.close()
   }
 
   onSignUpSuccess () {
     this.analyticsFactory.track('ga-sign-in-create-login')
+    this.sessionService.removeOktaRedirectIndicator()
     this.close()
   }
 
   onFailure () {
+    this.sessionService.removeOktaRedirectIndicator()
     this.dismiss({ $value: 'error' })
   }
 
   onCancel () {
+    this.sessionService.removeOktaRedirectIndicator()
     this.dismiss({ $value: 'cancel' })
   }
 
