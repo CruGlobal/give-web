@@ -133,22 +133,10 @@ class Profile {
     return this.cortexApiService.get({
       path: ['phonenumbers', this.cortexApiService.scope],
       zoom: {
-        donor: 'element[]',
-        spouse: 'spouse[]'
+        donor: 'element[]'
       }
     })
-      .map(data => {
-        const phoneNumbers = []
-        angular.forEach(data.donor, item => {
-          item['is-spouse'] = false
-          phoneNumbers.push(item)
-        })
-        angular.forEach(data.spouse, item => {
-          item['is-spouse'] = true
-          phoneNumbers.push(item)
-        })
-        return phoneNumbers
-      })
+      .map(data => data.donor)
   }
 
   addPhoneNumber (number) {
