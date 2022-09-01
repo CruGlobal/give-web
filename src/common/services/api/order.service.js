@@ -12,6 +12,7 @@ import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort
 
 import cortexApiService from '../cortexApi.service'
 import cartService from './cart.service'
+import tsysService from './tsys.service'
 import hateoasHelperService from 'common/services/hateoasHelper.service'
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
@@ -23,10 +24,11 @@ const serviceName = 'orderService'
 
 class Order {
   /* @ngInject */
-  constructor (cortexApiService, cartService, hateoasHelperService, analyticsFactory, $window, $log, $filter) {
+  constructor (cortexApiService, cartService, hateoasHelperService, tsysService, analyticsFactory, $window, $log, $filter) {
     this.cortexApiService = cortexApiService
     this.cartService = cartService
     this.hateoasHelperService = hateoasHelperService
+    this.tsysService = tsysService
     this.analyticsFactory = analyticsFactory
     this.sessionStorage = $window.sessionStorage
     this.localStorage = $window.localStorage
@@ -253,6 +255,7 @@ class Order {
         const postData = cvv ? { 'security-code': cvv } : {}
         postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
         postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()
+        postData['tsys-device'] = this.tsysService.getDevice()
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
           data: postData,
@@ -351,6 +354,7 @@ export default angular
     cortexApiService.name,
     cartService.name,
     hateoasHelperService.name,
+    tsysService.name,
     analyticsFactory.name
   ])
   .service(serviceName, Order)

@@ -20,9 +20,10 @@ describe('order service', () => {
   beforeEach(angular.mock.module(module.name))
   var self = {}
 
-  beforeEach(inject((orderService, cartService, $httpBackend, $window, $log) => {
+  beforeEach(inject((orderService, cartService, tsysService, $httpBackend, $window, $log) => {
     self.orderService = orderService
     self.cartService = cartService
+    self.tsysService = tsysService
     self.$httpBackend = $httpBackend
     self.$window = $window
     self.$log = $log
@@ -649,7 +650,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': false, 'radio-call-letters': null }
+        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': '' }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -663,7 +664,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase and with a CVV', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'security-code': '123', 'cover-cc-fees': false, 'radio-call-letters': null }
+        { 'security-code': '123', 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': '' }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit('123')
@@ -679,7 +680,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': true, 'radio-call-letters': null }
+        { 'cover-cc-fees': true, 'radio-call-letters': null, 'tsys-device': '' }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -695,7 +696,24 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
-        { 'cover-cc-fees': false, 'radio-call-letters': 'WXYZ' }
+        { 'cover-cc-fees': false, 'radio-call-letters': 'WXYZ', 'tsys-device': '' }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(data).toEqual(purchaseResponse)
+          done()
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should send the tsys device id to the server', (done) => {
+      self.tsysService.device = 'test-env'
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?followLocation=true',
+        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': 'test-env' }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
