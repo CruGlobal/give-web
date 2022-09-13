@@ -368,7 +368,7 @@ describe('donations service', () => {
 
     it('should update a recurring gift', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/donations/recurring/crugive', {
+        .expectPOST('https://give-stage2.cru.org/cortex/donations/recurring/crugive/form', {
           'donation-lines': [
             gift.toObject
           ]
