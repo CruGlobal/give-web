@@ -141,7 +141,7 @@ const DonationsService = /* @ngInject */ function (cortexApiService, profileServ
   function addRecurringGifts (gifts) {
     gifts = angular.isArray(gifts) ? gifts : [gifts]
     return cortexApiService.post({
-      path: ['donations', 'recurring', cortexApiService.scope],
+      path: ['donations', 'recurring', cortexApiService.scope, 'form'],
       data: {
         'donation-lines': map(gifts, 'toObject')
       }
