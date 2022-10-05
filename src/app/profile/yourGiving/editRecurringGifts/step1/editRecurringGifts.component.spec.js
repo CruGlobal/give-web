@@ -72,5 +72,24 @@ describe('editRecurringGiftsModal', () => {
         expect(self.controller.allPaymentMethodsValid()).toEqual(false)
       })
     })
+
+    describe('allAmountsValid', () => {
+      beforeEach(() => {
+        RecurringGiftModel.amount = 50
+      })
+
+      it('should return true if all amounts are valid', () => {
+        self.controller.recurringGifts = [new RecurringGiftModel({}).setDefaults(), new RecurringGiftModel({}).setDefaults()]
+
+        expect(self.controller.allAmountsValid()).toEqual(true)
+      })
+
+      it('should return false if any amount is invalid', () => {
+        self.controller.recurringGifts = [new RecurringGiftModel({}).setDefaults(), new RecurringGiftModel({}).setDefaults()]
+        self.controller.recurringGifts[0].amount = ''
+
+        expect(self.controller.allAmountsValid()).toEqual(false)
+      })
+    })
   })
 })
