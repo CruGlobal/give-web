@@ -37,6 +37,9 @@
     </a>
   </div>
   <div class="col-xs-6 text-right">
-    <button class="btn btn-primary" ng-click="$ctrl.next({ additions: $ctrl.additions })" translate>Continue</button>
+    <button class="btn btn-primary" 
+      ng-click="$ctrl.next({ additions: $ctrl.additions })"
+      ng-disabled="!$ctrl.allGiftsValid()"
+      translate>Continue</button>
   </div>
 </div>
