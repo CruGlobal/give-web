@@ -96,13 +96,9 @@ export default class RecurringGiftModel {
   }
 
   get paymentMethodId () {
-    console.log("=====> gift:")
-    console.log(this.gift)
     let paymentMethodId = this.gift['updated-payment-instrument-id'] || this.gift['payment-instrument-id']
-    console.log('paymentMethodId = ', paymentMethodId)
     if (!paymentMethodId) {
       paymentMethodId = this.gift['updated-payment-instrument-id'] = this.paymentMethods && this.paymentMethods[0] && this.paymentMethods[0].self.uri.split('/').pop()
-      console.log('paymentMethodId 2 = ', paymentMethodId)
     }
     return paymentMethodId
   }
@@ -113,7 +109,6 @@ export default class RecurringGiftModel {
   }
 
   get paymentMethod () {
-    console.log("_paymentMethod = ", this._paymentMethod)
     this._paymentMethod = this._paymentMethod || find(this.paymentMethods, paymentMethod => {
       return this.paymentMethodId === paymentMethod.self.uri.split('/').pop()
     })
