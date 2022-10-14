@@ -17,7 +17,7 @@ export default class RecurringGiftModel {
   initializeEmptyFields () {
     defaults(this.gift, {
       'updated-amount': '',
-      'updated-payment-method-id': '',
+      'updated-payment-instrument-id': '',
       'updated-rate': {
         recurrence: {
           interval: ''
@@ -96,19 +96,24 @@ export default class RecurringGiftModel {
   }
 
   get paymentMethodId () {
-    let paymentMethodId = this.gift['updated-payment-method-id'] || this.gift['payment-method-id']
+    console.log("=====> gift:")
+    console.log(this.gift)
+    let paymentMethodId = this.gift['updated-payment-instrument-id'] || this.gift['payment-instrument-id']
+    console.log('paymentMethodId = ', paymentMethodId)
     if (!paymentMethodId) {
-      paymentMethodId = this.gift['updated-payment-method-id'] = this.paymentMethods && this.paymentMethods[0] && this.paymentMethods[0].self.uri.split('/').pop()
+      paymentMethodId = this.gift['updated-payment-instrument-id'] = this.paymentMethods && this.paymentMethods[0] && this.paymentMethods[0].self.uri.split('/').pop()
+      console.log('paymentMethodId 2 = ', paymentMethodId)
     }
     return paymentMethodId
   }
 
   set paymentMethodId (value) {
-    this.gift['updated-payment-method-id'] = value !== this.gift['payment-method-id'] ? value : ''
+    this.gift['updated-payment-instrument-id'] = value !== this.gift['payment-instrument-id'] ? value : ''
     delete this._paymentMethod
   }
 
   get paymentMethod () {
+    console.log("_paymentMethod = ", this._paymentMethod)
     this._paymentMethod = this._paymentMethod || find(this.paymentMethods, paymentMethod => {
       return this.paymentMethodId === paymentMethod.self.uri.split('/').pop()
     })
@@ -191,7 +196,7 @@ export default class RecurringGiftModel {
 
   hasChanges () {
     return this.gift['updated-amount'] !== '' ||
-      this.gift['updated-payment-method-id'] !== '' ||
+      this.gift['updated-payment-instrument-id'] !== '' ||
       this.gift['updated-rate'].recurrence.interval !== '' ||
       this.gift['updated-recurring-day-of-month'] !== '' ||
       this.gift['updated-start-month'] !== '' ||
