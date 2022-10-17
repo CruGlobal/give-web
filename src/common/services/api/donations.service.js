@@ -159,7 +159,7 @@ const DonationsService = /* @ngInject */ function (cortexApiService, profileServ
         return map(response.recipients, (recipient) => {
           return {
             'designation-name': recipient.definition['display-name'],
-            'designation-number': recipient.code['product-code']
+            'designation-number': recipient.code.code
           }
         })
       })
