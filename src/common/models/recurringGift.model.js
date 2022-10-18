@@ -17,7 +17,7 @@ export default class RecurringGiftModel {
   initializeEmptyFields () {
     defaults(this.gift, {
       'updated-amount': '',
-      'updated-payment-instrument-id': '',
+      'updated-payment-method-id': '',
       'updated-rate': {
         recurrence: {
           interval: ''
@@ -96,15 +96,15 @@ export default class RecurringGiftModel {
   }
 
   get paymentMethodId () {
-    let paymentMethodId = this.gift['updated-payment-instrument-id'] || this.gift['payment-instrument-id']
+    let paymentMethodId = this.gift['updated-payment-method-id'] || this.gift['payment-method-id']
     if (!paymentMethodId) {
-      paymentMethodId = this.gift['updated-payment-instrument-id'] = this.paymentMethods && this.paymentMethods[0] && this.paymentMethods[0].self.uri.split('/').pop()
+      paymentMethodId = this.gift['updated-payment-method-id'] = this.paymentMethods && this.paymentMethods[0] && this.paymentMethods[0].self.uri.split('/').pop()
     }
     return paymentMethodId
   }
 
   set paymentMethodId (value) {
-    this.gift['updated-payment-instrument-id'] = value !== this.gift['payment-instrument-id'] ? value : ''
+    this.gift['updated-payment-method-id'] = value !== this.gift['payment-method-id'] ? value : ''
     delete this._paymentMethod
   }
 
@@ -191,7 +191,7 @@ export default class RecurringGiftModel {
 
   hasChanges () {
     return this.gift['updated-amount'] !== '' ||
-      this.gift['updated-payment-instrument-id'] !== '' ||
+      this.gift['updated-payment-method-id'] !== '' ||
       this.gift['updated-rate'].recurrence.interval !== '' ||
       this.gift['updated-recurring-day-of-month'] !== '' ||
       this.gift['updated-start-month'] !== '' ||

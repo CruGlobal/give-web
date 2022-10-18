@@ -186,7 +186,7 @@ describe('delete payment method modal', function () {
   })
 
   describe('moveDonationsToNewPaymentMethod()', () => {
-    it('should update each donation\'s updated-payment-instrument-id field and make an API call to update', () => {
+    it('should update each donation\'s updated-payment-method-id field and make an API call to update', () => {
       self.controller.selectedPaymentMethod = {
         self: {
           uri: '/blah/blah/123'
