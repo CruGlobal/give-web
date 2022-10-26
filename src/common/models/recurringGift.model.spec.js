@@ -14,10 +14,10 @@ describe('recurringGift model', () => {
         'designation-number': '0105987',
         'donation-line-row-id': '1-GVVEB6',
         'donation-line-status': 'Standard',
-        'payment-method-id': 'giydgnrxgm=',
+        'payment-instrument-id': 'g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=',
         'updated-amount': '',
         'updated-donation-line-status': '',
-        'updated-payment-method-id': '',
+        'updated-payment-instrument-id': '',
         'updated-rate': { recurrence: { interval: '' } },
         'updated-recurring-day-of-month': '',
         'updated-start-month': '',
@@ -37,7 +37,7 @@ describe('recurringGift model', () => {
     RecurringGiftModel.nextDrawDate = '2015-05-20'
     RecurringGiftModel.paymentMethods = [
       {
-        self: { uri: '/selfservicepaymentinstruments/crugive/giydgnrxgm=' },
+        self: { uri: '/selfservicepaymentinstruments/crugive/g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=' },
         'account-type': 'Savings'
       }
     ]
@@ -68,7 +68,7 @@ describe('recurringGift model', () => {
 
       expect(gift.gift).toEqual({
         'updated-amount': '',
-        'updated-payment-method-id': '',
+        'updated-payment-instrument-id': '',
         'updated-rate': {
           recurrence: {
             interval: ''
@@ -175,20 +175,20 @@ describe('recurringGift model', () => {
 
   describe('paymentMethodId getter', () => {
     it('should load payment id if it hasn\'t been updated', () => {
-      expect(giftModel.paymentMethodId).toEqual('giydgnrxgm=')
+      expect(giftModel.paymentMethodId).toEqual('g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=')
     })
 
     it('should load payment id if it has been updated', () => {
-      giftModel.gift['updated-payment-method-id'] = 'new id'
+      giftModel.gift['updated-payment-instrument-id'] = 'new id'
 
       expect(giftModel.paymentMethodId).toEqual('new id')
     })
 
     it('should load the first payment method id and set it as updated if one is not set on the gift', () => {
-      giftModel.gift['payment-method-id'] = ''
+      giftModel.gift['payment-instrument-id'] = ''
 
-      expect(giftModel.paymentMethodId).toEqual('giydgnrxgm=')
-      expect(giftModel.gift['updated-payment-method-id']).toEqual('giydgnrxgm=')
+      expect(giftModel.paymentMethodId).toEqual('g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=')
+      expect(giftModel.gift['updated-payment-instrument-id']).toEqual('g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=')
     })
   })
 
@@ -197,17 +197,17 @@ describe('recurringGift model', () => {
       giftModel._paymentMethod = 'some payment method object'
       giftModel.paymentMethodId = 'new id'
 
-      expect(giftModel.gift['payment-method-id']).toEqual('giydgnrxgm=')
-      expect(giftModel.gift['updated-payment-method-id']).toEqual('new id')
+      expect(giftModel.gift['payment-instrument-id']).toEqual('g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=')
+      expect(giftModel.gift['updated-payment-instrument-id']).toEqual('new id')
       expect(giftModel._paymentMethod).toBeUndefined() // Check that it clears old payment method object
     })
 
     it('should clear updated payment id if it is the same as the original', () => {
       giftModel._paymentMethod = 'some payment method object'
-      giftModel.paymentMethodId = 'giydgnrxgm='
+      giftModel.paymentMethodId = 'g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm='
 
-      expect(giftModel.gift['payment-method-id']).toEqual('giydgnrxgm=')
-      expect(giftModel.gift['updated-payment-method-id']).toEqual('')
+      expect(giftModel.gift['payment-instrument-id']).toEqual('g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=')
+      expect(giftModel.gift['updated-payment-instrument-id']).toEqual('')
       expect(giftModel._paymentMethod).toBeUndefined() // Check that it clears old payment method object
     })
   })
@@ -221,7 +221,7 @@ describe('recurringGift model', () => {
 
     it('should lookup payment method object if it hasn\'t yet', () => {
       const paymentMethod = {
-        self: { uri: '/selfservicepaymentinstruments/crugive/giydgnrxgm=' },
+        self: { uri: '/selfservicepaymentinstruments/crugive/g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=' },
         'account-type': 'Savings'
       }
 
