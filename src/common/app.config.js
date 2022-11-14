@@ -14,6 +14,9 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         'localhost.cru.org',
         'cru-givedev.s3-website-us-east-1.amazonaws.com'
       ],
+      devcloud: [
+        'give-dev-cloud.cru.org'
+      ],
       staging: [
         'give-stage2.cru.org',
         'stage.cru.org',
@@ -32,6 +35,15 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false
+      },
+      devcloud: {
+        apiUrl: 'https://give-stage2.cru.org',
+        imgDomain: '//give-static.cru.org',
+        imgDomainDesignation: 'https://give-dev-cloud.cru.org',
+        publicCru: 'https://stage-cloud.cru.org',
+        publicGive: 'https://give-dev-cloud.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
         isBrandedCheckout: false
       },
