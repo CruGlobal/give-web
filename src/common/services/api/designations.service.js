@@ -274,7 +274,7 @@ class DesignationsService {
 
   ministriesList (pagePath) {
     const path = pagePath + '/jcr:content/content-parsys/designation_search_r.json'
-    return Observable.from(this.$http.get(this.envService.read('apiUrl') + '/' + path))
+    return Observable.from(this.$http.get(location.origin + '/' + path))
       .map((response) => {
         return map(response.data.ministries, (item) => {
           const ministry = JSON.parse(item)
