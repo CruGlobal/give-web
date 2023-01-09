@@ -556,23 +556,25 @@ describe('Designation Editor', function () {
 
   describe ('getDoneEditingUrl()', () => {
     const cacheBust = '?doneEditing'
+    const designationNumber = '0123456'
+
     it('should return the first vanity url', () => {
       $ctrl.designationContent = designationSecurityResponse
-      $ctrl.designationContent['sling:vanityPath'] = ['/content/give/us/en/0123456']
-      expect($ctrl.getDoneEditingUrl()).toEqual(`/0123456${cacheBust}`)
+      $ctrl.designationContent['sling:vanityPath'] = [`/content/give/us/en/${designationNumber}`]
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
     })
 
     it('should return the only vanity url', () => {
       $ctrl.designationContent = designationSecurityResponse
-      $ctrl.designationContent['sling:vanityPath'] = '/content/give/us/en/0123456'
-      expect($ctrl.getDoneEditingUrl()).toEqual(`/0123456${cacheBust}`)
+      $ctrl.designationContent['sling:vanityPath'] = `/content/give/us/en/${designationNumber}`
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
     })
 
     it('should fallback to the designation number page', () => {
-      $ctrl.designationNumber = '0123456'
+      $ctrl.designationNumber = designationNumber
       $ctrl.designationContent = designationSecurityResponse
       $ctrl.designationContent['sling:vanityPath'] = undefined
-      expect($ctrl.getDoneEditingUrl()).toEqual(`/0123456${cacheBust}`)
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
     })
   })
 })
