@@ -2,6 +2,7 @@ import angular from 'angular'
 import 'angular-sanitize'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
+import isArray from 'lodash/isArray'
 import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import commonModule from 'common/common.module'
@@ -339,6 +340,19 @@ class DesignationEditorController {
         cancelable: true
       }))
       this.carouselLoaded = true
+    }
+  }
+
+  getDoneEditingUrl () {
+    const vanityPath = this.designationContent['sling:vanityPath']
+    if (vanityPath) {
+      if (isArray(vanityPath)) {
+        return vanityPath[0].replace('/content/give/us/en', '')
+      } else {
+        return vanityPath.replace('/content/give/us/en', '')
+      }
+    } else {
+      return `/${this.designationNumber}`
     }
   }
 }
