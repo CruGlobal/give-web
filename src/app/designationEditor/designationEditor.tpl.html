@@ -30,7 +30,7 @@
         </div>
 
         <div class="col-sm-6  col-xs-12 text-right">
-          <a id="doneEditingButton1" ng-href="{{$ctrl.designationContent['sling:vanityPath'][0].replace('/content/give/us/en', '')}}" class="btn btn-secondary"
+          <a id="doneEditingButton1" ng-href="{{$ctrl.getDoneEditingUrl()}}" class="btn btn-secondary"
              ng-if="$ctrl.contentLoaded" translate>
             Done Editing
           </a>
