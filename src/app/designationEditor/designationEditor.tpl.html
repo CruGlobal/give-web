@@ -73,11 +73,11 @@
             </div>
 
             <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
-                 ng-if="$ctrl.contentLoaded && !$ctrl.images().length">
-            <div class="secondaryPhoto" ng-if="$ctrl.contentLoaded && $ctrl.images().length">
+                 ng-if="$ctrl.contentLoaded && !$ctrl.imageUrls.length">
+            <div class="secondaryPhoto" ng-if="$ctrl.contentLoaded && $ctrl.imageUrls.length">
               <div class="cmp-carousel" data-cmp-delay="5000" data-cmp-is="carousel">
                 <div class="cmp-carousel__content">
-                  <div ng-repeat="image in $ctrl.images()"
+                  <div ng-repeat="image in $ctrl.imageUrls"
                        role="tabpanel"
                        class="cmp-carousel__item {{$first ? 'cmp-carousel__item--active' : ''}}"
                        data-cmp-hook-carousel="item"
@@ -91,7 +91,7 @@
                       </div>
                     </div>
                   </div>
-                  <div ng-if="$ctrl.images().length > 1" class="cmp-carousel__actions">
+                  <div ng-if="$ctrl.imageUrls.length > 1" class="cmp-carousel__actions">
                     <button class="cmp-carousel__action cmp-carousel__action--previous"
                             data-cmp-hook-carousel="previous"
                             aria-label="Previous">
@@ -106,7 +106,7 @@
                     </button>
                   </div>
                   <ol role="tablist" class="cmp-carousel__indicators" data-cmp-hook-carousel="indicators">
-                    <li ng-repeat="image in $ctrl.images()"
+                    <li ng-repeat="image in $ctrl.imageUrls"
                         role="tab" class="cmp-carousel__indicator {{$first ? 'cmp-carousel__indicator--active' : ''}}"
                         data-cmp-hook-carousel="indicator"
                         aria-selected="{{$first}}"

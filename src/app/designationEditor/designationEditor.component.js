@@ -43,6 +43,7 @@ class DesignationEditorController {
     this.imgDomain = envService.read('imgDomain')
     this.imgDomainDesignation = envService.read('imgDomainDesignation')
     this.giveDomain = envService.read('publicGive')
+    this.imageUrls = []
 
     this.$location = $location
     this.$q = $q
@@ -92,6 +93,7 @@ class DesignationEditorController {
       this.loadingOverlay = false
       this.designationContent = responses[0].data
       this.designationPhotos = responses[1].data
+      this.images()
     }, error => {
       this.contentLoaded = false
       this.loadingOverlay = false
@@ -242,7 +244,8 @@ class DesignationEditorController {
   images () {
     const designController = this.designationContent['design-controller']
     if (designController && designController.carousel) {
-      return this.getImageUrls(designController.carousel)
+      this.imageUrls = this.getImageUrls(designController.carousel)
+      return this.imageUrls
     }
     return []
   }
@@ -290,6 +293,7 @@ class DesignationEditorController {
     return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
       this.saveStatus = 'success'
       this.loadingOverlay = false
+      this.images()
     }, error => {
       this.saveStatus = 'failure'
       this.saveDesignationError = true
