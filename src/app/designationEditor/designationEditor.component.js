@@ -34,8 +34,9 @@ const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($log, $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService, designationEditorService) {
+  constructor ($log, $q, $uibModal, $location, $window, $timeout, envService, sessionService, sessionEnforcerService, designationEditorService) {
     this.$log = $log
+    this.$timeout = $timeout
     this.sessionService = sessionService
     this.sessionEnforcerService = sessionEnforcerService
     this.designationEditorService = designationEditorService
@@ -292,8 +293,9 @@ class DesignationEditorController {
 
     return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
       this.saveStatus = 'success'
-      this.loadingOverlay = false
-      this.images()
+      this.$timeout(() => {
+        this.$window.location.reload()
+      }, 20000)
     }, error => {
       this.saveStatus = 'failure'
       this.saveDesignationError = true
