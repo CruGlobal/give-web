@@ -8,6 +8,7 @@ const imageUpload = /* @ngInject */ ($http) => ({
   restrict: 'EA',
   scope: {
     url: '@',
+    onInvalidFileType: '&',
     onUpload: '&',
     onSuccess: '&',
     onError: '&',
@@ -30,6 +31,9 @@ const imageUpload = /* @ngInject */ ($http) => ({
       if (!validMimeTypes.includes(file.type)) {
         // Clear the selected file because it's not a valid image
         event.target.value = null
+        scope.$apply(() => {
+          scope.onInvalidFileType()
+        })
         return
       }
 
