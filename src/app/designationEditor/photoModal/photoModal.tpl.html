@@ -12,14 +12,13 @@
       <div ng-if="!$ctrl.uploading">
         <label translate>Select a Photo to Upload</label>
 
-        <upload-button
+        <image-upload
           class="form-control"
           url="/bin/crugive/image?designationNumber={{$ctrl.designationNumber}}"
-          accept="image/*"
           on-upload="$ctrl.uploading = true"
-          on-success="$ctrl.uploadComplete(response)"
+          on-success="$ctrl.uploadComplete()"
           on-error="$ctrl.uploading = false"
-        ></upload-button>
+        >
       </div>
 
       <label ng-if="$ctrl.uploading" translate>Uploading...</label>
