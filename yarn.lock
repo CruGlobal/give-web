@@ -2134,14 +2134,7 @@ angular-ui-router@^1.0.30:
   dependencies:
     "@uirouter/core" "6.0.8"
 
-angular-upload@^1.0.13:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/angular-upload/-/angular-upload-1.0.13.tgz#f622bde164e5ed96ba062409e659a3021921c407"
-  integrity sha1-9iK94WTl7Za6BiQJ5lmjAhkhxAc=
-  dependencies:
-    angular ">=1.2.0"
-
-angular@*, angular@>=1.2.0:
+angular@*:
   version "1.7.9"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.9.tgz#e52616e8701c17724c3c238cfe4f9446fd570bc4"
   integrity sha512-5se7ZpcOtu0MBFlzGv5dsM1quQDoDeUTwZrWjGtTNA7O88cD8TEk5IEKCTDa3uECV9XnvKREVUr7du1ACiWGFQ==

@@ -1,6 +1,6 @@
 import angular from 'angular'
-import 'angular-upload'
 
+import imageUploadDirective from 'common/directives/imageUpload.directive'
 import designationEditorService from 'common/services/api/designationEditor.service'
 
 const controllerName = 'photoCtrl'
@@ -49,7 +49,7 @@ class ModalInstanceCtrl {
 
 export default angular
   .module(controllerName, [
-    'lr.upload',
+    imageUploadDirective.name,
     designationEditorService.name
   ])
   .controller(controllerName, ModalInstanceCtrl)
