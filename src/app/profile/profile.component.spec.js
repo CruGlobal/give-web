@@ -205,35 +205,37 @@ describe('ProfileComponent', function () {
   })
 
   describe('initTitles()', () => {
+    let expectedTitles;
     beforeEach(() => {
       $ctrl.donorDetails = {
         name: {},
         'spouse-name': {}
       }
-      this.expectedTitles = angular.copy(titles)
-      this.expectedTitles[''] = ''
+      expectedTitles = angular.copy(titles)
+      expectedTitles[''] = ''
     })
 
     it('should load all the normal titles', () => {
       $ctrl.initTitles()
 
-      expect($ctrl.availableTitles).toEqual(this.expectedTitles)
+      expect($ctrl.availableTitles).toEqual(expectedTitles)
     })
 
     it('should additional leacy titles if they are in use in donorDetails', () => {
       $ctrl.donorDetails.name.title = 'Alderman'
       $ctrl.donorDetails['spouse-name'].title = 'Prof'
       $ctrl.initTitles()
-      this.expectedTitles.Alderman = 'Alderman'
-      this.expectedTitles.Prof = 'Professor'
+      expectedTitles.Alderman = 'Alderman'
+      expectedTitles.Prof = 'Professor'
 
-      expect($ctrl.availableTitles).toEqual(this.expectedTitles)
+      expect($ctrl.availableTitles).toEqual(expectedTitles)
     })
   })
 
   describe('updateDonorDetails()', () => {
+    let donorDetails;
     beforeEach(() => {
-      this.donorDetails = {
+      donorDetails = {
         name: {
           'family-name': 'Lname',
           'given-name': 'Fname'
@@ -246,18 +248,18 @@ describe('ProfileComponent', function () {
     })
 
     it('should update donor details', () => {
-      $ctrl.donorDetails = this.donorDetails
+      $ctrl.donorDetails = donorDetails
       jest.spyOn($ctrl.profileService, 'updateProfileDonorDetails').mockReturnValue(Observable.of(''))
       jest.spyOn($ctrl, 'updateEmail').mockImplementation(() => {})
       $ctrl.updateDonorDetails()
 
-      expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalledWith(this.donorDetails)
+      expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalledWith(donorDetails)
       expect($ctrl.donorDetailsForm.$setPristine).toHaveBeenCalled()
       expect($ctrl.updateEmail).toHaveBeenCalled()
     })
 
     it('should update donor details while adding a spouse', () => {
-      $ctrl.donorDetails = this.donorDetails
+      $ctrl.donorDetails = donorDetails
       $ctrl.addingSpouse = true
       jest.spyOn($ctrl.profileService, 'updateProfileDonorDetails').mockReturnValue(Observable.of(''))
       jest.spyOn($ctrl, 'updateEmail').mockImplementation(() => {})
