@@ -35,7 +35,7 @@ describe('Designation Editor Photo', function () {
 
   it('uploadComplete', function () {
     let getPhotosPromise = $q.defer()
-    spyOn($ctrl.designationEditorService, 'getPhotos').and.returnValue(getPhotosPromise.promise)
+    jest.spyOn($ctrl.designationEditorService, 'getPhotos').mockReturnValue(getPhotosPromise.promise)
 
     $ctrl.uploadComplete()
     $timeout.flush()

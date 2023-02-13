@@ -326,7 +326,7 @@ describe('Designation Editor', function () {
       let modalPromise
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer()
-        spyOn($ctrl.$uibModal, 'open').and.returnValue({ result: modalPromise.promise })
+        jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: modalPromise.promise })
         $ctrl.designationContent = designationSecurityResponse
       }))
 
@@ -343,11 +343,11 @@ describe('Designation Editor', function () {
         ]
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled()
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.campaignPage()).toBeUndefined()
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photos()).toEqual(photos)
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photoLocation()).toEqual('secondaryPhotos')
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.selectedPhoto()).toEqual(selectedPhotos)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.campaignPage()).toBeUndefined()
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.photos()).toEqual(photos)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.photoLocation()).toEqual('secondaryPhotos')
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.selectedPhoto()).toEqual(selectedPhotos)
       })
 
       it('should have empty selectedPhotos', () => {
