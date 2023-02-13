@@ -348,14 +348,8 @@ describe('product config form component', function () {
     it('orders frequency by name', () => {
       expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0)
       expect($ctrl.frequencyOrder({ name: 'MON' })).toEqual(1)
-      if (!this.hideQuarterly) {
-        expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2)
-      }
-      if (this.hideAnnual === true && !this.hideQuarterly) {
-        expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3)
-      } else if (this.hideAnnual === true) {
-        expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(2)
-      }
+      expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2)
+      expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3)
     })
   })
 
