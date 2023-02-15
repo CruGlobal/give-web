@@ -530,6 +530,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               name: cartItem.designationNumber,
               id: cartItem.designationNumber,
               price: cartItem.amount.toString(),
+              processingFee: cartItem.amountWithFees ? Number.parseFloat(cartItem.amountWithFees - cartItem.amount).toFixed(2) : undefined,
               brand: cartItem.orgId,
               category: cartItem.designationType.toLowerCase(),
               variant: cartItem.frequency.toLowerCase(),
