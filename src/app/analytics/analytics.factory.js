@@ -512,7 +512,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     transactionEvent: function (purchaseData) {
       try {
         // The value of whether or not user is covering credit card fees for the transaction
-        const coverFeeDecision = sessionStorage.getItem('coverFeeDecision')
+        const coverFeeDecision = JSON.parse(sessionStorage.getItem('coverFeeDecision'))
         // Parse the cart object of the last purchase
         const transactionCart = JSON.parse(localStorage.getItem('transactionCart'))
         // The purchaseId number from the last purchase
@@ -530,7 +530,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               name: cartItem.designationNumber,
               id: cartItem.designationNumber,
               price: cartItem.amount.toString(),
-              processingFee: cartItem.amountWithFees ? Number.parseFloat(cartItem.amountWithFees - cartItem.amount).toFixed(2) : undefined,
+              processingFee: cartItem.amountWithFees && coverFeeDecision ? (cartItem.amountWithFees - cartItem.amount).toFixed(2) : undefined,
               brand: cartItem.orgId,
               category: cartItem.designationType.toLowerCase(),
               variant: cartItem.frequency.toLowerCase(),
