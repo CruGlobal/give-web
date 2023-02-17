@@ -24,21 +24,27 @@ import { startMonth } from '../giftHelpers/giftDates.service'
 
 const cartTotalCookie = 'giveCartItemCount'
 const cartTotalCookieDomain = 'cru.org'
+const brandedCheckoutDomains = ['secure.cru.org']
 
 const serviceName = 'cartService'
 
 class Cart {
   /* @ngInject */
-  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies) {
+  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies, $location) {
     this.cortexApiService = cortexApiService
     this.commonService = commonService
     this.designationsService = designationsService
     this.sessionService = sessionService
     this.hateoasHelperService = hateoasHelperService
     this.$cookies = $cookies
+    this.$location = $location
   }
 
   setCartCountCookie (quantity) {
+    if (brandedCheckoutDomains.includes(this.$location.host())) {
+      return
+    }
+
     if (quantity) {
       this.$cookies.put(cartTotalCookie, quantity, {
         path: '/',
