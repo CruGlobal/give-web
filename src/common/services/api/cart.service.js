@@ -24,7 +24,6 @@ import { startMonth } from '../giftHelpers/giftDates.service'
 
 const cartTotalCookie = 'giveCartItemCount'
 const cartTotalCookieDomain = 'cru.org'
-const brandedCheckoutDomains = ['secure.cru.org']
 
 const serviceName = 'cartService'
 
@@ -41,7 +40,7 @@ class Cart {
   }
 
   setCartCountCookie (quantity) {
-    if (brandedCheckoutDomains.includes(this.$location.host())) {
+    if (!['give.cru.org', 'give-stage2.cru.org', 'give-stage2-next.cru.org'].includes(this.$location.host())) {
       return
     }
 
