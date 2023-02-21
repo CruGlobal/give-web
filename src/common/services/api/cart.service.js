@@ -29,16 +29,21 @@ const serviceName = 'cartService'
 
 class Cart {
   /* @ngInject */
-  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies) {
+  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies, $location) {
     this.cortexApiService = cortexApiService
     this.commonService = commonService
     this.designationsService = designationsService
     this.sessionService = sessionService
     this.hateoasHelperService = hateoasHelperService
     this.$cookies = $cookies
+    this.$location = $location
   }
 
   setCartCountCookie (quantity) {
+    if (!['give.cru.org', 'give-stage2.cru.org', 'give-stage2-next.cru.org'].includes(this.$location.host())) {
+      return
+    }
+
     if (quantity) {
       this.$cookies.put(cartTotalCookie, quantity, {
         path: '/',
