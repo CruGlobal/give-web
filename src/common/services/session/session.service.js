@@ -217,7 +217,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function currentRole () {
     if (angular.isDefined(session.role)) {
-      if (session.role === Roles.public) {
+      if (session.role === Roles.public || angular.isUndefined($cookies.get(Sessions.profile))) {
         return Roles.public
       }
       // Expired cookies are undefined
