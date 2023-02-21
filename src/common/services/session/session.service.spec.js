@@ -295,7 +295,7 @@ describe('session service', function () {
     describe('with \'IDENTIFIED\' role', () => {
       beforeEach(() => {
         $cookies.put(Sessions.role, cortexRole.identified)
-        $cookies.put(Sessions.profile, cortexRole.registered)
+        $cookies.put(Sessions.profile, cruProfile)
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest()
       })
@@ -319,7 +319,7 @@ describe('session service', function () {
     describe('with skipEvent = true', () => {
       beforeEach(() => {
         $cookies.put(Sessions.role, cortexRole.identified)
-        $cookies.put(Sessions.profile, cortexRole.registered)
+        $cookies.put(Sessions.profile, cruProfile)
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest()
       })
