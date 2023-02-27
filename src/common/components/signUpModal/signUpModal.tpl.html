@@ -1,12 +1,13 @@
 <div class="col-md-12 col-xs-12">
   <div class="alert alert-danger" role="alert" ng-messages="$ctrl.signUpErrors" ng-if="$ctrl.hasError">
-    <div ng-message="400" translate>An error occurred during sign up.<br />Please Check your Email Address and Password and try again.</div>
-    <div ng-message="403" translate>An error occurred during sign up.<br />This is most likely caused by the use of a reserved domain name in your email address. You might try to
+    <div ng-message="invalid_password_message">{{$ctrl.signUpErrors.invalid_password_message}}</div>
+    <div ng-message="400" translate>An error occurred during sign up. <br />Please Check your Email Address and Password and try again.</div>
+    <div ng-message="403" translate>An error occurred during sign up. <br />This is most likely caused by the use of a reserved domain name in your email address. You might try to
       <a id="signInLink1" ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a>,
       <a id="forgotPasswordLink1" ng-click="$ctrl.onStateChange({state: 'forgot-password'})">Reset your Password</a>or
       <a href="https://www.cru.org/about/contact-us.html">Contact Us</a>.
     </div>
-    <div ng-message="409" translate>An account with this Email Address already exists.<br />Please
+    <div ng-message="409" translate>An account with this Email Address already exists. <br />Please
       <a id="signInLink2" ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a> or
       <a id="forgotPasswordLink2" ng-click="$ctrl.onStateChange({state: 'forgot-password'})">Reset your Password</a>.
     </div>
@@ -74,12 +75,12 @@
              type="password"
              class="form-control form-control-subtle"
              ng-model="$ctrl.password"
-             minlength="8"
+             minlength="15"
              ng-pattern="/^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/"
              required>
       <div ng-if="($ctrl.signUpForm.password | showErrors)" ng-messages="$ctrl.signUpForm.password.$error">
         <span class="help-block" ng-message="required" translate>Password is required.</span>
-        <span class="help-block" ng-message="minlength" translate>Must be 8 or more characters.</span>
+        <span class="help-block" ng-message="minlength" translate>Must be 15 or more characters.</span>
         <span class="help-block" ng-message="pattern" translate>Must include 1 letter and 1 number.</span>
       </div>
     </div>
