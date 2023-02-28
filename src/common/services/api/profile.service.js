@@ -230,7 +230,7 @@ class Profile {
           if (paymentMethod['payment-instrument-identification-attributes']['street-address']) {
             paymentMethod.address = formatAddressForTemplate(paymentMethod['payment-instrument-identification-attributes'])
           }
-          paymentMethod.recurringGifts = flatMap(paymentMethod.recurringgifts.donations, donation => {
+          paymentMethod.recurringGifts = flatMap(paymentMethod?.recurringgifts?.donations || [], donation => {
             return map(donation['donation-lines'], donationLine => {
               return new RecurringGiftModel(donationLine, donation)
             })
