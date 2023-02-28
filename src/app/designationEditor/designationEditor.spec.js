@@ -438,11 +438,18 @@ describe('Designation Editor', function () {
         original: '/content/dam/give/designations/026/CMS1_055.jpg',
         cover: '/content/dam/give/designations/0/5/CMS1_0535.jpg.transform/GiveDesignationCoverPhoto/img.jpg',
         thumbnail: '/content/dam/give/designations/826/CMS1_035.jpg.transform/GiveDesignationThumbnail/img.jpg',
-        secondary: '/content/dam/give/designations/826/CMS1_035.jpg.transform/GiveDesignationSmallerPhoto/img.jpg'
+        secondary: '/content/dam/give/designations/826/CMS1_035.jpg.transform/GiveDesignationSmallerPhoto/img.jpg',
+        cachedUrls: {
+          original: 'blob:https://domain.com/original-blob',
+          cover: 'blob:https://domain.com/cover-blob',
+          thumbnail: 'blob:https://domain.com/thumbnail-blob',
+          secondary: 'blob:https://domain.com/secondary-blob'
+        }
       }]
       $ctrl.designationPhotos = photos
 
       expect($ctrl.photoUrl(photos[0].original)).toEqual(photos[0])
+      expect($ctrl.photoUrl(photos[3].original).original).toEqual('blob:https://domain.com/original-blob')
     })
   })
 
@@ -503,7 +510,7 @@ describe('Designation Editor', function () {
     })
   })
 
-  describe('images', () => {
+  describe('extractImageUrls', () => {
     it('should return all of the selected images for the carousel', () => {
       $ctrl.designationContent = designationSecurityResponse
       let expectedImageUrls = [
@@ -512,14 +519,14 @@ describe('Designation Editor', function () {
         '/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg'
       ]
 
-      expect($ctrl.images()).toEqual(expectedImageUrls)
+      expect($ctrl.extractImageUrls()).toEqual(expectedImageUrls)
     })
 
     it('should return an empty array if there is no carousel', () => {
       $ctrl.designationContent = {
         designationNumber: '0123456'
       }
-      expect($ctrl.images()).toEqual([])
+      expect($ctrl.extractImageUrls()).toEqual([])
     })
   })
 

@@ -4,13 +4,20 @@ import module from './photo.modal'
 
 describe('Designation Editor Photo', function () {
   beforeEach(angular.mock.module(module.name))
-  var $rootScope, $ctrl, $q, $timeout
+  let $ctrl, $flushPendingTasks, $httpBackend, $q, $verifyNoPendingTasks
 
-  beforeEach(inject(function (_$rootScope_, _$controller_, _$q_, _$timeout_) {
-    var $scope = _$rootScope_.$new()
-    $rootScope = _$rootScope_
-    $timeout = _$timeout_
+  beforeEach(angular.mock.module(($provide) => {
+    $provide.value('envService', {
+      read: () => 'https://img-domain.com'
+    })
+  }))
+
+  beforeEach(inject(function (_$rootScope_, _$controller_, _$flushPendingTasks_, _$httpBackend_, _$q_, _$verifyNoPendingTasks_) {
+    const $scope = _$rootScope_.$new()
+    $flushPendingTasks = _$flushPendingTasks_
+    $httpBackend = _$httpBackend_
     $q = _$q_
+    $verifyNoPendingTasks = _$verifyNoPendingTasks_
 
     $ctrl = _$controller_(module.name, {
       designationNumber: '000555',
@@ -21,6 +28,10 @@ describe('Designation Editor Photo', function () {
       $scope: $scope
     })
   }))
+
+  afterEach(() => {
+    $verifyNoPendingTasks()
+  })
 
   it('to be defined', function () {
     expect($ctrl).toBeDefined()
@@ -34,17 +45,105 @@ describe('Designation Editor Photo', function () {
   })
 
   it('uploadComplete', function () {
-    let getPhotosPromise = $q.defer()
-    jest.spyOn($ctrl.designationEditorService, 'getPhotos').mockReturnValue(getPhotosPromise.promise)
+    const photos = [{
+      original: '/content/photo1.jpg'
+    }, {
+      original: '/content/photo2.jpg'
+    }, {
+      original: '/content/photo3.jpg'
+    }]
+    jest.spyOn($ctrl, 'refreshPhotos').mockReturnValueOnce($q.resolve(photos))
 
-    $ctrl.uploadComplete()
-    $timeout.flush()
+    $ctrl.uploadComplete({ headers: () => '/content/photo3.jpg' })
+    expect($ctrl.numProcessingPhotos).toBe(1)
 
-    getPhotosPromise.resolve({ data: [] })
-    $rootScope.$digest()
+    $flushPendingTasks()
+    expect($ctrl.numProcessingPhotos).toBe(0)
 
-    expect($ctrl.designationEditorService.getPhotos).toHaveBeenCalled()
-    expect($ctrl.photos).toEqual([])
+    expect($ctrl.refreshPhotos).toHaveBeenCalledWith('/content/photo3.jpg')
+    expect($ctrl.photos).toBe(photos)
+  })
+
+  it('getProcessingPhotos returns an array of processing photos', () => {
+    $ctrl.numProcessingPhotos = 3
+    expect($ctrl.getProcessingPhotos()).toHaveLength(3)
+  })
+
+  describe('tryLoadUploadedPhoto', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.designationEditorService, 'getPhotos').mockReturnValueOnce($q.resolve({
+        data: [{
+          original: '/content/photo1.jpg'
+        }, {
+          original: '/content/photo2.jpg'
+        }]
+      }))
+    })
+
+    it('resolves if the photo is found', () => {
+      expect($ctrl.tryLoadUploadedPhoto('/content/photo1.jpg')).resolves.toEqual({
+        expectedPhoto: {
+          original: '/content/photo1.jpg'
+        },
+        otherPhotos: [{
+          original: '/content/photo2.jpg'
+        }]
+      })
+      $flushPendingTasks()
+    })
+
+    it('rejects if the photo is not found', () => {
+      expect($ctrl.tryLoadUploadedPhoto('/content/photo3.jpg')).rejects.toBeUndefined()
+      $flushPendingTasks()
+    })
+  })
+
+  it('refreshPhotos', () => {
+    jest.spyOn($ctrl, 'tryLoadUploadedPhoto').mockReturnValueOnce($q.resolve({
+      expectedPhoto: {
+        original: '/content/photo3.jpg',
+        cover: '/content/photo3.cover.jpg',
+        secondary: '/content/photo3.secondary.jpg',
+        thumbnail: '/content/photo3.thumbnail.jpg'
+      },
+      otherPhotos: [{
+        original: '/content/photo1.jpg'
+      }, {
+        original: '/content/photo2.jpg'
+      }]
+    }))
+
+    jest.spyOn($ctrl, 'loadPhotoBlob').mockImplementation((url) => $q.resolve(`blob:${url}`))
+
+    expect($ctrl.refreshPhotos('/content/photo3.jpg')).resolves.toEqual([{
+      original: '/content/photo1.jpg'
+    }, {
+      original: '/content/photo2.jpg'
+    }, {
+      original: '/content/photo3.jpg',
+      cover: '/content/photo3.cover.jpg',
+      secondary: '/content/photo3.secondary.jpg',
+      thumbnail: '/content/photo3.thumbnail.jpg',
+      cachedUrls: {
+        original: 'blob:/content/photo3.jpg',
+        cover: 'blob:/content/photo3.cover.jpg',
+        secondary: 'blob:/content/photo3.secondary.jpg',
+        thumbnail: 'blob:/content/photo3.thumbnail.jpg'
+      }
+    }])
+    $flushPendingTasks()
+  })
+
+  it('loadPhotoBlob loads a photo URL as a blob', () => {
+    $httpBackend.whenGET('/content/photo3.jpg').respond(200, 'content')
+
+    URL.createObjectURL = jest.fn().mockReturnValue('blob:url')
+
+    expect($ctrl.loadPhotoBlob('/content/photo3.jpg')).resolves.toBe('blob:url')
+    $httpBackend.flush()
+    $flushPendingTasks()
+
+    expect(URL.createObjectURL).toHaveBeenCalledWith('content')
   })
 
   describe('addImageToCarousel(photo)', () => {

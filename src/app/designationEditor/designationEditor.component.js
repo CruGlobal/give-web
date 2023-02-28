@@ -28,14 +28,17 @@ import carouselModalTemplate from './carouselModal/carouselModal.tpl.html'
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html'
 import websiteModalTemplate from './websiteModal/websiteModal.tpl.html'
 
+import desigImgSrcDirective from 'common/directives/desigImgSrc.directive'
+
 import './designationEditor.scss'
 
 const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($log, $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService, designationEditorService) {
+  constructor ($log, $q, $uibModal, $location, $window, $timeout, envService, sessionService, sessionEnforcerService, designationEditorService) {
     this.$log = $log
+    this.$timeout = $timeout
     this.sessionService = sessionService
     this.sessionEnforcerService = sessionEnforcerService
     this.designationEditorService = designationEditorService
@@ -43,6 +46,7 @@ class DesignationEditorController {
     this.imgDomain = envService.read('imgDomain')
     this.imgDomainDesignation = envService.read('imgDomainDesignation')
     this.giveDomain = envService.read('publicGive')
+    this.imageUrls = []
 
     this.$location = $location
     this.$q = $q
@@ -92,6 +96,8 @@ class DesignationEditorController {
       this.loadingOverlay = false
       this.designationContent = responses[0].data
       this.designationPhotos = responses[1].data
+      // Refresh this.imageUrls
+      this.imageUrls = this.extractImageUrls()
     }, error => {
       this.contentLoaded = false
       this.loadingOverlay = false
@@ -236,10 +242,14 @@ class DesignationEditorController {
   }
 
   photoUrl (originalUrl) {
-    return find(this.designationPhotos, { original: originalUrl })
+    // When a photo has just been uploaded, it's photo URLs might 404 for a while until the photo replicates to all
+    // publisher instances. In that case, cachedUrls will contain cached blob URLs for the original photo and its
+    // transformations so look for the photo URL inside cachedUrls first.
+    const photo = find(this.designationPhotos, { original: originalUrl })
+    return photo && photo.cachedUrls ? photo.cachedUrls : photo
   }
 
-  images () {
+  extractImageUrls () {
     const designController = this.designationContent['design-controller']
     if (designController && designController.carousel) {
       return this.getImageUrls(designController.carousel)
@@ -357,6 +367,7 @@ export default angular
     photoModalController.name,
     textEditorModalController.name,
     websiteModalController.name,
+    desigImgSrcDirective.name,
     uibModal
   ])
   .component(componentName, {

@@ -18,16 +18,16 @@
           on-invalid-file-type="$ctrl.invalidFileType = true"
           on-complete="$ctrl.invalidFileType = false"
           on-upload="$ctrl.uploading = true"
-          on-success="$ctrl.uploadComplete()"
+          on-success="$ctrl.uploadComplete(response)"
           on-error="$ctrl.uploading = false"
-        >
+        />
       </div>
 
       <label ng-if="$ctrl.uploading" translate>Uploading...</label>
     </div>
   </div>
 
-  <div class="give-available-photos-container" ng-if="$ctrl.photos.length">
+  <div class="give-available-photos-container" ng-if="$ctrl.photos.length || $ctrl.numProcessingPhotos > 0">
     <div class="give-thumbs-container">
       <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
         <input
@@ -37,8 +37,11 @@
           ng-value="photo.original"
         />
         <label for="cover-thumb{{$index}}">
-          <img ng-src="{{photo.thumbnail}}" />
+          <img ng-src="{{photo.cachedUrls && photo.cachedUrls.thumbnail ? photo.cachedUrls.thumbnail : photo.thumbnail}}" />
         </label>
+      </div>
+      <div class="cover-thumb" ng-repeat="photo in $ctrl.getProcessingPhotos() track by $index">
+        <loading type="centered">Processing...</loading>
       </div>
     </div>
 
