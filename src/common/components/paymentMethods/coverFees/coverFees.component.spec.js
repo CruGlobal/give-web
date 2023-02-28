@@ -35,7 +35,7 @@ describe('coverFees', () => {
             amount: 25000,
             price: '$25,000.00',
             config: {
-              amount: 25000
+              AMOUNT: 25000
             }
           }
         ],
@@ -64,7 +64,7 @@ describe('coverFees', () => {
     })
 
     it('should configure a common "item" object for the template if we are in branded checkout', () => {
-      const brandedCheckoutItem = { amount: 1.02 }
+      const brandedCheckoutItem = { AMOUNT: 1.02 }
       self.controller.brandedCheckoutItem = brandedCheckoutItem
       self.controller.cartData = undefined
 
@@ -79,13 +79,13 @@ describe('coverFees', () => {
     })
 
     it('should not call updatePriceWithFees on standard checkout', () => {
-      self.controller.cartData = { items: [{ amount: 50 }] }
+      self.controller.cartData = { items: [{ AMOUNT: 50 }] }
       expect(self.controller.updatePriceWithFees).not.toHaveBeenCalled()
     })
 
     it('should call updatePriceWithFees on branded checkout', () => {
       self.controller.cartData = undefined
-      self.controller.brandedCheckoutItem = { amount: 50 }
+      self.controller.brandedCheckoutItem = { AMOUNT: 50 }
       self.controller.$onInit()
       expect(self.controller.updatePriceWithFees).toHaveBeenCalled()
     })
@@ -93,7 +93,7 @@ describe('coverFees', () => {
 
   describe('updatePriceWithFees', () => {
     it('should calculate the price to show the user', () => {
-      self.controller.item = { amount: 50 }
+      self.controller.item = { AMOUNT: 50 }
       self.controller.updatePriceWithFees()
       expect(self.controller.item.priceWithFees).toEqual('$51.20')
     })

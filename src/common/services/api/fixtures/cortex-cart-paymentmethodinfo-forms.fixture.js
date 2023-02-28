@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.carts.cart',
-    uri: '/carts/crugive/gzsggnjxmuzdoljrmrrdkljuhfrtmljymm3tillemi4gmnjwge4denjqga=?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform',
-    href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/carts/crugive/gzsggnjxmuzdoljrmrrdkljuhfrtmljymm3tillemi4gmnjwge4denjqga=?zoom=order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform'
+    uri: '/carts/crugive/gzsggnjxmuzdoljrmrrdkljuhfrtmljymm3tillemi4gmnjwge4denjqga=?zoom=order:paymentmethodinfo:element,order:paymentmethodinfo:element:paymentinstrumentform',
+    href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/carts/crugive/gzsggnjxmuzdoljrmrrdkljuhfrtmljymm3tillemi4gmnjwge4denjqga=?zoom=order:paymentmethodinfo:element,order:paymentmethodinfo:element:paymentinstrumentform'
   },
   links: [
     {
@@ -49,49 +49,100 @@ export default {
     {
       _paymentmethodinfo: [
         {
-          _bankaccountform: [
+          _element: [
             {
               self: {
-                type: 'training.bankaccounts.bank-account',
-                uri: '/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=/form',
-                href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=/form'
+                type: 'paymentmethods.order-payment-method',
+                uri: '/paymentmethods/orders/crugive/gy2dmnrzgq4dcljvgq2doljuga2dkllcmu2deljumeygkmrxmrrwczrsmm=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=',
+                href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/paymentmethods/orders/crugive/gy2dmnrzgq4dcljvgq2doljuga2dkllcmu2deljumeygkmrxmrrwczrsmm=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy='
               },
-              links: [
+              messages: [],
+              links: [],
+              _paymentinstrumentform: [
                 {
-                  rel: 'createbankaccountfororderaction',
-                  uri: '/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=',
-                  href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/bankaccounts/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq='
+                  self: {
+                    type: 'paymentinstruments.order-payment-instrument-form',
+                    uri: '/paymentinstruments/paymentmethods/orders/crugive/mjswgobwmy2gkljtgazwcljumfsweljzmu2teljzmmytazrsge3wkodfmu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form',
+                    href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mjswgobwmy2gkljtgazwcljumfsweljzmu2teljzmmytazrsge3wkodfmu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form'
+                  },
+                  messages: [],
+                  links: [
+                    {
+                      rel: 'createpaymentinstrumentaction',
+                      type: 'paymentinstruments.order-payment-instrument-form',
+                      href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mjswgobwmy2gkljtgazwcljumfsweljzmu2teljzmmytazrsge3wkodfmu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form'
+                    }
+                  ],
+                  'default-on-profile': false,
+                  'limit-amount': 0,
+                  'payment-instrument-identification-form': {
+                    'account-type': '',
+                    'bank-name': '',
+                    'display-name': '',
+                    'encrypted-account-number': '',
+                    'routing-number': ''
+                  },
+                  'save-on-profile': false
                 }
               ],
-              'account-type': '',
-              'bank-name': '',
-              'display-account-number': '',
-              'encrypted-account-number': '',
-              'routing-number': ''
-            }
-          ],
-          _creditcardform: [
+              'display-name': 'BANKACCOUNT',
+              name: 'BANKACCOUNT'
+            },
             {
               self: {
-                type: 'cru.creditcards.named-credit-card',
-                uri: '/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=/form',
-                href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=/form'
+                type: 'paymentmethods.order-payment-method',
+                uri: '/paymentmethods/orders/crugive/gy2dmnrzgq4dcljvgq2doljuga2dkllcmu2deljumeygkmrxmrrwczrsmm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=',
+                href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/paymentmethods/orders/crugive/gy2dmnrzgq4dcljvgq2doljuga2dkllcmu2deljumeygkmrxmrrwczrsmm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm='
               },
-              links: [
+              messages: [],
+              links: [],
+              _paymentinstrumentform: [
                 {
-                  rel: 'createcreditcardfororderaction',
-                  uri: '/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq=',
-                  href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/creditcards/orders/crugive/muytoyrymm2dallghbqtkljuhe3gmllcme4ggllcmu3tmmlcgi2weyldgq='
+                  self: {
+                    type: 'paymentinstruments.order-payment-instrument-form',
+                    uri: '/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form',
+                    href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form'
+                  },
+                  messages: [],
+                  links: [
+                    {
+                      rel: 'createpaymentinstrumentaction',
+                      type: 'paymentinstruments.order-payment-instrument-form',
+                      href: 'http://give-ep-cortex-uat.aws.cru.org/cortex/paymentinstruments/paymentmethods/orders/crugive/mnrwmntdmjrgkljvgi4gmljugrstcllbmjqtsllegq2winbvgbrdamrzgm=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form'
+                    }
+                  ],
+                  'billing-address': {
+                    address: {
+                      'country-name': '',
+                      'extended-address': '',
+                      locality: '',
+                      'postal-code': '',
+                      region: '',
+                      'street-address': ''
+                    },
+                    name: {
+                      'family-name': '',
+                      'given-name': ''
+                    },
+                    organization: '',
+                    'phone-number': ''
+                  },
+                  'default-on-profile': false,
+                  'limit-amount': 0,
+                  'payment-instrument-identification-form': {
+                    'card-number': '',
+                    'card-type': '',
+                    'cardholder-name': '',
+                    'display-name': '',
+                    'expiry-month': '',
+                    'expiry-year': '',
+                    'last-four-digits': ''
+                  },
+                  'save-on-profile': false
                 }
               ],
-              'card-number': '',
-              'card-type': '',
-              'cardholder-name': '',
-              'expiry-month': '',
-              'expiry-year': '',
-              'issue-number': 0,
-              'start-month': '',
-              'start-year': ''
+              'display-name': 'CREDITCARD',
+              name: 'CREDITCARD'
             }
           ]
         }

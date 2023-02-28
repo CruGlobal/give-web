@@ -12,8 +12,7 @@ describe('HATEOAS helper service', function () {
     self.hateoasHelperService = hateoasHelperService
 
     self.zoom = {
-      bankaccountform: 'order:paymentmethodinfo:bankaccountform',
-      creditcardform: 'order:paymentmethodinfo:creditcardform'
+      paymentMethodForms: 'order:paymentmethodinfo'
     }
   }))
 
@@ -45,7 +44,7 @@ describe('HATEOAS helper service', function () {
 
   describe('getElement', () => {
     it('should get the object specified by a path array', () => {
-      expect(self.hateoasHelperService.getElement(cartResponse, ['order', 'paymentmethodinfo', 'bankaccountform'])).toEqual(cartResponse._order[0]._paymentmethodinfo[0]._bankaccountform[0])
+      expect(self.hateoasHelperService.getElement(cartResponse, ['order', 'paymentmethodinfo', 'element'])).toEqual(cartResponse._order[0]._paymentmethodinfo[0]._element[0])
     })
 
     it('should get the object specified by a path string', () => {
@@ -69,22 +68,20 @@ describe('HATEOAS helper service', function () {
 
   describe('serializeZoom', () => {
     it('should join all zoom strings with a comma', () => {
-      expect(self.hateoasHelperService.serializeZoom(self.zoom)).toEqual('order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform')
+      expect(self.hateoasHelperService.serializeZoom(self.zoom)).toEqual('order:paymentmethodinfo')
     })
 
     it('should join all zoom strings with a comma and remove array indicators', () => {
-      self.zoom.bankaccountform += '[]'
-      self.zoom.creditcardform += '[]'
+      self.zoom.paymentMethodForms += '[]'
 
-      expect(self.hateoasHelperService.serializeZoom(self.zoom)).toEqual('order:paymentmethodinfo:bankaccountform,order:paymentmethodinfo:creditcardform')
+      expect(self.hateoasHelperService.serializeZoom(self.zoom)).toEqual('order:paymentmethodinfo')
     })
   })
 
   describe('mapZoomElements', () => {
     it('should use the zoom keys as keys and find the corresponding objects', () => {
       expect(self.hateoasHelperService.mapZoomElements(cartResponse, self.zoom)).toEqual({
-        bankaccountform: cartResponse._order[0]._paymentmethodinfo[0]._bankaccountform[0],
-        creditcardform: cartResponse._order[0]._paymentmethodinfo[0]._creditcardform[0],
+        paymentMethodForms: cartResponse._order[0]._paymentmethodinfo[0],
         rawData: cartResponse
       })
     })
@@ -138,11 +135,10 @@ describe('HATEOAS helper service', function () {
     })
 
     it('should return undefined if the zoom isn\'t found', () => {
-      self.zoom.creditcardform += '[]'
+      self.zoom.paymentMethodForms += '[]'
 
       expect(self.hateoasHelperService.mapZoomElements({}, self.zoom)).toEqual({
-        bankaccountform: undefined,
-        creditcardform: undefined,
+        paymentMethodForms: undefined,
         rawData: {}
       })
     })
@@ -162,7 +158,7 @@ describe('HATEOAS helper service', function () {
             someKey: 'someValue'
           }
         ],
-        paymentmeans: [
+        paymentInstruments: [
           {
             _creditcard: [
               {
@@ -172,8 +168,8 @@ describe('HATEOAS helper service', function () {
           }
         ]
       }
-      zoomString = 'lineitems:element'
-      childZoomStrings = ['lineitems:element:code', 'lineitems:element:rates[]', 'lineitems:element:paymentmeans:creditcard']
+      this.zoomString = 'lineitems:element'
+      this.childZoomStrings = ['lineitems:element:code', 'lineitems:element:rates[]', 'lineitems:element:paymentInstruments:creditcard']
     })
 
     it('should take an element and map the child zoom strings to keys', () => {
@@ -186,7 +182,7 @@ describe('HATEOAS helper service', function () {
             someKey: 'someValue'
           }
         ],
-        paymentmeans: [
+        paymentInstruments: [
           {
             _creditcard: [
               {
@@ -195,7 +191,7 @@ describe('HATEOAS helper service', function () {
             ]
           }
         ],
-        paymentmeansCreditcard: {
+        paymentInstrumentsCreditcard: {
           someKey: 'someValue'
         }
       })
@@ -215,7 +211,7 @@ describe('HATEOAS helper service', function () {
             someKey: 'someValue'
           }
         ],
-        paymentmeans: [
+        paymentInstruments: [
           {
             _creditcard: [
               {

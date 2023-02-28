@@ -2,9 +2,9 @@ name: Build
 
 on:
   push: 
-    branches: [staging, master]
+    branches: [staging, master, ep-upgrade-stage, ep-upgrade-prod, ep-upgrade]
   pull_request:
-    branches: [staging, master]
+    branches: [staging, master, ep-upgrade-stage, ep-upgrade-prod, ep-upgrade]
 
 permissions:
   id-token: write
@@ -50,9 +50,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.ref == 'refs/heads/master' && 'production' || 'staging' }}
+      name: ${{ (github.ref == 'refs/heads/master' && 'production') || (github.ref == 'refs/heads/ep-upgrade-stage' && 'nonprod') || 'staging' }}
     needs: [lint, test]
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/ep-upgrade-stage')
     steps:
       - uses: actions/checkout@v2
 

@@ -41,8 +41,9 @@ describe('edit recurring gifts modal', () => {
     it('should handle bank accounts', () => {
       const paymentMethods = [{
         self: {
-          type: 'elasticpath.bankaccounts.bank-account'
-        }
+          type: 'paymentinstruments.payment-instrument'
+        },
+        'account-type': 'Checking'
       }]
       jest.spyOn(self.controller.profileService, 'getPaymentMethods').mockReturnValue(Observable.of(paymentMethods))
       jest.spyOn(self.controller.commonService, 'getNextDrawDate').mockReturnValue(Observable.of('2015-02-04'))
@@ -63,7 +64,7 @@ describe('edit recurring gifts modal', () => {
     it('should handle active credit cards', () => {
       const paymentMethods = [{
         self: {
-          type: 'cru.creditcards.named-credit-card'
+          type: 'paymentinstruments.payment-instrument'
         },
         'expiry-month': '01',
         'expiry-year': '2015'
@@ -87,7 +88,7 @@ describe('edit recurring gifts modal', () => {
     it('should handle inactive credit cards', () => {
       const paymentMethods = [{
         self: {
-          type: 'cru.creditcards.named-credit-card'
+          type: 'paymentinstruments.payment-instrument'
         },
         'expiry-month': '12',
         'expiry-year': '2014'

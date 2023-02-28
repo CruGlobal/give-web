@@ -36,10 +36,11 @@ describe('cart service', () => {
       advanceTo(moment('2016-09-01').toDate()) // Make sure current date is before next draw date
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should handle an empty response', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, null)
 
@@ -50,10 +51,11 @@ describe('cart service', () => {
       self.$httpBackend.flush()
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should handle a response with no line items', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, {})
 
@@ -65,10 +67,11 @@ describe('cart service', () => {
       self.$httpBackend.flush()
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should get cart, parse response, and show most recent items first', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, cartResponse)
 
@@ -187,9 +190,11 @@ describe('cart service', () => {
 
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+        'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
         {
-          amount: 50,
+          configuration: {
+            AMOUNT: 50
+          },
           quantity: 1
         }
       ).respond(200)
@@ -211,9 +216,11 @@ describe('cart service', () => {
 
         it('should add an item', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
-              amount: 50,
+              configuration: {
+                AMOUNT: 50
+              },
               quantity: 1
             }
           ).respond(200)
@@ -232,9 +239,11 @@ describe('cart service', () => {
 
         it('should delete cookies and addItem to cart', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
-              amount: 50,
+              configuration: {
+                AMOUNT: 50
+              },
               quantity: 1
             }
           ).respond(200)
@@ -296,9 +305,9 @@ describe('cart service', () => {
         },
         () => fail('Observable should not have thrown an error'),
         () => {
-          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'uri1', { designationNumber: '0123456', uri: 'uri1' })
-          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'uri2', { designationNumber: '1234567', uri: 'uri2' })
-          expect(outputValues).toEqual([{ configuredDesignation: { designationNumber: '0123456', uri: 'uri1' } }, { configuredDesignation: { designationNumber: '1234567', uri: 'uri2' } }])
+          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'carts/uri1/form', { designationNumber: '0123456', uri: 'carts/uri1/form' })
+          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'carts/uri2/form', { designationNumber: '1234567', uri: 'carts/uri2/form' })
+          expect(outputValues).toEqual([{ configuredDesignation: { designationNumber: '0123456', uri: 'carts/uri1/form' } }, { configuredDesignation: { designationNumber: '1234567', uri: 'carts/uri2/form' } }])
         })
     })
 

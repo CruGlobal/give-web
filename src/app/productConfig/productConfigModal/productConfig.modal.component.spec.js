@@ -119,8 +119,8 @@ describe('product config modal', function () {
       expect($ctrl.$location.search).toHaveBeenCalled()
       expect($ctrl.itemConfig.amount).toEqual('150')
       expect($ctrl.defaultFrequency).toEqual('QUARTERLY')
-      expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('21')
-      expect($ctrl.itemConfig['recurring-start-month']).toEqual('07')
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('21')
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('07')
       expect($ctrl.itemConfig['campaign-page']).toEqual('testCampaign')
     })
 
@@ -132,7 +132,7 @@ describe('product config modal', function () {
       expect($ctrl.$location.search).toHaveBeenCalled()
       expect($ctrl.itemConfig.amount).toBeUndefined()
       expect($ctrl.defaultFrequency).toBeUndefined()
-      expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined()
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toBeUndefined()
       expect($ctrl.itemConfig['campaign-page']).toBeUndefined()
     })
 
@@ -142,7 +142,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('LEGACY')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('LEGACY')
     })
 
     it('sets campaignCode if multiple are set in url', () => {
@@ -151,7 +151,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('LEGACY')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('LEGACY')
     })
 
     it('sets campaignCode if default-campaign-code is set', () => {
@@ -159,7 +159,7 @@ describe('product config modal', function () {
       $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT'
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('DEFAULT')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('DEFAULT')
     })
 
     it('sets the campaignCode from default-campaign-code if opening from modal directly', () => {
@@ -180,7 +180,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('')
     })
 
     it('cleans campaignCode if longer than 30 characters', () => {
@@ -189,7 +189,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('')
     })
   })
 
