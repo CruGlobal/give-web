@@ -866,24 +866,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-      { 'cover-cc-fees': true, 'radio-call-letters': null }
-      ).respond(200, purchaseResponse)
-
-      self.orderService.submit()
-        .subscribe((data) => {
-          expect(data).toEqual(purchaseResponse)
-          done()
-        })
-
-      self.$httpBackend.flush()
-    })
-
-    it('should send the radio cover letters to the server', (done) => {
-      self.$window.sessionStorage.setItem('radioStationCallLetters', 'WXYZ')
-
-      self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'cover-cc-fees': false, 'radio-call-letters': 'WXYZ' }
+        { 'cover-cc-fees': true, 'radio-call-letters': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -918,6 +901,23 @@ describe('order service', () => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
         { 'cover-cc-fees': false, 'radio-call-letters': null }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(data).toEqual(purchaseResponse)
+          done()
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should send the radio cover letters to the server', (done) => {
+      self.$window.sessionStorage.setItem('radioStationCallLetters', 'WXYZ')
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
+        { 'cover-cc-fees': false, 'radio-call-letters': 'WXYZ' }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
