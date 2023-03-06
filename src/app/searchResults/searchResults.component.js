@@ -91,8 +91,8 @@ class SearchResultsController {
    * @returns {*} the vanity url
    */
   buildVanity (originalPath) {
-    const pattern = /\/designations\/([0-9])\/([0-9])\/([0-9])\/([0-9])\/([0-9])\/([0-9]{7})\.html/g
-    return originalPath.replace(pattern, '/$6')
+    const pattern = /\/designations\/(\d\/){5}(\d{7})\.html/g
+    return originalPath.replace(pattern, '/$2')
   }
 }
 
