@@ -107,4 +107,22 @@ describe('searchResults', function () {
       expect($ctrl.analyticsFactory.productViewDetailsEvent).toHaveBeenCalledWith('product')
     })
   })
+
+  describe('buildVanity', () => {
+    it('should replace a full url with a proper vanity', () => {
+      const fullUrl = 'https://localhost.cru.org/designations/0/1/2/3/4/0123456.html'
+      const expectedVanity = 'https://localhost.cru.org/0123456'
+      expect($ctrl.buildVanity(fullUrl)).toEqual(expectedVanity)
+    })
+
+    it('should not break an already-vanity url', () => {
+      const fullUrl = 'https://localhost.cru.org/0123456'
+      expect($ctrl.buildVanity(fullUrl)).toEqual(fullUrl)
+    })
+
+    it('should not break a non-staff page url', () => {
+      const fullUrl = 'https://localhost.cru.org/give-all-money-now'
+      expect($ctrl.buildVanity(fullUrl)).toEqual(fullUrl)
+    })
+  })
 })
