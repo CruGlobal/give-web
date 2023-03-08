@@ -14,6 +14,15 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         'localhost.cru.org',
         'cru-givedev.s3-website-us-east-1.amazonaws.com'
       ],
+      devcloud: [
+        'give-dev-cloud.cru.org'
+      ],
+      stagecloud: [
+        'give-stage-cloud.cru.org'
+      ],
+      prodcloud: [
+        'give-prod-cloud.cru.org'
+      ],
       staging: [
         'give-stage2.cru.org',
         'stage.cru.org',
@@ -33,6 +42,33 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false
+      },
+      devcloud: {
+        apiUrl: 'https://give-stage2.cru.org',
+        imgDomain: '//give-static.cru.org',
+        imgDomainDesignation: 'https://give-dev-cloud.cru.org',
+        publicCru: 'https://stage-cloud.cru.org',
+        publicGive: 'https://give-dev-cloud.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false
+      },
+      stagecloud: {
+        apiUrl: 'https://give-stage2.cru.org',
+        imgDomain: '//give-static.cru.org',
+        imgDomainDesignation: 'https://give-stage-cloud.cru.org',
+        publicCru: 'https://stage-cloud.cru.org',
+        publicGive: 'https://give-stage-cloud.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false
+      },
+      prodcloud: {
+        apiUrl: 'https://give.cru.org',
+        imgDomain: '//give-static.cru.org',
+        imgDomainDesignation: 'https://give-prod-cloud.cru.org',
+        publicCru: 'https://www.cru.org',
+        publicGive: 'https://give-prod-cloud.cru.org',
+        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
         isBrandedCheckout: false
       },
       staging: {
