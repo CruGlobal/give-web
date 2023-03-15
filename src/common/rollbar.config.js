@@ -74,13 +74,14 @@ const rollbarConfig = /* @ngInject */ function (envServiceProvider, $provide) {
   })
 }
 
-function updateRollbarPerson (session) {
+function updateRollbarPerson (session, giveSession) {
   let person = {}
   if (session) {
     person = {
       id: session.sub,
       username: session.first_name + ' ' + session.last_name,
-      email: session.email
+      email: session.email,
+      giveId: giveSession.sub
     }
   }
 
