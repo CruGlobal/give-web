@@ -54,7 +54,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         isBrandedCheckout: false
       },
       stagecloud: {
-        apiUrl: 'https://give-stage2.cru.org',
+        apiUrl: 'https://give-stage-cloud.cru.org',
         imgDomain: '//give-static.cru.org',
         imgDomainDesignation: 'https://give-stage-cloud.cru.org',
         publicCru: 'https://stage-cloud.cru.org',
@@ -63,7 +63,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         isBrandedCheckout: false
       },
       prodcloud: {
-        apiUrl: 'https://give.cru.org',
+        apiUrl: 'https://give-prod-cloud.cru.org',
         imgDomain: '//give-static.cru.org',
         imgDomainDesignation: 'https://give-prod-cloud.cru.org',
         publicCru: 'https://www.cru.org',
