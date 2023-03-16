@@ -268,7 +268,8 @@ class DesignationsService {
 
   ministriesList (pagePath) {
     const path = pagePath + '/jcr:content/content-parsys/designation_search_r.json'
-    return Observable.from(this.$http.get(this.$location.origin + '/' + path))
+    const url = `${this.$location.protocol()}://${this.$location.host()}/${path}`
+    return Observable.from(this.$http.get(url))
       .map((response) => {
         return map(response.data.ministries, (item) => {
           const ministry = JSON.parse(item)
