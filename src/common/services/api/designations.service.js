@@ -15,8 +15,9 @@ const serviceName = 'designationsService'
 
 class DesignationsService {
   /* @ngInject */
-  constructor ($http, envService, cortexApiService, hateoasHelperService) {
+  constructor ($http, $location, envService, cortexApiService, hateoasHelperService) {
     this.$http = $http
+    this.$location = $location
     this.envService = envService
     this.cortexApiService = cortexApiService
     this.hateoasHelperService = hateoasHelperService
@@ -274,7 +275,7 @@ class DesignationsService {
 
   ministriesList (pagePath) {
     const path = pagePath + '/jcr:content/content-parsys/designation_search_r.json'
-    return Observable.from(this.$http.get(location.origin + '/' + path))
+    return Observable.from(this.$http.get(this.$location.origin + '/' + path))
       .map((response) => {
         return map(response.data.ministries, (item) => {
           const ministry = JSON.parse(item)
