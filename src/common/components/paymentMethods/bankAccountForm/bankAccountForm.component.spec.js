@@ -190,7 +190,7 @@ describe('bank account form', () => {
       self.controller.envService.set('prodcloud')
       self.controller.savePayment()
 
-      expect(cruPayments.bankAccount.init).toHaveBeenCalledWith('prodcloud', ccpKey)
+      expect(cruPayments.bankAccount.init).toHaveBeenCalledWith('production', ccpKey)
       expect(cruPayments.bankAccount.encrypt).toHaveBeenCalledWith('123456789012')
       expect(self.formController.$setSubmitted).toHaveBeenCalled()
       const expectedData = {
