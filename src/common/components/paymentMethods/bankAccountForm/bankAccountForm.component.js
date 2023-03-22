@@ -87,7 +87,10 @@ class BankAccountController {
           state: 'encrypting'
         }
       })
-      cruPayments.bankAccount.init(this.envService.get(), (this.envService.is('production') || this.envService.is('prodcloud')) ? ccpKey : ccpStagingKey)
+      const productionEnvironments = ['production', 'prodcloud']
+      const actualEnvironment = this.envService.get()
+      const ccpEnvironment = productionEnvironments.includes(actualEnvironment) ? 'production' : actualEnvironment
+      cruPayments.bankAccount.init(ccpEnvironment, ccpEnvironment === 'production' ? ccpKey : ccpStagingKey)
       const encryptObservable = this.paymentMethod && !this.bankPayment.accountNumber
         ? Observable.of('')
         : cruPayments.bankAccount.encrypt(this.bankPayment.accountNumber)
