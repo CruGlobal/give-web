@@ -40,7 +40,7 @@ class Cart {
   }
 
   setCartCountCookie (quantity) {
-    if (!['give.cru.org', 'give-stage2.cru.org', 'give-stage2-next.cru.org'].includes(this.$location.host())) {
+    if (!['give.cru.org', 'give-stage2.cru.org', 'give-stage2-next.cru.org', 'give-stage-cloud.cru.org', 'give-prod-cloud.cru.org'].includes(this.$location.host())) {
       return
     }
 
