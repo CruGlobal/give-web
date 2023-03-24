@@ -6,6 +6,7 @@ import 'rxjs/add/observable/of'
 
 import showErrors from 'common/filters/showErrors.filter'
 import { scrollModalToTop } from 'common/services/modalState.service'
+import analyticsFactory from 'app/analytics/analytics.factory'
 
 import cruPayments from 'cru-payments/dist/cru-payments'
 import { ccpKey, ccpStagingKey } from 'common/app.constants'
@@ -16,9 +17,10 @@ const componentName = 'bankAccountForm'
 
 class BankAccountController {
   /* @ngInject */
-  constructor ($scope, $log, envService) {
+  constructor ($scope, $log, analyticsFactory, envService) {
     this.$scope = $scope
     this.$log = $log
+    this.analyticsFactory = analyticsFactory
     this.envService = envService
 
     this.imgDomain = this.envService.read('imgDomain')
@@ -120,6 +122,7 @@ class BankAccountController {
         scrollModalToTop()
       })
     } else {
+      this.analyticsFactory.handleFormErrors(this.bankPaymentForm)
       this.onPaymentFormStateChange({
         $event: {
           state: 'unsubmitted'
@@ -132,7 +135,8 @@ class BankAccountController {
 export default angular
   .module(componentName, [
     commonModule.name,
-    showErrors.name
+    showErrors.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: BankAccountController,

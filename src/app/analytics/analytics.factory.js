@@ -9,6 +9,27 @@ import isEmpty from 'lodash/isEmpty'
 
 const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionService) {
   return {
+    fieldError: function (field, error) {
+      $window.dataLayer = $window.dataLayer || []
+      $window.dataLayer.push({
+        event: 'checkout_error',
+        error_type: field,
+        error_details: error
+      })
+    },
+
+    // Send fieldError events for any invalid fields in a form
+    handleFormErrors: function (form) {
+      Object.entries(form).forEach(([fieldName, field]) => {
+        if (!fieldName.startsWith('$') && field.$invalid) {
+          // The keys of $error are the validators that failed for this field
+          Object.keys(field.$error).forEach((validator) => {
+            this.fieldError(fieldName, validator)
+          })
+        }
+      })
+    },
+
     buildProductVar: function (cartData) {
       try {
         let item, donationType

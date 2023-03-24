@@ -83,6 +83,7 @@ class ExistingPaymentMethodsController {
   }
 
   openPaymentMethodFormModal (existingPaymentMethod) {
+    this.paymentFormResolve.state = 'unsubmitted'
     this.paymentMethodFormModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
       backdrop: 'static', // Disables closing on click
@@ -104,11 +105,6 @@ class ExistingPaymentMethodsController {
     })
 
     const resetForm = () => {
-      this.onPaymentFormStateChange({
-        $event: {
-          state: 'unsubmitted'
-        }
-      })
       delete this.paymentMethodFormModal
     }
     this.paymentMethodFormModal.result.then(resetForm, resetForm)
