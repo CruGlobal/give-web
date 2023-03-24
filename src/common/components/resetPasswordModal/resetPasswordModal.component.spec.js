@@ -98,7 +98,7 @@ describe('resetPasswordModal', function () {
     describe('valid form', () => {
       beforeEach(() => {
         $ctrl.email = 'professorx@xavier.edu'
-        $ctrl.password = 'Cerebro123'
+        $ctrl.password = 'Cerebro12345678'
         $ctrl.resetKey = 'abc123def456'
         $ctrl.resetPassword()
       })
@@ -106,7 +106,7 @@ describe('resetPasswordModal', function () {
       it('sets isLoading to true and calls sessionService.resetPassword', () => {
         expect($ctrl.isLoading).toEqual(true)
         expect($ctrl.sessionService.resetPassword)
-          .toHaveBeenCalledWith('professorx@xavier.edu', 'Cerebro123', 'abc123def456')
+          .toHaveBeenCalledWith('professorx@xavier.edu', 'Cerebro12345678', 'abc123def456')
       })
 
       describe('resetPassword success', () => {
