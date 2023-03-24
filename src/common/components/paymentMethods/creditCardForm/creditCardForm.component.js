@@ -14,6 +14,7 @@ import coverFees from 'common/components/paymentMethods/coverFees/coverFees.comp
 
 import showErrors from 'common/filters/showErrors.filter'
 import { scrollModalToTop } from 'common/services/modalState.service'
+import analyticsFactory from 'app/analytics/analytics.factory'
 
 import cruPayments from 'cru-payments/dist/cru-payments'
 import tsys from 'common/services/api/tsys.service'
@@ -25,9 +26,10 @@ const componentName = 'creditCardForm'
 
 class CreditCardController {
   /* @ngInject */
-  constructor ($scope, $log, envService, tsysService) {
+  constructor ($scope, $log, analyticsFactory, envService, tsysService) {
     this.$scope = $scope
     this.$log = $log
+    this.analyticsFactory = analyticsFactory
     this.envService = envService
     this.tsysService = tsysService
 
@@ -173,6 +175,7 @@ class CreditCardController {
         scrollModalToTop()
       })
     } else {
+      this.analyticsFactory.handleFormErrors(this.creditCardPaymentForm)
       this.onPaymentFormStateChange({
         $event: {
           state: 'unsubmitted'
@@ -189,6 +192,7 @@ export default angular
     addressForm.name,
     coverFees.name,
     showErrors.name,
+    analyticsFactory.name,
     tsys.name,
     creditCardNumberDirective.name
   ])

@@ -30,6 +30,7 @@ import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/
 import { giveGiftParams } from '../giveGiftParams'
 import loading from 'common/components/loading/loading.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
+import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory'
 
 import { brandedCheckoutAmountUpdatedEvent } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
@@ -41,7 +42,7 @@ const componentName = 'productConfigForm'
 
 class ProductConfigFormController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory, envService) {
+  constructor ($rootScope, $scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory, brandedAnalyticsFactory, envService) {
     this.$rootScope = $rootScope
     this.$scope = $scope
     this.$log = $log
@@ -56,6 +57,7 @@ class ProductConfigFormController {
     this.startDate = startDate
     this.startMonth = startMonth
     this.analyticsFactory = analyticsFactory
+    this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.envService = envService
     this.amountChanged = false
 
@@ -116,6 +118,9 @@ class ProductConfigFormController {
     const productLookupObservable = this.designationsService.productLookup(this.code)
       .do(productData => {
         this.productData = productData
+        if (this.envService.read('isBrandedCheckout')) {
+          this.brandedAnalyticsFactory.beginCheckout(this.productData)
+        }
         this.setDefaultAmount()
         this.setDefaultFrequency()
         if (this.envService.read('isBrandedCheckout')) {
@@ -391,7 +396,8 @@ export default angular
     desigSrcDirective.name,
     showErrors.name,
     loading.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    brandedAnalyticsFactory.name
   ])
   .component(componentName, {
     controller: ProductConfigFormController,

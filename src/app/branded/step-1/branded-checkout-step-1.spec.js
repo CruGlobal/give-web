@@ -203,7 +203,11 @@ describe('branded checkout step 1', () => {
   describe('onContactInfoSubmit', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'checkSuccessfulSubmission').mockImplementation(() => {})
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'saveDonorDetails')
       $ctrl.resetSubmission()
+      $ctrl.donorDetails = {
+        'donor-type': 'Household'
+      }
     })
 
     it('should handle a successful submission', () => {
@@ -215,6 +219,7 @@ describe('branded checkout step 1', () => {
       })
 
       expect($ctrl.checkSuccessfulSubmission).toHaveBeenCalled()
+      expect($ctrl.brandedAnalyticsFactory.saveDonorDetails).toHaveBeenCalledWith($ctrl.donorDetails)
     })
 
     it('should handle an error submitting', () => {
@@ -226,6 +231,7 @@ describe('branded checkout step 1', () => {
       })
 
       expect($ctrl.checkSuccessfulSubmission).toHaveBeenCalled()
+      expect($ctrl.brandedAnalyticsFactory.saveDonorDetails).not.toHaveBeenCalled()
     })
   })
 
