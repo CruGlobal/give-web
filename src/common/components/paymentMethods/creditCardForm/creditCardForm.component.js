@@ -136,7 +136,11 @@ class CreditCardController {
           }) // Send masked card number when card number is not updated
         : this.tsysService.getManifest()
           .mergeMap(data => {
-            cruPayments.creditCard.init(this.envService.get(), data.deviceId, data.manifest)
+            const productionEnvironments = ['production', 'prodcloud']
+            const actualEnvironment = this.envService.get()
+            const ccpEnvironment = productionEnvironments.includes(actualEnvironment) ? 'production' : actualEnvironment
+
+            cruPayments.creditCard.init(ccpEnvironment, data.deviceId, data.manifest)
             return cruPayments.creditCard.encrypt(this.creditCardPayment.cardNumber, this.hideCvv ? null : this.creditCardPayment.securityCode, this.creditCardPayment.expiryMonth, this.creditCardPayment.expiryYear)
           })
       tokenObservable.subscribe(tokenObj => {
