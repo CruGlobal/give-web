@@ -69,6 +69,7 @@ describe('branded checkout step 2', () => {
     beforeEach(() => {
       jest.spyOn($ctrl.brandedAnalyticsFactory, 'purchase')
       jest.spyOn($ctrl.brandedAnalyticsFactory, 'checkoutChange')
+      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
     })
 
     it('should call next if nextStep is thankYou', () => {
@@ -76,7 +77,7 @@ describe('branded checkout step 2', () => {
       $ctrl.changeStep('thankYou')
 
       expect($ctrl.next).toHaveBeenCalled()
-      expect($ctrl.brandedAnalyticsFactory.purchase).toHaveBeenCalledWith($ctrl.cartData.items[0])
+      expect($ctrl.brandedAnalyticsFactory.purchase).toHaveBeenCalledWith($ctrl.cartData.items[0], true)
       expect($ctrl.brandedAnalyticsFactory.checkoutChange).not.toHaveBeenCalled()
     })
 

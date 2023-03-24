@@ -68,11 +68,10 @@ describe('branded analytics factory', () => {
       self.brandedAnalyticsFactory.addPaymentInfo({
         amount: 100,
         amountWithFees: 102.5,
-        coverFees: false,
         frequency: 'Single',
         giftStartDate: null,
         ...productData
-      })
+      }, false)
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -109,11 +108,10 @@ describe('branded analytics factory', () => {
       self.brandedAnalyticsFactory.addPaymentInfo({
         amount: 100,
         amountWithFees: 102.5,
-        coverFees: true,
         frequency: 'Single',
         giftStartDate: null,
         ...productData
-      })
+      }, true)
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -150,11 +148,10 @@ describe('branded analytics factory', () => {
       self.brandedAnalyticsFactory.addPaymentInfo({
         amount: 100,
         amountWithFees: 102.5,
-        coverFees: false,
         frequency: 'Monthly',
         giftStartDate: moment(new Date(2024, 0, 1)),
         ...productData
-      })
+      }, false)
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -211,11 +208,10 @@ describe('branded analytics factory', () => {
       self.brandedAnalyticsFactory.purchase({
         amount: 100,
         amountWithFees: 102.5,
-        coverFees: false,
         frequency: 'Single',
         giftStartDate: null,
         ...productData
-      })
+      }, false)
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -252,11 +248,10 @@ describe('branded analytics factory', () => {
       self.brandedAnalyticsFactory.purchase({
         amount: 100,
         amountWithFees: 102.5,
-        coverFees: true,
         frequency: 'Single',
         giftStartDate: null,
         ...productData
-      })
+      }, true)
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -293,11 +288,10 @@ describe('branded analytics factory', () => {
       self.brandedAnalyticsFactory.purchase({
         amount: 100,
         amountWithFees: 102.5,
-        coverFees: false,
         frequency: 'Monthly',
         giftStartDate: moment(new Date(2024, 0, 1)),
         ...productData
-      })
+      }, false)
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
