@@ -6,14 +6,14 @@ const factoryName = 'brandedAnalyticsFactory'
 let brandedDonorType, brandedPaymentType
 
 // Generate a datalayer ecommerce object from an itemConfig
-function ecommerceFromItemConfig (itemConfig) {
-  const amountPaid = (itemConfig.coverFees ? itemConfig.amountWithFees : itemConfig.amount).toFixed(2)
+function ecommerceFromItemConfig (itemConfig, coverFees) {
+  const amountPaid = (coverFees ? itemConfig.amountWithFees : itemConfig.amount).toFixed(2)
 
   return {
     payment_type: brandedPaymentType,
     currency: 'USD',
     donator_type: brandedDonorType,
-    pays_processing: itemConfig.coverFees ? 'yes' : 'no',
+    pays_processing: coverFees ? 'yes' : 'no',
     value: amountPaid,
     processing_fee: (itemConfig.amountWithFees - itemConfig.amount).toFixed(2),
     items: [{
@@ -68,12 +68,12 @@ const brandedAnalyticsFactory = /* @ngInject */ function ($window) {
     }),
 
     // saveDonorDetails and savePaymentType should have been called before this
-    addPaymentInfo: suppressErrors(function (itemConfig) {
+    addPaymentInfo: suppressErrors(function (itemConfig, coverFees) {
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({ ecommerce: null })
       $window.dataLayer.push({
         event: 'add_payment_info',
-        ecommerce: ecommerceFromItemConfig(itemConfig)
+        ecommerce: ecommerceFromItemConfig(itemConfig, coverFees)
       })
     }),
 
@@ -86,12 +86,12 @@ const brandedAnalyticsFactory = /* @ngInject */ function ($window) {
     }),
 
     // saveDonorDetails and savePaymentType should have been called before this
-    purchase: suppressErrors(function (itemConfig) {
+    purchase: suppressErrors(function (itemConfig, coverFees) {
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({ ecommerce: null })
       $window.dataLayer.push({
         event: 'purchase',
-        ecommerce: ecommerceFromItemConfig(itemConfig)
+        ecommerce: ecommerceFromItemConfig(itemConfig, coverFees)
       })
     }),
 
