@@ -76,7 +76,7 @@
         <div><label ng-if="$ctrl.invalidFileType" translate>Uploaded image must be a JPEG or a PNG file</label></div>
         <image-upload
           class="form-control"
-          url="/bin/crugive/image?designationNumber={{$ctrl.designationNumber}}"
+          url="/bin/crugive/image.html?designationNumber={{$ctrl.designationNumber}}"
           on-invalid-file-type="$ctrl.invalidFileType = true"
           on-upload="$ctrl.uploading = true"
           on-complete="$ctrl.invalidFileType = false"
