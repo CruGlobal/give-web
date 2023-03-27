@@ -175,7 +175,7 @@ class CreditCardController {
         scrollModalToTop()
       })
     } else {
-      this.analyticsFactory.handleFormErrors(this.creditCardPaymentForm)
+      this.analyticsFactory.handleCheckoutFormErrors(this.creditCardPaymentForm)
       this.onPaymentFormStateChange({
         $event: {
           state: 'unsubmitted'
