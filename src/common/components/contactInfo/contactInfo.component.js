@@ -165,7 +165,7 @@ class Step1Controller {
           this.onSubmit({ success: false })
         })
     } else {
-      this.analyticsFactory.handleFormErrors(this.detailsForm)
+      this.analyticsFactory.handleCheckoutFormErrors(this.detailsForm)
       this.onSubmit({ success: false })
     }
   }

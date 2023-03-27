@@ -122,7 +122,7 @@ class BankAccountController {
         scrollModalToTop()
       })
     } else {
-      this.analyticsFactory.handleFormErrors(this.bankPaymentForm)
+      this.analyticsFactory.handleCheckoutFormErrors(this.bankPaymentForm)
       this.onPaymentFormStateChange({
         $event: {
           state: 'unsubmitted'
