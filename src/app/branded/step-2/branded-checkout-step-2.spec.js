@@ -21,20 +21,29 @@ describe('branded checkout step 2', () => {
     it('should load cart', () => {
       jest.spyOn($ctrl, 'loadCart').mockImplementation(() => {})
       jest.spyOn($ctrl, 'loadRadioStation').mockImplementation(() => {})
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'reviewOrder')
       $ctrl.$onInit()
 
       expect($ctrl.loadCart).toHaveBeenCalled()
       expect($ctrl.loadRadioStation).toHaveBeenCalled()
+      expect($ctrl.brandedAnalyticsFactory.reviewOrder).toHaveBeenCalled()
     })
   })
 
   describe('loadCart', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'addPaymentInfo')
+      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
+    })
+
     it('should load cart data', () => {
-      jest.spyOn($ctrl.cartService, 'get').mockReturnValue(Observable.of('some data'))
+      const cartData = { items: [] }
+      jest.spyOn($ctrl.cartService, 'get').mockReturnValue(Observable.of(cartData))
       $ctrl.loadCart()
 
-      expect($ctrl.cartData).toEqual('some data')
+      expect($ctrl.cartData).toEqual(cartData)
       expect($ctrl.errorLoadingCart).toEqual(false)
+      expect($ctrl.brandedAnalyticsFactory.addPaymentInfo).toHaveBeenCalledWith(cartData.items[0], true)
     })
 
     it('should handle error', () => {
@@ -44,6 +53,7 @@ describe('branded checkout step 2', () => {
       expect($ctrl.cartData).toBeUndefined()
       expect($ctrl.errorLoadingCart).toEqual(true)
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading cart data for branded checkout step 2', 'some error'])
+      expect($ctrl.brandedAnalyticsFactory.addPaymentInfo).not.toHaveBeenCalled()
     })
   })
 
@@ -57,16 +67,27 @@ describe('branded checkout step 2', () => {
   })
 
   describe('changeStep', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'purchase')
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'checkoutChange')
+      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
+    })
+
     it('should call next if nextStep is thankYou', () => {
+      $ctrl.cartData = { items: [] }
       $ctrl.changeStep('thankYou')
 
       expect($ctrl.next).toHaveBeenCalled()
+      expect($ctrl.brandedAnalyticsFactory.purchase).toHaveBeenCalledWith($ctrl.cartData.items[0], true)
+      expect($ctrl.brandedAnalyticsFactory.checkoutChange).not.toHaveBeenCalled()
     })
 
     it('should call previous otherwise', () => {
       $ctrl.changeStep('otherStep')
 
       expect($ctrl.previous).toHaveBeenCalled()
+      expect($ctrl.brandedAnalyticsFactory.purchase).not.toHaveBeenCalled()
+      expect($ctrl.brandedAnalyticsFactory.checkoutChange).toHaveBeenCalledWith('otherStep')
     })
   })
 })

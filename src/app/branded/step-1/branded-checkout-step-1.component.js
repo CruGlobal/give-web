@@ -7,6 +7,7 @@ import checkoutStep2 from 'app/checkout/step-2/step-2.component'
 
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
+import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.factory'
 
 import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
@@ -16,9 +17,10 @@ const componentName = 'brandedCheckoutStep1'
 
 class BrandedCheckoutStep1Controller {
   /* @ngInject */
-  constructor ($log, $filter, cartService, orderService) {
+  constructor ($log, $filter, brandedAnalyticsFactory, cartService, orderService) {
     this.$log = $log
     this.$filter = $filter
+    this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.cartService = cartService
     this.orderService = orderService
   }
@@ -125,6 +127,7 @@ class BrandedCheckoutStep1Controller {
   onContactInfoSubmit (success) {
     if (success) {
       this.submission.contactInfo.completed = true
+      this.brandedAnalyticsFactory.saveDonorDetails(this.donorDetails)
     } else {
       this.submission.contactInfo.completed = true
       this.submission.contactInfo.error = true
@@ -165,7 +168,8 @@ export default angular
     contactInfo.name,
     checkoutStep2.name,
     cartService.name,
-    orderService.name
+    orderService.name,
+    brandedAnalyticsFactory.name
   ])
   .component(componentName, {
     controller: BrandedCheckoutStep1Controller,

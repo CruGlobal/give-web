@@ -7,8 +7,34 @@ import merge from 'lodash/merge'
 import isEmpty from 'lodash/isEmpty'
 /* global localStorage */
 
-const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionService) {
+const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService, sessionService) {
   return {
+    checkoutFieldError: function (field, error) {
+      $window.dataLayer = $window.dataLayer || []
+      $window.dataLayer.push({
+        event: 'checkout_error',
+        error_type: field,
+        error_details: error
+      })
+    },
+
+    // Send checkoutFieldError events for any invalid fields in a form
+    handleCheckoutFormErrors: function (form) {
+      if (!envService.read('isCheckout') && !envService.read('isBrandedCheckout')) {
+        // Ignore errors not during checkout, like a logged-in user updating their payment methods
+        return
+      }
+
+      Object.entries(form).forEach(([fieldName, field]) => {
+        if (!fieldName.startsWith('$') && field.$invalid) {
+          // The keys of $error are the validators that failed for this field
+          Object.keys(field.$error).forEach((validator) => {
+            this.checkoutFieldError(fieldName, validator)
+          })
+        }
+      })
+    },
+
     buildProductVar: function (cartData) {
       try {
         let item, donationType
