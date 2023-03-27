@@ -28,7 +28,7 @@
           </div>
         </td>
         <td>
-          <img ng-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"/>
+          <img desig-img-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"/>
         </td>
         <td>
           <button class="btn btn-default"
@@ -44,7 +44,7 @@
 
   <hr />
 
-  <div class="give-available-photos-container" ng-if="$ctrl.photos.length">
+  <div class="give-available-photos-container" ng-if="$ctrl.photos.length || $ctrl.numProcessingPhotos > 0">
     <h3 translate>Available Photos</h3>
     <h5 translate>Click + to add photos to the carousel.</h5>
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.maxCarouselError">
@@ -58,7 +58,10 @@
         <div class="add-trigger" ng-click="$ctrl.addImageToCarousel(photo)">
           <i class="fa fa-plus" aria-label="Add to carousel"></i>
         </div>
-        <img ng-src="{{photo.thumbnail}}" />
+        <img desig-img-src="{{photo.thumbnail}}" />
+      </div>
+      <div class="cover-thumb" ng-repeat="photo in $ctrl.getProcessingPhotos() track by $index">
+        <loading type="centered">Processing...</loading>
       </div>
     </div>
   </div>
@@ -78,10 +81,11 @@
           class="form-control"
           url="/bin/crugive/image.html?designationNumber={{$ctrl.designationNumber}}"
           on-invalid-file-type="$ctrl.invalidFileType = true"
-          on-upload="$ctrl.uploading = true"
           on-complete="$ctrl.invalidFileType = false"
-          on-success="$ctrl.uploadComplete()"
-          on-error="$ctrl.uploading = false"/>
+          on-upload="$ctrl.uploading = true"
+          on-success="$ctrl.uploadComplete(response)"
+          on-error="$ctrl.uploading = false"
+        />
       </div>
 
       <label ng-if="$ctrl.uploading" translate>Uploading...</label>
