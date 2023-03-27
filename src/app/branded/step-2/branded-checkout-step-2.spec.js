@@ -33,6 +33,7 @@ describe('branded checkout step 2', () => {
   describe('loadCart', () => {
     beforeEach(() => {
       jest.spyOn($ctrl.brandedAnalyticsFactory, 'addPaymentInfo')
+      jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
     })
 
     it('should load cart data', () => {
@@ -42,7 +43,7 @@ describe('branded checkout step 2', () => {
 
       expect($ctrl.cartData).toEqual(cartData)
       expect($ctrl.errorLoadingCart).toEqual(false)
-      expect($ctrl.brandedAnalyticsFactory.addPaymentInfo).toHaveBeenCalled(cartData.items[0])
+      expect($ctrl.brandedAnalyticsFactory.addPaymentInfo).toHaveBeenCalledWith(cartData.items[0], true)
     })
 
     it('should handle error', () => {
