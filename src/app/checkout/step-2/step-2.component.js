@@ -52,7 +52,7 @@ class Step2Controller {
   }
 
   handlePaymentChange (selectedPaymentMethod) {
-    const paymentType = selectedPaymentMethod['account-type'] ? selectedPaymentMethod['account-type'] : selectedPaymentMethod['card-type']
+    const paymentType = selectedPaymentMethod['account-type'] || selectedPaymentMethod['card-type']
     this.defaultPaymentType = paymentType
     this.brandedAnalyticsFactory.savePaymentType(paymentType)
   }
