@@ -439,18 +439,11 @@ describe('Designation Editor', function () {
         original: '/content/dam/give/designations/026/CMS1_055.jpg',
         cover: '/content/dam/give/designations/0/5/CMS1_0535.jpg.transform/GiveDesignationCoverPhoto/img.jpg',
         thumbnail: '/content/dam/give/designations/826/CMS1_035.jpg.transform/GiveDesignationThumbnail/img.jpg',
-        secondary: '/content/dam/give/designations/826/CMS1_035.jpg.transform/GiveDesignationSmallerPhoto/img.jpg',
-        cachedUrls: {
-          original: 'blob:https://domain.com/original-blob',
-          cover: 'blob:https://domain.com/cover-blob',
-          thumbnail: 'blob:https://domain.com/thumbnail-blob',
-          secondary: 'blob:https://domain.com/secondary-blob'
-        }
+        secondary: '/content/dam/give/designations/826/CMS1_035.jpg.transform/GiveDesignationSmallerPhoto/img.jpg'
       }]
       $ctrl.designationPhotos = photos
 
       expect($ctrl.photoUrl(photos[0].original)).toEqual(photos[0])
-      expect($ctrl.photoUrl(photos[3].original).original).toEqual('blob:https://domain.com/original-blob')
     })
   })
 

@@ -242,11 +242,7 @@ class DesignationEditorController {
   }
 
   photoUrl (originalUrl) {
-    // When a photo has just been uploaded, it's photo URLs might 404 for a while until the photo replicates to all
-    // publisher instances. In that case, cachedUrls will contain cached blob URLs for the original photo and its
-    // transformations so look for the photo URL inside cachedUrls first.
-    const photo = find(this.designationPhotos, { original: originalUrl })
-    return photo && photo.cachedUrls ? photo.cachedUrls : photo
+    return find(this.designationPhotos, { original: originalUrl })
   }
 
   extractCarouselUrls () {
