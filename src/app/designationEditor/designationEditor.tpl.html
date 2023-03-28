@@ -86,16 +86,16 @@
         <div class="col-md-10 col-md-offset-1">
           <div href="" class="pull-right secondary-wrapper ml mb">
             <div class="edit-trigger" ng-if="$ctrl.contentLoaded"
-                 ng-click="$ctrl.contentLoaded && $ctrl.selectPhotos('secondaryPhotos', $ctrl.designationContent['design-controller'].carousel)">
+                 ng-click="$ctrl.contentLoaded && $ctrl.selectPhotos('secondaryPhotos')">
               <i class="fa fa-camera"></i>
             </div>
 
             <img ng-src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png"
-                 ng-if="$ctrl.contentLoaded && !$ctrl.imageUrls.length">
-            <div class="secondaryPhoto" ng-if="$ctrl.contentLoaded && $ctrl.imageUrls.length">
+                 ng-if="$ctrl.contentLoaded && !$ctrl.carouselImages.length">
+            <div class="secondaryPhoto" ng-if="$ctrl.contentLoaded && $ctrl.carouselImages.length">
               <div class="cmp-carousel" data-cmp-delay="5000" data-cmp-is="carousel">
                 <div class="cmp-carousel__content">
-                  <div ng-repeat="image in $ctrl.imageUrls"
+                  <div ng-repeat="image in $ctrl.carouselImages"
                        role="tabpanel"
                        class="cmp-carousel__item {{$first ? 'cmp-carousel__item--active' : ''}}"
                        data-cmp-hook-carousel="item"
@@ -109,7 +109,7 @@
                       </div>
                     </div>
                   </div>
-                  <div ng-if="$ctrl.imageUrls.length > 1" class="cmp-carousel__actions">
+                  <div ng-if="$ctrl.carouselImages.length > 1" class="cmp-carousel__actions">
                     <button class="cmp-carousel__action cmp-carousel__action--previous"
                             data-cmp-hook-carousel="previous"
                             aria-label="Previous">
@@ -124,14 +124,13 @@
                     </button>
                   </div>
                   <ol role="tablist" class="cmp-carousel__indicators" data-cmp-hook-carousel="indicators">
-                    <li ng-repeat="image in $ctrl.imageUrls"
+                    <li ng-repeat="image in $ctrl.carouselImages"
                         role="tab" class="cmp-carousel__indicator {{$first ? 'cmp-carousel__indicator--active' : ''}}"
                         data-cmp-hook-carousel="indicator"
                         aria-selected="{{$first}}"
                         tabindex="{{$first ? '0' : '-1'}}"></li>
                   </ol>
                 </div>
-                {{$ctrl.carouselLoad()}}
               </div>
             </div>
           </div>
@@ -154,7 +153,7 @@
             <img ng-src="{{$ctrl.imgDomain}}/assets/img/signature.png"
                  ng-if="!$ctrl.photoUrl($ctrl.designationContent.signatureImage)"
                  class="signature-image">
-            <img ng-src="{{$ctrl.imgDomainDesignation + $ctrl.photoUrl($ctrl.designationContent.signatureImage).original}}"
+            <img desig-img-src="{{$ctrl.photoUrl($ctrl.designationContent.signatureImage).original}}"
                  ng-if="$ctrl.photoUrl($ctrl.designationContent.signatureImage)"
                  class="signature-image">
 

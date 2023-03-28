@@ -42,7 +42,7 @@
           ng-value="photo.original"
         />
         <label for="cover-thumb{{$index}}">
-          <img ng-src="{{photo.cachedUrls && photo.cachedUrls.thumbnail ? photo.cachedUrls.thumbnail : photo.thumbnail}}" />
+          <img desig-img-src="{{photo.thumbnail}}" />
         </label>
       </div>
       <div class="cover-thumb" ng-repeat="photo in $ctrl.getProcessingPhotos() track by $index">

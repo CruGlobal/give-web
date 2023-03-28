@@ -4,7 +4,7 @@ import module from './photo.modal'
 
 describe('Designation Editor Photo', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, $flushPendingTasks, $httpBackend, $q, $verifyNoPendingTasks
+  let $ctrl, $flushPendingTasks, $q, $verifyNoPendingTasks
 
   beforeEach(angular.mock.module(($provide) => {
     $provide.value('envService', {
@@ -12,10 +12,9 @@ describe('Designation Editor Photo', function () {
     })
   }))
 
-  beforeEach(inject(function (_$rootScope_, _$controller_, _$flushPendingTasks_, _$httpBackend_, _$q_, _$verifyNoPendingTasks_) {
+  beforeEach(inject(function (_$rootScope_, _$controller_, _$flushPendingTasks_, _$q_, _$verifyNoPendingTasks_) {
     const $scope = _$rootScope_.$new()
     $flushPendingTasks = _$flushPendingTasks_
-    $httpBackend = _$httpBackend_
     $q = _$q_
     $verifyNoPendingTasks = _$verifyNoPendingTasks_
 
@@ -85,7 +84,9 @@ describe('Designation Editor Photo', function () {
         expectedPhoto: {
           original: '/content/photo1.jpg'
         },
-        otherPhotos: [{
+        allPhotos: [{
+          original: '/content/photo1.jpg'
+        }, {
           original: '/content/photo2.jpg'
         }]
       })
@@ -106,14 +107,19 @@ describe('Designation Editor Photo', function () {
         secondary: '/content/photo3.secondary.jpg',
         thumbnail: '/content/photo3.thumbnail.jpg'
       },
-      otherPhotos: [{
+      allPhotos: [{
         original: '/content/photo1.jpg'
       }, {
         original: '/content/photo2.jpg'
+      }, {
+        original: '/content/photo3.jpg',
+        cover: '/content/photo3.cover.jpg',
+        secondary: '/content/photo3.secondary.jpg',
+        thumbnail: '/content/photo3.thumbnail.jpg'
       }]
     }))
 
-    jest.spyOn($ctrl, 'loadPhotoBlob').mockImplementation((url) => $q.resolve(`blob:${url}`))
+    jest.spyOn($ctrl.imageCacheService, 'cache').mockImplementation((url) => $q.resolve(`blob:${url}`))
 
     expect($ctrl.refreshPhotos('/content/photo3.jpg')).resolves.toEqual([{
       original: '/content/photo1.jpg'
@@ -124,26 +130,8 @@ describe('Designation Editor Photo', function () {
       cover: '/content/photo3.cover.jpg',
       secondary: '/content/photo3.secondary.jpg',
       thumbnail: '/content/photo3.thumbnail.jpg',
-      cachedUrls: {
-        original: 'blob:/content/photo3.jpg',
-        cover: 'blob:/content/photo3.cover.jpg',
-        secondary: 'blob:/content/photo3.secondary.jpg',
-        thumbnail: 'blob:/content/photo3.thumbnail.jpg'
-      }
     }])
     $flushPendingTasks()
-  })
-
-  it('loadPhotoBlob loads a photo URL as a blob', () => {
-    $httpBackend.whenGET('/content/photo3.jpg').respond(200, 'content')
-
-    URL.createObjectURL = jest.fn().mockReturnValue('blob:url')
-
-    expect($ctrl.loadPhotoBlob('/content/photo3.jpg')).resolves.toBe('blob:url')
-    $httpBackend.flush()
-    $flushPendingTasks()
-
-    expect(URL.createObjectURL).toHaveBeenCalledWith('content')
   })
 
   describe('addImageToCarousel(photo)', () => {

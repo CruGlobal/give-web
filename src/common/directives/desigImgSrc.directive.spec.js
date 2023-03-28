@@ -7,27 +7,31 @@ describe('desigImgSrc', () => {
 
   beforeEach(angular.mock.module(($provide) => {
     $provide.value('envService', {
-      read: () => 'https://domain.com'
+      read: () => 'https://cdn.domain.com'
     })
   }))
 
-  let $compile, $scope
+  let $compile, $scope, imageCacheService
   beforeEach(() => {
     inject(($injector, $rootScope) => {
-      $compile = $injector.get('$compile')
       $scope = $rootScope.$new()
+      $compile = $injector.get('$compile')
+      imageCacheService = $injector.get('imageCacheService')
     })
   })
 
   it('should set the src for pathname', () => {
     const element = $compile('<img desig-img-src="/image.jpg" />')($scope)
     $scope.$digest()
-    expect(element.attr('src')).toBe('https://domain.com/image.jpg')
+    expect(element.attr('src')).toBe('https://cdn.domain.com/image.jpg')
   })
 
-  it('should set the src for blobs', () => {
-    const element = $compile('<img desig-img-src="blob:https://example.com/uuid" />')($scope)
+  it('should set the src for cached URLs', () => {
+    jest.spyOn(imageCacheService, 'get').mockReturnValue('blob:https://domain.com/uuid')
+
+    const element = $compile('<img desig-img-src="/image.jpg" />')($scope)
     $scope.$digest()
-    expect(element.attr('src')).toBe('blob:https://example.com/uuid')
+    expect(element.attr('src')).toBe('blob:https://domain.com/uuid')
+    expect(imageCacheService.get).toHaveBeenCalledWith('/image.jpg')
   })
 })

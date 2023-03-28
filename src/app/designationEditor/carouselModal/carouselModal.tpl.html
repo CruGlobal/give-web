@@ -28,7 +28,7 @@
           </div>
         </td>
         <td>
-          <img ng-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"/>
+          <img desig-img-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"/>
         </td>
         <td>
           <button class="btn btn-default"
@@ -58,7 +58,7 @@
         <div class="add-trigger" ng-click="$ctrl.addImageToCarousel(photo)">
           <i class="fa fa-plus" aria-label="Add to carousel"></i>
         </div>
-        <img ng-src="{{photo.thumbnail}}" />
+        <img desig-img-src="{{photo.thumbnail}}" />
       </div>
       <div class="cover-thumb" ng-repeat="photo in $ctrl.getProcessingPhotos() track by $index">
         <loading type="centered">Processing...</loading>
