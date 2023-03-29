@@ -26,7 +26,7 @@ class ImageCache {
 
   // Cache an image by its pathname and return a promise that resolves to its blob URL
   cache (url) {
-    return this.retryService.executeWithRetries(() => this.$http.get(this.makeAbsoluteUrl(url), { responseType: 'blob' }), 30, 0)
+    return this.retryService.executeWithRetries(() => this.$http.get(this.makeAbsoluteUrl(url), { responseType: 'blob' }), 30, 3000)
       .then(response => {
         const blob = URL.createObjectURL(response.data)
         this.blobCache.set(url, blob)
