@@ -13,6 +13,7 @@ import thankYouSummary from 'app/thankYou/summary/thankYouSummary.component'
 
 import sessionService from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
+import brandedAnalyticsFactory from './analytics/branded-analytics.factory'
 
 import 'common/lib/fakeLocalStorage'
 
@@ -22,9 +23,10 @@ const componentName = 'brandedCheckout'
 
 class BrandedCheckoutController {
   /* @ngInject */
-  constructor ($window, analyticsFactory, tsysService, sessionService, envService, orderService, $translate) {
+  constructor ($window, analyticsFactory, brandedAnalyticsFactory, tsysService, sessionService, envService, orderService, $translate) {
     this.$window = $window
     this.analyticsFactory = analyticsFactory
+    this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.tsysService = tsysService
     this.sessionService = sessionService
     this.envService = envService
@@ -93,6 +95,8 @@ class BrandedCheckoutController {
 
   onThankYouPurchaseLoaded (purchase) {
     this.onOrderCompleted({ $event: { $window: this.$window, purchase: changeCaseObject.camelCase(pick(purchase, ['donorDetails', 'lineItems'])) } })
+    this.brandedAnalyticsFactory.savePurchase(purchase)
+    this.brandedAnalyticsFactory.purchase()
   }
 
   onPaymentFailed (donorDetails) {
@@ -114,6 +118,7 @@ export default angular
     thankYouSummary.name,
     sessionService.name,
     orderService.name,
+    brandedAnalyticsFactory.name,
     uibModal,
     'environment',
     'pascalprecht.translate'

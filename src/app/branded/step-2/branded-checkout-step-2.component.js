@@ -30,7 +30,9 @@ class BrandedCheckoutStep2Controller {
       .subscribe(
         data => {
           this.cartData = data
-          this.brandedAnalyticsFactory.addPaymentInfo(this.cartData.items[0], this.orderService.retrieveCoverFeeDecision())
+          this.brandedAnalyticsFactory.saveCoverFees(this.orderService.retrieveCoverFeeDecision())
+          this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
+          this.brandedAnalyticsFactory.addPaymentInfo()
         },
         error => {
           this.errorLoadingCart = true
@@ -46,7 +48,6 @@ class BrandedCheckoutStep2Controller {
   changeStep (newStep) {
     if (newStep === 'thankYou') {
       this.next()
-      this.brandedAnalyticsFactory.purchase(this.cartData.items[0], this.orderService.retrieveCoverFeeDecision())
     } else {
       this.previous()
       this.brandedAnalyticsFactory.checkoutChange(newStep)

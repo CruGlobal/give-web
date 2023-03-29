@@ -19,6 +19,10 @@ describe('branded checkout', () => {
             querySelector: jest.fn(() => ({ scrollIntoView: scrollIntoViewMock })),
           },
         },
+        brandedAnalyticsFactory: {
+          savePurchase: jest.fn(),
+          purchase: jest.fn()
+        },
         tsysService: {
           setDevice: jest.fn(),
         },
@@ -159,15 +163,21 @@ describe('branded checkout', () => {
   })
 
   describe('onThankYouPurchaseLoaded', () => {
+    const purchaseData = {
+      donorDetails: {
+        'donor-type': 'Household'
+      },
+      paymentMeans: {},
+      lineItems: {},
+      rawData: {}
+    }
+
+    beforeEach(() => {
+      $ctrl.onThankYouPurchaseLoaded()
+    })
+
     it('should pass the purchase info to the onOrderCompleted binding', () => {
-      $ctrl.onThankYouPurchaseLoaded({
-        donorDetails: {
-          'donor-type': 'Household'
-        },
-        paymentMeans: {},
-        lineItems: {},
-        rawData: {}
-      })
+      $ctrl.onThankYouPurchaseLoaded(purchaseData)
 
       expect($ctrl.onOrderCompleted).toHaveBeenCalledWith({ $event: { $window: $ctrl.$window,
         purchase: {
@@ -176,6 +186,13 @@ describe('branded checkout', () => {
           },
           lineItems: {}
         } } })
+    })
+
+    it('should call purchase', () => {
+      $ctrl.onThankYouPurchaseLoaded(purchaseData)
+
+      expect($ctrl.brandedAnalyticsFactory.savePurchase).toHaveBeenCalledWith(purchaseData)
+      expect($ctrl.brandedAnalyticsFactory.purchase).toHaveBeenCalled()
     })
   })
 

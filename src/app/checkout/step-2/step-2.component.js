@@ -54,7 +54,7 @@ class Step2Controller {
   handlePaymentChange (selectedPaymentMethod) {
     const paymentType = selectedPaymentMethod['account-type'] || selectedPaymentMethod['card-type']
     this.defaultPaymentType = paymentType
-    this.brandedAnalyticsFactory.savePaymentType(paymentType)
+    this.brandedAnalyticsFactory.savePaymentType(paymentType, Boolean(selectedPaymentMethod['card-type']))
   }
 
   handleExistingPaymentLoading (success, hasExistingPaymentMethods, error) {
@@ -86,7 +86,7 @@ class Step2Controller {
           this.onStateChange({ state: 'submitted' })
           this.$onInit()
         }
-        this.brandedAnalyticsFactory.savePaymentType(paymentType)
+        this.brandedAnalyticsFactory.savePaymentType(paymentType, Boolean($event.payload.creditCard))
         this.paymentFormState = 'success'
       },
       error => {

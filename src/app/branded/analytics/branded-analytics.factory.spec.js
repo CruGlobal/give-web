@@ -53,6 +53,15 @@ describe('branded analytics factory', () => {
   })
 
   describe('addPaymentInfo', () => {
+    beforeEach(() => {
+      self.brandedAnalyticsFactory.saveDonorDetails({
+        'donor-type': 'Household'
+      })
+      self.brandedAnalyticsFactory.saveTestingTransaction(false)
+      self.brandedAnalyticsFactory.savePaymentType('Visa', true)
+      self.brandedAnalyticsFactory.saveCoverFees(false)
+    })
+
     it('should silently ignore bad data', () => {
       self.brandedAnalyticsFactory.addPaymentInfo()
       expect(self.$window.dataLayer).toEqual([
@@ -61,17 +70,14 @@ describe('branded analytics factory', () => {
     })
 
     it('should add add_payment_info event', () => {
-      self.brandedAnalyticsFactory.saveDonorDetails({
-        'donor-type': 'Household'
-      })
-      self.brandedAnalyticsFactory.savePaymentType('Visa')
-      self.brandedAnalyticsFactory.addPaymentInfo({
+      self.brandedAnalyticsFactory.saveItem({
         amount: 100,
         amountWithFees: 102.5,
         frequency: 'Single',
         giftStartDate: null,
         ...productData
-      }, false)
+      })
+      self.brandedAnalyticsFactory.addPaymentInfo()
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -84,6 +90,46 @@ describe('branded analytics factory', () => {
             pays_processing: 'no',
             value: '100.00',
             processing_fee: '2.50',
+            testing_transaction: false,
+            items: [{
+              item_id: '1234567',
+              item_name: 'Staff Person',
+              item_brand: 'CRU',
+              item_category: 'STAFF',
+              item_variant: 'single',
+              currency: 'USD',
+              price: '100.00',
+              quantity: '1',
+              recurring_date: undefined
+            }]
+          }
+        }
+      ])
+    })
+
+    it('with testing transaction should add add_payment_info event', () => {
+      self.brandedAnalyticsFactory.saveTestingTransaction(true)
+      self.brandedAnalyticsFactory.saveItem({
+        amount: 100,
+        amountWithFees: 102.5,
+        frequency: 'Single',
+        giftStartDate: null,
+        ...productData
+      })
+      self.brandedAnalyticsFactory.addPaymentInfo()
+
+      expect(self.$window.dataLayer).toEqual([
+        { ecommerce: null },
+        {
+          event: 'add_payment_info',
+          ecommerce: {
+            payment_type: 'Visa',
+            currency: 'USD',
+            donator_type: 'Household',
+            pays_processing: 'no',
+            value: '100.00',
+            processing_fee: '2.50',
+            testing_transaction: true,
             items: [{
               item_id: '1234567',
               item_name: 'Staff Person',
@@ -101,17 +147,15 @@ describe('branded analytics factory', () => {
     })
 
     it('with paying fees should add add_payment_info event', () => {
-      self.brandedAnalyticsFactory.saveDonorDetails({
-        'donor-type': 'Household'
-      })
-      self.brandedAnalyticsFactory.savePaymentType('Visa')
-      self.brandedAnalyticsFactory.addPaymentInfo({
+      self.brandedAnalyticsFactory.saveCoverFees(true)
+      self.brandedAnalyticsFactory.saveItem({
         amount: 100,
         amountWithFees: 102.5,
         frequency: 'Single',
         giftStartDate: null,
         ...productData
-      }, true)
+      })
+      self.brandedAnalyticsFactory.addPaymentInfo()
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -124,6 +168,7 @@ describe('branded analytics factory', () => {
             pays_processing: 'yes',
             value: '102.50',
             processing_fee: '2.50',
+            testing_transaction: false,
             items: [{
               item_id: '1234567',
               item_name: 'Staff Person',
@@ -140,18 +185,54 @@ describe('branded analytics factory', () => {
       ])
     })
 
-    it('with monthly gift should add add_payment_info event', () => {
-      self.brandedAnalyticsFactory.saveDonorDetails({
-        'donor-type': 'Household'
+    it('with bank account should add add_payment_info event', () => {
+      self.brandedAnalyticsFactory.savePaymentType('Checking', false)
+      self.brandedAnalyticsFactory.saveItem({
+        amount: 100,
+        amountWithFees: 102.5,
+        frequency: 'Single',
+        giftStartDate: null,
+        ...productData
       })
-      self.brandedAnalyticsFactory.savePaymentType('Visa')
-      self.brandedAnalyticsFactory.addPaymentInfo({
+      self.brandedAnalyticsFactory.addPaymentInfo()
+
+      expect(self.$window.dataLayer).toEqual([
+        { ecommerce: null },
+        {
+          event: 'add_payment_info',
+          ecommerce: {
+            payment_type: 'Checking',
+            currency: 'USD',
+            donator_type: 'Household',
+            pays_processing: undefined,
+            value: '100.00',
+            processing_fee: undefined,
+            testing_transaction: false,
+            items: [{
+              item_id: '1234567',
+              item_name: 'Staff Person',
+              item_brand: 'CRU',
+              item_category: 'STAFF',
+              item_variant: 'single',
+              currency: 'USD',
+              price: '100.00',
+              quantity: '1',
+              recurring_date: undefined
+            }]
+          }
+        }
+      ])
+    })
+
+    it('with monthly gift should add add_payment_info event', () => {
+      self.brandedAnalyticsFactory.saveItem({
         amount: 100,
         amountWithFees: 102.5,
         frequency: 'Monthly',
         giftStartDate: moment(new Date(2024, 0, 1)),
         ...productData
-      }, false)
+      })
+      self.brandedAnalyticsFactory.addPaymentInfo()
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -164,6 +245,7 @@ describe('branded analytics factory', () => {
             pays_processing: 'no',
             value: '100.00',
             processing_fee: '2.50',
+            testing_transaction: false,
             items: [{
               item_id: '1234567',
               item_name: 'Staff Person',
@@ -193,7 +275,22 @@ describe('branded analytics factory', () => {
   })
 
   describe('purchase', () => {
+    beforeEach(() => {
+      self.brandedAnalyticsFactory.saveDonorDetails({
+        'donor-type': 'Household'
+      })
+      self.brandedAnalyticsFactory.saveTestingTransaction(false)
+      self.brandedAnalyticsFactory.savePaymentType('Visa', true)
+      self.brandedAnalyticsFactory.saveCoverFees(false)
+      self.brandedAnalyticsFactory.savePurchase({
+        rawData: {
+          'purchase-number': '12345'
+        }
+      })
+    })
+
     it('should silently ignore bad data', () => {
+      self.brandedAnalyticsFactory.savePurchase(undefined)
       self.brandedAnalyticsFactory.purchase()
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -201,17 +298,14 @@ describe('branded analytics factory', () => {
     })
 
     it('should add purchase event', () => {
-      self.brandedAnalyticsFactory.saveDonorDetails({
-        'donor-type': 'Household'
-      })
-      self.brandedAnalyticsFactory.savePaymentType('Visa')
-      self.brandedAnalyticsFactory.purchase({
+      self.brandedAnalyticsFactory.saveItem({
         amount: 100,
         amountWithFees: 102.5,
         frequency: 'Single',
         giftStartDate: null,
         ...productData
-      }, false)
+      })
+      self.brandedAnalyticsFactory.purchase()
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -224,6 +318,48 @@ describe('branded analytics factory', () => {
             pays_processing: 'no',
             value: '100.00',
             processing_fee: '2.50',
+            siebel_transaction_id: '12345',
+            testing_transaction: false,
+            items: [{
+              item_id: '1234567',
+              item_name: 'Staff Person',
+              item_brand: 'CRU',
+              item_category: 'STAFF',
+              item_variant: 'single',
+              currency: 'USD',
+              price: '100.00',
+              quantity: '1',
+              recurring_date: undefined
+            }]
+          }
+        }
+      ])
+    })
+
+    it('with testing transaction should add purchase event', () => {
+      self.brandedAnalyticsFactory.saveTestingTransaction(true)
+      self.brandedAnalyticsFactory.saveItem({
+        amount: 100,
+        amountWithFees: 102.5,
+        frequency: 'Single',
+        giftStartDate: null,
+        ...productData
+      })
+      self.brandedAnalyticsFactory.purchase()
+
+      expect(self.$window.dataLayer).toEqual([
+        { ecommerce: null },
+        {
+          event: 'purchase',
+          ecommerce: {
+            payment_type: 'Visa',
+            currency: 'USD',
+            donator_type: 'Household',
+            pays_processing: 'no',
+            value: '100.00',
+            processing_fee: '2.50',
+            siebel_transaction_id: '12345',
+            testing_transaction: true,
             items: [{
               item_id: '1234567',
               item_name: 'Staff Person',
@@ -241,17 +377,15 @@ describe('branded analytics factory', () => {
     })
 
     it('with paying fees should add purchase event', () => {
-      self.brandedAnalyticsFactory.saveDonorDetails({
-        'donor-type': 'Household'
-      })
-      self.brandedAnalyticsFactory.savePaymentType('Visa')
-      self.brandedAnalyticsFactory.purchase({
+      self.brandedAnalyticsFactory.saveCoverFees(true)
+      self.brandedAnalyticsFactory.saveItem({
         amount: 100,
         amountWithFees: 102.5,
         frequency: 'Single',
         giftStartDate: null,
         ...productData
-      }, true)
+      })
+      self.brandedAnalyticsFactory.purchase()
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -264,6 +398,8 @@ describe('branded analytics factory', () => {
             pays_processing: 'yes',
             value: '102.50',
             processing_fee: '2.50',
+            siebel_transaction_id: '12345',
+            testing_transaction: false,
             items: [{
               item_id: '1234567',
               item_name: 'Staff Person',
@@ -280,18 +416,55 @@ describe('branded analytics factory', () => {
       ])
     })
 
-    it('with monthly gift should add purchase event', () => {
-      self.brandedAnalyticsFactory.saveDonorDetails({
-        'donor-type': 'Household'
+    it('with bank account should add purchase event', () => {
+      self.brandedAnalyticsFactory.savePaymentType('Checking', false)
+      self.brandedAnalyticsFactory.saveItem({
+        amount: 100,
+        amountWithFees: 102.5,
+        frequency: 'Single',
+        giftStartDate: null,
+        ...productData
       })
-      self.brandedAnalyticsFactory.savePaymentType('Visa')
-      self.brandedAnalyticsFactory.purchase({
+      self.brandedAnalyticsFactory.purchase()
+
+      expect(self.$window.dataLayer).toEqual([
+        { ecommerce: null },
+        {
+          event: 'purchase',
+          ecommerce: {
+            payment_type: 'Checking',
+            currency: 'USD',
+            donator_type: 'Household',
+            pays_processing: undefined,
+            value: '100.00',
+            processing_fee: undefined,
+            siebel_transaction_id: '12345',
+            testing_transaction: false,
+            items: [{
+              item_id: '1234567',
+              item_name: 'Staff Person',
+              item_brand: 'CRU',
+              item_category: 'STAFF',
+              item_variant: 'single',
+              currency: 'USD',
+              price: '100.00',
+              quantity: '1',
+              recurring_date: undefined
+            }]
+          }
+        }
+      ])
+    })
+
+    it('with monthly gift should add purchase event', () => {
+      self.brandedAnalyticsFactory.saveItem({
         amount: 100,
         amountWithFees: 102.5,
         frequency: 'Monthly',
         giftStartDate: moment(new Date(2024, 0, 1)),
         ...productData
-      }, false)
+      })
+      self.brandedAnalyticsFactory.purchase()
 
       expect(self.$window.dataLayer).toEqual([
         { ecommerce: null },
@@ -304,6 +477,8 @@ describe('branded analytics factory', () => {
             pays_processing: 'no',
             value: '100.00',
             processing_fee: '2.50',
+            siebel_transaction_id: '12345',
+            testing_transaction: false,
             items: [{
               item_id: '1234567',
               item_name: 'Staff Person',
