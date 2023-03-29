@@ -308,6 +308,9 @@ class ProductConfigFormController {
     this.submittingGift = true
     this.onStateChange({ state: 'submitting' })
 
+    const comment = this.itemConfig['donation-services-comments']
+    this.brandedAnalyticsFactory.saveTestingTransaction(comment ? comment.toLowerCase().includes('test') : false)
+
     const data = this.productData.frequency === 'NA' ? omit(this.itemConfig, ['recurring-start-month', 'recurring-day-of-month']) : this.itemConfig
 
     const savingObservable = this.isEdit
