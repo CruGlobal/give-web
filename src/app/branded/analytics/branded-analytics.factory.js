@@ -25,7 +25,7 @@ function generateEcommerce (siebelTransactionId) {
     pays_processing: brandedState.isCreditCard ? brandedState.coverFees ? 'yes' : 'no' : undefined,
     value: amountPaid,
     processing_fee: brandedState.isCreditCard ? (item.amountWithFees - item.amount).toFixed(2) : undefined,
-    siebel_transaction_id: siebelTransactionId,
+    transaction_id: siebelTransactionId,
     testing_transaction: Boolean(brandedState.testingTransaction),
     items: [{
       item_id: item.designationNumber,

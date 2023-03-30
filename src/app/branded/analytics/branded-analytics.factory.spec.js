@@ -318,7 +318,7 @@ describe('branded analytics factory', () => {
             pays_processing: 'no',
             value: '100.00',
             processing_fee: '2.50',
-            siebel_transaction_id: '12345',
+            transaction_id: '12345',
             testing_transaction: false,
             items: [{
               item_id: '1234567',
@@ -358,7 +358,7 @@ describe('branded analytics factory', () => {
             pays_processing: 'no',
             value: '100.00',
             processing_fee: '2.50',
-            siebel_transaction_id: '12345',
+            transaction_id: '12345',
             testing_transaction: true,
             items: [{
               item_id: '1234567',
@@ -398,7 +398,7 @@ describe('branded analytics factory', () => {
             pays_processing: 'yes',
             value: '102.50',
             processing_fee: '2.50',
-            siebel_transaction_id: '12345',
+            transaction_id: '12345',
             testing_transaction: false,
             items: [{
               item_id: '1234567',
@@ -438,7 +438,7 @@ describe('branded analytics factory', () => {
             pays_processing: undefined,
             value: '100.00',
             processing_fee: undefined,
-            siebel_transaction_id: '12345',
+            transaction_id: '12345',
             testing_transaction: false,
             items: [{
               item_id: '1234567',
@@ -477,7 +477,7 @@ describe('branded analytics factory', () => {
             pays_processing: 'no',
             value: '100.00',
             processing_fee: '2.50',
-            siebel_transaction_id: '12345',
+            transaction_id: '12345',
             testing_transaction: false,
             items: [{
               item_id: '1234567',
