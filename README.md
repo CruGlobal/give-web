@@ -137,12 +137,12 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 #### Server-side configuration for a new branded checkout domain
 1. Figure out what domain you will be hosting the branded checkout form on. For example, `myministry.org`
 2. Make sure HTTPS is enabled on that domain
-3. You will need to setup a subdomain for the give.cru.org API. We've experienced cross-domain cookie issues trying to hit the give.cru.org API directly from a custom domain. Create a CNAME record for `brandedcheckout.myministry.org` (the subdomain could be different but using that suggested subdomain makes it consistent with other sites) and point it at `give.cru.org`.
+3. You will need to setup a subdomain for the give.cru.org API. We've experienced cross-domain cookie issues trying to hit the give.cru.org API directly from a custom domain. Create a CNAME record for `brandedcheckout.myministry.org` (the subdomain could be different but using that suggested subdomain makes it consistent with other sites) and point it at `give-site-production-alb-1251385984.us-east-1.elb.amazonaws.com`.
 4. In order to accept credit cards on your own domain, you will need to setup a TSYS merchant account. Contact the Cru's Financial Services Group ([hazel.mcpherson@cru.org](mailto:hazel.mcpherson@cru.org)) if you don't already have one. You will need a TSYS device id (a numeric id around 14 digits) to complete step 6.
 5. To prepare for the next step, think of a unique identifier like `"jesusfilm"` or `"aia"` that uniquely identifies your ministry and domain. We can create this for you but we need enough information about your ministry to do so.
 6. Once you have completed the steps above, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)). Below is an example email: (replace the `{{}}`s with the info for your site)
 
-   > I'm working on implementing branded checkout for {{my ministry}}. I would like to host the branded checkout form on {{myminsitry.org}}. HTTPS is setup on my domain and I have created a CNAME record for the subdomain {{brandedcheckout.myministry.org}} that points to give.cru.org. (DPS may be able to help with the CNAME record configuration if the domain is hosted with us.)
+   > I'm working on implementing branded checkout for {{my ministry}}. I would like to host the branded checkout form on {{myminsitry.org}}. HTTPS is setup on my domain and I have created a CNAME record for the subdomain {{brandedcheckout.myministry.org}} that points to give-site-production-alb-1251385984.us-east-1.elb.amazonaws.com. (DPS may be able to help with the CNAME record configuration if the domain is hosted with us.)
    >
    >    I need help configuring the give.cru.org API to work on my domain. Can you:
    >    - Add an SSL certificate to cruorg-alb for my subdomain {{brandedcheckout.myministry.org}}
@@ -154,7 +154,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
    >    - Whitelist my site {{https://myministry.org}} with TSYS so their TSEP credit card tokenization services will work on my domain.
 
 7. Test the subdomain configured to point to the give.cru.org API. https://brandedcheckout.myministry.org/cortex/nextdrawdate is a good test url. There should be no certificate errors and you should get a response that looks like this `{"next-draw-date":"2018-09-27"}`. If there are errors, please get in touch with ([help@cru.org](mailto:help@cru.org)) again and provide details as to what is happening.
-8. Add the `<branded-checkout>` tag to a page on the domain you've configured above. You can follow the documentation above for all the possible attributes and the required style and script tags. The email conversations above should have provided the values for the `api-url` (the subdomain that has a CNAME to give.cru.org) and `tsys-device` (the unique string identifier created by you or by DPS) attributes. You can add them like this:
+8. Add the `<branded-checkout>` tag to a page on the domain you've configured above. You can follow the documentation above for all the possible attributes and the required style and script tags. The email conversations above should have provided the values for the `api-url` (the subdomain that has a CNAME to give-site-production-alb-1251385984.us-east-1.elb.amazonaws.com) and `tsys-device` (the unique string identifier created by you or by DPS) attributes. You can add them like this:
    ```html
    <branded-checkout
        designation-number="0763355"
