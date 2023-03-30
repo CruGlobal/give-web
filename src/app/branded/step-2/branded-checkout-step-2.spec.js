@@ -32,6 +32,8 @@ describe('branded checkout step 2', () => {
 
   describe('loadCart', () => {
     beforeEach(() => {
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'saveCoverFees')
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'saveItem')
       jest.spyOn($ctrl.brandedAnalyticsFactory, 'addPaymentInfo')
       jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
     })
@@ -43,7 +45,9 @@ describe('branded checkout step 2', () => {
 
       expect($ctrl.cartData).toEqual(cartData)
       expect($ctrl.errorLoadingCart).toEqual(false)
-      expect($ctrl.brandedAnalyticsFactory.addPaymentInfo).toHaveBeenCalledWith(cartData.items[0], true)
+      expect($ctrl.brandedAnalyticsFactory.saveCoverFees).toHaveBeenCalledWith(true)
+      expect($ctrl.brandedAnalyticsFactory.saveItem).toHaveBeenCalledWith($ctrl.cartData.items[0])
+      expect($ctrl.brandedAnalyticsFactory.addPaymentInfo).toHaveBeenCalled()
     })
 
     it('should handle error', () => {
@@ -68,7 +72,6 @@ describe('branded checkout step 2', () => {
 
   describe('changeStep', () => {
     beforeEach(() => {
-      jest.spyOn($ctrl.brandedAnalyticsFactory, 'purchase')
       jest.spyOn($ctrl.brandedAnalyticsFactory, 'checkoutChange')
       jest.spyOn($ctrl.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
     })
@@ -78,7 +81,6 @@ describe('branded checkout step 2', () => {
       $ctrl.changeStep('thankYou')
 
       expect($ctrl.next).toHaveBeenCalled()
-      expect($ctrl.brandedAnalyticsFactory.purchase).toHaveBeenCalledWith($ctrl.cartData.items[0], true)
       expect($ctrl.brandedAnalyticsFactory.checkoutChange).not.toHaveBeenCalled()
     })
 
@@ -86,7 +88,6 @@ describe('branded checkout step 2', () => {
       $ctrl.changeStep('otherStep')
 
       expect($ctrl.previous).toHaveBeenCalled()
-      expect($ctrl.brandedAnalyticsFactory.purchase).not.toHaveBeenCalled()
       expect($ctrl.brandedAnalyticsFactory.checkoutChange).toHaveBeenCalledWith('otherStep')
     })
   })

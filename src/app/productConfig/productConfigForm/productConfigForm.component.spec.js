@@ -552,6 +552,7 @@ describe('product config form component', function () {
       $ctrl.errorAlreadyInCart = true
       $ctrl.errorSavingGeneric = true
       jest.spyOn($ctrl.analyticsFactory, 'cartAdd').mockImplementation(() => {})
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'saveTestingTransaction')
       $ctrl.initItemConfig()
     })
 
@@ -565,6 +566,32 @@ describe('product config form component', function () {
 
     describe('isEdit = false', () => {
       testSaving(false)
+    })
+
+    describe('testing transaction flag', () => {
+      beforeEach(() => {
+        $ctrl.productData = {}
+      })
+
+      it('saves flag with no comment', () => {
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(false)
+      })
+
+      it('saves flag with non-test comment', () => {
+        $ctrl.itemConfig['donation-services-comments'] = 'Anonymous'
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(false)
+      })
+
+      it('saves flag with test comment', () => {
+        $ctrl.itemConfig['donation-services-comments'] = 'Testing'
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(true)
+      })
     })
 
     function testSaving (isEdit) {
