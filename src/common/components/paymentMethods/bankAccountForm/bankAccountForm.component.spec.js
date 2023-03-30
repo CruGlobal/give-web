@@ -179,34 +179,6 @@ describe('bank account form', () => {
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData })
     })
 
-    it('should send a request to save the bank account payment info using the prodcloud env', () => {
-      self.controller.bankPayment = {
-        accountType: 'checking',
-        bankName: 'First Bank',
-        routingNumber: '123456789',
-        accountNumber: '123456789012'
-      }
-      self.formController.$valid = true
-      self.controller.envService.set('prodcloud')
-      self.controller.savePayment()
-
-      expect(cruPayments.bankAccount.init).toHaveBeenCalledWith('production', ccpKey)
-      expect(cruPayments.bankAccount.encrypt).toHaveBeenCalledWith('123456789012')
-      expect(self.formController.$setSubmitted).toHaveBeenCalled()
-      const expectedData = {
-        bankAccount: {
-          'account-type': 'checking',
-          'bank-name': 'First Bank',
-          'encrypted-account-number': encryptedAccountNumber,
-          'display-account-number': '9012',
-          'routing-number': '123456789'
-        }
-      }
-
-      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } })
-      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData })
-    })
-
     it('should send a request to save the bank account payment info with an existing payment method where the accountNumber is empty', () => {
       self.controller.paymentMethod = {
         'display-account-number': '9012'

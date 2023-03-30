@@ -137,7 +137,7 @@ class CreditCardController {
           }) // Send masked card number when card number is not updated
         : this.tsysService.getManifest()
           .mergeMap(data => {
-            const productionEnvironments = ['production', 'prodcloud']
+            const productionEnvironments = ['production']
             const actualEnvironment = this.envService.get()
             const ccpEnvironment = productionEnvironments.includes(actualEnvironment) ? 'production' : actualEnvironment
 
