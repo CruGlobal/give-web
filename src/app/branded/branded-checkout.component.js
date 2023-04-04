@@ -23,7 +23,8 @@ const componentName = 'brandedCheckout'
 
 class BrandedCheckoutController {
   /* @ngInject */
-  constructor ($window, analyticsFactory, brandedAnalyticsFactory, tsysService, sessionService, envService, orderService, $translate) {
+  constructor ($element, $window, analyticsFactory, brandedAnalyticsFactory, tsysService, sessionService, envService, orderService, $translate) {
+    this.$element = $element[0] // extract the DOM element from the jqLite wrapper
     this.$window = $window
     this.analyticsFactory = analyticsFactory
     this.brandedAnalyticsFactory = brandedAnalyticsFactory
@@ -78,17 +79,43 @@ class BrandedCheckoutController {
         this.checkoutStep = 'thankYou'
         break
     }
-    this.$window.document.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
+    this.$element.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
   }
 
-  previous () {
-    switch (this.checkoutStep) {
-      case 'review':
-        this.fireAnalyticsEvents('contact', 'payment')
-        this.checkoutStep = 'giftContactPayment'
-        break
+  previous (newStep) {
+    let scrollElement = 'branded-checkout'
+
+    if (this.checkoutStep === 'review') {
+      this.fireAnalyticsEvents('contact', 'payment')
+      this.checkoutStep = 'giftContactPayment'
+
+      switch (newStep) {
+        case 'contact':
+          scrollElement = 'contact-info'
+          break
+        case 'cart':
+          scrollElement = 'product-config-form'
+          break
+        case 'payment':
+          scrollElement = 'checkout-existing-payment-methods'
+          break
+      }
     }
-    this.$window.document.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
+
+    // Watch for changes until the element we are scrolling to exists and everything has loaded
+    // because there will be layout shift every time a new component finishes loading
+    const observer = new this.$window.MutationObserver(() => {
+      // TODO: When Firefox supports :has(), this query can be changed to `.panel :has(${scrollElement})`
+      // instead of having to find the scrollElement and manually navigate up to the grandparent element
+      // https://caniuse.com/css-has
+      const element = this.$element.querySelector(scrollElement)
+      if (element && this.$element.querySelector('loading') === null) {
+        // Traverse up to the .panel grandparent
+        element.parentElement.parentElement.scrollIntoView({ behavior: 'smooth' })
+        observer.disconnect()
+      }
+    })
+    observer.observe(this.$element, { childList: true, subtree: true })
   }
 
   onThankYouPurchaseLoaded (purchase) {

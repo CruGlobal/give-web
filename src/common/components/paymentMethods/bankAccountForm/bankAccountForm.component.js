@@ -112,6 +112,7 @@ class BankAccountController {
           }
         })
       }, error => {
+        this.analyticsFactory.checkoutFieldError('encryptAccount', 'failed')
         this.$log.error('Error encrypting bank account number', error)
         this.onPaymentFormStateChange({
           $event: {
