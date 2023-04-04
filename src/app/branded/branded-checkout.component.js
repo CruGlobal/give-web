@@ -79,11 +79,11 @@ class BrandedCheckoutController {
         this.checkoutStep = 'thankYou'
         break
     }
-    this.$element.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
+    this.$element.scrollIntoView({ behavior: 'smooth' })
   }
 
   previous (newStep) {
-    let scrollElement = 'branded-checkout'
+    let scrollElement
 
     if (this.checkoutStep === 'review') {
       this.fireAnalyticsEvents('contact', 'payment')
@@ -102,20 +102,24 @@ class BrandedCheckoutController {
       }
     }
 
-    // Watch for changes until the element we are scrolling to exists and everything has loaded
-    // because there will be layout shift every time a new component finishes loading
-    const observer = new this.$window.MutationObserver(() => {
-      // TODO: When Firefox supports :has(), this query can be changed to `.panel :has(${scrollElement})`
-      // instead of having to find the scrollElement and manually navigate up to the grandparent element
-      // https://caniuse.com/css-has
-      const element = this.$element.querySelector(scrollElement)
-      if (element && this.$element.querySelector('loading') === null) {
-        // Traverse up to the .panel grandparent
-        element.parentElement.parentElement.scrollIntoView({ behavior: 'smooth' })
-        observer.disconnect()
-      }
-    })
-    observer.observe(this.$element, { childList: true, subtree: true })
+    if (scrollElement) {
+      // Watch for changes until the element we are scrolling to exists and everything has loaded
+      // because there will be layout shift every time a new component finishes loading
+      const observer = new this.$window.MutationObserver(() => {
+        // TODO: When support for :has() is high enough, this query could be changed to `.panel :has(${scrollElement})`
+        // instead of having to find the scrollElement and manually navigate up to the grandparent element
+        // https://caniuse.com/css-has
+        const element = this.$element.querySelector(scrollElement)
+        if (element && this.$element.querySelector('loading') === null) {
+          // Traverse up to the .panel grandparent
+          element.parentElement.parentElement.scrollIntoView({ behavior: 'smooth' })
+          observer.disconnect()
+        }
+      })
+      observer.observe(this.$element, { childList: true, subtree: true })
+    } else {
+      this.$element.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   onThankYouPurchaseLoaded (purchase) {

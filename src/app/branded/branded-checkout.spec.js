@@ -11,16 +11,17 @@ describe('branded checkout', () => {
   let $ctrl
 
   const querySelectorMock = jest.fn((selector) => (selector === 'loading' ? null : element))
-  const element = { scrollIntoView: scrollIntoViewMock }
-  element.parentElement = element;
+  const element = {
+    querySelector: querySelectorMock,
+    scrollIntoView: scrollIntoViewMock
+  }
+  element.parentElement = element
 
   beforeEach(inject($componentController => {
     $ctrl = $componentController(
       module.name,
       {
-        $element: [{
-          querySelector: querySelectorMock,
-        }],
+        $element: [element],
         $window: {
           MutationObserver: jest.fn((callback) => ({
             observe: jest.fn(() => {
@@ -169,7 +170,7 @@ describe('branded checkout', () => {
     })
 
     it('should transition from review to giftContactPayment', () => {
-      $ctrl.previous()
+      $ctrl.previous('contact')
 
       expect($ctrl.checkoutStep).toEqual('giftContactPayment')
     })
