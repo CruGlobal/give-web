@@ -166,6 +166,7 @@ class CreditCardController {
         })
       }, error => {
         this.$log.error('Error tokenizing credit card', error)
+        this.analyticsFactory.checkoutFieldError('tokenizeCard', 'failed')
         this.onPaymentFormStateChange({
           $event: {
             state: 'error',

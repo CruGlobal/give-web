@@ -10,14 +10,22 @@ describe('branded checkout', () => {
   beforeEach(angular.mock.module(module.name))
   let $ctrl
 
+  const element = { scrollIntoView: scrollIntoViewMock };
+  element.parentElement = element;
   beforeEach(inject($componentController => {
     $ctrl = $componentController(
       module.name,
       {
+        $element: [{
+          querySelector: jest.fn((selector) => (selector === 'loading' ? null : element))
+        }],
         $window: {
-          document: {
-            querySelector: jest.fn(() => ({ scrollIntoView: scrollIntoViewMock })),
-          },
+          MutationObserver: jest.fn((callback) => ({
+            observe: jest.fn(() => {
+              callback();
+            }),
+            disconnect: jest.fn(),
+          })),
         },
         brandedAnalyticsFactory: {
           savePurchase: jest.fn(),
