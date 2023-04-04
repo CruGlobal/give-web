@@ -170,7 +170,7 @@ describe('branded checkout', () => {
     })
 
     it('should transition from review to giftContactPayment', () => {
-      $ctrl.previous('contact')
+      $ctrl.previous()
 
       expect($ctrl.checkoutStep).toEqual('giftContactPayment')
     })
