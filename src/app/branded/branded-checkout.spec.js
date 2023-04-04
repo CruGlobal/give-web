@@ -10,14 +10,16 @@ describe('branded checkout', () => {
   beforeEach(angular.mock.module(module.name))
   let $ctrl
 
-  const element = { scrollIntoView: scrollIntoViewMock };
+  const querySelectorMock = jest.fn((selector) => (selector === 'loading' ? null : element))
+  const element = { scrollIntoView: scrollIntoViewMock }
   element.parentElement = element;
+
   beforeEach(inject($componentController => {
     $ctrl = $componentController(
       module.name,
       {
         $element: [{
-          querySelector: jest.fn((selector) => (selector === 'loading' ? null : element))
+          querySelector: querySelectorMock,
         }],
         $window: {
           MutationObserver: jest.fn((callback) => ({
@@ -158,15 +160,33 @@ describe('branded checkout', () => {
   })
 
   describe('previous', () => {
+    beforeEach(() => {
+      $ctrl.checkoutStep = 'review'
+    })
+
     afterEach(() => {
       expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' })
     })
 
     it('should transition from review to giftContactPayment', () => {
-      $ctrl.checkoutStep = 'review'
       $ctrl.previous()
 
       expect($ctrl.checkoutStep).toEqual('giftContactPayment')
+    })
+
+    it('should scroll to the contact form when change contact info was clicked', () => {
+      $ctrl.previous('contact')
+      expect(querySelectorMock).toHaveBeenCalledWith('contact-info')
+    })
+
+    it('should scroll to the contact form when change cart was clicked', () => {
+      $ctrl.previous('cart')
+      expect(querySelectorMock).toHaveBeenCalledWith('product-config-form')
+    })
+
+    it('should scroll to the contact form when change payment was clicked', () => {
+      $ctrl.previous('payment')
+      expect(querySelectorMock).toHaveBeenCalledWith('checkout-existing-payment-methods')
     })
   })
 
