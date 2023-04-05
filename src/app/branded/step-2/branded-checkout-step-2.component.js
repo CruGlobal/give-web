@@ -21,7 +21,6 @@ class BrandedCheckoutStep2Controller {
   $onInit () {
     this.loadCart()
     this.loadRadioStation()
-    this.brandedAnalyticsFactory.reviewOrder()
   }
 
   loadCart () {
@@ -33,6 +32,7 @@ class BrandedCheckoutStep2Controller {
           this.brandedAnalyticsFactory.saveCoverFees(this.orderService.retrieveCoverFeeDecision())
           this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
           this.brandedAnalyticsFactory.addPaymentInfo()
+          this.brandedAnalyticsFactory.reviewOrder()
         },
         error => {
           this.errorLoadingCart = true
@@ -49,7 +49,7 @@ class BrandedCheckoutStep2Controller {
     if (newStep === 'thankYou') {
       this.next()
     } else {
-      this.previous()
+      this.previous({ newStep })
       this.brandedAnalyticsFactory.checkoutChange(newStep)
     }
   }

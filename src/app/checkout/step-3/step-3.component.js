@@ -149,6 +149,7 @@ class Step3Controller {
       this.changeStep({ newStep: 'thankYou' })
     },
     error => {
+      this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
 
