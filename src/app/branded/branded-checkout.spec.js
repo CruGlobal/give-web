@@ -186,7 +186,8 @@ describe('branded checkout', () => {
 
     it('should scroll to the contact form when change payment was clicked', () => {
       $ctrl.previous('payment')
-      expect(querySelectorMock).toHaveBeenCalledWith('checkout-existing-payment-methods')
+      expect(querySelectorMock).toHaveBeenCalledWith('checkout-step-2')
+    })
 
     it('should scroll even when MutationObserver is unavailable', () => {
       $ctrl.$window.MutationObserver = undefined

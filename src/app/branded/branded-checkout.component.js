@@ -97,7 +97,7 @@ class BrandedCheckoutController {
           scrollElement = 'product-config-form'
           break
         case 'payment':
-          scrollElement = 'checkout-existing-payment-methods'
+          scrollElement = 'checkout-step-2'
           break
       }
     }
