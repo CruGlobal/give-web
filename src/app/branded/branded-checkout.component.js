@@ -114,7 +114,9 @@ class BrandedCheckoutController {
         const element = this.$element.querySelector(scrollElement)
         if (element && this.$element.querySelector('loading') === null) {
           // Traverse up to the .panel grandparent
-          element.parentElement.parentElement.scrollIntoView({ behavior: 'smooth' })
+          const panel = element.parentElement.parentElement
+          // Scroll 100px past the top of the element
+          this.$window.scrollTo({ top: panel.getBoundingClientRect().top + this.$window.scrollY - 100, behavior: 'smooth' })
           observer.disconnect()
         }
       })
