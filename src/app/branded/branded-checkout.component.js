@@ -99,12 +99,12 @@ class BrandedCheckoutController {
           scrollElement = 'product-config-form'
           break
         case 'payment':
-          scrollElement = 'checkout-existing-payment-methods'
+          scrollElement = 'checkout-step-2'
           break
       }
     }
 
-    if (scrollElement) {
+    if (scrollElement && this.$window.MutationObserver) {
       // Watch for changes until the element we are scrolling to exists and everything has loaded
       // because there will be layout shift every time a new component finishes loading
       const observer = new this.$window.MutationObserver(() => {
