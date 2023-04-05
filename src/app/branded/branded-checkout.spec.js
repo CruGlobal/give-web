@@ -170,8 +170,7 @@ describe('branded checkout', () => {
     })
 
     it('should transition from review to giftContactPayment', () => {
-      $ctrl.previous()
-
+      $ctrl.previous('contact')
       expect($ctrl.checkoutStep).toEqual('giftContactPayment')
     })
 
@@ -188,6 +187,11 @@ describe('branded checkout', () => {
     it('should scroll to the contact form when change payment was clicked', () => {
       $ctrl.previous('payment')
       expect(querySelectorMock).toHaveBeenCalledWith('checkout-existing-payment-methods')
+
+    it('should scroll even when MutationObserver is unavailable', () => {
+      $ctrl.$window.MutationObserver = undefined
+      $ctrl.previous('contact')
+      expect($ctrl.checkoutStep).toEqual('giftContactPayment')
     })
   })
 
