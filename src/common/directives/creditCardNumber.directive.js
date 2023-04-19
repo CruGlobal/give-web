@@ -1,6 +1,6 @@
 import angular from 'angular'
 import appConfig from 'common/app.config'
-import cruPayments from 'cru-payments'
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 
 const directiveName = 'creditCardNumber'
 
