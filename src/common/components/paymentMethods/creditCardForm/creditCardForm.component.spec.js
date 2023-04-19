@@ -5,7 +5,18 @@ import size from 'lodash/size'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 
-import cruPayments from 'cru-payments/dist/cru-payments'
+jest.mock('@cruglobal/cru-payments/dist/cru-payments', () => {
+  const originalModule = jest.requireActual('@cruglobal/cru-payments/dist/cru-payments')
+  return {
+    creditCard: {
+      ...originalModule.creditCard,
+      init: jest.fn(),
+      encrypt: jest.fn()
+    }
+  }
+})
+
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 
 import module from './creditCardForm.component'
 
@@ -91,6 +102,10 @@ describe('credit card form', () => {
       jest.spyOn(self.controller.tsysService, 'getManifest').mockReturnValue(Observable.of({ deviceId: '<device id>', manifest: '<manifest>' }))
       jest.spyOn(cruPayments.creditCard, 'init').mockImplementation(() => {})
       jest.spyOn(cruPayments.creditCard, 'encrypt').mockReturnValue(Observable.of({ tsepToken: 'YfxWvtXJxjET5100', maskedCardNumber: '1111', transactionID: '<transaction id>', cvv2: '123' }))
+    })
+
+    afterEach(() => {
+      jest.clearAllMocks()
     })
 
     it('should call onPaymentFormStateChange with success false when form is invalid', () => {

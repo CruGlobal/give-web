@@ -16,7 +16,7 @@ import showErrors from 'common/filters/showErrors.filter'
 import { scrollModalToTop } from 'common/services/modalState.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
 
-import cruPayments from 'cru-payments/dist/cru-payments'
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 import tsys from 'common/services/api/tsys.service'
 
 import template from './creditCardForm.tpl.html'
