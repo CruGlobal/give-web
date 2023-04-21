@@ -12,6 +12,9 @@ describe('Designation Editor Photo', function () {
     })
   }))
 
+  const file = new File(['contents'], 'file.jpg');
+  const file2 = new File(['contents'], 'file.jpg');
+
   beforeEach(inject(function (_$rootScope_, _$controller_, _$flushPendingTasks_, _$q_, _$verifyNoPendingTasks_) {
     const $scope = _$rootScope_.$new()
     $flushPendingTasks = _$flushPendingTasks_
@@ -26,6 +29,8 @@ describe('Designation Editor Photo', function () {
       selectedPhoto: [{ url: '/content/photo1.jpg' }],
       $scope: $scope
     })
+
+    URL.createObjectURL = jest.fn().mockReturnValue('blob:url')
   }))
 
   afterEach(() => {
@@ -43,6 +48,12 @@ describe('Designation Editor Photo', function () {
     expect($ctrl.photos).toBeDefined()
   })
 
+  it('uploadStart', function() {
+    $ctrl.uploadStart(file)
+    expect($ctrl.uploading).toBe(true)
+    expect($ctrl.processingPhotos.size).toBe(1)
+  })
+
   it('uploadComplete', function () {
     const photos = [{
       original: '/content/photo1.jpg'
@@ -53,19 +64,28 @@ describe('Designation Editor Photo', function () {
     }]
     jest.spyOn($ctrl, 'refreshPhotos').mockReturnValueOnce($q.resolve(photos))
 
-    $ctrl.uploadComplete({ headers: () => '/content/photo3.jpg' })
-    expect($ctrl.numProcessingPhotos).toBe(1)
-
+    $ctrl.uploadStart(file)
+    $ctrl.uploadComplete({ headers: () => '/content/photo3.jpg' }, file)
     $flushPendingTasks()
-    expect($ctrl.numProcessingPhotos).toBe(0)
+
+    expect($ctrl.uploading).toBe(false)
+    expect($ctrl.processingPhotos.size).toBe(0)
 
     expect($ctrl.refreshPhotos).toHaveBeenCalledWith('/content/photo3.jpg')
     expect($ctrl.photos).toBe(photos)
   })
 
+  it('uploadError', function() {
+    $ctrl.uploadStart(file)
+    $ctrl.uploadError(file)
+    expect($ctrl.uploading).toBe(false)
+    expect($ctrl.processingPhotos.size).toBe(0)
+  })
+
   it('getProcessingPhotos returns an array of processing photos', () => {
-    $ctrl.numProcessingPhotos = 3
-    expect($ctrl.getProcessingPhotos()).toHaveLength(3)
+    $ctrl.uploadStart(file)
+    $ctrl.uploadStart(file2)
+    expect($ctrl.getProcessingPhotos()).toHaveLength(2)
   })
 
   describe('tryLoadUploadedPhoto', () => {

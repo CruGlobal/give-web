@@ -60,8 +60,9 @@
         </div>
         <img desig-img-src="{{photo.thumbnail}}" />
       </div>
-      <div class="cover-thumb" ng-repeat="photo in $ctrl.getProcessingPhotos() track by $index">
+      <div class="cover-thumb processing" ng-repeat="blobUrl in $ctrl.getProcessingPhotos() track by $index">
         <loading type="centered">Processing...</loading>
+        <img ng-src="{{blobUrl}}" />
       </div>
     </div>
   </div>
@@ -82,9 +83,9 @@
           url="/bin/crugive/image.html?designationNumber={{$ctrl.designationNumber}}"
           on-invalid-file-type="$ctrl.invalidFileType = true"
           on-complete="$ctrl.invalidFileType = false"
-          on-upload="$ctrl.uploading = true"
-          on-success="$ctrl.uploadComplete(response)"
-          on-error="$ctrl.uploading = false"
+          on-upload="$ctrl.uploadStart(file)"
+          on-success="$ctrl.uploadComplete(response, file)"
+          on-error="$ctrl.uploadError(file)"
         />
       </div>
 
