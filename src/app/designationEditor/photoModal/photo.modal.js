@@ -22,7 +22,10 @@ class ModalInstanceCtrl {
     this.retryService = retryService
 
     this.imgDomain = envService.read('imgDomain')
-    this.numProcessingPhotos = 0
+    // The key is the File, and the value is the blob URL
+    // This can't just be a set because URL.createObjectURL(file) creates a new blob URL every
+    // time, even when called with the same file
+    this.processingPhotos = new Map()
     this.RETRY_DELAY_MS = 3000
     this.MAX_RETRIES = 20
 
@@ -35,20 +38,30 @@ class ModalInstanceCtrl {
     this.maxNumberOfPhotos = 6
   }
 
-  uploadComplete (response) {
+  uploadStart (file) {
+    this.uploading = true
+
+    this.processingPhotos.set(file, URL.createObjectURL(file))
+  }
+
+  uploadComplete (response, file) {
     this.uploading = false
-    ++this.numProcessingPhotos
 
     this.refreshPhotos(new URL(response.headers('location'), this.$window.location).pathname).then((photos) => {
       this.photos = photos
     }, angular.noop).finally(() => {
-      --this.numProcessingPhotos
+      this.processingPhotos.delete(file)
     })
   }
 
-  // ng-repeat needs an array to iterate over, so generate an array with one element per processing photo
+  uploadError (file) {
+    this.uploading = false
+    this.processingPhotos.delete(file)
+  }
+
+  // ng-repeat can only iterate over arrays, not Maps, generate an array of the blob URLs of all currently uploading/processing images
   getProcessingPhotos () {
-    return new Array(this.numProcessingPhotos).fill(undefined)
+    return Array.from(this.processingPhotos.values())
   }
 
   // Attempt to load a recently uploaded photo because newly uploaded photos will 404 for several seconds
