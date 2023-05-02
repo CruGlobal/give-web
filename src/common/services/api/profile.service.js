@@ -131,7 +131,7 @@ class Profile {
 
   getPhoneNumbers () {
     return this.cortexApiService.get({
-      path: ['phonenumbers', this.cortexApiService.scope],
+      path: ['phonenumbers', this.cortexApiService.scope, 'form'],
       zoom: {
         donor: 'element[]'
       }
