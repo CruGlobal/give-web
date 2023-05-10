@@ -28,6 +28,7 @@
   </div>
   <user-match-identity ng-switch-when="identity"
                        contacts="$ctrl.contacts"
+                       on-back="$ctrl.changeMatchState('intro')"
                        on-select-contact="$ctrl.onSelectContact(contact)">
   </user-match-identity>
   <div ng-switch-when="activate">

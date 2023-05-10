@@ -75,6 +75,13 @@ class UserMatchModalController {
   }
 
   getContacts () {
+    if (this.contacts) {
+      // The user picked a contact then went back, so don't load the contacts again because there
+      // probably won't even be any
+      this.changeMatchState('identity')
+      return
+    }
+
     this.setLoading({ loading: true })
     this.verificationService.getContacts().subscribe((contacts) => {
       if (find(contacts, { selected: true })) {
