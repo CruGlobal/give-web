@@ -103,7 +103,7 @@ class CartController {
   }
 
   checkout () {
-    this.$window.location = this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html'
+    this.$window.location = this.sessionService.getRole() === 'REGISTERED' ? `/checkout.html${window.location.search}` : `/sign-in.html${window.location.search}`
   }
 
   setContinueBrowsingUrl () {

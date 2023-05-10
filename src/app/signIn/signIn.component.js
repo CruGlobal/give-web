@@ -39,10 +39,10 @@ class SignInController {
   checkoutAsGuest () {
     this.sessionService.downgradeToGuest(true).subscribe({
       error: () => {
-        this.$window.location = '/checkout.html'
+        this.$window.location = `/checkout.html${window.location.search}`
       },
       complete: () => {
-        this.$window.location = '/checkout.html'
+        this.$window.location = `/checkout.html${window.location.search}`
       }
     })
   }
