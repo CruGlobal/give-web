@@ -65,6 +65,10 @@ class NavCartController {
     this.$window.location = this.envService.read('publicGive') +
       (this.sessionService.getRole() === 'REGISTERED' ? `/checkout.html${window.location.search}` : `/sign-in.html${window.location.search}`)
   }
+
+  buildCartUrl () {
+    return `${this.envService.read('publicGive')}/cart.html${window.location.search}`
+  }
 }
 
 export default angular
