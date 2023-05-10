@@ -35,8 +35,31 @@ register-account-modal {
     color: white;
   }
 
-  .modal-sm .give-modal-content & .modal-body {
+  /* TODO: This affects the styles on the contact info form */
+  .modal-dialog .give-modal-content & .modal-body {
     padding: 30px 15px;
+  }
+
+  .modal-dialog.modal-lg & {
+    .modal-header {
+      text-align: center;
+    }
+    .modal-body {
+      margin-left: 200px;
+      margin-right: 200px;
+    }
+    .footer-buttons {
+      margin-left: -230px;
+      margin-right: -230px;
+      margin-bottom: -30px;
+      padding: 15px;
+      background-color: #F5F5F5;
+
+      button {
+        width: 400px;
+        margin-left: auto;
+      }
+    }
   }
 }
 
@@ -64,6 +87,10 @@ user-match-modal {
     .step-label {
       font-weight: bold;
     }
+  }
+
+  .modal-dialog.modal-lg & .success .footer-buttons button {
+    margin-right: auto;
   }
 }
 

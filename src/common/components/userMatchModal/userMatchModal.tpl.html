@@ -22,7 +22,9 @@
     <p class="text-center" style="margin-bottom: 2em;" translate>
       Please answer these questions to confirm this so that you can access your whole giving history from this account.
     </p>
-    <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.getContacts()" translate>Next: Verify Name</button>
+    <div class="footer-buttons">
+      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.getContacts()" translate>Next: Verify Name</button>
+    </div>
   </div>
   <user-match-identity ng-switch-when="identity"
                        contacts="$ctrl.contacts"
@@ -47,7 +49,7 @@
                        question-count="$ctrl.questionCount"
                        on-question-answer="$ctrl.onQuestionAnswer(key, answer)">
   </user-match-question>
-  <div ng-switch-when="success">
+  <div ng-switch-when="success" class="success">
     <h4 class="text-center">Success!</h4>
     <p ng-if="!$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('ga-registration-match-linked-account-success')">
       Thank you for taking the time to answer our security questions. Your account is now activated, and you are signed in.
@@ -61,11 +63,11 @@
     <p ng-if="$ctrl.cartCount === 0" translate>
       You may now find giving opportunities or view your dashboard.
     </p>
-    <div ng-if="$ctrl.cartCount > 0">
+    <div class="footer-buttons" ng-if="$ctrl.cartCount > 0">
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.continueCheckout()" translate>Continue Checkout</button>
       <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.gotoOpportunities()" translate>Find Giving Opportunities</button>
     </div>
-    <div ng-if="$ctrl.cartCount === 0">
+    <div class="footer-buttons" ng-if="$ctrl.cartCount === 0">
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.gotoOpportunities()" translate>Find Giving Opportunities</button>
       <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.gotoDashboard()" translate>Go to My Dashboard</button>
     </div>

@@ -24,8 +24,9 @@ class RegisterAccountModalController {
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor ($rootScope, cartService, orderService, sessionService, verificationService, gettext) {
+  constructor ($rootScope, $window, cartService, orderService, sessionService, verificationService, gettext) {
     this.$rootScope = $rootScope
+    this.$window = $window
     this.cartService = cartService
     this.orderService = orderService
     this.sessionService = sessionService
@@ -112,7 +113,7 @@ class RegisterAccountModalController {
         this.setModalSize()
         break
       default:
-        this.setModalSize('sm')
+        this.setModalSize(this.$window.screen.width >= 1200 ? 'lg' : 'sm')
     }
     this.state = state
     if (!this.sessionService.isOktaRedirecting()) {

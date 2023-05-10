@@ -23,7 +23,6 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
     options = angular.isObject(options) ? options : {}
     const modalOptions = angular.merge({}, {
       component: sessionModalComponent.name,
-      size: 'sm',
       windowTemplateUrl: sessionModalWindowTemplate,
       resolve: {
         state: () => type
