@@ -32,7 +32,7 @@ class SignInController {
 
   sessionChanged () {
     if (this.sessionService.getRole() === Roles.registered) {
-      this.$window.location = '/checkout.html'
+      this.$window.location = `/checkout.html${window.location.search}`
     }
   }
 
