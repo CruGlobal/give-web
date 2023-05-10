@@ -61,16 +61,14 @@
     <p ng-if="$ctrl.cartCount === 0" translate>
       You may now find giving opportunities or view your dashboard.
     </p>
-    <p ng-if="$ctrl.cartCount > 0">
-      <!-- TODO: Make these buttons do the right thing -->
+    <div ng-if="$ctrl.cartCount > 0">
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.continueCheckout()" translate>Continue Checkout</button>
       <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.gotoOpportunities()" translate>Find Giving Opportunities</button>
-    </p>
-    <p ng-if="$ctrl.cartCount === 0">
-      <!-- TODO: Make these buttons do the right thing -->
+    </div>
+    <div ng-if="$ctrl.cartCount === 0">
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.gotoOpportunities()" translate>Find Giving Opportunities</button>
       <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.gotoDashboard()" translate>Go to My Dashboard</button>
-    </p>
+    </div>
   </div>
   <failed-verification-modal ng-switch-when="failure"
                              ng-init="$ctrl.analyticsFactory.track('ga-registration-match-failed-questions')"

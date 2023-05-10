@@ -20,16 +20,15 @@
     </label>
   </div>
 
-  <p ng-if="$ctrl.question">
-    <button type="button"
-            class="btn btn-md btn-block btn-primary"
-            ng-click="$ctrl.selectAnswer()"
-            ng-switch="$ctrl.question.key">
-      <span ng-switch-when="previous-address" translate>Next: Verify Bank</span>
-      <span ng-switch-when="previous-bank" translate>Next: Verify Credit or Debit Card</span>
-      <span ng-switch-when="previous-cc" translate>Next: Verify Staff Member(s)</span>
-      <span ng-switch-when="staff-member-gift" translate>Next: Verify Ministries</span>
-      <span ng-switch-when="ministry-gift" translate>Finish Activation</span>
-    </button>
-  </p>
+  <button type="button"
+          class="btn btn-md btn-block btn-primary"
+          ng-if="$ctrl.question"
+          ng-click="$ctrl.selectAnswer()"
+          ng-switch="$ctrl.question.key">
+    <span ng-switch-when="previous-address" translate>Next: Verify Bank</span>
+    <span ng-switch-when="previous-bank" translate>Next: Verify Credit or Debit Card</span>
+    <span ng-switch-when="previous-cc" translate>Next: Verify Staff Member(s)</span>
+    <span ng-switch-when="staff-member-gift" translate>Next: Verify Ministries</span>
+    <span ng-switch-when="ministry-gift" translate>Finish Activation</span>
+  </button>
 </form>
