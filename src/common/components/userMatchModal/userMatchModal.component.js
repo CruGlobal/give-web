@@ -138,7 +138,6 @@ class UserMatchModalController {
       this.questions = questions
       this.questionIndex = 1
       this.questionCount = this.questions.length
-      this.question = this.questions.shift()
       this.changeMatchState('question')
     },
     error => {
@@ -151,8 +150,7 @@ class UserMatchModalController {
   onQuestionAnswer (key, answer) {
     this.setLoading({ loading: true })
     this.answers.push({ key: key, answer: answer })
-    this.question = this.questions.shift()
-    if (angular.isDefined(this.question)) {
+    if (this.questionIndex < this.questions.length) {
       this.questionIndex++
       this.changeMatchState('question')
     } else {
@@ -169,6 +167,15 @@ class UserMatchModalController {
 
   onFailure () {
     this.$window.location = '/'
+  }
+
+  back () {
+    if (this.questionIndex === 1) {
+      this.changeMatchState('identity')
+    } else {
+      this.questionIndex--
+      this.answers.pop()
+    }
   }
 
   continueCheckout () {

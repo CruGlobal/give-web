@@ -44,10 +44,10 @@
   </div>
   <user-match-question ng-switch-when="question"
                        ng-init="$ctrl.analyticsFactory.track('ga-registration-match-security-question'+$ctrl.questionCount)"
-                       question="$ctrl.question"
+                       question="$ctrl.questions[$ctrl.questionIndex - 1]"
                        question-index="$ctrl.questionIndex"
                        question-count="$ctrl.questionCount"
-                       on-back="$ctrl.changeMatchState('identity')"
+                       on-back="$ctrl.back()"
                        on-question-answer="$ctrl.onQuestionAnswer(key, answer)">
   </user-match-question>
   <div ng-switch-when="success" class="success">
