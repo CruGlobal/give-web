@@ -36,11 +36,14 @@ register-account-modal {
   }
 
   .modal-sm .give-modal-content & .modal-body {
-    padding-top: 15px;
+    padding: 30px 15px;
   }
 }
 
 user-match-modal {
+  display: block;
+  padding-bottom: 15px;
+
   h4 {
     font-weight: bold;
     text-align: center;
