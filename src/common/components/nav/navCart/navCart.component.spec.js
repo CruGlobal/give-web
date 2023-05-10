@@ -133,4 +133,16 @@ describe('navCart', () => {
       expect($ctrl.$window.location).toBe('https://give-stage2.cru.org/checkout.html')
     })
   })
+
+  describe('buildCartUrl', () => {
+    it('should build a url without query parameters', () => {
+      expect($ctrl.buildCartUrl()).toEqual('https://give-stage2.cru.org/cart.html')
+    })
+
+    it('should build a url with query parameters', () => {
+      delete window.location
+      window.location = { search: '?one=1&two=2' }
+      expect($ctrl.buildCartUrl()).toEqual('https://give-stage2.cru.org/cart.html?one=1&two=2')
+    })
+  })
 })

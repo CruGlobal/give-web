@@ -28,7 +28,7 @@
 
   <div class="row repeating-row top-row" ng-if="$ctrl.hasItems || $ctrl.error">
     <div class="col-xs-6">
-      <a id="mini-cart-view-cart" ng-href="{{$ctrl.envService.read('publicGive')}}/cart.html" class="btn btn-default btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" translate>View Cart</a>
+      <a id="mini-cart-view-cart" ng-href="{{$ctrl.buildCartUrl()}}" class="btn btn-default btn-cart" ng-class="{ 'btn-mobile': $ctrl.mobile }" translate>View Cart</a>
     </div>
     <div class="col-xs-6">
       <i class="fal fa-bars fa-times close-cart" ng-click="$ctrl.isOpen = false"></i>
