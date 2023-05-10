@@ -32,6 +32,7 @@ export default angular
       question: '<',
       questionIndex: '<',
       questionCount: '<',
+      onBack: '&',
       onQuestionAnswer: '&'
     }
   })
