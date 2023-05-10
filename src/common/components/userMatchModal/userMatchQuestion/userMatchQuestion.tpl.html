@@ -14,7 +14,7 @@
            ng-repeat="answer in $ctrl.question.answers">
       <input name="answer"
              ng-model="$ctrl.answer"
-             ng-value="answer"
+             ng-value="answer.answer"
              type="radio"
              required>{{answer.answer}}
     </label>

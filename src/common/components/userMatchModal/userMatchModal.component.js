@@ -141,7 +141,6 @@ class UserMatchModalController {
     this.setLoading({ loading: true })
     this.loadingQuestionsError = false
     this.verificationService.getQuestions().subscribe((questions) => {
-      this.answers = []
       this.questions = questions
       this.questionIndex = 1
       this.questionCount = this.questions.length
@@ -154,14 +153,14 @@ class UserMatchModalController {
     })
   }
 
-  onQuestionAnswer (key, answer) {
-    this.setLoading({ loading: true })
-    this.answers.push({ key: key, answer: answer })
+  onQuestionAnswer (question, answer) {
+    question.answer = answer
     if (this.questionIndex < this.questions.length) {
       this.questionIndex++
       this.changeMatchState('question')
     } else {
-      this.verificationService.submitAnswers(this.answers).subscribe(() => {
+      const answers = this.questions.map(({ key, answer }) => ({ key, answer }))
+      this.verificationService.submitAnswers(answers).subscribe(() => {
         this.changeMatchState('success')
       },
       error => {
@@ -181,7 +180,6 @@ class UserMatchModalController {
       this.changeMatchState('identity')
     } else {
       this.questionIndex--
-      this.answers.pop()
     }
   }
 
