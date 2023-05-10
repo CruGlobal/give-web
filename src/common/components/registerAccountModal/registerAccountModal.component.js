@@ -24,7 +24,8 @@ class RegisterAccountModalController {
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor ($rootScope, $window, cartService, orderService, sessionService, verificationService, gettext) {
+  constructor ($element, $rootScope, $window, cartService, orderService, sessionService, verificationService, gettext) {
+    this.element = $element[0]
     this.$rootScope = $rootScope
     this.$window = $window
     this.cartService = cartService
@@ -108,6 +109,12 @@ class RegisterAccountModalController {
   }
 
   stateChanged (state) {
+    if (state === 'sign-in') {
+      this.element.classList.add('sign-in')
+    } else {
+      this.element.classList.remove('sign-in')
+    }
+
     switch (state) {
       case 'contact-info':
         this.setModalSize()

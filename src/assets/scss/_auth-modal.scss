@@ -15,6 +15,7 @@ register-account-modal {
 
   .modal-header {
     padding-bottom: 30px;
+    background-color: #EBECEC;
   }
 
   h3 {
@@ -52,13 +53,35 @@ register-account-modal {
   }
 
   .modal-dialog.modal-lg & {
-    .modal-header {
-      text-align: center;
+    &.sign-in {
+      $body-width: 530px;
+      $body-margin: 80px;
+      display: flex;
+
+      .modal-header {
+        flex: 1;
+
+        button.close {
+          margin-right: -85px - $body-width;
+        }
+      }
+
+      .modal-body {
+        width: $body-width - $body-margin * 2;
+        margin: 60px $body-margin;
+      }
     }
+    &:not(.sign-in) {
+      .modal-header h3 {
+        text-align: center;
+      }
+    }
+
     .modal-body {
       margin-left: 200px;
       margin-right: 200px;
     }
+
     .footer-buttons {
       margin-left: -230px;
       margin-right: -230px;
