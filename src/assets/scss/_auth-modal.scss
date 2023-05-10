@@ -40,6 +40,17 @@ register-account-modal {
     padding: 30px 15px;
   }
 
+  .footer-buttons {
+    button {
+      width: 100%;
+    }
+
+    button.back {
+      display: none;
+      width: auto;
+    }
+  }
+
   .modal-dialog.modal-lg & {
     .modal-header {
       text-align: center;
@@ -54,10 +65,14 @@ register-account-modal {
       margin-bottom: -30px;
       padding: 15px;
       background-color: #F5F5F5;
+      display: flex;
 
-      button {
+      button:not(.back) {
         width: 400px;
         margin-left: auto;
+      }
+      button.back {
+        display: block;
       }
     }
   }
@@ -86,6 +101,11 @@ user-match-modal {
 
     .step-label {
       font-weight: bold;
+      padding-left: calc(var(--progress) * 320px);
+
+      .modal-dialog.modal-lg & {
+        padding-left: calc(var(--progress) * 370px);
+      }
     }
   }
 

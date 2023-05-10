@@ -10,7 +10,7 @@
   <div class="activate-progress">
     <h3 class="text-center" translate>Activate your account</h3>
     <progress id="activation-progress" ng-attr-value="{{$ctrl.getCurrentStep()}}" ng-attr-max="{{$ctrl.stepCount - 1}}">Activation status</progress>
-    <label for="activation-progress" class="step-label" ng-switch="$ctrl.matchState" ng-style="{ 'padding-left': $ctrl.getCurrentStep() / ($ctrl.stepCount - 1) * 320 + 'px' }">
+    <label for="activation-progress" class="step-label" ng-switch="$ctrl.matchState" style="--progress: {{$ctrl.getCurrentStep() / ($ctrl.stepCount - 1)}}">
       <span ng-switch-when="intro" translate>Intro</span>
       <span ng-switch-when="identity" translate>Name</span>
       <span ng-switch-when="question"><span translate>Question</span><br />{{$ctrl.questionIndex}} <span translate>of</span> {{$ctrl.questionCount}}</span>
@@ -23,7 +23,8 @@
       Please answer these questions to confirm this so that you can access your whole giving history from this account.
     </p>
     <div class="footer-buttons">
-      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.getContacts()" translate>Next: Verify Name</button>
+      <button type="button" class="btn btn-md back" ng-click="$ctrl.getContacts()" translate>Back</button>
+      <button type="button" class="btn btn-md btn-primary" ng-click="$ctrl.getContacts()" translate>Next: Verify Name</button>
     </div>
   </div>
   <user-match-identity ng-switch-when="identity"
