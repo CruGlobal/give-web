@@ -26,8 +26,11 @@ class SessionModalController {
   }
 
   $onInit () {
-    this.$rootScope.$on(LoginOktaOnlyEvent, (event, state) => {
-      this.stateChanged(state)
+    // this.$rootScope.$on(LoginOktaOnlyEvent, (event, state) => {
+    //   this.stateChanged(state)
+    // })
+    this.sessionService.sessionSubject.subscribe((session) => {
+      this.firstName = session.first_name
     })
     this.stateChanged(this.resolve.state)
     this.lastPurchaseId = this.resolve.lastPurchaseId
@@ -50,7 +53,7 @@ class SessionModalController {
   onSignUpSuccess () {
     this.analyticsFactory.track('ga-sign-in-create-login')
     this.sessionService.removeOktaRedirectIndicator()
-    this.close()
+    // this.close()
   }
 
   onFailure () {

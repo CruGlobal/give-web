@@ -1,0 +1,80 @@
+sign-in-form .okta-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 1em 0.5em;
+  gap: 1em;
+
+  img {
+    height: 20px;
+  }
+}
+
+register-account-modal {
+  line-height: 1.2em;
+
+  .modal-header {
+    padding-bottom: 30px;
+  }
+
+  h3 {
+    padding-bottom: 30px;
+  }
+
+  ul {
+    padding-left: 1em;
+  }
+
+  .section {
+    padding-bottom: 30px;
+  }
+
+  .cart {
+    padding: 10px;
+    background-color: #9C9FA1;
+    color: white;
+  }
+
+  .modal-sm .give-modal-content & .modal-body {
+    padding-top: 15px;
+  }
+}
+
+user-match-modal {
+  h4 {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  input {
+    accent-color: $colorCru-gold;
+  }
+
+  .activate-progress {
+    padding-bottom: 30px;
+
+    progress {
+      width: 100%;
+      accent-color: $colorCru-gold;
+    }
+
+    .step-label {
+      font-weight: bold;
+    }
+  }
+}
+
+sign-in-modal {
+  h4 {
+    font-size: 1.3em;
+    line-height: 1.5em;
+  }
+
+  .row {
+    margin-bottom: 1em;
+  }
+
+  .content {
+    margin-top: 1em;
+  }
+}

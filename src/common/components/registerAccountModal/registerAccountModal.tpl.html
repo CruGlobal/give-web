@@ -1,30 +1,61 @@
-<div ng-switch="$ctrl.state">
-  <sign-in-modal ng-switch-when="sign-in"
-                 modal-title="$ctrl.modalTitle"
-                 on-state-change="$ctrl.stateChanged(state)"
-                 on-success="$ctrl.onIdentitySuccess()">
-  </sign-in-modal>
-  <sign-up-modal ng-switch-when="sign-up"
-                 modal-title="$ctrl.modalTitle"
-                 on-state-change="$ctrl.stateChanged(state)"
-                 on-success="$ctrl.onIdentitySuccess()">
-  </sign-up-modal>
-  <div ng-switch-when="loading">
-    <loading></loading>
+<div class="modal-header" style="background-color: #EBECEC;">
+  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <h3 ng-if="$ctrl.firstName" translate>Welcome back, {{$ctrl.firstName}}!</h3>
+        <h3 ng-if="!$ctrl.firstName" translate>Welcome back!</h3>
+        <div ng-if="$ctrl.state === 'sign-in'" class="section">
+          <ul>
+            <li translate>Give to thousands of opportunities.</li>
+            <li translate>View giving history (online and offline).</li>
+            <li translate>Access your tax receipts and forms.</li>
+          </ul>
+        </div>
+        <div ng-if="$ctrl.state === 'contact-info'" class="section" translate>
+          Your email address is verified. Please provide your contact information so that we can send you your giving receipts.
+        </div>
+        <div class="section cart" ng-if="$ctrl.cartCount > 0">
+          <span ng-if="$ctrl.cartCount === 1" translate>1 gift is currently in your cart.</span>
+          <span ng-if="$ctrl.cartCount > 1">{{$ctrl.cartCount}} <span translate>gifts are currently in your cart.</span></span>
+        </div>
+      </div>
+    </div>
   </div>
-  <contact-info-modal ng-switch-when="contact-info"
+</div>
+<div class="modal-body">
+  <div class="container-fluid" tabindex="-1" role="dialog">
+    <div class="row">
+
+      <div ng-switch="$ctrl.state">
+        <sign-in-modal ng-switch-when="sign-in"
                       modal-title="$ctrl.modalTitle"
-                      on-success="$ctrl.onContactInfoSuccess()"
-                      on-cancel="$ctrl.onCancel()">
-  </contact-info-modal>
-  <user-match-modal ng-switch-when="user-match"
-                    modal-title="$ctrl.modalTitle"
-                    on-success="$ctrl.onUserMatchSuccess()"
-                    set-loading="$ctrl.setLoading({loading: loading})">
-  </user-match-modal>
-  <failed-verification-modal ng-switch-when="failed-verification"
-                             modal-title="$ctrl.modalTitle"
-                             on-ok="$ctrl.onCancel()">
-  </failed-verification-modal>
-  <div ng-switch-default style="height: 100px;"></div>
+                      on-state-change="$ctrl.stateChanged(state)"
+                      on-success="$ctrl.onIdentitySuccess()">
+        </sign-in-modal>
+        <div ng-switch-when="loading">
+          <loading></loading>
+        </div>
+        <contact-info-modal ng-switch-when="contact-info"
+                            modal-title="$ctrl.modalTitle"
+                            on-success="$ctrl.onContactInfoSuccess()"
+                            on-cancel="$ctrl.onCancel()">
+        </contact-info-modal>
+        <user-match-modal ng-switch-when="user-match"
+                          cart-count="$ctrl.cartCount"
+                          first-name="$ctrl.firstName"
+                          modal-title="$ctrl.modalTitle"
+                          on-success="$ctrl.onUserMatchSuccess()"
+                          set-loading="$ctrl.setLoading({loading: loading})">
+        </user-match-modal>
+        <failed-verification-modal ng-switch-when="failed-verification"
+                                  modal-title="$ctrl.modalTitle"
+                                  on-ok="$ctrl.onCancel()">
+        </failed-verification-modal>
+        <div ng-switch-default style="height: 100px;"></div>
+      </div>
+    </div>
+  </div>
 </div>

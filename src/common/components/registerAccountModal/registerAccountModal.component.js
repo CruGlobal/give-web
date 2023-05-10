@@ -1,6 +1,7 @@
 import angular from 'angular'
 import template from './registerAccountModal.tpl.html'
 
+import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
 import sessionService, { Roles, LoginOktaOnlyEvent } from 'common/services/session/session.service'
 import verificationService from 'common/services/api/verification.service'
@@ -23,8 +24,9 @@ class RegisterAccountModalController {
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor ($rootScope, orderService, sessionService, verificationService, gettext) {
+  constructor ($rootScope, cartService, orderService, sessionService, verificationService, gettext) {
     this.$rootScope = $rootScope
+    this.cartService = cartService
     this.orderService = orderService
     this.sessionService = sessionService
     this.verificationService = verificationService
@@ -35,6 +37,13 @@ class RegisterAccountModalController {
   $onInit () {
     this.$rootScope.$on(LoginOktaOnlyEvent, () => {
       this.getDonorDetails()
+    })
+
+    this.cartCount = 0
+    this.cartService.getTotalQuantity().subscribe(count => {
+      this.cartCount = count
+    }, () => {
+      this.cartCount = 0
     })
 
     // Step 1. Sign-In/Up (skipped if already Signed In)
@@ -125,6 +134,7 @@ class RegisterAccountModalController {
 export default angular
   .module(componentName, [
     contactInfoModal.name,
+    cartService.name,
     orderService.name,
     sessionService.name,
     signInModal.name,
@@ -137,6 +147,7 @@ export default angular
     controller: RegisterAccountModalController,
     templateUrl: template,
     bindings: {
+      firstName: '=',
       modalTitle: '=',
       onSuccess: '&',
       onCancel: '&',

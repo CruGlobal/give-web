@@ -20,6 +20,7 @@ class UserMatchModalController {
     this.profileService = profileService
     this.verificationService = verificationService
     this.analyticsFactory = analyticsFactory
+    this.stepCount = 8 // intro, name, 5 questions, and success
   }
 
   $onInit () {
@@ -36,7 +37,7 @@ class UserMatchModalController {
           // Do donor matching if
           this.postDonorMatch()
         } else {
-          this.getContacts()
+          this.changeMatchState('intro')
         }
       }
     },
@@ -47,11 +48,25 @@ class UserMatchModalController {
     })
   }
 
+  getCurrentStep () {
+    if (this.matchState === 'intro') {
+      return 0
+    } else if (this.matchState === 'identity') {
+      return 1
+    } else if (this.matchState === 'question') {
+      return this.questionIndex + 1 // questionIndex is 1-indexed, otherwise this would be + 2
+    } else if (this.matchState === 'success') {
+      return 7
+    } else {
+      return 0
+    }
+  }
+
   postDonorMatch () {
     this.setLoading({ loading: true })
     this.verificationService.postDonorMatches().subscribe(() => {
       // Donor match success, get contacts
-      this.getContacts()
+      this.changeMatchState('intro')
     }, () => {
       // Donor Match failed, user match not required
       this.skippedQuestions = true
@@ -63,7 +78,7 @@ class UserMatchModalController {
     this.setLoading({ loading: true })
     this.verificationService.getContacts().subscribe((contacts) => {
       if (find(contacts, { selected: true })) {
-        this.changeMatchState('activate')
+        this.onActivate()
       } else {
         this.contacts = contacts
         this.changeMatchState('identity')
@@ -78,13 +93,10 @@ class UserMatchModalController {
 
   changeMatchState (state) {
     switch (state) {
-      case 'identity':
-        this.modalTitle = this.gettext('It looks like someone in your household has given to Cru previously')
-        break
       case 'success':
         this.modalTitle = this.gettext('Success!')
+        this.onSuccess()
         break
-      case 'activate':
       default:
         this.modalTitle = this.gettext('Activate Your Account')
     }
@@ -97,7 +109,8 @@ class UserMatchModalController {
     this.selectContactError = false
     if (angular.isDefined(contact)) {
       this.verificationService.selectContact(contact).subscribe(() => {
-        this.changeMatchState('activate')
+        this.onActivate()
+        this.firstName = contact.name.split(' ')[0]
       },
       error => {
         this.setLoading({ loading: false })
@@ -157,6 +170,18 @@ class UserMatchModalController {
   onFailure () {
     this.$window.location = '/'
   }
+
+  continueCheckout () {
+    this.$window.location = '/checkout.html'
+  }
+
+  gotoOpportunities () {
+    this.$window.location = '/'
+  }
+
+  gotoDashboard () {
+    this.$window.location = '/your-giving.html'
+  }
 }
 
 export default angular
@@ -173,6 +198,8 @@ export default angular
     controller: UserMatchModalController,
     templateUrl: template,
     bindings: {
+      cartCount: '<',
+      firstName: '=',
       modalTitle: '=',
       setLoading: '&',
       onStateChange: '&',
