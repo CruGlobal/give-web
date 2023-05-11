@@ -42,6 +42,7 @@ class RegisterAccountModalController {
     })
 
     this.cartCount = 0
+    // TODO: Do we need to unsubscribe from this?
     this.cartService.getTotalQuantity().subscribe(count => {
       this.cartCount = count
     }, () => {
