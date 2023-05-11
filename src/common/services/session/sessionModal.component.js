@@ -29,7 +29,7 @@ class SessionModalController {
     // this.$rootScope.$on(LoginOktaOnlyEvent, (event, state) => {
     //   this.stateChanged(state)
     // })
-    this.sessionService.sessionSubject.subscribe((session) => {
+    this.subscription = this.sessionService.sessionSubject.subscribe((session) => {
       this.firstName = session.first_name
     })
     this.stateChanged(this.resolve.state)
@@ -37,6 +37,10 @@ class SessionModalController {
     if (this.sessionService.isOktaRedirecting()) {
       this.setLoading({ loading: true })
     }
+  }
+
+  $onDestroy () {
+    this.subscription.unsubscribe()
   }
 
   stateChanged (state) {
