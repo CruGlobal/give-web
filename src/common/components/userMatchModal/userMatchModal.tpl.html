@@ -1,4 +1,4 @@
-<div class="col-xs-12" ng-switch="$ctrl.matchState">
+<div ng-switch="$ctrl.matchState">
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingDonorDetailsError">
     <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
     <p><button type="button" class="btn btn-primary" ng-click="$ctrl.$onInit()" translate>Retry</button></p>

@@ -36,9 +36,8 @@ register-account-modal {
     color: white;
   }
 
-  /* TODO: This affects the styles on the contact info form */
   .modal-dialog .give-modal-content & .modal-body {
-    padding: 30px 15px;
+    padding: 30px;
   }
 
   .footer-buttons {
@@ -53,7 +52,7 @@ register-account-modal {
   }
 
   .modal-dialog.modal-lg & {
-    &.sign-in {
+    &[data-state=sign-in] {
       $body-width: 530px;
       $body-margin: 80px;
       display: flex;
@@ -71,15 +70,35 @@ register-account-modal {
         margin: 60px $body-margin;
       }
     }
-    &:not(.sign-in) {
+    &[data-state=contact-info] {
+      contact-info-modal form {
+        display: grid;
+        grid-template: 1fr auto / auto 320px;
+        column-gap: 20px;
+
+        .name {
+          grid-column: 1;
+          grid-row: 1;
+        }
+        .address {
+          grid-column: 2;
+          grid-row: 1 / 3;
+        }
+        .contact-info {
+          grid-column: 1;
+          grid-row: 2;
+        }
+      }
+    }
+    &[data-state=user-match] {
       .modal-header h3 {
         text-align: center;
       }
-    }
 
-    .modal-body {
-      margin-left: 200px;
-      margin-right: 200px;
+      .modal-body {
+        margin-left: 200px;
+        margin-right: 200px;
+      }
     }
 
     .footer-buttons {
@@ -98,13 +117,13 @@ register-account-modal {
         display: block;
       }
     }
+    .success .footer-buttons {
+      flex-direction: column;
+    }
   }
 }
 
 user-match-modal {
-  display: block;
-  padding-bottom: 15px;
-
   h4 {
     font-weight: bold;
     text-align: center;
