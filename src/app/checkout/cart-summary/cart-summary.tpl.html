@@ -27,7 +27,7 @@
         </tr>
         <tr>
           <td colspan="2" class="text-right">
-            <a id="editCartButton" href="cart.html" class="btn btn-subtle mt" translate>Edit Cart</a>
+            <a id="editCartButton" ng-href="{{$ctrl.buildCartUrl()}}" class="btn btn-subtle mt" translate>Edit Cart</a>
             <button id="submitGiftButton" ng-if="$ctrl.showSubmitBtn" class="btn btn-primary mt" ng-click="$ctrl.onSubmit()" ng-disabled="!$ctrl.enableSubmitBtn" translate>Submit Your Gift</button>
           </td>
         </tr>

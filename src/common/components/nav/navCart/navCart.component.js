@@ -67,7 +67,7 @@ class NavCartController {
   }
 
   buildCartUrl () {
-    return `${this.envService.read('publicGive')}/cart.html${window.location.search}`
+    return `${this.envService.read('publicGive')}/${this.cartService.buildCartUrl()}`
   }
 }
 
