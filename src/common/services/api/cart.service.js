@@ -241,6 +241,10 @@ class Cart {
         return Observable.of({ error: response, configuredDesignation: configuredDesignation })
       })
   }
+
+  buildCartUrl () {
+    return `cart.html${window.location.search}`
+  }
 }
 
 export default angular
