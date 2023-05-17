@@ -24,17 +24,17 @@
           url="/bin/crugive/image.html?designationNumber={{$ctrl.designationNumber}}"
           on-invalid-file-type="$ctrl.invalidFileType = true"
           on-complete="$ctrl.invalidFileType = false"
-          on-upload="$ctrl.uploading = true"
-          on-success="$ctrl.uploadComplete()"
-          on-error="$ctrl.uploading = false"
-        >
+          on-upload="$ctrl.uploadStart(file)"
+          on-success="$ctrl.uploadComplete(response, file)"
+          on-error="$ctrl.uploadError(file)"
+        />
       </div>
 
       <label ng-if="$ctrl.uploading" translate>Uploading...</label>
     </div>
   </div>
 
-  <div class="give-available-photos-container" ng-if="$ctrl.photos.length">
+  <div class="give-available-photos-container" ng-if="$ctrl.photos.length || $ctrl.numProcessingPhotos > 0">
     <div class="give-thumbs-container">
       <div class="cover-thumb" ng-repeat="photo in $ctrl.photos">
         <input
@@ -44,8 +44,12 @@
           ng-value="photo.original"
         />
         <label for="cover-thumb{{$index}}">
-          <img ng-src="{{photo.thumbnail}}" />
+          <img desig-img-src="{{photo.thumbnail}}" />
         </label>
+      </div>
+      <div class="cover-thumb processing" ng-repeat="blobUrl in $ctrl.getProcessingPhotos() track by $index">
+        <img ng-src="{{blobUrl}}" />
+        <loading type="centered">Processing...</loading>
       </div>
     </div>
 

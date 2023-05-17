@@ -38,7 +38,7 @@ const imageUpload = /* @ngInject */ ($http) => ({
       }
 
       scope.$apply(() => {
-        scope.onUpload({ files })
+        scope.onUpload({ file })
       })
 
       const formData = new FormData()
@@ -52,11 +52,11 @@ const imageUpload = /* @ngInject */ ($http) => ({
         },
         data: formData
       }).then((response) => {
-        scope.onSuccess({ response })
-        scope.onComplete({ response })
+        scope.onSuccess({ response, file })
+        scope.onComplete({ response, file })
       }).catch((response) => {
-        scope.onError({ response })
-        scope.onComplete({ response })
+        scope.onError({ response, file })
+        scope.onComplete({ response, file })
       }
       )
     })
