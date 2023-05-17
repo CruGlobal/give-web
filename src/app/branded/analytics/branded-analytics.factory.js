@@ -3,29 +3,40 @@ import angular from 'angular'
 
 const factoryName = 'brandedAnalyticsFactory'
 
-let brandedDonorType, brandedPaymentType
+const brandedState = {
+  coverFees: undefined,
+  donorType: undefined,
+  isCreditCard: undefined,
+  item: undefined,
+  paymentType: undefined,
+  purchase: undefined,
+  testingTransaction: undefined
+}
 
-// Generate a datalayer ecommerce object from an itemConfig
-function ecommerceFromItemConfig (itemConfig, coverFees) {
-  const amountPaid = (coverFees ? itemConfig.amountWithFees : itemConfig.amount).toFixed(2)
+// Generate a datalayer ecommerce object
+function generateEcommerce (siebelTransactionId) {
+  const item = brandedState.item
+  const amountPaid = (brandedState.isCreditCard && brandedState.coverFees ? item.amountWithFees : item.amount).toFixed(2)
 
   return {
-    payment_type: brandedPaymentType,
+    payment_type: brandedState.paymentType,
     currency: 'USD',
-    donator_type: brandedDonorType,
-    pays_processing: coverFees ? 'yes' : 'no',
+    donator_type: brandedState.donorType,
+    pays_processing: brandedState.isCreditCard ? brandedState.coverFees ? 'yes' : 'no' : undefined,
     value: amountPaid,
-    processing_fee: (itemConfig.amountWithFees - itemConfig.amount).toFixed(2),
+    processing_fee: brandedState.isCreditCard ? (item.amountWithFees - item.amount).toFixed(2) : undefined,
+    transaction_id: siebelTransactionId,
+    testing_transaction: Boolean(brandedState.testingTransaction),
     items: [{
-      item_id: itemConfig.designationNumber,
-      item_name: itemConfig.displayName,
-      item_brand: itemConfig.orgId,
-      item_category: itemConfig.designationType,
-      item_variant: itemConfig.frequency.toLowerCase(),
+      item_id: item.designationNumber,
+      item_name: item.displayName,
+      item_brand: item.orgId,
+      item_category: item.designationType,
+      item_variant: item.frequency.toLowerCase(),
       currency: 'USD',
       price: amountPaid,
       quantity: '1',
-      recurring_date: itemConfig.giftStartDate ? itemConfig.giftStartDate.format('MMMM D, YYYY') : undefined
+      recurring_date: item.giftStartDate ? item.giftStartDate.format('MMMM D, YYYY') : undefined
     }]
   }
 }
@@ -40,12 +51,29 @@ function suppressErrors (func) {
 
 const brandedAnalyticsFactory = /* @ngInject */ function ($window) {
   return {
-    saveDonorDetails: suppressErrors(function (donorDetails) {
-      brandedDonorType = donorDetails['donor-type']
+    saveCoverFees: suppressErrors(function (coverFees) {
+      brandedState.coverFees = coverFees
     }),
 
-    savePaymentType: suppressErrors(function (paymentType) {
-      brandedPaymentType = paymentType
+    saveDonorDetails: suppressErrors(function (donorDetails) {
+      brandedState.donorType = donorDetails['donor-type']
+    }),
+
+    saveItem: suppressErrors(function (item) {
+      brandedState.item = item
+    }),
+
+    savePaymentType: suppressErrors(function (paymentType, isCreditCard) {
+      brandedState.paymentType = paymentType
+      brandedState.isCreditCard = isCreditCard
+    }),
+
+    savePurchase: suppressErrors(function (purchase) {
+      brandedState.purchase = purchase
+    }),
+
+    saveTestingTransaction: suppressErrors(function (testingTransaction) {
+      brandedState.testingTransaction = testingTransaction
     }),
 
     beginCheckout: suppressErrors(function (productData) {
@@ -67,13 +95,13 @@ const brandedAnalyticsFactory = /* @ngInject */ function ($window) {
       })
     }),
 
-    // saveDonorDetails and savePaymentType should have been called before this
-    addPaymentInfo: suppressErrors(function (itemConfig, coverFees) {
+    // saveCoverFees, saveDonorDetails, saveItem, savePaymentType, and saveTestingTransaction should have been called before this
+    addPaymentInfo: suppressErrors(function () {
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({ ecommerce: null })
       $window.dataLayer.push({
         event: 'add_payment_info',
-        ecommerce: ecommerceFromItemConfig(itemConfig, coverFees)
+        ecommerce: generateEcommerce(undefined)
       })
     }),
 
@@ -85,13 +113,13 @@ const brandedAnalyticsFactory = /* @ngInject */ function ($window) {
       })
     }),
 
-    // saveDonorDetails and savePaymentType should have been called before this
-    purchase: suppressErrors(function (itemConfig, coverFees) {
+    // saveCoverFees, saveDonorDetails, saveItem, savePaymentType, savePurchase, and saveTestingTransaction should have been called before this
+    purchase: suppressErrors(function () {
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({ ecommerce: null })
       $window.dataLayer.push({
         event: 'purchase',
-        ecommerce: ecommerceFromItemConfig(itemConfig, coverFees)
+        ecommerce: generateEcommerce(brandedState.purchase.rawData['purchase-number'])
       })
     }),
 

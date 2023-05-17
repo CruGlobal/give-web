@@ -127,7 +127,7 @@ describe('checkout', () => {
 
         expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'account-type': 'checking'})
         expect(self.controller.defaultPaymentType).toEqual('checking')
-        expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('checking')
+        expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('checking', false)
       })
 
       it('should change default payment type with credit card', () => {
@@ -137,7 +137,7 @@ describe('checkout', () => {
 
         expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'card-type': 'visa'})
         expect(self.controller.defaultPaymentType).toEqual('visa')
-        expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('visa')
+        expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('visa', true)
       })
     })
 
