@@ -154,6 +154,7 @@ class UserMatchModalController {
   }
 
   onQuestionAnswer (question, answer) {
+    this.setLoading({ loading: true })
     question.answer = answer
     if (this.questionIndex < this.questions.length) {
       this.questionIndex++

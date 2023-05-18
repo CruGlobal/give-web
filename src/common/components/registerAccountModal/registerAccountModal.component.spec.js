@@ -19,6 +19,7 @@ describe('registerAccountModal', function () {
       setLoading: jest.fn()
     }
     locals = {
+      $element: [{ dataset: {} }],
       orderService: { getDonorDetails: jest.fn() },
       verificationService: { postDonorMatches: jest.fn() },
       sessionService: { getRole: jest.fn(), isOktaRedirecting: jest.fn() }
@@ -194,7 +195,7 @@ describe('registerAccountModal', function () {
     it('changes to \'contact-info\' state', () => {
       $ctrl.stateChanged('contact-info')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith()
+      expect($ctrl.setModalSize).toHaveBeenCalledWith(undefined)
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('contact-info')
     })

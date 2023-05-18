@@ -57,7 +57,7 @@ class SessionModalController {
   onSignUpSuccess () {
     this.analyticsFactory.track('ga-sign-in-create-login')
     this.sessionService.removeOktaRedirectIndicator()
-    // this.close()
+    this.close()
   }
 
   onFailure () {

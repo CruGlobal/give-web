@@ -208,15 +208,3 @@ describe('sessionModalService', function () {
     })
   })
 })
-
-describe('sessionModalService module config', () => {
-  let modalStateServiceProvider
-
-  beforeEach(() => {
-    angular.mock.module(modalStateModule.name, function (_modalStateServiceProvider_) {
-      modalStateServiceProvider = _modalStateServiceProvider_
-      jest.spyOn(modalStateServiceProvider, 'registerModal').mockImplementation(() => {})
-    })
-    angular.mock.module(module.name)
-  })
-})
