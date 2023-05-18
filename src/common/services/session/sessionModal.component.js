@@ -26,9 +26,9 @@ class SessionModalController {
   }
 
   $onInit () {
-    // this.$rootScope.$on(LoginOktaOnlyEvent, (event, state) => {
-    //   this.stateChanged(state)
-    // })
+    this.$rootScope.$on(LoginOktaOnlyEvent, (event, state) => {
+      this.stateChanged(state)
+    })
     this.subscription = this.sessionService.sessionSubject.subscribe((session) => {
       this.firstName = session.first_name
     })
