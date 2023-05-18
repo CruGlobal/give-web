@@ -61,8 +61,6 @@ class Order {
         donorDetails.email = data.email && data.email.email
         donorDetails.emailFormUri = data.emailForm && data.emailForm.links[0].uri
 
-        donorDetails['registration-state'] = 'NEW'
-
         return donorDetails
       })
   }
