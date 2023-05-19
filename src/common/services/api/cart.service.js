@@ -29,7 +29,7 @@ const serviceName = 'cartService'
 
 class Cart {
   /* @ngInject */
-  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies, $location) {
+  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies, $location, $window) {
     this.cortexApiService = cortexApiService
     this.commonService = commonService
     this.designationsService = designationsService
@@ -37,6 +37,7 @@ class Cart {
     this.hateoasHelperService = hateoasHelperService
     this.$cookies = $cookies
     this.$location = $location
+    this.$window = $window
   }
 
   setCartCountCookie (quantity) {
@@ -235,7 +236,7 @@ class Cart {
   }
 
   buildCartUrl () {
-    return `cart.html${window.location.search}`
+    return `cart.html${this.$window.location.search}`
   }
 }
 
