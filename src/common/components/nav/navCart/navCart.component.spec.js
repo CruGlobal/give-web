@@ -136,12 +136,12 @@ describe('navCart', () => {
 
   describe('buildCartUrl', () => {
     it('should build a url without query parameters', () => {
+      jest.spyOn($ctrl.cartService, 'buildCartUrl').mockReturnValue('cart.html')
       expect($ctrl.buildCartUrl()).toEqual('https://give-stage2.cru.org/cart.html')
     })
 
     it('should build a url with query parameters', () => {
-      delete window.location
-      window.location = { search: '?one=1&two=2' }
+      jest.spyOn($ctrl.cartService, 'buildCartUrl').mockReturnValue('cart.html?one=1&two=2')
       expect($ctrl.buildCartUrl()).toEqual('https://give-stage2.cru.org/cart.html?one=1&two=2')
     })
   })
