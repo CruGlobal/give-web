@@ -86,10 +86,11 @@ class CheckoutController {
   changeStep (newStep, replace) {
     switch (newStep) {
       case 'cart':
-        this.$window.location = '/cart.html'
+        this.$window.location.href = `/cart.html${this.buildQueryStringWithoutStep()}`
         break
       case 'thankYou':
-        this.$window.location = '/thank-you.html'
+        this.$location.search('step', null)
+        this.$window.location.href = `/thank-you.html${this.buildQueryStringWithoutStep()}`
         break
       default:
         this.$window.scrollTo(0, 0)
@@ -98,6 +99,21 @@ class CheckoutController {
         replace && this.$location.replace()
         break
     }
+  }
+
+  buildQueryStringWithoutStep () {
+    let queryString = ''
+    let index = 0
+    this.$location.search('step', null)
+    Object.entries(this.$location.search()).forEach(([key, value]) => {
+      if (index === 0) {
+        queryString += `?${key}=${value}`
+      } else {
+        queryString += `&${key}=${value}`
+      }
+      index++
+    })
+    return queryString
   }
 
   loadCart () {
