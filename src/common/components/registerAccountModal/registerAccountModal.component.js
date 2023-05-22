@@ -15,6 +15,26 @@ import failedVerificationModal from 'common/components/failedVerificationModal/f
 
 const componentName = 'registerAccountModal'
 
+/*
+ * TODO:
+ *
+ * If you navigate to /profile.html as a 'registration-state' === 'NEW' user with the Okta tokens
+ * in local storage but without the give site cookies, clicking the login button will succeed without
+ * a redirect and will proceed to the contact info form. However, the redirectingFromOkta flag will
+ * still be set in session storage. If the user reloads the page before submitting their contact
+ * information, it will hang forever in a loading state because redirectingFromOkta is still set.
+ * Closing that browser tab and opening another tab clears session storage and will fix this. It
+ * would be nice to fix this edge case though.
+ *
+ * I don't fully understand our code's Okta auth state machine and where our logic maybe faulty. I
+ * believe we should investigate calling sessionService.removeOktaRedirectIndicator() immediately
+ * in the register account modal instead of waiting for the contact info and the donor matching to
+ * complete.
+ *
+ * ~ Caleb Cox
+ */
+
+
 class RegisterAccountModalController {
   // Register Account Modal is a multi-step process.
   // 1. Sign In/Up
