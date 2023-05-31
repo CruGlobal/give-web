@@ -8,7 +8,6 @@ import verificationService from 'common/services/api/verification.service'
 import { scrollModalToTop } from 'common/services/modalState.service'
 
 import signInModal from 'common/components/signInModal/signInModal.component'
-import signUpModal from 'common/components/signUpModal/signUpModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
@@ -33,8 +32,6 @@ const componentName = 'registerAccountModal'
  *
  * ~ Caleb Cox
  */
-
-
 class RegisterAccountModalController {
   // Register Account Modal is a multi-step process.
   // 1. Sign In/Up
@@ -157,7 +154,6 @@ export default angular
     orderService.name,
     sessionService.name,
     signInModal.name,
-    signUpModal.name,
     userMatchModal.name,
     failedVerificationModal.name,
     verificationService.name

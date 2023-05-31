@@ -224,23 +224,6 @@ describe('session service', function () {
     })
   })
 
-  describe('signUp', () => {
-    it('makes http request to cas/register', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/register', {
-        email: 'professorx@xavier.edu',
-        password: 'Cerebro123',
-        firstName: 'Charles',
-        lastName: 'Xavier'
-      }).respond(200, {})
-      sessionService
-        .signUp('professorx@xavier.edu', 'Cerebro123', 'Charles', 'Xavier')
-        .subscribe((data) => {
-          expect(data).toEqual({})
-        })
-      $httpBackend.flush()
-    })
-  })
-
   describe('signOut', () => {
     it('makes http request to cas/logout', () => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/cas/logout')
