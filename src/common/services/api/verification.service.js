@@ -9,18 +9,15 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
   function getContacts () {
     return cortexApiService
       .get({
-        path: ['verificationcontacts', cortexApiService.scope, 'form'],
-        zoom: {
-          contacts: 'element[]'
-        }
+        path: ['verificationcontacts', cortexApiService.scope]
       })
-      .pluck('contacts')
+      .pluck('verification-contacts')
   }
 
   function selectContact (contact) {
     return cortexApiService
       .post({
-        path: contact.links[0].uri,
+        path: ['verificationcontacts', cortexApiService.scope, 'form'],
         data: contact
       })
   }
