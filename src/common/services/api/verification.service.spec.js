@@ -22,7 +22,7 @@ describe('verification service', () => {
   describe('getContacts()', () => {
     it('should load the matched contacts', () => {
       $httpBackend
-        .expectGET('https://give-stage2.cru.org/cortex/verificationcontacts/crugive?zoom=element')
+        .expectGET('https://give-stage2.cru.org/cortex/verificationcontacts/crugive')
         .respond(200, contactsResponse)
       verificationService.getContacts().subscribe((contacts) => {
         expect(contacts).toEqual(expect.arrayContaining([
@@ -37,9 +37,9 @@ describe('verification service', () => {
   describe('selectContact(contact)', () => {
     it('should select specified contact', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/verificationcontacts/crugive/a5umfmtuhnfelqvlkjfdgltkohbkuwsjlu6ve7ksykxsrqvtlnac6s2qij44hatbhzjuojdqohblcwocuxbl23kqobg4fl27yktdsxkahlbkeskphfyxwti=', contactsResponse._element[0])
+        .expectPOST('https://give-stage2.cru.org/cortex/verificationcontacts/crugive/form', contactsResponse['verification-contacts'][0])
         .respond(201, {})
-      verificationService.selectContact(contactsResponse._element[0])
+      verificationService.selectContact(contactsResponse['verification-contacts'][0])
       $httpBackend.flush()
     })
   })
