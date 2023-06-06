@@ -585,13 +585,13 @@ describe('profile service', () => {
           self: {
             type: 'elasticpath.phonenumbers.phone-number',
             uri: '/phonenumbers/crugive/gewuwmktgjivi=',
-            href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive/form/gewuwmktgjivi='
+            href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive/gewuwmktgjivi='
           },
           links: [
             { rel: 'list',
               type: 'elasticpath.collections.links',
               uri: '/phonenumbers/crugive',
-              href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive/form'
+              href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive'
             }
           ],
           locked: false,
@@ -604,14 +604,14 @@ describe('profile service', () => {
           self: {
             type: 'elasticpath.phonenumbers.phone-number',
             uri: '/phonenumbers/crugive/gewuwmktgjjfq=',
-            href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive/form/gewuwmktgjjfq='
+            href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive/gewuwmktgjjfq='
           },
           links: [
             {
               rel: 'list',
               type: 'elasticpath.collections.links',
               uri: '/phonenumbers/crugive',
-              href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive/form'
+              href: 'https://give-stage2.cru.org/cortex/phonenumbers/crugive'
             }
           ],
           locked: false,
@@ -621,7 +621,7 @@ describe('profile service', () => {
           'is-spouse': true
         }
       ]
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/phonenumbers/crugive/form?zoom=element')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/phonenumbers/crugive?zoom=element')
         .respond(200, phoneNumbersResponse)
       self.profileService.getPhoneNumbers()
         .subscribe((data) => {
