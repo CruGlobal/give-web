@@ -22,7 +22,7 @@ describe('verification service', () => {
   describe('getContacts()', () => {
     it('should load the matched contacts', () => {
       $httpBackend
-        .expectGET('https://give-stage2.cru.org/cortex/verificationcontacts/crugive/form?zoom=element')
+        .expectGET('https://give-stage2.cru.org/cortex/verificationcontacts/crugive?zoom=element')
         .respond(200, contactsResponse)
       verificationService.getContacts().subscribe((contacts) => {
         expect(contacts).toEqual(expect.arrayContaining([
