@@ -306,7 +306,7 @@ class DesignationEditorController {
     return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
       this.saveStatus = 'success'
       this.loadingOverlay = false
-      this.carouselImages = this.designationContent.secondaryPhotos
+      this.carouselImages = this.designationContent.secondaryPhotos || []
       this.updateCarousel()
     }, error => {
       this.saveStatus = 'failure'
