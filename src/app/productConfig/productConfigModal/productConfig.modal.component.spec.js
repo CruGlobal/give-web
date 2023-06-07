@@ -117,7 +117,7 @@ describe('product config modal', function () {
       $ctrl.initializeParams()
 
       expect($ctrl.$location.search).toHaveBeenCalled()
-      expect($ctrl.itemConfig.amount).toEqual('150')
+      expect($ctrl.itemConfig.AMOUNT).toEqual('150')
       expect($ctrl.defaultFrequency).toEqual('QUARTERLY')
       expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('21')
       expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('07')
@@ -130,7 +130,7 @@ describe('product config modal', function () {
 
       expect($ctrl.modalStateService.name).toHaveBeenCalledWith('give-gift')
       expect($ctrl.$location.search).toHaveBeenCalled()
-      expect($ctrl.itemConfig.amount).toBeUndefined()
+      expect($ctrl.itemConfig.AMOUNT).toBeUndefined()
       expect($ctrl.defaultFrequency).toBeUndefined()
       expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toBeUndefined()
       expect($ctrl.itemConfig['campaign-page']).toBeUndefined()

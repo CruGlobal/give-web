@@ -97,7 +97,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
               designationType: productData.designationType
             },
             price: {
-              basePrice: itemConfig.amount
+              basePrice: itemConfig.AMOUNT
             },
             attributes: {
               siebel: {
@@ -147,7 +147,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
                 products: [{
                   name: productData.designationNumber,
                   id: productData.designationNumber,
-                  price: itemConfig.amount.toString(),
+                  price: itemConfig.AMOUNT.toString(),
                   brand: productData.orgId,
                   category: productData.designationType.toLowerCase(),
                   variant: frequencyObj.display.toLowerCase(),
