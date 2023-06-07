@@ -198,9 +198,16 @@ describe('order service', () => {
 
     it('should use the cached response if called a second time', (done) => {
       setupRequest()
-      initiateRequest(done)
+      self.orderService.getPaymentMethodForms()
+        .subscribe((data) => {
+          expect(data).toEqual(cartResponseZoomMapped)
+          self.orderService.getPaymentMethodForms()
+            .subscribe((data2) => {
+              expect(data2).toEqual(cartResponseZoomMapped)
+              done()
+            })
+        })
       self.$httpBackend.flush()
-      initiateRequest(done)
     })
   })
 
