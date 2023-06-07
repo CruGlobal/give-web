@@ -75,7 +75,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
                 donationFrequency: cartData.items[i].frequency.toLowerCase(),
                 siebel: {
                   productType: 'designation',
-                  campaignCode: cartData.items[i].config['campaign-code']
+                  campaignCode: cartData.items[i].config.CAMPAIGN_CODE
                 }
               }
             }
@@ -177,7 +177,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
               donationFrequency: item.frequency.toLowerCase(),
               siebel: {
                 productType: 'designation',
-                campaignCode: item.config['campaign-code']
+                campaignCode: item.config.CAMPAIGN_CODE
               }
             }
           }]
@@ -567,7 +567,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
               dimension6: purchaseData.paymentInstruments['account-type'] ? 'bank account' : 'credit card',
               dimension7: purchaseData.rawData['purchase-number'],
               dimension8: 'designation',
-              dimension9: cartItem.config['campaign-code'] !== '' ? cartItem.config['campaign-code'] : undefined
+              dimension9: cartItem.config.CAMPAIGN_CODE !== '' ? cartItem.config.CAMPAIGN_CODE : undefined
             }
           })
           // Send the transaction event if the dataLayer is defined
