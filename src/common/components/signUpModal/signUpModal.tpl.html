@@ -74,7 +74,7 @@
              type="password"
              class="form-control form-control-subtle"
              ng-model="$ctrl.password"
-             minlength="15"
+             minlength="8"
              ng-pattern="/^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/"
              required>
       <div ng-if="($ctrl.signUpForm.password | showErrors)" ng-messages="$ctrl.signUpForm.password.$error">
