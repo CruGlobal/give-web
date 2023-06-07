@@ -4,6 +4,7 @@ import module from './productConfig.modal.component'
 import { giveGiftParams } from '../giveGiftParams'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
+import { Observable } from 'rxjs/Observable'
 
 describe('product config modal', function () {
   beforeEach(angular.mock.module(module.name))
@@ -21,6 +22,9 @@ describe('product config modal', function () {
         },
         modalStateService: {
           name: jest.fn()
+        },
+        designationsService: {
+          suggestedAmounts: jest.fn()
         }
       },
       {
@@ -79,6 +83,7 @@ describe('product config modal', function () {
   describe('initializeParams', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'updateQueryParam').mockImplementation(() => {})
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([]))
       $ctrl.itemConfig = {}
     })
 
@@ -154,6 +159,18 @@ describe('product config modal', function () {
       $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT'
       $ctrl.initializeParams()
 
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('DEFAULT')
+    })
+
+    it('sets the campaignCode from default-campaign-code if opening from modal directly', () => {
+      $ctrl.itemConfig['campaign-page'] = 'some-page'
+
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockImplementation(() => {
+        $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT'
+        return Observable.from([])
+      })
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toBeUndefined()
+      $ctrl.initializeParams()
       expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('DEFAULT')
     })
 

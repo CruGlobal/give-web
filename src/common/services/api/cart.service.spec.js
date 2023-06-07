@@ -31,6 +31,7 @@ describe('cart service', () => {
     beforeEach(() => {
       jest.spyOn(self.cartService.$cookies, 'put').mockImplementation(() => {})
       jest.spyOn(self.cartService.$cookies, 'remove').mockImplementation(() => {})
+      jest.spyOn(self.cartService.$location, 'host').mockReturnValue('give.cru.org')
       jest.spyOn(self.cartService.commonService, 'getNextDrawDate').mockReturnValue(Observable.of('2016-10-01'))
       advanceTo(moment('2016-09-01').toDate()) // Make sure current date is before next draw date
     })
@@ -95,6 +96,22 @@ describe('cart service', () => {
         })
       self.$httpBackend.flush()
     })
+
+    it('should not set cart count cookie on other domains', () => {
+      self.cartService.$location.host.mockReturnValue('secure.cru.org')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
+        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:itemfields,ratetotals:element,total,total:cost')
+        .respond(200, cartResponse)
+
+      self.cartService.get()
+        .subscribe(() => {
+          expect(self.cartService.$cookies.put).not.toHaveBeenCalled()
+          expect(self.cartService.$cookies.remove).not.toHaveBeenCalled()
+        })
+      self.$httpBackend.flush()
+    })
   })
 
   describe('handleCartResponse', () => {
@@ -108,6 +125,7 @@ describe('cart service', () => {
     beforeEach(() => {
       jest.spyOn(self.cartService.$cookies, 'put').mockImplementation(() => {})
       jest.spyOn(self.cartService.$cookies, 'remove').mockImplementation(() => {})
+      jest.spyOn(self.cartService.$location, 'host').mockReturnValue('give.cru.org')
       advanceTo(moment('2016-09-01').toDate()) // Make sure current date is before next draw date
       transformedCartResponse = self.cartService.hateoasHelperService.mapZoomElements(cartResponse, zoom)
       transformedCartResponse.rateTotals[0].cost.amount = 51

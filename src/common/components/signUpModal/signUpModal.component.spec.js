@@ -50,7 +50,7 @@ describe('signUpModal', function () {
     describe('valid form', () => {
       beforeEach(() => {
         $ctrl.email = 'professorx@xavier.edu'
-        $ctrl.password = 'Cerebro123'
+        $ctrl.password = 'Cerebro12345678'
         $ctrl.first_name = 'Charles'
         $ctrl.last_name = 'Xavier'
         $ctrl.signUp()
@@ -59,7 +59,7 @@ describe('signUpModal', function () {
       it('sets isLoading to true and calls sessionService.signUp', () => {
         expect($ctrl.isLoading).toEqual(true)
         expect($ctrl.sessionService.signUp)
-          .toHaveBeenCalledWith('professorx@xavier.edu', 'Cerebro123', 'Charles', 'Xavier')
+          .toHaveBeenCalledWith('professorx@xavier.edu', 'Cerebro12345678', 'Charles', 'Xavier')
       })
 
       describe('signUp success', () => {

@@ -14,19 +14,22 @@ import coverFees from 'common/components/paymentMethods/coverFees/coverFees.comp
 
 import showErrors from 'common/filters/showErrors.filter'
 import { scrollModalToTop } from 'common/services/modalState.service'
+import analyticsFactory from 'app/analytics/analytics.factory'
 
 import cruPayments from 'cru-payments/dist/cru-payments'
 import tsys from 'common/services/api/tsys.service'
 
 import template from './creditCardForm.tpl.html'
+import creditCardNumberDirective from '../../../directives/creditCardNumber.directive'
 
 const componentName = 'creditCardForm'
 
 class CreditCardController {
   /* @ngInject */
-  constructor ($scope, $log, envService, tsysService) {
+  constructor ($scope, $log, analyticsFactory, envService, tsysService) {
     this.$scope = $scope
     this.$log = $log
+    this.analyticsFactory = analyticsFactory
     this.envService = envService
     this.tsysService = tsysService
 
@@ -135,7 +138,11 @@ class CreditCardController {
           }) // Send masked card number when card number is not updated
         : this.tsysService.getManifest()
           .mergeMap(data => {
-            cruPayments.creditCard.init(this.envService.get(), data.deviceId, data.manifest)
+            const productionEnvironments = ['production', 'prodcloud']
+            const actualEnvironment = this.envService.get()
+            const ccpEnvironment = productionEnvironments.includes(actualEnvironment) ? 'production' : actualEnvironment
+
+            cruPayments.creditCard.init(ccpEnvironment, data.deviceId, data.manifest)
             return cruPayments.creditCard.encrypt(this.creditCardPayment.cardNumber, this.hideCvv ? null : this.creditCardPayment.securityCode, this.creditCardPayment.expiryMonth, this.creditCardPayment.expiryYear)
           })
       tokenObservable.subscribe(tokenObj => {
@@ -159,6 +166,7 @@ class CreditCardController {
         })
       }, error => {
         this.$log.error('Error tokenizing credit card', error)
+        this.analyticsFactory.checkoutFieldError('tokenizeCard', 'failed')
         this.onPaymentFormStateChange({
           $event: {
             state: 'error',
@@ -168,6 +176,7 @@ class CreditCardController {
         scrollModalToTop()
       })
     } else {
+      this.analyticsFactory.handleCheckoutFormErrors(this.creditCardPaymentForm)
       this.onPaymentFormStateChange({
         $event: {
           state: 'unsubmitted'
@@ -184,7 +193,9 @@ export default angular
     addressForm.name,
     coverFees.name,
     showErrors.name,
-    tsys.name
+    analyticsFactory.name,
+    tsys.name,
+    creditCardNumberDirective.name
   ])
   .component(componentName, {
     controller: CreditCardController,

@@ -238,6 +238,22 @@ describe('credit card form', () => {
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData })
     })
 
+    it('should handle prodcloud environment properly', () => {
+      self.controller.envService.set('prodcloud')
+      self.controller.creditCardPayment = {
+        cardNumber: '4111111111111111',
+        cardholderName: 'Person Name',
+        expiryMonth: 12,
+        expiryYear: 2019,
+        securityCode: '123'
+      }
+      self.controller.useMailingAddress = true
+      self.formController.$valid = true
+      self.controller.savePayment()
+
+      expect(cruPayments.creditCard.init).toHaveBeenCalledWith('production', '<device id>', '<manifest>')
+    })
+
     it('should handle an error retrieving the manifest from TSYS', () => {
       self.formController.$valid = true
       self.controller.tsysService.getManifest.mockReturnValue(Observable.throw('some error'))

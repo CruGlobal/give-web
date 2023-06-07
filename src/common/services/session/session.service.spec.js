@@ -112,6 +112,7 @@ describe('session service', function () {
     describe('with \'IDENTIFIED\' cortex-session', () => {
       beforeEach(() => {
         $cookies.put(Sessions.role, cortexRole.identified)
+        $cookies.put(Sessions.profile, cruProfile)
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest()
       })
@@ -121,15 +122,21 @@ describe('session service', function () {
       })
     })
 
-    describe('getRole with \'REGISTERED\' cortex-session', () => {
+    describe('with \'REGISTERED\' cortex-session', () => {
       beforeEach(() => {
         $cookies.put(Sessions.role, cortexRole.registered)
+        $cookies.put(Sessions.profile, cruProfile)
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest()
       })
 
       it('returns \'IDENTIFIED\' with expired give-session', () => {
         expect(sessionService.getRole()).toEqual(Roles.identified)
+      })
+
+      it('returns \'PUBLIC\' with expired cru-profile', () => {
+        $cookies.remove(Sessions.profile)
+        expect(sessionService.getRole()).toEqual(Roles.public)
       })
 
       describe('with \'REGISTERED\' give-session', () => {
@@ -288,6 +295,7 @@ describe('session service', function () {
     describe('with \'IDENTIFIED\' role', () => {
       beforeEach(() => {
         $cookies.put(Sessions.role, cortexRole.identified)
+        $cookies.put(Sessions.profile, cruProfile)
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest()
       })
@@ -311,6 +319,7 @@ describe('session service', function () {
     describe('with skipEvent = true', () => {
       beforeEach(() => {
         $cookies.put(Sessions.role, cortexRole.identified)
+        $cookies.put(Sessions.profile, cruProfile)
         // Force digest so scope session watchers pick up changes.
         $rootScope.$digest()
       })
