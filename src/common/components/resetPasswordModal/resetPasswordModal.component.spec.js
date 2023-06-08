@@ -132,6 +132,15 @@ describe('resetPasswordModal', function () {
             expect($ctrl.hasError).toEqual(true)
             expect($ctrl.errors).toEqual(expect.objectContaining({ invalid_reset_key: true }))
           })
+
+          it('sets invalid_password error', () => {
+            deferred.reject({ status: 400, data: { error: 'invalid_password', description: 'Invalid password...' } })
+            $rootScope.$digest()
+
+            expect($ctrl.hasError).toEqual(true)
+            expect($ctrl.errors).toEqual(expect.objectContaining({ invalid_password: true }))
+            expect($ctrl.invalidPasswordMessage).toEqual('Invalid password...')
+          })
         })
 
         describe('403 Forbidden', () => {
