@@ -1,5 +1,6 @@
 <div class="col-md-12 col-xs-12">
   <div class="alert alert-danger" role="alert" ng-messages="$ctrl.signUpErrors" ng-if="$ctrl.hasError">
+    <div ng-message="invalid_password" translate>{{$ctrl.invalidPasswordMessage}}</div>
     <div ng-message="400" translate>An error occurred during sign up.<br />Please Check your Email Address and Password and try again.</div>
     <div ng-message="403" translate>An error occurred during sign up.<br />This is most likely caused by the use of a reserved domain name in your email address. You might try to
       <a id="signInLink1" ng-click="$ctrl.onStateChange({state: 'sign-in'})">Sign In</a>,

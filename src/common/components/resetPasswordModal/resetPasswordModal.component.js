@@ -71,6 +71,10 @@ class ResetPasswordModalController {
           case 'password_cant_change':
             this.errors[error.data.error] = true
             break
+          case 'invalid_password':
+            this.errors[error.data.error] = true
+            this.invalidPasswordMessage = error.data.description
+            break
           default:
             this.$log.error('Error resetting password', omit(error, ['config.data.password', 'config.data.resetKey']))
             this.errors.unknown = true
