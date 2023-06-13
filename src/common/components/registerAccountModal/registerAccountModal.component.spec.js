@@ -19,9 +19,10 @@ describe('registerAccountModal', function () {
       setLoading: jest.fn()
     }
     locals = {
+      $element: [{ dataset: {} }],
       orderService: { getDonorDetails: jest.fn() },
       verificationService: { postDonorMatches: jest.fn() },
-      sessionService: { getRole: jest.fn() }
+      sessionService: { getRole: jest.fn(), isOktaRedirecting: jest.fn() }
     }
     $ctrl = _$componentController_(module.name, locals, bindings)
   }))
@@ -194,7 +195,7 @@ describe('registerAccountModal', function () {
     it('changes to \'contact-info\' state', () => {
       $ctrl.stateChanged('contact-info')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith()
+      expect($ctrl.setModalSize).toHaveBeenCalledWith(undefined)
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('contact-info')
     })
@@ -211,7 +212,7 @@ describe('registerAccountModal', function () {
   describe('setModalSize( size )', () => {
     let modal
     beforeEach(() => {
-      modal = { addClass: jest.fn(), removeClass: jest.fn() }
+      modal = { addClass: jest.fn(), removeClass: jest.fn(), data: jest.fn() }
       jest.spyOn(angular, 'element').mockReturnValue(modal)
       angular.element.cleanData = jest.fn()
     })

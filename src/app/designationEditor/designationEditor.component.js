@@ -10,7 +10,7 @@ import sessionEnforcerService, {
   EnforcerCallbacks,
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService, { LoginOktaOnlyEvent, Roles } from 'common/services/session/session.service'
 import designationEditorService from 'common/services/api/designationEditor.service'
 
 import titleModalController from './titleModal/title.modal'
@@ -32,13 +32,14 @@ import websiteModalTemplate from './websiteModal/websiteModal.tpl.html'
 import desigImgSrcDirective from 'common/directives/desigImgSrc.directive'
 
 import './designationEditor.scss'
+import { concatMap } from 'rxjs/operators/concatMap'
+import { Observable } from 'rxjs/Observable'
 
 const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($scope, $log, $q, $uibModal, $location, $window, $timeout, envService, sessionService, sessionEnforcerService, designationEditorService) {
-    this.$scope = $scope
+  constructor ($log, $q, $uibModal, $location, $window, $rootScope, envService, sessionService, sessionEnforcerService, designationEditorService) {
     this.$log = $log
     this.$timeout = $timeout
     this.sessionService = sessionService
@@ -54,6 +55,7 @@ class DesignationEditorController {
     this.$q = $q
     this.$uibModal = $uibModal
     this.$window = $window
+    this.$rootScope = $rootScope
   }
 
   $onInit () {
@@ -64,6 +66,29 @@ class DesignationEditorController {
     if (!this.designationNumber) {
       this.$window.location = '/'
     }
+
+    this.sessionService.handleOktaRedirect().pipe(
+      concatMap(data => {
+        return data.subscribe ? data : Observable.of(data)
+      })
+    ).subscribe((data) => {
+      if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
+        this.sessionService.removeOktaRedirectIndicator()
+      }
+    },
+    error => {
+      this.errorMessage = 'generic'
+      this.$log.error('Failed to redirect from Okta', error)
+      this.sessionService.removeOktaRedirectIndicator()
+    })
 
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -306,7 +331,7 @@ class DesignationEditorController {
     return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
       this.saveStatus = 'success'
       this.loadingOverlay = false
-      this.carouselImages = this.designationContent.secondaryPhotos
+      this.carouselImages = this.designationContent.secondaryPhotos || []
       this.updateCarousel()
     }, error => {
       this.saveStatus = 'failure'

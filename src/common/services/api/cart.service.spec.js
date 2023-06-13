@@ -227,7 +227,7 @@ describe('cart service', () => {
       describe('with empty cart', () => {
         beforeEach(() => {
           jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(0))
-          jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.of({}))
+          jest.spyOn(self.cartService.sessionService, 'oktaSignOut').mockReturnValue(Observable.of({}))
         })
 
         it('should delete cookies and addItem to cart', () => {

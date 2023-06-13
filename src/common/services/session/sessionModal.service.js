@@ -15,9 +15,7 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       if (replace === true) {
         currentModal.dismiss('replaced')
       } else {
-        if (currentModal.type !== 'reset-password') {
-          $log.error('Attempted to open more than 1 modal')
-        }
+        $log.error('Attempted to open more than 1 modal')
         return false
       }
     }
@@ -25,7 +23,6 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
     options = angular.isObject(options) ? options : {}
     const modalOptions = angular.merge({}, {
       component: sessionModalComponent.name,
-      size: 'sm',
       windowTemplateUrl: sessionModalWindowTemplate,
       resolve: {
         state: () => type
@@ -67,8 +64,6 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       dismissAnalyticsEvent: 'ga-sign-in-exit'
     }).result,
     signUp: () => openModal('sign-up').result,
-    forgotPassword: () => openModal('forgot-password').result,
-    resetPassword: () => openModal('reset-password', { backdrop: 'static' }).result,
     userMatch: () => openModal('user-match', {
       backdrop: 'static',
       openAnalyticsEvent: 'ga-registration-match-is-this-you',
@@ -90,9 +85,6 @@ export default angular
   .factory(serviceName, SessionModalService)
   .config(function (modalStateServiceProvider) {
     modalStateServiceProvider.registerModal(
-      'reset-password',
       /* @ngInject */
-      function (sessionModalService) {
-        sessionModalService.resetPassword()
-      })
+      function (sessionModalService) {})
   })

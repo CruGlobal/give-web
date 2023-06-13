@@ -3,14 +3,17 @@ import template from './receipts.tpl.html'
 import donationsService from 'common/services/api/donations.service'
 import filterByYear from './receipts.filter'
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
-import { Roles, SignOutEvent } from 'common/services/session/session.service'
+import sessionService, { LoginOktaOnlyEvent, Roles, SignOutEvent } from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
 import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
+import { concatMap } from 'rxjs/operators/concatMap'
+import { Observable } from 'rxjs/Observable'
 
 class ReceiptsController {
   /* @ngInject */
-  constructor ($rootScope, donationsService, sessionEnforcerService, analyticsFactory, $location, $window, $log) {
+  constructor ($rootScope, donationsService, sessionService, sessionEnforcerService, analyticsFactory, $location, $window, $log) {
     this.donationsService = donationsService
+    this.sessionService = sessionService
     this.sessionEnforcerService = sessionEnforcerService
     this.analyticsFactory = analyticsFactory
     this.$location = $location
@@ -23,6 +26,29 @@ class ReceiptsController {
   }
 
   $onInit () {
+    this.sessionService.handleOktaRedirect().pipe(
+      concatMap(data => {
+        return data.subscribe ? data : Observable.of(data)
+      })
+    ).subscribe((data) => {
+      if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
+        this.sessionService.removeOktaRedirectIndicator()
+      }
+    },
+    error => {
+      this.errorMessage = 'generic'
+      this.$log.error('Failed to redirect from Okta', error)
+      this.sessionService.removeOktaRedirectIndicator()
+    })
+
     this.today = new Date()
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -107,6 +133,7 @@ export default angular
   .module(componentName, [
     commonModule.name,
     donationsService.name,
+    sessionService.name,
     filterByYear.name,
     sessionEnforcerService.name,
     uibDropdown

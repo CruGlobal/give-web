@@ -69,7 +69,7 @@ describe('sessionEnforcerService', function () {
         }))
 
         it('opens sign-in modal and calls \'change\' callback', () => {
-          expect(change).toHaveBeenCalledWith(Roles.public)
+          expect(change).toHaveBeenCalledWith(Roles.public, 'NEW')
           expect(sessionModalService.open).toHaveBeenCalledWith('sign-in', { backdrop: 'static', keyboard: false })
         })
 
@@ -185,7 +185,7 @@ describe('sessionEnforcerService', function () {
             [EnforcerCallbacks.change]: change
           }, EnforcerModes.donor)
 
-          expect(change).toHaveBeenCalledWith(Roles.public)
+          expect(change).toHaveBeenCalledWith(Roles.public, 'NEW')
           expect(sessionModalService.open).toHaveBeenCalledWith('register-account', {
             backdrop: 'static',
             keyboard: false
@@ -211,7 +211,7 @@ describe('sessionEnforcerService', function () {
             $rootScope.$digest()
 
             expect(orderService.getDonorDetails).toHaveBeenCalled()
-            expect(change).toHaveBeenCalledWith(Roles.registered)
+            expect(change).toHaveBeenCalledWith(Roles.registered, 'NEW')
             expect(sessionModalService.open).toHaveBeenCalledWith('register-account', {
               backdrop: 'static',
               keyboard: false
@@ -251,7 +251,7 @@ describe('sessionEnforcerService', function () {
             $rootScope.$digest()
 
             expect(orderService.getDonorDetails).toHaveBeenCalled()
-            expect(change).toHaveBeenCalledWith(Roles.registered)
+            expect(change).toHaveBeenCalledWith(Roles.registered, 'NEW')
             expect(sessionModalService.open).toHaveBeenCalledWith('register-account', {
               backdrop: 'static',
               keyboard: false

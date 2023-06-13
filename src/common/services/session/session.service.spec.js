@@ -1,10 +1,12 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent } from './session.service'
+import module, { OktaStorage, Roles, Sessions, SignOutEvent, redirectingIndicator } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { advanceBy, advanceTo, clear } from 'jest-date-mock'
+import 'rxjs/add/observable/of'
+
 /* global inject */
 
 describe('session service', function () {
@@ -16,17 +18,27 @@ describe('session service', function () {
       spy.verifyNoPendingTasks = $delegate.verifyNoPendingTasks
       return spy
     })
+
+    $provide.decorator('$window', function ($delegate) {
+      const spy = jest.fn($delegate)
+      spy.localStorage = { clear: jest.fn() }
+      spy.sessionStorage = $delegate.sessionStorage
+      spy.document = $delegate.document
+      return spy
+    })
   }))
 
   beforeEach(angular.mock.module(module.name))
-  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks
+  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks, $window, envService
 
-  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_) {
+  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _envService_) {
     sessionService = _sessionService_
     $httpBackend = _$httpBackend_
     $cookies = _$cookies_
     $rootScope = _$rootScope_
     $verifyNoPendingTasks = _$verifyNoPendingTasks_
+    $window = _$window_
+    envService = _envService_
   }))
 
   afterEach(() => {
@@ -242,38 +254,120 @@ describe('session service', function () {
     })
   })
 
-  describe('forgotPassword', () => {
-    it('makes http request to cas/send_forgot_password_email', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/send_forgot_password_email', {
-        email: 'professorx@xavier.edu',
-        passwordResetUrl: 'http://example.com/index.html?theme=cru#reset-password'
-      }).respond(200, {})
+  describe('oktaSignOut', () => {
+    it('makes an http request to okta/logout', () => {
+      $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
+        .respond(200, {})
       sessionService
-        .forgotPassword('professorx@xavier.edu', 'http://example.com/index.html?theme=cru#reset-password')
-        .subscribe((data) => {
-          expect(data).toEqual({})
+        .oktaSignOut()
+        .subscribe((response) => {
+          expect(response.data).toEqual({})
         })
       $httpBackend.flush()
     })
+
+    it('should clear extra storage', () => {
+      $cookies.put(OktaStorage.state, 'a')
+      $cookies.put(OktaStorage.nonce, 'b')
+      $cookies.put(OktaStorage.redirectParams, 'c')
+      expect($cookies.get(OktaStorage.state)).toEqual('a')
+      expect($cookies.get(OktaStorage.nonce)).toEqual('b')
+      expect($cookies.get(OktaStorage.redirectParams)).toEqual('c')
+      sessionService
+        .oktaSignOut()
+        .subscribe(() => {
+          expect($window.localStorage.clear).toHaveBeenCalled()
+          expect($cookies.get(OktaStorage.state)).not.toBeDefined()
+          expect($cookies.get(OktaStorage.nonce)).not.toBeDefined()
+          expect($cookies.get(OktaStorage.redirectParams)).not.toBeDefined()
+        })
+    })
   })
 
-  describe('resetPassword', () => {
-    it('makes http request to cas/reset_password and then sign in', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/reset_password', {
-        email: 'professorx@xavier.edu',
-        password: 'Cerebro123',
-        resetKey: 'abc123def456'
-      }).respond(200, {})
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'professorx@xavier.edu',
-        password: 'Cerebro123'
+  describe('handleOktaRedirect', () => {
+    it('should handle a successful login', done => {
+      sessionService.authClient.shouldSucceed()
+      sessionService.authClient.setupForRedirect()
+
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'wee'
       }).respond(200, 'success')
-      sessionService
-        .resetPassword('professorx@xavier.edu', 'Cerebro123', 'abc123def456')
-        .subscribe((data) => {
-          expect(data).toEqual({})
-        })
-      $httpBackend.flush()
+      sessionService.handleOktaRedirect().toPromise().then(() => {
+        $httpBackend.flush()
+        done()
+      })
+    })
+
+    it('should pass along lastPurchaseId', done => {
+      sessionService.authClient.shouldSucceed()
+      sessionService.authClient.setupForRedirect()
+
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'wee',
+        lastPurchaseId: 'gxbcdviu='
+      }).respond(200, 'success')
+
+      sessionService.handleOktaRedirect('gxbcdviu=').toPromise().then(() => {
+        $httpBackend.flush()
+        done()
+      })
+    })
+
+    it('should handle a failed login', done => {
+      sessionService.authClient.shouldFail()
+      sessionService.authClient.setupForRedirect()
+      sessionService.handleOktaRedirect().subscribe(() => {
+        fail()
+      }, error => {
+        expect(error).toBeDefined()
+        done()
+      })
+    })
+
+    it('should redirect to Okta if the login has not yet happened', done => {
+      sessionService.authClient.setLoginRedirect(true)
+      sessionService.authClient.setAuthenticated(false)
+      sessionService.authClient.shouldSucceed()
+      sessionService.handleOktaRedirect().subscribe(() => {
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
+        done()
+      })
+    })
+
+    it('should ignore a non-login attempt', done => {
+      sessionService.authClient.setLoginRedirect(false)
+      sessionService.handleOktaRedirect().subscribe((data) => {
+        expect(sessionService.authClient.token.parseFromUrl).not.toHaveBeenCalled()
+        expect(data).toEqual(false)
+        done()
+      })
+
+    })
+  })
+
+  describe('getOktaUrl', () => {
+    it('should return the oktaUrl from the environment', () => {
+      expect(sessionService.getOktaUrl()).toEqual(envService.read('oktaUrl'))
+    })
+  })
+
+  describe('removeOktaRedirectIndicator', () => {
+    it('should remove the Okta redirect session storage variable', () => {
+      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      sessionService.removeOktaRedirectIndicator()
+      expect($window.sessionStorage.getItem(redirectingIndicator)).toEqual(null)
+    })
+  })
+
+  describe('isOktaRedirecting', () => {
+    it('should be true if the session storage variable is set', () => {
+      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      expect(sessionService.isOktaRedirecting()).toBeTruthy()
+    })
+
+    it('should be false if the session storage variable is not set', () => {
+      $window.sessionStorage.removeItem(redirectingIndicator)
+      expect(sessionService.isOktaRedirecting()).toBeFalsy()
     })
   })
 
@@ -301,7 +395,7 @@ describe('session service', function () {
       })
 
       it('make http request to cas/downgrade', (done) => {
-        $httpBackend.expectPOST('https://give-stage2.cru.org/cas/downgrade', {}).respond(204, {})
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/downgrade', {}).respond(204, {})
         sessionService.downgradeToGuest().subscribe((data) => {
           expect(data).toEqual({})
         })
@@ -325,7 +419,7 @@ describe('session service', function () {
       })
 
       it('make http request to cas/downgrade', (done) => {
-        $httpBackend.expectPOST('https://give-stage2.cru.org/cas/downgrade', {}).respond(204, {})
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/downgrade', {}).respond(204, {})
         sessionService.downgradeToGuest(true).subscribe((data) => {
           expect(data).toEqual({})
         })
@@ -422,6 +516,33 @@ describe('session service', function () {
           expect($timeout).toHaveBeenCalledTimes(2)
         })
       })
+    })
+  })
+
+  describe('updateCurrentProfile', () => {
+    it('updates the first and last name if the cookie is defined', () => {
+      const cruProfileCookie = {
+        first_name: 'Test',
+        last_name: 'Tester'
+      }
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
+
+      // Encode as JWT
+      $cookies.put(Sessions.profile, `.${btoa(angular.toJson(cruProfileCookie))}.`)
+      sessionService.updateCurrentProfile()
+      expect(sessionService.session.first_name).toEqual(cruProfileCookie.first_name)
+      expect(sessionService.session.last_name).toEqual(cruProfileCookie.last_name)
+    })
+
+    it('does not set profile values if the cookie is not defined', () => {
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
+
+      const cruProfile = sessionService.updateCurrentProfile()
+      expect(cruProfile).toEqual({})
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
     })
   })
 })

@@ -3,6 +3,7 @@ import 'angular-cookies'
 import jwtDecode from 'jwt-decode'
 import { Observable } from 'rxjs/Observable'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import { OktaAuth } from '@okta/okta-auth-js'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
@@ -26,14 +27,29 @@ export const Sessions = {
   profile: 'cru-profile'
 }
 
+export const OktaStorage = {
+  state: 'okta-oauth-state',
+  nonce: 'okta-oauth-nonce',
+  redirectParams: 'okta-oauth-redirect-params'
+}
+
+export const redirectingIndicator = 'redirectingFromOkta'
+
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
+export const LoginOktaOnlyEvent = 'loginAsOktaOnlyUser'
 
-const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, envService) {
+const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
   const maximumTimeout = 30 * 1000
+  const authClient = new OktaAuth({
+    issuer: envService.read('oktaUrl'),
+    clientId: envService.read('oktaClientId'),
+    redirectUri: `${window.location.origin}${window.location.pathname}`,
+    scopes: ['openid', 'email', 'profile']
+  })
 
   // Set initial session on load
   updateCurrentSession()
@@ -46,13 +62,19 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   return {
     session: session,
     sessionSubject: sessionSubject,
+    authClient: authClient, // Exposed for tests only
     getRole: currentRole,
     signIn: signIn,
     signOut: signOut,
     signUp: signUp,
-    forgotPassword: forgotPassword,
-    resetPassword: resetPassword,
-    downgradeToGuest: downgradeToGuest
+    handleOktaRedirect: handleOktaRedirect,
+    oktaSignIn: oktaSignIn,
+    oktaSignOut: oktaSignOut,
+    downgradeToGuest: downgradeToGuest,
+    getOktaUrl: getOktaUrl,
+    removeOktaRedirectIndicator: removeOktaRedirectIndicator,
+    isOktaRedirecting: isOktaRedirecting,
+    updateCurrentProfile: updateCurrentProfile
   }
 
   /* Public Methods */
@@ -106,35 +128,57 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       .map((response) => response.data)
   }
 
-  function forgotPassword (email, passwordResetUrl) {
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Send-Forgot-Password-Email
-    return Observable
-      .from($http({
-        method: 'POST',
-        url: casApiUrl('/send_forgot_password_email'),
-        withCredentials: true,
-        data: {
-          email: email,
-          passwordResetUrl: passwordResetUrl
-        }
+  function handleOktaRedirect (lastPurchaseId) {
+    if (authClient.isLoginRedirect()) {
+      return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
+        authClient.tokenManager.setTokens(tokenResponse.tokens)
+        return oktaSignIn(lastPurchaseId)
       }))
-      .map((response) => response.data)
+    } else {
+      return Observable.of(false)
+    }
   }
 
-  function resetPassword (email, password, resetKey) {
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Set-Password-By-Reset-Key
-    return Observable
-      .from($http({
-        method: 'POST',
-        url: casApiUrl('/reset_password'),
-        withCredentials: true,
-        data: {
-          email: email,
-          password: password,
-          resetKey: resetKey
-        }
-      }))
-      .mergeMap(() => signIn(email, password))
+  function oktaSignIn (lastPurchaseId) {
+    setOktaRedirecting()
+    return Observable.from(internalSignIn(lastPurchaseId))
+      .map((response) => response ? response.data : response)
+      .finally(() => {
+        $rootScope.$broadcast(SignInEvent)
+      })
+  }
+
+  async function internalSignIn (lastPurchaseId) {
+    const isAuthenticated = await authClient.isAuthenticated()
+    if (!isAuthenticated) {
+      authClient.token.getWithRedirect()
+      return
+    }
+    const tokens = await authClient.tokenManager.getTokens()
+    const data = { access_token: tokens.accessToken.accessToken }
+    // Only send lastPurchaseId if present and currently public
+    if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
+      data.lastPurchaseId = lastPurchaseId
+    }
+    return $http({
+      method: 'POST',
+      url: oktaApiUrl('login'),
+      data: data,
+      withCredentials: true
+    })
+  }
+
+  function oktaSignOut () {
+    return Observable.from(internalSignOut())
+  }
+
+  function internalSignOut () {
+    clearStorageForOktaLogout()
+    return $http({
+      method: 'DELETE',
+      url: oktaApiUrl('logout'),
+      withCredentials: true
+    })
   }
 
   function downgradeToGuest (skipEvent = false) {
@@ -143,7 +187,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       : Observable
         .from($http({
           method: 'POST',
-          url: casApiUrl('/downgrade'),
+          url: oktaApiUrl('downgrade'),
           withCredentials: true,
           data: {}
         }))
@@ -155,10 +199,46 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       })
   }
 
+  function getOktaUrl () {
+    return envService.read('oktaUrl')
+  }
+
+  function removeOktaRedirectIndicator () {
+    $window.sessionStorage.removeItem(redirectingIndicator)
+  }
+
+  function isOktaRedirecting () {
+    return $window.sessionStorage.getItem(redirectingIndicator)
+  }
+
+  function updateCurrentProfile () {
+    let cruProfile = {}
+
+    if (angular.isDefined($cookies.get(Sessions.profile))) {
+      cruProfile = jwtDecode($cookies.get(Sessions.profile))
+      session.first_name = cruProfile.first_name
+      session.last_name = cruProfile.last_name
+    }
+
+    return cruProfile
+  }
+
   /* Private Methods */
+  function setOktaRedirecting () {
+    $window.sessionStorage.setItem(redirectingIndicator, 'true')
+  }
+
+  function clearStorageForOktaLogout () {
+    $window.localStorage.clear()
+    const cookieConfig = { path: '/' }
+    $cookies.remove(OktaStorage.state, cookieConfig)
+    $cookies.remove(OktaStorage.nonce, cookieConfig)
+    $cookies.remove(OktaStorage.redirectParams, cookieConfig)
+  }
+
   function updateCurrentSession () {
     const cortexRole = decodeCookie(Sessions.role)
-    const cruProfile = decodeCookie(Sessions.profile)
+    const cruProfile = updateCurrentProfile()
     const giveSession = decodeCookie(Sessions.give)
 
     // Set give-session expiration timeout if defined
@@ -232,6 +312,10 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   function casApiUrl (path) {
     const apiUrl = envService.read('apiUrl') + '/cas'
     return apiUrl + path
+  }
+
+  function oktaApiUrl (path) {
+    return `${envService.read('apiUrl')}/okta/${path}`
   }
 }
 

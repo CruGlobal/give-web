@@ -1,0 +1,172 @@
+sign-in-form .okta-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 1em 0.5em;
+  gap: 1em;
+
+  img {
+    height: 20px;
+  }
+}
+
+register-account-modal {
+  line-height: 1.2em;
+
+  .modal-header {
+    padding-bottom: 30px;
+    background-color: #EBECEC;
+  }
+
+  h3 {
+    padding-bottom: 30px;
+  }
+
+  ul {
+    padding-left: 1em;
+  }
+
+  .section {
+    padding-bottom: 30px;
+  }
+
+  .cart {
+    padding: 10px;
+    background-color: #9C9FA1;
+    color: white;
+  }
+
+  .modal-dialog .give-modal-content & .modal-body {
+    padding: 30px;
+  }
+
+  .footer-buttons {
+    button {
+      width: 100%;
+    }
+
+    button.back {
+      display: none;
+      width: auto;
+    }
+  }
+
+  .modal-dialog.modal-lg & {
+    &[data-state=sign-in] {
+      $body-width: 530px;
+      $body-margin: 80px;
+      display: flex;
+
+      .modal-header {
+        flex: 1;
+
+        button.close {
+          margin-right: -85px - $body-width;
+        }
+      }
+
+      .modal-body {
+        width: $body-width - $body-margin * 2;
+        margin: 60px $body-margin;
+      }
+    }
+    &[data-state=contact-info] {
+      contact-info-modal form {
+        display: grid;
+        grid-template: 1fr auto / auto 320px;
+        column-gap: 20px;
+
+        .name {
+          grid-column: 1;
+          grid-row: 1;
+        }
+        .address {
+          grid-column: 2;
+          grid-row: 1 / 3;
+        }
+        .contact-info {
+          grid-column: 1;
+          grid-row: 2;
+        }
+      }
+    }
+    &[data-state=user-match] {
+      .modal-header h3 {
+        text-align: center;
+      }
+
+      .modal-body {
+        margin-left: 200px;
+        margin-right: 200px;
+      }
+    }
+
+    .footer-buttons {
+      margin-left: -230px;
+      margin-right: -230px;
+      margin-bottom: -30px;
+      padding: 15px;
+      background-color: #F5F5F5;
+      display: flex;
+
+      button:not(.back) {
+        width: 400px;
+        margin-left: auto;
+      }
+      button.back {
+        display: block;
+      }
+    }
+    .success .footer-buttons {
+      flex-direction: column;
+    }
+  }
+}
+
+user-match-modal {
+  h4 {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  input {
+    accent-color: $colorCru-gold;
+  }
+
+  .activate-progress {
+    padding-bottom: 30px;
+
+    progress {
+      width: 100%;
+      accent-color: $colorCru-gold;
+    }
+
+    .step-label {
+      font-weight: bold;
+      padding-left: calc(var(--progress) * 320px);
+
+      .modal-dialog.modal-lg & {
+        padding-left: calc(var(--progress) * 370px);
+      }
+    }
+  }
+
+  .modal-dialog.modal-lg & .success .footer-buttons button {
+    margin-right: auto;
+  }
+}
+
+sign-in-modal {
+  h4 {
+    font-size: 1.3em;
+    line-height: 1.5em;
+  }
+
+  .row {
+    margin-bottom: 1em;
+  }
+
+  .content {
+    margin-top: 1em;
+  }
+}
