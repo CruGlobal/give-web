@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header {{$ctrl.state}}" >
   <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
     <span aria-hidden="true">×</span>
   </button>
@@ -14,7 +14,7 @@
             <li translate>Access your tax receipts and forms.</li>
           </ul>
         </div>
-        <div ng-if="$ctrl.state === 'contact-info'" class="section" translate>
+        <div ng-if="$ctrl.state === 'contact-info'" class="section paragraph" translate>
           Your email address is verified. Please provide your contact information so that we can send you your giving receipts.
         </div>
         <div class="section cart" ng-if="$ctrl.cartCount > 0">
@@ -29,7 +29,8 @@
   <sign-in-modal ng-switch-when="sign-in"
                 modal-title="$ctrl.modalTitle"
                 on-state-change="$ctrl.stateChanged(state)"
-                on-success="$ctrl.onIdentitySuccess()">
+                on-success="$ctrl.onIdentitySuccess()"
+                on-failure="$ctrl.onIdentityFailure()">
   </sign-in-modal>
   <div ng-switch-when="loading">
     <loading></loading>

@@ -231,6 +231,12 @@
 @import "sign-in";
 @import "footer";
 
+
+@import "./components/signInForm";
+@import "./components/signUpModal";
+@import "./components/registerAccountModal";
+@import "./components/contactInfo";
+
 @import "tabs";
 @import "global-changes";
 @import "responsive";

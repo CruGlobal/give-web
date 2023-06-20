@@ -47,6 +47,7 @@ export default angular
       modalTitle: '=',
       lastPurchaseId: '<',
       onStateChange: '&',
-      onSuccess: '&'
+      onSuccess: '&',
+      onFailure: '&'
     }
   })

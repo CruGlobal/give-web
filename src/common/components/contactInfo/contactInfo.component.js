@@ -41,6 +41,7 @@ class Step1Controller {
         country: 'US'
       }
     }
+    this.showSpouseFields = false;
 
     this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
 
@@ -167,6 +168,16 @@ class Step1Controller {
     } else {
       this.analyticsFactory.handleCheckoutFormErrors(this.detailsForm)
       this.onSubmit({ success: false })
+    }
+  }
+
+  toggleSpouseFields() {
+    this.showSpouseFields = !this.showSpouseFields;
+    if (!this.showSpouseFields) {
+      this.donorDetails['spouse-name']['given-name'] = '';
+      this.donorDetails['spouse-name']['middle-initial'] = '';
+      this.donorDetails['spouse-name']['family-name'] = '';
+      this.donorDetails['spouse-name']['suffix'] = '';
     }
   }
 }

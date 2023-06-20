@@ -61,9 +61,11 @@ class RegisterAccountModalController {
       this.getDonorDetails()
     })
 
+    // Ensure loading icon isn't rendered on screen.
+    this.sessionService.removeOktaRedirectIndicator()
+
     this.cartCount = 0
-    // TODO: Do we need to unsubscribe from this?
-    this.cartService.getTotalQuantity().subscribe(count => {
+    this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe(count => {
       this.cartCount = count
     }, () => {
       this.cartCount = 0
@@ -79,9 +81,19 @@ class RegisterAccountModalController {
     }
   }
 
+  $onDestroy () {
+    this.getTotalQuantitySubscription.unsubscribe();
+    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe();
+    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe();
+  }
+
   onIdentitySuccess () {
     // Success Sign-In/Up, Proceed to Step 2.
     this.getDonorDetails()
+  }
+
+  onIdentityFailure () {
+    this.sessionService.removeOktaRedirectIndicator()
   }
 
   onContactInfoSuccess () {
@@ -100,7 +112,9 @@ class RegisterAccountModalController {
     this.stateChanged('loading')
 
     // Step 2. Fetch Donor Details
-    this.orderService.getDonorDetails().subscribe((donorDetails) => {
+    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe();
+    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe((donorDetails) => {
+
       // Workflow Complete if 'registration-state' is COMPLETED
       if (donorDetails['registration-state'] === 'COMPLETED') {
         this.onSuccess()
@@ -120,7 +134,8 @@ class RegisterAccountModalController {
     this.setLoading({ loading: true })
 
     // Step 4. Post to Donor Matches.
-    this.verificationService.postDonorMatches().subscribe(() => {
+    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe();
+    this.verificationServiceSubscription = this.verificationService.postDonorMatches().subscribe(() => {
       // Donor match success, Proceed to step 5.
       this.stateChanged('user-match')
     }, () => {
