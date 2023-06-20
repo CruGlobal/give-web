@@ -15,6 +15,10 @@ class Tsys {
     this.device = device
   }
 
+  getDevice () {
+    return this.device
+  }
+
   getManifest () {
     return this.cortexApiService.get({
       path: this.device ? ['tsys', 'manifest', this.device] : ['tsys', 'manifest']

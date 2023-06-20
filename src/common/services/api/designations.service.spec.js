@@ -12,9 +12,10 @@ describe('designation service', () => {
   beforeEach(angular.mock.module(module.name))
   const self = {}
 
-  beforeEach(inject((designationsService, $httpBackend) => {
+  beforeEach(inject((designationsService, $httpBackend, $location) => {
     self.designationsService = designationsService
     self.$httpBackend = $httpBackend
+    self.$location = $location
   }))
 
   afterEach(() => {
@@ -239,6 +240,36 @@ describe('designation service', () => {
 
       const path = self.designationsService.generatePath(productCode, campaignPage)
       expect(path).toEqual('/content/give2/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
+    })
+  })
+
+  describe('ministriesList', () => {
+    it('should return a list of ministries', () => {
+      jest.spyOn(self.$location, 'protocol').mockImplementationOnce(() => 'https')
+      jest.spyOn(self.$location, 'host').mockImplementationOnce(() => 'give-stage-cloud.cru.org')
+      const pagePath = 'page.html'
+      const ministriesResponse = {
+        ministries: [{
+          name: 'Some Ministry',
+          designationNumber: '0123456',
+          path: '/some-vanity',
+          extra: 'something-else'
+        }]
+      }
+      self.$httpBackend.expectGET(`https://give-stage-cloud.cru.org/${pagePath}/jcr:content/content-parsys/designation_search_r.json`)
+        .respond(200, ministriesResponse)
+
+      const expectedResult = {
+        ministries: [{
+          name: 'Some Ministry',
+          designationNumber: '0123456',
+          path: '/some-vanity'
+        }]
+      }
+      self.designationsService.ministriesList(pagePath).subscribe(actualResult => {
+        expect(actualResult).toEqual(expectedResult)
+      })
+      self.$httpBackend.flush()
     })
   })
 })

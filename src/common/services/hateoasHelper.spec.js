@@ -145,8 +145,9 @@ describe('HATEOAS helper service', function () {
   })
 
   describe('mapChildZoomElements', () => {
+    let element, zoomString, childZoomStrings;
     beforeEach(() => {
-      this.element = {
+      element = {
         _code: [
           {
             someKey: 'someValue'
@@ -167,12 +168,12 @@ describe('HATEOAS helper service', function () {
           }
         ]
       }
-      this.zoomString = 'lineitems:element'
-      this.childZoomStrings = ['lineitems:element:code', 'lineitems:element:rates[]', 'lineitems:element:paymentInstruments:creditcard']
+      zoomString = 'lineitems:element'
+      childZoomStrings = ['lineitems:element:code', 'lineitems:element:rates[]', 'lineitems:element:paymentInstruments:creditcard']
     })
 
     it('should take an element and map the child zoom strings to keys', () => {
-      expect(self.hateoasHelperService.mapChildZoomElements(this.element, this.zoomString, this.childZoomStrings)).toEqual({
+      expect(self.hateoasHelperService.mapChildZoomElements(element, zoomString, childZoomStrings)).toEqual({
         code: {
           someKey: 'someValue'
         },
@@ -197,9 +198,9 @@ describe('HATEOAS helper service', function () {
     })
 
     it('should return undefined if the zoom isn\'t found', () => {
-      this.childZoomStrings = ['lineitems:element:code2', 'lineitems:element:rates2[]']
+      childZoomStrings = ['lineitems:element:code2', 'lineitems:element:rates2[]']
 
-      expect(self.hateoasHelperService.mapChildZoomElements(this.element, this.zoomString, this.childZoomStrings)).toEqual({
+      expect(self.hateoasHelperService.mapChildZoomElements(element, zoomString, childZoomStrings)).toEqual({
         _code: [
           {
             someKey: 'someValue'

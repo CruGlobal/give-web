@@ -326,15 +326,16 @@ describe('Designation Editor', function () {
       let modalPromise
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer()
-        spyOn($ctrl.$uibModal, 'open').and.returnValue({ result: modalPromise.promise })
+        jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: modalPromise.promise })
         $ctrl.designationContent = designationSecurityResponse
+        $ctrl.carouselImages = $ctrl.extractCarouselUrls()
       }))
 
       it('should open modal', () => {
         let photos = []
         $ctrl.designationPhotos = photos
 
-        $ctrl.selectPhotos('secondaryPhotos', designationSecurityResponse['design-controller'].carousel)
+        $ctrl.selectPhotos('secondaryPhotos')
 
         let selectedPhotos = [
           { url: '/content/dam/give/designations/0/1/2/3/4/0123456/some-image.jpg' },
@@ -343,11 +344,11 @@ describe('Designation Editor', function () {
         ]
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled()
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.campaignPage()).toBeUndefined()
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photos()).toEqual(photos)
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photoLocation()).toEqual('secondaryPhotos')
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.selectedPhoto()).toEqual(selectedPhotos)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.campaignPage()).toBeUndefined()
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.photos()).toEqual(photos)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.photoLocation()).toEqual('secondaryPhotos')
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.selectedPhoto()).toEqual(selectedPhotos)
       })
 
       it('should have empty selectedPhotos', () => {
@@ -503,7 +504,7 @@ describe('Designation Editor', function () {
     })
   })
 
-  describe('images', () => {
+  describe('extractCarouselUrls', () => {
     it('should return all of the selected images for the carousel', () => {
       $ctrl.designationContent = designationSecurityResponse
       let expectedImageUrls = [
@@ -512,14 +513,26 @@ describe('Designation Editor', function () {
         '/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg'
       ]
 
-      expect($ctrl.images()).toEqual(expectedImageUrls)
+      expect($ctrl.extractCarouselUrls()).toEqual(expectedImageUrls)
     })
 
     it('should return an empty array if there is no carousel', () => {
       $ctrl.designationContent = {
         designationNumber: '0123456'
       }
-      expect($ctrl.images()).toEqual([])
+      expect($ctrl.extractCarouselUrls()).toEqual([])
+    })
+  })
+
+  describe('updateCarousel', () => {
+    it('should hide then show the carousel', () => {
+      $ctrl.updateCarousel()
+
+      expect($ctrl.contentLoaded).toBe(false)
+
+      $rootScope.$digest()
+
+      expect($ctrl.contentLoaded).toBe(true)
     })
   })
 
@@ -551,6 +564,30 @@ describe('Designation Editor', function () {
       $ctrl.carouselLoaded = false
       $ctrl.carouselLoad()
       expect($ctrl.$window.document.dispatchEvent).toHaveBeenCalled()
+    })
+  })
+
+  describe ('getDoneEditingUrl()', () => {
+    const cacheBust = '?doneEditing'
+    const designationNumber = '0123456'
+
+    it('should return the first vanity url', () => {
+      $ctrl.designationContent = designationSecurityResponse
+      $ctrl.designationContent['sling:vanityPath'] = [`/content/give2/us/en/${designationNumber}`]
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
+    })
+
+    it('should return the only vanity url', () => {
+      $ctrl.designationContent = designationSecurityResponse
+      $ctrl.designationContent['sling:vanityPath'] = `/content/give2/us/en/${designationNumber}`
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
+    })
+
+    it('should fallback to the designation number page', () => {
+      $ctrl.designationNumber = designationNumber
+      $ctrl.designationContent = designationSecurityResponse
+      $ctrl.designationContent['sling:vanityPath'] = undefined
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
     })
   })
 })

@@ -27,12 +27,13 @@ const componentName = 'checkout'
 
 class CheckoutController {
   /* @ngInject */
-  constructor ($window, $location, $rootScope, $log, cartService, orderService, designationsService, sessionEnforcerService, analyticsFactory) {
+  constructor ($window, $location, $rootScope, $log, cartService, envService, orderService, designationsService, sessionEnforcerService, analyticsFactory) {
     this.$log = $log
     this.$window = $window
     this.$location = $location
     this.$rootScope = $rootScope
     this.cartService = cartService
+    this.envService = envService
     this.orderService = orderService
     this.designationsService = designationsService
     this.sessionEnforcerService = sessionEnforcerService
@@ -41,6 +42,7 @@ class CheckoutController {
   }
 
   $onInit () {
+    this.envService.data.vars[this.envService.get()].isCheckout = true
     this.enforcerId = this.sessionEnforcerService([Roles.public, Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
         this.loadCart()
@@ -115,6 +117,7 @@ class CheckoutController {
 
 export default angular
   .module(componentName, [
+    'environment',
     commonModule.name,
     step1.name,
     step2.name,

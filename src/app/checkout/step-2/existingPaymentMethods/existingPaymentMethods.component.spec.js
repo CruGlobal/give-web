@@ -232,8 +232,18 @@ describe('checkout', () => {
           jest.spyOn(self.controller.orderService, 'storeCardSecurityCode').mockImplementation(() => {})
         })
 
-        it('should save the selected payment', () => {
-          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account', uri: 'selected uri' }, selectAction: 'some uri' }
+        it('should save the selected bank account', () => {
+          self.controller.selectedPaymentMethod = { 'account-type': 'Checking', self: { type: 'elasticpath.bankaccounts.bank-account', uri: 'selected uri' }, selectAction: 'some uri' }
+          self.controller.orderService.selectPaymentMethod.mockReturnValue(Observable.of('success'))
+          self.controller.selectPayment()
+
+          expect(self.controller.orderService.selectPaymentMethod).toHaveBeenCalledWith('some uri')
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } })
+          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(null, 'selected uri')
+        })
+
+        it('should save the selected credit card', () => {
+          self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: 'selected uri' }, selectAction: 'some uri' }
           self.controller.orderService.selectPaymentMethod.mockReturnValue(Observable.of('success'))
           self.controller.selectPayment()
 

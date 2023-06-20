@@ -165,6 +165,9 @@ describe('product config form component', function () {
 
       jest.spyOn($ctrl.designationsService, 'givingLinks').mockReturnValue(Observable.of([]))
       jest.spyOn($ctrl.analyticsFactory, 'giveGiftModal').mockReturnValue(() => {})
+
+      jest.spyOn($ctrl.envService, 'read').mockReturnValue(false)
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'beginCheckout')
     })
 
     it('should get productData, nextDrawDate, suggestedAmounts and givingLinks', () => {
@@ -176,6 +179,7 @@ describe('product config form component', function () {
       expect($ctrl.productData).toEqual('product data')
       expect($ctrl.setDefaultAmount).toHaveBeenCalled()
       expect($ctrl.setDefaultFrequency).toHaveBeenCalled()
+      expect($ctrl.brandedAnalyticsFactory.beginCheckout).not.toHaveBeenCalled()
 
       expect($ctrl.nextDrawDate).toEqual('2016-10-02')
       expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('02')
@@ -189,6 +193,12 @@ describe('product config form component', function () {
       expect($ctrl.loading).toEqual(false)
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' })
       expect($ctrl.analyticsFactory.giveGiftModal($ctrl.productData))
+    })
+
+    it('should called beginCheckout in branded checkout', () => {
+      $ctrl.envService.read.mockReturnValue(true)
+      $ctrl.loadData()
+      expect($ctrl.brandedAnalyticsFactory.beginCheckout).toHaveBeenCalledWith($ctrl.productData)
     })
 
     it('should not use suggested amounts if they are not provided', () => {
@@ -542,6 +552,7 @@ describe('product config form component', function () {
       $ctrl.errorAlreadyInCart = true
       $ctrl.errorSavingGeneric = true
       jest.spyOn($ctrl.analyticsFactory, 'cartAdd').mockImplementation(() => {})
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'saveTestingTransaction')
       $ctrl.initItemConfig()
     })
 
@@ -555,6 +566,32 @@ describe('product config form component', function () {
 
     describe('isEdit = false', () => {
       testSaving(false)
+    })
+
+    describe('testing transaction flag', () => {
+      beforeEach(() => {
+        $ctrl.productData = {}
+      })
+
+      it('saves flag with no comment', () => {
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(false)
+      })
+
+      it('saves flag with non-test comment', () => {
+        $ctrl.itemConfig.DONATION_SERVICES_COMMENTS = 'Anonymous'
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(false)
+      })
+
+      it('saves flag with test comment', () => {
+        $ctrl.itemConfig.DONATION_SERVICES_COMMENTS = 'Testing'
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(true)
+      })
     })
 
     function testSaving (isEdit) {

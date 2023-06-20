@@ -7,8 +7,34 @@ import merge from 'lodash/merge'
 import isEmpty from 'lodash/isEmpty'
 /* global localStorage */
 
-const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionService) {
+const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService, sessionService) {
   return {
+    checkoutFieldError: function (field, error) {
+      $window.dataLayer = $window.dataLayer || []
+      $window.dataLayer.push({
+        event: 'checkout_error',
+        error_type: field,
+        error_details: error
+      })
+    },
+
+    // Send checkoutFieldError events for any invalid fields in a form
+    handleCheckoutFormErrors: function (form) {
+      if (!envService.read('isCheckout') && !envService.read('isBrandedCheckout')) {
+        // Ignore errors not during checkout, like a logged-in user updating their payment methods
+        return
+      }
+
+      Object.entries(form).forEach(([fieldName, field]) => {
+        if (!fieldName.startsWith('$') && field.$invalid) {
+          // The keys of $error are the validators that failed for this field
+          Object.keys(field.$error).forEach((validator) => {
+            this.checkoutFieldError(fieldName, validator)
+          })
+        }
+      })
+    },
+
     buildProductVar: function (cartData) {
       try {
         let item, donationType
@@ -512,7 +538,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
     transactionEvent: function (purchaseData) {
       try {
         // The value of whether or not user is covering credit card fees for the transaction
-        const coverFeeDecision = sessionStorage.getItem('coverFeeDecision')
+        const coverFeeDecision = JSON.parse(sessionStorage.getItem('coverFeeDecision'))
         // Parse the cart object of the last purchase
         const transactionCart = JSON.parse(localStorage.getItem('transactionCart'))
         // The purchaseId number from the last purchase
@@ -530,6 +556,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, sessionSer
               name: cartItem.designationNumber,
               id: cartItem.designationNumber,
               price: cartItem.amount.toString(),
+              processingFee: cartItem.amountWithFees && coverFeeDecision ? (cartItem.amountWithFees - cartItem.amount).toFixed(2) : undefined,
               brand: cartItem.orgId,
               category: cartItem.designationType.toLowerCase(),
               variant: cartItem.frequency.toLowerCase(),
