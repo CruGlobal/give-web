@@ -66,7 +66,10 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getRole: currentRole,
     signIn: signIn,
     signOut: signOut,
+<<<<<<< HEAD
     signUp: signUp,
+=======
+>>>>>>> 58aaf2ec5f597a2c9299314a43a6ec4bc4c2a7ad
     handleOktaRedirect: handleOktaRedirect,
     oktaSignIn: oktaSignIn,
     oktaSignOut: oktaSignOut,
@@ -109,23 +112,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         withCredentials: true
       })
       )
-  }
-
-  function signUp (email, password, first_name, last_name) {
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Create-User
-    return Observable
-      .from($http({
-        method: 'POST',
-        url: casApiUrl('/register'),
-        withCredentials: true,
-        data: {
-          email: email,
-          password: password,
-          firstName: first_name,
-          lastName: last_name
-        }
-      }))
-      .map((response) => response.data)
   }
 
   function handleOktaRedirect (lastPurchaseId) {
