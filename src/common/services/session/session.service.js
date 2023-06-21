@@ -66,10 +66,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getRole: currentRole,
     signIn: signIn,
     signOut: signOut,
-<<<<<<< HEAD
-    signUp: signUp,
-=======
->>>>>>> 58aaf2ec5f597a2c9299314a43a6ec4bc4c2a7ad
     handleOktaRedirect: handleOktaRedirect,
     oktaSignIn: oktaSignIn,
     oktaSignOut: oktaSignOut,
