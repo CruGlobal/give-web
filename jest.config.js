@@ -20,7 +20,7 @@ module.exports = {
   ],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.js?$': 'babel-jest',
+    '^.+\\.(js|tsx)?$': 'babel-jest',
     '^.+\\.html$': '<rootDir>/jest/htmlTransform.js'
   }
 }
