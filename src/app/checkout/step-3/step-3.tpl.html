@@ -202,9 +202,14 @@
                 <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
               </div>
               <div class="checkout-cta pull-right">
-                <button id="submitOrderButton" type="submit" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.submitOrder()" ng-disabled="!$ctrl.canSubmitOrder()" translate>
-                  {{'SUBMIT_GIFT'}}
-                </button>
+                <recaptcha-wrapper action="'submit'"
+                           on-success="$ctrl.submitOrderInternal"
+                           component-instance="$ctrl.selfReference"
+                           button-id="'submitOrderButton'"
+                           button-type="'submit'"
+                           button-classes="'btn btn-primary btn-lg btn-block'"
+                           button-disabled="!$ctrl.canSubmitOrder()"
+                           button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
               </div>
             </td>
           </tr>
