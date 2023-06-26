@@ -1522,10 +1522,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cruglobal/cru-payments@^1.2.3-beta":
-  version "1.2.3-beta"
-  resolved "https://registry.yarnpkg.com/@cruglobal/cru-payments/-/cru-payments-1.2.3-beta.tgz#566040082e95a60bbc330cad14d85d499b373dc2"
-  integrity sha512-tUW8ZFYi6JPd9ZvCKKFyiOuxwje+hOP0vUA/EKO2FDbFUPPUkG5gGbm8z+FPtY3qHO4NJJdgHVfUJhRB2EygwA==
+"@cruglobal/cru-payments@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@cruglobal/cru-payments/-/cru-payments-1.2.4.tgz#2794be3141c40232539b18581d1038648470ac2d"
+  integrity sha512-hbw/e4T0lq20XCDGDsuhl8wr/8ruhhi94qcF7DuLh5HyGuwaaVvxi0yDRj9irsL6CIcsmgwDimOmOlvyD9BwaA==
   dependencies:
     es6-promise "^4.0.5"
     jsencrypt "3.1.0"
@@ -3250,7 +3250,7 @@ caniuse-lite@^1.0.30001449:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001451.tgz#2e197c698fc1373d63e1406d6607ea4617c613f1"
   integrity sha512-XY7UbUpGRatZzoRft//5xOa69/1iGJRBlrieH6QYrkKLIFn3m7OVEJ81dSrKoy2BnKsdbX5cLrOispZNYo9v2w==
 
-chalk@2.4.2, chalk@^2.0.0, chalk@^2.0.1, chalk@^2.4.1:
+chalk@2.4.2, chalk@^2.0.0, chalk@^2.4.1:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
