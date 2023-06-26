@@ -20,7 +20,7 @@ interface RecaptchaWrapperProps {
   $log: any
 }
 
-const RecaptchaWrapper = ({
+export const RecaptchaWrapper = ({
   action,
   onSuccess,
   componentInstance,
