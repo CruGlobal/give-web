@@ -1,5 +1,12 @@
 register-account-modal {
+  display: block;
   line-height: 1.2em;
+
+
+  &[data-state=sign-in] {
+    display: inline-block;
+  }
+
 
   .modal-header {
     padding-bottom: 30px;
@@ -36,7 +43,8 @@ register-account-modal {
   }
 
   .modal-dialog.modal-lg & {
-    &[data-state=sign-in] {
+    &[data-state=sign-in],
+    &[data-state=loading] {
       $body-width: 530px;
       $body-margin: 80px;
       display: flex;
@@ -58,6 +66,7 @@ register-account-modal {
 
       .modal-header {
         text-align: center;
+        width: 100%;
 
         .paragraph {
           max-width: 500px;
@@ -86,6 +95,7 @@ register-account-modal {
       }
     }
     &[data-state=user-match] {
+
       .modal-header h3 {
         text-align: center;
       }
@@ -115,5 +125,9 @@ register-account-modal {
     .success .footer-buttons {
       flex-direction: column;
     }
+  }
+
+  .modal-dialog[data-state=mfa] {
+
   }
 }
