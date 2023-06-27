@@ -20,11 +20,13 @@ describe('Recaptcha component', () => {
   };
 
   const $log = {
-    warn: jest.fn()
+    warn: jest.fn(),
+    error: jest.fn()
   }
 
   beforeEach(() => {
     $translate.instant.mockImplementation((input) => input)
+    mockExecuteRecaptcha = jest.fn()
     mockExecuteRecaptcha.mockImplementation(() => Promise.resolve('token'))
   })
 
@@ -57,7 +59,7 @@ describe('Recaptcha component', () => {
 
     await userEvent.click(getByRole('button'))
     await waitFor(() =>
-      expect(onSuccess).toHaveBeenCalled()
+      expect(onSuccess).toHaveBeenCalledTimes(1)
     )
   })
 
@@ -76,9 +78,10 @@ describe('Recaptcha component', () => {
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
+    await waitFor(() => {
       expect($log.warn).toHaveBeenCalledWith('Captcha score was below the threshold: 0.2')
-    )
+      expect(onSuccess).toHaveBeenCalledTimes(1)
+    })
   })
 
   it('should fail the recaptcha call', async () => {
@@ -135,6 +138,67 @@ describe('Recaptcha component', () => {
     await waitFor(() =>
       expect(onSuccess).not.toHaveBeenCalled()
     )
+  })
+
+  it('should not block the gift if something went wrong with recaptcha', async () => {
+    //@ts-ignore
+    global.fetch = jest.fn(() => {
+      return Promise.reject('Failed')
+    })
+
+    const onSuccess = jest.fn(() => console.log('success after error'))
+
+    const { getByRole } = render(
+      buildRecaptcha(onSuccess)
+    )
+
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect($log.error).toHaveBeenCalledWith('Failed to verify recaptcha, continuing on: Failed')
+    })
+  })
+
+  it('should not block the gift if something went wrong with recaptcha JSON', async () => {
+    //@ts-ignore
+    global.fetch = jest.fn(() => {
+      return Promise.resolve({
+        json: () => Promise.reject('Failed')
+      })
+    })
+
+    const onSuccess = jest.fn(() => console.log('success after JSON error'))
+
+    const { getByRole } = render(
+      buildRecaptcha(onSuccess)
+    )
+
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect($log.error).toHaveBeenCalledWith('Failed to return recaptcha JSON, continuing on: Failed')
+    })
+  })
+
+  it('should not block gifts if something weird happens', async () => {
+    //@ts-ignore
+    global.fetch = jest.fn(() => {
+      return Promise.resolve({
+        json: () => Promise.resolve()
+      })
+    })
+
+    const onSuccess = jest.fn(() => console.log('success after weird'))
+
+    const { getByRole } = render(
+      buildRecaptcha(onSuccess)
+    )
+
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect($log.warn).toHaveBeenCalledWith('Data was falsy!')
+    })
   })
 
   const buildRecaptcha = (onSuccess: (componentInstance: any) => void) => {
