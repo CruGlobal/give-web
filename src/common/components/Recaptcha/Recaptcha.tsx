@@ -39,6 +39,8 @@ export const Recaptcha = ({
       return
     }
 
+    let successFunctionRun = false
+
     const token = await executeRecaptcha(action)
     // Do whatever you want with the token
     fetch('/bin/cru/recaptcha.json', {
@@ -46,14 +48,32 @@ export const Recaptcha = ({
       body: JSON.stringify({ token: token })
     }).then(function (res) {
       return res.json()
+    }, (error: any) => {
+      $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
+      onSuccess(componentInstance)
+      successFunctionRun = true
+      return Promise.reject(error)
     }).then(function (data) {
-      if (data.success === true && data.action === 'submit') {
+      if (data && data.success === true && data.action === 'submit') {
         if (data.score < 0.5) {
           $log.warn(`Captcha score was below the threshold: ${data.score}`)
         }
         onSuccess(componentInstance)
+        successFunctionRun = true
         return
       }
+      if (!data && !successFunctionRun) {
+        $log.warn('Data was falsy!')
+        onSuccess(componentInstance)
+        successFunctionRun = true
+      }
+    }, (error: any) => {
+      $log.error(`Failed to return recaptcha JSON, continuing on: ${error}`)
+      if (!successFunctionRun) {
+        onSuccess(componentInstance)
+        successFunctionRun = true
+      }
+      return
     })
   }, [executeRecaptcha])
 
