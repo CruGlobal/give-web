@@ -25,8 +25,8 @@ import cartResponse from './fixtures/cortex-cart-paymentmethodinfo-forms.fixture
 
 const paymentMethodForms = cloneDeep(paymentmethodsFormsResponse._paymentmethods[0]._element)
 angular.forEach(paymentMethodForms, form => {
-  form.paymentinstrumentform = form._paymentinstrumentform[0]
-  delete form._paymentinstrumentform
+  form.selfservicepaymentinstrumentform = form._selfservicepaymentinstrumentform[0]
+  delete form._selfservicepaymentinstrumentform
 })
 
 const paymentmethodsFormsResponseZoomMapped = {
@@ -135,7 +135,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethodForms', () => {
     function setupRequest () {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=paymentmethods:element,paymentmethods:element:paymentinstrumentform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=paymentmethods:element,paymentmethods:element:selfservicepaymentinstrumentform')
         .respond(200, paymentmethodsFormsResponse)
     }
 
@@ -175,7 +175,7 @@ describe('profile service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/paymentinstrument/form?FollowLocation=true',
+        'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/selfservicepaymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, 'success')
 
@@ -208,7 +208,7 @@ describe('profile service', () => {
       delete expectedPostData['payment-instrument-identification-form'].cvv
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?FollowLocation=true',
+        'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/selfservicepaymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, 'success')
 
@@ -262,7 +262,7 @@ describe('profile service', () => {
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/paymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/paymentinstrument/form?FollowLocation=true',
+        'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/selfservicepaymentinstrument/form?FollowLocation=true',
         expectedPostData
       ).respond(200, 'success')
 

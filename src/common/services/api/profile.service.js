@@ -249,14 +249,14 @@ class Profile {
       return this.cortexApiService.get({
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
-          paymentMethodForms: 'paymentmethods:element[],paymentmethods:element:paymentinstrumentform'
+          paymentMethodForms: 'paymentmethods:element[],paymentmethods:element:selfservicepaymentinstrumentform'
         }
       })
         .do((data) => {
           this.paymentMethodForms = data
 
           angular.forEach(this.paymentMethodForms, paymentMethodForm => {
-            if (!this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')) {
+            if (!this.hateoasHelperService.getLink(paymentMethodForm.selfservicepaymentinstrumentform, 'createpaymentinstrumentaction')) {
               this.$log.warn('Payment form request contains empty link', data)
             }
           })
@@ -301,8 +301,8 @@ class Profile {
   determinePaymentMethodFormLink (data, fieldName) {
     let link = ''
     angular.forEach(data.paymentMethodForms, paymentMethodForm => {
-      if (paymentMethodForm.paymentinstrumentform['payment-instrument-identification-form'][fieldName] !== undefined) {
-        link = this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')
+      if (paymentMethodForm.selfservicepaymentinstrumentform['payment-instrument-identification-form'][fieldName] !== undefined) {
+        link = this.hateoasHelperService.getLink(paymentMethodForm.selfservicepaymentinstrumentform, 'createpaymentinstrumentaction')
       }
     })
     return link
