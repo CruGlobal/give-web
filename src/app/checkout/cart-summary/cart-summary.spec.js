@@ -18,5 +18,13 @@ describe('checkout', function () {
     it('to be defined', function () {
       expect(self.controller).toBeDefined()
     })
+
+    describe('buildCartUrl', () => {
+      it('should get the url from the cart service', () => {
+        jest.spyOn(self.controller.cartService, 'buildCartUrl')
+        self.controller.buildCartUrl()
+        expect(self.controller.cartService.buildCartUrl).toHaveBeenCalled()
+      })
+    })
   })
 })

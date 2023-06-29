@@ -12,6 +12,17 @@ import module from './cart.service'
 import cartResponse from 'common/services/api/fixtures/cortex-cart.fixture'
 
 describe('cart service', () => {
+  let search = ''
+  const windowMock = {
+    location: {
+      search: search
+    }
+  }
+
+  beforeEach(angular.mock.module(function ($provide) {
+    $provide.value('$window', windowMock);
+  }))
+
   beforeEach(angular.mock.module(module.name))
 
   afterEach(clear)
@@ -25,6 +36,7 @@ describe('cart service', () => {
   afterEach(() => {
     self.$httpBackend.verifyNoOutstandingExpectation()
     self.$httpBackend.verifyNoOutstandingRequest()
+    windowMock.location.search = ''
   })
 
   describe('get', () => {
@@ -387,6 +399,17 @@ describe('cart service', () => {
           },
           () => fail('Observable should not have thrown an error')
         )
+    })
+  })
+
+  describe('buildCartUrl', () => {
+    it('should build a url without query parameters', () => {
+      expect(self.cartService.buildCartUrl()).toEqual('cart.html')
+    })
+
+    it('should build a url with query parameters', () => {
+      self.cartService.$window.location.search = '?one=1&two=2'
+      expect(self.cartService.buildCartUrl()).toEqual('cart.html?one=1&two=2')
     })
   })
 })
