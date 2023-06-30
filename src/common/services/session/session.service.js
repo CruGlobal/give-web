@@ -27,12 +27,6 @@ export const Sessions = {
   profile: 'cru-profile'
 }
 
-export const OktaStorage = {
-  state: 'okta-oauth-state',
-  nonce: 'okta-oauth-nonce',
-  redirectParams: 'okta-oauth-redirect-params'
-}
-
 export const redirectingIndicator = 'redirectingFromOkta'
 
 export const SignInEvent = 'SessionSignedIn'
@@ -73,7 +67,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getOktaUrl: getOktaUrl,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
     isOktaRedirecting: isOktaRedirecting,
-    updateCurrentProfile: updateCurrentProfile
+    updateCurrentProfile: updateCurrentProfile,
+    oktaIsUserAuthenticated: oktaIsUserAuthenticated
   }
 
   /* Public Methods */
@@ -150,17 +145,28 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     })
   }
 
+  function oktaIsUserAuthenticated () {
+    return Observable.from(authClient.isAuthenticated());
+  }
+
   function oktaSignOut () {
     return Observable.from(internalSignOut())
   }
 
-  function internalSignOut () {
-    clearStorageForOktaLogout()
-    return $http({
-      method: 'DELETE',
-      url: oktaApiUrl('logout'),
-      withCredentials: true
-    })
+  async function internalSignOut () {
+    try {
+      await $http({
+        method: 'DELETE',
+        url: oktaApiUrl('logout'),
+        withCredentials: true
+      });
+      await authClient.revokeAccessToken();
+      await authClient.revokeRefreshToken();
+      await authClient.closeSession();
+      authClient.signOut();
+    } catch {
+      $window.location=`https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`;
+    }
   }
 
   function downgradeToGuest (skipEvent = false) {
@@ -208,14 +214,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   /* Private Methods */
   function setOktaRedirecting () {
     $window.sessionStorage.setItem(redirectingIndicator, 'true')
-  }
-
-  function clearStorageForOktaLogout () {
-    $window.localStorage.clear()
-    const cookieConfig = { path: '/' }
-    $cookies.remove(OktaStorage.state, cookieConfig)
-    $cookies.remove(OktaStorage.nonce, cookieConfig)
-    $cookies.remove(OktaStorage.redirectParams, cookieConfig)
   }
 
   function updateCurrentSession () {

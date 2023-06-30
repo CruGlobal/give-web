@@ -10,9 +10,10 @@ const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor ($log, $scope, sessionService, gettext) {
+  constructor ($log, $scope, $location, sessionService, gettext) {
     this.$log = $log
     this.$scope = $scope
+    this.$location = $location
     this.sessionService = sessionService
     this.gettext = gettext
   }
@@ -33,7 +34,10 @@ class SignInFormController {
         this.errorMessage = 'generic'
         this.$log.error('Failed to redirect from Okta', error)
         this.onFailure()
-      })
+      }
+    );
+    const autoLogin = this.$location.search()?.autoLogin;
+    if (autoLogin === 'true') this.signInWithOkta();
   }
 
   signInWithOkta () {

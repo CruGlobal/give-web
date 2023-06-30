@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { OktaStorage, Roles, Sessions, SignOutEvent, redirectingIndicator } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, redirectingIndicator } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -238,6 +238,13 @@ describe('session service', function () {
   })
 
   describe('oktaSignOut', () => {
+    beforeEach(() => {
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken')
+      jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
+      jest.spyOn(sessionService.authClient, 'closeSession')
+      jest.spyOn(sessionService.authClient, 'signOut')
+    })
+
     it('makes an http request to okta/logout', () => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
         .respond(200, {})
@@ -249,22 +256,32 @@ describe('session service', function () {
       $httpBackend.flush()
     })
 
-    it('should clear extra storage', () => {
-      $cookies.put(OktaStorage.state, 'a')
-      $cookies.put(OktaStorage.nonce, 'b')
-      $cookies.put(OktaStorage.redirectParams, 'c')
-      expect($cookies.get(OktaStorage.state)).toEqual('a')
-      expect($cookies.get(OktaStorage.nonce)).toEqual('b')
-      expect($cookies.get(OktaStorage.redirectParams)).toEqual('c')
+    it('should revoke tokens log user out of Okta', () => {
       sessionService
         .oktaSignOut()
         .subscribe(() => {
-          expect($window.localStorage.clear).toHaveBeenCalled()
-          expect($cookies.get(OktaStorage.state)).not.toBeDefined()
-          expect($cookies.get(OktaStorage.nonce)).not.toBeDefined()
-          expect($cookies.get(OktaStorage.redirectParams)).not.toBeDefined()
+          expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+          expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+          expect(sessionService.authClient.closeSession).toHaveBeenCalled()
+          expect(sessionService.authClient.signOut).toHaveBeenCalled()
         })
-    })
+    });
+
+    it('should revoke tokens log user out of Okta', () => {
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      try {
+        sessionService
+        .oktaSignOut()
+        .subscribe(() => {
+          expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+          expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
+          expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
+          expect(sessionService.authClient.signOut).not.toHaveBeenCalled()
+        })
+      } catch {
+        expect($window.location).toEqual(`https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`)
+      }
+    });
   })
 
   describe('handleOktaRedirect', () => {

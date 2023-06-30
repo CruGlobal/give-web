@@ -3,6 +3,7 @@ import 'angular-ui-router'
 
 import '../../assets/scss/styles.scss'
 
+import sessionService from '../../common/services/session/session.service'
 import commonModule from 'common/common.module'
 import cartComponent from '../cart/cart.component'
 import checkoutComponent from '../checkout/checkout.component'
@@ -24,7 +25,13 @@ const componentName = 'main'
 
 class MainController {
   /* @ngInject */
-  constructor () /* eslint-disable-line no-useless-constructor */ { }
+  constructor ( sessionService) /* eslint-disable-line no-useless-constructor */ {
+    this.sessionService = sessionService;
+   }
+
+  signout() {
+    return this.sessionService.oktaSignOut()
+  }
 }
 
 const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvider, $urlRouterProvider) {
@@ -93,6 +100,7 @@ export default angular
     paymentMethodsComponent.name,
     receiptsComponent.name,
     brandedCheckoutComponent.name,
+    sessionService.name,
     'ui.router'
   ])
   .config(routingConfig)
