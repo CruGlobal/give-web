@@ -28,7 +28,7 @@
           </div>
         </td>
         <td>
-          <img ng-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"/>
+          <img desig-img-src="{{pic.url}}.transform/GiveDesignationThumbnail/img.jpg"/>
         </td>
         <td>
           <button class="btn btn-default"
@@ -44,7 +44,7 @@
 
   <hr />
 
-  <div class="give-available-photos-container" ng-if="$ctrl.photos.length">
+  <div class="give-available-photos-container" ng-if="$ctrl.photos.length || $ctrl.numProcessingPhotos > 0">
     <h3 translate>Available Photos</h3>
     <h5 translate>Click + to add photos to the carousel.</h5>
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.maxCarouselError">
@@ -58,28 +58,42 @@
         <div class="add-trigger" ng-click="$ctrl.addImageToCarousel(photo)">
           <i class="fa fa-plus" aria-label="Add to carousel"></i>
         </div>
-        <img ng-src="{{photo.thumbnail}}" />
+        <img desig-img-src="{{photo.thumbnail}}" />
+      </div>
+      <div class="cover-thumb processing" ng-repeat="blobUrl in $ctrl.getProcessingPhotos() track by $index">
+        <loading type="centered">Processing...</loading>
+        <img ng-src="{{blobUrl}}" />
       </div>
     </div>
   </div>
 
   <hr />
 
-  <p translate class="alert-info">
-    <strong>Please Note:</strong> The image carousel works best with images that are the same size
-    and orientation (all horizontal or all vertical).
-  </p>
+  <div class="alert-info">
+    <p translate>
+      <strong>Please Note:</strong> The image carousel works best with images that are the same size
+      and orientation (all horizontal or all vertical).
+    </p>
+    <p>
+      Note: If you are experiencing a long wait time and issues seeing your image load,
+      please refresh the page and open the image screen again.
+      If needing help please contact <a href="mailto:dev.services@cru.org">dev.services@cru.org</a>.
+    </p>
+  </div>
   <div class="upload-drag-target p mb">
     <div class="form-group text-center">
       <div ng-if="!$ctrl.uploading">
-        <label translate>Select a Photo to Upload</label>
-        <upload-button
+        <div><label translate>Select a Photo to Upload</label></div>
+        <div><label ng-if="$ctrl.invalidFileType" translate>Uploaded image must be a JPEG or a PNG file</label></div>
+        <image-upload
           class="form-control"
-          url="/bin/crugive/image?designationNumber={{$ctrl.designationNumber}}"
-          accept="image/*"
-          on-upload="$ctrl.uploading = true"
-          on-success="$ctrl.uploadComplete(response)"
-          on-error="$ctrl.uploading = false"/>
+          url="/bin/crugive/image.html?designationNumber={{$ctrl.designationNumber}}"
+          on-invalid-file-type="$ctrl.invalidFileType = true"
+          on-complete="$ctrl.invalidFileType = false"
+          on-upload="$ctrl.uploadStart(file)"
+          on-success="$ctrl.uploadComplete(response, file)"
+          on-error="$ctrl.uploadError(file)"
+        />
       </div>
 
       <label ng-if="$ctrl.uploading" translate>Uploading...</label>

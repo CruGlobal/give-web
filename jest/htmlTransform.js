@@ -7,6 +7,6 @@ module.exports = {
       resource: path.basename(filename)
     }
     const result = ngTemplateLoader.call(webpackContext, `\`${src}\``)
-    return `${result}; module.exports = "${path.basename(filename)}"`
+    return { code: `${result}; module.exports = "${path.basename(filename)}"` }
   }
 }

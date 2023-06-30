@@ -128,6 +128,8 @@ describe('rollbarConfig', () => {
           first_name: 'Fname',
           last_name: 'Lname',
           email: 'someone@email.com'
+        }, {
+          sub: 'cas|12345'
         })
 
         expect(self.rollbarSpies.configure).toHaveBeenCalledWith({
@@ -135,7 +137,8 @@ describe('rollbarConfig', () => {
             person: {
               id: 'cas|12345',
               username: 'Fname Lname',
-              email: 'someone@email.com'
+              email: 'someone@email.com',
+              giveId: 'cas|12345'
             }
           }
         })
