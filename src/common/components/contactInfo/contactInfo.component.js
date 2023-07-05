@@ -106,6 +106,18 @@ class Step1Controller {
             'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
           ]))
         }
+
+        const checkoutSavedData = this.sessionService.session.checkoutSavedData;
+        if (checkoutSavedData) {
+          this.donorDetails = assign(this.donorDetails, pick(checkoutSavedData, [
+            'name', 'mailingAddress', 'donor-type', 'organization-name', 'phone-number', 'spouse-name'
+          ]))
+          if (!!this.donorDetails['spouse-name']['given-name'] || !!this.donorDetails['spouse-name']['family-name']) {
+            this.showSpouseFields = true;
+            this.spouseFieldsDisabled = false;
+          }
+        }
+
       },
       error => {
         this.loadingDonorDetails = false
@@ -144,6 +156,9 @@ class Step1Controller {
     if (this.detailsForm.$valid) {
       const details = this.donorDetails
       this.submissionError = ''
+
+      // Clear the saved checkout data
+      this.sessionService.clearCheckoutSavedData();
 
       const requests = [this.orderService.updateDonorDetails(details)]
       if (details.email) {

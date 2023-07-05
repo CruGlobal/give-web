@@ -28,6 +28,7 @@ export const Sessions = {
 }
 
 export const redirectingIndicator = 'redirectingFromOkta'
+export const checkoutSavedData = 'checkoutSavedData'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
@@ -68,7 +69,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
     isOktaRedirecting: isOktaRedirecting,
     updateCurrentProfile: updateCurrentProfile,
-    oktaIsUserAuthenticated: oktaIsUserAuthenticated
+    oktaIsUserAuthenticated: oktaIsUserAuthenticated,
+    updateCheckoutSavedData: updateCheckoutSavedData,
+    clearCheckoutSavedData: clearCheckoutSavedData
   }
 
   /* Public Methods */
@@ -160,6 +163,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         url: oktaApiUrl('logout'),
         withCredentials: true
       });
+      await clearCheckoutSavedData();
       await authClient.revokeAccessToken();
       await authClient.revokeRefreshToken();
       await authClient.closeSession();
@@ -232,7 +236,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     // Update sessionSubject with new value
     sessionSubject.next(session)
 
-    updateRollbarPerson(session, giveSession)
+    updateRollbarPerson(session, giveSession);
+    updateCheckoutSavedData();
   }
 
   function decodeCookie (cookieName) {
@@ -254,7 +259,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       const expiration = giveSessionExpiration()
       if (angular.isUndefined(expiration)) {
         // Give session has expired
-        updateCurrentSession()
+        updateCurrentSession();
+        clearCheckoutSavedData();
       } else {
         setSessionTimeout(expiration)
       }
@@ -296,6 +302,28 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function oktaApiUrl (path) {
     return `${envService.read('apiUrl')}/okta/${path}`
+  }
+
+  function updateCheckoutSavedData (data) {
+    try {
+      if (data) {
+        const dataAsString = JSON.stringify(data)
+        $window.localStorage.setItem(checkoutSavedData, dataAsString);
+        session.checkoutSavedData = data
+      } else {
+        const dataAsString = $window.localStorage.getItem(checkoutSavedData);
+        if (dataAsString) session.checkoutSavedData = JSON.parse(dataAsString);
+      }
+      return session.checkoutSavedData;
+    } catch { }
+  }
+
+  function clearCheckoutSavedData () {
+    try {
+      session.checkoutSavedData = {}
+      $window.localStorage.removeItem(checkoutSavedData)
+      return session.checkoutSavedData;
+    } catch { }
   }
 }
 

@@ -63,12 +63,6 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       openAnalyticsEvent: 'ga-sign-in',
       dismissAnalyticsEvent: 'ga-sign-in-exit'
     }).result,
-    userMatch: () => openModal('user-match', {
-      backdrop: 'static',
-      openAnalyticsEvent: 'ga-registration-match-is-this-you',
-      dismissAnalyticsEvent: 'ga-registration-exit'
-    }).result,
-    contactInfo: () => openModal('contact-info', { size: '', backdrop: 'static' }).result,
     accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId } }).result,
     registerAccount: () => openModal('register-account', { backdrop: 'static', keyboard: false }).result
   }

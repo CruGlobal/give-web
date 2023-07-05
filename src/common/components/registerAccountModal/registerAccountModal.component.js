@@ -58,10 +58,19 @@ class RegisterAccountModalController {
       // Proceed to Step 1.
       this.stateChanged('sign-in')
     }
+
+    // If there is a session chnage, update the state if needed.
+    this.subscription = this.sessionService.sessionSubject.subscribe(() => {
+      if (this.sessionService.getRole() === Roles.registered) {
+        // Proceed to Step 2
+        this.getDonorDetails()
+      }
+    })
   }
 
   $onDestroy () {
     this.getTotalQuantitySubscription.unsubscribe();
+    this.subscription.unsubscribe();
     if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe();
     if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe();
   }

@@ -21,7 +21,7 @@ class AccountBenefitsModalController {
       // No need to sign in if we already are
       this.onSuccess()
     } else {
-      this.onStateChange({ state: 'sign-in' })
+      this.onStateChange({ state: 'register-account' })
     }
   }
 }

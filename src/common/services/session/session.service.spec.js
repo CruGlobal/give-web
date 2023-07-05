@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, redirectingIndicator } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, redirectingIndicator, checkoutSavedData } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -21,7 +21,7 @@ describe('session service', function () {
 
     $provide.decorator('$window', function ($delegate) {
       const spy = jest.fn($delegate)
-      spy.localStorage = { clear: jest.fn() }
+      spy.localStorage = $delegate.localStorage
       spy.sessionStorage = $delegate.sessionStorage
       spy.document = $delegate.document
       return spy
@@ -543,6 +543,43 @@ describe('session service', function () {
       expect(cruProfile).toEqual({})
       expect(sessionService.session.first_name).not.toBeDefined()
       expect(sessionService.session.last_name).not.toBeDefined()
+    })
+  })
+
+  const checkoutData = {
+    phone: '(111) 111-1111',
+    name: {
+      firstName: 'Tester',
+      lastName: 'Last name',
+    },
+    'spouse-name': {
+      firstName: 'Spouse',
+      lastName: 'Last name',
+    }
+  }
+
+  describe('updateCheckoutSavedData', () => {
+    it('updates the checkout saved data and saves it to local storage', () => {
+      sessionService.updateCheckoutSavedData(checkoutData)
+      expect(sessionService.session.checkoutSavedData).toBeDefined()
+      const dataStoredInLocalStoarage = $window.localStorage.getItem(checkoutSavedData)
+      expect(dataStoredInLocalStoarage).toEqual(JSON.stringify(checkoutData))
+    })
+    it('copies checkout data from localstorage and stores it on session', () => {
+      delete sessionService.session.checkoutSavedData;
+      expect(sessionService.session.checkoutSavedData).not.toBeDefined()
+      sessionService.updateCheckoutSavedData()
+      expect(sessionService.session.checkoutSavedData).toBeDefined()
+    })
+  })
+
+  describe('clearCheckoutSavedData', () => {
+    it('clears all data on session and the local storage', () => {
+      const dataStoredInLocalStoarage = $window.localStorage.getItem(checkoutSavedData)
+      expect(dataStoredInLocalStoarage).toEqual(JSON.stringify(checkoutData))
+      sessionService.clearCheckoutSavedData()
+      const dataAfterClear = $window.localStorage.getItem(checkoutSavedData)
+      expect(dataAfterClear).toEqual(null)
     })
   })
 })
