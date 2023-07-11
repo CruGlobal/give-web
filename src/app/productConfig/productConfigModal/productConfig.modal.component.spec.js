@@ -25,6 +25,9 @@ describe('product config modal', function () {
         },
         designationsService: {
           suggestedAmounts: jest.fn()
+        },
+        cartService: {
+          buildCartUrl: jest.fn()
         }
       },
       {
@@ -221,6 +224,14 @@ describe('product config modal', function () {
 
       expect($ctrl.close).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/cart.html')
+    })
+  })
+
+  describe('buildCartUrl', () => {
+    it('should return the cart url ', () => {
+      jest.spyOn($ctrl.cartService, 'buildCartUrl').mockImplementationOnce(() => 'cart.html?one=1')
+      const cartUrl = $ctrl.buildCartUrl()
+      expect(cartUrl).toEqual('/cart.html?one=1')
     })
   })
 })

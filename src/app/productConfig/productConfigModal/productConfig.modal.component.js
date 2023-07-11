@@ -13,11 +13,12 @@ const componentName = 'productConfigModal'
 
 class ProductConfigModalController {
   /* @ngInject */
-  constructor ($window, $location, modalStateService, designationsService) {
+  constructor ($window, $location, modalStateService, designationsService, cartService) {
     this.$window = $window
     this.$location = $location
     this.modalStateService = modalStateService
     this.designationsService = designationsService
+    this.cartService = cartService
   }
 
   $onInit () {
@@ -115,6 +116,10 @@ class ProductConfigModalController {
         }
         break
     }
+  }
+
+  buildCartUrl () {
+    return `/${this.cartService.buildCartUrl()}`
   }
 }
 
