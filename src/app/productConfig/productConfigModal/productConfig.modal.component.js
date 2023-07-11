@@ -112,7 +112,7 @@ class ProductConfigModalController {
         this.close()
 
         if (this.isMobile && !this.isEdit) {
-          this.$window.location = '/cart.html'
+          this.$window.location = `/${this.cartService.buildCartUrl()}`
         }
         break
     }
