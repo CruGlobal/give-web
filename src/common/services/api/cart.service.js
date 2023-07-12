@@ -244,7 +244,14 @@ class Cart {
   }
 
   buildCartUrl () {
-    return `cart.html${this.$window.location.search}`
+    const url = new URL(this.$window.location.href)
+    const queryParameters = url.searchParams
+    const parametersToDelete = ['modal', 'd', 'a']
+    parametersToDelete.forEach((parameterToDelete) => {
+      queryParameters.delete(parameterToDelete)
+    })
+
+    return queryParameters.toString() ? `cart.html?${queryParameters.toString()}` : 'cart.html'
   }
 }
 
