@@ -246,7 +246,7 @@ class Cart {
   buildCartUrl () {
     const url = new URL(this.$window.location.href)
     const queryParameters = url.searchParams
-    const parametersToDelete = ['modal', 'd', 'a']
+    const parametersToDelete = ['modal', 'd', 'a', 'q']
     parametersToDelete.forEach((parameterToDelete) => {
       queryParameters.delete(parameterToDelete)
     })

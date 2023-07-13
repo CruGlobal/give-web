@@ -432,7 +432,7 @@ describe('cart service', () => {
     })
 
     it('should filter out a subset of query parameters', () => {
-      self.cartService.$window.location.search = `${queryParametersToKeep}&d=0123456&a=50`
+      self.cartService.$window.location.search = `${queryParametersToKeep}&q=0123456&d=0123456&a=50`
       self.cartService.$window.location.href += self.cartService.$window.location.search
       expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
     })
