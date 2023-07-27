@@ -49,7 +49,6 @@ describe('thank you', function () {
         userMatch = _$q_.defer()
         $rootScope = _$rootScope_
         jest.spyOn($ctrl.sessionModalService, 'accountBenefits').mockReturnValue(deferred.promise)
-        jest.spyOn($ctrl.sessionModalService, 'userMatch').mockReturnValue(userMatch.promise)
         $ctrl.isVisible = true
       }))
 

@@ -3,11 +3,11 @@ register-account-modal {
   line-height: 1.2em;
 
 
-  &[data-state=sign-in] {
+  &[data-state=sign-in],
+  &[data-state=sign-up] {
     display: inline-block;
   }
-
-
+  
   .modal-header {
     padding-bottom: 30px;
     background-color: #EBECEC;
@@ -35,6 +35,22 @@ register-account-modal {
     button.back {
       display: none;
       width: auto;
+    }
+  }
+
+  .signup-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      font-size: 30px;
+      font-weight: 400;
+      margin: 0 10px;
+    }
+
+    img {
+      max-height: 35px;
     }
   }
 

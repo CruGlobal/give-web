@@ -1,6 +1,7 @@
 import angular from 'angular'
 import 'angular-cookies'
 import jwtDecode from 'jwt-decode'
+import moment from 'moment'
 import { Observable } from 'rxjs/Observable'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { OktaAuth } from '@okta/okta-auth-js'
@@ -28,7 +29,8 @@ export const Sessions = {
 }
 
 export const redirectingIndicator = 'redirectingFromOkta'
-export const checkoutSavedData = 'checkoutSavedData'
+export const checkoutSavedDataCookieName = 'checkoutSavedData'
+export const checkoutSavedDataCookieDomain = '.cru.org'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
@@ -304,24 +306,40 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     return `${envService.read('apiUrl')}/okta/${path}`
   }
 
-  function updateCheckoutSavedData (data) {
+  // Added 'isTest' as needed cookie created without domain for unit tests to add or get the cookie.
+  function updateCheckoutSavedData (data, isTest = false) {
     try {
       if (data) {
-        const dataAsString = JSON.stringify(data)
-        $window.localStorage.setItem(checkoutSavedData, dataAsString);
-        session.checkoutSavedData = data
+        session.checkoutSavedData = data;
+        const dataAsString = JSON.stringify(data);
+        $cookies.put(
+          checkoutSavedDataCookieName,
+          dataAsString,
+          {
+            path: '/',
+            domain: isTest ? '' : checkoutSavedDataCookieDomain,
+            expires: moment().add(20, 'minutes').toISOString(),
+          }
+        );
       } else {
-        const dataAsString = $window.localStorage.getItem(checkoutSavedData);
+        const dataAsString = $cookies.get(checkoutSavedDataCookieName);
         if (dataAsString) session.checkoutSavedData = JSON.parse(dataAsString);
       }
       return session.checkoutSavedData;
     } catch { }
   }
-
-  function clearCheckoutSavedData () {
+  // Added 'isTest' as needed cookie created without domain for unit tests to remove the cookie.
+  function clearCheckoutSavedData (isTest = false) {
     try {
       session.checkoutSavedData = {}
-      $window.localStorage.removeItem(checkoutSavedData)
+      $cookies.remove(
+        checkoutSavedDataCookieName,
+        {
+          path: '/',
+          domain: isTest ? '' : checkoutSavedDataCookieDomain,
+
+        }
+      );
       return session.checkoutSavedData;
     } catch { }
   }

@@ -32,6 +32,10 @@ class SignInModalController {
   getOktaUrl () {
     return this.sessionService.getOktaUrl()
   }
+
+  stateChanged (state) {
+    this.onStateChange({state})
+  }
 }
 
 export default angular

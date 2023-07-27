@@ -8,6 +8,8 @@ import verificationService from 'common/services/api/verification.service'
 import { scrollModalToTop } from 'common/services/modalState.service'
 
 import signInModal from 'common/components/signInModal/signInModal.component'
+import signUpModal from 'common/components/signUpModal/signUpModal.component'
+import signUpActivationModal from 'common/components/signUpActivationModal/signUpActivationModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
@@ -17,13 +19,15 @@ const componentName = 'registerAccountModal'
 class RegisterAccountModalController {
   // Register Account Modal is a multi-step process.
   // 1. Sign In/Up
+  //  1.1 Enter Sign Up Details
+  //  1.2 Verify Email
   // 2. Fetch Donor Details
   // 3. Collect Contact Info
   // 4. Post to Donor Matches
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor ($element, $rootScope, $window, cartService, orderService, sessionService, verificationService, gettext) {
+  constructor ($element, $rootScope, $window, cartService, orderService, sessionService, verificationService, envService, gettext) {
     this.element = $element[0]
     this.$rootScope = $rootScope
     this.$window = $window
@@ -33,6 +37,7 @@ class RegisterAccountModalController {
     this.verificationService = verificationService
     this.gettext = gettext
     this.scrollModalToTop = scrollModalToTop
+    this.imgDomain = envService.read('imgDomain')
   }
 
   $onInit () {
@@ -160,6 +165,8 @@ export default angular
     orderService.name,
     sessionService.name,
     signInModal.name,
+    signUpModal.name,
+    signUpActivationModal.name,
     userMatchModal.name,
     failedVerificationModal.name,
     verificationService.name

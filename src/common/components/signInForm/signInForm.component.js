@@ -62,6 +62,10 @@ class SignInFormController {
       this.onFailure()
     })
   }
+
+  signUpWithOkta () {
+    this.onStateChange({ state: 'sign-up' })
+  }
 }
 
 export default angular
@@ -75,6 +79,7 @@ export default angular
     bindings: {
       onSuccess: '&',
       onFailure: '&',
+      onStateChange: '&',
       lastPurchaseId: '<'
     }
   })

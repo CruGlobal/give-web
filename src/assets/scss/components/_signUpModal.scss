@@ -1,0 +1,32 @@
+sign-up-modal,
+sign-up-activation-modal {
+
+  .loading-overlay-parent {
+    margin-bottom: 30px;
+  }
+
+  .row.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row-reverse;
+  }
+
+  a {
+    cursor: pointer;
+  }
+
+  hr {
+    width: 100%;
+    margin: 0 0 30px;
+  }
+
+  .bottom-links {
+    margin-bottom: 20px;
+
+    div, a {
+      color: $colorCru-gray;
+      font-size: 12px;
+    }
+  }
+}
