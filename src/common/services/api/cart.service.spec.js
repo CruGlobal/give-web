@@ -403,13 +403,33 @@ describe('cart service', () => {
   })
 
   describe('buildCartUrl', () => {
+    const queryParametersToKeep = '?one=1&two=2'
+    const urlWithParameters = `cart.html${queryParametersToKeep}`
+
+    beforeEach(() => {
+      self.cartService.$window.location.href = 'https://give-stage2.cru.org'
+    })
+
     it('should build a url without query parameters', () => {
       expect(self.cartService.buildCartUrl()).toEqual('cart.html')
     })
 
     it('should build a url with query parameters', () => {
-      self.cartService.$window.location.search = '?one=1&two=2'
-      expect(self.cartService.buildCartUrl()).toEqual('cart.html?one=1&two=2')
+      self.cartService.$window.location.search = queryParametersToKeep
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
+    })
+
+    it('should filter out certain query parameters', () => {
+      self.cartService.$window.location.search = `${queryParametersToKeep}&modal=give-gift&d=0123456&a=50`
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
+    })
+
+    it('should filter out a subset of query parameters', () => {
+      self.cartService.$window.location.search = `${queryParametersToKeep}&q=0123456&d=0123456&a=50`
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
     })
   })
 })
