@@ -51,7 +51,7 @@
     <a class="btn btn-primary" ng-if="$ctrl.loadingError" ng-click="$ctrl.loadGifts()" translate>Retry</a>
     <a class="btn btn-primary" ng-if="!$ctrl.loadingError"
        ng-click="$ctrl.next({ recurringGifts: $ctrl.recurringGifts })"
-       ng-disabled="!$ctrl.allPaymentMethodsValid() || !$ctrl.allAmountsValid()"
+       ng-disabled="!$ctrl.allPaymentMethodsValid()"
        translate>
       Continue
     </a>
