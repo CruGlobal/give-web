@@ -61,7 +61,7 @@ describe('verification service', () => {
     const answers = [{ key: 'a', answer: '1' }, { key: 'b', answer: '2' }]
     it('submits donor verification answers', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/verifyregistrations/crugive?FollowLocation=true', {
+        .expectPOST('https://give-stage2.cru.org/cortex/verifyregistrations/crugive/form?FollowLocation=true', {
           'verification-questions': answers,
           'that-is-not-me': 'false'
         })
@@ -74,7 +74,7 @@ describe('verification service', () => {
   describe('thatIsNotMe()', () => {
     it('submits \'that-is-not-me\' donor verification', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/verifyregistrations/crugive?FollowLocation=true', {
+        .expectPOST('https://give-stage2.cru.org/cortex/verifyregistrations/crugive/form?FollowLocation=true', {
           'that-is-not-me': 'true'
         })
         .respond(201, {})
@@ -86,7 +86,7 @@ describe('verification service', () => {
   describe('postDonorMatches()', () => {
     it('posts donor matches form', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/donormatches/crugive', {})
+        .expectPOST('https://give-stage2.cru.org/cortex/donormatches/crugive/form', {})
         .respond(200, {})
       verificationService.postDonorMatches()
       $httpBackend.flush()

@@ -33,7 +33,7 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
   function thatIsNotMe () {
     return cortexApiService
       .post({
-        path: ['verifyregistrations', cortexApiService.scope],
+        path: ['verifyregistrations', cortexApiService.scope, 'form'],
         data: { 'that-is-not-me': 'true' },
         followLocation: true
       })
@@ -42,7 +42,7 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
   function submitAnswers (answers) {
     return cortexApiService
       .post({
-        path: ['verifyregistrations', cortexApiService.scope],
+        path: ['verifyregistrations', cortexApiService.scope, 'form'],
         data: { 'verification-questions': answers, 'that-is-not-me': 'false' },
         followLocation: true
       })
@@ -51,7 +51,7 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
   function postDonorMatches () {
     return cortexApiService
       .post({
-        path: ['donormatches', cortexApiService.scope],
+        path: ['donormatches', cortexApiService.scope, 'form'],
         data: {}
       })
   }
