@@ -37,7 +37,7 @@ class SessionModalController {
   }
 
   onSignInSuccess () {
-    this.$document.body.dispatchEvent(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
+    this.$document[0].body.dispatchEvent(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
     this.close()
   }
 
