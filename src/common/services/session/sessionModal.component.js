@@ -38,9 +38,9 @@ class SessionModalController {
   }
 
   onSignInSuccess () {
-    const injector = this.$injector
+    const $injector = this.$injector
     this.$document[0].body.dispatchEvent(
-      new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { injector } }))
+      new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
     this.close()
   }
 

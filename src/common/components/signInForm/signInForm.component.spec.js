@@ -85,11 +85,11 @@ describe('signInForm', function () {
       it('signs in successfully', () => {
         deferred.resolve({})
         $rootScope.$digest()
-        const injector = bindings.$injector
+        const $injector = bindings.$injector
 
         expect(bindings.onSuccess).toHaveBeenCalled()
         expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
-          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { injector } }))
+          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
       })
 
       it('requires multi-factor', () => {

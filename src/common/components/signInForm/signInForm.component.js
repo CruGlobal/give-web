@@ -33,9 +33,9 @@ class SignInFormController {
     this.sessionService
       .signIn(this.username, this.password, this.mfa_token, this.trust_device, this.lastPurchaseId)
       .subscribe(() => {
-        const injector = this.$injector
+        const $injector = this.$injector
         this.$document[0].body.dispatchEvent(
-          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { injector } }))
+          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
         this.onSuccess()
       }, error => {
         this.isSigningIn = false
