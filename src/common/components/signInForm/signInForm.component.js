@@ -10,8 +10,9 @@ const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor ($log, sessionService, gettext) {
+  constructor ($log, $document, sessionService, gettext) {
     this.$log = $log
+    this.$document = $document
     this.sessionService = sessionService
     this.gettext = gettext
   }
@@ -31,6 +32,7 @@ class SignInFormController {
     this.sessionService
       .signIn(this.username, this.password, this.mfa_token, this.trust_device, this.lastPurchaseId)
       .subscribe(() => {
+        this.$document.body.dispatchEvent(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
         this.onSuccess()
       }, error => {
         this.isSigningIn = false
