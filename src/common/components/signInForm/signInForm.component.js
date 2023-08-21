@@ -32,7 +32,7 @@ class SignInFormController {
     this.sessionService
       .signIn(this.username, this.password, this.mfa_token, this.trust_device, this.lastPurchaseId)
       .subscribe(() => {
-        this.$document.body.dispatchEvent(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
+        this.$document[0].body.dispatchEvent(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
         this.onSuccess()
       }, error => {
         this.isSigningIn = false

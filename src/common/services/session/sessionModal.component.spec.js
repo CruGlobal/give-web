@@ -16,11 +16,11 @@ describe('sessionModalController', function () {
         },
         close: jest.fn(),
         dismiss: jest.fn(),
-        $document: {
+        $document: [{
           body: {
             dispatchEvent: jest.fn()
           }
-        }
+        }]
       })
   }))
 
@@ -54,7 +54,7 @@ describe('sessionModalController', function () {
       $ctrl.onSignInSuccess()
 
       expect($ctrl.close).toHaveBeenCalled()
-      expect($ctrl.$document.body.dispatchEvent)
+      expect($ctrl.$document[0].body.dispatchEvent)
         .toHaveBeenCalledWith(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
     })
   })
