@@ -15,7 +15,12 @@ describe('sessionModalController', function () {
           lastPurchaseId: '<some id>'
         },
         close: jest.fn(),
-        dismiss: jest.fn()
+        dismiss: jest.fn(),
+        $document: {
+          body: {
+            dispatchEvent: jest.fn()
+          }
+        }
       })
   }))
 
@@ -49,6 +54,8 @@ describe('sessionModalController', function () {
       $ctrl.onSignInSuccess()
 
       expect($ctrl.close).toHaveBeenCalled()
+      expect($ctrl.$document.body.dispatchEvent)
+        .toHaveBeenCalledWith(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
     })
   })
 
