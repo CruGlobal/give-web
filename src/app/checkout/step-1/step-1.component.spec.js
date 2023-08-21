@@ -33,5 +33,13 @@ describe('checkout', function () {
         expect(self.controller.submitted).toEqual(false)
       })
     })
+
+    describe('buildCartUrl', () => {
+      it('should get the url from the cart service', () => {
+        jest.spyOn(self.controller.cartService, 'buildCartUrl')
+        self.controller.buildCartUrl()
+        expect(self.controller.cartService.buildCartUrl).toHaveBeenCalled()
+      })
+    })
   })
 })

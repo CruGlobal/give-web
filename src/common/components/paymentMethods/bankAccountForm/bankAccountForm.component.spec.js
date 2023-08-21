@@ -4,7 +4,18 @@ import size from 'lodash/size'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 
-import cruPayments from 'cru-payments/dist/cru-payments'
+jest.mock('@cruglobal/cru-payments/dist/cru-payments', () => {
+  const originalModule = jest.requireActual('@cruglobal/cru-payments/dist/cru-payments')
+  return {
+    bankAccount: {
+      ...originalModule.bankAccount,
+      init: jest.fn(),
+      encrypt: jest.fn()
+    }
+  }
+})
+
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 import { ccpKey, ccpStagingKey } from 'common/app.constants'
 
 import module from './bankAccountForm.component'

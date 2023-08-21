@@ -26,7 +26,10 @@ describe('cart', () => {
         getRole: () => 'REGISTERED'
       },
       $window: {
-        location: '/cart.html'
+        location: {
+          href: '/cart.html',
+          search: ''
+        }
       },
       $document: [{
         referrer: ''
@@ -183,11 +186,11 @@ describe('cart', () => {
     it('should return uri', () => {
       self.controller.checkout()
 
-      expect(self.controller.$window.location).toBe('/checkout.html')
+      expect(self.controller.$window.location.href).toBe('/checkout.html')
       self.controller.sessionService.getRole = () => 'foo'
       self.controller.checkout()
 
-      expect(self.controller.$window.location).toBe('/sign-in.html')
+      expect(self.controller.$window.location.href).toBe('/sign-in.html')
     })
   })
 
