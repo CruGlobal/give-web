@@ -21,7 +21,10 @@ describe('sessionModalController', function () {
             dispatchEvent: jest.fn()
           }
         }],
-        $injector: jest.fn()
+        $injector: {
+          has: jest.fn(),
+          loadNewModules: jest.fn()
+        }
       })
   }))
 
@@ -52,10 +55,22 @@ describe('sessionModalController', function () {
 
   describe('$ctrl.onSignInSuccess', () => {
     it('should close modal', () => {
+      $ctrl.$injector.has.mockImplementation(() => true)
       $ctrl.onSignInSuccess()
       const $injector = $ctrl.$injector
 
       expect($ctrl.close).toHaveBeenCalled()
+      expect($ctrl.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
+    })
+
+    it('should add the sessionService module', () => {
+      $ctrl.$injector.has.mockImplementation(() => false)
+      $ctrl.$injector.loadNewModules.mockImplementation(() => {})
+      $ctrl.onSignInSuccess()
+      const $injector = $ctrl.$injector
+
+      expect($injector.loadNewModules).toHaveBeenCalledWith(['sessionService'])
       expect($ctrl.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
         new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
     })
