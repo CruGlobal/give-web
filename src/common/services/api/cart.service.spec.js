@@ -13,6 +13,17 @@ import module from './cart.service'
 import cartResponse from 'common/services/api/fixtures/cortex-cart.fixture'
 
 describe('cart service', () => {
+  let search = ''
+  const windowMock = {
+    location: {
+      search: search
+    }
+  }
+
+  beforeEach(angular.mock.module(function ($provide) {
+    $provide.value('$window', windowMock);
+  }))
+
   beforeEach(angular.mock.module(module.name))
 
   afterEach(clear)
@@ -26,6 +37,7 @@ describe('cart service', () => {
   afterEach(() => {
     self.$httpBackend.verifyNoOutstandingExpectation()
     self.$httpBackend.verifyNoOutstandingRequest()
+    windowMock.location.search = ''
   })
 
   describe('get', () => {
@@ -388,6 +400,37 @@ describe('cart service', () => {
           },
           () => fail('Observable should not have thrown an error')
         )
+    })
+  })
+
+  describe('buildCartUrl', () => {
+    const queryParametersToKeep = '?one=1&two=2'
+    const urlWithParameters = `cart.html${queryParametersToKeep}`
+
+    beforeEach(() => {
+      self.cartService.$window.location.href = 'https://give-stage2.cru.org'
+    })
+
+    it('should build a url without query parameters', () => {
+      expect(self.cartService.buildCartUrl()).toEqual('cart.html')
+    })
+
+    it('should build a url with query parameters', () => {
+      self.cartService.$window.location.search = queryParametersToKeep
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
+    })
+
+    it('should filter out certain query parameters', () => {
+      self.cartService.$window.location.search = `${queryParametersToKeep}&modal=give-gift&d=0123456&a=50`
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
+    })
+
+    it('should filter out a subset of query parameters', () => {
+      self.cartService.$window.location.search = `${queryParametersToKeep}&q=0123456&d=0123456&a=50`
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
     })
   })
 })

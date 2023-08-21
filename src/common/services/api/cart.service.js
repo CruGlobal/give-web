@@ -29,7 +29,7 @@ const serviceName = 'cartService'
 
 class Cart {
   /* @ngInject */
-  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies, $location) {
+  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies, $location, $window) {
     this.cortexApiService = cortexApiService
     this.commonService = commonService
     this.designationsService = designationsService
@@ -37,6 +37,7 @@ class Cart {
     this.hateoasHelperService = hateoasHelperService
     this.$cookies = $cookies
     this.$location = $location
+    this.$window = $window
   }
 
   setCartCountCookie (quantity) {
@@ -233,6 +234,17 @@ class Cart {
       .catch(response => {
         return Observable.of({ error: response, configuredDesignation: configuredDesignation })
       })
+  }
+
+  buildCartUrl () {
+    const url = new URL(this.$window.location.href)
+    const queryParameters = url.searchParams
+    const parametersToDelete = ['modal', 'd', 'a', 'q']
+    parametersToDelete.forEach((parameterToDelete) => {
+      queryParameters.delete(parameterToDelete)
+    })
+
+    return queryParameters.toString() ? `cart.html?${queryParameters.toString()}` : 'cart.html'
   }
 }
 
