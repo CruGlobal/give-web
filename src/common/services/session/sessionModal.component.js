@@ -18,9 +18,10 @@ const componentName = 'sessionModal'
 
 class SessionModalController {
   /* @ngInject */
-  constructor (sessionService, analyticsFactory) {
+  constructor (sessionService, analyticsFactory, $document) {
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
+    this.$document = $document
     this.isLoading = false
     this.scrollModalToTop = scrollModalToTop
   }
@@ -36,6 +37,7 @@ class SessionModalController {
   }
 
   onSignInSuccess () {
+    this.$document.body.dispatchEvent(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
     this.close()
   }
 
