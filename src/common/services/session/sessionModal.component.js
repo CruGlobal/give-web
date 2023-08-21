@@ -39,6 +39,9 @@ class SessionModalController {
 
   onSignInSuccess () {
     const $injector = this.$injector
+    if (!$injector.has('sessionService')) {
+      $injector.loadNewModules(['sessionService'])
+    }
     this.$document[0].body.dispatchEvent(
       new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
     this.close()

@@ -22,7 +22,10 @@ describe('signInForm', function () {
           dispatchEvent: jest.fn()
         }
       }],
-      $injector: jest.fn()
+      $injector: {
+        has: jest.fn(),
+        loadNewModules: jest.fn()
+      }
     }
 
     $ctrl = _$componentController_(module.name, {}, bindings)
@@ -85,9 +88,22 @@ describe('signInForm', function () {
       it('signs in successfully', () => {
         deferred.resolve({})
         $rootScope.$digest()
+        bindings.$injector.has.mockImplementation(() => true)
         const $injector = bindings.$injector
 
         expect(bindings.onSuccess).toHaveBeenCalled()
+        expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
+          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
+      })
+
+      it('adds the sessionService module', () => {
+        deferred.resolve({})
+        $rootScope.$digest()
+        bindings.$injector.has.mockImplementation(() => false)
+        bindings.$injector.loadNewModules.mockImplementation(() => {})
+        const $injector = bindings.$injector
+
+        expect($injector.loadNewModules).toHaveBeenCalledWith(['sessionService'])
         expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
           new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
       })
