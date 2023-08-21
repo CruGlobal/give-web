@@ -20,7 +20,8 @@ describe('sessionModalController', function () {
           body: {
             dispatchEvent: jest.fn()
           }
-        }]
+        }],
+        $injector: jest.fn()
       })
   }))
 
@@ -52,10 +53,11 @@ describe('sessionModalController', function () {
   describe('$ctrl.onSignInSuccess', () => {
     it('should close modal', () => {
       $ctrl.onSignInSuccess()
+      const injector = $ctrl.$injector
 
       expect($ctrl.close).toHaveBeenCalled()
-      expect($ctrl.$document[0].body.dispatchEvent)
-        .toHaveBeenCalledWith(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
+      expect($ctrl.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { injector } }))
     })
   })
 
