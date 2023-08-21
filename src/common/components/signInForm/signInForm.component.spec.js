@@ -16,7 +16,12 @@ describe('signInForm', function () {
     $rootScope = _$rootScope_
     bindings = {
       onSuccess: jest.fn(),
-      onFailure: jest.fn()
+      onFailure: jest.fn(),
+      $document: {
+        body: {
+          dispatchEvent: jest.fn()
+        }
+      }
     }
 
     $ctrl = _$componentController_(module.name, {}, bindings)
@@ -81,6 +86,8 @@ describe('signInForm', function () {
         $rootScope.$digest()
 
         expect(bindings.onSuccess).toHaveBeenCalled()
+        expect(bindings.$document.body.dispatchEvent)
+          .toHaveBeenCalledWith(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
       })
 
       it('requires multi-factor', () => {
