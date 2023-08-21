@@ -22,6 +22,7 @@ class SessionModalController {
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.$document = $document
+    this.$injector = angular.injector()
     this.isLoading = false
     this.scrollModalToTop = scrollModalToTop
   }
@@ -37,7 +38,9 @@ class SessionModalController {
   }
 
   onSignInSuccess () {
-    this.$document[0].body.dispatchEvent(new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: {} }))
+    const injector = this.$injector
+    this.$document[0].body.dispatchEvent(
+      new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { injector } }))
     this.close()
   }
 
