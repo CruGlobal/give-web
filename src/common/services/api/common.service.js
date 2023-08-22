@@ -16,7 +16,7 @@ class Common {
       path: ['nextdrawdate'],
       cache: true
     })
-      .pluck('next-draw-date')
+      .pluck('next-draw-date', 'string')
   }
 }
 
