@@ -10,8 +10,10 @@ const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor ($log, sessionService, gettext) {
+  constructor ($log, $document, sessionService, gettext) {
     this.$log = $log
+    this.$document = $document
+    this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
   }
@@ -31,6 +33,12 @@ class SignInFormController {
     this.sessionService
       .signIn(this.username, this.password, this.mfa_token, this.trust_device, this.lastPurchaseId)
       .subscribe(() => {
+        const $injector = this.$injector
+        if (!$injector.has('sessionService')) {
+          $injector.loadNewModules(['sessionService'])
+        }
+        this.$document[0].body.dispatchEvent(
+          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
         this.onSuccess()
       }, error => {
         this.isSigningIn = false
