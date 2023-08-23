@@ -79,6 +79,7 @@
     "build": "webpack -p",
     "build:analyze": "webpack -p --env.analyze",
     "test": "jest",
+    "test:log": "jest --silent=false",
     "lint": "standard",
     "lint:ts": "tsc"
   },

@@ -180,4 +180,13 @@ describe('sessionModalService', function () {
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
     })
   })
+
+  describe('SignUp', () => {
+    it('should open signUp modal', () => {
+      sessionModalService.createAccount()
+
+      expect($uibModal.open).toHaveBeenCalledTimes(1)
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
+    })
+  })
 })

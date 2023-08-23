@@ -1,8 +1,14 @@
 sign-up-modal,
 sign-up-activation-modal {
+  display: inline-block;
+  @extend register-account-modal;
 
   .loading-overlay-parent {
     margin-bottom: 30px;
+  }
+
+  .content {
+    display: inline-block;
   }
 
   .row.buttons {

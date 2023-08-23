@@ -63,6 +63,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getRole: currentRole,
     signIn: signIn,
     signOut: signOut,
+    createAccount: createAccount,
     handleOktaRedirect: handleOktaRedirect,
     oktaSignIn: oktaSignIn,
     oktaSignOut: oktaSignOut,
@@ -148,6 +149,55 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       data: data,
       withCredentials: true
     })
+  }
+
+  async function createAccount (email, firstName, lastName) {
+    const isAuthenticated = await authClient.isAuthenticated()
+    if (currentRole() !== Roles.public || isAuthenticated) {
+      return 'Already logged in.'
+    }
+    const data = { };
+
+    if (angular.isDefined(email)) data.email = email;
+    if (angular.isDefined(firstName)) data['first_name'] = firstName;
+    if (angular.isDefined(lastName)) data['last_name'] = lastName;
+
+    console.log('data', data)
+
+    try {
+      const createAccount = await $http({
+        method: 'POST',
+        url: oktaApiUrl('create'),
+        data: data,
+        withCredentials: true
+      });
+      console.log('createAccount', createAccount)
+      return {
+        status: 'success',
+        data: createAccount
+      }
+    } catch(err) {
+      try {
+        console.log('err', err)
+        if (err.status === 401) {
+          throw new Error();
+        }
+        const errors = err?.data?.error 
+          ? err.data.error.split(',')
+            .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
+            .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ""))
+          : err;
+        return {
+          status: 'error',
+          data: errors,
+        }
+      } catch {
+        return {
+          status: 'error',
+          data: ['Something went wrong. Please try again'],
+        }
+      }
+    }
   }
 
   function oktaIsUserAuthenticated () {

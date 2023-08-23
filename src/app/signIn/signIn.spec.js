@@ -88,5 +88,24 @@ describe('signIn', function () {
         expect($ctrl.$window.location).toEqual('/checkout.html')
       })
     })
+
+    describe('getOktaUrl()', () => {
+      it('On sign up with Okta', () => {
+        jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
+        const response = $ctrl.getOktaUrl()
+
+        expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled();
+        expect(response).toEqual('URL')
+      })
+    })
+
+    describe('onSignUpWithOkta()', () => {
+      it('On sign up with Okta', () => {
+        jest.spyOn($ctrl.sessionModalService, 'createAccount').mockReturnValue(Observable.throw({}))
+        $ctrl.onSignUpWithOkta()
+
+        expect($ctrl.sessionModalService.createAccount).toHaveBeenCalled()
+      })
+    })
   })
 })

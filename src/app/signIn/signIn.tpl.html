@@ -16,7 +16,7 @@
                 <h3 class="text-center" translate>Already have an account?</h3>
                 <p class="text-center section-description" translate>Sign in now for faster checkout and to save payment info for the next time.</p>
 
-                <sign-in-form></sign-in-form>
+                <sign-in-form on-sign-up-with-okta="$ctrl.onSignUpWithOkta()"></sign-in-form>
 
                 <div class="text-center self-service">
                   <a ng-href="{{$ctrl.getOktaUrl()}}/signin/forgot-password" target="_blank" translate>Forgot your password?</a>

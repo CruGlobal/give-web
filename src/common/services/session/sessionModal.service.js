@@ -64,7 +64,8 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       dismissAnalyticsEvent: 'ga-sign-in-exit'
     }).result,
     accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId } }).result,
-    registerAccount: () => openModal('register-account', { backdrop: 'static', keyboard: false }).result
+    registerAccount: () => openModal('register-account', { backdrop: 'static', keyboard: false }).result,
+    createAccount: () => openModal('sign-up', { backdrop: 'static', keyboard: false }).result
   }
 }
 

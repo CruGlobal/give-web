@@ -3,7 +3,7 @@ import signInForm from 'common/components/signInForm/signInForm.component'
 import commonModule from 'common/common.module'
 import showErrors from 'common/filters/showErrors.filter'
 import analyticsFactory from 'app/analytics/analytics.factory'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService, { Roles, CreateOktaAccountEvent } from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
 import orderService from 'common/services/api/order.service'
 
@@ -13,9 +13,10 @@ const componentName = 'signIn'
 
 class SignInController {
   /* @ngInject */
-  constructor ($window, $log, sessionService, analyticsFactory, sessionModalService, orderService) {
+  constructor ($window, $log, $rootScope, sessionService, analyticsFactory, sessionModalService, orderService) {
     this.$window = $window
     this.$log = $log
+    this.$rootScope = $rootScope
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.sessionModalService = sessionModalService
@@ -50,6 +51,10 @@ class SignInController {
 
   getOktaUrl () {
     return this.sessionService.getOktaUrl()
+  }
+
+  onSignUpWithOkta () {
+    this.sessionModalService.createAccount();
   }
 }
 

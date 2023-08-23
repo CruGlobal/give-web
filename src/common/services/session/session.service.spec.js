@@ -518,6 +518,50 @@ describe('session service', function () {
       })
     })
   })
+  describe('createAccount()', () => {
+    describe('Create Account for user on Okta', () => {
+      it('returns as user is already authenicated by Okta', () => {
+        jest.spyOn(sessionService.authClient, 'isAuthenticated').mockReturnValue(true)
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data).toEqual('Already logged in.')
+        })
+      })
+      it('returns as user is already authenicated by Cortex', () => {
+        $cookies.put(Sessions.role, cortexRole.registered)
+        $cookies.put(Sessions.profile, cruProfile)
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest()
+        expect(sessionService.getRole()).toEqual(Roles.identified)
+
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data).toEqual('Already logged in.')
+        })
+      })
+
+      // it('returns as user is already authenicated by Cortex', () => {
+      //   $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+      //     email: 'test@test@test.com',
+      //     first_name: 'FirstName',
+      //     last_name: 'LastName',
+      //   }).respond(200, {
+      //     data: {
+      //       error: 'Error ajdjsdjl'
+      //     }
+      //   })
+      //   sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+      //     console.log('data', data)
+      //   })
+
+      //   try {
+      //     $httpBackend.flush()
+      //   } catch { }
+      //   $httpBackend.verifyNoOutstandingExpectation()
+      //   $httpBackend.verifyNoOutstandingRequest()
+
+      // })
+
+    })
+  })
 
   describe('updateCurrentProfile', () => {
     it('updates the first and last name if the cookie is defined', () => {

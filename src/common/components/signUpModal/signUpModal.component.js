@@ -3,17 +3,20 @@ import includes from 'lodash/includes'
 import sessionService, { Roles } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './signUpModal.tpl.html'
+import cartService from 'common/services/api/cart.service'
 
 const componentName = 'signUpModal'
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $location, sessionService, orderService) {
+  constructor ($log, $scope, $location, sessionService, cartService, orderService, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$location = $location
     this.sessionService = sessionService
     this.orderService = orderService
+    this.cartService = cartService
+    this.imgDomain = envService.read('imgDomain')
   }
 
   $onInit () {
@@ -22,36 +25,17 @@ class SignUpModalController {
       this.username = this.session.email;
       this.onStateChange({ state: 'sign-in' });
     }
-    this.loadDonorDetails()
-    // https://github.com/CruGlobal/thekey/wiki/Self-Service-REST-API#create-user
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Create-User
-    this.setPristine()
-    this.isLoading = true
-    this.sessionService
-      .signUp(this.email, this.password, this.first_name, this.last_name)
-      .subscribe((data) => {
-        this.isLoading = false
-        this.onSuccess(data)
-      }, (error) => {
-        this.hasError = true
-        switch (error.status) {
-          case 400:
-            if (error.data && error.data.error === 'invalid_password') {
-              this.signUpErrors.invalid_password = true
-              this.invalidPasswordMessage = error.data.description
-            } else {
-              this.signUpErrors[error.status] = true
-            }
-            break
-          case 403:
-          case 409:
-            this.signUpErrors[error.status] = true
-            break
-          default:
-            this.signUpErrors.generic = true
-        }
-        this.isLoading = false
+    if (!this.isInsideAnotherModal) {
+      this.cartCount = 0
+      this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe(count => {
+        this.cartCount = count
+      }, () => {
+        this.cartCount = 0
       })
+    }
+    this.loadDonorDetails()
+    this.isLoading = true;
+    this.submitting = false;
   }
 
   loadDonorDetails () {
@@ -82,17 +66,24 @@ class SignUpModalController {
   }
 
   submitDetails () {
-    this.submitted = true
+    this.submitting = true
+    this.submissionError = ''
     this.signUpForm.$setSubmitted()
     if (this.signUpForm.$valid) {
-      const details = this.donorDetails
-      this.submissionError = ''
-      // TODO: send data to API
-      // this.submissionError = 'Invalid email address'
-      // this.submissionError = 'Account already exists'
-      this.onStateChange({ state: 'sign-up-activation' });
+      const details = this.donorDetails   
+      const { email, name } = details
+      this.sessionService.createAccount(email, name['given-name'], name['family-name']).then((response) => {
+        if (response.status === 'error') {
+          this.$scope.$apply(() => {
+            this.submissionError = response.data;
+            this.submitting = false
+          })
+        } else {
+          this.onStateChange({ state: 'sign-up-activation' });
+        }
+      })
     } else {
-      this.submitted = false
+      this.submitting = false
     }
   }
 }
@@ -109,6 +100,8 @@ export default angular
     bindings: {
       onStateChange: '&',
       onSuccess: '&',
-      onFailure: '&'
+      onFailure: '&',
+      onCancel: '&',
+      isInsideAnotherModal: '='
     }
   })

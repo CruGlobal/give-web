@@ -11,6 +11,7 @@
       last-purchase-id="$ctrl.lastPurchaseId"
       on-state-change="$ctrl.stateChanged(state)"
       on-success="$ctrl.onSignInSuccess()"
+      on-cancel="$ctrl.onCancel()"
     ></sign-up-modal>
     <sign-up-activation-modal ng-switch-when="sign-up-activation"
       modal-title="$ctrl.modalTitle"
