@@ -519,7 +519,6 @@ describe('session service', function () {
     })
   })
   describe('createAccount()', () => {
-    describe('Create Account for user on Okta', () => {
       it('returns as user is already authenicated by Okta', () => {
         jest.spyOn(sessionService.authClient, 'isAuthenticated').mockReturnValue(true)
         sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
@@ -538,28 +537,49 @@ describe('session service', function () {
         })
       })
 
-      // it('returns as user is already authenicated by Cortex', () => {
-      //   $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
-      //     email: 'test@test@test.com',
-      //     first_name: 'FirstName',
-      //     last_name: 'LastName',
-      //   }).respond(200, {
-      //     data: {
-      //       error: 'Error ajdjsdjl'
-      //     }
-      //   })
-      //   sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
-      //     console.log('data', data)
-      //   })
+  })
+  describe('createAccount() with correct data', () => {
 
-      //   try {
-      //     $httpBackend.flush()
-      //   } catch { }
-      //   $httpBackend.verifyNoOutstandingExpectation()
-      //   $httpBackend.verifyNoOutstandingRequest()
+    it('returns as user is already authenticated by Cortex', () => {
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+        email: 'test@test@test.com',
+        first_name: 'FirstName',
+        last_name: 'LastName'
+      }).respond(200, {
+        data: {
+          error: 'Error ajdjsdjl'
+        }
+      })
+      sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+        console.log('test data', data)
+        expect(data).toBeDefined()
+      })
+    })
 
-      // })
+    it('returns as user is already authenticated by Cortex', () => {
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+        email: 'test@test@test.com',
+        first_name: 'FirstName',
+        last_name: 'LastName'
+      }).respond(500, {
+          "error": "Okta user creation failed: [{:errorCode=>\"E0000001\",\n :errorSummary=>\"Api validation failed: login\",\n :errorLink=>\"E0000001\",\n :errorId=>\"oaeTHQQui71RxKf-kpCQHRr4Q\",\n :errorCauses=>\n  [{:errorSummary=>\"login: Username must be in the form of an email address\"},\n   {:errorSummary=>\"email: Does not match required pattern\"}]}\n, 400]"
+      })
+      sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+        console.log('test data', data)
+        expect(data.data).toBeDefined()
+        expect(data.data[0]).toEqual('login: Username must be in the form of an email address')
+        expect(data.data[1]).toEqual('email: Does not match required pattern')
+      })
+    })
 
+    afterEach(() => {
+      try {
+        $httpBackend.flush()
+      } catch (err) {
+        console.log(err)
+      }
+      $httpBackend.verifyNoOutstandingExpectation()
+      $httpBackend.verifyNoOutstandingRequest()
     })
   })
 
