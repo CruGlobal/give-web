@@ -151,52 +151,70 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     })
   }
 
-  async function createAccount (email, firstName, lastName) {
+  function createAccount (email, firstName, lastName) {
+    return Observable.from(internalCreateAccount(email, firstName, lastName))
+      .map((response) => {
+        console.log('response', response)
+        return {
+          status: 'success',
+          data: response
+        }
+      })
+      .finally(() => {
+        $rootScope.$broadcast('CreateAccount')
+      })
+  }
+
+  async function internalCreateAccount (email, firstName, lastName) {
     const isAuthenticated = await authClient.isAuthenticated()
     if (currentRole() !== Roles.public || isAuthenticated) {
       return 'Already logged in.'
     }
-    const data = { };
+    const data = { }
 
-    if (angular.isDefined(email)) data.email = email;
-    if (angular.isDefined(firstName)) data['first_name'] = firstName;
-    if (angular.isDefined(lastName)) data['last_name'] = lastName;
+    if (angular.isDefined(email)) data.email = email
+    if (angular.isDefined(firstName)) data.first_name = firstName
+    if (angular.isDefined(lastName)) data.last_name = lastName
 
     console.log('data', data)
 
     try {
-      const createAccount = await $http({
+      return $http({
         method: 'POST',
         url: oktaApiUrl('create'),
         data: data,
         withCredentials: true
-      });
-      console.log('createAccount', createAccount)
-      return {
-        status: 'success',
-        data: createAccount
-      }
-    } catch(err) {
+      })
+      // return $http.post(oktaApiUrl('create'), data, {
+      //   withCredentials: true
+      // })
+      // console.log('createAccount', created)
+      // return created
+    } catch (err) {
       try {
         console.log('err', err)
         if (err.status === 401) {
-          throw new Error();
+          throw new Error()
         }
-        const errors = err?.data?.error 
+        const errors = err.data.error
           ? err.data.error.split(',')
-            .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
-            .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ""))
-          : err;
+              .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
+              .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ''))
+          : err
         return {
           status: 'error',
-          data: errors,
+          data: errors
         }
       } catch {
         return {
           status: 'error',
           data: ['Something went wrong. Please try again'],
         }
+      } finally {
+        console.log('inner finally')
       }
+    } finally {
+      console.log('finally')
     }
   }
 
