@@ -79,6 +79,10 @@ class SessionModalController {
   setLoading (loading) {
     this.isLoading = !!loading
   }
+
+  onSignUpActivationSuccess () {
+    this.stateChanged('register-account')
+  }
 }
 
 export default angular

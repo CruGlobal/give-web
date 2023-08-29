@@ -30,7 +30,8 @@ export const Sessions = {
 
 export const redirectingIndicator = 'redirectingFromOkta'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
-export const checkoutSavedDataCookieDomain = '.cru.org'
+export const createAccountDataCookieName = 'createAccountData'
+export const cookieDomain = '.cru.org'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
@@ -74,7 +75,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     updateCurrentProfile: updateCurrentProfile,
     oktaIsUserAuthenticated: oktaIsUserAuthenticated,
     updateCheckoutSavedData: updateCheckoutSavedData,
-    clearCheckoutSavedData: clearCheckoutSavedData
+    clearCheckoutSavedData: clearCheckoutSavedData,
+    checkCreateAccountStatus: checkCreateAccountStatus,
   }
 
   /* Public Methods */
@@ -151,7 +153,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     })
   }
 
-  async function createAccount (email, firstName, lastName) {
+  async function createAccount (email, firstName, lastName, isTest = false) {
     const isAuthenticated = await authClient.isAuthenticated()
     if (currentRole() !== Roles.public || isAuthenticated) {
       return 'Already logged in.'
@@ -161,7 +163,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     if (angular.isDefined(email)) data.email = email;
     if (angular.isDefined(firstName)) data['first_name'] = firstName;
     if (angular.isDefined(lastName)) data['last_name'] = lastName;
-
+    const dataAsString = JSON.stringify(data);
     try {
       const createAccount = await $http({
         method: 'POST',
@@ -170,6 +172,16 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         withCredentials: true
       });
       console.log('createAccount', createAccount)
+
+      $cookies.put(
+        createAccountDataCookieName,
+        dataAsString,
+        {
+          path: '/',
+          domain: isTest ? '' : cookieDomain,
+          expires: moment().add(2, 'hours').toISOString(),
+        }
+      );
       return {
         status: 'success',
         data: createAccount
@@ -184,9 +196,88 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
             .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
             .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ""))
           : err;
+
+        let checkIfAccountIsPending = false
+        
+        const formattedErrors = errors.map((error) => {
+          switch(error) {
+            case 'login: An object with this field already exists in the current organization':
+              checkIfAccountIsPending = true;
+              return 'The email address you used belongs to an existing Okta user.';
+              break;
+            case 'email: Does not match required pattern':
+              return 'There was an error saving your email address. Make sure it was entered correctly.';
+              break;
+            case 'Something went wrong. Please try again':
+              return 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.';
+              break;
+            default:
+              return error
+          };
+        })
+        if (!checkIfAccountIsPending) {
+          return {
+            status: 'error',
+            data: formattedErrors,
+            accountPending: false
+          }
+        } else {
+          const accountPending = await checkCreateAccountStatus(email);
+          if (accountPending?.data?.status !== 'PROVISIONED') {
+            return {
+              status: 'error',
+              data: formattedErrors,
+              accountPending: false
+            }
+          } else {
+            $cookies.put(
+              createAccountDataCookieName,
+              dataAsString,
+              {
+                path: '/',
+                domain: isTest ? '' : cookieDomain,
+                expires: moment().add(2, 'hours').toISOString(),
+              }
+            );
+            return {
+              status: 'error',
+              data: formattedErrors,
+              accountPending: true
+            }
+          }
+        }
+      } catch {
         return {
           status: 'error',
-          data: errors,
+          data: ['Something went wrong. Please try again'],
+        }
+      }
+    }
+  }
+
+  async function checkCreateAccountStatus (email) {
+    const isAuthenticated = await authClient.isAuthenticated();
+    if (currentRole() !== Roles.public || isAuthenticated) {
+      return 'Already logged in.'
+    }
+    try {
+      const createAccountStatus = await $http({
+        method: 'GET',
+        url: `${oktaApiUrl('status')}?email=${encodeURIComponent(email)}`,
+        withCredentials: true
+      });
+      return {
+        status: 'success',
+        data: createAccountStatus.data
+      }
+    } catch(err) {
+      try {
+        if (err.status === 401) {
+          throw new Error();
+        }
+        return {
+          status: 'error',
+          data: err?.data?.error ?? 'Something went wrong. Please try again',
         }
       } catch {
         return {
@@ -364,7 +455,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
           dataAsString,
           {
             path: '/',
-            domain: isTest ? '' : checkoutSavedDataCookieDomain,
+            domain: isTest ? '' : cookieDomain,
             expires: moment().add(20, 'minutes').toISOString(),
           }
         );
@@ -383,7 +474,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         checkoutSavedDataCookieName,
         {
           path: '/',
-          domain: isTest ? '' : checkoutSavedDataCookieDomain,
+          domain: isTest ? '' : cookieDomain,
 
         }
       );

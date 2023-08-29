@@ -1,96 +1,102 @@
-<div class="content">
-  <div class="col-md-3 col-xs-12"></div>
-  <div class="col-md-6 col-xs-12">
-    <div class="alert alert-danger" role="alert" ng-if="$ctrl.verifyError" ng-switch="$ctrl.verifyError">
-      <p ng-switch-default translate>
-        {{'UNVERIFY_EMAIL_ERROR'}}
-      </p>
-    </div>
-
-    <div class="row text-center">
+<div class="modal-header" ng-if="!$ctrl.isInsideAnotherModal">
+  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <div class="container-fluid">
+    <div class="row">
       <div class="col-xs-12">
-        <h4 translate>Activate Account</h4>
-        <p translate>You will need to go to your email and open an email with the subject <strong>Activate Account for Giving to Cru.</strong></p>
-        <p translate>Verify your account by opening a link that we will send in that email.</p>
-      </div>
-    </div>
-
-    <div class="loading-overlay-parent">
-      <loading type="overlay" ng-if="$ctrl.loadingUnverifiedEmails">
-        <translate>{{'CHECKING_FOR_EXISTING'}}</translate>
-      </loading>
-
-      <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingUnverifiedEmailsError">
-        <p translate>{{'LOADING_ERROR_RETRY'}}</p>
-        <p><button id="retryButton1" type="button" class="btn btn-primary" ng-click="$ctrl.getUnverifiedEmails()" translate>{{'RETRY'}}</button></p>
-      </div>
-
-      <div class="row unverified-email-headers">
-        <div class="col-xs-8">
-          <p translate>Email</p>
+        <div class="signup-header">
+          <img src="{{$ctrl.imgDomain}}/assets/img/cru-logo.png" alt="Cru logo" />
+          <span>+</span>
+          <img src="{{$ctrl.imgDomain}}/assets/img/okta.png" alt="Okta logo" />
         </div>
-        <div class="col-xs-4">
-          <p translate class="pull-right">Status</p>
-        </div>
-      </div>
-      <div class="row unverified-emails">
-        <div class="unverified-email" ng-repeat="unverifiedEmail in $ctrl.unverifiedEmails">
-          <div class="col-xs-8">
-            <p translate>{{unverifiedEmail.email}}</p>
-          </div>
-          <div class="col-xs-4">
-            <p translate class="pull-right">{{unverifiedEmail.status}}</p>
-          </div>
-        </div>
-      </div>
-
-
-      <p
-        translate
-        class="need-help"
-        ng-click="$ctrl.showHelp = !$ctrl.showHelp"
-      >
-        {{$ctrl.showHelp ? 'Close help.' : 'Need help locating verify email?'}}
-      </p>
-
-
-      <div class="screenshot" ng-if="$ctrl.showHelp">
-        <div class="row">
-          <div class="col-xs-12">
-            <p translate>You'll receive an email very similar to the one below.</p>
-            <img src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png" alt="Screenshot of verify email from Okta" />
-          </div>
-        </div>
-      </div>
-
-      <div class="row buttons">
-        <div class="col-xs-6">
-          <button
-            id="continueButton"
-            type="button"
-            class="btn btn-primary pull-right"
-            ng-click="$ctrl.emailIsVerified()"
-            translate
-          >
-            Continue
-          </button>
-        </div>
-        <div class="col-xs-6">
-          <a ng-click="$ctrl.onStateChange({state:'sign-in'})" class="back-to-sign-in">Back to sign in</a>
+        <div class="section cart" ng-if="$ctrl.cartCount > 0">
+          <span ng-if="$ctrl.cartCount === 1" translate>1 gift is currently in your cart.</span>
+          <span ng-if="$ctrl.cartCount > 1">{{$ctrl.cartCount}} <span translate>gifts are currently in your cart.</span></span>
         </div>
       </div>
     </div>
-
-    <hr />
-
-    <div class="row bottom-links">
-      <div class="col-xs-6">Powered by Okta</div>
-      <div class="col-xs-6">
-        <a href="https://www.cru.org/us/en/about/privacy.html" target="_blank" rel="noopener" class="pull-right">Privacy Policy</a>
-      </div>
-    </div>
-
   </div>
-  <div class="col-md-3 col-xs-12"></div>
 </div>
 
+<div ng-class="{'modal-body': !$ctrl.isInsideAnotherModal }">
+  <div class="content">
+    <div class="col-xs-12">
+      <div class="loading-overlay-parent">
+        <loading type="overlay" ng-if="$ctrl.loadingAccount">
+          <translate>{{'CHECKING_FOR_EXISTING'}}</translate>
+        </loading>
+
+        <div class="row text-center">
+          <div class="col-xs-12">
+            <h4 translate>Activate Account</h4>
+            <p translate style="margin-bottom: 0px">You will need to go to your <b>email</b> and open an email with the subject</p>
+            <strong translate style="display: block; margin-bottom: 8px">Activate Account for Giving to Cru.</strong>
+            <p translate>Verify your account by opening a link that we will send in that email.</p>
+          </div>
+        </div>
+        <p
+          translate
+          class="need-help"
+          ng-click="$ctrl.showHelp = !$ctrl.showHelp"
+          ng-if="$ctrl.unverifiedAccount.status"
+        >
+          {{$ctrl.showHelp ? 'Close help.' : 'Need help locating verify email?'}}
+        </p>
+
+
+        <div class="screenshot" ng-if="$ctrl.showHelp">
+          <div class="row">
+            <div class="col-xs-12">
+              <p translate>You'll receive an email very similar to the one below.</p>
+              <img src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png" alt="Screenshot of verify email from Okta" />
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingAccountError">
+          <div ng-if="$ctrl.loadingAccountErrorCount < 2">
+            <div ng-if="!$ctrl.loadingAccountError.includes('Okta user not found:')">
+              <p translate>There was an error loading your Okta account status</p>
+            </div>
+            <div>
+              <p translate translate-value-email="{{$ctrl.unverifiedAccount.email}}">{{$ctrl.loadingAccountError}}</p>
+            </div>
+          </div>
+          <p ng-if="$ctrl.loadingAccountErrorCount > 1" style="margin-top:20px;">There was an error loading your Okta account status. Please locate the email mentioned above and follow the steps. Once you've done that please login via "Sign up with okta".</p>
+        </div>
+
+        <div class="row unverified-email-headers" ng-if="$ctrl.unverifiedAccount.status">
+          <div class="col-xs-8">
+            <p translate>Email</p>
+          </div>
+          <div class="col-xs-4">
+            <p translate class="pull-right">Status</p>
+          </div>
+        </div>
+        <div class="row unverified-emails" ng-if="$ctrl.unverifiedAccount.status">
+          <div class="unverified-email">
+            <div class="col-xs-8">
+              <p translate>{{$ctrl.unverifiedAccount.email}}</p>
+              <span class="instructions">Please locate the email in your email inbox.</span>
+            </div>
+            <div class="col-xs-4">
+              <p translate class="pull-right">{{$ctrl.unverifiedAccount.status}}</p>
+            </div>
+          </div>
+        </div>
+
+        <p>This page re-fetches the data every 10 seconds.</p>
+
+      <hr />
+
+      <div class="row bottom-links">
+        <div class="col-xs-6">Powered by Okta</div>
+        <div class="col-xs-6">
+          <a href="https://www.cru.org/us/en/about/privacy.html" target="_blank" rel="noopener" class="pull-right">Privacy Policy</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

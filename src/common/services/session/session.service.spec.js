@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, redirectingIndicator, checkoutSavedDataCookieName, checkoutSavedDataCookieDomain } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, redirectingIndicator, checkoutSavedDataCookieName } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -551,7 +551,6 @@ describe('session service', function () {
         }
       })
       sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
-        console.log('test data', data)
         expect(data).toBeDefined()
       })
     })
@@ -565,10 +564,49 @@ describe('session service', function () {
           "error": "Okta user creation failed: [{:errorCode=>\"E0000001\",\n :errorSummary=>\"Api validation failed: login\",\n :errorLink=>\"E0000001\",\n :errorId=>\"oaeTHQQui71RxKf-kpCQHRr4Q\",\n :errorCauses=>\n  [{:errorSummary=>\"login: Username must be in the form of an email address\"},\n   {:errorSummary=>\"email: Does not match required pattern\"}]}\n, 400]"
       })
       sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
-        console.log('test data', data)
         expect(data.data).toBeDefined()
         expect(data.data[0]).toEqual('login: Username must be in the form of an email address')
-        expect(data.data[1]).toEqual('email: Does not match required pattern')
+        expect(data.data[1]).toEqual('There was an error saving your email address. Make sure it was entered correctly.')
+      })
+    })
+
+    afterEach(() => {
+      try {
+        $httpBackend.flush()
+      } catch (err) {
+        console.log(err)
+      }
+      $httpBackend.verifyNoOutstandingExpectation()
+      $httpBackend.verifyNoOutstandingRequest()
+    })
+  })
+
+  describe('checkCreateAccountStatus() with correct data', () => {
+    it('returns as OKTA user status', () => {
+
+      $httpBackend.expectGET('https://give-stage2.cru.org/okta/status?email=test-test%40test.com').respond(200, {
+        activated: '2023-08-28T14:35:00.000Z',
+        password_changed: null,
+        status: 'PROVISIONED'
+      })
+      
+      sessionService.checkCreateAccountStatus('test-test@test.com').then((data) => {
+        console.log('test data', data)
+        expect(data.status).toEqual('success')
+        expect(data.data.status).toEqual('PROVISIONED')
+      })
+    })
+
+    it('returns as error when fetching OKTA user status', () => {
+
+      $httpBackend.expectGET('https://give-stage2.cru.org/okta/status?email=test-test%40test.com').respond(404, {
+        error: 'Email is not an Okta user'
+      })
+      
+      sessionService.checkCreateAccountStatus('test-test@test.com').then((data) => {
+        console.log('test data', data)
+        expect(data.status).toEqual('error')
+        expect(data.data).toEqual('Email is not an Okta user')
       })
     })
 

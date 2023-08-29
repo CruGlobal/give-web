@@ -75,11 +75,18 @@ class SignUpModalController {
       this.sessionService.createAccount(email, name['given-name'], name['family-name']).then((response) => {
         if (response.status === 'error') {
           this.$scope.$apply(() => {
-            this.submissionError = response.data;
+            if (response.accountPending) {
+              this.onStateChange({ state: 'sign-up-activation' });
+            } else {
+              this.submissionError = response.data;
+            }
             this.submitting = false
           })
         } else {
-          this.onStateChange({ state: 'sign-up-activation' });
+          this.$scope.$apply(() => {
+            this.onStateChange({ state: 'sign-up-activation' });
+            this.submitting = false;
+          })
         }
       })
     } else {
@@ -93,13 +100,13 @@ export default angular
   .module(componentName, [
     sessionService.name,
     orderService.name,
+    cartService.name,
   ])
   .component(componentName, {
     controller: SignUpModalController,
     templateUrl: template,
     bindings: {
       onStateChange: '&',
-      onSuccess: '&',
       onFailure: '&',
       onCancel: '&',
       isInsideAnotherModal: '='

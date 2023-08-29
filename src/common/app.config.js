@@ -334,8 +334,6 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
     PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
-    UNVERIFY_EMAIL_ERROR: 'You must verify your email addres before being able to continue in the registration process.',
-    ERROR_SAVING_ACCOUNT_EXISTS: 'The email address you used belongs to an existing Okta user.'
   })
 
   $translateProvider.translations('es', {

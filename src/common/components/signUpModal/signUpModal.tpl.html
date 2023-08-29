@@ -21,20 +21,11 @@
 
 <div ng-class="{'modal-body': !$ctrl.isInsideAnotherModal }">
   <div class="content">
-    <div class="col-md-3 col-xs-12"></div>
-    <div class="col-md-6 col-xs-12">
+    <div class="col-xs-12">
 
 
       <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.length" ng-repeat="error in $ctrl.submissionError track by $index">
-        <p ng-if="error === 'login: An object with this field already exists in the current organization'" translate>
-          {{'ERROR_SAVING_ACCOUNT_EXISTS'}}
-        </p>
-        <p ng-if="error === 'email: Does not match required pattern'" translate>
-          {{'ERROR_SAVING_EMAIL'}}
-        </p>
-        <p ng-if="error === 'Something went wrong. Please try again'" translate>
-          {{'ERROR_SAVING_CONTACT_TRY_AGAIN'}}
-        </p>
+        <p translate>{{error}}</p>
       </div>
 
       <div class="row text-center">
@@ -118,7 +109,8 @@
                 translate
                 ng-disabled="$ctrl.submitting"
               >
-                Register
+              {{$ctrl.submitting ? 'Creating An Account...' : 'Register'}}
+                
               </button>
             </div>
             <div class="col-xs-6"  ng-if="$ctrl.isInsideAnotherModal">
@@ -139,6 +131,5 @@
       </div>
 
     </div>
-    <div class="col-md-3 col-xs-12"></div>
   </div>
 </div>

@@ -49,6 +49,7 @@
     on-state-change="$ctrl.stateChanged(state)"
     on-success="$ctrl.onIdentitySuccess()"
     on-failure="$ctrl.onIdentityFailure()"
+    is-inside-another-modal="true"
   ></sign-up-activation-modal>
   <div ng-switch-when="loading">
     <loading></loading>

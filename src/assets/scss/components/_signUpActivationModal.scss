@@ -45,6 +45,14 @@ sign-up-activation-modal {
     }
   }
 
+  .unverified-email {
+    .instructions {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #a94442;
+    }
+  }
+
   .need-help {
     cursor: pointer;
     font-size: 14px;
