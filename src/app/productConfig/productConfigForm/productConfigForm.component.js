@@ -138,7 +138,7 @@ class ProductConfigFormController {
 
     const suggestedAmountsObservable = this.designationsService.suggestedAmounts(this.code, this.itemConfig)
       .do(suggestedAmounts => {
-        this.suggestedAmounts = suggestedAmounts
+        this.suggestedAmounts = suggestedAmounts.filter((amount) => amount?.amount);
         this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts)
       })
 
@@ -173,7 +173,7 @@ class ProductConfigFormController {
     const amountOptions = isEmpty(this.suggestedAmounts)
       ? this.selectableAmounts
       : map(this.suggestedAmounts, 'amount')
-
+      
     if (this.itemConfig.amount) {
       if (amountOptions.indexOf(this.itemConfig.amount) === -1) {
         this.changeCustomAmount(this.itemConfig.amount)
