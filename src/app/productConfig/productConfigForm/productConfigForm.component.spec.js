@@ -161,7 +161,7 @@ describe('product config form component', function () {
 
       jest.spyOn($ctrl.commonService, 'getNextDrawDate').mockReturnValue(Observable.of('2016-10-02'))
 
-      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 5 }, { amount: 10 }]))
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 5 }, { amount: 10 }, { amount: 0 }, { }]))
 
       jest.spyOn($ctrl.designationsService, 'givingLinks').mockReturnValue(Observable.of([]))
       jest.spyOn($ctrl.analyticsFactory, 'giveGiftModal').mockReturnValue(() => {})
@@ -228,6 +228,19 @@ describe('product config form component', function () {
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorLoading' })
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading data for product config form', 'some error'])
       expect($ctrl.loading).toEqual(false)
+    })
+  })
+
+
+  describe('loadData but suggestedAmounts only has 0 amounts or empty objects', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 0 }, { }]))
+    })
+
+    it('should use default amounts', () => {
+      $ctrl.loadData()
+      expect($ctrl.suggestedAmounts).toEqual([])
+      expect($ctrl.useSuggestedAmounts).toEqual(false)
     })
   })
 

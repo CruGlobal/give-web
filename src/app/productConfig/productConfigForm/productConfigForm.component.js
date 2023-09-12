@@ -138,7 +138,7 @@ class ProductConfigFormController {
 
     const suggestedAmountsObservable = this.designationsService.suggestedAmounts(this.code, this.itemConfig)
       .do(suggestedAmounts => {
-        this.suggestedAmounts = suggestedAmounts
+        this.suggestedAmounts = suggestedAmounts.filter((amount) => amount?.amount)
         this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts)
       })
 
