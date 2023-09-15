@@ -3,7 +3,7 @@ import 'angular-environment'
 import 'angular-translate'
 
 import rollbarConfig from './rollbar.config'
-// import { datadogRum } from '@datadog/browser-rum'
+import { datadogRum } from '@datadog/browser-rum'
 
 const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
   $httpProvider.useApplyAsync(true)
@@ -537,6 +537,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
   })
   $translateProvider.preferredLanguage('en')
 
+  window.datadogRum = datadogRum;
   window.datadogRum && window.datadogRum.init({
     applicationId: '3937053e-386b-4b5b-ab4a-c83217d2f953',
     clientToken: process.env.DATADOG_RUM_CLIENT_TOKEN,
