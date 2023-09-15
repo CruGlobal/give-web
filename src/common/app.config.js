@@ -550,24 +550,6 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
   })
   $translateProvider.preferredLanguage('en')
-
-  window.datadogRum = datadogRum
-  window.datadogRum && window.datadogRum.init({
-    applicationId: '3937053e-386b-4b5b-ab4a-c83217d2f953',
-    clientToken: process.env.DATADOG_RUM_CLIENT_TOKEN,
-    site: 'datadoghq.com',
-    service: 'give-web',
-    env: process.env.NODE_ENV,
-    version: process.env.GITHUB_SHA,
-    sessionSampleRate: process.env.NODE_ENV === 'staging' ? 100 : 10,
-    sessionReplaySampleRate: process.env.NODE_ENV === 'staging' ? 100 : 1,
-    trackUserInteractions: true,
-    trackResources: true,
-    trackLongTasks: true,
-    defaultPrivacyLevel: 'mask-user-input'
-  })
-
-  window.datadogRum && window.datadogRum.startSessionReplayRecording()
 }
 
 export default angular.module('appConfig', [
