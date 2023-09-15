@@ -554,6 +554,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
   })
 
   window.datadogRum && window.datadogRum.startSessionReplayRecording()
+  console.log('node env: ', process.env.NODE_ENV)
 }
 
 export default angular.module('appConfig', [
