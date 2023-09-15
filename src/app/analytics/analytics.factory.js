@@ -8,23 +8,22 @@ import isEmpty from 'lodash/isEmpty'
 import moment from 'moment'
 /* global localStorage */
 
-
 function suppressErrors (func) {
   return function wrapper (...args) {
     try {
       return func.apply(this, args)
-    } catch(e) { }
+    } catch (e) { }
   }
 }
 // Generate a datalayer product object
-const generateProduct = suppressErrors(function(item, additionalData = {}) {
+const generateProduct = suppressErrors(function (item, additionalData = {}) {
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
   const recurringDate = additionalData.recurringDate
     ? additionalData.recurringDate.format('MMMM D, YYYY')
     : item.giftStartDate
-    ? moment(item.giftStartDate).format('MMMM D, YYYY')
-    : undefined
+      ? moment(item.giftStartDate).format('MMMM D, YYYY')
+      : undefined
   const frequencyObj = find(item.frequencies, { name: item.frequency })
   const variant = additionalData?.variant || frequencyObj?.display || item.frequency
 
@@ -91,7 +90,6 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           }
         }
       }
-      
 
       // Build cart data layer
       $window.digitalData.cart.price = {
@@ -100,7 +98,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
 
       if (cartData.items?.length) {
         cartData.items.forEach((item) => {
-           const frequency = item?.frequency ? item.frequency.toLowerCase() : undefined
+          const frequency = item?.frequency ? item.frequency.toLowerCase() : undefined
           // Set donation type
           if (frequency === 'single') {
             donationType = 'one-time donation'
@@ -175,7 +173,6 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
             }
           }
         }
-        
       }
 
       let recurringDate = null
@@ -201,14 +198,14 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           currencyCode: 'USD',
           add: {
             products: [generateProduct(productData, {
-              recurringDate,
+              recurringDate
             })]
           }
         }
-      })      
+      })
     }),
     cartRemove: suppressErrors(function (item) {
-      if (!item) return;
+      if (!item) return
       const frequency = item.frequency ? item.frequency.toLowerCase() : undefined
       $window.digitalData.cart.item = [{
         productInfo: {
@@ -410,7 +407,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           }
         }
       }]
-      const modifiedProductData = {...productData}
+      const modifiedProductData = { ...productData }
       modifiedProductData.frequency = undefined
       $window.digitalData.product = product
       $window.dataLayer = $window.dataLayer || []
@@ -481,7 +478,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
             products: [
               generateProduct(product, {
                 category: product.type,
-                name: product.name,
+                name: product.name
               })
             ]
           }
@@ -489,20 +486,20 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       })
     }),
     purchase: suppressErrors(function (donorDetails, cartData, coverFeeDecision) {
-        // Build cart data layer
-        this.setDonorDetails(donorDetails)
-        this.buildProductVar(cartData)
-        // Stringify the cartObject and store in localStorage for the transactionEvent
-        localStorage.setItem('transactionCart', JSON.stringify(cartData))
-        // Store value of coverFeeDecision in sessionStorage for the transactionEvent
-        sessionStorage.setItem('coverFeeDecision', coverFeeDecision)
+      // Build cart data layer
+      this.setDonorDetails(donorDetails)
+      this.buildProductVar(cartData)
+      // Stringify the cartObject and store in localStorage for the transactionEvent
+      localStorage.setItem('transactionCart', JSON.stringify(cartData))
+      // Store value of coverFeeDecision in sessionStorage for the transactionEvent
+      sessionStorage.setItem('coverFeeDecision', coverFeeDecision)
     }),
     setPurchaseNumber: suppressErrors(function (purchaseNumber) {
       if ($window?.digitalData) {
         $window.digitalData.purchaseNumber = purchaseNumber
       } else {
         $window.digitalData = {
-          purchaseNumber,
+          purchaseNumber
         }
       }
     }),
@@ -677,7 +674,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         $window.digitalData.event = []
       } else {
         $window.digitalData = {
-          event:[]
+          event: []
         }
       }
       $window.digitalData.event.push(evt)
