@@ -3,7 +3,7 @@ import 'angular-environment'
 import 'angular-translate'
 
 import rollbarConfig from './rollbar.config'
-import { datadogRum } from '@datadog/browser-rum';
+// import { datadogRum } from '@datadog/browser-rum'
 
 const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
   $httpProvider.useApplyAsync(true)
@@ -541,18 +541,18 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     applicationId: '3937053e-386b-4b5b-ab4a-c83217d2f953',
     clientToken: process.env.DATADOG_RUM_CLIENT_TOKEN,
     site: 'datadoghq.com',
-    service:'give-web',
+    service: 'give-web',
     env: process.env.NODE_ENV,
     version: process.env.GITHUB_SHA,
-    sessionSampleRate: process.env.NODE_ENV == "staging" ? 100 : 10,
-    sessionReplaySampleRate: process.env.NODE_ENV == "staging" ? 100 : 1,
+    sessionSampleRate: process.env.NODE_ENV === 'staging' ? 100 : 10,
+    sessionReplaySampleRate: process.env.NODE_ENV === 'staging' ? 100 : 1,
     trackUserInteractions: true,
     trackResources: true,
     trackLongTasks: true,
-    defaultPrivacyLevel:'mask-user-input'
-});
-    
-window.datadogRum && window.datadogRum.startSessionReplayRecording();
+    defaultPrivacyLevel: 'mask-user-input'
+  })
+
+  window.datadogRum && window.datadogRum.startSessionReplayRecording()
 }
 
 export default angular.module('appConfig', [
