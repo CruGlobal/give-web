@@ -8,36 +8,33 @@ import isEmpty from 'lodash/isEmpty'
 import moment from 'moment'
 /* global localStorage */
 
-
 function suppressErrors (func) {
   return function wrapper (...args) {
     try {
       return func.apply(this, args)
-    } catch(e) { }
+    } catch (e) { }
   }
 }
 // Generate a datalayer product object
-const generateProduct = suppressErrors(function(item, additionalData = {}) {
-  const price = additionalData?.price || item?.price
+const generateProduct = suppressErrors(function (item, additionalData = {}) {
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
   const recurringDate = additionalData.recurringDate
     ? additionalData.recurringDate.format('MMMM D, YYYY')
     : item.giftStartDate
-    ? item.giftStartDate.format('MMMM D, YYYY')
-    : undefined
+      ? moment(item.giftStartDate).format('MMMM D, YYYY')
+      : undefined
   const frequencyObj = find(item.frequencies, { name: item.frequency })
-  const variant = frequencyObj?.display || item.frequency
-  const itemVariant = variant ? variant.toLowerCase() : undefined
+  const variant = additionalData?.variant || frequencyObj?.display || item.frequency
 
   return {
     item_id: item.designationNumber,
     item_name: name,
     item_brand: item.orgId,
     item_category: category ? category.toLowerCase() : undefined,
-    item_variant: itemVariant,
+    item_variant: variant ? variant.toLowerCase() : undefined,
     currency: 'USD',
-    price: price ? price.toString() : undefined,
+    price: item?.amount ? item?.amount.toString() : undefined,
     quantity: '1',
     recurring_date: recurringDate
   }
@@ -72,63 +69,65 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
     },
 
     buildProductVar: suppressErrors(function (cartData) {
-        let donationType
+      if (!cartData) return
+      let donationType
 
-        // Instantiate cart data layer
-        const hash = sha3(cartData.id, { outputLength: 80 }) // limit hash to 20 characters
-        if ($window?.digitalData) {
-          $window.digitalData.cart = {
-            id: cartData.id,
-            hash: cartData.id ? hash.toString() : null,
+      const { id } = cartData
+      // Instantiate cart data layer
+      const hash = id ? sha3(id, { outputLength: 80 }).toString() : null // limit hash to 20 characters
+      if ($window?.digitalData) {
+        $window.digitalData.cart = {
+          id: id,
+          hash: hash,
+          item: []
+        }
+      } else {
+        $window.digitalData = {
+          cart: {
+            id: id,
+            hash: hash,
             item: []
           }
-        } else {
-          $window.digitalData = {
-            cart: {
-              id: cartData.id,
-              hash: cartData.id ? hash.toString() : null,
-              item: []
-            }
+        }
+      }
+
+      // Build cart data layer
+      $window.digitalData.cart.price = {
+        cartTotal: cartData?.cartTotal
+      }
+
+      if (cartData.items?.length) {
+        cartData.items.forEach((item) => {
+          const frequency = item?.frequency ? item.frequency.toLowerCase() : undefined
+          // Set donation type
+          if (frequency === 'single') {
+            donationType = 'one-time donation'
+          } else {
+            donationType = 'recurring donation'
           }
-        }
-       
 
-        // Build cart data layer
-        $window.digitalData.cart.price = {
-          cartTotal: cartData && cartData.cartTotal
-        }
-
-        if (cartData.items?.length) {
-          cartData.items.forEach((item) => {
-            // Set donation type
-            if (item.frequency.toLowerCase() === 'single') {
-              donationType = 'one-time donation'
-            } else {
-              donationType = 'recurring donation'
-            }
-
-            item = {
-              productInfo: {
-                productID: item.designationNumber,
-                designationType: item.designationType,
-                orgId: item.orgId ? item.orgId : 'cru'
-              },
-              price: {
-                basePrice: item.amount
-              },
-              attributes: {
-                donationType: donationType,
-                donationFrequency: item.frequency ? item.frequency.toLowerCase() : undefined,
-                siebel: {
-                  productType: 'designation',
-                  campaignCode: item.config['campaign-code']
-                }
+          item = {
+            productInfo: {
+              productID: item.designationNumber,
+              designationType: item.designationType,
+              orgId: item.orgId ? item.orgId : 'cru'
+            },
+            price: {
+              basePrice: item.amount
+            },
+            attributes: {
+              donationType: donationType,
+              donationFrequency: frequency,
+              siebel: {
+                productType: 'designation',
+                campaignCode: item.config['campaign-code']
               }
             }
+          }
 
-            $window.digitalData.cart.item.push(item)
-          })
-        }
+          $window.digitalData.cart.item.push(item)
+        })
+      }
     }),
     cartAdd: suppressErrors(function (itemConfig, productData) {
       let siteSubSection
@@ -174,14 +173,15 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
             }
           }
         }
-        
       }
 
+      let recurringDate = null
       // Set donation type
       if (productData.frequency === 'NA') {
         cart.item[0].attributes.donationType = 'one-time donation'
       } else {
         cart.item[0].attributes.donationType = 'recurring donation'
+        recurringDate = moment(`${moment().year()}-${itemConfig['recurring-start-month'] - 1}-${itemConfig['recurring-day-of-month']} ${moment().format('h:mm:ss a')}`)
       }
 
       // Set donation frequency
@@ -198,19 +198,15 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           currencyCode: 'USD',
           add: {
             products: [generateProduct(productData, {
-              price: itemConfig.amount,
-              recurringDate: moment([
-                moment().year(), 
-                itemConfig['recurring-start-month'] - 1,
-                itemConfig['recurring-day-of-month'],
-              ]),
+              recurringDate
             })]
           }
         }
-      })      
+      })
     }),
     cartRemove: suppressErrors(function (item) {
-      if (!item) return;
+      if (!item) return
+      const frequency = item.frequency ? item.frequency.toLowerCase() : undefined
       $window.digitalData.cart.item = [{
         productInfo: {
           productID: item.designationNumber,
@@ -220,8 +216,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           basePrice: item.amount
         },
         attributes: {
-          donationType: item.frequency.toLowerCase() === 'single' ? 'one-time donation' : 'recurring donation',
-          donationFrequency: item.frequency ? item.frequency.toLowerCase() : undefined,
+          donationType: frequency === 'single' ? 'one-time donation' : 'recurring donation',
+          donationFrequency: frequency,
           siebel: {
             productType: 'designation',
             campaignCode: item.config['campaign-code']
@@ -235,7 +231,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         ecommerce: {
           currencyCode: 'USD',
           remove: {
-            products: [generateProduct(item, { price: item.amount })]
+            products: [generateProduct(item)]
           }
         }
       })
@@ -260,7 +256,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           stepNumber = 3
           break
       }
-      const cartObject = cart.items.map((cartItem) => generateProduct(cartItem, { price: cartItem.amount }))
+      const cartObject = cart.items.map((cartItem) => generateProduct(cartItem))
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({
         event: 'checkout-step',
@@ -317,7 +313,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         }
 
         if ($window?.digitalData) {
-          if (typeof $window.digitalData?.recurringGift) {
+          if ($window.digitalData?.recurringGift) {
             $window.digitalData.recurringGift.originalFrequency = frequency
           } else {
             $window.digitalData.recurringGift = {
@@ -411,6 +407,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           }
         }
       }]
+      const modifiedProductData = { ...productData }
+      modifiedProductData.frequency = undefined
       $window.digitalData.product = product
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({
@@ -418,7 +416,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         ecommerce: {
           currencyCode: 'USD',
           detail: {
-            products: [generateProduct(productData)]
+            products: [generateProduct(modifiedProductData)]
           }
         }
       })
@@ -480,7 +478,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
             products: [
               generateProduct(product, {
                 category: product.type,
-                name: product.name,
+                name: product.name
               })
             ]
           }
@@ -488,20 +486,20 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       })
     }),
     purchase: suppressErrors(function (donorDetails, cartData, coverFeeDecision) {
-        // Build cart data layer
-        this.setDonorDetails(donorDetails)
-        this.buildProductVar(cartData)
-        // Stringify the cartObject and store in localStorage for the transactionEvent
-        localStorage.setItem('transactionCart', JSON.stringify(cartData))
-        // Store value of coverFeeDecision in sessionStorage for the transactionEvent
-        sessionStorage.setItem('coverFeeDecision', coverFeeDecision)
+      // Build cart data layer
+      this.setDonorDetails(donorDetails)
+      this.buildProductVar(cartData)
+      // Stringify the cartObject and store in localStorage for the transactionEvent
+      localStorage.setItem('transactionCart', JSON.stringify(cartData))
+      // Store value of coverFeeDecision in sessionStorage for the transactionEvent
+      sessionStorage.setItem('coverFeeDecision', coverFeeDecision)
     }),
     setPurchaseNumber: suppressErrors(function (purchaseNumber) {
       if ($window?.digitalData) {
         $window.digitalData.purchaseNumber = purchaseNumber
       } else {
         $window.digitalData = {
-          purchaseNumber,
+          purchaseNumber
         }
       }
     }),
@@ -515,27 +513,23 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       // The purchaseId number from the pruchase data being passed in
       const currentTransactionId = purchaseData && purchaseData.rawData['purchase-number']
       let purchaseTotal = 0
-      let totalPurchaseWithFeesTotal = 0
+      let purchaseTotalWithFees = 0
       // If the lastTransactionId and the current one do not match, we need to send an analytics event for the transaction
       if (purchaseData && lastTransactionId !== currentTransactionId) {
         // Set the transactionId in localStorage to be the one that is passed in
 
         sessionStorage.setItem('transactionId', currentTransactionId)
         const cartObject = transactionCart.items.map((cartItem) => {
-          purchaseTotal += cartItem.amount
-          totalPurchaseWithFeesTotal += cartItem.amountWithFees || 0
+          const { amount, amountWithFees } = cartItem
+          purchaseTotal += amount
+          purchaseTotalWithFees += amountWithFees || 0
+          const frequency = cartItem?.frequency ? cartItem.frequency.toLowerCase() : undefined
           return {
-            ...generateProduct(
-              cartItem,
-              {
-                price: cartItem.amount,
-                recurringDate: moment(cartItem.giftStartDate),
-              }
-            ),
-            processingFee: cartItem.amountWithFees && coverFeeDecision ? (cartItem.amountWithFees - cartItem.amount).toFixed(2) : undefined,
+            ...generateProduct(cartItem),
+            processingFee: amountWithFees && coverFeeDecision ? (amountWithFees - amount).toFixed(2) : undefined,
             dimension1: localStorage.getItem('gaDonorType'),
-            dimension3: cartItem.frequency.toLowerCase() === 'single' ? 'one-time' : 'recurring',
-            dimension4: cartItem.frequency ? cartItem.frequency.toLowerCase() : undefined,
+            dimension3: frequency === 'single' ? 'one-time' : 'recurring',
+            dimension4: frequency,
             dimension6: purchaseData.paymentMeans['account-type'] ? 'bank account' : 'credit card',
             dimension7: purchaseData.rawData['purchase-number'],
             dimension8: 'designation',
@@ -545,15 +539,15 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         // Send the transaction event if the dataLayer is defined
         $window.dataLayer = $window.dataLayer || []
         $window.dataLayer.push({
-          event: 'transaction',
+          event: 'purchase',
           paymentType: purchaseData.paymentMeans['account-type'] ? 'bank account' : 'credit card',
           ecommerce: {
             currency: 'USD',
             payment_type: purchaseData.paymentMeans['account-type'] ? 'bank account' : 'credit card',
             donator_type: purchaseData.donorDetails['donor-type'],
-            pays_processing: totalPurchaseWithFeesTotal && coverFeeDecision ? 'yes' : 'no',
-            value: totalPurchaseWithFeesTotal && coverFeeDecision ? totalPurchaseWithFeesTotal.toString() : purchaseTotal.toString(),
-            processing_fee: totalPurchaseWithFeesTotal && coverFeeDecision ? (totalPurchaseWithFeesTotal - purchaseTotal).toFixed(2) : undefined,
+            pays_processing: purchaseTotalWithFees && coverFeeDecision ? 'yes' : 'no',
+            value: purchaseTotalWithFees && coverFeeDecision ? purchaseTotalWithFees.toString() : purchaseTotal.toString(),
+            processing_fee: purchaseTotalWithFees && coverFeeDecision ? (purchaseTotalWithFees - purchaseTotal).toFixed(2) : undefined,
             transaction_id: purchaseData.rawData['purchase-number'],
             items: [
               ...cartObject
@@ -680,7 +674,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         $window.digitalData.event = []
       } else {
         $window.digitalData = {
-          event:[]
+          event: []
         }
       }
       $window.digitalData.event.push(evt)
