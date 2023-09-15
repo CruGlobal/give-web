@@ -72,63 +72,64 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
     },
 
     buildProductVar: suppressErrors(function (cartData) {
-        let donationType
+      if (!cartData) return
+      let donationType
 
-        // Instantiate cart data layer
-        const hash = sha3(cartData.id, { outputLength: 80 }) // limit hash to 20 characters
-        if ($window?.digitalData) {
-          $window.digitalData.cart = {
+      // Instantiate cart data layer
+      const hash = sha3(cartData.id, { outputLength: 80 }) // limit hash to 20 characters
+      if ($window?.digitalData) {
+        $window.digitalData.cart = {
+          id: cartData.id,
+          hash: cartData.id ? hash.toString() : null,
+          item: []
+        }
+      } else {
+        $window.digitalData = {
+          cart: {
             id: cartData.id,
             hash: cartData.id ? hash.toString() : null,
             item: []
           }
-        } else {
-          $window.digitalData = {
-            cart: {
-              id: cartData.id,
-              hash: cartData.id ? hash.toString() : null,
-              item: []
-            }
+        }
+      }
+      
+
+      // Build cart data layer
+      $window.digitalData.cart.price = {
+        cartTotal: cartData?.cartTotal
+      }
+
+      if (cartData.items?.length) {
+        cartData.items.forEach((item) => {
+          // Set donation type
+          if (item.frequency.toLowerCase() === 'single') {
+            donationType = 'one-time donation'
+          } else {
+            donationType = 'recurring donation'
           }
-        }
-       
 
-        // Build cart data layer
-        $window.digitalData.cart.price = {
-          cartTotal: cartData && cartData.cartTotal
-        }
-
-        if (cartData.items?.length) {
-          cartData.items.forEach((item) => {
-            // Set donation type
-            if (item.frequency.toLowerCase() === 'single') {
-              donationType = 'one-time donation'
-            } else {
-              donationType = 'recurring donation'
-            }
-
-            item = {
-              productInfo: {
-                productID: item.designationNumber,
-                designationType: item.designationType,
-                orgId: item.orgId ? item.orgId : 'cru'
-              },
-              price: {
-                basePrice: item.amount
-              },
-              attributes: {
-                donationType: donationType,
-                donationFrequency: item.frequency ? item.frequency.toLowerCase() : undefined,
-                siebel: {
-                  productType: 'designation',
-                  campaignCode: item.config['campaign-code']
-                }
+          item = {
+            productInfo: {
+              productID: item.designationNumber,
+              designationType: item.designationType,
+              orgId: item.orgId ? item.orgId : 'cru'
+            },
+            price: {
+              basePrice: item.amount
+            },
+            attributes: {
+              donationType: donationType,
+              donationFrequency: item.frequency ? item.frequency.toLowerCase() : undefined,
+              siebel: {
+                productType: 'designation',
+                campaignCode: item.config['campaign-code']
               }
             }
+          }
 
-            $window.digitalData.cart.item.push(item)
-          })
-        }
+          $window.digitalData.cart.item.push(item)
+        })
+      }
     }),
     cartAdd: suppressErrors(function (itemConfig, productData) {
       let siteSubSection
