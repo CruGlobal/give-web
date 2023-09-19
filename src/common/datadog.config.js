@@ -20,7 +20,7 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
   window.datadogRum = datadogRum
   window.datadogRum && window.datadogRum.init(config)
   window.datadogRum && window.datadogRum.startSessionReplayRecording()
-  window.DD_RUM && window.DD_RUM.addAction('hello', { action: 'qux' })
+  window.datadogRum && window.datadogRum.addAction('hello', { action: 'qux' })
 }
 export {
   dataDogConfig as default
