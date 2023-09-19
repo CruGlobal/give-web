@@ -55,7 +55,8 @@ const sharedConfig = {
     new webpack.EnvironmentPlugin({
       GITHUB_SHA: 'development',
       S3_GIVE_DOMAIN: '',
-      ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token'
+      ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token',
+      DATADOG_RUM_CLIENT_TOKEN: process.env.DATADOG_RUM_CLIENT_TOKEN || ''
     }),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
