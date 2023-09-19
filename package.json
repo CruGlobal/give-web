@@ -83,6 +83,7 @@
     "build:analyze": "webpack -p --env.analyze",
     "test": "jest",
     "lint": "standard",
+    "lint:write": "standard --fix",
     "lint:ts": "tsc"
   },
   "standard": {
