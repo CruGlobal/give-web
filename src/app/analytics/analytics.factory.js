@@ -17,6 +17,7 @@ function suppressErrors (func) {
 }
 // Generate a datalayer product object
 const generateProduct = suppressErrors(function (item, additionalData = {}) {
+  const price = additionalData?.price || item.amount
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
   const recurringDate = additionalData.recurringDate
@@ -34,7 +35,7 @@ const generateProduct = suppressErrors(function (item, additionalData = {}) {
     item_category: category ? category.toLowerCase() : undefined,
     item_variant: variant ? variant.toLowerCase() : undefined,
     currency: 'USD',
-    price: item?.amount ? item?.amount.toString() : undefined,
+    price: price ? price.toString() : undefined,
     quantity: '1',
     recurring_date: recurringDate
   }
@@ -181,7 +182,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         cart.item[0].attributes.donationType = 'one-time donation'
       } else {
         cart.item[0].attributes.donationType = 'recurring donation'
-        recurringDate = moment(`${moment().year()}-${itemConfig['recurring-start-month'] - 1}-${itemConfig['recurring-day-of-month']} ${moment().format('h:mm:ss a')}`)
+        recurringDate = moment(`${moment().year()}-${itemConfig['recurring-start-month']}-${itemConfig['recurring-day-of-month']} ${moment().format('h:mm:ss a')}`)
       }
 
       // Set donation frequency
@@ -198,6 +199,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           currencyCode: 'USD',
           add: {
             products: [generateProduct(productData, {
+              price: itemConfig.amount,
               recurringDate
             })]
           }
@@ -244,20 +246,32 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       })
     }),
     checkoutStepEvent: suppressErrors(function (step, cart) {
+      $window.dataLayer = $window.dataLayer || []
+      const cartObject = cart.items.map((cartItem) => generateProduct(cartItem))
       let stepNumber
       switch (step) {
         case 'contact':
           stepNumber = 1
+          $window.dataLayer.push({
+            event: 'begin_checkout',
+            ecommerce: {
+              items: cartObject
+            }
+          })
           break
         case 'payment':
           stepNumber = 2
+          $window.dataLayer.push({
+            event: 'add_payment_info',
+          })
           break
         case 'review':
           stepNumber = 3
+          $window.dataLayer.push({
+            event: 'review_order'
+          })
           break
       }
-      const cartObject = cart.items.map((cartItem) => generateProduct(cartItem))
-      $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({
         event: 'checkout-step',
         cartId: cart.id,
@@ -546,7 +560,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
             payment_type: purchaseData.paymentMeans['account-type'] ? 'bank account' : 'credit card',
             donator_type: purchaseData.donorDetails['donor-type'],
             pays_processing: purchaseTotalWithFees && coverFeeDecision ? 'yes' : 'no',
-            value: purchaseTotalWithFees && coverFeeDecision ? purchaseTotalWithFees.toString() : purchaseTotal.toString(),
+            value: purchaseTotalWithFees && coverFeeDecision ? purchaseTotalWithFees.toFixed(2).toString() : purchaseTotal.toFixed(2).toString(),
             processing_fee: purchaseTotalWithFees && coverFeeDecision ? (purchaseTotalWithFees - purchaseTotal).toFixed(2) : undefined,
             transaction_id: purchaseData.rawData['purchase-number'],
             items: [
