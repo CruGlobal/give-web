@@ -3,6 +3,7 @@ import 'angular-environment'
 import 'angular-translate'
 
 import rollbarConfig from './rollbar.config'
+import dataDogConfig from './datadog.config.js'
 
 const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
   $httpProvider.useApplyAsync(true)
@@ -543,3 +544,4 @@ export default angular.module('appConfig', [
 ])
   .config(appConfig)
   .config(rollbarConfig)
+  .config(dataDogConfig)
