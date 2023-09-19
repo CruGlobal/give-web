@@ -262,7 +262,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         case 'payment':
           stepNumber = 2
           $window.dataLayer.push({
-            event: 'add_payment_info',
+            event: 'add_payment_info'
           })
           break
         case 'review':
