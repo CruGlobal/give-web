@@ -541,13 +541,13 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           return {
             ...generateProduct(cartItem),
             processingFee: amountWithFees && coverFeeDecision ? (amountWithFees - amount).toFixed(2) : undefined,
-            dimension1: localStorage.getItem('gaDonorType'),
-            dimension3: frequency === 'single' ? 'one-time' : 'recurring',
-            dimension4: frequency,
-            dimension6: purchaseData.paymentMeans['account-type'] ? 'bank account' : 'credit card',
-            dimension7: purchaseData.rawData['purchase-number'],
-            dimension8: 'designation',
-            dimension9: cartItem.config['campaign-code'] !== '' ? cartItem.config['campaign-code'] : undefined
+            ga_donator_type: localStorage.getItem('gaDonorType'),
+            donation_type: frequency === 'single' ? 'one-time' : 'recurring',
+            donation_frequency: frequency,
+            payment_type: purchaseData.paymentMeans['account-type'] ? 'bank account' : 'credit card',
+            purchase_number: purchaseData.rawData['purchase-number'],
+            campaign_code: cartItem.config['campaign-code'] !== '' ? cartItem.config['campaign-code'] : undefined,
+            designation: 'designation'
           }
         })
         // Send the transaction event if the dataLayer is defined
