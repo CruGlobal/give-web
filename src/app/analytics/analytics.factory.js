@@ -15,6 +15,10 @@ function suppressErrors (func) {
     } catch (e) { }
   }
 }
+
+const brandedState = {
+  testingTransaction: undefined
+}
 // Generate a datalayer product object
 const generateProduct = suppressErrors(function (item, additionalData = {}) {
   const price = additionalData?.price || item.amount
@@ -37,7 +41,8 @@ const generateProduct = suppressErrors(function (item, additionalData = {}) {
     currency: 'USD',
     price: price ? price.toString() : undefined,
     quantity: '1',
-    recurring_date: recurringDate
+    recurring_date: recurringDate,
+    testing_transaction: brandedState.testingTransaction || undefined
   }
 })
 
@@ -129,6 +134,9 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
           $window.digitalData.cart.item.push(item)
         })
       }
+    }),
+    saveTestingTransaction: suppressErrors(function (testingTransaction) {
+      brandedState.testingTransaction = testingTransaction
     }),
     cartAdd: suppressErrors(function (itemConfig, productData) {
       let siteSubSection
