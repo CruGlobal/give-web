@@ -15,8 +15,24 @@ function suppressErrors (func) {
     } catch (e) { }
   }
 }
+
+function testingTransactionName (item) {
+  const designationNumber = item.designationNumber
+  const frequencyObj = find(item.frequencies, { name: item.frequency })
+  const frequency = frequencyObj?.display || item.frequency
+  if (designationNumber && frequency) {
+    return `isItemTestingTransaction_${designationNumber}_${frequency.toLowerCase()}`
+  } else {
+    return undefined
+  }
+}
+
 // Generate a datalayer product object
 const generateProduct = suppressErrors(function (item, additionalData = {}) {
+  const sessionStorageTestName = testingTransactionName(item)
+  const testingTransaction = sessionStorageTestName
+    ? window.sessionStorage.getItem(sessionStorageTestName) || undefined
+    : undefined
   const price = additionalData?.price || item.amount
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
@@ -37,7 +53,8 @@ const generateProduct = suppressErrors(function (item, additionalData = {}) {
     currency: 'USD',
     price: price ? price.toString() : undefined,
     quantity: '1',
-    recurring_date: recurringDate
+    recurring_date: recurringDate,
+    testing_transaction: testingTransaction
   }
 })
 
@@ -128,6 +145,11 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
 
           $window.digitalData.cart.item.push(item)
         })
+      }
+    }),
+    saveTestingTransaction: suppressErrors(function (item, testingTransaction) {
+      if (testingTransaction) {
+        $window.sessionStorage.setItem(testingTransactionName(item), testingTransaction)
       }
     }),
     cartAdd: suppressErrors(function (itemConfig, productData) {
@@ -579,6 +601,10 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       localStorage.removeItem('transactionCart')
       // Remove the coverFeeDecision from sessionStorage since it is no longer needed
       sessionStorage.removeItem('coverFeeDecision')
+      // Remove testingTransaction from sessionStorage for each item if any since it is no longer needed
+      transactionCart.items.forEach((item) => {
+        $window.sessionStorage.removeItem(testingTransactionName(item))
+      })
     }),
     search: suppressErrors(function (params, results) {
       if (params) {
