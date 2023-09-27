@@ -332,7 +332,7 @@ class ProductConfigFormController {
     const comment = this.itemConfig['donation-services-comments']
     const isTestingTransaction = comment ? comment.toLowerCase().includes('test') : false
     this.brandedAnalyticsFactory.saveTestingTransaction(isTestingTransaction)
-    this.analyticsFactory.saveTestingTransaction(isTestingTransaction)
+    this.analyticsFactory.saveTestingTransaction(this.productData.designationNumber, isTestingTransaction)
 
     const data = this.productData.frequency === 'NA' ? omit(this.itemConfig, ['recurring-start-month', 'recurring-day-of-month']) : this.itemConfig
 

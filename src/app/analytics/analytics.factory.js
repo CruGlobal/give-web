@@ -16,11 +16,10 @@ function suppressErrors (func) {
   }
 }
 
-const brandedState = {
-  testingTransaction: undefined
-}
+const testingTransactionSessionName = 'isItemTestingTransaction_'
 // Generate a datalayer product object
 const generateProduct = suppressErrors(function (item, additionalData = {}) {
+  const testingTransaction = window.sessionStorage.getItem(`${testingTransactionSessionName + item.designationNumber}`) || undefined
   const price = additionalData?.price || item.amount
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
@@ -31,7 +30,7 @@ const generateProduct = suppressErrors(function (item, additionalData = {}) {
       : undefined
   const frequencyObj = find(item.frequencies, { name: item.frequency })
   const variant = additionalData?.variant || frequencyObj?.display || item.frequency
-
+  
   return {
     item_id: item.designationNumber,
     item_name: name,
@@ -42,7 +41,7 @@ const generateProduct = suppressErrors(function (item, additionalData = {}) {
     price: price ? price.toString() : undefined,
     quantity: '1',
     recurring_date: recurringDate,
-    testing_transaction: brandedState.testingTransaction || undefined
+    testing_transaction: testingTransaction
   }
 })
 
@@ -135,8 +134,10 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         })
       }
     }),
-    saveTestingTransaction: suppressErrors(function (testingTransaction) {
-      brandedState.testingTransaction = testingTransaction
+    saveTestingTransaction: suppressErrors(function (itemId, testingTransaction) {
+      if (testingTransaction) {
+        $window.sessionStorage.setItem(`${testingTransactionSessionName + itemId}`, testingTransaction)
+      }
     }),
     cartAdd: suppressErrors(function (itemConfig, productData) {
       let siteSubSection
