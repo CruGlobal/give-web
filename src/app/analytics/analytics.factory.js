@@ -30,7 +30,7 @@ const generateProduct = suppressErrors(function (item, additionalData = {}) {
       : undefined
   const frequencyObj = find(item.frequencies, { name: item.frequency })
   const variant = additionalData?.variant || frequencyObj?.display || item.frequency
-  
+
   return {
     item_id: item.designationNumber,
     item_name: name,
