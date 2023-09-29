@@ -16,10 +16,16 @@ function suppressErrors (func) {
   }
 }
 
-const testingTransactionSessionName = 'isItemTestingTransaction_'
+function testingTransactionName (item) {
+  const designationNumber = item.designationNumber
+  const frequencyObj = find(item.frequencies, { name: item.frequency })
+  const frequency = frequencyObj?.display || item.frequency
+  return `isItemTestingTransaction_${designationNumber}_${frequency.toLowerCase()}`
+}
+
 // Generate a datalayer product object
 const generateProduct = suppressErrors(function (item, additionalData = {}) {
-  const testingTransaction = window.sessionStorage.getItem(`${testingTransactionSessionName + item.designationNumber}`) || undefined
+  const testingTransaction = window.sessionStorage.getItem(testingTransactionName(item)) || undefined
   const price = additionalData?.price || item.amount
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
@@ -134,9 +140,9 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         })
       }
     }),
-    saveTestingTransaction: suppressErrors(function (itemId, testingTransaction) {
+    saveTestingTransaction: suppressErrors(function (item, testingTransaction) {
       if (testingTransaction) {
-        $window.sessionStorage.setItem(`${testingTransactionSessionName + itemId}`, testingTransaction)
+        $window.sessionStorage.setItem(testingTransactionName(item), testingTransaction)
       }
     }),
     cartAdd: suppressErrors(function (itemConfig, productData) {
@@ -588,6 +594,10 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       localStorage.removeItem('transactionCart')
       // Remove the coverFeeDecision from sessionStorage since it is no longer needed
       sessionStorage.removeItem('coverFeeDecision')
+      // Remove testingTransaction from sessionStorage for each item if any since it is no longer needed
+      transactionCart.items.forEach((item) => {
+        $window.sessionStorage.removeItem(testingTransactionName(item))
+      })
     }),
     search: suppressErrors(function (params, results) {
       if (params) {
