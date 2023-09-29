@@ -140,7 +140,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         })
       }
     }),
-    saveTestingTransaction: suppressErrors(function (item,  testingTransaction) {
+    saveTestingTransaction: suppressErrors(function (item, testingTransaction) {
       if (testingTransaction) {
         $window.sessionStorage.setItem(testingTransactionName(item), testingTransaction)
       }
@@ -595,7 +595,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       // Remove the coverFeeDecision from sessionStorage since it is no longer needed
       sessionStorage.removeItem('coverFeeDecision')
       // Remove testingTransaction from sessionStorage for each item if any since it is no longer needed
-      transactionCart.items.map((item) => {
+      transactionCart.items.forEach((item) => {
         $window.sessionStorage.removeItem(testingTransactionName(item))
       })
     }),
