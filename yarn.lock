@@ -1544,6 +1544,26 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
+"@datadog/browser-core@4.48.2":
+  version "4.48.2"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.48.2.tgz#6606878660a2dad528a7c5c4aa5465169cb2c33a"
+  integrity sha512-ewQDLouh9jymJPTRq5M8Hz0FFzMaVlJCwHHY5gMUmGyIaBEzS8wd3AeZ56kQ32ZOcyz83au1/yZ/zcIB8LDoyA==
+
+"@datadog/browser-rum-core@4.48.2":
+  version "4.48.2"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.48.2.tgz#4fc13aedc6170d51c3c024327da27af937fd0186"
+  integrity sha512-LUlaYAC7MGXZbIPT6LvSVxaZBG0irer+meQp1LfJBdSy/lLb4OrNowrc9dcHeh4Fw9rNNLWl2Pz+4dBqRtR87g==
+  dependencies:
+    "@datadog/browser-core" "4.48.2"
+
+"@datadog/browser-rum@^4.48.2":
+  version "4.48.2"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.48.2.tgz#95ab72a0fd6b9f82b69cca6a351d9a91bcd8d5da"
+  integrity sha512-SGxjKJLUJq8AjWedhHTQicIr4rvAcDMwBr6gHvZr3h9llCBpDxPzd/RPKCK69HMxBGt/Cw7KCpjAjy9IaCURWQ==
+  dependencies:
+    "@datadog/browser-core" "4.48.2"
+    "@datadog/browser-rum-core" "4.48.2"
+
 "@eslint/eslintrc@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.3.0.tgz#d736d6963d7003b6514e6324bec9c602ac340318"
