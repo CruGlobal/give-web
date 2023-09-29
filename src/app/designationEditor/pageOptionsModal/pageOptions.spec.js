@@ -15,7 +15,9 @@ describe('Designation Editor Page Options', function () {
       facebookPixelId: '635334562464',
       suggestedAmounts: { 'jcr:primaryType': 'nt:unstructured',
         1: { 'jcr:primaryType': 'nt:unstructured', description: '1 Bible', amount: 100 },
-        2: { 'jcr:primaryType': 'nt:unstructured', description: '2 Bibles', amount: 200 } },
+        2: { 'jcr:primaryType': 'nt:unstructured', description: '2 Bibles', amount: 200 },
+        3: { 'jcr:primaryType': 'nt:unstructured', description: '2 Bibles', amount: 0 },
+        4: {  }, },
       $scope: $scope
     })
   }))
@@ -42,4 +44,24 @@ describe('Designation Editor Page Options', function () {
       2: { amount: 200, description: '2 Bibles' }
     })
   })
+
+  it('should remove zero or empty objects', function () {
+    $ctrl.suggestedAmounts.push({
+      amount: 0,
+      description: '3 Bibles',
+    });
+    $ctrl.suggestedAmounts.push({
+      amount: 400,
+      description: '4 Bibles',
+    });
+    $ctrl.suggestedAmounts.push({ description: '5 Bibles' });
+
+    expect($ctrl.transformSuggestedAmounts()).toEqual({
+      1: { amount: 100, description: '1 Bible' },
+      2: { amount: 200, description: '2 Bibles' },
+      3: { amount: 400, description: '4 Bibles' }
+    })
+  })
+
+
 })
