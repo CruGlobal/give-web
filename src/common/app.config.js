@@ -40,7 +40,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
       ],
       preprod: [
         'give-prod-static.cru.org',
-        'cru-give-web-assets-preprodInfo.s3.amazonaws.com',
+        'cru-give-web-assets-preprod.s3.amazonaws.com',
         'give-preprod.cru.org'
       ],
       production: []
