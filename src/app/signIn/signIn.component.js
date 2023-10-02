@@ -32,17 +32,17 @@ class SignInController {
 
   sessionChanged () {
     if (this.sessionService.getRole() === Roles.registered) {
-      this.$window.location = '/checkout.html'
+      this.$window.location = `/checkout.html${window.location.search}`
     }
   }
 
   checkoutAsGuest () {
     this.sessionService.downgradeToGuest(true).subscribe({
       error: () => {
-        this.$window.location = '/checkout.html'
+        this.$window.location = `/checkout.html${window.location.search}`
       },
       complete: () => {
-        this.$window.location = '/checkout.html'
+        this.$window.location = `/checkout.html${window.location.search}`
       }
     })
   }

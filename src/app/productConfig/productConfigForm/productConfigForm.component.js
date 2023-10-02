@@ -5,6 +5,7 @@ import 'angular-sanitize'
 import indexOf from 'lodash/indexOf'
 import find from 'lodash/find'
 import omit from 'lodash/omit'
+import omitBy from 'lodash/omitBy'
 import map from 'lodash/map'
 import includes from 'lodash/includes'
 import isEmpty from 'lodash/isEmpty'
@@ -30,6 +31,7 @@ import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/
 import { giveGiftParams } from '../giveGiftParams'
 import loading from 'common/components/loading/loading.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
+import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory'
 
 import { brandedCheckoutAmountUpdatedEvent } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
@@ -41,7 +43,7 @@ const componentName = 'productConfigForm'
 
 class ProductConfigFormController {
   /* @ngInject */
-  constructor ($rootScope, $scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory, envService) {
+  constructor ($rootScope, $scope, $log, $filter, $window, designationsService, cartService, orderService, commonService, analyticsFactory, brandedAnalyticsFactory, envService) {
     this.$rootScope = $rootScope
     this.$scope = $scope
     this.$log = $log
@@ -56,6 +58,7 @@ class ProductConfigFormController {
     this.startDate = startDate
     this.startMonth = startMonth
     this.analyticsFactory = analyticsFactory
+    this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.envService = envService
     this.amountChanged = false
 
@@ -69,10 +72,11 @@ class ProductConfigFormController {
 
     this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
       this.initItemConfig()
-      if (this.selectableAmounts.includes(this.itemConfig.amount)) {
-        this.changeAmount(this.itemConfig.amount, true)
+      //  Based on EP 8.1 JSON Object amount has been changed to uppercase
+      if (this.selectableAmounts.includes(this.itemConfig.AMOUNT)) {
+        this.changeAmount(this.itemConfig.AMOUNT, true)
       } else {
-        this.changeCustomAmount(this.itemConfig.amount, true)
+        this.changeCustomAmount(this.itemConfig.AMOUNT, true)
       }
     })
   }
@@ -86,23 +90,24 @@ class ProductConfigFormController {
   initItemConfig () {
     this.itemConfig = this.itemConfig || {}
 
-    const amount = parseFloat(this.itemConfig.amount)
+    //  Based on EP 8.1 JSON Object amount has been changed to uppercase
+    const amount = parseFloat(this.itemConfig.AMOUNT)
     if (isNaN(amount)) {
-      delete this.itemConfig.amount
+      delete this.itemConfig.AMOUNT
     } else {
-      this.itemConfig.amount = amount
+      this.itemConfig.AMOUNT = amount
     }
 
-    if (inRange(parseInt(this.itemConfig['recurring-day-of-month'], 10), 1, 29)) {
-      this.itemConfig['recurring-day-of-month'] = padStart(this.itemConfig['recurring-day-of-month'], 2, '0')
+    if (inRange(parseInt(this.itemConfig.RECURRING_DAY_OF_MONTH, 10), 1, 29)) {
+      this.itemConfig.RECURRING_DAY_OF_MONTH = padStart(this.itemConfig.RECURRING_DAY_OF_MONTH, 2, '0')
     } else {
-      delete this.itemConfig['recurring-day-of-month']
+      delete this.itemConfig.RECURRING_DAY_OF_MONTH
     }
 
-    if (inRange(parseInt(this.itemConfig['recurring-start-month'], 10), 1, 13)) {
-      this.itemConfig['recurring-start-month'] = padStart(this.itemConfig['recurring-start-month'], 2, '0')
+    if (inRange(parseInt(this.itemConfig.RECURRING_START_MONTH, 10), 1, 13)) {
+      this.itemConfig.RECURRING_START_MONTH = padStart(this.itemConfig.RECURRING_START_MONTH, 2, '0')
     } else {
-      delete this.itemConfig['recurring-start-month']
+      delete this.itemConfig.RECURRING_START_MONTH
     }
   }
 
@@ -110,12 +115,15 @@ class ProductConfigFormController {
     this.loading = true
     this.errorLoading = false
 
-    this.showRecipientComments = !!this.itemConfig['recipient-comments']
-    this.showDSComments = !!this.itemConfig['donation-services-comments']
+    this.showRecipientComments = !!this.itemConfig.RECIPIENT_COMMENTS
+    this.showDSComments = !!this.itemConfig.DONATION_SERVICES_COMMENTS
 
     const productLookupObservable = this.designationsService.productLookup(this.code)
       .do(productData => {
         this.productData = productData
+        if (this.envService.read('isBrandedCheckout')) {
+          this.brandedAnalyticsFactory.beginCheckout(this.productData)
+        }
         this.setDefaultAmount()
         this.setDefaultFrequency()
       })
@@ -123,17 +131,17 @@ class ProductConfigFormController {
     const nextDrawDateObservable = this.commonService.getNextDrawDate()
       .do(nextDrawDate => {
         this.nextDrawDate = nextDrawDate
-        if (!this.itemConfig['recurring-day-of-month'] && this.nextDrawDate) {
-          this.itemConfig['recurring-day-of-month'] = startDate(null, this.nextDrawDate).format('DD')
+        if (!this.itemConfig.RECURRING_DAY_OF_MONTH && this.nextDrawDate) {
+          this.itemConfig.RECURRING_DAY_OF_MONTH = startDate(null, this.nextDrawDate).format('DD')
         }
-        if (!this.itemConfig['recurring-start-month'] && this.nextDrawDate) {
-          this.itemConfig['recurring-start-month'] = startDate(null, this.nextDrawDate).format('MM')
+        if (!this.itemConfig.RECURRING_START_MONTH && this.nextDrawDate) {
+          this.itemConfig.RECURRING_START_MONTH = startDate(null, this.nextDrawDate).format('MM')
         }
       })
 
     const suggestedAmountsObservable = this.designationsService.suggestedAmounts(this.code, this.itemConfig)
       .do(suggestedAmounts => {
-        this.suggestedAmounts = suggestedAmounts
+        this.suggestedAmounts = suggestedAmounts.filter((amount) => amount?.amount)
         this.useSuggestedAmounts = !isEmpty(this.suggestedAmounts)
       })
 
@@ -164,17 +172,18 @@ class ProductConfigFormController {
         })
   }
 
+  //  Based on EP 8.1 JSON Object amount has been changed to uppercase
   setDefaultAmount () {
     const amountOptions = isEmpty(this.suggestedAmounts)
       ? this.selectableAmounts
-      : map(this.suggestedAmounts, 'amount')
+      : map(this.suggestedAmounts, 'AMOUNT')
 
-    if (this.itemConfig.amount) {
-      if (amountOptions.indexOf(this.itemConfig.amount) === -1) {
-        this.changeCustomAmount(this.itemConfig.amount)
+    if (this.itemConfig.AMOUNT) {
+      if (amountOptions.indexOf(this.itemConfig.AMOUNT) === -1) {
+        this.changeCustomAmount(this.itemConfig.AMOUNT)
       }
     } else {
-      this.itemConfig.amount = amountOptions[0]
+      this.itemConfig.AMOUNT = amountOptions[0]
     }
   }
 
@@ -188,8 +197,8 @@ class ProductConfigFormController {
   }
 
   waitForFormInitialization () {
-    const unregister = this.$scope.$watch('$ctrl.itemConfigForm.amount', () => {
-      if (this.itemConfigForm && this.itemConfigForm.amount) {
+    const unregister = this.$scope.$watch('$ctrl.itemConfigForm.AMOUNT', () => {
+      if (this.itemConfigForm && this.itemConfigForm.AMOUNT) {
         unregister()
         this.addCustomValidators()
       }
@@ -197,14 +206,14 @@ class ProductConfigFormController {
   }
 
   addCustomValidators () {
-    this.itemConfigForm.amount.$parsers.push(value => value.replace('$', '').replace(',', '')) // Ignore a dollar sign and comma if included by the user
-    this.itemConfigForm.amount.$validators.minimum = value => {
+    this.itemConfigForm.AMOUNT.$parsers.push(value => value.replace('$', '').replace(',', '')) // Ignore a dollar sign and comma if included by the user
+    this.itemConfigForm.AMOUNT.$validators.minimum = value => {
       return !this.customInputActive || value * 1.0 >= 1
     }
-    this.itemConfigForm.amount.$validators.maximum = value => {
+    this.itemConfigForm.AMOUNT.$validators.maximum = value => {
       return !this.customInputActive || value * 1.0 < 10000000
     }
-    this.itemConfigForm.amount.$validators.pattern = value => {
+    this.itemConfigForm.AMOUNT.$validators.pattern = value => {
       const regex = /^([0-9]*)(\.[0-9]{1,2})?$/
       return !this.customInputActive || regex.test(value)
     }
@@ -255,7 +264,7 @@ class ProductConfigFormController {
   changeAmount (amount, retainCoverFees) {
     this.itemConfigForm.$setDirty()
     this.checkAmountChanged(amount)
-    this.itemConfig.amount = amount
+    this.itemConfig.AMOUNT = amount
     this.customAmount = ''
     this.customInputActive = false
     if (!retainCoverFees && this.amountChanged) {
@@ -267,7 +276,7 @@ class ProductConfigFormController {
 
   changeCustomAmount (amount, retainCoverFees) {
     this.checkAmountChanged(amount)
-    this.itemConfig.amount = amount
+    this.itemConfig.AMOUNT = amount
     this.customAmount = amount
     this.customInputActive = true
     if (!retainCoverFees && this.amountChanged) {
@@ -278,10 +287,10 @@ class ProductConfigFormController {
   }
 
   checkAmountChanged (amount) {
-    if (this.itemConfig.amount && amount) {
-      this.amountChanged = this.itemConfig.amount !== amount
+    if (this.itemConfig.AMOUNT && amount) {
+      this.amountChanged = this.itemConfig.AMOUNT !== amount
     }
-    if (!this.itemConfig.amount && amount) {
+    if (!this.itemConfig.AMOUNT && amount) {
       this.amountChanged = true
     }
   }
@@ -303,7 +312,9 @@ class ProductConfigFormController {
     this.submittingGift = true
     this.onStateChange({ state: 'submitting' })
 
-    const data = this.productData.frequency === 'NA' ? omit(this.itemConfig, ['recurring-start-month', 'recurring-day-of-month']) : this.itemConfig
+    const data = this.omitIrrelevantData(this.itemConfig)
+    const comment = data.DONATION_SERVICES_COMMENTS
+    this.brandedAnalyticsFactory.saveTestingTransaction(comment ? comment.toLowerCase().includes('test') : false)
 
     const savingObservable = this.isEdit
       ? this.cartService.editItem(this.uri, this.productData.uri, data)
@@ -332,6 +343,16 @@ class ProductConfigFormController {
         this.onStateChange({ state: 'errorSubmitting' })
       }
       this.submittingGift = false
+    })
+  }
+
+  omitIrrelevantData (itemConfig) {
+    const data = this.productData.frequency === 'NA'
+      ? omit(itemConfig, ['RECURRING_START_MONTH', 'RECURRING_DAY_OF_MONTH', 'jcr-title', 'AMOUNT_WITH_FEES'])
+      : omit(itemConfig, ['jcr-title', 'AMOUNT_WITH_FEES'])
+    // I tried using lodash.isEmpty instead of my own predicate, but for some reason it was deleting the AMOUNT value
+    return omitBy(data, (value) => {
+      return value === ''
     })
   }
 
@@ -370,7 +391,8 @@ export default angular
     desigSrcDirective.name,
     showErrors.name,
     loading.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    brandedAnalyticsFactory.name
   ])
   .component(componentName, {
     controller: ProductConfigFormController,

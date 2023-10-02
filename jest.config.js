@@ -6,6 +6,7 @@ module.exports = {
   ],
   restoreMocks: true,
   setupFilesAfterEnv: [
+    '<rootDir>/jest/setupAngularMocks.js',
     'angular',
     'angular-mocks',
     'jest-date-mock',
@@ -17,6 +18,7 @@ module.exports = {
   modulePaths: [
     '<rootDir>/src'
   ],
+  testEnvironment: 'jsdom',
   transform: {
     '^.+\\.js?$': 'babel-jest',
     '^.+\\.html$': '<rootDir>/jest/htmlTransform.js'

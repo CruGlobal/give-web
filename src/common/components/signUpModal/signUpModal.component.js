@@ -38,12 +38,19 @@ class SignUpModalController {
         this.hasError = true
         switch (error.status) {
           case 400:
+            if (error.data && error.data.error === 'invalid_password') {
+              this.signUpErrors.invalid_password = true
+              this.invalidPasswordMessage = error.data.description
+            } else {
+              this.signUpErrors[error.status] = true
+            }
+            break
           case 403:
           case 409:
             this.signUpErrors[error.status] = true
             break
           default:
-            this.signUpErrors['generic'] = true
+            this.signUpErrors.generic = true
         }
         this.isLoading = false
       })

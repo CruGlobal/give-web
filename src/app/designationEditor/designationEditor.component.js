@@ -2,6 +2,7 @@ import angular from 'angular'
 import 'angular-sanitize'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
+import isArray from 'lodash/isArray'
 import uibModal from 'angular-ui-bootstrap/src/modal'
 
 import commonModule from 'common/common.module'
@@ -28,14 +29,18 @@ import carouselModalTemplate from './carouselModal/carouselModal.tpl.html'
 import textEditorModalTemplate from './textEditorModal/textEditorModal.tpl.html'
 import websiteModalTemplate from './websiteModal/websiteModal.tpl.html'
 
+import desigImgSrcDirective from 'common/directives/desigImgSrc.directive'
+
 import './designationEditor.scss'
 
 const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($log, $q, $uibModal, $location, $window, envService, sessionService, sessionEnforcerService, designationEditorService) {
+  constructor ($scope, $log, $q, $uibModal, $location, $window, $timeout, envService, sessionService, sessionEnforcerService, designationEditorService) {
+    this.$scope = $scope
     this.$log = $log
+    this.$timeout = $timeout
     this.sessionService = sessionService
     this.sessionEnforcerService = sessionEnforcerService
     this.designationEditorService = designationEditorService
@@ -43,6 +48,7 @@ class DesignationEditorController {
     this.imgDomain = envService.read('imgDomain')
     this.imgDomainDesignation = envService.read('imgDomainDesignation')
     this.giveDomain = envService.read('publicGive')
+    this.carouselImages = []
 
     this.$location = $location
     this.$q = $q
@@ -53,7 +59,6 @@ class DesignationEditorController {
   $onInit () {
     this.designationNumber = this.$location.search().d
     this.campaignPage = this.$location.search().campaign
-    this.carouselLoaded = false
 
     // designationNumber is required
     if (!this.designationNumber) {
@@ -92,6 +97,8 @@ class DesignationEditorController {
       this.loadingOverlay = false
       this.designationContent = responses[0].data
       this.designationPhotos = responses[1].data
+      this.carouselImages = this.extractCarouselUrls()
+      this.updateCarousel()
     }, error => {
       this.contentLoaded = false
       this.loadingOverlay = false
@@ -172,9 +179,8 @@ class DesignationEditorController {
       }, angular.noop)
   }
 
-  selectPhotos (photoLocation, selectedPhotos) {
-    const imageUrls = this.getImageUrls(selectedPhotos)
-    const selectedUrls = imageUrls.map(url => ({ url }))
+  selectPhotos (photoLocation) {
+    const selectedUrls = this.carouselImages.map(url => ({ url }))
 
     const modalOptions = {
       templateUrl: carouselModalTemplate,
@@ -239,12 +245,22 @@ class DesignationEditorController {
     return find(this.designationPhotos, { original: originalUrl })
   }
 
-  images () {
+  extractCarouselUrls () {
     const designController = this.designationContent['design-controller']
-    if (designController && designController['carousel']) {
-      return this.getImageUrls(designController['carousel'])
+    if (designController && designController.carousel) {
+      return this.getImageUrls(designController.carousel)
     }
     return []
+  }
+
+  updateCarousel () {
+    // The carousel element needs to be removed and re-added to the DOM for the AEM component to
+    // pick up on the changes. Toggling contentLoaded off then back on will cause the ng-if on
+    // `.secondaryPhoto` will forcibly recreate the carousel DOM element.
+    this.contentLoaded = false
+    this.$scope.$applyAsync(() => {
+      this.contentLoaded = true
+    })
   }
 
   editText (field) {
@@ -290,6 +306,8 @@ class DesignationEditorController {
     return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
       this.saveStatus = 'success'
       this.loadingOverlay = false
+      this.carouselImages = this.designationContent.secondaryPhotos || []
+      this.updateCarousel()
     }, error => {
       this.saveStatus = 'failure'
       this.saveDesignationError = true
@@ -341,6 +359,21 @@ class DesignationEditorController {
       this.carouselLoaded = true
     }
   }
+
+  getDoneEditingUrl () {
+    const vanityPath = this.designationContent['sling:vanityPath']
+    const cacheBust = '?doneEditing'
+
+    if (vanityPath) {
+      if (isArray(vanityPath)) {
+        return `${vanityPath[0].replace('/content/give2/us/en', '')}${cacheBust}`
+      } else {
+        return `${vanityPath.replace('/content/give2/us/en', '')}${cacheBust}`
+      }
+    } else {
+      return `/${this.designationNumber}${cacheBust}`
+    }
+  }
 }
 
 export default angular
@@ -357,6 +390,7 @@ export default angular
     photoModalController.name,
     textEditorModalController.name,
     websiteModalController.name,
+    desigImgSrcDirective.name,
     uibModal
   ])
   .component(componentName, {

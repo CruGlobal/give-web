@@ -158,6 +158,7 @@ describe('ProfileComponent', function () {
   describe('loadDonorDetails()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'initTitles').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'setPKeys').mockImplementation(() => {})
     })
 
     it('should load donor details on $onInit() and have a spouse info', () => {
@@ -173,6 +174,7 @@ describe('ProfileComponent', function () {
       expect($ctrl.hasSpouse).toBe(true)
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled()
       expect($ctrl.initTitles).toHaveBeenCalled()
+      expect($ctrl.setPKeys).toHaveBeenCalled()
     })
 
     it('should load donor details on $onInit() without spouse info', () => {
@@ -186,6 +188,7 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.hasSpouse).toBe(false)
       expect($ctrl.initTitles).toHaveBeenCalled()
+      expect($ctrl.setPKeys).toHaveBeenCalled()
     })
 
     it('should handle and error of loading donor details on $onInit()', () => {
@@ -197,39 +200,42 @@ describe('ProfileComponent', function () {
       expect($ctrl.donorDetailsError).toBe('loading')
       expect($ctrl.profileService.getProfileDonorDetails).toHaveBeenCalled()
       expect($ctrl.initTitles).not.toHaveBeenCalled()
+      expect($ctrl.setPKeys).not.toHaveBeenCalled()
     })
   })
 
   describe('initTitles()', () => {
+    let expectedTitles;
     beforeEach(() => {
       $ctrl.donorDetails = {
         name: {},
         'spouse-name': {}
       }
-      this.expectedTitles = angular.copy(titles)
-      this.expectedTitles[''] = ''
+      expectedTitles = angular.copy(titles)
+      expectedTitles[''] = ''
     })
 
     it('should load all the normal titles', () => {
       $ctrl.initTitles()
 
-      expect($ctrl.availableTitles).toEqual(this.expectedTitles)
+      expect($ctrl.availableTitles).toEqual(expectedTitles)
     })
 
     it('should additional leacy titles if they are in use in donorDetails', () => {
       $ctrl.donorDetails.name.title = 'Alderman'
       $ctrl.donorDetails['spouse-name'].title = 'Prof'
       $ctrl.initTitles()
-      this.expectedTitles.Alderman = 'Alderman'
-      this.expectedTitles.Prof = 'Professor'
+      expectedTitles.Alderman = 'Alderman'
+      expectedTitles.Prof = 'Professor'
 
-      expect($ctrl.availableTitles).toEqual(this.expectedTitles)
+      expect($ctrl.availableTitles).toEqual(expectedTitles)
     })
   })
 
   describe('updateDonorDetails()', () => {
+    let donorDetails;
     beforeEach(() => {
-      this.donorDetails = {
+      donorDetails = {
         name: {
           'family-name': 'Lname',
           'given-name': 'Fname'
@@ -242,18 +248,18 @@ describe('ProfileComponent', function () {
     })
 
     it('should update donor details', () => {
-      $ctrl.donorDetails = this.donorDetails
+      $ctrl.donorDetails = donorDetails
       jest.spyOn($ctrl.profileService, 'updateProfileDonorDetails').mockReturnValue(Observable.of(''))
       jest.spyOn($ctrl, 'updateEmail').mockImplementation(() => {})
       $ctrl.updateDonorDetails()
 
-      expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalledWith(this.donorDetails)
+      expect($ctrl.profileService.updateProfileDonorDetails).toHaveBeenCalledWith(donorDetails)
       expect($ctrl.donorDetailsForm.$setPristine).toHaveBeenCalled()
       expect($ctrl.updateEmail).toHaveBeenCalled()
     })
 
     it('should update donor details while adding a spouse', () => {
-      $ctrl.donorDetails = this.donorDetails
+      $ctrl.donorDetails = donorDetails
       $ctrl.addingSpouse = true
       jest.spyOn($ctrl.profileService, 'updateProfileDonorDetails').mockReturnValue(Observable.of(''))
       jest.spyOn($ctrl, 'updateEmail').mockImplementation(() => {})
@@ -342,12 +348,17 @@ describe('ProfileComponent', function () {
   })
 
   describe('updateEmail()', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl, 'loadDonorDetails').mockImplementation(() => {})
+    })
+
     it('should update donor email', () => {
       jest.spyOn($ctrl.profileService, 'updateEmail').mockReturnValue(Observable.of({ email: 'new email' }))
       $ctrl.updateEmail(false)
 
       expect($ctrl.donorEmail).toEqual({ email: 'new email' })
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled()
+      expect($ctrl.loadDonorDetails).toHaveBeenCalled()
     })
 
     it('should update spouse email', () => {
@@ -356,6 +367,7 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.spouseEmail).toEqual({ email: 'new email' })
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled()
+      expect($ctrl.loadDonorDetails).toHaveBeenCalled()
     })
 
     it('should handle and error of updating email', () => {
@@ -366,6 +378,78 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.emailAddressError).toBe('updating')
       expect($ctrl.profileService.updateEmail).toHaveBeenCalled()
+      expect($ctrl.loadDonorDetails).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('setPKeys()', () => {
+    const primaryPKey = '123456';
+    const spousePKey = '654321';
+
+    it('should set PKey for primary email', () => {
+      $ctrl.donorDetails = {
+        'acs-profile-pkey': primaryPKey,
+        'acs-spouse-profile-pkey': undefined,
+      }
+
+      $ctrl.setPKeys()
+
+      expect($ctrl.profilePKey).toEqual(primaryPKey)
+      expect($ctrl.spousePKey).toEqual(undefined)
+    })
+
+    it('should set PKey for spouse email', () => {
+      $ctrl.donorDetails = {
+        'acs-profile-pkey': undefined,
+        'acs-spouse-profile-pkey': spousePKey,
+      }
+
+      $ctrl.setPKeys()
+
+      expect($ctrl.profilePKey).toEqual(undefined)
+      expect($ctrl.spousePKey).toEqual(spousePKey)
+    })
+
+    it('should set PKey for both primary and spouse emails' , () => {
+      $ctrl.donorDetails = {
+        'acs-profile-pkey': primaryPKey,
+        'acs-spouse-profile-pkey': spousePKey,
+      }
+
+      $ctrl.setPKeys()
+
+      expect($ctrl.profilePKey).toEqual(primaryPKey)
+      expect($ctrl.spousePKey).toEqual(spousePKey)
+    })
+
+    it('should set PKey to undefined for both primary and spouse emails', () => {
+      $ctrl.donorDetails = {
+        'acs-profile-pkey': undefined,
+        'acs-spouse-profile-pkey': undefined,
+      }
+
+      $ctrl.setPKeys()
+
+      expect($ctrl.profilePKey).toEqual(undefined)
+      expect($ctrl.spousePKey).toEqual(undefined)
+    })
+  })
+
+  describe('linkToAdobeCampaign()', () => {
+    beforeEach(() => {
+      jest.spyOn(window, 'open').mockImplementation(() => {})
+    })
+
+    it('should open tab if pKey is present', () => {
+      $ctrl.linkToAdobeCampaign('123456')
+
+      expect(window.open).toHaveBeenCalledWith('https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=123456')
+    })
+
+    it('should not open tab if pKey is undefined', () => {
+      $ctrl.linkToAdobeCampaign(undefined)
+
+      expect(window.open).not.toHaveBeenCalled()
     })
   })
 
@@ -405,6 +489,19 @@ describe('ProfileComponent', function () {
 
       expect($ctrl.phoneNumberError).toBe('loading')
       expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled()
+    })
+
+    it('should properly handle cache', () => {
+      const onlyPhoneNumber = {
+        'phone-number': '555-555-5555',
+        'phone-number-type': 'Mobile',
+        primary: true,
+        'is-spouse': false
+      }
+      jest.spyOn($ctrl.profileService, 'getPhoneNumbers').mockReturnValue(Observable.of([onlyPhoneNumber]))
+      $ctrl.phoneNumbers = [onlyPhoneNumber]
+      $ctrl.loadPhoneNumbers()
+      expect($ctrl.phoneNumbers.length).toEqual(1)
     })
   })
 

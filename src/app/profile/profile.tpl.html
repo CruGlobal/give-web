@@ -65,6 +65,10 @@
                                 <option value="II" translate>II</option>
                                 <option value="III" translate>III</option>
                                 <option value="IV" translate>IV</option>
+                                <option value="V" translate>V</option>
+                                <option value="VI" translate>VI</option>
+                                <option value="VII" translate>VII</option>
+                                <option value="VIII" translate>VIII</option>
                               </select>
 
                               <div class="clear"></div>
@@ -96,6 +100,10 @@
                                 <option value="II" translate>II</option>
                                 <option value="III" translate>III</option>
                                 <option value="IV" translate>IV</option>
+                                <option value="V" translate>V</option>
+                                <option value="VI" translate>VI</option>
+                                <option value="VII" translate>VII</option>
+                                <option value="VIII" translate>VIII</option>
                               </select>
 
                               <div class="clear"></div>
@@ -149,6 +157,7 @@
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
                             <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                           </div>
+                          <a id="donorEmailPreferences" href="" ng-if="$ctrl.profilePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.profilePKey)" translate>Edit Email Preferences</a>
                         </div>
                       </form>
 
@@ -167,6 +176,7 @@
                             <div class="help-block" ng-message="email" translate>You must enter a valid email address</div>
                             <div class="help-block" ng-message="maxlength" translate>This field cannot be longer than 100 characters</div>
                           </div>
+                          <a id="spouseEmailPreferences" href="" ng-if="$ctrl.spousePKey" ng-click="$ctrl.linkToAdobeCampaign($ctrl.spousePKey)" translate>Edit Email Preferences</a>
                         </div>
                       </form>
                     </div>
@@ -196,7 +206,7 @@
                                    ng-disabled="$ctrl.donorDetails.staff">
                             <select name="spousePhoneNumber"
                                     class="form-control form-control-subtle"
-                                    ng-model="phone.spouse"
+                                    ng-model="phone['is-spouse']"
                                     ng-change="phone.ownerChanged = !phone.ownerChanged"
                                     ng-disabled="!$ctrl.hasSpouse || $ctrl.donorDetails.staff">
                               <option ng-value="true">{{$ctrl.donorDetails['spouse-name']['given-name']}}</option>

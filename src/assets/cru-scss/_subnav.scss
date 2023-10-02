@@ -169,7 +169,7 @@ background: #f2f2f2;
             .subnav__link--primary{
                 &:before{
                    @extend [class^="icon-"], [class*=" icon-"];
-    @extend .icon-right-arrow:before;
+    @extend .icon-right-arrow, :before;
 
     float: right;
     padding-top: 10px;

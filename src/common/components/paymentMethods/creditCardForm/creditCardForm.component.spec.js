@@ -5,7 +5,18 @@ import size from 'lodash/size'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 
-import cruPayments from 'cru-payments/dist/cru-payments'
+jest.mock('@cruglobal/cru-payments/dist/cru-payments', () => {
+  const originalModule = jest.requireActual('@cruglobal/cru-payments/dist/cru-payments')
+  return {
+    creditCard: {
+      ...originalModule.creditCard,
+      init: jest.fn(),
+      encrypt: jest.fn()
+    }
+  }
+})
+
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 
 import module from './creditCardForm.component'
 
@@ -91,6 +102,10 @@ describe('credit card form', () => {
       jest.spyOn(self.controller.tsysService, 'getManifest').mockReturnValue(Observable.of({ deviceId: '<device id>', manifest: '<manifest>' }))
       jest.spyOn(cruPayments.creditCard, 'init').mockImplementation(() => {})
       jest.spyOn(cruPayments.creditCard, 'encrypt').mockReturnValue(Observable.of({ tsepToken: 'YfxWvtXJxjET5100', maskedCardNumber: '1111', transactionID: '<transaction id>', cvv2: '123' }))
+    })
+
+    afterEach(() => {
+      jest.clearAllMocks()
     })
 
     it('should call onPaymentFormStateChange with success false when form is invalid', () => {
@@ -236,6 +251,38 @@ describe('credit card form', () => {
 
       expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } })
       expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData })
+    })
+
+    it('should handle prodcloud environment properly', () => {
+      self.controller.envService.set('prodcloud')
+      self.controller.creditCardPayment = {
+        cardNumber: '4111111111111111',
+        cardholderName: 'Person Name',
+        expiryMonth: 12,
+        expiryYear: 2019,
+        securityCode: '123'
+      }
+      self.controller.useMailingAddress = true
+      self.formController.$valid = true
+      self.controller.savePayment()
+
+      expect(cruPayments.creditCard.init).toHaveBeenCalledWith('production', '<device id>', '<manifest>')
+    })
+
+    it('should handle preprod environment properly', () => {
+      self.controller.envService.set('preprod')
+      self.controller.creditCardPayment = {
+        cardNumber: '4111111111111111',
+        cardholderName: 'Person Name',
+        expiryMonth: 12,
+        expiryYear: 2019,
+        securityCode: '123'
+      }
+      self.controller.useMailingAddress = true
+      self.formController.$valid = true
+      self.controller.savePayment()
+
+      expect(cruPayments.creditCard.init).toHaveBeenCalledWith('production', '<device id>', '<manifest>')
     })
 
     it('should handle an error retrieving the manifest from TSYS', () => {

@@ -4,6 +4,7 @@ import module from './productConfig.modal.component'
 import { giveGiftParams } from '../giveGiftParams'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
+import { Observable } from 'rxjs/Observable'
 
 describe('product config modal', function () {
   beforeEach(angular.mock.module(module.name))
@@ -21,6 +22,12 @@ describe('product config modal', function () {
         },
         modalStateService: {
           name: jest.fn()
+        },
+        designationsService: {
+          suggestedAmounts: jest.fn()
+        },
+        cartService: {
+          buildCartUrl: jest.fn()
         }
       },
       {
@@ -79,6 +86,7 @@ describe('product config modal', function () {
   describe('initializeParams', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'updateQueryParam').mockImplementation(() => {})
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([]))
       $ctrl.itemConfig = {}
     })
 
@@ -114,8 +122,8 @@ describe('product config modal', function () {
       expect($ctrl.$location.search).toHaveBeenCalled()
       expect($ctrl.itemConfig.amount).toEqual('150')
       expect($ctrl.defaultFrequency).toEqual('QUARTERLY')
-      expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('21')
-      expect($ctrl.itemConfig['recurring-start-month']).toEqual('07')
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('21')
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('07')
       expect($ctrl.itemConfig['campaign-page']).toEqual('testCampaign')
     })
 
@@ -127,7 +135,7 @@ describe('product config modal', function () {
       expect($ctrl.$location.search).toHaveBeenCalled()
       expect($ctrl.itemConfig.amount).toBeUndefined()
       expect($ctrl.defaultFrequency).toBeUndefined()
-      expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined()
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toBeUndefined()
       expect($ctrl.itemConfig['campaign-page']).toBeUndefined()
     })
 
@@ -137,7 +145,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('LEGACY')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('LEGACY')
     })
 
     it('sets campaignCode if multiple are set in url', () => {
@@ -146,7 +154,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('LEGACY')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('LEGACY')
     })
 
     it('sets campaignCode if default-campaign-code is set', () => {
@@ -154,7 +162,19 @@ describe('product config modal', function () {
       $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT'
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('DEFAULT')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('DEFAULT')
+    })
+
+    it('sets the campaignCode from default-campaign-code if opening from modal directly', () => {
+      $ctrl.itemConfig['campaign-page'] = 'some-page'
+
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockImplementation(() => {
+        $ctrl.itemConfig['default-campaign-code'] = 'DEFAULT'
+        return Observable.from([])
+      })
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toBeUndefined()
+      $ctrl.initializeParams()
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('DEFAULT')
     })
 
     it('cleans campaignCode if containing invalid characters', () => {
@@ -163,7 +183,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('')
     })
 
     it('cleans campaignCode if longer than 30 characters', () => {
@@ -172,7 +192,7 @@ describe('product config modal', function () {
       })
       $ctrl.initializeParams()
 
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('')
     })
   })
 
@@ -204,6 +224,25 @@ describe('product config modal', function () {
 
       expect($ctrl.close).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/cart.html')
+    })
+
+    it('should go to the cart page if mobile and state is submitted', () => {
+      $ctrl.$window.location = '/search-results.html'
+      $ctrl.isMobile = true
+      $ctrl.isEdit = false
+      jest.spyOn($ctrl.cartService, 'buildCartUrl').mockImplementationOnce(() => 'cart.html?two=2')
+      $ctrl.onStateChange('submitted')
+
+      expect($ctrl.close).toHaveBeenCalled()
+      expect($ctrl.$window.location).toEqual('/cart.html?two=2')
+    })
+  })
+
+  describe('buildCartUrl', () => {
+    it('should return the cart url ', () => {
+      jest.spyOn($ctrl.cartService, 'buildCartUrl').mockImplementationOnce(() => 'cart.html?one=1')
+      const cartUrl = $ctrl.buildCartUrl()
+      expect(cartUrl).toEqual('/cart.html?one=1')
     })
   })
 })

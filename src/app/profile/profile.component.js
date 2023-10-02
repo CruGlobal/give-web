@@ -26,7 +26,7 @@ const componentName = 'profile'
 
 class ProfileController {
   /* @ngInject */
-  constructor ($rootScope, $window, $location, $log, $scope, sessionEnforcerService, profileService, analyticsFactory) {
+  constructor ($rootScope, $window, $location, $log, $scope, sessionEnforcerService, envService, profileService, analyticsFactory) {
     this.$rootScope = $rootScope
     this.$window = $window
     this.$location = $location
@@ -40,6 +40,7 @@ class ProfileController {
     this.emailLoading = true
     this.phonesLoading = true
     this.mailingAddressLoading = true
+    this.acsUrl = envService.read('acsUrl')
   }
 
   $onInit () {
@@ -85,6 +86,7 @@ class ProfileController {
           this.donorDetails = donorDetails
           this.hasSpouse = !!this.donorDetails['spouse-name']['family-name']
           this.initTitles()
+          this.setPKeys()
           this.donorDetailsLoading = false
         },
         error => {
@@ -161,6 +163,7 @@ class ProfileController {
           }
           this.success = true
           this.emailLoading = false
+          this.loadDonorDetails()
         },
         error => {
           this.emailAddressError = 'updating'
@@ -168,6 +171,17 @@ class ProfileController {
           this.emailLoading = false
         }
       )
+  }
+
+  setPKeys () {
+    this.profilePKey = this.donorDetails['acs-profile-pkey']
+    this.spousePKey = this.donorDetails['acs-spouse-profile-pkey']
+  }
+
+  linkToAdobeCampaign (pKey) {
+    if (pKey) {
+      window.open(`${this.acsUrl}${pKey}`)
+    }
   }
 
   syncPhoneValidators () {
@@ -185,6 +199,7 @@ class ProfileController {
     this.profileService.getPhoneNumbers()
       .subscribe(
         data => {
+          this.phoneNumbers = []
           this.phonesLoading = false
           angular.forEach(data, (item) => {
             item.ownerChanged = false
@@ -204,7 +219,7 @@ class ProfileController {
       'phone-number': '',
       'phone-number-type': 'Mobile',
       primary: false,
-      spouse: false
+      'is-spouse': false
     })
   }
 
@@ -222,7 +237,7 @@ class ProfileController {
           'phone-number': item['phone-number'],
           'phone-number-type': item['phone-number-type'],
           primary: false,
-          spouse: item.spouse
+          'is-spouse': item['is-spouse']
         })
       }
       if (item.self && item.delete === undefined) { // update existing phone number
@@ -415,6 +430,7 @@ class ProfileController {
 
 export default angular
   .module(componentName, [
+    'environment',
     profileService.name,
     'ngMessages',
     sessionEnforcerService.name,

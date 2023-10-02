@@ -12,9 +12,10 @@ describe('designation service', () => {
   beforeEach(angular.mock.module(module.name))
   const self = {}
 
-  beforeEach(inject((designationsService, $httpBackend) => {
+  beforeEach(inject((designationsService, $httpBackend, $location) => {
     self.designationsService = designationsService
     self.$httpBackend = $httpBackend
+    self.$location = $location
   }))
 
   afterEach(() => {
@@ -93,7 +94,7 @@ describe('designation service', () => {
       designationNumber: '0354433'
     }
     it('should get product details for a designation number', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/lookups/crugive/items?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description',
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/items/crugive/lookups/form?FollowLocation=true&zoom=code,offer:code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description',
         { code: '0354433' })
         .respond(200, lookupResponse)
       self.designationsService.productLookup('0354433')
@@ -104,7 +105,7 @@ describe('designation service', () => {
     })
 
     it('should get product details for a uri', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?FollowLocation=true&zoom=code,offer:code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, lookupResponse)
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(data => {
@@ -114,7 +115,7 @@ describe('designation service', () => {
     })
 
     it('should handle an empty response', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?followLocation=true&zoom=code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?FollowLocation=true&zoom=code,offer:code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, '')
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(() => {
@@ -128,7 +129,7 @@ describe('designation service', () => {
 
   describe('bulkLookup', () => {
     it('should take an array of designation numbers and return corresponding links for items', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/lookups/crugive/batches/items?followLocation=true',
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/items/crugive/lookups/batches/form?FollowLocation=true',
         { codes: ['0123456', '1234567'] })
         .respond(200, bulkLookupResponse)
       self.designationsService.bulkLookup(['0123456', '1234567'])
@@ -142,7 +143,7 @@ describe('designation service', () => {
   describe('suggestedAmounts', () => {
     it('should load suggested amounts', () => {
       const itemConfig = { amount: 50, 'campaign-page': 9876 }
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
         .respond(200, campaignResponse)
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
@@ -159,7 +160,7 @@ describe('designation service', () => {
 
     it('should handle an invalid campaign page', () => {
       const itemConfig = { amount: 50, 'campaign-page': 9876 }
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
         .respond(400, {})
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
@@ -172,7 +173,7 @@ describe('designation service', () => {
 
     it('should handle no campaign page', () => {
       const itemConfig = { amount: 50 }
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
@@ -186,7 +187,7 @@ describe('designation service', () => {
 
   describe('facebookPixel', () => {
     it('should load facebook pixel id from JCR', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
       self.designationsService.facebookPixel('0123456')
         .subscribe(pixelId => {
@@ -198,7 +199,7 @@ describe('designation service', () => {
 
   describe('givingLinks', () => {
     it('should load givingLinks from JCR', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
       self.designationsService.givingLinks('0123456')
         .subscribe(givingLinks => {
@@ -215,7 +216,7 @@ describe('designation service', () => {
       const productCode = '0123456'
 
       const path = self.designationsService.generatePath(productCode)
-      expect(path).toEqual('/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      expect(path).toEqual('/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
     })
 
     it('should return the proper path for one time gift to campaign', () => {
@@ -223,14 +224,14 @@ describe('designation service', () => {
       const campaignPage = 'some-campaign'
 
       const path = self.designationsService.generatePath(productCode, campaignPage)
-      expect(path).toEqual('/content/give/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
+      expect(path).toEqual('/content/give2/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
     })
 
     it('should return the proper path for recurring gift to non-campaign', () => {
       const productCode = '0123456_mon'
 
       const path = self.designationsService.generatePath(productCode)
-      expect(path).toEqual('/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      expect(path).toEqual('/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
     })
 
     it('should return the proper path for recurring gift to campaign', () => {
@@ -238,7 +239,37 @@ describe('designation service', () => {
       const campaignPage = 'some-campaign'
 
       const path = self.designationsService.generatePath(productCode, campaignPage)
-      expect(path).toEqual('/content/give/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
+      expect(path).toEqual('/content/give2/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
+    })
+  })
+
+  describe('ministriesList', () => {
+    it('should return a list of ministries', () => {
+      jest.spyOn(self.$location, 'protocol').mockImplementationOnce(() => 'https')
+      jest.spyOn(self.$location, 'host').mockImplementationOnce(() => 'give-stage-cloud.cru.org')
+      const pagePath = 'page.html'
+      const ministriesResponse = {
+        ministries: [{
+          name: 'Some Ministry',
+          designationNumber: '0123456',
+          path: '/some-vanity',
+          extra: 'something-else'
+        }]
+      }
+      self.$httpBackend.expectGET(`https://give-stage-cloud.cru.org/${pagePath}/jcr:content/content-parsys/designation_search_r.json`)
+        .respond(200, ministriesResponse)
+
+      const expectedResult = {
+        ministries: [{
+          name: 'Some Ministry',
+          designationNumber: '0123456',
+          path: '/some-vanity'
+        }]
+      }
+      self.designationsService.ministriesList(pagePath).subscribe(actualResult => {
+        expect(actualResult).toEqual(expectedResult)
+      })
+      self.$httpBackend.flush()
     })
   })
 })

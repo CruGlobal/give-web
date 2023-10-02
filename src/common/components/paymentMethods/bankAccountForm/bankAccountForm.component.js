@@ -6,8 +6,9 @@ import 'rxjs/add/observable/of'
 
 import showErrors from 'common/filters/showErrors.filter'
 import { scrollModalToTop } from 'common/services/modalState.service'
+import analyticsFactory from 'app/analytics/analytics.factory'
 
-import cruPayments from 'cru-payments/dist/cru-payments'
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 import { ccpKey, ccpStagingKey } from 'common/app.constants'
 
 import template from './bankAccountForm.tpl.html'
@@ -16,9 +17,10 @@ const componentName = 'bankAccountForm'
 
 class BankAccountController {
   /* @ngInject */
-  constructor ($scope, $log, envService) {
+  constructor ($scope, $log, analyticsFactory, envService) {
     this.$scope = $scope
     this.$log = $log
+    this.analyticsFactory = analyticsFactory
     this.envService = envService
 
     this.imgDomain = this.envService.read('imgDomain')
@@ -87,7 +89,10 @@ class BankAccountController {
           state: 'encrypting'
         }
       })
-      cruPayments.bankAccount.init(this.envService.get(), this.envService.is('production') ? ccpKey : ccpStagingKey)
+      const productionEnvironments = ['production', 'prodcloud', 'preprod']
+      const actualEnvironment = this.envService.get()
+      const ccpEnvironment = productionEnvironments.includes(actualEnvironment) ? 'production' : actualEnvironment
+      cruPayments.bankAccount.init(ccpEnvironment, ccpEnvironment === 'production' ? ccpKey : ccpStagingKey)
       const encryptObservable = this.paymentMethod && !this.bankPayment.accountNumber
         ? Observable.of('')
         : cruPayments.bankAccount.encrypt(this.bankPayment.accountNumber)
@@ -107,6 +112,7 @@ class BankAccountController {
           }
         })
       }, error => {
+        this.analyticsFactory.checkoutFieldError('encryptAccount', 'failed')
         this.$log.error('Error encrypting bank account number', error)
         this.onPaymentFormStateChange({
           $event: {
@@ -117,6 +123,7 @@ class BankAccountController {
         scrollModalToTop()
       })
     } else {
+      this.analyticsFactory.handleCheckoutFormErrors(this.bankPaymentForm)
       this.onPaymentFormStateChange({
         $event: {
           state: 'unsubmitted'
@@ -129,7 +136,8 @@ class BankAccountController {
 export default angular
   .module(componentName, [
     commonModule.name,
-    showErrors.name
+    showErrors.name,
+    analyticsFactory.name
   ])
   .component(componentName, {
     controller: BankAccountController,

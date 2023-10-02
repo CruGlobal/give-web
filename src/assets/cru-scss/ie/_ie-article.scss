@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 /*------------------------------------*\
     #IE-ARTICLE
 \*------------------------------------*/
@@ -23,7 +25,7 @@
     @include mq(700px) {
         letter-spacing: 0.01rem;
         /* Calculate a unitless line-height based on 31px */
-        line-height: ceil(21px / 31px)* (31px / 21px);
+        line-height: ceil(math.div(21px, 31px)) * math.div(31px, 21px);
         @include font-size(21px, false);
     }
 }
@@ -35,7 +37,7 @@
 
 
 .post-article li {
-    margin-bottom: $base-spacing-unit / 2;
+    margin-bottom: math.div($base-spacing-unit, 2);
 }
 
 .post-article figure {
@@ -54,7 +56,7 @@
 .post-meta {
     color: #666062;
     line-height: 1.6;
-    margin-bottom: $base-spacing-unit / 2;
+    margin-bottom: math.div($base-spacing-unit, 2);
 
     @include font-size(16px, false);
 }
@@ -73,7 +75,7 @@ a + .phone + .phone:before {
     float: right;
     margin: 10px 0 10px ($base-spacing-unit * 1.25);
 
-    padding-left: $base-spacing-unit / 1.25;
+    padding-left: math.div($base-spacing-unit, 1.25);
     border-left: 1px solid $colorCru-gray;
 
     li {

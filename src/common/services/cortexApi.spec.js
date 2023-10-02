@@ -44,7 +44,7 @@ describe('cortex api service', () => {
     })
 
     it('should set the followLocation param if it is set in the config', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/test?followLocation=true').respond(200, 'success')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/test?FollowLocation=true').respond(200, 'success')
       self.cortexApiService.http({
         method: 'GET',
         path: 'test',

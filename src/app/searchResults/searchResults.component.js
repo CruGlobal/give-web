@@ -83,6 +83,17 @@ class SearchResultsController {
   productViewDetailsAnalyticsEvent (product) {
     this.analyticsFactory.productViewDetailsEvent(product)
   }
+
+  /**
+   * Go from a full url such as https://give-stage2.cru.org/designations/0/1/2/3/4/0123456.html
+   * to a vanity url of the pattern https://give-stage2.cru.org/0123456
+   * @param originalPath the full url
+   * @returns {*} the vanity url
+   */
+  buildVanity (originalPath) {
+    const pattern = /\/designations\/(\d\/){5}(\d{7})\.html/g
+    return originalPath.replace(pattern, '/$2')
+  }
 }
 
 export default angular

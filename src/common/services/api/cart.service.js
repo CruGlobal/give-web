@@ -29,16 +29,22 @@ const serviceName = 'cartService'
 
 class Cart {
   /* @ngInject */
-  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies) {
+  constructor (cortexApiService, commonService, designationsService, sessionService, hateoasHelperService, $cookies, $location, $window) {
     this.cortexApiService = cortexApiService
     this.commonService = commonService
     this.designationsService = designationsService
     this.sessionService = sessionService
     this.hateoasHelperService = hateoasHelperService
     this.$cookies = $cookies
+    this.$location = $location
+    this.$window = $window
   }
 
   setCartCountCookie (quantity) {
+    if (!['give.cru.org', 'give-stage2.cru.org', 'give-stage2-next.cru.org', 'give-stage-cloud.cru.org', 'give-prod-cloud.cru.org'].includes(this.$location.host())) {
+      return
+    }
+
     if (quantity) {
       this.$cookies.put(cartTotalCookie, quantity, {
         path: '/',
@@ -54,10 +60,11 @@ class Cart {
   }
 
   get () {
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     return Observable.forkJoin(this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
+        lineItems: 'lineitems:element[],lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,lineitems:element:itemfields',
         rateTotals: 'ratetotals:element[]',
         total: 'total,total:cost'
       }
@@ -74,18 +81,21 @@ class Cart {
   handleCartResponse (cartResponse, nextDrawDate) {
     const items = map(cartResponse.lineItems, item => {
       const frequency = item.rate.recurrence.display
-      const itemConfig = omit(item.itemfields, ['self', 'links'])
+      //  Changed the 'itemfields' property to 'configuration' with in the item object.
+      const itemConfig = omit(item.configuration, ['self', 'links'])
+      //  Based on EP 8.1 JSON Object item config properties are changed to uppercase
       const giftStartDate = frequency !== 'Single'
-        ? startMonth(itemConfig['recurring-day-of-month'], itemConfig['recurring-start-month'], nextDrawDate) : null
+        ? startMonth(itemConfig.RECURRING_DAY_OF_MONTH, itemConfig.RECURRING_START_MONTH, nextDrawDate)
+        : null
       const giftStartDateDaysFromNow = giftStartDate ? giftStartDate.diff(new Date(), 'days') : 0
 
       let designationType
       let orgId
-      angular.forEach(item.itemDefinition['details'], (v, k) => {
-        if (v['name'] === 'designation_type') {
+      angular.forEach(item.itemDefinition.details, (v, k) => {
+        if (v.name === 'designation_type') {
           designationType = v['display-value']
         }
-        if (v['name'] === 'org_id') {
+        if (v.name === 'org_id') {
           orgId = v['display-value']
         }
       })
@@ -96,13 +106,13 @@ class Cart {
         orgId: orgId,
         displayName: item.itemDefinition['display-name'],
         designationType: designationType,
-        price: item.rate.cost.display,
-        priceWithFees: item.rate.cost['display-with-fees'],
+        price: item.rate.cost[0].display, // cost object was changed to array
+        priceWithFees: item.rate.cost[0]['display-with-fees'],
         config: itemConfig,
         frequency: frequency,
-        amount: item.rate.cost.amount,
-        amountWithFees: item.rate.cost['amount-with-fees'],
-        designationNumber: item.itemCode['product-code'],
+        amount: item.rate.cost[0].amount, // cost object was changed to array
+        amountWithFees: item.rate.cost[0]['amount-with-fees'],
+        designationNumber: item.item._offer[0]._code[0].code, // product code is fetched from offer resource
         productUri: item.item.self.uri,
         giftStartDate: giftStartDate,
         giftStartDateDaysFromNow: giftStartDateDaysFromNow,
@@ -171,9 +181,25 @@ class Cart {
    * @private
    */
   _addItem (uri, data) {
+    const obj = {
+      ...data
+    }
+    const res = {}
+    //  Converted payload keys lowercase to uppercase and converted format as per API request
+    for (const [key, value] of Object.entries(obj)) {
+      res[key.toUpperCase()] = value
+    }
+    delete res.QUANTITY
+    const payLoad = {
+      configuration: {
+        ...res
+      },
+      quantity: data.quantity
+    }
+
     return this.cortexApiService.post({
-      path: ['itemfieldslineitem', uri],
-      data: data,
+      path: uri,
+      data: payLoad,
       followLocation: true
     })
   }
@@ -202,7 +228,7 @@ class Cart {
         }
         return map(response.links, (link, index) => {
           const configuredDesignation = configuredDesignations[index]
-          configuredDesignation.uri = link.uri.replace(/^\//, '')
+          configuredDesignation.uri = `carts/${link.uri.replace(/^\//, '')}/form`
           return this.addItemAndReplaceExisting(cart, configuredDesignation.uri, configuredDesignation)
         })
       })
@@ -226,6 +252,17 @@ class Cart {
       .catch(response => {
         return Observable.of({ error: response, configuredDesignation: configuredDesignation })
       })
+  }
+
+  buildCartUrl () {
+    const url = new URL(this.$window.location.href)
+    const queryParameters = url.searchParams
+    const parametersToDelete = ['modal', 'd', 'a', 'q']
+    parametersToDelete.forEach((parameterToDelete) => {
+      queryParameters.delete(parameterToDelete)
+    })
+
+    return queryParameters.toString() ? `cart.html?${queryParameters.toString()}` : 'cart.html'
   }
 }
 

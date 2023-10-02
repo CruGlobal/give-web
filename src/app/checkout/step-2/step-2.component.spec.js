@@ -120,12 +120,24 @@ describe('checkout', () => {
     })
 
     describe('handlePaymentChange', () => {
-      it('should change default payment type', () => {
+      it('should change default payment type with bank account', () => {
         jest.spyOn(self.controller, 'handlePaymentChange')
+        jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
         self.controller.handlePaymentChange({'account-type': 'checking'})
 
         expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'account-type': 'checking'})
         expect(self.controller.defaultPaymentType).toEqual('checking')
+        expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('checking', false)
+      })
+
+      it('should change default payment type with credit card', () => {
+        jest.spyOn(self.controller, 'handlePaymentChange')
+        jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
+        self.controller.handlePaymentChange({'card-type': 'visa'})
+
+        expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'card-type': 'visa'})
+        expect(self.controller.defaultPaymentType).toEqual('visa')
+        expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('visa', true)
       })
     })
 
@@ -145,9 +157,9 @@ describe('checkout', () => {
       it('should save payment data when in the loading state with a payload', () => {
         jest.spyOn(self.controller, '$onInit').mockImplementation(() => {})
         jest.spyOn(self.controller.orderService, 'addPaymentMethod').mockReturnValue(Observable.of(''))
-        self.controller.onPaymentFormStateChange({ state: 'loading', payload: { bankAccount: {} } })
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: { bankAccount: { 'account-type': 'Checking' } } })
 
-        expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({ bankAccount: {} })
+        expect(self.controller.orderService.addPaymentMethod).toHaveBeenCalledWith({ bankAccount: { 'account-type': 'Checking' } })
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' })
         expect(self.controller.onStateChange).toHaveBeenCalledWith({ state: 'submitted' })
         expect(self.controller.$onInit).toHaveBeenCalled()

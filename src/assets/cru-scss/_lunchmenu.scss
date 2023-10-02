@@ -1,6 +1,7 @@
+@use 'sass:math';
 
 $headerHeight: 84px;
-$actionNav-height: $headerHeight / 2;
+$actionNav-height: math.div($headerHeight, 2);
 $colorGrayscale-text: #3a3a3a;  
 
 

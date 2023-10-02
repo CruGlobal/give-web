@@ -70,9 +70,9 @@ class Step3Controller {
       .subscribe((data) => {
         if (!data) {
           this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist')
-        } else if (data.self.type === 'elasticpath.bankaccounts.bank-account') {
+        } else if (data['account-type']) {
           this.bankAccountPaymentDetails = data
-        } else if (data.self.type === 'cru.creditcards.named-credit-card') {
+        } else if (data['card-type']) {
           this.creditCardPaymentDetails = data
         } else {
           this.$log.error('Error loading current payment info: current payment type is unknown')
@@ -102,7 +102,7 @@ class Step3Controller {
   }
 
   updateGiftStartMonth (item, month) {
-    item.config['recurring-start-month'] = month
+    item.config.RECURRING_START_MONTH = month
 
     this.cartData = null
     this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
@@ -139,7 +139,7 @@ class Step3Controller {
       submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
     }
     submitRequest.subscribe(() => {
-      this.analyticsFactory.purchase(this.donorDetails, this.cartData)
+      this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
       this.orderService.clearCardSecurityCodes()
@@ -149,6 +149,7 @@ class Step3Controller {
       this.changeStep({ newStep: 'thankYou' })
     },
     error => {
+      this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
       this.submittingOrder = false
       this.onSubmittingOrder({ value: false })
 
@@ -189,6 +190,7 @@ export default angular
       onSubmitBtnChangeState: '&',
       onSubmitted: '&',
       onSubmittingOrder: '&',
-      submittingOrder: '<'
+      submittingOrder: '<',
+      radioStationName: '<'
     }
   })

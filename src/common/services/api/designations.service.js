@@ -15,8 +15,9 @@ const serviceName = 'designationsService'
 
 class DesignationsService {
   /* @ngInject */
-  constructor ($http, envService, cortexApiService, hateoasHelperService) {
+  constructor ($http, $location, envService, cortexApiService, hateoasHelperService) {
     this.$http = $http
+    this.$location = $location
     this.envService = envService
     this.cortexApiService = cortexApiService
     this.hateoasHelperService = hateoasHelperService
@@ -119,27 +120,31 @@ class DesignationsService {
   productLookup (query, selectQuery) {
     const zoomObj = {
       code: 'code',
+      offer: 'offer:code',
       definition: 'definition',
       choices: 'definition:options:element:selector:choice[],definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction',
       chosen: 'definition:options:element:selector:chosen,definition:options:element:selector:chosen:description'
     }
 
-    const httpRequest = selectQuery ? this.cortexApiService.post({
-      path: query,
-      data: {},
-      followLocation: true,
-      zoom: zoomObj
-    }) : this.cortexApiService.post({
-      path: ['lookups', this.cortexApiService.scope, 'items'],
-      followLocation: true,
-      data: {
-        code: query
-      },
-      zoom: zoomObj
-    })
+    const httpRequest = selectQuery
+      ? this.cortexApiService.post({
+          path: query,
+          data: {},
+          followLocation: true,
+          zoom: zoomObj
+        })
+      : this.cortexApiService.post({
+        path: ['items', this.cortexApiService.scope, 'lookups/form'],
+        followLocation: true,
+        data: {
+          code: query
+        },
+        zoom: zoomObj
+      })
 
     return httpRequest.map(data => {
       if (!data.code) throw new Error('Product lookup response contains no code data')
+      if (!data.offer) throw new Error('Product lookup response contains no offer data')
       if (!data.definition) throw new Error('Product lookup response contains no definition data')
       if (!data.choices) throw new Error('Product lookup response contains no choices data')
       if (!data.chosen) throw new Error('Product lookup response contains no chosen data')
@@ -153,23 +158,23 @@ class DesignationsService {
 
       let designationType
       let orgId
-      angular.forEach(data.definition['details'], (v, k) => {
-        if (v['name'] === 'designation_type') {
+      angular.forEach(data.definition.details, (v, k) => {
+        if (v.name === 'designation_type') {
           designationType = v['display-value']
         }
-        if (v['name'] === 'org_id') {
+        if (v.name === 'org_id') {
           orgId = v['display-value']
         }
       })
 
       return {
-        uri: this.hateoasHelperService.getLink(data.definition, 'item'),
+        uri: this.hateoasHelperService.getLink(data.rawData, 'addtocartform'),
         frequencies: choices,
         frequency: data.chosen.description.name,
         displayName: data.definition['display-name'],
         designationType: designationType,
         code: data.code.code,
-        designationNumber: data.code['product-code'],
+        designationNumber: data.offer.code,
         orgId: orgId
       }
     })
@@ -177,7 +182,7 @@ class DesignationsService {
 
   bulkLookup (designationNumbers) {
     return this.cortexApiService.post({
-      path: ['lookups', this.cortexApiService.scope, 'batches', 'items'],
+      path: ['items', this.cortexApiService.scope, 'lookups', 'batches', 'form'],
       data: {
         codes: designationNumbers
       },
@@ -194,8 +199,8 @@ class DesignationsService {
     const [designationNumber] = code.split('_')
 
     return campaignPage
-      ? `/content/give/us/en/campaigns/${c}/${designationNumber}/${campaignPage}.infinity.json`
-      : `/content/give/us/en/designations/${c}/${designationNumber}.infinity.json`
+      ? `/content/give2/us/en/campaigns/${c}/${designationNumber}/${campaignPage}.infinity.json`
+      : `/content/give2/us/en/designations/${c}/${designationNumber}.infinity.json`
   }
 
   suggestedAmounts (code, itemConfig) {
@@ -218,10 +223,9 @@ class DesignationsService {
           }
 
           // Copy default-campaign-code to config
-          if (data.data['jcr:content'].defaultCampaign && !itemConfig['campaign-code']) {
+          if (data.data['jcr:content'].defaultCampaign && !itemConfig.CAMPAIGN_CODE) {
             itemConfig['default-campaign-code'] = data.data['jcr:content'].defaultCampaign
           }
-
           // Copy jcr:title
           if (data.data['jcr:content']['jcr:title']) {
             itemConfig['jcr-title'] = data.data['jcr:content']['jcr:title']
@@ -236,7 +240,7 @@ class DesignationsService {
     const path = this.generatePath(code)
     return Observable.from(this.$http.get(this.envService.read('publicGive') + path))
       .map((data) => {
-        return data.data['jcr:content']['facebookPixelId']
+        return data.data['jcr:content'].facebookPixelId
       })
   }
 
@@ -265,7 +269,8 @@ class DesignationsService {
 
   ministriesList (pagePath) {
     const path = pagePath + '/jcr:content/content-parsys/designation_search_r.json'
-    return Observable.from(this.$http.get(this.envService.read('apiUrl') + '/' + path))
+    const url = `${this.$location.protocol()}://${this.$location.host()}/${path}`
+    return Observable.from(this.$http.get(url))
       .map((response) => {
         return map(response.data.ministries, (item) => {
           const ministry = JSON.parse(item)

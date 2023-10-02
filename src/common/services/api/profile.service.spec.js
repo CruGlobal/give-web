@@ -21,10 +21,16 @@ import phoneNumbersResponse from 'common/services/api/fixtures/cortex-profile-ph
 import selfserviceDonorDetailsResponse from 'common/services/api/fixtures/cortex-profile-selfservicedonordetails.fixture.js'
 import mailingAddressResponse from 'common/services/api/fixtures/cortex-profile-mailingaddress.fixture.js'
 import RecurringGiftModel from 'common/models/recurringGift.model'
+import cartResponse from './fixtures/cortex-cart-paymentmethodinfo-forms.fixture'
+
+const paymentMethodForms = cloneDeep(paymentmethodsFormsResponse._paymentmethods[0]._element)
+angular.forEach(paymentMethodForms, form => {
+  form.selfservicepaymentinstrumentform = form._selfservicepaymentinstrumentform[0]
+  delete form._selfservicepaymentinstrumentform
+})
 
 const paymentmethodsFormsResponseZoomMapped = {
-  bankAccount: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createbankaccountform[0],
-  creditCard: paymentmethodsFormsResponse._selfservicepaymentmethods[0]._createcreditcardform[0],
+  paymentMethodForms: paymentMethodForms,
   rawData: paymentmethodsFormsResponse
 }
 
@@ -57,10 +63,10 @@ describe('profile service', () => {
 
   describe('getPaymentMethods', () => {
     it('should load the user\'s saved payment methods', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:element')
         .respond(200, paymentmethodsResponse)
 
-      const expectedPaymentMethods = angular.copy(paymentmethodsResponse._selfservicepaymentmethods[0]._element)
+      const expectedPaymentMethods = angular.copy(paymentmethodsResponse._selfservicepaymentinstruments[0]._element)
       expectedPaymentMethods[0].id = expectedPaymentMethods[0].self.uri.split('/').pop()
       expectedPaymentMethods[1].id = expectedPaymentMethods[1].self.uri.split('/').pop()
       expectedPaymentMethods[0].address = {
@@ -84,7 +90,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethod', () => {
     it('should load a user\'s payment method', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydiojyg4=')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/giydiojyg4=')
         .respond(200, paymentmethodResponse)
 
       const expectedPaymentMethod = angular.copy(paymentmethodResponse)
@@ -97,7 +103,7 @@ describe('profile service', () => {
         region: 'IN',
         'street-address': '198 W King St'
       }
-      self.profileService.getPaymentMethod('/selfservicepaymentmethods/crugive/giydiojyg4=')
+      self.profileService.getPaymentMethod('/selfservicepaymentinstruments/crugive/giydiojyg4=')
         .subscribe((data) => {
           expect(data.id).toEqual(expectedPaymentMethod.id)
           expect(data.address['card-number']).toEqual(expectedPaymentMethod.address['card-number'])
@@ -109,10 +115,10 @@ describe('profile service', () => {
 
   describe('getPaymentMethodsWithDonations', () => {
     it('should load the user\'s saved payment methods with donations', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:element,selfservicepaymentmethods:element:recurringgifts')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:element,selfservicepaymentinstruments:element:recurringgifts')
         .respond(200, paymentmethodsWithDonationsResponse)
 
-      const expectedData = cloneDeep(paymentmethodsWithDonationsResponse._selfservicepaymentmethods[0]._element)
+      const expectedData = cloneDeep(paymentmethodsWithDonationsResponse._selfservicepaymentinstruments[0]._element)
         .map(paymentMethod => {
           paymentMethod.recurringGifts = []
           delete paymentMethod._recurringgifts
@@ -129,7 +135,7 @@ describe('profile service', () => {
 
   describe('getPaymentMethodForms', () => {
     function setupRequest () {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=paymentmethods:element,paymentmethods:element:selfservicepaymentinstrumentform')
         .respond(200, paymentmethodsFormsResponse)
     }
 
@@ -164,9 +170,13 @@ describe('profile service', () => {
         'routing-number': '123456789'
       }
 
+      const expectedPostData = {
+        'payment-instrument-identification-form': paymentInfo
+      }
+
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive?followLocation=true',
-        paymentInfo
+        'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/selfservicepaymentinstrument/form?FollowLocation=true',
+        expectedPostData
       ).respond(200, 'success')
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -192,12 +202,14 @@ describe('profile service', () => {
         cvv: 'someEncryptedCVV...'
       }
 
-      const paymentInfoWithoutCVV = angular.copy(paymentInfo)
-      delete paymentInfoWithoutCVV.cvv
+      const expectedPostData = {
+        'payment-instrument-identification-form': paymentInfo
+      }
+      delete expectedPostData['payment-instrument-identification-form'].cvv
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
-        paymentInfoWithoutCVV
+        'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/selfservicepaymentinstrument/form?FollowLocation=true',
+        expectedPostData
       ).respond(200, 'success')
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -229,20 +241,29 @@ describe('profile service', () => {
         cvv: 'someEncryptedCVV...'
       }
 
-      const paymentInfoWithoutCVV = angular.copy(paymentInfo)
-      delete paymentInfoWithoutCVV.cvv
-      paymentInfoWithoutCVV.address = {
-        'country-name': 'US',
-        'street-address': '123 First St',
-        'extended-address': 'Apt 123',
-        locality: 'Sacramento',
-        'postal-code': '12345',
-        region: 'CA'
+      const expectedPostData = {
+        'billing-address': {
+          address: {
+            'country-name': 'US',
+            'street-address': '123 First St',
+            'extended-address': 'Apt 123',
+            locality: 'Sacramento',
+            'postal-code': '12345',
+            region: 'CA'
+          }
+        },
+        'payment-instrument-identification-form': {
+          'card-number': '**fake*encrypted**1234567890123456**',
+          'card-type': 'VISA',
+          'cardholder-name': 'Test Name',
+          'expiry-month': '06',
+          'expiry-year': '12'
+        }
       }
 
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive?followLocation=true',
-        paymentInfoWithoutCVV
+        'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/selfservicepaymentinstrument/form?FollowLocation=true',
+        expectedPostData
       ).respond(200, 'success')
 
       // cache getPaymentForms response to avoid another http request while testing
@@ -372,7 +393,7 @@ describe('profile service', () => {
   describe('updatePaymentMethod', () => {
     it('should update a bank account', () => {
       self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
-        { 'bank-name': 'Some Bank' }
+        { 'payment-instrument-identification-attributes': { 'bank-name': 'Some Bank' } }
       ).respond(200, null)
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { bankAccount: { 'bank-name': 'Some Bank' } })
         .subscribe(null, () => fail())
@@ -381,7 +402,16 @@ describe('profile service', () => {
 
     it('should update a credit card', () => {
       self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
-        { 'cardholder-name': 'Some Person', address: { 'street-address': 'Some Address||||||', 'extended-address': '', locality: '', 'postal-code': '', region: '' } }
+        {
+          'payment-instrument-identification-attributes': {
+            'cardholder-name': 'Some Person',
+            'street-address': 'Some Address||||||',
+            'extended-address': '',
+            locality: '',
+            'postal-code': '',
+            region: ''
+          }
+        }
       ).respond(200, null)
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { creditCard: { 'cardholder-name': 'Some Person', address: { streetAddress: 'Some Address' } } })
         .subscribe(null, () => fail())
@@ -390,7 +420,7 @@ describe('profile service', () => {
 
     it('should update a credit card with no billing address (api will use mailing address)', () => {
       self.$httpBackend.expectPUT('https://give-stage2.cru.org/cortex/paymentUri',
-        { 'cardholder-name': 'Some Person' }
+        { 'payment-instrument-identification-attributes': { 'cardholder-name': 'Some Person' } }
       ).respond(200, null)
       self.profileService.updatePaymentMethod({ self: { uri: 'paymentUri' } }, { creditCard: { 'cardholder-name': 'Some Person', address: undefined } })
         .subscribe(null, () => fail())
@@ -426,27 +456,28 @@ describe('profile service', () => {
 
       const expectedPurchaseData = {
         donorDetails: modifiedPurchaseResponse._donordetails[0],
-        paymentMeans: modifiedPurchaseResponse._paymentmeans[0]._element[0],
+        paymentInstruments: modifiedPurchaseResponse._paymentinstruments[0]._element[0],
         lineItems: [
           assign(omit(modifiedPurchaseResponse._lineitems[0]._element[0], ['_code', '_rate']), {
-            code: modifiedPurchaseResponse._lineitems[0]._element[0]._code[0],
+            code: modifiedPurchaseResponse._lineitems[0]._element[0]._item[0]._code[0],
             rate: modifiedPurchaseResponse._lineitems[0]._element[0]._rate[0]
           }),
           assign(omit(modifiedPurchaseResponse._lineitems[0]._element[1], ['_code', '_rate']), {
-            code: modifiedPurchaseResponse._lineitems[0]._element[1]._code[0],
+            code: modifiedPurchaseResponse._lineitems[0]._element[1]._item[0]._code[0],
             rate: modifiedPurchaseResponse._lineitems[0]._element[1]._rate[0]
           })
         ],
         rateTotals: modifiedPurchaseResponse._ratetotals[0]._element,
+        billingAddress: modifiedPurchaseResponse._billingaddress[0],
         rawData: purchaseResponse
       }
 
       expectedPurchaseData.donorDetails.mailingAddress = formatAddressForTemplate(expectedPurchaseData.donorDetails['mailing-address'])
       delete expectedPurchaseData.donorDetails['mailing-address']
-      expectedPurchaseData.paymentMeans.address = formatAddressForTemplate(expectedPurchaseData.paymentMeans['billing-address'].address)
-      delete expectedPurchaseData.paymentMeans['billing-address']
+      expectedPurchaseData.paymentInstruments.address = formatAddressForTemplate(expectedPurchaseData.billingAddress.address)
+      delete expectedPurchaseData.billingAddress
 
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/purchases/crugive/giydanbt=?zoom=donordetails,paymentmeans:element,lineitems:element,lineitems:element:code,lineitems:element:rate,ratetotals:element')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/purchases/crugive/giydanbt=?zoom=donordetails,paymentinstruments:element,lineitems:element,lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:rate,ratetotals:element,billingaddress')
         .respond(200, purchaseResponse)
       self.profileService.getPurchase('/purchases/crugive/giydanbt=')
         .subscribe((data) => {
@@ -529,9 +560,9 @@ describe('profile service', () => {
 
   describe('updateEmail', () => {
     it('should add spouse\'s details', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/spouse?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/spouseemails/crugive/spouse/form?FollowLocation=true')
         .respond(200, 'spouse success')
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/emails/crugive/form?FollowLocation=true')
         .respond(200, 'donor success')
 
       self.profileService.updateEmail({}, true)
@@ -567,7 +598,7 @@ describe('profile service', () => {
           'phone-number': '(343) 454-3344',
           'phone-number-type': 'Mobile',
           primary: false,
-          spouse: false
+          'is-spouse': false
         },
         {
           self: {
@@ -587,10 +618,10 @@ describe('profile service', () => {
           'phone-number': '(565) 777-5656',
           'phone-number-type': 'Mobile',
           primary: false,
-          spouse: true
+          'is-spouse': true
         }
       ]
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/phonenumbers/crugive?zoom=element,spouse')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/phonenumbers/crugive?zoom=element')
         .respond(200, phoneNumbersResponse)
       self.profileService.getPhoneNumbers()
         .subscribe((data) => {
@@ -602,18 +633,18 @@ describe('profile service', () => {
 
   describe('addPhoneNumber', () => {
     it('should add phone number', () => {
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/spouse?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/spouse/form?FollowLocation=true')
         .respond(200, 'spouse success')
-      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/?followLocation=true')
+      self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/phonenumbers/crugive/form?FollowLocation=true')
         .respond(200, 'donor success')
       const phoneNumber = {
-        spouse: true
+        'is-spouse': true
       }
       self.profileService.addPhoneNumber(phoneNumber)
         .subscribe((data) => {
           expect(data).toEqual('spouse success')
         })
-      phoneNumber.spouse = false
+      phoneNumber['is-spouse'] = false
       self.profileService.addPhoneNumber(phoneNumber)
         .subscribe((data) => {
           expect(data).toEqual('donor success')

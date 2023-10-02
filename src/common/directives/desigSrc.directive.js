@@ -7,7 +7,7 @@ const desigSrc = /* @ngInject */ function (envService) {
   return {
     restrict: 'A',
     link: function (scope, element, attributes) {
-      let imgUrl = envService.read('imgDomainDesignation') + '/bin/crugive/imageThumbnail?designationNumber=' + attributes.desigSrc
+      let imgUrl = envService.read('imgDomainDesignation') + '/bin/crugive/imageThumbnail.html?designationNumber=' + attributes.desigSrc
       if (Object.prototype.hasOwnProperty.call(attributes, 'campaignPage') && attributes.campaignPage !== '') {
         imgUrl += '&campaign=' + attributes.campaignPage
       }

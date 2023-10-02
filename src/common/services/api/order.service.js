@@ -9,10 +9,13 @@ import 'rxjs/add/observable/throw'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
+import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 
 import cortexApiService from '../cortexApi.service'
 import cartService from './cart.service'
+import tsysService from './tsys.service'
 import hateoasHelperService from 'common/services/hateoasHelper.service'
+import sessionService, { Roles } from 'common/services/session/session.service'
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
@@ -23,10 +26,12 @@ const serviceName = 'orderService'
 
 class Order {
   /* @ngInject */
-  constructor (cortexApiService, cartService, hateoasHelperService, analyticsFactory, $window, $log, $filter) {
+  constructor (cortexApiService, cartService, hateoasHelperService, sessionService, tsysService, analyticsFactory, $window, $log, $filter) {
     this.cortexApiService = cortexApiService
     this.cartService = cartService
     this.hateoasHelperService = hateoasHelperService
+    this.sessionService = sessionService
+    this.tsysService = tsysService
     this.analyticsFactory = analyticsFactory
     this.sessionStorage = $window.sessionStorage
     this.localStorage = $window.localStorage
@@ -40,14 +45,14 @@ class Order {
       zoom: {
         donorDetails: 'order:donordetails',
         email: 'order:emailinfo:email',
-        emailForm: 'order:emailinfo:emailform'
+        emailForm: 'order:emailinfo:orderemailform'
       }
     })
       .map(data => {
         let donorDetails = { name: {}, mailingAddress: {} }
         if (data.donorDetails) {
           donorDetails = data.donorDetails
-          donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'])
+          donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'].address)
           delete donorDetails['mailing-address']
         }
 
@@ -66,7 +71,7 @@ class Order {
   updateDonorDetails (details) {
     this.analyticsFactory.setDonorDetails(details)
     details = angular.copy(details)
-    details['mailing-address'] = formatAddressForCortex(details.mailingAddress)
+    details['mailing-address'] = { address: formatAddressForCortex(details.mailingAddress) }
     delete details.mailingAddress
 
     return this.cortexApiService.put({
@@ -89,42 +94,58 @@ class Order {
       return this.cortexApiService.get({
         path: ['carts', this.cortexApiService.scope, 'default'],
         zoom: {
-          bankAccount: 'order:paymentmethodinfo:bankaccountform',
-          creditCard: 'order:paymentmethodinfo:creditcardform'
+          paymentMethodForms: 'order:paymentmethodinfo:element[],order:paymentmethodinfo:element:paymentinstrumentform'
         }
       })
         .do((data) => {
           this.paymentMethodForms = data
 
-          if (!this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction')) {
-            this.$log.warn('Payment form request contains empty link', data)
-          }
+          angular.forEach(data.paymentMethodForms, paymentMethodForm => {
+            if (!this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')) {
+              this.$log.warn('Payment form request contains empty link', data)
+            }
+          })
         })
     }
   }
 
-  addBankAccountPayment (paymentInfo) {
+  addBankAccountPayment (paymentInfo, saveOnProfile) {
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'bank-name')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountfororderaction'),
-          data: paymentInfo,
+          path: link,
+          data: { 'payment-instrument-identification-form': paymentInfo, 'save-on-profile': saveOnProfile },
           followLocation: true
         })
       })
   }
 
-  addCreditCardPayment (paymentInfo) {
+  addCreditCardPayment (paymentInfo, saveOnProfile) {
     const cvv = paymentInfo.cvv
     paymentInfo = omit(paymentInfo, 'cvv')
+
+    const dataToSend = {}
+
     if (paymentInfo.address) {
-      paymentInfo.address = formatAddressForCortex(paymentInfo.address)
+      dataToSend['billing-address'] = {
+        name: {
+          'family-name': 'na',
+          'given-name': 'na'
+        },
+        address: formatAddressForCortex(paymentInfo.address)
+      }
+      paymentInfo.address = undefined
     }
+    dataToSend['payment-instrument-identification-form'] = paymentInfo
+    dataToSend['save-on-profile'] = saveOnProfile
+
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'card-number')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardfororderaction'),
-          data: paymentInfo,
+          path: link,
+          data: dataToSend,
           followLocation: true
         }).do(creditCard => {
           this.storeCardSecurityCode(cvv, creditCard.self.uri)
@@ -132,11 +153,26 @@ class Order {
       })
   }
 
+  determinePaymentMethodFormLink (data, fieldName) {
+    let link = ''
+    angular.forEach(data.paymentMethodForms, paymentMethodForm => {
+      if (paymentMethodForm.paymentinstrumentform['payment-instrument-identification-form'][fieldName] !== undefined) {
+        link = this.hateoasHelperService.getLink(paymentMethodForm.paymentinstrumentform, 'createpaymentinstrumentaction')
+      }
+    })
+    return link
+  }
+
   addPaymentMethod (paymentInfo) {
+    const role = this.sessionService.getRole()
+    let saveOnProfile = false
+    if (Roles.registered === role) {
+      saveOnProfile = true
+    }
     if (paymentInfo.bankAccount) {
-      return this.addBankAccountPayment(paymentInfo.bankAccount)
+      return this.addBankAccountPayment(paymentInfo.bankAccount, saveOnProfile)
     } else if (paymentInfo.creditCard) {
-      return this.addCreditCardPayment(paymentInfo.creditCard)
+      return this.addCreditCardPayment(paymentInfo.creditCard, saveOnProfile)
     } else {
       return Observable.throw('Error adding payment method. The data passed to orderService.addPaymentMethod did not contain bankAccount or creditCard data')
     }
@@ -150,23 +186,36 @@ class Order {
       paymentInfo.address = formatAddressForCortex(paymentInfo.address)
     }
 
+    let dataToSubmit = { ...paymentInfo, ...paymentInfo.address }
+    dataToSubmit = omit(dataToSubmit, ['cvv', 'address'])
+    dataToSubmit = { 'payment-instrument-identification-attributes': dataToSubmit }
+
+    if (paymentMethod.self.type === 'paymentinstruments.order-payment-instrument') {
+      return this.updatePaymentMethodInCortex(paymentMethod.self.uri, dataToSubmit, paymentInfo.cvv, paymentMethod)
+    }
+
     return this.selectPaymentMethod(paymentMethod.selectAction)
       .mergeMap(() => {
         return this.cortexApiService.get({
           path: ['carts', this.cortexApiService.scope, 'default'],
           zoom: {
-            updateForm: 'order:paymentmethodinfo:creditcardupdateform'
+            chosen: 'order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
           }
         })
       })
       .mergeMap(data => {
-        return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.updateForm, 'updatecreditcardfororderaction'),
-          data: omit(paymentInfo, 'cvv')
-        })
-          .do(() => {
-            this.storeCardSecurityCode(paymentInfo.cvv, paymentMethod.self.uri)
-          })
+        const uri = data.chosen ? data.chosen.description.self.uri : paymentMethod.self.uri
+        return this.updatePaymentMethodInCortex(uri, dataToSubmit, paymentInfo.cvv, paymentMethod)
+      })
+  }
+
+  updatePaymentMethodInCortex (uri, dataToSubmit, cvv, paymentMethod) {
+    return this.cortexApiService.put({
+      path: uri,
+      data: dataToSubmit
+    })
+      .do(() => {
+        this.storeCardSecurityCode(cvv, paymentMethod.self.uri)
       })
   }
 
@@ -174,8 +223,8 @@ class Order {
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        choices: 'order:paymentmethodinfo:selector:choice[],order:paymentmethodinfo:selector:choice:description',
-        chosen: 'order:paymentmethodinfo:selector:chosen,order:paymentmethodinfo:selector:chosen:description'
+        choices: 'order:paymentinstrumentselector:choice[],order:paymentinstrumentselector:choice:description',
+        chosen: 'order:paymentinstrumentselector:chosen,order:paymentinstrumentselector:chosen:description'
       }
     })
       .map(selector => {
@@ -186,10 +235,11 @@ class Order {
         }
         return map(paymentMethods, paymentMethod => {
           paymentMethod.description.selectAction = paymentMethod.self.uri
-          if (paymentMethod.description.address) {
-            paymentMethod.description.address = formatAddressForTemplate(paymentMethod.description.address)
+          if (paymentMethod.description['payment-instrument-identification-attributes']['street-address']) {
+            paymentMethod.description.address =
+              formatAddressForTemplate(paymentMethod.description['payment-instrument-identification-attributes'])
           }
-          return paymentMethod.description
+          return extractPaymentAttributes(paymentMethod.description)
         })
       })
       .map(paymentMethods => {
@@ -208,15 +258,15 @@ class Order {
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        paymentMethod: 'order:paymentmethodinfo:paymentmethod'
+        paymentMethod: 'order:paymentinstrumentselector:chosen:description'
       }
     })
       .pluck('paymentMethod')
       .map(data => {
-        if (data && data.address) {
-          data.address = formatAddressForTemplate(data.address)
+        if (data && data['payment-instrument-identification-attributes']['street-address']) {
+          data.address = formatAddressForTemplate(data['payment-instrument-identification-attributes'])
         }
-        return data
+        return extractPaymentAttributes(data)
       })
   }
 
@@ -234,17 +284,21 @@ class Order {
     return this.cortexApiService.get({
       path: ['carts', this.cortexApiService.scope, 'default'],
       zoom: {
-        needInfo: 'order:needinfo[]'
+        order: 'order'
       }
     })
       .map((data) => {
-        const needInfo = data.needInfo
-        const errors = map(needInfo, 'name')
-        return (errors && errors.length > 0) ? errors : undefined
+        const messages = data.order?.messages
+        const messageIds = map(messages, 'id')
+        return (messageIds && messageIds.length > 0) ? ({ messageIds: messageIds, messages: messages }) : undefined
       })
-      .do((errors) => {
-        errors && this.$log.error('The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.', errors)
+      .do(entry => {
+        entry?.messageIds && this.$log.error(
+          'The user was presented with these `needinfo` errors. They should have been caught earlier in the checkout process.',
+          entry.messages.map(message => message['debug-message'])
+        )
       })
+      .map(entry => entry?.messageIds)
   }
 
   submit (cvv) {
@@ -252,8 +306,10 @@ class Order {
       .mergeMap((data) => {
         const postData = cvv ? { 'security-code': cvv } : {}
         postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
+        postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()
+        postData['tsys-device'] = this.tsysService.getDevice()
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'createenhancedpurchaseaction'),
+          path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'submitenhancedpurchaseaction'),
           data: postData,
           followLocation: true
         })
@@ -315,6 +371,19 @@ class Order {
     return this.sessionStorage.getItem('lastPurchaseLink')
   }
 
+  storeRadioStationData (radioStationData) {
+    this.sessionStorage.setItem('radioStationName', radioStationData.Description)
+    this.sessionStorage.setItem('radioStationCallLetters', radioStationData.MediaId)
+  }
+
+  retrieveRadioStationName () {
+    return this.sessionStorage.getItem('radioStationName')
+  }
+
+  retrieveRadioStationCallLetters () {
+    return this.sessionStorage.getItem('radioStationCallLetters')
+  }
+
   spouseEditableForOrder (donorDetails) {
     if (donorDetails.staff) return false
     const currentOrder = this.hateoasHelperService.getLink(donorDetails, 'order')
@@ -337,6 +406,8 @@ export default angular
     cortexApiService.name,
     cartService.name,
     hateoasHelperService.name,
+    sessionService.name,
+    tsysService.name,
     analyticsFactory.name
   ])
   .service(serviceName, Order)
