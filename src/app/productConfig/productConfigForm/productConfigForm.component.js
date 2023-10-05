@@ -314,7 +314,9 @@ class ProductConfigFormController {
 
     const data = this.omitIrrelevantData(this.itemConfig)
     const comment = data.DONATION_SERVICES_COMMENTS
-    this.brandedAnalyticsFactory.saveTestingTransaction(comment ? comment.toLowerCase().includes('test') : false)
+    const isTestingTransaction = comment ? comment.toLowerCase().includes('test') : false
+    this.brandedAnalyticsFactory.saveTestingTransaction(isTestingTransaction)
+    this.analyticsFactory.saveTestingTransaction(this.productData, isTestingTransaction)
 
     const savingObservable = this.isEdit
       ? this.cartService.editItem(this.uri, this.productData.uri, data)
