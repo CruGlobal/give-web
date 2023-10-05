@@ -20,12 +20,19 @@ function testingTransactionName (item) {
   const designationNumber = item.designationNumber
   const frequencyObj = find(item.frequencies, { name: item.frequency })
   const frequency = frequencyObj?.display || item.frequency
-  return `isItemTestingTransaction_${designationNumber}_${frequency.toLowerCase()}`
+  if (designationNumber && frequency) {
+    return `isItemTestingTransaction_${designationNumber}_${frequency.toLowerCase()}`
+  } else {
+    return undefined
+  }
 }
 
 // Generate a datalayer product object
 const generateProduct = suppressErrors(function (item, additionalData = {}) {
-  const testingTransaction = window.sessionStorage.getItem(testingTransactionName(item)) || undefined
+  const sessionStorageTestName = testingTransactionName(item)
+  const testingTransaction = sessionStorageTestName
+    ? window.sessionStorage.getItem(sessionStorageTestName) || undefined
+    : undefined
   const price = additionalData?.price || item.amount
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
