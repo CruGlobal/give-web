@@ -552,8 +552,9 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       let purchaseTotalWithFees = 0
       // If the lastTransactionId and the current one do not match, we need to send an analytics event for the transaction
       if (purchaseData && lastTransactionId !== currentTransactionId) {
-        // Set the transactionId in localStorage to be the one that is passed in
+        const paymentType = purchaseData.paymentInstruments['account-type'] ? 'bank account' : 'credit card'
 
+        // Set the transactionId in localStorage to be the one that is passed in
         sessionStorage.setItem('transactionId', currentTransactionId)
         const cartObject = transactionCart.items.map((cartItem) => {
           const { amount, amountWithFees } = cartItem
@@ -566,7 +567,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
             ga_donator_type: localStorage.getItem('gaDonorType'),
             donation_type: frequency === 'single' ? 'one-time' : 'recurring',
             donation_frequency: frequency,
-            payment_type: purchaseData.paymentInstruments['account-type'] ? 'bank account' : 'credit card',
+            payment_type: paymentType,
             purchase_number: purchaseData.rawData['purchase-number'],
             campaign_code: cartItem.config['campaign-code'] !== '' ? cartItem.config['campaign-code'] : undefined,
             designation: 'designation'
@@ -576,10 +577,10 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         $window.dataLayer = $window.dataLayer || []
         $window.dataLayer.push({
           event: 'purchase',
-          paymentType: purchaseData.paymentInstruments['account-type'] ? 'bank account' : 'credit card',
+          paymentType: paymentType,
           ecommerce: {
             currency: 'USD',
-            payment_type: purchaseData.paymentInstruments['account-type'] ? 'bank account' : 'credit card',
+            payment_type: paymentType,
             donator_type: purchaseData.donorDetails['donor-type'],
             pays_processing: purchaseTotalWithFees && coverFeeDecision ? 'yes' : 'no',
             value: purchaseTotalWithFees && coverFeeDecision ? purchaseTotalWithFees.toFixed(2).toString() : purchaseTotal.toFixed(2).toString(),
