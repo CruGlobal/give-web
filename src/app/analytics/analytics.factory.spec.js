@@ -602,7 +602,7 @@ describe('analytics factory', () => {
       "donorDetails": {
         "donor-type": "Household",
       },
-      "paymentMeans": {
+      "paymentInstruments": {
         "card-type": "Visa",
       },
       "lineItems": [],

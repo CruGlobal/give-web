@@ -576,7 +576,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         $window.dataLayer = $window.dataLayer || []
         $window.dataLayer.push({
           event: 'purchase',
-          paymentType:  purchaseData.paymentInstruments['account-type'] ? 'bank account' : 'credit card',
+          paymentType: purchaseData.paymentInstruments['account-type'] ? 'bank account' : 'credit card',
           ecommerce: {
             currency: 'USD',
             payment_type: purchaseData.paymentInstruments['account-type'] ? 'bank account' : 'credit card',
