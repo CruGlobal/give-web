@@ -82,7 +82,7 @@ class RegisterAccountModalController {
 
   onIdentitySuccess () {
     // Success Sign-In/Up, Proceed to Step 2.
-    this.getDonorDetails()
+    this.getDonorDetails();
   }
 
   onIdentityFailure () {

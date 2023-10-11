@@ -67,4 +67,20 @@ sign-up-activation-modal {
     border-radius: 5px;
     margin-bottom: 20px;
   }
+
+  .active-account {
+    text-align: center;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    p {
+      width: 100%;
+    }
+
+    .okta-button {
+      max-width: 300px;
+    }
+  }
 }

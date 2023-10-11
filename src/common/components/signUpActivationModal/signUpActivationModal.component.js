@@ -36,11 +36,15 @@ class signUpActivationModalController {
     }
     this.showHelp = false;
     this.loadingAccountErrorCount = 0;
+    this.initialLoading = true;
     this.getUnverifiedAccount(false)
     this.getUnverifiedAccountTimoutId = this.$window.setInterval(() => {
       this.getUnverifiedAccount()
     }, 10000);
-    
+
+    // Allow time for the server to populate the data
+    // Otherwise error will show that email isn't registered.
+    setTimeout(() => this.initialLoading = false, 10000)
   }
 
   $onDestroy () {
@@ -86,8 +90,12 @@ class signUpActivationModalController {
             this.loadingAccount = false
             this.loadingAccountErrorCount = 0;
 
+            if (this.unverifiedAccount.email) {
+              this.initialLoading = false
+            }
+
             if (response.data.status === 'ACTIVE') {
-              this.onSuccess();
+              clearInterval(this.getUnverifiedAccountTimoutId) 
             }
           })
         }
@@ -97,6 +105,29 @@ class signUpActivationModalController {
       this.loadingAccount = false
       this.loadingAccountErrorCount++;
     }
+  }
+
+  signInWithOkta () {
+    this.isSigningIn = true
+    delete this.errorMessage
+    this.sessionService.oktaSignIn(this.lastPurchaseId).subscribe(() => {
+      this.onSuccess()
+    }, error => {
+      this.isSigningIn = false
+      if (error && error.config && error.config.data && error.config.data.password) {
+        delete error.config.data.password
+      }
+
+      if (error && error.data && error.data.code && error.data.code === 'SIEB-DOWN') {
+        this.$log.error('Siebel is down', error)
+        this.errorMessage = error.data.message
+      } else {
+        this.$log.error('Sign In Error', error)
+        this.errorMessage = 'generic'
+      }
+      this.$scope.$apply()
+      this.onFailure()
+    })
   }
 }
 
@@ -115,6 +146,7 @@ export default angular
       onSuccess: '&',
       onFailure: '&',
       onCancel: '&',
-      isInsideAnotherModal: '='
+      isInsideAnotherModal: '=',
+      lastPurchaseId: '<',
     }
   })
