@@ -122,8 +122,9 @@ class Profile {
 
   updateEmail (data, spouse) {
     const initialPath = spouse ? 'spouseemails' : 'emails'
+    const formPath = spouse ? 'spouse/form' : 'form'
     return this.cortexApiService.post({
-      path: [initialPath, this.cortexApiService.scope, spouse ? 'spouse/form' : 'form'],
+      path: [initialPath, this.cortexApiService.scope, formPath],
       data: { email: data.email },
       followLocation: true
     })
@@ -140,8 +141,9 @@ class Profile {
   }
 
   addPhoneNumber (number) {
+    const formPath = number['is-spouse'] ? 'spouse/form' : 'form'
     return this.cortexApiService.post({
-      path: ['phonenumbers', this.cortexApiService.scope, number['is-spouse'] ? 'spouse/form' : 'form'],
+      path: ['phonenumbers', this.cortexApiService.scope, formPath],
       data: number,
       followLocation: true
     })
