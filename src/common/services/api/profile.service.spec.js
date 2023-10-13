@@ -21,7 +21,6 @@ import phoneNumbersResponse from 'common/services/api/fixtures/cortex-profile-ph
 import selfserviceDonorDetailsResponse from 'common/services/api/fixtures/cortex-profile-selfservicedonordetails.fixture.js'
 import mailingAddressResponse from 'common/services/api/fixtures/cortex-profile-mailingaddress.fixture.js'
 import RecurringGiftModel from 'common/models/recurringGift.model'
-import cartResponse from './fixtures/cortex-cart-paymentmethodinfo-forms.fixture'
 
 const paymentMethodForms = cloneDeep(paymentmethodsFormsResponse._paymentmethods[0]._element)
 angular.forEach(paymentMethodForms, form => {

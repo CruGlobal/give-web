@@ -290,7 +290,7 @@ class Order {
       .map((data) => {
         const messages = data.order?.messages
         const messageIds = map(messages, 'id')
-        return (messageIds && messageIds.length > 0) ? ({ messageIds: messageIds, messages: messages }) : undefined
+        return (messageIds && messageIds.length) ? ({ messageIds: messageIds, messages: messages }) : undefined
       })
       .do(entry => {
         entry?.messageIds && this.$log.error(

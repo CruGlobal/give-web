@@ -181,8 +181,6 @@ describe('order service', () => {
     }
 
     function initiateRequest (done) {
-
-
       self.orderService.getPaymentMethodForms()
         .subscribe((data) => {
           expect(data).toEqual(cartResponseZoomMapped)
