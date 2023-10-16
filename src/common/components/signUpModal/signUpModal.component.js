@@ -65,32 +65,43 @@ class SignUpModalController {
       )
   }
 
-  submitDetails () {
+  async submitDetails () {
     this.submitting = true
-    this.submissionError = ''
-    this.signUpForm.$setSubmitted()
-    if (this.signUpForm.$valid) {
+    this.submissionError = []
+    try {
+      this.signUpForm.$setSubmitted()
+      if (!this.signUpForm.$valid) throw new Error('Some fields are invalid');
+
       const details = this.donorDetails   
-      const { email, name } = details
-      this.sessionService.createAccount(email, name['given-name'], name['family-name']).then((response) => {
-        if (response.status === 'error') {
-          this.$scope.$apply(() => {
-            if (response.accountPending) {
-              this.onStateChange({ state: 'sign-up-activation' });
-            } else {
-              this.submissionError = response.data;
-            }
-            this.submitting = false
-          })
+      const { email, name } = details;
+      const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name']);
+
+      if (createAccount.status === 'error') {
+        if (createAccount.accountPending) {
+          this.onStateChange({ state: 'sign-up-activation' });
         } else {
+          if (createAccount.redirectToSignIn) {
+            setTimeout(() => {
+              this.$scope.$apply(() => {
+                this.onStateChange({ state: 'sign-in' });
+              })
+            }, 5000)
+          }
           this.$scope.$apply(() => {
-            this.onStateChange({ state: 'sign-up-activation' });
-            this.submitting = false;
+            this.submissionError = createAccount.data
           })
         }
+      } else {
+        this.$scope.$apply(() => {
+          this.onStateChange({ state: 'sign-up-activation' });
+        })
+      }
+    } catch(error) {
+      this.$scope.$apply(() => {
+        this.submissionError = [error.message]
       })
-    } else {
-      this.submitting = false
+    } finally {
+      this.submitting = false;
     }
   }
 }

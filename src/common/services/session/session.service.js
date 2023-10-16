@@ -156,8 +156,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   async function createAccount (email, firstName, lastName, isTest = false) {
     const isAuthenticated = await authClient.isAuthenticated()
     if (currentRole() !== Roles.public || isAuthenticated) {
-      return 'Already logged in.'
+      const email = (await authClient.getUser()).email;
+      return {
+        status: 'error',
+        data: [`Already logged in to Okta ${email ? ` with email: ${email}` : ''}. You will be redirected to the Sign In page in a few seconds.`, 'Another Error'],
+        redirectToSignIn: true,
+      }
     }
+
     const data = { };
 
     if (angular.isDefined(email)) data.email = email;
