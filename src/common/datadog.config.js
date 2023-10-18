@@ -2,7 +2,7 @@ import 'angular-environment'
 import { datadogRum } from '@datadog/browser-rum'
 
 const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
-  const clientToken = process.env.DATADOG_RUM_CLIENT_TOKEN;
+  const clientToken = process.env.DATADOG_RUM_CLIENT_TOKEN
   if (clientToken) {
     const config = {
       applicationId: '3937053e-386b-4b5b-ab4a-c83217d2f953',
