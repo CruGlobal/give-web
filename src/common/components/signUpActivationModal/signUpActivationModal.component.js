@@ -23,7 +23,7 @@ class signUpActivationModalController {
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
       this.identified = true;
-      this.username = this.session.email;
+      this.username = this.sessionService.session.email;
       this.onStateChange({ state: 'sign-in' });
     }
     if (!this.isInsideAnotherModal) {
@@ -51,53 +51,49 @@ class signUpActivationModalController {
     clearInterval(this.getUnverifiedAccountTimoutId) 
   }
 
-  getUnverifiedAccount (subtle = true) {
-    if (!subtle) this.loadingAccount = true
-    this.loadingAccountError = false
+  async getUnverifiedAccount (subtle = true) {
+    if (!subtle) this.loadingAccount = true;
+    this.loadingAccountError = false;
 
     const createAccountDataStringified = this.$cookies.get(createAccountDataCookieName);
     const createAccountData = createAccountDataStringified ? JSON.parse(createAccountDataStringified) : null;
-    console.log('createAccountData', createAccountData);
     if (createAccountData) {
       this.sessionService.checkCreateAccountStatus(createAccountData?.email).then((response) => {
-        console.log('response', response)
         if (response.status === 'error') {
-          this.$scope.$apply(() => {
-            this.loadingAccountError = response.data
-            this.loadingAccountErrorCount++;
-            if (!subtle) this.loadingAccount = false
-          })
+          this.loadingAccountError = response.data
+          this.loadingAccountErrorCount++;
+          if (!subtle) this.loadingAccount = false
+          this.$scope.$apply();
         } else {
-          this.$scope.$apply(() => {
-            let status = ''
-            switch(response.data.status) {
-              case 'STAGED':
-                status = 'Awaiting Admin approval'
-                break;
-              case 'ACTIVE':
-                status = 'Active'
-                break;
-              case 'PROVISIONED':
-                status = 'Pending Activation'
-                break;
-            }
+          let status = ''
+          switch(response.data.status) {
+            case 'STAGED':
+              status = 'Awaiting Admin approval'
+              break;
+            case 'ACTIVE':
+              status = 'Active'
+              break;
+            case 'PROVISIONED':
+              status = 'Pending Activation'
+              break;
+          }
 
-            this.unverifiedAccount = { 
-              ...createAccountData,
-              ...response.data,
-              status
-            }
-            this.loadingAccount = false
-            this.loadingAccountErrorCount = 0;
+          this.unverifiedAccount = { 
+            ...createAccountData,
+            ...response.data,
+            status
+          }
+          this.loadingAccount = false
+          this.loadingAccountErrorCount = 0;
 
-            if (this.unverifiedAccount.email) {
-              this.initialLoading = false
-            }
+          if (this.unverifiedAccount.email) {
+            this.initialLoading = false
+          }
 
-            if (response.data.status === 'ACTIVE') {
-              clearInterval(this.getUnverifiedAccountTimoutId) 
-            }
-          })
+          if (response.data.status === 'ACTIVE') {
+            clearInterval(this.getUnverifiedAccountTimoutId) 
+          }
+          this.$scope.$apply();
         }
       });
     } else {
