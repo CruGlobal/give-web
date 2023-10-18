@@ -22,7 +22,7 @@ class SignUpModalController {
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
       this.identified = true;
-      this.username = this.session.email;
+      this.username = this.sessionService.session.email;
       this.onStateChange({ state: 'sign-in' });
     }
     if (!this.isInsideAnotherModal) {
@@ -75,26 +75,20 @@ class SignUpModalController {
       const details = this.donorDetails   
       const { email, name } = details;
       const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name']);
-
       if (createAccount.status === 'error') {
         if (createAccount.accountPending) {
           this.onStateChange({ state: 'sign-up-activation' });
         } else {
           if (createAccount.redirectToSignIn) {
             setTimeout(() => {
-              this.$scope.$apply(() => {
-                this.onStateChange({ state: 'sign-in' });
-              })
+              this.onStateChange({ state: 'sign-in' });
+              this.$scope.$apply();
             }, 5000)
-          }
-          this.$scope.$apply(() => {
-            this.submissionError = createAccount.data
-          })
+          };
+          this.submissionError = createAccount.data
         }
       } else {
-        this.$scope.$apply(() => {
-          this.onStateChange({ state: 'sign-up-activation' });
-        })
+        this.onStateChange({ state: 'sign-up-activation' });
       }
     } catch(error) {
       this.$scope.$apply(() => {
@@ -102,6 +96,7 @@ class SignUpModalController {
       })
     } finally {
       this.submitting = false;
+      this.$scope.$apply();
     }
   }
 }

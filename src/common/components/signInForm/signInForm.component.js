@@ -26,7 +26,7 @@ class SignInFormController {
     this.sessionService.handleOktaRedirect()
       .subscribe((data) => {
         if (data) {
-          console.log('Successfully redirected from Okta')
+          // Successfully redirected from Okta
           this.onSuccess()
         }
       },

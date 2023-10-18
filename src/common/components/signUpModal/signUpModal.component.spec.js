@@ -9,6 +9,14 @@ import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 
+const signUpFormData = {
+  name: {
+    ['given-name']: 'givenName',
+    ['family-name']: 'familyName',
+  },
+  email: 'email@cru.org',
+};
+
 describe('signUpForm', function () {
   beforeEach(angular.mock.module(module.name))
   let $ctrl, bindings, $rootScope
@@ -155,16 +163,48 @@ describe('signUpForm', function () {
       expect($ctrl.submitting).toEqual(false)   
     })
 
-    it("should call createAccount() with the user's data", () => {
-      const data = {
-        name: {
-          ['given-name']: 'givenName',
-          ['family-name']: 'familyName',
-        },
-        email: 'EMAIL@cru.org',
-      };
+    it('should not call createAccount', async () => {
+      jest.spyOn($ctrl.sessionService, 'createAccount')
+
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
-        [data]
+        [signUpFormData]
+      ))
+      $ctrl.$onInit()
+      $ctrl.signUpForm.$valid = false;
+      $ctrl.submitDetails(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name']).then(() =>{
+        expect($ctrl.sessionService.createAccount).not.toHaveBeenCalled()
+      })
+    });
+
+    it('should redirect as already logged in', async () => {
+      jest.useFakeTimers();
+      jest.spyOn(global, 'setTimeout');
+      jest.spyOn($ctrl.sessionService, 'createAccount').mockImplementation(() => Promise.resolve({
+        status: 'error',
+        redirectToSignIn: true,
+        data: ['Error one', 'Error 2']
+      }))
+      
+
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [signUpFormData]
+      ))
+      $ctrl.$onInit()
+      $ctrl.signUpForm.$valid = true
+      $ctrl.submitDetails().then(() =>{
+        expect($ctrl.$scope.$apply).toHaveBeenCalled();
+        expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])
+        expect($ctrl.submitting).toEqual(false)
+        expect($ctrl.submissionError).toEqual(['Error one', 'Error 2']);
+        jest.advanceTimersByTime(10000);
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-in' })
+        jest.useRealTimers()
+      });
+    })
+
+    it("should call createAccount() with the user's data", () => {
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [signUpFormData]
       ))
       jest.spyOn($ctrl.sessionService, 'createAccount').mockImplementation(() => Promise.resolve({
         status: 'error',
@@ -173,20 +213,13 @@ describe('signUpForm', function () {
       $ctrl.$onInit()
       $ctrl.signUpForm.$valid = true
       $ctrl.submitDetails()
-      expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(data.email, data.name['given-name'], data.name['family-name'])    
+      expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])    
     })
 
     it("should call createAccount() with the user's data", () => {
       jest.spyOn($ctrl, 'onStateChange')
-      const data = {
-        name: {
-          ['given-name']: 'givenName',
-          ['family-name']: 'familyName',
-        },
-        email: 'EMAIL@cru.org',
-      };
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
-        [data]
+        [signUpFormData]
       ))
       jest.spyOn($ctrl.sessionService, 'createAccount').mockImplementation(() => Promise.resolve({
         status: 'success',
@@ -194,13 +227,11 @@ describe('signUpForm', function () {
       }))
       $ctrl.$onInit()
       $ctrl.signUpForm.$valid = true
-      $ctrl.submitDetails()
-
-      setTimeout(() => {
-        expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(data.email, data.name['given-name'], data.name['family-name'])    
+      $ctrl.submitDetails().then(() => {
+        expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])    
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-up-activation' })
         expect($ctrl.$scope.$apply).toHaveBeenCalled()
-      }, 2000)
+      })
     })
   })
 })
