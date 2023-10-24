@@ -207,6 +207,21 @@ describe('order service', () => {
         })
       self.$httpBackend.flush()
     })
+
+    it('should log a warning if there is no create payment instrument link', done => {
+      const alteredCartResponse = cartResponse
+      alteredCartResponse._order[0]._paymentmethodinfo[0]._element[0]._paymentinstrumentform[0].links = []
+      alteredCartResponse._order[0]._paymentmethodinfo[0]._element[1]._paymentinstrumentform[0].links = []
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default?zoom=order:paymentmethodinfo:element,order:paymentmethodinfo:element:paymentinstrumentform')
+        .respond(200, alteredCartResponse)
+      self.orderService.getPaymentMethodForms()
+        .subscribe((data) => {
+          expect(self.$log.warn.logs[0]).toContain('Payment form request contains empty link')
+          done()
+        })
+      self.$httpBackend.flush()
+
+    })
   })
 
   describe('addBankAccountPayment', () => {

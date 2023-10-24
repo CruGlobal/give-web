@@ -61,13 +61,11 @@ describe('profile service', () => {
   })
 
   describe('getPaymentMethods', () => {
-    it('should load the user\'s saved payment methods', () => {
+    const testGetPaymentMethods = (paymentMethodsResponse) => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/profiles/crugive/default?zoom=selfservicepaymentinstruments:element')
-        .respond(200, paymentmethodsResponse)
+        .respond(200, paymentMethodsResponse)
 
-      const expectedPaymentMethods = angular.copy(paymentmethodsResponse._selfservicepaymentinstruments[0]._element)
-      expectedPaymentMethods[0].id = expectedPaymentMethods[0].self.uri.split('/').pop()
-      expectedPaymentMethods[1].id = expectedPaymentMethods[1].self.uri.split('/').pop()
+      const expectedPaymentMethods = angular.copy(paymentMethodsResponse._selfservicepaymentinstruments[0]._element)
       expectedPaymentMethods[0].address = {
         country: 'US',
         streetAddress: '123 First St',
@@ -76,6 +74,8 @@ describe('profile service', () => {
         region: 'CA',
         postalCode: '12345'
       }
+      expectedPaymentMethods[0].id = expectedPaymentMethods[0].self.uri.split('/').pop()
+      expectedPaymentMethods[1].id = expectedPaymentMethods[1].self.uri.split('/').pop()
       self.profileService.getPaymentMethods()
         .subscribe((data) => {
           expect(data).toEqual([
@@ -84,15 +84,33 @@ describe('profile service', () => {
           ])
         })
       self.$httpBackend.flush()
+    }
+    it('should load the user\'s saved payment methods', () => {
+      testGetPaymentMethods(paymentmethodsResponse)
+    })
+
+    it('should format the address', () => {
+      const incomingPaymentMethodsResponse = angular.copy(paymentmethodsResponse)
+      const incomingCreditCard = incomingPaymentMethodsResponse._selfservicepaymentinstruments[0]._element[0]
+      incomingCreditCard.address = undefined
+      incomingCreditCard['payment-instrument-identification-attributes'] = {
+        'country-name': 'US',
+        'street-address': '123 First St',
+        'extended-address': 'Apt 123',
+        locality: 'Sacramento',
+        'postal-code': '12345',
+        region: 'CA'
+      }
+      testGetPaymentMethods(incomingPaymentMethodsResponse)
     })
   })
 
   describe('getPaymentMethod', () => {
-    it('should load a user\'s payment method', () => {
+    const testGetPaymentMethod = (paymentMethodResponse) => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/giydiojyg4=')
-        .respond(200, paymentmethodResponse)
+        .respond(200, paymentMethodResponse)
 
-      const expectedPaymentMethod = angular.copy(paymentmethodResponse)
+      const expectedPaymentMethod = angular.copy(paymentMethodResponse)
       expectedPaymentMethod.id = expectedPaymentMethod.self.uri.split('/').pop()
       expectedPaymentMethod.address = {
         'country-name': 'US',
@@ -109,6 +127,24 @@ describe('profile service', () => {
           expect(data.address.streetAddress).toEqual(expectedPaymentMethod.address['street-address'])
         })
       self.$httpBackend.flush()
+    }
+
+    it('should load a user\'s payment method', () => {
+      testGetPaymentMethod(paymentmethodResponse)
+    })
+
+    it('should format the address', () => {
+      const incomingPaymentMethodResponse = angular.copy(paymentmethodResponse)
+      incomingPaymentMethodResponse.address = undefined
+      incomingPaymentMethodResponse['payment-instrument-identification-attributes'] = {
+        'country-name': 'US',
+        'extended-address': '',
+        locality: 'Franklin',
+        'postal-code': '46131-1632',
+        region: 'IN',
+        'street-address': '198 W King St'
+      }
+      testGetPaymentMethod(incomingPaymentMethodResponse)
     })
   })
 
