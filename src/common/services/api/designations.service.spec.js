@@ -143,7 +143,7 @@ describe('designation service', () => {
   describe('suggestedAmounts', () => {
     it('should load suggested amounts', () => {
       const itemConfig = { amount: 50, 'campaign-page': 9876 }
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
         .respond(200, campaignResponse)
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
@@ -160,7 +160,7 @@ describe('designation service', () => {
 
     it('should handle an invalid campaign page', () => {
       const itemConfig = { amount: 50, 'campaign-page': 9876 }
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
         .respond(400, {})
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
@@ -173,7 +173,7 @@ describe('designation service', () => {
 
     it('should handle no campaign page', () => {
       const itemConfig = { amount: 50 }
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
       self.designationsService.suggestedAmounts('0123456', itemConfig)
         .subscribe(suggestedAmounts => {
@@ -187,7 +187,7 @@ describe('designation service', () => {
 
   describe('facebookPixel', () => {
     it('should load facebook pixel id from JCR', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
       self.designationsService.facebookPixel('0123456')
         .subscribe(pixelId => {
@@ -199,7 +199,7 @@ describe('designation service', () => {
 
   describe('givingLinks', () => {
     it('should load givingLinks from JCR', () => {
-      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
       self.designationsService.givingLinks('0123456')
         .subscribe(givingLinks => {
@@ -216,7 +216,7 @@ describe('designation service', () => {
       const productCode = '0123456'
 
       const path = self.designationsService.generatePath(productCode)
-      expect(path).toEqual('/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      expect(path).toEqual('/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
     })
 
     it('should return the proper path for one time gift to campaign', () => {
@@ -224,14 +224,14 @@ describe('designation service', () => {
       const campaignPage = 'some-campaign'
 
       const path = self.designationsService.generatePath(productCode, campaignPage)
-      expect(path).toEqual('/content/give2/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
+      expect(path).toEqual('/content/give/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
     })
 
     it('should return the proper path for recurring gift to non-campaign', () => {
       const productCode = '0123456_mon'
 
       const path = self.designationsService.generatePath(productCode)
-      expect(path).toEqual('/content/give2/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+      expect(path).toEqual('/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
     })
 
     it('should return the proper path for recurring gift to campaign', () => {
@@ -239,7 +239,7 @@ describe('designation service', () => {
       const campaignPage = 'some-campaign'
 
       const path = self.designationsService.generatePath(productCode, campaignPage)
-      expect(path).toEqual('/content/give2/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
+      expect(path).toEqual('/content/give/us/en/campaigns/0/1/2/3/4/0123456/some-campaign.infinity.json')
     })
   })
 
