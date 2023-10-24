@@ -246,7 +246,7 @@ describe('designation service', () => {
   describe('ministriesList', () => {
     it('should return a list of ministries', () => {
       jest.spyOn(self.$location, 'protocol').mockImplementationOnce(() => 'https')
-      jest.spyOn(self.$location, 'host').mockImplementationOnce(() => 'give-stage-cloud.cru.org')
+      jest.spyOn(self.$location, 'host').mockImplementationOnce(() => 'give-stage2.cru.org')
       const pagePath = 'page.html'
       const ministriesResponse = {
         ministries: [{
@@ -256,7 +256,7 @@ describe('designation service', () => {
           extra: 'something-else'
         }]
       }
-      self.$httpBackend.expectGET(`https://give-stage-cloud.cru.org/${pagePath}/jcr:content/content-parsys/designation_search_r.json`)
+      self.$httpBackend.expectGET(`https://give-stage2.cru.org/${pagePath}/jcr:content/content-parsys/designation_search_r.json`)
         .respond(200, ministriesResponse)
 
       const expectedResult = {

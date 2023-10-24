@@ -513,7 +513,7 @@ describe('analytics factory', () => {
 
   describe('productViewDetailsEvent', () => {
     const productData = {
-      "path": "https://give-stage-cloud.cru.org/designations/0/6/4/3/0/0643021.html",
+      "path": "https://give-stage2.cru.org/designations/0/6/4/3/0/0643021.html",
       "designationNumber": "0643021",
       "campaignPage": null,
       "replacementDesignationNumber": null,
