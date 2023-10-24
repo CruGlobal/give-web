@@ -206,7 +206,7 @@
                                    ng-disabled="$ctrl.donorDetails.staff">
                             <select name="spousePhoneNumber"
                                     class="form-control form-control-subtle"
-                                    ng-model="phone.spouse"
+                                    ng-model="phone['is-spouse']"
                                     ng-change="phone.ownerChanged = !phone.ownerChanged"
                                     ng-disabled="!$ctrl.hasSpouse || $ctrl.donorDetails.staff">
                               <option ng-value="true">{{$ctrl.donorDetails['spouse-name']['given-name']}}</option>

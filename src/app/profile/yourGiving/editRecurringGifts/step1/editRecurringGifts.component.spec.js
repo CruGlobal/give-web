@@ -54,7 +54,7 @@ describe('editRecurringGiftsModal', () => {
       beforeEach(() => {
         RecurringGiftModel.paymentMethods = [
           {
-            self: { uri: '/selfservicepaymentmethods/crugive/giydgnrxgm=' }
+            self: { uri: '/selfservicepaymentinstruments/crugive/giydgnrxgm=' }
           }
         ]
       })

@@ -599,13 +599,13 @@ describe('Designation Editor', function () {
 
     it('should return the first vanity url', () => {
       $ctrl.designationContent = designationSecurityResponse
-      $ctrl.designationContent['sling:vanityPath'] = [`/content/give/us/en/${designationNumber}`]
+      $ctrl.designationContent['sling:vanityPath'] = [`/content/give2/us/en/${designationNumber}`]
       expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
     })
 
     it('should return the only vanity url', () => {
       $ctrl.designationContent = designationSecurityResponse
-      $ctrl.designationContent['sling:vanityPath'] = `/content/give/us/en/${designationNumber}`
+      $ctrl.designationContent['sling:vanityPath'] = `/content/give2/us/en/${designationNumber}`
       expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
     })
 

@@ -1,9 +1,9 @@
 <div class="loading-overlay-parent">
   <div class="alert alert-danger" role="alert" ng-if="$ctrl.needinfoErrors || $ctrl.submissionError">
     <p ng-repeat="error in $ctrl.needinfoErrors" ng-switch="error">
-      <span ng-switch-when="email-info" translate>{{'REVIEW_EMAIL_ERROR'}}</span>
-      <span ng-switch-when="payment-method-info" translate>{{'REVIEW_PAYMENT_ERROR'}}</span>
-      <span ng-switch-when="billing-address-info" translate>{{'REVIEW_BILLING_ADDRESS_ERROR'}}</span>
+      <span ng-switch-when="need.email" translate>{{'REVIEW_EMAIL_ERROR'}}</span>
+      <span ng-switch-when="need.payment.method" translate>{{'REVIEW_PAYMENT_ERROR'}}</span>
+      <span ng-switch-when="need.billing.address" translate>{{'REVIEW_BILLING_ADDRESS_ERROR'}}</span>
       <span ng-switch-default translate>
         <span ng-if="$ctrl.submissionErrorStatus > -1" translate>
           {{'REVIEW_MISSING_DATA_ERROR'}}
@@ -174,7 +174,7 @@
                 <span translate="FUTURE_WARNING" translate-value-days="{{i.giftStartDateDaysFromNow}}"></span>
                 <div>
                   <button class="btn btn-default" ng-click="i.giftStartDateWarning = false" translate="KEEP_DATE" translate-value-keepdate="{{i.giftStartDate.format('ll')}}"></button>
-                  <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('MM'))" translate="CHANGE_TO_DATE" translate-value-changedate="{{$ctrl.startDate(i.config['recurring-day-of-month'], $ctrl.nextDrawDate).format('ll')}}"></button>
+                  <button class="btn btn-primary" ng-click="$ctrl.updateGiftStartMonth(i, $ctrl.startDate(i.config['RECURRING_DAY_OF_MONTH'], $ctrl.nextDrawDate).format('MM'))" translate="CHANGE_TO_DATE" translate-value-changedate="{{$ctrl.startDate(i.config['RECURRING_DAY_OF_MONTH'], $ctrl.nextDrawDate).format('ll')}}"></button>
                 </div>
               </div>
             </td>
