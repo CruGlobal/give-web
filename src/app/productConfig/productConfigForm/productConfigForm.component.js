@@ -339,6 +339,8 @@ class ProductConfigFormController {
       if (includes(error.data, 'already in the cart')) {
         this.errorAlreadyInCart = true
         this.onStateChange({ state: 'errorAlreadyInCart' })
+      } else if (error.id === 'field.invalid.decimal.format') {
+        this.amountFormatError = error['debug-message']
       } else {
         this.errorSavingGeneric = true
         this.$log.error('Error adding or updating item in cart', error)
