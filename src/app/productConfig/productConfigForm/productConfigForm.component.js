@@ -340,7 +340,7 @@ class ProductConfigFormController {
         this.errorAlreadyInCart = true
         this.onStateChange({ state: 'errorAlreadyInCart' })
       } else if (error?.data?.messages[0]?.id === 'field.invalid.decimal.format') {
-        this.amountFormatError = error['debug-message']
+        this.amountFormatError = error?.data?.messages[0]['debug-message']
         this.onStateChange({ state: 'errorSubmitting' })
       } else {
         this.errorSavingGeneric = true
