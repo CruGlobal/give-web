@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.collections.links',
-    uri: '/lookups/crugive/batches/items/sgttknrqha4deni=',
-    href: 'https://give-stage2.cru.org/cortex/lookups/crugive/batches/items/sgttknrqha4deni='
+    uri: '/lookups/crugive/batches/form/sgttknrqha4deni=',
+    href: 'https://give-stage2.cru.org/cortex/items/crugive/lookups/batches/form/sgttknrqha4deni='
   },
   links: [{
     rel: 'element',

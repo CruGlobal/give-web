@@ -79,11 +79,11 @@
                 <input name="suggestedAmount"
                        type="radio"
                        ng-click="$ctrl.changeAmount(suggested.amount)"
-                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.amount === suggested.amount" />
+                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount" />
                 {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
               </label>
             </div>
-            <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
+            <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.AMOUNT | showErrors)}">
               <div class="form-group">
                 <label>
                   <input name="suggestedAmount"
@@ -100,8 +100,8 @@
                          ng-required="$ctrl.customInputActive"
                          placeholder="{{'OTHER_PLACEHOLDER' | translate}}" />
                 </label>
-                <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
-                     ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+                <div role="alert" ng-messages="$ctrl.itemConfigForm.AMOUNT.$error"
+                     ng-if="($ctrl.itemConfigForm.AMOUNT | showErrors)">
                   <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
                   <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
                   <div class="help-block" ng-message="minimum" translate translate-values="{currencyLimit: (1 | currency)}">{{'AMOUNT_MIN_ERROR'}}</div>
@@ -114,11 +114,11 @@
           </div>
 
           <div data-toggle="buttons"
-               ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
+               ng-class="{'has-error': ($ctrl.itemConfigForm.AMOUNT | showErrors)}"
                ng-if="!$ctrl.useSuggestedAmounts">
             <label class="btn btn-radio"
                    ng-click="$ctrl.changeAmount(a)"
-                   ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
+                   ng-class="{'active': $ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive}"
                    ng-repeat-start="a in $ctrl.selectableAmounts">
               <span class="number">&dollar;{{a}}</span>
             </label>
@@ -140,8 +140,8 @@
                        required />
               </div>
             </label>
-            <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
-                 ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+            <div role="alert" ng-messages="$ctrl.itemConfigForm.AMOUNT.$error"
+                 ng-if="($ctrl.itemConfigForm.AMOUNT | showErrors)">
               <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
               <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
               <div class="help-block" ng-message="minimum" translate="AMOUNT_MIN_ERROR" translate-values="{currencyLimit: (1 | currency)}"></div>
@@ -186,9 +186,9 @@
                 <label translate>{{'MONTH'}}</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['recurring-start-month']"
+                          ng-model="$ctrl.itemConfig['RECURRING_START_MONTH']"
                           ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
                   </select>
                 </div>
               </div>
@@ -198,9 +198,9 @@
                 <label translate>{{'DAY'}}</label>
                 <div class="form-group">
                   <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['recurring-day-of-month']"
-                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
+                          ng-model="$ctrl.itemConfig['RECURRING_DAY_OF_MONTH']"
+                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate)"
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
                   </select>
                 </div>
               </div>
@@ -209,7 +209,7 @@
               <div class="form-group">
                 <label translate>{{'GIFT_START_DATE'}}</label>
                 <div class="form-group">
-                  {{$ctrl.startMonth( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate ).format('ll')}}
+                  {{$ctrl.startMonth( $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate ).format('ll')}}
                 </div>
               </div>
             </div>
@@ -236,7 +236,7 @@
                       name="recipientComments"
                       rows="3"
                       maxlength="250"
-                      ng-model="$ctrl.itemConfig['recipient-comments']"
+                      ng-model="$ctrl.itemConfig.RECIPIENT_COMMENTS"
                       ng-if="$ctrl.showRecipientComments"
                       tabindex="-1"
                       style="display:block;"></textarea>
@@ -254,7 +254,7 @@
                       name="donationServicesComments"
                       rows="3"
                       maxlength="250"
-                      ng-model="$ctrl.itemConfig['donation-services-comments']"
+                      ng-model="$ctrl.itemConfig.DONATION_SERVICES_COMMENTS"
                       ng-if="$ctrl.showDSComments"
                       tabindex="-1"
                       placeholder="{{'MESSAGE_EXAMPLE' | translate}}"

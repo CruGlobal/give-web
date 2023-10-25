@@ -24,7 +24,7 @@ class ProductConfigController {
   configModal () {
     this.productModalService
       .configureProduct(this.productCode, {
-        'campaign-code': this.campaignCode,
+        CAMPAIGN_CODE: this.campaignCode,
         'campaign-page': this.campaignPage
       }, false)
   }

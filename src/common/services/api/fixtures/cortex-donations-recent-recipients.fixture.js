@@ -62,11 +62,11 @@ export default {
     uri: '/selfservicedonordetails/profiles/crugive/myywkmtcga2diljyme3tkljugfqtollbgzrdeljqmq2tknrtgu2tamtbga=',
     href: 'https://give-stage2.cru.org/cortex/selfservicedonordetails/profiles/crugive/myywkmtcga2diljyme3tkljugfqtollbgzrdeljqmq2tknrtgu2tamtbga='
   }, {
-    rel: 'selfservicepaymentmethods',
+    rel: 'selfservicepaymentinstruments',
     rev: 'profile',
     type: 'elasticpath.collections.links',
-    uri: '/selfservicepaymentmethods/crugive',
-    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+    uri: '/selfservicepaymentinstruments/crugive',
+    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive'
   }, {
     rel: 'wishlists',
     rev: 'profile',

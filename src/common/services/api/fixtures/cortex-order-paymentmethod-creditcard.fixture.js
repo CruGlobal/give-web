@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.carts.cart',
-    uri: '/carts/crugive/my2gmmlfhaygkllbmu4deljumq3diljzgfsdellcge3wizbyhazwemtggm=?zoom=order:paymentmethodinfo:paymentmethod',
-    href: 'https://give-stage2.cru.org/cortex/carts/crugive/my2gmmlfhaygkllbmu4deljumq3diljzgfsdellcge3wizbyhazwemtggm=?zoom=order:paymentmethodinfo:paymentmethod'
+    uri: '/carts/crugive/my2gmmlfhaygkllbmu4deljumq3diljzgfsdellcge3wizbyhazwemtggm=?zoom=order:paymentinstrumentselector:chosen:description',
+    href: 'https://give-stage2.cru.org/cortex/carts/crugive/my2gmmlfhaygkllbmu4deljumq3diljzgfsdellcge3wizbyhazwemtggm=?zoom=order:paymentinstrumentselector:chosen:description'
   },
   links: [{
     rel: 'lineitems',
@@ -39,28 +39,39 @@ export default {
     href: 'https://give-stage2.cru.org/cortex/totals/carts/crugive/my2gmmlfhaygkllbmu4deljumq3diljzgfsdellcge3wizbyhazwemtggm='
   }],
   _order: [{
-    _paymentmethodinfo: [{
-      _paymentmethod: [{
-        self: {
-          type: 'cru.creditcards.named-credit-card',
-          uri: '/paymentmethods/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq=',
-          href: 'https://give-stage2.cru.org/cortex/paymentmethods/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq='
-        },
-        links: [],
-        address: {
-          'country-name': 'US',
-          'extended-address': '',
-          locality: 'Sacramento',
-          'postal-code': '12345',
-          region: 'CA',
-          'street-address': '1234 First Street'
-        },
-        'card-number': '1118',
-        'card-type': 'MasterCard',
-        'cardholder-name': 'Test Person',
-        description: 'MasterCard - 1118',
-        'expiry-month': '08',
-        'expiry-year': '2020'
+    _paymentinstrumentselector: [{
+      _chosen: [{
+        _description: [{
+          self: {
+            type: 'paymentinstruments.payment-instrument',
+            uri: '/paymentmethods/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq=',
+            href: 'https://give-stage2.cru.org/cortex/paymentmethods/orders/crugive/mm2tsnrrg5qtqljshfsteljuhe2dellcgrrweljugftdgndcg4zweztbmq='
+          },
+          messages: [],
+          links: [],
+          'default-on-profile': false,
+          'limit-amount': {
+            amount: 0,
+            currency: 'USD',
+            display: '$0.00'
+          },
+          name: 'Cru Payment Instrument',
+          'payment-instrument-identification-attributes': {
+            'last-four-digits': '1118',
+            'card-type': 'MasterCard',
+            'cardholder-name': 'Test Person',
+            description: 'MasterCard - 1118',
+            'expiry-month': '08',
+            'expiry-year': '2020',
+            'country-name': 'US',
+            'extended-address': '',
+            locality: 'Sacramento',
+            'postal-code': '12345',
+            region: 'CA',
+            'street-address': '1234 First Street'
+          },
+          'saved-on-profile': true
+        }]
       }]
     }]
   }],

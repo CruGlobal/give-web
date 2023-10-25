@@ -46,7 +46,7 @@ export default {
         href: 'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=/form'
       },
       links: [{
-        rel: 'createenhancedpurchaseaction',
+        rel: 'submitenhancedpurchaseaction',
         uri: '/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=',
         href: 'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu='
       }],

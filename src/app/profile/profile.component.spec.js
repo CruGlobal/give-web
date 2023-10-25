@@ -490,6 +490,19 @@ describe('ProfileComponent', function () {
       expect($ctrl.phoneNumberError).toBe('loading')
       expect($ctrl.profileService.getPhoneNumbers).toHaveBeenCalled()
     })
+
+    it('should properly handle cache', () => {
+      const onlyPhoneNumber = {
+        'phone-number': '555-555-5555',
+        'phone-number-type': 'Mobile',
+        primary: true,
+        'is-spouse': false
+      }
+      jest.spyOn($ctrl.profileService, 'getPhoneNumbers').mockReturnValue(Observable.of([onlyPhoneNumber]))
+      $ctrl.phoneNumbers = [onlyPhoneNumber]
+      $ctrl.loadPhoneNumbers()
+      expect($ctrl.phoneNumbers.length).toEqual(1)
+    })
   })
 
   describe('addPhoneNumber()', () => {

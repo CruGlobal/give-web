@@ -21,9 +21,9 @@ describe('thank you summary', () => {
         },
         'registration-state': 'MATCHED'
       },
-      paymentMeans: {
+      paymentInstruments: {
         self: {
-          type: 'elasticpath.purchases.purchase.paymentmeans'
+          type: 'paymentinstruments.purchase-payment-instrument'
         },
         address: {
           'street-address': '123 Billing St'
@@ -196,11 +196,11 @@ describe('thank you summary', () => {
       )
 
       self.controller.loadFacebookPixel({
-        code: {
+        itemCode: {
           code: '555111'
         },
         rate: {
-          cost: { amount: 100 }
+          cost: [{ amount: 100 }]
         }
       })
 
@@ -214,11 +214,11 @@ describe('thank you summary', () => {
       )
 
       self.controller.loadFacebookPixel({
-        code: {
+        itemCode: {
           code: '555111'
         },
         rate: {
-          cost: { amount: 100 }
+          cost: [{ amount: 100 }]
         }
       })
 

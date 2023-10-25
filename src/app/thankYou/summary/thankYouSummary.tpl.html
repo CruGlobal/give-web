@@ -28,52 +28,52 @@
               {{'PAYMENT_METHOD'}}
             </div>
 
-            <div class="panel-body" ng-if="$ctrl.purchase.paymentMeans.self.type === 'elasticpath.bankaccountpurchases.payment-means-bank-account'">
+            <div class="panel-body" ng-if="$ctrl.purchase.paymentInstruments['account-type']">
               <div class="form-group">
                 <label translate>{{'BANK_NAME'}}</label>
-                <p>{{$ctrl.purchase.paymentMeans['bank-name']}}</p>
+                <p>{{$ctrl.purchase.paymentInstruments['bank-name']}}</p>
               </div>
 
               <div class="form-group">
                 <label translate>{{'ACCOUNT_TYPE'}}</label>
-                <p>{{$ctrl.purchase.paymentMeans['account-type'] | capitalize}}</p>
+                <p>{{$ctrl.purchase.paymentInstruments['account-type'] | capitalize}}</p>
               </div>
 
               <div class="form-group">
                 <label translate>{{'ROUTING_NUM_FULL'}}</label>
-                <p>{{$ctrl.purchase.paymentMeans['routing-number']}}</p>
+                <p>{{$ctrl.purchase.paymentInstruments['routing-number']}}</p>
               </div>
 
               <div class="form-group">
                 <label translate>{{'ACCOUNT_NUM_FULL'}}</label>
-                <p>************{{$ctrl.purchase.paymentMeans['display-account-number']}}</p>
+                <p>************{{$ctrl.purchase.paymentInstruments['display-account-number']}}</p>
               </div>
             </div>
 
-            <div class="panel-body" ng-if="$ctrl.purchase.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans'">
+            <div class="panel-body" ng-if="$ctrl.purchase.paymentInstruments['card-type']">
               <div class="form-group">
                 <label translate>{{'CARD_NAME'}}</label>
-                <p>{{$ctrl.purchase.paymentMeans['holder-name']}}</p>
+                <p>{{$ctrl.purchase.paymentInstruments['cardholder-name']}}</p>
               </div>
 
               <div class="form-group">
                 <label translate>{{'CARD_NUM_FULL'}}</label>
-                <p>************{{$ctrl.purchase.paymentMeans['primary-account-number-id']}}</p>
+                <p>************{{$ctrl.purchase.paymentInstruments['last-four-digits']}}</p>
               </div>
 
               <div class="form-group">
                 <label translate>{{'CARD_TYPE'}}</label>
-                <p>{{$ctrl.purchase.paymentMeans['card-type']}}</p>
+                <p>{{$ctrl.purchase.paymentInstruments['card-type']}}</p>
               </div>
 
               <div class="form-group">
                 <label translate>{{'EXPIRES'}}</label>
-                <p>{{$ctrl.purchase.paymentMeans['expiry-date'].month}}/{{$ctrl.purchase.paymentMeans['expiry-date'].year}}</p><!-- TODO: deal with localization -->
+                <p>{{$ctrl.purchase.paymentInstruments['expiry-month']}}/{{$ctrl.purchase.paymentInstruments['expiry-year']}}</p><!-- TODO: deal with localization -->
               </div>
 
               <div class="form-group">
                 <label translate>{{'BILLING_ADDRESS'}}</label>
-                <display-address address="$ctrl.purchase.paymentMeans.address"></display-address>
+                <display-address address="$ctrl.purchase.paymentInstruments.address"></display-address>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@
                 <tr class="giftsum-gift-row" ng-repeat="item in $ctrl.purchase.lineItems" ng-init="$ctrl.loadFacebookPixel(item)">
                   <td class="td-gift">
                     <span class="giftsum-person giftsum-title">{{item.name}}</span>
-                    <p>#{{item.code['product-code']}}</p>
+                    <p>#{{item.itemOfferCode.code}}</p>
                   </td>
                   <td class="td-frequency">
                     <span class="giftsum-about giftsum-title">{{item.rate.display}}</span>
