@@ -360,15 +360,10 @@ class ProductConfigFormController {
   }
 
   transformAmountIfNecessary (amount) {
-    let transformedAmount = amount
     if (!angular.isNumber(amount)) {
-      transformedAmount = amount.replace('$', '')
-      transformedAmount = parseFloat(transformedAmount)
-      if (isNaN(transformedAmount)) {
-        return amount
-      }
+      return amount.replace('$', '')
     }
-    return transformedAmount
+    return amount
   }
 
   displayId () {
