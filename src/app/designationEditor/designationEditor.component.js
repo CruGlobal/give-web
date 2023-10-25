@@ -374,9 +374,9 @@ class DesignationEditorController {
 
     if (vanityPath) {
       if (isArray(vanityPath)) {
-        return `${vanityPath[0].replace('/content/give2/us/en', '')}${cacheBust}`
+        return `${vanityPath[0].replace('/content/give/us/en', '')}${cacheBust}`
       } else {
-        return `${vanityPath.replace('/content/give2/us/en', '')}${cacheBust}`
+        return `${vanityPath.replace('/content/give/us/en', '')}${cacheBust}`
       }
     } else {
       return `/${this.designationNumber}${cacheBust}`
