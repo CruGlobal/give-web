@@ -315,6 +315,7 @@ class ProductConfigFormController {
     const data = this.omitIrrelevantData(this.itemConfig)
     const comment = data.DONATION_SERVICES_COMMENTS
     const isTestingTransaction = comment ? comment.toLowerCase().includes('test') : false
+    data.AMOUNT = this.transformAmountIfNecessary(data.AMOUNT)
     this.brandedAnalyticsFactory.saveTestingTransaction(isTestingTransaction)
     this.analyticsFactory.saveTestingTransaction(this.productData, isTestingTransaction)
 
@@ -356,6 +357,13 @@ class ProductConfigFormController {
     return omitBy(data, (value) => {
       return value === ''
     })
+  }
+
+  transformAmountIfNecessary (amount) {
+    if (!angular.isNumber(amount)) {
+      return amount.replace('$', '')
+    }
+    return amount
   }
 
   displayId () {
