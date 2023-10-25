@@ -715,6 +715,30 @@ describe('product config form component', function () {
           $ctrl.saveGiftToCart()
         }
       })
+
+      it('should transform the amount', () => {
+        $ctrl.itemConfig.AMOUNT = '$85'
+        $ctrl.itemConfigForm.$dirty = true
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.submittingGift).toEqual(false)
+        expect($ctrl.cartService[operation]).toHaveBeenCalledWith(...operationArgs)
+        expect($ctrl.$scope.$emit).toHaveBeenCalledWith(cartEvent)
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'submitted' })
+        expect($ctrl.errorAlreadyInCart).toEqual(false)
+        expect($ctrl.errorSavingGeneric).toEqual(false)
+      })
+
+      it('should fail if the amount is invalid', () => {
+        $ctrl.itemConfig.AMOUNT = 'test'
+        $ctrl.itemConfigForm.$dirty = true
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.submittingGift).toEqual(false)
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorSubmitting' })
+        expect($ctrl.errorAlreadyInCart).toEqual(false)
+        expect($ctrl.errorSavingGeneric).toEqual(true)
+      })
     }
   })
 
@@ -760,6 +784,33 @@ describe('product config form component', function () {
     it('should navigate to other giving link', () => {
       $ctrl.giveLink('https://example.com')
       expect($ctrl.$window.location).toEqual('https://example.com')
+    })
+  })
+
+  describe('transformAmountIfNecessary', () => {
+    it('should not change the int amount', () => {
+      const amount = '5'
+      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(5)
+    })
+
+    it('should not change the float amount', () => {
+      const amount = '5.12'
+      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(5.12)
+    })
+
+    it('should remove the $', () => {
+      const amount = '$50'
+      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(50)
+    })
+
+    it('should remove the comma', () => {
+      const amount = '1,000'
+      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(1000)
+    })
+
+    it('should return an error', () => {
+      const amount = 'test'
+      expect($ctrl.transformAmountIfNecessary(amount)).toEqual('error')
     })
   })
 })
