@@ -728,17 +728,6 @@ describe('product config form component', function () {
         expect($ctrl.errorAlreadyInCart).toEqual(false)
         expect($ctrl.errorSavingGeneric).toEqual(false)
       })
-
-      it('should fail if the amount is invalid', () => {
-        $ctrl.itemConfig.AMOUNT = 'test'
-        $ctrl.itemConfigForm.$dirty = true
-        $ctrl.saveGiftToCart()
-
-        expect($ctrl.submittingGift).toEqual(false)
-        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorSubmitting' })
-        expect($ctrl.errorAlreadyInCart).toEqual(false)
-        expect($ctrl.errorSavingGeneric).toEqual(true)
-      })
     }
   })
 
@@ -803,14 +792,9 @@ describe('product config form component', function () {
       expect($ctrl.transformAmountIfNecessary(amount)).toEqual(50)
     })
 
-    it('should remove the comma', () => {
-      const amount = '1,000'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(1000)
-    })
-
-    it('should return an error', () => {
+    it('should pass through the original amount', () => {
       const amount = 'test'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual('error')
+      expect($ctrl.transformAmountIfNecessary(amount)).toEqual('test')
     })
   })
 })

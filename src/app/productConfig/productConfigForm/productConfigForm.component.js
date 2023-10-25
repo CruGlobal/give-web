@@ -315,14 +315,7 @@ class ProductConfigFormController {
     const data = this.omitIrrelevantData(this.itemConfig)
     const comment = data.DONATION_SERVICES_COMMENTS
     const isTestingTransaction = comment ? comment.toLowerCase().includes('test') : false
-    const transformedAmount = this.transformAmountIfNecessary(data.AMOUNT)
-    if (transformedAmount === 'error') {
-      this.submittingGift = false
-      this.errorSavingGeneric = true
-      this.onStateChange({ state: 'errorSubmitting' })
-      return
-    }
-    data.AMOUNT = transformedAmount
+    data.AMOUNT = this.transformAmountIfNecessary(data.AMOUNT)
     this.brandedAnalyticsFactory.saveTestingTransaction(isTestingTransaction)
     this.analyticsFactory.saveTestingTransaction(this.productData, isTestingTransaction)
 
@@ -373,10 +366,9 @@ class ProductConfigFormController {
     let transformedAmount = amount
     if (!angular.isNumber(amount)) {
       transformedAmount = amount.replace('$', '')
-      transformedAmount = transformedAmount.replace(',', '')
       transformedAmount = parseFloat(transformedAmount)
       if (isNaN(transformedAmount)) {
-        return 'error'
+        return amount
       }
     }
     return transformedAmount
