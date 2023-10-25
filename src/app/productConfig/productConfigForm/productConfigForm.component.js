@@ -370,7 +370,6 @@ class ProductConfigFormController {
     let transformedAmount = amount
     if (!angular.isNumber(amount)) {
       transformedAmount = amount.replace('$', '')
-      transformedAmount = transformedAmount.replace(',', '')
       transformedAmount = parseFloat(transformedAmount)
       if (isNaN(transformedAmount)) {
         return 'error'

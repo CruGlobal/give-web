@@ -803,11 +803,6 @@ describe('product config form component', function () {
       expect($ctrl.transformAmountIfNecessary(amount)).toEqual(50)
     })
 
-    it('should remove the comma', () => {
-      const amount = '1,000'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(1000)
-    })
-
     it('should return an error', () => {
       const amount = 'test'
       expect($ctrl.transformAmountIfNecessary(amount)).toEqual('error')
