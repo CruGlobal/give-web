@@ -321,7 +321,7 @@ describe('product config form component', function () {
       $ctrl.itemConfigForm = {
         $valid: true,
         $dirty: false,
-        AMOUNT: {}
+        amount: {}
       }
       $ctrl.$scope.$digest()
 
@@ -332,7 +332,7 @@ describe('product config form component', function () {
 
   describe('addCustomValidators()', () => {
     beforeEach(() => {
-      $ctrl.itemConfigForm.AMOUNT = {
+      $ctrl.itemConfigForm.amount = {
         $validators: {},
         $parsers: []
       }
@@ -342,28 +342,28 @@ describe('product config form component', function () {
       $ctrl.customInputActive = true
       $ctrl.addCustomValidators()
 
-      expect($ctrl.itemConfigForm.AMOUNT.$parsers[0]('$10')).toBe('10')
-      expect($ctrl.itemConfigForm.AMOUNT.$parsers[0]('$10,000')).toBe('10000')
+      expect($ctrl.itemConfigForm.amount.$parsers[0]('$10')).toBe('10')
+      expect($ctrl.itemConfigForm.amount.$parsers[0]('$10,000')).toBe('10000')
 
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('1')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('0.9')).toBe(false)
+      expect($ctrl.itemConfigForm.amount.$validators.minimum('1')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.minimum('0.9')).toBe(false)
 
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('9999999.99')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('10000000')).toBe(false)
+      expect($ctrl.itemConfigForm.amount.$validators.maximum('9999999.99')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.maximum('10000000')).toBe(false)
 
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.4')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.')).toBe(false)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.235')).toBe(false)
+      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.4')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.')).toBe(false)
+      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.235')).toBe(false)
     })
 
     it('should pass validation in any \'bad\' case', () => {
       $ctrl.customInputActive = false
       $ctrl.addCustomValidators()
 
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('0.3')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('dlksfjs')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('4542452454524.99')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('1.214')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.minimum('0.3')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.minimum('dlksfjs')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.maximum('4542452454524.99')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.pattern('1.214')).toBe(true)
     })
   })
 

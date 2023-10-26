@@ -197,8 +197,8 @@ class ProductConfigFormController {
   }
 
   waitForFormInitialization () {
-    const unregister = this.$scope.$watch('$ctrl.itemConfigForm.AMOUNT', () => {
-      if (this.itemConfigForm && this.itemConfigForm.AMOUNT) {
+    const unregister = this.$scope.$watch('$ctrl.itemConfigForm.amount', () => {
+      if (this.itemConfigForm && this.itemConfigForm.amount) {
         unregister()
         this.addCustomValidators()
       }
@@ -206,14 +206,14 @@ class ProductConfigFormController {
   }
 
   addCustomValidators () {
-    this.itemConfigForm.AMOUNT.$parsers.push(value => value.replace('$', '').replace(',', '')) // Ignore a dollar sign and comma if included by the user
-    this.itemConfigForm.AMOUNT.$validators.minimum = value => {
+    this.itemConfigForm.amount.$parsers.push(value => value.replace('$', '').replace(',', '')) // Ignore a dollar sign and comma if included by the user
+    this.itemConfigForm.amount.$validators.minimum = value => {
       return !this.customInputActive || value * 1.0 >= 1
     }
-    this.itemConfigForm.AMOUNT.$validators.maximum = value => {
+    this.itemConfigForm.amount.$validators.maximum = value => {
       return !this.customInputActive || value * 1.0 < 10000000
     }
-    this.itemConfigForm.AMOUNT.$validators.pattern = value => {
+    this.itemConfigForm.amount.$validators.pattern = value => {
       const regex = /^([0-9]*)(\.[0-9]{1,2})?$/
       return !this.customInputActive || regex.test(value)
     }
