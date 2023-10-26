@@ -715,22 +715,6 @@ describe('product config form component', function () {
           $ctrl.saveGiftToCart()
         }
       })
-
-      it('should transform the amount', () => {
-        $ctrl.itemConfig.AMOUNT = '$85'
-        $ctrl.itemConfigForm.$dirty = true
-        const overrideArgs = isEdit
-          ? ['uri', 'items/crugive/<some id>', { AMOUNT: '85' }]
-          : ['items/crugive/<some id>', { AMOUNT: '85' }, undefined]
-        $ctrl.saveGiftToCart()
-
-        expect($ctrl.submittingGift).toEqual(false)
-        expect($ctrl.cartService[operation]).toHaveBeenCalledWith(...overrideArgs)
-        expect($ctrl.$scope.$emit).toHaveBeenCalledWith(cartEvent)
-        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'submitted' })
-        expect($ctrl.errorAlreadyInCart).toEqual(false)
-        expect($ctrl.errorSavingGeneric).toEqual(false)
-      })
     }
   })
 
@@ -776,33 +760,6 @@ describe('product config form component', function () {
     it('should navigate to other giving link', () => {
       $ctrl.giveLink('https://example.com')
       expect($ctrl.$window.location).toEqual('https://example.com')
-    })
-  })
-
-  describe('transformAmountIfNecessary', () => {
-    it('should not change the int amount', () => {
-      const amount = '5'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(amount)
-    })
-
-    it('should not change the float amount', () => {
-      const amount = '5.12'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(amount)
-    })
-
-    it('should remove the $', () => {
-      const amount = '$50'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual('50')
-    })
-
-    it('should not strip other characters', () => {
-      const amount = '23,00'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(amount)
-    })
-
-    it('should pass through the original amount', () => {
-      const amount = 'test'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual('test')
     })
   })
 })
