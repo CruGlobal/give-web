@@ -41,7 +41,7 @@ describe('branded checkout step 1', () => {
       expect($ctrl.itemConfig).toEqual({
         CAMPAIGN_CODE: '1234',
         'campaign-page': '135',
-        amount: '75',
+        AMOUNT: '75',
         priceWithFees: '$76.80',
         'RECURRING_DAY_OF_MONTH': '9'
       })

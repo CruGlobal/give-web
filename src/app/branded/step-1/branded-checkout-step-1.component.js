@@ -41,7 +41,7 @@ class BrandedCheckoutStep1Controller {
       this.itemConfig.CAMPAIGN_CODE = ''
     }
     this.itemConfig['campaign-page'] = this.campaignPage
-    this.itemConfig.amount = this.amount
+    this.itemConfig.AMOUNT = this.amount
 
     // These lines calculate the price with fees for amounts coming in from the client site via component config
     if (this.amount) {
