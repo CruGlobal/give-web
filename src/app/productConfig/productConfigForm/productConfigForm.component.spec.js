@@ -321,7 +321,7 @@ describe('product config form component', function () {
       $ctrl.itemConfigForm = {
         $valid: true,
         $dirty: false,
-        AMOUNT: {}
+        amount: {}
       }
       $ctrl.$scope.$digest()
 
@@ -332,7 +332,7 @@ describe('product config form component', function () {
 
   describe('addCustomValidators()', () => {
     beforeEach(() => {
-      $ctrl.itemConfigForm.AMOUNT = {
+      $ctrl.itemConfigForm.amount = {
         $validators: {},
         $parsers: []
       }
@@ -342,28 +342,28 @@ describe('product config form component', function () {
       $ctrl.customInputActive = true
       $ctrl.addCustomValidators()
 
-      expect($ctrl.itemConfigForm.AMOUNT.$parsers[0]('$10')).toBe('10')
-      expect($ctrl.itemConfigForm.AMOUNT.$parsers[0]('$10,000')).toBe('10000')
+      expect($ctrl.itemConfigForm.amount.$parsers[0]('$10')).toBe('10')
+      expect($ctrl.itemConfigForm.amount.$parsers[0]('$10,000')).toBe('10000')
 
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('1')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('0.9')).toBe(false)
+      expect($ctrl.itemConfigForm.amount.$validators.minimum('1')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.minimum('0.9')).toBe(false)
 
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('9999999.99')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('10000000')).toBe(false)
+      expect($ctrl.itemConfigForm.amount.$validators.maximum('9999999.99')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.maximum('10000000')).toBe(false)
 
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.4')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.')).toBe(false)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('4.235')).toBe(false)
+      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.4')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.')).toBe(false)
+      expect($ctrl.itemConfigForm.amount.$validators.pattern('4.235')).toBe(false)
     })
 
     it('should pass validation in any \'bad\' case', () => {
       $ctrl.customInputActive = false
       $ctrl.addCustomValidators()
 
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('0.3')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.minimum('dlksfjs')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.maximum('4542452454524.99')).toBe(true)
-      expect($ctrl.itemConfigForm.AMOUNT.$validators.pattern('1.214')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.minimum('0.3')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.minimum('dlksfjs')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.maximum('4542452454524.99')).toBe(true)
+      expect($ctrl.itemConfigForm.amount.$validators.pattern('1.214')).toBe(true)
     })
   })
 
@@ -750,22 +750,6 @@ describe('product config form component', function () {
           $ctrl.saveGiftToCart()
         }
       })
-
-      it('should transform the amount', () => {
-        $ctrl.itemConfig.AMOUNT = '$85'
-        $ctrl.itemConfigForm.$dirty = true
-        const overrideArgs = isEdit
-          ? ['uri', 'items/crugive/<some id>', { AMOUNT: '85' }]
-          : ['items/crugive/<some id>', { AMOUNT: '85' }, undefined]
-        $ctrl.saveGiftToCart()
-
-        expect($ctrl.submittingGift).toEqual(false)
-        expect($ctrl.cartService[operation]).toHaveBeenCalledWith(...overrideArgs)
-        expect($ctrl.$scope.$emit).toHaveBeenCalledWith(cartEvent)
-        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'submitted' })
-        expect($ctrl.errorAlreadyInCart).toEqual(false)
-        expect($ctrl.errorSavingGeneric).toEqual(false)
-      })
     }
   })
 
@@ -811,33 +795,6 @@ describe('product config form component', function () {
     it('should navigate to other giving link', () => {
       $ctrl.giveLink('https://example.com')
       expect($ctrl.$window.location).toEqual('https://example.com')
-    })
-  })
-
-  describe('transformAmountIfNecessary', () => {
-    it('should not change the int amount', () => {
-      const amount = '5'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(amount)
-    })
-
-    it('should not change the float amount', () => {
-      const amount = '5.12'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(amount)
-    })
-
-    it('should remove the $', () => {
-      const amount = '$50'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual('50')
-    })
-
-    it('should not strip other characters', () => {
-      const amount = '23,00'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual(amount)
-    })
-
-    it('should pass through the original amount', () => {
-      const amount = 'test'
-      expect($ctrl.transformAmountIfNecessary(amount)).toEqual('test')
     })
   })
 })
