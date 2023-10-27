@@ -257,7 +257,7 @@ describe('product config form component', function () {
     })
 
     it('should set the default amount if there are suggested amounts', () => {
-      $ctrl.suggestedAmounts = [{ AMOUNT: 14 }]
+      $ctrl.suggestedAmounts = [{ amount: 14 }]
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(14)
@@ -273,7 +273,7 @@ describe('product config form component', function () {
 
     it('should use an existing suggestedAmounts', () => {
       $ctrl.itemConfig.AMOUNT = 14
-      $ctrl.suggestedAmounts = [{ AMOUNT: 14 }]
+      $ctrl.suggestedAmounts = [{ amount: 14 }]
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(14)
@@ -290,7 +290,7 @@ describe('product config form component', function () {
 
     it('should initialize the custom value with suggestedAmounts', () => {
       $ctrl.itemConfig.AMOUNT = 14
-      $ctrl.suggestedAmounts = [{ AMOUNT: 25 }]
+      $ctrl.suggestedAmounts = [{ amount: 25 }]
       $ctrl.setDefaultAmount()
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(14)
