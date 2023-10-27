@@ -179,7 +179,7 @@ class ProductConfigFormController {
   setDefaultAmount () {
     const amountOptions = isEmpty(this.suggestedAmounts)
       ? this.selectableAmounts
-      : map(this.suggestedAmounts, 'AMOUNT')
+      : map(this.suggestedAmounts, 'amount')
 
     if (this.itemConfig.AMOUNT) {
       if (amountOptions.indexOf(this.itemConfig.AMOUNT) === -1) {
