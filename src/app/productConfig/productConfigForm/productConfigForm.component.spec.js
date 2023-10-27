@@ -692,6 +692,41 @@ describe('product config form component', function () {
         expect($ctrl.errorSavingGeneric).toEqual(false)
       })
 
+      it('should handle an error when saving a bad decimal amount - old error style', () => {
+        const error = { data: 'Amount must be a valid decimal number without dollar signs or commas.' }
+        $ctrl.cartService[operation].mockReturnValue(Observable.throw(error))
+        $ctrl.itemConfigForm.$dirty = true
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.submittingGift).toEqual(false)
+        expect($ctrl.cartService[operation]).toHaveBeenCalledWith(...operationArgs)
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorSubmitting' })
+        expect($ctrl.errorAlreadyInCart).toEqual(false)
+        expect($ctrl.errorSavingGeneric).toEqual(false)
+        expect($ctrl.amountFormatError).toEqual = error.data
+      })
+
+      it('should handle an error when saving a bad decimal amount - new error style', () => {
+        const error = {
+          data: {
+            messages: [{
+              id: 'field.invalid.decimal.format',
+              'debug-message': 'Amount must be a valid decimal number without dollar signs or commas.'
+            }]
+          }
+        }
+        $ctrl.cartService[operation].mockReturnValue(Observable.throw(error))
+        $ctrl.itemConfigForm.$dirty = true
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.submittingGift).toEqual(false)
+        expect($ctrl.cartService[operation]).toHaveBeenCalledWith(...operationArgs)
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorSubmitting' })
+        expect($ctrl.errorAlreadyInCart).toEqual(false)
+        expect($ctrl.errorSavingGeneric).toEqual(false)
+        expect($ctrl.amountFormatError).toEqual = error.data.messages[0]['debug-message']
+      })
+
       it('should clear the cover fee decision when editing the amount of an item in the cart', () => {
         if (isEdit) {
           jest.spyOn($ctrl.orderService, 'clearCoverFees')

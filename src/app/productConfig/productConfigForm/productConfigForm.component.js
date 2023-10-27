@@ -306,6 +306,7 @@ class ProductConfigFormController {
     this.submittingGift = false
     this.errorAlreadyInCart = false
     this.errorSavingGeneric = false
+    this.amountFormatError = ''
     if (!this.itemConfigForm.$valid) {
       return
     }
@@ -339,6 +340,12 @@ class ProductConfigFormController {
       if (includes(error.data, 'already in the cart')) {
         this.errorAlreadyInCart = true
         this.onStateChange({ state: 'errorAlreadyInCart' })
+      } else if (error.data && error.data.messages && error.data.messages[0] && error.data.messages[0].id === 'field.invalid.decimal.format') {
+        this.amountFormatError = error.data.messages[0]['debug-message']
+        this.onStateChange({ state: 'errorSubmitting' })
+      } else if (includes(error.data, 'decimal number')) {
+        this.amountFormatError = error.data
+        this.onStateChange({ state: 'errorSubmitting' })
       } else {
         this.errorSavingGeneric = true
         this.$log.error('Error adding or updating item in cart', error)
