@@ -306,6 +306,7 @@ class ProductConfigFormController {
     this.submittingGift = false
     this.errorAlreadyInCart = false
     this.errorSavingGeneric = false
+    this.amountFormatError = ''
     if (!this.itemConfigForm.$valid) {
       return
     }
