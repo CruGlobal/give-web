@@ -80,7 +80,7 @@
                 {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
               </label>
             </div>
-            <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.AMOUNT | showErrors)}">
+            <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
               <div class="form-group">
                 <label>
                   <input name="suggestedAmount"
@@ -97,8 +97,8 @@
                          ng-required="$ctrl.customInputActive"
                          placeholder="{{'OTHER_PLACEHOLDER' | translate}}" />
                 </label>
-                <div role="alert" ng-messages="$ctrl.itemConfigForm.AMOUNT.$error"
-                     ng-if="($ctrl.itemConfigForm.AMOUNT | showErrors)">
+                <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                     ng-if="($ctrl.itemConfigForm.amount | showErrors)">
                   <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
                   <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
                   <div class="help-block" ng-message="minimum" translate translate-values="{currencyLimit: (1 | currency)}">{{'AMOUNT_MIN_ERROR'}}</div>
@@ -111,7 +111,7 @@
           </div>
 
           <div data-toggle="buttons"
-               ng-class="{'has-error': ($ctrl.itemConfigForm.AMOUNT | showErrors)}"
+               ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
                ng-if="!$ctrl.useSuggestedAmounts">
             <label class="btn btn-radio"
                    ng-click="$ctrl.changeAmount(a)"
@@ -137,8 +137,8 @@
                        required />
               </div>
             </label>
-            <div role="alert" ng-messages="$ctrl.itemConfigForm.AMOUNT.$error"
-                 ng-if="($ctrl.itemConfigForm.AMOUNT | showErrors)">
+            <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                 ng-if="($ctrl.itemConfigForm.amount | showErrors)">
               <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
               <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
               <div class="help-block" ng-message="minimum" translate="AMOUNT_MIN_ERROR" translate-values="{currencyLimit: (1 | currency)}"></div>
