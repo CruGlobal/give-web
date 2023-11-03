@@ -522,7 +522,7 @@ describe('analytics factory', () => {
       "facet": "person",
       "startMonth": null,
       "ministry": "Staff Giving",
-      "orgId": "1-TG-11",
+      "orgId": "STAFF",
       "$$hashKey": "object:26"
     }
     it('should add product-detail-click event', () => {
@@ -539,7 +539,7 @@ describe('analytics factory', () => {
             {
               item_id: '0643021',
               item_name: 'John Doe',
-              item_brand: '1-TG-11',
+              item_brand: 'STAFF',
               item_category: 'staff',
               item_variant: undefined,
               price: undefined,
@@ -637,7 +637,6 @@ describe('analytics factory', () => {
           {
             item_id: '0643021',
             item_name: 'John Doe',
-            item_brand: '1-TG-11',
             item_category: 'staff',
             item_variant: 'single',
             price: '50',
