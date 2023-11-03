@@ -65,9 +65,9 @@ describe('analytics factory', () => {
     const itemConfig = {
       "campaign-page": "",
       "jcr-title": "John Doe",
-      "recurring-day-of-month": "13",
-      "recurring-start-month": "09",
-      "amount": 50
+      "RECURRING_DAY_OF_MONTH": "13",
+      "RECURRING_START_MONTH": "09",
+      "AMOUNT": 50
     }
     const productData = {
       "uri": "items/crugive/a5t4fmspmfpwpqv3le7hgksifu=",
@@ -121,7 +121,7 @@ describe('analytics factory', () => {
         item_category: productData.designationType.toLowerCase(),
         item_variant: 'monthly',
         currency: 'USD',
-        price: itemConfig.amount.toString(),
+        price: itemConfig.AMOUNT.toString(),
         quantity: '1',
         recurring_date: 'September 13, 2023'
       })
@@ -142,7 +142,7 @@ describe('analytics factory', () => {
         item_category: productData.designationType.toLowerCase(),
         item_variant: 'single',
         currency: 'USD',
-        price: itemConfig.amount.toString(),
+        price: itemConfig.AMOUNT.toString(),
         quantity: '1',
         recurring_date: undefined
       })
@@ -163,14 +163,14 @@ describe('analytics factory', () => {
               "price": "$50.00",
               "priceWithFees": "$51.20",
               "config": {
-                  "amount": 50,
-                  "amount-with-fees": 51.2,
-                  "campaign-code": "",
-                  "donation-services-comments": "",
-                  "premium-code": "",
-                  "recipient-comments": "",
-                  "recurring-day-of-month": "15",
-                  "recurring-start-month": "09"
+                  "AMOUNT": 50,
+                  "AMOUNT_WITH_FEES": 51.2,
+                  "CAMPAIGN_CODE": "",
+                  "DONATION_SERVICES_COMMENTS": "",
+                  "PREMIUM_CODE": "",
+                  "RECIPIENT_COMMENTS": "",
+                  "RECURRING_DAY_OF_MONTH": "15",
+                  "RECURRING_START_MONTH": "09"
               },
               "frequency": "Monthly",
               "amount": 50,
@@ -224,14 +224,14 @@ describe('analytics factory', () => {
       "price": "$50.00",
       "priceWithFees": "$51.20",
       "config": {
-          "amount": 50,
-          "amount-with-fees": 51.2,
-          "campaign-code": "CAMPAIGN",
-          "donation-services-comments": "",
-          "premium-code": "",
-          "recipient-comments": "",
-          "recurring-day-of-month": "15",
-          "recurring-start-month": "09"
+          "AMOUNT": 50,
+          "AMOUNT_WITH_FEES": 51.2,
+          "CAMPAIGN_CODE": "CAMPAIGN",
+          "DONATION_SERVICES_COMMENTS": "",
+          "PREMIUM_CODE": "",
+          "RECIPIENT_COMMENTS": "",
+          "RECURRING_DAY_OF_MONTH": "15",
+          "RECURRING_START_MONTH": "09"
       },
       "frequency": "Monthly",
       "amount": 50,
@@ -293,14 +293,14 @@ describe('analytics factory', () => {
               "price": "$50.00",
               "priceWithFees": "$51.20",
               "config": {
-                  "amount": 50,
-                  "amount-with-fees": 51.2,
-                  "campaign-code": "",
-                  "donation-services-comments": "",
-                  "premium-code": "",
-                  "recipient-comments": "",
-                  "recurring-day-of-month": "",
-                  "recurring-start-month": ""
+                  "AMOUNT": 50,
+                  "AMOUNT_WITH_FEES": 51.2,
+                  "CAMPAIGN_CODE": "",
+                  "DONATION_SERVICES_COMMENTS": "",
+                  "PREMIUM_CODE": "",
+                  "RECIPIENT_COMMENTS": "",
+                  "RECURRING_DAY_OF_MONTH": "",
+                  "RECURRING_START_MONTH": ""
               },
               "frequency": "Single",
               "amount": 50,
@@ -563,14 +563,14 @@ describe('analytics factory', () => {
       "price": "$50.00",
       "priceWithFees": "$51.20",
       "config": {
-          "amount": 50,
-          "amount-with-fees": 51.2,
-          "campaign-code": "",
-          "donation-services-comments": "",
-          "premium-code": "",
-          "recipient-comments": "",
-          "recurring-day-of-month": "",
-          "recurring-start-month": ""
+          "AMOUNT": 50,
+          "AMOUNT_WITH_FEES": 51.2,
+          "CAMPAIGN_CODE": "",
+          "DONATION_SERVICES_COMMENTS": "",
+          "PREMIUM_CODE": "",
+          "RECIPIENT_COMMENTS": "",
+          "RECURRING_DAY_OF_MONTH": "",
+          "RECURRING_START_MONTH": ""
       },
       "frequency": "Single",
       "amount": 50,
