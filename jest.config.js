@@ -2,7 +2,8 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
-    '!**/*.fixture.js'
+    '!**/*.fixture.js',
+    'src/**/*.ts'
   ],
   restoreMocks: true,
   setupFilesAfterEnv: [
@@ -12,6 +13,7 @@ module.exports = {
     'jest-date-mock',
     '<rootDir>/jest/setup.js'
   ],
+  moduleFileExtensions: ['ts', 'js'],
   moduleNameMapper: {
     '^.+\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js'
   },
@@ -20,7 +22,7 @@ module.exports = {
   ],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.js?$': 'babel-jest',
+    '^.+\\.[jt]s?$': 'babel-jest',
     '^.+\\.html$': '<rootDir>/jest/htmlTransform.js'
   }
 }
