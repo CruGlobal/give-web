@@ -50,26 +50,10 @@ describe('editRecurringGiftsModal', () => {
       })
     })
 
-    describe('allPaymentMethodsValid', () => {
-      beforeEach(() => {
-        RecurringGiftModel.paymentMethods = [
-          {
-            self: { uri: '/selfservicepaymentinstruments/crugive/giydgnrxgm=' }
-          }
-        ]
-      })
-
-      it('should return true if all payment methods are valid', () => {
-        self.controller.recurringGifts = [new RecurringGiftModel({}).setDefaults(), new RecurringGiftModel({}).setDefaults()]
-
-        expect(self.controller.allPaymentMethodsValid()).toEqual(true)
-      })
-
-      it('should return false if any payment methods is invalid', () => {
-        self.controller.recurringGifts = [new RecurringGiftModel({}).setDefaults(), new RecurringGiftModel({}).setDefaults()]
-        self.controller.recurringGifts[0].paymentMethodId = 'something invalid'
-
-        expect(self.controller.allPaymentMethodsValid()).toEqual(false)
+    describe('allGiftsValid', () => {
+      it('should call the GiftValidator service', () => {
+        self.controller.allGiftsValid()
+        expect(allGiftsValid).toHaveBeenCalled()
       })
     })
   })

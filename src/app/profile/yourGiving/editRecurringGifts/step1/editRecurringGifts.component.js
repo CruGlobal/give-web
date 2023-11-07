@@ -5,6 +5,7 @@ import giftListItem from 'common/components/giftViews/giftListItem/giftListItem.
 import giftUpdateView from 'common/components/giftViews/giftUpdateView/giftUpdateView.component'
 
 import donationsService from 'common/services/api/donations.service'
+import { allGiftsValid } from 'common/services/giftHelpers/giftValidator.service'
 
 import template from './editRecurringGifts.tpl.html'
 
@@ -38,8 +39,8 @@ class EditRecurringGiftsController {
     }
   }
 
-  allPaymentMethodsValid () {
-    return every(this.recurringGifts, gift => gift.paymentMethod)
+  allGiftsValid () {
+    return allGiftsValid(this.recurringGifts)
   }
 }
 
