@@ -11,6 +11,7 @@ import module, {
 } from './productConfigForm.component';
 import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents';
 import { giveGiftParams } from '../giveGiftParams';
+import * as structuredErrorService from '../../../common/services/structuredError.service';
 
 describe('product config form component', function () {
   beforeEach(angular.mock.module(module.name));
@@ -938,6 +939,9 @@ describe('product config form component', function () {
           data: {
             messages: [
               {
+                data: {
+                  'field-name': 'AMOUNT',
+                },
                 id: 'field.invalid.decimal.format',
                 'debug-message':
                   'Amount must be a valid decimal number without dollar signs or commas.',

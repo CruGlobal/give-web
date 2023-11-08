@@ -28,6 +28,7 @@ import suggestedGiftAmounts from '../giftPanels/suggestedGiftAmounts/suggestedGi
 import giftFrequency from '../giftPanels/giftFrequency/giftFrequency.component';
 import giftDates from '../giftPanels/giftDates/giftDates.component';
 import specialInstructions from '../giftPanels/specialInstructions/specialInstructions.component';
+import * as structuredErrorService from 'common/services/structuredError.service';
 import template from './productConfigForm.tpl.html';
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent';
@@ -432,6 +433,8 @@ class ProductConfigFormController {
         this.onStateChange({ state: 'submitted' });
       },
       (error) => {
+        const structuredErrorMessage =
+          structuredErrorService.getErrorMessage(error);
         if (includes(error.data, 'already in the cart')) {
           this.errorAlreadyInCart = true;
           this.onStateChange({ state: 'errorAlreadyInCart' });
@@ -442,6 +445,9 @@ class ProductConfigFormController {
           error.data.messages[0].id === 'field.invalid.decimal.format'
         ) {
           this.amountFormatError = error.data.messages[0]['debug-message'];
+          this.onStateChange({ state: 'errorSubmitting' });
+        } else if (structuredErrorMessage) {
+          this.amountFormatError = structuredErrorMessage;
           this.onStateChange({ state: 'errorSubmitting' });
         } else if (includes(error.data, 'decimal number')) {
           this.amountFormatError = error.data;
