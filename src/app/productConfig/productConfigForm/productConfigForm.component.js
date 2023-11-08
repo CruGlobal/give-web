@@ -34,6 +34,7 @@ import analyticsFactory from 'app/analytics/analytics.factory'
 import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory'
 
 import { brandedCheckoutAmountUpdatedEvent } from 'common/components/paymentMethods/coverFees/coverFees.component'
+import * as structuredErrorService from 'common/services/structuredError.service'
 
 import template from './productConfigForm.tpl.html'
 
@@ -337,11 +338,12 @@ class ProductConfigFormController {
       this.submittingGift = false
       this.onStateChange({ state: 'submitted' })
     }, error => {
+      const structuredErrorMessage = structuredErrorService.getErrorMessage(error)
       if (includes(error.data, 'already in the cart')) {
         this.errorAlreadyInCart = true
         this.onStateChange({ state: 'errorAlreadyInCart' })
-      } else if (error.data && error.data.messages && error.data.messages[0] && error.data.messages[0].id === 'field.invalid.decimal.format') {
-        this.amountFormatError = error.data.messages[0]['debug-message']
+      } else if (structuredErrorMessage) {
+        this.amountFormatError = structuredErrorMessage
         this.onStateChange({ state: 'errorSubmitting' })
       } else if (includes(error.data, 'decimal number')) {
         this.amountFormatError = error.data

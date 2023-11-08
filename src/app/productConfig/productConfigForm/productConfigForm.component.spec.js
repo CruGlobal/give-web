@@ -10,6 +10,7 @@ import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.compone
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { giveGiftParams } from '../giveGiftParams'
 import { brandedCheckoutAmountUpdatedEvent } from '../../../common/components/paymentMethods/coverFees/coverFees.component'
+import * as structuredErrorService from '../../../common/services/structuredError.service'
 
 describe('product config form component', function () {
   beforeEach(angular.mock.module(module.name))
@@ -709,10 +710,15 @@ describe('product config form component', function () {
       it('should handle an error when saving a bad decimal amount - new error style', () => {
         const error = {
           data: {
-            messages: [{
-              id: 'field.invalid.decimal.format',
-              'debug-message': 'Amount must be a valid decimal number without dollar signs or commas.'
-            }]
+            messages: [
+              {
+                data: {
+                  'field-name': 'AMOUNT'
+                },
+                id: 'field.invalid.decimal.format',
+                'debug-message': 'Amount must be a valid decimal number without dollar signs or commas.'
+              }
+            ]
           }
         }
         $ctrl.cartService[operation].mockReturnValue(Observable.throw(error))
