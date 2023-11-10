@@ -34,6 +34,10 @@
     <p ng-if="$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('ga-registration-no-match-new-account-success')">
       Thank you for completing account registration. Your account has been activated.
     </p>
+    <p translate>
+      If you do not see saved payment methods that you are expecting to see, please try signing out and signing back in.
+      This should resolve the issue.
+    </p>
     <p>
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onSuccess()" translate>Close</button>
     </p>

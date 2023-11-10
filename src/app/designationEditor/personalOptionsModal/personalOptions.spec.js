@@ -4,7 +4,19 @@ import module from './personalOptions.modal'
 
 describe('Designation Editor Personal Options', function () {
   beforeEach(angular.mock.module(module.name))
-  var $ctrl
+  let $ctrl
+
+  const controllerInjections = {
+    designationNumber: '000555',
+    designationType: 'Staff',
+    giveDomain: 'https://give.cru.org',
+    givingLinks: {
+      'jcr:primaryType': 'nt:unstructured',
+      1: { 'jcr:primaryType': 'nt:unstructured', url: 'https://example.com', name: 'Name' }
+    },
+    showNewsletterForm: true,
+    hasNewsletter: true,
+  }
 
   var controllerInjections = {
     designationNumber: '000555',
