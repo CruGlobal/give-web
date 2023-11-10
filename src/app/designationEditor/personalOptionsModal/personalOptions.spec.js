@@ -18,18 +18,6 @@ describe('Designation Editor Personal Options', function () {
     hasNewsletter: true,
   }
 
-  var controllerInjections = {
-    designationNumber: '000555',
-    designationType: 'Staff',
-    giveDomain: 'https://give.cru.org',
-    givingLinks: {
-      'jcr:primaryType': 'nt:unstructured',
-      1: { 'jcr:primaryType': 'nt:unstructured', url: 'https://example.com', name: 'Name' }
-    },
-    showNewsletterForm: true,
-    hasNewsletter: true,
-  }
-
   beforeEach(inject(function ($rootScope, $controller) {
     const $scope = $rootScope.$new()
 
