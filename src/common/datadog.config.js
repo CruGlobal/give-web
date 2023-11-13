@@ -10,6 +10,7 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
       site: 'datadoghq.com',
       service: 'give-web',
       env: envServiceProvider.get(),
+      allowedTracingUrls: [envServiceProvider.read('apiUrl')],
       version: process.env.GITHUB_SHA,
       sessionSampleRate: envServiceProvider.is('staging') ? 100 : 10,
       sessionReplaySampleRate: envServiceProvider.is('staging') ? 100 : 1,
