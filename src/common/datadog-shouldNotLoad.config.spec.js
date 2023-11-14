@@ -1,16 +1,20 @@
 import angular from 'angular'
 import 'angular-mocks'
+import { appConfig } from './app.config'
 import * as module from './datadog.config'
 
 describe('dataDogConfig', () => {
 
   describe('pipe $log to Rollbar', () => {
     beforeEach(() => {
-      // Use rollbar config function somewhere
-      angular.module('testDataDogConfig', ['environment'])
+      // Added appConfig as needed the envServiceProvider vars
+      angular.module('testAppAndDataDogConfig', [
+        'environment',
+        'pascalprecht.translate'
+      ])
+        .config(appConfig)
         .config(module.default)
-      // Init and run the test module
-      angular.mock.module('testDataDogConfig')
+      angular.mock.module('testAppAndDataDogConfig')
       inject(() => {})
     })
 
