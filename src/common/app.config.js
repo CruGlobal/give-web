@@ -5,7 +5,8 @@ import 'angular-translate'
 import rollbarConfig from './rollbar.config'
 import dataDogConfig from './datadog.config.js'
 
-const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
+// Exported for datadog.config tests.
+export const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
   $httpProvider.useApplyAsync(true)
 
   envServiceProvider.config({
