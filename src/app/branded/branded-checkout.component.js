@@ -59,6 +59,10 @@ class BrandedCheckoutController {
   }
 
   formatDonorDetails () {
+    console.log('BrandedCheckoutController.formatDonorDetails', this.$window)
+    console.log('BrandedCheckoutController.donorDetailsVariable', this.donorDetailsVariable)
+    console.log('BrandedCheckoutController.window.donorDetails', this.$window.donorDetails)
+    console.log('BrandedCheckoutController.window.donorDetailsVariable', this.$window[this.donorDetailsVariable])
     if (this.donorDetailsVariable && this.$window[this.donorDetailsVariable]) {
       this.donorDetails = this.$window[this.donorDetailsVariable]
 
@@ -69,6 +73,7 @@ class BrandedCheckoutController {
         this.donorDetails.mailingAddress = mailingAddress
       }
     }
+    console.log('BrandedCheckoutController.donorDetails', this.donorDetails)
   }
 
   next () {
