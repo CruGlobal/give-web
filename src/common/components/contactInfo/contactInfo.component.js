@@ -2,7 +2,7 @@ import angular from 'angular'
 import 'angular-messages'
 import assign from 'lodash/assign'
 import pick from 'lodash/pick'
-import find from 'lodash/find'
+import mergeWith from 'lodash/mergeWith'
 import includes from 'lodash/includes'
 import startsWith from 'lodash/startsWith'
 import { Observable } from 'rxjs/Observable'
@@ -23,9 +23,10 @@ const componentName = 'contactInfo'
 
 class Step1Controller {
   /* @ngInject */
-  constructor ($log, $scope, orderService, radioStationsService, sessionService, analyticsFactory) {
+  constructor ($log, $scope, $window, orderService, radioStationsService, sessionService, analyticsFactory) {
     this.$log = $log
     this.$scope = $scope
+    this.$window = $window
     this.orderService = orderService
     this.radioStationsService = radioStationsService
     this.sessionService = sessionService
@@ -43,7 +44,7 @@ class Step1Controller {
     }
 
     this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
-
+    
     this.loadDonorDetails(donorDetailsDefaults)
     this.loadRadioStations()
     this.waitForFormInitialization()
@@ -99,11 +100,20 @@ class Step1Controller {
           }
         }
 
-        const firstTimeLoading = !find(this.donorDetails.links, ['rel', 'donormatchesform'])
-        if (overrideDonorDetails && firstTimeLoading) {
-          this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
+        if (overrideDonorDetails) {
+          const afterInitialLoad = !!this.$window.sessionStorage.getItem('afterInitialLoad')
+          const predefinedDonorDetails = pick(overrideDonorDetails, [
             'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
-          ]))
+          ])
+          if (afterInitialLoad) {
+            this.donorDetails = mergeWith(this.donorDetails, predefinedDonorDetails, (objValue, srcValue) => {
+              if (typeof objValue === 'object') return
+              return objValue || srcValue
+            })
+          } else {
+            this.donorDetails = assign(this.donorDetails, predefinedDonorDetails)
+            this.$window.sessionStorage.setItem('afterInitialLoad', 'true')
+          }
         }
       },
       error => {
