@@ -279,6 +279,8 @@
 
 .is-row {
   display: flex;
+  column-gap: $gutter*.5;
+  align-items: center;
   border-bottom: 1px solid $colorGrayscale-stone;
   padding-bottom: $gutter*.65;
   margin-bottom: $gutter*.65;
@@ -288,7 +290,6 @@
     padding-bottom: 0;
   }
   .is-row-thumb {
-    margin-right: $gutter*.5;
     min-width: 90px;
     img {
       max-width: 90px;
