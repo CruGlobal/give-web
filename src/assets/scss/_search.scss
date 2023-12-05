@@ -278,6 +278,7 @@
 }
 
 .is-row {
+  display: flex;
   border-bottom: 1px solid $colorGrayscale-stone;
   padding-bottom: $gutter*.65;
   margin-bottom: $gutter*.65;
@@ -287,7 +288,6 @@
     padding-bottom: 0;
   }
   .is-row-thumb {
-    float: left;
     margin-right: $gutter*.5;
     min-width: 90px;
     img {
@@ -295,7 +295,7 @@
     }
   }
   .is-row-meta {
-    float: left;
+    flex: 1;
     span {
       display: block;
     }
@@ -309,9 +309,6 @@
       color: $colorCru-gray;
       font-size: 100%;
     }
-  }
-  .is-row-actions {
-    float: right;
   }
 }
 
