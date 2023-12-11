@@ -318,14 +318,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         $window.sessionStorage.setItem('forcedUserToLogout', true)
       }
       authClient.signOut({
-        postLogoutRedirectUri: redirectHome ? null : $window.location.href,
+        postLogoutRedirectUri: redirectHome ? null : $window.location.href
       })
     } catch {
       $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
     }
   }
 
-  function removeForcedUserToLogoutSessionData() {
+  function removeForcedUserToLogoutSessionData () {
     // Allow for 2 seconds, so component can show error to user.
     setTimeout(() => {
       $window.sessionStorage.removeItem('forcedUserToLogout')
