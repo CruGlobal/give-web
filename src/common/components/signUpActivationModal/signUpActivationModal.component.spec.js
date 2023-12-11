@@ -9,7 +9,6 @@ import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { createAccountDataCookieName } from 'common/services/session/session.service'
-import { afterEach } from 'node:test'
 
 const lastPurchaseId = 'lastPurchaseId'
 
