@@ -76,7 +76,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     oktaIsUserAuthenticated: oktaIsUserAuthenticated,
     updateCheckoutSavedData: updateCheckoutSavedData,
     clearCheckoutSavedData: clearCheckoutSavedData,
-    checkCreateAccountStatus: checkCreateAccountStatus,
+    checkCreateAccountStatus: checkCreateAccountStatus
   }
 
   /* Public Methods */
@@ -156,27 +156,27 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   async function createAccount (email, firstName, lastName, isTest = false) {
     const isAuthenticated = await authClient.isAuthenticated()
     if (currentRole() !== Roles.public || isAuthenticated) {
-      const email = isAuthenticated && (await authClient.getUser()).email;
+      const email = isAuthenticated && (await authClient.getUser()).email
       return {
         status: 'error',
         data: [`Already logged in to Okta${email ? ` with email: ${email}` : ''}. You will be redirected to the Sign In page in a few seconds.`, 'Another Error'],
-        redirectToSignIn: true,
+        redirectToSignIn: true
       }
     }
 
-    const data = { };
+    const data = { }
 
-    if (angular.isDefined(email)) data.email = email;
-    if (angular.isDefined(firstName)) data['first_name'] = firstName;
-    if (angular.isDefined(lastName)) data['last_name'] = lastName;
-    const dataAsString = JSON.stringify(data);
+    if (angular.isDefined(email)) data.email = email
+    if (angular.isDefined(firstName)) data.first_name = firstName
+    if (angular.isDefined(lastName)) data.last_name = lastName
+    const dataAsString = JSON.stringify(data)
     try {
       const createAccount = await $http({
         method: 'POST',
         url: oktaApiUrl('create'),
         data: data,
         withCredentials: true
-      });
+      })
 
       $cookies.put(
         createAccountDataCookieName,
@@ -184,38 +184,35 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         {
           path: '/',
           domain: isTest ? '' : cookieDomain,
-          expires: moment().add(2, 'hours').toISOString(),
+          expires: moment().add(2, 'hours').toISOString()
         }
-      );
+      )
       return {
         status: 'success',
         data: createAccount
       }
-    } catch(err) {
+    } catch (err) {
       try {
         if (err.status === 401) {
-          throw new Error(err.message);
+          throw new Error(err.message)
         }
-        const errors = err?.data?.error 
+        const errors = err?.data?.error
           ? err.data.error.split(',')
-            .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
-            .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ""))
-          : err;
+              .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
+              .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ''))
+          : err
 
         let checkIfAccountIsPending = false
-        
+
         const formattedErrors = errors.map((error) => {
-          switch(error) {
+          switch (error) {
             case 'login: An object with this field already exists in the current organization':
-              checkIfAccountIsPending = true;
-              return 'The email address you used belongs to an existing Okta user.';
-              break;
+              checkIfAccountIsPending = true
+              return 'The email address you used belongs to an existing Okta user.'
             case 'email: Does not match required pattern':
-              return 'There was an error saving your email address. Make sure it was entered correctly.';
-              break;
+              return 'There was an error saving your email address. Make sure it was entered correctly.'
             case 'Something went wrong. Please try again':
-              return 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.';
-              break;
+              return 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
             default:
               return error
           };
@@ -227,7 +224,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
             accountPending: false
           }
         } else {
-          const accountPending = await checkCreateAccountStatus(email);
+          const accountPending = await checkCreateAccountStatus(email)
           if (accountPending?.data?.status !== 'PROVISIONED') {
             return {
               status: 'error',
@@ -241,9 +238,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
               {
                 path: '/',
                 domain: isTest ? '' : cookieDomain,
-                expires: moment().add(2, 'hours').toISOString(),
+                expires: moment().add(2, 'hours').toISOString()
               }
-            );
+            )
             return {
               status: 'error',
               data: formattedErrors,
@@ -254,14 +251,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       } catch {
         return {
           status: 'error',
-          data: ['Something went wrong. Please try again'],
+          data: ['Something went wrong. Please try again']
         }
       }
     }
   }
 
   async function checkCreateAccountStatus (email) {
-    const isAuthenticated = await authClient.isAuthenticated();
+    const isAuthenticated = await authClient.isAuthenticated()
     if (currentRole() !== Roles.public || isAuthenticated) {
       return 'Already logged in.'
     }
@@ -270,31 +267,31 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         method: 'GET',
         url: `${oktaApiUrl('status')}?email=${encodeURIComponent(email)}`,
         withCredentials: true
-      });
+      })
       return {
         status: 'success',
         data: createAccountStatus.data
       }
-    } catch(err) {
+    } catch (err) {
       try {
         if (err.status === 401) {
-          throw new Error();
+          throw new Error()
         }
         return {
           status: 'error',
-          data: err?.data?.error ?? 'Something went wrong. Please try again',
+          data: err?.data?.error ?? 'Something went wrong. Please try again'
         }
       } catch {
         return {
           status: 'error',
-          data: ['Something went wrong. Please try again'],
+          data: ['Something went wrong. Please try again']
         }
       }
     }
   }
 
   function oktaIsUserAuthenticated () {
-    return Observable.from(authClient.isAuthenticated());
+    return Observable.from(authClient.isAuthenticated())
   }
 
   function oktaSignOut () {
@@ -307,15 +304,15 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         method: 'DELETE',
         url: oktaApiUrl('logout'),
         withCredentials: true
-      });
-      await clearCheckoutSavedData();
-      await authClient.revokeAccessToken();
-      await authClient.revokeRefreshToken();
-      await authClient.closeSession();
-      authClient.signOut();
-      $window.location = '/cart.html';
+      })
+      await clearCheckoutSavedData()
+      await authClient.revokeAccessToken()
+      await authClient.revokeRefreshToken()
+      await authClient.closeSession()
+      authClient.signOut()
+      $window.location = '/cart.html'
     } catch {
-      $window.location=`https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`;
+      $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
     }
   }
 
@@ -382,8 +379,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     // Update sessionSubject with new value
     sessionSubject.next(session)
 
-    updateRollbarPerson(session, giveSession);
-    updateCheckoutSavedData();
+    updateRollbarPerson(session, giveSession)
+    updateCheckoutSavedData()
   }
 
   function decodeCookie (cookieName) {
@@ -405,8 +402,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       const expiration = giveSessionExpiration()
       if (angular.isUndefined(expiration)) {
         // Give session has expired
-        updateCurrentSession();
-        clearCheckoutSavedData();
+        updateCurrentSession()
+        clearCheckoutSavedData()
       } else {
         setSessionTimeout(expiration)
       }
@@ -454,22 +451,22 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   function updateCheckoutSavedData (data, isTest = false) {
     try {
       if (data) {
-        session.checkoutSavedData = data;
-        const dataAsString = JSON.stringify(data);
+        session.checkoutSavedData = data
+        const dataAsString = JSON.stringify(data)
         $cookies.put(
           checkoutSavedDataCookieName,
           dataAsString,
           {
             path: '/',
             domain: isTest ? '' : cookieDomain,
-            expires: moment().add(20, 'minutes').toISOString(),
+            expires: moment().add(20, 'minutes').toISOString()
           }
-        );
+        )
       } else {
-        const dataAsString = $cookies.get(checkoutSavedDataCookieName);
-        if (dataAsString) session.checkoutSavedData = JSON.parse(dataAsString);
+        const dataAsString = $cookies.get(checkoutSavedDataCookieName)
+        if (dataAsString) session.checkoutSavedData = JSON.parse(dataAsString)
       }
-      return session.checkoutSavedData;
+      return session.checkoutSavedData
     } catch { }
   }
   // Added 'isTest' as needed cookie created without domain for unit tests to remove the cookie.
@@ -480,11 +477,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         checkoutSavedDataCookieName,
         {
           path: '/',
-          domain: isTest ? '' : cookieDomain,
+          domain: isTest ? '' : cookieDomain
 
         }
-      );
-      return session.checkoutSavedData;
+      )
+      return session.checkoutSavedData
     } catch { }
   }
 }

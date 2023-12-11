@@ -3,7 +3,7 @@ import signInForm from 'common/components/signInForm/signInForm.component'
 import commonModule from 'common/common.module'
 import showErrors from 'common/filters/showErrors.filter'
 import analyticsFactory from 'app/analytics/analytics.factory'
-import sessionService, { Roles, CreateOktaAccountEvent } from 'common/services/session/session.service'
+import sessionService, { Roles } from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
 import orderService from 'common/services/api/order.service'
 
@@ -54,7 +54,7 @@ class SignInController {
   }
 
   onSignUpWithOkta () {
-    this.sessionModalService.createAccount();
+    this.sessionModalService.createAccount()
   }
 }
 

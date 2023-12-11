@@ -362,7 +362,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
-    PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
   })
 
   $translateProvider.translations('es', {

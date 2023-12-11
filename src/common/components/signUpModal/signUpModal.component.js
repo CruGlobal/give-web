@@ -21,9 +21,9 @@ class SignUpModalController {
 
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.identified = true;
-      this.username = this.sessionService.session.email;
-      this.onStateChange({ state: 'sign-in' });
+      this.identified = true
+      this.username = this.sessionService.session.email
+      this.onStateChange({ state: 'sign-in' })
     }
 
     if (!this.isInsideAnotherModal) {
@@ -35,8 +35,8 @@ class SignUpModalController {
       })
     }
     this.loadDonorDetails()
-    this.isLoading = true;
-    this.submitting = false;
+    this.isLoading = true
+    this.submitting = false
   }
 
   loadDonorDetails () {
@@ -47,7 +47,7 @@ class SignUpModalController {
       .subscribe(
         (data) => {
           this.loadingDonorDetails = false
-          this.donorDetails = data;
+          this.donorDetails = data
           // Pre-populate first, last and email from session if missing from donorDetails
           if (!this.donorDetails.name['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
             this.donorDetails.name['given-name'] = this.sessionService.session.first_name
@@ -71,44 +71,42 @@ class SignUpModalController {
     this.submissionError = []
     try {
       this.signUpForm.$setSubmitted()
-      if (!this.signUpForm.$valid) throw new Error('Some fields are invalid');
+      if (!this.signUpForm.$valid) throw new Error('Some fields are invalid')
 
-      const details = this.donorDetails   
-      const { email, name } = details;
-      const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name']);
-      console.log('createAccount', createAccount)
+      const details = this.donorDetails
+      const { email, name } = details
+      const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name'])
       if (createAccount.status === 'error') {
         if (createAccount.accountPending) {
-          this.onStateChange({ state: 'sign-up-activation' });
+          this.onStateChange({ state: 'sign-up-activation' })
         } else {
           if (createAccount.redirectToSignIn) {
             setTimeout(() => {
-              this.onStateChange({ state: 'sign-in' });
-              this.$scope.$apply();
+              this.onStateChange({ state: 'sign-in' })
+              this.$scope.$apply()
             }, 5000)
           };
           this.submissionError = createAccount.data
         }
       } else {
-        this.onStateChange({ state: 'sign-up-activation' });
+        this.onStateChange({ state: 'sign-up-activation' })
       }
-    } catch(error) {
+    } catch (error) {
       this.$scope.$apply(() => {
         this.submissionError = [error.message]
       })
     } finally {
-      this.submitting = false;
-      this.$scope.$apply();
+      this.submitting = false
+      this.$scope.$apply()
     }
   }
 }
-
 
 export default angular
   .module(componentName, [
     sessionService.name,
     orderService.name,
-    cartService.name,
+    cartService.name
   ])
   .component(componentName, {
     controller: SignUpModalController,

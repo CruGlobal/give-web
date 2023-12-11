@@ -74,15 +74,15 @@ class RegisterAccountModalController {
   }
 
   $onDestroy () {
-    this.getTotalQuantitySubscription.unsubscribe();
-    this.subscription.unsubscribe();
-    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe();
-    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe();
+    this.getTotalQuantitySubscription.unsubscribe()
+    this.subscription.unsubscribe()
+    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe()
+    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe()
   }
 
   onIdentitySuccess () {
     // Success Sign-In/Up, Proceed to Step 2.
-    this.getDonorDetails();
+    this.getDonorDetails()
   }
 
   onIdentityFailure () {
@@ -105,9 +105,8 @@ class RegisterAccountModalController {
     this.stateChanged('loading')
 
     // Step 2. Fetch Donor Details
-    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe();
+    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe()
     this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe((donorDetails) => {
-
       // Workflow Complete if 'registration-state' is COMPLETED
       if (donorDetails['registration-state'] === 'COMPLETED') {
         this.onSuccess()
@@ -127,7 +126,7 @@ class RegisterAccountModalController {
     this.setLoading({ loading: true })
 
     // Step 4. Post to Donor Matches.
-    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe();
+    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe()
     this.verificationServiceSubscription = this.verificationService.postDonorMatches().subscribe(() => {
       // Donor match success, Proceed to step 5.
       this.stateChanged('user-match')

@@ -34,7 +34,7 @@ class SignInModalController {
   }
 
   stateChanged (state) {
-    this.onStateChange({state})
+    this.onStateChange({ state })
   }
 }
 

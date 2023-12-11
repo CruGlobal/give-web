@@ -37,9 +37,9 @@ class SignInFormController {
         this.$log.error('Failed to redirect from Okta', error)
         this.onFailure()
       }
-    );
-    const autoLogin = this.$location.search()?.autoLogin;
-    if (autoLogin === 'true') this.signInWithOkta();
+      )
+    const autoLogin = this.$location.search()?.autoLogin
+    if (autoLogin === 'true') this.signInWithOkta()
   }
 
   signInWithOkta () {
@@ -47,11 +47,11 @@ class SignInFormController {
     delete this.errorMessage
     this.sessionService.oktaSignIn(this.lastPurchaseId).subscribe(() => {
       const $injector = this.$injector
-        if (!$injector.has('sessionService')) {
-          $injector.loadNewModules(['sessionService'])
-        }
-        this.$document[0].body.dispatchEvent(
-          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
+      if (!$injector.has('sessionService')) {
+        $injector.loadNewModules(['sessionService'])
+      }
+      this.$document[0].body.dispatchEvent(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
       this.onSuccess()
     }, error => {
       this.isSigningIn = false

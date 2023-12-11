@@ -256,7 +256,7 @@ describe('session service', function () {
       $httpBackend.flush()
     })
 
-    it('should revoke tokens log user out of Okta', () => {
+    it('should revoke tokens & log user out of Okta', () => {
       sessionService
         .oktaSignOut()
         .subscribe(() => {
@@ -264,6 +264,7 @@ describe('session service', function () {
           expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
           expect(sessionService.authClient.closeSession).toHaveBeenCalled()
           expect(sessionService.authClient.signOut).toHaveBeenCalled()
+          expect($window.location).toEqual(`cart.html`)
         })
     });
 

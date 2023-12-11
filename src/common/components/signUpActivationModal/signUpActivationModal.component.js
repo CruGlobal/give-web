@@ -1,6 +1,5 @@
 import angular from 'angular'
 import includes from 'lodash/includes'
-import isEmpty from 'lodash/isEmpty'
 import sessionService, { Roles, createAccountDataCookieName } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './signUpActivationModal.tpl.html'
@@ -22,9 +21,9 @@ class signUpActivationModalController {
 
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.identified = true;
-      this.username = this.sessionService.session.email;
-      this.onStateChange({ state: 'sign-in' });
+      this.identified = true
+      this.username = this.sessionService.session.email
+      this.onStateChange({ state: 'sign-in' })
     }
     if (!this.isInsideAnotherModal) {
       this.cartCount = 0
@@ -34,72 +33,72 @@ class signUpActivationModalController {
         this.cartCount = 0
       })
     }
-    this.showHelp = false;
-    this.loadingAccountErrorCount = 0;
-    this.initialLoading = true;
+    this.showHelp = false
+    this.loadingAccountErrorCount = 0
+    this.initialLoading = true
     this.getUnverifiedAccount(false)
     this.getUnverifiedAccountTimoutId = this.$window.setInterval(() => {
       this.getUnverifiedAccount()
-    }, 10000);
+    }, 10000)
 
     // Allow time for the server to populate the data
     // Otherwise error will show that email isn't registered.
-    setTimeout(() => this.initialLoading = false, 10000)
+    setTimeout(() => { this.initialLoading = false }, 10000)
   }
 
   $onDestroy () {
-    clearInterval(this.getUnverifiedAccountTimoutId) 
+    clearInterval(this.getUnverifiedAccountTimoutId)
   }
 
   async getUnverifiedAccount (subtle = true) {
-    if (!subtle) this.loadingAccount = true;
-    this.loadingAccountError = false;
+    if (!subtle) this.loadingAccount = true
+    this.loadingAccountError = false
 
-    const createAccountDataStringified = this.$cookies.get(createAccountDataCookieName);
-    const createAccountData = createAccountDataStringified ? JSON.parse(createAccountDataStringified) : null;
+    const createAccountDataStringified = this.$cookies.get(createAccountDataCookieName)
+    const createAccountData = createAccountDataStringified ? JSON.parse(createAccountDataStringified) : null
     if (createAccountData) {
       this.sessionService.checkCreateAccountStatus(createAccountData?.email).then((response) => {
         if (response.status === 'error') {
           this.loadingAccountError = response.data
-          this.loadingAccountErrorCount++;
+          this.loadingAccountErrorCount++
           if (!subtle) this.loadingAccount = false
-          this.$scope.$apply();
+          this.$scope.$apply()
         } else {
           let status = ''
-          switch(response.data.status) {
+          switch (response.data.status) {
             case 'STAGED':
               status = 'Awaiting Admin approval'
-              break;
+              break
             case 'ACTIVE':
               status = 'Active'
-              break;
+              break
             case 'PROVISIONED':
               status = 'Pending Activation'
-              break;
+              break
           }
 
-          this.unverifiedAccount = { 
+          this.unverifiedAccount = {
             ...createAccountData,
             ...response.data,
             status
           }
           this.loadingAccount = false
-          this.loadingAccountErrorCount = 0;
+          this.loadingAccountErrorCount = 0
 
           if (this.unverifiedAccount.email) {
             this.initialLoading = false
           }
 
           if (response.data.status === 'ACTIVE') {
-            clearInterval(this.getUnverifiedAccountTimoutId) 
+            clearInterval(this.getUnverifiedAccountTimoutId)
           }
-          this.$scope.$apply();
+          this.$scope.$apply()
         }
-      });
+      })
     } else {
-      this.loadingAccountError = 'error';
+      this.loadingAccountError = 'error'
       this.loadingAccount = false
-      this.loadingAccountErrorCount++;
+      this.loadingAccountErrorCount++
     }
   }
 
@@ -127,12 +126,11 @@ class signUpActivationModalController {
   }
 }
 
-
 export default angular
   .module(componentName, [
     sessionService.name,
     orderService.name,
-    cartService.name,
+    cartService.name
   ])
   .component(componentName, {
     controller: signUpActivationModalController,
@@ -143,6 +141,6 @@ export default angular
       onFailure: '&',
       onCancel: '&',
       isInsideAnotherModal: '=',
-      lastPurchaseId: '<',
+      lastPurchaseId: '<'
     }
   })

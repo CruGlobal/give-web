@@ -1,6 +1,6 @@
 import angular from 'angular'
 import sessionModalService from 'common/services/session/sessionModal.service'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './accountBenefits.tpl.html'
 
@@ -36,7 +36,7 @@ class AccountBenefitsController {
     // Display Account Benefits Modal when registration-state is NEW or MATCHED
     if (lastPurchaseId && this.donorDetails['registration-state'] !== 'COMPLETED') {
       this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
-          this.isVisible = false
+        this.isVisible = false
       }, angular.noop)
     }
   }

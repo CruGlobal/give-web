@@ -15,7 +15,6 @@ import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { SignInEvent } from 'common/services/session/session.service'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
-import { Roles } from 'common/services/session/session.service.js'
 
 import template from './step-3.tpl.html'
 
@@ -126,13 +125,13 @@ class Step3Controller {
   saveDonorDataForRegistration () {
     if (this.donorDetails['registration-state'] !== 'COMPLETED') {
       const storeSessionData = {}
-      storeSessionData.name = {...this.donorDetails.name};
-      storeSessionData.mailingAddress = {...this.donorDetails.mailingAddress};
-      storeSessionData['spouse-name'] = {...this.donorDetails['spouse-name']};
-      storeSessionData['donor-type'] = this.donorDetails['donor-type'];
-      storeSessionData['organization-name'] = this.donorDetails['organization-name'];
-      storeSessionData['phone-number'] = this.donorDetails['phone-number'];
-      this.sessionService.updateCheckoutSavedData(storeSessionData);
+      storeSessionData.name = { ...this.donorDetails.name }
+      storeSessionData.mailingAddress = { ...this.donorDetails.mailingAddress }
+      storeSessionData['spouse-name'] = { ...this.donorDetails['spouse-name'] }
+      storeSessionData['donor-type'] = this.donorDetails['donor-type']
+      storeSessionData['organization-name'] = this.donorDetails['organization-name']
+      storeSessionData['phone-number'] = this.donorDetails['phone-number']
+      this.sessionService.updateCheckoutSavedData(storeSessionData)
     }
   }
 

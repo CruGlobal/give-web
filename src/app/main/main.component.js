@@ -26,10 +26,10 @@ const componentName = 'main'
 class MainController {
   /* @ngInject */
   constructor (sessionService) /* eslint-disable-line no-useless-constructor */ {
-    this.sessionService = sessionService;
-   }
+    this.sessionService = sessionService
+  }
 
-  signOut() {
+  signOut () {
     return this.sessionService.oktaSignOut()
   }
 }
