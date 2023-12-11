@@ -101,18 +101,12 @@ class Step1Controller {
         }
 
         if (overrideDonorDetails) {
-          const afterInitialLoad = !!this.$window.sessionStorage.getItem('afterInitialLoad')
-          const predefinedDonorDetails = pick(overrideDonorDetails, [
-            'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
-          ])
-          if (afterInitialLoad) {
-            this.donorDetails = mergeWith(this.donorDetails, predefinedDonorDetails, (objValue, srcValue) => {
-              if (typeof objValue === 'object') return
-              return objValue || srcValue
-            })
-          } else {
-            this.donorDetails = assign(this.donorDetails, predefinedDonorDetails)
-            this.$window.sessionStorage.setItem('afterInitialLoad', 'true')
+          const initialLoad = !this.$window.sessionStorage.getItem('initialLoad')
+          if (initialLoad) {
+            this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
+              'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
+            ]))
+            this.$window.sessionStorage.setItem('initialLoad', 'true')
           }
         }
       },
