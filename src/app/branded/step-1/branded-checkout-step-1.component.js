@@ -33,13 +33,13 @@ class BrandedCheckoutStep1Controller {
 
   initItemConfig () {
     this.itemConfig = {}
-    this.itemConfig['campaign-code'] = this.campaignCode
-    if (this.itemConfig['campaign-code'] &&
-      (this.itemConfig['campaign-code'].match(/^[a-z0-9]+$/i) === null || this.itemConfig['campaign-code'].length > 30)) {
-      this.itemConfig['campaign-code'] = ''
+    this.itemConfig.CAMPAIGN_CODE = this.campaignCode
+    if (this.itemConfig.CAMPAIGN_CODE &&
+      (this.itemConfig.CAMPAIGN_CODE.match(/^[a-z0-9]+$/i) === null || this.itemConfig.CAMPAIGN_CODE.length > 30)) {
+      this.itemConfig.CAMPAIGN_CODE = ''
     }
     this.itemConfig['campaign-page'] = this.campaignPage
-    this.itemConfig.amount = this.amount
+    this.itemConfig.AMOUNT = this.amount
 
     // These lines calculate the price with fees for amounts coming in from the client site via component config
     if (this.amount) {
@@ -58,7 +58,7 @@ class BrandedCheckoutStep1Controller {
         this.defaultFrequency = 'ANNUAL'
         break
     }
-    this.itemConfig['recurring-day-of-month'] = this.day
+    this.itemConfig.RECURRING_DAY_OF_MONTH = this.day
     this.itemConfig.frequency = this.frequency
   }
 

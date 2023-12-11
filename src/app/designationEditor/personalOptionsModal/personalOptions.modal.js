@@ -25,6 +25,7 @@ class ModalInstanceCtrl {
     this.givingLinks = sortBy(this.givingLinks, 'order')
 
     this.tab = 'newsletter'
+    this.givingLinksAvailable = designationType === 'National Staff'
   }
 
   transformGivingLinks () {

@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.purchases.purchase',
-    uri: '/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentmeans:element,ratetotals:element',
-    href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:code,lineitems:element:rate,paymentmeans:element,ratetotals:element'
+    uri: '/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:rate,paymentinstruments:element,ratetotals:element,billingaddress',
+    href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=?zoom=donordetails,lineitems:element,lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:rate,paymentinstruments:element,ratetotals:element,billingaddress'
   },
   links: [{
     rel: 'list',
@@ -42,11 +42,9 @@ export default {
     uri: '/purchases/crugive/giydanju=/billingaddress',
     href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/billingaddress'
   }, {
-    rel: 'paymentmeans',
-    rev: 'purchase',
-    type: 'elasticpath.collections.links',
-    uri: '/purchases/crugive/giydanju=/paymentmeans',
-    href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans'
+    rel: 'paymentinstruments',
+    type: 'paymentinstruments.purchase-payment-instruments',
+    href: 'https://give-stage2.cru.org/cortex/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument'
   }, {
     rel: 'ratetotals',
     type: 'elasticpath.ratetotals.rate-total',
@@ -59,6 +57,37 @@ export default {
     uri: '/shipments/purchases/crugive/giydanju=',
     href: 'https://give-stage2.cru.org/cortex/shipments/purchases/crugive/giydanju='
   }],
+  _billingaddress: [
+    {
+      self: {
+        type: 'purchases.purchase-billingaddress',
+        uri: '/purchases/crugive/giydcnzv=/billingaddress',
+        href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydcnzv=/billingaddress'
+      },
+      messages: [],
+      links: [
+        {
+          rel: 'purchase',
+          type: 'purchases.purchase',
+          href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydcnzv='
+        }
+      ],
+      address: {
+        'country-name': 'US',
+        'extended-address': 'Apt 45',
+        locality: 'State',
+        'postal-code': '12345',
+        region: 'AL',
+        'street-address': '123 Asdf St'
+      },
+      name: {
+        'family-name': 'Lname',
+        'given-name': 'Fname'
+      },
+      organization: null,
+      'phone-number': null
+    }
+  ],
   _donordetails: [{
     self: {
       type: 'elasticpath.donordetails.donor',
@@ -108,11 +137,6 @@ export default {
         uri: '/purchases/crugive/giydanju=/lineitems',
         href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems'
       }, {
-        rel: 'code',
-        type: 'elasticpath.extlookups.product-code',
-        uri: '/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
-        href: 'https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
-      }, {
         rel: 'options',
         rev: 'lineitem',
         type: 'elasticpath.collections.links',
@@ -125,19 +149,9 @@ export default {
         uri: '/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
         href: 'https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
       }],
-      _code: [{
-        self: {
-          type: 'elasticpath.extlookups.product-code',
-          uri: '/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
-          href: 'https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
-        },
-        links: [],
-        code: '0798349',
-        'product-code': '0798349'
-      }],
       _rate: [{
         self: {
-          type: 'elasticpath.rates.rate',
+          type: 'rate.purchase-rate',
           uri: '/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
           href: 'https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
         },
@@ -148,7 +162,7 @@ export default {
           uri: '/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
           href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
         }],
-        cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+        cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 One Time',
         recurrence: { display: 'One Time', interval: 'NA' }
       }],
@@ -156,7 +170,35 @@ export default {
       'line-extension-tax': [{ amount: 0.00, currency: 'USD', display: '$0.00' }],
       'line-extension-total': [{ amount: 50.00, currency: 'USD', display: '$50.00' }],
       name: 'E-Ministry',
-      quantity: 1
+      quantity: 1,
+      _item: [{
+        _code: [{
+          self: {
+            type: 'items.code-for-item',
+            uri: '/items/code/items/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
+            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
+          },
+          links: [],
+          code: '0798349'
+        }],
+        _offer: [{
+          _code: [{
+            self: {
+              type: 'offers.code-for-offer',
+              uri: '/offers/code/offers/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy=',
+              href: 'https://give-stage2.cru.org/cortex/offers/code/offers/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
+            },
+            messages: [],
+            links: [{
+              rel: 'offer',
+              rev: 'code',
+              type: 'offers.offer',
+              uri: '/offers/code/offers/crugive/g5tdqzrvmmydqllgg4zgkljumi4taljygjtdkljxmuydiyjwgzqtgyzugy='
+            }],
+            code: '0798349'
+          }]
+        }]
+      }]
     }, {
       self: {
         type: 'elasticpath.purchases.line-item',
@@ -191,16 +233,6 @@ export default {
         uri: '/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
         href: 'https://give-stage2.cru.org/cortex/rates/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
       }],
-      _code: [{
-        self: {
-          type: 'elasticpath.extlookups.product-code',
-          uri: '/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
-          href: 'https://give-stage2.cru.org/cortex/productcodes/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
-        },
-        links: [],
-        code: '0775813_mon',
-        'product-code': '0775813'
-      }],
       _rate: [{
         self: {
           type: 'elasticpath.rates.rate',
@@ -214,7 +246,7 @@ export default {
           uri: '/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
           href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/lineitems/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
         }],
-        cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+        cost: [{ amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' }],
         display: '$50.00 Monthly',
         recurrence: { display: 'Monthly', interval: 'MON' }
       }],
@@ -222,43 +254,63 @@ export default {
       'line-extension-tax': [{ amount: 0.00, currency: 'USD', display: '$0.00' }],
       'line-extension-total': [{ amount: 0.00, currency: 'USD', display: '$0.00' }],
       name: 'Half a Team Motorbike',
-      quantity: 1
+      quantity: 1,
+      _item: [{
+        _code: [{
+          self: {
+            type: 'items.code-for-item',
+            uri: '/items/code/items/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
+            href: 'https://give-stage2.cru.org/cortex/items/code/items/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
+          },
+          links: [],
+          code: '0775813_mon'
+        }],
+        _offer: [{
+          _code: [{
+            self: {
+              type: 'offers.code-for-offer',
+              uri: '/offers/code/offers/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu=',
+              href: 'https://give-stage2.cru.org/cortex/offers/code/offers/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
+            },
+            messages: [],
+            links: [{
+              rel: 'offer',
+              rev: 'code',
+              type: 'offers.offer',
+              uri: '/offers/code/offers/crugive/gu3tsmlgmizdoljyg4ztsljumiztoljzgftgiljumi3dgzjzgnrgknlcgu='
+            }],
+            code: '0775813'
+          }]
+        }]
+      }]
     }]
   }],
-  _paymentmeans: [{
+  _paymentinstruments: [{
     _element: [{
       self: {
-        type: 'elasticpath.purchases.purchase.paymentmeans',
-        uri: '/purchases/crugive/giydanju=/paymentmeans/giydamzyge=',
-        href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans/giydamzyge='
+        type: 'paymentinstruments.purchase-payment-instrument',
+        uri: '/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument/giydamzyge=',
+        href: 'https://give-stage2.cru.org/cortex/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument/giydamzyge='
       },
       links: [{
-        rel: 'list',
-        type: 'elasticpath.collections.links',
-        uri: '/purchases/crugive/giydanju=/paymentmeans',
-        href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju=/paymentmeans'
+        rel: 'paymentinstruments',
+        type: 'paymentinstruments.purchase-payment-instruments',
+        href: 'https://give-stage2.cru.org/cortex/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument'
       }, {
-        rel: 'purchase',
-        type: 'elasticpath.purchases.purchase',
-        uri: '/purchases/crugive/giydanju=',
-        href: 'https://give-stage2.cru.org/cortex/purchases/crugive/giydanju='
+        rel: 'paymentmethod',
+        type: 'paymentinstruments.purchase-payment-method',
+        href: 'https://give-stage2.cru.org/cortex/paymentinstruments/purchases/crugive/giydanju=/purchasepaymentinstrument/giydamzyge=/purchasepaymentmethod/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm='
       }],
-      'billing-address': {
-        address: {
-          'country-name': 'US',
-          'extended-address': 'Apt 45',
-          locality: 'State',
-          'postal-code': '12345',
-          region: 'AL',
-          'street-address': '123 Asdf St'
-        },
-        name: { 'family-name': 'Lname', 'given-name': 'Fname' }
-      },
-      'card-type': 'Visa',
-      'expiry-date': { month: '12', year: '2019' },
-      'holder-name': 'sadf',
-      'primary-account-number-id': '*******************************************************cNKg',
-      'telephone-type': 'voice'
+      name: 'Cru Payment Instrument',
+      'payment-instrument-identification-attributes': {
+        'card-number': 'aw3afa8af1111',
+        'card-type': 'Visa',
+        'expiry-month': '12',
+        'expiry-year': '2019',
+        'cardholder-name': 'sadf',
+        description: 'Visa - 1111',
+        'last-four-digits': '1111'
+      }
     }]
   }],
   _ratetotals: [{
@@ -279,7 +331,7 @@ export default {
         href: 'https://give-stage2.cru.org/cortex/ratetotals/purchases/crugive/giydanju=/a5ve2uj7yoadlqvvku6dckreernmfj6cxvqt6mtooquwyscpppble4jqgnzusp3tfhbkyi3jnhbk46lujmsmhadhykvemv6cwpblg7odrjp4fmwcwjnugwj3lizd65tmee='
       },
       links: [],
-      cost: { amount: 50.00, currency: 'USD', display: '$50.00' },
+      cost: { amount: 50.00, 'amount-with-fees': 51.2, currency: 'USD', display: '$50.00', 'display-with-fees': '$51.20' },
       display: '$50.00 Single',
       recurrence: { display: 'Single', interval: 'NA' }
     }]

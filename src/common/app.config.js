@@ -3,8 +3,10 @@ import 'angular-environment'
 import 'angular-translate'
 
 import rollbarConfig from './rollbar.config'
+import dataDogConfig from './datadog.config.js'
 
-const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
+// Exported for datadog.config tests.
+export const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
   $httpProvider.useApplyAsync(true)
 
   envServiceProvider.config({
@@ -31,6 +33,16 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         'uatdisp.aws.cru.org',
         'cru-givestage.s3.amazonaws.com',
         'give-stage-static.cru.org'
+      ],
+      nonprod: [
+        'give-stage2-next.cru.org',
+        'cru-give-web-assets-nonprod.s3.amazonaws.com',
+        'give-nonprod-static.cru.org'
+      ],
+      preprod: [
+        'give-prod-static.cru.org',
+        'cru-give-web-assets-preprod.s3.amazonaws.com',
+        'give-preprod.cru.org'
       ],
       production: []
     },
@@ -81,6 +93,23 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         isBrandedCheckout: false,
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa1p8kb6gr1IGGdc0h8'
+      },
+      nonprod: {
+        apiUrl: 'https://give-stage2-next.cru.org',
+        imgDomain: '//give-nonprod-static.cru.org',
+        imgDomainDesignation: 'https://give-stage2-next.cru.org',
+        publicCru: 'https://stage.cru.org',
+        publicGive: 'https://give-stage2-next.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false
+      },
+      preprod: {
+        apiUrl: 'https://give-preprod.cru.org',
+        imgDomain: '//give-prod-static.cru.org',
+        imgDomainDesignation: 'https://give-preprod.cru.org',
+        publicCru: 'https://www.cru.org',
+        publicGive: 'https://give-preprod.cru.org',
+        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey='
       },
       production: {
         apiUrl: 'https://give.cru.org',
@@ -557,3 +586,4 @@ export default angular.module('appConfig', [
 ])
   .config(appConfig)
   .config(rollbarConfig)
+  .config(dataDogConfig)

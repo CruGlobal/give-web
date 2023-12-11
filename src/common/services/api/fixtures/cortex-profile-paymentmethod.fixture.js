@@ -1,13 +1,13 @@
 export default {
   self: {
-    type: 'cru.creditcards.named-credit-card',
-    uri: '/selfservicepaymentmethods/crugive/giydiojyg4=',
-    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydiojyg4='
+    type: 'paymentinstruments.payment-instrument',
+    uri: '/selfservicepaymentinstruments/crugive/giydiojyg4=',
+    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/giydiojyg4='
   },
   links: [{
     rel: 'list',
-    uri: '/selfservicepaymentmethods/crugive',
-    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+    uri: '/selfservicepaymentinstruments/crugive',
+    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive'
   }, {
     rel: 'element',
     rev: 'list',

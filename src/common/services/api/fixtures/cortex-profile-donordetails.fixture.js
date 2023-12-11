@@ -51,11 +51,11 @@ export default {
     uri: '/purchases/crugive',
     href: 'https://give-stage2.cru.org/cortex/purchases/crugive'
   }, {
-    rel: 'selfservicepaymentmethods',
+    rel: 'selfservicepaymentinstruments',
     rev: 'profile',
     type: 'elasticpath.collections.links',
-    uri: '/selfservicepaymentmethods/crugive',
-    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+    uri: '/selfservicepaymentinstruments/crugive',
+    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive'
   }, {
     rel: 'wishlists',
     rev: 'profile',
@@ -83,12 +83,14 @@ export default {
     'donor-number': '447072430',
     'donor-type': 'Household',
     'mailing-address': {
-      'country-name': 'US',
-      'extended-address': '',
-      locality: 'Post Falls',
-      'postal-code': '83854-6674',
-      region: 'ID',
-      'street-address': '2100 N Palisades Dr'
+      address: {
+        'country-name': 'US',
+        'extended-address': '',
+        locality: 'Post Falls',
+        'postal-code': '83854-6674',
+        region: 'ID',
+        'street-address': '2100 N Palisades Dr'
+      }
     },
     name: {
       'family-name': 'Tubbs',

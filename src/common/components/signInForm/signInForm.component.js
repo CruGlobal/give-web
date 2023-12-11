@@ -10,10 +10,12 @@ const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor ($log, $scope, $location, sessionService, gettext) {
+  constructor ($log, $scope, $document, $location, sessionService, gettext) {
     this.$log = $log
     this.$scope = $scope
+    this.$document = $document
     this.$location = $location
+    this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
   }
@@ -44,6 +46,12 @@ class SignInFormController {
     this.isSigningIn = true
     delete this.errorMessage
     this.sessionService.oktaSignIn(this.lastPurchaseId).subscribe(() => {
+      const $injector = this.$injector
+        if (!$injector.has('sessionService')) {
+          $injector.loadNewModules(['sessionService'])
+        }
+        this.$document[0].body.dispatchEvent(
+          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
       this.onSuccess()
     }, error => {
       this.isSigningIn = false

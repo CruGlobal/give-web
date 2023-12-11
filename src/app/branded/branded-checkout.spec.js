@@ -205,7 +205,7 @@ describe('branded checkout', () => {
       donorDetails: {
         'donor-type': 'Household'
       },
-      paymentMeans: {},
+      paymentInstruments: {},
       lineItems: {},
       rawData: {}
     }

@@ -43,7 +43,7 @@ class CoverFeesController {
   }
 
   updatePriceWithFees () {
-    const amountWithFees = this.item.amount / FEE_DERIVATIVE
+    const amountWithFees = this.item.AMOUNT / FEE_DERIVATIVE
     this.item.priceWithFees = this.$filter('currency')(amountWithFees, '$', 2)
   }
 

@@ -17,7 +17,16 @@ describe('signInForm', function () {
     $rootScope = _$rootScope_
     bindings = {
       onSuccess: jest.fn(),
-      onFailure: jest.fn()
+      onFailure: jest.fn(),
+      $document: [{
+        body: {
+          dispatchEvent: jest.fn()
+        }
+      }],
+      $injector: {
+        has: jest.fn(),
+        loadNewModules: jest.fn()
+      }
     }
 
     const scope = { $apply: jest.fn() }
@@ -108,6 +117,20 @@ describe('signInForm', function () {
       $rootScope.$digest()
 
       expect(bindings.onSuccess).toHaveBeenCalled()
+    })
+
+    it('adds the sessionService module', () => {
+      deferred.resolve({})
+      $rootScope.$digest()
+      bindings.$injector.has.mockImplementation(() => false)
+      bindings.$injector.loadNewModules.mockImplementation(() => {})
+
+      expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalled();
+      const $injector = bindings.$injector
+
+      expect($injector.loadNewModules).toHaveBeenCalledWith(['sessionService'])
+      expect(bindings.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
     })
 
     it('has unknown error signing in', () => {

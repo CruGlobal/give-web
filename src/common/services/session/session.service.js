@@ -194,7 +194,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     } catch(err) {
       try {
         if (err.status === 401) {
-          throw new Error();
+          throw new Error(err.message);
         }
         const errors = err?.data?.error 
           ? err.data.error.split(',')
@@ -313,6 +313,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       await authClient.revokeRefreshToken();
       await authClient.closeSession();
       authClient.signOut();
+      $window.location = '/cart.html';
     } catch {
       $window.location=`https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`;
     }

@@ -25,6 +25,7 @@ class SignUpModalController {
       this.username = this.sessionService.session.email;
       this.onStateChange({ state: 'sign-in' });
     }
+
     if (!this.isInsideAnotherModal) {
       this.cartCount = 0
       this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe(count => {
@@ -75,6 +76,7 @@ class SignUpModalController {
       const details = this.donorDetails   
       const { email, name } = details;
       const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name']);
+      console.log('createAccount', createAccount)
       if (createAccount.status === 'error') {
         if (createAccount.accountPending) {
           this.onStateChange({ state: 'sign-up-activation' });

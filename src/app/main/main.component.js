@@ -3,7 +3,7 @@ import 'angular-ui-router'
 
 import '../../assets/scss/styles.scss'
 
-import sessionService from '../../common/services/session/session.service'
+import sessionService from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
 import cartComponent from '../cart/cart.component'
 import checkoutComponent from '../checkout/checkout.component'
@@ -25,11 +25,11 @@ const componentName = 'main'
 
 class MainController {
   /* @ngInject */
-  constructor ( sessionService) /* eslint-disable-line no-useless-constructor */ {
+  constructor (sessionService) /* eslint-disable-line no-useless-constructor */ {
     this.sessionService = sessionService;
    }
 
-  signout() {
+  signOut() {
     return this.sessionService.oktaSignOut()
   }
 }

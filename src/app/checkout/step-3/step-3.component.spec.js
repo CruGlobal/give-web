@@ -138,12 +138,12 @@ describe('checkout', () => {
           uri: '/uri',
           productUri: '/uri',
           config: {
-            'recurring-start-month': '07'
+            'RECURRING_START_MONTH': '07'
           }
         }
         self.controller.updateGiftStartMonth(item, '05')
 
-        item.config['recurring-start-month'] = '05'
+        item.config['RECURRING_START_MONTH'] = '05'
 
         expect(self.controller.cartService.editItem).toHaveBeenCalledWith(item.uri, item.productUri, item.config)
 
@@ -153,7 +153,7 @@ describe('checkout', () => {
 
     describe('loadCurrentPayment', () => {
       it('should load bank account payment details', () => {
-        self.loadedPayment.self.type = 'elasticpath.bankaccounts.bank-account'
+        self.loadedPayment['account-type'] = 'Checking'
         self.controller.loadCurrentPayment()
 
         expect(self.controller.bankAccountPaymentDetails).toEqual(self.loadedPayment)
@@ -164,7 +164,7 @@ describe('checkout', () => {
       })
 
       it('should load credit card payment details', () => {
-        self.loadedPayment.self.type = 'cru.creditcards.named-credit-card'
+        self.loadedPayment['card-type'] = 'Visa'
         self.controller.loadCurrentPayment()
 
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined()

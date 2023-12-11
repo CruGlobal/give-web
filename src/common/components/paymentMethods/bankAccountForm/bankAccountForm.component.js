@@ -89,7 +89,7 @@ class BankAccountController {
           state: 'encrypting'
         }
       })
-      const productionEnvironments = ['production', 'prodcloud']
+      const productionEnvironments = ['production', 'prodcloud', 'preprod']
       const actualEnvironment = this.envService.get()
       const ccpEnvironment = productionEnvironments.includes(actualEnvironment) ? 'production' : actualEnvironment
       cruPayments.bankAccount.init(ccpEnvironment, ccpEnvironment === 'production' ? ccpKey : ccpStagingKey)

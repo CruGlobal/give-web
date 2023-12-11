@@ -18,10 +18,12 @@ const componentName = 'sessionModal'
 
 class SessionModalController {
   /* @ngInject */
-  constructor ($rootScope, sessionService, analyticsFactory) {
+  constructor ($rootScope, $document, sessionService, analyticsFactory) {
     this.$rootScope = $rootScope
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
+    this.$document = $document
+    this.$injector = angular.injector()
     this.isLoading = false
     this.scrollModalToTop = scrollModalToTop
   }
@@ -52,6 +54,12 @@ class SessionModalController {
 
   onSignInSuccess () {
     this.sessionService.removeOktaRedirectIndicator()
+    const $injector = this.$injector
+    if (!$injector.has('sessionService')) {
+      $injector.loadNewModules(['sessionService'])
+    }
+    this.$document[0].body.dispatchEvent(
+      new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
     this.close()
   }
 

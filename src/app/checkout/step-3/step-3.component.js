@@ -72,9 +72,9 @@ class Step3Controller {
       .subscribe((data) => {
         if (!data) {
           this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist')
-        } else if (data.self.type === 'elasticpath.bankaccounts.bank-account') {
+        } else if (data['account-type']) {
           this.bankAccountPaymentDetails = data
-        } else if (data.self.type === 'cru.creditcards.named-credit-card') {
+        } else if (data['card-type']) {
           this.creditCardPaymentDetails = data
         } else {
           this.$log.error('Error loading current payment info: current payment type is unknown')
@@ -104,7 +104,7 @@ class Step3Controller {
   }
 
   updateGiftStartMonth (item, month) {
-    item.config['recurring-start-month'] = month
+    item.config.RECURRING_START_MONTH = month
 
     this.cartData = null
     this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {

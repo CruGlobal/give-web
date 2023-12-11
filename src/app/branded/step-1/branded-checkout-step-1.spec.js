@@ -39,11 +39,11 @@ describe('branded checkout step 1', () => {
       $ctrl.initItemConfig()
 
       expect($ctrl.itemConfig).toEqual({
-        'campaign-code': '1234',
+        CAMPAIGN_CODE: '1234',
         'campaign-page': '135',
-        amount: '75',
+        AMOUNT: '75',
         priceWithFees: '$76.80',
-        'recurring-day-of-month': '9'
+        'RECURRING_DAY_OF_MONTH': '9'
       })
 
       expect($ctrl.defaultFrequency).toBeUndefined()
@@ -76,13 +76,13 @@ describe('branded checkout step 1', () => {
     it('should validate campaignCode (too long)', () => {
       $ctrl.campaignCode = 'abcdefghijklmnopqrstuvwxyz0123456789'
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('')
     })
 
     it('should validate campaignCode (non alpha numeric)', () => {
       $ctrl.campaignCode = '😅😳'
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig['campaign-code']).toEqual('')
+      expect($ctrl.itemConfig.CAMPAIGN_CODE).toEqual('')
     })
   })
 

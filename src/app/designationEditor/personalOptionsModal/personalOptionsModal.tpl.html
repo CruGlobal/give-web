@@ -6,7 +6,7 @@
         <a href="" ng-click="$ctrl.tab = 'newsletter'">
           MPDX Newsletter <span class="xs-hide">Form</span>
         </a>
-        <a href="" ng-click="$ctrl.tab = 'givingLinks'">
+        <a href="" ng-click="$ctrl.tab = 'givingLinks'" ng-if="$ctrl.givingLinksAvailable">
           Giving Links
         </a>
       </li>

@@ -78,7 +78,8 @@ describe('Designation Editor', function () {
           location: '/designation-editor.html?d=' + designationSecurityResponse.designationNumber,
           document: {
             dispatchEvent: jest.fn()
-          }
+          },
+          scrollTo: jest.fn()
         }
       }
     )
@@ -478,27 +479,52 @@ describe('Designation Editor', function () {
   })
 
   describe('save', () => {
-    it('should save designation content', () => {
-      $httpBackend.expectPOST(designationConstants.designationEndpoint).respond(200)
-      $ctrl.designationContent = designationSecurityResponse
+    it('should save designation content', done => {
+      jest.spyOn($ctrl, 'sessionEnforcerService').mockImplementation((role, callbacks) => {
+        const signInAsync = () => {
+          return Promise.resolve(callbacks['sign-in']())
+        }
 
-      $ctrl.save().then(() => {
-        expect($ctrl.saveStatus).toEqual('success')
-        expect($ctrl.saveDesignationError).toEqual(false)
+        signInAsync().then(() => {
+          expect($ctrl.designationEditorService.save).toHaveBeenCalled()
+          done()
+        })
       })
-      $httpBackend.flush()
+      $ctrl.designationContent = designationSecurityResponse
+      jest.spyOn($ctrl.designationEditorService, 'save').mockImplementation(() => Promise.resolve({}))
+      $ctrl.save()
     })
 
-    it('should try to save designation content', () => {
-      $httpBackend.expectPOST(designationConstants.designationEndpoint).respond(500)
-      $ctrl.designationContent = designationSecurityResponse
-
-      $ctrl.save().then(() => {
-        expect($ctrl.saveStatus).toEqual('failure')
-        expect($ctrl.saveDesignationError).toEqual(true)
-        expect($ctrl.$log.error.logs[0]).toEqual(['Error saving designation editor content.', expect.any(Object)])
+    it('should try to save designation content', done => {
+      jest.spyOn($ctrl, 'sessionEnforcerService').mockImplementation((role, callbacks) => {
+        const signInAsync = () => {
+          return Promise.resolve(callbacks['sign-in']())
+        }
+        signInAsync().then(() => {
+          expect($ctrl.saveStatus).toEqual('failure')
+          expect($ctrl.saveDesignationError).toEqual(true)
+          expect($ctrl.$log.error.logs[0]).toEqual(['Error saving designation editor content.', expect.any(Object)])
+          done()
+        })
       })
-      $httpBackend.flush()
+      jest.spyOn($ctrl.designationEditorService, 'save').mockImplementation(() => Promise.reject(new Error('error')))
+      jest.spyOn($ctrl.$window, 'scrollTo').mockImplementation(() => {})
+      $ctrl.designationContent = designationSecurityResponse
+      $ctrl.save()
+    })
+
+    it('should handle cancelling the login', done => {
+      jest.spyOn($ctrl, 'sessionEnforcerService').mockImplementation((role, callbacks) => {
+        const signInAsync = () => {
+          return Promise.resolve(callbacks.cancel())
+        }
+
+        signInAsync().then(() => {
+          expect($ctrl.$window.location).toEqual('/')
+          done()
+        })
+      })
+      $ctrl.save()
     })
   })
 
