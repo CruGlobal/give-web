@@ -52,6 +52,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   // Set initial session on load
   updateCurrentSession()
 
+  // Remove session data if present
+  removeForcedUserToLogoutSessionData()
+
   // Watch cortex-session cookie for changes and update existing session variable
   // This only detects changes made by $http or other angular services, not the browser expiring the cookie.
   $rootScope.$watch(() => $cookies.get(Sessions.role), updateCurrentSession)
@@ -294,11 +297,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     return Observable.from(authClient.isAuthenticated())
   }
 
-  function oktaSignOut () {
-    return Observable.from(internalSignOut())
+  function oktaSignOut (redirectHome = true) {
+    return Observable.from(internalSignOut(redirectHome))
   }
 
-  async function internalSignOut () {
+  async function internalSignOut (redirectHome = true) {
     try {
       await $http({
         method: 'DELETE',
@@ -309,11 +312,24 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       await authClient.revokeAccessToken()
       await authClient.revokeRefreshToken()
       await authClient.closeSession()
-      authClient.signOut()
-      $window.location = '/cart.html'
+
+      // Add session data so on return to page we can show an explaination to the user about what happened.
+      if (!redirectHome) {
+        $window.sessionStorage.setItem('forcedUserToLogout', true)
+      }
+      authClient.signOut({
+        postLogoutRedirectUri: redirectHome ? null : $window.location.href,
+      })
     } catch {
       $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
     }
+  }
+
+  function removeForcedUserToLogoutSessionData() {
+    // Allow for 2 seconds, so component can show error to user.
+    setTimeout(() => {
+      $window.sessionStorage.removeItem('forcedUserToLogout')
+    }, 2000)
   }
 
   function downgradeToGuest (skipEvent = false) {
