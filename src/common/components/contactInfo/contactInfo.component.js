@@ -100,12 +100,12 @@ class Step1Controller {
         }
 
         if (overrideDonorDetails) {
-          const initialLoad = !this.$window.sessionStorage.getItem('initialLoad')
+          const initialLoad = !this.$window.sessionStorage.getItem('initialLoadComplete')
           if (initialLoad) {
             this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
               'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
             ]))
-            this.$window.sessionStorage.setItem('initialLoad', 'true')
+            this.$window.sessionStorage.setItem('initialLoadComplete', 'true')
           }
         }
       },

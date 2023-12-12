@@ -243,7 +243,7 @@ describe('contactInfo', function () {
       })
   
       it('should overwrite donorDetails with overrideDonorDetails on intital load', () => {
-        self.controller.$window.sessionStorage.removeItem('initialLoad')
+        self.controller.$window.sessionStorage.removeItem('initialLoadComplete')
         self.controller.donorDetails = overrideDonorDetails
         self.controller.$onInit()
 
@@ -266,11 +266,11 @@ describe('contactInfo', function () {
         expect(self.controller.donorDetails.mailingAddress.region).toEqual('Georgia')
         expect(self.controller.donorDetails.mailingAddress.postalCode).toEqual('12345')
 
-        expect(self.controller.$window.sessionStorage.getItem('initialLoad')).toEqual('true')
+        expect(self.controller.$window.sessionStorage.getItem('initialLoadComplete')).toEqual('true')
       })
   
-      it('should not use overrideDonorDetails if initialLoad is set', () => {
-        self.controller.$window.sessionStorage.setItem('initialLoad', 'true')
+      it('should not use overrideDonorDetails if initialLoadComplete is set', () => {
+        self.controller.$window.sessionStorage.setItem('initialLoadComplete', 'true')
         self.controller.donorDetails = overrideDonorDetails
         self.controller.$onInit()
   
