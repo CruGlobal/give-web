@@ -243,7 +243,7 @@ describe('contactInfo', function () {
       })
   
       it('should overwrite donorDetails with overrideDonorDetails on intital load', () => {
-        self.controller.$window.sessionStorage.removeItem('afterInitialLoad')
+        self.controller.$window.sessionStorage.removeItem('initialLoadComplete')
         self.controller.donorDetails = overrideDonorDetails
         self.controller.$onInit()
 
@@ -266,17 +266,17 @@ describe('contactInfo', function () {
         expect(self.controller.donorDetails.mailingAddress.region).toEqual('Georgia')
         expect(self.controller.donorDetails.mailingAddress.postalCode).toEqual('12345')
 
-        expect(self.controller.$window.sessionStorage.getItem('afterInitialLoad')).toEqual('true')
+        expect(self.controller.$window.sessionStorage.getItem('initialLoadComplete')).toEqual('true')
       })
   
-      it('should merge donorDetails and overrideDonorDetails, favouring donorDetails if afterInitialLoad is set', () => {
-        self.controller.$window.sessionStorage.setItem('afterInitialLoad', 'true')
+      it('should not use overrideDonorDetails if initialLoadComplete is set', () => {
+        self.controller.$window.sessionStorage.setItem('initialLoadComplete', 'true')
         self.controller.donorDetails = overrideDonorDetails
         self.controller.$onInit()
   
-        expect(self.controller.donorDetails.name['title']).toEqual('Mr')
+        expect(self.controller.donorDetails.name['title']).toEqual('')
         expect(self.controller.donorDetails.name['given-name']).toEqual('Joe')
-        expect(self.controller.donorDetails.name['middle-initial']).toEqual('initial')
+        expect(self.controller.donorDetails.name['middle-initial']).toEqual('')
         expect(self.controller.donorDetails.name['family-name']).toEqual('Smith')
         expect(self.controller.donorDetails.name.suffix).toEqual('')
 
@@ -287,11 +287,11 @@ describe('contactInfo', function () {
         expect(self.controller.donorDetails['spouse-name']['family-name']).toEqual('Smith')
 
         expect(self.controller.donorDetails.mailingAddress.country).toEqual('US')
-        expect(self.controller.donorDetails.mailingAddress.streetAddress).toEqual('1111 Street Name')
-        expect(self.controller.donorDetails.mailingAddress.extendedAddress).toEqual('Apartment 2')
-        expect(self.controller.donorDetails.mailingAddress.locality).toEqual('City')
-        expect(self.controller.donorDetails.mailingAddress.region).toEqual('Georgia')
-        expect(self.controller.donorDetails.mailingAddress.postalCode).toEqual('12345')
+        expect(self.controller.donorDetails.mailingAddress.streetAddress).toBeUndefined()
+        expect(self.controller.donorDetails.mailingAddress.extendedAddress).toBeUndefined()
+        expect(self.controller.donorDetails.mailingAddress.locality).toBeUndefined()
+        expect(self.controller.donorDetails.mailingAddress.region).toBeUndefined()
+        expect(self.controller.donorDetails.mailingAddress.postalCode).toBeUndefined()
       })
 
       it('should use donorDetails if overrideDonorDetails are not defined', () => {
