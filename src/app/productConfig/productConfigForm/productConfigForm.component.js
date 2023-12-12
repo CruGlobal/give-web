@@ -390,7 +390,7 @@ class ProductConfigFormController {
     }
   }
 
-  shouldShowForcedUserToLogoutError() {
+  shouldShowForcedUserToLogoutError () {
     const forcedUserToLogout = this.$window.sessionStorage.getItem('forcedUserToLogout')
     this.errorForcedUserToLogout = !!forcedUserToLogout
   }
