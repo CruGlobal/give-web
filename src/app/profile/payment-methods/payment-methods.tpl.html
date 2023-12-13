@@ -22,8 +22,11 @@
             <loading ng-if="$ctrl.loading" class="mb">
               <translate>Loading payment methods...</translate>
             </loading>
-            <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError">
+            <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError === true">
               <span translate>There was an error loading your payment methods. You may</span> <a href="" ng-click="$ctrl.loadPaymentMethods()" translate>try again</a>.
+            </div>
+            <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingError === 'authentication'" translate>
+              There was an error loading your payment methods. Please log out and log in again.
             </div>
             <div class="alert alert-warning" role="alert" ng-if="!$ctrl.loading && !$ctrl.loadingError && $ctrl.paymentMethods.length === 0" translate>
               You haven't added any payment methods. Feel free to add one.
