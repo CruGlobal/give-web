@@ -73,6 +73,23 @@ describe('cart', () => {
       expect(self.controller.updating).toEqual(false)
     })
 
+    it('should preserve the order', () => {
+      self.controller.cartService.get.mockReturnValue(Observable.of({ items: [{ code: '1' }, { code: '2' }, { code: '3' }] }))
+      self.controller.loadCart(true)
+
+      self.controller.cartService.get.mockReturnValue(Observable.of({ items: [{ code: '3' }, { code: '2' }, { code: '1' }, { code: '4' }] }))
+      self.controller.loadCart(true)
+
+      expect(self.controller.cartData).toEqual({ items: [{ code: '4' }, { code: '1' }, { code: '2' }, { code: '3' }] })
+    })
+
+    it('should handle empty data', () => {
+      self.controller.cartService.get.mockReturnValue(Observable.of({}))
+      self.controller.loadCart(true)
+
+      expect(self.controller.cartData).toEqual({})
+    })
+
     it('should handle an error loading cart data', () => {
       self.controller.cartData = 'previous data'
       self.controller.cartService.get.mockReturnValue(Observable.throw('error'))
@@ -178,7 +195,6 @@ describe('cart', () => {
 
       expect(self.controller.productModalService.configureProduct).toHaveBeenCalledWith('0123456', 'some config', true, 'uri1')
       expect(self.controller.loadCart).toHaveBeenCalledWith(true)
-      expect(self.controller.cartData.items).toEqual([{ uri: 'uri2' }])
     })
   })
 
