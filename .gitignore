@@ -10,7 +10,6 @@ coverage
 .sass-cache
 stats.json
 .vs
-*.iml
 
 # asdf
 .tool-versions
