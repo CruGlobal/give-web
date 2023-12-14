@@ -37,7 +37,7 @@ export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
 export const LoginOktaOnlyEvent = 'loginAsOktaOnlyUser'
 
-const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, envService) {
+const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, $location, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
@@ -139,6 +139,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   async function internalSignIn (lastPurchaseId) {
     const isAuthenticated = await authClient.isAuthenticated()
     if (!isAuthenticated) {
+      // Save marketing search queries as they are lost on redirect
+      $window.sessionStorage.setItem('locationSearchOnLogin', $window.location.search)
       authClient.token.getWithRedirect()
       return
     }
@@ -148,6 +150,17 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
       data.lastPurchaseId = lastPurchaseId
     }
+    // Add marketing search queries back to URL once returned from Okta
+    const locationSearch = $window.sessionStorage.getItem('locationSearchOnLogin') || ''
+    const searchQueries = locationSearch.split(/\?|\&/);
+    $window.sessionStorage.removeItem('locationSearchOnLogin')
+    searchQueries.forEach((searchQuery) => {
+      const [search, value] = searchQuery.split('=')
+      if (search && value) {
+        $location.search(search, value)
+      }
+    })
+    
     return $http({
       method: 'POST',
       url: oktaApiUrl('login'),
