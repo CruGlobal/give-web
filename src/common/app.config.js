@@ -595,5 +595,5 @@ export default angular.module('appConfig', [
   'pascalprecht.translate'
 ])
   .config(appConfig)
-  .config(dataDogConfig)
   .config(rollbarConfig)
+  .config(dataDogConfig)

@@ -1,8 +1,6 @@
 import 'angular-environment'
 import { datadogRum } from '@datadog/browser-rum'
 
-console.log('Loading datadog')
-
 const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
   const clientToken = process.env.DATADOG_RUM_CLIENT_TOKEN
   if (clientToken) {
@@ -25,7 +23,6 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
     window.datadogRum = datadogRum
     window.datadogRum && window.datadogRum.init(config)
     window.datadogRum && window.datadogRum.startSessionReplayRecording()
-    console.log('DataDog context', window.datadogRum?.getInternalContext())
   }
 }
 export {
