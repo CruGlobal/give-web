@@ -85,7 +85,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
-        imgDomain: '//give-static.cru.org',
+        imgDomain: '//give-stage-static.cru.org',
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
