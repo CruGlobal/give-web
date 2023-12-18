@@ -11,9 +11,9 @@ import module from './contactInfo.component.js'
 
 describe('contactInfo', function () {
   beforeEach(angular.mock.module(module.name))
-  var self = {}
+  let self = {}
 
-  beforeEach(inject(function ($componentController) {
+  beforeEach(inject(function ($componentController, $window) {
     self.controller = $componentController(module.name, {}, {
       detailsForm: {
         $valid: false,
@@ -21,6 +21,7 @@ describe('contactInfo', function () {
       },
       onSubmit: jest.fn()
     })
+    self.$window = $window;
   }))
 
   describe('$onInit', () => {

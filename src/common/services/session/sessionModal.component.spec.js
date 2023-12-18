@@ -55,11 +55,13 @@ describe('sessionModalController', function () {
 
   describe('$ctrl.onSignInSuccess', () => {
     it('should close modal', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
       $ctrl.$injector.has.mockImplementation(() => true)
       $ctrl.onSignInSuccess()
       const $injector = $ctrl.$injector
 
       expect($ctrl.close).toHaveBeenCalled()
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
       expect($ctrl.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
         new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
     })
@@ -78,27 +80,33 @@ describe('sessionModalController', function () {
 
   describe('$ctrl.onSignUpSuccess', () => {
     it('should close modal', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
       jest.spyOn($ctrl.analyticsFactory, 'track').mockImplementation(() => {})
       $ctrl.onSignUpSuccess()
 
       expect($ctrl.close).toHaveBeenCalled()
       expect($ctrl.analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in-create-login')
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
   })
 
   describe('$ctrl.onFailure', () => {
     it('should dismiss modal with \'error\'', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
       $ctrl.onFailure()
 
       expect($ctrl.dismiss).toHaveBeenCalledWith({ $value: 'error' })
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
   })
 
   describe('$ctrl.onCancel', () => {
     it('should dismiss modal with \'cancel\'', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
       $ctrl.onCancel()
 
       expect($ctrl.dismiss).toHaveBeenCalledWith({ $value: 'cancel' })
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
   })
 

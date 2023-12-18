@@ -12,7 +12,6 @@ describe('main', function () {
 
     self.controller = $componentController(module.name, {
       $scope: $scope,
-      $window: { location: '/' }
     })
 
     self.controller.sessionService = sessionService
@@ -24,17 +23,12 @@ describe('main', function () {
 
   describe('signOut', () => {
     beforeEach(() => {
-      jest.spyOn(self.controller.sessionService, 'signOut').mockImplementation(() => Observable.of({}))
+      jest.spyOn(self.controller.sessionService, 'oktaSignOut').mockImplementation(() => Observable.of({}))
     })
 
     it('should call session sign out', () => {
       self.controller.signOut()
-      expect(self.controller.sessionService.signOut).toHaveBeenCalled()
-    })
-
-    it('should redirect to the cart', () => {
-      self.controller.signOut()
-      expect(self.controller.$window.location).toEqual('/cart.html')
+      expect(self.controller.sessionService.oktaSignOut).toHaveBeenCalled()
     })
   })
 })

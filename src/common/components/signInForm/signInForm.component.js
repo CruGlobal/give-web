@@ -10,9 +10,11 @@ const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor ($log, $document, sessionService, gettext) {
+  constructor ($log, $scope, $document, $location, sessionService, gettext) {
     this.$log = $log
+    this.$scope = $scope
     this.$document = $document
+    this.$location = $location
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
@@ -20,63 +22,53 @@ class SignInFormController {
 
   $onInit () {
     this.isSigningIn = false
-    this.signInState = 'identity'
-
     if (includes(['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole())) {
       this.username = this.sessionService.session.email
     }
+    this.sessionService.handleOktaRedirect()
+      .subscribe((data) => {
+        if (data) {
+          // Successfully redirected from Okta
+          this.onSuccess()
+        }
+      },
+      error => {
+        this.errorMessage = 'generic'
+        this.$log.error('Failed to redirect from Okta', error)
+        this.onFailure()
+      }
+      )
+    const autoLogin = this.$location.search()?.autoLogin
+    if (autoLogin === 'true') this.signInWithOkta()
   }
 
-  signIn () {
+  signInWithOkta () {
     this.isSigningIn = true
     delete this.errorMessage
-    this.sessionService
-      .signIn(this.username, this.password, this.mfa_token, this.trust_device, this.lastPurchaseId)
-      .subscribe(() => {
-        const $injector = this.$injector
-        if (!$injector.has('sessionService')) {
-          $injector.loadNewModules(['sessionService'])
-        }
-        this.$document[0].body.dispatchEvent(
-          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-        this.onSuccess()
-      }, error => {
-        this.isSigningIn = false
-        if (error && error.data && error.data.error && error.data.error === 'invalid_grant' && error.data.thekey_authn_error) {
-          switch (error.data.thekey_authn_error) {
-            case 'mfa_required':
-              if (this.signInState === 'mfa') {
-                this.errorMessage = 'mfa'
-                delete this.mfa_token
-              }
-              this.signInState = 'mfa'
-              break
-            case 'invalid_credentials':
-            case 'stale_password':
-            case 'email_unverified':
-            default:
-              this.errorMessage = 'Bad username or password'
-              this.signInState = 'identity'
-              this.onFailure()
-          }
-        } else if (error && error.data && error.data.code && error.data.code === 'SIEB-DOWN') {
-          if (error && error.config && error.config.data && error.config.data.password) {
-            delete error.config.data.password
-          }
-          this.$log.error('Siebel is down', error)
-          this.signInState = 'identity'
-          this.errorMessage = error.data.message
-          this.onFailure()
-        } else {
-          if (error && error.config && error.config.data && error.config.data.password) {
-            delete error.config.data.password
-          }
-          this.$log.error('Sign In Error', error)
-          this.signInState = 'identity'
-          this.errorMessage = 'generic'
-          this.onFailure()
-        }
-      })
+    this.sessionService.oktaSignIn(this.lastPurchaseId).subscribe(() => {
+      const $injector = this.$injector
+      if (!$injector.has('sessionService')) {
+        $injector.loadNewModules(['sessionService'])
+      }
+      this.$document[0].body.dispatchEvent(
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
+      this.onSuccess()
+    }, error => {
+      this.isSigningIn = false
+      if (error && error.config && error.config.data && error.config.data.password) {
+        delete error.config.data.password
+      }
+
+      if (error && error.data && error.data.code && error.data.code === 'SIEB-DOWN') {
+        this.$log.error('Siebel is down', error)
+        this.errorMessage = error.data.message
+      } else {
+        this.$log.error('Sign In Error', error)
+        this.errorMessage = 'generic'
+      }
+      this.$scope.$apply()
+      this.onFailure()
+    })
   }
 }
 
@@ -91,6 +83,8 @@ export default angular
     bindings: {
       onSuccess: '&',
       onFailure: '&',
-      lastPurchaseId: '<'
+      onStateChange: '&',
+      lastPurchaseId: '<',
+      onSignUpWithOkta: '&'
     }
   })

@@ -3,6 +3,7 @@ import 'angular-ui-router'
 
 import '../../assets/scss/styles.scss'
 
+import sessionService from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
 import cartComponent from '../cart/cart.component'
 import checkoutComponent from '../checkout/checkout.component'
@@ -18,23 +19,18 @@ import brandedCheckoutComponent from '../branded/branded-checkout.component'
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component'
 import receiptsComponent from '../profile/receipts/receipts.component'
 
-import sessionService from 'common/services/session/session.service'
-
 import template from './main.tpl.html'
 
 const componentName = 'main'
 
 class MainController {
   /* @ngInject */
-  constructor ($window, sessionService) {
-    this.$window = $window
+  constructor (sessionService) /* eslint-disable-line no-useless-constructor */ {
     this.sessionService = sessionService
   }
 
   signOut () {
-    this.sessionService.signOut().subscribe(() => {
-      this.$window.location = '/cart.html'
-    })
+    return this.sessionService.oktaSignOut()
   }
 }
 

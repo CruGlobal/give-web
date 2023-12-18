@@ -168,8 +168,11 @@ class Cart {
     if (!disableSessionRestart && this.sessionService.getRole() === Roles.public) {
       return this.getTotalQuantity().mergeMap((total) => {
         if (total <= 0) {
-          return this.sessionService.signOut().mergeMap(() => {
-            return this._addItem(uri, data)
+          return this.sessionService.oktaIsUserAuthenticated().mergeMap((isAuthenticated) => {
+            if (!isAuthenticated) return this._addItem(uri, data)
+            return this.sessionService.oktaSignOut(false).mergeMap(() => {
+              return this._addItem(uri, data)
+            })
           })
         }
         return this._addItem(uri, data)

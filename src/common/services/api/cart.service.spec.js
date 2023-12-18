@@ -5,6 +5,7 @@ import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/empty'
+import 'rxjs/add/observable/from'
 import { Roles } from 'common/services/session/session.service'
 
 import module from './cart.service'
@@ -246,10 +247,11 @@ describe('cart service', () => {
       describe('with empty cart', () => {
         beforeEach(() => {
           jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(0))
-          jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.of({}))
+          jest.spyOn(self.cartService.sessionService, 'oktaSignOut').mockReturnValue(Observable.from([]))
         })
 
         it('should delete cookies and addItem to cart', () => {
+          jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([false]))
           self.$httpBackend.expectPOST(
             'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
@@ -259,9 +261,17 @@ describe('cart service', () => {
               quantity: 1
             }
           ).respond(200)
-
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
+          expect(self.cartService.sessionService.oktaIsUserAuthenticated).toHaveBeenCalled()
+          expect(self.cartService.sessionService.oktaSignOut).not.toHaveBeenCalled()
           self.$httpBackend.flush()
+        })
+
+        it('should redirect user to login and not run addItem to cart', () => {
+          jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([true]))
+          self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
+          expect(self.cartService.sessionService.oktaIsUserAuthenticated).toHaveBeenCalled()
+          expect(self.cartService.sessionService.oktaSignOut).toHaveBeenCalled()
         })
       })
     })

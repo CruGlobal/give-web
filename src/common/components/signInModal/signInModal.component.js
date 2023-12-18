@@ -28,6 +28,14 @@ class SignInModalController {
   signOut () {
     this.identified = false
   }
+
+  getOktaUrl () {
+    return this.sessionService.getOktaUrl()
+  }
+
+  stateChanged (state) {
+    this.onStateChange({ state })
+  }
 }
 
 export default angular
@@ -43,6 +51,7 @@ export default angular
       modalTitle: '=',
       lastPurchaseId: '<',
       onStateChange: '&',
-      onSuccess: '&'
+      onSuccess: '&',
+      onFailure: '&'
     }
   })

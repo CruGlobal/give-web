@@ -88,18 +88,24 @@ describe('signIn', function () {
         expect($ctrl.$window.location).toEqual('/checkout.html')
       })
     })
-  })
 
-  describe('resetPassword()', () => {
-    let deferred
-    beforeEach(inject(function (_$q_) {
-      deferred = _$q_.defer()
-      jest.spyOn($ctrl.sessionModalService, 'forgotPassword').mockImplementation(() => deferred.promise)
-      $ctrl.resetPassword()
-    }))
+    describe('getOktaUrl()', () => {
+      it('On sign up with Okta', () => {
+        jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
+        const response = $ctrl.getOktaUrl()
 
-    it('opens reset password modal', () => {
-      expect($ctrl.sessionModalService.forgotPassword).toHaveBeenCalled()
+        expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled();
+        expect(response).toEqual('URL')
+      })
+    })
+
+    describe('onSignUpWithOkta()', () => {
+      it('On sign up with Okta', () => {
+        jest.spyOn($ctrl.sessionModalService, 'createAccount').mockReturnValue(Observable.throw({}))
+        $ctrl.onSignUpWithOkta()
+
+        expect($ctrl.sessionModalService.createAccount).toHaveBeenCalled()
+      })
     })
   })
 })

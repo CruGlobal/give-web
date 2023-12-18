@@ -14,7 +14,8 @@ module.exports = {
     'jest-extended'
   ],
   moduleNameMapper: {
-    '^.+\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js'
+    '^.+\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js',
+    '^@okta/okta-auth-js$': '<rootDir>/__mocks__/oktaMock.js'
   },
   modulePaths: [
     '<rootDir>/src'

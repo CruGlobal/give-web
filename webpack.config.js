@@ -159,8 +159,8 @@ const devServer = {
       changeOrigin: true
     }
   },
-  port: 9000,
-  public: 'localhost.cru.org:9000'
+  port: 443,
+  public: 'localhost.cru.org'
 }
 
 module.exports = (env = {}) => [

@@ -50,10 +50,14 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
       development: {
         apiUrl: 'https://give-stage2.cru.org',
         imgDomain: '',
-        imgDomainDesignation: 'https://localhost.cru.org:9000',
+        imgDomainDesignation: 'https://localhost.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
-        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey='
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false,
+        oktaUrl: 'https://signon.okta.com',
+        oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
+        oktaReferrer: 'https://localhost.cru.org'
       },
       devcloud: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -85,7 +89,10 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
-        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey='
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false,
+        oktaUrl: 'https://signon.okta.com',
+        oktaClientId: '0oa1p8kb6gr1IGGdc0h8'
       },
       nonprod: {
         apiUrl: 'https://give-stage2-next.cru.org',
@@ -110,7 +117,10 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         imgDomainDesignation: 'https://give.cru.org',
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give.cru.org',
-        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey='
+        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
+        isBrandedCheckout: false,
+        oktaUrl: 'https://signon.okta.com',
+        oktaClientId: '0oa1p8kb6gr1IGGdc0h8'
       },
       defaults: {
         isCheckout: false,
@@ -152,6 +162,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     FREQUENCY_ERROR: 'There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     ADDING_CART_ERROR: 'There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     GIFT_IN_CART_ERROR: 'You already have this gift in your cart.',
+    FORCED_USER_TO_LOGOUT: 'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
     GIFT_AMOUNT: 'Gift Amount',
     OTHER_PLACEHOLDER: 'Other',
     GIFT_FREQUENCY: 'Gift Frequency',
@@ -172,6 +183,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     SPECIAL_INSTRUCTIONS: 'Special Handling Instructions for Processing This Gift',
     MESSAGE_EXAMPLE: 'For example: stop my gift after 18 months, make this gift anonymous (note: please remove any messages to ministry or missionary to remain anonymous), etc.',
     YOUR_INFORMATION: 'Your information',
+    YOUR_NAME: 'Your name',
+    SPOUSE_NAME: "Your Spouse's name",
     PAYMENT: 'Payment',
     CONTINUE: 'Continue',
     LOADING_ERROR_RETRY: 'There was an error loading your profile. You can use the retry button to try loading it again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
@@ -367,6 +380,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     FREQUENCY_ERROR: 'There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     ADDING_CART_ERROR: 'There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     GIFT_IN_CART_ERROR: 'Ya tienes este regalo en tu carrito.',
+    FORCED_USER_TO_LOGOUT: 'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
     GIFT_AMOUNT: 'Selecciona Una Cantidad',
     OTHER_PLACEHOLDER: 'Otro regalo generoso',
     GIFT_FREQUENCY: 'Frecuencia de la donación',
@@ -387,6 +401,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     SPECIAL_INSTRUCTIONS: 'Instrucciones especiales de manejo para procesar este regalo',
     MESSAGE_EXAMPLE: 'Por ejemplo: Detener mi donación después de 18 meses, hacer esta donación anónima (nota: favor de quitar cualquier mensaje al ministerio o al misionero para permanecer en el anonimato), etc.',
     YOUR_INFORMATION: 'Tu información',
+    YOUR_NAME: 'Tu nombre',
+    SPOUSE_NAME: 'cónyuge nombre',
     PAYMENT: 'Pago',
     CONTINUE: 'Continuar',
     LOADING_ERROR_RETRY: 'There was an error loading your profile. You can use the retry button to try loading it again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
