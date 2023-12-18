@@ -59,6 +59,10 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   // This only detects changes made by $http or other angular services, not the browser expiring the cookie.
   $rootScope.$watch(() => $cookies.get(Sessions.role), updateCurrentSession)
 
+  // Is redirect and on profile page
+  if (authClient.isLoginRedirect() && $location.path() !== '/profile.html') {
+    handleOktaRedirect()
+  }
   // Return sessionService public interface
   return {
     session: session,
