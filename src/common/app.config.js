@@ -2,8 +2,8 @@ import angular from 'angular'
 import 'angular-environment'
 import 'angular-translate'
 
-import dataDogConfig from './datadog.config.js'
 import rollbarConfig from './rollbar.config'
+import dataDogConfig from './datadog.config.js'
 
 // Exported for datadog.config tests.
 export const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
@@ -595,5 +595,5 @@ export default angular.module('appConfig', [
   'pascalprecht.translate'
 ])
   .config(appConfig)
-  .config(rollbarConfig)
   .config(dataDogConfig)
+  .config(rollbarConfig)
