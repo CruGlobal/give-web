@@ -5,9 +5,13 @@ import defaults from 'lodash/defaults'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
 
+console.log("Loading rollbar")
+
 let Rollbar
 
 const rollbarConfig = /* @ngInject */ function (envServiceProvider, $provide) {
+  console.log('Context', window.datadogRum?.getInternalContext())
+
   const config = {
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     captureUncaught: false,
@@ -40,7 +44,8 @@ const rollbarConfig = /* @ngInject */ function (envServiceProvider, $provide) {
           guess_uncaught_frames: true,
           code_version: process.env.GITHUB_SHA
         }
-      }
+      },
+      rumSessionId: window.datadogRum?.getInternalContext()?.session_id
     }
   }
   Rollbar = rollbar.init(config)
