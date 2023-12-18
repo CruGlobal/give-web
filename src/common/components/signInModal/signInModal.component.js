@@ -1,6 +1,5 @@
 import angular from 'angular'
 import 'angular-gettext'
-import includes from 'lodash/includes'
 import sessionService, { Roles } from 'common/services/session/session.service'
 import signInForm from 'common/components/signInForm/signInForm.component'
 import template from './signInModal.tpl.html'
@@ -9,7 +8,8 @@ const componentName = 'signInModal'
 
 class SignInModalController {
   /* @ngInject */
-  constructor (gettext, sessionService) {
+  constructor ($window, gettext, sessionService) {
+    this.$window = $window
     this.gettext = gettext
     this.sessionService = sessionService
     this.session = sessionService.session
@@ -17,11 +17,8 @@ class SignInModalController {
 
   $onInit () {
     this.modalTitle = this.gettext('Sign In')
-    if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.identified = true
-      this.username = this.session.email
-    } else {
-      this.identified = false
+    if (this.sessionService.getRole() === Roles.registered) {
+      this.$window.location = `/checkout.html${window.location.search}`
     }
   }
 
