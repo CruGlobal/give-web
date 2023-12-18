@@ -10,11 +10,10 @@ const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor ($log, $scope, $document, $location, sessionService, gettext) {
+  constructor ($log, $scope, $document, sessionService, gettext) {
     this.$log = $log
     this.$scope = $scope
     this.$document = $document
-    this.$location = $location
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
@@ -38,8 +37,6 @@ class SignInFormController {
         this.onFailure()
       }
       )
-    const autoLogin = this.$location.search()?.autoLogin
-    if (autoLogin === 'true') this.signInWithOkta()
   }
 
   signInWithOkta () {
