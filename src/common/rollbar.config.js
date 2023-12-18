@@ -40,7 +40,8 @@ const rollbarConfig = /* @ngInject */ function (envServiceProvider, $provide) {
           guess_uncaught_frames: true,
           code_version: process.env.GITHUB_SHA
         }
-      }
+      },
+      rumSessionId: window.datadogRum?.getInternalContext()?.session_id
     }
   }
   Rollbar = rollbar.init(config)

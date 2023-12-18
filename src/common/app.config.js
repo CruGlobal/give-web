@@ -595,5 +595,6 @@ export default angular.module('appConfig', [
   'pascalprecht.translate'
 ])
   .config(appConfig)
-  .config(rollbarConfig)
+  // Configure DataDog before Rollbar so that the RUM session id can be added to the Rollbar payload
   .config(dataDogConfig)
+  .config(rollbarConfig)
