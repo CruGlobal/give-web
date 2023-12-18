@@ -1,7 +1,7 @@
 import 'angular-environment'
 import { datadogRum } from '@datadog/browser-rum'
 
-console.log("Loading datadog")
+console.log('Loading datadog')
 
 const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
   const clientToken = process.env.DATADOG_RUM_CLIENT_TOKEN

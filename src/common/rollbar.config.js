@@ -5,7 +5,7 @@ import defaults from 'lodash/defaults'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
 
-console.log("Loading rollbar")
+console.log('Loading rollbar')
 
 let Rollbar
 
