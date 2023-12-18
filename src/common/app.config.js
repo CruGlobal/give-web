@@ -50,14 +50,14 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
       development: {
         apiUrl: 'https://give-stage2.cru.org',
         imgDomain: '',
-        imgDomainDesignation: 'https://localhost.cru.org',
+        imgDomainDesignation: 'https://localhost.cru.org:9000',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
         isBrandedCheckout: false,
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
-        oktaReferrer: 'https://localhost.cru.org'
+        oktaReferrer: 'https://localhost.cru.org:9000'
       },
       devcloud: {
         apiUrl: 'https://give-stage2.cru.org',
