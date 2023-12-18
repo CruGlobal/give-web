@@ -10,13 +10,14 @@ const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor ($log, $scope, $document, sessionService, gettext) {
+  constructor ($log, $scope, $document, sessionService, gettext, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$document = $document
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
+    this.imgDomain = envService.read('imgDomain')
   }
 
   $onInit () {
