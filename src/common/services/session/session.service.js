@@ -65,8 +65,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     sessionSubject: sessionSubject,
     authClient: authClient, // Exposed for tests only
     getRole: currentRole,
-    signIn: signIn,
-    signOut: signOut,
     createAccount: createAccount,
     handleOktaRedirect: handleOktaRedirect,
     oktaSignIn: oktaSignIn,
@@ -80,40 +78,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     updateCheckoutSavedData: updateCheckoutSavedData,
     clearCheckoutSavedData: clearCheckoutSavedData,
     checkCreateAccountStatus: checkCreateAccountStatus
-  }
-
-  /* Public Methods */
-  function signIn (username, password, mfa_token, trust_device, lastPurchaseId) {
-    const data = {
-      username: username,
-      password: password
-    }
-    if (angular.isDefined(mfa_token)) { data.mfa_token = mfa_token }
-    if (trust_device) { data.trust_device = '1' }
-    // Only send lastPurchaseId if present and currently public
-    if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) { data.lastPurchaseId = lastPurchaseId }
-    return Observable
-      .from($http({
-        method: 'POST',
-        url: casApiUrl('/login'),
-        data: data,
-        withCredentials: true
-      }))
-      .map((response) => response.data)
-      .finally(() => {
-        $rootScope.$broadcast(SignInEvent)
-      })
-  }
-
-  function signOut () {
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Logout
-    return Observable
-      .from($http({
-        method: 'DELETE',
-        url: casApiUrl('/logout'),
-        withCredentials: true
-      })
-      )
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -152,7 +116,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     }
     // Add marketing search queries back to URL once returned from Okta
     const locationSearch = $window.sessionStorage.getItem('locationSearchOnLogin') || ''
-    const searchQueries = locationSearch.split(/\?|\&/);
+    // eslint-disable-next-line
+    const searchQueries = locationSearch.split(/\?|\&/)
     $window.sessionStorage.removeItem('locationSearchOnLogin')
     searchQueries.forEach((searchQuery) => {
       const [search, value] = searchQuery.split('=')
@@ -160,7 +125,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         $location.search(search, value)
       }
     })
-    
+
     return $http({
       method: 'POST',
       url: oktaApiUrl('login'),
@@ -465,11 +430,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       return session.role
     }
     return Roles.public
-  }
-
-  function casApiUrl (path) {
-    const apiUrl = envService.read('apiUrl') + '/cas'
-    return apiUrl + path
   }
 
   function oktaApiUrl (path) {

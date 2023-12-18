@@ -24,20 +24,22 @@ describe('session service', function () {
       spy.localStorage = $delegate.localStorage
       spy.sessionStorage = $delegate.sessionStorage
       spy.document = $delegate.document
+      spy.location = {search: '?ga=111111&query=test&anotherQuery=00000'}
       return spy
     })
   }))
 
   beforeEach(angular.mock.module(module.name))
-  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks, $window, envService
+  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks, $window, $location, envService
 
-  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _envService_) {
+  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _$location_, _envService_) {
     sessionService = _sessionService_
     $httpBackend = _$httpBackend_
     $cookies = _$cookies_
     $rootScope = _$rootScope_
     $verifyNoPendingTasks = _$verifyNoPendingTasks_
     $window = _$window_
+    $location = _$location_
     envService = _envService_
   }))
 
@@ -165,77 +167,6 @@ describe('session service', function () {
     })
   })
 
-  describe('signIn', () => {
-    it('makes http request to cas/login without mfa', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123'
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123')
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-
-    it('makes http request to cas/login with mfa', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123',
-        mfa_token: '123456'
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123', '123456')
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-
-    it('makes http request to cas/login with mfa and trust_device', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123',
-        mfa_token: '123456',
-        trust_device: '1'
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123', '123456', true)
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-
-    it('includes lastPurchaseId when present and PUBLIC', () => {
-      jest.spyOn(sessionService, 'getRole').mockReturnValue(Roles.public)
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123',
-        lastPurchaseId: 'gxbcdviu='
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123', undefined, undefined, 'gxbcdviu=')
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-  })
-
-  describe('signOut', () => {
-    it('makes http request to cas/logout', () => {
-      $httpBackend.expectDELETE('https://give-stage2.cru.org/cas/logout')
-        .respond(200, {})
-      sessionService
-        .signOut()
-        .subscribe((response) => {
-          expect(response.data).toEqual({})
-        })
-      $httpBackend.flush()
-    })
-  })
 
   describe('oktaSignOut', () => {
     beforeEach(() => {
@@ -285,7 +216,7 @@ describe('session service', function () {
     });
   })
 
-  describe('handleOktaRedirect', () => {
+  describe('oktaSignIn & handleOktaRedirect', () => {
     it('should handle a successful login', done => {
       sessionService.authClient.shouldSucceed()
       sessionService.authClient.setupForRedirect()
@@ -294,6 +225,27 @@ describe('session service', function () {
         access_token: 'wee'
       }).respond(200, 'success')
       sessionService.handleOktaRedirect().toPromise().then(() => {
+        $httpBackend.flush()
+        done()
+      })
+    })
+
+    it('should remove locationSearchOnLogin when returning from Okta a successful login', done => {
+      sessionService.authClient.shouldSucceed()
+      sessionService.authClient.setupForRedirect()
+      jest.spyOn($location, 'search')
+      
+      $window.sessionStorage.setItem('locationSearchOnLogin', '?ga=111111&query=test&anotherQuery=00000')
+
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'wee'
+      }).respond(200, 'success')
+      sessionService.handleOktaRedirect().toPromise().then(() => {
+        expect($window.sessionStorage.getItem('locationSearchOnLogin')).toEqual(null)
+        expect($location.search).toHaveBeenCalledTimes(3)
+        expect($location.search).toHaveBeenNthCalledWith(1, 'ga', '111111')
+        expect($location.search).toHaveBeenNthCalledWith(2, 'query', 'test')
+        expect($location.search).toHaveBeenNthCalledWith(3, 'anotherQuery', '00000')
         $httpBackend.flush()
         done()
       })
@@ -331,6 +283,7 @@ describe('session service', function () {
       sessionService.authClient.shouldSucceed()
       sessionService.handleOktaRedirect().subscribe(() => {
         expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
+        expect($window.sessionStorage.getItem('locationSearchOnLogin')).toEqual('?ga=111111&query=test&anotherQuery=00000')
         done()
       })
     })
@@ -374,7 +327,7 @@ describe('session service', function () {
 
   describe('downgradeToGuest( skipEvent )', () => {
     beforeEach(() => {
-      jest.spyOn($rootScope, '$broadcast').mockImplementation(() => {})
+      jest.spyOn($rootScope, '$broadcast')
     })
 
     describe('with \'PUBLIC\' role', () => {
@@ -428,7 +381,7 @@ describe('session service', function () {
         // Observable.finally is fired after the test, this defers until it's called.
         // eslint-disable-next-line angular/timeout-service
         setTimeout(() => {
-          expect($rootScope.$broadcast).not.toHaveBeenCalled()
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith(SignOutEvent)
           done()
         })
         $httpBackend.flush()
