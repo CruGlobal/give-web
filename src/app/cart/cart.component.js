@@ -52,6 +52,10 @@ class CartController {
       .subscribe(data => {
         if (reload) {
           // Sort the incoming cart to match the order of the previous cart, with new items at the top
+          // The code of recurring gifts have a suffix and look like 0123456_MON or 0123456_QUARTERLY.
+          // We will be able to maintain the order of items in the cart as long as the user doesn't
+          // change the frequency of a gift or have multiple gifts in their cart with the same
+          // frequency and the same designation account.
           data.items?.sort((item1, item2) => orderByCode.indexOf(item1.code) - orderByCode.indexOf(item2.code))
         }
         this.cartData = data
