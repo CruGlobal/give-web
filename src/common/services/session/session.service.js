@@ -85,7 +85,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function handleOktaRedirect (lastPurchaseId) {
-    console.log('handleOktaRedirect')
     if (authClient.isLoginRedirect()) {
       return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
         authClient.tokenManager.setTokens(tokenResponse.tokens)
@@ -97,7 +96,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function oktaSignIn (lastPurchaseId) {
-    console.log('oktaSignIn')
     setOktaRedirecting()
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
@@ -108,7 +106,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   async function internalSignIn (lastPurchaseId) {
     const isAuthenticated = await authClient.isAuthenticated()
-    console.log('internalSignIn', isAuthenticated)
     if (!isAuthenticated) {
       // Save marketing search queries as they are lost on redirect
       $window.sessionStorage.setItem('locationSearchOnLogin', $window.location.search)
