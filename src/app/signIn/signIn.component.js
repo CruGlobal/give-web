@@ -34,7 +34,13 @@ class SignInController {
 
   sessionChanged () {
     if (this.sessionService.getRole() === Roles.registered) {
-      this.$window.location = `/checkout.html${window.location.search}`
+      const locationToReturnUser = this.$window.sessionStorage.getItem('locationOnLogin')
+      if (locationToReturnUser) {
+        this.$window.sessionStorage.removeItem('locationOnLogin')
+        this.$window.location = locationToReturnUser
+      } else {
+        this.$window.location = `/checkout.html${window.location.search}`
+      }
     }
   }
 
