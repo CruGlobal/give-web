@@ -11,7 +11,14 @@ describe('signIn', function () {
 
   beforeEach(inject(function (_$componentController_) {
     $ctrl = _$componentController_(module.name,
-      { $window: { location: '/sign-in.html' } }
+      { $window: {
+          location: '/sign-in.html',
+          sessionStorage: {
+            getItem: jest.fn(),
+            removeItem: jest.fn(),
+          }
+        }
+      }
     )
   }))
 
@@ -57,7 +64,6 @@ describe('signIn', function () {
     beforeEach(() => {
       jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('REGISTERED')
       jest.spyOn($ctrl, 'sessionChanged')
-      $ctrl.$onInit()
     })
 
     afterEach(() => {
@@ -65,8 +71,20 @@ describe('signIn', function () {
     })
 
     it('navigates to checkout', () => {
+      $ctrl.$onInit()
       expect($ctrl.sessionChanged).toHaveBeenCalled()
+      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalled()
+      expect($ctrl.$window.sessionStorage.removeItem).not.toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/checkout.html')
+    })
+
+    it('navigates to location which user initial came from before logging in', () => {
+      jest.spyOn($ctrl.$window.sessionStorage, 'getItem').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      $ctrl.$onInit()
+      expect($ctrl.sessionChanged).toHaveBeenCalled()
+      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalled()
+      expect($ctrl.$window.sessionStorage.removeItem).toHaveBeenCalled()
+      expect($ctrl.$window.location).toEqual('https://give-stage2.cru.org/search-results.html')
     })
   })
 

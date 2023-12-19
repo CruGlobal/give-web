@@ -45,7 +45,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   const authClient = new OktaAuth({
     issuer: envService.read('oktaUrl'),
     clientId: envService.read('oktaClientId'),
-    redirectUri: `${window.location.origin}${window.location.pathname}`,
+    redirectUri: `${window.location.origin}/sign-in.html`,
     scopes: ['openid', 'email', 'profile']
   })
 
@@ -59,10 +59,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   // This only detects changes made by $http or other angular services, not the browser expiring the cookie.
   $rootScope.$watch(() => $cookies.get(Sessions.role), updateCurrentSession)
 
-  // Is redirect and on profile page
-  if (authClient.isLoginRedirect() && $location.path() !== '/profile.html') {
-    handleOktaRedirect()
-  }
   // Return sessionService public interface
   return {
     session: session,
@@ -97,6 +93,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function signIn (lastPurchaseId) {
     setOktaRedirecting()
+    if ($location.path() !== '/sign-in.html') {
+      $window.sessionStorage.setItem('locationOnLogin', $window.location)
+    }
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
       .finally(() => {
@@ -129,7 +128,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         $location.search(search, value)
       }
     })
-
+    removeOktaRedirectIndicator()
     return $http({
       method: 'POST',
       url: oktaApiUrl('login'),
@@ -325,6 +324,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
           data: {}
         }))
         .map((response) => response.data)
+    authClient.revokeAccessToken()
+    authClient.revokeRefreshToken()
+    authClient.closeSession()
     return skipEvent
       ? observable
       : observable.finally(() => {
