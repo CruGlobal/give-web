@@ -247,7 +247,7 @@ describe('cart service', () => {
       describe('with empty cart', () => {
         beforeEach(() => {
           jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(0))
-          jest.spyOn(self.cartService.sessionService, 'oktaSignOut').mockReturnValue(Observable.from([]))
+          jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.from([]))
         })
 
         it('should delete cookies and addItem to cart', () => {
@@ -263,7 +263,7 @@ describe('cart service', () => {
           ).respond(200)
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
           expect(self.cartService.sessionService.oktaIsUserAuthenticated).toHaveBeenCalled()
-          expect(self.cartService.sessionService.oktaSignOut).not.toHaveBeenCalled()
+          expect(self.cartService.sessionService.signOut).not.toHaveBeenCalled()
           self.$httpBackend.flush()
         })
 
@@ -271,7 +271,7 @@ describe('cart service', () => {
           jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([true]))
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
           expect(self.cartService.sessionService.oktaIsUserAuthenticated).toHaveBeenCalled()
-          expect(self.cartService.sessionService.oktaSignOut).toHaveBeenCalled()
+          expect(self.cartService.sessionService.signOut).toHaveBeenCalled()
         })
       })
     })

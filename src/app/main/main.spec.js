@@ -23,12 +23,12 @@ describe('main', function () {
 
   describe('signOut', () => {
     beforeEach(() => {
-      jest.spyOn(self.controller.sessionService, 'oktaSignOut').mockImplementation(() => Observable.of({}))
+      jest.spyOn(self.controller.sessionService, 'signOut').mockImplementation(() => Observable.of({}))
     })
 
     it('should call session sign out', () => {
       self.controller.signOut()
-      expect(self.controller.sessionService.oktaSignOut).toHaveBeenCalled()
+      expect(self.controller.sessionService.signOut).toHaveBeenCalled()
     })
   })
 })

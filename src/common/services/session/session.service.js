@@ -71,8 +71,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getRole: currentRole,
     createAccount: createAccount,
     handleOktaRedirect: handleOktaRedirect,
-    oktaSignIn: oktaSignIn,
-    oktaSignOut: oktaSignOut,
+    signIn: signIn,
+    signOut: signOut,
     downgradeToGuest: downgradeToGuest,
     getOktaUrl: getOktaUrl,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
@@ -88,14 +88,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     if (authClient.isLoginRedirect()) {
       return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
         authClient.tokenManager.setTokens(tokenResponse.tokens)
-        return oktaSignIn(lastPurchaseId)
+        return signIn(lastPurchaseId)
       }))
     } else {
       return Observable.of(false)
     }
   }
 
-  function oktaSignIn (lastPurchaseId) {
+  function signIn (lastPurchaseId) {
     setOktaRedirecting()
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
@@ -279,7 +279,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     return Observable.from(authClient.isAuthenticated())
   }
 
-  function oktaSignOut (redirectHome = true) {
+  function signOut (redirectHome = true) {
     return Observable.from(internalSignOut(redirectHome))
   }
 

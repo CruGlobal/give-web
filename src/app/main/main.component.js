@@ -4,6 +4,7 @@ import 'angular-ui-router'
 import '../../assets/scss/styles.scss'
 
 import sessionService from 'common/services/session/session.service'
+import sessionModalService from 'common/services/session/sessionModal.service'
 import commonModule from 'common/common.module'
 import cartComponent from '../cart/cart.component'
 import checkoutComponent from '../checkout/checkout.component'
@@ -25,12 +26,17 @@ const componentName = 'main'
 
 class MainController {
   /* @ngInject */
-  constructor (sessionService) /* eslint-disable-line no-useless-constructor */ {
+  constructor (sessionService, sessionModalService) /* eslint-disable-line no-useless-constructor */ {
     this.sessionService = sessionService
+    this.sessionModalService = sessionModalService
   }
 
   signOut () {
-    return this.sessionService.oktaSignOut()
+    return this.sessionService.signOut()
+  }
+
+  signInModal () {
+    this.sessionModalService.signIn()
   }
 }
 
@@ -101,6 +107,7 @@ export default angular
     receiptsComponent.name,
     brandedCheckoutComponent.name,
     sessionService.name,
+    sessionModalService.name,
     'ui.router'
   ])
   .config(routingConfig)

@@ -168,7 +168,7 @@ describe('session service', function () {
   })
 
 
-  describe('oktaSignOut', () => {
+  describe('signOut', () => {
     beforeEach(() => {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken')
       jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
@@ -180,7 +180,7 @@ describe('session service', function () {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
         .respond(200, {})
       sessionService
-        .oktaSignOut()
+        .signOut()
         .subscribe((response) => {
           expect(response.data).toEqual({})
         })
@@ -189,7 +189,7 @@ describe('session service', function () {
 
     it('should revoke tokens & log user out of Okta', () => {
       sessionService
-        .oktaSignOut()
+        .signOut()
         .subscribe(() => {
           expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
           expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
@@ -203,7 +203,7 @@ describe('session service', function () {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
       try {
         sessionService
-        .oktaSignOut()
+        .signOut()
         .subscribe(() => {
           expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
           expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
@@ -216,7 +216,7 @@ describe('session service', function () {
     });
   })
 
-  describe('oktaSignIn & handleOktaRedirect', () => {
+  describe('signIn & handleOktaRedirect', () => {
     it('should handle a successful login', done => {
       sessionService.authClient.shouldSucceed()
       sessionService.authClient.setupForRedirect()
