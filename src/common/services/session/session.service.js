@@ -85,8 +85,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function handleOktaRedirect (lastPurchaseId) {
+    console.log('handleOktaRedirect')
     if (authClient.isLoginRedirect()) {
-      console.log('handleOktaRedirect')
       return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
         authClient.tokenManager.setTokens(tokenResponse.tokens)
         return oktaSignIn(lastPurchaseId)
@@ -97,8 +97,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function oktaSignIn (lastPurchaseId) {
-    setOktaRedirecting()
     console.log('oktaSignIn')
+    setOktaRedirecting()
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
       .finally(() => {
@@ -108,25 +108,23 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   async function internalSignIn (lastPurchaseId) {
     const isAuthenticated = await authClient.isAuthenticated()
+    console.log('internalSignIn', isAuthenticated)
     if (!isAuthenticated) {
       // Save marketing search queries as they are lost on redirect
       $window.sessionStorage.setItem('locationSearchOnLogin', $window.location.search)
       authClient.token.getWithRedirect()
       return
     }
-    console.log('internalSignIn')
     const tokens = await authClient.tokenManager.getTokens()
     const data = { access_token: tokens.accessToken.accessToken }
     // Only send lastPurchaseId if present and currently public
     if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
       data.lastPurchaseId = lastPurchaseId
     }
-    console.log('internalSignIn 1')
     // Add marketing search queries back to URL once returned from Okta
     const locationSearch = $window.sessionStorage.getItem('locationSearchOnLogin') || ''
     // eslint-disable-next-line
     const searchQueries = locationSearch.split(/\?|\&/)
-    console.log('internalSignIn 2')
     $window.sessionStorage.removeItem('locationSearchOnLogin')
     searchQueries.forEach((searchQuery) => {
       const [search, value] = searchQuery.split('=')
@@ -134,7 +132,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         $location.search(search, value)
       }
     })
-    console.log('internalSignIn 3')
 
     return $http({
       method: 'POST',

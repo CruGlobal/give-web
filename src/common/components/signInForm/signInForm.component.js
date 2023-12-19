@@ -14,7 +14,7 @@ class SignInFormController {
     this.$log = $log
     this.$scope = $scope
     this.$document = $document
-    this.$injector = angular.injector()
+    // this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
     this.imgDomain = envService.read('imgDomain')
@@ -44,12 +44,12 @@ class SignInFormController {
     this.isSigningIn = true
     delete this.errorMessage
     this.sessionService.oktaSignIn(this.lastPurchaseId).subscribe(() => {
-      const $injector = this.$injector
-      if (!$injector.has('sessionService')) {
-        $injector.loadNewModules(['sessionService'])
-      }
-      this.$document[0].body.dispatchEvent(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
+      // const $injector = this.$injector
+      // if (!$injector.has('sessionService')) {
+      //   $injector.loadNewModules(['sessionService'])
+      // }
+      // this.$document[0].body.dispatchEvent(
+      //   new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
       this.onSuccess()
     }, error => {
       this.isSigningIn = false
