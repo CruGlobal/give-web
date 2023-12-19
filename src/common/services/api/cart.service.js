@@ -169,7 +169,7 @@ class Cart {
         if (total <= 0) {
           return this.sessionService.oktaIsUserAuthenticated().mergeMap((isAuthenticated) => {
             if (!isAuthenticated) return this._addItem(uri, data)
-            return this.sessionService.oktaSignOut(false).mergeMap(() => {
+            return this.sessionService.signOut(false).mergeMap(() => {
               return this._addItem(uri, data)
             })
           })

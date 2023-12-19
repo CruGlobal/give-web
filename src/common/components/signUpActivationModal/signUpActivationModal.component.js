@@ -105,7 +105,7 @@ class signUpActivationModalController {
   signInWithOkta () {
     this.isSigningIn = true
     delete this.errorMessage
-    this.sessionService.oktaSignIn(this.lastPurchaseId).subscribe(() => {
+    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
       this.onSuccess()
     }, error => {
       this.isSigningIn = false

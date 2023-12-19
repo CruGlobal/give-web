@@ -43,7 +43,7 @@ class SignInFormController {
   signInWithOkta () {
     this.isSigningIn = true
     delete this.errorMessage
-    this.sessionService.oktaSignIn(this.lastPurchaseId).subscribe(() => {
+    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
       const $injector = this.$injector
       if (!$injector.has('sessionService')) {
         $injector.loadNewModules(['sessionService'])

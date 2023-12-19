@@ -103,13 +103,13 @@ describe('signInForm', function () {
     let deferred
     beforeEach(inject(function (_$q_) {
       deferred = _$q_.defer()
-      jest.spyOn($ctrl.sessionService, 'oktaSignIn').mockImplementation(() => Observable.from(deferred.promise))
+      jest.spyOn($ctrl.sessionService, 'signIn').mockImplementation(() => Observable.from(deferred.promise))
       $ctrl.signInWithOkta()
     }))
 
-    it('calls sessionService oktaSignIn', () => {
+    it('calls sessionService signIn', () => {
       expect($ctrl.isSigningIn).toEqual(true)
-      expect($ctrl.sessionService.oktaSignIn).toHaveBeenCalledWith(undefined)
+      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith(undefined)
     })
 
     it('signs in successfully', () => {
