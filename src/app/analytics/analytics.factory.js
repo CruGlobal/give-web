@@ -30,9 +30,8 @@ function testingTransactionName (item) {
 // Generate a datalayer product object
 const generateProduct = suppressErrors(function (item, additionalData = {}) {
   const sessionStorageTestName = testingTransactionName(item)
-  const testingTransaction = sessionStorageTestName
-    ? window.sessionStorage.getItem(sessionStorageTestName) || undefined
-    : undefined
+  const testingTransaction = Boolean(sessionStorageTestName &&
+    window.sessionStorage.getItem(sessionStorageTestName) === 'true').toString()
   const price = additionalData?.price || item.amount
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
