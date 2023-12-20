@@ -11,6 +11,7 @@ describe('analytics factory', () => {
     self.analyticsFactory = analyticsFactory
     self.envService = envService
     self.$window = $window
+    self.$window.digitalData = { cart: {} }
     self.$window.dataLayer = []
 
     self.$window.sessionStorage.clear()
