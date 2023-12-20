@@ -290,6 +290,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         withCredentials: true
       })
       await clearCheckoutSavedData()
+      await authClient.revokeAccessToken()
+      await authClient.revokeRefreshToken()
+      await authClient.closeSession()
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem('forcedUserToLogout', true)
