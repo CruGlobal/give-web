@@ -216,15 +216,14 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       // Send GTM Advance Ecommerce event
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({
-        event: 'add-to-cart',
+        event: 'add_to_cart',
         ecommerce: {
           currencyCode: 'USD',
-          add: {
-            products: [generateProduct(productData, {
-              price: itemConfig.AMOUNT,
-              recurringDate
-            })]
-          }
+          value: itemConfig.AMOUNT.toFixed(2),
+          items: [generateProduct(productData, {
+            price: itemConfig.AMOUNT,
+            recurringDate
+          })]
         }
       })
     }),
@@ -251,12 +250,11 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       // Send GTM Advance Ecommerce event
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({
-        event: 'remove-from-cart',
+        event: 'remove_from_cart',
         ecommerce: {
           currencyCode: 'USD',
-          remove: {
-            products: [generateProduct(item)]
-          }
+          value: item.amount.toFixed(2),
+          items: [generateProduct(item)]
         }
       })
     }),
@@ -448,12 +446,12 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
       $window.digitalData.product = product
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({
-        event: 'give-gift-modal',
+        event: 'view_item',
         ecommerce: {
           currencyCode: 'USD',
-          detail: {
-            products: [generateProduct(modifiedProductData)]
-          }
+          // value is unavailable until the user selects a gift amount
+          value: undefined,
+          items: [generateProduct(modifiedProductData)]
         }
       })
       this.setEvent('give gift modal')
