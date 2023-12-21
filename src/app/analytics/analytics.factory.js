@@ -204,7 +204,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         cart.item[0].attributes.donationType = 'one-time donation'
       } else {
         cart.item[0].attributes.donationType = 'recurring donation'
-        recurringDate = moment(`${moment().year()}-${itemConfig.RECURRING_START_MONTH}-${itemConfig.RECURRING_DAY_OF_MONTH} ${moment().format('h:mm:ss a')}`)
+        recurringDate = moment(`${moment().year()}-${itemConfig.RECURRING_START_MONTH}-${itemConfig.RECURRING_DAY_OF_MONTH}`)
       }
 
       // Set donation frequency
