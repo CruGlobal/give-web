@@ -294,6 +294,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       await clearCheckoutSavedData()
       await authClient.revokeAccessToken()
       await authClient.revokeRefreshToken()
+      await authClient.closeSession()
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem('forcedUserToLogout', true)
@@ -302,7 +303,17 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         postLogoutRedirectUri: redirectHome ? null : $window.location.href
       })
     } catch {
-      $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
+      // closeSession errors out due to CORS. to fix this temporarily, I've added the logout in a catch just in case.
+      try {
+        if (!redirectHome) {
+          $window.sessionStorage.setItem('forcedUserToLogout', true)
+        }
+        return authClient.signOut({
+          postLogoutRedirectUri: redirectHome ? null : $window.location.href
+        })
+      } catch {
+        $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
+      }
     }
   }
 
