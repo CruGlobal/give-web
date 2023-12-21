@@ -26,6 +26,11 @@ class SignInController {
   $onInit () {
     this.subscription = this.sessionService.sessionSubject.subscribe(() => this.sessionChanged())
     this.analyticsFactory.pageLoaded()
+    if (this.sessionService.hasLocationOnLogin()) {
+      this.showRedirectingLoadingIcon = true
+    } else {
+      this.showRedirectingLoadingIcon = false
+    }
   }
 
   $onDestroy () {
@@ -34,9 +39,9 @@ class SignInController {
 
   sessionChanged () {
     if (this.sessionService.getRole() === Roles.registered) {
-      const locationToReturnUser = this.$window.sessionStorage.getItem('locationOnLogin')
+      const locationToReturnUser = this.sessionService.hasLocationOnLogin()
       if (locationToReturnUser) {
-        this.$window.sessionStorage.removeItem('locationOnLogin')
+        this.sessionService.removeLocationOnLogin()
         this.$window.location = locationToReturnUser
       } else {
         this.$window.location = `/checkout.html${window.location.search}`
@@ -61,6 +66,10 @@ class SignInController {
 
   onSignUpWithOkta () {
     this.sessionModalService.createAccount()
+  }
+
+  closeRedirectingLoading () {
+    this.showRedirectingLoadingIcon = false
   }
 }
 

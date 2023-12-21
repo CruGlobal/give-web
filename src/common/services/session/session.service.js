@@ -29,6 +29,8 @@ export const Sessions = {
 }
 
 export const redirectingIndicator = 'redirectingFromOkta'
+export const locationOnLogin = 'locationOnLogin'
+export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
 export const createAccountDataCookieName = 'createAccountData'
 export const cookieDomain = '.cru.org'
@@ -77,7 +79,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     oktaIsUserAuthenticated: oktaIsUserAuthenticated,
     updateCheckoutSavedData: updateCheckoutSavedData,
     clearCheckoutSavedData: clearCheckoutSavedData,
-    checkCreateAccountStatus: checkCreateAccountStatus
+    checkCreateAccountStatus: checkCreateAccountStatus,
+    removeLocationOnLogin: removeLocationOnLogin,
+    hasLocationOnLogin: hasLocationOnLogin
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -93,9 +97,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function signIn (lastPurchaseId) {
     setOktaRedirecting()
-    if ($location.path() !== '/sign-in.html') {
-      $window.sessionStorage.setItem('locationOnLogin', $window.location)
-    }
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
       .finally(() => {
@@ -106,8 +107,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   async function internalSignIn (lastPurchaseId) {
     const isAuthenticated = await authClient.isAuthenticated()
     if (!isAuthenticated) {
-      // Save marketing search queries as they are lost on redirect
-      $window.sessionStorage.setItem('locationSearchOnLogin', $window.location.search)
+      setRedirectingOnLogin()
       authClient.token.getWithRedirect()
       return
     }
@@ -118,16 +118,18 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       data.lastPurchaseId = lastPurchaseId
     }
     // Add marketing search queries back to URL once returned from Okta
-    const locationSearch = $window.sessionStorage.getItem('locationSearchOnLogin') || ''
-    // eslint-disable-next-line
-    const searchQueries = locationSearch.split(/\?|\&/)
-    $window.sessionStorage.removeItem('locationSearchOnLogin')
-    searchQueries.forEach((searchQuery) => {
-      const [search, value] = searchQuery.split('=')
-      if (search && value) {
-        $location.search(search, value)
-      }
-    })
+    const locationSearch = $window.sessionStorage.getItem(locationSearchOnLogin) || ''
+    if (locationSearch) {
+      // eslint-disable-next-line
+      const searchQueries = locationSearch.split(/\?|\&/)
+      $window.sessionStorage.removeItem(locationSearchOnLogin)
+      searchQueries.forEach((searchQuery) => {
+        const [search, value] = searchQuery.split('=')
+        if (search && value) {
+          $location.search(search, value)
+        }
+      })
+    }
     removeOktaRedirectIndicator()
     return $http({
       method: 'POST',
@@ -292,7 +294,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       await clearCheckoutSavedData()
       await authClient.revokeAccessToken()
       await authClient.revokeRefreshToken()
-      await authClient.closeSession()
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem('forcedUserToLogout', true)
@@ -335,6 +336,22 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function getOktaUrl () {
     return envService.read('oktaUrl')
+  }
+
+  function removeLocationOnLogin () {
+    $window.sessionStorage.removeItem(locationOnLogin)
+  }
+  function hasLocationOnLogin () {
+    return $window.sessionStorage.getItem(locationOnLogin)
+  }
+  function setRedirectingOnLogin () {
+    if (['/sign-in.html'].indexOf($location.path()) + 1) {
+      // Save marketing search queries as they are lost on redirect
+      $window.sessionStorage.setItem(locationSearchOnLogin, $window.location.search)
+    } else {
+      // Save location we need to redirect the user back to
+      $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
+    }
   }
 
   function removeOktaRedirectIndicator () {
