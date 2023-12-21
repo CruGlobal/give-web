@@ -128,6 +128,15 @@ describe('PaymentMethodsComponent', function () {
       expect($ctrl.profileService.getPaymentMethodsWithDonations).toHaveBeenCalled()
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading payment methods', { data: 'some error' }])
     })
+
+    it('should handle 500 errors differently when loading payment methods', () => {
+      jest.spyOn($ctrl.profileService, 'getPaymentMethodsWithDonations').mockReturnValue(Observable.throw({
+        status: 500
+      }))
+      $ctrl.loadPaymentMethods()
+
+      expect($ctrl.loadingError).toEqual('authentication')
+    })
   })
 
   describe('loadDonorDetails()', () => {
