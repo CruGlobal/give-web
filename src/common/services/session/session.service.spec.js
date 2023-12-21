@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, redirectingIndicator, checkoutSavedDataCookieName } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -24,7 +24,10 @@ describe('session service', function () {
       spy.localStorage = $delegate.localStorage
       spy.sessionStorage = $delegate.sessionStorage
       spy.document = $delegate.document
-      spy.location = {search: '?ga=111111&query=test&anotherQuery=00000'}
+      spy.location = {
+        search: '?ga=111111&query=test&anotherQuery=00000',
+        href: 'https://URL.org?utm_source=text'
+      }
       return spy
     })
   }))
@@ -217,6 +220,11 @@ describe('session service', function () {
   })
 
   describe('signIn & handleOktaRedirect', () => {
+    beforeEach(() => {
+      $window.sessionStorage.removeItem(locationSearchOnLogin)
+      $window.sessionStorage.removeItem(locationOnLogin)
+    })
+
     it('should handle a successful login', done => {
       sessionService.authClient.shouldSucceed()
       sessionService.authClient.setupForRedirect()
@@ -277,13 +285,28 @@ describe('session service', function () {
       })
     })
 
-    it('should redirect to Okta if the login has not yet happened', done => {
+    it('should redirect to Okta from the login screen if the login has not yet happened', done => {
+      jest.spyOn($location, 'path').mockReturnValue('/sign-in.html')
       sessionService.authClient.setLoginRedirect(true)
       sessionService.authClient.setAuthenticated(false)
       sessionService.authClient.shouldSucceed()
       sessionService.handleOktaRedirect().subscribe(() => {
         expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
-        expect($window.sessionStorage.getItem('locationSearchOnLogin')).toEqual('?ga=111111&query=test&anotherQuery=00000')
+        expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual('?ga=111111&query=test&anotherQuery=00000')
+        expect($window.sessionStorage.getItem(locationOnLogin)).toEqual(null)
+        done()
+      })
+    })
+
+    it('should redirect to Okta from page other than login if the login has not yet happened', done => {
+      jest.spyOn($location, 'path').mockReturnValue('/search-results.html')
+      sessionService.authClient.setLoginRedirect(true)
+      sessionService.authClient.setAuthenticated(false)
+      sessionService.authClient.shouldSucceed()
+      sessionService.handleOktaRedirect().subscribe(() => {
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
+        expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual(null)
+        expect($window.sessionStorage.getItem(locationOnLogin)).toEqual('https://URL.org?utm_source=text')
         done()
       })
     })

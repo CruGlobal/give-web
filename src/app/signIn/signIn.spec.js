@@ -63,6 +63,7 @@ describe('signIn', function () {
   describe('as \'REGISTERED\'', () => {
     beforeEach(() => {
       jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('REGISTERED')
+      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
       jest.spyOn($ctrl, 'sessionChanged')
     })
 
@@ -71,19 +72,20 @@ describe('signIn', function () {
     })
 
     it('navigates to checkout', () => {
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue(null)
       $ctrl.$onInit()
       expect($ctrl.sessionChanged).toHaveBeenCalled()
-      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalled()
-      expect($ctrl.$window.sessionStorage.removeItem).not.toHaveBeenCalled()
+      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
+      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/checkout.html')
     })
 
     it('navigates to location which user initial came from before logging in', () => {
-      jest.spyOn($ctrl.$window.sessionStorage, 'getItem').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
       $ctrl.$onInit()
       expect($ctrl.sessionChanged).toHaveBeenCalled()
-      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalled()
-      expect($ctrl.$window.sessionStorage.removeItem).toHaveBeenCalled()
+      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
+      expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('https://give-stage2.cru.org/search-results.html')
     })
   })
