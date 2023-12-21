@@ -345,14 +345,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     return $window.sessionStorage.getItem(locationOnLogin)
   }
   function setRedirectingOnLogin () {
-    if(['/sign-in.html'].indexOf($location.path()) +1) {
+    if (['/sign-in.html'].indexOf($location.path()) + 1) {
       // Save marketing search queries as they are lost on redirect
       $window.sessionStorage.setItem(locationSearchOnLogin, $window.location.search)
     } else {
       // Save location we need to redirect the user back to
       $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
     }
-  } 
+  }
 
   function removeOktaRedirectIndicator () {
     $window.sessionStorage.removeItem(redirectingIndicator)

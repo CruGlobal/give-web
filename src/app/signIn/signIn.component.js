@@ -27,7 +27,7 @@ class SignInController {
     this.subscription = this.sessionService.sessionSubject.subscribe(() => this.sessionChanged())
     this.analyticsFactory.pageLoaded()
     if (this.sessionService.hasLocationOnLogin()) {
-      this.showRedirectingLoadingIcon = true;
+      this.showRedirectingLoadingIcon = true
     } else {
       this.showRedirectingLoadingIcon = false
     }
@@ -68,7 +68,7 @@ class SignInController {
     this.sessionModalService.createAccount()
   }
 
-  closeRedirectingLoading() {
+  closeRedirectingLoading () {
     this.showRedirectingLoadingIcon = false
   }
 }
