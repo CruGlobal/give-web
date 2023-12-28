@@ -47,11 +47,17 @@ class CartController {
       this.loading = true
     }
     // Remember the order of the existing items in the cart
-    const orderByCode = this.cartData?.items?.map(item => item.code) ?? []
+    const orderByCode = this.cartData?.items?.map(item => item.code) || []
     this.cartService.get()
       .subscribe(data => {
-        // Sort the incoming cart to match the order of the previous cart, with new items at the top
-        data.items?.sort((item1, item2) => orderByCode.indexOf(item1.code) - orderByCode.indexOf(item2.code))
+        if (reload) {
+          // Sort the incoming cart to match the order of the previous cart, with new items at the top
+          // The code of recurring gifts have a suffix and look like 0123456_MON or 0123456_QUARTERLY.
+          // We will be able to maintain the order of items in the cart as long as the user doesn't
+          // change the frequency of a gift. The server prevents carts from containing multiple gifts
+          // with the same frequency and designation account, which would interfere with sorting.
+          data.items?.sort((item1, item2) => orderByCode.indexOf(item1.code) - orderByCode.indexOf(item2.code))
+        }
         this.cartData = data
         this.setLoadCartVars(reload)
       },
