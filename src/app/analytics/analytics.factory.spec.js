@@ -1,5 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
+import moment from 'moment'
 
 import module from './analytics.factory'
 
@@ -179,7 +180,7 @@ describe('analytics factory', () => {
               "amountWithFees": 51.2,
               "designationNumber": "0048461",
               "productUri": "/items/crugive/a5t4fmspmhbkez6cvfmucmrkykwc7q4mykr4fps5ee=",
-              "giftStartDate": "2024-09-15T04:00:00.000Z",
+              "giftStartDate": moment(new Date(2024, 8, 15)),
               "giftStartDateDaysFromNow": 361,
               "giftStartDateWarning": true,
               "$$hashKey": "object:506"
@@ -240,7 +241,7 @@ describe('analytics factory', () => {
       "amountWithFees": 51.2,
       "designationNumber": "0048461",
       "productUri": "/items/crugive/a5t4fmspmhbkez6cv",
-      "giftStartDate": "2024-09-15T04:00:00.000Z",
+      "giftStartDate": moment(new Date(2024, 8, 15)),
       "giftStartDateDaysFromNow": 361,
       "giftStartDateWarning": true,
       "$$hashKey": "object:22",
