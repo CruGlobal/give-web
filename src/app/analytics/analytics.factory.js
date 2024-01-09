@@ -30,9 +30,8 @@ function testingTransactionName (item) {
 // Generate a datalayer product object
 const generateProduct = suppressErrors(function (item, additionalData = {}) {
   const sessionStorageTestName = testingTransactionName(item)
-  const testingTransaction = sessionStorageTestName
-    ? window.sessionStorage.getItem(sessionStorageTestName) || undefined
-    : undefined
+  const testingTransaction = Boolean(sessionStorageTestName &&
+    window.sessionStorage.getItem(sessionStorageTestName) === 'true').toString()
   const price = additionalData?.price || item.amount
   const category = additionalData?.category || item.designationType
   const name = additionalData?.name || item.displayName || undefined
@@ -204,7 +203,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
         cart.item[0].attributes.donationType = 'one-time donation'
       } else {
         cart.item[0].attributes.donationType = 'recurring donation'
-        recurringDate = moment(`${moment().year()}-${itemConfig.RECURRING_START_MONTH}-${itemConfig.RECURRING_DAY_OF_MONTH}`)
+        recurringDate = moment(`${moment().year()}-${itemConfig.RECURRING_START_MONTH}-${itemConfig.RECURRING_DAY_OF_MONTH}`, 'YYYY-MM-DD')
       }
 
       // Set donation frequency
