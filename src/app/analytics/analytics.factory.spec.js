@@ -1,5 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
+import moment from 'moment'
 
 import module from './analytics.factory'
 
@@ -11,10 +12,13 @@ describe('analytics factory', () => {
     self.analyticsFactory = analyticsFactory
     self.envService = envService
     self.$window = $window
+    self.$window.digitalData = { cart: {} }
     self.$window.dataLayer = []
 
     self.$window.sessionStorage.clear()
     self.$window.localStorage.clear()
+
+    Date.now = jest.fn(() => new Date("2023-04-05T01:02:03.000Z"));
   }))
 
   describe('handleCheckoutFormErrors', () => {
@@ -113,8 +117,9 @@ describe('analytics factory', () => {
       self.analyticsFactory.cartAdd(itemConfig, productData)
 
       expect(self.$window.dataLayer.length).toEqual(1)
-      expect(self.$window.dataLayer[0].event).toEqual('add-to-cart')
-      expect(self.$window.dataLayer[0].ecommerce.add.products[0]).toEqual({
+      expect(self.$window.dataLayer[0].event).toEqual('add_to_cart')
+      expect(self.$window.dataLayer[0].ecommerce.value).toEqual(itemConfig.AMOUNT.toFixed(2))
+      expect(self.$window.dataLayer[0].ecommerce.items[0]).toEqual({
         item_id: productData.code,
         item_name: productData.displayName,
         item_brand: productData.orgId,
@@ -123,7 +128,8 @@ describe('analytics factory', () => {
         currency: 'USD',
         price: itemConfig.AMOUNT.toString(),
         quantity: '1',
-        recurring_date: 'September 13, 2023'
+        recurring_date: 'September 13, 2023',
+        testing_transaction: 'false',
       })
     });
 
@@ -134,8 +140,9 @@ describe('analytics factory', () => {
       self.analyticsFactory.cartAdd(itemConfig, productData)
 
       expect(self.$window.dataLayer.length).toEqual(1)
-      expect(self.$window.dataLayer[0].event).toEqual('add-to-cart')
-      expect(self.$window.dataLayer[0].ecommerce.add.products[0]).toEqual({
+      expect(self.$window.dataLayer[0].event).toEqual('add_to_cart')
+      expect(self.$window.dataLayer[0].ecommerce.value).toEqual(itemConfig.AMOUNT.toFixed(2))
+      expect(self.$window.dataLayer[0].ecommerce.items[0]).toEqual({
         item_id: productData.code,
         item_name: productData.displayName,
         item_brand: productData.orgId,
@@ -144,7 +151,8 @@ describe('analytics factory', () => {
         currency: 'USD',
         price: itemConfig.AMOUNT.toString(),
         quantity: '1',
-        recurring_date: undefined
+        recurring_date: undefined,
+        testing_transaction: 'false',
       })
     })
   });
@@ -177,7 +185,7 @@ describe('analytics factory', () => {
               "amountWithFees": 51.2,
               "designationNumber": "0048461",
               "productUri": "/items/crugive/a5t4fmspmhbkez6cvfmucmrkykwc7q4mykr4fps5ee=",
-              "giftStartDate": "2024-09-15T04:00:00.000Z",
+              "giftStartDate": moment(new Date(2024, 8, 15)),
               "giftStartDateDaysFromNow": 361,
               "giftStartDateWarning": true,
               "$$hashKey": "object:506"
@@ -238,7 +246,7 @@ describe('analytics factory', () => {
       "amountWithFees": 51.2,
       "designationNumber": "0048461",
       "productUri": "/items/crugive/a5t4fmspmhbkez6cv",
-      "giftStartDate": "2024-09-15T04:00:00.000Z",
+      "giftStartDate": moment(new Date(2024, 8, 15)),
       "giftStartDateDaysFromNow": 361,
       "giftStartDateWarning": true,
       "$$hashKey": "object:22",
@@ -260,22 +268,22 @@ describe('analytics factory', () => {
       })
       expect(self.$window.digitalData.cart.item.length).toEqual(1)
 
-      expect(self.$window.dataLayer[0].event).toEqual('remove-from-cart')
+      expect(self.$window.dataLayer[0].event).toEqual('remove_from_cart')
       expect(self.$window.dataLayer[0].ecommerce).toEqual({
         currencyCode: 'USD',
-        remove: {
-          products: [{
-            item_id: item.designationNumber,
-            item_name: item.displayName,
-            item_brand: item.orgId,
-            item_category: item.designationType.toLowerCase(),
-            item_variant: 'monthly',
-            currency: 'USD',
-            price: item.amount.toString(),
-            quantity: '1',
-            recurring_date: 'September 15, 2024'
-          }]
-        }
+        value: item.amount.toFixed(2),
+        items: [{
+          item_id: item.designationNumber,
+          item_name: item.displayName,
+          item_brand: item.orgId,
+          item_category: item.designationType.toLowerCase(),
+          item_variant: 'monthly',
+          currency: 'USD',
+          price: item.amount.toString(),
+          quantity: '1',
+          recurring_date: 'September 15, 2024',
+          testing_transaction: 'false',
+        }]
       })
     });
   });
@@ -334,7 +342,8 @@ describe('analytics factory', () => {
       currency: 'USD',
       price: item.amount.toString(),
       quantity: '1',
-      recurring_date: undefined
+      recurring_date: undefined,
+      testing_transaction: 'false',
     }
 
     it('should create begining checkout and checkout step DataLayer events', () => {
@@ -364,7 +373,7 @@ describe('analytics factory', () => {
 
     it('should create payment info and checkout step DataLayer events', () => {
       self.analyticsFactory.checkoutStepEvent('payment', cart)
-      
+
       expect(self.$window.dataLayer.length).toEqual(2)
       expect(self.$window.dataLayer[0]).toEqual({
         event: 'add_payment_info'
@@ -386,7 +395,7 @@ describe('analytics factory', () => {
 
     it('should create review order and checkout step DataLayer events', () => {
       self.analyticsFactory.checkoutStepEvent('review', cart)
-      
+
       expect(self.$window.dataLayer.length).toEqual(2)
       expect(self.$window.dataLayer[0]).toEqual({
         event: 'review_order',
@@ -407,7 +416,7 @@ describe('analytics factory', () => {
     })
   });
 
-  describe('checkoutStepOptionEvent', () => { 
+  describe('checkoutStepOptionEvent', () => {
     it('should add contact checkout option event to DataLayer', () => {
       self.analyticsFactory.checkoutStepOptionEvent('Household', 'contact')
       expect(self.$window.dataLayer.length).toEqual(1)
@@ -487,25 +496,25 @@ describe('analytics factory', () => {
       "orgId": "STAFF"
     }
 
-    it('should push give-gift-modal event to the DataLayer', () => {
+    it('should push view_item event to the DataLayer', () => {
       self.analyticsFactory.giveGiftModal(productData)
       expect(self.$window.dataLayer.length).toEqual(1)
-      expect(self.$window.dataLayer[0].event).toEqual('give-gift-modal')
+      expect(self.$window.dataLayer[0].event).toEqual('view_item')
       expect(self.$window.dataLayer[0].ecommerce).toEqual({
         currencyCode: 'USD',
-          detail: {
-            products: [{
-              item_id: '0643021',
-              item_name: 'International Staff',
-              item_brand: 'STAFF',
-              item_category: 'staff',
-              item_variant: undefined,
-              price: undefined,
-              currency: 'USD',
-              quantity: '1',
-              recurring_date: undefined,
-            }]
-          }
+        value: undefined,
+        items: [{
+          item_id: '0643021',
+          item_name: 'International Staff',
+          item_brand: 'STAFF',
+          item_category: 'staff',
+          item_variant: undefined,
+          price: undefined,
+          currency: 'USD',
+          quantity: '1',
+          recurring_date: undefined,
+          testing_transaction: 'false',
+        }]
       })
     });
   });
@@ -546,7 +555,8 @@ describe('analytics factory', () => {
               currency: 'USD',
               quantity: '1',
               recurring_date: undefined,
-          }
+              testing_transaction: 'false',
+            }
           ]
         }
       })
@@ -621,7 +631,7 @@ describe('analytics factory', () => {
       self.analyticsFactory.transactionEvent(purchaseData)
 
       expect(self.$window.sessionStorage.getItem('transactionId')).toEqual(purchaseData.rawData['purchase-number'])
-      
+
       expect(self.$window.dataLayer.length).toEqual(1)
       expect(self.$window.dataLayer[0].event).toEqual('purchase')
       expect(self.$window.dataLayer[0].paymentType).toEqual('credit card')
@@ -652,7 +662,7 @@ describe('analytics factory', () => {
             designation: 'designation',
             item_brand: 'STAFF',
             processingFee: undefined,
-
+            testing_transaction: 'false',
           }
         ]
       })
@@ -678,7 +688,7 @@ describe('analytics factory', () => {
 
       const totalWithFees = 51.2 * 3
       const totalWithoutFees = 50 * 3
-      
+
       expect(self.$window.dataLayer[0].ecommerce.processing_fee).toEqual((totalWithFees - totalWithoutFees).toFixed(2))
       expect(self.$window.dataLayer[0].ecommerce.value).toEqual((totalWithFees).toFixed(2))
       expect(self.$window.dataLayer[0].ecommerce.pays_processing).toEqual('yes')
