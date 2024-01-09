@@ -79,7 +79,11 @@ class PaymentMethodsController {
         },
         error => {
           this.loading = false
-          this.loadingError = true
+          if (error.status === 500) {
+            this.loadingError = 'authentication'
+          } else {
+            this.loadingError = true
+          }
           this.$log.error('Error loading payment methods', error)
         }
       )
