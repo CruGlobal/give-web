@@ -12,6 +12,7 @@ describe('analytics factory', () => {
     self.analyticsFactory = analyticsFactory
     self.envService = envService
     self.$window = $window
+    self.$window.digitalData = { cart: {} }
     self.$window.dataLayer = []
 
     self.$window.sessionStorage.clear()
@@ -116,8 +117,9 @@ describe('analytics factory', () => {
       self.analyticsFactory.cartAdd(itemConfig, productData)
 
       expect(self.$window.dataLayer.length).toEqual(1)
-      expect(self.$window.dataLayer[0].event).toEqual('add-to-cart')
-      expect(self.$window.dataLayer[0].ecommerce.add.products[0]).toEqual({
+      expect(self.$window.dataLayer[0].event).toEqual('add_to_cart')
+      expect(self.$window.dataLayer[0].ecommerce.value).toEqual(itemConfig.AMOUNT.toFixed(2))
+      expect(self.$window.dataLayer[0].ecommerce.items[0]).toEqual({
         item_id: productData.code,
         item_name: productData.displayName,
         item_brand: productData.orgId,
@@ -126,7 +128,8 @@ describe('analytics factory', () => {
         currency: 'USD',
         price: itemConfig.AMOUNT.toString(),
         quantity: '1',
-        recurring_date: 'September 13, 2023'
+        recurring_date: 'September 13, 2023',
+        testing_transaction: 'false',
       })
     });
 
@@ -137,8 +140,9 @@ describe('analytics factory', () => {
       self.analyticsFactory.cartAdd(itemConfig, productData)
 
       expect(self.$window.dataLayer.length).toEqual(1)
-      expect(self.$window.dataLayer[0].event).toEqual('add-to-cart')
-      expect(self.$window.dataLayer[0].ecommerce.add.products[0]).toEqual({
+      expect(self.$window.dataLayer[0].event).toEqual('add_to_cart')
+      expect(self.$window.dataLayer[0].ecommerce.value).toEqual(itemConfig.AMOUNT.toFixed(2))
+      expect(self.$window.dataLayer[0].ecommerce.items[0]).toEqual({
         item_id: productData.code,
         item_name: productData.displayName,
         item_brand: productData.orgId,
@@ -147,7 +151,8 @@ describe('analytics factory', () => {
         currency: 'USD',
         price: itemConfig.AMOUNT.toString(),
         quantity: '1',
-        recurring_date: undefined
+        recurring_date: undefined,
+        testing_transaction: 'false',
       })
     })
   });
@@ -263,22 +268,22 @@ describe('analytics factory', () => {
       })
       expect(self.$window.digitalData.cart.item.length).toEqual(1)
 
-      expect(self.$window.dataLayer[0].event).toEqual('remove-from-cart')
+      expect(self.$window.dataLayer[0].event).toEqual('remove_from_cart')
       expect(self.$window.dataLayer[0].ecommerce).toEqual({
         currencyCode: 'USD',
-        remove: {
-          products: [{
-            item_id: item.designationNumber,
-            item_name: item.displayName,
-            item_brand: item.orgId,
-            item_category: item.designationType.toLowerCase(),
-            item_variant: 'monthly',
-            currency: 'USD',
-            price: item.amount.toString(),
-            quantity: '1',
-            recurring_date: 'September 15, 2024'
-          }]
-        }
+        value: item.amount.toFixed(2),
+        items: [{
+          item_id: item.designationNumber,
+          item_name: item.displayName,
+          item_brand: item.orgId,
+          item_category: item.designationType.toLowerCase(),
+          item_variant: 'monthly',
+          currency: 'USD',
+          price: item.amount.toString(),
+          quantity: '1',
+          recurring_date: 'September 15, 2024',
+          testing_transaction: 'false',
+        }]
       })
     });
   });
@@ -337,7 +342,8 @@ describe('analytics factory', () => {
       currency: 'USD',
       price: item.amount.toString(),
       quantity: '1',
-      recurring_date: undefined
+      recurring_date: undefined,
+      testing_transaction: 'false',
     }
 
     it('should create begining checkout and checkout step DataLayer events', () => {
@@ -490,25 +496,25 @@ describe('analytics factory', () => {
       "orgId": "STAFF"
     }
 
-    it('should push give-gift-modal event to the DataLayer', () => {
+    it('should push view_item event to the DataLayer', () => {
       self.analyticsFactory.giveGiftModal(productData)
       expect(self.$window.dataLayer.length).toEqual(1)
-      expect(self.$window.dataLayer[0].event).toEqual('give-gift-modal')
+      expect(self.$window.dataLayer[0].event).toEqual('view_item')
       expect(self.$window.dataLayer[0].ecommerce).toEqual({
         currencyCode: 'USD',
-          detail: {
-            products: [{
-              item_id: '0643021',
-              item_name: 'International Staff',
-              item_brand: 'STAFF',
-              item_category: 'staff',
-              item_variant: undefined,
-              price: undefined,
-              currency: 'USD',
-              quantity: '1',
-              recurring_date: undefined,
-            }]
-          }
+        value: undefined,
+        items: [{
+          item_id: '0643021',
+          item_name: 'International Staff',
+          item_brand: 'STAFF',
+          item_category: 'staff',
+          item_variant: undefined,
+          price: undefined,
+          currency: 'USD',
+          quantity: '1',
+          recurring_date: undefined,
+          testing_transaction: 'false',
+        }]
       })
     });
   });
@@ -549,7 +555,8 @@ describe('analytics factory', () => {
               currency: 'USD',
               quantity: '1',
               recurring_date: undefined,
-          }
+              testing_transaction: 'false',
+            }
           ]
         }
       })
@@ -655,7 +662,7 @@ describe('analytics factory', () => {
             designation: 'designation',
             item_brand: 'STAFF',
             processingFee: undefined,
-
+            testing_transaction: 'false',
           }
         ]
       })
