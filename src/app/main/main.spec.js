@@ -12,7 +12,6 @@ describe('main', function () {
 
     self.controller = $componentController(module.name, {
       $scope: $scope,
-      $window: { location: '/' }
     })
 
     self.controller.sessionService = sessionService
@@ -30,11 +29,6 @@ describe('main', function () {
     it('should call session sign out', () => {
       self.controller.signOut()
       expect(self.controller.sessionService.signOut).toHaveBeenCalled()
-    })
-
-    it('should redirect to the cart', () => {
-      self.controller.signOut()
-      expect(self.controller.$window.location).toEqual('/cart.html')
     })
   })
 })

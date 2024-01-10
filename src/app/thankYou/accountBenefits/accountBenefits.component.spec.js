@@ -49,7 +49,6 @@ describe('thank you', function () {
         userMatch = _$q_.defer()
         $rootScope = _$rootScope_
         jest.spyOn($ctrl.sessionModalService, 'accountBenefits').mockReturnValue(deferred.promise)
-        jest.spyOn($ctrl.sessionModalService, 'userMatch').mockReturnValue(userMatch.promise)
         $ctrl.isVisible = true
       }))
 
@@ -59,11 +58,6 @@ describe('thank you', function () {
 
         expect($ctrl.sessionModalService.accountBenefits).toHaveBeenCalledWith('iiydanbt=')
         deferred.resolve()
-        $rootScope.$digest()
-
-        expect($ctrl.isVisible).toEqual(true)
-        expect($ctrl.sessionModalService.userMatch).toHaveBeenCalled()
-        userMatch.resolve()
         $rootScope.$digest()
 
         expect($ctrl.isVisible).toEqual(false)
@@ -85,37 +79,26 @@ describe('thank you', function () {
     })
 
     describe('doUserMatch()', () => {
-      it('shows userMatch modal if role is \'REGISTERED\'', () => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.registered)
-        jest.spyOn($ctrl.sessionModalService, 'userMatch').mockImplementation(() => {})
-
-        $ctrl.doUserMatch()
-
-        expect($ctrl.sessionService.getRole).toHaveBeenCalled()
-        expect($ctrl.sessionModalService.userMatch).toHaveBeenCalled()
-      })
-
-      describe('\'PUBLIC\' role', () => {
-        let deferred, $rootScope, userMatch
+      let deferred, $rootScope
         beforeEach(inject((_$q_, _$rootScope_) => {
           deferred = _$q_.defer()
-          userMatch = _$q_.defer()
           $rootScope = _$rootScope_
-          jest.spyOn($ctrl.sessionModalService, 'signIn').mockReturnValue(deferred.promise)
-          jest.spyOn($ctrl.sessionModalService, 'userMatch').mockReturnValue(userMatch.promise)
+          jest.spyOn($ctrl.sessionModalService, 'registerAccount').mockReturnValue(deferred.promise)
           $ctrl.isVisible = true
         }))
 
-        it('shows sign in modal, followed by userMatch', () => {
+      it('shows registerAccount modal if role is \'REGISTERED\'', () => {
+        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.registered)
+        $ctrl.doUserMatch()
+        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalled()
+      })
+
+      describe('\'PUBLIC\' role', () => {
+        it('shows sign in modal, followed by registerAccount', () => {
           $ctrl.doUserMatch()
 
-          expect($ctrl.sessionModalService.signIn).toHaveBeenCalledWith('iiydanbt=')
+          expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalled()
           deferred.resolve()
-          $rootScope.$digest()
-
-          expect($ctrl.isVisible).toEqual(true)
-          expect($ctrl.sessionModalService.userMatch).toHaveBeenCalled()
-          userMatch.resolve()
           $rootScope.$digest()
 
           expect($ctrl.isVisible).toEqual(false)

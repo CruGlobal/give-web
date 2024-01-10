@@ -1,10 +1,12 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { advanceBy, advanceTo, clear } from 'jest-date-mock'
+import 'rxjs/add/observable/of'
+
 /* global inject */
 
 describe('session service', function () {
@@ -16,17 +18,32 @@ describe('session service', function () {
       spy.verifyNoPendingTasks = $delegate.verifyNoPendingTasks
       return spy
     })
+
+    $provide.decorator('$window', function ($delegate) {
+      const spy = jest.fn($delegate)
+      spy.localStorage = $delegate.localStorage
+      spy.sessionStorage = $delegate.sessionStorage
+      spy.document = $delegate.document
+      spy.location = {
+        search: '?ga=111111&query=test&anotherQuery=00000',
+        href: 'https://URL.org?utm_source=text'
+      }
+      return spy
+    })
   }))
 
   beforeEach(angular.mock.module(module.name))
-  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks
+  let sessionService, $httpBackend, $cookies, $rootScope, $verifyNoPendingTasks, $window, $location, envService
 
-  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_) {
+  beforeEach(inject(function (_sessionService_, _$httpBackend_, _$cookies_, _$rootScope_, _$verifyNoPendingTasks_, _$window_, _$location_, _envService_) {
     sessionService = _sessionService_
     $httpBackend = _$httpBackend_
     $cookies = _$cookies_
     $rootScope = _$rootScope_
     $verifyNoPendingTasks = _$verifyNoPendingTasks_
+    $window = _$window_
+    $location = _$location_
+    envService = _envService_
   }))
 
   afterEach(() => {
@@ -153,85 +170,17 @@ describe('session service', function () {
     })
   })
 
-  describe('signIn', () => {
-    it('makes http request to cas/login without mfa', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123'
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123')
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-
-    it('makes http request to cas/login with mfa', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123',
-        mfa_token: '123456'
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123', '123456')
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-
-    it('makes http request to cas/login with mfa and trust_device', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123',
-        mfa_token: '123456',
-        trust_device: '1'
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123', '123456', true)
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-
-    it('includes lastPurchaseId when present and PUBLIC', () => {
-      jest.spyOn(sessionService, 'getRole').mockReturnValue(Roles.public)
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123',
-        lastPurchaseId: 'gxbcdviu='
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123', undefined, undefined, 'gxbcdviu=')
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-  })
-
-  describe('signUp', () => {
-    it('makes http request to cas/register', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/register', {
-        email: 'professorx@xavier.edu',
-        password: 'Cerebro123',
-        firstName: 'Charles',
-        lastName: 'Xavier'
-      }).respond(200, {})
-      sessionService
-        .signUp('professorx@xavier.edu', 'Cerebro123', 'Charles', 'Xavier')
-        .subscribe((data) => {
-          expect(data).toEqual({})
-        })
-      $httpBackend.flush()
-    })
-  })
 
   describe('signOut', () => {
-    it('makes http request to cas/logout', () => {
-      $httpBackend.expectDELETE('https://give-stage2.cru.org/cas/logout')
+    beforeEach(() => {
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken')
+      jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
+      jest.spyOn(sessionService.authClient, 'closeSession')
+      jest.spyOn(sessionService.authClient, 'signOut')
+    })
+
+    it('makes an http request to okta/logout', () => {
+      $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
         .respond(200, {})
       sessionService
         .signOut()
@@ -240,46 +189,209 @@ describe('session service', function () {
         })
       $httpBackend.flush()
     })
-  })
 
-  describe('forgotPassword', () => {
-    it('makes http request to cas/send_forgot_password_email', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/send_forgot_password_email', {
-        email: 'professorx@xavier.edu',
-        passwordResetUrl: 'http://example.com/index.html?theme=cru#reset-password'
-      }).respond(200, {})
+    it('should revoke tokens & log user out of Okta', () => {
       sessionService
-        .forgotPassword('professorx@xavier.edu', 'http://example.com/index.html?theme=cru#reset-password')
-        .subscribe((data) => {
-          expect(data).toEqual({})
+        .signOut()
+        .subscribe(() => {
+          expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+          expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+          expect(sessionService.authClient.closeSession).toHaveBeenCalled()
+          expect(sessionService.authClient.signOut).toHaveBeenCalled()
+          expect($window.location).toEqual(`cart.html`)
         })
-      $httpBackend.flush()
-    })
+    });
+
+    it('should revoke tokens log user out of Okta', () => {
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      try {
+        sessionService
+        .signOut()
+        .subscribe(() => {
+          expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+          expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
+          expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
+          expect(sessionService.authClient.signOut).not.toHaveBeenCalled()
+        })
+      } catch {
+        expect($window.location).toEqual(`https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`)
+      }
+    });
   })
 
-  describe('resetPassword', () => {
-    it('makes http request to cas/reset_password and then sign in', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/reset_password', {
-        email: 'professorx@xavier.edu',
-        password: 'Cerebro123',
-        resetKey: 'abc123def456'
-      }).respond(200, {})
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'professorx@xavier.edu',
-        password: 'Cerebro123'
+  describe('signIn & handleOktaRedirect', () => {
+    beforeEach(() => {
+      $window.sessionStorage.removeItem(locationSearchOnLogin)
+      $window.sessionStorage.removeItem(locationOnLogin)
+    })
+
+    it('should handle a successful login', done => {
+      sessionService.authClient.shouldSucceed()
+      sessionService.authClient.setupForRedirect()
+
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'wee'
       }).respond(200, 'success')
-      sessionService
-        .resetPassword('professorx@xavier.edu', 'Cerebro123', 'abc123def456')
-        .subscribe((data) => {
-          expect(data).toEqual({})
-        })
-      $httpBackend.flush()
+      sessionService.handleOktaRedirect().toPromise().then(() => {
+        $httpBackend.flush()
+        done()
+      })
+    })
+
+    it('should remove locationSearchOnLogin when returning from Okta a successful login', done => {
+      sessionService.authClient.shouldSucceed()
+      sessionService.authClient.setupForRedirect()
+      jest.spyOn($location, 'search')
+      
+      $window.sessionStorage.setItem('locationSearchOnLogin', '?ga=111111&query=test&anotherQuery=00000')
+
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'wee'
+      }).respond(200, 'success')
+      sessionService.handleOktaRedirect().toPromise().then(() => {
+        expect($window.sessionStorage.getItem('locationSearchOnLogin')).toEqual(null)
+        expect($location.search).toHaveBeenCalledTimes(3)
+        expect($location.search).toHaveBeenNthCalledWith(1, 'ga', '111111')
+        expect($location.search).toHaveBeenNthCalledWith(2, 'query', 'test')
+        expect($location.search).toHaveBeenNthCalledWith(3, 'anotherQuery', '00000')
+        $httpBackend.flush()
+        done()
+      })
+    })
+
+    it('should pass along lastPurchaseId', done => {
+      sessionService.authClient.shouldSucceed()
+      sessionService.authClient.setupForRedirect()
+
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'wee',
+        lastPurchaseId: 'gxbcdviu='
+      }).respond(200, 'success')
+
+      sessionService.handleOktaRedirect('gxbcdviu=').toPromise().then(() => {
+        $httpBackend.flush()
+        done()
+      })
+    })
+
+    it('should handle a failed login', done => {
+      sessionService.authClient.shouldFail()
+      sessionService.authClient.setupForRedirect()
+      sessionService.handleOktaRedirect().subscribe(() => {
+        fail()
+      }, error => {
+        expect(error).toBeDefined()
+        done()
+      })
+    })
+
+    it('should redirect to Okta from the login screen if the login has not yet happened', done => {
+      jest.spyOn($location, 'path').mockReturnValue('/sign-in.html')
+      sessionService.authClient.setLoginRedirect(true)
+      sessionService.authClient.setAuthenticated(false)
+      sessionService.authClient.shouldSucceed()
+      sessionService.handleOktaRedirect().subscribe(() => {
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
+        expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual('?ga=111111&query=test&anotherQuery=00000')
+        expect($window.sessionStorage.getItem(locationOnLogin)).toEqual(null)
+        done()
+      })
+    })
+
+    it('should redirect to Okta from page other than login if the login has not yet happened', done => {
+      jest.spyOn($location, 'path').mockReturnValue('/search-results.html')
+      sessionService.authClient.setLoginRedirect(true)
+      sessionService.authClient.setAuthenticated(false)
+      sessionService.authClient.shouldSucceed()
+      sessionService.handleOktaRedirect().subscribe(() => {
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
+        expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual(null)
+        expect($window.sessionStorage.getItem(locationOnLogin)).toEqual('https://URL.org?utm_source=text')
+        done()
+      })
+    })
+
+    it('should ignore a non-login attempt', done => {
+      sessionService.authClient.setLoginRedirect(false)
+      sessionService.handleOktaRedirect().subscribe((data) => {
+        expect(sessionService.authClient.token.parseFromUrl).not.toHaveBeenCalled()
+        expect(data).toEqual(false)
+        done()
+      })
+
     })
   })
+
+  describe('getOktaUrl', () => {
+    it('should return the oktaUrl from the environment', () => {
+      expect(sessionService.getOktaUrl()).toEqual(envService.read('oktaUrl'))
+    })
+  })
+
+  describe('removeOktaRedirectIndicator', () => {
+    it('should remove the Okta redirect session storage variable', () => {
+      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      sessionService.removeOktaRedirectIndicator()
+      expect($window.sessionStorage.getItem(redirectingIndicator)).toEqual(null)
+    })
+  })
+
+  describe('isOktaRedirecting', () => {
+    it('should be true if the session storage variable is set', () => {
+      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      expect(sessionService.isOktaRedirecting()).toBeTruthy()
+    })
+
+    it('should be false if the session storage variable is not set', () => {
+      $window.sessionStorage.removeItem(redirectingIndicator)
+      expect(sessionService.isOktaRedirecting()).toBeFalsy()
+    })
+  })
+
+  describe('signOutWithoutRedirectToOkta()', () => {
+    beforeEach(() => {
+      jest.spyOn($rootScope, '$broadcast')
+    })
+
+    describe('with \'PUBLIC\' role', () => {
+      it('throws error', () => {
+        sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
+          expect(data).toEqual(true)
+        })
+        expect($rootScope.$broadcast).toHaveBeenCalledWith(SignOutEvent)
+      })
+    })
+
+    describe('with \'IDENTIFIED\' role', () => {
+      beforeEach(() => {
+        $cookies.put(Sessions.role, cortexRole.identified)
+        $cookies.put(Sessions.profile, cruProfile)
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest()
+      })
+
+      it('make http request to signout user without redirect', (done) => {
+        $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
+        sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
+          expect(data).toEqual({})
+        })
+        $rootScope.$digest()
+        // Observable.finally is fired after the test, this defers until it's called.
+        // eslint-disable-next-line angular/timeout-service
+        setTimeout(() => {
+          expect($rootScope.$broadcast).toHaveBeenCalledWith(SignOutEvent)
+          done()
+        })
+        $httpBackend.flush()
+      })
+    })
+  })
+
+
 
   describe('downgradeToGuest( skipEvent )', () => {
     beforeEach(() => {
-      jest.spyOn($rootScope, '$broadcast').mockImplementation(() => {})
+      jest.spyOn($rootScope, '$broadcast')
     })
 
     describe('with \'PUBLIC\' role', () => {
@@ -301,7 +413,7 @@ describe('session service', function () {
       })
 
       it('make http request to cas/downgrade', (done) => {
-        $httpBackend.expectPOST('https://give-stage2.cru.org/cas/downgrade', {}).respond(204, {})
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/downgrade', {}).respond(204, {})
         sessionService.downgradeToGuest().subscribe((data) => {
           expect(data).toEqual({})
         })
@@ -325,7 +437,7 @@ describe('session service', function () {
       })
 
       it('make http request to cas/downgrade', (done) => {
-        $httpBackend.expectPOST('https://give-stage2.cru.org/cas/downgrade', {}).respond(204, {})
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/downgrade', {}).respond(204, {})
         sessionService.downgradeToGuest(true).subscribe((data) => {
           expect(data).toEqual({})
         })
@@ -333,7 +445,7 @@ describe('session service', function () {
         // Observable.finally is fired after the test, this defers until it's called.
         // eslint-disable-next-line angular/timeout-service
         setTimeout(() => {
-          expect($rootScope.$broadcast).not.toHaveBeenCalled()
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith(SignOutEvent)
           done()
         })
         $httpBackend.flush()
@@ -421,6 +533,198 @@ describe('session service', function () {
 
           expect($timeout).toHaveBeenCalledTimes(2)
         })
+      })
+    })
+  })
+  describe('createAccount()', () => {
+    const getUser = jest.fn(() => ({
+      email: 'email@cru.org',
+    }));
+
+    beforeEach(() => {
+      sessionService.authClient.getUser = getUser;
+      getUser.mockClear();
+    })
+
+    describe('Already Logged in', () => {
+
+      it('returns as user is already authenicated by Okta', () => {
+        jest.spyOn(sessionService.authClient, 'isAuthenticated').mockReturnValue(true)
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(getUser).toHaveBeenCalled();
+          expect(data).toEqual({
+            data: [
+              "Already logged in to Okta with email: email@cru.org. You will be redirected to the Sign In page in a few seconds.",
+              "Another Error"
+            ],
+            redirectToSignIn: true,
+            status: "error"
+          })
+        })
+      })
+      it('returns as user is already authenicated by Cortex', () => {
+        jest.spyOn(sessionService.authClient, 'isAuthenticated').mockReturnValue(false)
+        sessionService.authClient.getUser = undefined;
+        $cookies.put(Sessions.role, cortexRole.registered)
+        $cookies.put(Sessions.profile, cruProfile)
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest()
+        expect(sessionService.getRole()).toEqual(Roles.identified)
+
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data).toEqual({
+            data: [
+              "Already logged in to Okta. You will be redirected to the Sign In page in a few seconds.",
+              "Another Error"
+            ],
+            redirectToSignIn: true,
+            status: "error"
+          })
+        })
+      })
+    })
+    describe('User is logged out', () => {
+
+      it('returns as user is already authenticated by Cortex', () => {
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+          email: 'test@test@test.com',
+          first_name: 'FirstName',
+          last_name: 'LastName'
+        }).respond(500, {
+            "error": "Okta user creation failed: [{:errorCode=>\"E0000001\",\n :errorSummary=>\"Api validation failed: login\",\n :errorLink=>\"E0000001\",\n :errorId=>\"oaeTHQQui71RxKf-kpCQHRr4Q\",\n :errorCauses=>\n  [{:errorSummary=>\"login: Username must be in the form of an email address\"},\n   {:errorSummary=>\"email: Does not match required pattern\"}]}\n, 400]"
+        })
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data.data).toBeDefined()
+          expect(data.data[0]).toEqual('login: Username must be in the form of an email address')
+          expect(data.data[1]).toEqual('There was an error saving your email address. Make sure it was entered correctly.')
+        })
+      })
+
+      it('returns as user is already authenticated by Cortex', () => {
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+          email: 'test@test@test.com',
+          first_name: 'FirstName',
+          last_name: 'LastName'
+        }).respond(200, {
+          data: {
+            error: 'Error ajdjsdjl'
+          }
+        })
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data).toBeDefined()
+        })
+      })
+
+      
+
+      afterEach(() => {
+        $httpBackend.flush()
+        $httpBackend.verifyNoOutstandingExpectation()
+        $httpBackend.verifyNoOutstandingRequest()
+      })
+    })
+  });
+
+  describe('checkCreateAccountStatus() with correct data', () => {
+    it('returns as OKTA user status', () => {
+
+      $httpBackend.expectGET('https://give-stage2.cru.org/okta/status?email=test-test%40test.com').respond(200, {
+        activated: '2023-08-28T14:35:00.000Z',
+        password_changed: null,
+        status: 'PROVISIONED'
+      })
+      
+      sessionService.checkCreateAccountStatus('test-test@test.com').then((data) => {
+        expect(data.status).toEqual('success')
+        expect(data.data.status).toEqual('PROVISIONED')
+      })
+    })
+
+    it('returns as error when fetching OKTA user status', () => {
+
+      $httpBackend.expectGET('https://give-stage2.cru.org/okta/status?email=test-test%40test.com').respond(404, {
+        error: 'Email is not an Okta user'
+      })
+      
+      sessionService.checkCreateAccountStatus('test-test@test.com').then((data) => {
+        expect(data.status).toEqual('error')
+        expect(data.data).toEqual('Email is not an Okta user')
+      })
+    })
+
+    afterEach(() => {
+      $httpBackend.flush()
+      $httpBackend.verifyNoOutstandingExpectation()
+      $httpBackend.verifyNoOutstandingRequest()
+    })
+  })
+
+  describe('updateCurrentProfile', () => {
+    it('updates the first and last name if the cookie is defined', () => {
+      const cruProfileCookie = {
+        first_name: 'Test',
+        last_name: 'Tester'
+      }
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
+
+      // Encode as JWT
+      $cookies.put(Sessions.profile, `.${btoa(angular.toJson(cruProfileCookie))}.`)
+      sessionService.updateCurrentProfile()
+      expect(sessionService.session.first_name).toEqual(cruProfileCookie.first_name)
+      expect(sessionService.session.last_name).toEqual(cruProfileCookie.last_name)
+    })
+
+    it('does not set profile values if the cookie is not defined', () => {
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
+
+      const cruProfile = sessionService.updateCurrentProfile()
+      expect(cruProfile).toEqual({})
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
+    })
+  })
+
+  const checkoutData = {
+    phone: '(111) 111-1111',
+    name: {
+      firstName: 'Tester',
+      lastName: 'Last name',
+    },
+    'spouse-name': {
+      firstName: 'Spouse',
+      lastName: 'Last name',
+    }
+  }
+
+
+
+  describe('CheckoutSavedData', () => {
+    describe('updateCheckoutSavedData', () => {
+      it('saves the checkout data to a cookie', () => {
+        // isTest set to TRUE
+        sessionService.updateCheckoutSavedData(checkoutData, true)
+        expect(sessionService.session.checkoutSavedData).toBeDefined()
+        const dataStoredInLocalStoarage = $cookies.get(checkoutSavedDataCookieName)
+        expect(dataStoredInLocalStoarage).toEqual(JSON.stringify(checkoutData))
+      })
+      it('copies checkout data cookie and stores it on session', () => {
+        delete sessionService.session.checkoutSavedData;
+        expect(sessionService.session.checkoutSavedData).not.toBeDefined()
+        sessionService.updateCheckoutSavedData()
+        expect(sessionService.session.checkoutSavedData).toBeDefined()
+      })
+    })
+
+    describe('clearCheckoutSavedData', () => {
+      it('removes the cookie and data on session', () => {
+        const dataStoredInLocalStoarage = $cookies.get(checkoutSavedDataCookieName)
+        expect(dataStoredInLocalStoarage).toEqual(JSON.stringify(checkoutData))
+        // isTest set to TRUE
+        sessionService.clearCheckoutSavedData(true)
+        const dataAfterClear = $cookies.get(checkoutSavedDataCookieName)
+        expect(dataAfterClear).toEqual(undefined)
       })
     })
   })
