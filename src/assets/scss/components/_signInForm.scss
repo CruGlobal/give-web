@@ -1,0 +1,23 @@
+sign-in-form,
+sign-up-activation-modal {
+  .okta-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1em 0.5em;
+    justify-content: center;
+    gap: 1em;
+    margin: 20px 0;
+  
+    img {
+      height: 20px;
+    }
+  }
+
+  .okta-signup-button {
+    display: block;
+    margin-bottom: 10px;
+    padding: 5px;
+    text-align: center;
+  }
+}

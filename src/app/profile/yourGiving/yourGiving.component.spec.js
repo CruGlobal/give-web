@@ -5,7 +5,7 @@ import module, { queryParams } from './yourGiving.component'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
-import { Roles, SignOutEvent } from 'common/services/session/session.service'
+import { LoginOktaOnlyEvent, Roles, SignOutEvent } from 'common/services/session/session.service'
 /* global inject */
 
 describe('your giving', function () {
@@ -16,6 +16,7 @@ describe('your giving', function () {
     $ctrl = _$componentController_(module.name, {
       $window: { location: '/your-giving.html' }
     })
+    $ctrl.$rootScope.$broadcast = jest.spyOn($ctrl.$rootScope, '$broadcast')
   }))
 
   it('to be defined', function () {
@@ -97,9 +98,37 @@ describe('your giving', function () {
         $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']()
 
         expect($ctrl.$window.location).toEqual('/')
-      });
+      })
     })
-  });
+
+    describe('sessionEnforcerService change', () => {
+      beforeEach(() => {
+        jest.spyOn($ctrl.sessionService, 'handleOktaRedirect').mockImplementation(() => Observable.of(Observable.of('success')))
+        $ctrl.$onInit()
+      })
+
+      it('broadcasts an event if registered/new', () => {
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['change'](Roles.registered, 'NEW')
+        expect($ctrl.$rootScope.$broadcast).toHaveBeenCalledWith(LoginOktaOnlyEvent, 'register-account')
+      })
+
+      it('does not broadcast an event if not registered/new', () => {
+        $ctrl.sessionEnforcerService.mock.calls[0][1]['change'](Roles.registered, 'COMPLETED')
+        expect($ctrl.$rootScope.$broadcast).not.toHaveBeenCalled()
+      })
+    })
+
+    it('handles an Okta redirect error', () => {
+      const error = new Error()
+      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {})
+      jest.spyOn($ctrl.sessionService, 'handleOktaRedirect').mockImplementation(() => Observable.of(Observable.throw(error)))
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
+      $ctrl.$onInit()
+      expect($ctrl.errorMessage).toEqual('generic')
+      expect($ctrl.$log.error).toHaveBeenCalledWith('Failed to redirect from Okta', error)
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
+    })
+  })
 
   describe('$onDestroy()', () => {
     it('cleans up the component', () => {

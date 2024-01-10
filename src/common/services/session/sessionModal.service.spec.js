@@ -172,51 +172,6 @@ describe('sessionModalService', function () {
     })
   })
 
-  describe('signUp', () => {
-    it('should open signUp modal', () => {
-      sessionModalService.signUp()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
-    })
-  })
-
-  describe('forgotPassword', () => {
-    it('should open forgotPassword modal', () => {
-      sessionModalService.forgotPassword()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('forgot-password')
-    })
-  })
-
-  describe('resetPassword', () => {
-    it('should open resetPassword modal', () => {
-      sessionModalService.resetPassword()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('reset-password')
-    })
-  })
-
-  describe('userMatch', () => {
-    it('should open userMatch modal', () => {
-      sessionModalService.userMatch()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('user-match')
-    })
-  })
-
-  describe('contactInfo', () => {
-    it('should open contactInfo modal', () => {
-      sessionModalService.contactInfo()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('contact-info')
-    })
-  })
-
   describe('registerAccount', () => {
     it('should open registerAccount modal', () => {
       sessionModalService.registerAccount()
@@ -225,37 +180,13 @@ describe('sessionModalService', function () {
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
     })
   })
-})
 
-describe('sessionModalService module config', () => {
-  let modalStateServiceProvider
+  describe('SignUp', () => {
+    it('should open signUp modal', () => {
+      sessionModalService.createAccount()
 
-  beforeEach(() => {
-    angular.mock.module(modalStateModule.name, function (_modalStateServiceProvider_) {
-      modalStateServiceProvider = _modalStateServiceProvider_
-      jest.spyOn(modalStateServiceProvider, 'registerModal').mockImplementation(() => {})
-    })
-    angular.mock.module(module.name)
-  })
-
-  it('config to register \'reset-password\' modal', inject(function () {
-    expect(modalStateServiceProvider.registerModal).toHaveBeenCalledWith('reset-password', expect.any(Function))
-  }))
-
-  describe('invoke \'reset-password\' modal function', () => {
-    let sessionModalService, $injector
-
-    beforeEach(inject(function (_sessionModalService_, _$injector_) {
-      sessionModalService = _sessionModalService_
-      $injector = _$injector_
-      jest.spyOn(sessionModalService, 'resetPassword').mockImplementation(() => {})
-    }))
-
-    it('calls sessionModalService.resetPassword()', () => {
-      const fn = modalStateServiceProvider.registerModal.mock.calls[0][1]
-      $injector.invoke(fn)
-
-      expect(sessionModalService.resetPassword).toHaveBeenCalled()
+      expect($uibModal.open).toHaveBeenCalledTimes(1)
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
     })
   })
 })
