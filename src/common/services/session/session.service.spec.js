@@ -370,7 +370,7 @@ describe('session service', function () {
         $rootScope.$digest()
       })
 
-      it('make http request to cas/downgrade', (done) => {
+      it('make http request to signout user without redirect', (done) => {
         $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
         sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
           expect(data).toEqual({})
