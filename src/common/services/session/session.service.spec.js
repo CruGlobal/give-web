@@ -348,6 +348,47 @@ describe('session service', function () {
     })
   })
 
+  describe('signOutWithoutRedirectToOkta()', () => {
+    beforeEach(() => {
+      jest.spyOn($rootScope, '$broadcast')
+    })
+
+    describe('with \'PUBLIC\' role', () => {
+      it('throws error', () => {
+        sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
+          expect(data).toEqual(true)
+        })
+        expect($rootScope.$broadcast).toHaveBeenCalledWith(SignOutEvent)
+      })
+    })
+
+    describe('with \'IDENTIFIED\' role', () => {
+      beforeEach(() => {
+        $cookies.put(Sessions.role, cortexRole.identified)
+        $cookies.put(Sessions.profile, cruProfile)
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest()
+      })
+
+      it('make http request to signout user without redirect', (done) => {
+        $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
+        sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
+          expect(data).toEqual({})
+        })
+        $rootScope.$digest()
+        // Observable.finally is fired after the test, this defers until it's called.
+        // eslint-disable-next-line angular/timeout-service
+        setTimeout(() => {
+          expect($rootScope.$broadcast).toHaveBeenCalledWith(SignOutEvent)
+          done()
+        })
+        $httpBackend.flush()
+      })
+    })
+  })
+
+
+
   describe('downgradeToGuest( skipEvent )', () => {
     beforeEach(() => {
       jest.spyOn($rootScope, '$broadcast')
