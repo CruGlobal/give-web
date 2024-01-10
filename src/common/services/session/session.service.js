@@ -81,7 +81,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     clearCheckoutSavedData: clearCheckoutSavedData,
     checkCreateAccountStatus: checkCreateAccountStatus,
     removeLocationOnLogin: removeLocationOnLogin,
-    hasLocationOnLogin: hasLocationOnLogin
+    hasLocationOnLogin: hasLocationOnLogin,
+    signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -315,6 +316,25 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
       }
     }
+  }
+
+  function signOutWithoutRedirectToOkta () {
+    const observable = currentRole() === Roles.public
+      ? Observable.of(true)
+      : Observable
+        .from($http({
+          method: 'DELETE',
+          url: oktaApiUrl('logout'),
+          withCredentials: true
+        }))
+        .map((response) => response.data)
+    clearCheckoutSavedData()
+    authClient.revokeAccessToken()
+    authClient.revokeRefreshToken()
+    authClient.closeSession()
+    return observable.finally(() => {
+        $rootScope.$broadcast(SignOutEvent)
+      })
   }
 
   function removeForcedUserToLogoutSessionData () {
