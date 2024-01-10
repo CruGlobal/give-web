@@ -319,22 +319,20 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function signOutWithoutRedirectToOkta () {
-    const observable = currentRole() === Roles.public
-      ? Observable.of(true)
-      : Observable
-        .from($http({
-          method: 'DELETE',
-          url: oktaApiUrl('logout'),
-          withCredentials: true
-        }))
-        .map((response) => response.data)
+    const observable = Observable
+      .from($http({
+        method: 'DELETE',
+        url: oktaApiUrl('logout'),
+        withCredentials: true
+      }))
+      .map((response) => response.data)
     clearCheckoutSavedData()
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
     authClient.closeSession()
     return observable.finally(() => {
-        $rootScope.$broadcast(SignOutEvent)
-      })
+      $rootScope.$broadcast(SignOutEvent)
+    })
   }
 
   function removeForcedUserToLogoutSessionData () {
