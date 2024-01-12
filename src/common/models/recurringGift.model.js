@@ -201,17 +201,7 @@ export default class RecurringGiftModel {
   }
 
   get toObject () {
-    const interval = this.gift['updated-rate'].recurrence.interval
-    if (interval === '' || interval === 'Monthly') {
-      return this.gift
-    }
-
-    return {
-      ...this.gift,
-      'updated-recurring-day-of-month': this.gift['updated-recurring-day-of-month'] || this.parentDonation['recurring-day-of-month'],
-      'updated-start-month': this.gift['updated-start-month'] || this.nextGiftDate.format('MM'),
-      'updated-start-year': this.gift['updated-start-year'] || this.nextGiftDate.format('YYYY')
-    }
+    return this.gift
   }
 
   clone () {
