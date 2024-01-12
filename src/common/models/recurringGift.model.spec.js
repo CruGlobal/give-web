@@ -564,6 +564,38 @@ describe('recurringGift model', () => {
     it('should return the object to send to the api', () => {
       expect(giftModel.toObject).toEqual(giftModel.gift)
     })
+
+    it('should include next draw date information when the frequency changes', () => {
+      giftModel.frequency = 'Quarterly'
+      expect(giftModel.toObject).toEqual({
+        ...giftModel.gift,
+        'updated-recurring-day-of-month': '15',
+        'updated-start-month': '06',
+        'updated-start-year': '2015',
+      })
+    })
+
+    it('should not override modified next draw date information when the frequency changes', () => {
+      giftModel.frequency = 'Quarterly'
+      giftModel.transactionDay = '20'
+      giftModel.startMonth = '7'
+      expect(giftModel.toObject).toEqual({
+        ...giftModel.gift,
+        'updated-recurring-day-of-month': '20',
+        'updated-start-month': '07',
+        'updated-start-year': '2015',
+      })
+    })
+
+    it('should not include next draw date information when the frequency changes to monthly', () => {
+      giftModel = new RecurringGiftModel(giftModel.gift, {
+        ...giftModel.parentDonation,
+        rate: { recurrence: { interval: 'Quarterly' } },
+      })
+
+      giftModel.frequency = 'Monthly'
+      expect(giftModel.toObject).toEqual(giftModel.gift)
+    })
   })
 
   describe('clone', () => {
