@@ -128,4 +128,12 @@ describe('signIn', function () {
       })
     })
   })
+
+  describe('closeRedirectingLoading()', () => {
+    it('On sign up with Okta', () => {
+      $ctrl.showRedirectingLoadingIcon = true
+      $ctrl.closeRedirectingLoading()
+      expect($ctrl.showRedirectingLoadingIcon).toEqual(false)
+    });
+  });
 })

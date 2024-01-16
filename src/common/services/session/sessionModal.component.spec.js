@@ -1,13 +1,15 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './sessionModal.component'
+import { LoginOktaOnlyEvent } from './session.service'
 
 describe('sessionModalController', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, state
+  let $ctrl, state, $rootScope
 
-  beforeEach(inject(function ($componentController) {
+  beforeEach(inject(function ($componentController, _$rootScope_) {
     state = 'sign-in'
+    $rootScope = _$rootScope_
     $ctrl = $componentController(module.name, {},
       {
         resolve: {
@@ -35,6 +37,31 @@ describe('sessionModalController', function () {
 
       expect($ctrl.state).toEqual('sign-in')
       expect($ctrl.lastPurchaseId).toEqual('<some id>')
+    })
+
+    it('should show loading if Okta rdirecting', () => {
+      expect($ctrl.isLoading).toEqual(false)
+      jest.spyOn($ctrl.sessionService, 'isOktaRedirecting').mockImplementation(() => true)
+      $ctrl.$onInit()
+      expect($ctrl.isLoading).toEqual(true)
+    })
+
+    it('should stateChanged on LoginOktaOnlyEvent', () => {
+      expect($ctrl.isLoading).toEqual(false)
+      $ctrl.$onInit()
+      expect($ctrl.state).toEqual('sign-in')
+      $rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+      expect($ctrl.state).toEqual('register-account')
+      expect($ctrl.state).toEqual('register-account')
+    })
+  })
+
+  describe('$ctrl.$onDestroy', () => {
+    it('should remove sessionSubject subscription', () => {
+      $ctrl.$onInit()
+      expect($ctrl.subscription.closed).toEqual(false)
+      $ctrl.$onDestroy()
+      expect($ctrl.subscription.closed).toEqual(true)
     })
   })
 
@@ -90,6 +117,15 @@ describe('sessionModalController', function () {
     })
   })
 
+  describe('$ctrl.onAccountBenefitsSuccess', () => {
+    it('should move to register-account page and remove Okta Indicator', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
+      $ctrl.onAccountBenefitsSuccess()
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
+      expect($ctrl.state).toEqual('register-account')
+    })
+  })
+
   describe('$ctrl.onFailure', () => {
     it('should dismiss modal with \'error\'', () => {
       jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
@@ -107,6 +143,13 @@ describe('sessionModalController', function () {
 
       expect($ctrl.dismiss).toHaveBeenCalledWith({ $value: 'cancel' })
       expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
+    })
+  })
+
+  describe('$ctrl.onSignUpActivationSuccess', () => {
+    it('should move to register-account page', () => {
+      $ctrl.onSignUpActivationSuccess()
+      expect($ctrl.state).toEqual('register-account')
     })
   })
 

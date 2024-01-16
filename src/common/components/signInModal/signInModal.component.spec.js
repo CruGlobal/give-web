@@ -6,12 +6,12 @@ import { Roles } from 'common/services/session/session.service'
 
 describe('signInModal', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, bindings
+  let $ctrl, bindings, onStateChange = jest.fn()
 
   beforeEach(inject(function (_$componentController_) {
     bindings = {
       modalTitle: '',
-      onStateChange: jest.fn(),
+      onStateChange: onStateChange,
       onSuccess: jest.fn()
     }
     $ctrl = _$componentController_(module.name, {}, bindings)
@@ -51,14 +51,26 @@ describe('signInModal', function () {
   })
 
   describe('signOut', () => {
-    beforeEach(() => {
-      $ctrl.identified = true
-    })
-
     it('set identified to false', () => {
+      $ctrl.identified = true
       $ctrl.signOut()
-
       expect($ctrl.identified).toEqual(false)
+    })
+  })
+
+  describe('getOktaUrl', () => {
+    it('should call sessionService getOktaUrl', () => {
+      jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
+      expect($ctrl.sessionService.getOktaUrl).not.toHaveBeenCalled()
+      $ctrl.getOktaUrl()
+      expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled()
+    })
+  })
+
+  describe('stateChanged', () => {
+    it('updates the state value', () => {
+      $ctrl.stateChanged('newState')
+      expect($ctrl.onStateChange).toHaveBeenCalledWith({state: 'newState'})
     })
   })
 })

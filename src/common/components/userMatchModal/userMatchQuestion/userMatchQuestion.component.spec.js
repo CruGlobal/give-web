@@ -21,6 +21,19 @@ describe('userMatchQuestion', function () {
     expect($ctrl.hasError).toEqual(false)
   })
 
+  describe('$onChanges', () => {
+    it('It should set the new answer value', () => {
+      expect($ctrl.answer).toEqual({"answer": "answer"})
+      $ctrl.question.answer = 'new answer'
+      $ctrl.$onChanges({
+        question: {
+          answer: 'new answer'
+        }
+      })
+      expect($ctrl.answer).toEqual('new answer')
+    })
+  })
+
   describe('selectAnswer()', () => {
     describe('invalid form', () => {
       it('sets hasError', () => {

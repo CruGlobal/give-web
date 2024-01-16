@@ -22,6 +22,15 @@ describe('thank you', function () {
       expect($ctrl.isVisible).toEqual(false)
     })
 
+    describe('$onInit', () => {
+      it('should remove the Okta Redirect Indicator', () => {
+        jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator')
+        expect($ctrl.sessionService.removeOktaRedirectIndicator).not.toHaveBeenCalled()
+        $ctrl.$onInit()
+        expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
+      });
+    });
+
     describe('$onChanges', () => {
       beforeEach(() => {
         jest.spyOn($ctrl, 'openAccountBenefitsModal').mockImplementation(() => {})
