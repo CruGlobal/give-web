@@ -207,7 +207,7 @@ export default class RecurringGiftModel {
 
     return {
       ...this.gift,
-      'updated-recurring-day-of-month': this.gift['updated-recurring-day-of-month'] || this.parentDonation['recurring-day-of-month'],
+      'updated-recurring-day-of-month': this.gift['updated-recurring-day-of-month'] || this.parentDonation['recurring-day-of-month']
     }
   }
 
