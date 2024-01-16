@@ -564,6 +564,27 @@ describe('recurringGift model', () => {
     it('should return the object to send to the api', () => {
       expect(giftModel.toObject).toEqual(giftModel.gift)
     })
+
+    it('should include the recurring day of month when the month changes', () => {
+      giftModel.startMonth = '6'
+      expect(giftModel.toObject).toEqual({
+        ...giftModel.gift,
+        'updated-recurring-day-of-month': '15',
+        'updated-start-month': '06',
+        'updated-start-year': '2015',
+      })
+    })
+
+    it('should not override the modified recurring day of month when the month changes', () => {
+      giftModel.transactionDay = '20'
+      giftModel.startMonth = '6'
+      expect(giftModel.toObject).toEqual({
+        ...giftModel.gift,
+        'updated-recurring-day-of-month': '20',
+        'updated-start-month': '06',
+        'updated-start-year': '2015',
+      })
+    })
   })
 
   describe('clone', () => {
