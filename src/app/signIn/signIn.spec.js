@@ -11,7 +11,14 @@ describe('signIn', function () {
 
   beforeEach(inject(function (_$componentController_) {
     $ctrl = _$componentController_(module.name,
-      { $window: { location: '/sign-in.html' } }
+      { $window: {
+          location: '/sign-in.html',
+          sessionStorage: {
+            getItem: jest.fn(),
+            removeItem: jest.fn(),
+          }
+        }
+      }
     )
   }))
 
@@ -56,8 +63,8 @@ describe('signIn', function () {
   describe('as \'REGISTERED\'', () => {
     beforeEach(() => {
       jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('REGISTERED')
+      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
       jest.spyOn($ctrl, 'sessionChanged')
-      $ctrl.$onInit()
     })
 
     afterEach(() => {
@@ -65,8 +72,21 @@ describe('signIn', function () {
     })
 
     it('navigates to checkout', () => {
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue(null)
+      $ctrl.$onInit()
       expect($ctrl.sessionChanged).toHaveBeenCalled()
+      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
+      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/checkout.html')
+    })
+
+    it('navigates to location which user initial came from before logging in', () => {
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      $ctrl.$onInit()
+      expect($ctrl.sessionChanged).toHaveBeenCalled()
+      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
+      expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
+      expect($ctrl.$window.location).toEqual('https://give-stage2.cru.org/search-results.html')
     })
   })
 
@@ -88,18 +108,32 @@ describe('signIn', function () {
         expect($ctrl.$window.location).toEqual('/checkout.html')
       })
     })
-  })
 
-  describe('resetPassword()', () => {
-    let deferred
-    beforeEach(inject(function (_$q_) {
-      deferred = _$q_.defer()
-      jest.spyOn($ctrl.sessionModalService, 'forgotPassword').mockImplementation(() => deferred.promise)
-      $ctrl.resetPassword()
-    }))
+    describe('getOktaUrl()', () => {
+      it('On sign up with Okta', () => {
+        jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
+        const response = $ctrl.getOktaUrl()
 
-    it('opens reset password modal', () => {
-      expect($ctrl.sessionModalService.forgotPassword).toHaveBeenCalled()
+        expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled();
+        expect(response).toEqual('URL')
+      })
+    })
+
+    describe('onSignUpWithOkta()', () => {
+      it('On sign up with Okta', () => {
+        jest.spyOn($ctrl.sessionModalService, 'createAccount').mockReturnValue(Observable.throw({}))
+        $ctrl.onSignUpWithOkta()
+
+        expect($ctrl.sessionModalService.createAccount).toHaveBeenCalled()
+      })
     })
   })
+
+  describe('closeRedirectingLoading()', () => {
+    it('On sign up with Okta', () => {
+      $ctrl.showRedirectingLoadingIcon = true
+      $ctrl.closeRedirectingLoading()
+      expect($ctrl.showRedirectingLoadingIcon).toEqual(false)
+    });
+  });
 })

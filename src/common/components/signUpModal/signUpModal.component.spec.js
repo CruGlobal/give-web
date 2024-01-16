@@ -2,18 +2,39 @@ import angular from 'angular'
 import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
+import 'rxjs/add/observable/of'
 import module from './signUpModal.component'
+import { Sessions } from 'common/services/session/session.service'
+import { cortexRole } from 'common/services/session/fixtures/cortex-role'
+import { giveSession } from 'common/services/session/fixtures/give-session'
+import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 
-describe('signUpModal', function () {
+const signUpFormData = {
+  name: {
+    ['given-name']: 'givenName',
+    ['family-name']: 'familyName',
+  },
+  email: 'email@cru.org',
+};
+
+describe('signUpForm', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, $rootScope
+  let $ctrl, bindings, $rootScope
 
-  beforeEach(inject(function (_$componentController_, _$rootScope_) {
+  beforeEach(inject(function (_$rootScope_,  _$componentController_) {
     $rootScope = _$rootScope_
-    $ctrl = _$componentController_(module.name, {}, {
-      signUpForm: { $valid: true },
-      onSuccess: jest.fn()
-    })
+    bindings = {
+      onStateChange: jest.fn(),
+      onSuccess: jest.fn(),
+      signUpForm: {
+        $valid: false,
+        $setSubmitted: jest.fn()
+      },
+      onSubmit: jest.fn()
+    }
+    const scope = { $apply: jest.fn() }
+    scope.$apply.mockImplementation(() => {})
+    $ctrl = _$componentController_(module.name, { $scope: scope }, bindings)
   }))
 
   it('to be defined', function () {
@@ -21,113 +42,227 @@ describe('signUpModal', function () {
   })
 
   describe('$onInit()', () => {
-    it('initializes the component', () => {
+    describe('with \'REGISTERED\' cortex-session', () => {
+      let $cookies
+      beforeEach(inject(function (_$cookies_) {
+        $cookies = _$cookies_
+        $cookies.put(Sessions.role, cortexRole.registered)
+        $cookies.put(Sessions.give, giveSession)
+        $cookies.put(Sessions.profile, cruProfile)
+        $rootScope.$digest()
+      }))
+
+      afterEach(() => {
+        [Sessions.role, Sessions.give, Sessions.profile].forEach((name) => {
+          $cookies.remove(name)
+        })
+      })
+
+      it('Redirects user to sign in modal', () => {
+        jest.spyOn($ctrl, 'onStateChange')
+        $ctrl.session = {
+          email: 'test@cru.org',
+        }
+
+        $ctrl.$onInit()
+
+        expect($ctrl.onStateChange).toHaveBeenCalled()
+      })
+    })
+
+    it('initializes the component, inherits data from orderService', () => {
+      jest.spyOn($ctrl, 'loadDonorDetails')
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [
+          {
+            name: {
+              ['given-name']: 'givenName',
+              ['family-name']: 'familyName',
+            },
+            email: 'EMAIL@cru.org',
+          }
+        ]
+      ))
+      $ctrl.sessionService.session = {
+        first_name: undefined,
+        last_name: undefined,
+        email: undefined,
+      }
+
       $ctrl.$onInit()
 
-      expect($ctrl.modalTitle).toEqual('Sign Up')
-      expect($ctrl.isLoading).toEqual(false)
-      expect($ctrl.signUpErrors).toEqual({})
-      expect($ctrl.hasError).toEqual(false)
+      expect($ctrl.isLoading).toEqual(true)
+      expect($ctrl.submitting).toEqual(false)
+      expect($ctrl.loadDonorDetails).toHaveBeenCalled()
+      expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
+      expect($ctrl.donorDetails.name['given-name']).toEqual('givenName')
+      expect($ctrl.donorDetails.name['family-name']).toEqual('familyName')
+      expect($ctrl.donorDetails.email).toEqual('EMAIL@cru.org')
+    })
+
+    it('initializes the component, inherits data from sessionService', () => {
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [
+          {
+            name: {
+              ['given-name']: undefined,
+              ['family-name']: undefined,
+            },
+            email: undefined,
+          }
+        ]
+      ))
+      $ctrl.sessionService.session = {
+        first_name: 'newFirstName',
+        last_name: 'newLastName',
+        email: 'testing@cru.org',
+      }
+      $ctrl.$onInit()
+      expect($ctrl.donorDetails.name['given-name']).toEqual('newFirstName')
+      expect($ctrl.donorDetails.name['family-name']).toEqual('newLastName')
+      expect($ctrl.donorDetails.email).toEqual('testing@cru.org')
+    })
+
+    it('initializes the component, inherits no data', () => {
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [
+          {
+            name: {
+              ['given-name']: undefined,
+              ['family-name']: undefined,
+            },
+            email: undefined,
+          }
+        ]
+      ))
+      $ctrl.sessionService.session = {
+        first_name: undefined,
+        last_name: undefined,
+        email: undefined,
+      }
+      $ctrl.$onInit()
+      expect($ctrl.donorDetails.name['given-name']).toEqual(undefined)
+      expect($ctrl.donorDetails.name['family-name']).toEqual(undefined)
+      expect($ctrl.donorDetails.email).toEqual(undefined)
+    })
+
+    it('Loads user cart details', () => {
+      $ctrl.isInsideAnotherModal = false
+      jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockImplementation(() => Observable.from([5]))
+ 
+      $ctrl.$onInit()
+
+      expect($ctrl.cartCount).toEqual(5)
+    })
+
+    it('Error during loading cart details', () => {
+      $ctrl.isInsideAnotherModal = false
+      jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockReturnValue(Observable.throw({status: 404}))
+      $ctrl.$onInit()
+      expect($ctrl.cartCount).toEqual(0)
     })
   })
 
-  describe('signUp()', () => {
-    let deferred
-    beforeEach(inject(function (_$q_) {
-      deferred = _$q_.defer()
-      jest.spyOn($ctrl.sessionService, 'signUp').mockImplementation(() => Observable.from(deferred.promise))
-    }))
+  describe('loadDonorDetails()', () => {
+    it('should set loadingDonorDetails to false', () => {
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.throw({status: 404}))
+      $ctrl.loadingDonorDetails = true
+      $ctrl.loadDonorDetails()
+      expect($ctrl.loadingDonorDetails).toEqual(false)
+    })
+  });
 
-    describe('invalid form', () => {
-      it('does not submit the form', () => {
-        $ctrl.signUpForm.$valid = false
-        $ctrl.signUp()
+  describe('submitDetails()', () => {
+    it('should return as form is not valid', () => {
+      $ctrl.submitDetails()
+      expect($ctrl.signUpForm.$setSubmitted).toHaveBeenCalled()
+      expect($ctrl.submitting).toEqual(false)   
+    })
 
-        expect($ctrl.sessionService.signUp).not.toHaveBeenCalled()
+    it('should not call createAccount', async () => {
+      jest.spyOn($ctrl.sessionService, 'createAccount')
+
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [signUpFormData]
+      ))
+      $ctrl.$onInit()
+      $ctrl.signUpForm.$valid = false;
+      $ctrl.submitDetails(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name']).then(() =>{
+        expect($ctrl.sessionService.createAccount).not.toHaveBeenCalled()
+      })
+    });
+
+    it('should redirect as already logged in', async () => {
+      jest.useFakeTimers();
+      jest.spyOn(global, 'setTimeout');
+      jest.spyOn($ctrl.sessionService, 'createAccount').mockImplementation(() => Promise.resolve({
+        status: 'error',
+        redirectToSignIn: true,
+        data: ['Error one', 'Error 2']
+      }))
+      
+
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [signUpFormData]
+      ))
+      $ctrl.$onInit()
+      $ctrl.signUpForm.$valid = true
+      $ctrl.submitDetails().then(() =>{
+        expect($ctrl.$scope.$apply).toHaveBeenCalled();
+        expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])
+        expect($ctrl.submitting).toEqual(false)
+        expect($ctrl.submissionError).toEqual(['Error one', 'Error 2']);
+        jest.advanceTimersByTime(10000);
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-in' })
+        jest.useRealTimers()
+      });
+    })
+
+    it("should call createAccount() with the user's data", () => {
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [signUpFormData]
+      ))
+      jest.spyOn($ctrl.sessionService, 'createAccount').mockImplementation(() => Promise.resolve({
+        status: 'error',
+        data: ['Error one', 'Error 2']
+      }))
+      $ctrl.$onInit()
+      $ctrl.signUpForm.$valid = true
+      $ctrl.submitDetails()
+      expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])    
+    })
+
+    it("should call createAccount() with the user's data", () => {
+      jest.spyOn($ctrl, 'onStateChange')
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [signUpFormData]
+      ))
+      jest.spyOn($ctrl.sessionService, 'createAccount').mockImplementation(() => Promise.resolve({
+        status: 'success',
+        data: 'yay'
+      }))
+      $ctrl.$onInit()
+      $ctrl.signUpForm.$valid = true
+      $ctrl.submitDetails().then(() => {
+        expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])    
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-up-activation' })
+        expect($ctrl.$scope.$apply).toHaveBeenCalled()
       })
     })
 
-    describe('valid form', () => {
-      beforeEach(() => {
-        $ctrl.email = 'professorx@xavier.edu'
-        $ctrl.password = 'Cerebro12345678'
-        $ctrl.first_name = 'Charles'
-        $ctrl.last_name = 'Xavier'
-        $ctrl.signUp()
-      })
-
-      it('sets isLoading to true and calls sessionService.signUp', () => {
-        expect($ctrl.isLoading).toEqual(true)
-        expect($ctrl.sessionService.signUp)
-          .toHaveBeenCalledWith('professorx@xavier.edu', 'Cerebro12345678', 'Charles', 'Xavier')
-      })
-
-      describe('signUp success', () => {
-        beforeEach(() => {
-          deferred.resolve()
-          $rootScope.$digest()
-        })
-
-        it('calls onSuccess', () => {
-          expect($ctrl.isLoading).toEqual(false)
-          expect($ctrl.onSuccess).toHaveBeenCalled()
-        })
-      })
-
-      describe('signUp failure', () => {
-        describe('400 Bad Request', () => {
-          it('sets 400 error', () => {
-            deferred.reject({ status: 400 })
-            $rootScope.$digest()
-
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.signUpErrors).toEqual(expect.objectContaining({ 400: true }))
-          })
-
-          it('sets invalid password data', () => {
-            deferred.reject({
-              status: 400,
-              data: {
-                error: 'invalid_password',
-                description: 'Invalid password...'
-              }
-            })
-            $rootScope.$digest()
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.signUpErrors).toEqual(expect.objectContaining({ invalid_password: true }))
-            expect($ctrl.invalidPasswordMessage).toEqual('Invalid password...')
-          })
-        })
-
-        describe('403 Bad Request', () => {
-          it('sets 403 error', () => {
-            deferred.reject({ status: 403 })
-            $rootScope.$digest()
-
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.signUpErrors).toEqual(expect.objectContaining({ 403: true }))
-          })
-        })
-
-        describe('409 Bad Request', () => {
-          it('sets 409 error', () => {
-            deferred.reject({ status: 409 })
-            $rootScope.$digest()
-
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.signUpErrors).toEqual(expect.objectContaining({ 409: true }))
-          })
-        })
-
-        describe('500 Bad Request', () => {
-          it('sets generic error', () => {
-            deferred.reject({ status: 500 })
-            $rootScope.$digest()
-
-            expect($ctrl.hasError).toEqual(true)
-            expect($ctrl.signUpErrors).toEqual(expect.objectContaining({ generic: true }))
-          })
-        })
+    it("handles state change when accoutn is pending", () => {
+      jest.spyOn($ctrl, 'onStateChange')
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [signUpFormData]
+      ))
+      jest.spyOn($ctrl.sessionService, 'createAccount').mockImplementation(() => Promise.resolve({
+        status: 'error',
+        accountPending: true
+      }))
+      $ctrl.$onInit()
+      $ctrl.signUpForm.$valid = true
+      $ctrl.submitDetails().then(() => {
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-up-activation' })
       })
     })
   })

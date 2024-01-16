@@ -2,16 +2,18 @@ import angular from 'angular'
 import 'angular-mocks'
 import module from './registerAccountModal.component'
 import { Observable } from 'rxjs/Observable'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import 'rxjs/add/observable/of'
+import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/throw'
-
-import { Roles } from 'common/services/session/session.service'
+import { Roles, LoginOktaOnlyEvent } from 'common/services/session/session.service'
 
 describe('registerAccountModal', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, bindings, locals
+  let $ctrl, $rootScope, bindings, locals
 
-  beforeEach(inject(function (_$componentController_) {
+  beforeEach(inject(function (_$componentController_, _$rootScope_) {
+    $rootScope = _$rootScope_
     bindings = {
       modalTitle: '',
       onCancel: jest.fn(),
@@ -19,9 +21,18 @@ describe('registerAccountModal', function () {
       setLoading: jest.fn()
     }
     locals = {
+      $element: [{ dataset: {} }],
       orderService: { getDonorDetails: jest.fn() },
       verificationService: { postDonorMatches: jest.fn() },
-      sessionService: { getRole: jest.fn() }
+      sessionService: { 
+        getRole: jest.fn(),
+        isOktaRedirecting: jest.fn(),
+        removeOktaRedirectIndicator: jest.fn(),
+        sessionSubject: new BehaviorSubject({})
+      },
+      cartService: {
+        getTotalQuantity: () => new BehaviorSubject(1)
+      }
     }
     $ctrl = _$componentController_(module.name, locals, bindings)
   }))
@@ -37,6 +48,13 @@ describe('registerAccountModal', function () {
     beforeEach(() => {
       jest.spyOn($ctrl, 'getDonorDetails').mockImplementation(() => {})
       jest.spyOn($ctrl, 'stateChanged').mockImplementation(() => {})
+    })
+
+    it('should get donor details', () => {
+      $ctrl.$onInit()
+      expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
+      $rootScope.$broadcast(LoginOktaOnlyEvent)
+      expect($ctrl.getDonorDetails).toHaveBeenCalled()
     })
 
     describe('with \'REGISTERED\' cortex-session', () => {
@@ -61,15 +79,68 @@ describe('registerAccountModal', function () {
         expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('sign-in')
       })
+
+      it('proceeds to contact-info', () => {
+        $ctrl.sessionService.sessionSubject.next({
+          firstName: 'Daniel'
+        })
+        expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
+
+        $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
+        $ctrl.sessionService.sessionSubject.next({
+          firstName: 'Daniel'
+        })
+        expect($ctrl.getDonorDetails).toHaveBeenCalled()
+      })
+    })
+
+    describe('Get cart count', () => {
+      it('Gets cart count', () => {
+        jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(3))
+        $ctrl.$onInit()
+        expect($ctrl.cartCount).toEqual(3)
+      });
+
+      it('should show 0 cart itams', () => {
+        jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockReturnValue(Observable.throw({status: 404}))
+        $ctrl.$onInit()
+        expect($ctrl.cartCount).toEqual(0)
+      });
     })
   })
 
-  describe('onIdentitySuccess()', () => {
+  describe('$onDestroy()', () => {
     it('calls getDonorDetails', () => {
-      jest.spyOn($ctrl, 'getDonorDetails').mockImplementation(() => {})
-      $ctrl.onIdentitySuccess()
+      $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ }))
+      $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
+      $ctrl.$onInit()
+      $ctrl.getDonorDetails()
+      $ctrl.postDonorMatches()
+      expect($ctrl.getTotalQuantitySubscription.closed).toEqual(false)
+      expect($ctrl.subscription.closed).toEqual(false)
+      // getDonorDetailsSubscription & verificationServiceSubscription are already closed
+      $ctrl.$onDestroy()
+      expect($ctrl.getTotalQuantitySubscription.closed).toEqual(true)
+      expect($ctrl.subscription.closed).toEqual(true)
+      expect($ctrl.getDonorDetailsSubscription.closed).toEqual(true)
+      expect($ctrl.verificationServiceSubscription.closed).toEqual(true)
+    })
+  })
 
-      expect($ctrl.getDonorDetails).toHaveBeenCalled()
+  describe('onIdentityFailure()', () => {
+    it('calls getDonorDetails', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
+      $ctrl.onIdentityFailure()
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
+    })
+  })
+
+  describe('onContactInfoSuccess()', () => {
+    it('calls postDonorMatches', () => {
+      jest.spyOn($ctrl, 'postDonorMatches').mockImplementation(() => {})
+      $ctrl.onContactInfoSuccess()
+
+      expect($ctrl.postDonorMatches).toHaveBeenCalled()
     })
   })
 
@@ -194,7 +265,7 @@ describe('registerAccountModal', function () {
     it('changes to \'contact-info\' state', () => {
       $ctrl.stateChanged('contact-info')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith()
+      expect($ctrl.setModalSize).toHaveBeenCalledWith(undefined)
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('contact-info')
     })
@@ -211,7 +282,7 @@ describe('registerAccountModal', function () {
   describe('setModalSize( size )', () => {
     let modal
     beforeEach(() => {
-      modal = { addClass: jest.fn(), removeClass: jest.fn() }
+      modal = { addClass: jest.fn(), removeClass: jest.fn(), data: jest.fn() }
       jest.spyOn(angular, 'element').mockReturnValue(modal)
       angular.element.cleanData = jest.fn()
     })

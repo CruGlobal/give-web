@@ -36,10 +36,10 @@ describe('accountBenefitsModal', function () {
       expect($ctrl.onSuccess).toHaveBeenCalled()
     })
 
-    it('changes state to \'sign-in\'', () => {
+    it('changes state to \'register-account\'', () => {
       $ctrl.registerAccount()
 
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-in' })
+      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'register-account' })
     })
   })
 })
