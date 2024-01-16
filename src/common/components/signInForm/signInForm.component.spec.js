@@ -155,6 +155,7 @@ describe('signInForm', function () {
       deferred.reject({
         config: {
           data: {
+            username: 'username',
             password: $ctrl.password
           }
         }
@@ -162,7 +163,13 @@ describe('signInForm', function () {
       $rootScope.$digest()
 
       expect(bindings.onFailure).toHaveBeenCalled()
-      expect($ctrl.$log.error.logs[0]).toEqual(['Sign In Error', { config: { data: {} } }])
+      expect($ctrl.$log.error.logs[0]).toEqual(['Sign In Error', {
+        config: {
+          data: {
+            username: 'username'
+          }
+        }
+      }])
     })
 
     it('has Siebel down error signing in', () => {

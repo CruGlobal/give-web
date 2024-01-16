@@ -247,11 +247,7 @@ describe('cart service', () => {
       describe('with empty cart', () => {
         beforeEach(() => {
           jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(0))
-          jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.from([]))
-        })
-
-        it('should delete cookies and addItem to cart', () => {
-          jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([false]))
+          jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.from(['']))
           self.$httpBackend.expectPOST(
             'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
@@ -261,10 +257,13 @@ describe('cart service', () => {
               quantity: 1
             }
           ).respond(200)
+        })
+
+        it('should delete cookies and addItem to cart', () => {
+          jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([false]))
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
           expect(self.cartService.sessionService.oktaIsUserAuthenticated).toHaveBeenCalled()
           expect(self.cartService.sessionService.signOut).not.toHaveBeenCalled()
-          self.$httpBackend.flush()
         })
 
         it('should redirect user to login and not run addItem to cart', () => {
@@ -272,6 +271,17 @@ describe('cart service', () => {
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
           expect(self.cartService.sessionService.oktaIsUserAuthenticated).toHaveBeenCalled()
           expect(self.cartService.sessionService.signOut).toHaveBeenCalled()
+        })
+
+        it('should call _addItem()', () => {
+          jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([true]))
+          jest.spyOn(self.cartService, '_addItem')
+          self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
+          expect(self.cartService._addItem).toHaveBeenCalled()
+        })
+
+        afterEach(() => {
+          self.$httpBackend.flush()
         })
       })
     })

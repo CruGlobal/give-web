@@ -278,9 +278,17 @@ describe('sessionEnforcerService', function () {
       })
 
       describe('\'REGISTERED\' role with \'COMPLETED\' registration-state', () => {
+        let currentModalDismissMock = jest.fn()
         beforeEach(() => {
           sessionService.getRole.mockReturnValue(Roles.registered)
           orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'COMPLETED' }))
+          jest.spyOn(sessionModalService, 'currentModal').mockImplementation(() => {
+            return {
+              dismiss: currentModalDismissMock,
+              close: jest.fn()
+            }
+          })
+          currentModalDismissMock.mockClear()
         })
 
         it('does not open registerAccount modal and calls \'sign-in\' callback', () => {
@@ -305,6 +313,15 @@ describe('sessionEnforcerService', function () {
           expect(signIn).not.toHaveBeenCalled()
           expect(change).not.toHaveBeenCalled()
           expect(sessionModalService.open).not.toHaveBeenCalled()
+        })
+
+        it('should call sessionModalService.currentModal', () => {
+          expect(currentModalDismissMock).not.toHaveBeenCalled()
+
+          sessionEnforcerService([Roles.registered], {}, EnforcerModes.donor)
+          $rootScope.$digest()
+          expect(sessionModalService.currentModal).toHaveBeenCalled()
+          expect(currentModalDismissMock).toHaveBeenCalled()
         })
       })
     })

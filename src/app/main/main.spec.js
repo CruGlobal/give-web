@@ -22,13 +22,18 @@ describe('main', function () {
   })
 
   describe('signOut', () => {
-    beforeEach(() => {
-      jest.spyOn(self.controller.sessionService, 'signOut').mockImplementation(() => Observable.of({}))
-    })
-
     it('should call session sign out', () => {
+      jest.spyOn(self.controller.sessionService, 'signOut')
       self.controller.signOut()
       expect(self.controller.sessionService.signOut).toHaveBeenCalled()
+    })
+  })
+
+  describe('signInModal', () => {
+    it('should open the signIn modal', () => {
+      jest.spyOn(self.controller.sessionModalService, 'signIn').mockImplementation(() => Observable.of({}))
+      self.controller.signInModal()
+      expect(self.controller.sessionModalService.signIn).toHaveBeenCalled()
     })
   })
 })

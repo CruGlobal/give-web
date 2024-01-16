@@ -49,10 +49,9 @@ class RegisterAccountModalController {
     this.sessionService.removeOktaRedirectIndicator()
 
     this.cartCount = 0
-    this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe(count => {
-      this.cartCount = count
-    }, () => {
-      this.cartCount = 0
+    this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe({
+      next: (count) => { this.cartCount = count },
+      error: () => { this.cartCount = 0 }
     })
 
     // Step 1. Sign-In/Up (skipped if already Signed In)
@@ -106,19 +105,19 @@ class RegisterAccountModalController {
 
     // Step 2. Fetch Donor Details
     if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe()
-    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe((donorDetails) => {
-      // Workflow Complete if 'registration-state' is COMPLETED
-      if (donorDetails['registration-state'] === 'COMPLETED') {
-        this.onSuccess()
-      } else if (donorDetails['registration-state'] === 'FAILED') {
-        this.stateChanged('failed-verification')
-      } else {
-        // Proceed to Step 3
-        this.stateChanged('contact-info')
-      }
-    }, () => {
-      // Error fetching donor details, proceed to step 3.
-      this.stateChanged('contact-info')
+    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe({
+      next: (donorDetails) => {
+        // Workflow Complete if 'registration-state' is COMPLETED
+        if (donorDetails['registration-state'] === 'COMPLETED') {
+          this.onSuccess()
+        } else if (donorDetails['registration-state'] === 'FAILED') {
+          this.stateChanged('failed-verification')
+        } else {
+          // Proceed to Step 3
+          this.stateChanged('contact-info')
+        }
+      },
+      error: () => this.stateChanged('contact-info') // Error fetching donor details, proceed to step 3.
     })
   }
 
@@ -127,12 +126,9 @@ class RegisterAccountModalController {
 
     // Step 4. Post to Donor Matches.
     if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe()
-    this.verificationServiceSubscription = this.verificationService.postDonorMatches().subscribe(() => {
-      // Donor match success, Proceed to step 5.
-      this.stateChanged('user-match')
-    }, () => {
-      // Donor Match failed, Register Account workflow failed
-      this.onCancel()
+    this.verificationServiceSubscription = this.verificationService.postDonorMatches().subscribe({
+      next: () => { this.stateChanged('user-match') }, // Donor match success, Proceed to step 5.
+      error: () => { this.onCancel() } // Donor Match failed, Register Account workflow failed
     })
   }
 

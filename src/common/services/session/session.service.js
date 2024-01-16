@@ -82,7 +82,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     checkCreateAccountStatus: checkCreateAccountStatus,
     removeLocationOnLogin: removeLocationOnLogin,
     hasLocationOnLogin: hasLocationOnLogin,
-    signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta
+    signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta,
+    catchCreateAccountErrors: catchCreateAccountErrors
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -178,68 +179,72 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         status: 'success',
         data: createAccount
       }
-    } catch (err) {
-      try {
-        if (err.status === 401) {
-          throw new Error(err.message)
+    } catch (error) {
+      return await catchCreateAccountErrors(error, dataAsString, email, isTest)
+    }
+  }
+
+  async function catchCreateAccountErrors (errorObject, dataAsString, email, isTest) {
+    try {
+      if (errorObject.status === 401) {
+        throw new Error(errorObject.message)
+      }
+      const errors = errorObject?.data?.error
+        ? errorObject.data.error.split(',')
+            .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
+            .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ''))
+        : errorObject
+
+      let checkIfAccountIsPending = false
+
+      const formattedErrors = errors.map((error) => {
+        switch (error) {
+          case 'login: An object with this field already exists in the current organization':
+            checkIfAccountIsPending = true
+            return 'The email address you used belongs to an existing Okta user.'
+          case 'email: Does not match required pattern':
+            return 'There was an error saving your email address. Make sure it was entered correctly.'
+          case 'Something went wrong. Please try again':
+            return 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
+          default:
+            return error
+        };
+      })
+      if (!checkIfAccountIsPending) {
+        return {
+          status: 'error',
+          data: formattedErrors,
+          accountPending: false
         }
-        const errors = err?.data?.error
-          ? err.data.error.split(',')
-              .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
-              .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ''))
-          : err
-
-        let checkIfAccountIsPending = false
-
-        const formattedErrors = errors.map((error) => {
-          switch (error) {
-            case 'login: An object with this field already exists in the current organization':
-              checkIfAccountIsPending = true
-              return 'The email address you used belongs to an existing Okta user.'
-            case 'email: Does not match required pattern':
-              return 'There was an error saving your email address. Make sure it was entered correctly.'
-            case 'Something went wrong. Please try again':
-              return 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
-            default:
-              return error
-          };
-        })
-        if (!checkIfAccountIsPending) {
+      } else {
+        const accountPending = await checkCreateAccountStatus(email)
+        if (accountPending?.data?.status !== 'PROVISIONED') {
           return {
             status: 'error',
             data: formattedErrors,
             accountPending: false
           }
         } else {
-          const accountPending = await checkCreateAccountStatus(email)
-          if (accountPending?.data?.status !== 'PROVISIONED') {
-            return {
-              status: 'error',
-              data: formattedErrors,
-              accountPending: false
+          $cookies.put(
+            createAccountDataCookieName,
+            dataAsString,
+            {
+              path: '/',
+              domain: isTest ? '' : cookieDomain,
+              expires: moment().add(2, 'hours').toISOString()
             }
-          } else {
-            $cookies.put(
-              createAccountDataCookieName,
-              dataAsString,
-              {
-                path: '/',
-                domain: isTest ? '' : cookieDomain,
-                expires: moment().add(2, 'hours').toISOString()
-              }
-            )
-            return {
-              status: 'error',
-              data: formattedErrors,
-              accountPending: true
-            }
+          )
+          return {
+            status: 'error',
+            data: formattedErrors,
+            accountPending: true
           }
         }
-      } catch {
-        return {
-          status: 'error',
-          data: ['Something went wrong. Please try again']
-        }
+      }
+    } catch {
+      return {
+        status: 'error',
+        data: ['Something went wrong. Please try again']
       }
     }
   }
@@ -305,16 +310,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       })
     } catch {
       // closeSession errors out due to CORS. to fix this temporarily, I've added the logout in a catch just in case.
-      try {
-        if (!redirectHome) {
-          $window.sessionStorage.setItem('forcedUserToLogout', true)
-        }
-        return authClient.signOut({
-          postLogoutRedirectUri: redirectHome ? null : $window.location.href
-        })
-      } catch {
-        $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
+      if (!redirectHome) {
+        $window.sessionStorage.setItem('forcedUserToLogout', true)
       }
+      return authClient.signOut({
+        postLogoutRedirectUri: redirectHome ? null : $window.location.href
+      }).catch(() => {
+        $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
+      })
     }
   }
 

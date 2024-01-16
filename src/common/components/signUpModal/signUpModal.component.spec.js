@@ -154,7 +154,23 @@ describe('signUpForm', function () {
 
       expect($ctrl.cartCount).toEqual(5)
     })
+
+    it('Error during loading cart details', () => {
+      $ctrl.isInsideAnotherModal = false
+      jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockReturnValue(Observable.throw({status: 404}))
+      $ctrl.$onInit()
+      expect($ctrl.cartCount).toEqual(0)
+    })
   })
+
+  describe('loadDonorDetails()', () => {
+    it('should set loadingDonorDetails to false', () => {
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.throw({status: 404}))
+      $ctrl.loadingDonorDetails = true
+      $ctrl.loadDonorDetails()
+      expect($ctrl.loadingDonorDetails).toEqual(false)
+    })
+  });
 
   describe('submitDetails()', () => {
     it('should return as form is not valid', () => {
@@ -231,6 +247,22 @@ describe('signUpForm', function () {
         expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])    
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-up-activation' })
         expect($ctrl.$scope.$apply).toHaveBeenCalled()
+      })
+    })
+
+    it("handles state change when accoutn is pending", () => {
+      jest.spyOn($ctrl, 'onStateChange')
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [signUpFormData]
+      ))
+      jest.spyOn($ctrl.sessionService, 'createAccount').mockImplementation(() => Promise.resolve({
+        status: 'error',
+        accountPending: true
+      }))
+      $ctrl.$onInit()
+      $ctrl.signUpForm.$valid = true
+      $ctrl.submitDetails().then(() => {
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-up-activation' })
       })
     })
   })
