@@ -110,8 +110,12 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     const isAuthenticated = await authClient.isAuthenticated()
     if (!isAuthenticated) {
       setRedirectingOnLogin()
-      authClient.token.getWithRedirect()
-      return
+      // prompt: 'login' - Used to ignore Okta session and prevent silent authentication.
+      // Branded checkout uses signOutWithoutRedirectToOkta() which revokes tokens but doesn't log user out of all Okta apps
+      // We added prompt: login, to ensure we always get the user to login, for security.
+      return authClient.token.getWithRedirect({
+        prompt: 'login'
+      })
     }
     const tokens = await authClient.tokenManager.getTokens()
     const data = { access_token: tokens.accessToken.accessToken }
@@ -332,7 +336,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     clearCheckoutSavedData()
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
-    authClient.closeSession()
     return observable.finally(() => {
       $rootScope.$broadcast(SignOutEvent)
     })
