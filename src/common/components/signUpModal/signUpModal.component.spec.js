@@ -155,7 +155,7 @@ describe('signUpForm', function () {
       expect($ctrl.cartCount).toEqual(5)
     })
 
-    it('Error during loading cart details', () => {
+    it('should default to 0 items in cart if error fetching cart details', () => {
       $ctrl.isInsideAnotherModal = false
       jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockReturnValue(Observable.throw({status: 404}))
       $ctrl.$onInit()
@@ -250,7 +250,7 @@ describe('signUpForm', function () {
       })
     })
 
-    it("handles state change when accoutn is pending", () => {
+    it("handles state change when account is pending", (done) => {
       jest.spyOn($ctrl, 'onStateChange')
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
         [signUpFormData]
@@ -263,6 +263,7 @@ describe('signUpForm', function () {
       $ctrl.signUpForm.$valid = true
       $ctrl.submitDetails().then(() => {
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-up-activation' })
+        done()
       })
     })
   })

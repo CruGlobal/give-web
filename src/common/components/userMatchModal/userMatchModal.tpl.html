@@ -73,11 +73,11 @@
     </p>
     <div class="footer-buttons" ng-if="$ctrl.cartCount > 0">
       <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.continueCheckout()" translate>Continue Checkout</button>
-      <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.gotoOpportunities()" translate>Find Giving Opportunities</button>
+      <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.goToOpportunities()" translate>Find Giving Opportunities</button>
     </div>
     <div class="footer-buttons" ng-if="$ctrl.cartCount === 0">
-      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.gotoOpportunities()" translate>Find Giving Opportunities</button>
-      <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.gotoDashboard()" translate>Go to My Dashboard</button>
+      <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.goToOpportunities()" translate>Find Giving Opportunities</button>
+      <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.goToDashboard()" translate>Go to My Dashboard</button>
     </div>
   </div>
   <failed-verification-modal ng-switch-when="failure"

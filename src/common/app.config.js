@@ -384,7 +384,11 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
     PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
     CHOOSE_RESOURCE: 'Choose a Resource',
-    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
+    SOMETHING_WENT_WRONG: 'Something went wrong. Please try again',
+    OKTA_EMAIL_ALREADY_EXISTS: 'The email address you used belongs to an existing Okta user.',
+    OKTA_ERROR_WHILE_SAVING_EMAIL: 'There was an error saving your email address. Make sure it was entered correctly.',
+    OKTA_ERROR_WHILE_SAVING_DATA: 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
   })
 
   $translateProvider.translations('es', {
@@ -602,7 +606,11 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
     PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
     CHOOSE_RESOURCE: 'Choose a Resource',
-    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
+    SOMETHING_WENT_WRONG: 'Something went wrong. Please try again',
+    OKTA_EMAIL_ALREADY_EXISTS: 'The email address you used belongs to an existing Okta user.',
+    OKTA_ERROR_WHILE_SAVING_EMAIL: 'There was an error saving your email address. Make sure it was entered correctly.',
+    OKTA_ERROR_WHILE_SAVING_DATA: 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
   })
   $translateProvider.preferredLanguage('en')
 }

@@ -171,13 +171,13 @@ describe('session service', function () {
   })
 
   describe('oktaIsUserAuthenticated()', () => {
-    it('returns True', () => {
+    it('returns false', () => {
       jest.spyOn(sessionService.authClient, 'isAuthenticated').mockImplementationOnce(() => Promise.resolve(false))
       sessionService.oktaIsUserAuthenticated().subscribe((data) => {
         expect(data).toEqual(false)
       })
     })
-    it('returns True', () => {
+    it('returns true', () => {
       jest.spyOn(sessionService.authClient, 'isAuthenticated').mockImplementationOnce(() => Promise.resolve(true))
       sessionService.oktaIsUserAuthenticated().subscribe((data) => {
         expect(data).toEqual(true)
@@ -269,14 +269,13 @@ describe('session service', function () {
     })
   })
 
-  describe('signIn & handleOktaRedirect', () => {
+  describe('signIn() & handleOktaRedirect()', () => {
     beforeEach(() => {
       $window.sessionStorage.removeItem(locationSearchOnLogin)
       $window.sessionStorage.removeItem(locationOnLogin)
     })
 
     it('should return SignInEvent broadcast', done => {
-      jest.spyOn($rootScope, '$broadcast')
       sessionService.authClient.setAuthenticated(true)
       sessionService.authClient.shouldSucceed()
 
@@ -356,7 +355,9 @@ describe('session service', function () {
       sessionService.authClient.setAuthenticated(false)
       sessionService.authClient.shouldSucceed()
       sessionService.handleOktaRedirect().subscribe(() => {
-        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalledWith({
+          prompt: 'login'
+        })
         expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual('?ga=111111&query=test&anotherQuery=00000')
         expect($window.sessionStorage.getItem(locationOnLogin)).toEqual(null)
         done()
@@ -415,11 +416,17 @@ describe('session service', function () {
   describe('signOutWithoutRedirectToOkta()', () => {
     beforeEach(() => {
       jest.spyOn($rootScope, '$broadcast')
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken')
+      jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
+      jest.spyOn(sessionService.authClient, 'closeSession')
     })
     it('make http request to signout user without redirect', (done) => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
       sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
         expect(data).toEqual({})
+        expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+        expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+        expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
       })
       $rootScope.$digest()
       // Observable.finally is fired after the test, this defers until it's called.
@@ -641,8 +648,8 @@ describe('session service', function () {
         sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
           expect(data.data).toBeDefined()
           expect(data.data[0]).toEqual('login: Username must be in the form of an email address')
-          expect(data.data[1]).toEqual('There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.')
-          expect(data.data[2]).toEqual('There was an error saving your email address. Make sure it was entered correctly.')
+          expect(data.data[1]).toEqual('OKTA_ERROR_WHILE_SAVING_DATA')
+          expect(data.data[2]).toEqual('OKTA_ERROR_WHILE_SAVING_EMAIL')
         })
       })
 
@@ -656,7 +663,7 @@ describe('session service', function () {
         })
         sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
           expect(data.status).toEqual('error')
-          expect(data.data[0]).toEqual('Something went wrong. Please try again')
+          expect(data.data[0]).toEqual('SOMETHING_WENT_WRONG')
         })
       })
 
@@ -670,7 +677,7 @@ describe('session service', function () {
         })
         sessionService.createAccount('test@test@test123.com', 'FirstName', 'LastName').then((data) => {
           expect(data.status).toEqual('error')
-          expect(data.data[0]).toEqual('Something went wrong. Please try again')
+          expect(data.data[0]).toEqual('SOMETHING_WENT_WRONG')
         })
       })
 
@@ -689,7 +696,7 @@ describe('session service', function () {
       })
 
       describe('catchCreateAccountErrors()', () => {
-        const email = 'daniel.bisgrove@cru.org';
+        const email = 'test@test.com';
         const dataAsString = JSON.stringify({data: 'data'})
         beforeEach(() => {
           jest.spyOn(sessionService.authClient, 'isAuthenticated')
@@ -711,7 +718,7 @@ describe('session service', function () {
 
           sessionService.catchCreateAccountErrors(errorObject, dataAsString, email, true).then((data) => {
             expect(data.status).toEqual('error')
-            expect(data.data[0]).toEqual('The email address you used belongs to an existing Okta user.')
+            expect(data.data[0]).toEqual('OKTA_EMAIL_ALREADY_EXISTS')
             expect(data.accountPending).toEqual(true)
             expect($cookies.get(createAccountDataCookieName)).toEqual(dataAsString)
           })
@@ -732,7 +739,7 @@ describe('session service', function () {
 
           sessionService.catchCreateAccountErrors(errorObject, dataAsString, email, true).then((data) => {
             expect(data.status).toEqual('error')
-            expect(data.data[0]).toEqual('The email address you used belongs to an existing Okta user.')
+            expect(data.data[0]).toEqual('OKTA_EMAIL_ALREADY_EXISTS')
             expect(data.accountPending).toEqual(false)
           })
         })
@@ -788,7 +795,7 @@ describe('session service', function () {
         })
         sessionService.checkCreateAccountStatus(email).then((data) => {
           expect(data.status).toEqual('error')
-          expect(data.data[0]).toEqual('Something went wrong. Please try again')
+          expect(data.data[0]).toEqual('SOMETHING_WENT_WRONG')
         })
       })
 

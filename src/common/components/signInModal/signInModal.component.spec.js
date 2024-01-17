@@ -51,7 +51,7 @@ describe('signInModal', function () {
   })
 
   describe('signOut', () => {
-    it('set identified to false', () => {
+    it('sets identified to false', () => {
       $ctrl.identified = true
       $ctrl.signOut()
       expect($ctrl.identified).toEqual(false)

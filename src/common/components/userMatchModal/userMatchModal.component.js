@@ -188,11 +188,11 @@ class UserMatchModalController {
     this.$window.location = '/checkout.html'
   }
 
-  gotoOpportunities () {
+  goToOpportunities () {
     this.$window.location = '/'
   }
 
-  gotoDashboard () {
+  goToDashboard () {
     this.$window.location = '/your-giving.html'
   }
 }
