@@ -201,7 +201,15 @@ export default class RecurringGiftModel {
   }
 
   get toObject () {
-    return this.gift
+    if (this.gift['updated-start-month'] === '') {
+      return this.gift
+    }
+
+    // When the start month changes the server needs the recurring day of month even if it didn't change
+    return {
+      ...this.gift,
+      'updated-recurring-day-of-month': this.gift['updated-recurring-day-of-month'] || this.parentDonation['recurring-day-of-month']
+    }
   }
 
   clone () {
