@@ -269,14 +269,13 @@ describe('session service', function () {
     })
   })
 
-  describe('signIn & handleOktaRedirect', () => {
+  describe('signIn() & handleOktaRedirect()', () => {
     beforeEach(() => {
       $window.sessionStorage.removeItem(locationSearchOnLogin)
       $window.sessionStorage.removeItem(locationOnLogin)
     })
 
     it('should return SignInEvent broadcast', done => {
-      jest.spyOn($rootScope, '$broadcast')
       sessionService.authClient.setAuthenticated(true)
       sessionService.authClient.shouldSucceed()
 

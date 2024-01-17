@@ -90,6 +90,30 @@ describe('sessionEnforcerService', function () {
             expect(cancel).toHaveBeenCalled()
           })
         })
+
+        describe('sign-in and sessionModalService.currentModal()', () => {
+          beforeEach(() => {
+            sessionService.getRole.mockReturnValue(Roles.registered)
+            jest.spyOn(sessionModalService, 'currentModal')
+          })
+  
+          it('should call \'signIn\' and sessionModalService.currentModal callback', () => {
+            $rootScope.$digest()
+            expect(signIn).toHaveBeenCalled()
+            expect(sessionModalService.currentModal).toHaveBeenCalled()
+          })
+  
+          it('should close sessionModalService.currentModal', () => {
+            let currentModalCloseMock = jest.fn()
+            jest.spyOn(sessionModalService, 'currentModal').mockImplementation(() => {
+              return {
+                close: currentModalCloseMock
+              }
+            })
+            $rootScope.$digest()
+            expect(currentModalCloseMock).toHaveBeenCalled()
+          })
+        })
       })
 
       describe('does not include current role, has no callbacks', () => {
