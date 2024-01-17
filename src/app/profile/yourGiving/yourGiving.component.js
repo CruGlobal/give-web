@@ -18,9 +18,11 @@ import sessionEnforcerService, {
   EnforcerCallbacks,
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
-import sessionService, { Roles, SignOutEvent } from 'common/services/session/session.service'
+import sessionService, { LoginOktaOnlyEvent, Roles, SignOutEvent } from 'common/services/session/session.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import template from './yourGiving.tpl.html'
+import { concatMap } from 'rxjs/operators/concatMap'
+import { Observable } from 'rxjs/Observable'
 
 const componentName = 'yourGiving'
 
@@ -47,6 +49,28 @@ class YourGivingController {
   }
 
   $onInit () {
+    this.sessionService.handleOktaRedirect().pipe(
+      concatMap(data => {
+        return data.subscribe ? data : Observable.of(data)
+      })
+    ).subscribe((data) => {
+      if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
+        this.sessionService.removeOktaRedirectIndicator()
+      }
+    },
+    error => {
+      this.errorMessage = 'generic'
+      this.$log.error('Failed to redirect from Okta', error)
+      this.sessionService.removeOktaRedirectIndicator()
+    })
     // Enforce donor role view access manage-giving
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
