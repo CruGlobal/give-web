@@ -355,7 +355,9 @@ describe('session service', function () {
       sessionService.authClient.setAuthenticated(false)
       sessionService.authClient.shouldSucceed()
       sessionService.handleOktaRedirect().subscribe(() => {
-        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalledWith({
+          prompt: 'login'
+        })
         expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual('?ga=111111&query=test&anotherQuery=00000')
         expect($window.sessionStorage.getItem(locationOnLogin)).toEqual(null)
         done()
@@ -414,11 +416,17 @@ describe('session service', function () {
   describe('signOutWithoutRedirectToOkta()', () => {
     beforeEach(() => {
       jest.spyOn($rootScope, '$broadcast')
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken')
+      jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
+      jest.spyOn(sessionService.authClient, 'closeSession')
     })
     it('make http request to signout user without redirect', (done) => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
       sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
         expect(data).toEqual({})
+        expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+        expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+        expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
       })
       $rootScope.$digest()
       // Observable.finally is fired after the test, this defers until it's called.
