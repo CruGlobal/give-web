@@ -25,7 +25,19 @@
 
 
       <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.length" ng-repeat="error in $ctrl.submissionError track by $index">
-        <p translate>{{error}}</p>
+        <translate ng-if="error === 'OKTA_EMAIL_ALREADY_EXISTS'">{{'OKTA_EMAIL_ALREADY_EXISTS'}}</translate>
+        <translate ng-if="error === 'OKTA_ERROR_WHILE_SAVING_EMAIL'">{{'OKTA_ERROR_WHILE_SAVING_EMAIL'}}</translate>
+        <translate ng-if="error === 'OKTA_ERROR_WHILE_SAVING_DATA'">{{'OKTA_ERROR_WHILE_SAVING_DATA'}}</translate>
+        <translate ng-if="error === 'SOMETHING_WENT_WRONG'">{{'SOMETHING_WENT_WRONG'}}</translate>
+        <p
+          translate
+          ng-if="!([
+          'OKTA_EMAIL_ALREADY_EXISTS',
+          'OKTA_ERROR_WHILE_SAVING_EMAIL',
+          'OKTA_ERROR_WHILE_SAVING_DATA',
+          'SOMETHING_WENT_WRONG'
+          ].indexOf(error) +1)"
+        >{{error}}</p>
       </div>
 
       <div class="row text-center">

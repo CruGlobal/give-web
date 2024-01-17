@@ -101,7 +101,7 @@ describe('registerAccountModal', function () {
         expect($ctrl.cartCount).toEqual(3)
       });
 
-      it('should show 0 cart itams', () => {
+      it('should show 0 cart items', () => {
         jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockReturnValue(Observable.throw({status: 404}))
         $ctrl.$onInit()
         expect($ctrl.cartCount).toEqual(0)
@@ -110,7 +110,7 @@ describe('registerAccountModal', function () {
   })
 
   describe('$onDestroy()', () => {
-    it('calls getDonorDetails', () => {
+    it('should close all subscriptions', () => {
       $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ }))
       $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
       $ctrl.$onInit()
@@ -125,6 +125,14 @@ describe('registerAccountModal', function () {
       expect($ctrl.getDonorDetailsSubscription.closed).toEqual(true)
       expect($ctrl.verificationServiceSubscription.closed).toEqual(true)
     })
+  })
+
+  describe('onIdentitySuccess()', () => {
+    it('calls getDonorDetails', () => {
+      jest.spyOn($ctrl, 'getDonorDetails').mockImplementation(() => {})
+      $ctrl.onIdentitySuccess()
+      expect($ctrl.getDonorDetails).toHaveBeenCalled()
+    });
   })
 
   describe('onIdentityFailure()', () => {

@@ -52,7 +52,6 @@ describe('sessionModalController', function () {
       expect($ctrl.state).toEqual('sign-in')
       $rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
       expect($ctrl.state).toEqual('register-account')
-      expect($ctrl.state).toEqual('register-account')
     })
   })
 

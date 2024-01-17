@@ -110,7 +110,7 @@ describe('signIn', function () {
     })
 
     describe('getOktaUrl()', () => {
-      it('On sign up with Okta', () => {
+      it('should call sessionService getOktaUrl and return Okta URL', () => {
         jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
         const response = $ctrl.getOktaUrl()
 
@@ -120,7 +120,7 @@ describe('signIn', function () {
     })
 
     describe('onSignUpWithOkta()', () => {
-      it('On sign up with Okta', () => {
+      it('should call createAccount()', () => {
         jest.spyOn($ctrl.sessionModalService, 'createAccount').mockReturnValue(Observable.throw({}))
         $ctrl.onSignUpWithOkta()
 
@@ -130,7 +130,7 @@ describe('signIn', function () {
   })
 
   describe('closeRedirectingLoading()', () => {
-    it('On sign up with Okta', () => {
+    it('should remove the Redirecting loading icon', () => {
       $ctrl.showRedirectingLoadingIcon = true
       $ctrl.closeRedirectingLoading()
       expect($ctrl.showRedirectingLoadingIcon).toEqual(false)

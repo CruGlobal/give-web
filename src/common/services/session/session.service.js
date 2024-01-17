@@ -201,11 +201,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         switch (error) {
           case 'login: An object with this field already exists in the current organization':
             checkIfAccountIsPending = true
-            return 'The email address you used belongs to an existing Okta user.'
+            return 'OKTA_EMAIL_ALREADY_EXISTS'
           case 'email: Does not match required pattern':
-            return 'There was an error saving your email address. Make sure it was entered correctly.'
+            return 'OKTA_ERROR_WHILE_SAVING_EMAIL'
           case 'Something went wrong. Please try again':
-            return 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
+            return 'OKTA_ERROR_WHILE_SAVING_DATA'
           default:
             return error
         };
@@ -244,7 +244,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     } catch {
       return {
         status: 'error',
-        data: ['Something went wrong. Please try again']
+        data: ['SOMETHING_WENT_WRONG']
       }
     }
   }
@@ -271,12 +271,12 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         }
         return {
           status: 'error',
-          data: err?.data?.error ?? 'Something went wrong. Please try again'
+          data: err?.data?.error ?? 'SOMETHING_WENT_WRONG'
         }
       } catch {
         return {
           status: 'error',
-          data: ['Something went wrong. Please try again']
+          data: ['SOMETHING_WENT_WRONG']
         }
       }
     }
