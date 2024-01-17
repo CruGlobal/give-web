@@ -2,6 +2,7 @@ import angular from 'angular'
 import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
+import cloneDeep from 'lodash/cloneDeep'
 import { Sessions, SignInEvent } from 'common/services/session/session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -244,6 +245,128 @@ describe('contactInfo', function () {
       expect(self.controller.donorDetails['spouse-name']).toEqual(checkoutData['spouse-name'])
       expect(self.controller.donorDetails.mailingAddress.streetAddress).toEqual(checkoutData.mailingAddress.streetAddress)
       expect(self.controller.donorDetails.staff).toEqual(false)
+    })
+
+    describe('pre-populate with overrideDonorDetails', () => {
+      const overrideDonorDetails = {
+        name: {
+          title: 'Mr',
+          'given-name': 'Test First Name',
+          'middle-initial': 'initial',
+          'family-name': 'Test Last Name',
+          suffix: ''
+        },
+        mailingAddress: {
+          country: 'US',
+          streetAddress: '1111 Street Name',
+          extendedAddress: 'Apartment 2',
+          locality: 'City',
+          region: 'Georgia',
+          postalCode: '12345',
+        },
+        email: 'test@cru.org'
+      }
+      const initDonorDetails = {
+        'donor-type': 'Organization',
+        name: {
+          title: '',
+          'given-name': 'Joe',
+          'middle-initial': '',
+          'family-name': 'Smith',
+          suffix: ''
+        },
+        'spouse-name': {
+          'given-name': 'Julie',
+          'family-name': 'Smith'
+        },
+        mailingAddress: {
+          country: 'US',
+        },
+        email: 'joe.smith@example.com',
+        'registration-state': 'COMPLETED'
+      }
+  
+      beforeEach(() => {
+        jest.spyOn(self.controller.orderService, 'getDonorDetails').mockImplementation(() => Observable.of(cloneDeep(initDonorDetails)))
+        jest.spyOn(self.controller, 'loadRadioStations').mockImplementation(() => {})
+        jest.spyOn(self.controller, 'waitForFormInitialization').mockImplementation(() => {})
+      })
+  
+      it('should overwrite donorDetails with overrideDonorDetails on intital load', () => {
+        self.controller.$window.sessionStorage.removeItem('initialLoadComplete')
+        self.controller.donorDetails = overrideDonorDetails
+        self.controller.$onInit()
+
+        expect(self.controller.donorDetails.name['title']).toEqual('Mr')
+        expect(self.controller.donorDetails.name['given-name']).toEqual('Test First Name')
+        expect(self.controller.donorDetails.name['middle-initial']).toEqual('initial')
+        expect(self.controller.donorDetails.name['family-name']).toEqual('Test Last Name')
+        expect(self.controller.donorDetails.name.suffix).toEqual('')
+
+        expect(self.controller.donorDetails.email).toEqual('test@cru.org')
+
+        expect(self.controller.donorDetails['donor-type']).toEqual('Organization')
+        expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('Julie')
+        expect(self.controller.donorDetails['spouse-name']['family-name']).toEqual('Smith')
+
+        expect(self.controller.donorDetails.mailingAddress.country).toEqual('US')
+        expect(self.controller.donorDetails.mailingAddress.streetAddress).toEqual('1111 Street Name')
+        expect(self.controller.donorDetails.mailingAddress.extendedAddress).toEqual('Apartment 2')
+        expect(self.controller.donorDetails.mailingAddress.locality).toEqual('City')
+        expect(self.controller.donorDetails.mailingAddress.region).toEqual('Georgia')
+        expect(self.controller.donorDetails.mailingAddress.postalCode).toEqual('12345')
+
+        expect(self.controller.$window.sessionStorage.getItem('initialLoadComplete')).toEqual('true')
+      })
+  
+      it('should not use overrideDonorDetails if initialLoadComplete is set', () => {
+        self.controller.$window.sessionStorage.setItem('initialLoadComplete', 'true')
+        self.controller.donorDetails = overrideDonorDetails
+        self.controller.$onInit()
+  
+        expect(self.controller.donorDetails.name['title']).toEqual('')
+        expect(self.controller.donorDetails.name['given-name']).toEqual('Joe')
+        expect(self.controller.donorDetails.name['middle-initial']).toEqual('')
+        expect(self.controller.donorDetails.name['family-name']).toEqual('Smith')
+        expect(self.controller.donorDetails.name.suffix).toEqual('')
+
+        expect(self.controller.donorDetails.email).toEqual('joe.smith@example.com')
+        expect(self.controller.donorDetails['donor-type']).toEqual('Organization')
+
+        expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('Julie')
+        expect(self.controller.donorDetails['spouse-name']['family-name']).toEqual('Smith')
+
+        expect(self.controller.donorDetails.mailingAddress.country).toEqual('US')
+        expect(self.controller.donorDetails.mailingAddress.streetAddress).toBeUndefined()
+        expect(self.controller.donorDetails.mailingAddress.extendedAddress).toBeUndefined()
+        expect(self.controller.donorDetails.mailingAddress.locality).toBeUndefined()
+        expect(self.controller.donorDetails.mailingAddress.region).toBeUndefined()
+        expect(self.controller.donorDetails.mailingAddress.postalCode).toBeUndefined()
+      })
+
+      it('should use donorDetails if overrideDonorDetails are not defined', () => {
+        self.controller.donorDetails = {
+          mailingAddress: {
+            country: 'US'
+          }
+        }
+        self.controller.loadDonorDetails()
+  
+        expect(self.controller.donorDetails.name['title']).toEqual('')
+        expect(self.controller.donorDetails.name['given-name']).toEqual('Joe')
+        expect(self.controller.donorDetails.name['middle-initial']).toEqual('')
+        expect(self.controller.donorDetails.name['family-name']).toEqual('Smith')
+        expect(self.controller.donorDetails.name.suffix).toEqual('')
+
+        expect(self.controller.donorDetails.email).toEqual('joe.smith@example.com')
+        expect(self.controller.donorDetails['donor-type']).toEqual('Organization')
+
+        expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('Julie')
+        expect(self.controller.donorDetails['spouse-name']['family-name']).toEqual('Smith')
+
+        expect(self.controller.donorDetails.mailingAddress.country).toEqual('US')
+        expect(self.controller.donorDetails.mailingAddress.streetAddress).toBeUndefined()
+      })
     })
   })
 

@@ -51,6 +51,9 @@ class BrandedCheckoutController {
     this.sessionService.signOutWithoutRedirectToOkta().subscribe(() => {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
+      // Remove initialLoadComplete session storage. Used on src/common/components/contactInfo/contactInfo.component.js
+      // To prevent users who complete a gift and give again.
+      this.$window.sessionStorage.removeItem('initialLoadComplete')
     }, (err) => {
       console.error(err)
     })

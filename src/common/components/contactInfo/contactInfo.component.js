@@ -2,7 +2,6 @@ import angular from 'angular'
 import 'angular-messages'
 import assign from 'lodash/assign'
 import pick from 'lodash/pick'
-import find from 'lodash/find'
 import includes from 'lodash/includes'
 import startsWith from 'lodash/startsWith'
 import { Observable } from 'rxjs/Observable'
@@ -23,9 +22,10 @@ const componentName = 'contactInfo'
 
 class Step1Controller {
   /* @ngInject */
-  constructor ($log, $scope, orderService, radioStationsService, sessionService, analyticsFactory) {
+  constructor ($log, $scope, $window, orderService, radioStationsService, sessionService, analyticsFactory) {
     this.$log = $log
     this.$scope = $scope
+    this.$window = $window
     this.orderService = orderService
     this.radioStationsService = radioStationsService
     this.sessionService = sessionService
@@ -100,11 +100,14 @@ class Step1Controller {
           }
         }
 
-        const firstTimeLoading = !find(this.donorDetails.links, ['rel', 'donormatchesform'])
-        if (overrideDonorDetails && firstTimeLoading) {
-          this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
-            'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
-          ]))
+        if (overrideDonorDetails) {
+          const initialLoad = !this.$window.sessionStorage.getItem('initialLoadComplete')
+          if (initialLoad) {
+            this.donorDetails = assign(this.donorDetails, pick(overrideDonorDetails, [
+              'donor-type', 'name', 'organization-name', 'phone-number', 'spouse-name', 'mailingAddress', 'email'
+            ]))
+            this.$window.sessionStorage.setItem('initialLoadComplete', 'true')
+          }
         }
 
         const checkoutSavedData = this.sessionService.session.checkoutSavedData

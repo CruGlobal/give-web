@@ -32,6 +32,9 @@ describe('branded checkout', () => {
           })),
           scrollY: 100,
           scrollTo: jest.fn(),
+          sessionStorage: {
+            removeItem: jest.fn(),
+          },
         },
         brandedAnalyticsFactory: {
           savePurchase: jest.fn(),
@@ -69,6 +72,7 @@ describe('branded checkout', () => {
       expect($ctrl.tsysService.setDevice).toHaveBeenCalledWith('test-env')
       expect($ctrl.checkoutStep).toEqual('giftContactPayment')
       expect($ctrl.formatDonorDetails).toHaveBeenCalled()
+      expect($ctrl.$window.sessionStorage.removeItem).toHaveBeenCalledWith('initialLoadComplete')
     })
   })
 
