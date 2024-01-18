@@ -296,11 +296,10 @@ class ProductConfigFormController {
     this.updateQueryParam({ key: giveGiftParams.amount, value: amount })
   }
 
-  changeCustomAmount (stringAmount, retainCoverFees) {
-    // Convert the string amount to a number and default it to 0 if the parse fails
-    const amount = parseFloat(stringAmount) || 0
-    this.checkAmountChanged(amount)
-    this.itemConfig.AMOUNT = amount
+  changeCustomAmount (amount, retainCoverFees) {
+    const amountAsNumber = parseFloat(amount)
+    this.checkAmountChanged(amountAsNumber)
+    this.itemConfig.AMOUNT = amountAsNumber
     this.customAmount = amount
     this.customInputActive = true
     if (!retainCoverFees && this.amountChanged) {
