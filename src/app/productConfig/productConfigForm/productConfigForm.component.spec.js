@@ -484,7 +484,7 @@ describe('product config form component', function () {
   describe('changeCustomAmount()', () => {
     it('sets itemConfig amount', () => {
       $ctrl.itemConfig = {}
-      $ctrl.changeCustomAmount(300)
+      $ctrl.changeCustomAmount('300')
 
       expect($ctrl.itemConfig.AMOUNT).toEqual(300)
       expect($ctrl.customAmount).toEqual(300)
@@ -497,7 +497,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.AMOUNT = 51.2
-      $ctrl.changeCustomAmount(1)
+      $ctrl.changeCustomAmount('1')
 
       expect($ctrl.amountChanged).toEqual(true)
       expect($ctrl.orderService.clearCoverFees).toHaveBeenCalled()
@@ -509,7 +509,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
       $ctrl.itemConfig.AMOUNT = 51.2
-      $ctrl.changeCustomAmount(1, true)
+      $ctrl.changeCustomAmount('1', true)
 
       expect($ctrl.amountChanged).toEqual(true)
       expect($ctrl.orderService.clearCoverFees).not.toHaveBeenCalled()
