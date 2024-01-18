@@ -492,6 +492,16 @@ describe('product config form component', function () {
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 300 })
     })
 
+    it('sets itemConfig amount with string', () => {
+      $ctrl.itemConfig = {}
+      $ctrl.changeCustomAmount('300')
+
+      expect($ctrl.itemConfig.AMOUNT).toEqual(300)
+      expect($ctrl.customAmount).toEqual('300')
+      expect($ctrl.customInputActive).toEqual(true)
+      expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: '300' })
+    })
+
     it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
