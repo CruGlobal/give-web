@@ -275,8 +275,9 @@ class ProductConfigFormController {
   }
 
   changeCustomAmount (amount, retainCoverFees) {
-    this.checkAmountChanged(amount)
-    this.itemConfig.AMOUNT = amount
+    const amountAsNumber = parseFloat(amount)
+    this.checkAmountChanged(amountAsNumber)
+    this.itemConfig.AMOUNT = amountAsNumber
     this.customAmount = amount
     this.customInputActive = true
     if (!retainCoverFees && this.amountChanged) {
