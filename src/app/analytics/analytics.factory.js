@@ -12,7 +12,9 @@ function suppressErrors (func) {
   return function wrapper (...args) {
     try {
       return func.apply(this, args)
-    } catch (e) { }
+    } catch (e) {
+      console.error(e)
+    }
   }
 }
 
