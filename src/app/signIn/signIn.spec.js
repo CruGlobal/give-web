@@ -4,6 +4,7 @@ import module from './signIn.component'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
+import { registerForSiebelSessionKey } from 'common/services/session/session.service'
 
 describe('signIn', function () {
   beforeEach(angular.mock.module(module.name))
@@ -21,7 +22,7 @@ describe('signIn', function () {
       }
     )
   }))
-
+  
   it('to be defined', function () {
     expect($ctrl).toBeDefined()
   })
@@ -87,6 +88,19 @@ describe('signIn', function () {
       expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
       expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('https://give-stage2.cru.org/search-results.html')
+    })
+
+    it('should show register for siebel modal and does not redirect', () => {
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      $ctrl.$window.sessionStorage.getItem.mockReturnValue('true')
+
+
+      $ctrl.$onInit()
+      expect($ctrl.sessionChanged).toHaveBeenCalled()
+      expect($ctrl.$window.sessionStorage.removeItem).toHaveBeenCalledWith(registerForSiebelSessionKey)
+      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(1)
+      expect($ctrl.$window.location).toEqual('/sign-in.html')
     })
   })
 

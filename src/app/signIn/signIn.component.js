@@ -3,7 +3,7 @@ import signInForm from 'common/components/signInForm/signInForm.component'
 import commonModule from 'common/common.module'
 import showErrors from 'common/filters/showErrors.filter'
 import analyticsFactory from 'app/analytics/analytics.factory'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService, { Roles, registerForSiebelSessionKey } from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
 import orderService from 'common/services/api/order.service'
 
@@ -37,14 +37,25 @@ class SignInController {
     this.subscription.unsubscribe()
   }
 
+  hasReturnedFromInitialSignInAfterSignup () {
+    return this.$window.sessionStorage.getItem(registerForSiebelSessionKey) === 'true'
+  }
+
   sessionChanged () {
     if (this.sessionService.getRole() === Roles.registered) {
-      const locationToReturnUser = this.sessionService.hasLocationOnLogin()
-      if (locationToReturnUser) {
-        this.sessionService.removeLocationOnLogin()
-        this.$window.location = locationToReturnUser
+      if (this.hasReturnedFromInitialSignInAfterSignup()) {
+        // Register with Siebel
+        this.$window.sessionStorage.removeItem(registerForSiebelSessionKey)
+        this.sessionModalService.registerAccount()
+        this.showRedirectingLoadingIcon = false
       } else {
-        this.$window.location = `/checkout.html${window.location.search}`
+        const locationToReturnUser = this.sessionService.hasLocationOnLogin()
+        if (locationToReturnUser) {
+          this.sessionService.removeLocationOnLogin()
+          this.$window.location = locationToReturnUser
+        } else {
+          this.$window.location = `/checkout.html${window.location.search}`
+        }
       }
     }
   }

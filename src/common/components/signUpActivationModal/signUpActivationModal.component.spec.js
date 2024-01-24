@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/of'
 import module from './signUpActivationModal.component'
-import { Sessions } from 'common/services/session/session.service'
+import { Sessions, registerForSiebelSessionKey } from 'common/services/session/session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -14,11 +14,12 @@ const lastPurchaseId = 'lastPurchaseId'
 
 describe('signUpActivationModal', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, bindings, $rootScope, $cookies
+  let $ctrl, bindings, $rootScope, $cookies, $window
 
-  beforeEach(inject(function (_$rootScope_, _$cookies_, _$componentController_) {
+  beforeEach(inject(function (_$rootScope_, _$cookies_, _$componentController_, _$window_) {
     $rootScope = _$rootScope_;
     $cookies = _$cookies_;
+    $window = _$window_;
     bindings = {
       onStateChange: jest.fn(),
       onSuccess: jest.fn(),
@@ -250,6 +251,12 @@ describe('signUpActivationModal', function () {
     it('calls sessionService signIn', () => {
       expect($ctrl.isSigningIn).toEqual(true)
       expect($ctrl.sessionService.signIn).toHaveBeenCalledWith(lastPurchaseId)
+    })
+
+    it('sets the \'registerForSiebelOnReturn\' session storage item', () => {
+      deferred.resolve({})
+      $rootScope.$digest()
+      expect($window.sessionStorage.getItem(registerForSiebelSessionKey)).toEqual('true')
     })
 
     it('signs in successfully', () => {
