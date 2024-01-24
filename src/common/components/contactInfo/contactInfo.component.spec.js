@@ -11,9 +11,9 @@ import module from './contactInfo.component.js'
 
 describe('contactInfo', function () {
   beforeEach(angular.mock.module(module.name))
-  var self = {}
+  let self = {}
 
-  beforeEach(inject(function ($componentController) {
+  beforeEach(inject(function ($componentController, $window) {
     self.controller = $componentController(module.name, {}, {
       detailsForm: {
         $valid: false,
@@ -21,6 +21,7 @@ describe('contactInfo', function () {
       },
       onSubmit: jest.fn()
     })
+    self.$window = $window;
   }))
 
   describe('$onInit', () => {
@@ -195,6 +196,55 @@ describe('contactInfo', function () {
       expect(self.controller.loadingDonorDetailsError).toEqual(true)
       expect(self.controller.loadingDonorDetails).toEqual(false)
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading donorDetails.', 'some error'])
+    })
+
+    const checkoutData = {
+      name: {
+        'given-name': 'Name 1',
+        'family-name': 'Last Name 1',
+        'middle-initial': 'I',
+        suffix: 'IV',
+        title: 'Mr'
+      },
+      'spouse-name': {
+        'given-name': 'Name 2',
+        'family-name': 'Last Name 2',
+        'middle-initial': 'M',
+        suffix: 'I',
+        title: 'Mrs'
+      },
+      mailingAddress: {
+        country: 'country',
+        streetAddress: 'streetAddress',
+        extendedAddress: 'extendedAddress',
+        locality: 'locality',
+        region: 'region',
+        postalCode: 'postalCode'
+
+      },
+      'donor-type': 'Household',
+      'organization-name': '',
+      'phone-number': '(111) 111-111'
+    }
+
+    it('should override details with checkout saved data', () => {
+      jest.spyOn(self.controller.orderService, 'getDonorDetails').mockImplementation(() => Observable.of(
+        {
+          'donor-type': 'Organization',
+          'spouse-name': {},
+          'name': { 'given-name': 'given-name' },
+          staff: false
+        }
+      ))
+      self.controller.sessionService.session.checkoutSavedData = checkoutData
+
+      self.controller.loadDonorDetails()
+
+      expect(self.controller.donorDetails['donor-type']).toEqual(checkoutData['donor-type'])
+      expect(self.controller.donorDetails.name['given-name']).toEqual(checkoutData.name['given-name'])
+      expect(self.controller.donorDetails['spouse-name']).toEqual(checkoutData['spouse-name'])
+      expect(self.controller.donorDetails.mailingAddress.streetAddress).toEqual(checkoutData.mailingAddress.streetAddress)
+      expect(self.controller.donorDetails.staff).toEqual(false)
     })
 
     describe('pre-populate with overrideDonorDetails', () => {
@@ -493,6 +543,27 @@ describe('contactInfo', function () {
       expect(self.controller.$log.warn.logs[0]).toEqual(['Error saving donor contact info', { data: 'Invalid email address: a@a' }])
       expect(self.controller.submissionError).toEqual('Invalid email address')
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false })
+    })
+  })
+
+  describe('toggleSpouseFields', () => {
+    it('should toggle spouse field and remove all data', () => {
+      self.controller.showSpouseFields = true
+      self.controller.donorDetails = {
+        'spouse-name': {
+          'given-name': 'given-name',
+          'middle-initial': 'middle-initial',
+          'family-name': 'family-name',
+          suffix: 'suffix'
+        }
+      }
+      expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('given-name')
+      self.controller.toggleSpouseFields()
+      expect(self.controller.showSpouseFields).toEqual(false)
+      expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('')
+      expect(self.controller.donorDetails['spouse-name']['middle-initial']).toEqual('')
+      expect(self.controller.donorDetails['spouse-name']['family-name']).toEqual('')
+      expect(self.controller.donorDetails['spouse-name'].suffix).toEqual('')
     })
   })
 })
