@@ -111,7 +111,7 @@
             <button class="okta-button"
                     ng-click="$ctrl.signInWithOkta()"
                     ng-disabled="$ctrl.isSigningIn">
-              <img src="/assets/img/okta.png" alt="Okta logo">
+              <img src="{{$ctrl.imgDomain}}/assets/img/okta.png" alt="Okta logo">
               <strong translate>Sign in with Okta</strong>
             </button>
             <loading type="overlay" ng-if="$ctrl.isSigningIn">
