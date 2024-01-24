@@ -1,6 +1,6 @@
 import angular from 'angular'
 import includes from 'lodash/includes'
-import sessionService, { Roles, createAccountDataCookieName } from 'common/services/session/session.service'
+import sessionService, { Roles, createAccountDataCookieName, registerForSiebelSessionKey } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './signUpActivationModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
@@ -106,6 +106,7 @@ class signUpActivationModalController {
     this.isSigningIn = true
     delete this.errorMessage
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
+      this.$window.sessionStorage.setItem(registerForSiebelSessionKey, true)
       this.onSuccess()
     }, error => {
       this.isSigningIn = false

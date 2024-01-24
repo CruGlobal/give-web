@@ -134,7 +134,11 @@ class RegisterAccountModalController {
 
   stateChanged (state) {
     this.element.dataset.state = state
-    this.setModalSize(this.$window.screen.width >= 1200 ? 'lg' : state === 'contact-info' ? undefined : 'sm')
+    if (state === 'sign-up' || state === 'sign-up-activation') {
+      this.setModalSize('md')
+    } else {
+      this.setModalSize(this.$window.screen.width >= 1200 ? 'lg' : state === 'contact-info' ? undefined : 'sm')
+    }
 
     this.state = state
     if (!this.sessionService.isOktaRedirecting()) {

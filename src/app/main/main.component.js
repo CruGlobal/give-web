@@ -36,7 +36,7 @@ class MainController {
   }
 
   signInModal () {
-    this.sessionModalService.signIn()
+    this.sessionModalService.registerAccount()
   }
 }
 

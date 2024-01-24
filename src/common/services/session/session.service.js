@@ -34,6 +34,7 @@ export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
 export const createAccountDataCookieName = 'createAccountData'
 export const cookieDomain = '.cru.org'
+export const registerForSiebelSessionKey = 'registerForSiebelOnReturn'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
