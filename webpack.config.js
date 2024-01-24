@@ -163,6 +163,8 @@ const devServer = {
   public: 'localhost.cru.org:9000'
 }
 
+const loaders = new Set(['dev.v2', 'give.v2', 'branded-checkout.v2', 'branded-checkout.react'])
+
 module.exports = (env = {}) => [
   // Manifest Loader build
   {
@@ -172,17 +174,19 @@ module.exports = (env = {}) => [
         ? {
             'give.v2': 'loaders/give.js',
             'branded-checkout.v2': 'loaders/branded.js',
+            'branded-checkout.react': 'branded-checkout-react.tsx',
             give: [...giveComponents, ...giveCss],
             branded: brandedComponents
           }
         : {
             'dev.v2': 'loaders/dev.js',
+            'branded-checkout.react': 'branded-checkout-react.tsx',
             main: 'app/main/main.component.js'
           })
     },
     output: {
       filename (chunkData) {
-        return ['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunkData.chunk.name)
+        return loaders.has(chunkData.chunk.name)
           ? '[name].js'
           : 'chunks/[name].[contenthash].js'
       },
@@ -212,7 +216,7 @@ module.exports = (env = {}) => [
         filename: 'chunks/[name].[contenthash].js',
         chunks (chunk) {
           // Don't chunk loader files
-          return !['dev.v2', 'give.v2', 'branded-checkout.v2'].includes(chunk.name)
+          return !loaders.has(chunk.name)
         },
         cacheGroups: {
           angular: {
