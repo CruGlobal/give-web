@@ -51,7 +51,9 @@ class signUpActivationModalController {
   }
 
   async getUnverifiedAccount (subtle = true) {
-    if (!subtle) this.loadingAccount = true
+    if (!subtle) {
+      this.loadingAccount = true
+    }
     this.loadingAccountError = false
 
     const createAccountDataStringified = this.$cookies.get(createAccountDataCookieName)
@@ -61,7 +63,9 @@ class signUpActivationModalController {
         if (response.status === 'error') {
           this.loadingAccountError = response.data
           this.loadingAccountErrorCount++
-          if (!subtle) this.loadingAccount = false
+          if (!subtle) {
+            this.loadingAccount = false
+          }
           this.$scope.$apply()
         } else {
           let status = ''
