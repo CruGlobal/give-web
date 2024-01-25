@@ -111,7 +111,7 @@
             <button class="okta-button"
                     ng-click="$ctrl.signInWithOkta()"
                     ng-disabled="$ctrl.isSigningIn">
-              <img src="{{$ctrl.imgDomain}}/assets/img/okta.png" alt="Okta logo">
+              <img src="{{$ctrl.imgDomain}}/assets/img/okta.png" alt="Okta logo" />
               <strong translate>Sign in with Okta</strong>
             </button>
             <loading type="overlay" ng-if="$ctrl.isSigningIn">
@@ -125,7 +125,7 @@
         <div class="row bottom-links">
           <div class="col-xs-6">Powered by Okta</div>
           <div class="col-xs-6">
-            <a href="https://www.cru.org/us/en/about/privacy.html" target="_blank" rel="noopener" class="pull-right">Privacy Policy</a>
+            <a href="{{$ctrl.publicCru}}/us/en/about/privacy.html" target="_blank" rel="noopener" class="pull-right">Privacy Policy</a>
           </div>
         </div>
       </div>
