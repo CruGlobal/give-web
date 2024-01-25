@@ -17,6 +17,7 @@ class signUpActivationModalController {
     this.orderService = orderService
     this.cartService = cartService
     this.imgDomain = envService.read('imgDomain')
+    this.publicCru = envService.read('publicCru')
   }
 
   $onInit () {
