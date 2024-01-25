@@ -15,6 +15,10 @@ class AccountBenefitsController {
     this.isVisible = false
   }
 
+  $onInit () {
+    this.sessionService.removeOktaRedirectIndicator()
+  }
+
   $onChanges (changes) {
     // donorDetails is undefined initially
     if (changes.donorDetails && angular.isDefined(changes.donorDetails.currentValue)) {
@@ -32,10 +36,7 @@ class AccountBenefitsController {
     // Display Account Benefits Modal when registration-state is NEW or MATCHED
     if (lastPurchaseId && this.donorDetails['registration-state'] !== 'COMPLETED') {
       this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
-        this.sessionModalService.userMatch().then(() => {
-          // Hide accountBenefits after successful user match
-          this.isVisible = false
-        }, angular.noop)
+        this.isVisible = false
       }, angular.noop)
     }
   }
@@ -44,7 +45,7 @@ class AccountBenefitsController {
     if (this.sessionService.getRole() === Roles.registered) {
       this.sessionModalService.userMatch()
     } else {
-      this.sessionModalService.signIn(this.getLastPurchaseId()).then(() => {
+      this.sessionModalService.registerAccount(this.getLastPurchaseId()).then(() => {
         this.sessionModalService.userMatch().then(() => {
           // Hide component after successful user match
           this.isVisible = false
