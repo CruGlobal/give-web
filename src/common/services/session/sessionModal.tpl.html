@@ -32,6 +32,12 @@
       on-cancel="$ctrl.onCancel()"
       on-state-change="$ctrl.stateChanged(state)"
     ></account-benefits-modal>
+    <user-match-modal ng-switch-when="user-match"
+      modal-title="$ctrl.modalTitle"
+      on-state-change="$ctrl.stateChanged(state)"
+      on-success="$ctrl.onSignUpSuccess()"
+      set-loading="$ctrl.setLoading(loading)">
+    </user-match-modal>
     </div>
   </div>
   <loading type="overlay" ng-if="$ctrl.isLoading"></loading>

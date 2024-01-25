@@ -1,6 +1,6 @@
 import angular from 'angular'
 import sessionModalService from 'common/services/session/sessionModal.service'
-import sessionService from 'common/services/session/session.service'
+import sessionService, { Roles } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './accountBenefits.tpl.html'
 
@@ -42,9 +42,16 @@ class AccountBenefitsController {
   }
 
   doUserMatch () {
-    this.sessionModalService.registerAccount().then(() => {
-      this.isVisible = false
-    }, angular.noop)
+    if (this.sessionService.getRole() === Roles.registered) {
+      this.sessionModalService.userMatch()
+    } else {
+      this.sessionModalService.registerAccount(this.getLastPurchaseId()).then(() => {
+        this.sessionModalService.userMatch().then(() => {
+          // Hide component after successful user match
+          this.isVisible = false
+        }, angular.noop)
+      }, angular.noop)
+    }
   }
 
   getLastPurchaseId () {
