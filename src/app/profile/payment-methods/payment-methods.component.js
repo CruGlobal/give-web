@@ -7,16 +7,19 @@ import paymentMethodFormModal from 'common/components/paymentMethods/paymentMeth
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component'
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
-import { Roles, SignOutEvent } from 'common/services/session/session.service'
+import { LoginOktaOnlyEvent, Roles, SignOutEvent } from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
 import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
 import { scrollModalToTop } from 'common/services/modalState.service'
 import uibModal from 'angular-ui-bootstrap/src/modal'
+import { concatMap } from 'rxjs/operators/concatMap'
+import { Observable } from 'rxjs/Observable'
+import sessionService from '../../../common/services/session/session.service'
 
 class PaymentMethodsController {
   /* @ngInject */
-  constructor ($rootScope, $uibModal, profileService, sessionEnforcerService, analyticsFactory, $log, $timeout, $window, $location) {
+  constructor ($rootScope, $uibModal, profileService, sessionService, sessionEnforcerService, analyticsFactory, $log, $timeout, $window, $location) {
     this.$log = $log
     this.$rootScope = $rootScope
     this.$uibModal = $uibModal
@@ -28,6 +31,7 @@ class PaymentMethodsController {
     this.$window = $window
     this.paymentMethods = []
     this.$location = $location
+    this.sessionService = sessionService
     this.sessionEnforcerService = sessionEnforcerService
     this.analyticsFactory = analyticsFactory
   }
@@ -42,6 +46,29 @@ class PaymentMethodsController {
   }
 
   $onInit () {
+    this.sessionService.handleOktaRedirect().pipe(
+      concatMap(data => {
+        return data.subscribe ? data : Observable.of(data)
+      })
+    ).subscribe((data) => {
+      if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
+        this.sessionService.removeOktaRedirectIndicator()
+      }
+    },
+    error => {
+      this.errorMessage = 'generic'
+      this.$log.error('Failed to redirect from Okta', error)
+      this.sessionService.removeOktaRedirectIndicator()
+    })
+
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
         this.loadPaymentMethods()
@@ -169,6 +196,7 @@ export default angular
     paymentMethod.name,
     profileService.name,
     paymentMethodDisplay.name,
+    sessionService.name,
     sessionEnforcerService.name,
     uibModal
   ])

@@ -7,6 +7,7 @@ import omit from 'lodash/omit'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/forkJoin'
 import 'rxjs/add/operator/do'
+import { concatMap } from 'rxjs/operators/concatMap'
 import { phoneNumberRegex } from 'common/app.constants'
 
 import template from './profile.tpl.html'
@@ -17,7 +18,7 @@ import sessionEnforcerService, {
   EnforcerCallbacks,
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
-import { Roles, SignOutEvent } from 'common/services/session/session.service'
+import sessionService, { Roles, SignOutEvent, LoginOktaOnlyEvent } from 'common/services/session/session.service'
 import showErrors from 'common/filters/showErrors.filter'
 import commonModule from 'common/common.module'
 import { titles, legacyTitles } from './titles.fixture'
@@ -26,13 +27,14 @@ const componentName = 'profile'
 
 class ProfileController {
   /* @ngInject */
-  constructor ($rootScope, $window, $location, $log, $scope, sessionEnforcerService, envService, profileService, analyticsFactory) {
+  constructor ($rootScope, $window, $location, $log, $scope, sessionEnforcerService, sessionService, envService, profileService, analyticsFactory) {
     this.$rootScope = $rootScope
     this.$window = $window
     this.$location = $location
     this.$log = $log
     this.$scope = $scope
     this.sessionEnforcerService = sessionEnforcerService
+    this.sessionService = sessionService
     this.profileService = profileService
     this.analyticsFactory = analyticsFactory
     this.phoneNumbers = []
@@ -44,6 +46,29 @@ class ProfileController {
   }
 
   $onInit () {
+    this.sessionService.handleOktaRedirect().pipe(
+      concatMap(data => {
+        return data.subscribe ? data : Observable.of(data)
+      })
+    ).subscribe((data) => {
+      if (data) {
+        this.sessionEnforcerService([Roles.registered], {
+          [EnforcerCallbacks.change]: (role, registrationState) => {
+            if (role === Roles.registered && registrationState === 'NEW') {
+              this.sessionService.updateCurrentProfile()
+              this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+            }
+          }
+        }, EnforcerModes.donor)
+        this.sessionService.removeOktaRedirectIndicator()
+      }
+    },
+    error => {
+      this.errorMessage = 'generic'
+      this.$log.error('Failed to redirect from Okta', error)
+      this.sessionService.removeOktaRedirectIndicator()
+    })
+
     // Enforce donor role view access manage-giving
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -434,6 +459,7 @@ export default angular
     profileService.name,
     'ngMessages',
     sessionEnforcerService.name,
+    sessionService.name,
     showErrors.name,
     addressForm.name,
     commonModule.name
