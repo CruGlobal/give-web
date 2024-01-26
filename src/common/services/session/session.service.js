@@ -34,7 +34,7 @@ export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
 export const createAccountDataCookieName = 'createAccountData'
 export const cookieDomain = '.cru.org'
-export const registerForSiebelSessionKey = 'registerForSiebelOnReturn'
+export const registerForSiebelLocalKey = 'registerForSiebelOnReturn'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
@@ -159,9 +159,15 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
     const data = { }
 
-    if (angular.isDefined(email)) data.email = email
-    if (angular.isDefined(firstName)) data.first_name = firstName
-    if (angular.isDefined(lastName)) data.last_name = lastName
+    if (angular.isDefined(email)) {
+      data.email = email
+    }
+    if (angular.isDefined(firstName)) {
+      data.first_name = firstName
+    }
+    if (angular.isDefined(lastName)) {
+      data.last_name = lastName
+    }
     const dataAsString = JSON.stringify(data)
     try {
       const createAccount = await $http({
@@ -306,6 +312,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       await authClient.revokeAccessToken()
       await authClient.revokeRefreshToken()
       await authClient.closeSession()
+      clearregisterForSiebelLocalKey()
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem('forcedUserToLogout', true)
@@ -321,7 +328,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       return authClient.signOut({
         postLogoutRedirectUri: redirectHome ? null : $window.location.href
       }).catch(() => {
-        $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
+        $window.location = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
       })
     }
   }
@@ -337,6 +344,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     clearCheckoutSavedData()
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
+    clearregisterForSiebelLocalKey()
     return observable.finally(() => {
       $rootScope.$broadcast(SignOutEvent)
     })
@@ -456,6 +464,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         // Give session has expired
         updateCurrentSession()
         clearCheckoutSavedData()
+        clearregisterForSiebelLocalKey()
       } else {
         setSessionTimeout(expiration)
       }
@@ -511,7 +520,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         )
       } else {
         const dataAsString = $cookies.get(checkoutSavedDataCookieName)
-        if (dataAsString) session.checkoutSavedData = JSON.parse(dataAsString)
+        if (dataAsString) {
+          session.checkoutSavedData = JSON.parse(dataAsString)
+        }
       }
       return session.checkoutSavedData
     } catch { }
@@ -530,6 +541,10 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       )
       return session.checkoutSavedData
     } catch { }
+  }
+
+  function clearregisterForSiebelLocalKey () {
+    $window.localStorage.removeItem(registerForSiebelLocalKey)
   }
 }
 

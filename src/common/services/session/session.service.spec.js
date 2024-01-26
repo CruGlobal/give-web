@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, SignInEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin, createAccountDataCookieName } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, SignInEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin, createAccountDataCookieName, registerForSiebelLocalKey } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -194,6 +194,7 @@ describe('session service', function () {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
         .respond(200, {})
       $window.sessionStorage.removeItem('forcedUserToLogout')
+      $window.localStorage.setItem(registerForSiebelLocalKey, 'true')
     })
 
     it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', () => {
@@ -220,8 +221,9 @@ describe('session service', function () {
           expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
             postLogoutRedirectUri: null
           })
+          expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual(null)
         })
-    });
+    })
 
     it('should still sign user out if error during signout', () => {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
@@ -233,7 +235,7 @@ describe('session service', function () {
         expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
         expect(sessionService.authClient.signOut).toHaveBeenCalled()
       })
-    });
+    })
 
     it('should add forcedUserToLogout session data', () => {
       sessionService
@@ -241,7 +243,7 @@ describe('session service', function () {
       .subscribe(() => {
         expect($window.sessionStorage.getItem('forcedUserToLogout')).toEqual('true')
       })
-    });
+    })
 
     it('should add forcedUserToLogout if error', () => {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
@@ -250,7 +252,7 @@ describe('session service', function () {
       .subscribe(() => {
         expect($window.sessionStorage.getItem('forcedUserToLogout')).toEqual('true')
       })
-    });
+    })
 
     it('should redirect the user to okta if all else fails', () => {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
@@ -258,9 +260,9 @@ describe('session service', function () {
       sessionService
       .signOut()
       .subscribe(() => {
-        expect($window.location).toEqual(`https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`)
+        expect($window.location).toEqual(`${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`)
       })
-    });
+    })
 
     afterEach(() => {
       $httpBackend.flush()
@@ -419,6 +421,7 @@ describe('session service', function () {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken')
       jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
       jest.spyOn(sessionService.authClient, 'closeSession')
+      $window.localStorage.setItem(registerForSiebelLocalKey, 'true')
     })
     it('make http request to signout user without redirect', (done) => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
@@ -427,6 +430,7 @@ describe('session service', function () {
         expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
         expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
         expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
+        expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual(null)
       })
       $rootScope.$digest()
       // Observable.finally is fired after the test, this defers until it's called.
@@ -854,11 +858,11 @@ describe('session service', function () {
         // isTest set to TRUE
         sessionService.updateCheckoutSavedData(checkoutData, true)
         expect(sessionService.session.checkoutSavedData).toBeDefined()
-        const dataStoredInLocalStoarage = $cookies.get(checkoutSavedDataCookieName)
-        expect(dataStoredInLocalStoarage).toEqual(JSON.stringify(checkoutData))
+        const dataStoredInLocalStorage = $cookies.get(checkoutSavedDataCookieName)
+        expect(dataStoredInLocalStorage).toEqual(JSON.stringify(checkoutData))
       })
       it('copies checkout data cookie and stores it on session', () => {
-        delete sessionService.session.checkoutSavedData;
+        delete sessionService.session.checkoutSavedData
         expect(sessionService.session.checkoutSavedData).not.toBeDefined()
         sessionService.updateCheckoutSavedData()
         expect(sessionService.session.checkoutSavedData).toBeDefined()
@@ -867,8 +871,8 @@ describe('session service', function () {
 
     describe('clearCheckoutSavedData', () => {
       it('removes the cookie and data on session', () => {
-        const dataStoredInLocalStoarage = $cookies.get(checkoutSavedDataCookieName)
-        expect(dataStoredInLocalStoarage).toEqual(JSON.stringify(checkoutData))
+        const dataStoredInLocalStorage = $cookies.get(checkoutSavedDataCookieName)
+        expect(dataStoredInLocalStorage).toEqual(JSON.stringify(checkoutData))
         // isTest set to TRUE
         sessionService.clearCheckoutSavedData(true)
         const dataAfterClear = $cookies.get(checkoutSavedDataCookieName)

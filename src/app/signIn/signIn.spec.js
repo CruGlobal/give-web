@@ -4,7 +4,7 @@ import module from './signIn.component'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
-import { registerForSiebelSessionKey } from 'common/services/session/session.service'
+import { registerForSiebelLocalKey } from 'common/services/session/session.service'
 
 describe('signIn', function () {
   beforeEach(angular.mock.module(module.name))
@@ -14,7 +14,7 @@ describe('signIn', function () {
     $ctrl = _$componentController_(module.name,
       { $window: {
           location: '/sign-in.html',
-          sessionStorage: {
+          localStorage: {
             getItem: jest.fn(),
             removeItem: jest.fn(),
           }
@@ -81,7 +81,7 @@ describe('signIn', function () {
       expect($ctrl.$window.location).toEqual('/checkout.html')
     })
 
-    it('navigates to location which user initial came from before logging in', () => {
+    it('navigates to location which user initially came from before logging in', () => {
       jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
       $ctrl.$onInit()
       expect($ctrl.sessionChanged).toHaveBeenCalled()
@@ -92,12 +92,12 @@ describe('signIn', function () {
 
     it('should show register for siebel modal and does not redirect', () => {
       jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
-      $ctrl.$window.sessionStorage.getItem.mockReturnValue('true')
+      $ctrl.$window.localStorage.getItem.mockReturnValue('true')
 
 
       $ctrl.$onInit()
       expect($ctrl.sessionChanged).toHaveBeenCalled()
-      expect($ctrl.$window.sessionStorage.removeItem).toHaveBeenCalledWith(registerForSiebelSessionKey)
+      expect($ctrl.$window.localStorage.removeItem).toHaveBeenCalledWith(registerForSiebelLocalKey)
       expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
       expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(1)
       expect($ctrl.$window.location).toEqual('/sign-in.html')
