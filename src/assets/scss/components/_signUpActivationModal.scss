@@ -1,0 +1,86 @@
+sign-up-activation-modal {
+  display: inline-block;
+  width: 100%;
+
+  .unverified-emails {
+    background: #ebecec;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .unverified-email {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dedede;
+    display: flex;
+
+    &:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border: none;
+    }
+  }
+
+  .unverified-email,
+  .unverified-email-headers {
+    p {
+      margin: 0;
+      word-break: break-all;
+    }
+
+    > div {
+      padding: 5px;
+    }
+  }
+
+  .unverified-email-headers {
+    margin-left: 0;
+    margin-right: 0;
+
+    p {
+      font-weight: 600;
+    }
+  }
+
+  .unverified-email {
+    .instructions {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #a94442;
+    }
+  }
+
+  .need-help {
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: underline;
+    color: #007398;
+    font-style: italic;
+  }
+
+  .screenshot {
+    background: #e7e7e7;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+
+  .active-account {
+    text-align: center;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    p {
+      width: 100%;
+    }
+
+    .okta-button {
+      max-width: 300px;
+    }
+  }
+}

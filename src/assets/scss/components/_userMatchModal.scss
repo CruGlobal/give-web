@@ -1,0 +1,32 @@
+user-match-modal {
+  h4 {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  input {
+    accent-color: $colorCru-gold;
+  }
+
+  .activate-progress {
+    padding-bottom: 30px;
+
+    progress {
+      width: 100%;
+      accent-color: $colorCru-gold;
+    }
+
+    .step-label {
+      font-weight: bold;
+      padding-left: calc(var(--progress) * 320px);
+
+      .modal-dialog.modal-lg & {
+        padding-left: calc(var(--progress) * 370px);
+      }
+    }
+  }
+
+  .modal-dialog.modal-lg & .success .footer-buttons button {
+    margin-right: auto;
+  }
+}

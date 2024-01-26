@@ -3,7 +3,7 @@ import signInForm from 'common/components/signInForm/signInForm.component'
 import commonModule from 'common/common.module'
 import showErrors from 'common/filters/showErrors.filter'
 import analyticsFactory from 'app/analytics/analytics.factory'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService, { Roles, registerForSiebelLocalKey } from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
 import orderService from 'common/services/api/order.service'
 
@@ -13,8 +13,10 @@ const componentName = 'signIn'
 
 class SignInController {
   /* @ngInject */
-  constructor ($window, sessionService, analyticsFactory, sessionModalService, orderService) {
+  constructor ($window, $log, $rootScope, sessionService, analyticsFactory, sessionModalService, orderService) {
     this.$window = $window
+    this.$log = $log
+    this.$rootScope = $rootScope
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.sessionModalService = sessionModalService
@@ -24,15 +26,37 @@ class SignInController {
   $onInit () {
     this.subscription = this.sessionService.sessionSubject.subscribe(() => this.sessionChanged())
     this.analyticsFactory.pageLoaded()
+    if (this.sessionService.hasLocationOnLogin()) {
+      this.showRedirectingLoadingIcon = true
+    } else {
+      this.showRedirectingLoadingIcon = false
+    }
   }
 
   $onDestroy () {
     this.subscription.unsubscribe()
   }
 
+  hasReturnedFromInitialSignInAfterSignup () {
+    return this.$window.localStorage.getItem(registerForSiebelLocalKey) === 'true'
+  }
+
   sessionChanged () {
     if (this.sessionService.getRole() === Roles.registered) {
-      this.$window.location = `/checkout.html${window.location.search}`
+      if (this.hasReturnedFromInitialSignInAfterSignup()) {
+        // Register with Siebel
+        this.$window.localStorage.removeItem(registerForSiebelLocalKey)
+        this.sessionModalService.registerAccount()
+        this.showRedirectingLoadingIcon = false
+      } else {
+        const locationToReturnUser = this.sessionService.hasLocationOnLogin()
+        if (locationToReturnUser) {
+          this.sessionService.removeLocationOnLogin()
+          this.$window.location = locationToReturnUser
+        } else {
+          this.$window.location = `/checkout.html${window.location.search}`
+        }
+      }
     }
   }
 
@@ -47,8 +71,16 @@ class SignInController {
     })
   }
 
-  resetPassword () {
-    this.sessionModalService.forgotPassword()
+  getOktaUrl () {
+    return this.sessionService.getOktaUrl()
+  }
+
+  onSignUpWithOkta () {
+    this.sessionModalService.createAccount()
+  }
+
+  closeRedirectingLoading () {
+    this.showRedirectingLoadingIcon = false
   }
 }
 
