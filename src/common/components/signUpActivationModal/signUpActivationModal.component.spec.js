@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/of'
 import module from './signUpActivationModal.component'
-import { Sessions, registerForSiebelSessionKey } from 'common/services/session/session.service'
+import { Sessions, registerForSiebelLocalKey } from 'common/services/session/session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -256,7 +256,7 @@ describe('signUpActivationModal', function () {
     it('sets the \'registerForSiebelOnReturn\' session storage item', () => {
       deferred.resolve({})
       $rootScope.$digest()
-      expect($window.sessionStorage.getItem(registerForSiebelSessionKey)).toEqual('true')
+      expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual('true')
     })
 
     it('signs in successfully', () => {
