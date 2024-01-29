@@ -1,10 +1,11 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './accountBenefits.component'
-
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/from'
 import { Roles } from 'common/services/session/session.service'
 
-describe('thank you', function () {
+fdescribe('thank you', function () {
   describe('accountBenefits', function () {
     beforeEach(angular.mock.module(module.name))
     let $ctrl
@@ -58,14 +59,27 @@ describe('thank you', function () {
         userMatch = _$q_.defer()
         $rootScope = _$rootScope_
         jest.spyOn($ctrl.sessionModalService, 'accountBenefits').mockReturnValue(deferred.promise)
+        jest.spyOn($ctrl.sessionModalService, 'registerAccount').mockReturnValue(deferred.promise)
+        jest.spyOn($ctrl.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([false]))
         $ctrl.isVisible = true
       }))
 
-      it('should show accountBenefits modal to users who have not completed donor matching', () => {
+      it('should show accountBenefits modal to users who are signed out of Okta and have not completed donor matching', () => {
         $ctrl.donorDetails = { 'registration-state': 'MATCHED' }
         $ctrl.openAccountBenefitsModal()
 
         expect($ctrl.sessionModalService.accountBenefits).toHaveBeenCalledWith('iiydanbt=')
+        deferred.resolve()
+        $rootScope.$digest()
+        expect($ctrl.isVisible).toEqual(false)
+      })
+
+      it('should show registerAccount modal to users who have signed in with Okta but have not completed donor matching', () => {
+        $ctrl.sessionService.oktaIsUserAuthenticated.mockReturnValue(Observable.from([true]))
+        $ctrl.donorDetails = { 'registration-state': 'MATCHED' }
+        $ctrl.openAccountBenefitsModal()
+
+        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith('iiydanbt=')
         deferred.resolve()
         $rootScope.$digest()
 
