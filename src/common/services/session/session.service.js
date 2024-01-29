@@ -312,7 +312,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       await authClient.revokeAccessToken()
       await authClient.revokeRefreshToken()
       await authClient.closeSession()
-      clearregisterForSiebelLocalKey()
+      clearRegisterForSiebelLocalKey()
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem('forcedUserToLogout', true)
@@ -344,7 +344,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     clearCheckoutSavedData()
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
-    clearregisterForSiebelLocalKey()
+    clearRegisterForSiebelLocalKey()
     return observable.finally(() => {
       $rootScope.$broadcast(SignOutEvent)
     })
@@ -464,7 +464,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         // Give session has expired
         updateCurrentSession()
         clearCheckoutSavedData()
-        clearregisterForSiebelLocalKey()
+        clearRegisterForSiebelLocalKey()
       } else {
         setSessionTimeout(expiration)
       }
@@ -543,7 +543,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     } catch { }
   }
 
-  function clearregisterForSiebelLocalKey () {
+  function clearRegisterForSiebelLocalKey () {
     $window.localStorage.removeItem(registerForSiebelLocalKey)
   }
 }
