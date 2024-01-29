@@ -4,10 +4,6 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/of'
 import module from './signInButton.component'
-import { Sessions } from 'common/services/session/session.service'
-import { cortexRole } from 'common/services/session/fixtures/cortex-role'
-import { giveSession } from 'common/services/session/fixtures/give-session'
-import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 
 describe('signInButton', function () {
   beforeEach(angular.mock.module(module.name))
