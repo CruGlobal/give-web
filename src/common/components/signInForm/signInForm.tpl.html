@@ -11,23 +11,20 @@
   <p translate>You will be taken to Okta&rsquo;s website, then back to this site.</p>
 </div>
 <div class="row">
-  <button class="okta-button"
-          ng-click="$ctrl.signInWithOkta()"
-          ng-disabled="$ctrl.isSigningIn">
-    <img src="{{$ctrl.imgDomain}}/assets/img/okta.png" alt="Okta logo">
-    <strong translate>Sign in with Okta</strong>
-  </button>
-  <loading type="overlay" ng-if="$ctrl.isSigningIn">
-    <translate translate>Signing you in...</translate>
-  </loading>
+  <sign-in-button
+    on-success="$ctrl.onSuccess()"
+    on-failure="$ctrl.onFailure()"
+    last-purchase-id="$ctrl.lastPurchaseId"
+    error-message="$ctrl.errorMessage"
+  ></sign-in-button>
 </div>
 <div class="row text-center">
   <h4 translate>Don&rsquo;t have an account?</h4>
   <a class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()" style="cursor: pointer">Sign up for Okta</a>
-  <p translate>With Okta, you can sign in to multiple services with one login. You may learn more about Okta <a href="" target="_blank">here</a>.</p>
+  <p translate>With Okta, you can sign in to multiple services with one login. You may learn more about Okta <a href="https://www.okta.com/" target="_blank">here</a>.</p>
 </div>
 <div class="row text-center">
   <h4 translate>Help signing in</h4>
-  <p><a href="" target="_blank" translate>Live Chat</a> or <a href="tel:8882787233" target="_blank" translate>Call (888) 278-7233</a></p>
+  <p><a href="tel:8882787233" target="_blank" translate>Call (888) 278-7233</a></p>
   <p>(8am-5pm Eastern Time (U.S.), Mon-Fri)</p>
 </div>

@@ -108,15 +108,12 @@
           </div>
 
           <div class="row active-account">
-            <button class="okta-button"
-                    ng-click="$ctrl.signInWithOkta()"
-                    ng-disabled="$ctrl.isSigningIn">
-              <img src="{{$ctrl.imgDomain}}/assets/img/okta.png" alt="Okta logo" />
-              <strong translate>Sign in with Okta</strong>
-            </button>
-            <loading type="overlay" ng-if="$ctrl.isSigningIn">
-              <translate translate>Signing you in...</translate>
-            </loading>
+            <sign-in-button
+              on-success="$ctrl.onSuccessfulSignIn()"
+              on-failure="$ctrl.onFailure()"
+              last-purchase-id="$ctrl.lastPurchaseId"
+              error-message="$ctrl.errorMessage"
+            ></sign-in-button>
           </div>
         </div>
 

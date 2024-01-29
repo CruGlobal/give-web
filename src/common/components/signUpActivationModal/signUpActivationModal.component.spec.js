@@ -240,76 +240,13 @@ describe('signUpActivationModal', function () {
   });
 
 
-  describe('signInWithOkta', () => {
-    let deferred
+  describe('onSuccessfulSignIn', () => {
     beforeEach(inject(function (_$q_) {
-      deferred = _$q_.defer()
-      jest.spyOn($ctrl.sessionService, 'signIn').mockImplementation(() => Observable.from(deferred.promise))
-      $ctrl.signInWithOkta()
+      $ctrl.onSuccessfulSignIn()
     }))
 
-    it('calls sessionService signIn', () => {
-      expect($ctrl.isSigningIn).toEqual(true)
-      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith(lastPurchaseId)
-    })
-
     it('sets the \'registerForSiebelOnReturn\' session storage item', () => {
-      deferred.resolve({})
-      $rootScope.$digest()
       expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual('true')
-    })
-
-    it('signs in successfully', () => {
-      deferred.resolve({})
-      $rootScope.$digest()
-
-      expect(bindings.onSuccess).toHaveBeenCalled()
-    })
-
-    it('has unknown error signing in', () => {
-      deferred.reject({ data: { error: 'invalid_grant' } })
-      $rootScope.$digest()
-
-      expect(bindings.onFailure).toHaveBeenCalled()
-      expect($ctrl.errorMessage).toEqual('generic')
-      expect($ctrl.isSigningIn).toEqual(false)
-    })
-
-    it('has missing error signing in', () => {
-      deferred.reject({ data: null })
-      $rootScope.$digest()
-
-      expect(bindings.onFailure).toHaveBeenCalled()
-      expect($ctrl.errorMessage).toEqual('generic')
-      expect($ctrl.isSigningIn).toEqual(false)
-    })
-
-    it('removes password from error log', () => {
-      deferred.reject({
-        config: {
-          data: {
-            password: $ctrl.password
-          }
-        }
-      })
-      $rootScope.$digest()
-
-      expect(bindings.onFailure).toHaveBeenCalled()
-      expect($ctrl.$log.error.logs[0]).toEqual(['Sign In Error', { config: { data: {} } }])
-    })
-
-    it('has Siebel down error signing in', () => {
-      deferred.reject(
-        {
-          data: {
-            code: 'SIEB-DOWN',
-            message: 'This functionality is not currently available. Please try again later.'
-          }
-        })
-      $rootScope.$digest()
-      expect(bindings.onFailure).toHaveBeenCalled()
-      expect($ctrl.errorMessage).toEqual('This functionality is not currently available. Please try again later.')
-      expect($ctrl.isSigningIn).toEqual(false)
     })
   })
 })
