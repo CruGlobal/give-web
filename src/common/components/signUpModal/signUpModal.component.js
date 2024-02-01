@@ -71,7 +71,9 @@ class SignUpModalController {
     this.submissionError = []
     try {
       this.signUpForm.$setSubmitted()
-      if (!this.signUpForm.$valid) throw new Error('Some fields are invalid')
+      if (!this.signUpForm.$valid) {
+        throw new Error('Some fields are invalid')
+      }
 
       const details = this.donorDetails
       const { email, name } = details

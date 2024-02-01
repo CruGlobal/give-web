@@ -8,7 +8,8 @@ const componentName = 'accountBenefits'
 
 class AccountBenefitsController {
   /* @ngInject */
-  constructor (sessionModalService, sessionService, orderService) {
+  constructor ($log, sessionModalService, sessionService, orderService) {
+    this.$log = $log
     this.sessionModalService = sessionModalService
     this.sessionService = sessionService
     this.orderService = orderService
@@ -32,13 +33,23 @@ class AccountBenefitsController {
 
   openAccountBenefitsModal () {
     const lastPurchaseId = this.getLastPurchaseId()
-
-    // Display Account Benefits Modal when registration-state is NEW or MATCHED
-    if (lastPurchaseId && this.donorDetails['registration-state'] !== 'COMPLETED') {
-      this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
-        this.isVisible = false
-      }, angular.noop)
-    }
+    return this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
+      if (lastPurchaseId && this.donorDetails['registration-state'] !== 'COMPLETED') {
+        if (isAuthenticated) {
+          return this.sessionModalService.registerAccount(lastPurchaseId).then(() => {
+            this.isVisible = false
+          }, angular.noop)
+        } else {
+          // Display Account Benefits Modal when registration-state is NEW or MATCHED
+          return this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
+            this.isVisible = false
+          }, angular.noop)
+        }
+      }
+    },
+    error => {
+     this.$log.error('Failed checking if user is authenicated', error)
+    })
   }
 
   doUserMatch () {
