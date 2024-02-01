@@ -36,10 +36,17 @@ describe('accountBenefitsModal', function () {
       expect($ctrl.onSuccess).toHaveBeenCalled()
     })
 
-    it('changes state to \'sign-in\'', () => {
+    it('changes state to \'sign-up\'', () => {
       $ctrl.registerAccount()
+      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-up' })
+    })
+  })
 
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-in' })
+  describe('onFailure()', () => {
+    it('calls sessionService.removeOktaRedirectIndicator()', () => {
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator')
+      $ctrl.onFailure()
+      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
   })
 })

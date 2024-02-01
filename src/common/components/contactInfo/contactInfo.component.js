@@ -41,6 +41,7 @@ class Step1Controller {
         country: 'US'
       }
     }
+    this.showSpouseFields = false
 
     this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
 
@@ -108,6 +109,17 @@ class Step1Controller {
             this.$window.sessionStorage.setItem('initialLoadComplete', 'true')
           }
         }
+
+        const checkoutSavedData = this.sessionService.session.checkoutSavedData
+        if (checkoutSavedData) {
+          this.donorDetails = assign(this.donorDetails, pick(checkoutSavedData, [
+            'name', 'mailingAddress', 'donor-type', 'organization-name', 'phone-number', 'spouse-name'
+          ]))
+          if (!!this.donorDetails['spouse-name']['given-name'] || !!this.donorDetails['spouse-name']['family-name']) {
+            this.showSpouseFields = true
+            this.spouseFieldsDisabled = false
+          }
+        }
       },
       error => {
         this.loadingDonorDetails = false
@@ -147,6 +159,9 @@ class Step1Controller {
       const details = this.donorDetails
       this.submissionError = ''
 
+      // Clear the saved checkout data
+      this.sessionService.clearCheckoutSavedData()
+
       const requests = [this.orderService.updateDonorDetails(details)]
       if (details.email) {
         requests.push(this.orderService.addEmail(details.email, details.emailFormUri))
@@ -170,6 +185,16 @@ class Step1Controller {
     } else {
       this.analyticsFactory.handleCheckoutFormErrors(this.detailsForm)
       this.onSubmit({ success: false })
+    }
+  }
+
+  toggleSpouseFields () {
+    this.showSpouseFields = !this.showSpouseFields
+    if (!this.showSpouseFields) {
+      this.donorDetails['spouse-name']['given-name'] = ''
+      this.donorDetails['spouse-name']['middle-initial'] = ''
+      this.donorDetails['spouse-name']['family-name'] = ''
+      this.donorDetails['spouse-name'].suffix = ''
     }
   }
 }
