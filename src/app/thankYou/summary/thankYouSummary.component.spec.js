@@ -125,6 +125,7 @@ describe('thank you summary', () => {
     it('should load all data from the last completed purchase', () => {
       jest.spyOn(self.controller.profileService, 'getPurchase')
       jest.spyOn(self.controller.analyticsFactory, 'transactionEvent')
+      jest.spyOn(self.controller.envService, 'read').mockReturnValue(false)
       jest.spyOn(self.controller, 'loadThankYouImage').mockImplementation(() => {})
       self.controller.loadLastPurchase()
 
@@ -150,6 +151,14 @@ describe('thank you summary', () => {
         $event: { purchase: self.mockPurchase }
       })
       expect(self.controller.analyticsFactory.transactionEvent).toHaveBeenCalledWith(self.mockPurchase)
+    })
+
+    it('does not trigger analytics event in branded checkout', () => {
+      jest.spyOn(self.controller.analyticsFactory, 'transactionEvent')
+      jest.spyOn(self.controller.envService, 'read').mockReturnValue(true)
+      self.controller.loadLastPurchase()
+
+      expect(self.controller.analyticsFactory.transactionEvent).not.toHaveBeenCalled()
     })
 
     it('should not request purchase data if lastPurchaseLink is not defined', () => {
