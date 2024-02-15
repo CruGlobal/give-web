@@ -21,9 +21,10 @@ const componentName = 'thankYouSummary'
 
 class ThankYouSummaryController {
   /* @ngInject */
-  constructor ($rootScope, $window, analyticsFactory, orderService, profileService, sessionModalService, designationsService, $log) {
+  constructor ($rootScope, $window, analyticsFactory, envService, orderService, profileService, sessionModalService, designationsService, $log) {
     this.$rootScope = $rootScope
     this.$window = $window
+    this.envService = envService
     this.orderService = orderService
     this.profileService = profileService
     this.sessionModalService = sessionModalService
@@ -73,7 +74,9 @@ class ThankYouSummaryController {
 
         this.analyticsFactory.pageLoaded()
         this.analyticsFactory.setPurchaseNumber(data.rawData['purchase-number'])
-        this.analyticsFactory.transactionEvent(this.purchase)
+        if (!this.envService.read('isBrandedCheckout')) {
+          this.analyticsFactory.transactionEvent(this.purchase)
+        }
       },
       (error) => {
         this.$log.error('Error loading purchase data for thank you component', error)
