@@ -20,7 +20,6 @@ const sessionHandleOktaRedirectService = /* @ngInject */ function ($rootScope, $
   }
 
   function onHandleOktaRedirect() {
-    console.log('onHandleOktaRedirect - called')
     sessionService.handleOktaRedirect().pipe(
       concatMap(data => {
         return data.subscribe ? data : Observable.of(data)
