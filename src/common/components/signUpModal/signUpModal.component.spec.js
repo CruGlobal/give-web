@@ -123,6 +123,32 @@ describe('signUpForm', function () {
       expect($ctrl.donorDetails.email).toEqual('testing@cru.org')
     })
 
+    it('grabs data from orderService if data from both orderService and sessionService are set', () => {
+      jest.spyOn($ctrl, 'loadDonorDetails')
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [
+          {
+            name: {
+              ['given-name']: 'givenName',
+              ['family-name']: 'familyName',
+            },
+            email: 'EMAIL@cru.org',
+          }
+        ]
+      ))
+      $ctrl.sessionService.session = {
+        first_name: 'newFirstName',
+        last_name: 'newLastName',
+        email: 'testing@cru.org',
+      }
+
+      $ctrl.$onInit()
+
+      expect($ctrl.donorDetails.name['given-name']).toEqual('givenName')
+      expect($ctrl.donorDetails.name['family-name']).toEqual('familyName')
+      expect($ctrl.donorDetails.email).toEqual('EMAIL@cru.org')
+    })
+
     it('initializes the component, inherits no data', () => {
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
         [
@@ -170,7 +196,7 @@ describe('signUpForm', function () {
       $ctrl.loadDonorDetails()
       expect($ctrl.loadingDonorDetails).toEqual(false)
     })
-  });
+  })
 
   describe('submitDetails()', () => {
     it('should return as form is not valid', () => {
@@ -187,7 +213,7 @@ describe('signUpForm', function () {
       ))
       $ctrl.$onInit()
       $ctrl.signUpForm.$valid = false;
-      $ctrl.submitDetails(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name']).then(() =>{
+      $ctrl.submitDetails(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name']).then(() => {
         expect($ctrl.sessionService.createAccount).not.toHaveBeenCalled()
       })
     });
@@ -207,7 +233,7 @@ describe('signUpForm', function () {
       ))
       $ctrl.$onInit()
       $ctrl.signUpForm.$valid = true
-      $ctrl.submitDetails().then(() =>{
+      $ctrl.submitDetails().then(() => {
         expect($ctrl.$scope.$apply).toHaveBeenCalled();
         expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])
         expect($ctrl.submitting).toEqual(false)
