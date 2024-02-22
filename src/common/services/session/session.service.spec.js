@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, SignInEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin, createAccountDataCookieName, registerForSiebelLocalKey } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, SignInEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin, createAccountDataCookieName } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -194,7 +194,6 @@ describe('session service', function () {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
         .respond(200, {})
       $window.sessionStorage.removeItem('forcedUserToLogout')
-      $window.localStorage.setItem(registerForSiebelLocalKey, 'true')
     })
 
     it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', () => {
@@ -221,7 +220,6 @@ describe('session service', function () {
           expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
             postLogoutRedirectUri: null
           })
-          expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual(null)
         })
     })
 
@@ -421,7 +419,6 @@ describe('session service', function () {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken')
       jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
       jest.spyOn(sessionService.authClient, 'closeSession')
-      $window.localStorage.setItem(registerForSiebelLocalKey, 'true')
     })
     it('make http request to signout user without redirect', (done) => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
@@ -430,7 +427,6 @@ describe('session service', function () {
         expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
         expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
         expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
-        expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual(null)
       })
       $rootScope.$digest()
       // Observable.finally is fired after the test, this defers until it's called.

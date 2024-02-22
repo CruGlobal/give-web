@@ -34,7 +34,6 @@ export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
 export const createAccountDataCookieName = 'createAccountData'
 export const cookieDomain = '.cru.org'
-export const registerForSiebelLocalKey = 'registerForSiebelOnReturn'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
@@ -312,7 +311,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       await authClient.revokeAccessToken()
       await authClient.revokeRefreshToken()
       await authClient.closeSession()
-      clearRegisterForSiebelLocalKey()
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem('forcedUserToLogout', true)
@@ -344,7 +342,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     clearCheckoutSavedData()
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
-    clearRegisterForSiebelLocalKey()
     return observable.finally(() => {
       $rootScope.$broadcast(SignOutEvent)
     })
@@ -464,7 +461,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         // Give session has expired
         updateCurrentSession()
         clearCheckoutSavedData()
-        clearRegisterForSiebelLocalKey()
       } else {
         setSessionTimeout(expiration)
       }
@@ -543,9 +539,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     } catch { }
   }
 
-  function clearRegisterForSiebelLocalKey () {
-    $window.localStorage.removeItem(registerForSiebelLocalKey)
-  }
 }
 
 export default angular

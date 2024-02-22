@@ -4,7 +4,6 @@ import module from './signIn.component'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
-import { registerForSiebelLocalKey } from 'common/services/session/session.service'
 
 describe('signIn', function () {
   beforeEach(angular.mock.module(module.name))
@@ -97,7 +96,6 @@ describe('signIn', function () {
 
       $ctrl.$onInit()
       expect($ctrl.sessionChanged).toHaveBeenCalled()
-      expect($ctrl.$window.localStorage.removeItem).toHaveBeenCalledWith(registerForSiebelLocalKey)
       expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
       expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(1)
       expect($ctrl.$window.location).toEqual('/sign-in.html')

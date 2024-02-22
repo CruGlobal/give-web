@@ -3,23 +3,27 @@ import signInForm from 'common/components/signInForm/signInForm.component'
 import commonModule from 'common/common.module'
 import showErrors from 'common/filters/showErrors.filter'
 import analyticsFactory from 'app/analytics/analytics.factory'
-import sessionService, { Roles, registerForSiebelLocalKey } from 'common/services/session/session.service'
+import sessionService, { Roles, LoginOktaOnlyEvent } from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
+import sessionEnforcerService, {
+  EnforcerCallbacks,
+  EnforcerModes
+} from 'common/services/session/sessionEnforcer.service'
 import orderService from 'common/services/api/order.service'
-
 import template from './signIn.tpl.html'
 
 const componentName = 'signIn'
 
 class SignInController {
   /* @ngInject */
-  constructor ($window, $log, $rootScope, sessionService, analyticsFactory, sessionModalService, orderService) {
+  constructor ($window, $log, $rootScope, sessionService, analyticsFactory, sessionModalService, sessionEnforcerService, orderService) {
     this.$window = $window
     this.$log = $log
     this.$rootScope = $rootScope
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.sessionModalService = sessionModalService
+    this.sessionEnforcerService = sessionEnforcerService
     this.orderService = orderService
   }
 
@@ -37,27 +41,35 @@ class SignInController {
     this.subscription.unsubscribe()
   }
 
-  hasReturnedFromInitialSignInAfterSignup () {
-    return this.$window.localStorage.getItem(registerForSiebelLocalKey) === 'true'
-  }
-
   sessionChanged () {
-    if (this.sessionService.getRole() === Roles.registered) {
-      if (this.hasReturnedFromInitialSignInAfterSignup()) {
-        // Register with Siebel
-        this.$window.localStorage.removeItem(registerForSiebelLocalKey)
-        this.sessionModalService.registerAccount()
-        this.showRedirectingLoadingIcon = false
+    if (this.sessionService.getRole() !== Roles.registered) {
+      return
+    }
+
+    const redirectToLocationPriorToLogin = () => {
+      const locationToReturnUser = this.sessionService.hasLocationOnLogin()
+      if (locationToReturnUser) {
+        this.sessionService.removeLocationOnLogin()
+        this.$window.location = locationToReturnUser
       } else {
-        const locationToReturnUser = this.sessionService.hasLocationOnLogin()
-        if (locationToReturnUser) {
-          this.sessionService.removeLocationOnLogin()
-          this.$window.location = locationToReturnUser
-        } else {
-          this.$window.location = `/checkout.html${window.location.search}`
-        }
+        this.$window.location = `/checkout.html${window.location.search}`
       }
     }
+
+    this.sessionEnforcerService([Roles.registered], {
+      [EnforcerCallbacks.change]: (role, registrationState) => {
+        if (role === Roles.registered && registrationState === 'NEW') {
+          this.sessionService.removeLocationOnLogin()
+          this.sessionService.updateCurrentProfile()
+          this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+        } else {
+          redirectToLocationPriorToLogin()
+        }
+      },
+      [EnforcerCallbacks.signIn]: () => {
+        redirectToLocationPriorToLogin()
+      }
+    }, EnforcerModes.donor)
   }
 
   checkoutAsGuest () {
@@ -90,6 +102,7 @@ export default angular
     analyticsFactory.name,
     sessionService.name,
     sessionModalService.name,
+    sessionEnforcerService.name,
     orderService.name,
     signInForm.name,
     showErrors.name
