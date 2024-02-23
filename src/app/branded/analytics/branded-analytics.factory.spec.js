@@ -11,14 +11,19 @@ const productData = {
   designationType: 'STAFF'
 }
 
+const utmTerm = 'CAMPAIGN'
+
 describe('branded analytics factory', () => {
   beforeEach(angular.mock.module(module.name))
 
   const self = {}
-  beforeEach(inject((brandedAnalyticsFactory, $window) => {
+  beforeEach(inject((brandedAnalyticsFactory, $window, $location) => {
     self.brandedAnalyticsFactory = brandedAnalyticsFactory
     self.$window = $window
     self.$window.dataLayer = []
+    self.$location = $location
+
+    jest.spyOn($location, 'search').mockReturnValue(`?utm_term=${utmTerm}`)
   }))
 
   describe('beginCheckout', () => {
@@ -329,7 +334,51 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '100.00',
               quantity: '1',
-              recurring_date: undefined
+              recurring_date: undefined,
+              job_id: utmTerm
+            }]
+          }
+        }
+      ])
+    })
+
+    it('should handle missing utm_term', () => {
+      jest.spyOn(self.$location, 'search').mockReturnValue('')
+
+      self.brandedAnalyticsFactory.saveItem({
+        amount: 100,
+        amountWithFees: 102.5,
+        frequency: 'Single',
+        giftStartDate: null,
+        ...productData
+      })
+      self.brandedAnalyticsFactory.purchase()
+
+      expect(self.$window.dataLayer).toEqual([
+        { ecommerce: null },
+        {
+          event: 'purchase',
+          ecommerce: {
+            payment_type: 'Visa',
+            currency: 'USD',
+            donator_type: 'Household',
+            pays_processing: 'no',
+            value: '100.00',
+            processing_fee: '2.50',
+            transaction_id: '12345',
+            testing_transaction: false,
+            items: [{
+              item_id: '1234567',
+              item_name: 'Staff Person',
+              item_brand: 'CRU',
+              item_category: 'STAFF',
+              item_variant: 'single',
+              currency: 'USD',
+              price: '100.00',
+              quantity: '1',
+              recurring_date: undefined,
+              campaign_code: '123ABC',
+              job_id: undefined
             }]
           }
         }
@@ -369,7 +418,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '100.00',
               quantity: '1',
-              recurring_date: undefined
+              recurring_date: undefined,
+              job_id: utmTerm
             }]
           }
         }
@@ -409,7 +459,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '102.50',
               quantity: '1',
-              recurring_date: undefined
+              recurring_date: undefined,
+              job_id: utmTerm
             }]
           }
         }
@@ -449,7 +500,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '100.00',
               quantity: '1',
-              recurring_date: undefined
+              recurring_date: undefined,
+              job_id: utmTerm
             }]
           }
         }
@@ -488,7 +540,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '100.00',
               quantity: '1',
-              recurring_date: 'January 1, 2024'
+              recurring_date: 'January 1, 2024',
+              job_id: utmTerm
             }]
           }
         }
