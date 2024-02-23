@@ -308,9 +308,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         withCredentials: true
       })
       await clearCheckoutSavedData()
-      await authClient.revokeAccessToken()
-      await authClient.revokeRefreshToken()
-      await authClient.closeSession()
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem('forcedUserToLogout', true)
@@ -332,6 +329,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function signOutWithoutRedirectToOkta () {
+    // ** This function requires third-party cookies **
+    // If unsure of the consequences use sessionService.signOut()
     const observable = Observable
       .from($http({
         method: 'DELETE',
@@ -340,8 +339,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       }))
       .map((response) => response.data)
     clearCheckoutSavedData()
+    // revokeAccessToken() & revokeRefreshToken() sign the user out of Okta on this application. Not the browser.
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
+    // CloseSession() will close the Okta session for the entire browser. (similar to signOut())
+    // However, closeSession() requires third-party cookies.
+    // CloseSession() will fail quietly for users who block third-party cookies
+    // CloseSession() doesn't return anything so we don't know if it fails.
+    authClient.closeSession()
     return observable.finally(() => {
       $rootScope.$broadcast(SignOutEvent)
     })
