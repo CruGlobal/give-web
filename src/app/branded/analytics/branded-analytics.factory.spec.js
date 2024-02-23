@@ -11,14 +11,18 @@ const productData = {
   designationType: 'STAFF'
 }
 
+const utmTerm = 'CAMPAIGN'
+
 describe('branded analytics factory', () => {
   beforeEach(angular.mock.module(module.name))
 
   const self = {}
-  beforeEach(inject((brandedAnalyticsFactory, $window) => {
+  beforeEach(inject((brandedAnalyticsFactory, $window, $location) => {
     self.brandedAnalyticsFactory = brandedAnalyticsFactory
     self.$window = $window
     self.$window.dataLayer = []
+
+    jest.spyOn($location, 'search').mockReturnValue(`?utm_term=${utmTerm}`)
   }))
 
   describe('beginCheckout', () => {
@@ -329,7 +333,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '100.00',
               quantity: '1',
-              recurring_date: undefined
+              recurring_date: undefined,
+              job_id: utmTerm
             }]
           }
         }
@@ -369,7 +374,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '100.00',
               quantity: '1',
-              recurring_date: undefined
+              recurring_date: undefined,
+              job_id: utmTerm
             }]
           }
         }
@@ -409,7 +415,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '102.50',
               quantity: '1',
-              recurring_date: undefined
+              recurring_date: undefined,
+              job_id: utmTerm
             }]
           }
         }
@@ -449,7 +456,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '100.00',
               quantity: '1',
-              recurring_date: undefined
+              recurring_date: undefined,
+              job_id: utmTerm
             }]
           }
         }
@@ -488,7 +496,8 @@ describe('branded analytics factory', () => {
               currency: 'USD',
               price: '100.00',
               quantity: '1',
-              recurring_date: 'January 1, 2024'
+              recurring_date: 'January 1, 2024',
+              job_id: utmTerm
             }]
           }
         }
