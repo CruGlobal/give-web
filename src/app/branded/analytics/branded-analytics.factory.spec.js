@@ -21,7 +21,8 @@ describe('branded analytics factory', () => {
     self.brandedAnalyticsFactory = brandedAnalyticsFactory
     self.$window = $window
     self.$window.dataLayer = []
-    $location.search = `?utm_term=${utmTerm}`
+
+    jest.spyOn($location, 'search').mockReturnValue(`?utm_term=${utmTerm}`)
   }))
 
   describe('beginCheckout', () => {

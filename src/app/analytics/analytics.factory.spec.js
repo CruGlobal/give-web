@@ -20,7 +20,7 @@ describe('analytics factory', () => {
     self.$window.sessionStorage.clear()
     self.$window.localStorage.clear()
 
-    $location.search = `?utm_term=${utmTerm}`
+    jest.spyOn($location, 'search').mockReturnValue(`?utm_term=${utmTerm}`)
 
     Date.now = jest.fn(() => new Date("2023-04-05T01:02:03.000Z"));
   }))

@@ -116,7 +116,7 @@ const brandedAnalyticsFactory = /* @ngInject */ function ($window, $location) {
 
     // saveCoverFees, saveDonorDetails, saveItem, savePaymentType, savePurchase, and saveTestingTransaction should have been called before this
     purchase: suppressErrors(function () {
-      const jobId = new URLSearchParams($location.search).get('utm_term')
+      const jobId = new URLSearchParams($location.search()).get('utm_term')
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({ ecommerce: null })
       $window.dataLayer.push({
