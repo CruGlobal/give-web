@@ -47,6 +47,7 @@ class SignInController {
     }
 
     const redirectToLocationPriorToLogin = () => {
+      this.showRedirectingLoadingIcon = true
       const locationToReturnUser = this.sessionService.hasLocationOnLogin()
       if (locationToReturnUser) {
         this.sessionService.removeLocationOnLogin()
@@ -56,17 +57,21 @@ class SignInController {
       }
     }
 
-    // Using sessionEnforcerService to direct user to location prior to login or register for siebel
-    this.sessionEnforcerService([Roles.registered], {
-      [EnforcerCallbacks.change]: (role, registrationState) => {
-        if (role === Roles.registered && registrationState === 'NEW') {
-          this.sessionService.updateCurrentProfile()
-          this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
+    this.orderService.getDonorDetails()
+      .subscribe((data) => {
+        const registrationState = data['registration-state']
+        if (registrationState === 'NEW' || registrationState === 'MATCHED') {
+          this.showRedirectingLoadingIcon = false
+          const modal = registrationState === 'NEW' 
+            ? this.sessionModalService.registerAccount()
+            : this.sessionModalService.userMatch()
+          modal && modal.then(() => {
+            redirectToLocationPriorToLogin()
+          })
         } else {
           redirectToLocationPriorToLogin()
         }
-      }
-    }, EnforcerModes.donor)
+      })
   }
 
   checkoutAsGuest () {
