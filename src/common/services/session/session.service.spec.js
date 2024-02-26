@@ -214,9 +214,9 @@ describe('session service', function () {
       sessionService
         .signOut(true)
         .subscribe(() => {
-          expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
-          expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
-          expect(sessionService.authClient.closeSession).toHaveBeenCalled()
+          expect(sessionService.authClient.revokeAccessToken).not.toHaveBeenCalled()
+          expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
+          expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
           expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
             postLogoutRedirectUri: null
           })
@@ -228,7 +228,7 @@ describe('session service', function () {
       sessionService
       .signOut()
       .subscribe(() => {
-        expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+        expect(sessionService.authClient.revokeAccessToken).not.toHaveBeenCalled()
         expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
         expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
         expect(sessionService.authClient.signOut).toHaveBeenCalled()
@@ -426,7 +426,7 @@ describe('session service', function () {
         expect(data).toEqual({})
         expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
         expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
-        expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
+        expect(sessionService.authClient.closeSession).toHaveBeenCalled()
       })
       $rootScope.$digest()
       // Observable.finally is fired after the test, this defers until it's called.
