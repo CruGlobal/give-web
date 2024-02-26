@@ -122,20 +122,6 @@ describe('sessionModalController', function () {
       expect($ctrl.analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in-create-login')
       expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
-
-    it('should redirect to previous page after sign up', () => {
-      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockImplementation(() => '/search')
-      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
-      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
-      jest.spyOn($ctrl.analyticsFactory, 'track').mockImplementation(() => {})
-      expect($ctrl.$window.location).toEqual('/sign-in.html')
-
-      $ctrl.onSignUpSuccess()
-
-      expect($ctrl.$window.location).toEqual('/search')
-      expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
-      expect($ctrl.close).toHaveBeenCalled()
-    })
   })
 
   describe('$ctrl.onAccountBenefitsSuccess', () => {

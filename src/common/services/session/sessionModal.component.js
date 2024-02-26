@@ -67,12 +67,6 @@ class SessionModalController {
   onSignUpSuccess () {
     this.analyticsFactory.track('ga-sign-in-create-login')
     this.sessionService.removeOktaRedirectIndicator()
-    const locationToReturnUser = this.sessionService.hasLocationOnLogin()
-    if (locationToReturnUser) {
-      // Redirects user to the page they were on before signup.
-      this.sessionService.removeLocationOnLogin()
-      this.$window.location = locationToReturnUser
-    }
     this.close()
   }
 
