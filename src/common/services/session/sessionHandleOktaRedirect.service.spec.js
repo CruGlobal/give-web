@@ -10,7 +10,7 @@ import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 
 
-fdescribe('sessionHandleOktaRedirectService', function () {
+describe('sessionHandleOktaRedirectService', function () {
   beforeEach(angular.mock.module(module.name))
   let sessionHandleOktaRedirectService,
     sessionEnforcerService,
