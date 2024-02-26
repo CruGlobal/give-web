@@ -117,7 +117,9 @@ class UserMatchModalController {
     if (angular.isDefined(contact)) {
       this.verificationService.selectContact(contact).subscribe(() => {
         this.onActivate()
-        this.firstName = contact.name.split(' ')[0]
+        this.firstName = contact.name.includes(' ') 
+          ? contact.name.substring(0,contact.name.lastIndexOf(' '))
+          : contact.name
       },
       error => {
         this.setLoading({ loading: false })
