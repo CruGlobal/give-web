@@ -56,18 +56,15 @@ class SignInController {
       }
     }
 
+    // Using sessionEnforcerService to direct user to location prior to login or register for siebel
     this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.change]: (role, registrationState) => {
         if (role === Roles.registered && registrationState === 'NEW') {
-          this.sessionService.removeLocationOnLogin()
           this.sessionService.updateCurrentProfile()
           this.$rootScope.$broadcast(LoginOktaOnlyEvent, 'register-account')
         } else {
           redirectToLocationPriorToLogin()
         }
-      },
-      [EnforcerCallbacks.signIn]: () => {
-        redirectToLocationPriorToLogin()
       }
     }, EnforcerModes.donor)
   }
