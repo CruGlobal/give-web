@@ -74,7 +74,7 @@ class signUpActivationModalController {
           let status = ''
           switch (response.data.status) {
             case 'STAGED':
-              status = 'Awaiting Admin approval'
+              status = 'Sending Activation Email'
               break
             case 'ACTIVE':
               status = 'Active'
