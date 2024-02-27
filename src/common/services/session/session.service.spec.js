@@ -6,6 +6,7 @@ import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { advanceBy, advanceTo, clear } from 'jest-date-mock'
 import 'rxjs/add/observable/of'
+import 'rxjs/add/observable/throw'
 
 /* global inject */
 
@@ -224,7 +225,7 @@ describe('session service', function () {
     })
 
     it('should still sign user out if error during signout', () => {
-      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      jest.spyOn(sessionService.authClient, 'closeSession').mockRejectedValueOnce()
       sessionService
       .signOut()
       .subscribe(() => {
@@ -244,7 +245,7 @@ describe('session service', function () {
     })
 
     it('should add forcedUserToLogout if error', () => {
-      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      jest.spyOn(sessionService.authClient, 'closeSession').mockImplementationOnce(() => Promise.reject())
       sessionService
       .signOut(false)
       .subscribe(() => {
@@ -253,8 +254,7 @@ describe('session service', function () {
     })
 
     it('should redirect the user to okta if all else fails', () => {
-      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
-      jest.spyOn(sessionService.authClient, 'signOut').mockImplementationOnce(() => Promise.reject())
+      jest.spyOn(sessionService.authClient, 'signOut').mockRejectedValueOnce()
       sessionService
       .signOut()
       .subscribe(() => {

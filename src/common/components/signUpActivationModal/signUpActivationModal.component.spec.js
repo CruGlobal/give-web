@@ -175,7 +175,7 @@ describe('signUpActivationModal', function () {
         $rootScope.$digest()
       });
 
-      it('should return successfully and set status to "Awaiting Admin approval"', () => {
+      it('should return successfully and set status to "Sending Activation Email"', () => {
         jest.spyOn($ctrl.sessionService, 'checkCreateAccountStatus').mockImplementation(() => Promise.resolve({
           status: 'sucess',
           data: checkCreateAccountStatusData,
@@ -189,7 +189,7 @@ describe('signUpActivationModal', function () {
           expect ($ctrl.unverifiedAccount).toEqual({
             ...createAccountDataCookieData,
             ...checkCreateAccountStatusData,
-            status: 'Awaiting Admin approval'
+            status: 'Sending Activation Email'
           })
         })
       });

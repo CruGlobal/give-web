@@ -304,9 +304,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       })
       await clearCheckoutSavedData()
       // Use revokeAccessToken, revokeRefreshToken & closeSession to ensure authClint is cleared before logging out entirely.
-      authClient.revokeAccessToken()
-      authClient.revokeRefreshToken()
-      authClient.closeSession()
+      await authClient.revokeAccessToken()
+      await authClient.revokeRefreshToken()
+      await authClient.closeSession()
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem('forcedUserToLogout', true)
