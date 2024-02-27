@@ -115,7 +115,7 @@
             <div class="col-xs-6">
               <button
                 id="submitChangesButton"
-                type="button"
+                type="submit"
                 class="btn btn-primary pull-right"
                 ng-click="$ctrl.submitDetails()"
                 translate
@@ -142,7 +142,7 @@
       <div class="row bottom-links">
         <div class="col-xs-6">Powered by Okta</div>
         <div class="col-xs-6">
-          <a href="https://www.cru.org/us/en/about/privacy.html" target="_blank" rel="noopener" class="pull-right">Privacy Policy</a>
+          <a href="{{$ctrl.publicCru}}/us/en/about/privacy.html" target="_blank" class="pull-right">Privacy Policy</a>
         </div>
       </div>
 

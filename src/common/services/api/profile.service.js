@@ -81,7 +81,6 @@ class Profile {
       .map((donorDetails) => {
         donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'].address)
         delete donorDetails['mailing-address']
-        donorDetails['registration-state'] = 'NEW'
         return donorDetails
       })
   }

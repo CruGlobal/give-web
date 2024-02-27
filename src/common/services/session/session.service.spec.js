@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, SignInEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin, createAccountDataCookieName, registerForSiebelLocalKey } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, SignInEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin, createAccountDataCookieName } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -194,7 +194,6 @@ describe('session service', function () {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
         .respond(200, {})
       $window.sessionStorage.removeItem('forcedUserToLogout')
-      $window.localStorage.setItem(registerForSiebelLocalKey, 'true')
     })
 
     it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', () => {
@@ -221,18 +220,17 @@ describe('session service', function () {
           expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
             postLogoutRedirectUri: null
           })
-          expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual(null)
         })
     })
 
     it('should still sign user out if error during signout', () => {
-      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      jest.spyOn(sessionService.authClient, 'closeSession').mockRejectedValueOnce()
       sessionService
       .signOut()
       .subscribe(() => {
         expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
-        expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
-        expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
+        expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+        expect(sessionService.authClient.closeSession).toHaveBeenCalled()
         expect(sessionService.authClient.signOut).toHaveBeenCalled()
       })
     })
@@ -246,7 +244,7 @@ describe('session service', function () {
     })
 
     it('should add forcedUserToLogout if error', () => {
-      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      jest.spyOn(sessionService.authClient, 'closeSession').mockImplementationOnce(() => Promise.reject())
       sessionService
       .signOut(false)
       .subscribe(() => {
@@ -255,8 +253,7 @@ describe('session service', function () {
     })
 
     it('should redirect the user to okta if all else fails', () => {
-      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
-      jest.spyOn(sessionService.authClient, 'signOut').mockImplementationOnce(() => Promise.reject())
+      jest.spyOn(sessionService.authClient, 'signOut').mockRejectedValueOnce()
       sessionService
       .signOut()
       .subscribe(() => {
@@ -357,9 +354,7 @@ describe('session service', function () {
       sessionService.authClient.setAuthenticated(false)
       sessionService.authClient.shouldSucceed()
       sessionService.handleOktaRedirect().subscribe(() => {
-        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalledWith({
-          prompt: 'login'
-        })
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
         expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual('?ga=111111&query=test&anotherQuery=00000')
         expect($window.sessionStorage.getItem(locationOnLogin)).toEqual(null)
         done()
@@ -421,7 +416,6 @@ describe('session service', function () {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken')
       jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
       jest.spyOn(sessionService.authClient, 'closeSession')
-      $window.localStorage.setItem(registerForSiebelLocalKey, 'true')
     })
     it('make http request to signout user without redirect', (done) => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
@@ -429,8 +423,7 @@ describe('session service', function () {
         expect(data).toEqual({})
         expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
         expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
-        expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
-        expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual(null)
+        expect(sessionService.authClient.closeSession).toHaveBeenCalled()
       })
       $rootScope.$digest()
       // Observable.finally is fired after the test, this defers until it's called.

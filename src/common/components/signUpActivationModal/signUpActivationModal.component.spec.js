@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/of'
 import module from './signUpActivationModal.component'
-import { Sessions, registerForSiebelLocalKey } from 'common/services/session/session.service'
+import { Sessions } from 'common/services/session/session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -175,7 +175,7 @@ describe('signUpActivationModal', function () {
         $rootScope.$digest()
       });
 
-      it('should return successfully and set status to "Awaiting Admin approval"', () => {
+      it('should return successfully and set status to "Sending Activation Email"', () => {
         jest.spyOn($ctrl.sessionService, 'checkCreateAccountStatus').mockImplementation(() => Promise.resolve({
           status: 'sucess',
           data: checkCreateAccountStatusData,
@@ -189,7 +189,7 @@ describe('signUpActivationModal', function () {
           expect ($ctrl.unverifiedAccount).toEqual({
             ...createAccountDataCookieData,
             ...checkCreateAccountStatusData,
-            status: 'Awaiting Admin approval'
+            status: 'Sending Activation Email'
           })
         })
       });
@@ -241,12 +241,9 @@ describe('signUpActivationModal', function () {
 
 
   describe('onSuccessfulSignIn', () => {
-    beforeEach(inject(function (_$q_) {
+    it('runs onSuccess()', () => {
       $ctrl.onSuccessfulSignIn()
-    }))
-
-    it('sets the \'registerForSiebelOnReturn\' session storage item', () => {
-      expect($window.localStorage.getItem(registerForSiebelLocalKey)).toEqual('true')
+      expect($ctrl.onSuccess).toHaveBeenCalled()
     })
   })
 })

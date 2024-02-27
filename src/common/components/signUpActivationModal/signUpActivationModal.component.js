@@ -1,6 +1,6 @@
 import angular from 'angular'
 import includes from 'lodash/includes'
-import sessionService, { Roles, createAccountDataCookieName, registerForSiebelLocalKey } from 'common/services/session/session.service'
+import sessionService, { Roles, createAccountDataCookieName } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './signUpActivationModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
@@ -74,7 +74,7 @@ class signUpActivationModalController {
           let status = ''
           switch (response.data.status) {
             case 'STAGED':
-              status = 'Awaiting Admin approval'
+              status = 'Sending Activation Email'
               break
             case 'ACTIVE':
               status = 'Active'
@@ -110,7 +110,6 @@ class signUpActivationModalController {
   }
 
   onSuccessfulSignIn () {
-    this.$window.localStorage.setItem(registerForSiebelLocalKey, true)
     this.onSuccess()
   }
 }

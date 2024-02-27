@@ -1,9 +1,5 @@
-<h4 ng-switch="$ctrl.question.key">
-  <span ng-switch-when="previous-address" translate>Have you lived at any of these addresses?</span>
-  <span ng-switch-when="previous-bank" translate>Have you given to us via a check or transfer from one of these banks?</span>
-  <span ng-switch-when="previous-cc" translate>Are any of these the last 4 digits of a card that you may have used to give to us?</span>
-  <span ng-switch-when="staff-member-gift" translate>Have you given to any of these staff members before?</span>
-  <span ng-switch-when="ministry-gift" translate>Have you given to any of these ministries, programs, or funds before?</span>
+<h4>
+  <span translate>{{$ctrl.question['question-text']}}</span>
 </h4>
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError">
   <div translate>You must choose one.</div>

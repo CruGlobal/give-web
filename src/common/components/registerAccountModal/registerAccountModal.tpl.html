@@ -33,19 +33,22 @@
   </div>
 </div>
 <div class="modal-body" ng-switch="$ctrl.state">
-  <sign-in-modal ng-switch-when="sign-in"
+  <sign-in-modal 
+    ng-switch-when="sign-in"
     modal-title="$ctrl.modalTitle"
     on-state-change="$ctrl.stateChanged(state)"
     on-success="$ctrl.onIdentitySuccess()"
     on-failure="$ctrl.onIdentityFailure()"
   ></sign-in-modal>
-  <sign-up-modal ng-switch-when="sign-up"
+  <sign-up-modal 
+    ng-switch-when="sign-up"
     on-state-change="$ctrl.stateChanged(state)"
     on-success="$ctrl.onIdentitySuccess()"
     on-failure="$ctrl.onIdentityFailure()"
     is-inside-another-modal="true"
   ></sign-up-modal>
-  <sign-up-activation-modal ng-switch-when="sign-up-activation"
+  <sign-up-activation-modal 
+    ng-switch-when="sign-up-activation"
     on-state-change="$ctrl.stateChanged(state)"
     on-success="$ctrl.onIdentitySuccess()"
     on-failure="$ctrl.onIdentityFailure()"
@@ -54,19 +57,22 @@
   <div ng-switch-when="loading">
     <loading></loading>
   </div>
-  <contact-info-modal ng-switch-when="contact-info"
+  <contact-info-modal 
+    ng-switch-when="contact-info"
     modal-title="$ctrl.modalTitle"
     on-success="$ctrl.onContactInfoSuccess()"
     on-cancel="$ctrl.onCancel()"
   ></contact-info-modal>
-  <user-match-modal ng-switch-when="user-match"
+  <user-match-modal
+    ng-switch-when="user-match"
     cart-count="$ctrl.cartCount"
     first-name="$ctrl.firstName"
     modal-title="$ctrl.modalTitle"
     on-success="$ctrl.onUserMatchSuccess()"
     set-loading="$ctrl.setLoading({loading: loading})"
   ></user-match-modal>
-  <failed-verification-modal ng-switch-when="failed-verification"
+  <failed-verification-modal 
+    ng-switch-when="failed-verification"
     modal-title="$ctrl.modalTitle"
     on-ok="$ctrl.onCancel()"
   ></failed-verification-modal>

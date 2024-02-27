@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
 import { Roles } from 'common/services/session/session.service'
 
-fdescribe('thank you', function () {
+describe('thank you', function () {
   describe('accountBenefits', function () {
     beforeEach(angular.mock.module(module.name))
     let $ctrl

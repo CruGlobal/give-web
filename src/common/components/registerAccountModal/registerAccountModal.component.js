@@ -75,8 +75,12 @@ class RegisterAccountModalController {
   $onDestroy () {
     this.getTotalQuantitySubscription.unsubscribe()
     this.subscription.unsubscribe()
-    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe()
-    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe()
+    if (angular.isDefined(this.getDonorDetailsSubscription)) {
+      this.getDonorDetailsSubscription.unsubscribe()
+    }
+    if (angular.isDefined(this.verificationServiceSubscription)) {
+      this.verificationServiceSubscription.unsubscribe()
+    }
   }
 
   onIdentitySuccess () {
