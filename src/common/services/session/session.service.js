@@ -542,7 +542,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       return session.checkoutSavedData
     } catch { }
   }
-
 }
 
 export default angular

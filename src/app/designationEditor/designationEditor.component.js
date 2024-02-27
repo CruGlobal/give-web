@@ -34,7 +34,6 @@ import desigImgSrcDirective from 'common/directives/desigImgSrc.directive'
 
 import './designationEditor.scss'
 
-
 const componentName = 'designationEditor'
 
 class DesignationEditorController {
@@ -67,7 +66,7 @@ class DesignationEditorController {
       this.$window.location = '/'
     }
 
-    this.sessionHandleOktaRedirectService.onHandleOktaRedirect();
+    this.sessionHandleOktaRedirectService.onHandleOktaRedirect()
     this.sessionHandleOktaRedirectService.errorMessageSubject.subscribe((errorMessage) => {
       this.errorMessage = errorMessage
     })
