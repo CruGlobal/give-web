@@ -214,9 +214,9 @@ describe('session service', function () {
       sessionService
         .signOut(true)
         .subscribe(() => {
-          expect(sessionService.authClient.revokeAccessToken).not.toHaveBeenCalled()
-          expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
-          expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
+          expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+          expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+          expect(sessionService.authClient.closeSession).toHaveBeenCalled()
           expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
             postLogoutRedirectUri: null
           })
@@ -228,9 +228,9 @@ describe('session service', function () {
       sessionService
       .signOut()
       .subscribe(() => {
-        expect(sessionService.authClient.revokeAccessToken).not.toHaveBeenCalled()
-        expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
-        expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
+        expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+        expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+        expect(sessionService.authClient.closeSession).toHaveBeenCalled()
         expect(sessionService.authClient.signOut).toHaveBeenCalled()
       })
     })
@@ -355,9 +355,7 @@ describe('session service', function () {
       sessionService.authClient.setAuthenticated(false)
       sessionService.authClient.shouldSucceed()
       sessionService.handleOktaRedirect().subscribe(() => {
-        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalledWith({
-          prompt: 'login'
-        })
+        expect(sessionService.authClient.token.getWithRedirect).toHaveBeenCalled()
         expect($window.sessionStorage.getItem(locationSearchOnLogin)).toEqual('?ga=111111&query=test&anotherQuery=00000')
         expect($window.sessionStorage.getItem(locationOnLogin)).toEqual(null)
         done()

@@ -4,7 +4,6 @@ import module from './signIn.component'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
-import { LoginOktaOnlyEvent } from '../../common/services/session/session.service'
 
 describe('signIn', function () {
   beforeEach(angular.mock.module(module.name))
@@ -82,16 +81,31 @@ describe('signIn', function () {
     })
 
     describe('Without Siebel account', () => {
+      beforeEach(() => {
+        jest.spyOn($ctrl.sessionModalService, 'registerAccount').mockReturnValue({then: angular.noop })
+        jest.spyOn($ctrl.sessionModalService, 'userMatch').mockReturnValue({then: angular.noop})
+      })
+
       it('shows register to Siebel modal upon initial Okta sign in', () => {
         jest.spyOn(orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'registration-state': 'NEW' }))
         jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
         $ctrl.$onInit()
         expect($ctrl.sessionChanged).toHaveBeenCalled()
-        expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
-        expect($ctrl.sessionService.updateCurrentProfile).toHaveBeenCalled()
-        expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(1)
+        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalled()
         expect($ctrl.$window.location).toEqual('/sign-in.html')
-        expect ($ctrl.$rootScope.$broadcast).toHaveBeenCalledWith(LoginOktaOnlyEvent, 'register-account')
+        expect($ctrl.sessionModalService.userMatch).not.toHaveBeenCalled()
+        expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+      })
+
+      it('shows register to Siebel modal upon matched account', () => {
+        jest.spyOn(orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'registration-state': 'MATCHED' }))
+        jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+        $ctrl.$onInit()
+        expect($ctrl.sessionChanged).toHaveBeenCalled()
+        expect($ctrl.sessionModalService.userMatch).toHaveBeenCalled()
+        expect($ctrl.$window.location).toEqual('/sign-in.html')
+        expect($ctrl.sessionModalService.registerAccount).not.toHaveBeenCalled()
+        expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
       })
     })
 
