@@ -37,6 +37,7 @@ function generateEcommerce (siebelTransactionId, jobId) {
       price: amountPaid,
       quantity: '1',
       recurring_date: item.giftStartDate ? item.giftStartDate.format('MMMM D, YYYY') : undefined,
+      campaign_code: item.config.CAMPAIGN_CODE || undefined,
       job_id: jobId
     }]
   }
