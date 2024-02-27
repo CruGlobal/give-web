@@ -6,7 +6,6 @@ import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { advanceBy, advanceTo, clear } from 'jest-date-mock'
 import 'rxjs/add/observable/of'
-import 'rxjs/add/observable/throw'
 
 /* global inject */
 
