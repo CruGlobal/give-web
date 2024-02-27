@@ -44,7 +44,7 @@ class PaymentMethodsController {
   }
 
   $onInit () {
-    this.sessionHandleOktaRedirectService.onHandleOktaRedirect();
+    this.sessionHandleOktaRedirectService.onHandleOktaRedirect()
     this.sessionHandleOktaRedirectService.errorMessageSubject.subscribe((errorMessage) => {
       this.errorMessage = errorMessage
     })

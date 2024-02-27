@@ -48,11 +48,11 @@ class YourGivingController {
   }
 
   $onInit () {
-    this.sessionHandleOktaRedirectService.onHandleOktaRedirect();
+    this.sessionHandleOktaRedirectService.onHandleOktaRedirect()
     this.sessionHandleOktaRedirectService.errorMessageSubject.subscribe((errorMessage) => {
       this.errorMessage = errorMessage
     })
-    
+
     // Enforce donor role view access manage-giving
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
