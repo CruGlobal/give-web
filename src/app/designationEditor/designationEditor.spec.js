@@ -176,6 +176,24 @@ describe('Designation Editor', function () {
       $httpBackend.flush()
     })
 
+    it('to sign in and try again if the response is 422', () => {
+      $ctrl.designationNumber = designationSecurityResponse.designationNumber
+
+      jest.spyOn($ctrl.sessionModalService, 'open').mockReturnValue(() => ({ result: $q.resolve() }))
+      $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(422, null)
+      $httpBackend.expectGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(422, null)
+
+      $ctrl.getDesignationContent().then(() => {
+        expect($ctrl.sessionModalService.open).toHaveBeenCalled()
+        expect($ctrl.designationContent).toBeDefined()
+        expect($ctrl.contentLoaded).toEqual(true)
+        expect($ctrl.loadingContentError).toEqual(false)
+      })
+      $httpBackend.flush()
+    })
+
     it('should log an error if content fails', () => {
       $ctrl.designationNumber = '0123456'
       jest.spyOn($ctrl.designationEditorService, 'getContent').mockImplementation(() => {
