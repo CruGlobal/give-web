@@ -101,11 +101,12 @@ class DesignationEditorController {
       this.carouselImages = this.extractCarouselUrls()
       this.updateCarousel()
     }, error => {
-      if (error.status === 422) {
+      if (error.status === 422 && !this.retried) {
         return this.sessionModalService.open('sign-in', {
           backdrop: 'static',
           keyboard: false
         }).result.then(() => {
+          this.retried = true
           return this.getDesignationContent()
         })
       }
@@ -114,6 +115,8 @@ class DesignationEditorController {
       this.loadingOverlay = false
       this.loadingContentError = true
       this.$log.error('Error loading designation content or photos.', error)
+    }).finally(() => {
+      this.retried = false
     })
   }
 

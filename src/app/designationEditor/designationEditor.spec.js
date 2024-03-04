@@ -156,11 +156,11 @@ describe('Designation Editor', function () {
   })
 
   describe('getDesignationContent()', () => {
-    it('to skip if no designation number', () => {
+    it('should skip if no designation number', () => {
       expect($ctrl.getDesignationContent()).toEqual(undefined)
     })
 
-    it('to getDesignationContent', (done) => {
+    it('should load designation content and photos', (done) => {
       $ctrl.designationNumber = designationSecurityResponse.designationNumber
 
       $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
@@ -177,7 +177,7 @@ describe('Designation Editor', function () {
       $httpBackend.flush()
     })
 
-    it('to sign in and try again if the response is 422', (done) => {
+    it('should sign in and try again if the response is 422', (done) => {
       $ctrl.designationNumber = designationSecurityResponse.designationNumber
 
       $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
@@ -202,6 +202,27 @@ describe('Designation Editor', function () {
       $httpBackend.expectGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
         .respond(200, [])
       signInDeferred.resolve()
+      $httpBackend.flush()
+    })
+
+    it('should only retry once if the response is repeatedly 422', (done) => {
+      $ctrl.designationNumber = designationSecurityResponse.designationNumber
+
+      $httpBackend.whenGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(422, null)
+      $httpBackend.whenGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(422, null)
+
+      jest.spyOn($ctrl.sessionModalService, 'open').mockReturnValue({ result: $q.resolve() })
+
+      $ctrl.getDesignationContent().then(() => {
+        expect($ctrl.sessionModalService.open).toHaveBeenCalledTimes(1)
+        expect($ctrl.designationContent).toBeUndefined()
+        expect($ctrl.contentLoaded).toEqual(false)
+        expect($ctrl.loadingContentError).toEqual(true)
+        done()
+      }).catch(done)
+      $httpBackend.flush()
       $httpBackend.flush()
     })
 
