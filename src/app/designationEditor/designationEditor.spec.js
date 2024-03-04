@@ -160,7 +160,7 @@ describe('Designation Editor', function () {
       expect($ctrl.getDesignationContent()).toEqual(undefined)
     })
 
-    it('to getDesignationContent', () => {
+    it('to getDesignationContent', (done) => {
       $ctrl.designationNumber = designationSecurityResponse.designationNumber
 
       $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
@@ -170,27 +170,38 @@ describe('Designation Editor', function () {
 
       $ctrl.getDesignationContent().then(() => {
         expect($ctrl.designationContent).toBeDefined()
-        expect($ctrl.contentLoaded).toEqual(true)
+        expect($ctrl.contentLoaded).toEqual(false)
         expect($ctrl.loadingContentError).toEqual(false)
-      })
+        done()
+      }).catch(done)
       $httpBackend.flush()
     })
 
-    it('to sign in and try again if the response is 422', () => {
+    it('to sign in and try again if the response is 422', (done) => {
       $ctrl.designationNumber = designationSecurityResponse.designationNumber
 
-      jest.spyOn($ctrl.sessionModalService, 'open').mockReturnValue(() => ({ result: $q.resolve() }))
       $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
         .respond(422, null)
       $httpBackend.expectGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
         .respond(422, null)
 
+      const signInDeferred = $q.defer()
+      jest.spyOn($ctrl.sessionModalService, 'open').mockReturnValue({ result: signInDeferred.promise })
+
       $ctrl.getDesignationContent().then(() => {
         expect($ctrl.sessionModalService.open).toHaveBeenCalled()
         expect($ctrl.designationContent).toBeDefined()
-        expect($ctrl.contentLoaded).toEqual(true)
+        expect($ctrl.contentLoaded).toEqual(false)
         expect($ctrl.loadingContentError).toEqual(false)
-      })
+        done()
+      }).catch(done)
+      $httpBackend.flush()
+
+      $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(200, designationSecurityResponse)
+      $httpBackend.expectGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(200, [])
+      signInDeferred.resolve()
       $httpBackend.flush()
     })
 

@@ -95,7 +95,6 @@ class DesignationEditorController {
       // get designation photos
       this.designationEditorService.getPhotos(this.designationNumber)
     ]).then(responses => {
-      this.contentLoaded = true
       this.loadingOverlay = false
       this.designationContent = responses[0].data
       this.designationPhotos = responses[1].data
@@ -103,13 +102,12 @@ class DesignationEditorController {
       this.updateCarousel()
     }, error => {
       if (error.status === 422) {
-        this.sessionModalService.open('sign-in', {
+        return this.sessionModalService.open('sign-in', {
           backdrop: 'static',
           keyboard: false
         }).result.then(() => {
-          this.getDesignationContent()
+          return this.getDesignationContent()
         })
-        return
       }
 
       this.contentLoaded = false
