@@ -351,7 +351,7 @@ describe('branded analytics factory', () => {
       ])
     })
 
-    it('should handle missing utm_term purchase event', () => {
+    it('should handle missing utm_term', () => {
       jest.spyOn(self.$location, 'search').mockReturnValue('')
 
       self.brandedAnalyticsFactory.saveItem({
