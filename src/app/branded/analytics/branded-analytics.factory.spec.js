@@ -24,6 +24,7 @@ describe('branded analytics factory', () => {
     self.brandedAnalyticsFactory = brandedAnalyticsFactory
     self.$window = $window
     self.$window.dataLayer = []
+    self.$location = $location
 
     jest.spyOn($location, 'search').mockReturnValue(`?utm_term=${utmTerm}`)
   }))
@@ -344,6 +345,49 @@ describe('branded analytics factory', () => {
               recurring_date: undefined,
               campaign_code: '123ABC',
               job_id: utmTerm
+            }]
+          }
+        }
+      ])
+    })
+
+    it('should handle missing utm_term purchase event', () => {
+      jest.spyOn(self.$location, 'search').mockReturnValue('')
+
+      self.brandedAnalyticsFactory.saveItem({
+        amount: 100,
+        amountWithFees: 102.5,
+        frequency: 'Single',
+        giftStartDate: null,
+        ...productData
+      })
+      self.brandedAnalyticsFactory.purchase()
+
+      expect(self.$window.dataLayer).toEqual([
+        { ecommerce: null },
+        {
+          event: 'purchase',
+          ecommerce: {
+            payment_type: 'Visa',
+            currency: 'USD',
+            donator_type: 'Household',
+            pays_processing: 'no',
+            value: '100.00',
+            processing_fee: '2.50',
+            transaction_id: '12345',
+            testing_transaction: false,
+            items: [{
+              item_id: '1234567',
+              item_name: 'Staff Person',
+              item_brand: 'CRU',
+              item_category: 'STAFF',
+              item_variant: 'single',
+              currency: 'USD',
+              price: '100.00',
+              quantity: '1',
+              recurring_date: undefined,
+              campaign_code: '123ABC',
+              job_id: undefined
             }]
           }
         }
