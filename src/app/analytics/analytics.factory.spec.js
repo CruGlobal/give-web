@@ -4,11 +4,13 @@ import moment from 'moment'
 
 import module from './analytics.factory'
 
+const utmTerm = 'CAMPAIGN'
+
 describe('analytics factory', () => {
   beforeEach(angular.mock.module(module.name, 'environment'))
 
   const self = {}
-  beforeEach(inject((analyticsFactory, envService, $window) => {
+  beforeEach(inject((analyticsFactory, envService, $window, $location) => {
     self.analyticsFactory = analyticsFactory
     self.envService = envService
     self.$window = $window
@@ -17,6 +19,8 @@ describe('analytics factory', () => {
 
     self.$window.sessionStorage.clear()
     self.$window.localStorage.clear()
+
+    jest.spyOn($location, 'search').mockReturnValue(`?utm_term=${utmTerm}`)
 
     Date.now = jest.fn(() => new Date("2023-04-05T01:02:03.000Z"));
   }))
@@ -659,10 +663,11 @@ describe('analytics factory', () => {
             payment_type: 'credit card',
             purchase_number: '23032',
             campaign_code: undefined,
-            designation: 'designation',
+            designation: '0643021',
             item_brand: 'STAFF',
             processingFee: undefined,
             testing_transaction: 'false',
+            job_id: utmTerm,
           }
         ]
       })
