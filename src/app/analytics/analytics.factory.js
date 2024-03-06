@@ -555,7 +555,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $location, $timeout,
 
         // Set the transactionId in localStorage to be the one that is passed in
         sessionStorage.setItem('transactionId', currentTransactionId)
-        const jobId = new URLSearchParams($location.search()).get('utm_term') || undefined
+        const jobId = $location.search().utm_term
         const cartObject = transactionCart.items.map((cartItem) => {
           const { amount, amountWithFees } = cartItem
           purchaseTotal += amount

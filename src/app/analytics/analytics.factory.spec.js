@@ -21,8 +21,7 @@ describe('analytics factory', () => {
     self.$window.localStorage.clear()
 
     self.$location = $location
-
-    jest.spyOn($location, 'search').mockReturnValue(`?utm_term=${utmTerm}`)
+    self.$location.search({ utm_term: utmTerm })
 
     Date.now = jest.fn(() => new Date("2023-04-05T01:02:03.000Z"));
   }))
@@ -679,7 +678,7 @@ describe('analytics factory', () => {
       self.$window.sessionStorage.setItem('coverFeeDecision', null)
       self.$window.localStorage.setItem('transactionCart', JSON.stringify(transactionCart))
       self.$window.sessionStorage.setItem('transactionId', 23031)
-      jest.spyOn(self.$location, 'search').mockReturnValue('')
+      self.$location.search({})
 
       expect(self.$window.sessionStorage.getItem('transactionId')).toEqual('23031')
 
