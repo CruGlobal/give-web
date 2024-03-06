@@ -7,21 +7,15 @@ import 'rxjs/add/observable/throw'
 
 describe('signIn', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl
+  let $ctrl, orderService
 
-  beforeEach(inject(function (_$componentController_) {
+  beforeEach(inject(function (_$componentController_, _orderService_) {
+    orderService = _orderService_
     $ctrl = _$componentController_(module.name,
-      { $window: {
-          location: '/sign-in.html',
-          sessionStorage: {
-            getItem: jest.fn(),
-            removeItem: jest.fn(),
-          }
-        }
-      }
+      { $window: { location: '/sign-in.html' } }
     )
   }))
-
+  
   it('to be defined', function () {
     expect($ctrl).toBeDefined()
   })
@@ -45,6 +39,8 @@ describe('signIn', function () {
 
   describe('as \'IDENTIFIED\'', () => {
     beforeEach(() => {
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
       jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('IDENTIFIED')
       jest.spyOn($ctrl, 'sessionChanged')
       $ctrl.$onInit()
@@ -57,6 +53,8 @@ describe('signIn', function () {
     it('has does not change location', () => {
       expect($ctrl.sessionChanged).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/sign-in.html')
+      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -71,23 +69,69 @@ describe('signIn', function () {
       $ctrl.$onDestroy()
     })
 
-    it('navigates to checkout', () => {
-      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue(null)
-      $ctrl.$onInit()
-      expect($ctrl.sessionChanged).toHaveBeenCalled()
-      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
-      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
-      expect($ctrl.$window.location).toEqual('/checkout.html')
+    describe('Without Siebel account', () => {
+      let deferred, $rootScope
+      beforeEach(inject((_$q_, _$rootScope_) => {
+        deferred = _$q_.defer()
+        $rootScope = _$rootScope_
+        jest.spyOn($ctrl.sessionModalService, 'registerAccount').mockReturnValue(deferred.promise)
+        jest.spyOn($ctrl.sessionModalService, 'userMatch').mockReturnValue(deferred.promise)
+      }))
+
+      it('shows register to Siebel modal upon initial Okta sign in', () => {
+        jest.spyOn(orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'registration-state': 'NEW' }))
+        jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+        $ctrl.$onInit()
+        expect($ctrl.sessionChanged).toHaveBeenCalled()
+        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalled()
+        expect($ctrl.$window.location).toEqual('/sign-in.html')
+        expect($ctrl.sessionModalService.userMatch).not.toHaveBeenCalled()
+        expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+
+        deferred.resolve()
+        $rootScope.$digest()
+        expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
+      })
+
+      it('shows register to Siebel modal upon matched account', () => {
+        jest.spyOn(orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'registration-state': 'MATCHED' }))
+        jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+        $ctrl.$onInit()
+        expect($ctrl.sessionChanged).toHaveBeenCalled()
+        expect($ctrl.sessionModalService.userMatch).toHaveBeenCalled()
+        expect($ctrl.$window.location).toEqual('/sign-in.html')
+        expect($ctrl.sessionModalService.registerAccount).not.toHaveBeenCalled()
+        expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+
+        deferred.resolve()
+        $rootScope.$digest()
+        expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
+      })
     })
 
-    it('navigates to location which user initial came from before logging in', () => {
-      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
-      $ctrl.$onInit()
-      expect($ctrl.sessionChanged).toHaveBeenCalled()
-      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
-      expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
-      expect($ctrl.$window.location).toEqual('https://give-stage2.cru.org/search-results.html')
-    })
+    describe('With Siebel account', () => {
+      beforeEach(() => {
+        jest.spyOn(orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'registration-state': 'REGISTERED' }))
+      })
+
+      it('navigates to checkout if location prior to login wasn\'t saved', () => {
+        jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue(null)
+        $ctrl.$onInit()
+        expect($ctrl.sessionChanged).toHaveBeenCalled()
+        expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
+        expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+        expect($ctrl.$window.location).toEqual('/checkout.html')
+      })
+
+      it('navigates to location prior to login', () => {
+        jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+        $ctrl.$onInit()
+        expect($ctrl.sessionChanged).toHaveBeenCalled()
+        expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(2)
+        expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
+        expect($ctrl.$window.location).toEqual('https://give-stage2.cru.org/search-results.html')
+      })
+    });
   })
 
   describe('checkoutAsGuest()', () => {
@@ -121,7 +165,7 @@ describe('signIn', function () {
 
     describe('onSignUpWithOkta()', () => {
       it('should call createAccount()', () => {
-        jest.spyOn($ctrl.sessionModalService, 'createAccount').mockReturnValue(Observable.throw({}))
+        jest.spyOn($ctrl.sessionModalService, 'createAccount')
         $ctrl.onSignUpWithOkta()
 
         expect($ctrl.sessionModalService.createAccount).toHaveBeenCalled()

@@ -270,6 +270,22 @@ describe('registerAccountModal', function () {
       expect($ctrl.state).toEqual('sign-in')
     })
 
+    it('changes to \'sign-up\' state', () => {
+      $ctrl.stateChanged('sign-up')
+
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
+      expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
+      expect($ctrl.state).toEqual('sign-up')
+    })
+
+    it('changes to \'sign-up-activation\' state', () => {
+      $ctrl.stateChanged('sign-up-activation')
+
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
+      expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
+      expect($ctrl.state).toEqual('sign-up-activation')
+    })
+
     it('changes to \'contact-info\' state', () => {
       $ctrl.stateChanged('contact-info')
 

@@ -4,6 +4,8 @@ import sessionService, { Roles, createAccountDataCookieName } from 'common/servi
 import orderService from 'common/services/api/order.service'
 import template from './signUpActivationModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
+import signInButtonComponent from '../signInForm/signInButton/signInButton.component'
+
 const componentName = 'signUpActivationModal'
 
 class signUpActivationModalController {
@@ -105,27 +107,8 @@ class signUpActivationModalController {
     }
   }
 
-  signInWithOkta () {
-    this.isSigningIn = true
-    delete this.errorMessage
-    this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
-      this.onSuccess()
-    }, error => {
-      this.isSigningIn = false
-      if (error && error.config && error.config.data && error.config.data.password) {
-        delete error.config.data.password
-      }
-
-      if (error && error.data && error.data.code && error.data.code === 'SIEB-DOWN') {
-        this.$log.error('Siebel is down', error)
-        this.errorMessage = error.data.message
-      } else {
-        this.$log.error('Sign In Error', error)
-        this.errorMessage = 'generic'
-      }
-      this.$scope.$apply()
-      this.onFailure()
-    })
+  onSuccessfulSignIn () {
+    this.onSuccess()
   }
 }
 
@@ -133,7 +116,8 @@ export default angular
   .module(componentName, [
     sessionService.name,
     orderService.name,
-    cartService.name
+    cartService.name,
+    signInButtonComponent.name
   ])
   .component(componentName, {
     controller: signUpActivationModalController,
