@@ -1,19 +1,37 @@
 import angular from 'angular'
 import template from './registerAccountModal.tpl.html'
 
+import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import sessionService, { Roles, LoginOktaOnlyEvent } from 'common/services/session/session.service'
 import verificationService from 'common/services/api/verification.service'
 import { scrollModalToTop } from 'common/services/modalState.service'
 
 import signInModal from 'common/components/signInModal/signInModal.component'
-import signUpModal from 'common/components/signUpModal/signUpModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
 
 const componentName = 'registerAccountModal'
 
+/*
+ * TODO:
+ *
+ * If you navigate to /profile.html as a 'registration-state' === 'NEW' user with the Okta tokens
+ * in local storage but without the give site cookies, clicking the login button will succeed without
+ * a redirect and will proceed to the contact info form. However, the redirectingFromOkta flag will
+ * still be set in session storage. If the user reloads the page before submitting their contact
+ * information, it will hang forever in a loading state because redirectingFromOkta is still set.
+ * Closing that browser tab and opening another tab clears session storage and will fix this. It
+ * would be nice to fix this edge case though.
+ *
+ * I don't fully understand our code's Okta auth state machine and where our logic maybe faulty. I
+ * believe we should investigate calling sessionService.removeOktaRedirectIndicator() immediately
+ * in the register account modal instead of waiting for the contact info and the donor matching to
+ * complete.
+ *
+ * ~ Caleb Cox
+ */
 class RegisterAccountModalController {
   // Register Account Modal is a multi-step process.
   // 1. Sign In/Up
@@ -23,7 +41,11 @@ class RegisterAccountModalController {
   // 5. Complete User Match
 
   /* @ngInject */
-  constructor (orderService, sessionService, verificationService, gettext) {
+  constructor ($element, $rootScope, $window, cartService, orderService, sessionService, verificationService, gettext) {
+    this.element = $element[0]
+    this.$rootScope = $rootScope
+    this.$window = $window
+    this.cartService = cartService
     this.orderService = orderService
     this.sessionService = sessionService
     this.verificationService = verificationService
@@ -32,6 +54,18 @@ class RegisterAccountModalController {
   }
 
   $onInit () {
+    this.$rootScope.$on(LoginOktaOnlyEvent, () => {
+      this.getDonorDetails()
+    })
+
+    this.cartCount = 0
+    // TODO: Do we need to unsubscribe from this?
+    this.cartService.getTotalQuantity().subscribe(count => {
+      this.cartCount = count
+    }, () => {
+      this.cartCount = 0
+    })
+
     // Step 1. Sign-In/Up (skipped if already Signed In)
     if (this.sessionService.getRole() === Roles.registered) {
       // Proceed to Step 2
@@ -93,15 +127,13 @@ class RegisterAccountModalController {
   }
 
   stateChanged (state) {
-    switch (state) {
-      case 'contact-info':
-        this.setModalSize()
-        break
-      default:
-        this.setModalSize('sm')
-    }
+    this.element.dataset.state = state
+    this.setModalSize(this.$window.screen.width >= 1200 ? 'lg' : state === 'contact-info' ? undefined : 'sm')
+
     this.state = state
-    this.setLoading({ loading: false })
+    if (!this.sessionService.isOktaRedirecting()) {
+      this.setLoading({ loading: false })
+    }
     this.scrollModalToTop()
   }
 
@@ -118,10 +150,10 @@ class RegisterAccountModalController {
 export default angular
   .module(componentName, [
     contactInfoModal.name,
+    cartService.name,
     orderService.name,
     sessionService.name,
     signInModal.name,
-    signUpModal.name,
     userMatchModal.name,
     failedVerificationModal.name,
     verificationService.name
@@ -130,6 +162,7 @@ export default angular
     controller: RegisterAccountModalController,
     templateUrl: template,
     bindings: {
+      firstName: '=',
       modalTitle: '=',
       onSuccess: '&',
       onCancel: '&',

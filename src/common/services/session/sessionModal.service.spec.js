@@ -172,15 +172,6 @@ describe('sessionModalService', function () {
     })
   })
 
-  describe('signUp', () => {
-    it('should open signUp modal', () => {
-      sessionModalService.signUp()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
-    })
-  })
-
   describe('userMatch', () => {
     it('should open userMatch modal', () => {
       sessionModalService.userMatch()
@@ -206,17 +197,5 @@ describe('sessionModalService', function () {
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
     })
-  })
-})
-
-describe('sessionModalService module config', () => {
-  let modalStateServiceProvider
-
-  beforeEach(() => {
-    angular.mock.module(modalStateModule.name, function (_modalStateServiceProvider_) {
-      modalStateServiceProvider = _modalStateServiceProvider_
-      jest.spyOn(modalStateServiceProvider, 'registerModal').mockImplementation(() => {})
-    })
-    angular.mock.module(module.name)
   })
 })

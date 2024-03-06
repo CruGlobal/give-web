@@ -23,7 +23,6 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
     options = angular.isObject(options) ? options : {}
     const modalOptions = angular.merge({}, {
       component: sessionModalComponent.name,
-      size: 'sm',
       windowTemplateUrl: sessionModalWindowTemplate,
       resolve: {
         state: () => type
@@ -64,7 +63,6 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       openAnalyticsEvent: 'ga-sign-in',
       dismissAnalyticsEvent: 'ga-sign-in-exit'
     }).result,
-    signUp: () => openModal('sign-up').result,
     userMatch: () => openModal('user-match', {
       backdrop: 'static',
       openAnalyticsEvent: 'ga-registration-match-is-this-you',

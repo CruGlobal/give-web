@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { OktaStorage, Roles, Sessions, SignOutEvent } from './session.service'
+import module, { OktaStorage, Roles, Sessions, SignOutEvent, redirectingIndicator } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -219,23 +219,6 @@ describe('session service', function () {
         .signIn('user@example.com', 'hello123', undefined, undefined, 'gxbcdviu=')
         .subscribe((data) => {
           expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-  })
-
-  describe('signUp', () => {
-    it('makes http request to cas/register', () => {
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/register', {
-        email: 'professorx@xavier.edu',
-        password: 'Cerebro123',
-        firstName: 'Charles',
-        lastName: 'Xavier'
-      }).respond(200, {})
-      sessionService
-        .signUp('professorx@xavier.edu', 'Cerebro123', 'Charles', 'Xavier')
-        .subscribe((data) => {
-          expect(data).toEqual({})
         })
       $httpBackend.flush()
     })

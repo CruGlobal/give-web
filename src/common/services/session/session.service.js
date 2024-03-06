@@ -66,12 +66,13 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getRole: currentRole,
     signIn: signIn,
     signOut: signOut,
-    signUp: signUp,
     handleOktaRedirect: handleOktaRedirect,
     oktaSignIn: oktaSignIn,
     oktaSignOut: oktaSignOut,
     downgradeToGuest: downgradeToGuest,
+    getOktaUrl: getOktaUrl,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
+    isOktaRedirecting: isOktaRedirecting,
     updateCurrentProfile: updateCurrentProfile
   }
 
@@ -109,23 +110,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       )
   }
 
-  function signUp (email, password, first_name, last_name) {
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Create-User
-    return Observable
-      .from($http({
-        method: 'POST',
-        url: casApiUrl('/register'),
-        withCredentials: true,
-        data: {
-          email: email,
-          password: password,
-          firstName: first_name,
-          lastName: last_name
-        }
-      }))
-      .map((response) => response.data)
-  }
-
   function handleOktaRedirect (lastPurchaseId) {
     if (authClient.isLoginRedirect()) {
       return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
@@ -138,6 +122,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function oktaSignIn (lastPurchaseId) {
+    setOktaRedirecting()
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
       .finally(() => {
@@ -204,6 +189,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     $window.sessionStorage.removeItem(redirectingIndicator)
   }
 
+  function isOktaRedirecting () {
+    return $window.sessionStorage.getItem(redirectingIndicator)
+  }
 
   function updateCurrentProfile () {
     let cruProfile = {}
@@ -218,6 +206,10 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   /* Private Methods */
+  function setOktaRedirecting () {
+    $window.sessionStorage.setItem(redirectingIndicator, 'true')
+  }
+
   function clearStorageForOktaLogout () {
     $window.localStorage.clear()
     const cookieConfig = { path: '/' }
@@ -228,7 +220,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function updateCurrentSession () {
     const cortexRole = decodeCookie(Sessions.role)
-    const cruProfile = decodeCookie(Sessions.profile)
+    const cruProfile = updateCurrentProfile()
     const giveSession = decodeCookie(Sessions.give)
 
     // Set give-session expiration timeout if defined
