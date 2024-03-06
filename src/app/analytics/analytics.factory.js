@@ -34,9 +34,9 @@ const generateProduct = suppressErrors(function (item, additionalData = {}) {
   const sessionStorageTestName = testingTransactionName(item)
   const testingTransaction = Boolean(sessionStorageTestName &&
     window.sessionStorage.getItem(sessionStorageTestName) === 'true').toString()
-  const price = additionalData?.price || item.amount
-  const category = additionalData?.category || item.designationType
-  const name = additionalData?.name || item.displayName || undefined
+  const price = additionalData.price || item.amount
+  const category = additionalData.category || item.designationType
+  const name = additionalData.name || item.displayName || undefined
   const recurringDate = additionalData.recurringDate
     ? additionalData.recurringDate.format('MMMM D, YYYY')
     : item.giftStartDate
@@ -59,7 +59,7 @@ const generateProduct = suppressErrors(function (item, additionalData = {}) {
   }
 })
 
-const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService, sessionService) {
+const analyticsFactory = /* @ngInject */ function ($window, $location, $timeout, envService, sessionService) {
   return {
     checkoutFieldError: suppressErrors((field, error) => {
       $window.dataLayer = $window.dataLayer || []
@@ -555,6 +555,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
 
         // Set the transactionId in localStorage to be the one that is passed in
         sessionStorage.setItem('transactionId', currentTransactionId)
+        const jobId = $location.search().utm_term
         const cartObject = transactionCart.items.map((cartItem) => {
           const { amount, amountWithFees } = cartItem
           purchaseTotal += amount
@@ -569,7 +570,8 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
             payment_type: paymentType,
             purchase_number: purchaseData.rawData['purchase-number'],
             campaign_code: cartItem.config.CAMPAIGN_CODE !== '' ? cartItem.config.CAMPAIGN_CODE : undefined,
-            designation: 'designation'
+            designation: cartItem.designationNumber,
+            job_id: jobId
           }
         })
         // Send the transaction event if the dataLayer is defined

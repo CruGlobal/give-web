@@ -4,11 +4,13 @@ import moment from 'moment'
 
 import module from './analytics.factory'
 
+const utmTerm = 'CAMPAIGN'
+
 describe('analytics factory', () => {
   beforeEach(angular.mock.module(module.name, 'environment'))
 
   const self = {}
-  beforeEach(inject((analyticsFactory, envService, $window) => {
+  beforeEach(inject((analyticsFactory, envService, $window, $location) => {
     self.analyticsFactory = analyticsFactory
     self.envService = envService
     self.$window = $window
@@ -17,6 +19,9 @@ describe('analytics factory', () => {
 
     self.$window.sessionStorage.clear()
     self.$window.localStorage.clear()
+
+    self.$location = $location
+    self.$location.search({ utm_term: utmTerm })
 
     Date.now = jest.fn(() => new Date("2023-04-05T01:02:03.000Z"));
   }))
@@ -659,10 +664,60 @@ describe('analytics factory', () => {
             payment_type: 'credit card',
             purchase_number: '23032',
             campaign_code: undefined,
-            designation: 'designation',
+            designation: '0643021',
             item_brand: 'STAFF',
             processingFee: undefined,
             testing_transaction: 'false',
+            job_id: utmTerm,
+          }
+        ]
+      })
+    });
+
+    it('should handle missing utm_term', async () => {
+      self.$window.sessionStorage.setItem('coverFeeDecision', null)
+      self.$window.localStorage.setItem('transactionCart', JSON.stringify(transactionCart))
+      self.$window.sessionStorage.setItem('transactionId', 23031)
+      self.$location.search({})
+
+      expect(self.$window.sessionStorage.getItem('transactionId')).toEqual('23031')
+
+      self.analyticsFactory.transactionEvent(purchaseData)
+
+      expect(self.$window.sessionStorage.getItem('transactionId')).toEqual(purchaseData.rawData['purchase-number'])
+
+      expect(self.$window.dataLayer.length).toEqual(1)
+      expect(self.$window.dataLayer[0].event).toEqual('purchase')
+      expect(self.$window.dataLayer[0].paymentType).toEqual('credit card')
+      expect(self.$window.dataLayer[0].ecommerce).toEqual({
+        currency: 'USD',
+        payment_type: 'credit card',
+        donator_type: 'Household',
+        pays_processing: 'no',
+        value: '50.00',
+        processing_fee: undefined,
+        transaction_id: purchaseData.rawData['purchase-number'],
+        items: [
+          {
+            item_id: '0643021',
+            item_name: 'John Doe',
+            item_category: 'staff',
+            item_variant: 'single',
+            price: '50',
+            currency: 'USD',
+            quantity: '1',
+            recurring_date: undefined,
+            ga_donator_type: null,
+            donation_type: 'one-time',
+            donation_frequency: 'single',
+            payment_type: 'credit card',
+            purchase_number: '23032',
+            campaign_code: undefined,
+            designation: '0643021',
+            item_brand: 'STAFF',
+            processingFee: undefined,
+            testing_transaction: 'false',
+            job_id: undefined,
           }
         ]
       })
