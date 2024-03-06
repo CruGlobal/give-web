@@ -33,8 +33,11 @@ export const OktaStorage = {
   redirectParams: 'okta-oauth-redirect-params'
 }
 
+export const redirectingIndicator = 'redirectingFromOkta'
+
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
+export const LoginOktaOnlyEvent = 'loginAsOktaOnlyUser'
 
 const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, envService) {
   const session = {}
@@ -68,7 +71,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     oktaSignIn: oktaSignIn,
     oktaSignOut: oktaSignOut,
     downgradeToGuest: downgradeToGuest,
-    getOktaUrl: getOktaUrl
+    removeOktaRedirectIndicator: removeOktaRedirectIndicator,
+    updateCurrentProfile: updateCurrentProfile
   }
 
   /* Public Methods */
@@ -194,6 +198,23 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function getOktaUrl () {
     return envService.read('oktaUrl')
+  }
+
+  function removeOktaRedirectIndicator () {
+    $window.sessionStorage.removeItem(redirectingIndicator)
+  }
+
+
+  function updateCurrentProfile () {
+    let cruProfile = {}
+
+    if (angular.isDefined($cookies.get(Sessions.profile))) {
+      cruProfile = jwtDecode($cookies.get(Sessions.profile))
+      session.first_name = cruProfile.first_name
+      session.last_name = cruProfile.last_name
+    }
+
+    return cruProfile
   }
 
   /* Private Methods */

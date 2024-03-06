@@ -351,6 +351,26 @@ describe('session service', function () {
     })
   })
 
+  describe('removeOktaRedirectIndicator', () => {
+    it('should remove the Okta redirect session storage variable', () => {
+      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      sessionService.removeOktaRedirectIndicator()
+      expect($window.sessionStorage.getItem(redirectingIndicator)).toEqual(null)
+    })
+  })
+
+  describe('isOktaRedirecting', () => {
+    it('should be true if the session storage variable is set', () => {
+      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      expect(sessionService.isOktaRedirecting()).toBeTruthy()
+    })
+
+    it('should be false if the session storage variable is not set', () => {
+      $window.sessionStorage.removeItem(redirectingIndicator)
+      expect(sessionService.isOktaRedirecting()).toBeFalsy()
+    })
+  })
+
   describe('downgradeToGuest( skipEvent )', () => {
     beforeEach(() => {
       jest.spyOn($rootScope, '$broadcast').mockImplementation(() => {})
@@ -496,6 +516,33 @@ describe('session service', function () {
           expect($timeout).toHaveBeenCalledTimes(2)
         })
       })
+    })
+  })
+
+  describe('updateCurrentProfile', () => {
+    it('updates the first and last name if the cookie is defined', () => {
+      const cruProfileCookie = {
+        first_name: 'Test',
+        last_name: 'Tester'
+      }
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
+
+      // Encode as JWT
+      $cookies.put(Sessions.profile, `.${btoa(angular.toJson(cruProfileCookie))}.`)
+      sessionService.updateCurrentProfile()
+      expect(sessionService.session.first_name).toEqual(cruProfileCookie.first_name)
+      expect(sessionService.session.last_name).toEqual(cruProfileCookie.last_name)
+    })
+
+    it('does not set profile values if the cookie is not defined', () => {
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
+
+      const cruProfile = sessionService.updateCurrentProfile()
+      expect(cruProfile).toEqual({})
+      expect(sessionService.session.first_name).not.toBeDefined()
+      expect(sessionService.session.last_name).not.toBeDefined()
     })
   })
 })
