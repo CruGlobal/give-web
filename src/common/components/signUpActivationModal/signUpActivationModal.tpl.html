@@ -62,7 +62,7 @@
                 <p translate translate-value-email="{{$ctrl.unverifiedAccount.email}}">{{$ctrl.loadingAccountError}}</p>
               </div>
             </div>
-            <p ng-if="$ctrl.loadingAccountErrorCount > 1" style="margin-top:20px;">There was an error loading your Okta account status. Please locate the email mentioned above and follow the steps. Once you've done that please login via "Sign up with okta".</p>
+            <p ng-if="$ctrl.loadingAccountErrorCount > 1" style="margin-top:20px;">There was an error loading your Okta account status. Please locate the email mentioned above and follow the steps. Once you've done that please login via "Sign up with Okta".</p>
           </div>
 
           <div class="row unverified-email-headers" ng-if="$ctrl.unverifiedAccount.status">
@@ -125,7 +125,7 @@
         <div class="row bottom-links">
           <div class="col-xs-6">Powered by Okta</div>
           <div class="col-xs-6">
-            <a href="https://www.cru.org/us/en/about/privacy.html" target="_blank" rel="noopener" class="pull-right">Privacy Policy</a>
+            <a href="{{$ctrl.publicCru}}/us/en/about/privacy.html" target="_blank" class="pull-right">Privacy Policy</a>
           </div>
         </div>
       </div>

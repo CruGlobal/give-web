@@ -50,14 +50,6 @@ describe('signInModal', function () {
     })
   })
 
-  describe('signOut', () => {
-    it('sets identified to false', () => {
-      $ctrl.identified = true
-      $ctrl.signOut()
-      expect($ctrl.identified).toEqual(false)
-    })
-  })
-
   describe('getOktaUrl', () => {
     it('should call sessionService getOktaUrl', () => {
       jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')

@@ -60,10 +60,6 @@ describe('signUpForm', function () {
 
       it('Redirects user to sign in modal', () => {
         jest.spyOn($ctrl, 'onStateChange')
-        $ctrl.session = {
-          email: 'test@cru.org',
-        }
-
         $ctrl.$onInit()
 
         expect($ctrl.onStateChange).toHaveBeenCalled()
@@ -123,6 +119,32 @@ describe('signUpForm', function () {
       expect($ctrl.donorDetails.email).toEqual('testing@cru.org')
     })
 
+    it('grabs data from orderService if data from both orderService and sessionService are set', () => {
+      jest.spyOn($ctrl, 'loadDonorDetails')
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
+        [
+          {
+            name: {
+              ['given-name']: 'givenName',
+              ['family-name']: 'familyName',
+            },
+            email: 'EMAIL@cru.org',
+          }
+        ]
+      ))
+      $ctrl.sessionService.session = {
+        first_name: 'newFirstName',
+        last_name: 'newLastName',
+        email: 'testing@cru.org',
+      }
+
+      $ctrl.$onInit()
+
+      expect($ctrl.donorDetails.name['given-name']).toEqual('givenName')
+      expect($ctrl.donorDetails.name['family-name']).toEqual('familyName')
+      expect($ctrl.donorDetails.email).toEqual('EMAIL@cru.org')
+    })
+
     it('initializes the component, inherits no data', () => {
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
         [
@@ -170,13 +192,13 @@ describe('signUpForm', function () {
       $ctrl.loadDonorDetails()
       expect($ctrl.loadingDonorDetails).toEqual(false)
     })
-  });
+  })
 
   describe('submitDetails()', () => {
     it('should return as form is not valid', () => {
       $ctrl.submitDetails()
       expect($ctrl.signUpForm.$setSubmitted).toHaveBeenCalled()
-      expect($ctrl.submitting).toEqual(false)   
+      expect($ctrl.submitting).toEqual(false)
     })
 
     it('should not call createAccount', async () => {
@@ -187,7 +209,7 @@ describe('signUpForm', function () {
       ))
       $ctrl.$onInit()
       $ctrl.signUpForm.$valid = false;
-      $ctrl.submitDetails(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name']).then(() =>{
+      $ctrl.submitDetails(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name']).then(() => {
         expect($ctrl.sessionService.createAccount).not.toHaveBeenCalled()
       })
     });
@@ -207,7 +229,7 @@ describe('signUpForm', function () {
       ))
       $ctrl.$onInit()
       $ctrl.signUpForm.$valid = true
-      $ctrl.submitDetails().then(() =>{
+      $ctrl.submitDetails().then(() => {
         expect($ctrl.$scope.$apply).toHaveBeenCalled();
         expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])
         expect($ctrl.submitting).toEqual(false)
@@ -232,7 +254,7 @@ describe('signUpForm', function () {
       expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])    
     })
 
-    it("should call createAccount() with the user's data", () => {
+    it("should move to \'sign-up-activation\' when createAccount returns a successful response", () => {
       jest.spyOn($ctrl, 'onStateChange')
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
         [signUpFormData]

@@ -1,7 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './sessionModal.service'
-import modalStateModule from 'common/services/modalState.service'
 
 describe('sessionModalService', function () {
   beforeEach(angular.mock.module(module.name))

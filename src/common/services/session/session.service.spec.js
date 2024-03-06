@@ -415,11 +415,15 @@ describe('session service', function () {
   describe('signOutWithoutRedirectToOkta()', () => {
     beforeEach(() => {
       jest.spyOn($rootScope, '$broadcast')
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken')
+      jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
     })
     it('make http request to signout user without redirect', (done) => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
       sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
         expect(data).toEqual({})
+        expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+        expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
       })
       $rootScope.$digest()
       // Observable.finally is fired after the test, this defers until it's called.
@@ -598,8 +602,7 @@ describe('session service', function () {
           expect(getUser).toHaveBeenCalled();
           expect(data).toEqual({
             data: [
-              "Already logged in to Okta with email: email@cru.org. You will be redirected to the Sign In page in a few seconds.",
-              "Another Error"
+              "Already logged in to Okta with email: email@cru.org. You will be redirected to the Sign In page in a few seconds."
             ],
             redirectToSignIn: true,
             status: "error"
@@ -618,8 +621,7 @@ describe('session service', function () {
         sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
           expect(data).toEqual({
             data: [
-              "Already logged in to Okta. You will be redirected to the Sign In page in a few seconds.",
-              "Another Error"
+              "Already logged in to Okta. You will be redirected to the Sign In page in a few seconds."
             ],
             redirectToSignIn: true,
             status: "error"
@@ -847,11 +849,11 @@ describe('session service', function () {
         // isTest set to TRUE
         sessionService.updateCheckoutSavedData(checkoutData, true)
         expect(sessionService.session.checkoutSavedData).toBeDefined()
-        const dataStoredInLocalStoarage = $cookies.get(checkoutSavedDataCookieName)
-        expect(dataStoredInLocalStoarage).toEqual(JSON.stringify(checkoutData))
+        const dataStoredInLocalStorage = $cookies.get(checkoutSavedDataCookieName)
+        expect(dataStoredInLocalStorage).toEqual(JSON.stringify(checkoutData))
       })
       it('copies checkout data cookie and stores it on session', () => {
-        delete sessionService.session.checkoutSavedData;
+        delete sessionService.session.checkoutSavedData
         expect(sessionService.session.checkoutSavedData).not.toBeDefined()
         sessionService.updateCheckoutSavedData()
         expect(sessionService.session.checkoutSavedData).toBeDefined()
@@ -860,8 +862,8 @@ describe('session service', function () {
 
     describe('clearCheckoutSavedData', () => {
       it('removes the cookie and data on session', () => {
-        const dataStoredInLocalStoarage = $cookies.get(checkoutSavedDataCookieName)
-        expect(dataStoredInLocalStoarage).toEqual(JSON.stringify(checkoutData))
+        const dataStoredInLocalStorage = $cookies.get(checkoutSavedDataCookieName)
+        expect(dataStoredInLocalStorage).toEqual(JSON.stringify(checkoutData))
         // isTest set to TRUE
         sessionService.clearCheckoutSavedData(true)
         const dataAfterClear = $cookies.get(checkoutSavedDataCookieName)

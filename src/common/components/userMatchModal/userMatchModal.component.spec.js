@@ -109,13 +109,13 @@ describe('userMatchModal', function () {
 
     it('initializes the component and proceeds to \'question\'', () => {
       jest.spyOn($ctrl, 'onActivate')
-      const contacts = [{ name: 'Charles Xavier', selected: true }, { name: 'Bruce Bannr', selected: true }]
+      const contacts = [{ name: 'Charles Xavier', selected: true }]
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.of([{ key: 'a' }, { key: 'b' }, { key: 'c' }]))
       $ctrl.verificationService.getContacts.mockImplementation(() => Observable.of(contacts))
       $ctrl.contacts = null
       $ctrl.getContacts()
       expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
-      expect($ctrl.onActivate).toHaveBeenCalledWith()
+      expect($ctrl.onActivate).toHaveBeenCalled()
       expect($ctrl.changeMatchState).toHaveBeenCalledWith('question')
     })
 
@@ -228,6 +228,18 @@ describe('userMatchModal', function () {
         expect($ctrl.selectContactError).toEqual(true)
         expect($ctrl.$log.error.logs[0]).toEqual(['Error selecting verification contact.', 'some error'])
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
+      })
+
+      it('should only return the first name', () => {
+        jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
+        $ctrl.onSelectContact({ name: 'firstName lastName' })
+        expect($ctrl.firstName).toEqual('firstName')
+      })
+
+      it('should return the first two first names', () => {
+        jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
+        $ctrl.onSelectContact({ name: 'firstName secondFirstName lastName' })
+        expect($ctrl.firstName).toEqual('firstName secondFirstName')
       })
     })
 

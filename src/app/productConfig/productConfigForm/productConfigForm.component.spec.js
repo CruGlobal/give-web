@@ -5,7 +5,7 @@ import { advanceTo, clear } from 'jest-date-mock'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
-
+import { forcedUserToLogout } from '../../../common/services/session/session.service'
 import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
 import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { giveGiftParams } from '../giveGiftParams'
@@ -812,14 +812,14 @@ describe('product config form component', function () {
   describe('shouldShowForcedUserToLogoutError', () => {
     it('should call $window.sessionStorage', () => {
       $ctrl.$onInit()
-      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalledWith('forcedUserToLogout')
+      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalledWith(forcedUserToLogout)
       expect($ctrl.errorForcedUserToLogout).toEqual(false)
     })
 
     it('should set errorForcedUserToLogout to true', () => {
       $ctrl.$window.sessionStorage.getItem.mockReturnValue('true')
       $ctrl.$onInit()
-      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalledWith('forcedUserToLogout')
+      expect($ctrl.$window.sessionStorage.getItem).toHaveBeenCalledWith(forcedUserToLogout)
       expect($ctrl.errorForcedUserToLogout).toEqual(true)
     })
   })

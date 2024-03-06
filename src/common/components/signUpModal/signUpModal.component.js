@@ -17,12 +17,11 @@ class SignUpModalController {
     this.orderService = orderService
     this.cartService = cartService
     this.imgDomain = envService.read('imgDomain')
+    this.publicCru = envService.read('publicCru')
   }
 
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.identified = true
-      this.username = this.sessionService.session.email
       this.onStateChange({ state: 'sign-in' })
     }
     if (!this.isInsideAnotherModal) {
@@ -70,7 +69,9 @@ class SignUpModalController {
     this.submissionError = []
     try {
       this.signUpForm.$setSubmitted()
-      if (!this.signUpForm.$valid) throw new Error('Some fields are invalid')
+      if (!this.signUpForm.$valid) {
+        throw new Error('Some fields are invalid')
+      }
 
       const details = this.donorDetails   
       const { email, name } = details;

@@ -19,8 +19,9 @@ const componentName = 'registerAccountModal'
 class RegisterAccountModalController {
   // Register Account Modal is a multi-step process.
   // 1. Sign In/Up
-  //  1.1 Enter Sign Up Details
+  //  1.1 Sign in or Sign Up
   //  1.2 Verify Email
+  //  1.3 Sign In
   // 2. Fetch Donor Details
   // 3. Collect Contact Info
   // 4. Post to Donor Matches
@@ -63,7 +64,7 @@ class RegisterAccountModalController {
       this.stateChanged('sign-in')
     }
 
-    // If there is a session chnage, update the state if needed.
+    // If there is a session change, update the state if needed.
     this.subscription = this.sessionService.sessionSubject.subscribe(() => {
       if (this.sessionService.getRole() === Roles.registered) {
         // Proceed to Step 2
@@ -75,8 +76,12 @@ class RegisterAccountModalController {
   $onDestroy () {
     this.getTotalQuantitySubscription.unsubscribe()
     this.subscription.unsubscribe()
-    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe()
-    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe()
+    if (angular.isDefined(this.getDonorDetailsSubscription)) {
+      this.getDonorDetailsSubscription.unsubscribe()
+    }
+    if (angular.isDefined(this.verificationServiceSubscription)) {
+      this.verificationServiceSubscription.unsubscribe()
+    }
   }
 
   onIdentitySuccess () {
@@ -104,7 +109,9 @@ class RegisterAccountModalController {
     this.stateChanged('loading')
 
     // Step 2. Fetch Donor Details
-    if (angular.isDefined(this.getDonorDetailsSubscription)) this.getDonorDetailsSubscription.unsubscribe()
+    if (angular.isDefined(this.getDonorDetailsSubscription)) {
+      this.getDonorDetailsSubscription.unsubscribe()
+    }
     this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe({
       next: (donorDetails) => {
         // Workflow Complete if 'registration-state' is COMPLETED
@@ -125,7 +132,9 @@ class RegisterAccountModalController {
     this.setLoading({ loading: true })
 
     // Step 4. Post to Donor Matches.
-    if (angular.isDefined(this.verificationServiceSubscription)) this.verificationServiceSubscription.unsubscribe()
+    if (angular.isDefined(this.verificationServiceSubscription)) {
+      this.verificationServiceSubscription.unsubscribe()
+    }
     this.verificationServiceSubscription = this.verificationService.postDonorMatches().subscribe({
       next: () => { this.stateChanged('user-match') }, // Donor match success, Proceed to step 5.
       error: () => { this.onCancel() } // Donor Match failed, Register Account workflow failed

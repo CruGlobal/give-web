@@ -1,8 +1,5 @@
 import angular from 'angular'
 import 'angular-ui-router'
-
-import '../../assets/scss/styles.scss'
-
 import sessionService from 'common/services/session/session.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
 import commonModule from 'common/common.module'
@@ -16,13 +13,10 @@ import designationEditorComponent from '../designationEditor/designationEditor.c
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component'
 import profileComponent from '../profile/profile.component'
 import brandedCheckoutComponent from '../branded/branded-checkout.component'
-
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component'
 import receiptsComponent from '../profile/receipts/receipts.component'
-
-import sessionService from 'common/services/session/session.service'
-
 import template from './main.tpl.html'
+import '../../assets/scss/styles.scss'
 
 const componentName = 'main'
 
@@ -34,11 +28,11 @@ class MainController {
   }
 
   signOut () {
-    return this.sessionService.signOut()
+    this.sessionService.signOut()
   }
 
   signInModal () {
-    this.sessionModalService.signIn()
+    this.sessionModalService.registerAccount()
   }
 }
 

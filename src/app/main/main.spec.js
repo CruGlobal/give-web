@@ -31,10 +31,10 @@ describe('main', function () {
   })
 
   describe('signInModal', () => {
-    it('should open the signIn modal', () => {
-      jest.spyOn(self.controller.sessionModalService, 'signIn').mockImplementation(() => Observable.of({}))
+    it('should open the registerAccount modal', () => {
+      jest.spyOn(self.controller.sessionModalService, 'registerAccount').mockImplementation(() => Observable.of({}))
       self.controller.signInModal()
-      expect(self.controller.sessionModalService.signIn).toHaveBeenCalled()
+      expect(self.controller.sessionModalService.registerAccount).toHaveBeenCalled()
     })
   })
 })

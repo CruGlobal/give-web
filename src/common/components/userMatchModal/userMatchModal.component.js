@@ -64,13 +64,13 @@ class UserMatchModalController {
 
   postDonorMatch () {
     this.setLoading({ loading: true })
-    this.verificationService.postDonorMatches().subscribe(() => {
-      // Donor match success, get contacts
-      this.changeMatchState('intro')
-    }, () => {
-      // Donor Match failed, user match not required
-      this.skippedQuestions = true
-      this.changeMatchState('success')
+    this.verificationService.postDonorMatches().subscribe({
+      next: () => { this.changeMatchState('intro') }, // Donor match success, get contacts
+      error: () => {
+        // Donor Match failed, user match not required
+        this.skippedQuestions = true
+        this.changeMatchState('success')
+      }
     })
   }
 
@@ -117,7 +117,9 @@ class UserMatchModalController {
     if (angular.isDefined(contact)) {
       this.verificationService.selectContact(contact).subscribe(() => {
         this.onActivate()
-        this.firstName = contact.name.split(' ')[0]
+        this.firstName = contact.name.includes(' ')
+          ? contact.name.substring(0, contact.name.lastIndexOf(' '))
+          : contact.name
       },
       error => {
         this.setLoading({ loading: false })

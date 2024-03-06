@@ -33,6 +33,7 @@ export const locationOnLogin = 'locationOnLogin'
 export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
 export const createAccountDataCookieName = 'createAccountData'
+export const forcedUserToLogout = 'forcedUserToLogout'
 export const cookieDomain = '.cru.org'
 
 export const SignInEvent = 'SessionSignedIn'
@@ -66,24 +67,24 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     session: session,
     sessionSubject: sessionSubject,
     authClient: authClient, // Exposed for tests only
-    getRole: currentRole,
-    createAccount: createAccount,
-    handleOktaRedirect: handleOktaRedirect,
-    signIn: signIn,
-    signOut: signOut,
-    downgradeToGuest: downgradeToGuest,
-    getOktaUrl: getOktaUrl,
-    removeOktaRedirectIndicator: removeOktaRedirectIndicator,
-    isOktaRedirecting: isOktaRedirecting,
-    updateCurrentProfile: updateCurrentProfile,
-    oktaIsUserAuthenticated: oktaIsUserAuthenticated,
-    updateCheckoutSavedData: updateCheckoutSavedData,
+    catchCreateAccountErrors: catchCreateAccountErrors,
     clearCheckoutSavedData: clearCheckoutSavedData,
     checkCreateAccountStatus: checkCreateAccountStatus,
-    removeLocationOnLogin: removeLocationOnLogin,
+    createAccount: createAccount,
+    downgradeToGuest: downgradeToGuest,
+    getRole: currentRole,
+    getOktaUrl: getOktaUrl,
+    handleOktaRedirect: handleOktaRedirect,
     hasLocationOnLogin: hasLocationOnLogin,
-    signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta,
-    catchCreateAccountErrors: catchCreateAccountErrors
+    isOktaRedirecting: isOktaRedirecting,
+    oktaIsUserAuthenticated: oktaIsUserAuthenticated,
+    updateCurrentProfile: updateCurrentProfile,
+    updateCheckoutSavedData: updateCheckoutSavedData,
+    removeOktaRedirectIndicator: removeOktaRedirectIndicator,
+    removeLocationOnLogin: removeLocationOnLogin,
+    signIn: signIn,
+    signOut: signOut,
+    signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -110,12 +111,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     const isAuthenticated = await authClient.isAuthenticated()
     if (!isAuthenticated) {
       setRedirectingOnLogin()
-      // prompt: 'login' - Used to ignore Okta session and prevent silent authentication.
-      // Branded checkout uses signOutWithoutRedirectToOkta() which revokes tokens but doesn't log user out of all Okta apps
-      // We added prompt: login, to ensure we always get the user to login, for security.
-      return authClient.token.getWithRedirect({
-        prompt: 'login'
-      })
+      return authClient.token.getWithRedirect()
     }
     const tokens = await authClient.tokenManager.getTokens()
     const data = { access_token: tokens.accessToken.accessToken }
@@ -151,16 +147,22 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       const email = isAuthenticated && (await authClient.getUser()).email
       return {
         status: 'error',
-        data: [`Already logged in to Okta${email ? ` with email: ${email}` : ''}. You will be redirected to the Sign In page in a few seconds.`, 'Another Error'],
+        data: [`Already logged in to Okta${email ? ` with email: ${email}` : ''}. You will be redirected to the Sign In page in a few seconds.`],
         redirectToSignIn: true
       }
     }
 
     const data = { }
 
-    if (angular.isDefined(email)) data.email = email
-    if (angular.isDefined(firstName)) data.first_name = firstName
-    if (angular.isDefined(lastName)) data.last_name = lastName
+    if (angular.isDefined(email)) {
+      data.email = email
+    }
+    if (angular.isDefined(firstName)) {
+      data.first_name = firstName
+    }
+    if (angular.isDefined(lastName)) {
+      data.last_name = lastName
+    }
     const dataAsString = JSON.stringify(data)
     try {
       const createAccount = await $http({
@@ -326,6 +328,8 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function signOutWithoutRedirectToOkta () {
+    // ** This function requires third-party cookies **
+    // If unsure of the consequences use sessionService.signOut()
     const observable = Observable
       .from($http({
         method: 'DELETE',
@@ -334,6 +338,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       }))
       .map((response) => response.data)
     clearCheckoutSavedData()
+    // revokeAccessToken() & revokeRefreshToken() sign the user out of Okta on this application.
+    // It doesn't close the Okta session on Okta.
+    // To close the session on Okta would require calling authClient.signOut(), refreshing the page.
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
     return observable.finally(() => {
@@ -510,7 +517,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         )
       } else {
         const dataAsString = $cookies.get(checkoutSavedDataCookieName)
-        if (dataAsString) session.checkoutSavedData = JSON.parse(dataAsString)
+        if (dataAsString) {
+          session.checkoutSavedData = JSON.parse(dataAsString)
+        }
       }
       return session.checkoutSavedData
     } catch { }

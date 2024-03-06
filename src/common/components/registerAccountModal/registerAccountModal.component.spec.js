@@ -137,7 +137,7 @@ describe('registerAccountModal', function () {
 
   describe('onIdentityFailure()', () => {
     it('calls getDonorDetails', () => {
-      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
+      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator')
       $ctrl.onIdentityFailure()
       expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })

@@ -17,12 +17,11 @@ class signUpActivationModalController {
     this.orderService = orderService
     this.cartService = cartService
     this.imgDomain = envService.read('imgDomain')
+    this.publicCru = envService.read('publicCru')
   }
 
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.identified = true
-      this.username = this.sessionService.session.email
       this.onStateChange({ state: 'sign-in' })
     }
     if (!this.isInsideAnotherModal) {
@@ -51,7 +50,9 @@ class signUpActivationModalController {
   }
 
   async getUnverifiedAccount (subtle = true) {
-    if (!subtle) this.loadingAccount = true
+    if (!subtle) {
+      this.loadingAccount = true
+    }
     this.loadingAccountError = false
 
     const createAccountDataStringified = this.$cookies.get(createAccountDataCookieName)
@@ -61,13 +62,15 @@ class signUpActivationModalController {
         if (response.status === 'error') {
           this.loadingAccountError = response.data
           this.loadingAccountErrorCount++
-          if (!subtle) this.loadingAccount = false
+          if (!subtle) {
+            this.loadingAccount = false
+          }
           this.$scope.$apply()
         } else {
           let status = ''
           switch (response.data.status) {
             case 'STAGED':
-              status = 'Awaiting Admin approval'
+              status = 'Sending Activation Email'
               break
             case 'ACTIVE':
               status = 'Active'
