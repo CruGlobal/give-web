@@ -3,8 +3,9 @@ import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
+import { Subject } from 'rxjs/Subject'
 import clone from 'lodash/clone'
-import { LoginOktaOnlyEvent, Roles, SignOutEvent } from 'common/services/session/session.service'
+import { SignOutEvent } from 'common/services/session/session.service'
 import { titles } from './titles.fixture'
 import module from './profile.component'
 
@@ -127,32 +128,21 @@ describe('ProfileComponent', function () {
       })
     })
 
-    describe('sessionEnforcerService change', () => {
-      beforeEach(() => {
-        jest.spyOn($ctrl.sessionService, 'handleOktaRedirect').mockImplementation(() => Observable.of(Observable.of('success')))
+    describe('sessionHandleOktaRedirectService', () => {
+      it('should call onHandleOktaRedirect', () => {
+        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
         $ctrl.$onInit()
+
+        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
       })
 
-      it('broadcasts an event if registered/new', () => {
-        $ctrl.sessionEnforcerService.mock.calls[0][1]['change'](Roles.registered, 'NEW')
-        expect($ctrl.$rootScope.$broadcast).toHaveBeenCalledWith(LoginOktaOnlyEvent, 'register-account')
+      it('handles an Okta redirect error', () => {
+        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
+        $ctrl.$onInit()
+        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject.next('generic')
+  
+        expect($ctrl.errorMessage).toEqual('generic')
       })
-
-      it('does not broadcast an event if not registered/new', () => {
-        $ctrl.sessionEnforcerService.mock.calls[0][1]['change'](Roles.registered, 'COMPLETED')
-        expect($ctrl.$rootScope.$broadcast).not.toHaveBeenCalled()
-      })
-    })
-
-    it('handles an Okta redirect error', () => {
-      const error = new Error()
-      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {})
-      jest.spyOn($ctrl.sessionService, 'handleOktaRedirect').mockImplementation(() => Observable.of(Observable.throw(error)))
-      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
-      $ctrl.$onInit()
-      expect($ctrl.errorMessage).toEqual('generic')
-      expect($ctrl.$log.error).toHaveBeenCalledWith('Failed to redirect from Okta', error)
-      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
     })
   })
 
