@@ -1,18 +1,24 @@
 <div class="loading-overlay-parent">
   <div ng-switch="$ctrl.state">
     <sign-in-modal ng-switch-when="sign-in"
-                    modal-title="$ctrl.modalTitle"
-                    last-purchase-id="$ctrl.lastPurchaseId"
-                    on-state-change="$ctrl.stateChanged(state)"
-                    on-success="$ctrl.onSignInSuccess()">
-    </sign-in-modal>
+      modal-title="$ctrl.modalTitle"
+      last-purchase-id="$ctrl.lastPurchaseId"
+      on-state-change="$ctrl.stateChanged(state)"
+      on-success="$ctrl.onSignInSuccess()"
+    ></sign-in-modal>
     <register-account-modal ng-switch-when="register-account"
-                            first-name="$ctrl.firstName"
-                            modal-title="$ctrl.modalTitle"
-                            on-success="$ctrl.onSignUpSuccess()"
-                            on-cancel="$ctrl.onCancel()"
-                            set-loading="$ctrl.setLoading(loading)">
-    </register-account-modal>
+      first-name="$ctrl.firstName"
+      modal-title="$ctrl.modalTitle"
+      on-success="$ctrl.onSignUpSuccess()"
+      on-cancel="$ctrl.onCancel()"
+      set-loading="$ctrl.setLoading(loading)"
+    ></register-account-modal>
+    <account-benefits-modal ng-switch-when="account-benefits"
+      modal-title="$ctrl.modalTitle"
+      on-success="$ctrl.onAccountBenefitsSuccess()"
+      on-cancel="$ctrl.onCancel()"
+      on-state-change="$ctrl.stateChanged(state)"
+    ></account-benefits-modal>
     </div>
   </div>
   <loading type="overlay" ng-if="$ctrl.isLoading"></loading>

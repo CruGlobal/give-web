@@ -198,4 +198,14 @@ describe('sessionModalService', function () {
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
     })
   })
+
+  describe('accountBenefits', () => {
+    it('should open accountBenefits modal', () => {
+      sessionModalService.accountBenefits('gxwpz=')
+
+      expect($uibModal.open).toHaveBeenCalledTimes(1)
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('account-benefits')
+      expect($uibModal.open.mock.calls[0][0].resolve.lastPurchaseId()).toEqual('gxwpz=')
+    })
+  })
 })

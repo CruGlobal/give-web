@@ -61,6 +61,11 @@ class SessionModalController {
     this.close()
   }
 
+  onAccountBenefitsSuccess () {
+    this.sessionService.removeOktaRedirectIndicator()
+    this.stateChanged('register-account')
+  }
+
   onFailure () {
     this.sessionService.removeOktaRedirectIndicator()
     this.dismiss({ $value: 'error' })

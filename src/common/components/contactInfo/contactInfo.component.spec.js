@@ -11,9 +11,9 @@ import module from './contactInfo.component.js'
 
 describe('contactInfo', function () {
   beforeEach(angular.mock.module(module.name))
-  var self = {}
+  let self = {}
 
-  beforeEach(inject(function ($componentController) {
+  beforeEach(inject(function ($componentController, $window) {
     self.controller = $componentController(module.name, {}, {
       detailsForm: {
         $valid: false,
@@ -21,6 +21,7 @@ describe('contactInfo', function () {
       },
       onSubmit: jest.fn()
     })
+    self.$window = $window;
   }))
 
   describe('$onInit', () => {
@@ -493,6 +494,27 @@ describe('contactInfo', function () {
       expect(self.controller.$log.warn.logs[0]).toEqual(['Error saving donor contact info', { data: 'Invalid email address: a@a' }])
       expect(self.controller.submissionError).toEqual('Invalid email address')
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false })
+    })
+  })
+
+  describe('toggleSpouseFields', () => {
+    it('should toggle spouse field and remove all data', () => {
+      self.controller.showSpouseFields = true
+      self.controller.donorDetails = {
+        'spouse-name': {
+          'given-name': 'given-name',
+          'middle-initial': 'middle-initial',
+          'family-name': 'family-name',
+          suffix: 'suffix'
+        }
+      }
+      expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('given-name')
+      self.controller.toggleSpouseFields()
+      expect(self.controller.showSpouseFields).toEqual(false)
+      expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('')
+      expect(self.controller.donorDetails['spouse-name']['middle-initial']).toEqual('')
+      expect(self.controller.donorDetails['spouse-name']['family-name']).toEqual('')
+      expect(self.controller.donorDetails['spouse-name'].suffix).toEqual('')
     })
   })
 })

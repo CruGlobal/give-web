@@ -13,9 +13,10 @@ const componentName = 'signIn'
 
 class SignInController {
   /* @ngInject */
-  constructor ($window, $log, sessionService, analyticsFactory, sessionModalService, orderService) {
+  constructor ($window, $log, $rootScope, sessionService, analyticsFactory, sessionModalService, orderService) {
     this.$window = $window
     this.$log = $log
+    this.$rootScope = $rootScope
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.sessionModalService = sessionModalService
@@ -25,6 +26,11 @@ class SignInController {
   $onInit () {
     this.subscription = this.sessionService.sessionSubject.subscribe(() => this.sessionChanged())
     this.analyticsFactory.pageLoaded()
+    if (this.sessionService.hasLocationOnLogin()) {
+      this.showRedirectingLoadingIcon = true
+    } else {
+      this.showRedirectingLoadingIcon = false
+    }
   }
 
   $onDestroy () {
@@ -33,7 +39,13 @@ class SignInController {
 
   sessionChanged () {
     if (this.sessionService.getRole() === Roles.registered) {
-      this.$window.location = `/checkout.html${window.location.search}`
+      const locationToReturnUser = this.sessionService.hasLocationOnLogin()
+      if (locationToReturnUser) {
+        this.sessionService.removeLocationOnLogin()
+        this.$window.location = locationToReturnUser
+      } else {
+        this.$window.location = `/checkout.html${window.location.search}`
+      }
     }
   }
 
@@ -50,6 +62,14 @@ class SignInController {
 
   getOktaUrl () {
     return this.sessionService.getOktaUrl()
+  }
+
+  onSignUpWithOkta () {
+    this.sessionModalService.createAccount()
+  }
+
+  closeRedirectingLoading () {
+    this.showRedirectingLoadingIcon = false
   }
 }
 

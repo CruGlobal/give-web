@@ -39,7 +39,7 @@ const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($log, $q, $uibModal, $location, $window, $rootScope, envService, sessionService, sessionEnforcerService, designationEditorService) {
+  constructor ($log, $q, $uibModal, $location, $window, $rootScope, $timeout, envService, sessionService, sessionEnforcerService, designationEditorService) {
     this.$log = $log
     this.$timeout = $timeout
     this.sessionService = sessionService
@@ -283,7 +283,7 @@ class DesignationEditorController {
     // pick up on the changes. Toggling contentLoaded off then back on will cause the ng-if on
     // `.secondaryPhoto` will forcibly recreate the carousel DOM element.
     this.contentLoaded = false
-    this.$scope.$applyAsync(() => {
+    this.$rootScope.$applyAsync(() => {
       this.contentLoaded = true
     })
   }
@@ -328,26 +328,18 @@ class DesignationEditorController {
     this.loadingOverlay = true
     this.saveDesignationError = false
 
-    this.enforcerId = this.sessionEnforcerService([Roles.registered], {
-      [EnforcerCallbacks.signIn]: () => {
-        return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
-          this.saveStatus = 'success'
-          this.loadingOverlay = false
-          this.carouselImages = this.designationContent.secondaryPhotos || []
-          this.updateCarousel()
-        }, error => {
-          this.saveStatus = 'failure'
-          this.saveDesignationError = true
-          this.loadingOverlay = false
-          this.$log.error('Error saving designation editor content.', error)
-          this.$window.scrollTo(0, 0)
-        })
-      },
-      [EnforcerCallbacks.cancel]: () => {
-        // Authentication failure
-        this.$window.location = '/'
-      }
-    }, EnforcerModes.session)
+    return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
+      this.saveStatus = 'success'
+      this.loadingOverlay = false
+      this.carouselImages = this.designationContent.secondaryPhotos || []
+      this.updateCarousel()
+    }, error => {
+      this.saveStatus = 'failure'
+      this.saveDesignationError = true
+      this.loadingOverlay = false
+      this.$log.error('Error saving designation editor content.', error)
+      this.$window.scrollTo(0, 0)
+    })
   }
 
   isPerson () {

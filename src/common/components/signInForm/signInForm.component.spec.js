@@ -103,13 +103,13 @@ describe('signInForm', function () {
     let deferred
     beforeEach(inject(function (_$q_) {
       deferred = _$q_.defer()
-      jest.spyOn($ctrl.sessionService, 'oktaSignIn').mockImplementation(() => Observable.from(deferred.promise))
+      jest.spyOn($ctrl.sessionService, 'signIn').mockImplementation(() => Observable.from(deferred.promise))
       $ctrl.signInWithOkta()
     }))
 
-    it('calls sessionService oktaSignIn', () => {
+    it('calls sessionService signIn', () => {
       expect($ctrl.isSigningIn).toEqual(true)
-      expect($ctrl.sessionService.oktaSignIn).toHaveBeenCalledWith(undefined)
+      expect($ctrl.sessionService.signIn).toHaveBeenCalledWith(undefined)
     })
 
     it('signs in successfully', () => {
@@ -141,6 +141,7 @@ describe('signInForm', function () {
       deferred.reject({
         config: {
           data: {
+            username: 'username',
             password: $ctrl.password
           }
         }
@@ -148,7 +149,13 @@ describe('signInForm', function () {
       $rootScope.$digest()
 
       expect(bindings.onFailure).toHaveBeenCalled()
-      expect($ctrl.$log.error.logs[0]).toEqual(['Sign In Error', { config: { data: {} } }])
+      expect($ctrl.$log.error.logs[0]).toEqual(['Sign In Error', {
+        config: {
+          data: {
+            username: 'username'
+          }
+        }
+      }])
     })
 
     it('has Siebel down error signing in', () => {

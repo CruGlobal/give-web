@@ -1,6 +1,7 @@
 import angular from 'angular'
 import 'angular-cookies'
 import jwtDecode from 'jwt-decode'
+import moment from 'moment'
 import { Observable } from 'rxjs/Observable'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { OktaAuth } from '@okta/okta-auth-js'
@@ -38,7 +39,7 @@ export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
 export const LoginOktaOnlyEvent = 'loginAsOktaOnlyUser'
 
-const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, envService) {
+const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout, $window, $location, envService) {
   const session = {}
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
@@ -46,7 +47,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   const authClient = new OktaAuth({
     issuer: envService.read('oktaUrl'),
     clientId: envService.read('oktaClientId'),
-    redirectUri: `${window.location.origin}${window.location.pathname}`,
+    redirectUri: `${window.location.origin}/sign-in.html`,
     scopes: ['openid', 'email', 'profile']
   })
 
@@ -66,6 +67,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     sessionSubject: sessionSubject,
     authClient: authClient, // Exposed for tests only
     getRole: currentRole,
+    handleOktaRedirect: handleOktaRedirect,
     signIn: signIn,
     signOut: signOut,
     handleOktaRedirect: handleOktaRedirect,
@@ -75,6 +77,12 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getOktaUrl: getOktaUrl,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
     isOktaRedirecting: isOktaRedirecting,
+    updateCurrentProfile: updateCurrentProfile,
+    oktaIsUserAuthenticated: oktaIsUserAuthenticated,
+    updateCheckoutSavedData: updateCheckoutSavedData,
+    clearCheckoutSavedData: clearCheckoutSavedData,
+    removeLocationOnLogin: removeLocationOnLogin,
+    hasLocationOnLogin: hasLocationOnLogin,
     signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta,
   }
 
@@ -82,14 +90,14 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     if (authClient.isLoginRedirect()) {
       return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
         authClient.tokenManager.setTokens(tokenResponse.tokens)
-        return oktaSignIn(lastPurchaseId)
+        return signIn(lastPurchaseId)
       }))
     } else {
       return Observable.of(false)
     }
   }
 
-  function oktaSignIn (lastPurchaseId) {
+  function signIn (lastPurchaseId) {
     setOktaRedirecting()
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
@@ -101,6 +109,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   async function internalSignIn (lastPurchaseId) {
     const isAuthenticated = await authClient.isAuthenticated()
     if (!isAuthenticated) {
+      setRedirectingOnLogin()
       authClient.token.getWithRedirect()
       return
     }
@@ -110,6 +119,20 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
       data.lastPurchaseId = lastPurchaseId
     }
+    // Add marketing search queries back to URL once returned from Okta
+    const locationSearch = $window.sessionStorage.getItem(locationSearchOnLogin) || ''
+    if (locationSearch) {
+      // eslint-disable-next-line
+      const searchQueries = locationSearch.split(/\?|\&/)
+      $window.sessionStorage.removeItem(locationSearchOnLogin)
+      searchQueries.forEach((searchQuery) => {
+        const [search, value] = searchQuery.split('=')
+        if (search && value) {
+          $location.search(search, value)
+        }
+      })
+    }
+    removeOktaRedirectIndicator()
     return $http({
       method: 'POST',
       url: oktaApiUrl('login'),
@@ -203,6 +226,22 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     return envService.read('oktaUrl')
   }
 
+  function removeLocationOnLogin () {
+    $window.sessionStorage.removeItem(locationOnLogin)
+  }
+  function hasLocationOnLogin () {
+    return $window.sessionStorage.getItem(locationOnLogin)
+  }
+  function setRedirectingOnLogin () {
+    if (['/sign-in.html'].indexOf($location.path()) + 1) {
+      // Save marketing search queries as they are lost on redirect
+      $window.sessionStorage.setItem(locationSearchOnLogin, $window.location.search)
+    } else {
+      // Save location we need to redirect the user back to
+      $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
+    }
+  }
+
   function removeOktaRedirectIndicator () {
     $window.sessionStorage.removeItem(redirectingIndicator)
   }
@@ -245,6 +284,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     sessionSubject.next(session)
 
     updateRollbarPerson(session, giveSession)
+    updateCheckoutSavedData()
   }
 
   function decodeCookie (cookieName) {
@@ -267,6 +307,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       if (angular.isUndefined(expiration)) {
         // Give session has expired
         updateCurrentSession()
+        clearCheckoutSavedData()
       } else {
         setSessionTimeout(expiration)
       }
@@ -303,6 +344,44 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function oktaApiUrl (path) {
     return `${envService.read('apiUrl')}/okta/${path}`
+  }
+
+  // Added 'isTest' as needed cookie created without domain for unit tests to add or get the cookie.
+  function updateCheckoutSavedData (data, isTest = false) {
+    try {
+      if (data) {
+        session.checkoutSavedData = data
+        const dataAsString = JSON.stringify(data)
+        $cookies.put(
+          checkoutSavedDataCookieName,
+          dataAsString,
+          {
+            path: '/',
+            domain: isTest ? '' : cookieDomain,
+            expires: moment().add(20, 'minutes').toISOString()
+          }
+        )
+      } else {
+        const dataAsString = $cookies.get(checkoutSavedDataCookieName)
+        if (dataAsString) session.checkoutSavedData = JSON.parse(dataAsString)
+      }
+      return session.checkoutSavedData
+    } catch { }
+  }
+  // Added 'isTest' as needed cookie created without domain for unit tests to remove the cookie.
+  function clearCheckoutSavedData (isTest = false) {
+    try {
+      session.checkoutSavedData = {}
+      $cookies.remove(
+        checkoutSavedDataCookieName,
+        {
+          path: '/',
+          domain: isTest ? '' : cookieDomain
+
+        }
+      )
+      return session.checkoutSavedData
+    } catch { }
   }
 }
 
