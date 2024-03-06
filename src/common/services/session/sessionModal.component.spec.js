@@ -131,6 +131,13 @@ describe('sessionModalController', function () {
     })
   })
 
+  describe('$ctrl.onSignUpActivationSuccess', () => {
+    it('should move to register-account page', () => {
+      $ctrl.onSignUpActivationSuccess()
+      expect($ctrl.state).toEqual('register-account')
+    })
+  })
+
   describe('$ctrl.setLoading()', () => {
     it('should set isLoading', () => {
       expect($ctrl.isLoading).toEqual(false)

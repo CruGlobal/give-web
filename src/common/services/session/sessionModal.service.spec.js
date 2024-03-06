@@ -172,6 +172,15 @@ describe('sessionModalService', function () {
     })
   })
 
+  describe('signUp', () => {
+    it('should open signUp modal', () => {
+      sessionModalService.signUp()
+
+      expect($uibModal.open).toHaveBeenCalledTimes(1)
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
+    })
+  })
+
   describe('userMatch', () => {
     it('should open userMatch modal', () => {
       sessionModalService.userMatch()
@@ -196,6 +205,15 @@ describe('sessionModalService', function () {
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
+    })
+  })
+
+  describe('SignUp', () => {
+    it('should open signUp modal', () => {
+      sessionModalService.createAccount()
+
+      expect($uibModal.open).toHaveBeenCalledTimes(1)
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
     })
   })
 

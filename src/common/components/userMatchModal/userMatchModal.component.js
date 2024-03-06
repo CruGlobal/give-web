@@ -50,7 +50,7 @@ class UserMatchModalController {
 
   getCurrentStep () {
     if (this.matchState === 'intro') {
-      return 0
+      return 0.1
     } else if (this.matchState === 'identity') {
       return 1
     } else if (this.matchState === 'question') {
@@ -188,11 +188,11 @@ class UserMatchModalController {
     this.$window.location = '/checkout.html'
   }
 
-  gotoOpportunities () {
+  goToOpportunities () {
     this.$window.location = '/'
   }
 
-  gotoDashboard () {
+  goToDashboard () {
     this.$window.location = '/your-giving.html'
   }
 }

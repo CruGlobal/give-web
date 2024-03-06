@@ -1,0 +1,151 @@
+<div class="modal-header" ng-if="!$ctrl.isInsideAnotherModal">
+  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="signup-header">
+          <img src="{{$ctrl.imgDomain}}/assets/img/cru-logo.png" alt="Cru logo" />
+          <span>+</span>
+          <img src="{{$ctrl.imgDomain}}/assets/img/okta.png" alt="Okta logo" />
+        </div>
+        <div class="section cart" ng-if="$ctrl.cartCount > 0">
+          <span ng-if="$ctrl.cartCount === 1" translate>1 gift is currently in your cart.</span>
+          <span ng-if="$ctrl.cartCount > 1">{{$ctrl.cartCount}} <span translate>gifts are currently in your cart.</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div ng-class="{'modal-body': !$ctrl.isInsideAnotherModal }">
+  <div class="content">
+    <div class="col-xs-12">
+
+
+      <div class="alert alert-danger" role="alert" ng-if="$ctrl.submissionError.length" ng-repeat="error in $ctrl.submissionError track by $index">
+        <translate ng-if="error === 'OKTA_EMAIL_ALREADY_EXISTS'">{{'OKTA_EMAIL_ALREADY_EXISTS'}}</translate>
+        <translate ng-if="error === 'OKTA_ERROR_WHILE_SAVING_EMAIL'">{{'OKTA_ERROR_WHILE_SAVING_EMAIL'}}</translate>
+        <translate ng-if="error === 'OKTA_ERROR_WHILE_SAVING_DATA'">{{'OKTA_ERROR_WHILE_SAVING_DATA'}}</translate>
+        <translate ng-if="error === 'SOMETHING_WENT_WRONG'">{{'SOMETHING_WENT_WRONG'}}</translate>
+        <p
+          translate
+          ng-if="!([
+          'OKTA_EMAIL_ALREADY_EXISTS',
+          'OKTA_ERROR_WHILE_SAVING_EMAIL',
+          'OKTA_ERROR_WHILE_SAVING_DATA',
+          'SOMETHING_WENT_WRONG'
+          ].indexOf(error) +1)"
+        >{{error}}</p>
+      </div>
+
+      <div class="row text-center">
+        <div class="col-xs-12">
+          <h4 translate>Create Account</h4>
+          <p translate>This will invite you to sign up for our website using Okta.  After this, please check your email for an invitation to finish setting up your account, including your contact information and password.</p>
+        </div>
+      </div>
+
+      <div class="loading-overlay-parent">
+        <loading type="overlay" ng-if="$ctrl.loadingDonorDetails">
+          <translate>{{'CHECKING_FOR_EXISTING'}}</translate>
+        </loading>
+
+        <form novalidate name="$ctrl.signUpForm">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group is-required" ng-class="{'has-error': ($ctrl.signUpForm.email | showErrors)}">
+                <label translate>{{'EMAIL'}}</label>
+                <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required ng-maxlength="100" ng-disabled="$ctrl.donorDetails.staff">
+                <div role="alert" ng-messages="$ctrl.signUpForm.email.$error" ng-if="($ctrl.signUpForm.email | showErrors)">
+                  <div class="help-block" ng-message="required" translate>{{'EMAIL_MISSING_ERROR'}}</div>
+                  <div class="help-block" ng-message="email" translate>{{'EMAIL_INVALID_ERROR'}}</div>
+                  <div class="help-block" ng-message="maxlength" translate>{{'EMAIL_LENGTH_ERROR'}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group is-required" ng-class="{'has-error': ($ctrl.signUpForm.nameGivenName | showErrors)}">
+                <label translate>{{'FIRST_NAME'}}</label>
+                <input type="text"
+                      class="form-control  form-control-subtle"
+                      name="nameGivenName"
+                      ng-model="$ctrl.donorDetails['name']['given-name']"
+                      required
+                      ng-maxlength="50"
+                      ng-disabled="$ctrl.nameFieldsDisabled">
+                <div role="alert" ng-messages="$ctrl.signUpForm.nameGivenName.$error" ng-if="($ctrl.signUpForm.nameGivenName | showErrors)">
+                  <div class="help-block" ng-message="required" translate>{{'FIRST_NAME_ERROR'}}</div>
+                  <div class="help-block" ng-message="maxlength" translate>{{'MAX_LENGTH_FIRST_NAME_ERROR'}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group is-required" ng-class="{'has-error': ($ctrl.signUpForm.nameFamilyName | showErrors)}">
+                <label translate>{{'LAST_NAME'}}</label>
+                <input type="text"
+                      class="form-control  form-control-subtle"
+                      name="nameFamilyName"
+                      ng-model="$ctrl.donorDetails['name']['family-name']"
+                      required
+                      ng-maxlength="50"
+                      ng-disabled="$ctrl.nameFieldsDisabled">
+                <div role="alert" ng-messages="$ctrl.signUpForm.nameFamilyName.$error" ng-if="($ctrl.signUpForm.nameFamilyName | showErrors)">
+                  <div class="help-block" ng-message="required" translate>{{'LAST_NAME_ERROR'}}</div>
+                  <div class="help-block" ng-message="maxlength" translate>{{'MAX_LENGTH_LAST_NAME_ERROR'}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <p>* indicates required field</p>
+            </div>
+          </div>
+
+          <div class="row buttons">
+            <div class="col-xs-6">
+              <button
+                id="submitChangesButton"
+                type="button"
+                class="btn btn-primary pull-right"
+                ng-click="$ctrl.submitDetails()"
+                translate
+                ng-disabled="$ctrl.submitting"
+              >
+              {{$ctrl.submitting ? 'Creating An Account...' : 'Register'}}  
+              </button>
+            </div>
+            <div class="col-xs-6"  ng-if="$ctrl.isInsideAnotherModal">
+              <a ng-click="$ctrl.onStateChange({state:'sign-in'})" class="back-to-sign-in">Back to sign in</a>
+            </div>
+          </div>
+
+          <div ng-if="$ctrl.submitting" class="alert alert-warning mt--" role="alert">
+            <p translate>The request for creating an account sometimes takes a moment.</p>
+          </div>
+
+        </form>
+      </div>
+
+      <hr />
+
+
+      <div class="row bottom-links">
+        <div class="col-xs-6">Powered by Okta</div>
+        <div class="col-xs-6">
+          <a href="https://www.cru.org/us/en/about/privacy.html" target="_blank" rel="noopener" class="pull-right">Privacy Policy</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

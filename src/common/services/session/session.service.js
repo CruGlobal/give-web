@@ -67,12 +67,10 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     sessionSubject: sessionSubject,
     authClient: authClient, // Exposed for tests only
     getRole: currentRole,
+    createAccount: createAccount,
     handleOktaRedirect: handleOktaRedirect,
     signIn: signIn,
     signOut: signOut,
-    handleOktaRedirect: handleOktaRedirect,
-    oktaSignIn: oktaSignIn,
-    oktaSignOut: oktaSignOut,
     downgradeToGuest: downgradeToGuest,
     getOktaUrl: getOktaUrl,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
@@ -81,9 +79,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     oktaIsUserAuthenticated: oktaIsUserAuthenticated,
     updateCheckoutSavedData: updateCheckoutSavedData,
     clearCheckoutSavedData: clearCheckoutSavedData,
+    checkCreateAccountStatus: checkCreateAccountStatus,
     removeLocationOnLogin: removeLocationOnLogin,
     hasLocationOnLogin: hasLocationOnLogin,
     signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta,
+    catchCreateAccountErrors: catchCreateAccountErrors
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -141,6 +141,150 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     })
   }
 
+  async function createAccount (email, firstName, lastName, isTest = false) {
+    const isAuthenticated = await authClient.isAuthenticated()
+    if (currentRole() !== Roles.public || isAuthenticated) {
+      const email = isAuthenticated && (await authClient.getUser()).email
+      return {
+        status: 'error',
+        data: [`Already logged in to Okta${email ? ` with email: ${email}` : ''}. You will be redirected to the Sign In page in a few seconds.`, 'Another Error'],
+        redirectToSignIn: true
+      }
+    }
+
+    const data = { }
+
+    if (angular.isDefined(email)) data.email = email
+    if (angular.isDefined(firstName)) data.first_name = firstName
+    if (angular.isDefined(lastName)) data.last_name = lastName
+    const dataAsString = JSON.stringify(data)
+    try {
+      const createAccount = await $http({
+        method: 'POST',
+        url: oktaApiUrl('create'),
+        data: data,
+        withCredentials: true
+      })
+
+      $cookies.put(
+        createAccountDataCookieName,
+        dataAsString,
+        {
+          path: '/',
+          domain: isTest ? '' : cookieDomain,
+          expires: moment().add(2, 'hours').toISOString()
+        }
+      )
+      return {
+        status: 'success',
+        data: createAccount
+      }
+    } catch (error) {
+      return await catchCreateAccountErrors(error, dataAsString, email, isTest)
+    }
+  }
+
+  async function catchCreateAccountErrors (errorObject, dataAsString, email, isTest) {
+    try {
+      if (errorObject.status === 401) {
+        throw new Error(errorObject.message)
+      }
+      const errors = errorObject?.data?.error
+        ? errorObject.data.error.split(',')
+            .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
+            .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ''))
+        : errorObject
+
+      let checkIfAccountIsPending = false
+
+      const formattedErrors = errors.map((error) => {
+        switch (error) {
+          case 'login: An object with this field already exists in the current organization':
+            checkIfAccountIsPending = true
+            return 'OKTA_EMAIL_ALREADY_EXISTS'
+          case 'email: Does not match required pattern':
+            return 'OKTA_ERROR_WHILE_SAVING_EMAIL'
+          case 'Something went wrong. Please try again':
+            return 'OKTA_ERROR_WHILE_SAVING_DATA'
+          default:
+            return error
+        };
+      })
+      if (!checkIfAccountIsPending) {
+        return {
+          status: 'error',
+          data: formattedErrors,
+          accountPending: false
+        }
+      } else {
+        const accountPending = await checkCreateAccountStatus(email)
+        if (accountPending?.data?.status !== 'PROVISIONED') {
+          return {
+            status: 'error',
+            data: formattedErrors,
+            accountPending: false
+          }
+        } else {
+          $cookies.put(
+            createAccountDataCookieName,
+            dataAsString,
+            {
+              path: '/',
+              domain: isTest ? '' : cookieDomain,
+              expires: moment().add(2, 'hours').toISOString()
+            }
+          )
+          return {
+            status: 'error',
+            data: formattedErrors,
+            accountPending: true
+          }
+        }
+      }
+    } catch {
+      return {
+        status: 'error',
+        data: ['SOMETHING_WENT_WRONG']
+      }
+    }
+  }
+
+  async function checkCreateAccountStatus (email) {
+    const isAuthenticated = await authClient.isAuthenticated()
+    if (currentRole() !== Roles.public || isAuthenticated) {
+      return 'Already logged in.'
+    }
+    try {
+      const createAccountStatus = await $http({
+        method: 'GET',
+        url: `${oktaApiUrl('status')}?email=${encodeURIComponent(email)}`,
+        withCredentials: true
+      })
+      return {
+        status: 'success',
+        data: createAccountStatus.data
+      }
+    } catch (err) {
+      try {
+        if (err.status === 401) {
+          throw new Error()
+        }
+        return {
+          status: 'error',
+          data: err?.data?.error ?? 'SOMETHING_WENT_WRONG'
+        }
+      } catch {
+        return {
+          status: 'error',
+          data: ['SOMETHING_WENT_WRONG']
+        }
+      }
+    }
+  }
+
+  function oktaIsUserAuthenticated () {
+    return Observable.from(authClient.isAuthenticated())
+  }
 
   function signOut (redirectHome = true) {
     return Observable.from(internalSignOut(redirectHome))

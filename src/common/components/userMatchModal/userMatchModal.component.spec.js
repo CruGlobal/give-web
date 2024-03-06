@@ -24,7 +24,7 @@ describe('userMatchModal', function () {
     expect($ctrl).toBeDefined()
   })
 
-  describe('$onInit', () => {
+  describe('$onInit()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl.verificationService, 'getContacts').mockImplementation(() => Observable.of([]))
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
@@ -105,6 +105,18 @@ describe('userMatchModal', function () {
       expect($ctrl.contacts).toEqual(contacts)
       expect($ctrl.changeMatchState).toHaveBeenCalledWith('identity')
       expect($ctrl.loadingDonorDetailsError).not.toEqual(true)
+    })
+
+    it('initializes the component and proceeds to \'question\'', () => {
+      jest.spyOn($ctrl, 'onActivate')
+      const contacts = [{ name: 'Charles Xavier', selected: true }, { name: 'Bruce Bannr', selected: true }]
+      jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.of([{ key: 'a' }, { key: 'b' }, { key: 'c' }]))
+      $ctrl.verificationService.getContacts.mockImplementation(() => Observable.of(contacts))
+      $ctrl.contacts = null
+      $ctrl.getContacts()
+      expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
+      expect($ctrl.onActivate).toHaveBeenCalledWith()
+      expect($ctrl.changeMatchState).toHaveBeenCalledWith('question')
     })
 
     it('logs an error on failure', () => {
@@ -243,7 +255,7 @@ describe('userMatchModal', function () {
     })
   })
 
-  describe('onActivate', () => {
+  describe('onActivate()', () => {
     it('load questions and changes state', () => {
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.of([{ key: 'a' }, { key: 'b' }, { key: 'c' }]))
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
@@ -272,7 +284,7 @@ describe('userMatchModal', function () {
     })
   })
 
-  describe('onQuestionAnswer', () => {
+  describe('onQuestionAnswer()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
       $ctrl.questionIndex = 2
@@ -326,11 +338,77 @@ describe('userMatchModal', function () {
     })
   })
 
-  describe('onFailure', () => {
+  describe('onFailure()', () => {
     it('returns the user to the home page', () => {
       $ctrl.$onInit()
       $ctrl.onFailure()
       expect($ctrl.$window.location).toEqual('/')
+    })
+  })
+
+  describe('getCurrentStep()', () => {
+    it('returns intro step', () => {
+      $ctrl.matchState = 'intro'
+      expect($ctrl.getCurrentStep()).toEqual(0.1)
+    })
+    it('returns identity step', () => {
+      $ctrl.matchState = 'identity'
+      expect($ctrl.getCurrentStep()).toEqual(1)
+    })
+    it('returns the next question step', () => {
+      $ctrl.matchState = 'question'
+      $ctrl.questionIndex = 2
+      expect($ctrl.getCurrentStep()).toEqual(3)
+    })
+    it('returns success step', () => {
+      $ctrl.matchState = 'success'
+      expect($ctrl.getCurrentStep()).toEqual(7)
+    })
+    it('returns default step', () => {
+      $ctrl.matchState = 'default'
+      expect($ctrl.getCurrentStep()).toEqual(0)
+    })
+  })
+
+  describe('back()', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl, 'changeMatchState')
+    })
+    it('sends the user back a step to \'identity\'', () => {
+      $ctrl.questionIndex = 1
+      $ctrl.back()
+      expect($ctrl.changeMatchState).toHaveBeenCalledWith('identity')
+    })
+
+    it('should proceed to the previous question', () => {
+      $ctrl.questionIndex = 2
+      $ctrl.back()
+      expect($ctrl.changeMatchState).not.toHaveBeenCalled()
+      expect($ctrl.questionIndex).toEqual(1)
+    })
+  })
+
+  describe('continueCheckout()', () => {
+    it('sends the user to the checkout', () => {
+      $ctrl.$window.location = '/cart.html'
+      $ctrl.continueCheckout()
+      expect($ctrl.$window.location).toEqual('/checkout.html')
+    })
+  })
+
+  describe('goToOpportunities()', () => {
+    it('sends the user to the homepage', () => {
+      $ctrl.$window.location = '/cart.html'
+      $ctrl.goToOpportunities()
+      expect($ctrl.$window.location).toEqual('/')
+    })
+  })
+
+  describe('goToDashboard()', () => {
+    it('sends the user to the dashboard', () => {
+      $ctrl.$window.location = '/cart.html'
+      $ctrl.goToDashboard()
+      expect($ctrl.$window.location).toEqual('/your-giving.html')
     })
   })
 })

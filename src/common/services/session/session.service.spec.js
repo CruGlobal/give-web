@@ -383,7 +383,6 @@ describe('session service', function () {
         expect(data).toEqual(false)
         done()
       })
-
     })
   })
 
@@ -582,6 +581,170 @@ describe('session service', function () {
       })
     })
   })
+  describe('createAccount()', () => {
+    const getUser = jest.fn(() => ({
+      email: 'email@cru.org',
+    }));
+
+    beforeEach(() => {
+      sessionService.authClient.getUser = getUser;
+      getUser.mockClear();
+    })
+
+    describe('Is authenicated', () => {
+      it('returns user is already authenicated by Okta error', () => {
+        jest.spyOn(sessionService.authClient, 'isAuthenticated').mockReturnValue(true)
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(getUser).toHaveBeenCalled();
+          expect(data).toEqual({
+            data: [
+              "Already logged in to Okta with email: email@cru.org. You will be redirected to the Sign In page in a few seconds.",
+              "Another Error"
+            ],
+            redirectToSignIn: true,
+            status: "error"
+          })
+        })
+      })
+      it('returns user is already authenicated by Cortex error', () => {
+        jest.spyOn(sessionService.authClient, 'isAuthenticated').mockReturnValue(false)
+        sessionService.authClient.getUser = undefined;
+        $cookies.put(Sessions.role, cortexRole.registered)
+        $cookies.put(Sessions.profile, cruProfile)
+        // Force digest so scope session watchers pick up changes.
+        $rootScope.$digest()
+        expect(sessionService.getRole()).toEqual(Roles.identified)
+
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data).toEqual({
+            data: [
+              "Already logged in to Okta. You will be redirected to the Sign In page in a few seconds.",
+              "Another Error"
+            ],
+            redirectToSignIn: true,
+            status: "error"
+          })
+        })
+      })
+    })
+
+    describe('Not authenicated', () => {
+
+      it('should return formatted errors', () => {
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+          email: 'test@test@test.com',
+          first_name: 'FirstName',
+          last_name: 'LastName'
+        }).respond(500, {
+            "error": "Okta user creation failed: [{:errorCode=>\"E0000001\",\n :errorSummary=>\"Api validation failed: login\",\n :errorLink=>\"E0000001\",\n :errorId=>\"oaeTHQQui71RxKf-kpCQHRr4Q\",\n :errorCauses=>\n  [{:errorSummary=>\"login: Username must be in the form of an email address\"},\n  {:errorSummary=>\"Something went wrong. Please try again\"},\n {:errorSummary=>\"email: Does not match required pattern\"}]}\n, 400]"
+        })
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data.data).toBeDefined()
+          expect(data.data[0]).toEqual('login: Username must be in the form of an email address')
+          expect(data.data[1]).toEqual('OKTA_ERROR_WHILE_SAVING_DATA')
+          expect(data.data[2]).toEqual('OKTA_ERROR_WHILE_SAVING_EMAIL')
+        })
+      })
+
+      it('handles a 401 error', () => {
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+          email: 'test@test@test.com',
+          first_name: 'FirstName',
+          last_name: 'LastName'
+        }).respond(401, {
+            "error": "Authenication error"
+        })
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data.status).toEqual('error')
+          expect(data.data[0]).toEqual('SOMETHING_WENT_WRONG')
+        })
+      })
+
+      it('handles an unknown error', () => {
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+          email: 'test@test@test123.com',
+          first_name: 'FirstName',
+          last_name: 'LastName'
+        }).respond(500, {
+            "message": "Authenication error"
+        })
+        sessionService.createAccount('test@test@test123.com', 'FirstName', 'LastName').then((data) => {
+          expect(data.status).toEqual('error')
+          expect(data.data[0]).toEqual('SOMETHING_WENT_WRONG')
+        })
+      })
+
+      it('returns a successful response', () => {
+        $httpBackend.expectPOST('https://give-stage2.cru.org/okta/create', {
+          email: 'test@test@test.com',
+          first_name: 'FirstName',
+          last_name: 'LastName'
+        }).respond(200, {
+          email: 'test@test@test.com',
+        })
+        sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
+          expect(data.status).toEqual('success')
+          expect(data.data.data).toEqual({ email: 'test@test@test.com' })
+        })
+      })
+
+      describe('catchCreateAccountErrors()', () => {
+        const email = 'test@test.com';
+        const dataAsString = JSON.stringify({data: 'data'})
+        beforeEach(() => {
+          jest.spyOn(sessionService.authClient, 'isAuthenticated')
+          $cookies.remove(createAccountDataCookieName)
+        })
+
+        it('returns errors for account already registered and checks account status.', () => {
+          $httpBackend.expectGET(`https://give-stage2.cru.org/okta/status?email=${encodeURIComponent(email)}`).respond(200, {
+            activated: '2023-08-28T14:35:00.000Z',
+            password_changed: null,
+            status: 'PROVISIONED'
+          })
+          const errorObject = {
+            data: {
+              error: "Okta user creation failed: [{:errorCode=>\"E0000001\",\n :errorSummary=>\"Api validation failed: login\",\n :errorLink=>\"E0000001\",\n :errorId=>\"oaeTHQQui71RxKf-kpCQHRr4Q\",\n :errorCauses=>\n  [{:errorSummary=>\"login: An object with this field already exists in the current organization\"}\n, 400]"
+            },
+            status: 500
+          }     
+
+          sessionService.catchCreateAccountErrors(errorObject, dataAsString, email, true).then((data) => {
+            expect(data.status).toEqual('error')
+            expect(data.data[0]).toEqual('OKTA_EMAIL_ALREADY_EXISTS')
+            expect(data.accountPending).toEqual(true)
+            expect($cookies.get(createAccountDataCookieName)).toEqual(dataAsString)
+          })
+        })
+
+        it('returns error for PROVISIONED account', () => {
+          $httpBackend.expectGET(`https://give-stage2.cru.org/okta/status?email=${encodeURIComponent(email)}`).respond(200, {
+            activated: '2023-08-28T14:35:00.000Z',
+            password_changed: null,
+            status: 'AWAITING_APPROVAL'
+          })
+          const errorObject = {
+            data: {
+              error: "Okta user creation failed: [{:errorCode=>\"E0000001\",\n :errorSummary=>\"Api validation failed: login\",\n :errorLink=>\"E0000001\",\n :errorId=>\"oaeTHQQui71RxKf-kpCQHRr4Q\",\n :errorCauses=>\n  [{:errorSummary=>\"login: An object with this field already exists in the current organization\"}\n, 400]"
+            },
+            status: 500
+          }     
+
+          sessionService.catchCreateAccountErrors(errorObject, dataAsString, email, true).then((data) => {
+            expect(data.status).toEqual('error')
+            expect(data.data[0]).toEqual('OKTA_EMAIL_ALREADY_EXISTS')
+            expect(data.accountPending).toEqual(false)
+          })
+        })
+      })
+
+      afterEach(() => {
+        $httpBackend.flush()
+        $httpBackend.verifyNoOutstandingExpectation()
+        $httpBackend.verifyNoOutstandingRequest()
+      })
+    })
+  });
 
   describe('checkCreateAccountStatus()', () => {
     const email = 'test@test.com'
