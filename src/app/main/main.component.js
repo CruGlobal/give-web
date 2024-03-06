@@ -8,6 +8,7 @@ import checkoutComponent from '../checkout/checkout.component'
 import thankYouComponent from '../thankYou/thankYou.component'
 import productConfigComponent from '../productConfig/productConfig.component'
 import signInComponent from '../signIn/signIn.component'
+import signOutComponent from '../signOut/signOut.component'
 import searchResultsComponent from '../searchResults/searchResults.component'
 import designationEditorComponent from '../designationEditor/designationEditor.component'
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component'
@@ -45,6 +46,10 @@ const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvide
     .state('sign-in', {
       url: '/sign-in.html',
       template: '<sign-in></sign-in>'
+    })
+    .state('sign-out', {
+      url: '/sign-out.html',
+      template: '<sign-out></sign-out>'
     })
     .state('checkout', {
       url: '/checkout.html',
@@ -96,6 +101,7 @@ export default angular
     yourGivingComponent.name,
     productConfigComponent.name,
     signInComponent.name,
+    signOutComponent.name,
     searchResultsComponent.name,
     profileComponent.name,
     designationEditorComponent.name,
