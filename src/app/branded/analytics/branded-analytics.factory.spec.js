@@ -25,8 +25,7 @@ describe('branded analytics factory', () => {
     self.$window = $window
     self.$window.dataLayer = []
     self.$location = $location
-
-    jest.spyOn($location, 'search').mockReturnValue(`?utm_term=${utmTerm}`)
+    self.$location.search({ utm_term: utmTerm })
   }))
 
   describe('beginCheckout', () => {
@@ -352,7 +351,7 @@ describe('branded analytics factory', () => {
     })
 
     it('should handle missing utm_term', () => {
-      jest.spyOn(self.$location, 'search').mockReturnValue('')
+      self.$location.search({})
 
       self.brandedAnalyticsFactory.saveItem({
         amount: 100,
