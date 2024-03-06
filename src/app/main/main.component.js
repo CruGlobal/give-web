@@ -32,9 +32,9 @@ class MainController {
   }
 
   signOut () {
-    this.sessionService.signOut().subscribe(() => {
-      this.$window.location = '/cart.html'
-    })
+    return this.sessionService.signOut()
+  }
+
   }
 }
 

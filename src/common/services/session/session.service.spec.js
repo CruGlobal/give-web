@@ -208,62 +208,88 @@ describe('session service', function () {
       $httpBackend.flush()
     })
 
-    it('includes lastPurchaseId when present and PUBLIC', () => {
-      jest.spyOn(sessionService, 'getRole').mockReturnValue(Roles.public)
-      $httpBackend.expectPOST('https://give-stage2.cru.org/cas/login', {
-        username: 'user@example.com',
-        password: 'hello123',
-        lastPurchaseId: 'gxbcdviu='
-      }).respond(200, 'success')
-      sessionService
-        .signIn('user@example.com', 'hello123', undefined, undefined, 'gxbcdviu=')
-        .subscribe((data) => {
-          expect(data).toEqual('success')
-        })
-      $httpBackend.flush()
-    })
-  })
-
-  describe('signOut', () => {
-    it('makes http request to cas/logout', () => {
-      $httpBackend.expectDELETE('https://give-stage2.cru.org/cas/logout')
-        .respond(200, {})
-      sessionService
-        .signOut()
-        .subscribe((response) => {
-          expect(response.data).toEqual({})
-        })
-      $httpBackend.flush()
-    })
-  })
-
-  describe('oktaSignOut', () => {
-    it('makes an http request to okta/logout', () => {
+  
+  describe('signOut()', () => {
+    beforeEach(() => {
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken')
+      jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
+      jest.spyOn(sessionService.authClient, 'closeSession')
+      jest.spyOn(sessionService.authClient, 'signOut')
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
         .respond(200, {})
-      sessionService
-        .oktaSignOut()
-        .subscribe((response) => {
-          expect(response.data).toEqual({})
-        })
-      $httpBackend.flush()
+      $window.sessionStorage.removeItem('forcedUserToLogout')
     })
 
-    it('should clear extra storage', () => {
-      $cookies.put(OktaStorage.state, 'a')
-      $cookies.put(OktaStorage.nonce, 'b')
-      $cookies.put(OktaStorage.redirectParams, 'c')
-      expect($cookies.get(OktaStorage.state)).toEqual('a')
-      expect($cookies.get(OktaStorage.nonce)).toEqual('b')
-      expect($cookies.get(OktaStorage.redirectParams)).toEqual('c')
+    it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', () => {
+      jest.spyOn(sessionService.authClient, 'signOut').mockImplementationOnce(() => Promise.resolve({
+        data: {}
+      }))
       sessionService
-        .oktaSignOut()
-        .subscribe(() => {
-          expect($window.localStorage.clear).toHaveBeenCalled()
-          expect($cookies.get(OktaStorage.state)).not.toBeDefined()
-          expect($cookies.get(OktaStorage.nonce)).not.toBeDefined()
-          expect($cookies.get(OktaStorage.redirectParams)).not.toBeDefined()
+        .signOut(false)
+        .subscribe((response) => {
+          expect(response.data).toEqual({})
+          expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
+            postLogoutRedirectUri: `https://URL.org?utm_source=text`
+          })
         })
+    })
+
+    it('should revoke all tokens & run signOut returning the user home', () => {
+      sessionService
+        .signOut(true)
+        .subscribe(() => {
+          expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+          expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+          expect(sessionService.authClient.closeSession).toHaveBeenCalled()
+          expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
+            postLogoutRedirectUri: null
+          })
+        })
+    });
+
+    it('should still sign user out if error during signout', () => {
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      sessionService
+      .signOut()
+      .subscribe(() => {
+        expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+        expect(sessionService.authClient.revokeRefreshToken).not.toHaveBeenCalled()
+        expect(sessionService.authClient.closeSession).not.toHaveBeenCalled()
+        expect(sessionService.authClient.signOut).toHaveBeenCalled()
+      })
+    });
+
+    it('should add forcedUserToLogout session data', () => {
+      sessionService
+      .signOut(false)
+      .subscribe(() => {
+        expect($window.sessionStorage.getItem('forcedUserToLogout')).toEqual('true')
+      })
+    });
+
+    it('should add forcedUserToLogout if error', () => {
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      sessionService
+      .signOut(false)
+      .subscribe(() => {
+        expect($window.sessionStorage.getItem('forcedUserToLogout')).toEqual('true')
+      })
+    });
+
+    it('should redirect the user to okta if all else fails', () => {
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockImplementationOnce(() => Promise.reject())
+      jest.spyOn(sessionService.authClient, 'signOut').mockImplementationOnce(() => Promise.reject())
+      sessionService
+      .signOut()
+      .subscribe(() => {
+        expect($window.location).toEqual(`https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`)
+      })
+    });
+
+    afterEach(() => {
+      $httpBackend.flush()
+      $httpBackend.verifyNoOutstandingExpectation()
+      $httpBackend.verifyNoOutstandingRequest()
     })
   })
 
@@ -354,9 +380,31 @@ describe('session service', function () {
     })
   })
 
+  describe('signOutWithoutRedirectToOkta()', () => {
+    beforeEach(() => {
+      jest.spyOn($rootScope, '$broadcast')
+    })
+    it('make http request to signout user without redirect', (done) => {
+      $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
+      sessionService.signOutWithoutRedirectToOkta().subscribe((data) => {
+        expect(data).toEqual({})
+      })
+      $rootScope.$digest()
+      // Observable.finally is fired after the test, this defers until it's called.
+      // eslint-disable-next-line angular/timeout-service
+      setTimeout(() => {
+        expect($rootScope.$broadcast).toHaveBeenCalledWith(SignOutEvent)
+        done()
+      })
+      $httpBackend.flush()
+    })
+  })
+
+
+
   describe('downgradeToGuest( skipEvent )', () => {
     beforeEach(() => {
-      jest.spyOn($rootScope, '$broadcast').mockImplementation(() => {})
+      jest.spyOn($rootScope, '$broadcast')
     })
 
     describe('with \'PUBLIC\' role', () => {
@@ -410,7 +458,7 @@ describe('session service', function () {
         // Observable.finally is fired after the test, this defers until it's called.
         // eslint-disable-next-line angular/timeout-service
         setTimeout(() => {
-          expect($rootScope.$broadcast).not.toHaveBeenCalled()
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith(SignOutEvent)
           done()
         })
         $httpBackend.flush()

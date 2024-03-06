@@ -23,18 +23,13 @@ describe('main', function () {
   })
 
   describe('signOut', () => {
-    beforeEach(() => {
-      jest.spyOn(self.controller.sessionService, 'signOut').mockImplementation(() => Observable.of({}))
-    })
-
     it('should call session sign out', () => {
+      jest.spyOn(self.controller.sessionService, 'signOut')
       self.controller.signOut()
       expect(self.controller.sessionService.signOut).toHaveBeenCalled()
     })
+  })
 
-    it('should redirect to the cart', () => {
-      self.controller.signOut()
-      expect(self.controller.$window.location).toEqual('/cart.html')
     })
   })
 })

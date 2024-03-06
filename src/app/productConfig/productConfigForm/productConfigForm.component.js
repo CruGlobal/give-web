@@ -69,6 +69,7 @@ class ProductConfigFormController {
     this.initItemConfig()
     this.loadData()
     this.waitForFormInitialization()
+    this.shouldShowForcedUserToLogoutError()
 
     this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
       this.initItemConfig()
@@ -388,6 +389,11 @@ class ProductConfigFormController {
     } else {
       this.$window.location = url
     }
+  }
+
+  shouldShowForcedUserToLogoutError () {
+    const forcedUserToLogout = this.$window.sessionStorage.getItem('forcedUserToLogout')
+    this.errorForcedUserToLogout = !!forcedUserToLogout
   }
 }
 

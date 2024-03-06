@@ -27,12 +27,6 @@ export const Sessions = {
   profile: 'cru-profile'
 }
 
-export const OktaStorage = {
-  state: 'okta-oauth-state',
-  nonce: 'okta-oauth-nonce',
-  redirectParams: 'okta-oauth-redirect-params'
-}
-
 export const redirectingIndicator = 'redirectingFromOkta'
 export const locationOnLogin = 'locationOnLogin'
 export const locationSearchOnLogin = 'locationSearchOnLogin'
@@ -59,6 +53,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   // Set initial session on load
   updateCurrentSession()
 
+  // Remove session data if present
+  removeForcedUserToLogoutSessionData()
+
   // Watch cortex-session cookie for changes and update existing session variable
   // This only detects changes made by $http or other angular services, not the browser expiring the cookie.
   $rootScope.$watch(() => $cookies.get(Sessions.role), updateCurrentSession)
@@ -78,41 +75,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getOktaUrl: getOktaUrl,
     removeOktaRedirectIndicator: removeOktaRedirectIndicator,
     isOktaRedirecting: isOktaRedirecting,
-    updateCurrentProfile: updateCurrentProfile
-  }
-
-  /* Public Methods */
-  function signIn (username, password, mfa_token, trust_device, lastPurchaseId) {
-    const data = {
-      username: username,
-      password: password
-    }
-    if (angular.isDefined(mfa_token)) { data.mfa_token = mfa_token }
-    if (trust_device) { data.trust_device = '1' }
-    // Only send lastPurchaseId if present and currently public
-    if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) { data.lastPurchaseId = lastPurchaseId }
-    return Observable
-      .from($http({
-        method: 'POST',
-        url: casApiUrl('/login'),
-        data: data,
-        withCredentials: true
-      }))
-      .map((response) => response.data)
-      .finally(() => {
-        $rootScope.$broadcast(SignInEvent)
-      })
-  }
-
-  function signOut () {
-    // https://github.com/CruGlobal/cortex_gateway/wiki/Logout
-    return Observable
-      .from($http({
-        method: 'DELETE',
-        url: casApiUrl('/logout'),
-        withCredentials: true
-      })
-      )
+    signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta,
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -155,17 +118,64 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     })
   }
 
-  function oktaSignOut () {
-    return Observable.from(internalSignOut())
+
+  function signOut (redirectHome = true) {
+    return Observable.from(internalSignOut(redirectHome))
   }
 
-  function internalSignOut () {
-    clearStorageForOktaLogout()
-    return $http({
-      method: 'DELETE',
-      url: oktaApiUrl('logout'),
-      withCredentials: true
+  async function internalSignOut (redirectHome = true) {
+    try {
+      await $http({
+        method: 'DELETE',
+        url: oktaApiUrl('logout'),
+        withCredentials: true
+      })
+      await clearCheckoutSavedData()
+      await authClient.revokeAccessToken()
+      await authClient.revokeRefreshToken()
+      await authClient.closeSession()
+      // Add session data so on return to page we can show an explaination to the user about what happened.
+      if (!redirectHome) {
+        $window.sessionStorage.setItem('forcedUserToLogout', true)
+      }
+      return authClient.signOut({
+        postLogoutRedirectUri: redirectHome ? null : $window.location.href
+      })
+    } catch {
+      // closeSession errors out due to CORS. to fix this temporarily, I've added the logout in a catch just in case.
+      if (!redirectHome) {
+        $window.sessionStorage.setItem('forcedUserToLogout', true)
+      }
+      return authClient.signOut({
+        postLogoutRedirectUri: redirectHome ? null : $window.location.href
+      }).catch(() => {
+        $window.location = `https://signon.okta.com/login/signout?fromURI=${envService.read('oktaReferrer')}`
+      })
+    }
+  }
+
+  function signOutWithoutRedirectToOkta () {
+    const observable = Observable
+      .from($http({
+        method: 'DELETE',
+        url: oktaApiUrl('logout'),
+        withCredentials: true
+      }))
+      .map((response) => response.data)
+    clearCheckoutSavedData()
+    authClient.revokeAccessToken()
+    authClient.revokeRefreshToken()
+    authClient.closeSession()
+    return observable.finally(() => {
+      $rootScope.$broadcast(SignOutEvent)
     })
+  }
+
+  function removeForcedUserToLogoutSessionData () {
+    // Allow for 2 seconds, so component can show error to user.
+    setTimeout(() => {
+      $window.sessionStorage.removeItem('forcedUserToLogout')
+    }, 2000)
   }
 
   function downgradeToGuest (skipEvent = false) {
@@ -179,6 +189,9 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
           data: {}
         }))
         .map((response) => response.data)
+    authClient.revokeAccessToken()
+    authClient.revokeRefreshToken()
+    authClient.closeSession()
     return skipEvent
       ? observable
       : observable.finally(() => {
@@ -213,14 +226,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   /* Private Methods */
   function setOktaRedirecting () {
     $window.sessionStorage.setItem(redirectingIndicator, 'true')
-  }
-
-  function clearStorageForOktaLogout () {
-    $window.localStorage.clear()
-    const cookieConfig = { path: '/' }
-    $cookies.remove(OktaStorage.state, cookieConfig)
-    $cookies.remove(OktaStorage.nonce, cookieConfig)
-    $cookies.remove(OktaStorage.redirectParams, cookieConfig)
   }
 
   function updateCurrentSession () {
