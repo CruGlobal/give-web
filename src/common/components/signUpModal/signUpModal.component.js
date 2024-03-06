@@ -73,9 +73,9 @@ class SignUpModalController {
         throw new Error('Some fields are invalid')
       }
 
-      const details = this.donorDetails   
-      const { email, name } = details;
-      const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name']);
+      const details = this.donorDetails
+      const { email, name } = details
+      const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name'])
       if (createAccount.status === 'error') {
         if (createAccount.accountPending) {
           this.onStateChange({ state: 'sign-up-activation' })

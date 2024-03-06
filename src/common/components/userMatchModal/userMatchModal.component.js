@@ -194,7 +194,7 @@ class UserMatchModalController {
     this.$window.location = '/'
   }
 
-  goToDashboard () {
+  goToGivingDashboard () {
     this.$window.location = '/your-giving.html'
   }
 }

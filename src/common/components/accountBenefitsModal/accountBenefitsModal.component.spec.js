@@ -5,9 +5,10 @@ import { Roles } from 'common/services/session/session.service'
 
 describe('accountBenefitsModal', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, bindings
+  let $ctrl, $location, bindings
 
-  beforeEach(inject(function (_$componentController_) {
+  beforeEach(inject(function (_$componentController_, _$location_) {
+    $location = _$location_
     bindings = {
       modalTitle: '',
       onStateChange: jest.fn(),
@@ -25,6 +26,14 @@ describe('accountBenefitsModal', function () {
       $ctrl.$onInit()
 
       expect($ctrl.modalTitle).toEqual('Register Your Account for Online Access')
+      expect($ctrl.onStateChange).not.toHaveBeenCalled()
+    })
+
+    it('initializes component', () => {
+      jest.spyOn($location, 'search').mockReturnValue({ code: 'code', state: 'state '})
+      $ctrl.$onInit()
+
+      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'register-account' })
     })
   })
 

@@ -3,16 +3,18 @@ import 'angular-mocks'
 import module from './accountBenefits.component'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
+import 'rxjs/add/observable/throw'
 import { Roles } from 'common/services/session/session.service'
 
 describe('thank you', function () {
   describe('accountBenefits', function () {
     beforeEach(angular.mock.module(module.name))
     let $ctrl
+    const lastPurchaseId = 'iiydanbt='
 
     beforeEach(inject(function ($componentController) {
       $ctrl = $componentController(module.name)
-      jest.spyOn($ctrl.orderService, 'retrieveLastPurchaseLink').mockReturnValue('/purchases/crugive/iiydanbt=')
+      jest.spyOn($ctrl.orderService, 'retrieveLastPurchaseLink').mockReturnValue(`/purchases/crugive/${lastPurchaseId}`)
     }))
 
     it('should be defined', () => {
@@ -70,19 +72,19 @@ describe('thank you', function () {
         $ctrl.donorDetails = { 'registration-state': 'MATCHED' }
         $ctrl.openAccountBenefitsModal()
 
-        expect($ctrl.sessionModalService.userMatch).toHaveBeenCalledWith('iiydanbt=')
+        expect($ctrl.sessionModalService.userMatch).toHaveBeenCalledWith(lastPurchaseId)
         deferred.resolve()
         $rootScope.$digest()
         expect($ctrl.isVisible).toEqual(false)
         done()
       })
 
-      it('shows registerAccount modal to users who are authenticated but need to register for siebel', () => {
+      it('shows registerAccount modal to users who are authenticated but need to register for a donor account', () => {
         $ctrl.sessionService.oktaIsUserAuthenticated.mockReturnValue(Observable.from([true]))
         $ctrl.donorDetails = { 'registration-state': 'NEW' }
         $ctrl.openAccountBenefitsModal()
 
-        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith('iiydanbt=')
+        expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalledWith(lastPurchaseId)
         deferred.resolve()
         $rootScope.$digest()
         expect($ctrl.isVisible).toEqual(false)
@@ -93,7 +95,7 @@ describe('thank you', function () {
         $ctrl.donorDetails = { 'registration-state': 'NEW' }
         $ctrl.openAccountBenefitsModal()
 
-        expect($ctrl.sessionModalService.accountBenefits).toHaveBeenCalledWith('iiydanbt=')
+        expect($ctrl.sessionModalService.accountBenefits).toHaveBeenCalledWith(lastPurchaseId)
         deferred.resolve()
         $rootScope.$digest()
 
@@ -113,6 +115,14 @@ describe('thank you', function () {
         $ctrl.openAccountBenefitsModal()
 
         expect($ctrl.sessionModalService.accountBenefits).not.toHaveBeenCalled()
+      })
+
+      it('should log an error', () => {
+        const error = 'Unknown error'
+        $ctrl.sessionService.oktaIsUserAuthenticated.mockReturnValue(Observable.throw(error))
+        $ctrl.openAccountBenefitsModal()
+
+        expect($ctrl.$log.error.logs[0]).toEqual(['Failed checking if user is authenticated', error])
       })
     })
 
@@ -148,7 +158,7 @@ describe('thank you', function () {
 
     describe('getLastPurchaseId', () => {
       it('should get the id from the last purchase link', () => {
-        expect($ctrl.getLastPurchaseId()).toEqual('iiydanbt=')
+        expect($ctrl.getLastPurchaseId()).toEqual(lastPurchaseId)
       })
 
       it('should return undefined when there is no last purchase link', () => {

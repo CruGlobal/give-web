@@ -416,10 +416,10 @@ describe('userMatchModal', function () {
     })
   })
 
-  describe('goToDashboard()', () => {
+  describe('goToGivingDashboard()', () => {
     it('sends the user to the dashboard', () => {
       $ctrl.$window.location = '/cart.html'
-      $ctrl.goToDashboard()
+      $ctrl.goToGivingDashboard()
       expect($ctrl.$window.location).toEqual('/your-giving.html')
     })
   })

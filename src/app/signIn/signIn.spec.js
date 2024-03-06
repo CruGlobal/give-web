@@ -69,7 +69,7 @@ describe('signIn', function () {
       $ctrl.$onDestroy()
     })
 
-    describe('Without Siebel account', () => {
+    describe('Without a donor account account', () => {
       let deferred, $rootScope
       beforeEach(inject((_$q_, _$rootScope_) => {
         deferred = _$q_.defer()
@@ -78,7 +78,7 @@ describe('signIn', function () {
         jest.spyOn($ctrl.sessionModalService, 'userMatch').mockReturnValue(deferred.promise)
       }))
 
-      it('shows register to Siebel modal upon initial Okta sign in', () => {
+      it('shows register for a donor account modal upon initial Okta sign in', () => {
         jest.spyOn(orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'registration-state': 'NEW' }))
         jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
         $ctrl.$onInit()
@@ -93,7 +93,7 @@ describe('signIn', function () {
         expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
       })
 
-      it('shows register to Siebel modal upon matched account', () => {
+      it('shows register a donor account modal upon matched account', () => {
         jest.spyOn(orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'registration-state': 'MATCHED' }))
         jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
         $ctrl.$onInit()
@@ -109,7 +109,7 @@ describe('signIn', function () {
       })
     })
 
-    describe('With Siebel account', () => {
+    describe('With a donor account account', () => {
       beforeEach(() => {
         jest.spyOn(orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'registration-state': 'REGISTERED' }))
       })

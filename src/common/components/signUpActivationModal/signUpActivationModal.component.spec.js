@@ -88,7 +88,6 @@ describe('signUpActivationModal', function () {
       $ctrl.$onInit()
 
       expect($ctrl.cartCount).toEqual(4)
-      expect($ctrl.showHelp).toEqual(false)
       expect($ctrl.loadingAccountErrorCount).toEqual(0)
       expect($ctrl.initialLoading).toEqual(true)
       expect($ctrl.getUnverifiedAccount).toHaveBeenCalledWith(false)

@@ -309,18 +309,26 @@ class DesignationEditorController {
     this.loadingOverlay = true
     this.saveDesignationError = false
 
-    return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
-      this.saveStatus = 'success'
-      this.loadingOverlay = false
-      this.carouselImages = this.designationContent.secondaryPhotos || []
-      this.updateCarousel()
-    }, error => {
-      this.saveStatus = 'failure'
-      this.saveDesignationError = true
-      this.loadingOverlay = false
-      this.$log.error('Error saving designation editor content.', error)
-      this.$window.scrollTo(0, 0)
-    })
+    this.enforcerId = this.sessionEnforcerService([Roles.registered], {
+      [EnforcerCallbacks.signIn]: () => {
+        return this.designationEditorService.save(this.designationContent, this.designationNumber, this.campaignPage).then(() => {
+          this.saveStatus = 'success'
+          this.loadingOverlay = false
+          this.carouselImages = this.designationContent.secondaryPhotos || []
+          this.updateCarousel()
+        }, error => {
+          this.saveStatus = 'failure'
+          this.saveDesignationError = true
+          this.loadingOverlay = false
+          this.$log.error('Error saving designation editor content.', error)
+          this.$window.scrollTo(0, 0)
+        })
+      },
+      [EnforcerCallbacks.cancel]: () => {
+        // Authentication failure
+        this.$window.location = '/'
+      }
+    }, EnforcerModes.session)
   }
 
   isPerson () {

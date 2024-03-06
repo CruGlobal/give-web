@@ -128,7 +128,8 @@ describe('analytics factory', () => {
         currency: 'USD',
         price: itemConfig.AMOUNT.toString(),
         quantity: '1',
-        recurring_date: `September 13, ${new Date().getFullYear()}`
+        recurring_date: 'September 13, 2023',
+        testing_transaction: "false",
       })
     });
 

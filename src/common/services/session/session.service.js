@@ -298,7 +298,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   async function internalSignOut (redirectHome = true) {
     const oktaSignOut = async () => {
-      console.log('oktaSignOut', redirectHome)
       // Add session data so on return to page we can show an explaination to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem(forcedUserToLogout, true)
@@ -326,7 +325,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       try {
         return await oktaSignOut()
       } catch {
-        console.log('woof')
         $window.location.href = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
       }
     }

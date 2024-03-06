@@ -34,7 +34,6 @@ class signUpActivationModalController {
         this.cartCount = 0
       })
     }
-    this.showHelp = false
     this.loadingAccountErrorCount = 0
     this.initialLoading = true
     this.getUnverifiedAccount(false)

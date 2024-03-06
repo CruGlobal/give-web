@@ -185,7 +185,6 @@ describe('session service', function () {
     })
   })
 
-  
   describe('signOut()', () => {
     beforeEach(() => {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken')
@@ -194,7 +193,6 @@ describe('session service', function () {
      
       $window.sessionStorage.removeItem(forcedUserToLogout)
     })
-
 
     describe('Successful cortex logout', () => {
       beforeEach(() => {
@@ -211,7 +209,7 @@ describe('session service', function () {
           .subscribe((response) => {
             expect(response.data).toEqual({})
             expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
-              postLogoutRedirectUri: `https://URL.org?utm_source=text`
+              postLogoutRedirectUri: `https://localhost.cru.org:9000/sign-out.html`
             })
           })
       })

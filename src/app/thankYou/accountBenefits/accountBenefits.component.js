@@ -52,7 +52,7 @@ class AccountBenefitsController {
       }
     },
     error => {
-      this.$log.error('Failed checking if user is authenicated', error)
+      this.$log.error('Failed checking if user is authenticated', error)
     })
   }
 

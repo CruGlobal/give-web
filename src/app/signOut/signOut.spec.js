@@ -19,6 +19,44 @@ describe('signOut', function () {
     expect($ctrl).toBeDefined()
   })
 
+  describe('$onInit()', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.sessionService, 'getRole')
+      jest.spyOn($ctrl, 'redirectToHomepage')
+      jest.spyOn($ctrl, 'redirectToLocationPriorToSignOut')
+    })
+
+    describe('as \'IDENTIFIED\'', () => {
+      it('should redirect to the home page', () => {
+        $ctrl.sessionService.getRole.mockReturnValue('IDENTIFIED')
+        $ctrl.$onInit()
+
+        expect($ctrl.redirectToHomepage).toHaveBeenCalled()
+        expect($ctrl.redirectToLocationPriorToSignOut).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('as \'REGISTERED\'', () => {
+      it('should redirect to the home page', () => {
+        $ctrl.sessionService.getRole.mockReturnValue('REGISTERED')
+        $ctrl.$onInit()
+
+        expect($ctrl.redirectToHomepage).toHaveBeenCalled()
+        expect($ctrl.redirectToLocationPriorToSignOut).not.toHaveBeenCalled()
+      })
+    })
+
+
+    describe('as \'GUEST\'', () => {
+      it('should run redirectToLocationPriorToSignOut()', () => {
+        $ctrl.sessionService.getRole.mockReturnValue('PUBLIC')
+        $ctrl.$onInit()
+
+        expect($ctrl.redirectToLocationPriorToSignOut).toHaveBeenCalled()
+      })
+    })
+  })
+
   it('redirectToHomepage()', function () {
     $ctrl.redirectToHomepage()
     expect($ctrl.$window.location.href).toEqual('/')
@@ -31,13 +69,14 @@ describe('signOut', function () {
     })
 
     it('redirects to prior page if hasLocationOnLogin() returns value', () => {
-      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      const priorLocation = 'https://give-stage2.cru.org/search-results.html'
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue(priorLocation)
       $ctrl.showRedirectingLoadingIcon = false
       $ctrl.redirectToLocationPriorToSignOut()
       expect($ctrl.showRedirectingLoadingIcon).toEqual(true)
       expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalled()
       expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
-      expect($ctrl.$window.location.href).toEqual('https://give-stage2.cru.org/search-results.html')
+      expect($ctrl.$window.location.href).toEqual(priorLocation)
     })
 
     it('redirects to home page if hasLocationOnLogin() returns no value', () => {
@@ -48,43 +87,6 @@ describe('signOut', function () {
       expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalled()
       expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual('/')
-    })
-  })
-
- 
-
-  describe('as \'IDENTIFIED\'', () => {
-    it('should redirect to the home page', () => {
-      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('IDENTIFIED')
-      jest.spyOn($ctrl, 'redirectToHomepage')
-      jest.spyOn($ctrl, 'redirectToLocationPriorToSignOut')
-      $ctrl.$onInit()
-
-      expect($ctrl.redirectToHomepage).toHaveBeenCalled()
-      expect($ctrl.redirectToLocationPriorToSignOut).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('as \'REGISTERED\'', () => {
-    it('should redirect to the home page', () => {
-      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('REGISTERED')
-      jest.spyOn($ctrl, 'redirectToHomepage')
-      jest.spyOn($ctrl, 'redirectToLocationPriorToSignOut')
-      $ctrl.$onInit()
-
-      expect($ctrl.redirectToHomepage).toHaveBeenCalled()
-      expect($ctrl.redirectToLocationPriorToSignOut).not.toHaveBeenCalled()
-    })
-  })
-
-
-  describe('as \'GUEST\'', () => {
-    it('should run redirectToLocationPriorToSignOut()', () => {
-      jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('PUBLIC')
-      jest.spyOn($ctrl, 'redirectToLocationPriorToSignOut')
-      $ctrl.$onInit()
-
-      expect($ctrl.redirectToLocationPriorToSignOut).toHaveBeenCalled()
     })
   })
 

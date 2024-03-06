@@ -16,8 +16,10 @@ class AccountBenefitsModalController {
 
   $onInit () {
     this.modalTitle = this.gettext('Register Your Account for Online Access')
-    const shouldShowRegisterAccountmodal = !!this.$location.search()?.code && !!this.$location.search()?.state
-    if (shouldShowRegisterAccountmodal) this.onStateChange({ state: 'register-account' })
+    const shouldShowRegisterAccountModal = !!this.$location.search()?.code && !!this.$location.search()?.state
+    if (shouldShowRegisterAccountModal) {
+      this.onStateChange({ state: 'register-account' })
+    }
   }
 
   registerAccount () {

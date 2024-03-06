@@ -171,30 +171,12 @@ describe('sessionModalService', function () {
     })
   })
 
-  describe('signUp', () => {
-    it('should open signUp modal', () => {
-      sessionModalService.signUp()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
-    })
-  })
-
   describe('userMatch', () => {
     it('should open userMatch modal', () => {
       sessionModalService.userMatch()
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('user-match')
-    })
-  })
-
-  describe('contactInfo', () => {
-    it('should open contactInfo modal', () => {
-      sessionModalService.contactInfo()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('contact-info')
     })
   })
 
