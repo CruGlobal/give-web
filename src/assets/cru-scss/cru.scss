@@ -231,6 +231,15 @@
 @import "sign-in";
 @import "footer";
 
+<<<<<<< HEAD
+
+@import "./components/signInForm";
+@import "./components/signUpModal";
+@import "./components/registerAccountModal";
+@import "./components/contactInfo";
+
+=======
+>>>>>>> 468b762e (config sass to smaller files)
 @import "tabs";
 @import "global-changes";
 @import "responsive";

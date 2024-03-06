@@ -67,4 +67,16 @@ export class OktaAuth {
   setLoginRedirect (loginRedirect) {
     this.loginRedirect = loginRedirect
   }
+
+  revokeAccessToken () {
+    return Promise.resolve(true)
+  }
+
+  revokeRefreshToken () {
+    return Promise.resolve(true)
+  }
+
+  closeSession () {
+    return Promise.resolve(true)
+  }
 }

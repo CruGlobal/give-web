@@ -1,25 +1,16 @@
-sign-in-form .okta-button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 1em 0.5em;
-  gap: 1em;
-
-  img {
-    height: 20px;
-  }
-}
-
 register-account-modal {
+  display: block;
   line-height: 1.2em;
 
+
+  &[data-state=sign-in],
+  &[data-state=sign-up] {
+    display: inline-block;
+  }
+  
   .modal-header {
     padding-bottom: 30px;
     background-color: #EBECEC;
-  }
-
-  h3 {
-    padding-bottom: 30px;
   }
 
   ul {
@@ -27,17 +18,13 @@ register-account-modal {
   }
 
   .section {
-    padding-bottom: 30px;
+    margin-top: 20px;
   }
 
   .cart {
     padding: 10px;
     background-color: #9C9FA1;
     color: white;
-  }
-
-  .modal-dialog .give-modal-content & .modal-body {
-    padding: 30px;
   }
 
   .footer-buttons {
@@ -51,8 +38,29 @@ register-account-modal {
     }
   }
 
+  .signup-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      font-size: 30px;
+      font-weight: 400;
+      margin: 0 10px;
+    }
+
+    img {
+      max-height: 35px;
+    }
+  }
+
+  .modal-dialog .give-modal-content & .modal-body {
+    padding: 30px;
+  }
+
   .modal-dialog.modal-lg & {
-    &[data-state=sign-in] {
+    &[data-state=sign-in],
+    &[data-state=loading] {
       $body-width: 530px;
       $body-margin: 80px;
       display: flex;
@@ -68,9 +76,26 @@ register-account-modal {
       .modal-body {
         width: $body-width - $body-margin * 2;
         margin: 60px $body-margin;
+
+        sign-in-modal {
+          display: inline-block;
+          padding: 0;
+        }  
       }
     }
     &[data-state=contact-info] {
+
+      .modal-header {
+        text-align: center;
+        width: 100%;
+
+        .paragraph {
+          max-width: 500px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
       contact-info-modal form {
         display: grid;
         grid-template: 1fr auto / auto 320px;
@@ -91,6 +116,7 @@ register-account-modal {
       }
     }
     &[data-state=user-match] {
+
       .modal-header h3 {
         text-align: center;
       }
@@ -121,52 +147,8 @@ register-account-modal {
       flex-direction: column;
     }
   }
-}
 
-user-match-modal {
-  h4 {
-    font-weight: bold;
-    text-align: center;
-  }
+  .modal-dialog[data-state=mfa] {
 
-  input {
-    accent-color: $colorCru-gold;
-  }
-
-  .activate-progress {
-    padding-bottom: 30px;
-
-    progress {
-      width: 100%;
-      accent-color: $colorCru-gold;
-    }
-
-    .step-label {
-      font-weight: bold;
-      padding-left: calc(var(--progress) * 320px);
-
-      .modal-dialog.modal-lg & {
-        padding-left: calc(var(--progress) * 370px);
-      }
-    }
-  }
-
-  .modal-dialog.modal-lg & .success .footer-buttons button {
-    margin-right: auto;
-  }
-}
-
-sign-in-modal {
-  h4 {
-    font-size: 1.3em;
-    line-height: 1.5em;
-  }
-
-  .row {
-    margin-bottom: 1em;
-  }
-
-  .content {
-    margin-top: 1em;
   }
 }

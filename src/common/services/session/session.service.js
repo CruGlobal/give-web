@@ -34,6 +34,11 @@ export const OktaStorage = {
 }
 
 export const redirectingIndicator = 'redirectingFromOkta'
+export const locationOnLogin = 'locationOnLogin'
+export const locationSearchOnLogin = 'locationSearchOnLogin'
+export const checkoutSavedDataCookieName = 'checkoutSavedData'
+export const createAccountDataCookieName = 'createAccountData'
+export const cookieDomain = '.cru.org'
 
 export const SignInEvent = 'SessionSignedIn'
 export const SignOutEvent = 'SessionSignedOut'
@@ -289,11 +294,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       return session.role
     }
     return Roles.public
-  }
-
-  function casApiUrl (path) {
-    const apiUrl = envService.read('apiUrl') + '/cas'
-    return apiUrl + path
   }
 
   function oktaApiUrl (path) {
