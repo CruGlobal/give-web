@@ -12,6 +12,7 @@ import sessionEnforcerService, {
 } from 'common/services/session/sessionEnforcer.service'
 import { Roles } from 'common/services/session/session.service'
 import sessionHandleOktaRedirectService from 'common/services/session/sessionHandleOktaRedirect.service'
+import sessionModalService from 'common/services/session/sessionModal.service'
 import designationEditorService from 'common/services/api/designationEditor.service'
 
 import titleModalController from './titleModal/title.modal'
@@ -38,11 +39,12 @@ const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($log, $q, $uibModal, $location, $window, $rootScope, $timeout, envService, sessionEnforcerService, sessionHandleOktaRedirectService, designationEditorService) {
+  constructor ($log, $q, $uibModal, $location, $window, $rootScope, $timeout, envService, sessionEnforcerService, sessionHandleOktaRedirectService, sessionModalService, designationEditorService) {
     this.$log = $log
     this.$timeout = $timeout
     this.sessionEnforcerService = sessionEnforcerService
     this.sessionHandleOktaRedirectService = sessionHandleOktaRedirectService
+    this.sessionModalService = sessionModalService
     this.designationEditorService = designationEditorService
 
     this.imgDomain = envService.read('imgDomain')
@@ -99,17 +101,28 @@ class DesignationEditorController {
       // get designation photos
       this.designationEditorService.getPhotos(this.designationNumber)
     ]).then(responses => {
-      this.contentLoaded = true
       this.loadingOverlay = false
       this.designationContent = responses[0].data
       this.designationPhotos = responses[1].data
       this.carouselImages = this.extractCarouselUrls()
       this.updateCarousel()
     }, error => {
+      if (error.status === 422 && !this.retried) {
+        return this.sessionModalService.open('sign-in', {
+          backdrop: 'static',
+          keyboard: false
+        }).result.then(() => {
+          this.retried = true
+          return this.getDesignationContent()
+        })
+      }
+
       this.contentLoaded = false
       this.loadingOverlay = false
       this.loadingContentError = true
       this.$log.error('Error loading designation content or photos.', error)
+    }).finally(() => {
+      this.retried = false
     })
   }
 
@@ -397,6 +410,7 @@ export default angular
     commonModule.name,
     sessionEnforcerService.name,
     sessionHandleOktaRedirectService.name,
+    sessionModalService.name,
     designationEditorService.name,
     titleModalController.name,
     pageOptionsModalController.name,
