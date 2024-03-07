@@ -341,6 +341,7 @@ describe('checkout', () => {
       describe('submit single order', () => {
         beforeEach(() => {
           jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
+          jest.spyOn(self.controller.sessionService, 'updateCheckoutSavedData')          
         })
 
         afterEach(() => {
@@ -351,13 +352,16 @@ describe('checkout', () => {
 
         it('should submit the order normally if paying with a bank account', () => {
           self.controller.bankAccountPaymentDetails = {}
+          self.controller.donorDetails = {
+            'registration-state': 'NEW'
+          }
           self.controller.submitOrder()
-
           expect(self.controller.orderService.submit).toHaveBeenCalled()
           expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+          expect(self.controller.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
         })
 
         it('should handle an error submitting an order with a bank account', () => {
@@ -377,6 +381,9 @@ describe('checkout', () => {
 
         it('should submit the order with a CVV if paying with a credit card', () => {
           self.controller.creditCardPaymentDetails = {}
+          self.controller.donorDetails = {
+            'registration-state': 'MATCHED'
+          }
           self.storedCvv = '1234'
           self.coverFeeDecision = true
           self.controller.submitOrder()
@@ -386,9 +393,13 @@ describe('checkout', () => {
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+          expect(self.controller.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
         })
 
         it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
+          self.controller.donorDetails = {
+            'registration-state': 'COMPLETED'
+          }
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = undefined
           self.coverFeeDecision = true
@@ -399,6 +410,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+          expect(self.controller.sessionService.updateCheckoutSavedData).not.toHaveBeenCalled()
         })
 
         it('should handle an error submitting an order with a credit card', () => {
@@ -438,6 +450,9 @@ describe('checkout', () => {
         })
 
         it('should clear out cover fee data', () => {
+          self.controller.donorDetails = {
+            'registration-state': 'NEW'
+          }
           self.controller.creditCardPaymentDetails = {}
           self.controller.submitOrder()
 
