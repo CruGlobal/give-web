@@ -54,7 +54,7 @@
                           on-question-answer="$ctrl.onQuestionAnswer(question, answer)">
       </user-match-question>
       <div ng-switch-when="success" class="success">
-        <h4 class="text-center">Success!</h4>
+        <h4 class="text-center" translate>Success!</h4>
         <p ng-if="!$ctrl.skippedQuestions" translate ng-init="$ctrl.analyticsFactory.track('ga-registration-match-linked-account-success')">
           Thank you for taking the time to answer our security questions. Your account is now activated, and you are signed in.
         </p>
@@ -73,7 +73,7 @@
         </div>
         <div class="footer-buttons" ng-if="$ctrl.cartCount === 0">
           <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.goToOpportunities()" translate>Find Giving Opportunities</button>
-          <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.goToDashboard()" translate>Go to My Dashboard</button>
+          <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.goToGivingDashboard()" translate>Go to My Dashboard</button>
         </div>
       </div>
       <failed-verification-modal ng-switch-when="failure"

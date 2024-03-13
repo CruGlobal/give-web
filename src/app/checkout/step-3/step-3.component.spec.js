@@ -341,6 +341,7 @@ describe('checkout', () => {
       describe('submit single order', () => {
         beforeEach(() => {
           jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
+          jest.spyOn(self.controller.sessionService, 'updateCheckoutSavedData')          
         })
 
         afterEach(() => {
@@ -360,6 +361,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+          expect(self.controller.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
         })
 
         it('should handle an error submitting an order with a bank account', () => {
@@ -391,11 +393,12 @@ describe('checkout', () => {
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+          expect(self.controller.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
         })
 
         it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
           self.controller.donorDetails = {
-            'registration-state': 'REGISTERED'
+            'registration-state': 'COMPLETED'
           }
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = undefined
@@ -407,6 +410,7 @@ describe('checkout', () => {
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
+          expect(self.controller.sessionService.updateCheckoutSavedData).not.toHaveBeenCalled()
         })
 
         it('should handle an error submitting an order with a credit card', () => {

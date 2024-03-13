@@ -128,23 +128,21 @@ describe('ProfileComponent', function () {
       })
     })
 
-    describe('onHandleOktaRedirect', () => {
-      beforeEach(() => {
-        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect').mockImplementation(() => Observable.of(Observable.of('success')))
-        $ctrl.$onInit()
-      })
-
+    describe('sessionHandleOktaRedirectService', () => {
       it('should call onHandleOktaRedirect', () => {
-        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalledWith()
-      })
-    })
+        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
+        $ctrl.$onInit()
 
-    it('handles an Okta redirect error', () => {
-      $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
-      jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect').mockImplementation(() => Observable.of(Observable.of('success')))
-      $ctrl.$onInit()
-      $ctrl.sessionHandleOktaRedirectService.errorMessageSubject .next('generic')
-      expect($ctrl.errorMessage).toEqual('generic')
+        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
+      })
+
+      it('handles an Okta redirect error', () => {
+        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
+        $ctrl.$onInit()
+        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject.next('generic')
+  
+        expect($ctrl.errorMessage).toEqual('generic')
+      })
     })
   })
 

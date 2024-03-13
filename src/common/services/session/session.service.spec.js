@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { Roles, Sessions, SignOutEvent, SignInEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin, createAccountDataCookieName } from './session.service'
+import module, { Roles, Sessions, SignOutEvent, SignInEvent, redirectingIndicator, checkoutSavedDataCookieName, locationOnLogin, locationSearchOnLogin, createAccountDataCookieName, forcedUserToLogout } from './session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
@@ -189,77 +189,86 @@ describe('session service', function () {
     beforeEach(() => {
       jest.spyOn(sessionService.authClient, 'revokeAccessToken')
       jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
-      jest.spyOn(sessionService.authClient, 'closeSession')
       jest.spyOn(sessionService.authClient, 'signOut')
-      $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
+     
+      $window.sessionStorage.removeItem(forcedUserToLogout)
+    })
+
+    describe('Successful cortex logout', () => {
+      beforeEach(() => {
+        $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
         .respond(200, {})
-      $window.sessionStorage.removeItem('forcedUserToLogout')
-    })
+      })
 
-    it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', () => {
-      jest.spyOn(sessionService.authClient, 'signOut').mockImplementationOnce(() => Promise.resolve({
-        data: {}
-      }))
-      sessionService
-        .signOut(false)
-        .subscribe((response) => {
-          expect(response.data).toEqual({})
-          expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
-            postLogoutRedirectUri: `https://URL.org?utm_source=text`
+      it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', () => {
+        jest.spyOn(sessionService.authClient, 'signOut').mockImplementationOnce(() => Promise.resolve({
+          data: {}
+        }))
+        sessionService
+          .signOut(false)
+          .subscribe((response) => {
+            expect(response.data).toEqual({})
+            expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
+              postLogoutRedirectUri: `https://localhost.cru.org:9000/sign-out.html`
+            })
           })
-        })
-    })
+      })
 
-    it('should revoke all tokens & run signOut returning the user home', () => {
-      sessionService
-        .signOut(true)
+      it('should revoke all tokens & run signOut returning the user home', () => {
+        sessionService
+          .signOut(true)
+          .subscribe(() => {
+            expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
+            expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
+            expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
+              postLogoutRedirectUri: null
+            })
+          })
+      })
+
+      it('should still sign user out if error during signout', () => {
+        jest.spyOn(sessionService.authClient, 'signOut').mockRejectedValueOnce()
+        sessionService
+        .signOut()
         .subscribe(() => {
           expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
           expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
-          expect(sessionService.authClient.closeSession).toHaveBeenCalled()
-          expect(sessionService.authClient.signOut).toHaveBeenCalledWith({
-            postLogoutRedirectUri: null
-          })
+          expect(sessionService.authClient.signOut).toHaveBeenCalled()
         })
-    })
+      })
 
-    it('should still sign user out if error during signout', () => {
-      jest.spyOn(sessionService.authClient, 'closeSession').mockRejectedValueOnce()
-      sessionService
-      .signOut()
-      .subscribe(() => {
-        expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
-        expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
-        expect(sessionService.authClient.closeSession).toHaveBeenCalled()
-        expect(sessionService.authClient.signOut).toHaveBeenCalled()
+      it('should add forcedUserToLogout session data', () => {
+        sessionService
+        .signOut(false)
+        .subscribe(() => {
+          expect($window.sessionStorage.getItem(forcedUserToLogout)).toEqual('true')
+        })
       })
     })
 
-    it('should add forcedUserToLogout session data', () => {
-      sessionService
-      .signOut(false)
-      .subscribe(() => {
-        expect($window.sessionStorage.getItem('forcedUserToLogout')).toEqual('true')
+    describe('Failed cortex logout', () => {
+      beforeEach(() => {
+        $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout')
+        .respond(200, {})
       })
-    })
 
-    it('should add forcedUserToLogout if error', () => {
-      jest.spyOn(sessionService.authClient, 'closeSession').mockImplementationOnce(() => Promise.reject())
-      sessionService
-      .signOut(false)
-      .subscribe(() => {
-        expect($window.sessionStorage.getItem('forcedUserToLogout')).toEqual('true')
+      it('should add forcedUserToLogout if error', () => {
+        sessionService
+        .signOut(false)
+        .subscribe(() => {
+          expect($window.sessionStorage.getItem(forcedUserToLogout)).toEqual('true')
+        })
       })
-    })
 
-    it('should redirect the user to okta if all else fails', () => {
-      jest.spyOn(sessionService.authClient, 'signOut').mockRejectedValueOnce()
-      sessionService
-      .signOut()
-      .subscribe(() => {
-        expect($window.location).toEqual(`${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`)
+      it('should redirect the user to okta if all else fails', () => {
+        jest.spyOn(sessionService.authClient, 'signOut').mockRejectedValue()
+        sessionService
+        .signOut()
+        .subscribe(() => {
+          expect($window.location.href).toEqual(`${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`)
+        })
       })
-    })
+    })    
 
     afterEach(() => {
       $httpBackend.flush()
@@ -415,7 +424,6 @@ describe('session service', function () {
       jest.spyOn($rootScope, '$broadcast')
       jest.spyOn(sessionService.authClient, 'revokeAccessToken')
       jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
-      jest.spyOn(sessionService.authClient, 'closeSession')
     })
     it('make http request to signout user without redirect', (done) => {
       $httpBackend.expectDELETE('https://give-stage2.cru.org/okta/logout').respond(200, {})
@@ -423,7 +431,6 @@ describe('session service', function () {
         expect(data).toEqual({})
         expect(sessionService.authClient.revokeAccessToken).toHaveBeenCalled()
         expect(sessionService.authClient.revokeRefreshToken).toHaveBeenCalled()
-        expect(sessionService.authClient.closeSession).toHaveBeenCalled()
       })
       $rootScope.$digest()
       // Observable.finally is fired after the test, this defers until it's called.
@@ -435,6 +442,8 @@ describe('session service', function () {
       $httpBackend.flush()
     })
   })
+
+
 
 
 
@@ -602,8 +611,7 @@ describe('session service', function () {
           expect(getUser).toHaveBeenCalled();
           expect(data).toEqual({
             data: [
-              "Already logged in to Okta with email: email@cru.org. You will be redirected to the Sign In page in a few seconds.",
-              "Another Error"
+              "Already logged in to Okta with email: email@cru.org. You will be redirected to the Sign In page in a few seconds."
             ],
             redirectToSignIn: true,
             status: "error"
@@ -622,8 +630,7 @@ describe('session service', function () {
         sessionService.createAccount('test@test@test.com', 'FirstName', 'LastName').then((data) => {
           expect(data).toEqual({
             data: [
-              "Already logged in to Okta. You will be redirected to the Sign In page in a few seconds.",
-              "Another Error"
+              "Already logged in to Okta. You will be redirected to the Sign In page in a few seconds."
             ],
             redirectToSignIn: true,
             status: "error"

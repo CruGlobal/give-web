@@ -60,10 +60,6 @@ describe('signUpForm', function () {
 
       it('Redirects user to sign in modal', () => {
         jest.spyOn($ctrl, 'onStateChange')
-        $ctrl.session = {
-          email: 'test@cru.org',
-        }
-
         $ctrl.$onInit()
 
         expect($ctrl.onStateChange).toHaveBeenCalled()
@@ -258,7 +254,7 @@ describe('signUpForm', function () {
       expect($ctrl.sessionService.createAccount).toHaveBeenCalledWith(signUpFormData.email, signUpFormData.name['given-name'], signUpFormData.name['family-name'])    
     })
 
-    it("should call createAccount() with the user's data", () => {
+    it("should move to \'sign-up-activation\' when createAccount returns a successful response", () => {
       jest.spyOn($ctrl, 'onStateChange')
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
         [signUpFormData]

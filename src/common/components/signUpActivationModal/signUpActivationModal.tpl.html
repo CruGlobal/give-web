@@ -36,22 +36,6 @@
               <p translate>Verify your account by opening a link that we will send in that email.</p>
             </div>
           </div>
-          <p
-            translate
-            class="need-help"
-            ng-click="$ctrl.showHelp = !$ctrl.showHelp"
-            ng-if="$ctrl.unverifiedAccount.status"
-          >
-            {{$ctrl.showHelp ? 'Close help.' : 'Need help locating verify email?'}}
-          </p>
-          <div class="screenshot" ng-if="$ctrl.showHelp">
-            <div class="row">
-              <div class="col-xs-12">
-                <p translate>You'll receive an email very similar to the one below.</p>
-                <img src="{{$ctrl.imgDomain}}/assets/img/photo-placeholder.png" alt="Screenshot of verify email from Okta" />
-              </div>
-            </div>
-          </div>
 
           <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingAccountError && !$ctrl.initialLoading">
             <div ng-if="$ctrl.loadingAccountErrorCount < 2">

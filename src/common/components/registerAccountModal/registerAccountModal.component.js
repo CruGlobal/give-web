@@ -19,8 +19,9 @@ const componentName = 'registerAccountModal'
 class RegisterAccountModalController {
   // Register Account Modal is a multi-step process.
   // 1. Sign In/Up
-  //  1.1 Enter Sign Up Details
+  //  1.1 Sign in or Sign Up
   //  1.2 Verify Email
+  //  1.3 Sign In
   // 2. Fetch Donor Details
   // 3. Collect Contact Info
   // 4. Post to Donor Matches
@@ -63,7 +64,7 @@ class RegisterAccountModalController {
       this.stateChanged('sign-in')
     }
 
-    // If there is a session chnage, update the state if needed.
+    // If there is a session change, update the state if needed.
     this.subscription = this.sessionService.sessionSubject.subscribe(() => {
       if (this.sessionService.getRole() === Roles.registered) {
         // Proceed to Step 2

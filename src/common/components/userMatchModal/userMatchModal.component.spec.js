@@ -238,8 +238,8 @@ describe('userMatchModal', function () {
 
       it('should return the first two first names', () => {
         jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        $ctrl.onSelectContact({ name: 'firstName secondfirstName lastName' })
-        expect($ctrl.firstName).toEqual('firstName secondfirstName')
+        $ctrl.onSelectContact({ name: 'firstName secondFirstName lastName' })
+        expect($ctrl.firstName).toEqual('firstName secondFirstName')
       })
     })
 
@@ -416,10 +416,10 @@ describe('userMatchModal', function () {
     })
   })
 
-  describe('goToDashboard()', () => {
+  describe('goToGivingDashboard()', () => {
     it('sends the user to the dashboard', () => {
       $ctrl.$window.location = '/cart.html'
-      $ctrl.goToDashboard()
+      $ctrl.goToGivingDashboard()
       expect($ctrl.$window.location).toEqual('/your-giving.html')
     })
   })

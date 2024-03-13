@@ -33,6 +33,7 @@ export const locationOnLogin = 'locationOnLogin'
 export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
 export const createAccountDataCookieName = 'createAccountData'
+export const forcedUserToLogout = 'forcedUserToLogout'
 export const cookieDomain = '.cru.org'
 
 export const SignInEvent = 'SessionSignedIn'
@@ -66,24 +67,24 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     session: session,
     sessionSubject: sessionSubject,
     authClient: authClient, // Exposed for tests only
-    getRole: currentRole,
-    createAccount: createAccount,
-    handleOktaRedirect: handleOktaRedirect,
-    signIn: signIn,
-    signOut: signOut,
-    downgradeToGuest: downgradeToGuest,
-    getOktaUrl: getOktaUrl,
-    removeOktaRedirectIndicator: removeOktaRedirectIndicator,
-    isOktaRedirecting: isOktaRedirecting,
-    updateCurrentProfile: updateCurrentProfile,
-    oktaIsUserAuthenticated: oktaIsUserAuthenticated,
-    updateCheckoutSavedData: updateCheckoutSavedData,
+    catchCreateAccountErrors: catchCreateAccountErrors,
     clearCheckoutSavedData: clearCheckoutSavedData,
     checkCreateAccountStatus: checkCreateAccountStatus,
-    removeLocationOnLogin: removeLocationOnLogin,
+    createAccount: createAccount,
+    downgradeToGuest: downgradeToGuest,
+    getRole: currentRole,
+    getOktaUrl: getOktaUrl,
+    handleOktaRedirect: handleOktaRedirect,
     hasLocationOnLogin: hasLocationOnLogin,
-    signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta,
-    catchCreateAccountErrors: catchCreateAccountErrors
+    isOktaRedirecting: isOktaRedirecting,
+    oktaIsUserAuthenticated: oktaIsUserAuthenticated,
+    updateCurrentProfile: updateCurrentProfile,
+    updateCheckoutSavedData: updateCheckoutSavedData,
+    removeOktaRedirectIndicator: removeOktaRedirectIndicator,
+    removeLocationOnLogin: removeLocationOnLogin,
+    signIn: signIn,
+    signOut: signOut,
+    signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta
   }
 
   function handleOktaRedirect (lastPurchaseId) {
@@ -146,7 +147,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       const email = isAuthenticated && (await authClient.getUser()).email
       return {
         status: 'error',
-        data: [`Already logged in to Okta${email ? ` with email: ${email}` : ''}. You will be redirected to the Sign In page in a few seconds.`, 'Another Error'],
+        data: [`Already logged in to Okta${email ? ` with email: ${email}` : ''}. You will be redirected to the Sign In page in a few seconds.`],
         redirectToSignIn: true
       }
     }
@@ -296,6 +297,18 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   async function internalSignOut (redirectHome = true) {
+    const oktaSignOut = async () => {
+      // Add session data so on return to page we can show an explaination to the user about what happened.
+      if (!redirectHome) {
+        $window.sessionStorage.setItem(forcedUserToLogout, true)
+        // Save location we need to redirect the user back to
+        $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
+      }
+      return await authClient.signOut({
+        postLogoutRedirectUri: redirectHome ? null : `${envService.read('oktaReferrer')}/sign-out.html`
+      })
+    }
+
     try {
       await $http({
         method: 'DELETE',
@@ -303,27 +316,17 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         withCredentials: true
       })
       await clearCheckoutSavedData()
-      // Use revokeAccessToken, revokeRefreshToken & closeSession to ensure authClint is cleared before logging out entirely.
+      // Use revokeAccessToken, revokeRefreshToken to ensure authClient is cleared before logging out entirely.
       await authClient.revokeAccessToken()
       await authClient.revokeRefreshToken()
-      await authClient.closeSession()
-      // Add session data so on return to page we can show an explaination to the user about what happened.
-      if (!redirectHome) {
-        $window.sessionStorage.setItem('forcedUserToLogout', true)
-      }
-      return authClient.signOut({
-        postLogoutRedirectUri: redirectHome ? null : $window.location.href
-      })
+
+      return await oktaSignOut()
     } catch {
-      // closeSession errors out due to CORS. to fix this temporarily, I've added the logout in a catch just in case.
-      if (!redirectHome) {
-        $window.sessionStorage.setItem('forcedUserToLogout', true)
+      try {
+        return await oktaSignOut()
+      } catch {
+        $window.location.href = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
       }
-      return authClient.signOut({
-        postLogoutRedirectUri: redirectHome ? null : $window.location.href
-      }).catch(() => {
-        $window.location = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
-      })
     }
   }
 
@@ -338,14 +341,11 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       }))
       .map((response) => response.data)
     clearCheckoutSavedData()
-    // revokeAccessToken() & revokeRefreshToken() sign the user out of Okta on this application. Not the browser.
+    // revokeAccessToken() & revokeRefreshToken() sign the user out of Okta on this application.
+    // It doesn't close the Okta session on Okta.
+    // To close the session on Okta would require calling authClient.signOut(), refreshing the page.
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
-    // CloseSession() will close the Okta session for the entire browser. (similar to signOut())
-    // However, closeSession() requires third-party cookies.
-    // CloseSession() will fail quietly for users who block third-party cookies
-    // CloseSession() doesn't return anything so we don't know if it fails.
-    authClient.closeSession()
     return observable.finally(() => {
       $rootScope.$broadcast(SignOutEvent)
     })
@@ -354,7 +354,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   function removeForcedUserToLogoutSessionData () {
     // Allow for 2 seconds, so component can show error to user.
     setTimeout(() => {
-      $window.sessionStorage.removeItem('forcedUserToLogout')
+      $window.sessionStorage.removeItem(forcedUserToLogout)
     }, 2000)
   }
 
@@ -371,7 +371,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
         .map((response) => response.data)
     authClient.revokeAccessToken()
     authClient.revokeRefreshToken()
-    authClient.closeSession()
     return skipEvent
       ? observable
       : observable.finally(() => {

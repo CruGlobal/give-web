@@ -34,13 +34,17 @@ class AccountBenefitsController {
   openAccountBenefitsModal () {
     const lastPurchaseId = this.getLastPurchaseId()
     return this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
-      if (lastPurchaseId && this.donorDetails['registration-state'] !== 'COMPLETED') {
-        if (isAuthenticated) {
+      const registrationState = this.donorDetails['registration-state']
+      if (lastPurchaseId && registrationState !== 'COMPLETED') {
+        if (isAuthenticated && registrationState === 'NEW') {
           return this.sessionModalService.registerAccount(lastPurchaseId).then(() => {
             this.isVisible = false
           }, angular.noop)
+        } else if (isAuthenticated && registrationState === 'MATCHED') {
+          return this.sessionModalService.userMatch(lastPurchaseId).then(() => {
+            this.isVisible = false
+          }, angular.noop)
         } else {
-          // Display Account Benefits Modal when registration-state is NEW or MATCHED
           return this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
             this.isVisible = false
           }, angular.noop)
@@ -48,7 +52,7 @@ class AccountBenefitsController {
       }
     },
     error => {
-      this.$log.error('Failed checking if user is authenicated', error)
+      this.$log.error('Failed checking if user is authenticated', error)
     })
   }
 

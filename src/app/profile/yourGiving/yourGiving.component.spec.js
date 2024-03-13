@@ -100,20 +100,21 @@ describe('your giving', function () {
       })
     })
 
-    it('should call onHandleOktaRedirect', () => {
-      jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
-      $ctrl.$onInit()
+    describe('sessionHandleOktaRedirectService', () => {
+      it('should call onHandleOktaRedirect', () => {
+        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
+        $ctrl.$onInit()
 
-      expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalledWith()
-    })
+        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
+      })
 
-    it('handles an Okta redirect error', () => {
-      $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
-      jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
-      $ctrl.$onInit()
-      $ctrl.sessionHandleOktaRedirectService.errorMessageSubject .next('generic')
-
-      expect($ctrl.errorMessage).toEqual('generic')
+      it('handles an Okta redirect error', () => {
+        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
+        $ctrl.$onInit()
+        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject.next('generic')
+  
+        expect($ctrl.errorMessage).toEqual('generic')
+      })
     })
   })
 

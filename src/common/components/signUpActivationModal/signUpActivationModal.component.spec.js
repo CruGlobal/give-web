@@ -37,11 +37,11 @@ describe('signUpActivationModal', function () {
     expect($ctrl).toBeDefined()
   })
 
-  describe('$onInit() with \'REGISTERED\' cortex-session', () => {
+  describe('$onInit() with an authenticated cortex-session', () => {
     beforeEach(() => {
-      $cookies.put(Sessions.role, cortexRole.registered)
       $cookies.put(Sessions.give, giveSession)
       $cookies.put(Sessions.profile, cruProfile)
+      jest.spyOn($ctrl, 'onStateChange')
       $rootScope.$digest()
     })
 
@@ -49,14 +49,20 @@ describe('signUpActivationModal', function () {
       [Sessions.role, Sessions.give, Sessions.profile].forEach((name) => {
         $cookies.remove(name)
       })
+      $ctrl.onStateChange.mockClear()
     })
 
     it('Redirects user to sign in modal', () => {
-      jest.spyOn($ctrl, 'onStateChange')
-      $ctrl.session = {
-        email: 'test@cru.org',
-      }
+      $cookies.put(Sessions.role, cortexRole.registered)
+      $rootScope.$digest()
+      $ctrl.$onInit()
 
+      expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-in' })
+    })
+
+    it('Redirects user with identified role to sign in modal', () => {
+      $cookies.put(Sessions.role, cortexRole.identified)
+      $rootScope.$digest()
       $ctrl.$onInit()
 
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'sign-in' })
@@ -66,6 +72,8 @@ describe('signUpActivationModal', function () {
   describe('$onInit()', () => {
 
     beforeEach(() => {
+      $cookies.put(Sessions.role, cortexRole.public)
+      $rootScope.$digest()
       jest.useFakeTimers();
       jest.spyOn(global, 'setTimeout');
     })
@@ -80,7 +88,6 @@ describe('signUpActivationModal', function () {
       $ctrl.$onInit()
 
       expect($ctrl.cartCount).toEqual(4)
-      expect($ctrl.showHelp).toEqual(false)
       expect($ctrl.loadingAccountErrorCount).toEqual(0)
       expect($ctrl.initialLoading).toEqual(true)
       expect($ctrl.getUnverifiedAccount).toHaveBeenCalledWith(false)
@@ -177,7 +184,7 @@ describe('signUpActivationModal', function () {
 
       it('should return successfully and set status to "Sending Activation Email"', () => {
         jest.spyOn($ctrl.sessionService, 'checkCreateAccountStatus').mockImplementation(() => Promise.resolve({
-          status: 'sucess',
+          status: 'success',
           data: checkCreateAccountStatusData,
         }))
 
@@ -197,7 +204,7 @@ describe('signUpActivationModal', function () {
       it('should return successfully and set status to "Pending Activation"', () => {
         checkCreateAccountStatusData.status = 'PROVISIONED'
         jest.spyOn($ctrl.sessionService, 'checkCreateAccountStatus').mockImplementation(() => Promise.resolve({
-          status: 'sucess',
+          status: 'success',
           data: checkCreateAccountStatusData,
         }))
 
@@ -218,7 +225,7 @@ describe('signUpActivationModal', function () {
         checkCreateAccountStatusData.status = 'ACTIVE';
         jest.spyOn(global, 'clearInterval');
         jest.spyOn($ctrl.sessionService, 'checkCreateAccountStatus').mockImplementation(() => Promise.resolve({
-          status: 'sucess',
+          status: 'success',
           data: checkCreateAccountStatusData,
         }))
 

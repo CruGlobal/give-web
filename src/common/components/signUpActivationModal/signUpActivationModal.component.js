@@ -24,8 +24,6 @@ class signUpActivationModalController {
 
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.identified = true
-      this.username = this.sessionService.session.email
       this.onStateChange({ state: 'sign-in' })
     }
     if (!this.isInsideAnotherModal) {
@@ -36,7 +34,6 @@ class signUpActivationModalController {
         this.cartCount = 0
       })
     }
-    this.showHelp = false
     this.loadingAccountErrorCount = 0
     this.initialLoading = true
     this.getUnverifiedAccount(false)

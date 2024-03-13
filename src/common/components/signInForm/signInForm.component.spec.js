@@ -37,38 +37,4 @@ describe('signInForm', function () {
   it('to be defined', function () {
     expect($ctrl).toBeDefined()
   })
-
-  describe('$onInit', () => {
-    it('has no username', () => {
-      jest.spyOn($ctrl.sessionService, 'handleOktaRedirect').mockImplementation(() => Observable.of(false))
-      $ctrl.$onInit()
-
-      expect($ctrl.username).not.toBeDefined()
-    })
-
-    describe('with \'REGISTERED\' cortex-session', () => {
-      let $cookies
-      beforeEach(inject(function (_$cookies_) {
-        $cookies = _$cookies_
-        $cookies.put(Sessions.role, cortexRole.registered)
-        $cookies.put(Sessions.give, giveSession)
-        $cookies.put(Sessions.profile, cruProfile)
-        $rootScope.$digest()
-      }))
-
-      afterEach(() => {
-        [Sessions.role, Sessions.give, Sessions.profile].forEach((name) => {
-          $cookies.remove(name)
-        })
-      })
-
-      it('sets username', () => {
-        expect($ctrl.username).not.toBeDefined()
-        jest.spyOn($ctrl.sessionService, 'handleOktaRedirect').mockImplementation(() => Observable.of(false))
-        $ctrl.$onInit()
-
-        expect($ctrl.username).toEqual('professorx@xavier.edu')
-      })
-    })
-  })
 })

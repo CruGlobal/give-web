@@ -52,7 +52,7 @@ describe('userMatchQuestion', function () {
         expect($ctrl.answer).toEqual({ answer: 'answer' })
         $ctrl.selectAnswer()
 
-        expect($ctrl.onQuestionAnswer).toHaveBeenCalledWith({ answer: { answer: 'answer' } , question: { key: 'key' } })
+        expect($ctrl.onQuestionAnswer).toHaveBeenCalledWith({question: { key: 'key' },  answer: { answer: 'answer' } })
         expect($ctrl.answer).toEqual({ answer: 'answer' })
       })
     })

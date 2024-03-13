@@ -7,6 +7,7 @@
     "@okta/okta-auth-js": "^6.7.2",
     "@cruglobal/cru-payments": "^1.2.4",
     "@datadog/browser-rum": "^4.48.2",
+    "@okta/okta-auth-js": "^6.7.2",
     "angular": "^1.8.2",
     "angular-cookies": "^1.8.2",
     "angular-environment": "https://github.com/jonshaffer/angular-environment.git#d3082c06fb16804d324faac9b7e753fd64a44e5d",

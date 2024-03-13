@@ -22,8 +22,12 @@ class SignInModalController {
     }
   }
 
-  signOut () {
-    this.identified = false
+  getOktaUrl () {
+    return this.sessionService.getOktaUrl()
+  }
+
+  stateChanged (state) {
+    this.onStateChange({ state })
   }
 
   getOktaUrl () {

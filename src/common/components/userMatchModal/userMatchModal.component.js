@@ -64,13 +64,13 @@ class UserMatchModalController {
 
   postDonorMatch () {
     this.setLoading({ loading: true })
-    this.verificationService.postDonorMatches().subscribe(() => {
-      // Donor match success, get contacts
-      this.changeMatchState('intro')
-    }, () => {
-      // Donor Match failed, user match not required
-      this.skippedQuestions = true
-      this.changeMatchState('success')
+    this.verificationService.postDonorMatches().subscribe({
+      next: () => { this.changeMatchState('intro') }, // Donor match success, get contacts
+      error: () => {
+        // Donor Match failed, user match not required
+        this.skippedQuestions = true
+        this.changeMatchState('success')
+      }
     })
   }
 
@@ -194,7 +194,7 @@ class UserMatchModalController {
     this.$window.location = '/'
   }
 
-  goToDashboard () {
+  goToGivingDashboard () {
     this.$window.location = '/your-giving.html'
   }
 }

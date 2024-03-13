@@ -22,11 +22,8 @@ class SignUpModalController {
 
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.identified = true
-      this.username = this.sessionService.session.email
       this.onStateChange({ state: 'sign-in' })
     }
-
     if (!this.isInsideAnotherModal) {
       this.cartCount = 0
       this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe(count => {

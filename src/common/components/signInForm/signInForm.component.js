@@ -1,6 +1,5 @@
 import angular from 'angular'
 import 'angular-gettext'
-import includes from 'lodash/includes'
 import sessionService from 'common/services/session/session.service'
 import signInButtonComponent from './signInButton/signInButton.component'
 import template from './signInForm.tpl.html'
@@ -13,13 +12,6 @@ class SignInFormController {
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
-  }
-
-  $onInit () {
-    this.isSigningIn = false
-    if (includes(['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole())) {
-      this.username = this.sessionService.session.email
-    }
   }
 }
 
