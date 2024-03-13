@@ -309,14 +309,25 @@ describe('checkout', () => {
       })
 
       describe('switchPayment', () => {
-        it('should remove fees if the newly selected payment method is EFT', () => {
-          self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
+        beforeEach(() => {
           jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
           jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
+        })
+
+        it('should remove fees if the newly selected payment method is EFT', () => {
+          self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
 
           self.controller.switchPayment()
           expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: self.controller.selectedPaymentMethod })
           expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(false)
+        })
+
+        it('should handle undefined payment methods', () => {
+          self.controller.selectedPaymentMethod = undefined
+
+          self.controller.switchPayment()
+          expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: undefined })
+          expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
         })
       })
     })

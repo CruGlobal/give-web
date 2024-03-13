@@ -129,12 +129,10 @@ class ExistingPaymentMethodsController {
   }
 
   switchPayment () {
-    if (this.selectedPaymentMethod) {
-      this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
-      if (this.selectedPaymentMethod['bank-name']) {
-        // This is an EFT payment method so we need to remove any fee coverage
-        this.orderService.storeCoverFeeDecision(false)
-      }
+    this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
+    if (this.selectedPaymentMethod?.['bank-name']) {
+      // This is an EFT payment method so we need to remove any fee coverage
+      this.orderService.storeCoverFeeDecision(false)
     }
   }
 }
