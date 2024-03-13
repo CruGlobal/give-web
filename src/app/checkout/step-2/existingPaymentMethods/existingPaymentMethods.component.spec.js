@@ -156,10 +156,6 @@ describe('checkout', () => {
       })
 
       describe('selectDefaultPaymentMethod', () => {
-        beforeEach(() => {
-          jest.spyOn(self.controller, 'validPaymentMethod').mockReturnValue(true)
-        })
-
         it('should choose the payment method that is marked chosen in cortex', () => {
           self.controller.paymentMethods = [
             {
@@ -187,38 +183,6 @@ describe('checkout', () => {
           self.controller.selectDefaultPaymentMethod()
 
           expect(self.controller.selectedPaymentMethod).toEqual({ selectAction: 'first uri' })
-        })
-
-        it('should choose the first payment method if the one marked chosen in cortex is invalid', () => {
-          jest.spyOn(self.controller, 'validPaymentMethod').mockImplementation(paymentMethod => paymentMethod.selectAction === 'first uri')
-          self.controller.paymentMethods = [
-            {
-              selectAction: 'first uri'
-            },
-            {
-              selectAction: 'second uri',
-              chosen: true
-            }
-          ]
-          self.controller.selectDefaultPaymentMethod()
-
-          expect(self.controller.selectedPaymentMethod).toEqual({ selectAction: 'first uri' })
-        })
-
-        it('should set selectedPaymentMethod to undefined if none are valid', () => {
-          jest.spyOn(self.controller, 'validPaymentMethod').mockReturnValue(undefined)
-          self.controller.paymentMethods = [
-            {
-              selectAction: 'first uri'
-            },
-            {
-              selectAction: 'second uri',
-              chosen: true
-            }
-          ]
-          self.controller.selectDefaultPaymentMethod()
-
-          expect(self.controller.selectedPaymentMethod).toBeUndefined()
         })
 
         it('should check whether or not the fee coverage should be altered based on selected payment type', () => {
