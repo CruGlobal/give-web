@@ -71,14 +71,13 @@ class ExistingPaymentMethodsController {
   }
 
   selectDefaultPaymentMethod () {
-    const paymentMethods = this.paymentMethods.filter(paymentMethod => this.validPaymentMethod(paymentMethod))
-    const chosenPaymentMethod = find(paymentMethods, { chosen: true })
+    const chosenPaymentMethod = find(this.paymentMethods, { chosen: true })
     if (chosenPaymentMethod) {
       // Select the payment method previously chosen for the order
       this.selectedPaymentMethod = chosenPaymentMethod
     } else {
       // Select the first payment method
-      this.selectedPaymentMethod = paymentMethods[0]
+      this.selectedPaymentMethod = this.paymentMethods[0]
     }
     this.switchPayment()
   }
