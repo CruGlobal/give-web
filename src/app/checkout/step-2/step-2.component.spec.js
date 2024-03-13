@@ -21,6 +21,12 @@ describe('checkout', () => {
         })
     }))
 
+    describe('constructor', () => {
+      it('initializes selectedPaymentMethod to undefined', () => {
+        expect(self.controller.selectedPaymentMethod).toBeUndefined()
+      })
+    })
+
     describe('$onInit', () => {
       it('should call loadDonorDetails', () => {
         jest.spyOn(self.controller, 'loadDonorDetails').mockImplementation(() => {})
@@ -121,23 +127,30 @@ describe('checkout', () => {
 
     describe('handlePaymentChange', () => {
       it('should change default payment type with bank account', () => {
-        jest.spyOn(self.controller, 'handlePaymentChange')
         jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
         self.controller.handlePaymentChange({'account-type': 'checking'})
 
-        expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'account-type': 'checking'})
+        expect(self.controller.selectedPaymentMethod).toEqual({'account-type': 'checking'})
         expect(self.controller.defaultPaymentType).toEqual('checking')
         expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('checking', false)
       })
 
       it('should change default payment type with credit card', () => {
-        jest.spyOn(self.controller, 'handlePaymentChange')
         jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
         self.controller.handlePaymentChange({'card-type': 'visa'})
 
-        expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'card-type': 'visa'})
+        expect(self.controller.selectedPaymentMethod).toEqual({'card-type': 'visa'})
         expect(self.controller.defaultPaymentType).toEqual('visa')
         expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('visa', true)
+      })
+
+      it('should clear selectedPaymentMethod and defaultPaymentType when the selected payment method is undefined', () => {
+        jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
+        self.controller.handlePaymentChange(undefined)
+
+        expect(self.controller.selectedPaymentMethod).toBeUndefined()
+        expect(self.controller.defaultPaymentType).toBeUndefined()
+        expect(self.controller.brandedAnalyticsFactory.savePaymentType).not.toHaveBeenCalled()
       })
     })
 
