@@ -52,9 +52,12 @@ class Step2Controller {
   }
 
   handlePaymentChange (selectedPaymentMethod) {
-    const paymentType = selectedPaymentMethod['account-type'] || selectedPaymentMethod['card-type']
+    const paymentType = selectedPaymentMethod?.['account-type'] || selectedPaymentMethod?.['card-type']
+    this.selectedPaymentMethod = selectedPaymentMethod
     this.defaultPaymentType = paymentType
-    this.brandedAnalyticsFactory.savePaymentType(paymentType, Boolean(selectedPaymentMethod['card-type']))
+    if (selectedPaymentMethod) {
+      this.brandedAnalyticsFactory.savePaymentType(paymentType, Boolean(selectedPaymentMethod['card-type']))
+    }
   }
 
   handleExistingPaymentLoading (success, hasExistingPaymentMethods, error) {
@@ -111,6 +114,20 @@ class Step2Controller {
     } else if ($event.state === 'error') {
       this.onStateChange({ state: 'errorSubmitting' })
     }
+  }
+
+  getContinueDisabled () {
+    if (this.existingPaymentMethods && !this.selectedPaymentMethod) {
+      // All payment methods are invalid
+      return true
+    }
+    if (this.loadingPaymentMethods) {
+      return true
+    }
+    if (this.paymentFormState === 'loading' || this.paymentFormState === 'encrypting') {
+      return true
+    }
+    return false
   }
 }
 
