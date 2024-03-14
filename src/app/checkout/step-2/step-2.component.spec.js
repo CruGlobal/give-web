@@ -259,6 +259,15 @@ describe('checkout', () => {
         expect(self.controller.getContinueDisabled()).toBe(true)
       })
 
+      it('should return false when there are existing payment methods and at least one is valid', () => {
+        self.controller.handleExistingPaymentLoading(true, true)
+        self.controller.handlePaymentChange({})
+
+        expect(self.controller.existingPaymentMethods).toBe(true)
+        expect(self.controller.selectedPaymentMethod).not.toBeUndefined()
+        expect(self.controller.getContinueDisabled()).toBe(false)
+      })
+
       it('should return false when there are not existing payment methods', () => {
         self.controller.handleExistingPaymentLoading(true, false)
 
