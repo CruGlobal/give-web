@@ -117,14 +117,14 @@ class Step2Controller {
   }
 
   getContinueDisabled () {
-    if (this.existingPaymentMethods && !this.selectedPaymentMethod) {
-      // All payment methods are invalid
-      return true
-    }
     if (this.loadingPaymentMethods) {
       return true
     }
     if (this.paymentFormState === 'loading' || this.paymentFormState === 'encrypting') {
+      return true
+    }
+    if (this.existingPaymentMethods && !this.selectedPaymentMethod) {
+      // All payment methods are invalid
       return true
     }
     return false
