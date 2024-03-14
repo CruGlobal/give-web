@@ -8,11 +8,16 @@ const componentName = 'accountBenefits'
 
 class AccountBenefitsController {
   /* @ngInject */
-  constructor (sessionModalService, sessionService, orderService) {
+  constructor ($log, sessionModalService, sessionService, orderService) {
+    this.$log = $log
     this.sessionModalService = sessionModalService
     this.sessionService = sessionService
     this.orderService = orderService
     this.isVisible = false
+  }
+
+  $onInit () {
+    this.sessionService.removeOktaRedirectIndicator()
   }
 
   $onChanges (changes) {
@@ -28,23 +33,34 @@ class AccountBenefitsController {
 
   openAccountBenefitsModal () {
     const lastPurchaseId = this.getLastPurchaseId()
-
-    // Display Account Benefits Modal when registration-state is NEW or MATCHED
-    if (lastPurchaseId && this.donorDetails['registration-state'] !== 'COMPLETED') {
-      this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
-        this.sessionModalService.userMatch().then(() => {
-          // Hide accountBenefits after successful user match
-          this.isVisible = false
-        }, angular.noop)
-      }, angular.noop)
-    }
+    return this.sessionService.oktaIsUserAuthenticated().subscribe((isAuthenticated) => {
+      const registrationState = this.donorDetails['registration-state']
+      if (lastPurchaseId && registrationState !== 'COMPLETED') {
+        if (isAuthenticated && registrationState === 'NEW') {
+          return this.sessionModalService.registerAccount(lastPurchaseId).then(() => {
+            this.isVisible = false
+          }, angular.noop)
+        } else if (isAuthenticated && registrationState === 'MATCHED') {
+          return this.sessionModalService.userMatch(lastPurchaseId).then(() => {
+            this.isVisible = false
+          }, angular.noop)
+        } else {
+          return this.sessionModalService.accountBenefits(lastPurchaseId).then(() => {
+            this.isVisible = false
+          }, angular.noop)
+        }
+      }
+    },
+    error => {
+      this.$log.error('Failed checking if user is authenticated', error)
+    })
   }
 
   doUserMatch () {
     if (this.sessionService.getRole() === Roles.registered) {
       this.sessionModalService.userMatch()
     } else {
-      this.sessionModalService.signIn(this.getLastPurchaseId()).then(() => {
+      this.sessionModalService.registerAccount(this.getLastPurchaseId()).then(() => {
         this.sessionModalService.userMatch().then(() => {
           // Hide component after successful user match
           this.isVisible = false

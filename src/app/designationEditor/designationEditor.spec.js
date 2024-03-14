@@ -1,8 +1,8 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './designationEditor.component'
+import { Subject } from 'rxjs/Subject'
 import designationConstants from 'common/services/api/designationEditor.constants'
-import { Roles } from 'common/services/session/session.service'
 
 const designationSecurityResponse = {
   designationNumber: '000555',
@@ -70,6 +70,7 @@ describe('Designation Editor', function () {
     $httpBackend = _$httpBackend_
     $q = _$q_
     $rootScope = _$rootScope_
+    $rootScope.$broadcast = jest.spyOn(_$rootScope_, '$broadcast')
     $ctrl = _$componentController_(module.name,
       {
         $window: {
@@ -108,16 +109,11 @@ describe('Designation Editor', function () {
     })
 
     describe('\'PUBLIC\' role', () => {
-      it('sets profileLoading and registers sessionEnforcer', () => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public)
+      it('should call onHandleOktaRedirect onInit', () => {
+        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
         $ctrl.$onInit()
 
-        expect($ctrl.sessionEnforcerService).toHaveBeenCalledWith(
-          [Roles.registered], expect.objectContaining({
-            'sign-in': expect.any(Function),
-            cancel: expect.any(Function)
-          }), 'session'
-        )
+        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
 
         expect($ctrl.getDesignationContent).not.toHaveBeenCalled()
       })
@@ -141,6 +137,25 @@ describe('Designation Editor', function () {
 
         expect($ctrl.$window.location).toEqual('/')
       })
+    })
+
+    describe('onHandleOktaRedirect', () => {
+      beforeEach(() => {
+        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
+        $ctrl.$onInit()
+      })
+
+      it('should call onHandleOktaRedirect', () => {
+        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
+      })
+    })
+
+    it('handles an Okta redirect error', () => {
+      $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
+      jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
+      $ctrl.$onInit()
+      $ctrl.sessionHandleOktaRedirectService.errorMessageSubject.next('generic')
+      expect($ctrl.errorMessage).toEqual('generic')
     })
   })
 

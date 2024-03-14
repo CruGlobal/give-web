@@ -2,78 +2,29 @@
   <span ng-switch-when="generic" translate>
     An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
   </span>
-  <span ng-switch-when="mfa" translate>
-    Invalid Verification Code. Please try again.
-  </span>
   <span ng-switch-default>
     {{$ctrl.errorMessage | translate}}
   </span>
 </div>
-<form class="sign-in-form loading-overlay-parent" name="$ctrl.signInForm" ng-switch="$ctrl.signInState">
-  <div ng-switch-when="identity">
-    <div class="form-group">
-      <label for="username" translate>Email</label>
-      <input id="username"
-             name="username"
-             type="email"
-             class="form-control form-control-subtle"
-             placeholder="{{'Email'|translate}}"
-             autocomplete="off"
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.username">
-    </div>
-    <div class="form-group">
-      <label for="password" translate>Password</label>
-      <input id="password"
-             name="password"
-             type="password"
-             class="form-control form-control-subtle"
-             placeholder="{{'Password'|translate}}"
-             autocomplete="off"
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.password">
-    </div>
-  </div>
-  <div ng-switch-when="mfa">
-    <p translate>Enter a verification code from your Authenticator app to continue.</p>
-    <div class="form-group">
-      <label for="mfa_token" translate>Verification Code</label>
-      <input id="mfa_token"
-             name="mfa_token"
-             type="text"
-             minlength="6"
-             maxlength="8"
-             class="form-control form-control-subtle"
-             placeholder="{{'Code'|translate}}"
-             autocomplete="off"
-             autofocus
-             required
-             ng-disabled="$ctrl.isSigningIn"
-             ng-model="$ctrl.mfa_token">
-    </div>
-    <div class="form-group">
-      <label class="checkbox-inline">
-        <input id="trust_device"
-               name="trust_device"
-               type="checkbox"
-               ng-model="$ctrl.trust_device"
-               ng-disabled="$ctrl.isSigningIn"
-               translate> Don't ask for codes again on this device.
-      </label>
-    </div>
-
-  </div>
-  <button
-    type="submit"
-    id="signInButton"
-    class="btn btn-block btn-primary"
-    ng-click="$ctrl.signIn()"
-    ng-disabled="!$ctrl.signInForm.$valid || $ctrl.isSigningIn"
-    translate>Sign In
-  </button>
-  <loading type="overlay" ng-if="$ctrl.isSigningIn">
-    <translate>Signing you in...</translate>
-  </loading>
-</form>
+<div class="row text-center">
+  <h4 translate>Sign in with Okta to get started.</h4>
+  <p translate>You will be taken to Okta&rsquo;s website, then back to this site.</p>
+</div>
+<div class="row">
+  <sign-in-button
+    on-success="$ctrl.onSuccess()"
+    on-failure="$ctrl.onFailure()"
+    last-purchase-id="$ctrl.lastPurchaseId"
+    error-message="$ctrl.errorMessage"
+  ></sign-in-button>
+</div>
+<div class="row text-center">
+  <h4 translate>Don&rsquo;t have an account?</h4>
+  <a class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()" style="cursor: pointer">Sign up for Okta</a>
+  <p translate>With Okta, you can sign in to multiple services with one login. You may learn more about Okta <a href="https://www.okta.com/" target="_blank">here</a>.</p>
+</div>
+<div class="row text-center">
+  <h4 translate>Help signing in</h4>
+  <p><a href="tel:8882787233" target="_blank" translate>Call (888) 278-7233</a></p>
+  <p>(8am-5pm Eastern Time (U.S.), Mon-Fri)</p>
+</div>

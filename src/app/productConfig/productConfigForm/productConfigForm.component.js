@@ -1,7 +1,6 @@
 import angular from 'angular'
 import 'angular-ordinal'
 import 'angular-sanitize'
-
 import indexOf from 'lodash/indexOf'
 import find from 'lodash/find'
 import omit from 'lodash/omit'
@@ -11,14 +10,13 @@ import includes from 'lodash/includes'
 import isEmpty from 'lodash/isEmpty'
 import padStart from 'lodash/padStart'
 import inRange from 'lodash/inRange'
-
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/merge'
 import 'rxjs/add/operator/do'
-
 import designationsService from 'common/services/api/designations.service'
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
+import { forcedUserToLogout } from '../../../common/services/session/session.service'
 import {
   possibleTransactionDays,
   possibleTransactionMonths,
@@ -32,9 +30,7 @@ import { giveGiftParams } from '../giveGiftParams'
 import loading from 'common/components/loading/loading.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory'
-
 import { brandedCheckoutAmountUpdatedEvent } from 'common/components/paymentMethods/coverFees/coverFees.component'
-
 import template from './productConfigForm.tpl.html'
 
 export const brandedCoverFeeCheckedEvent = 'brandedCoverFeeCheckedEvent'
@@ -69,6 +65,7 @@ class ProductConfigFormController {
     this.initItemConfig()
     this.loadData()
     this.waitForFormInitialization()
+    this.shouldShowForcedUserToLogoutError()
 
     this.$rootScope.$on(brandedCoverFeeCheckedEvent, () => {
       this.initItemConfig()
@@ -388,6 +385,10 @@ class ProductConfigFormController {
     } else {
       this.$window.location = url
     }
+  }
+
+  shouldShowForcedUserToLogoutError () {
+    this.errorForcedUserToLogout = !!this.$window.sessionStorage.getItem(forcedUserToLogout)
   }
 }
 
