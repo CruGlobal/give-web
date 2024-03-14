@@ -115,6 +115,20 @@ class Step2Controller {
       this.onStateChange({ state: 'errorSubmitting' })
     }
   }
+
+  getContinueDisabled () {
+    if (this.existingPaymentMethods && !this.selectedPaymentMethod) {
+      // All payment methods are invalid
+      return true
+    }
+    if (this.loadingPaymentMethods) {
+      return true
+    }
+    if (this.paymentFormState === 'loading' || this.paymentFormState === 'encrypting') {
+      return true
+    }
+    return false
+  }
 }
 
 export default angular

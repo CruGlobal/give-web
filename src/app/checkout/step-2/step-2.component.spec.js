@@ -13,12 +13,14 @@ describe('checkout', () => {
     beforeEach(angular.mock.module(module.name))
     var self = {}
 
-    beforeEach(inject(function ($componentController) {
+    beforeEach(inject(function ($componentController, $flushPendingTasks, $q) {
       self.controller = $componentController(module.name, {},
         {
           changeStep: jest.fn(),
           onStateChange: jest.fn()
         })
+      self.$flushPendingTasks = $flushPendingTasks
+      self.$q = $q
     }))
 
     describe('constructor', () => {
@@ -244,6 +246,58 @@ describe('checkout', () => {
 
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' })
         expect(self.controller.orderService.updatePaymentMethod).toHaveBeenCalledWith('selected payment method', { creditCard: {} })
+      })
+    })
+
+    describe('getContinueDisabled', () => {
+      it('should return true when there are existing payment methods but none are valid', () => {
+        self.controller.handleExistingPaymentLoading(true, true)
+        self.controller.handlePaymentChange(undefined)
+
+        expect(self.controller.existingPaymentMethods).toBe(true)
+        expect(self.controller.selectedPaymentMethod).toBeUndefined()
+        expect(self.controller.getContinueDisabled()).toBe(true)
+      })
+
+      it('should return false when there are not existing payment methods', () => {
+        self.controller.handleExistingPaymentLoading(true, false)
+
+        expect(self.controller.existingPaymentMethods).toBe(false)
+        expect(self.controller.selectedPaymentMethod).toBeUndefined()
+        expect(self.controller.getContinueDisabled()).toBe(false)
+      })
+
+      it('should return true while the payment methods are loading', () => {
+        self.controller.$onInit()
+
+        expect(self.controller.loadingPaymentMethods).toBe(true)
+        expect(self.controller.getContinueDisabled()).toBe(true)
+
+        self.controller.handleExistingPaymentLoading(true, false)
+
+        expect(self.controller.loadingPaymentMethods).toBe(false)
+        expect(self.controller.getContinueDisabled()).toBe(false)
+      })
+
+      it('should return true while the payment form is encrypting or loading', () => {
+        let deferred = self.$q.defer()
+        jest.spyOn(self.controller, '$onInit').mockImplementation(() => {})
+        jest.spyOn(self.controller.orderService, 'addPaymentMethod').mockReturnValue(Observable.from(deferred.promise))
+        self.controller.onPaymentFormStateChange({ state: 'encrypting' })
+
+        expect(self.controller.paymentFormState).toBe('encrypting')
+        expect(self.controller.getContinueDisabled()).toBe(true)
+
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: {}, update: false })
+
+        expect(self.controller.paymentFormState).toBe('loading')
+        expect(self.controller.getContinueDisabled()).toBe(true)
+
+        deferred.resolve()
+        self.$flushPendingTasks()
+
+        expect(self.controller.paymentFormState).toBe('success')
+        expect(self.controller.getContinueDisabled()).toBe(false)
       })
     })
   })
