@@ -13,13 +13,21 @@ describe('checkout', () => {
     beforeEach(angular.mock.module(module.name))
     var self = {}
 
-    beforeEach(inject(function ($componentController) {
+    beforeEach(inject(function ($componentController, $flushPendingTasks, $q) {
       self.controller = $componentController(module.name, {},
         {
           changeStep: jest.fn(),
           onStateChange: jest.fn()
         })
+      self.$flushPendingTasks = $flushPendingTasks
+      self.$q = $q
     }))
+
+    describe('constructor', () => {
+      it('initializes selectedPaymentMethod to undefined', () => {
+        expect(self.controller.selectedPaymentMethod).toBeUndefined()
+      })
+    })
 
     describe('$onInit', () => {
       it('should call loadDonorDetails', () => {
@@ -121,23 +129,30 @@ describe('checkout', () => {
 
     describe('handlePaymentChange', () => {
       it('should change default payment type with bank account', () => {
-        jest.spyOn(self.controller, 'handlePaymentChange')
         jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
         self.controller.handlePaymentChange({'account-type': 'checking'})
 
-        expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'account-type': 'checking'})
+        expect(self.controller.selectedPaymentMethod).toEqual({'account-type': 'checking'})
         expect(self.controller.defaultPaymentType).toEqual('checking')
         expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('checking', false)
       })
 
       it('should change default payment type with credit card', () => {
-        jest.spyOn(self.controller, 'handlePaymentChange')
         jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
         self.controller.handlePaymentChange({'card-type': 'visa'})
 
-        expect(self.controller.handlePaymentChange).toHaveBeenCalledWith({'card-type': 'visa'})
+        expect(self.controller.selectedPaymentMethod).toEqual({'card-type': 'visa'})
         expect(self.controller.defaultPaymentType).toEqual('visa')
         expect(self.controller.brandedAnalyticsFactory.savePaymentType).toHaveBeenCalledWith('visa', true)
+      })
+
+      it('should clear selectedPaymentMethod and defaultPaymentType when the selected payment method is undefined', () => {
+        jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
+        self.controller.handlePaymentChange(undefined)
+
+        expect(self.controller.selectedPaymentMethod).toBeUndefined()
+        expect(self.controller.defaultPaymentType).toBeUndefined()
+        expect(self.controller.brandedAnalyticsFactory.savePaymentType).not.toHaveBeenCalled()
       })
     })
 
@@ -231,6 +246,67 @@ describe('checkout', () => {
 
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'review' })
         expect(self.controller.orderService.updatePaymentMethod).toHaveBeenCalledWith('selected payment method', { creditCard: {} })
+      })
+    })
+
+    describe('getContinueDisabled', () => {
+      it('should return true when there are existing payment methods but none are valid', () => {
+        self.controller.handleExistingPaymentLoading(true, true)
+        self.controller.handlePaymentChange(undefined)
+
+        expect(self.controller.existingPaymentMethods).toBe(true)
+        expect(self.controller.selectedPaymentMethod).toBeUndefined()
+        expect(self.controller.getContinueDisabled()).toBe(true)
+      })
+
+      it('should return false when there are existing payment methods and at least one is valid', () => {
+        self.controller.handleExistingPaymentLoading(true, true)
+        self.controller.handlePaymentChange({})
+
+        expect(self.controller.existingPaymentMethods).toBe(true)
+        expect(self.controller.selectedPaymentMethod).not.toBeUndefined()
+        expect(self.controller.getContinueDisabled()).toBe(false)
+      })
+
+      it('should return false when there are not existing payment methods', () => {
+        self.controller.handleExistingPaymentLoading(true, false)
+
+        expect(self.controller.existingPaymentMethods).toBe(false)
+        expect(self.controller.selectedPaymentMethod).toBeUndefined()
+        expect(self.controller.getContinueDisabled()).toBe(false)
+      })
+
+      it('should return true while the payment methods are loading', () => {
+        self.controller.$onInit()
+
+        expect(self.controller.loadingPaymentMethods).toBe(true)
+        expect(self.controller.getContinueDisabled()).toBe(true)
+
+        self.controller.handleExistingPaymentLoading(true, false)
+
+        expect(self.controller.loadingPaymentMethods).toBe(false)
+        expect(self.controller.getContinueDisabled()).toBe(false)
+      })
+
+      it('should return true while the payment form is encrypting or loading', () => {
+        let deferred = self.$q.defer()
+        jest.spyOn(self.controller, '$onInit').mockImplementation(() => {})
+        jest.spyOn(self.controller.orderService, 'addPaymentMethod').mockReturnValue(Observable.from(deferred.promise))
+        self.controller.onPaymentFormStateChange({ state: 'encrypting' })
+
+        expect(self.controller.paymentFormState).toBe('encrypting')
+        expect(self.controller.getContinueDisabled()).toBe(true)
+
+        self.controller.onPaymentFormStateChange({ state: 'loading', payload: {}, update: false })
+
+        expect(self.controller.paymentFormState).toBe('loading')
+        expect(self.controller.getContinueDisabled()).toBe(true)
+
+        deferred.resolve()
+        self.$flushPendingTasks()
+
+        expect(self.controller.paymentFormState).toBe('success')
+        expect(self.controller.getContinueDisabled()).toBe(false)
       })
     })
   })
