@@ -60,6 +60,7 @@ describe('donations service', () => {
         .expectGET('https://give-stage2.cru.org/cortex/donations/historical/crugive/2016/9?zoom=element,element:paymentmethod,element:recurringdonation')
         .respond(200, historicalResponse)
       donationsService.getHistoricalGifts(2016, 9).subscribe((historicalGifts) => {
+        console.log(JSON.stringify(historicalGifts))
         expect(historicalGifts).toEqual(expect.any(Array))
       })
       $httpBackend.flush()
