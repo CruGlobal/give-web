@@ -129,6 +129,17 @@ describe('your giving', function () {
         expect($ctrl.loadingGiftsError).toEqual(true)
         expect($ctrl.$log.error.logs[0]).toEqual(['Error loading historical gifts', 'error'])
       })
+
+      it('should log an error when there is a problem with loading a payment method', () => {
+        $ctrl.donationsService.getRecipients.mockImplementation(() => Observable.of(recipientResponse['donation-summaries']))
+        $ctrl.profileService.getPaymentMethod.mockImplementation(() => Observable.throw('error'))
+        $ctrl.loadGifts(2017, 1)
+
+        expect($ctrl.$log.error.logs[0])
+          .toEqual([
+            `Failed to load payment instrument at ${recipientResponse['donation-summaries'][0].donations[0]['payment-instrument-link'].uri}`,
+            'error'])
+      })
     })
   })
 })
