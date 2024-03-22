@@ -22,6 +22,7 @@ describe('your giving', function () {
     it('to be defined', function () {
       expect($ctrl).toBeDefined()
       expect($ctrl.donationsService).toBeDefined()
+      expect($ctrl.profileService).toBeDefined()
     })
 
     describe('$onChanges()', () => {
@@ -67,16 +68,33 @@ describe('your giving', function () {
       beforeEach(() => {
         subscriberSpy = { unsubscribe: jest.fn() }
         jest.spyOn($ctrl.donationsService, 'getRecipients')
+        jest.spyOn($ctrl.profileService, 'getPaymentMethod')
       })
 
       it('should parse and keep the historical gift data that we care about', () => {
+        const paymentInstrument = {
+          'account-type': 'Checking',
+          'bank-name': 'Test Bank',
+          'default-on-profile': false,
+          description: 'Test Bank Checking **0000',
+          'display-account-number': '0000',
+          'encrypted-account-nmber': 'encrypted-value',
+          id: 'base-32-encoded-id',
+          links: [],
+          messages: [],
+          name: 'Cru Payment Instrument',
+          'routing-number': '123123123',
+          self: {},
+          'siebel-row-id': '1-TEST'
+        }
         const expectedHistoricalGifts = [
-          recipientResponse['donation-summaries'][0].donations[0],
+          { ...recipientResponse['donation-summaries'][0].donations[0], paymentmethod: paymentInstrument },
           recipientResponse['donation-summaries'][1].donations[0],
           recipientResponse['donation-summaries'][2].donations[0]
         ]
 
         $ctrl.donationsService.getRecipients.mockImplementation(() => Observable.of(recipientResponse['donation-summaries']))
+        $ctrl.profileService.getPaymentMethod.mockImplementation(() => Observable.of(paymentInstrument))
         $ctrl.subscriber = subscriberSpy
         $ctrl.loadGifts(2017, 1)
         expect($ctrl.historicalGifts).toEqual(expectedHistoricalGifts)
