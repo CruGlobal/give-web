@@ -568,8 +568,7 @@ const analyticsFactory = /* @ngInject */ function ($window, $timeout, envService
             donation_frequency: frequency,
             payment_type: paymentType,
             purchase_number: purchaseData.rawData['purchase-number'],
-            campaign_code: cartItem.config.CAMPAIGN_CODE !== '' ? cartItem.config.CAMPAIGN_CODE : undefined,
-            designation: 'designation'
+            campaign_code: cartItem.config.CAMPAIGN_CODE !== '' ? cartItem.config.CAMPAIGN_CODE : undefined
           }
         })
         // Send the transaction event if the dataLayer is defined
