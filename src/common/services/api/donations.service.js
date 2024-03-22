@@ -48,17 +48,6 @@ const DonationsService = /* @ngInject */ function (cortexApiService, profileServ
       })
   }
 
-  function getHistoricalGifts (year, month) {
-    return cortexApiService
-      .get({
-        path: ['donations', 'historical', cortexApiService.scope, year, month],
-        zoom: {
-          gifts: 'element[],element:paymentmethod,element:recurringdonation'
-        }
-      })
-      .pluck('gifts')
-  }
-
   function getReceipts (data) {
     return cortexApiService
       .post({
@@ -166,7 +155,6 @@ const DonationsService = /* @ngInject */ function (cortexApiService, profileServ
   }
 
   return {
-    getHistoricalGifts: getHistoricalGifts,
     getRecipients: getRecipients,
     getRecipientsRecurringGifts: getRecipientsRecurringGifts,
     getReceipts: getReceipts,
