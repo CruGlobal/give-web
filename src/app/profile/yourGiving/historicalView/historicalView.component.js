@@ -28,7 +28,8 @@ class HistoricalView {
     if (angular.isDefined(this.subscriber)) {
       this.subscriber.unsubscribe()
     }
-    this.subscriber = this.donationsService.getRecipients(year).subscribe((historicalGifts) => {
+    const yearToQuery = this.isRecent(year, month) ? 'recent' : year
+    this.subscriber = this.donationsService.getRecipients(yearToQuery).subscribe((historicalGifts) => {
       delete this.subscriber
       this.historicalGifts = this.parseHistoricalGifts(historicalGifts, year, month) || []
       this.setLoading({ loading: false })
@@ -38,6 +39,11 @@ class HistoricalView {
       this.$log.error('Error loading historical gifts', error)
       this.loadingGiftsError = true
     })
+  }
+
+  isRecent (year, month) {
+    const today = moment()
+    return today.subtract(3, 'months').isBefore(moment(`${year}/${month}/01`, 'YYYY/MM/DD'))
   }
 
   parseHistoricalGifts (historicalGifts, year, month) {

@@ -141,5 +141,21 @@ describe('your giving', function () {
             'error'])
       })
     })
+
+    describe('isRecent', () => {
+      beforeEach(() => {
+        Date.now = jest.fn(() => new Date('2024-03-22T05:00:00.000Z'))
+      })
+
+      it.each([
+        [1, 2024, true],
+        [2, 2024, true],
+        [3, 2024, true],
+        [12, 2023, false],
+        [2, 2023, false],
+      ])('when the date is %s/%s it should be %s', (month, year, expected) => {
+        expect($ctrl.isRecent(year, month)).toBe(expected)
+      })
+    })
   })
 })
