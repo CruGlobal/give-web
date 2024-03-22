@@ -172,7 +172,27 @@ export default {
     'designation-active': true,
     'designation-name': '"God Loves Lebanon" Initiative(2798344)',
     'designation-number': '2798344',
-    donations: [],
+    donations: [{
+      'donation-row-id': '1-26020D',
+      'donation-status': 'Closed',
+      'historical-donation-line': {
+        amount: 20,
+        anonymous: false,
+        'campaign-code': '000000',
+        completed: false,
+        'designation-active': true,
+        'designation-name': '"God Loves Lebanon" Initiative(2798344)',
+        'designation-number': '2798344',
+        'given-through-description': 'Steve',
+        'master-account': false,
+        'pass-through': false,
+        'payment-instrument-id': 'gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm=',
+        'payment-type': 'EFT',
+        'related-account-description': 'Steve',
+        'transaction-date': { 'display-value': '2017-02-22', value: 1471824000000 },
+        'transaction-sub-type': 'EFT'
+      }
+    }],
     'most-recent-donation': {
       'donation-row-id': '1-36020D',
       'donation-status': 'Closed',

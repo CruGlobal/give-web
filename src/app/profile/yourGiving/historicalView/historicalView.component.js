@@ -48,10 +48,7 @@ class HistoricalView {
         const transactionDate = donation['historical-donation-line']['transaction-date']
         const momentDate = moment(transactionDate['display-value'], 'YYYY/MM/DD')
 
-        if (momentDate.year() === year && (momentDate.month() + 1) === month) {
-          return true
-        }
-        return false
+        return momentDate.year() === year && (momentDate.month() + 1) === month
       })
       historicalGift.donations = donations
       return historicalGift.donations.length > 0
@@ -65,7 +62,7 @@ class HistoricalView {
             this.profileService.getPaymentMethod(paymentInstrumentLinkUri, true).subscribe((paymentMethod) => {
               donation.paymentmethod = paymentMethod
             }, error => {
-              console.error(`Failed to load payment instrument at ${paymentInstrumentLinkUri}`, error)
+              this.$log.error(`Failed to load payment instrument at ${paymentInstrumentLinkUri}`, error)
             })
           }
 
