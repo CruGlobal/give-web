@@ -14,7 +14,7 @@ const brandedState = {
 }
 
 // Generate a datalayer ecommerce object
-function generateEcommerce (siebelTransactionId, jobId) {
+function generateEcommerce (siebelTransactionId) {
   const item = brandedState.item
   const amountPaid = (brandedState.isCreditCard && brandedState.coverFees ? item.amountWithFees : item.amount).toFixed(2)
 
@@ -36,9 +36,7 @@ function generateEcommerce (siebelTransactionId, jobId) {
       currency: 'USD',
       price: amountPaid,
       quantity: '1',
-      recurring_date: item.giftStartDate ? item.giftStartDate.format('MMMM D, YYYY') : undefined,
-      campaign_code: item.config.CAMPAIGN_CODE || undefined,
-      job_id: jobId
+      recurring_date: item.giftStartDate ? item.giftStartDate.format('MMMM D, YYYY') : undefined
     }]
   }
 }
@@ -51,7 +49,7 @@ function suppressErrors (func) {
   }
 }
 
-const brandedAnalyticsFactory = /* @ngInject */ function ($window, $location) {
+const brandedAnalyticsFactory = /* @ngInject */ function ($window) {
   return {
     saveCoverFees: suppressErrors(function (coverFees) {
       brandedState.coverFees = coverFees
@@ -117,12 +115,11 @@ const brandedAnalyticsFactory = /* @ngInject */ function ($window, $location) {
 
     // saveCoverFees, saveDonorDetails, saveItem, savePaymentType, savePurchase, and saveTestingTransaction should have been called before this
     purchase: suppressErrors(function () {
-      const jobId = $location.search().utm_term
       $window.dataLayer = $window.dataLayer || []
       $window.dataLayer.push({ ecommerce: null })
       $window.dataLayer.push({
         event: 'purchase',
-        ecommerce: generateEcommerce(brandedState.purchase.rawData['purchase-number'], jobId)
+        ecommerce: generateEcommerce(brandedState.purchase.rawData['purchase-number'])
       })
     }),
 
