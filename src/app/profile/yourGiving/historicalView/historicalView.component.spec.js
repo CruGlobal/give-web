@@ -68,6 +68,7 @@ describe('your giving', function () {
       beforeEach(() => {
         subscriberSpy = { unsubscribe: jest.fn() }
         jest.spyOn($ctrl.donationsService, 'getRecipients')
+        jest.spyOn($ctrl.donationsService, 'getRecipientsRecurringGifts')
         jest.spyOn($ctrl.profileService, 'getPaymentMethod')
       })
 
@@ -87,13 +88,18 @@ describe('your giving', function () {
           self: {},
           'siebel-row-id': '1-TEST'
         }
+        const recurringGift = {
+          rate: { recurrence: { interval: 'Monthly' } }
+        }
+
         const expectedHistoricalGifts = [
-          { ...recipientResponse['donation-summaries'][0].donations[0], paymentmethod: paymentInstrument },
+          { ...recipientResponse['donation-summaries'][0].donations[0], paymentmethod: paymentInstrument, recurringdonation: recurringGift },
           recipientResponse['donation-summaries'][1].donations[0],
           recipientResponse['donation-summaries'][2].donations[0]
         ]
 
         $ctrl.donationsService.getRecipients.mockImplementation(() => Observable.of(recipientResponse['donation-summaries']))
+        $ctrl.donationsService.getRecipientsRecurringGifts.mockImplementation(() => Observable.of({ donations: [ recurringGift ] }))
         $ctrl.profileService.getPaymentMethod.mockImplementation(() => Observable.of(paymentInstrument))
         $ctrl.subscriber = subscriberSpy
         $ctrl.loadGifts(2017, 1)
