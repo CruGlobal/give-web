@@ -22,6 +22,7 @@ describe('your giving', function () {
     it('to be defined', function () {
       expect($ctrl).toBeDefined()
       expect($ctrl.donationsService).toBeDefined()
+      expect($ctrl.profileService).toBeDefined()
     })
 
     describe('$onChanges()', () => {
@@ -67,9 +68,25 @@ describe('your giving', function () {
       beforeEach(() => {
         subscriberSpy = { unsubscribe: jest.fn() }
         jest.spyOn($ctrl.donationsService, 'getRecipients')
+        jest.spyOn($ctrl.profileService, 'getPaymentMethod')
       })
 
       it('should parse and keep the historical gift data that we care about', () => {
+        const paymentInstrument = {
+          'account-type': 'Checking',
+          'bank-name': 'Test Bank',
+          'default-on-profile': false,
+          description: 'Test Bank Checking **0000',
+          'display-account-number': '0000',
+          'encrypted-account-nmber': 'encrypted-value',
+          id: 'base-32-encoded-id',
+          links: [],
+          messages: [],
+          name: 'Cru Payment Instrument',
+          'routing-number': '123123123',
+          self: {},
+          'siebel-row-id': '1-TEST'
+        }
         const expectedHistoricalGifts = [
           {
             'donation-row-id': '1-3CJZKF',
@@ -94,11 +111,12 @@ describe('your giving', function () {
               },
               'transaction-sub-type': 'Credit Card'
             },
-            'payment-method-link': {
-              rel: 'paymentmethod',
-              type: 'elasticpath.paymentmethods.payment-method',
-              uri: '/paymentmethods/crugive/giydambvga='
-            }
+            'payment-instrument-link': {
+              rel: 'paymentinstrument',
+              type: 'elasticpath.paymentinstruments.purchase-payment-instrument',
+              uri: '/selfservicepaymentinstruments/crugive/gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm='
+            },
+            paymentmethod: paymentInstrument
           },
           {
             'donation-row-id': '1-3CJZLM',
@@ -149,6 +167,7 @@ describe('your giving', function () {
         ]
 
         $ctrl.donationsService.getRecipients.mockImplementation(() => Observable.of(recipientResponse['donation-summaries']))
+        $ctrl.profileService.getPaymentMethod.mockImplementation(() => Observable.of(paymentInstrument))
         $ctrl.subscriber = subscriberSpy
         $ctrl.loadGifts(2017, 1)
         expect($ctrl.historicalGifts).toEqual(expectedHistoricalGifts)

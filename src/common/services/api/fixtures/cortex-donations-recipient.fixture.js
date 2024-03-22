@@ -34,9 +34,9 @@ export default {
         'transaction-sub-type': 'Credit Card'
       },
       'payment-instrument-link': {
-        rel: 'paymentmethod',
-        type: 'elasticpath.paymentmethods.payment-method',
-        uri: '/paymentmethods/crugive/giydambvga='
+        rel: 'paymentinstrument',
+        type: 'elasticpath.paymentinstruments.purchase-payment-instrument',
+        uri: '/selfservicepaymentinstruments/crugive/gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm='
       }
     }],
     'most-recent-donation': {
@@ -60,9 +60,9 @@ export default {
         'transaction-sub-type': 'Credit Card'
       },
       'payment-instrument-link': {
-        rel: 'paymentmethod',
-        type: 'elasticpath.paymentmethods.payment-method',
-        uri: '/paymentmethods/crugive/giydambvga='
+        rel: 'paymentinstrument',
+        type: 'elasticpath.paymentinstruments.purchase-payment-instrument',
+        uri: '/selfservicepaymentinstruments/crugive/gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm='
       }
     },
     'recurring-donations-link': {
@@ -194,9 +194,9 @@ export default {
         'transaction-sub-type': 'EFT'
       },
       'payment-instrument-link': {
-        rel: 'paymentmethod',
-        type: 'elasticpath.paymentmethods.payment-method',
-        uri: '/paymentmethods/crugive/giydambrg4='
+        rel: 'paymentinstrument',
+        type: 'elasticpath.paymentinstruments.purchase-payment-instrument',
+        uri: '/selfservicepaymentinstruments/crugive/gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm='
       }
     },
     'recurring-donations-link': {

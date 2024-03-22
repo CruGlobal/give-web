@@ -1,6 +1,7 @@
 import angular from 'angular'
 import historicalGift from './historicalGift/historicalGift.component'
 import donationsService from 'common/services/api/donations.service'
+import profileService from 'common/services/api/profile.service'
 import template from './historicalView.tpl.html'
 import moment from 'moment'
 
@@ -8,9 +9,10 @@ const componentName = 'historicalView'
 
 class HistoricalView {
   /* @ngInject */
-  constructor ($log, donationsService) {
+  constructor ($log, donationsService, profileService) {
     this.$log = $log
     this.donationsService = donationsService
+    this.profileService = profileService
   }
 
   $onChanges (changes) {
@@ -56,6 +58,18 @@ class HistoricalView {
     })
 
     return filteredList.flatMap((donationSummary) => {
+      if (donationSummary.donations) {
+        donationSummary.donations.forEach(donation => {
+          const uri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
+          if (uri) {
+            this.profileService.getPaymentMethod(uri, true).subscribe((paymentMethod) => {
+              donation.paymentmethod = paymentMethod
+            }, error => {
+              console.error(`Failed to load payment instrument at ${uri}`, error)
+            })
+          }
+        })
+      }
       return donationSummary.donations
     })
   }
@@ -63,7 +77,8 @@ class HistoricalView {
 export default angular
   .module(componentName, [
     historicalGift.name,
-    donationsService.name
+    donationsService.name,
+    profileService.name
   ])
   .component(componentName, {
     controller: HistoricalView,
