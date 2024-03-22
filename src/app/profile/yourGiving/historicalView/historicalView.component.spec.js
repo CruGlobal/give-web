@@ -88,82 +88,9 @@ describe('your giving', function () {
           'siebel-row-id': '1-TEST'
         }
         const expectedHistoricalGifts = [
-          {
-            'donation-row-id': '1-3CJZKF',
-            'donation-status': 'In Process',
-            'historical-donation-line': {
-              amount: 2.22,
-              anonymous: false,
-              'campaign-code': '000000',
-              completed: false,
-              'designation-active': true,
-              'designation-name': 'Houston SP (0687459)',
-              'designation-number': '0687459',
-              'given-through-description': 'Steve',
-              'master-account': false,
-              'pass-through': false,
-              'payment-method-id': 'giydambvga=',
-              'payment-type': 'Discover',
-              'related-account-description': 'Steve',
-              'transaction-date': {
-                'display-value': '2017-01-10',
-                value: 1484006400000
-              },
-              'transaction-sub-type': 'Credit Card'
-            },
-            'payment-instrument-link': {
-              rel: 'paymentinstrument',
-              type: 'elasticpath.paymentinstruments.purchase-payment-instrument',
-              uri: '/selfservicepaymentinstruments/crugive/gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm='
-            },
-            paymentmethod: paymentInstrument
-          },
-          {
-            'donation-row-id': '1-3CJZLM',
-            'donation-status': 'In Process',
-            'historical-donation-line': {
-              amount: 1.03,
-              anonymous: false,
-              'campaign-code': '000000',
-              completed: false,
-              'designation-active': true,
-              'designation-name': 'Steve Retir (0628066)',
-              'designation-number': '0628044',
-              'given-through-description': 'Steve',
-              'master-account': false,
-              'pass-through': false,
-              'payment-type': 'American Express',
-              'related-account-description': 'Steve',
-              'transaction-date': {
-                'display-value': '2017-01-10',
-                value: 1484006400000
-              },
-              'transaction-sub-type': 'Credit Card'
-            }
-          },
-          {
-            'donation-row-id': '1-3CJZIT',
-            'donation-status': 'In Process',
-            'historical-donation-line': {
-              amount: 5,
-              anonymous: false,
-              'campaign-code': '000000',
-              completed: false,
-              'designation-active': true,
-              'designation-name': 'UCF Scholarship (0656556)',
-              'designation-number': '0656556',
-              'given-through-description': 'Steve',
-              'master-account': false,
-              'pass-through': false,
-              'payment-type': 'American Express',
-              'related-account-description': 'Steve',
-              'transaction-date': {
-                'display-value': '2017-01-10',
-                value: 1484006400000
-              },
-              'transaction-sub-type': 'Credit Card'
-            }
-          }
+          { ...recipientResponse['donation-summaries'][0].donations[0], paymentmethod: paymentInstrument },
+          recipientResponse['donation-summaries'][1].donations[0],
+          recipientResponse['donation-summaries'][2].donations[0],
         ]
 
         $ctrl.donationsService.getRecipients.mockImplementation(() => Observable.of(recipientResponse['donation-summaries']))
