@@ -110,7 +110,7 @@ export default {
             'transaction-date': { 'display-value': '2017-02-20', value: 1487548800000 },
             'transaction-sub-type': 'Credit Card'
           },
-          'payment-method-link': {
+          'payment-instrument-link': {
             rel: 'paymentmethod',
             type: 'elasticpath.paymentmethods.payment-method',
             uri: '/paymentmethods/crugive/giydknjsg4='
@@ -136,7 +136,7 @@ export default {
             'transaction-date': { 'display-value': '2017-02-20', value: 1487548800000 },
             'transaction-sub-type': 'Credit Card'
           },
-          'payment-method-link': {
+          'payment-instrument-link': {
             rel: 'paymentmethod',
             type: 'elasticpath.paymentmethods.payment-method',
             uri: '/paymentmethods/crugive/giydknjsg4='
@@ -171,7 +171,7 @@ export default {
             'transaction-date': { 'display-value': '2017-02-16', value: 1487203200000 },
             'transaction-sub-type': 'Credit Card'
           },
-          'payment-method-link': {
+          'payment-instrument-link': {
             rel: 'paymentmethod',
             type: 'elasticpath.paymentmethods.payment-method',
             uri: '/paymentmethods/crugive/giydimbvg4='
@@ -197,7 +197,7 @@ export default {
             'transaction-date': { 'display-value': '2017-02-16', value: 1487203200000 },
             'transaction-sub-type': 'Credit Card'
           },
-          'payment-method-link': {
+          'payment-instrument-link': {
             rel: 'paymentmethod',
             type: 'elasticpath.paymentmethods.payment-method',
             uri: '/paymentmethods/crugive/giydimbvg4='

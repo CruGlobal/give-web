@@ -33,7 +33,7 @@ export default {
         'transaction-date': { 'display-value': '2017-01-10', value: 1484006400000 },
         'transaction-sub-type': 'Credit Card'
       },
-      'payment-method-link': {
+      'payment-instrument-link': {
         rel: 'paymentmethod',
         type: 'elasticpath.paymentmethods.payment-method',
         uri: '/paymentmethods/crugive/giydambvga='
@@ -59,7 +59,7 @@ export default {
         'transaction-date': { 'display-value': '2017-01-10', value: 1484006400000 },
         'transaction-sub-type': 'Credit Card'
       },
-      'payment-method-link': {
+      'payment-instrument-link': {
         rel: 'paymentmethod',
         type: 'elasticpath.paymentmethods.payment-method',
         uri: '/paymentmethods/crugive/giydambvga='
@@ -193,7 +193,7 @@ export default {
         'transaction-date': { 'display-value': '2016-08-22', value: 1471824000000 },
         'transaction-sub-type': 'EFT'
       },
-      'payment-method-link': {
+      'payment-instrument-link': {
         rel: 'paymentmethod',
         type: 'elasticpath.paymentmethods.payment-method',
         uri: '/paymentmethods/crugive/giydambrg4='
