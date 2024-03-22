@@ -60,12 +60,19 @@ class HistoricalView {
     return filteredList.flatMap((donationSummary) => {
       if (donationSummary.donations) {
         donationSummary.donations.forEach(donation => {
-          const uri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
-          if (uri) {
-            this.profileService.getPaymentMethod(uri, true).subscribe((paymentMethod) => {
+          const paymentInstrumentLinkUri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
+          if (paymentInstrumentLinkUri) {
+            this.profileService.getPaymentMethod(paymentInstrumentLinkUri, true).subscribe((paymentMethod) => {
               donation.paymentmethod = paymentMethod
             }, error => {
-              console.error(`Failed to load payment instrument at ${uri}`, error)
+              console.error(`Failed to load payment instrument at ${paymentInstrumentLinkUri}`, error)
+            })
+          }
+
+          const recurringDonationLink = donationSummary['recurring-donations-link']
+          if (recurringDonationLink) {
+            this.donationsService.getRecipientsRecurringGifts(recurringDonationLink).subscribe(recurringGifts => {
+              donation.recurringdonation = recurringGifts.donations ? recurringGifts.donations[0] : undefined
             })
           }
         })
