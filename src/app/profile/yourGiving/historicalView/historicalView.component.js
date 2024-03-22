@@ -25,7 +25,9 @@ class HistoricalView {
     this.loadingGiftsError = false
     this.setLoading({ loading: true })
     this.historicalGifts = undefined
-    if (angular.isDefined(this.subscriber)) this.subscriber.unsubscribe()
+    if (angular.isDefined(this.subscriber)) {
+      this.subscriber.unsubscribe()
+    }
     this.subscriber = this.donationsService.getRecipients(year).subscribe((historicalGifts) => {
       delete this.subscriber
       this.historicalGifts = this.parseHistoricalGifts(historicalGifts, year, month) || []
