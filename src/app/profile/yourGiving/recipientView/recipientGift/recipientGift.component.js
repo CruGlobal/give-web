@@ -37,7 +37,7 @@ class RecipientGift {
 
       const paymentMethodRequests = []; const paymentMethodUris = []
       angular.forEach(this.recipient.donations, (donation) => {
-        const uri = donation['payment-method-link'] && donation['payment-method-link'].uri
+        const uri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
         if (uri && paymentMethodUris.indexOf(uri) < 0) {
           paymentMethodUris.push(uri)
           paymentMethodRequests.push(this.profileService.getPaymentMethod(uri, true))
@@ -52,7 +52,7 @@ class RecipientGift {
             })
 
             angular.forEach(this.recipient.donations, (donation) => {
-              const uri = donation['payment-method-link'] && donation['payment-method-link'].uri
+              const uri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
               donation.paymentmethod = paymentMethods[uri]
             })
 
