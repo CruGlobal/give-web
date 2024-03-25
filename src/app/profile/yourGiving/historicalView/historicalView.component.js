@@ -43,7 +43,8 @@ class HistoricalView {
 
   isRecent (year, month) {
     const today = moment()
-    return today.subtract(3, 'months').isBefore(moment(`${year}/${month}/01`, 'YYYY/MM/DD'))
+    const queryDate = moment(`${year}/${month}/01`, 'YYYY/MM/DD')
+    return today.diff(queryDate, 'months', true) <= 3
   }
 
   parseHistoricalGifts (historicalGifts, year, month) {
@@ -51,7 +52,7 @@ class HistoricalView {
       return historicalGifts
     }
 
-    const filteredList = historicalGifts.filter((historicalGift) => {
+    const filteredGifts = historicalGifts.filter((historicalGift) => {
       historicalGift.donations = historicalGift.donations.filter((donation) => {
         const transactionDate = donation['historical-donation-line']['transaction-date']
         const momentDate = moment(transactionDate['display-value'], 'YYYY/MM/DD')
@@ -61,26 +62,24 @@ class HistoricalView {
       return historicalGift.donations.length > 0
     })
 
-    return filteredList.flatMap((donationSummary) => {
-      if (donationSummary.donations) {
-        donationSummary.donations.forEach(donation => {
-          const paymentInstrumentLinkUri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
-          if (paymentInstrumentLinkUri) {
-            this.profileService.getPaymentMethod(paymentInstrumentLinkUri, true).subscribe((paymentMethod) => {
-              donation.paymentmethod = paymentMethod
-            }, error => {
-              this.$log.error(`Failed to load payment instrument at ${paymentInstrumentLinkUri}`, error)
-            })
-          }
+    return filteredGifts.flatMap((donationSummary) => {
+      donationSummary.donations.forEach(donation => {
+        const paymentInstrumentLinkUri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
+        if (paymentInstrumentLinkUri) {
+          this.profileService.getPaymentMethod(paymentInstrumentLinkUri, true).subscribe((paymentMethod) => {
+            donation.paymentmethod = paymentMethod
+          }, error => {
+            this.$log.error(`Failed to load payment instrument at ${paymentInstrumentLinkUri}`, error)
+          })
+        }
 
-          const recurringDonationLink = donationSummary['recurring-donations-link']
-          if (recurringDonationLink) {
-            this.donationsService.getRecipientsRecurringGifts(recurringDonationLink).subscribe(recurringGifts => {
-              donation.recurringdonation = recurringGifts.donations ? recurringGifts.donations[0] : undefined
-            })
-          }
-        })
-      }
+        const recurringDonationLink = donationSummary['recurring-donations-link']
+        if (recurringDonationLink) {
+          this.donationsService.getRecipientsRecurringGifts(recurringDonationLink).subscribe(recurringGifts => {
+            donation.recurringdonation = recurringGifts.donations ? recurringGifts.donations[0] : undefined
+          })
+        }
+      })
       return donationSummary.donations
     })
   }
