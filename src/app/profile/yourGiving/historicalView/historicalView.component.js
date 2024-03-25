@@ -62,25 +62,23 @@ class HistoricalView {
     })
 
     return filteredList.flatMap((donationSummary) => {
-      if (donationSummary.donations) {
-        donationSummary.donations.forEach(donation => {
-          const paymentInstrumentLinkUri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
-          if (paymentInstrumentLinkUri) {
-            this.profileService.getPaymentMethod(paymentInstrumentLinkUri, true).subscribe((paymentMethod) => {
-              donation.paymentmethod = paymentMethod
-            }, error => {
-              this.$log.error(`Failed to load payment instrument at ${paymentInstrumentLinkUri}`, error)
-            })
-          }
+      donationSummary.donations.forEach(donation => {
+        const paymentInstrumentLinkUri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
+        if (paymentInstrumentLinkUri) {
+          this.profileService.getPaymentMethod(paymentInstrumentLinkUri, true).subscribe((paymentMethod) => {
+            donation.paymentmethod = paymentMethod
+          }, error => {
+            this.$log.error(`Failed to load payment instrument at ${paymentInstrumentLinkUri}`, error)
+          })
+        }
 
-          const recurringDonationLink = donationSummary['recurring-donations-link']
-          if (recurringDonationLink) {
-            this.donationsService.getRecipientsRecurringGifts(recurringDonationLink).subscribe(recurringGifts => {
-              donation.recurringdonation = recurringGifts.donations ? recurringGifts.donations[0] : undefined
-            })
-          }
-        })
-      }
+        const recurringDonationLink = donationSummary['recurring-donations-link']
+        if (recurringDonationLink) {
+          this.donationsService.getRecipientsRecurringGifts(recurringDonationLink).subscribe(recurringGifts => {
+            donation.recurringdonation = recurringGifts.donations ? recurringGifts.donations[0] : undefined
+          })
+        }
+      })
       return donationSummary.donations
     })
   }
