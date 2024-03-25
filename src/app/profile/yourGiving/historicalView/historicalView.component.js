@@ -51,7 +51,7 @@ class HistoricalView {
       return historicalGifts
     }
 
-    const filteredList = historicalGifts.filter((historicalGift) => {
+    const filteredGifts = historicalGifts.filter((historicalGift) => {
       historicalGift.donations = historicalGift.donations.filter((donation) => {
         const transactionDate = donation['historical-donation-line']['transaction-date']
         const momentDate = moment(transactionDate['display-value'], 'YYYY/MM/DD')
@@ -61,7 +61,7 @@ class HistoricalView {
       return historicalGift.donations.length > 0
     })
 
-    return filteredList.flatMap((donationSummary) => {
+    return filteredGifts.flatMap((donationSummary) => {
       donationSummary.donations.forEach(donation => {
         const paymentInstrumentLinkUri = donation['payment-instrument-link'] && donation['payment-instrument-link'].uri
         if (paymentInstrumentLinkUri) {
