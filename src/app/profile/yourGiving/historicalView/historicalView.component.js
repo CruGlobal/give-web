@@ -43,7 +43,8 @@ class HistoricalView {
 
   isRecent (year, month) {
     const today = moment()
-    return today.subtract(3, 'months').isBefore(moment(`${year}/${month}/01`, 'YYYY/MM/DD'))
+    const queryDate = moment(`${year}/${month}/01`, 'YYYY/MM/DD')
+    return today.diff(queryDate, 'months', true) <= 3
   }
 
   parseHistoricalGifts (historicalGifts, year, month) {
