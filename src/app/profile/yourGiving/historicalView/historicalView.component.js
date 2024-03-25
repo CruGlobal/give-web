@@ -4,6 +4,7 @@ import donationsService from 'common/services/api/donations.service'
 import profileService from 'common/services/api/profile.service'
 import template from './historicalView.tpl.html'
 import moment from 'moment'
+import cloneDeep from 'lodash/cloneDeep'
 
 const componentName = 'historicalView'
 
@@ -52,8 +53,8 @@ class HistoricalView {
       return historicalGifts
     }
 
-    const filteredGifts = [...historicalGifts].filter((historicalGift) => {
-      historicalGift.donations = historicalGift.donations.filter((donation) => {
+    const filteredGifts = cloneDeep(historicalGifts).filter((historicalGift) => {
+      historicalGift.donations = cloneDeep(historicalGift.donations).filter((donation) => {
         const transactionDate = donation['historical-donation-line']['transaction-date']
         const momentDate = moment(transactionDate['display-value'], 'YYYY/MM/DD')
 
