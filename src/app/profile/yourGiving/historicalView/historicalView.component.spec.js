@@ -94,8 +94,8 @@ describe('your giving', function () {
 
         const expectedHistoricalGifts = [
           { ...recipientResponse['donation-summaries'][0].donations[0], paymentmethod: paymentInstrument, recurringdonation: recurringGift },
-          recipientResponse['donation-summaries'][1].donations[0],
-          recipientResponse['donation-summaries'][2].donations[0]
+          { ...recipientResponse['donation-summaries'][1].donations[0], recurringdonation: recurringGift },
+          { ...recipientResponse['donation-summaries'][2].donations[0], recurringdonation: recurringGift }
         ]
 
         $ctrl.donationsService.getRecipients.mockImplementation(() => Observable.of(recipientResponse['donation-summaries']))
