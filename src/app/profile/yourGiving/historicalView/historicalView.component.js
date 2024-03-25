@@ -52,7 +52,7 @@ class HistoricalView {
       return historicalGifts
     }
 
-    const filteredGifts = historicalGifts.filter((historicalGift) => {
+    const filteredGifts = [...historicalGifts].filter((historicalGift) => {
       historicalGift.donations = historicalGift.donations.filter((donation) => {
         const transactionDate = donation['historical-donation-line']['transaction-date']
         const momentDate = moment(transactionDate['display-value'], 'YYYY/MM/DD')
