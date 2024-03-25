@@ -25,8 +25,11 @@ class HistoricalView {
     this.loadingGiftsError = false
     this.setLoading({ loading: true })
     this.historicalGifts = undefined
-    if (angular.isDefined(this.subscriber)) this.subscriber.unsubscribe()
-    this.subscriber = this.donationsService.getRecipients(year).subscribe((historicalGifts) => {
+    if (angular.isDefined(this.subscriber)) {
+      this.subscriber.unsubscribe()
+    }
+    const yearToQuery = this.isRecent(year, month) ? 'recent' : year
+    this.subscriber = this.donationsService.getRecipients(yearToQuery).subscribe((historicalGifts) => {
       delete this.subscriber
       this.historicalGifts = this.parseHistoricalGifts(historicalGifts, year, month) || []
       this.setLoading({ loading: false })
@@ -38,19 +41,23 @@ class HistoricalView {
     })
   }
 
+  isRecent (year, month) {
+    const today = moment()
+    return today.subtract(3, 'months').isBefore(moment(`${year}/${month}/01`, 'YYYY/MM/DD'))
+  }
+
   parseHistoricalGifts (historicalGifts, year, month) {
     if (!historicalGifts.length || !historicalGifts[0].donations) {
       return historicalGifts
     }
 
     const filteredList = historicalGifts.filter((historicalGift) => {
-      const donations = historicalGift.donations.filter((donation) => {
+      historicalGift.donations = historicalGift.donations.filter((donation) => {
         const transactionDate = donation['historical-donation-line']['transaction-date']
         const momentDate = moment(transactionDate['display-value'], 'YYYY/MM/DD')
 
         return momentDate.year() === year && (momentDate.month() + 1) === month
       })
-      historicalGift.donations = donations
       return historicalGift.donations.length > 0
     })
 

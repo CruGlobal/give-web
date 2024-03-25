@@ -95,7 +95,7 @@ describe('your giving', function () {
         const expectedHistoricalGifts = [
           { ...recipientResponse['donation-summaries'][0].donations[0], paymentmethod: paymentInstrument, recurringdonation: recurringGift },
           recipientResponse['donation-summaries'][1].donations[0],
-          recipientResponse['donation-summaries'][2].donations[0],
+          recipientResponse['donation-summaries'][2].donations[0]
         ]
 
         $ctrl.donationsService.getRecipients.mockImplementation(() => Observable.of(recipientResponse['donation-summaries']))
@@ -139,6 +139,22 @@ describe('your giving', function () {
           .toEqual([
             `Failed to load payment instrument at ${recipientResponse['donation-summaries'][0].donations[0]['payment-instrument-link'].uri}`,
             'error'])
+      })
+    })
+
+    describe('isRecent', () => {
+      beforeEach(() => {
+        Date.now = jest.fn(() => new Date('2024-03-22T05:00:00.000Z'))
+      })
+
+      it.each([
+        [1, 2024, true],
+        [2, 2024, true],
+        [3, 2024, true],
+        [12, 2023, false],
+        [2, 2023, false],
+      ])('when the date is %s/%s it should be %s', (month, year, expected) => {
+        expect($ctrl.isRecent(year, month)).toBe(expected)
       })
     })
   })
