@@ -54,7 +54,7 @@ class HistoricalView {
     }
 
     const filteredGifts = cloneDeep(historicalGifts).filter((historicalGift) => {
-      historicalGift.donations = cloneDeep(historicalGift.donations).filter((donation) => {
+      historicalGift.donations = historicalGift.donations.filter((donation) => {
         const transactionDate = donation['historical-donation-line']['transaction-date']
         const momentDate = moment(transactionDate['display-value'], 'YYYY/MM/DD')
 
