@@ -28,17 +28,7 @@
     </div>
 
     <div class="row button-actions">
-      <div class="col-sm-6 sign-in">
-          <sign-in-button
-            on-success="$ctrl.onSuccess()"
-            on-failure="$ctrl.onFailure()"
-            last-purchase-id="$ctrl.lastPurchaseId"
-            error-message="$ctrl.errorMessage"
-          ></sign-in-button>
-      </div>
-
-      <div class="col-sm-6 sign-up">
-        <p><strong translate>Don&rsquo;t have an account?</strong></p>
+      <div class="sign-up">
         <button type="button"
           id="registerAccountButton"
           class="btn btn-primary"
@@ -46,14 +36,7 @@
           translate>Register Your Account
         </button>
       </div>
-
-      <div class="col-sm-12 okta-link">
-        <a href="https://www.okta.com/" target="_blank" translate>Learn more about Okta</a>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-6 col-sm-offset-3">
+      <div>
         <button type="button"
           id="notNowButton"
           class="btn btn-md btn-block btn-default"
