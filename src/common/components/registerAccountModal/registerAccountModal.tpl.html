@@ -5,14 +5,15 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <div ng-if="$ctrl.state !== 'sign-up'">
+        <div ng-if="$ctrl.state !== 'sign-up' && $ctrl.state !== 'sign-up-activation'">
           <h3 ng-if="$ctrl.firstName" translate>Welcome back, {{$ctrl.firstName}}!</h3>
           <h3 ng-if="!$ctrl.firstName" translate>Welcome back!</h3>
         </div>
         <div ng-if="$ctrl.state === 'sign-up'" class="signup-header">
-          <img src="{{$ctrl.imgDomain}}/assets/img/cru-logo.png" alt="Cru logo" />
-          <span>+</span>
-          <img src="{{$ctrl.imgDomain}}/assets/img/okta.png" alt="Okta logo" />
+          <h3 translate>Create Your Account</h3>
+        </div>
+        <div ng-if="$ctrl.state === 'sign-up-activation'" class="signup-header">
+          <h3 translate>Register Your Account</h3>
         </div>
         <div ng-if="$ctrl.state === 'sign-in'" class="section">
           <ul>
