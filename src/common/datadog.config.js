@@ -22,7 +22,6 @@ const dataDogConfig = /* @ngInject */ function (envServiceProvider) {
 
     window.datadogRum = datadogRum
     window.datadogRum && window.datadogRum.init(config)
-    window.datadogRum && window.datadogRum.startSessionReplayRecording()
   }
 }
 export {
