@@ -1,12 +1,53 @@
+sign-in-form {
+  .sign-in-info {
+    margin-bottom: 0;
+  }
+
+  hr {
+    width:65%;
+    margin: 32px auto;
+  }
+
+  .need-help {
+    &--header {
+      cursor: pointer;
+
+      i {
+        font-size: 11px;
+        margin-right: 3px;
+      }
+    }
+
+    &--content {
+      max-height: 0px;
+      overflow: hidden;
+      transition: max-height 0.3s ease 0s;;
+    }
+
+    &.open {
+      i {
+        transform: rotate(90deg);
+      }
+
+      .need-help--content {
+        max-height: 140px;
+      }
+    }
+  }
+}
+
 sign-in-button {
   .okta-button {
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 1em 0.5em;
     justify-content: center;
     gap: 1em;
-    margin: 20px 0;
+    margin: 20px auto 0;
+
+    &:not(.normal-padding) {
+      padding: 1em 0.5em;
+    }
   
     img {
       height: 20px;
@@ -18,5 +59,5 @@ sign-in-button {
     margin-bottom: 10px;
     padding: 5px;
     text-align: center;
-  }
+  }  
 }

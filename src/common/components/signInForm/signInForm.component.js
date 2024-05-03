@@ -12,6 +12,15 @@ class SignInFormController {
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
+    this.needHelpAccordionOpened = false
+  }
+
+  $onInit () {
+    this.onSignInPage = this.onSignInPage || false;
+  }
+
+  toggleNeedHelpAccordion () {
+    this.needHelpAccordionOpened = !this.needHelpAccordionOpened;
   }
 }
 
@@ -29,6 +38,7 @@ export default angular
       onFailure: '&',
       onStateChange: '&',
       lastPurchaseId: '<',
-      onSignUpWithOkta: '&'
+      onSignUpWithOkta: '&',
+      onSignInPage: '<'
     }
   })
