@@ -1544,25 +1544,25 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
-"@datadog/browser-core@4.48.2":
-  version "4.48.2"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.48.2.tgz#6606878660a2dad528a7c5c4aa5465169cb2c33a"
-  integrity sha512-ewQDLouh9jymJPTRq5M8Hz0FFzMaVlJCwHHY5gMUmGyIaBEzS8wd3AeZ56kQ32ZOcyz83au1/yZ/zcIB8LDoyA==
+"@datadog/browser-core@5.16.0":
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-5.16.0.tgz#50cc87d3b89a943d677a421b41886865da4690ce"
+  integrity sha512-8SXjJ034T15ihdYU/9cC1UBKr8aUVAAW8MsL0imll8imjBYo95ZCovbf6e24iZ7hYCdjk26+w3WpHQkARrUNsw==
 
-"@datadog/browser-rum-core@4.48.2":
-  version "4.48.2"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.48.2.tgz#4fc13aedc6170d51c3c024327da27af937fd0186"
-  integrity sha512-LUlaYAC7MGXZbIPT6LvSVxaZBG0irer+meQp1LfJBdSy/lLb4OrNowrc9dcHeh4Fw9rNNLWl2Pz+4dBqRtR87g==
+"@datadog/browser-rum-core@5.16.0":
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-5.16.0.tgz#690b2e48e5e81ca4513d7b73c37de6bbecc4eb1f"
+  integrity sha512-avG+PRdJuMAAlGu1Ciwru18m/sKGik+XnwujnHMXf85+eSIngMwFlHFTZHDu24F6xq8WaxL53G7cVIGJBx/OUg==
   dependencies:
-    "@datadog/browser-core" "4.48.2"
+    "@datadog/browser-core" "5.16.0"
 
-"@datadog/browser-rum@^4.48.2":
-  version "4.48.2"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.48.2.tgz#95ab72a0fd6b9f82b69cca6a351d9a91bcd8d5da"
-  integrity sha512-SGxjKJLUJq8AjWedhHTQicIr4rvAcDMwBr6gHvZr3h9llCBpDxPzd/RPKCK69HMxBGt/Cw7KCpjAjy9IaCURWQ==
+"@datadog/browser-rum@^5.16.0":
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-5.16.0.tgz#5d458a07ef4dbb674131f7076b0dad7e51a076d2"
+  integrity sha512-AlKKylyILojF6Hx0Sf/HWbjpHo5BLMIPIrekC5fDNrtD7iK3EYaEIe1XNw4MbZ3RLuYVlqOFXIXdnPCvo5/7nQ==
   dependencies:
-    "@datadog/browser-core" "4.48.2"
-    "@datadog/browser-rum-core" "4.48.2"
+    "@datadog/browser-core" "5.16.0"
+    "@datadog/browser-rum-core" "5.16.0"
 
 "@eslint/eslintrc@^0.3.0":
   version "0.3.0"
