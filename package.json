@@ -4,7 +4,6 @@
   "dependencies": {
     "@babel/polyfill": "^7.7.0",
     "@babel/runtime-corejs2": "^7.0.0",
-    "@okta/okta-auth-js": "^6.7.2",
     "@cruglobal/cru-payments": "^1.2.4",
     "@datadog/browser-rum": "^5.16.0",
     "@okta/okta-auth-js": "^6.7.2",
