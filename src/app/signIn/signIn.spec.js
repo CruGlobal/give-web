@@ -153,15 +153,6 @@ describe('signIn', function () {
       })
     })
 
-    describe('getOktaUrl()', () => {
-      it('should call sessionService getOktaUrl and return Okta URL', () => {
-        jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
-        const response = $ctrl.getOktaUrl()
-
-        expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled();
-        expect(response).toEqual('URL')
-      })
-    })
 
     describe('onSignUpWithOkta()', () => {
       it('should call createAccount()', () => {

@@ -15,6 +15,7 @@
     on-failure="$ctrl.onFailure()"
     last-purchase-id="$ctrl.lastPurchaseId"
     error-message="$ctrl.errorMessage"
+    on-sign-in-page="$ctrl.onSignInPage"
   ></sign-in-button>
 </div>
 
@@ -27,6 +28,7 @@
     </i>
     <span translate>, then back to this site.</span>
   </p>
+  <p ng-if="$ctrl.onSignInPage" style="margin-top: 20px" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
 </div>
 <hr />
 <div class="row text-center" style="margin-bottom: 0px;" ng-if="!$ctrl.onSignInPage">
@@ -39,6 +41,7 @@
     <span translate>Help signing in?</span>
   </div>
   <div class="need-help--content">
+    <p><a ng-href="{{$ctrl.getOktaUrl()}}/signin/forgot-password" target="_blank" translate>Forgot your password?</a></p>
     <p><a href="tel:8882787233" target="_blank" translate>Call (888) 278-7233</a> opt. 1, then 1.<br />9:00 a.m. to 5:00 p.m. (ET), Monday-Friday,<br /> or email us at <a href="mailto:eGift@cru.org">eGift@cru.org</a>.</p>
   </div>
 </div>

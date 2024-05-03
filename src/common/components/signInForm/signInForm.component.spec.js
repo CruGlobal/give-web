@@ -37,4 +37,14 @@ describe('signInForm', function () {
   it('to be defined', function () {
     expect($ctrl).toBeDefined()
   })
+
+  describe('getOktaUrl()', () => {
+    it('should call sessionService getOktaUrl and return Okta URL', () => {
+      jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
+      const response = $ctrl.getOktaUrl()
+
+      expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled();
+      expect(response).toEqual('URL')
+    })
+  })
 })

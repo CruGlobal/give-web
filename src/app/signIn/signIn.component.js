@@ -78,10 +78,6 @@ class SignInController {
     })
   }
 
-  getOktaUrl () {
-    return this.sessionService.getOktaUrl()
-  }
-
   onSignUpWithOkta () {
     this.sessionModalService.createAccount()
   }
