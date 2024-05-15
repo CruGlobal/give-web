@@ -17,11 +17,11 @@ class SignInFormController {
   }
 
   $onInit () {
-    this.onSignInPage = this.onSignInPage || false;
+    this.onSignInPage = this.onSignInPage || false
   }
 
   toggleNeedHelpAccordion () {
-    this.needHelpAccordionOpened = !this.needHelpAccordionOpened;
+    this.needHelpAccordionOpened = !this.needHelpAccordionOpened
   };
 
   getOktaUrl () {
