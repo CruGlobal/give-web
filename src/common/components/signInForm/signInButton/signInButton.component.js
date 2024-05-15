@@ -19,7 +19,7 @@ class SignInButtonController {
 
   $onInit () {
     this.isSigningIn = false
-    this.onSignInPage = this.onSignInPage || false;
+    this.onSignInPage = this.onSignInPage || false
 
     this.sessionService.handleOktaRedirect()
       .subscribe((data) => {
