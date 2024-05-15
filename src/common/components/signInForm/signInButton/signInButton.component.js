@@ -19,6 +19,7 @@ class SignInButtonController {
 
   $onInit () {
     this.isSigningIn = false
+    this.onSignInPage = this.onSignInPage || false;
 
     this.sessionService.handleOktaRedirect()
       .subscribe((data) => {
@@ -79,6 +80,7 @@ export default angular
       onSuccess: '&',
       onFailure: '&',
       lastPurchaseId: '<',
-      errorMessage: '='
+      errorMessage: '=',
+      onSignInPage: '<'
     }
   })
