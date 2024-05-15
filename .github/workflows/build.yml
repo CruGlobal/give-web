@@ -2,9 +2,17 @@ name: Build
 
 on:
   push: 
-    branches: [staging, master, ep-upgrade-stage, ep-upgrade-prod, ep-upgrade]
+    branches: [staging, master]
   pull_request:
-    branches: [staging, master, ep-upgrade-stage, ep-upgrade-prod, ep-upgrade]
+    branches: [staging, master]
+  workflow_dispatch:
+    # Allows manual build and deploy of any branch/ref
+    inputs:
+      auto-deploy:
+        type: boolean
+        description: Deploy image after building?
+        required: true
+        default: 'false'
 
 permissions:
   id-token: write
@@ -50,9 +58,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ (github.ref == 'refs/heads/master' && 'production') || (github.ref == 'refs/heads/ep-upgrade-stage' && 'nonprod') || (github.ref == 'refs/heads/ep-upgrade-prod' && 'preprod') || 'staging' }}
+      name: ${{ (github.ref == 'refs/heads/master' && 'production') || 'staging' }}
     needs: [lint, test]
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/ep-upgrade-stage' || github.ref == 'refs/heads/ep-upgrade-prod')
+    if: (github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/staging')) || (github.event_name == 'workflow_dispatch' && github.event.inputs.auto-deploy == 'true')
     steps:
       - uses: actions/checkout@v2
 

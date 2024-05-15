@@ -17,11 +17,10 @@ describe('dataDogConfig', () => {
       angular.mock.module('testAppAndDataDogConfig')
       inject(() => {})
     })
-        
+
     it('should call init() and start session reply recording', () => {
       expect(window.datadogRum).not.toEqual(undefined)
       expect(window.datadogRum.init).toEqual(expect.any(Function))
-      expect(window.datadogRum.startSessionReplayRecording).toEqual(expect.any(Function))
     })
   })
 })

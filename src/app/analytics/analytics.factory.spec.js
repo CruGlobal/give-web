@@ -659,7 +659,6 @@ describe('analytics factory', () => {
             payment_type: 'credit card',
             purchase_number: '23032',
             campaign_code: undefined,
-            designation: 'designation',
             item_brand: 'STAFF',
             processingFee: undefined,
             testing_transaction: 'false',

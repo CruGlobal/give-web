@@ -55,7 +55,7 @@ describe('your giving', function () {
 
           $ctrl.recipient = {
             donations: [{
-              'payment-method-link': {
+              'payment-instrument-link': {
                 uri: '/payment/uri'
               },
               'historical-donation-line': {
@@ -80,7 +80,7 @@ describe('your giving', function () {
           $ctrl.profileService.getPaymentMethod.mockReturnValue(Observable.throw('some error'))
           $ctrl.recipient = {
             donations: [{
-              'payment-method-link': {
+              'payment-instrument-link': {
                 uri: '/payment/uri'
               },
               'historical-donation-line': {
