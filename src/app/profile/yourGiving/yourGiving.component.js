@@ -18,7 +18,8 @@ import sessionEnforcerService, {
   EnforcerCallbacks,
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
-import sessionService, { Roles, SignOutEvent } from 'common/services/session/session.service'
+import { Roles, SignOutEvent } from 'common/services/session/session.service'
+import sessionHandleOktaRedirectService from 'common/services/session/sessionHandleOktaRedirect.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import template from './yourGiving.tpl.html'
 
@@ -32,7 +33,7 @@ export const givingViews = ['recipient', 'historical']
 
 class YourGivingController {
   /* @ngInject */
-  constructor ($log, $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionService, analyticsFactory) {
+  constructor ($log, $rootScope, $window, $location, $uibModal, $filter, sessionEnforcerService, profileService, sessionHandleOktaRedirectService, analyticsFactory) {
     this.$log = $log
     this.$window = $window
     this.$location = $location
@@ -40,13 +41,18 @@ class YourGivingController {
     this.$rootScope = $rootScope
     this.sessionEnforcerService = sessionEnforcerService
     this.profileService = profileService
-    this.sessionService = sessionService
+    this.sessionHandleOktaRedirectService = sessionHandleOktaRedirectService
     this.analyticsFactory = analyticsFactory
     this.dateFilter = $filter('date')
     this.reload = false
   }
 
   $onInit () {
+    this.sessionHandleOktaRedirectService.onHandleOktaRedirect()
+    this.sessionHandleOktaRedirectService.errorMessageSubject.subscribe((errorMessage) => {
+      this.errorMessage = errorMessage
+    })
+
     // Enforce donor role view access manage-giving
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -174,7 +180,7 @@ export default angular
     stopStartRecurringGiftsModal.name,
     profileService.name,
     sessionEnforcerService.name,
-    sessionService.name,
+    sessionHandleOktaRedirectService.name,
     analyticsFactory.name,
     uibDropdown,
     uibModal

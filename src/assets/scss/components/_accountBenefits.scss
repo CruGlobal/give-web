@@ -1,0 +1,36 @@
+account-benefits-modal {
+  display: inline-block;
+  padding: 20px;
+
+  .button-actions {
+    margin: 20px 0;
+  }
+
+  .sign-in {
+    button {
+      margin: 0;
+    }
+  }
+
+
+  .sign-up {
+    text-align: center;
+    margin-bottom: 10px;
+    @media (max-width:550px) {
+      margin-top: 10px;
+    }
+    p {
+      margin-bottom: 3px;
+    }
+    button {
+      width: 100%;
+    }
+  }
+
+  .okta-link {
+    text-align: center;
+    margin-top: 5px;
+  }
+}
+
+
