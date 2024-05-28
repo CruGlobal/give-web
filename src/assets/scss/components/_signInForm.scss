@@ -1,6 +1,14 @@
 sign-in-form {
   .sign-in-info {
     margin-bottom: 0;
+
+    .sup {
+      font-size: 12px;
+
+      i {
+        color: #333333;
+      }
+    }
   }
 
   hr {
@@ -46,6 +54,7 @@ sign-in-button {
     margin: 20px auto 0;
 
     &:not(.normal-padding) {
+      width: 70%;
       padding: 1em 0.5em;
     }
   
