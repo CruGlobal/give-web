@@ -2,7 +2,6 @@ register-account-modal {
   display: block;
   line-height: 1.2em;
 
-
   &[data-state=sign-in],
   &[data-state=sign-up] {
     display: inline-block;
@@ -145,6 +144,17 @@ register-account-modal {
     }
     .success .footer-buttons {
       flex-direction: column;
+    }
+  }
+
+  sign-in-form {
+    hr {
+      width:65%;
+    }
+  }
+  sign-in-button {
+    .okta-button:not(.normal-padding) {
+      width: 100%;
     }
   }
 }
