@@ -129,7 +129,7 @@ describe('analytics factory', () => {
         price: itemConfig.AMOUNT.toString(),
         quantity: '1',
         recurring_date: 'September 13, 2023',
-        testing_transaction: 'false',
+        testing_transaction: "false",
       })
     });
 

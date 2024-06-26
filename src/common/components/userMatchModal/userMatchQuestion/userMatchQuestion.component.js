@@ -9,16 +9,21 @@ class UserMatchQuestionController {
     this.hasError = false
   }
 
+  $onChanges (changes) {
+    if (changes.question) {
+      this.answer = this.question.answer
+    }
+  }
+
   selectAnswer () {
     this.hasError = false
     if (!this.questionForm.$valid) {
       this.hasError = true
     } else {
       this.onQuestionAnswer({
-        key: this.question.key,
-        answer: this.answer.answer
+        question: this.question,
+        answer: this.answer
       })
-      delete this.answer
     }
   }
 }
@@ -32,6 +37,7 @@ export default angular
       question: '<',
       questionIndex: '<',
       questionCount: '<',
+      onBack: '&',
       onQuestionAnswer: '&'
     }
   })

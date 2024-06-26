@@ -1,0 +1,160 @@
+register-account-modal {
+  display: block;
+  line-height: 1.2em;
+
+  &[data-state=sign-in],
+  &[data-state=sign-up] {
+    display: inline-block;
+  }
+  
+  .modal-header {
+    padding-bottom: 30px;
+    background-color: #EBECEC;
+  }
+
+  ul {
+    padding-left: 1em;
+  }
+
+  .section {
+    margin-top: 20px;
+  }
+
+  .cart {
+    padding: 10px;
+    background-color: #9C9FA1;
+    color: white;
+  }
+
+  .footer-buttons {
+    button {
+      width: 100%;
+    }
+
+    button.back {
+      display: none;
+      width: auto;
+    }
+  }
+
+  .signup-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      font-size: 30px;
+      font-weight: 400;
+      margin: 0 10px;
+    }
+
+    img {
+      max-height: 35px;
+    }
+  }
+
+  .modal-dialog .give-modal-content & .modal-body {
+    padding: 30px;
+  }
+
+  .modal-dialog.modal-lg & {
+    &[data-state=sign-in],
+    &[data-state=loading] {
+      $body-width: 530px;
+      $body-margin: 80px;
+      display: flex;
+
+      .modal-header {
+        flex: 1;
+
+        button.close {
+          margin-right: -85px - $body-width;
+        }
+      }
+
+      .modal-body {
+        width: $body-width - $body-margin * 2;
+        margin: 60px $body-margin;
+
+        sign-in-modal {
+          display: inline-block;
+          padding: 0;
+        }  
+      }
+    }
+    &[data-state=contact-info] {
+
+      .modal-header {
+        text-align: center;
+        width: 100%;
+
+        .paragraph {
+          max-width: 500px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
+      contact-info-modal form {
+        display: grid;
+        grid-template: 1fr auto / auto 320px;
+        column-gap: 20px;
+
+        .name {
+          grid-column: 1;
+          grid-row: 1;
+        }
+        .address {
+          grid-column: 2;
+          grid-row: 1 / 3;
+        }
+        .contact-info {
+          grid-column: 1;
+          grid-row: 2;
+        }
+      }
+    }
+    &[data-state=user-match] {
+
+      .modal-header h3 {
+        text-align: center;
+      }
+
+      .modal-body {
+        margin-left: 200px;
+        margin-right: 200px;
+      }
+    }
+
+    .footer-buttons {
+      margin-left: -230px;
+      margin-right: -230px;
+      margin-bottom: -30px;
+      padding: 15px;
+      background-color: #F5F5F5;
+      display: flex;
+
+      button:not(.back) {
+        width: 400px;
+        margin-left: auto;
+      }
+      button.back {
+        display: block;
+      }
+    }
+    .success .footer-buttons {
+      flex-direction: column;
+    }
+  }
+
+  sign-in-form {
+    hr {
+      width:65%;
+    }
+  }
+  sign-in-button {
+    .okta-button:not(.normal-padding) {
+      width: 100%;
+    }
+  }
+}
