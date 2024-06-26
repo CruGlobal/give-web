@@ -61,7 +61,7 @@ class ProductConfigModalController {
     // Load query params to populate itemConfig
     const params = this.$location.search()
 
-    this.itemConfig.amount = params[giveGiftParams.amount]
+    this.itemConfig.AMOUNT = params[giveGiftParams.amount]
 
     if (Object.prototype.hasOwnProperty.call(params, giveGiftParams.frequency)) {
       this.defaultFrequency = params[giveGiftParams.frequency]
