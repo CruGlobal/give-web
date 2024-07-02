@@ -1,0 +1,9 @@
+<button class="okta-button btn btn-primary"
+        ng-click="$ctrl.signInWithOkta()"
+        ng-disabled="$ctrl.isSigningIn"
+        ng-class="{'normal-padding': $ctrl.onSignInPage}">
+  <strong translate>Sign in to your account</strong>
+</button>
+<loading type="overlay" ng-if="$ctrl.isSigningIn">
+  <translate translate>Signing you in...</translate>
+</loading>
