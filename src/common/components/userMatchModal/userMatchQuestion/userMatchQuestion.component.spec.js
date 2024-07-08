@@ -21,9 +21,22 @@ describe('userMatchQuestion', function () {
     expect($ctrl.hasError).toEqual(false)
   })
 
+  describe('$onChanges', () => {
+    it('should set the new answer value', () => {
+      expect($ctrl.answer).toEqual({'answer': 'answer'})
+      $ctrl.question.answer = 'new answer'
+      $ctrl.$onChanges({
+        question: {
+          answer: 'new answer'
+        }
+      })
+      expect($ctrl.answer).toEqual('new answer')
+    })
+  })
+
   describe('selectAnswer()', () => {
     describe('invalid form', () => {
-      it('sets hasError', () => {
+      it('sets hasError to true', () => {
         $ctrl.selectAnswer()
 
         expect($ctrl.hasError).toEqual(true)
@@ -39,8 +52,8 @@ describe('userMatchQuestion', function () {
         expect($ctrl.answer).toEqual({ answer: 'answer' })
         $ctrl.selectAnswer()
 
-        expect($ctrl.onQuestionAnswer).toHaveBeenCalledWith({ key: 'key', answer: 'answer' })
-        expect($ctrl.answer).toBeUndefined()
+        expect($ctrl.onQuestionAnswer).toHaveBeenCalledWith({question: { key: 'key' },  answer: { answer: 'answer' } })
+        expect($ctrl.answer).toEqual({ answer: 'answer' })
       })
     })
   })
