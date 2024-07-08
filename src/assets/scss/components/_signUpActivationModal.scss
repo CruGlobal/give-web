@@ -71,10 +71,9 @@ sign-up-activation-modal {
   .active-account {
     text-align: center;
     display: flex;
-    width: 100%;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 20px
+    margin-bottom: 20px;
 
     p {
       width: 100%;
@@ -83,10 +82,5 @@ sign-up-activation-modal {
     .okta-button {
       max-width: 300px;
     }
-  }
-
-  hr,
-  .bottom-links {
-    display: none;
   }
 }
