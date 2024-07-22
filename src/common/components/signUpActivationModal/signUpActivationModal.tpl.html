@@ -1,0 +1,104 @@
+<div class="modal-header" ng-if="!$ctrl.isInsideAnotherModal">
+  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="signup-header">
+          <h3 translate>Register Your Account</h3>
+        </div>
+        <div class="section cart" ng-if="$ctrl.cartCount > 0">
+          <span ng-if="$ctrl.cartCount === 1" translate>1 gift is currently in your cart.</span>
+          <span ng-if="$ctrl.cartCount > 1">{{$ctrl.cartCount}} <span translate>gifts are currently in your cart.</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div ng-class="{'modal-body': !$ctrl.isInsideAnotherModal }">
+  <div class="content">
+    <div class="col-xs-12">
+      <div class="loading-overlay-parent">
+        <loading type="overlay" ng-if="$ctrl.loadingAccount || $ctrl.initialLoading">
+          <translate>{{'CHECKING_FOR_EXISTING'}}</translate>
+        </loading>
+
+        <div ng-if="$ctrl.unverifiedAccount.status !== 'Active'">
+          <div class="row text-center">
+            <div class="col-xs-12">
+              <h4 translate>Activate Account</h4>
+              <p translate style="margin-bottom: 0px">You will need to go to your <b>email</b> and open an email with the subject</p>
+              <strong translate style="display: block; margin-bottom: 8px">Activate Account for Giving to Cru.</strong>
+              <p translate>Verify your account by opening a link that we will send in that email.</p>
+            </div>
+          </div>
+
+          <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingAccountError && !$ctrl.initialLoading">
+            <div ng-if="$ctrl.loadingAccountErrorCount < 2">
+              <div ng-if="!$ctrl.loadingAccountError.includes('Okta user not found:')">
+                <p translate>There was an error loading your Okta account status</p>
+              </div>
+              <div>
+                <p translate translate-value-email="{{$ctrl.unverifiedAccount.email}}">{{$ctrl.loadingAccountError}}</p>
+              </div>
+            </div>
+            <p ng-if="$ctrl.loadingAccountErrorCount > 1" style="margin-top:20px;">There was an error loading your Okta account status. Please locate the email mentioned above and follow the steps. Once you've done that please login via "Sign up with Okta".</p>
+          </div>
+
+          <div class="row unverified-email-headers" ng-if="$ctrl.unverifiedAccount.status">
+            <div class="col-xs-8">
+              <p translate>Email</p>
+            </div>
+            <div class="col-xs-4">
+              <p translate class="pull-right">Status</p>
+            </div>
+          </div>
+          <div class="row unverified-emails" ng-if="$ctrl.unverifiedAccount.status">
+            <div class="unverified-email">
+              <div class="col-xs-8">
+                <p translate>{{$ctrl.unverifiedAccount.email}}</p>
+                <span class="instructions">Please locate the email in your email inbox.</span>
+              </div>
+              <div class="col-xs-4">
+                <p translate class="pull-right">{{$ctrl.unverifiedAccount.status}}</p>
+              </div>
+            </div>
+          </div>
+
+          <p>This page re-fetches the data every 10 seconds.</p>
+        </div>
+
+
+        <div ng-if="$ctrl.unverifiedAccount.status && $ctrl.unverifiedAccount.status === 'Active'">
+          <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage" ng-switch="$ctrl.errorMessage">
+            <span ng-switch-when="generic" translate>
+              An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+            </span>
+            <span ng-switch-default>
+              {{$ctrl.errorMessage | translate}}
+            </span>
+          </div>
+          
+          <div class="row text-center">
+            <div class="col-xs-12">
+              <h4 translate>Your email has been verified!</h4>
+              <p translate style="margin-bottom: 0px">You are almost done creating your new account!</p>
+              <p>All that is left to do is sign in, and fill out your profile information.</p>
+            </div>
+          </div>
+
+          <div class="row active-account">
+            <sign-in-button
+              on-success="$ctrl.onSuccessfulSignIn()"
+              on-failure="$ctrl.onFailure()"
+              last-purchase-id="$ctrl.lastPurchaseId"
+              error-message="$ctrl.errorMessage"
+            ></sign-in-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
