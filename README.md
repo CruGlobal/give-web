@@ -1,7 +1,7 @@
 # give-web
 ## Angular front-end components for use in AEM on [give.cru.org](https://give.cru.org)
 
-[![Build Status](https://github.com/CruGlobal/give-web/actions)](https://github.com/CruGlobal/give-web/actions)
+[![Build Status](https://github.com/CruGlobal/give-web/actions/workflows/build.yml/badge.svg)](https://github.com/CruGlobal/give-web/actions)
 [![codecov](https://codecov.io/gh/CruGlobal/give-web/branch/master/graph/badge.svg)](https://codecov.io/gh/CruGlobal/give-web)
 
 ## Usage
