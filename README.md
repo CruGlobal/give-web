@@ -1,7 +1,7 @@
 # give-web
 ## Angular front-end components for use in AEM on [give.cru.org](https://give.cru.org)
 
-[![Build Status](https://github.com/CruGlobal/give-web/actions)](https://github.com/CruGlobal/give-web/actions)
+[![Build Status](https://github.com/CruGlobal/give-web/actions/workflows/build.yml/badge.svg)](https://github.com/CruGlobal/give-web/actions)
 [![codecov](https://codecov.io/gh/CruGlobal/give-web/branch/master/graph/badge.svg)](https://codecov.io/gh/CruGlobal/give-web)
 
 ## Usage
@@ -202,7 +202,7 @@ Note: For session cookies to work correctly, add an entry to your hosts file for
 Use the `cortexApiService` which provides convenience methods for sending requests to Cortex. For more documentation see the [cortexApiService docs](docs/cortexApiService.md).
 
 ### Staging Environment
-Replace `https://give-static.cru.org` with `https://give-stage-static.cru.org` to use the staging environment. 
+Replace `https://give-static.cru.org` with `https://give-stage-static.cru.org` to use the staging environment.
 
 ### Deployments
 
