@@ -171,6 +171,18 @@ class Step3Controller {
       componentInstance.$window.scrollTo(0, 0)
     })
   }
+
+  handleRecaptchaFailure (componentInstance) {
+    componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+    componentInstance.submittingOrder = false
+    componentInstance.onSubmittingOrder({ value: false })
+
+    componentInstance.loadCart()
+
+    componentInstance.onSubmitted()
+    componentInstance.submissionError = 'generic error'
+    componentInstance.$window.scrollTo(0, 0)
+  }
 }
 
 export default angular

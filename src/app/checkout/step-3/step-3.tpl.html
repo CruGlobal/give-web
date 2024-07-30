@@ -204,6 +204,7 @@
               <div class="checkout-cta pull-right">
                 <recaptcha-wrapper action="'submit'"
                            on-success="$ctrl.submitOrderInternal"
+                           on-failure="$ctrl.handleRecaptchaFailure"
                            component-instance="$ctrl.selfReference"
                            button-id="'submitOrderButton'"
                            button-type="'submit'"

@@ -9,6 +9,7 @@ const componentName = 'recaptcha'
 interface RecaptchaProps {
   action: string
   onSuccess: (componentInstance: any) => void
+  onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
   buttonType?: 'submit' | 'reset' | 'button' | undefined
@@ -22,6 +23,7 @@ interface RecaptchaProps {
 export const Recaptcha = ({
   action,
   onSuccess,
+  onFailure,
   componentInstance,
   buttonId,
   buttonType,
@@ -54,9 +56,12 @@ export const Recaptcha = ({
       successFunctionRun = true
       return Promise.reject(error)
     }).then(function (data) {
-      if (data && data.success === true && data.action === 'submit') {
+      if (data?.success === true && data?.action === 'submit') {
         if (data.score < 0.5) {
           $log.warn(`Captcha score was below the threshold: ${data.score}`)
+          successFunctionRun = false
+          onFailure(componentInstance)
+          return
         }
         onSuccess(componentInstance)
         successFunctionRun = true

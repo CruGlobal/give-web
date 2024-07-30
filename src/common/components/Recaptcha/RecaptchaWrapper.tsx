@@ -9,6 +9,7 @@ const componentName = 'recaptchaWrapper'
 interface RecaptchaWrapperProps {
   action: string
   onSuccess: (componentInstance: any) => void
+  onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
   buttonType?: 'submit' | 'reset' | 'button' | undefined
@@ -23,6 +24,7 @@ interface RecaptchaWrapperProps {
 export const RecaptchaWrapper = ({
   action,
   onSuccess,
+  onFailure,
   componentInstance,
   buttonId,
   buttonType,
@@ -38,6 +40,7 @@ export const RecaptchaWrapper = ({
     <GoogleReCaptchaProvider reCaptchaKey={recaptchaKey}>
       <Recaptcha action={action}
                  onSuccess={onSuccess}
+                 onFailure={onFailure}
                  componentInstance={componentInstance}
                  buttonId={buttonId}
                  buttonType={buttonType}
@@ -59,6 +62,7 @@ export default angular
       [
         'action',
         'onSuccess',
+        'onFailure',
         'componentInstance',
         'buttonId',
         'buttonType',
