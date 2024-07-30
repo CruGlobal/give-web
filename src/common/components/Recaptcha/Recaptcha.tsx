@@ -63,7 +63,7 @@ export const Recaptcha = ({
         return
       }
       if (!data && !successFunctionRun) {
-        $log.warn('Data was falsy!')
+        $log.warn('Data was missing!')
         onSuccess(componentInstance)
         successFunctionRun = true
       }

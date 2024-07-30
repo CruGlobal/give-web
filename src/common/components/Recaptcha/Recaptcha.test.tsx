@@ -197,7 +197,7 @@ describe('Recaptcha component', () => {
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect($log.warn).toHaveBeenCalledWith('Data was falsy!')
+      expect($log.warn).toHaveBeenCalledWith('Data was missing!')
     })
   })
 
