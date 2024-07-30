@@ -445,5 +445,21 @@ describe('checkout', () => {
         })
       })
     })
+
+    describe('handleRecaptchaFailure', () => {
+      it('should show an error if recaptcha fails', () => {
+        const componentInstance = self.controller
+        jest.spyOn(componentInstance.analyticsFactory, 'checkoutFieldError').mockImplementation(() => {})
+        self.controller.handleRecaptchaFailure(componentInstance)
+
+        expect(componentInstance.analyticsFactory.checkoutFieldError).toHaveBeenCalledWith('submitOrder', 'failed')
+        expect(componentInstance.submittingOrder).toEqual(false)
+        expect(componentInstance.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
+        expect(componentInstance.loadCart).toHaveBeenCalled()
+        expect(componentInstance.onSubmitted).toHaveBeenCalled()
+        expect(componentInstance.submissionError).toEqual('generic error')
+        expect(componentInstance.$window.scrollTo).toHaveBeenCalledWith(0, 0)
+      })
+    })
   })
 })

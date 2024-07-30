@@ -71,16 +71,16 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('warning'))
+    const onFailure = jest.fn(() => console.log('warning'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha(undefined, onFailure)
     )
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect($log.warn).toHaveBeenCalledWith('Captcha score was below the threshold: 0.2')
-      expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(onFailure).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -92,15 +92,15 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('fail'))
+    const onFailure = jest.fn(() => console.log('fail'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha(undefined, onFailure)
     )
 
     await userEvent.click(getByRole('button'))
     await waitFor(() =>
-      expect(onSuccess).not.toHaveBeenCalled()
+      expect(onFailure).not.toHaveBeenCalled()
     )
   })
 
@@ -201,10 +201,11 @@ describe('Recaptcha component', () => {
     })
   })
 
-  const buildRecaptcha = (onSuccess: (componentInstance: any) => void) => {
+  const buildRecaptcha = (onSuccess?: (componentInstance: any) => void, onFailure?: (componentInstance: any) => void) => {
     return <Recaptcha
       action='submit'
-      onSuccess={onSuccess}
+      onSuccess={onSuccess ?? jest.fn()}
+      onFailure={onFailure ?? jest.fn()}
       componentInstance={{}}
       buttonId='id'
       buttonType='submit'
