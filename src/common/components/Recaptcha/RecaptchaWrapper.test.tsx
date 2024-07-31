@@ -25,6 +25,7 @@ describe('RecaptchaWrapper component', () => {
       <RecaptchaWrapper
         action='submit'
         onSuccess={onSuccess}
+        onFailure={jest.fn()}
         componentInstance={{}}
         buttonId='id'
         buttonType='submit'

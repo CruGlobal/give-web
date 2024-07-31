@@ -218,7 +218,9 @@
                 <display-rate-totals rate-totals="$ctrl.cartData.frequencyTotals"></display-rate-totals>
               </div>
               <div class="checkout-cta pull-right">
-                <recaptcha-wrapper action="'submit'"
+                <recaptcha-wrapper
+                           ng-if="!$ctrl.isBranded"
+                           action="'submit'"
                            on-success="$ctrl.submitOrderInternal"
                            on-failure="$ctrl.handleRecaptchaFailure"
                            component-instance="$ctrl.selfReference"
@@ -227,6 +229,16 @@
                            button-classes="'btn btn-primary btn-lg btn-block'"
                            button-disabled="!$ctrl.canSubmitOrder()"
                            button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
+                  <button
+                      ng-if="$ctrl.isBranded"
+                      id="submitOrderButton"
+                      type="submit"
+                      class="btn btn-primary btn-lg btn-block"
+                      ng-click="$ctrl.submitOrder()"
+                      ng-disabled="!$ctrl.canSubmitOrder()"
+                      translate>
+                  {{'SUBMIT_GIFT'}}
+                </button>
               </div>
             </td>
           </tr>
