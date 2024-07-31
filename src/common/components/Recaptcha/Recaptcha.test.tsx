@@ -47,7 +47,7 @@ describe('Recaptcha component', () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
-        json: () => Promise.resolve({ success: true, score: 0.9, action: 'submit' })
+        json: () => Promise.resolve({ success: true, score: 0.9, action: 'submit_gift' })
       })
     })
 
@@ -67,7 +67,7 @@ describe('Recaptcha component', () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
-        json: () => Promise.resolve({ success: true, score: 0.2, action: 'submit' })
+        json: () => Promise.resolve({ success: true, score: 0.2, action: 'submit_gift' })
       })
     })
 
@@ -88,7 +88,7 @@ describe('Recaptcha component', () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
-        json: () => Promise.resolve({ success: false, error: 'some error', action: 'submit' })
+        json: () => Promise.resolve({ success: false, error: 'some error', action: 'submit_gift' })
       })
     })
 
@@ -203,7 +203,7 @@ describe('Recaptcha component', () => {
 
   const buildRecaptcha = (onSuccess?: (componentInstance: any) => void, onFailure?: (componentInstance: any) => void) => {
     return <Recaptcha
-      action='submit'
+      action='submit_gift'
       onSuccess={onSuccess ?? jest.fn()}
       onFailure={onFailure ?? jest.fn()}
       componentInstance={{}}

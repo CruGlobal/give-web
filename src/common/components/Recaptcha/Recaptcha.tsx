@@ -56,7 +56,7 @@ export const Recaptcha = ({
       successFunctionRun = true
       return Promise.reject(error)
     }).then(function (data) {
-      if (data?.success === true && data?.action === 'submit') {
+      if (data?.success === true && data?.action === 'submit_gift') {
         if (data.score < 0.5) {
           $log.warn(`Captcha score was below the threshold: ${data.score}`)
           successFunctionRun = false
