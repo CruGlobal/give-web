@@ -10,6 +10,8 @@ import sessionService, { SignInEvent } from 'common/services/session/session.ser
 import capitalizeFilter from 'common/filters/capitalize.filter'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
+import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
+
 import analyticsFactory from 'app/analytics/analytics.factory'
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import displayAddressComponent from 'common/components/display-address/display-address.component'
@@ -32,6 +34,7 @@ class Step3Controller {
     this.startDate = startDate
     this.sessionStorage = $window.sessionStorage
     this.sessionService = sessionService
+    this.selfReference = this
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -132,49 +135,65 @@ class Step3Controller {
   }
 
   submitOrder () {
-    delete this.submissionError
-    delete this.submissionErrorStatus
+    this.submitOrderInternal(this)
+  }
+
+  submitOrderInternal (componentInstance) {
+    delete componentInstance.submissionError
+    delete componentInstance.submissionErrorStatus
     // Prevent multiple submissions
-    if (this.submittingOrder) return
-    this.submittingOrder = true
-    this.onSubmittingOrder({ value: true })
+    if (componentInstance.submittingOrder) return
+    componentInstance.submittingOrder = true
+    componentInstance.onSubmittingOrder({ value: true })
 
     let submitRequest
-    if (this.bankAccountPaymentDetails) {
-      submitRequest = this.orderService.submit()
-    } else if (this.creditCardPaymentDetails) {
-      const cvv = this.orderService.retrieveCardSecurityCode()
-      submitRequest = this.orderService.submit(cvv)
+    if (componentInstance.bankAccountPaymentDetails) {
+      submitRequest = componentInstance.orderService.submit()
+    } else if (componentInstance.creditCardPaymentDetails) {
+      const cvv = componentInstance.orderService.retrieveCardSecurityCode()
+      submitRequest = componentInstance.orderService.submit(cvv)
     } else {
       submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
     }
     submitRequest.subscribe(() => {
-      this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
-      this.submittingOrder = false
-      this.onSubmittingOrder({ value: false })
-      this.orderService.clearCardSecurityCodes()
-      this.orderService.clearCoverFees()
-      this.onSubmitted()
-      this.$scope.$emit(cartUpdatedEvent)
-      this.saveDonorDataForRegistration()
-      this.changeStep({ newStep: 'thankYou' })
+      componentInstance.analyticsFactory.purchase(componentInstance.donorDetails, componentInstance.cartData, componentInstance.orderService.retrieveCoverFeeDecision())
+      componentInstance.submittingOrder = false
+      componentInstance.onSubmittingOrder({ value: false })
+      componentInstance.orderService.clearCardSecurityCodes()
+      componentInstance.orderService.clearCoverFees()
+      componentInstance.onSubmitted()
+      componentInstance.$scope.$emit(cartUpdatedEvent)
+      componentInstance.saveDonorDataForRegistration()
+      componentInstance.changeStep({ newStep: 'thankYou' })
     },
     error => {
-      this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-      this.submittingOrder = false
-      this.onSubmittingOrder({ value: false })
+      componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+      componentInstance.submittingOrder = false
+      componentInstance.onSubmittingOrder({ value: false })
 
-      this.loadCart()
+      componentInstance.loadCart()
 
       if (error.config && error.config.data && error.config.data['security-code']) {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }
-      this.$log.error('Error submitting purchase:', error)
-      this.onSubmitted()
-      this.submissionErrorStatus = error.status
-      this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
-      this.$window.scrollTo(0, 0)
+      componentInstance.$log.error('Error submitting purchase:', error)
+      componentInstance.onSubmitted()
+      componentInstance.submissionErrorStatus = error.status
+      componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
+      componentInstance.$window.scrollTo(0, 0)
     })
+  }
+
+  handleRecaptchaFailure (componentInstance) {
+    componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+    componentInstance.submittingOrder = false
+    componentInstance.onSubmittingOrder({ value: false })
+
+    componentInstance.loadCart()
+
+    componentInstance.onSubmitted()
+    componentInstance.submissionError = 'generic error'
+    componentInstance.$window.scrollTo(0, 0)
   }
 }
 
@@ -189,7 +208,8 @@ export default angular
     analyticsFactory.name,
     cartService.name,
     commonService.name,
-    sessionService.name
+    sessionService.name,
+    recaptchaComponent.name
   ])
   .component(componentName, {
     controller: Step3Controller,

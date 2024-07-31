@@ -57,7 +57,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         isBrandedCheckout: false,
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
-        oktaReferrer: 'https://localhost.cru.org:9000'
+        oktaReferrer: 'https://localhost.cru.org:9000',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
       },
       devcloud: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -68,7 +69,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
-        oktaReferrer: 'https://give-dev-cloud.cru.org'
+        oktaReferrer: 'https://give-dev-cloud.cru.org',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
       },
       stagecloud: {
         apiUrl: 'https://give-stage-cloud.cru.org',
@@ -79,7 +81,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
-        oktaReferrer: 'https://give-stage-cloud.cru.org'
+        oktaReferrer: 'https://give-stage-cloud.cru.org',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
       },
       prodcloud: {
         apiUrl: 'https://give-prod-cloud.cru.org',
@@ -90,7 +93,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
-        oktaReferrer: 'https://give-prod-cloud.cru.org'
+        oktaReferrer: 'https://give-prod-cloud.cru.org',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -102,7 +106,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         isBrandedCheckout: false,
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
-        oktaReferrer: 'https://give-stage2.cru.org'
+        oktaReferrer: 'https://give-stage2.cru.org',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
       },
       nonprod: {
         apiUrl: 'https://give-stage2-next.cru.org',
@@ -137,7 +142,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         isBrandedCheckout: false,
         oktaUrl: 'https://signon.okta.com',
         oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
-        oktaReferrer: 'https://give.cru.org'
+        oktaReferrer: 'https://give.cru.org',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
       },
       defaults: {
         isCheckout: false,

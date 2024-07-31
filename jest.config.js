@@ -2,6 +2,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
+    'src/**/*.{ts,tsx}',
     '!**/*.fixture.js'
   ],
   restoreMocks: true,
@@ -22,7 +23,7 @@ module.exports = {
   ],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.js?$': 'babel-jest',
+    '^.+\\.(js|tsx)?$': 'babel-jest',
     '^.+\\.html$': '<rootDir>/jest/htmlTransform.js'
   }
 }
