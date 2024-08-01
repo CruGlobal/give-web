@@ -20,15 +20,17 @@ import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
 import template from './step-3.tpl.html'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
+import { recaptchaFailedEvent, submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
 
 const componentName = 'checkoutStep3'
 
 class Step3Controller {
   /* @ngInject */
-  constructor (orderService, $window, $scope, $log, analyticsFactory, cartService, commonService, profileService, envService) {
+  constructor (orderService, $window, $rootScope, $scope, $log, analyticsFactory, cartService, commonService, profileService, envService) {
     this.orderService = orderService
     this.envService = envService
     this.$window = $window
+    this.$rootScope = $rootScope
     this.$scope = $scope
     this.$log = $log
     this.analyticsFactory = analyticsFactory
@@ -42,6 +44,13 @@ class Step3Controller {
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
+    })
+
+    this.$rootScope.$on(recaptchaFailedEvent, () => {
+      this.handleRecaptchaFailure(this)
+    })
+    this.$rootScope.$on(submitOrderEvent, () => {
+      this.submitOrder()
     })
   }
 
