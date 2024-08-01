@@ -100,6 +100,7 @@ export default angular
       [
         'action',
         'onSuccess',
+        'onFailure',
         'componentInstance',
         'buttonId',
         'buttonType',
