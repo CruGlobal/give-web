@@ -12,7 +12,7 @@ interface RecaptchaWrapperProps {
   onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
-  buttonType?: 'submit' | 'reset' | 'button' | undefined
+  buttonType?: 'submit' | 'reset' | 'button'
   buttonClasses: string
   buttonDisabled: boolean
   buttonLabel: string

@@ -12,7 +12,7 @@ interface RecaptchaProps {
   onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
-  buttonType?: 'submit' | 'reset' | 'button' | undefined
+  buttonType?: 'submit' | 'reset' | 'button'
   buttonClasses: string
   buttonDisabled: boolean
   buttonLabel: string
@@ -67,6 +67,12 @@ export const Recaptcha = ({
         successFunctionRun = true
         return
       }
+      if (data?.success === false && data?.action === 'submit_gift') {
+        $log.warn('Recaptcha call was unsuccessful, continuing anyway')
+        onSuccess(componentInstance)
+        successFunctionRun = true
+        return
+      }
       if (!data && !successFunctionRun) {
         $log.warn('Data was missing!')
         onSuccess(componentInstance)
@@ -78,7 +84,6 @@ export const Recaptcha = ({
         onSuccess(componentInstance)
         successFunctionRun = true
       }
-      return
     })
   }, [executeRecaptcha])
 

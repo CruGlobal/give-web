@@ -5,11 +5,11 @@ import module, { submitOrderEvent, recaptchaFailedEvent } from './cart-summary.c
 describe('checkout', function () {
   describe('cart summary', function () {
     beforeEach(angular.mock.module(module.name))
-    var self = {}
+    const self = {}
     const componentInstance = {}
 
     beforeEach(inject(function ($rootScope, $componentController) {
-      var $scope = $rootScope.$new()
+      const $scope = $rootScope.$new()
       componentInstance.$rootScope = $rootScope.$new()
 
       self.controller = $componentController(module.name, {
