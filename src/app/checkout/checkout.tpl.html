@@ -82,8 +82,8 @@
         <checkout-cart-summary cart-data="$ctrl.cartData"
                                show-submit-btn="$ctrl.checkoutStep === 'review'"
                                enable-submit-btn="$ctrl.enableSubmitOrderBtn"
-                               on-submit="$ctrl.submittedOrder = true"
-                               submitting-order="$ctrl.submittingOrder">
+                               submitting-order="$ctrl.submittingOrder"
+                               component-reference="$ctrl.selfReference">
         </checkout-cart-summary>
       </div>
       <div class="col-md-4 hidden-xs hidden-sm pull-right">

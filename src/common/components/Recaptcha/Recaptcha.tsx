@@ -56,13 +56,19 @@ export const Recaptcha = ({
       successFunctionRun = true
       return Promise.reject(error)
     }).then(function (data) {
-      if (data?.success === true && data?.action === 'submit') {
+      if (data?.success === true && data?.action === 'submit_gift') {
         if (data.score < 0.5) {
           $log.warn(`Captcha score was below the threshold: ${data.score}`)
           successFunctionRun = false
           onFailure(componentInstance)
           return
         }
+        onSuccess(componentInstance)
+        successFunctionRun = true
+        return
+      }
+      if (data?.success === false && data?.action === 'submit_gift') {
+        $log.warn('Recaptcha call was unsuccessful, continuing anyway')
         onSuccess(componentInstance)
         successFunctionRun = true
         return
@@ -78,7 +84,6 @@ export const Recaptcha = ({
         onSuccess(componentInstance)
         successFunctionRun = true
       }
-      return
     })
   }, [executeRecaptcha])
 
@@ -100,6 +105,7 @@ export default angular
       [
         'action',
         'onSuccess',
+        'onFailure',
         'componentInstance',
         'buttonId',
         'buttonType',

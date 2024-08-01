@@ -17,15 +17,17 @@ import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.componen
 import displayAddressComponent from 'common/components/display-address/display-address.component'
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
 import template from './step-3.tpl.html'
+import { recaptchaFailedEvent, submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
 
 const componentName = 'checkoutStep3'
 
 class Step3Controller {
   /* @ngInject */
-  constructor (orderService, $window, $scope, $log, analyticsFactory, cartService, commonService, profileService, sessionService, envService) {
+  constructor (orderService, $window, $rootScope, $scope, $log, analyticsFactory, cartService, commonService, profileService, sessionService, envService) {
     this.orderService = orderService
     this.envService = envService
     this.$window = $window
+    this.$rootScope = $rootScope
     this.$scope = $scope
     this.$log = $log
     this.analyticsFactory = analyticsFactory
@@ -40,6 +42,13 @@ class Step3Controller {
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
+    })
+
+    this.$rootScope.$on(recaptchaFailedEvent, () => {
+      this.handleRecaptchaFailure(this)
+    })
+    this.$rootScope.$on(submitOrderEvent, () => {
+      this.submitOrder()
     })
   }
 
