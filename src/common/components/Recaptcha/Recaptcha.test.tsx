@@ -1,4 +1,4 @@
-import { getByRole, render, waitFor } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Recaptcha } from './Recaptcha'
 import React from 'react'
@@ -13,6 +13,8 @@ jest.mock('react-google-recaptcha-v3');
 })
 
 let mockExecuteRecaptcha = jest.fn()
+const onSuccess = jest.fn()
+const onFailure = jest.fn()
 
 describe('Recaptcha component', () => {
   const $translate = {
@@ -28,12 +30,14 @@ describe('Recaptcha component', () => {
     $translate.instant.mockImplementation((input) => input)
     mockExecuteRecaptcha = jest.fn()
     mockExecuteRecaptcha.mockImplementation(() => Promise.resolve('token'))
+    onSuccess.mockClear()
+    onFailure.mockClear()
   })
 
   it('should render', () => {
-    const onSuccess = jest.fn(() => console.log('success'))
+    onSuccess.mockImplementation(() => console.log('success'))
     const { getAllByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
     expect(getAllByRole('button')).toHaveLength(1)
     const recaptchaEnabledButton = getAllByRole('button')[0]
@@ -51,10 +55,10 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('success'))
+    onSuccess.mockImplementation(() => console.log('success'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
@@ -71,10 +75,10 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onFailure = jest.fn(() => console.log('warning'))
+    onFailure.mockImplementation(() => console.log('warning'))
 
     const { getByRole } = render(
-      buildRecaptcha(undefined, onFailure)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
@@ -92,16 +96,17 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onFailure = jest.fn(() => console.log('fail'))
+    onFailure.mockImplementation(() => console.log('fail'))
 
     const { getByRole } = render(
-      buildRecaptcha(undefined, onFailure)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalled()
       expect(onFailure).not.toHaveBeenCalled()
-    )
+    })
   })
 
   it('should skip the success function when not submit', async () => {
@@ -112,32 +117,34 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('fail'))
+    onSuccess.mockImplementation(() => console.log('fail'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
+    await waitFor(() => {
       expect(onSuccess).not.toHaveBeenCalled()
-    )
+      expect(onFailure).not.toHaveBeenCalled()
+    })
   })
 
   it('should skip the recaptcha call', async () => {
     //@ts-ignore
     mockExecuteRecaptcha = undefined
 
-    const onSuccess = jest.fn(() => console.log('fail'))
+    onSuccess.mockImplementation(() => console.log('fail'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
+    await waitFor(() => {
       expect(onSuccess).not.toHaveBeenCalled()
-    )
+      expect(onFailure).not.toHaveBeenCalled()
+    })
   })
 
   it('should not block the gift if something went wrong with recaptcha', async () => {
@@ -146,15 +153,16 @@ describe('Recaptcha component', () => {
       return Promise.reject('Failed')
     })
 
-    const onSuccess = jest.fn(() => console.log('success after error'))
+    onSuccess.mockImplementation(() => console.log('success after error'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(onFailure).not.toHaveBeenCalled()
       expect($log.error).toHaveBeenCalledWith('Failed to verify recaptcha, continuing on: Failed')
     })
   })
@@ -167,15 +175,16 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('success after JSON error'))
+    onSuccess.mockImplementation(() => console.log('success after JSON error'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(onFailure).not.toHaveBeenCalled()
       expect($log.error).toHaveBeenCalledWith('Failed to return recaptcha JSON, continuing on: Failed')
     })
   })
@@ -188,24 +197,25 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('success after weird'))
+    onSuccess.mockImplementation(() => console.log('success after weird'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(onFailure).not.toHaveBeenCalled()
       expect($log.warn).toHaveBeenCalledWith('Data was missing!')
     })
   })
 
-  const buildRecaptcha = (onSuccess?: (componentInstance: any) => void, onFailure?: (componentInstance: any) => void) => {
+  const buildRecaptcha = () => {
     return <Recaptcha
       action='submit_gift'
-      onSuccess={onSuccess ?? jest.fn()}
-      onFailure={onFailure ?? jest.fn()}
+      onSuccess={onSuccess}
+      onFailure={onFailure}
       componentInstance={{}}
       buttonId='id'
       buttonType='submit'

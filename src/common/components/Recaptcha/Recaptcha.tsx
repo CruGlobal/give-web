@@ -67,6 +67,12 @@ export const Recaptcha = ({
         successFunctionRun = true
         return
       }
+      if (data?.success === false && data?.action === 'submit_gift') {
+        $log.warn('Recaptcha call was unsuccessful, continuing anyway')
+        onSuccess(componentInstance)
+        successFunctionRun = true
+        return
+      }
       if (!data && !successFunctionRun) {
         $log.warn('Data was missing!')
         onSuccess(componentInstance)
@@ -78,7 +84,6 @@ export const Recaptcha = ({
         onSuccess(componentInstance)
         successFunctionRun = true
       }
-      return
     })
   }, [executeRecaptcha])
 

@@ -13,7 +13,7 @@ import { recaptchaFailedEvent, submitOrderEvent } from '../cart-summary/cart-sum
 describe('checkout', () => {
   describe('step 3', () => {
     beforeEach(angular.mock.module(module.name))
-    var self = {}
+    const self = {}
 
     beforeEach(inject(function ($rootScope, $componentController) {
       self.loadedPayment = {
