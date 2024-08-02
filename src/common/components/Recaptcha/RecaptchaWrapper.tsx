@@ -52,6 +52,7 @@ export const RecaptchaWrapper = ({
   $log
 }: RecaptchaWrapperProps): JSX.Element => {
   const recaptchaKey = envService.read('recaptchaKey')
+  const apiUrl = envService.read('apiUrl')
 
   useMemo(() => {
     const script = document.createElement('script')
@@ -75,7 +76,8 @@ export const RecaptchaWrapper = ({
                  buttonLabel={buttonLabel}
                  $translate={$translate}
                  $log={$log}
-                 recaptchaKey={recaptchaKey}></Recaptcha>
+                 recaptchaKey={recaptchaKey}
+                 apiUrl={apiUrl}></Recaptcha>
   )
 }
 

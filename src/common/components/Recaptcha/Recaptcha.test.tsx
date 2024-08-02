@@ -71,9 +71,10 @@ describe('Recaptcha component', () => {
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
+    await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
-    )
+      expect(global.fetch).toHaveBeenCalledWith('https://give-stage2.cru.org/recaptcha/verify', expect.anything())
+    })
   })
 
   it('should log a warning due to low score', async () => {
@@ -234,6 +235,7 @@ describe('Recaptcha component', () => {
       $translate={$translate}
       $log={$log}
       recaptchaKey='key'
+      apiUrl={'https://give-stage2.cru.org'}
     />
   }
 })
