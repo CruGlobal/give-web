@@ -2,17 +2,13 @@ import { render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Recaptcha } from './Recaptcha'
 import React from 'react'
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
-
-jest.mock('react-google-recaptcha-v3');
-
-(useGoogleReCaptcha as jest.Mock).mockImplementation(() => {
-  return {
-    executeRecaptcha: mockExecuteRecaptcha
-  }
-})
 
 let mockExecuteRecaptcha = jest.fn()
+const mockRecaptchaReady = jest.fn()
+const mockRecaptcha = {
+  ready: mockRecaptchaReady,
+  execute: mockExecuteRecaptcha
+}
 const onSuccess = jest.fn()
 const onFailure = jest.fn()
 
@@ -27,9 +23,12 @@ describe('Recaptcha component', () => {
   }
 
   beforeEach(() => {
+    global.window.grecaptcha = mockRecaptcha
+
     $translate.instant.mockImplementation((input) => input)
     mockExecuteRecaptcha = jest.fn()
     mockExecuteRecaptcha.mockImplementation(() => Promise.resolve('token'))
+    mockRecaptchaReady.mockImplementation(() => Promise.resolve(true))
     onSuccess.mockClear()
     onFailure.mockClear()
   })
@@ -45,6 +44,17 @@ describe('Recaptcha component', () => {
     expect(recaptchaEnabledButton.className).toEqual('btn')
     expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(false)
     expect(recaptchaEnabledButton.innerHTML).toEqual('Label')
+  })
+
+  it('should disable the button until ready', async () => {
+    global.window.grecaptcha = undefined
+
+    const { getByRole } = render(buildRecaptcha())
+    const recaptchaEnabledButton = getByRole('button')
+    expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(true)
+
+    global.window.grecaptcha = mockRecaptcha
+    await waitFor(() => expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(false))
   })
 
   it('should successfully pass the recaptcha', async () => {
@@ -224,6 +234,7 @@ describe('Recaptcha component', () => {
       buttonLabel='Label'
       $translate={$translate}
       $log={$log}
+      recaptchaKey='key'
     />
   }
 })
