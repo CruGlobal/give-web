@@ -1,10 +1,15 @@
 import angular from 'angular'
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { react2angular } from 'react2angular'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Recaptcha } from './Recaptcha'
 
 const componentName = 'recaptchaWrapper'
+
+declare global {
+  interface Window {
+      grecaptcha: any;
+  }
+}
 
 interface RecaptchaWrapperProps {
   action: string
@@ -19,6 +24,17 @@ interface RecaptchaWrapperProps {
   envService: any
   $translate: any
   $log: any
+}
+
+export const findExistingScript = (): boolean => {
+  const scripts = document.getElementsByTagName('script')
+
+  for (let script of scripts) {
+    if (script.src.startsWith('https://www.google.com/recaptcha/api.js?render=')) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export const RecaptchaWrapper = ({
@@ -36,8 +52,18 @@ export const RecaptchaWrapper = ({
   $log
 }: RecaptchaWrapperProps): JSX.Element => {
   const recaptchaKey = envService.read('recaptchaKey')
+
+  useMemo(() => {
+    const script = document.createElement('script')
+    script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`
+    script.id = 'give-checkout-recaptcha'
+
+    if (!findExistingScript()) {
+      document.body.appendChild(script)
+    }
+  }, [])
+
   return (
-    <GoogleReCaptchaProvider reCaptchaKey={recaptchaKey}>
       <Recaptcha action={action}
                  onSuccess={onSuccess}
                  onFailure={onFailure}
@@ -48,8 +74,8 @@ export const RecaptchaWrapper = ({
                  buttonDisabled={buttonDisabled}
                  buttonLabel={buttonLabel}
                  $translate={$translate}
-                 $log={$log}></Recaptcha>
-    </GoogleReCaptchaProvider>
+                 $log={$log}
+                 recaptchaKey={recaptchaKey}></Recaptcha>
   )
 }
 
