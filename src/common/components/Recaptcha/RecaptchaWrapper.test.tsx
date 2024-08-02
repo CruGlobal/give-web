@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react'
 import { findExistingScript, RecaptchaWrapper } from './RecaptchaWrapper'
 import React from 'react'
+import { ButtonType } from './Recaptcha'
 
 describe('RecaptchaWrapper component', () => {
   const $translate = {
@@ -40,7 +41,7 @@ describe('RecaptchaWrapper component', () => {
         onFailure={jest.fn()}
         componentInstance={{}}
         buttonId='id'
-        buttonType='submit'
+        buttonType={ButtonType.Submit}
         buttonClasses='btn'
         buttonDisabled={false}
         buttonLabel='Label'
@@ -67,7 +68,7 @@ describe('RecaptchaWrapper component', () => {
         onFailure={jest.fn()}
         componentInstance={{}}
         buttonId='id'
-        buttonType='submit'
+        buttonType={ButtonType.Submit}
         buttonClasses='btn'
         buttonDisabled={false}
         buttonLabel='Label'
