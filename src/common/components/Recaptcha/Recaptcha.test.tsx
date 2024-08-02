@@ -1,18 +1,16 @@
-import { getByRole, render, waitFor } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Recaptcha } from './Recaptcha'
 import React from 'react'
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
-
-jest.mock('react-google-recaptcha-v3');
-
-(useGoogleReCaptcha as jest.Mock).mockImplementation(() => {
-  return {
-    executeRecaptcha: mockExecuteRecaptcha
-  }
-})
 
 let mockExecuteRecaptcha = jest.fn()
+const mockRecaptchaReady = jest.fn()
+const mockRecaptcha = {
+  ready: mockRecaptchaReady,
+  execute: mockExecuteRecaptcha
+}
+const onSuccess = jest.fn()
+const onFailure = jest.fn()
 
 describe('Recaptcha component', () => {
   const $translate = {
@@ -25,15 +23,19 @@ describe('Recaptcha component', () => {
   }
 
   beforeEach(() => {
+    global.window.grecaptcha = mockRecaptcha
+
     $translate.instant.mockImplementation((input) => input)
-    mockExecuteRecaptcha = jest.fn()
     mockExecuteRecaptcha.mockImplementation(() => Promise.resolve('token'))
+    mockRecaptchaReady.mockImplementation((callback) => { callback() })
+    onSuccess.mockClear()
+    onFailure.mockClear()
   })
 
   it('should render', () => {
-    const onSuccess = jest.fn(() => console.log('success'))
+    onSuccess.mockImplementation(() => console.log('success'))
     const { getAllByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
     expect(getAllByRole('button')).toHaveLength(1)
     const recaptchaEnabledButton = getAllByRole('button')[0]
@@ -43,18 +45,29 @@ describe('Recaptcha component', () => {
     expect(recaptchaEnabledButton.innerHTML).toEqual('Label')
   })
 
+  it('should disable the button until ready', async () => {
+    global.window.grecaptcha = undefined
+
+    const { getByRole } = render(buildRecaptcha())
+    const recaptchaEnabledButton = getByRole('button')
+    expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(true)
+
+    global.window.grecaptcha = mockRecaptcha
+    await waitFor(() => expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(false))
+  })
+
   it('should successfully pass the recaptcha', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
-        json: () => Promise.resolve({ success: true, score: 0.9, action: 'submit' })
+        json: () => Promise.resolve({ success: true, score: 0.9, action: 'submit_gift' })
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('success'))
+    onSuccess.mockImplementation(() => console.log('success'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
@@ -67,14 +80,14 @@ describe('Recaptcha component', () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
-        json: () => Promise.resolve({ success: true, score: 0.2, action: 'submit' })
+        json: () => Promise.resolve({ success: true, score: 0.2, action: 'submit_gift' })
       })
     })
 
-    const onFailure = jest.fn(() => console.log('warning'))
+    onFailure.mockImplementation(() => console.log('warning'))
 
     const { getByRole } = render(
-      buildRecaptcha(undefined, onFailure)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
@@ -88,20 +101,21 @@ describe('Recaptcha component', () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
-        json: () => Promise.resolve({ success: false, error: 'some error', action: 'submit' })
+        json: () => Promise.resolve({ success: false, error: 'some error', action: 'submit_gift' })
       })
     })
 
-    const onFailure = jest.fn(() => console.log('fail'))
+    onFailure.mockImplementation(() => console.log('fail'))
 
     const { getByRole } = render(
-      buildRecaptcha(undefined, onFailure)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalled()
       expect(onFailure).not.toHaveBeenCalled()
-    )
+    })
   })
 
   it('should skip the success function when not submit', async () => {
@@ -112,32 +126,34 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('fail'))
+    onSuccess.mockImplementation(() => console.log('fail'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
+    await waitFor(() => {
       expect(onSuccess).not.toHaveBeenCalled()
-    )
+      expect(onFailure).not.toHaveBeenCalled()
+    })
   })
 
   it('should skip the recaptcha call', async () => {
     //@ts-ignore
-    mockExecuteRecaptcha = undefined
+    global.window.grecaptcha = { ready: mockRecaptchaReady }
 
-    const onSuccess = jest.fn(() => console.log('fail'))
+    onSuccess.mockImplementation(() => console.log('fail'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
-      expect(onSuccess).not.toHaveBeenCalled()
-    )
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalled()
+      expect(onFailure).not.toHaveBeenCalled()
+    })
   })
 
   it('should not block the gift if something went wrong with recaptcha', async () => {
@@ -146,15 +162,16 @@ describe('Recaptcha component', () => {
       return Promise.reject('Failed')
     })
 
-    const onSuccess = jest.fn(() => console.log('success after error'))
+    onSuccess.mockImplementation(() => console.log('success after error'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(onFailure).not.toHaveBeenCalled()
       expect($log.error).toHaveBeenCalledWith('Failed to verify recaptcha, continuing on: Failed')
     })
   })
@@ -167,16 +184,17 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('success after JSON error'))
+    onSuccess.mockImplementation(() => console.log('success after JSON error'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect($log.error).toHaveBeenCalledWith('Failed to return recaptcha JSON, continuing on: Failed')
+      expect(onFailure).not.toHaveBeenCalled()
+      expect($log.error).toHaveBeenCalledWith(`Failed to verify recaptcha, continuing on: Failed`)
     })
   })
 
@@ -188,24 +206,25 @@ describe('Recaptcha component', () => {
       })
     })
 
-    const onSuccess = jest.fn(() => console.log('success after weird'))
+    onSuccess.mockImplementation(() => console.log('success after weird'))
 
     const { getByRole } = render(
-      buildRecaptcha(onSuccess)
+      buildRecaptcha()
     )
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(onFailure).not.toHaveBeenCalled()
       expect($log.warn).toHaveBeenCalledWith('Data was missing!')
     })
   })
 
-  const buildRecaptcha = (onSuccess?: (componentInstance: any) => void, onFailure?: (componentInstance: any) => void) => {
+  const buildRecaptcha = () => {
     return <Recaptcha
-      action='submit'
-      onSuccess={onSuccess ?? jest.fn()}
-      onFailure={onFailure ?? jest.fn()}
+      action='submit_gift'
+      onSuccess={onSuccess}
+      onFailure={onFailure}
       componentInstance={{}}
       buttonId='id'
       buttonType='submit'
@@ -214,6 +233,7 @@ describe('Recaptcha component', () => {
       buttonLabel='Label'
       $translate={$translate}
       $log={$log}
+      recaptchaKey='key'
     />
   }
 })

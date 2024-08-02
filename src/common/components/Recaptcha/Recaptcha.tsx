@@ -1,10 +1,20 @@
 import angular from 'angular'
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { react2angular } from 'react2angular'
-import { useCallback } from 'react'
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 const componentName = 'recaptcha'
+
+declare global {
+  interface Window {
+      grecaptcha: any;
+  }
+}
+
+export enum ButtonType {
+  Submit = 'submit',
+  Reset = 'reset',
+  Button = 'button'
+}
 
 interface RecaptchaProps {
   action: string
@@ -12,12 +22,13 @@ interface RecaptchaProps {
   onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
-  buttonType?: 'submit' | 'reset' | 'button' | undefined
+  buttonType?: ButtonType
   buttonClasses: string
   buttonDisabled: boolean
   buttonLabel: string
   $translate: any
-  $log: any
+  $log: any,
+  recaptchaKey: string
 }
 
 export const Recaptcha = ({
@@ -31,63 +42,74 @@ export const Recaptcha = ({
   buttonDisabled,
   buttonLabel,
   $translate,
-  $log
+  $log,
+  recaptchaKey
 }: RecaptchaProps): JSX.Element => {
-  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const [ready, setReady] = useState(false)
+  const [grecaptcha, setGrecaptcha] = useState(window.grecaptcha)
+  let timesIntervalRun = 0
+
+  useEffect(() => {
+    const updateRecaptcha = (intervalId: NodeJS.Timer) => {
+      setGrecaptcha(window.grecaptcha)
+      if (timesIntervalRun >= 20 || grecaptcha) {
+        clearInterval(intervalId)
+      }
+      timesIntervalRun++
+    }
+
+    const intervalId = setInterval(() => updateRecaptcha(intervalId), 100)
+    setReady(!!grecaptcha)
+    return () => clearInterval(intervalId);
+  }, [grecaptcha, buttonId])
 
   const handleReCaptchaVerify = useCallback(async () => {
-    if (!executeRecaptcha) {
-      console.log('Execute recaptcha not yet available')
+    if (!ready) {
+      $log.info('Execute recaptcha not yet available')
       return
     }
 
-    let successFunctionRun = false
+    grecaptcha.ready(async () => {
+      try {
+        const token = await grecaptcha.execute(recaptchaKey, { action: action })
+        const serverResponse = await fetch('/bin/cru/recaptcha.json', {
+          method: 'POST',
+          body: JSON.stringify({ token: token })
+        })
+        const data = await serverResponse.json()
 
-    const token = await executeRecaptcha(action)
-    // Do whatever you want with the token
-    fetch('/bin/cru/recaptcha.json', {
-      method: 'POST',
-      body: JSON.stringify({ token: token })
-    }).then(function (res) {
-      return res.json()
-    }, (error: any) => {
-      $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
-      onSuccess(componentInstance)
-      successFunctionRun = true
-      return Promise.reject(error)
-    }).then(function (data) {
-      if (data?.success === true && data?.action === 'submit') {
-        if (data.score < 0.5) {
-          $log.warn(`Captcha score was below the threshold: ${data.score}`)
-          successFunctionRun = false
-          onFailure(componentInstance)
+        if (data?.success === true && data?.action === 'submit_gift') {
+          if (data.score < 0.5) {
+            $log.warn(`Captcha score was below the threshold: ${data.score}`)
+            onFailure(componentInstance)
+            return
+          }
+          onSuccess(componentInstance)
           return
         }
+        if (data?.success === false && data?.action === 'submit_gift') {
+          $log.warn('Recaptcha call was unsuccessful, continuing anyway')
+          onSuccess(componentInstance)
+          return
+        }
+        if (!data) {
+          $log.warn('Data was missing!')
+          onSuccess(componentInstance)
+        }
+      } catch (error) {
+        $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
         onSuccess(componentInstance)
-        successFunctionRun = true
-        return
       }
-      if (!data && !successFunctionRun) {
-        $log.warn('Data was missing!')
-        onSuccess(componentInstance)
-        successFunctionRun = true
-      }
-    }, (error: any) => {
-      $log.error(`Failed to return recaptcha JSON, continuing on: ${error}`)
-      if (!successFunctionRun) {
-        onSuccess(componentInstance)
-        successFunctionRun = true
-      }
-      return
     })
-  }, [executeRecaptcha])
+  }, [grecaptcha, buttonId, ready])
 
   return (
     <button id={buttonId}
             type={buttonType}
             onClick={handleReCaptchaVerify}
             className={buttonClasses}
-            disabled={buttonDisabled}>{$translate.instant(buttonLabel)}</button>
+            disabled={buttonDisabled || !ready}>{$translate.instant(buttonLabel)}</button>
   )
 }
 
@@ -100,6 +122,7 @@ export default angular
       [
         'action',
         'onSuccess',
+        'onFailure',
         'componentInstance',
         'buttonId',
         'buttonType',

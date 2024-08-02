@@ -8,13 +8,14 @@ import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.componen
 import { SignInEvent } from 'common/services/session/session.service'
 
 import module from './step-3.component'
+import { recaptchaFailedEvent, submitOrderEvent } from '../cart-summary/cart-summary.component'
 
 describe('checkout', () => {
   describe('step 3', () => {
     beforeEach(angular.mock.module(module.name))
-    var self = {}
+    const self = {}
 
-    beforeEach(inject(function ($componentController) {
+    beforeEach(inject(function ($rootScope, $componentController) {
       self.loadedPayment = {
         self: {
           type: null
@@ -47,7 +48,8 @@ describe('checkout', () => {
         },
         $window: {
           scrollTo: jest.fn()
-        }
+        },
+        $rootScope: $rootScope.$new()
       },
       {
         loadCart: jest.fn(),
@@ -459,6 +461,20 @@ describe('checkout', () => {
         expect(componentInstance.onSubmitted).toHaveBeenCalled()
         expect(componentInstance.submissionError).toEqual('generic error')
         expect(componentInstance.$window.scrollTo).toHaveBeenCalledWith(0, 0)
+      })
+    })
+
+    describe('event handling', () => {
+      it('should call submit order if the submitOrderEvent is received', () => {
+        jest.spyOn(self.controller, 'submitOrder').mockImplementation(() => {})
+        self.controller.$rootScope.$emit(submitOrderEvent)
+        expect(self.controller.submitOrder).toHaveBeenCalled()
+      })
+
+      it('should call handleRecaptchaFailure if the recaptchaFailedEvent is received', () => {
+        jest.spyOn(self.controller, 'handleRecaptchaFailure').mockImplementation(() => {})
+        self.controller.$rootScope.$emit(recaptchaFailedEvent)
+        expect(self.controller.handleRecaptchaFailure).toHaveBeenCalledWith(self.controller)
       })
     })
   })

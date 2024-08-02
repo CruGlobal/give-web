@@ -39,6 +39,7 @@ class CheckoutController {
     this.sessionEnforcerService = sessionEnforcerService
     this.loadingCartData = true
     this.analyticsFactory = analyticsFactory
+    this.selfReference = this
   }
 
   $onInit () {

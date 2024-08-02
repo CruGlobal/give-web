@@ -1,14 +1,16 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module from './cart-summary.component'
+import module, { submitOrderEvent, recaptchaFailedEvent } from './cart-summary.component'
 
 describe('checkout', function () {
   describe('cart summary', function () {
     beforeEach(angular.mock.module(module.name))
-    var self = {}
+    const self = {}
+    const componentInstance = {}
 
     beforeEach(inject(function ($rootScope, $componentController) {
-      var $scope = $rootScope.$new()
+      const $scope = $rootScope.$new()
+      componentInstance.$rootScope = $rootScope.$new()
 
       self.controller = $componentController(module.name, {
         $scope: $scope
@@ -24,6 +26,22 @@ describe('checkout', function () {
         jest.spyOn(self.controller.cartService, 'buildCartUrl')
         self.controller.buildCartUrl()
         expect(self.controller.cartService.buildCartUrl).toHaveBeenCalled()
+      })
+    })
+
+    describe('onSubmit', () => {
+      it('should emit an event', () => {
+        jest.spyOn(componentInstance.$rootScope, '$emit').mockImplementation(() => {})
+        self.controller.onSubmit(componentInstance)
+        expect(componentInstance.$rootScope.$emit).toHaveBeenCalledWith(submitOrderEvent)
+      })
+    })
+
+    describe('handleRecaptchaFailure', () => {
+      it('should emit an event', () => {
+        jest.spyOn(componentInstance.$rootScope, '$emit').mockImplementation(() => {})
+        self.controller.handleRecaptchaFailure(componentInstance)
+        expect(componentInstance.$rootScope.$emit).toHaveBeenCalledWith(recaptchaFailedEvent)
       })
     })
   })
