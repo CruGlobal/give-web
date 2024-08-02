@@ -1,6 +1,6 @@
 import { render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Recaptcha } from './Recaptcha'
+import { ButtonType, Recaptcha } from './Recaptcha'
 import React from 'react'
 
 let mockExecuteRecaptcha = jest.fn()
@@ -71,9 +71,10 @@ describe('Recaptcha component', () => {
     )
 
     await userEvent.click(getByRole('button'))
-    await waitFor(() =>
+    await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
-    )
+      expect(global.fetch).toHaveBeenCalledWith('https://give-stage2.cru.org/bin/cru/recaptcha.json', expect.anything())
+    })
   })
 
   it('should log a warning due to low score', async () => {
@@ -227,13 +228,14 @@ describe('Recaptcha component', () => {
       onFailure={onFailure}
       componentInstance={{}}
       buttonId='id'
-      buttonType='submit'
+      buttonType={ButtonType.Submit}
       buttonClasses='btn'
       buttonDisabled={false}
       buttonLabel='Label'
       $translate={$translate}
       $log={$log}
       recaptchaKey='key'
+      apiUrl={'https://give-stage2.cru.org'}
     />
   }
 })

@@ -28,7 +28,8 @@ interface RecaptchaProps {
   buttonLabel: string
   $translate: any
   $log: any,
-  recaptchaKey: string
+  recaptchaKey: string,
+  apiUrl: string,
 }
 
 export const Recaptcha = ({
@@ -43,7 +44,8 @@ export const Recaptcha = ({
   buttonLabel,
   $translate,
   $log,
-  recaptchaKey
+  recaptchaKey,
+  apiUrl
 }: RecaptchaProps): JSX.Element => {
 
   const [ready, setReady] = useState(false)
@@ -73,7 +75,7 @@ export const Recaptcha = ({
     grecaptcha.ready(async () => {
       try {
         const token = await grecaptcha.execute(recaptchaKey, { action: action })
-        const serverResponse = await fetch('/bin/cru/recaptcha.json', {
+        const serverResponse = await fetch(`${apiUrl}/bin/cru/recaptcha.json`, {
           method: 'POST',
           body: JSON.stringify({ token: token })
         })
@@ -128,7 +130,9 @@ export default angular
         'buttonType',
         'buttonClasses',
         'buttonDisabled',
-        'buttonLabel'
+        'buttonLabel',
+        'recaptchaKey',
+        'apiUrl'
       ],
       ['$translate', '$log']))
 
