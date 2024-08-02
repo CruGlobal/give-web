@@ -65,55 +65,35 @@ export const Recaptcha = ({
     }
 
     grecaptcha.ready(async () => {
-      let successFunctionRun = false
-
       try {
         const token = await grecaptcha.execute(recaptchaKey, { action: action })
-        // Do whatever you want with the token
-        fetch('/bin/cru/recaptcha.json', {
+        const serverResponse = await fetch('/bin/cru/recaptcha.json', {
           method: 'POST',
           body: JSON.stringify({ token: token })
-        }).then(function (res) {
-          return res.json()
-        }, (error: any) => {
-          $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
-          onSuccess(componentInstance)
-          successFunctionRun = true
-          return Promise.reject(error)
-        }).then(function (data) {
-          if (data?.success === true && data?.action === 'submit_gift') {
-            if (data.score < 0.5) {
-              $log.warn(`Captcha score was below the threshold: ${data.score}`)
-              successFunctionRun = false
-              onFailure(componentInstance)
-              return
-            }
-            onSuccess(componentInstance)
-            successFunctionRun = true
-            return
-          }
-          if (data?.success === false && data?.action === 'submit_gift') {
-            $log.warn('Recaptcha call was unsuccessful, continuing anyway')
-            onSuccess(componentInstance)
-            successFunctionRun = true
-            return
-          }
-          if (!data && !successFunctionRun) {
-            $log.warn('Data was missing!')
-            onSuccess(componentInstance)
-            successFunctionRun = true
-          }
-        }, (error: any) => {
-          $log.error(`Failed to return recaptcha JSON, continuing on: ${error}`)
-          if (!successFunctionRun) {
-            onSuccess(componentInstance)
-            successFunctionRun = true
-          }
         })
-      } catch (err) {
-        $log.error(`Something went wrong calling execute, continuing on: ${err}`)
+        const data = await serverResponse.json()
+
+        if (data?.success === true && data?.action === 'submit_gift') {
+          if (data.score < 0.5) {
+            $log.warn(`Captcha score was below the threshold: ${data.score}`)
+            onFailure(componentInstance)
+            return
+          }
+          onSuccess(componentInstance)
+          return
+        }
+        if (data?.success === false && data?.action === 'submit_gift') {
+          $log.warn('Recaptcha call was unsuccessful, continuing anyway')
+          onSuccess(componentInstance)
+          return
+        }
+        if (!data) {
+          $log.warn('Data was missing!')
+          onSuccess(componentInstance)
+        }
+      } catch (error) {
+        $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
         onSuccess(componentInstance)
-        successFunctionRun = true
       }
     })
   }, [grecaptcha, buttonId, ready])

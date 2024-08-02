@@ -194,7 +194,7 @@ describe('Recaptcha component', () => {
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
       expect(onFailure).not.toHaveBeenCalled()
-      expect($log.error).toHaveBeenCalledWith('Failed to return recaptcha JSON, continuing on: Failed')
+      expect($log.error).toHaveBeenCalledWith(`Failed to verify recaptcha, continuing on: Failed`)
     })
   })
 
