@@ -1,6 +1,6 @@
 import { render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Recaptcha } from './Recaptcha'
+import { ButtonType, Recaptcha } from './Recaptcha'
 import React from 'react'
 
 let mockExecuteRecaptcha = jest.fn()
@@ -227,7 +227,7 @@ describe('Recaptcha component', () => {
       onFailure={onFailure}
       componentInstance={{}}
       buttonId='id'
-      buttonType='submit'
+      buttonType={ButtonType.Submit}
       buttonClasses='btn'
       buttonDisabled={false}
       buttonLabel='Label'

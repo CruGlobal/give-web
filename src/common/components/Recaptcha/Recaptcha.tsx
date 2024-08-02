@@ -128,7 +128,8 @@ export default angular
         'buttonType',
         'buttonClasses',
         'buttonDisabled',
-        'buttonLabel'
+        'buttonLabel',
+        'recaptchaKey'
       ],
       ['$translate', '$log']))
 
