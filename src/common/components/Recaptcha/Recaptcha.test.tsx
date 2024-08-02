@@ -142,7 +142,7 @@ describe('Recaptcha component', () => {
 
   it('should skip the recaptcha call', async () => {
     //@ts-ignore
-    mockExecuteRecaptcha = undefined
+    global.window.grecaptcha = { ready: mockRecaptchaReady }
 
     onSuccess.mockImplementation(() => console.log('fail'))
 
@@ -152,7 +152,7 @@ describe('Recaptcha component', () => {
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
-      expect(onSuccess).not.toHaveBeenCalled()
+      expect(onSuccess).toHaveBeenCalled()
       expect(onFailure).not.toHaveBeenCalled()
     })
   })
@@ -195,7 +195,7 @@ describe('Recaptcha component', () => {
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
       expect(onFailure).not.toHaveBeenCalled()
-      expect($log.error).toHaveBeenCalledWith('Failed to return recaptcha JSON, continuing on: Failed')
+      expect($log.error).toHaveBeenCalledWith(`Failed to verify recaptcha, continuing on: Failed`)
     })
   })
 
