@@ -1,10 +1,14 @@
 import angular from 'angular'
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { react2angular } from 'react2angular'
-import { useCallback } from 'react'
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 const componentName = 'recaptcha'
+
+declare global {
+  interface Window {
+      grecaptcha: any;
+  }
+}
 
 interface RecaptchaProps {
   action: string
@@ -17,7 +21,8 @@ interface RecaptchaProps {
   buttonDisabled: boolean
   buttonLabel: string
   $translate: any
-  $log: any
+  $log: any,
+  recaptchaKey: string
 }
 
 export const Recaptcha = ({
@@ -31,19 +36,39 @@ export const Recaptcha = ({
   buttonDisabled,
   buttonLabel,
   $translate,
-  $log
+  $log,
+  recaptchaKey
 }: RecaptchaProps): JSX.Element => {
-  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const [ready, setReady] = useState(false)
+  const [grecaptcha, setGrecaptcha] = useState(window.grecaptcha)
+  let timesIntervalRun = 0
+
+  useEffect(() => {
+    const updateRecaptcha = (intervalId: NodeJS.Timer) => {
+      setGrecaptcha(window.grecaptcha)
+      if (timesIntervalRun >= 20 || grecaptcha) {
+        clearInterval(intervalId)
+      }
+      timesIntervalRun++
+    }
+
+    const intervalId = setInterval(() => updateRecaptcha(intervalId), 100)
+    setReady(!!grecaptcha)
+    return () => clearInterval(intervalId);
+  }, [grecaptcha, buttonId])
 
   const handleReCaptchaVerify = useCallback(async () => {
-    if (!executeRecaptcha) {
+    if (!ready) {
       console.log('Execute recaptcha not yet available')
       return
     }
 
+    await grecaptcha.ready()
+
     let successFunctionRun = false
 
-    const token = await executeRecaptcha(action)
+    const token = await grecaptcha.execute(recaptchaKey, { action: action })
     // Do whatever you want with the token
     fetch('/bin/cru/recaptcha.json', {
       method: 'POST',
@@ -85,14 +110,14 @@ export const Recaptcha = ({
         successFunctionRun = true
       }
     })
-  }, [executeRecaptcha])
+  }, [grecaptcha, buttonId, ready])
 
   return (
     <button id={buttonId}
             type={buttonType}
             onClick={handleReCaptchaVerify}
             className={buttonClasses}
-            disabled={buttonDisabled}>{$translate.instant(buttonLabel)}</button>
+            disabled={buttonDisabled || !ready}>{$translate.instant(buttonLabel)}</button>
   )
 }
 
