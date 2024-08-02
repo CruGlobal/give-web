@@ -28,7 +28,7 @@ describe('Recaptcha component', () => {
     $translate.instant.mockImplementation((input) => input)
     mockExecuteRecaptcha = jest.fn()
     mockExecuteRecaptcha.mockImplementation(() => Promise.resolve('token'))
-    mockRecaptchaReady.mockImplementation(() => Promise.resolve(true))
+    mockRecaptchaReady.mockImplementation((callback) => { callback() })
     onSuccess.mockClear()
     onFailure.mockClear()
   })

@@ -23,9 +23,8 @@ const componentName = 'checkoutStep3'
 
 class Step3Controller {
   /* @ngInject */
-  constructor (orderService, $window, $rootScope, $scope, $log, analyticsFactory, cartService, commonService, profileService, sessionService, envService) {
+  constructor (orderService, $window, $rootScope, $scope, $log, analyticsFactory, cartService, commonService, profileService, sessionService) {
     this.orderService = orderService
-    this.envService = envService
     this.$window = $window
     this.$rootScope = $rootScope
     this.$scope = $scope
@@ -38,7 +37,6 @@ class Step3Controller {
     this.sessionStorage = $window.sessionStorage
     this.sessionService = sessionService
     this.selfReference = this
-    this.isBranded = this.envService.read('isBrandedCheckout')
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
