@@ -10,13 +10,19 @@ declare global {
   }
 }
 
+export enum ButtonType {
+  Submit = 'submit',
+  Reset = 'reset',
+  Button = 'button'
+}
+
 interface RecaptchaProps {
   action: string
   onSuccess: (componentInstance: any) => void
   onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
-  buttonType?: 'submit' | 'reset' | 'button'
+  buttonType?: ButtonType
   buttonClasses: string
   buttonDisabled: boolean
   buttonLabel: string

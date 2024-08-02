@@ -1,7 +1,7 @@
 import angular from 'angular'
 import { react2angular } from 'react2angular'
 import React, { useMemo } from 'react'
-import { Recaptcha } from './Recaptcha'
+import { ButtonType, Recaptcha } from './Recaptcha'
 
 const componentName = 'recaptchaWrapper'
 
@@ -17,7 +17,7 @@ interface RecaptchaWrapperProps {
   onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
-  buttonType?: 'submit' | 'reset' | 'button'
+  buttonType?: ButtonType
   buttonClasses: string
   buttonDisabled: boolean
   buttonLabel: string
