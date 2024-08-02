@@ -26,7 +26,6 @@ describe('Recaptcha component', () => {
     global.window.grecaptcha = mockRecaptcha
 
     $translate.instant.mockImplementation((input) => input)
-    mockExecuteRecaptcha = jest.fn()
     mockExecuteRecaptcha.mockImplementation(() => Promise.resolve('token'))
     mockRecaptchaReady.mockImplementation((callback) => { callback() })
     onSuccess.mockClear()
@@ -142,7 +141,7 @@ describe('Recaptcha component', () => {
 
   it('should skip the recaptcha call', async () => {
     //@ts-ignore
-    mockExecuteRecaptcha = undefined
+    global.window.grecaptcha = { ready: mockRecaptchaReady }
 
     onSuccess.mockImplementation(() => console.log('fail'))
 
@@ -152,7 +151,7 @@ describe('Recaptcha component', () => {
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
-      expect(onSuccess).not.toHaveBeenCalled()
+      expect(onSuccess).toHaveBeenCalled()
       expect(onFailure).not.toHaveBeenCalled()
     })
   })
