@@ -7,7 +7,7 @@ const componentName = 'recaptchaWrapper'
 
 declare global {
   interface Window {
-      grecaptcha: any;
+      grecaptcha: any
   }
 }
 
@@ -31,10 +31,10 @@ export const findExistingScript = (): boolean => {
 
   for (let script of scripts) {
     if (script.src.startsWith('https://www.google.com/recaptcha/api.js?render=')) {
-      return true;
+      return true
     }
   }
-  return false;
+  return false
 }
 
 export const RecaptchaWrapper = ({
