@@ -75,7 +75,7 @@ export const Recaptcha = ({
     grecaptcha.ready(async () => {
       try {
         const token = await grecaptcha.execute(recaptchaKey, { action: action })
-        const serverResponse = await fetch(`${apiUrl}/bin/cru/recaptcha.json`, {
+        const serverResponse = await fetch(`${apiUrl}/recaptcha/verify`, {
           method: 'POST',
           body: JSON.stringify({ token: token })
         })

@@ -73,7 +73,7 @@ describe('Recaptcha component', () => {
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect(global.fetch).toHaveBeenCalledWith('https://give-stage2.cru.org/bin/cru/recaptcha.json', expect.anything())
+      expect(global.fetch).toHaveBeenCalledWith('https://give-stage2.cru.org/recaptcha/verify', expect.anything())
     })
   })
 
