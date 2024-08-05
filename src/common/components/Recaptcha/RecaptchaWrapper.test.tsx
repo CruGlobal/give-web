@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import { findExistingScript, RecaptchaWrapper } from './RecaptchaWrapper'
+import { RecaptchaWrapper } from './RecaptchaWrapper'
 import React from 'react'
 import { ButtonType } from './Recaptcha'
 
@@ -59,7 +59,7 @@ describe('RecaptchaWrapper component', () => {
     expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
   })
 
-  it('should not add a script if one already exists', () => {
+  it('should add a script even if one already exists', () => {
     document.body.appendChild(script)
     render(
       <RecaptchaWrapper
@@ -77,32 +77,7 @@ describe('RecaptchaWrapper component', () => {
         $log={$log}
       />
     )
-    expect(document.getElementById('give-checkout-recaptcha')).toBeNull()
+    expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
     expect(document.getElementById('test-script')).not.toBeNull()
-  })
-
-  describe('findExistingScript', () => {
-    it('should find an existing script', () => {
-      document.body.appendChild(script)
-      expect(findExistingScript()).toEqual(true)
-    })
-
-    it('should not find an existing script', () => {
-      expect(findExistingScript()).toEqual(false)
-    })
-
-    it('should not find a different script', () => {
-      const otherScript = document.createElement('script')
-      otherScript.src = 'https://example.com/some/script.js'
-      document.body.appendChild(otherScript)
-      expect(findExistingScript()).toEqual(false)
-    })
-  })
-
-  afterEach(() => {
-    const allScripts = document.getElementsByTagName('script')
-    for (let script of allScripts) {
-      document.body.removeChild(script)
-    }
   })
 })

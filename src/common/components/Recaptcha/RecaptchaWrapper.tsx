@@ -26,17 +26,6 @@ interface RecaptchaWrapperProps {
   $log: any
 }
 
-export const findExistingScript = (): boolean => {
-  const scripts = document.getElementsByTagName('script')
-
-  for (let script of scripts) {
-    if (script.src.startsWith('https://www.google.com/recaptcha/api.js?render=')) {
-      return true
-    }
-  }
-  return false
-}
-
 export const RecaptchaWrapper = ({
   action,
   onSuccess,
@@ -58,10 +47,7 @@ export const RecaptchaWrapper = ({
     const script = document.createElement('script')
     script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`
     script.id = 'give-checkout-recaptcha'
-
-    if (!findExistingScript()) {
-      document.body.appendChild(script)
-    }
+    document.body.appendChild(script)
   }, [])
 
   return (
