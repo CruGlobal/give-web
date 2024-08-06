@@ -16,6 +16,10 @@ export enum ButtonType {
   Button = 'button'
 }
 
+const isValidAction = (action: string): boolean => {
+  return action === 'submit_gift' || action === 'branded_submit'
+}
+
 interface RecaptchaProps {
   action: string
   onSuccess: (componentInstance: any) => void
@@ -28,7 +32,8 @@ interface RecaptchaProps {
   buttonLabel: string
   $translate: any
   $log: any,
-  recaptchaKey: string
+  recaptchaKey: string,
+  apiUrl: string,
 }
 
 export const Recaptcha = ({
@@ -43,7 +48,8 @@ export const Recaptcha = ({
   buttonLabel,
   $translate,
   $log,
-  recaptchaKey
+  recaptchaKey,
+  apiUrl
 }: RecaptchaProps): JSX.Element => {
 
   const [ready, setReady] = useState(false)
@@ -73,13 +79,14 @@ export const Recaptcha = ({
     grecaptcha.ready(async () => {
       try {
         const token = await grecaptcha.execute(recaptchaKey, { action: action })
-        const serverResponse = await fetch('/bin/cru/recaptcha.json', {
+        const serverResponse = await fetch(`${apiUrl}/recaptcha/verify`, {
           method: 'POST',
-          body: JSON.stringify({ token: token })
+          body: JSON.stringify({ token: token }),
+          headers: { 'Content-Type': 'application/json' }
         })
         const data = await serverResponse.json()
 
-        if (data?.success === true && data?.action === 'submit_gift') {
+        if (data?.success === true && isValidAction(data?.action)) {
           if (data.score < 0.5) {
             $log.warn(`Captcha score was below the threshold: ${data.score}`)
             onFailure(componentInstance)
@@ -88,7 +95,7 @@ export const Recaptcha = ({
           onSuccess(componentInstance)
           return
         }
-        if (data?.success === false && data?.action === 'submit_gift') {
+        if (data?.success === false && isValidAction(data?.action)) {
           $log.warn('Recaptcha call was unsuccessful, continuing anyway')
           onSuccess(componentInstance)
           return
@@ -96,6 +103,11 @@ export const Recaptcha = ({
         if (!data) {
           $log.warn('Data was missing!')
           onSuccess(componentInstance)
+          return
+        }
+        if (!isValidAction(data?.action)) {
+          $log.warn(`Invalid action: ${data?.action}`)
+          onFailure(componentInstance)
         }
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
@@ -128,7 +140,9 @@ export default angular
         'buttonType',
         'buttonClasses',
         'buttonDisabled',
-        'buttonLabel'
+        'buttonLabel',
+        'recaptchaKey',
+        'apiUrl'
       ],
       ['$translate', '$log']))
 
