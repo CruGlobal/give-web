@@ -77,6 +77,27 @@ describe('Recaptcha component', () => {
     })
   })
 
+  it('should successfully pass the recaptcha on branded checkout', async () => {
+    //@ts-ignore
+    global.fetch = jest.fn(() => {
+      return Promise.resolve({
+        json: () => Promise.resolve({ success: true, score: 0.6, action: 'branded_submit' })
+      })
+    })
+
+    onSuccess.mockImplementation(() => console.log('success'))
+
+    const { getByRole } = render(
+      buildRecaptcha()
+    )
+
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(global.fetch).toHaveBeenCalledWith('https://give-stage2.cru.org/recaptcha/verify', expect.anything())
+    })
+  })
+
   it('should log a warning due to low score', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
@@ -119,7 +140,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  it('should skip the success function when not submit', async () => {
+  it('should call the fail function when not a valid action', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
@@ -136,7 +157,7 @@ describe('Recaptcha component', () => {
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).not.toHaveBeenCalled()
-      expect(onFailure).not.toHaveBeenCalled()
+      expect(onFailure).toHaveBeenCalled()
     })
   })
 
