@@ -6,8 +6,10 @@ import React from 'react'
 let mockExecuteRecaptcha = jest.fn()
 const mockRecaptchaReady = jest.fn()
 const mockRecaptcha = {
-  ready: mockRecaptchaReady,
-  execute: mockExecuteRecaptcha
+  enterprise: {
+    ready: mockRecaptchaReady,
+    execute: mockExecuteRecaptcha
+  }
 }
 const onSuccess = jest.fn()
 const onFailure = jest.fn()
@@ -163,7 +165,7 @@ describe('Recaptcha component', () => {
 
   it('should skip the recaptcha call', async () => {
     //@ts-ignore
-    global.window.grecaptcha = { ready: mockRecaptchaReady }
+    global.window.grecaptcha = { enterprise: { ready: mockRecaptchaReady }}
 
     onSuccess.mockImplementation(() => console.log('fail'))
 
