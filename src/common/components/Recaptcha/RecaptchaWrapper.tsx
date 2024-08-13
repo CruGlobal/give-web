@@ -45,7 +45,7 @@ export const RecaptchaWrapper = ({
 
   useMemo(() => {
     const script = document.createElement('script')
-    script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`
+    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${recaptchaKey}`
     script.id = 'give-checkout-recaptcha'
     document.body.appendChild(script)
   }, [])
