@@ -56,16 +56,22 @@ sign-up-activation-modal {
   .need-help {
     cursor: pointer;
     font-size: 14px;
-    text-decoration: underline;
     color: #007398;
     font-style: italic;
+    width: fit-content;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .screenshot {
     background: #e7e7e7;
-    padding: 5px;
+    padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
+    p:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .active-account {

@@ -201,7 +201,7 @@ describe('signUpActivationModal', function () {
         })
       });
 
-      it('should return successfully and set status to "Pending Activation"', () => {
+      it('should return successfully and set status to "Pending Verification"', () => {
         checkCreateAccountStatusData.status = 'PROVISIONED'
         jest.spyOn($ctrl.sessionService, 'checkCreateAccountStatus').mockImplementation(() => Promise.resolve({
           status: 'success',
@@ -216,7 +216,7 @@ describe('signUpActivationModal', function () {
           expect ($ctrl.unverifiedAccount).toEqual({
             ...createAccountDataCookieData,
             ...checkCreateAccountStatusData,
-            status: 'Pending Activation'
+            status: 'Pending Verification'
           })
         })
       });

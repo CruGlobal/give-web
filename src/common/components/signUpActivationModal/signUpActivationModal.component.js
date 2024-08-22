@@ -77,7 +77,7 @@ class signUpActivationModalController {
               status = 'Active'
               break
             case 'PROVISIONED':
-              status = 'Pending Activation'
+              status = 'Pending Verification'
               break
           }
 
