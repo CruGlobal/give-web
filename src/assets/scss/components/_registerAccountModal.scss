@@ -161,4 +161,11 @@ register-account-modal {
       width: 100%;
     }
   }
+
+  &[data-state=sign-up-activation] {
+    .loading-overlay-parent,
+    .data-refresh {
+      margin-bottom: 0;
+    }
+  }
 }

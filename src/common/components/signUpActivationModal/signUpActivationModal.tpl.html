@@ -22,12 +22,32 @@
         </loading>
 
         <div ng-if="$ctrl.unverifiedAccount.status !== 'Active'">
-          <div class="row text-center">
+          <div class="row">
             <div class="col-xs-12">
-              <h4 translate>Activate Account</h4>
-              <p translate style="margin-bottom: 0px">You will need to go to your <b>email</b> and open an email with the subject</p>
-              <strong translate style="display: block; margin-bottom: 8px">Activate Account for Giving to Cru.</strong>
-              <p translate>Verify your account by opening a link that we will send in that email.</p>
+              <h4 translate>Please verify your email address.</h4>
+              <ul>
+                <li translate>You will need to check your email inbox for a message from us.</li>
+                <li>Open the email and locate the verification link provided.</li>
+                <li>Click on the verification link. This will typically be a button or a hyperlink.</li>
+                <li>You will then be redirected to Okta to create your account password.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p
+            translate
+            class="need-help"
+            ng-click="$ctrl.showHelp = !$ctrl.showHelp"
+            ng-if="$ctrl.unverifiedAccount.status"
+          >
+            {{$ctrl.showHelp ? 'Close email verification help.' : 'Need help locating your verification email?'}}
+          </p>
+          <div class="screenshot" ng-if="$ctrl.showHelp">
+            <div class="row">
+              <div class="col-xs-12">
+                <p translate>In your inbox, search for the subject line "Please Verify Your Email Address" or emails sent from Cru, Donation Services (egift@cru.org).</p>
+                <p translate>If you are still not able to locate the email, please see if the email was mistakenly placed in your spam or junk folder.</p>
+              </div>
             </div>
           </div>
 
@@ -63,7 +83,23 @@
             </div>
           </div>
 
-          <p>This page re-fetches the data every 10 seconds.</p>
+          <p
+            translate
+            class="need-help"
+            ng-click="$ctrl.showOktaHelp = !$ctrl.showOktaHelp"
+            ng-if="$ctrl.unverifiedAccount.status"
+          >
+            {{$ctrl.showOktaHelp ? 'Close Okta help.' : 'What is Okta?'}}
+          </p>
+          <div class="screenshot" ng-if="$ctrl.showOktaHelp">
+            <div class="row">
+              <div class="col-xs-12">
+                <p translate>Okta content.</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="data-refresh">This page re-fetches the data every 10 seconds.</p>
         </div>
 
 

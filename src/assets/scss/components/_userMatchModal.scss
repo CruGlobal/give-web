@@ -11,6 +11,10 @@ user-match-modal {
     accent-color: $colorCru-gold;
   }
 
+  label {
+    display: block;
+  }
+
   .activate-progress {
     padding-bottom: 30px;
 
