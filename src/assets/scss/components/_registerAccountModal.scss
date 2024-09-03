@@ -66,10 +66,6 @@ register-account-modal {
 
       .modal-header {
         flex: 1;
-
-        button.close {
-          margin-right: -85px - $body-width;
-        }
       }
 
       .modal-body {
