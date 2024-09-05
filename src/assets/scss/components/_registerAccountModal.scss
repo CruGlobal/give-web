@@ -38,19 +38,7 @@ register-account-modal {
   }
 
   .signup-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    span {
-      font-size: 30px;
-      font-weight: 400;
-      margin: 0 10px;
-    }
-
-    img {
-      max-height: 35px;
-    }
+    text-align: center;
   }
 
   .modal-dialog .give-modal-content & .modal-body {
@@ -159,7 +147,6 @@ register-account-modal {
   }
 
   &[data-state=sign-up-activation] {
-    .loading-overlay-parent,
     .data-refresh {
       margin-bottom: 0;
     }
