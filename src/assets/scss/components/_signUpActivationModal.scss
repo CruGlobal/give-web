@@ -1,55 +1,69 @@
 sign-up-activation-modal {
-  display: inline-block;
-  width: 100%;
-
+  
   .unverified-emails {
-    background: #ebecec;
-    padding: 5px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .unverified-email {
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #dedede;
     display: flex;
-
-    &:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border: none;
-    }
-  }
-
-  .unverified-email,
-  .unverified-email-headers {
+    flex-direction: column;
+    margin-bottom: 20px;
+    
     p {
       margin: 0;
-      word-break: break-all;
-    }
-
-    > div {
-      padding: 5px;
     }
   }
-
-  .unverified-email-headers {
-    margin-left: 0;
-    margin-right: 0;
-
-    p {
-      font-weight: 600;
-    }
+  
+  .unverified-email__header {
+    font-weight: 600;
+    padding: 5px 10px;
   }
+  
+  .unverified-email__value {
+    background-color: #ebecec;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .unverified-email__value--email p:first-child {
+    word-break: break-all;
+  }
+  
+  .unverified-email__instructions {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #a94442;
+  }
+  
+  @media screen and (min-width: 550px) {
+    .unverified-emails {
+      flex-wrap: wrap;
+      flex-direction: row;
+    }
+    
+    .unverified-email__header--email {
+      order: 1;
+    }
 
-  .unverified-email {
-    .instructions {
-      font-size: 11px;
-      text-transform: uppercase;
-      color: #a94442;
+    .unverified-email__value--email {
+      order: 3;
+      border-radius: 5px 0 0 5px;
+    }
+
+    .unverified-email__header--status {
+      order: 2;
+    }
+
+    .unverified-email__value--status {
+      order: 4;
+      border-radius: 0 5px 5px 0;
+    }
+
+    .unverified-email__header--email,
+    .unverified-email__value--email {
+      flex-basis: 60%;
+    }
+
+    .unverified-email__header--status,
+    .unverified-email__value--status {
+      flex-basis: 40%;
+      text-align: right;
     }
   }
 
@@ -64,7 +78,7 @@ sign-up-activation-modal {
     }
   }
 
-  .screenshot {
+  .need-help-content {
     background: #e7e7e7;
     padding: 10px;
     border-radius: 5px;
@@ -83,10 +97,6 @@ sign-up-activation-modal {
 
     p {
       width: 100%;
-    }
-
-    .okta-button {
-      max-width: 300px;
     }
   }
 }

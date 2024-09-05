@@ -15,120 +15,114 @@
 
 <div ng-class="{'modal-body': !$ctrl.isInsideAnotherModal }">
   <div class="content">
-    <div class="col-xs-12">
-      <div class="loading-overlay-parent">
-        <loading type="overlay" ng-if="$ctrl.loadingAccount || $ctrl.initialLoading">
-          <translate>{{'CHECKING_FOR_EXISTING'}}</translate>
-        </loading>
+    <div class="loading-overlay-parent">
+      <loading type="overlay" ng-if="$ctrl.loadingAccount || $ctrl.initialLoading">
+        <translate>{{'CHECKING_FOR_EXISTING'}}</translate>
+      </loading>
 
-        <div ng-if="$ctrl.unverifiedAccount.status !== 'Active'">
-          <div class="row">
-            <div class="col-xs-12">
-              <h4 translate>Please verify your email address.</h4>
-              <ul>
-                <li translate>You will need to check your email inbox for a message from us.</li>
-                <li translate>Open the email and locate the verification link provided.</li>
-                <li translate>Click on the verification link. This will typically be a button or a hyperlink.</li>
-                <li translate>You will then be redirected to Okta to create your account password.</li>
-              </ul>
-            </div>
+      <div ng-if="$ctrl.unverifiedAccount.status !== 'Active'">
+        <div class="row">
+          <div class="col-xs-12">
+            <h4 translate>Please verify your email address.</h4>
+            <ul>
+              <li translate>You will need to check your email inbox for a message from us.</li>
+              <li translate>Open the email and locate the verification link provided.</li>
+              <li translate>Click on the verification link. This will typically be a button or a hyperlink.</li>
+              <li translate>You will then be redirected to Okta to create your account password.</li>
+            </ul>
           </div>
-
-          <p
-            translate
-            class="need-help"
-            ng-click="$ctrl.showHelp = !$ctrl.showHelp"
-            ng-if="$ctrl.unverifiedAccount.status"
-          >
-            {{$ctrl.showHelp ? 'Close email verification help.' : 'Need help locating your verification email?'}}
-          </p>
-          <div class="screenshot" ng-if="$ctrl.showHelp">
-            <div class="row">
-              <div class="col-xs-12">
-                <p translate>In your inbox, search for the subject line "Please Verify Your Email Address" or emails sent from Cru, Donation Services (egift@cru.org).</p>
-                <p translate>If you are still not able to locate the email, please see if the email was mistakenly placed in your spam or junk folder.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingAccountError && !$ctrl.initialLoading">
-            <div ng-if="$ctrl.loadingAccountErrorCount < 2">
-              <div ng-if="!$ctrl.loadingAccountError.includes('Okta user not found:')">
-                <p translate>There was an error loading your Okta account status</p>
-              </div>
-              <div>
-                <p translate translate-value-email="{{$ctrl.unverifiedAccount.email}}">{{$ctrl.loadingAccountError}}</p>
-              </div>
-            </div>
-            <p ng-if="$ctrl.loadingAccountErrorCount > 1" style="margin-top:20px;">There was an error loading your Okta account status. Please locate the email mentioned above and follow the steps. Once you've done that please login via "Sign up with Okta".</p>
-          </div>
-
-          <div class="row unverified-email-headers" ng-if="$ctrl.unverifiedAccount.status">
-            <div class="col-xs-8">
-              <p translate>Email</p>
-            </div>
-            <div class="col-xs-4">
-              <p translate class="pull-right">Status</p>
-            </div>
-          </div>
-          <div class="row unverified-emails" ng-if="$ctrl.unverifiedAccount.status">
-            <div class="unverified-email">
-              <div class="col-xs-8">
-                <p translate>{{$ctrl.unverifiedAccount.email}}</p>
-                <span class="instructions">Please locate the email in your email inbox.</span>
-              </div>
-              <div class="col-xs-4">
-                <p translate class="pull-right">{{$ctrl.unverifiedAccount.status}}</p>
-              </div>
-            </div>
-          </div>
-
-          <p
-            translate
-            class="need-help"
-            ng-click="$ctrl.showOktaHelp = !$ctrl.showOktaHelp"
-            ng-if="$ctrl.unverifiedAccount.status"
-          >
-            {{$ctrl.showOktaHelp ? 'Close Okta help.' : 'What is Okta?'}}
-          </p>
-          <div class="screenshot" ng-if="$ctrl.showOktaHelp">
-            <div class="row">
-              <div class="col-xs-12">
-                <p translate>Okta content.</p>
-              </div>
-            </div>
-          </div>
-
-          <p class="data-refresh">This page re-fetches the data every 10 seconds.</p>
         </div>
 
-
-        <div ng-if="$ctrl.unverifiedAccount.status && $ctrl.unverifiedAccount.status === 'Active'">
-          <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage" ng-switch="$ctrl.errorMessage">
-            <span ng-switch-when="generic" translate>
-              An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
-            </span>
-            <span ng-switch-default>
-              {{$ctrl.errorMessage | translate}}
-            </span>
-          </div>
-          
-          <div class="row text-center">
+        <p
+          translate
+          class="need-help"
+          ng-click="$ctrl.showHelp = !$ctrl.showHelp"
+          ng-if="$ctrl.unverifiedAccount.status"
+        >
+          {{$ctrl.showHelp ? 'Close email verification help.' : 'Need help locating your verification email?'}}
+        </p>
+        <div class="need-help-content" ng-if="$ctrl.showHelp">
+          <div class="row">
             <div class="col-xs-12">
-              <h4 translate>Your email has been verified!</h4>
-              <p translate style="margin-bottom: 0px">You are almost done creating your new account!</p>
-              <p>All that is left to do is sign in, and fill out your profile information.</p>
+              <p translate>In your inbox, search for the subject line "Please Verify Your Email Address" or emails sent from Cru, Donation Services (egift@cru.org).</p>
+              <p translate>If you are still not able to locate the email, please see if the email was mistakenly placed in your spam or junk folder.</p>
             </div>
           </div>
+        </div>
 
-          <div class="row active-account">
-            <sign-in-button
-              on-success="$ctrl.onSuccessfulSignIn()"
-              on-failure="$ctrl.onFailure()"
-              last-purchase-id="$ctrl.lastPurchaseId"
-              error-message="$ctrl.errorMessage"
-            ></sign-in-button>
+        <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingAccountError && !$ctrl.initialLoading">
+          <div ng-if="$ctrl.loadingAccountErrorCount < 2">
+            <div ng-if="!$ctrl.loadingAccountError.includes('Okta user not found:')">
+              <p translate>There was an error loading your Okta account status</p>
+            </div>
+            <div>
+              <p translate translate-value-email="{{$ctrl.unverifiedAccount.email}}">{{$ctrl.loadingAccountError}}</p>
+            </div>
           </div>
+          <p ng-if="$ctrl.loadingAccountErrorCount > 1" style="margin-top:20px;">There was an error loading your Okta account status. Please locate the email mentioned above and follow the steps. Once you've done that please login via "Sign up with Okta".</p>
+        </div>
+
+        <div class="unverified-emails" ng-if="$ctrl.unverifiedAccount.status">
+          <div class="unverified-email__header unverified-email__header--email">
+            <p translate>Email</p>
+          </div>
+          <div class="unverified-email__value unverified-email__value--email">
+            <p translate>{{$ctrl.unverifiedAccount.email}}</p>
+            <p class="unverified-email__instructions">Please locate the email in your email inbox.</p>
+          </div>
+          <div class="unverified-email__header unverified-email__header--status">
+            <p translate>Status</p>
+          </div>
+          <div class="unverified-email__value unverified-email__value--status">
+            <p translate>{{$ctrl.unverifiedAccount.status}}</p>
+          </div>
+        </div>
+
+        <p
+          translate
+          class="need-help"
+          ng-click="$ctrl.showOktaHelp = !$ctrl.showOktaHelp"
+          ng-if="$ctrl.unverifiedAccount.status"
+        >
+          {{$ctrl.showOktaHelp ? 'Close Okta help.' : 'What is Okta?'}}
+        </p>
+        <div class="need-help-content" ng-if="$ctrl.showOktaHelp">
+          <div class="row">
+            <div class="col-xs-12">
+              <p translate>Okta content.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="data-refresh">This page re-fetches the data every 10 seconds.</p>
+      </div>
+
+
+      <div ng-if="$ctrl.unverifiedAccount.status && $ctrl.unverifiedAccount.status === 'Active'">
+        <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage" ng-switch="$ctrl.errorMessage">
+          <span ng-switch-when="generic" translate>
+            An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
+          </span>
+          <span ng-switch-default>
+            {{$ctrl.errorMessage | translate}}
+          </span>
+        </div>
+        
+        <div class="row text-center">
+          <div class="col-xs-12">
+            <h4 translate>Your email has been verified!</h4>
+            <p translate style="margin-bottom: 0px">You are almost done creating your new account!</p>
+            <p>All that is left to do is sign in, and fill out your profile information.</p>
+          </div>
+        </div>
+
+        <div class="row active-account">
+          <sign-in-button
+            on-success="$ctrl.onSuccessfulSignIn()"
+            on-failure="$ctrl.onFailure()"
+            last-purchase-id="$ctrl.lastPurchaseId"
+            error-message="$ctrl.errorMessage"
+          ></sign-in-button>
         </div>
       </div>
     </div>
