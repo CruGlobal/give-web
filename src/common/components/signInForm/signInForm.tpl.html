@@ -6,10 +6,10 @@
     {{$ctrl.errorMessage | translate}}
   </span>
 </div>
-<div class="row text-center" ng-if="!$ctrl.onSignInPage">
+<div ng-if="!$ctrl.onSignInPage">
   <h2 translate>Sign in</h2>
 </div>
-<div class="row">
+<div>
   <sign-in-button
     on-success="$ctrl.onSuccess()"
     on-failure="$ctrl.onFailure()"
@@ -19,7 +19,7 @@
   ></sign-in-button>
 </div>
 
-<div class="row text-center">
+<div>
   <p class="sign-in-info" ng-if="!$ctrl.onSignInPage">
     <span translate>You will be taken to Okta </span>
     <span class="sup">
@@ -30,14 +30,14 @@
   </span>
     <span translate>, then back to this site.</span>
   </p>
-  <p ng-if="$ctrl.onSignInPage" style="margin-top: 20px" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
+  <p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
 </div>
 <hr />
-<div class="row text-center" style="margin-bottom: 0px;" ng-if="!$ctrl.onSignInPage">
+<div ng-if="!$ctrl.onSignInPage">
   <h4 translate>Don&rsquo;t have an account?</h4>
-  <a class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()" style="cursor: pointer">Create an account</a>
+  <a class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()">Create an account</a>
 </div>
-<div class="row text-center need-help" ng-class="{'open': $ctrl.needHelpAccordionOpened}">
+<div class="need-help" ng-class="{'open': $ctrl.needHelpAccordionOpened}">
   <div class="need-help--header" ng-click="$ctrl.toggleNeedHelpAccordion()" onKeyPress>
     <i class="fa fa-caret-right"></i>
     <span translate>Need help?</span>

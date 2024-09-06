@@ -1,12 +1,3 @@
-sign-up-modal,
-sign-up-activation-modal {
-  @extend register-account-modal;
-
-  a {
-    cursor: pointer;
-  }
-}
-
 sign-up-modal {
   .row.buttons,
   .bottom-links  {

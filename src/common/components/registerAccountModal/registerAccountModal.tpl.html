@@ -2,31 +2,25 @@
   <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
     <span aria-hidden="true">×</span>
   </button>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12">
-        <div ng-if="$ctrl.state !== 'sign-up' && $ctrl.state !== 'sign-up-activation'">
-          <h3 ng-if="$ctrl.firstName" translate>Welcome back, {{$ctrl.firstName}}!</h3>
-          <h3 ng-if="!$ctrl.firstName" translate>Welcome back!</h3>
-        </div>
-        <div ng-if="$ctrl.state === 'sign-up'" class="signup-header">
-          <h3 translate>Create Your Account</h3>
-        </div>
-        <div ng-if="$ctrl.state === 'sign-up-activation'" class="signup-header">
-          <h3 translate>Create a new account</h3>
-        </div>
-        <div ng-if="$ctrl.state === 'sign-in'" class="section">
-          <ul>
-            <li translate>Give to thousands of opportunities.</li>
-            <li translate>View giving history (online and offline).</li>
-            <li translate>Access your tax receipts and forms.</li>
-          </ul>
-        </div>
-        <div ng-if="$ctrl.state === 'contact-info'" class="section paragraph" translate>
-          Please fill in your information for your online account.
-        </div>
-      </div>
-    </div>
+  <div ng-if="$ctrl.state !== 'sign-up' && $ctrl.state !== 'sign-up-activation'">
+    <h3 ng-if="$ctrl.firstName" translate>Welcome back, {{$ctrl.firstName}}!</h3>
+    <h3 ng-if="!$ctrl.firstName" translate>Welcome back!</h3>
+  </div>
+  <div ng-if="$ctrl.state === 'sign-up'" class="signup-header">
+    <h3 translate>Create Your Account</h3>
+  </div>
+  <div ng-if="$ctrl.state === 'sign-up-activation'" class="signup-header">
+    <h3 translate>Create a new account</h3>
+  </div>
+  <div ng-if="$ctrl.state === 'sign-in'" class="section">
+    <ul>
+      <li translate>Give to thousands of opportunities.</li>
+      <li translate>View giving history (online and offline).</li>
+      <li translate>Access your tax receipts and forms.</li>
+    </ul>
+  </div>
+  <div ng-if="$ctrl.state === 'contact-info'" class="section paragraph" translate>
+    Please fill in your information for your online account.
   </div>
 </div>
 <div class="modal-body" ng-switch="$ctrl.state">

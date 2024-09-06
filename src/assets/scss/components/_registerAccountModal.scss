@@ -1,29 +1,39 @@
-register-account-modal {
+register-account-modal,
+sign-up-modal,
+sign-up-activation-modal {
   display: block;
   line-height: 1.2em;
 
-  &[data-state=sign-in],
-  &[data-state=sign-up] {
-    display: inline-block;
+  a {
+    cursor: pointer;
   }
   
-  .modal-header {
-    padding-bottom: 30px;
-    background-color: #EBECEC;
-  }
-
   ul {
     padding-left: 1em;
   }
 
-  .section {
-    margin-top: 20px;
+  .modal-body {
+    padding: 30px;
   }
 
-  .cart {
-    padding: 10px;
-    background-color: #9C9FA1;
-    color: white;
+  .modal-header {
+    padding: 30px;
+    background-color: #EBECEC;
+  }
+  
+  .signup-header {
+    text-align: center;
+  }
+}
+
+register-account-modal {
+
+  .modal-header ul:last-child {
+    margin-bottom: 0;
+  }
+
+  .section {
+    margin-top: 20px;
   }
 
   .footer-buttons {
@@ -36,35 +46,32 @@ register-account-modal {
       width: auto;
     }
   }
-
-  .signup-header {
-    text-align: center;
-  }
-
-  .modal-dialog .give-modal-content & .modal-body {
-    padding: 30px;
+  
+  .modal-dialog.modal-sm & {
+    &[data-state=sign-in],
+    &[data-state=loading] {
+      .modal-body {
+        padding-top: 30px;
+      }
+    }
   }
 
   .modal-dialog.modal-lg & {
     &[data-state=sign-in],
-    &[data-state=loading] {
-      $body-width: 530px;
-      $body-margin: 80px;
-      display: flex;
-
-      .modal-header {
-        flex: 1;
-      }
-
-      .modal-body {
-        width: $body-width - $body-margin * 2;
-        margin: 60px $body-margin;
-
+    &[data-state=loading] {  
+      @media screen and (min-width: 550px) {
         sign-in-modal {
-          display: inline-block;
-          padding: 0;
-        }  
+          padding: 50px;
+        }
       }
+
+      @media screen and (min-width: 992px) {
+        display: flex;
+
+        .modal-header {
+          flex: 1
+        }
+      }  
     }
     &[data-state=contact-info] {
 
@@ -137,18 +144,13 @@ register-account-modal {
 
   sign-in-form {
     hr {
-      width:65%;
-    }
-  }
-  sign-in-button {
-    .okta-button:not(.normal-padding) {
-      width: 100%;
+      width: 65%;
     }
   }
 
-  &[data-state=sign-up-activation] {
-    .data-refresh {
-      margin-bottom: 0;
+  sign-in-button {
+    .okta-button:not(.normal-padding) {
+      width: 100%;
     }
   }
 }
