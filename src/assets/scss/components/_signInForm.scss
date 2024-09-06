@@ -1,4 +1,19 @@
 sign-in-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  margin-top: 20px;
+
+  hr {
+    width: 65%;
+    margin: 12px auto;
+  }
+
+  a {
+    cursor: pointer;
+  }
+
   .sign-in-info {
     margin-bottom: 0;
 
@@ -9,11 +24,6 @@ sign-in-form {
         color: #333333;
       }
     }
-  }
-
-  hr {
-    width:65%;
-    margin: 32px auto;
   }
 
   .need-help {
@@ -42,31 +52,19 @@ sign-in-form {
       }
     }
   }
+
+  .alert {
+    text-align: left;
+  }
 }
 
 sign-in-button {
   .okta-button {
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1em;
-    margin: 20px auto 0;
 
     &:not(.normal-padding) {
       width: 70%;
       padding: 1em 0.5em;
     }
-  
-    img {
-      height: 20px;
-    }
   }
-
-  .okta-signup-button {
-    display: block;
-    margin-bottom: 10px;
-    padding: 5px;
-    text-align: center;
-  }  
 }
