@@ -144,6 +144,12 @@ hr.horizontal-divider {
     margin-top: 20px;
   }
 
+  @media screen and (min-width: 992px) {
+    .row {
+      display: flex;
+    }
+  }
+
 }
 
 .secondary-detail {
