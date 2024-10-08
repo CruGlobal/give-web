@@ -163,7 +163,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
    </branded-checkout>
    <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
    ```
-9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us.
+9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us at [help@cru.org](mailto:help@cru.org).
 
 ## Development
 
