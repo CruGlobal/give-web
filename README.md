@@ -152,6 +152,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
    >    I also need help setting up a my TSYS merchant account with the give.cru.org API to be able to proccess credit cards on my site. Can you:
    >    - Add my TSYS device id to the give.cru.org API configuration. My device id is {{12345678901234}} and the url I would like to use for the branded checkout form is {{https://myministry.org}}. I would like to use a identifier of "{{myministry}}". (Or uniquely describe your ministry and domain if you want DPS to create the identifier. We can't have multiple sites that use the same identifier.)
    >    - Whitelist my site {{https://myministry.org}} with TSYS so their TSEP credit card tokenization services will work on my domain.
+   >    - Whitelist my domain {{myminisry.org}} with Recaptcha.
 
 7. Test the subdomain configured to point to the give.cru.org API. https://brandedcheckout.myministry.org/cortex/nextdrawdate is a good test url. There should be no certificate errors and you should get a response that looks like this `{"next-draw-date":"2018-09-27"}`. If there are errors, please get in touch with ([help@cru.org](mailto:help@cru.org)) again and provide details as to what is happening.
 8. Add the `<branded-checkout>` tag to a page on the domain you've configured above. You can follow the documentation above for all the possible attributes and the required style and script tags. The email conversations above should have provided the values for the `api-url` (the subdomain that has a CNAME to cortex-gateway-production-alb-425941461.us-east-1.elb.amazonaws.com) and `tsys-device` (the unique string identifier created by you or by DPS) attributes. You can add them like this:
@@ -163,7 +164,7 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
    </branded-checkout>
    <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
    ```
-9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us.
+9. If you go to this page in a browser, you should see the `<branded-checkout>` tag fill with content. There should also be no errors in the browser's console. If you see errors that appear to be caused by branded checkout please contact us at [help@cru.org](mailto:help@cru.org).
 
 ## Development
 
