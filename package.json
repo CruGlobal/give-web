@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@babel/polyfill": "^7.7.0",
-    "@babel/runtime-corejs2": "^7.0.0",
+    "@babel/runtime-corejs2": "^7.25.7",
     "@cruglobal/cru-payments": "^1.2.4",
     "@datadog/browser-rum": "^5.16.0",
     "angular": "^1.8.2",
