@@ -152,13 +152,13 @@
 
   <div class="mb">
     <div class="panel panel-default">
-      <div class="panel-heading">
+      <div id="step3-header" class="panel-heading">
         <translate>{{'REVIEW_GIFTS'}}</translate>
         <button id="changeCartButton" class="btn btn-default btn-panel-head pull-right" ng-click="$ctrl.changeStep({newStep: 'cart'})" translate>{{'CHANGE'}}</button>
       </div>
       <div class="panel-body">
         <loading ng-if="!$ctrl.cartData"></loading>
-        <table class="table giftsum-table" ng-if="$ctrl.cartData">
+        <table class="table giftsum-table" ng-if="$ctrl.cartData" aria-labelledby="step3-header">
           <thead>
           <tr>
             <th class="th-title-gift" translate>{{'GIFT'}}</th>

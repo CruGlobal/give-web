@@ -9,7 +9,7 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-sm-6">
-                  <h3 class="panel-name" translate>Your Gift Cart</h3>
+                  <h3 id="cart-header" class="panel-name" translate>Your Gift Cart</h3>
                 </div>
                 <div class="col-sm-6 text-right">
                   <loading inline="true" class="text-right" ng-if="$ctrl.updating">
@@ -28,7 +28,7 @@
                 Your cart is empty
               </p>
               <form ng-if="$ctrl.cartData.items.length">
-                <table class="table giftsum-table">
+                <table class="table giftsum-table" aria-labelledby="cart-header">
                   <thead>
                   <tr>
                     <th class="th-title-gift" translate>Gift</th>
