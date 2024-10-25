@@ -24,6 +24,7 @@ class ProductModalService {
         component: productConfigModal.name,
         size: 'lg',
         windowTemplateUrl: giveModalWindowTemplate,
+        ariaLabelledBy: 'product-config-header',
         resolve: {
           code: () => code,
           itemConfig: () => itemConfig,
