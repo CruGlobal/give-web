@@ -1,15 +1,19 @@
 <div class="modal-body">
   <div class="form-group">
-    <label>Receipt Title</label>
-    <input name="receiptTitle" type="text" class="form-control" ng-model="$ctrl.receiptTitle" disabled>
-    <span class="help-block">
+    <label>
+      Receipt Title
+      <input name="receiptTitle" type="text" class="form-control" aria-describedby="receipt-help" ng-model="$ctrl.receiptTitle" disabled>
+    </label>
+    <span id="receipt-help" class="help-block">
       <strong>Email <a href="mailto:fds@cru.org">fds@cru.org</a> to update/change.</strong>
     </span>
   </div>
 
   <div class="form-group">
-    <label translate>Give.Cru.org Title</label>
-    <input name="giveTitle" type="text" class="form-control" ng-model="$ctrl.giveTitle">
+    <label>
+      <span translate>Give.Cru.org Title</span>
+      <input name="giveTitle" type="text" class="form-control" ng-model="$ctrl.giveTitle">
+    </label>
   </div>
 </div>
 <div class="modal-footer">
