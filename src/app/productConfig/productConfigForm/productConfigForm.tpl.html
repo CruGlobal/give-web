@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-sm-6">
-      <h4 class="give-gift-header" translate>
+      <h4 id="product-config-header" class="give-gift-header" translate>
         {{'GIVE_GIFT_HEADER'}}
       </h4>
     </div>
@@ -191,26 +191,26 @@
           <div class="row">
             <div class="col-sm-3">
               <div class="form-group">
-                <label translate>{{'MONTH'}}</label>
-                <div class="form-group">
+                <label>
+                  <span translate>{{'MONTH'}}</span>
                   <select class="form-control form-control-subtle"
                           ng-model="$ctrl.itemConfig['RECURRING_START_MONTH']"
                           ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
                           ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
                   </select>
-                </div>
+                </label>
               </div>
             </div>
             <div class="col-sm-2">
               <div class="form-group">
-                <label translate>{{'DAY'}}</label>
-                <div class="form-group">
+                <label>
+                  <span translate>{{'DAY'}}</span>
                   <select class="form-control form-control-subtle"
                           ng-model="$ctrl.itemConfig['RECURRING_DAY_OF_MONTH']"
                           ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate)"
                           ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
                   </select>
-                </div>
+                </label>
               </div>
             </div>
             <div class="col-sm-4">
@@ -238,12 +238,13 @@
                     tabindex="-1"
                     ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
                     translate='SEND_MESSAGE_TO'
-            translate-values="{ministry: $ctrl.productData.displayName}">
+                    translate-values="{ministry: $ctrl.productData.displayName}">
             </button>
             <textarea class="staff-comments give-modal-comments"
                       name="recipientComments"
                       rows="3"
                       maxlength="250"
+                      aria-labelledby="sendMessageButton"
                       ng-model="$ctrl.itemConfig.RECIPIENT_COMMENTS"
                       ng-if="$ctrl.showRecipientComments"
                       tabindex="-1"
@@ -262,6 +263,7 @@
                       name="donationServicesComments"
                       rows="3"
                       maxlength="250"
+                      aria-labelledby="sendHandlingButton"
                       ng-model="$ctrl.itemConfig.DONATION_SERVICES_COMMENTS"
                       ng-if="$ctrl.showDSComments"
                       tabindex="-1"
