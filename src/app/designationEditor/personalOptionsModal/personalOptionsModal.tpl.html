@@ -76,12 +76,13 @@
         <div class="form-group">
           <label>
             <input type="checkbox"
+                   aria-describedby="newsletter-help"
                    ng-disabled="!$ctrl.hasNewsletter"
                    ng-checked="$ctrl.showNewsletterForm"
                    ng-model="$ctrl.showNewsletterForm"/> Display Newsletter Form?
           </label>
         </div>
-        <div class="form-group">
+        <div id="newsletter-help" class="form-group">
           <h6 ng-if="$ctrl.hasNewsletter">This form will allow donors to subscribe to your MPDX newsletter.</h6>
           <h6 ng-if="!$ctrl.hasNewsletter">This option is disabled because you do not have an MPDX account. To sign up for one, visit <a href="https://mpdx.org" target="_blank">mpdx.org</a>.</h6>
         </div>

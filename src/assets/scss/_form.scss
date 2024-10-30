@@ -3,7 +3,7 @@
   .form-control {
     box-shadow: inset 0px 0px 0px 1px $state-danger-text;
   }
-  label {
+  label > span, label > translate {
     color: $state-danger-text;
     font-weight: 600;
     &:before {
@@ -19,7 +19,7 @@
   .form-control {
     box-shadow: inset 0px 0px 0px 1px $colorHelper-success;
   }
-  label {
+  label > span, label > translate {
     color: $colorHelper-success;
     &:before {
       content: "\f00c";
@@ -30,15 +30,21 @@
   }
 }
 
+label:not(:has(input[type=checkbox])) {
+  & > span, & > translate {
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+
 .is-required {
-  label {
-    &:after {
-      content: "*";
-      display: inline-block;
-      font-size: 115%;
-      font-family: "fontawesome", "Font Awesome 5 Pro";
-      margin-left: 6px;
-    }
+  label > span:after, label > translate:after {
+    content: "*";
+    display: inline-block;
+    font-size: 115%;
+    line-height: 0;
+    font-family: "fontawesome", "Font Awesome 5 Pro";
+    margin-left: 6px;
   }
   input[type=text],
   input[type=number],

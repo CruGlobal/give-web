@@ -22,13 +22,15 @@
   <div class="tab-content">
     <div class="tab-pane active" ng-if="$ctrl.tab === 'parentDesignation'">
       <div class="form-group">
-        <label>Parent Designation</label>
-        <input name="parentDesignationNumber" type="text" class="form-control" ng-model="$ctrl.parentDesignationNumber">
+        <label>
+          Parent Designation
+          <input name="parentDesignationNumber" type="text" class="form-control" ng-model="$ctrl.parentDesignationNumber">
+        </label>
       </div>
       <div class="form-group">
         <label>Organization ID</label>
         <div><strong>{{$ctrl.organizationId}}</strong></div>
-        <span class="help-block"><strong>Email <a href="mailto:fds@cru.org">fds@cru.org</a> to update/change.</strong></span>
+        <span class="help-block"><strong>Email <a href="mailto:dev.services@cru.org">dev.services@cru.org</a> to update/change.</strong></span>
       </div>
     </div>
 
@@ -62,12 +64,14 @@
 
     <div class="tab-pane active" ng-if="$ctrl.tab === 'other'">
       <div class="form-group">
-        <label>Facebook Pixel ID</label>
-        <input name="facebookPixelId" type="text" class="form-control" ng-model="$ctrl.facebookPixelId">
+        <label>
+          Facebook Pixel ID
+          <input name="facebookPixelId" type="text" class="form-control" ng-model="$ctrl.facebookPixelId">
+        </label>
       </div>
 
 
-      <p>Additional settings can be changed by sending email to <strong><a href="mailto:fds@cru.org">fds@cru.org</a></strong></p>
+      <p>Additional settings can be changed by sending email to <strong><a href="mailto:dev.services@cru.org">dev.services@cru.org</a></strong></p>
 
       <ul>
         <li>Designation Active/Inactive Status</li>
