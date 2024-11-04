@@ -1,3 +1,4 @@
+<form novalidate name="$ctrl.creditCardPaymentForm" ng-keyup="$event.key === 'Enter' && $ctrl.savePayment()">
 <span class="account-management">
   <span ng-if="$ctrl.paymentMethod['card-type']">
     <span ng-switch="$ctrl.paymentMethod['card-type']">
@@ -10,12 +11,32 @@
     </span>
     <strong>{{$ctrl.paymentMethod['card-type']}}</strong>
     <span>ends in ****{{$ctrl.paymentMethod['last-four-digits']}}</span>
-    <small class="number" ng-class="{'text-danger': $ctrl.expired}">
-      <span class="hidden-xs" ng-if="!$ctrl.expired" translate>EXPIRES</span>
-      <span class="hidden-xs" ng-if="$ctrl.expired" translate>EXPIRED</span>
-      <span class="visible-xs-inline">EXP</span>
-      {{$ctrl.paymentMethod['expiry-month']}}/<span class="hidden-xs">{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2}}</span>{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2 : 2}}
-    </small>
+      <small class="number" ng-class="{'text-danger': $ctrl.expired}">
+        <span class="hidden-xs" ng-if="!$ctrl.expired" translate>EXPIRES</span>
+        <span class="hidden-xs" ng-if="$ctrl.expired" translate>EXPIRED</span>
+        <span class="visible-xs-inline">EXP</span>
+        {{$ctrl.paymentMethod['expiry-month']}}/<span class="hidden-xs">{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2}}</span>{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2 : 2}}
+      </small>
+      
+        <div class="form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': true}">
+          <label translate>{{'SEC_CODE'}}</label>
+          <input type="text"
+                name="securityCode"
+                autocomplete="cc-csc"
+                class="form-control form-control-subtle"
+                ng-model="$ctrl.creditCardPayment.securityCode"
+          />
+          <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
+            <div class="help-block" ng-message="required" translate>{{'CARD_SEC_CODE_ERROR'}}</div>
+            <div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_SEC_CODE'}}</div>
+            <div class="help-block" ng-message="maxLength" translate>{{'MAX_LENGTH_CARD_SEC_CODE'}}</div>
+            <div class="help-block" ng-message="cardTypeLength" ng-init="isAmex = $ctrl.cardInfo.type($ctrl.creditCardPayment.cardNumber) === 'American Express'">
+              <translate ng-if="!isAmex">{{'LOCATION_OF_CODE_OTHER'}}</translate>
+              <translate ng-if="isAmex">{{'LOCATION_OF_CODE_AMEX'}}</translate>
+            </div>
+          </div>
+        </div>
+      
   </span>
   <span ng-if="!$ctrl.paymentMethod['card-type']">
     <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/bank-curved-128px.png" />
@@ -27,3 +48,4 @@
     <span>ends in ****{{$ctrl.paymentMethod['display-account-number']}}</span>
   </span>
 </span>
+</form>
