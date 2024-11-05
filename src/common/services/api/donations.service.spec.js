@@ -54,18 +54,6 @@ describe('donations service', () => {
     })
   })
 
-  describe('getHistoricalGifts( year, month )', () => {
-    it('should load historical gifts by year and month', () => {
-      $httpBackend
-        .expectGET('https://give-stage2.cru.org/cortex/donations/historical/crugive/2016/9?zoom=element,element:paymentmethod,element:recurringdonation')
-        .respond(200, historicalResponse)
-      donationsService.getHistoricalGifts(2016, 9).subscribe((historicalGifts) => {
-        expect(historicalGifts).toEqual(expect.any(Array))
-      })
-      $httpBackend.flush()
-    })
-  })
-
   describe('getReceipts( data )', () => {
     it('should load receipts', () => {
       const response = [{
@@ -94,7 +82,7 @@ describe('donations service', () => {
         }
       }]
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/receipts/items?followLocation=true')
+        .expectPOST('https://give-stage2.cru.org/cortex/receipts/form?FollowLocation=true')
         .respond(200, receiptsResponse)
       donationsService.getReceipts({}).subscribe((receipts) => {
         expect(receipts).toEqual(response)
@@ -131,8 +119,8 @@ describe('donations service', () => {
       paymentMethod = {
         self: {
           type: 'elasticpath.bankaccounts.bank-account',
-          uri: '/selfservicepaymentmethods/crugive/giydcnzyga=',
-          href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive/giydcnzyga='
+          uri: '/selfservicepaymentinstruments/crugive/g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=',
+          href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive/g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm='
         },
         'account-type': 'Savings',
         'bank-name': '2nd Bank',
@@ -157,9 +145,9 @@ describe('donations service', () => {
           'designation-number': '0105987',
           'donation-line-row-id': '1-GVVEB6',
           'donation-line-status': 'Standard',
-          'payment-method-id': 'giydcnzyga=',
+          'payment-instrument-id': 'g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=',
           'updated-donation-line-status': '',
-          'updated-payment-method-id': '',
+          'updated-payment-instrument-id': '',
           'updated-rate': { recurrence: { interval: '' } },
           'updated-recurring-day-of-month': '',
           'updated-start-month': '',
@@ -197,9 +185,9 @@ describe('donations service', () => {
           'designation-number': '0376390',
           'donation-line-row-id': '1-400ZBN',
           'donation-line-status': 'Cancelled',
-          'payment-method-id': 'giydcnzyga=',
+          'payment-instrument-id': 'g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=',
           'updated-donation-line-status': '',
-          'updated-payment-method-id': '',
+          'updated-payment-instrument-id': '',
           'updated-rate': { recurrence: { interval: '' } },
           'updated-recurring-day-of-month': '',
           'updated-start-month': '',
@@ -249,9 +237,9 @@ describe('donations service', () => {
           'designation-number': '0105987',
           'donation-line-row-id': '1-GVVEB6',
           'donation-line-status': 'Standard',
-          'payment-method-id': 'giydcnzyga=',
+          'payment-instrument-id': 'g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=',
           'updated-donation-line-status': '',
-          'updated-payment-method-id': '',
+          'updated-payment-instrument-id': '',
           'updated-rate': { recurrence: { interval: '' } },
           'updated-recurring-day-of-month': '',
           'updated-start-month': '',
@@ -278,9 +266,9 @@ describe('donations service', () => {
                   'designation-number': '0105987',
                   'donation-line-row-id': '1-GVVEB6',
                   'donation-line-status': 'Standard',
-                  'payment-method-id': 'giydcnzyga=',
+                  'payment-instrument-id': 'g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=',
                   'updated-donation-line-status': '',
-                  'updated-payment-method-id': '',
+                  'updated-payment-instrument-id': '',
                   'updated-rate': { recurrence: { interval: '' } },
                   'updated-recurring-day-of-month': '',
                   'updated-start-month': '',
@@ -314,9 +302,9 @@ describe('donations service', () => {
                   'designation-number': '0105987',
                   'donation-line-row-id': '1-GVVEB6',
                   'donation-line-status': 'Standard',
-                  'payment-method-id': 'giydcnzyga=',
+                  'payment-instrument-id': 'g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=',
                   'updated-donation-line-status': '',
-                  'updated-payment-method-id': '',
+                  'updated-payment-instrument-id': '',
                   'updated-rate': { recurrence: { interval: '' } },
                   'updated-recurring-day-of-month': '',
                   'updated-start-month': '',
@@ -329,9 +317,9 @@ describe('donations service', () => {
                   'designation-number': '0105987',
                   'donation-line-row-id': '1-GVVEB6',
                   'donation-line-status': 'Standard',
-                  'payment-method-id': 'giydcnzyga=',
+                  'payment-instrument-id': 'g4ywkyzvgrqtcljymuyweljugizgellbmnsdqljwg5stomrxg5qtqmrumm=',
                   'updated-donation-line-status': '',
-                  'updated-payment-method-id': '',
+                  'updated-payment-instrument-id': '',
                   'updated-rate': { recurrence: { interval: '' } },
                   'updated-recurring-day-of-month': '',
                   'updated-start-month': '',
@@ -368,7 +356,7 @@ describe('donations service', () => {
 
     it('should update a recurring gift', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/donations/recurring/crugive', {
+        .expectPOST('https://give-stage2.cru.org/cortex/donations/recurring/crugive/form', {
           'donation-lines': [
             gift.toObject
           ]
@@ -381,7 +369,7 @@ describe('donations service', () => {
 
     it('should update recurring gifts', () => {
       $httpBackend
-        .expectPOST('https://give-stage2.cru.org/cortex/donations/recurring/crugive', {
+        .expectPOST('https://give-stage2.cru.org/cortex/donations/recurring/crugive/form', {
           'donation-lines': [
             gift.toObject,
             gift.toObject

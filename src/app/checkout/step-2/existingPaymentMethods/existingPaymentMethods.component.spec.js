@@ -156,6 +156,10 @@ describe('checkout', () => {
       })
 
       describe('selectDefaultPaymentMethod', () => {
+        beforeEach(() => {
+          jest.spyOn(self.controller, 'validPaymentMethod').mockReturnValue(true)
+        })
+
         it('should choose the payment method that is marked chosen in cortex', () => {
           self.controller.paymentMethods = [
             {
@@ -183,6 +187,38 @@ describe('checkout', () => {
           self.controller.selectDefaultPaymentMethod()
 
           expect(self.controller.selectedPaymentMethod).toEqual({ selectAction: 'first uri' })
+        })
+
+        it('should choose the first payment method if the one marked chosen in cortex is invalid', () => {
+          jest.spyOn(self.controller, 'validPaymentMethod').mockImplementation(paymentMethod => paymentMethod.selectAction === 'first uri')
+          self.controller.paymentMethods = [
+            {
+              selectAction: 'first uri'
+            },
+            {
+              selectAction: 'second uri',
+              chosen: true
+            }
+          ]
+          self.controller.selectDefaultPaymentMethod()
+
+          expect(self.controller.selectedPaymentMethod).toEqual({ selectAction: 'first uri' })
+        })
+
+        it('should set selectedPaymentMethod to undefined if none are valid', () => {
+          jest.spyOn(self.controller, 'validPaymentMethod').mockReturnValue(undefined)
+          self.controller.paymentMethods = [
+            {
+              selectAction: 'first uri'
+            },
+            {
+              selectAction: 'second uri',
+              chosen: true
+            }
+          ]
+          self.controller.selectDefaultPaymentMethod()
+
+          expect(self.controller.selectedPaymentMethod).toBeUndefined()
         })
 
         it('should check whether or not the fee coverage should be altered based on selected payment type', () => {
@@ -232,8 +268,18 @@ describe('checkout', () => {
           jest.spyOn(self.controller.orderService, 'storeCardSecurityCode').mockImplementation(() => {})
         })
 
-        it('should save the selected payment', () => {
-          self.controller.selectedPaymentMethod = { self: { type: 'elasticpath.bankaccounts.bank-account', uri: 'selected uri' }, selectAction: 'some uri' }
+        it('should save the selected bank account', () => {
+          self.controller.selectedPaymentMethod = { 'account-type': 'Checking', self: { type: 'elasticpath.bankaccounts.bank-account', uri: 'selected uri' }, selectAction: 'some uri' }
+          self.controller.orderService.selectPaymentMethod.mockReturnValue(Observable.of('success'))
+          self.controller.selectPayment()
+
+          expect(self.controller.orderService.selectPaymentMethod).toHaveBeenCalledWith('some uri')
+          expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading' } })
+          expect(self.controller.orderService.storeCardSecurityCode).toHaveBeenCalledWith(null, 'selected uri')
+        })
+
+        it('should save the selected credit card', () => {
+          self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: 'selected uri' }, selectAction: 'some uri' }
           self.controller.orderService.selectPaymentMethod.mockReturnValue(Observable.of('success'))
           self.controller.selectPayment()
 
@@ -263,14 +309,25 @@ describe('checkout', () => {
       })
 
       describe('switchPayment', () => {
-        it('should remove fees if the newly selected payment method is EFT', () => {
-          self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
+        beforeEach(() => {
           jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockImplementation(() => true)
           jest.spyOn(self.controller.orderService, 'storeCoverFeeDecision').mockImplementation(() => {})
+        })
+
+        it('should remove fees if the newly selected payment method is EFT', () => {
+          self.controller.selectedPaymentMethod = { 'bank-name': 'My Bank' }
 
           self.controller.switchPayment()
           expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: self.controller.selectedPaymentMethod })
           expect(self.controller.orderService.storeCoverFeeDecision).toHaveBeenCalledWith(false)
+        })
+
+        it('should handle undefined payment methods', () => {
+          self.controller.selectedPaymentMethod = undefined
+
+          self.controller.switchPayment()
+          expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: undefined })
+          expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
         })
       })
     })

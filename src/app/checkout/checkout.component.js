@@ -27,20 +27,23 @@ const componentName = 'checkout'
 
 class CheckoutController {
   /* @ngInject */
-  constructor ($window, $location, $rootScope, $log, cartService, orderService, designationsService, sessionEnforcerService, analyticsFactory) {
+  constructor ($window, $location, $rootScope, $log, cartService, envService, orderService, designationsService, sessionEnforcerService, analyticsFactory) {
     this.$log = $log
     this.$window = $window
     this.$location = $location
     this.$rootScope = $rootScope
     this.cartService = cartService
+    this.envService = envService
     this.orderService = orderService
     this.designationsService = designationsService
     this.sessionEnforcerService = sessionEnforcerService
     this.loadingCartData = true
     this.analyticsFactory = analyticsFactory
+    this.selfReference = this
   }
 
   $onInit () {
+    this.envService.data.vars[this.envService.get()].isCheckout = true
     this.enforcerId = this.sessionEnforcerService([Roles.public, Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
         this.loadCart()
@@ -84,10 +87,10 @@ class CheckoutController {
   changeStep (newStep, replace) {
     switch (newStep) {
       case 'cart':
-        this.$window.location = '/cart.html'
+        this.$window.location.href = `/cart.html${this.buildRedirectQueryString()}`
         break
       case 'thankYou':
-        this.$window.location = '/thank-you.html'
+        this.$window.location.href = `/thank-you.html${this.buildRedirectQueryString()}`
         break
       default:
         this.$window.scrollTo(0, 0)
@@ -96,6 +99,23 @@ class CheckoutController {
         replace && this.$location.replace()
         break
     }
+  }
+
+  buildRedirectQueryString () {
+    let queryString = ''
+    Object.entries(this.$location.search()).forEach(([key, value]) => {
+      // remove step and email from query string
+      if (key === 'step' || key === 'e') {
+        return
+      }
+
+      if (queryString === '') {
+        queryString += `?${key}=${value}`
+      } else {
+        queryString += `&${key}=${value}`
+      }
+    })
+    return queryString
   }
 
   loadCart () {
@@ -115,6 +135,7 @@ class CheckoutController {
 
 export default angular
   .module(componentName, [
+    'environment',
     commonModule.name,
     step1.name,
     step2.name,

@@ -65,17 +65,18 @@ describe('your giving', () => {
           it('sets payment methods and next start date', () => {
             const paymentMethods = [{
               self: {
-                type: 'elasticpath.bankaccounts.bank-account'
-              }
+                type: 'paymentinstruments.payment-instrument'
+              },
+              'account-type': 'Checking'
             }, {
               self: {
-                type: 'cru.creditcards.named-credit-card'
+                type: 'paymentinstruments.payment-instrument'
               },
               'expiry-month': '01',
               'expiry-year': '2015'
             }, {
               self: {
-                type: 'cru.creditcards.named-credit-card'
+                type: 'paymentinstruments.payment-instrument'
               },
               'expiry-month': '12',
               'expiry-year': '2014'

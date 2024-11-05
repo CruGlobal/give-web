@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 //
 // Forms
 // --------------------------------------------------
@@ -111,6 +113,10 @@ output {
 // input[type="search"]
 // input[type="tel"]
 // input[type="color"]
+
+label:has(.form-control) {
+    width: 100%;
+}
 
 .form-control {
   display: block;
@@ -440,7 +446,7 @@ input[type="checkbox"] {
         }
 
         // Input groups need that 100% width though
-        .input-group > .form-control {
+        .input-group > label > .form-control {
             width: 100%;
         }
 
@@ -528,7 +534,7 @@ input[type="checkbox"] {
     // Reposition the icon because it's now within a grid column and columns have
     // `position: relative;` on them. Also accounts for the grid gutter padding.
     .has-feedback .form-control-feedback {
-        right: ($grid-gutter-width / 2);
+        right: math.div($grid-gutter-width, 2);
     }
 
     // Form group sizes

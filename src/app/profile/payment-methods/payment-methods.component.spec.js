@@ -99,6 +99,15 @@ describe('PaymentMethodsComponent', function () {
       expect($ctrl.profileService.getPaymentMethodsWithDonations).toHaveBeenCalled()
       expect($ctrl.$log.error.logs[0]).toEqual(['Error loading payment methods', { data: 'some error' }])
     })
+
+    it('should handle 500 errors differently when loading payment methods', () => {
+      jest.spyOn($ctrl.profileService, 'getPaymentMethodsWithDonations').mockReturnValue(Observable.throw({
+        status: 500
+      }))
+      $ctrl.loadPaymentMethods()
+
+      expect($ctrl.loadingError).toEqual('authentication')
+    })
   })
 
   describe('loadDonorDetails()', () => {
@@ -188,14 +197,16 @@ describe('PaymentMethodsComponent', function () {
     it('should return true if payment method is a card', () => {
       expect($ctrl.isCard({
         self: {
-          type: 'cru.creditcards.named-credit-card'
-        }
+          type: 'paymentinstruments.payment-instrument'
+        },
+        'card-type': 'Visa'
       })).toBe(true)
 
       expect($ctrl.isCard({
         self: {
-          type: 'elasticpath.bankaccounts.bank-account'
-        }
+          type: 'paymentinstruments.payment-instrument'
+        },
+        'account-type': 'Checking'
       })).toBe(false)
     })
   })
@@ -233,6 +244,65 @@ describe('PaymentMethodsComponent', function () {
 
       expect($ctrl.paymentFormResolve.state).toBe('error')
       expect($ctrl.paymentFormResolve.error).toBe('some error')
+    })
+
+    it('should handle data.address format', () => {
+      $ctrl.paymentMethodFormModal = { close: jest.fn() }
+      jest.spyOn($ctrl.profileService, 'addPaymentMethod').mockReturnValue(Observable.of({
+        address: {
+          'street-address': '123 Sesame St',
+          locality: 'Orlando',
+          region: 'FL',
+          'postal-code': '33333',
+          'country-name': 'US'
+        }
+      }))
+      $ctrl.onPaymentFormStateChange({ state: 'loading', payload: 'payload' })
+
+      const expectedData = {
+        address: {
+          streetAddress: '123 Sesame St',
+          locality: 'Orlando',
+          region: 'FL',
+          postalCode: '33333',
+          country: 'US'
+        }
+      }
+
+      expect($ctrl.paymentMethodFormModal.close).toHaveBeenCalledWith(expectedData)
+    })
+
+    it('should handle payment-instrument-identification-attributes', () => {
+      $ctrl.paymentMethodFormModal = { close: jest.fn() }
+      jest.spyOn($ctrl.profileService, 'addPaymentMethod').mockReturnValue(Observable.of({
+        'payment-instrument-identification-attributes': {
+          'street-address': '123 Sesame St',
+          locality: 'Orlando',
+          region: 'FL',
+          'postal-code': '33333',
+          'country-name': 'US'
+        }
+      }))
+      $ctrl.onPaymentFormStateChange({ state: 'loading', payload: 'payload' })
+
+      const expectedData = {
+        address: {
+          streetAddress: '123 Sesame St',
+          locality: 'Orlando',
+          region: 'FL',
+          postalCode: '33333',
+          country: 'US'
+        },
+        'payment-instrument-identification-attributes': {
+          'street-address': '123 Sesame St',
+          locality: 'Orlando',
+          region: 'FL',
+          'postal-code': '33333',
+          'country-name': 'US'
+        }
+      }
+
+      expect($ctrl.paymentMethodFormModal.close).toHaveBeenCalledWith(expectedData)
     })
   })
 

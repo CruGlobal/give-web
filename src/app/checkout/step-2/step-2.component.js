@@ -6,6 +6,7 @@ import existingPaymentMethods from './existingPaymentMethods/existingPaymentMeth
 import orderService from 'common/services/api/order.service'
 import { SignInEvent } from 'common/services/session/session.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
+import brandedAnalyticsFactory from 'app/branded/analytics/branded-analytics.factory'
 import { scrollModalToTop } from 'common/services/modalState.service'
 
 import template from './step-2.tpl.html'
@@ -14,12 +15,13 @@ const componentName = 'checkoutStep2'
 
 class Step2Controller {
   /* @ngInject */
-  constructor ($window, $log, $scope, orderService, analyticsFactory) {
+  constructor ($window, $log, $scope, orderService, analyticsFactory, brandedAnalyticsFactory) {
     this.$window = $window
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
     this.analyticsFactory = analyticsFactory
+    this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.scrollModalToTop = scrollModalToTop
 
     this.$scope.$on(SignInEvent, () => {
@@ -50,7 +52,12 @@ class Step2Controller {
   }
 
   handlePaymentChange (selectedPaymentMethod) {
-    this.defaultPaymentType = selectedPaymentMethod['account-type'] ? selectedPaymentMethod['account-type'] : selectedPaymentMethod['card-type']
+    const paymentType = selectedPaymentMethod?.['account-type'] || selectedPaymentMethod?.['card-type']
+    this.selectedPaymentMethod = selectedPaymentMethod
+    this.defaultPaymentType = paymentType
+    if (selectedPaymentMethod) {
+      this.brandedAnalyticsFactory.savePaymentType(paymentType, Boolean(selectedPaymentMethod['card-type']))
+    }
   }
 
   handleExistingPaymentLoading (success, hasExistingPaymentMethods, error) {
@@ -72,6 +79,7 @@ class Step2Controller {
   onPaymentFormStateChange ($event) {
     this.paymentFormState = $event.state
     if ($event.state === 'loading' && $event.payload) {
+      const paymentType = $event.payload.creditCard ? $event.payload.creditCard['card-type'] : $event.payload.bankAccount ? $event.payload.bankAccount['account-type'] : 'Unknown'
       const request = $event.update
         ? this.orderService.updatePaymentMethod($event.paymentMethodToUpdate, $event.payload)
         : this.orderService.addPaymentMethod($event.payload)
@@ -81,6 +89,7 @@ class Step2Controller {
           this.onStateChange({ state: 'submitted' })
           this.$onInit()
         }
+        this.brandedAnalyticsFactory.savePaymentType(paymentType, Boolean($event.payload.creditCard))
         this.paymentFormState = 'success'
       },
       error => {
@@ -106,6 +115,20 @@ class Step2Controller {
       this.onStateChange({ state: 'errorSubmitting' })
     }
   }
+
+  getContinueDisabled () {
+    if (this.loadingPaymentMethods) {
+      return true
+    }
+    if (this.paymentFormState === 'loading' || this.paymentFormState === 'encrypting') {
+      return true
+    }
+    if (this.existingPaymentMethods && !this.selectedPaymentMethod) {
+      // All payment methods are invalid
+      return true
+    }
+    return false
+  }
 }
 
 export default angular
@@ -113,7 +136,8 @@ export default angular
     paymentMethodForm.name,
     existingPaymentMethods.name,
     orderService.name,
-    analyticsFactory.name
+    analyticsFactory.name,
+    brandedAnalyticsFactory.name
   ])
   .component(componentName, {
     controller: Step2Controller,

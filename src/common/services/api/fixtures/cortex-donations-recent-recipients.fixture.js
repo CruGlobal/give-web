@@ -62,11 +62,11 @@ export default {
     uri: '/selfservicedonordetails/profiles/crugive/myywkmtcga2diljyme3tkljugfqtollbgzrdeljqmq2tknrtgu2tamtbga=',
     href: 'https://give-stage2.cru.org/cortex/selfservicedonordetails/profiles/crugive/myywkmtcga2diljyme3tkljugfqtollbgzrdeljqmq2tknrtgu2tamtbga='
   }, {
-    rel: 'selfservicepaymentmethods',
+    rel: 'selfservicepaymentinstruments',
     rev: 'profile',
     type: 'elasticpath.collections.links',
-    uri: '/selfservicepaymentmethods/crugive',
-    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+    uri: '/selfservicepaymentinstruments/crugive',
+    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive'
   }, {
     rel: 'wishlists',
     rev: 'profile',
@@ -110,7 +110,7 @@ export default {
             'transaction-date': { 'display-value': '2017-02-20', value: 1487548800000 },
             'transaction-sub-type': 'Credit Card'
           },
-          'payment-method-link': {
+          'payment-instrument-link': {
             rel: 'paymentmethod',
             type: 'elasticpath.paymentmethods.payment-method',
             uri: '/paymentmethods/crugive/giydknjsg4='
@@ -136,7 +136,7 @@ export default {
             'transaction-date': { 'display-value': '2017-02-20', value: 1487548800000 },
             'transaction-sub-type': 'Credit Card'
           },
-          'payment-method-link': {
+          'payment-instrument-link': {
             rel: 'paymentmethod',
             type: 'elasticpath.paymentmethods.payment-method',
             uri: '/paymentmethods/crugive/giydknjsg4='
@@ -171,7 +171,7 @@ export default {
             'transaction-date': { 'display-value': '2017-02-16', value: 1487203200000 },
             'transaction-sub-type': 'Credit Card'
           },
-          'payment-method-link': {
+          'payment-instrument-link': {
             rel: 'paymentmethod',
             type: 'elasticpath.paymentmethods.payment-method',
             uri: '/paymentmethods/crugive/giydimbvg4='
@@ -197,7 +197,7 @@ export default {
             'transaction-date': { 'display-value': '2017-02-16', value: 1487203200000 },
             'transaction-sub-type': 'Credit Card'
           },
-          'payment-method-link': {
+          'payment-instrument-link': {
             rel: 'paymentmethod',
             type: 'elasticpath.paymentmethods.payment-method',
             uri: '/paymentmethods/crugive/giydimbvg4='

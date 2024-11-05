@@ -42,7 +42,7 @@ class NewsletterModalController {
       })
 
       // Concatenate all defined street fields
-      this.attributes['street'] = compact(map(streetFields, key => this.address[key])).join(`\n`)
+      this.attributes.street = compact(map(streetFields, key => this.address[key])).join('\n')
 
       this.designationEditorService.subscribeToNewsletter(this.designationNumber, this.attributes).then(() => {
         this.success = true
@@ -52,7 +52,7 @@ class NewsletterModalController {
         forEach(addressPropertyMap, (value) => {
           delete this.attributes[value]
         })
-        delete this.attributes['street']
+        delete this.attributes.street
       }).finally(() => {
         this.step = 3
         this.progress = false

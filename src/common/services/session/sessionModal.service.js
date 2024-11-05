@@ -27,6 +27,7 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       component: sessionModalComponent.name,
       size: 'sm',
       windowTemplateUrl: sessionModalWindowTemplate,
+      ariaLabelledBy: 'session-modal-title',
       resolve: {
         state: () => type
       }

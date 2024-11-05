@@ -9,7 +9,7 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-sm-6">
-                  <h3 class="panel-name" translate>Your Gift Cart</h3>
+                  <h3 id="cart-header" class="panel-name" translate>Your Gift Cart</h3>
                 </div>
                 <div class="col-sm-6 text-right">
                   <loading inline="true" class="text-right" ng-if="$ctrl.updating">
@@ -28,7 +28,7 @@
                 Your cart is empty
               </p>
               <form ng-if="$ctrl.cartData.items.length">
-                <table class="table giftsum-table">
+                <table class="table giftsum-table" aria-labelledby="cart-header">
                   <thead>
                   <tr>
                     <th class="th-title-gift" translate>Gift</th>
@@ -39,8 +39,8 @@
                   <tbody>
                   <tr class="giftsum-gift-row" ng-repeat="i in $ctrl.cartData.items">
                     <td class="td-gift">
-                      <img desig-src="{{i.designationNumber}}" class="giftsum-profile pull-left">
-                      <span class="giftsum-person giftsum-title"><a ng-href="/{{i.designationNumber}}">{{i.displayName}}</a></span>
+                      <img desig-src="{{i.designationNumber}}" class="giftsum-profile pull-left" width="90" height="51">
+                      <span id="cart-{{$index}}" class="giftsum-person giftsum-title"><a ng-href="/{{i.designationNumber}}">{{i.displayName}}</a></span>
                       <span class="giftsum-accountnum giftsum-detail">#{{i.designationNumber}}</span>
                     </td>
                     <td class="td-frequency">
@@ -57,9 +57,9 @@
                       <span class="giftsum-detail"><span class=" visible-xs" translate>Gift Amount</span></span>
                     </td>
                     <td class="td-actions giftsum-actions text-sm-right" ng-if="!i.removing">
-                      <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.editItem(i)" translate>Edit</a>
+                      <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.editItem(i)" aria-describedby="cart-{{$index}}" translate>Edit</a>
                       <span class="sep"> | </span>
-                      <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.removeItem(i)" translate>Remove</a>
+                      <a href="" class="btn btn-link btn-giftsum-action" ng-click="$ctrl.removeItem(i)" aria-describedby="cart-{{$index}}" translate>Remove</a>
                       <div class="text-danger" role="alert" ng-if="i.removingError">
                         <span translate>Error removing</span>
                         <span class="hidden-xs hidden-sm" translate>gift</span>

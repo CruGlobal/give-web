@@ -15,18 +15,21 @@ import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { SignInEvent } from 'common/services/session/session.service'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
+import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
 
 import template from './step-3.tpl.html'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
+import { recaptchaFailedEvent, submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
 
 const componentName = 'checkoutStep3'
 
 class Step3Controller {
   /* @ngInject */
-  constructor (orderService, $window, $scope, $log, analyticsFactory, cartService, commonService, profileService) {
+  constructor (orderService, $window, $rootScope, $scope, $log, analyticsFactory, cartService, commonService, profileService, envService) {
     this.orderService = orderService
     this.$window = $window
+    this.$rootScope = $rootScope
     this.$scope = $scope
     this.$log = $log
     this.analyticsFactory = analyticsFactory
@@ -35,9 +38,18 @@ class Step3Controller {
     this.commonService = commonService
     this.startDate = startDate
     this.sessionStorage = $window.sessionStorage
+    this.selfReference = this
+    this.isBranded = envService.read('isBrandedCheckout')
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
+    })
+
+    this.$rootScope.$on(recaptchaFailedEvent, () => {
+      this.handleRecaptchaFailure(this)
+    })
+    this.$rootScope.$on(submitOrderEvent, () => {
+      this.submitOrder()
     })
   }
 
@@ -70,9 +82,9 @@ class Step3Controller {
       .subscribe((data) => {
         if (!data) {
           this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist')
-        } else if (data.self.type === 'elasticpath.bankaccounts.bank-account') {
+        } else if (data['account-type']) {
           this.bankAccountPaymentDetails = data
-        } else if (data.self.type === 'cru.creditcards.named-credit-card') {
+        } else if (data['card-type']) {
           this.creditCardPaymentDetails = data
         } else {
           this.$log.error('Error loading current payment info: current payment type is unknown')
@@ -102,7 +114,7 @@ class Step3Controller {
   }
 
   updateGiftStartMonth (item, month) {
-    item.config['recurring-start-month'] = month
+    item.config.RECURRING_START_MONTH = month
 
     this.cartData = null
     this.cartService.editItem(item.uri, item.productUri, item.config).subscribe(() => {
@@ -122,47 +134,64 @@ class Step3Controller {
   }
 
   submitOrder () {
-    delete this.submissionError
-    delete this.submissionErrorStatus
+    this.submitOrderInternal(this)
+  }
+
+  submitOrderInternal (componentInstance) {
+    delete componentInstance.submissionError
+    delete componentInstance.submissionErrorStatus
     // Prevent multiple submissions
-    if (this.submittingOrder) return
-    this.submittingOrder = true
-    this.onSubmittingOrder({ value: true })
+    if (componentInstance.submittingOrder) return
+    componentInstance.submittingOrder = true
+    componentInstance.onSubmittingOrder({ value: true })
 
     let submitRequest
-    if (this.bankAccountPaymentDetails) {
-      submitRequest = this.orderService.submit()
-    } else if (this.creditCardPaymentDetails) {
-      const cvv = this.orderService.retrieveCardSecurityCode()
-      submitRequest = this.orderService.submit(cvv)
+    if (componentInstance.bankAccountPaymentDetails) {
+      submitRequest = componentInstance.orderService.submit()
+    } else if (componentInstance.creditCardPaymentDetails) {
+      const cvv = componentInstance.orderService.retrieveCardSecurityCode()
+      submitRequest = componentInstance.orderService.submit(cvv)
     } else {
       submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
     }
     submitRequest.subscribe(() => {
-      this.analyticsFactory.purchase(this.donorDetails, this.cartData)
-      this.submittingOrder = false
-      this.onSubmittingOrder({ value: false })
-      this.orderService.clearCardSecurityCodes()
-      this.orderService.clearCoverFees()
-      this.onSubmitted()
-      this.$scope.$emit(cartUpdatedEvent)
-      this.changeStep({ newStep: 'thankYou' })
+      componentInstance.analyticsFactory.purchase(componentInstance.donorDetails, componentInstance.cartData, componentInstance.orderService.retrieveCoverFeeDecision())
+      componentInstance.submittingOrder = false
+      componentInstance.onSubmittingOrder({ value: false })
+      componentInstance.orderService.clearCardSecurityCodes()
+      componentInstance.orderService.clearCoverFees()
+      componentInstance.onSubmitted()
+      componentInstance.$scope.$emit(cartUpdatedEvent)
+      componentInstance.changeStep({ newStep: 'thankYou' })
     },
     error => {
-      this.submittingOrder = false
-      this.onSubmittingOrder({ value: false })
+      componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+      componentInstance.submittingOrder = false
+      componentInstance.onSubmittingOrder({ value: false })
 
-      this.loadCart()
+      componentInstance.loadCart()
 
       if (error.config && error.config.data && error.config.data['security-code']) {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }
-      this.$log.error('Error submitting purchase:', error)
-      this.onSubmitted()
-      this.submissionErrorStatus = error.status
-      this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
-      this.$window.scrollTo(0, 0)
+      componentInstance.$log.error('Error submitting purchase:', error)
+      componentInstance.onSubmitted()
+      componentInstance.submissionErrorStatus = error.status
+      componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
+      componentInstance.$window.scrollTo(0, 0)
     })
+  }
+
+  handleRecaptchaFailure (componentInstance) {
+    componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+    componentInstance.submittingOrder = false
+    componentInstance.onSubmittingOrder({ value: false })
+
+    componentInstance.loadCart()
+
+    componentInstance.onSubmitted()
+    componentInstance.submissionError = 'generic error'
+    componentInstance.$window.scrollTo(0, 0)
   }
 }
 
@@ -176,7 +205,8 @@ export default angular
     profileService.name,
     analyticsFactory.name,
     cartService.name,
-    commonService.name
+    commonService.name,
+    recaptchaComponent.name
   ])
   .component(componentName, {
     controller: Step3Controller,
@@ -190,6 +220,7 @@ export default angular
       onSubmitted: '&',
       onSubmittingOrder: '&',
       submittingOrder: '<',
+      radioStationName: '<',
       premiumName: '<',
       brandedCheckoutItem: '<'
     }

@@ -76,7 +76,8 @@ describe('Designation Editor', function () {
           location: '/designation-editor.html?d=' + designationSecurityResponse.designationNumber,
           document: {
             dispatchEvent: jest.fn()
-          }
+          },
+          scrollTo: jest.fn()
         }
       }
     )
@@ -155,11 +156,11 @@ describe('Designation Editor', function () {
   })
 
   describe('getDesignationContent()', () => {
-    it('to skip if no designation number', () => {
+    it('should skip if no designation number', () => {
       expect($ctrl.getDesignationContent()).toEqual(undefined)
     })
 
-    it('to getDesignationContent', () => {
+    it('should load designation content and photos', (done) => {
       $ctrl.designationNumber = designationSecurityResponse.designationNumber
 
       $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
@@ -169,9 +170,59 @@ describe('Designation Editor', function () {
 
       $ctrl.getDesignationContent().then(() => {
         expect($ctrl.designationContent).toBeDefined()
-        expect($ctrl.contentLoaded).toEqual(true)
+        expect($ctrl.contentLoaded).toEqual(false)
         expect($ctrl.loadingContentError).toEqual(false)
-      })
+        done()
+      }).catch(done)
+      $httpBackend.flush()
+    })
+
+    it('should sign in and try again if the response is 422', (done) => {
+      $ctrl.designationNumber = designationSecurityResponse.designationNumber
+
+      $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(422, null)
+      $httpBackend.expectGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(422, null)
+
+      const signInDeferred = $q.defer()
+      jest.spyOn($ctrl.sessionModalService, 'open').mockReturnValue({ result: signInDeferred.promise })
+
+      $ctrl.getDesignationContent().then(() => {
+        expect($ctrl.sessionModalService.open).toHaveBeenCalled()
+        expect($ctrl.designationContent).toBeDefined()
+        expect($ctrl.contentLoaded).toEqual(false)
+        expect($ctrl.loadingContentError).toEqual(false)
+        done()
+      }).catch(done)
+      $httpBackend.flush()
+
+      $httpBackend.expectGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(200, designationSecurityResponse)
+      $httpBackend.expectGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(200, [])
+      signInDeferred.resolve()
+      $httpBackend.flush()
+    })
+
+    it('should only retry once if the response is repeatedly 422', (done) => {
+      $ctrl.designationNumber = designationSecurityResponse.designationNumber
+
+      $httpBackend.whenGET(designationConstants.designationEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(422, null)
+      $httpBackend.whenGET(designationConstants.designationImagesEndpoint + '?designationNumber=' + designationSecurityResponse.designationNumber)
+        .respond(422, null)
+
+      jest.spyOn($ctrl.sessionModalService, 'open').mockReturnValue({ result: $q.resolve() })
+
+      $ctrl.getDesignationContent().then(() => {
+        expect($ctrl.sessionModalService.open).toHaveBeenCalledTimes(1)
+        expect($ctrl.designationContent).toBeUndefined()
+        expect($ctrl.contentLoaded).toEqual(false)
+        expect($ctrl.loadingContentError).toEqual(true)
+        done()
+      }).catch(done)
+      $httpBackend.flush()
       $httpBackend.flush()
     })
 
@@ -326,15 +377,16 @@ describe('Designation Editor', function () {
       let modalPromise
       beforeEach(inject((_$q_) => {
         modalPromise = _$q_.defer()
-        spyOn($ctrl.$uibModal, 'open').and.returnValue({ result: modalPromise.promise })
+        jest.spyOn($ctrl.$uibModal, 'open').mockReturnValue({ result: modalPromise.promise })
         $ctrl.designationContent = designationSecurityResponse
+        $ctrl.carouselImages = $ctrl.extractCarouselUrls()
       }))
 
       it('should open modal', () => {
         let photos = []
         $ctrl.designationPhotos = photos
 
-        $ctrl.selectPhotos('secondaryPhotos', designationSecurityResponse['design-controller'].carousel)
+        $ctrl.selectPhotos('secondaryPhotos')
 
         let selectedPhotos = [
           { url: '/content/dam/give/designations/0/1/2/3/4/0123456/some-image.jpg' },
@@ -343,11 +395,11 @@ describe('Designation Editor', function () {
         ]
 
         expect($ctrl.$uibModal.open).toHaveBeenCalled()
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.campaignPage()).toBeUndefined()
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photos()).toEqual(photos)
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.photoLocation()).toEqual('secondaryPhotos')
-        expect($ctrl.$uibModal.open.calls.argsFor(0)[0].resolve.selectedPhoto()).toEqual(selectedPhotos)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.designationNumber()).toEqual(designationSecurityResponse.designationNumber)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.campaignPage()).toBeUndefined()
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.photos()).toEqual(photos)
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.photoLocation()).toEqual('secondaryPhotos')
+        expect($ctrl.$uibModal.open.mock.calls[0][0].resolve.selectedPhoto()).toEqual(selectedPhotos)
       })
 
       it('should have empty selectedPhotos', () => {
@@ -447,27 +499,52 @@ describe('Designation Editor', function () {
   })
 
   describe('save', () => {
-    it('should save designation content', () => {
-      $httpBackend.expectPOST(designationConstants.designationEndpoint).respond(200)
-      $ctrl.designationContent = designationSecurityResponse
+    it('should save designation content', done => {
+      jest.spyOn($ctrl, 'sessionEnforcerService').mockImplementation((role, callbacks) => {
+        const signInAsync = () => {
+          return Promise.resolve(callbacks['sign-in']())
+        }
 
-      $ctrl.save().then(() => {
-        expect($ctrl.saveStatus).toEqual('success')
-        expect($ctrl.saveDesignationError).toEqual(false)
+        signInAsync().then(() => {
+          expect($ctrl.designationEditorService.save).toHaveBeenCalled()
+          done()
+        })
       })
-      $httpBackend.flush()
+      $ctrl.designationContent = designationSecurityResponse
+      jest.spyOn($ctrl.designationEditorService, 'save').mockImplementation(() => Promise.resolve({}))
+      $ctrl.save()
     })
 
-    it('should try to save designation content', () => {
-      $httpBackend.expectPOST(designationConstants.designationEndpoint).respond(500)
-      $ctrl.designationContent = designationSecurityResponse
-
-      $ctrl.save().then(() => {
-        expect($ctrl.saveStatus).toEqual('failure')
-        expect($ctrl.saveDesignationError).toEqual(true)
-        expect($ctrl.$log.error.logs[0]).toEqual(['Error saving designation editor content.', expect.any(Object)])
+    it('should try to save designation content', done => {
+      jest.spyOn($ctrl, 'sessionEnforcerService').mockImplementation((role, callbacks) => {
+        const signInAsync = () => {
+          return Promise.resolve(callbacks['sign-in']())
+        }
+        signInAsync().then(() => {
+          expect($ctrl.saveStatus).toEqual('failure')
+          expect($ctrl.saveDesignationError).toEqual(true)
+          expect($ctrl.$log.error.logs[0]).toEqual(['Error saving designation editor content.', expect.any(Object)])
+          done()
+        })
       })
-      $httpBackend.flush()
+      jest.spyOn($ctrl.designationEditorService, 'save').mockImplementation(() => Promise.reject(new Error('error')))
+      jest.spyOn($ctrl.$window, 'scrollTo').mockImplementation(() => {})
+      $ctrl.designationContent = designationSecurityResponse
+      $ctrl.save()
+    })
+
+    it('should handle cancelling the login', done => {
+      jest.spyOn($ctrl, 'sessionEnforcerService').mockImplementation((role, callbacks) => {
+        const signInAsync = () => {
+          return Promise.resolve(callbacks.cancel())
+        }
+
+        signInAsync().then(() => {
+          expect($ctrl.$window.location).toEqual('/')
+          done()
+        })
+      })
+      $ctrl.save()
     })
   })
 
@@ -503,7 +580,7 @@ describe('Designation Editor', function () {
     })
   })
 
-  describe('images', () => {
+  describe('extractCarouselUrls', () => {
     it('should return all of the selected images for the carousel', () => {
       $ctrl.designationContent = designationSecurityResponse
       let expectedImageUrls = [
@@ -512,14 +589,26 @@ describe('Designation Editor', function () {
         '/content/dam/give/designations/0/1/2/3/4/0123456/third-image.jpg'
       ]
 
-      expect($ctrl.images()).toEqual(expectedImageUrls)
+      expect($ctrl.extractCarouselUrls()).toEqual(expectedImageUrls)
     })
 
     it('should return an empty array if there is no carousel', () => {
       $ctrl.designationContent = {
         designationNumber: '0123456'
       }
-      expect($ctrl.images()).toEqual([])
+      expect($ctrl.extractCarouselUrls()).toEqual([])
+    })
+  })
+
+  describe('updateCarousel', () => {
+    it('should hide then show the carousel', () => {
+      $ctrl.updateCarousel()
+
+      expect($ctrl.contentLoaded).toBe(false)
+
+      $rootScope.$digest()
+
+      expect($ctrl.contentLoaded).toBe(true)
     })
   })
 
@@ -551,6 +640,30 @@ describe('Designation Editor', function () {
       $ctrl.carouselLoaded = false
       $ctrl.carouselLoad()
       expect($ctrl.$window.document.dispatchEvent).toHaveBeenCalled()
+    })
+  })
+
+  describe ('getDoneEditingUrl()', () => {
+    const cacheBust = '?doneEditing'
+    const designationNumber = '0123456'
+
+    it('should return the first vanity url', () => {
+      $ctrl.designationContent = designationSecurityResponse
+      $ctrl.designationContent['sling:vanityPath'] = [`/content/give/us/en/${designationNumber}`]
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
+    })
+
+    it('should return the only vanity url', () => {
+      $ctrl.designationContent = designationSecurityResponse
+      $ctrl.designationContent['sling:vanityPath'] = `/content/give/us/en/${designationNumber}`
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
+    })
+
+    it('should fallback to the designation number page', () => {
+      $ctrl.designationNumber = designationNumber
+      $ctrl.designationContent = designationSecurityResponse
+      $ctrl.designationContent['sling:vanityPath'] = undefined
+      expect($ctrl.getDoneEditingUrl()).toEqual(`/${designationNumber}${cacheBust}`)
     })
   })
 })

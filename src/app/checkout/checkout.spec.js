@@ -13,7 +13,11 @@ describe('checkout', function () {
 
   beforeEach(inject(function ($componentController) {
     self.controller = $componentController(module.name, {
-      $window: { location: '/checkout.html', scrollTo: jest.fn() }
+      $window: {
+        location: {
+          href: '/checkout.html',
+          search: ''
+        }, scrollTo: jest.fn() }
     })
   }))
 
@@ -114,7 +118,7 @@ describe('checkout', function () {
     it('should watch the url and update the state', () => {
       jest.spyOn(self.controller, 'initStepParam').mockImplementation(() => {})
       jest.spyOn(self.controller.cartService, 'get').mockReturnValue(Observable.of('cartData'))
-      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepEvent').mockImplementation(() => {})  
+      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepEvent').mockImplementation(() => {})
       self.controller.listenForLocationChange()
       self.controller.$location.search('step', 'review')
       self.controller.$rootScope.$digest()
@@ -129,7 +133,7 @@ describe('checkout', function () {
       it('does nothing', () => {
         self.controller.signedOut({ defaultPrevented: true })
 
-        expect(self.controller.$window.location).toEqual('/checkout.html')
+        expect(self.controller.$window.location.href).toEqual('/checkout.html')
       })
     })
 
@@ -170,14 +174,40 @@ describe('checkout', function () {
     it('should redirect to cart page', () => {
       self.controller.changeStep('cart')
 
-      expect(self.controller.$window.location).toEqual('/cart.html')
+      expect(self.controller.$window.location.href).toEqual('/cart.html')
     })
 
     it('should redirect to thank you page', () => {
       self.controller.changeStep('thankYou')
 
-      expect(self.controller.$window.location).toEqual('/thank-you.html')
+      expect(self.controller.$window.location.href).toEqual('/thank-you.html')
     })
+
+    it('should retain query parameters on cart page', () => {
+      const searchObject = {
+        one: '1',
+        step: 'review'
+      }
+      mockSearch(searchObject)
+      self.controller.changeStep('cart')
+      expect(self.controller.$window.location.href).toEqual('/cart.html?one=1')
+    })
+
+    it('should retain query parameters on thank you page', () => {
+      const searchObject = {
+        one: '1',
+        two: '2',
+        step: 'review',
+        e: 'bill.bright@cru.org'
+      }
+      mockSearch(searchObject)
+      self.controller.changeStep('thankYou')
+      expect(self.controller.$window.location.href).toEqual('/thank-you.html?one=1&two=2')
+    })
+
+    const mockSearch = (searchObject) => {
+      jest.spyOn(self.controller.$location, 'search').mockReturnValue(searchObject)
+    }
   })
 
   describe('loadCart', () => {

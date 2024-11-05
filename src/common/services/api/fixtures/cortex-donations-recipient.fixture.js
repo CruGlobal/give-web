@@ -2,12 +2,12 @@ export default {
   self: {
     type: 'elasticpath.donations.recipient-donation-history-list',
     uri: '/donations/historical/crugive/recipient/recent',
-    href: 'http://localhost:9080/cortex/donations/historical/crugive/recipient/recent'
+    href: 'https://give-stage2.cru.org/cortex/donations/historical/crugive/recipient/recent'
   },
   links: [{
     rel: 'givingdashboard',
     uri: '/giving/crugive',
-    href: 'http://localhost:9080/cortex/giving/crugive'
+    href: 'https://give-stage2.cru.org/cortex/giving/crugive'
   }],
   'donation-summaries': [{
     'designation-active': true,
@@ -27,16 +27,16 @@ export default {
         'given-through-description': 'Steve',
         'master-account': false,
         'pass-through': false,
-        'payment-method-id': 'giydambvga=',
+        'payment-instrument-id': 'gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm=',
         'payment-type': 'Discover',
         'related-account-description': 'Steve',
         'transaction-date': { 'display-value': '2017-01-10', value: 1484006400000 },
         'transaction-sub-type': 'Credit Card'
       },
-      'payment-method-link': {
-        rel: 'paymentmethod',
-        type: 'elasticpath.paymentmethods.payment-method',
-        uri: '/paymentmethods/crugive/giydambvga='
+      'payment-instrument-link': {
+        rel: 'paymentinstrument',
+        type: 'elasticpath.paymentinstruments.purchase-payment-instrument',
+        uri: '/selfservicepaymentinstruments/crugive/gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm='
       }
     }],
     'most-recent-donation': {
@@ -53,16 +53,16 @@ export default {
         'given-through-description': 'Steve',
         'master-account': false,
         'pass-through': false,
-        'payment-method-id': 'giydambvga=',
+        'payment-instrument-id': 'gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm=',
         'payment-type': 'Discover',
         'related-account-description': 'Steve',
         'transaction-date': { 'display-value': '2017-01-10', value: 1484006400000 },
         'transaction-sub-type': 'Credit Card'
       },
-      'payment-method-link': {
-        rel: 'paymentmethod',
-        type: 'elasticpath.paymentmethods.payment-method',
-        uri: '/paymentmethods/crugive/giydambvga='
+      'payment-instrument-link': {
+        rel: 'paymentinstrument',
+        type: 'elasticpath.paymentinstruments.purchase-payment-instrument',
+        uri: '/selfservicepaymentinstruments/crugive/gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm='
       }
     },
     'recurring-donations-link': {
@@ -172,7 +172,27 @@ export default {
     'designation-active': true,
     'designation-name': '"God Loves Lebanon" Initiative(2798344)',
     'designation-number': '2798344',
-    donations: [],
+    donations: [{
+      'donation-row-id': '1-26020D',
+      'donation-status': 'Closed',
+      'historical-donation-line': {
+        amount: 20,
+        anonymous: false,
+        'campaign-code': '000000',
+        completed: false,
+        'designation-active': true,
+        'designation-name': '"God Loves Lebanon" Initiative(2798344)',
+        'designation-number': '2798344',
+        'given-through-description': 'Steve',
+        'master-account': false,
+        'pass-through': false,
+        'payment-instrument-id': 'gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm=',
+        'payment-type': 'EFT',
+        'related-account-description': 'Steve',
+        'transaction-date': { 'display-value': '2017-02-22', value: 1471824000000 },
+        'transaction-sub-type': 'EFT'
+      }
+    }],
     'most-recent-donation': {
       'donation-row-id': '1-36020D',
       'donation-status': 'Closed',
@@ -187,16 +207,16 @@ export default {
         'given-through-description': 'Steve',
         'master-account': false,
         'pass-through': false,
-        'payment-method-id': 'giydambrg4=',
+        'payment-instrument-id': 'gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm=',
         'payment-type': 'EFT',
         'related-account-description': 'Steve',
         'transaction-date': { 'display-value': '2016-08-22', value: 1471824000000 },
         'transaction-sub-type': 'EFT'
       },
-      'payment-method-link': {
-        rel: 'paymentmethod',
-        type: 'elasticpath.paymentmethods.payment-method',
-        uri: '/paymentmethods/crugive/giydambrg4='
+      'payment-instrument-link': {
+        rel: 'paymentinstrument',
+        type: 'elasticpath.paymentinstruments.purchase-payment-instrument',
+        uri: '/selfservicepaymentinstruments/crugive/gi3tmyrsgazwiljygeytqljugaztkljygjrtmllemqydcyzygi3gmojsmm='
       }
     },
     'recurring-donations-link': {

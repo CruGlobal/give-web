@@ -9,18 +9,15 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
   function getContacts () {
     return cortexApiService
       .get({
-        path: ['verificationcontacts', cortexApiService.scope],
-        zoom: {
-          contacts: 'element[]'
-        }
+        path: ['verificationcontacts', cortexApiService.scope]
       })
-      .pluck('contacts')
+      .pluck('verification-contacts')
   }
 
   function selectContact (contact) {
     return cortexApiService
       .post({
-        path: contact.links[0].uri,
+        path: ['verificationcontacts', cortexApiService.scope, 'form'],
         data: contact
       })
   }
@@ -36,7 +33,7 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
   function thatIsNotMe () {
     return cortexApiService
       .post({
-        path: ['verifyregistrations', cortexApiService.scope],
+        path: ['verifyregistrations', cortexApiService.scope, 'form'],
         data: { 'that-is-not-me': 'true' },
         followLocation: true
       })
@@ -45,7 +42,7 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
   function submitAnswers (answers) {
     return cortexApiService
       .post({
-        path: ['verifyregistrations', cortexApiService.scope],
+        path: ['verifyregistrations', cortexApiService.scope, 'form'],
         data: { 'verification-questions': answers, 'that-is-not-me': 'false' },
         followLocation: true
       })
@@ -54,7 +51,7 @@ const VerificationService = /* @ngInject */ function (cortexApiService) {
   function postDonorMatches () {
     return cortexApiService
       .post({
-        path: ['donormatches', cortexApiService.scope],
+        path: ['donormatches', cortexApiService.scope, 'form'],
         data: {}
       })
   }

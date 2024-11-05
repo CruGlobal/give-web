@@ -1,5 +1,5 @@
-<span ng-switch="$ctrl.paymentMethod.self.type" class="account-management">
-  <span ng-switch-when="cru.creditcards.named-credit-card">
+<span class="account-management">
+  <span ng-if="$ctrl.paymentMethod['card-type']">
     <span ng-switch="$ctrl.paymentMethod['card-type']">
       &nbsp;
       <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/american-express-curved-128px.png" ng-switch-when="American Express"/>
@@ -17,7 +17,7 @@
       {{$ctrl.paymentMethod['expiry-month']}}/<span class="hidden-xs">{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2}}</span>{{$ctrl.paymentMethod['expiry-year'] | limitTo : 2 : 2}}
     </small>
   </span>
-  <span ng-switch-when="elasticpath.bankaccounts.bank-account">
+  <span ng-if="!$ctrl.paymentMethod['card-type']">
     <img class="payment-icon hidden-xs" ng-src="{{$ctrl.imgDomain}}/assets/img/cc-icons/bank-curved-128px.png" />
     <strong>
       {{$ctrl.paymentMethod['bank-name']}}

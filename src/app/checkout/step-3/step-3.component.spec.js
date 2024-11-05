@@ -8,19 +8,21 @@ import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.componen
 import { SignInEvent } from 'common/services/session/session.service'
 
 import module from './step-3.component'
+import { recaptchaFailedEvent, submitOrderEvent } from '../cart-summary/cart-summary.component'
 
 describe('checkout', () => {
   describe('step 3', () => {
     beforeEach(angular.mock.module(module.name))
-    var self = {}
+    const self = {}
 
-    beforeEach(inject(function ($componentController) {
+    beforeEach(inject(function ($rootScope, $componentController) {
       self.loadedPayment = {
         self: {
           type: null
         }
       }
       self.storedCvv = null
+      self.coverFeeDecision = false
 
       self.controller = $componentController(module.name, {
         // Mock services
@@ -37,6 +39,7 @@ describe('checkout', () => {
           submit: () => Observable.of('called submit'),
           retrieveCardSecurityCode: () => self.storedCvv,
           retrieveLastPurchaseLink: () => Observable.of('purchaseLink'),
+          retrieveCoverFeeDecision: () => self.coverFeeDecision,
           clearCardSecurityCodes: jest.fn(),
           clearCoverFees: jest.fn()
         },
@@ -45,7 +48,8 @@ describe('checkout', () => {
         },
         $window: {
           scrollTo: jest.fn()
-        }
+        },
+        $rootScope: $rootScope.$new()
       },
       {
         loadCart: jest.fn(),
@@ -136,12 +140,12 @@ describe('checkout', () => {
           uri: '/uri',
           productUri: '/uri',
           config: {
-            'recurring-start-month': '07'
+            'RECURRING_START_MONTH': '07'
           }
         }
         self.controller.updateGiftStartMonth(item, '05')
 
-        item.config['recurring-start-month'] = '05'
+        item.config['RECURRING_START_MONTH'] = '05'
 
         expect(self.controller.cartService.editItem).toHaveBeenCalledWith(item.uri, item.productUri, item.config)
 
@@ -151,7 +155,7 @@ describe('checkout', () => {
 
     describe('loadCurrentPayment', () => {
       it('should load bank account payment details', () => {
-        self.loadedPayment.self.type = 'elasticpath.bankaccounts.bank-account'
+        self.loadedPayment['account-type'] = 'Checking'
         self.controller.loadCurrentPayment()
 
         expect(self.controller.bankAccountPaymentDetails).toEqual(self.loadedPayment)
@@ -162,7 +166,7 @@ describe('checkout', () => {
       })
 
       it('should load credit card payment details', () => {
-        self.loadedPayment.self.type = 'cru.creditcards.named-credit-card'
+        self.loadedPayment['card-type'] = 'Visa'
         self.controller.loadCurrentPayment()
 
         expect(self.controller.bankAccountPaymentDetails).toBeUndefined()
@@ -323,6 +327,7 @@ describe('checkout', () => {
       beforeEach(() => {
         jest.spyOn(self.controller.orderService, 'submit')
         jest.spyOn(self.controller.profileService, 'getPurchase')
+        jest.spyOn(self.controller.analyticsFactory, 'purchase')
       })
 
       describe('another order submission in progress', () => {
@@ -351,6 +356,7 @@ describe('checkout', () => {
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalled()
+          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
@@ -363,6 +369,7 @@ describe('checkout', () => {
 
           expect(self.controller.orderService.submit).toHaveBeenCalled()
           expect(self.controller.loadCart).toHaveBeenCalled()
+          expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
           expect(self.controller.changeStep).not.toHaveBeenCalled()
@@ -373,9 +380,11 @@ describe('checkout', () => {
         it('should submit the order with a CVV if paying with a credit card', () => {
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = '1234'
+          self.coverFeeDecision = true
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
@@ -384,9 +393,11 @@ describe('checkout', () => {
         it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
           self.controller.creditCardPaymentDetails = {}
           self.storedCvv = undefined
+          self.coverFeeDecision = true
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalledWith(undefined)
+          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
           expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
           expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
@@ -399,6 +410,7 @@ describe('checkout', () => {
           self.controller.submitOrder()
 
           expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
+          expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
           expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
           expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
           expect(self.controller.changeStep).not.toHaveBeenCalled()
@@ -433,6 +445,36 @@ describe('checkout', () => {
 
           expect(self.controller.orderService.clearCoverFees).toHaveBeenCalled()
         })
+      })
+    })
+
+    describe('handleRecaptchaFailure', () => {
+      it('should show an error if recaptcha fails', () => {
+        const componentInstance = self.controller
+        jest.spyOn(componentInstance.analyticsFactory, 'checkoutFieldError').mockImplementation(() => {})
+        self.controller.handleRecaptchaFailure(componentInstance)
+
+        expect(componentInstance.analyticsFactory.checkoutFieldError).toHaveBeenCalledWith('submitOrder', 'failed')
+        expect(componentInstance.submittingOrder).toEqual(false)
+        expect(componentInstance.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
+        expect(componentInstance.loadCart).toHaveBeenCalled()
+        expect(componentInstance.onSubmitted).toHaveBeenCalled()
+        expect(componentInstance.submissionError).toEqual('generic error')
+        expect(componentInstance.$window.scrollTo).toHaveBeenCalledWith(0, 0)
+      })
+    })
+
+    describe('event handling', () => {
+      it('should call submit order if the submitOrderEvent is received', () => {
+        jest.spyOn(self.controller, 'submitOrder').mockImplementation(() => {})
+        self.controller.$rootScope.$emit(submitOrderEvent)
+        expect(self.controller.submitOrder).toHaveBeenCalled()
+      })
+
+      it('should call handleRecaptchaFailure if the recaptchaFailedEvent is received', () => {
+        jest.spyOn(self.controller, 'handleRecaptchaFailure').mockImplementation(() => {})
+        self.controller.$rootScope.$emit(recaptchaFailedEvent)
+        expect(self.controller.handleRecaptchaFailure).toHaveBeenCalledWith(self.controller)
       })
     })
   })

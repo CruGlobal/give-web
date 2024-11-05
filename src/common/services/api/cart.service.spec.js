@@ -12,6 +12,17 @@ import module from './cart.service'
 import cartResponse from 'common/services/api/fixtures/cortex-cart.fixture'
 
 describe('cart service', () => {
+  let search = ''
+  const windowMock = {
+    location: {
+      search: search
+    }
+  }
+
+  beforeEach(angular.mock.module(function ($provide) {
+    $provide.value('$window', windowMock);
+  }))
+
   beforeEach(angular.mock.module(module.name))
 
   afterEach(clear)
@@ -25,20 +36,23 @@ describe('cart service', () => {
   afterEach(() => {
     self.$httpBackend.verifyNoOutstandingExpectation()
     self.$httpBackend.verifyNoOutstandingRequest()
+    windowMock.location.search = ''
   })
 
   describe('get', () => {
     beforeEach(() => {
       jest.spyOn(self.cartService.$cookies, 'put').mockImplementation(() => {})
       jest.spyOn(self.cartService.$cookies, 'remove').mockImplementation(() => {})
+      jest.spyOn(self.cartService.$location, 'host').mockReturnValue('give.cru.org')
       jest.spyOn(self.cartService.commonService, 'getNextDrawDate').mockReturnValue(Observable.of('2016-10-01'))
       advanceTo(moment('2016-09-01').toDate()) // Make sure current date is before next draw date
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should handle an empty response', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, null)
 
@@ -49,10 +63,11 @@ describe('cart service', () => {
       self.$httpBackend.flush()
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should handle a response with no line items', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, {})
 
@@ -64,10 +79,11 @@ describe('cart service', () => {
       self.$httpBackend.flush()
     })
 
+    // To fetch product-code, offer resource is used and added it in zoom parameter.
     it('should get cart, parse response, and show most recent items first', () => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
         '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
-        'lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
         'lineitems:element:itemfields,ratetotals:element,total,total:cost')
         .respond(200, cartResponse)
 
@@ -92,6 +108,22 @@ describe('cart service', () => {
         })
       self.$httpBackend.flush()
     })
+
+    it('should not set cart count cookie on other domains', () => {
+      self.cartService.$location.host.mockReturnValue('secure.cru.org')
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/cortex/carts/crugive/default' +
+        '?zoom=lineitems:element,lineitems:element:availability,lineitems:element:item,lineitems:element:item:code,' +
+        'lineitems:element:item:offer:code,lineitems:element:item:definition,lineitems:element:rate,lineitems:element:total,' +
+        'lineitems:element:itemfields,ratetotals:element,total,total:cost')
+        .respond(200, cartResponse)
+
+      self.cartService.get()
+        .subscribe(() => {
+          expect(self.cartService.$cookies.put).not.toHaveBeenCalled()
+          expect(self.cartService.$cookies.remove).not.toHaveBeenCalled()
+        })
+      self.$httpBackend.flush()
+    })
   })
 
   describe('handleCartResponse', () => {
@@ -105,6 +137,7 @@ describe('cart service', () => {
     beforeEach(() => {
       jest.spyOn(self.cartService.$cookies, 'put').mockImplementation(() => {})
       jest.spyOn(self.cartService.$cookies, 'remove').mockImplementation(() => {})
+      jest.spyOn(self.cartService.$location, 'host').mockReturnValue('give.cru.org')
       advanceTo(moment('2016-09-01').toDate()) // Make sure current date is before next draw date
       transformedCartResponse = self.cartService.hateoasHelperService.mapZoomElements(cartResponse, zoom)
       transformedCartResponse.rateTotals[0].cost.amount = 51
@@ -169,9 +202,11 @@ describe('cart service', () => {
 
     it('should add an item', () => {
       self.$httpBackend.expectPOST(
-        'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+        'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
         {
-          amount: 50,
+          configuration: {
+            AMOUNT: 50
+          },
           quantity: 1
         }
       ).respond(200)
@@ -193,9 +228,11 @@ describe('cart service', () => {
 
         it('should add an item', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
-              amount: 50,
+              configuration: {
+                AMOUNT: 50
+              },
               quantity: 1
             }
           ).respond(200)
@@ -214,9 +251,11 @@ describe('cart service', () => {
 
         it('should delete cookies and addItem to cart', () => {
           self.$httpBackend.expectPOST(
-            'https://give-stage2.cru.org/cortex/itemfieldslineitem/items/crugive/<some id>?followLocation=true',
+            'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
-              amount: 50,
+              configuration: {
+                AMOUNT: 50
+              },
               quantity: 1
             }
           ).respond(200)
@@ -278,9 +317,9 @@ describe('cart service', () => {
         },
         () => fail('Observable should not have thrown an error'),
         () => {
-          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'uri1', { designationNumber: '0123456', uri: 'uri1' })
-          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'uri2', { designationNumber: '1234567', uri: 'uri2' })
-          expect(outputValues).toEqual([{ configuredDesignation: { designationNumber: '0123456', uri: 'uri1' } }, { configuredDesignation: { designationNumber: '1234567', uri: 'uri2' } }])
+          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'carts/uri1/form', { designationNumber: '0123456', uri: 'carts/uri1/form' })
+          expect(self.cartService.addItemAndReplaceExisting).toHaveBeenCalledWith(expect.any(Observable), 'carts/uri2/form', { designationNumber: '1234567', uri: 'carts/uri2/form' })
+          expect(outputValues).toEqual([{ configuredDesignation: { designationNumber: '0123456', uri: 'carts/uri1/form' } }, { configuredDesignation: { designationNumber: '1234567', uri: 'carts/uri2/form' } }])
         })
     })
 
@@ -360,6 +399,37 @@ describe('cart service', () => {
           },
           () => fail('Observable should not have thrown an error')
         )
+    })
+  })
+
+  describe('buildCartUrl', () => {
+    const queryParametersToKeep = '?one=1&two=2'
+    const urlWithParameters = `cart.html${queryParametersToKeep}`
+
+    beforeEach(() => {
+      self.cartService.$window.location.href = 'https://give-stage2.cru.org'
+    })
+
+    it('should build a url without query parameters', () => {
+      expect(self.cartService.buildCartUrl()).toEqual('cart.html')
+    })
+
+    it('should build a url with query parameters', () => {
+      self.cartService.$window.location.search = queryParametersToKeep
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
+    })
+
+    it('should filter out certain query parameters', () => {
+      self.cartService.$window.location.search = `${queryParametersToKeep}&modal=give-gift&d=0123456&a=50`
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
+    })
+
+    it('should filter out a subset of query parameters', () => {
+      self.cartService.$window.location.search = `${queryParametersToKeep}&q=0123456&d=0123456&a=50`
+      self.cartService.$window.location.href += self.cartService.$window.location.search
+      expect(self.cartService.buildCartUrl()).toEqual(urlWithParameters)
     })
   })
 })

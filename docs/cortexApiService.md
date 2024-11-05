@@ -175,7 +175,7 @@ cortexApiService.get({
         path: '/purchases/crugive/giydanby=',
         zoom: {
           donorDetails: 'donordetails',
-          paymentMeans: 'paymentmeans:element',
+          paymentInstruments: 'paymentinstruments:element',
           lineItems: 'lineitems:element,lineitems:element:code,lineitems:element:rate',
         }
       });
@@ -186,11 +186,13 @@ This will return: (the `rawData` key shows what the original response looked lik
     "donorDetails": {
         "donor-type": "Household",
         "mailing-address": {
-            "country-name": "US",
-            "locality": "sdag",
-            "postal-code": "12423",
-            "region": "AR",
-            "street-address": "dsfg"
+            address: {
+                "country-name": "US",
+                "locality": "sdag",
+                "postal-code": "12423",
+                "region": "AR",
+                "street-address": "dsfg"
+            }
         },
         "name": {
             "family-name": "Lname",
@@ -210,7 +212,7 @@ This will return: (the `rawData` key shows what the original response looked lik
             "title": "Mrs."
         }
     },
-    "paymentMeans": {
+    "paymentInstruments": {
         "billing-address": {
             "address": {
                 "country-name": "US",
@@ -280,11 +282,13 @@ This will return: (the `rawData` key shows what the original response looked lik
             {
                 "donor-type": "Household",
                 "mailing-address": {
-                    "country-name": "US",
-                    "locality": "sdag",
-                    "postal-code": "12423",
-                    "region": "AR",
-                    "street-address": "dsfg"
+                    address: {
+                        "country-name": "US",
+                        "locality": "sdag",
+                        "postal-code": "12423",
+                        "region": "AR",
+                        "street-address": "dsfg"
+                    }
                 },
                 "name": {
                     "family-name": "Lname",
@@ -356,7 +360,7 @@ This will return: (the `rawData` key shows what the original response looked lik
                 ]
             }
         ],
-        "_paymentmeans": [
+        "_paymentinstruments": [
             {
                 "_element": [
                     {

@@ -62,7 +62,12 @@ class NavCartController {
   }
 
   checkout () {
-    this.$window.location = this.envService.read('publicGive') + (this.sessionService.getRole() === 'REGISTERED' ? '/checkout.html' : '/sign-in.html')
+    this.$window.location = this.envService.read('publicGive') +
+      (this.sessionService.getRole() === 'REGISTERED' ? `/checkout.html${window.location.search}` : `/sign-in.html${window.location.search}`)
+  }
+
+  buildCartUrl () {
+    return `${this.envService.read('publicGive')}/${this.cartService.buildCartUrl()}`
   }
 }
 

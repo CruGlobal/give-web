@@ -3,8 +3,10 @@ import 'angular-environment'
 import 'angular-translate'
 
 import rollbarConfig from './rollbar.config'
+import dataDogConfig from './datadog.config.js'
 
-const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
+// Exported for datadog.config tests.
+export const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider, $logProvider, $httpProvider, $locationProvider, $qProvider, $translateProvider) {
   $httpProvider.useApplyAsync(true)
 
   envServiceProvider.config({
@@ -14,17 +16,33 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         'localhost.cru.org',
         'cru-givedev.s3-website-us-east-1.amazonaws.com'
       ],
+      devcloud: [
+        'give-dev-cloud.cru.org'
+      ],
+      stagecloud: [
+        'give-stage-cloud.cru.org'
+      ],
+      prodcloud: [
+        'give-prod-cloud.cru.org'
+      ],
       staging: [
         'give-stage2.cru.org',
         'stage.cru.org',
-        'dev.aws.cru.org',
-        'devauth.aws.cru.org',
-        'devpub.aws.cru.org',
         'uatauth.aws.cru.org',
         'uatpub.aws.cru.org',
         'uatdisp.aws.cru.org',
         'cru-givestage.s3.amazonaws.com',
-        'cru-givestage.s3-website-us-east-1.amazonaws.com'
+        'give-stage-static.cru.org'
+      ],
+      nonprod: [
+        'give-stage2-next.cru.org',
+        'cru-give-web-assets-nonprod.s3.amazonaws.com',
+        'give-nonprod-static.cru.org'
+      ],
+      preprod: [
+        'give-prod-static.cru.org',
+        'cru-give-web-assets-preprod.s3.amazonaws.com',
+        'give-preprod.cru.org'
       ],
       production: []
     },
@@ -32,10 +50,38 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
       development: {
         apiUrl: 'https://give-stage2.cru.org',
         imgDomain: '',
-        imgDomainDesignation: 'https://give-stage2.cru.org',
+        imgDomainDesignation: 'https://localhost.cru.org:9000',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
-        isBrandedCheckout: false
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
+      },
+      devcloud: {
+        apiUrl: 'https://give-stage2.cru.org',
+        imgDomain: '//give-static.cru.org',
+        imgDomainDesignation: 'https://give-dev-cloud.cru.org',
+        publicCru: 'https://stage-cloud.cru.org',
+        publicGive: 'https://give-dev-cloud.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
+      },
+      stagecloud: {
+        apiUrl: 'https://give-stage-cloud.cru.org',
+        imgDomain: '//give-static.cru.org',
+        imgDomainDesignation: 'https://give-stage-cloud.cru.org',
+        publicCru: 'https://stage-cloud.cru.org',
+        publicGive: 'https://give-stage-cloud.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
+      },
+      prodcloud: {
+        apiUrl: 'https://give-prod-cloud.cru.org',
+        imgDomain: '//give-static.cru.org',
+        imgDomainDesignation: 'https://give-prod-cloud.cru.org',
+        publicCru: 'https://www.cru.org',
+        publicGive: 'https://give-prod-cloud.cru.org',
+        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -43,7 +89,25 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
+      },
+      nonprod: {
+        apiUrl: 'https://give-stage2-next.cru.org',
+        imgDomain: '//give-nonprod-static.cru.org',
+        imgDomainDesignation: 'https://give-stage2-next.cru.org',
+        publicCru: 'https://stage.cru.org',
+        publicGive: 'https://give-stage2-next.cru.org',
+        acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
         isBrandedCheckout: false
+      },
+      preprod: {
+        apiUrl: 'https://give-preprod.cru.org',
+        imgDomain: '//give-prod-static.cru.org',
+        imgDomainDesignation: 'https://give-preprod.cru.org',
+        publicCru: 'https://www.cru.org',
+        publicGive: 'https://give-preprod.cru.org',
+        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey='
       },
       production: {
         apiUrl: 'https://give.cru.org',
@@ -51,6 +115,11 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
         imgDomainDesignation: 'https://give.cru.org',
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give.cru.org',
+        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
+        recaptchaKey: '6LdNz5UlAAAAAPSrzydROuY76yGVIquVQAup69PO'
+      },
+      defaults: {
+        isCheckout: false,
         isBrandedCheckout: false
       }
     }
@@ -105,7 +174,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     OPTIONAL: 'Optional',
     SEND_MESSAGE_TO: 'Send a Message to {{ministry}}',
     SPECIAL_INSTRUCTIONS: 'Special Handling Instructions for Processing This Gift',
-    MESSAGE_EXAMPLE: 'For example: make this gift anonymous, stop my gift after 18 months, etc.',
+    MESSAGE_EXAMPLE: 'For example: stop my gift after 18 months, make this gift anonymous (note: please remove any messages to ministry or missionary to remain anonymous), etc.',
     YOUR_INFORMATION: 'Your information',
     PAYMENT: 'Payment',
     CONTINUE: 'Continue',
@@ -285,7 +354,11 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
     CHOOSE_RESOURCE: 'Choose a Resource',
-    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
+    RADIO_STATION: 'Radio Station',
+    RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
+    RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
   })
 
   $translateProvider.translations('es', {
@@ -314,7 +387,7 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     OPTIONAL: 'Opcional',
     SEND_MESSAGE_TO: 'Enviar un mensaje al {{ministry}}',
     SPECIAL_INSTRUCTIONS: 'Instrucciones especiales de manejo para procesar este regalo',
-    MESSAGE_EXAMPLE: 'Por ejemplo: hacer este regalo anónimo, detener mi regalo después de 18 meses, etc.',
+    MESSAGE_EXAMPLE: 'Por ejemplo: Detener mi donación después de 18 meses, hacer esta donación anónima (nota: favor de quitar cualquier mensaje al ministerio o al misionero para permanecer en el anonimato), etc.',
     YOUR_INFORMATION: 'Tu información',
     PAYMENT: 'Pago',
     CONTINUE: 'Continuar',
@@ -494,7 +567,11 @@ const appConfig = /* @ngInject */ function (envServiceProvider, $compileProvider
     ANNUAL_GIFT_TOTAL: 'Annual Gift Total:',
     FREQUENCY_GIFT_TOTAL: '{{frequency}} Gift Total:',
     CHOOSE_RESOURCE: 'Choose a Resource',
-    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
+    RADIO_STATION: 'Radio Station',
+    RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
+    RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
   })
   $translateProvider.preferredLanguage('en')
 }
@@ -504,4 +581,6 @@ export default angular.module('appConfig', [
   'pascalprecht.translate'
 ])
   .config(appConfig)
+  // Configure DataDog before Rollbar so that the RUM session id can be added to the Rollbar payload
+  .config(dataDogConfig)
   .config(rollbarConfig)

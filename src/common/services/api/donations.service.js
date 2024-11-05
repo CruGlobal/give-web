@@ -48,21 +48,10 @@ const DonationsService = /* @ngInject */ function (cortexApiService, profileServ
       })
   }
 
-  function getHistoricalGifts (year, month) {
-    return cortexApiService
-      .get({
-        path: ['donations', 'historical', cortexApiService.scope, year, month],
-        zoom: {
-          gifts: 'element[],element:paymentmethod,element:recurringdonation'
-        }
-      })
-      .pluck('gifts')
-  }
-
   function getReceipts (data) {
     return cortexApiService
       .post({
-        path: '/receipts/items',
+        path: '/receipts/form',
         followLocation: true,
         data: data
       })
@@ -141,7 +130,7 @@ const DonationsService = /* @ngInject */ function (cortexApiService, profileServ
   function addRecurringGifts (gifts) {
     gifts = angular.isArray(gifts) ? gifts : [gifts]
     return cortexApiService.post({
-      path: ['donations', 'recurring', cortexApiService.scope],
+      path: ['donations', 'recurring', cortexApiService.scope, 'form'],
       data: {
         'donation-lines': map(gifts, 'toObject')
       }
@@ -159,14 +148,13 @@ const DonationsService = /* @ngInject */ function (cortexApiService, profileServ
         return map(response.recipients, (recipient) => {
           return {
             'designation-name': recipient.definition['display-name'],
-            'designation-number': recipient.code['product-code']
+            'designation-number': recipient.code.code
           }
         })
       })
   }
 
   return {
-    getHistoricalGifts: getHistoricalGifts,
     getRecipients: getRecipients,
     getRecipientsRecurringGifts: getRecipientsRecurringGifts,
     getReceipts: getReceipts,

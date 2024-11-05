@@ -305,7 +305,7 @@ $border-radius: 4px;
 
   .form-group {
     &:not(:last-child) {
-      margin-right: $gutter/2;
+      margin-right: $gutter*0.5;
     }
 
     > input, button[type=submit] {

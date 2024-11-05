@@ -30,7 +30,7 @@ describe('productConfig', function () {
     it('opens productConfig modal', () => {
       $ctrl.configModal()
 
-      expect(productModalService.configureProduct).toHaveBeenCalledWith('0123456', { 'campaign-code': 'test123', 'campaign-page': undefined }, false)
+      expect(productModalService.configureProduct).toHaveBeenCalledWith('0123456', { CAMPAIGN_CODE: 'test123', 'campaign-page': undefined }, false)
     })
   })
 })

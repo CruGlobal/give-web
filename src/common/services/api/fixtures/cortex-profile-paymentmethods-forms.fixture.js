@@ -1,8 +1,8 @@
 export default {
   self: {
     type: 'elasticpath.profiles.profile',
-    uri: '/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform',
-    href: 'https://give-stage2.cru.org/cortex/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=selfservicepaymentmethods:createbankaccountform,selfservicepaymentmethods:createcreditcardform'
+    uri: '/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=paymentmethods:element,paymentmethods:element:selfservicepaymentinstrumentform',
+    href: 'https://give-stage2.cru.org/cortex/profiles/crugive/gnrdkojsge4dsljxhazwmljugmztillcgu3gkljqgm3tkytdmm3dmzrxme=?zoom=paymentmethods:element,paymentmethods:element:selfservicepaymentinstrumentform'
   },
   links: [{
     rel: 'addresses',
@@ -46,11 +46,11 @@ export default {
     uri: '/purchases/crugive',
     href: 'https://give-stage2.cru.org/cortex/purchases/crugive'
   }, {
-    rel: 'selfservicepaymentmethods',
+    rel: 'selfservicepaymentinstruments',
     rev: 'profile',
     type: 'elasticpath.collections.links',
-    uri: '/selfservicepaymentmethods/crugive',
-    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+    uri: '/selfservicepaymentinstruments/crugive',
+    href: 'https://give-stage2.cru.org/cortex/selfservicepaymentinstruments/crugive'
   }, {
     rel: 'wishlists',
     rev: 'profile',
@@ -58,54 +58,88 @@ export default {
     uri: '/wishlists/crugive',
     href: 'https://give-stage2.cru.org/cortex/wishlists/crugive'
   }],
-  _selfservicepaymentmethods: [{
-    _createbankaccountform: [{
+  _paymentmethods: [{
+    _element: [{
       self: {
-        type: 'elasticpath.bankaccounts.bank-account',
-        uri: '/bankaccounts/selfservicepaymentmethods/crugive/form',
-        href: 'https://give-stage2.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive/form'
+        type: 'paymentmethods.profile-payment-method',
+        uri: '/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=',
+        href: 'https://give-stage2.cru.org/cortex/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy='
       },
-      links: [{
-        rel: 'createbankaccountaction',
-        uri: '/bankaccounts/selfservicepaymentmethods/crugive',
-        href: 'https://give-stage2.cru.org/cortex/bankaccounts/selfservicepaymentmethods/crugive'
-      }, {
-        rel: 'selfservicepaymentmethods',
-        uri: '/selfservicepaymentmethods/crugive',
-        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+      messages: [],
+      links: [],
+      _selfservicepaymentinstrumentform: [{
+        self: {
+          type: 'selfservicepaymentinstruments.profile-self-service-payment-instrument-form',
+          uri: '/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/selfservicepaymentinstrument/form',
+          href: 'https://give-stage2.cru.og/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/selfservicepaymentinstrument/form'
+        },
+        messages: [],
+        links: [{
+          rel: 'createpaymentinstrumentaction',
+          type: 'selfservicepaymentinstruments.profile-self-service-payment-instrument-form',
+          href: 'https://give-stage2.cru.og/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/gftgenrymm4dgllega2geljug44dillcga3dollbhe2wcnbugazdgobqgy=/selfservicepaymentinstrument/form'
+        }],
+        'default-on-profile': false,
+        'payment-instrument-identification-form': {
+          'account-type': '',
+          'bank-name': '',
+          'display-name': '',
+          'encrypted-account-number': '',
+          'routing-number': ''
+        }
       }],
-      'account-type': '',
-      'bank-name': '',
-      'encrypted-account-number': '',
-      'routing-number': ''
-    }],
-    _createcreditcardform: [{
+      'display-name': 'BANKACCOUNT',
+      name: 'BANKACCOUNT'
+    },
+    {
       self: {
-        type: 'cru.creditcards.named-credit-card',
-        uri: '/creditcards/selfservicepaymentmethods/crugive/form',
-        href: 'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive/form'
+        type: 'paymentmethods.profile-payment-method',
+        uri: '/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=',
+        href: 'https://give-stage2.cru.org/cortex/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm='
       },
-      links: [{
-        rel: 'createcreditcardaction',
-        uri: '/creditcards/selfservicepaymentmethods/crugive',
-        href: 'https://give-stage2.cru.org/cortex/creditcards/selfservicepaymentmethods/crugive'
-      }, {
-        rel: 'selfservicepaymentmethods',
-        uri: '/selfservicepaymentmethods/crugive',
-        href: 'https://give-stage2.cru.org/cortex/selfservicepaymentmethods/crugive'
+      messages: [],
+      links: [],
+      _selfservicepaymentinstrumentform: [{
+        self: {
+          type: 'selfservicepaymentinstruments.profile-self-service-payment-instrument-form',
+          uri: '/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/selfservicepaymentinstrument/form',
+          href: 'https://give-stage2.cru.og/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/selfservicepaymentinstrument/form'
+        },
+        messages: [],
+        links: [{
+          rel: 'createpaymentinstrumentaction',
+          type: 'selfservicepaymentinstruments.profile-self-service-payment-instrument-form',
+          href: 'https://give-stage2.cru.og/cortex/selfservicepaymentinstruments/paymentmethods/profiles/crugive/mm3gkodgmztgcljtgm2dsljumu2teljygi2weljzgjsdomryha3tkzrymu=/g4ygeodbg42tilldha4wiljrgfswellbgvsdmllfgu4wenjxmu2ton3bgm=/selfservicepaymentinstrument/form'
+        }],
+        'billing-address': {
+          address: {
+            'country-name': '',
+            'extended-address': '',
+            locality: '',
+            'postal-code': '',
+            region: '',
+            'street-address': ''
+          },
+          name: {
+            'family-name': '',
+            'given-name': ''
+          },
+          organization: '',
+          'phone-number': ''
+        },
+        'default-on-profile': false,
+        'payment-instrument-identification-form': {
+          'card-number': '',
+          'card-type': '',
+          'cardholder-name': '',
+          'display-name': '',
+          'expiry-month': '',
+          'expiry-year': '',
+          'last-four-digits': ''
+        }
       }],
-      address: {
-        'country-name': '',
-        'extended-address': '',
-        locality: '',
-        'postal-code': '',
-        region: '',
-        'street-address': ''
-      },
-      'card-number': '',
-      'cardholder-name': '',
-      'expiry-month': '',
-      'expiry-year': ''
+      'display-name': 'CREDITCARD',
+      name: 'CREDITCARD'
     }]
   }],
   'family-name': 'Lname',

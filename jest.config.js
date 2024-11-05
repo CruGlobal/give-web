@@ -2,10 +2,12 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
+    'src/**/*.{ts,tsx}',
     '!**/*.fixture.js'
   ],
   restoreMocks: true,
   setupFilesAfterEnv: [
+    '<rootDir>/jest/setupAngularMocks.js',
     'angular',
     'angular-mocks',
     'jest-date-mock',
@@ -17,8 +19,9 @@ module.exports = {
   modulePaths: [
     '<rootDir>/src'
   ],
+  testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.js?$': 'babel-jest',
+    '^.+\\.(js|tsx)?$': 'babel-jest',
     '^.+\\.html$': '<rootDir>/jest/htmlTransform.js'
   }
 }

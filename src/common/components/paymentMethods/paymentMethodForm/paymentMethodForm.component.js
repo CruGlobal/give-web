@@ -23,7 +23,7 @@ class PaymentMethodFormController {
 
   $onInit () {
     if (this.paymentMethod) {
-      this.paymentType = this.paymentMethod.self.type === 'elasticpath.bankaccounts.bank-account' ? 'bankAccount' : 'creditCard'
+      this.paymentType = this.paymentMethod['account-type'] ? 'bankAccount' : 'creditCard'
     } else if (this.defaultPaymentType === 'creditCard') {
       this.paymentType = 'creditCard'
     }

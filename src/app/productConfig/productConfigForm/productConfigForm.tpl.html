@@ -1,7 +1,7 @@
 <form novalidate name="$ctrl.itemConfigForm" ng-submit="$ctrl.saveGiftToCart()">
   <div class="row">
     <div class="col-sm-6">
-      <h4 class="give-gift-header" translate>
+      <h4 id="product-config-header" class="give-gift-header" translate>
         {{'GIVE_GIFT_HEADER'}}
       </h4>
     </div>
@@ -57,6 +57,10 @@
           <p translate>{{'ADDING_CART_ERROR'}}</p>
         </div>
 
+        <div ng-if="$ctrl.amountFormatError" role="alert" class="alert alert-danger">
+          <p translate>{{$ctrl.amountFormatError}}</p>
+        </div>
+
         <div ng-if="$ctrl.errorAlreadyInCart" class="alert alert-warning" role="alert">
           <p translate>{{'GIFT_IN_CART_ERROR'}}</p>
         </div>
@@ -72,7 +76,7 @@
                 <input name="suggestedAmount"
                        type="radio"
                        ng-click="$ctrl.changeAmount(suggested.amount)"
-                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.amount === suggested.amount" />
+                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount" />
                 {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
               </label>
             </div>
@@ -111,7 +115,7 @@
                ng-if="!$ctrl.useSuggestedAmounts">
             <label class="btn btn-radio"
                    ng-click="$ctrl.changeAmount(a)"
-                   ng-class="{'active': $ctrl.itemConfig.amount === a && !$ctrl.customInputActive}"
+                   ng-class="{'active': $ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive}"
                    ng-repeat-start="a in $ctrl.selectableAmounts">
               <span class="number">&dollar;{{a}}</span>
             </label>
@@ -176,33 +180,33 @@
           <div class="row">
             <div class="col-sm-3">
               <div class="form-group">
-                <label translate>{{'MONTH'}}</label>
-                <div class="form-group">
+                <label>
+                  <span translate>{{'MONTH'}}</span>
                   <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['recurring-start-month']"
+                          ng-model="$ctrl.itemConfig['RECURRING_START_MONTH']"
                           ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
                   </select>
-                </div>
+                </label>
               </div>
             </div>
             <div class="col-sm-2">
               <div class="form-group">
-                <label translate>{{'DAY'}}</label>
-                <div class="form-group">
+                <label>
+                  <span translate>{{'DAY'}}</span>
                   <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['recurring-day-of-month']"
-                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'])">
+                          ng-model="$ctrl.itemConfig['RECURRING_DAY_OF_MONTH']"
+                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate)"
+                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
                   </select>
-                </div>
+                </label>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="form-group">
                 <label translate>{{'GIFT_START_DATE'}}</label>
                 <div class="form-group">
-                  {{$ctrl.startMonth( $ctrl.itemConfig['recurring-day-of-month'], $ctrl.itemConfig['recurring-start-month'], $ctrl.nextDrawDate ).format('ll')}}
+                  {{$ctrl.startMonth( $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate ).format('ll')}}
                 </div>
               </div>
             </div>
@@ -223,13 +227,14 @@
                     tabindex="-1"
                     ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
                     translate='SEND_MESSAGE_TO'
-            translate-values="{ministry: $ctrl.productData.displayName}">
+                    translate-values="{ministry: $ctrl.productData.displayName}">
             </button>
             <textarea class="staff-comments give-modal-comments"
                       name="recipientComments"
                       rows="3"
                       maxlength="250"
-                      ng-model="$ctrl.itemConfig['recipient-comments']"
+                      aria-labelledby="sendMessageButton"
+                      ng-model="$ctrl.itemConfig.RECIPIENT_COMMENTS"
                       ng-if="$ctrl.showRecipientComments"
                       tabindex="-1"
                       style="display:block;"></textarea>
@@ -247,7 +252,8 @@
                       name="donationServicesComments"
                       rows="3"
                       maxlength="250"
-                      ng-model="$ctrl.itemConfig['donation-services-comments']"
+                      aria-labelledby="sendHandlingButton"
+                      ng-model="$ctrl.itemConfig.DONATION_SERVICES_COMMENTS"
                       ng-if="$ctrl.showDSComments"
                       tabindex="-1"
                       placeholder="{{'MESSAGE_EXAMPLE' | translate}}"

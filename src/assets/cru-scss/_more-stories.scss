@@ -19,7 +19,7 @@
 }
 
 .icon--readNext:after {
-    @extend %icon-right-circle:before;
+    @extend %icon-right-circle, :before;
 
     color: $colorCru-gold;
     font-family: "cruicons";

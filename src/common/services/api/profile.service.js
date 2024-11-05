@@ -13,6 +13,7 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
 
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
+import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 import RecurringGiftModel from 'common/models/recurringGift.model'
 
 import cortexApiService from '../cortexApi.service'
@@ -55,13 +56,14 @@ class Profile {
           name: angular.isDefined(data.donorDetails) && data.donorDetails['donor-type'] === 'Organization'
             ? data.donorDetails['organization-name']
             : (spouse['given-name'])
-              ? `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}`
-              : `${donor['given-name']} ${donor['family-name']}`,
+                ? `${donor['given-name']} & ${spouse['given-name']} ${donor['family-name']}`
+                : `${donor['given-name']} ${donor['family-name']}`,
           donorNumber: angular.isDefined(data.donorDetails) ? data.donorDetails['donor-number'] : undefined,
           email: angular.isDefined(data.emailAddress) ? data.emailAddress.email : undefined,
           phone: angular.isDefined(phone) ? phone['phone-number'] : undefined,
           address: angular.isDefined(data.mailingAddress)
-            ? formatAddressForTemplate(data.mailingAddress.address) : undefined,
+            ? formatAddressForTemplate(data.mailingAddress.address)
+            : undefined,
           yearToDate: angular.isDefined(data.yearToDate) ? data.yearToDate['year-to-date-amount'] : undefined
         }
       })
@@ -77,7 +79,7 @@ class Profile {
       })
       .pluck('donorDetails')
       .map((donorDetails) => {
-        donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'])
+        donorDetails.mailingAddress = formatAddressForTemplate(donorDetails['mailing-address'].address)
         delete donorDetails['mailing-address']
         return donorDetails
       })
@@ -119,8 +121,10 @@ class Profile {
   }
 
   updateEmail (data, spouse) {
+    const initialPath = spouse ? 'spouseemails' : 'emails'
+    const formPath = spouse ? 'spouse/form' : 'form'
     return this.cortexApiService.post({
-      path: ['emails', this.cortexApiService.scope, spouse ? 'spouse' : ''],
+      path: [initialPath, this.cortexApiService.scope, formPath],
       data: { email: data.email },
       followLocation: true
     })
@@ -130,27 +134,16 @@ class Profile {
     return this.cortexApiService.get({
       path: ['phonenumbers', this.cortexApiService.scope],
       zoom: {
-        donor: 'element[]',
-        spouse: 'spouse[]'
+        donor: 'element[]'
       }
     })
-      .map(data => {
-        const phoneNumbers = []
-        angular.forEach(data.donor, item => {
-          item.spouse = false
-          phoneNumbers.push(item)
-        })
-        angular.forEach(data.spouse, item => {
-          item.spouse = true
-          phoneNumbers.push(item)
-        })
-        return phoneNumbers
-      })
+      .map(data => data.donor)
   }
 
   addPhoneNumber (number) {
+    const formPath = number['is-spouse'] ? 'spouse/form' : 'form'
     return this.cortexApiService.post({
-      path: ['phonenumbers', this.cortexApiService.scope, number.spouse ? 'spouse' : ''],
+      path: ['phonenumbers', this.cortexApiService.scope, formPath],
       data: number,
       followLocation: true
     })
@@ -195,7 +188,7 @@ class Profile {
     return this.cortexApiService.get({
       path: ['profiles', this.cortexApiService.scope, 'default'],
       zoom: {
-        paymentMethods: 'selfservicepaymentmethods:element[]'
+        paymentMethods: 'selfservicepaymentinstruments:element[]'
       },
       cache: !!cache
     })
@@ -203,10 +196,10 @@ class Profile {
       .map((paymentMethods) => {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
           paymentMethod.id = paymentMethod.self.uri.split('/').pop()
-          if (paymentMethod.address) {
-            paymentMethod.address = formatAddressForTemplate(paymentMethod.address)
+          if (paymentMethod['payment-instrument-identification-attributes']['street-address']) {
+            paymentMethod.address = formatAddressForTemplate(paymentMethod['payment-instrument-identification-attributes'])
           }
-          return paymentMethod
+          return extractPaymentAttributes(paymentMethod)
         })
         return sortPaymentMethods(paymentMethods)
       })
@@ -219,10 +212,10 @@ class Profile {
     })
       .map((paymentMethod) => {
         paymentMethod.id = paymentMethod.self.uri.split('/').pop()
-        if (paymentMethod.address) {
-          paymentMethod.address = formatAddressForTemplate(paymentMethod.address)
+        if (paymentMethod['payment-instrument-identification-attributes']['street-address']) {
+          paymentMethod.address = formatAddressForTemplate(paymentMethod['payment-instrument-identification-attributes'])
         }
-        return paymentMethod
+        return extractPaymentAttributes(paymentMethod)
       })
   }
 
@@ -230,14 +223,14 @@ class Profile {
     return this.cortexApiService.get({
       path: ['profiles', this.cortexApiService.scope, 'default'],
       zoom: {
-        paymentMethods: 'selfservicepaymentmethods:element[],selfservicepaymentmethods:element:recurringgifts'
+        paymentMethods: 'selfservicepaymentinstruments:element[],selfservicepaymentinstruments:element:recurringgifts'
       }
     })
       .pluck('paymentMethods')
       .map(paymentMethods => {
         paymentMethods = map(paymentMethods, (paymentMethod) => {
-          if (paymentMethod.address) {
-            paymentMethod.address = formatAddressForTemplate(paymentMethod.address)
+          if (paymentMethod['payment-instrument-identification-attributes']['street-address']) {
+            paymentMethod.address = formatAddressForTemplate(paymentMethod['payment-instrument-identification-attributes'])
           }
           paymentMethod.recurringGifts = flatMap(paymentMethod.recurringgifts.donations, donation => {
             return map(donation['donation-lines'], donationLine => {
@@ -245,7 +238,7 @@ class Profile {
             })
           })
           delete paymentMethod.recurringgifts
-          return paymentMethod
+          return extractPaymentAttributes(paymentMethod)
         })
         return sortPaymentMethods(paymentMethods)
       })
@@ -258,16 +251,17 @@ class Profile {
       return this.cortexApiService.get({
         path: ['profiles', this.cortexApiService.scope, 'default'],
         zoom: {
-          bankAccount: 'selfservicepaymentmethods:createbankaccountform',
-          creditCard: 'selfservicepaymentmethods:createcreditcardform'
+          paymentMethodForms: 'paymentmethods:element[],paymentmethods:element:selfservicepaymentinstrumentform'
         }
       })
         .do((data) => {
           this.paymentMethodForms = data
 
-          if (!this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountaction') || !this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardaction')) {
-            this.$log.warn('Payment form request contains empty link', data)
-          }
+          angular.forEach(this.paymentMethodForms, paymentMethodForm => {
+            if (!this.hateoasHelperService.getLink(paymentMethodForm.selfservicepaymentinstrumentform, 'createpaymentinstrumentaction')) {
+              this.$log.warn('Payment form request contains empty link', data)
+            }
+          })
         })
     }
   }
@@ -275,9 +269,10 @@ class Profile {
   addBankAccountPayment (paymentInfo) {
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'bank-name')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.bankAccount, 'createbankaccountaction'),
-          data: paymentInfo,
+          path: link,
+          data: { 'payment-instrument-identification-form': paymentInfo },
           followLocation: true
         })
       })
@@ -285,17 +280,34 @@ class Profile {
 
   addCreditCardPayment (paymentInfo) {
     paymentInfo = omit(paymentInfo, 'cvv')
+
+    const dataToSend = {}
+
     if (paymentInfo.address) {
-      paymentInfo.address = formatAddressForCortex(paymentInfo.address)
+      dataToSend['billing-address'] = { address: formatAddressForCortex(paymentInfo.address) }
+      paymentInfo.address = undefined
     }
+    dataToSend['payment-instrument-identification-form'] = paymentInfo
+
     return this.getPaymentMethodForms()
       .mergeMap((data) => {
+        const link = this.determinePaymentMethodFormLink(data, 'card-number')
         return this.cortexApiService.post({
-          path: this.hateoasHelperService.getLink(data.creditCard, 'createcreditcardaction'),
-          data: paymentInfo,
+          path: link,
+          data: dataToSend,
           followLocation: true
         })
       })
+  }
+
+  determinePaymentMethodFormLink (data, fieldName) {
+    let link = ''
+    angular.forEach(data.paymentMethodForms, paymentMethodForm => {
+      if (paymentMethodForm.selfservicepaymentinstrumentform['payment-instrument-identification-form'][fieldName] !== undefined) {
+        link = this.hateoasHelperService.getLink(paymentMethodForm.selfservicepaymentinstrumentform, 'createpaymentinstrumentaction')
+      }
+    })
+    return link
   }
 
   addPaymentMethod (paymentInfo) {
@@ -317,13 +329,15 @@ class Profile {
       paymentInfo = paymentInfo.creditCard
       if (paymentInfo.address) {
         paymentInfo.address = formatAddressForCortex(paymentInfo.address)
+        paymentInfo = { ...paymentInfo, ...paymentInfo.address }
+        delete paymentInfo.address
       }
     } else {
       return Observable.throw('Error updating payment method. The data passed to profileService.updatePaymentMethod did not contain bankAccount or creditCard data.')
     }
     return this.cortexApiService.put({
       path: originalPaymentInfo.self.uri,
-      data: paymentInfo
+      data: { 'payment-instrument-identification-attributes': paymentInfo }
     })
   }
 
@@ -339,18 +353,21 @@ class Profile {
       path: uri,
       zoom: {
         donorDetails: 'donordetails',
-        paymentMeans: 'paymentmeans:element',
-        lineItems: 'lineitems:element[],lineitems:element:code,lineitems:element:rate',
-        rateTotals: 'ratetotals:element[]'
+        paymentInstruments: 'paymentinstruments:element',
+        lineItems: 'lineitems:element[],lineitems:element:item:code,lineitems:element:item:offer:code,lineitems:element:rate',
+        rateTotals: 'ratetotals:element[]',
+        billingAddress: 'billingaddress'
       }
     })
       .map((data) => {
-        data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address'])
+        data.donorDetails.mailingAddress = formatAddressForTemplate(data.donorDetails['mailing-address'].address)
         delete data.donorDetails['mailing-address']
-        if (data.paymentMeans.self.type === 'elasticpath.purchases.purchase.paymentmeans') { // only credit card type has billing address
-          data.paymentMeans.address = formatAddressForTemplate(data.paymentMeans['billing-address'].address)
-          delete data.paymentMeans['billing-address']
+
+        data.paymentInstruments = extractPaymentAttributes(data.paymentInstruments)
+        if (data.paymentInstruments['card-number']) { // only credit card type has billing address
+          data.paymentInstruments.address = formatAddressForTemplate(data.billingAddress.address)
         }
+        delete data.billingAddress
         return data
       })
   }

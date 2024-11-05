@@ -13,6 +13,7 @@ import thankYouSummary from 'app/thankYou/summary/thankYouSummary.component'
 
 import sessionService from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
+import brandedAnalyticsFactory from './analytics/branded-analytics.factory'
 
 import 'common/lib/fakeLocalStorage'
 
@@ -22,9 +23,11 @@ const componentName = 'brandedCheckout'
 
 class BrandedCheckoutController {
   /* @ngInject */
-  constructor ($window, analyticsFactory, tsysService, sessionService, envService, orderService, $translate) {
+  constructor ($element, $window, analyticsFactory, brandedAnalyticsFactory, tsysService, sessionService, envService, orderService, $translate) {
+    this.$element = $element[0] // extract the DOM element from the jqLite wrapper
     this.$window = $window
     this.analyticsFactory = analyticsFactory
+    this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.tsysService = tsysService
     this.sessionService = sessionService
     this.envService = envService
@@ -47,7 +50,12 @@ class BrandedCheckoutController {
     this.sessionService.signOut().subscribe(() => {
       this.checkoutStep = 'giftContactPayment'
       this.fireAnalyticsEvents('contact', 'payment')
-    }, angular.noop)
+      // Remove initialLoadComplete session storage. Used on src/common/components/contactInfo/contactInfo.component.js
+      // To prevent users who complete a gift and give again.
+      this.$window.sessionStorage.removeItem('initialLoadComplete')
+    }, (err) => {
+      console.error(err)
+    })
     this.$translate.use(this.language || 'en')
 
     this.itemConfig = {}
@@ -76,21 +84,55 @@ class BrandedCheckoutController {
         this.checkoutStep = 'thankYou'
         break
     }
-    this.$window.document.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
+    this.$element.scrollIntoView({ behavior: 'smooth' })
   }
 
-  previous () {
-    switch (this.checkoutStep) {
-      case 'review':
-        this.fireAnalyticsEvents('contact', 'payment')
-        this.checkoutStep = 'giftContactPayment'
-        break
+  previous (newStep) {
+    let scrollElement
+
+    if (this.checkoutStep === 'review') {
+      this.fireAnalyticsEvents('contact', 'payment')
+      this.checkoutStep = 'giftContactPayment'
+
+      switch (newStep) {
+        case 'contact':
+          scrollElement = 'contact-info'
+          break
+        case 'cart':
+          scrollElement = 'product-config-form'
+          break
+        case 'payment':
+          scrollElement = 'checkout-step-2'
+          break
+      }
     }
-    this.$window.document.querySelector('branded-checkout').scrollIntoView({ behavior: 'smooth' })
+
+    if (scrollElement && this.$window.MutationObserver) {
+      // Watch for changes until the element we are scrolling to exists and everything has loaded
+      // because there will be layout shift every time a new component finishes loading
+      const observer = new this.$window.MutationObserver(() => {
+        // TODO: When support for :has() is high enough, this query could be changed to `.panel :has(${scrollElement})`
+        // instead of having to find the scrollElement and manually navigate up to the grandparent element
+        // https://caniuse.com/css-has
+        const element = this.$element.querySelector(scrollElement)
+        if (element && this.$element.querySelector('loading') === null) {
+          // Traverse up to the .panel grandparent
+          const panel = element.parentElement.parentElement
+          // Scroll 100px past the top of the element
+          this.$window.scrollTo({ top: panel.getBoundingClientRect().top + this.$window.scrollY - 100, behavior: 'smooth' })
+          observer.disconnect()
+        }
+      })
+      observer.observe(this.$element, { childList: true, subtree: true })
+    } else {
+      this.$element.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   onThankYouPurchaseLoaded (purchase) {
     this.onOrderCompleted({ $event: { $window: this.$window, purchase: changeCaseObject.camelCase(pick(purchase, ['donorDetails', 'lineItems'])) } })
+    this.brandedAnalyticsFactory.savePurchase(purchase)
+    this.brandedAnalyticsFactory.purchase()
   }
 
   onPaymentFailed (donorDetails) {
@@ -112,6 +154,7 @@ export default angular
     thankYouSummary.name,
     sessionService.name,
     orderService.name,
+    brandedAnalyticsFactory.name,
     uibModal,
     'environment',
     'pascalprecht.translate'
@@ -132,6 +175,8 @@ export default angular
       frequency: '@',
       day: '@',
       apiUrl: '@',
+      radioStationApiUrl: '@',
+      radioStationRadius: '@',
       premiumCode: '@',
       premiumName: '@',
       premiumImageUrl: '@',

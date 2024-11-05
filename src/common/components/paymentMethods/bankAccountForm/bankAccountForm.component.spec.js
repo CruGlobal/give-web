@@ -4,7 +4,18 @@ import size from 'lodash/size'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 
-import cruPayments from 'cru-payments/dist/cru-payments'
+jest.mock('@cruglobal/cru-payments/dist/cru-payments', () => {
+  const originalModule = jest.requireActual('@cruglobal/cru-payments/dist/cru-payments')
+  return {
+    bankAccount: {
+      ...originalModule.bankAccount,
+      init: jest.fn(),
+      encrypt: jest.fn()
+    }
+  }
+})
+
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 import { ccpKey, ccpStagingKey } from 'common/app.constants'
 
 import module from './bankAccountForm.component'
@@ -160,6 +171,62 @@ describe('bank account form', () => {
       }
       self.formController.$valid = true
       self.controller.envService.set('production')
+      self.controller.savePayment()
+
+      expect(cruPayments.bankAccount.init).toHaveBeenCalledWith('production', ccpKey)
+      expect(cruPayments.bankAccount.encrypt).toHaveBeenCalledWith('123456789012')
+      expect(self.formController.$setSubmitted).toHaveBeenCalled()
+      const expectedData = {
+        bankAccount: {
+          'account-type': 'checking',
+          'bank-name': 'First Bank',
+          'encrypted-account-number': encryptedAccountNumber,
+          'display-account-number': '9012',
+          'routing-number': '123456789'
+        }
+      }
+
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } })
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData })
+    })
+
+    it('should send a request to save the bank account payment info using the prodcloud env', () => {
+      self.controller.bankPayment = {
+        accountType: 'checking',
+        bankName: 'First Bank',
+        routingNumber: '123456789',
+        accountNumber: '123456789012'
+      }
+      self.formController.$valid = true
+      self.controller.envService.set('prodcloud')
+      self.controller.savePayment()
+
+      expect(cruPayments.bankAccount.init).toHaveBeenCalledWith('production', ccpKey)
+      expect(cruPayments.bankAccount.encrypt).toHaveBeenCalledWith('123456789012')
+      expect(self.formController.$setSubmitted).toHaveBeenCalled()
+      const expectedData = {
+        bankAccount: {
+          'account-type': 'checking',
+          'bank-name': 'First Bank',
+          'encrypted-account-number': encryptedAccountNumber,
+          'display-account-number': '9012',
+          'routing-number': '123456789'
+        }
+      }
+
+      expect(self.controller.onPaymentFormStateChange).toHaveBeenCalledWith({ $event: { state: 'loading', payload: expectedData } })
+      expect(self.outerScope.onPaymentFormStateChange).toHaveBeenCalledWith({ state: 'loading', payload: expectedData })
+    })
+
+    it('should send a request to save the bank account payment info using the preprod env', () => {
+      self.controller.bankPayment = {
+        accountType: 'checking',
+        bankName: 'First Bank',
+        routingNumber: '123456789',
+        accountNumber: '123456789012'
+      }
+      self.formController.$valid = true
+      self.controller.envService.set('preprod')
       self.controller.savePayment()
 
       expect(cruPayments.bankAccount.init).toHaveBeenCalledWith('production', ccpKey)

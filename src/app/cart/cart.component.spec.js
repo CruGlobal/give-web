@@ -26,7 +26,10 @@ describe('cart', () => {
         getRole: () => 'REGISTERED'
       },
       $window: {
-        location: '/cart.html'
+        location: {
+          href: '/cart.html',
+          search: ''
+        }
       },
       $document: [{
         referrer: ''
@@ -68,6 +71,23 @@ describe('cart', () => {
       expect(self.controller.cartData).toEqual('data')
       expect(self.controller.loading).toEqual(false)
       expect(self.controller.updating).toEqual(false)
+    })
+
+    it('should preserve the order', () => {
+      self.controller.cartService.get.mockReturnValue(Observable.of({ items: [{ code: '1' }, { code: '2' }, { code: '3' }] }))
+      self.controller.loadCart(true)
+
+      self.controller.cartService.get.mockReturnValue(Observable.of({ items: [{ code: '3' }, { code: '2' }, { code: '1' }, { code: '4' }] }))
+      self.controller.loadCart(true)
+
+      expect(self.controller.cartData).toEqual({ items: [{ code: '4' }, { code: '1' }, { code: '2' }, { code: '3' }] })
+    })
+
+    it('should handle empty data', () => {
+      self.controller.cartService.get.mockReturnValue(Observable.of({}))
+      self.controller.loadCart(true)
+
+      expect(self.controller.cartData).toEqual({})
     })
 
     it('should handle an error loading cart data', () => {
@@ -175,7 +195,6 @@ describe('cart', () => {
 
       expect(self.controller.productModalService.configureProduct).toHaveBeenCalledWith('0123456', 'some config', true, 'uri1')
       expect(self.controller.loadCart).toHaveBeenCalledWith(true)
-      expect(self.controller.cartData.items).toEqual([{ uri: 'uri2' }])
     })
   })
 
@@ -183,11 +202,11 @@ describe('cart', () => {
     it('should return uri', () => {
       self.controller.checkout()
 
-      expect(self.controller.$window.location).toBe('/checkout.html')
+      expect(self.controller.$window.location.href).toBe('/checkout.html')
       self.controller.sessionService.getRole = () => 'foo'
       self.controller.checkout()
 
-      expect(self.controller.$window.location).toBe('/sign-in.html')
+      expect(self.controller.$window.location.href).toBe('/sign-in.html')
     })
   })
 

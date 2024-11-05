@@ -71,18 +71,20 @@ class ExistingPaymentMethodsController {
   }
 
   selectDefaultPaymentMethod () {
-    const chosenPaymentMethod = find(this.paymentMethods, { chosen: true })
+    const paymentMethods = this.paymentMethods.filter(paymentMethod => this.validPaymentMethod(paymentMethod))
+    const chosenPaymentMethod = find(paymentMethods, { chosen: true })
     if (chosenPaymentMethod) {
       // Select the payment method previously chosen for the order
       this.selectedPaymentMethod = chosenPaymentMethod
     } else {
       // Select the first payment method
-      this.selectedPaymentMethod = this.paymentMethods[0]
+      this.selectedPaymentMethod = paymentMethods[0]
     }
     this.switchPayment()
   }
 
   openPaymentMethodFormModal (existingPaymentMethod) {
+    this.paymentFormResolve.state = 'unsubmitted'
     this.paymentMethodFormModal = this.$uibModal.open({
       component: 'paymentMethodFormModal',
       backdrop: 'static', // Disables closing on click
@@ -104,11 +106,6 @@ class ExistingPaymentMethodsController {
     })
 
     const resetForm = () => {
-      this.onPaymentFormStateChange({
-        $event: {
-          state: 'unsubmitted'
-        }
-      })
       delete this.paymentMethodFormModal
     }
     this.paymentMethodFormModal.result.then(resetForm, resetForm)
@@ -132,12 +129,10 @@ class ExistingPaymentMethodsController {
   }
 
   switchPayment () {
-    if (this.selectedPaymentMethod) {
-      this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
-      if (this.selectedPaymentMethod['bank-name']) {
-        // This is an EFT payment method so we need to remove any fee coverage
-        this.orderService.storeCoverFeeDecision(false)
-      }
+    this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
+    if (this.selectedPaymentMethod?.['bank-name']) {
+      // This is an EFT payment method so we need to remove any fee coverage
+      this.orderService.storeCoverFeeDecision(false)
     }
   }
 }

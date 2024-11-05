@@ -36,7 +36,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   const maximumTimeout = 30 * 1000
 
   // Set initial session on load
-  updateCurrentSession($cookies.get(Sessions.role))
+  updateCurrentSession()
 
   // Watch cortex-session cookie for changes and update existing session variable
   // This only detects changes made by $http or other angular services, not the browser expiring the cookie.
@@ -148,21 +148,18 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
           data: {}
         }))
         .map((response) => response.data)
-    return skipEvent ? observable : observable.finally(() => {
-      $rootScope.$broadcast(SignOutEvent)
-    })
+    return skipEvent
+      ? observable
+      : observable.finally(() => {
+        $rootScope.$broadcast(SignOutEvent)
+      })
   }
 
   /* Private Methods */
-  function updateCurrentSession (encoded_value) {
-    let cortexRole = {}; let cruProfile = {}
-    if (angular.isDefined(encoded_value)) {
-      cortexRole = jwtDecode(encoded_value)
-    }
-
-    if (angular.isDefined($cookies.get(Sessions.profile))) {
-      cruProfile = jwtDecode($cookies.get(Sessions.profile))
-    }
+  function updateCurrentSession () {
+    const cortexRole = decodeCookie(Sessions.role)
+    const cruProfile = decodeCookie(Sessions.profile)
+    const giveSession = decodeCookie(Sessions.give)
 
     // Set give-session expiration timeout if defined
     const timeout = giveSessionExpiration()
@@ -175,7 +172,12 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     // Update sessionSubject with new value
     sessionSubject.next(session)
 
-    updateRollbarPerson(session)
+    updateRollbarPerson(session, giveSession)
+  }
+
+  function decodeCookie (cookieName) {
+    const jwt = $cookies.get(cookieName)
+    return angular.isDefined(jwt) ? jwtDecode(jwt) : {}
   }
 
   function setSessionTimeout (timeout) {
@@ -192,7 +194,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
       const expiration = giveSessionExpiration()
       if (angular.isUndefined(expiration)) {
         // Give session has expired
-        updateCurrentSession($cookies.get(Sessions.role))
+        updateCurrentSession()
       } else {
         setSessionTimeout(expiration)
       }
@@ -215,7 +217,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function currentRole () {
     if (angular.isDefined(session.role)) {
-      if (session.role === Roles.public) {
+      if (session.role === Roles.public || angular.isUndefined($cookies.get(Sessions.profile))) {
         return Roles.public
       }
       // Expired cookies are undefined
@@ -228,7 +230,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function casApiUrl (path) {
-    var apiUrl = envService.read('apiUrl') + '/cas'
+    const apiUrl = envService.read('apiUrl') + '/cas'
     return apiUrl + path
   }
 }

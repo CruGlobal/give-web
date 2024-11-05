@@ -9,6 +9,7 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
 import { Roles, SignOutEvent } from 'common/services/session/session.service'
 import commonModule from 'common/common.module'
+import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
 import { scrollModalToTop } from 'common/services/modalState.service'
 import uibModal from 'angular-ui-bootstrap/src/modal'
@@ -78,7 +79,11 @@ class PaymentMethodsController {
         },
         error => {
           this.loading = false
-          this.loadingError = true
+          if (error.status === 500) {
+            this.loadingError = 'authentication'
+          } else {
+            this.loadingError = true
+          }
           this.$log.error('Error loading payment methods', error)
         }
       )
@@ -101,8 +106,8 @@ class PaymentMethodsController {
         show: true,
         type: 'paymentMethodAdded'
       }
-      data['_recurringgifts'] = [{ donations: [] }]
-      this.paymentMethods.push(data)
+      data._recurringgifts = [{ donations: [] }]
+      this.paymentMethods.push(extractPaymentAttributes(data))
       this.$timeout(() => {
         this.successMessage.show = false
       }, 60000)
@@ -114,7 +119,11 @@ class PaymentMethodsController {
     if ($event.state === 'loading' && $event.payload) {
       this.profileService.addPaymentMethod($event.payload)
         .subscribe(data => {
-          data.address = data.address && formatAddressForTemplate(data.address)
+          if (data.address) {
+            data.address = formatAddressForTemplate(data.address)
+          } else if (data['payment-instrument-identification-attributes']['street-address']) {
+            data.address = formatAddressForTemplate(data['payment-instrument-identification-attributes'])
+          }
           this.paymentMethodFormModal.close(data)
           this.paymentFormResolve.state = 'unsubmitted'
         },
@@ -139,7 +148,7 @@ class PaymentMethodsController {
   }
 
   isCard (paymentMethod) {
-    return paymentMethod.self.type === 'cru.creditcards.named-credit-card'
+    return !!paymentMethod['card-type']
   }
 
   signedOut (event) {

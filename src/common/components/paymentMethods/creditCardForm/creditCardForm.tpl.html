@@ -13,15 +13,18 @@
     <div class="row">
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardNumber | showErrors)}">
-          <label translate>{{'CARD_NUM'}}</label>
-          <input type="text"
-                 name="cardNumber"
-                 autocomplete="cc-number"
-                 class="form-control  form-control-subtle"
-                 ng-model="$ctrl.creditCardPayment.cardNumber"
-                 ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
-                 ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
-                 ng-disabled="$ctrl.disableCardNumber">
+          <label>
+            <span translate>{{'CARD_NUM'}}</span>
+            <input type="text"
+                   name="cardNumber"
+                   autocomplete="cc-number"
+                   class="form-control  form-control-subtle"
+                   ng-model="$ctrl.creditCardPayment.cardNumber"
+                   ng-attr-placeholder="************{{$ctrl.creditCardPayment.cardNumberPlaceholder}}"
+                   ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
+                   ng-disabled="$ctrl.disableCardNumber"
+                   credit-card-number>
+          </label>
           <div ng-messages="$ctrl.creditCardPaymentForm.cardNumber.$error" role="alert" ng-if="($ctrl.creditCardPaymentForm.cardNumber | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'CARD_NUM_ERROR'}}</div>
             <div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_NUM_ERROR'}}</div>
@@ -34,13 +37,15 @@
       </div>
       <div class="col-sm-6">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.cardholderName | showErrors)}">
-          <label translate>{{'CARD_NAME'}}</label>
-          <input type="text"
-                 name="cardholderName"
-                 class="form-control  form-control-subtle"
-                 autocomplete="cc-name"
-                 ng-model="$ctrl.creditCardPayment.cardholderName"
-                 ng-maxlength="50" required>
+          <label>
+            <span translate>{{'CARD_NAME'}}</span>
+            <input type="text"
+                   name="cardholderName"
+                   class="form-control  form-control-subtle"
+                   autocomplete="cc-name"
+                   ng-model="$ctrl.creditCardPayment.cardholderName"
+                   ng-maxlength="50" required>
+          </label>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.cardholderName.$error" ng-if="($ctrl.creditCardPaymentForm.cardholderName | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'CARD_NAME_ERROR'}}</div>
             <div class="help-block" ng-message="maxlength" translate>{{'MAX_LENGTH_CARD_NAME_ERROR'}}</div>
@@ -51,25 +56,27 @@
     <div class="row">
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryMonth | showErrors)}">
-          <label translate>{{'EXP_MONTH'}}</label>
-          <select class="form-control  form-control-subtle"
-                  name="expiryMonth"
-                  autocomplete="cc-exp-month"
-                  required
-                  ng-model="$ctrl.creditCardPayment.expiryMonth">
-            <option value="01" translate>01 - {{'MONTHS.JAN'}}</option>
-            <option value="02" translate>02 - {{'MONTHS.FEB'}}</option>
-            <option value="03" translate>03 - {{'MONTHS.MAR'}}</option>
-            <option value="04" translate>04 - {{'MONTHS.APR'}}</option>
-            <option value="05" translate>05 - {{'MONTHS.MAY'}}</option>
-            <option value="06" translate>06 - {{'MONTHS.JUN'}}</option>
-            <option value="07" translate>07 - {{'MONTHS.JUL'}}</option>
-            <option value="08" translate>08 - {{'MONTHS.AUG'}}</option>
-            <option value="09" translate>09 - {{'MONTHS.SEP'}}</option>
-            <option value="10" translate>10 - {{'MONTHS.OCT'}}</option>
-            <option value="11" translate>11 - {{'MONTHS.NOV'}}</option>
-            <option value="12" translate>12 - {{'MONTHS.DEC'}}</option>
-          </select>
+          <label>
+            <span translate>{{'EXP_MONTH'}}</span>
+            <select class="form-control  form-control-subtle"
+                    name="expiryMonth"
+                    autocomplete="cc-exp-month"
+                    required
+                    ng-model="$ctrl.creditCardPayment.expiryMonth">
+              <option value="01" translate>01 - {{'MONTHS.JAN'}}</option>
+              <option value="02" translate>02 - {{'MONTHS.FEB'}}</option>
+              <option value="03" translate>03 - {{'MONTHS.MAR'}}</option>
+              <option value="04" translate>04 - {{'MONTHS.APR'}}</option>
+              <option value="05" translate>05 - {{'MONTHS.MAY'}}</option>
+              <option value="06" translate>06 - {{'MONTHS.JUN'}}</option>
+              <option value="07" translate>07 - {{'MONTHS.JUL'}}</option>
+              <option value="08" translate>08 - {{'MONTHS.AUG'}}</option>
+              <option value="09" translate>09 - {{'MONTHS.SEP'}}</option>
+              <option value="10" translate>10 - {{'MONTHS.OCT'}}</option>
+              <option value="11" translate>11 - {{'MONTHS.NOV'}}</option>
+              <option value="12" translate>12 - {{'MONTHS.DEC'}}</option>
+            </select>
+          </label>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryMonth.$error" ng-if="($ctrl.creditCardPaymentForm.expiryMonth | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'CARD_EXP_MONTH_ERROR'}}</div>
             <div class="help-block" ng-message="expired" translate>{{'CARD_EXPIRED_ERROR'}}</div>
@@ -78,14 +85,16 @@
       </div>
       <div class="col-sm-4">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.expiryYear | showErrors)}">
-          <label translate>{{'EXP_YEAR'}}</label>
-          <select class="form-control  form-control-subtle"
-                  name="expiryYear"
-                  autocomplete="cc-exp-year"
-                  required
-                  ng-model="$ctrl.creditCardPayment.expiryYear"
-                  ng-options="year for year in $ctrl.expirationDateYears">
-          </select>
+          <label>
+            <span translate>{{'EXP_YEAR'}}</span>
+            <select class="form-control  form-control-subtle"
+                    name="expiryYear"
+                    autocomplete="cc-exp-year"
+                    required
+                    ng-model="$ctrl.creditCardPayment.expiryYear"
+                    ng-options="year for year in $ctrl.expirationDateYears">
+            </select>
+          </label>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.expiryYear.$error" ng-if="($ctrl.creditCardPaymentForm.expiryYear | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'CARD_EXP_YEAR_ERROR'}}</div>
             <div class="help-block" ng-message="expired" translate>{{'CARD_EXPIRED_ERROR'}}</div>
@@ -94,14 +103,16 @@
       </div>
       <div class="col-sm-4" ng-if="!$ctrl.hideCvv">
         <div class="form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
-          <label translate>{{'SEC_CODE'}}</label>
-          <input type="text"
-                 name="securityCode"
-                 autocomplete="cc-csc"
-                 class="form-control form-control-subtle"
-                 ng-model="$ctrl.creditCardPayment.securityCode"
-                 ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
-                 ng-attr-placeholder="{{$ctrl.paymentMethod && !$ctrl.creditCardPayment.cardNumber ? '***' : ''}}">
+          <label>
+            <span translate>{{'SEC_CODE'}}</span>
+            <input type="text"
+                   name="securityCode"
+                   autocomplete="cc-csc"
+                   class="form-control form-control-subtle"
+                   ng-model="$ctrl.creditCardPayment.securityCode"
+                   ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
+                   ng-attr-placeholder="{{$ctrl.paymentMethod && !$ctrl.creditCardPayment.cardNumber ? '***' : ''}}">
+          </label>
           <div role="alert" ng-messages="$ctrl.creditCardPaymentForm.securityCode.$error" ng-if="($ctrl.creditCardPaymentForm.securityCode | showErrors)">
             <div class="help-block" ng-message="required" translate>{{'CARD_SEC_CODE_ERROR'}}</div>
             <div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_SEC_CODE'}}</div>

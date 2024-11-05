@@ -32,7 +32,7 @@ describe('product config form component', function () {
       },
       code: '1234567',
       itemConfig: {
-        amount: '85'
+        AMOUNT: '85'
       },
       isEdit: false,
       uri: 'uri',
@@ -77,7 +77,7 @@ describe('product config form component', function () {
 
     it('should handle brandedCoverFeeCheckedEvent for selectable amounts', () => {
       jest.spyOn($ctrl, 'changeAmount').mockImplementation(() => {})
-      $ctrl.itemConfig.amount = 50
+      $ctrl.itemConfig.AMOUNT = 50
 
       $ctrl.$onInit()
       $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
@@ -87,7 +87,7 @@ describe('product config form component', function () {
 
     it('should handle brandedCoverFeeCheckedEvent for custom amounts', () => {
       jest.spyOn($ctrl, 'changeCustomAmount').mockImplementation(() => {})
-      $ctrl.itemConfig.amount = 1.02
+      $ctrl.itemConfig.AMOUNT = 1.02
 
       $ctrl.$onInit()
       $ctrl.$rootScope.$emit(brandedCoverFeeCheckedEvent)
@@ -98,42 +98,42 @@ describe('product config form component', function () {
 
   describe('initItemConfig', () => {
     it('should format item config values', () => {
-      $ctrl.itemConfig['recurring-day-of-month'] = '9'
-      $ctrl.itemConfig['recurring-start-month'] = '8'
+      $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'] = '9'
+      $ctrl.itemConfig['RECURRING_START_MONTH'] = '8'
       $ctrl.initItemConfig()
 
-      expect($ctrl.itemConfig.amount).toEqual(85)
-      expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('09')
-      expect($ctrl.itemConfig['recurring-start-month']).toEqual('08')
+      expect($ctrl.itemConfig.AMOUNT).toEqual(85)
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('09')
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('08')
     })
 
     it('should handle out of range values', () => {
-      $ctrl.itemConfig.amount = 'invalid'
-      $ctrl.itemConfig['recurring-day-of-month'] = '29'
-      $ctrl.itemConfig['recurring-start-month'] = '13'
+      $ctrl.itemConfig.AMOUNT = 'invalid'
+      $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'] = '29'
+      $ctrl.itemConfig['RECURRING_START_MONTH'] = '13'
       $ctrl.initItemConfig()
 
-      expect($ctrl.itemConfig.amount).toBeUndefined()
-      expect($ctrl.itemConfig['recurring-day-of-month']).toBeUndefined()
-      expect($ctrl.itemConfig['recurring-start-month']).toBeUndefined()
+      expect($ctrl.itemConfig.AMOUNT).toBeUndefined()
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toBeUndefined()
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toBeUndefined()
     })
 
     it('should handle a whole number amount', () => {
-      $ctrl.itemConfig.amount = 10
+      $ctrl.itemConfig.AMOUNT = 10
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig.amount).toEqual(10)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(10)
     })
 
     it('should handle amount on first time through', () => {
-      $ctrl.itemConfig.amount = undefined
+      $ctrl.itemConfig.AMOUNT = undefined
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig.amount).toBeUndefined()
+      expect($ctrl.itemConfig.AMOUNT).toBeUndefined()
     })
 
     it('should handle amount with cents', () => {
-      $ctrl.itemConfig.amount = 10.25
+      $ctrl.itemConfig.AMOUNT = 10.25
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig.amount).toEqual(10.25)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(10.25)
     })
   })
 
@@ -161,10 +161,13 @@ describe('product config form component', function () {
 
       jest.spyOn($ctrl.commonService, 'getNextDrawDate').mockReturnValue(Observable.of('2016-10-02'))
 
-      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 5 }, { amount: 10 }]))
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 5 }, { amount: 10 }, { amount: 0 }, { }]))
 
       jest.spyOn($ctrl.designationsService, 'givingLinks').mockReturnValue(Observable.of([]))
       jest.spyOn($ctrl.analyticsFactory, 'giveGiftModal').mockReturnValue(() => {})
+
+      jest.spyOn($ctrl.envService, 'read').mockReturnValue(false)
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'beginCheckout')
     })
 
     it('should get productData, nextDrawDate, suggestedAmounts and givingLinks', () => {
@@ -176,10 +179,11 @@ describe('product config form component', function () {
       expect($ctrl.productData).toEqual('product data')
       expect($ctrl.setDefaultAmount).toHaveBeenCalled()
       expect($ctrl.setDefaultFrequency).toHaveBeenCalled()
+      expect($ctrl.brandedAnalyticsFactory.beginCheckout).not.toHaveBeenCalled()
 
       expect($ctrl.nextDrawDate).toEqual('2016-10-02')
-      expect($ctrl.itemConfig['recurring-day-of-month']).toEqual('02')
-      expect($ctrl.itemConfig['recurring-start-month']).toEqual('10')
+      expect($ctrl.itemConfig['RECURRING_DAY_OF_MONTH']).toEqual('02')
+      expect($ctrl.itemConfig['RECURRING_START_MONTH']).toEqual('10')
 
       expect($ctrl.suggestedAmounts).toEqual([{ amount: 5 }, { amount: 10 }])
       expect($ctrl.useSuggestedAmounts).toEqual(true)
@@ -189,6 +193,12 @@ describe('product config form component', function () {
       expect($ctrl.loading).toEqual(false)
       expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'unsubmitted' })
       expect($ctrl.analyticsFactory.giveGiftModal($ctrl.productData))
+    })
+
+    it('should called beginCheckout in branded checkout', () => {
+      $ctrl.envService.read.mockReturnValue(true)
+      $ctrl.loadData()
+      expect($ctrl.brandedAnalyticsFactory.beginCheckout).toHaveBeenCalledWith($ctrl.productData)
     })
 
     it('should not use suggested amounts if they are not provided', () => {
@@ -221,6 +231,19 @@ describe('product config form component', function () {
     })
   })
 
+
+  describe('loadData but suggestedAmounts only has 0 amounts or empty objects', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.designationsService, 'suggestedAmounts').mockReturnValue(Observable.of([{ amount: 0 }, { }]))
+    })
+
+    it('should use default amounts', () => {
+      $ctrl.loadData()
+      expect($ctrl.suggestedAmounts).toEqual([])
+      expect($ctrl.useSuggestedAmounts).toEqual(false)
+    })
+  })
+
   describe('setDefaultAmount', () => {
     beforeEach(() => {
       $ctrl.itemConfig = {}
@@ -230,47 +253,47 @@ describe('product config form component', function () {
     it('should set the default amount if there are no suggested amounts', () => {
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(50)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(50)
     })
 
     it('should set the default amount if there are suggested amounts', () => {
       $ctrl.suggestedAmounts = [{ amount: 14 }]
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(14)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(14)
     })
 
     it('should use an existing selectableAmounts', () => {
-      $ctrl.itemConfig.amount = 100
+      $ctrl.itemConfig.AMOUNT = 100
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(100)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(100)
       expect($ctrl.changeCustomAmount).not.toHaveBeenCalled()
     })
 
     it('should use an existing suggestedAmounts', () => {
-      $ctrl.itemConfig.amount = 14
+      $ctrl.itemConfig.AMOUNT = 14
       $ctrl.suggestedAmounts = [{ amount: 14 }]
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(14)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(14)
       expect($ctrl.changeCustomAmount).not.toHaveBeenCalled()
     })
 
     it('should initialize the custom value without suggestedAmounts', () => {
-      $ctrl.itemConfig.amount = 14
+      $ctrl.itemConfig.AMOUNT = 14
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(14)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(14)
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
     })
 
     it('should initialize the custom value with suggestedAmounts', () => {
-      $ctrl.itemConfig.amount = 14
+      $ctrl.itemConfig.AMOUNT = 14
       $ctrl.suggestedAmounts = [{ amount: 25 }]
       $ctrl.setDefaultAmount()
 
-      expect($ctrl.itemConfig.amount).toEqual(14)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(14)
       expect($ctrl.changeCustomAmount).toHaveBeenCalledWith(14)
     })
   })
@@ -415,7 +438,7 @@ describe('product config form component', function () {
       $ctrl.changeAmount(100)
 
       expect($ctrl.itemConfigForm.$setDirty).toHaveBeenCalled()
-      expect($ctrl.itemConfig.amount).toEqual(100)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(100)
       expect($ctrl.customAmount).toBe('')
       expect($ctrl.customInputActive).toEqual(false)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 100 })
@@ -425,7 +448,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 50
+      $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(100)
 
       expect($ctrl.amountChanged).toEqual(true)
@@ -437,7 +460,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 50
+      $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(100, true)
 
       expect($ctrl.amountChanged).toEqual(true)
@@ -449,7 +472,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 50
+      $ctrl.itemConfig.AMOUNT = 50
       $ctrl.changeAmount(50)
 
       expect($ctrl.amountChanged).toEqual(false)
@@ -463,17 +486,27 @@ describe('product config form component', function () {
       $ctrl.itemConfig = {}
       $ctrl.changeCustomAmount(300)
 
-      expect($ctrl.itemConfig.amount).toEqual(300)
+      expect($ctrl.itemConfig.AMOUNT).toEqual(300)
       expect($ctrl.customAmount).toEqual(300)
       expect($ctrl.customInputActive).toEqual(true)
       expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: 300 })
+    })
+
+    it('sets itemConfig amount with string', () => {
+      $ctrl.itemConfig = {}
+      $ctrl.changeCustomAmount('300')
+
+      expect($ctrl.itemConfig.AMOUNT).toEqual(300)
+      expect($ctrl.customAmount).toEqual('300')
+      expect($ctrl.customInputActive).toEqual(true)
+      expect($ctrl.updateQueryParam).toHaveBeenCalledWith({ key: giveGiftParams.amount, value: '300' })
     })
 
     it('should clear cover fees if we are not explicitly retaining them and the amount changed', () => {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 51.2
+      $ctrl.itemConfig.AMOUNT = 51.2
       $ctrl.changeCustomAmount(1)
 
       expect($ctrl.amountChanged).toEqual(true)
@@ -485,7 +518,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 51.2
+      $ctrl.itemConfig.AMOUNT = 51.2
       $ctrl.changeCustomAmount(1, true)
 
       expect($ctrl.amountChanged).toEqual(true)
@@ -497,7 +530,7 @@ describe('product config form component', function () {
       jest.spyOn($ctrl.orderService, 'clearCoverFees').mockImplementation(() => {})
       jest.spyOn($ctrl.$scope, '$emit').mockImplementation(() => {})
 
-      $ctrl.itemConfig.amount = 5
+      $ctrl.itemConfig.AMOUNT = 5
       $ctrl.changeAmount(5)
 
       expect($ctrl.amountChanged).toEqual(false)
@@ -508,13 +541,13 @@ describe('product config form component', function () {
 
   describe('checkAmountChanged()', () => {
     it('returns true if the amount changed', () => {
-      $ctrl.itemConfig = { amount: 1 }
+      $ctrl.itemConfig = { AMOUNT: 1 }
       $ctrl.checkAmountChanged(2)
       expect($ctrl.amountChanged).toEqual(true)
     })
 
     it('returns false if the amount did not change', () => {
-      $ctrl.itemConfig = { amount: 2 }
+      $ctrl.itemConfig = { AMOUNT: 2 }
       $ctrl.checkAmountChanged(2)
       expect($ctrl.amountChanged).toEqual(false)
     })
@@ -542,6 +575,7 @@ describe('product config form component', function () {
       $ctrl.errorAlreadyInCart = true
       $ctrl.errorSavingGeneric = true
       jest.spyOn($ctrl.analyticsFactory, 'cartAdd').mockImplementation(() => {})
+      jest.spyOn($ctrl.brandedAnalyticsFactory, 'saveTestingTransaction')
       $ctrl.initItemConfig()
     })
 
@@ -557,12 +591,38 @@ describe('product config form component', function () {
       testSaving(false)
     })
 
+    describe('testing transaction flag', () => {
+      beforeEach(() => {
+        $ctrl.productData = {}
+      })
+
+      it('saves flag with no comment', () => {
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(false)
+      })
+
+      it('saves flag with non-test comment', () => {
+        $ctrl.itemConfig.DONATION_SERVICES_COMMENTS = 'Anonymous'
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(false)
+      })
+
+      it('saves flag with test comment', () => {
+        $ctrl.itemConfig.DONATION_SERVICES_COMMENTS = 'Testing'
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.brandedAnalyticsFactory.saveTestingTransaction).toHaveBeenCalledWith(true)
+      })
+    })
+
     function testSaving (isEdit) {
       const operation = isEdit ? 'editItem' : 'addItem'
       const cartEvent = isEdit ? cartUpdatedEvent : giftAddedEvent
       const operationArgs = isEdit
-        ? ['uri', 'items/crugive/<some id>', { amount: 85 }]
-        : ['items/crugive/<some id>', { amount: 85 }, undefined]
+        ? ['uri', 'items/crugive/<some id>', { AMOUNT: 85 }]
+        : ['items/crugive/<some id>', { AMOUNT: 85 }, undefined]
       beforeEach(() => {
         $ctrl.isEdit = isEdit
         jest.spyOn($ctrl.cartService, operation).mockReturnValue(Observable.of({ self: { uri: 'uri' } }))
@@ -603,8 +663,8 @@ describe('product config form component', function () {
         $ctrl.isEdit ? expect($ctrl.analyticsFactory.cartAdd).not.toHaveBeenCalled() : expect($ctrl.analyticsFactory.cartAdd).toHaveBeenCalledWith($ctrl.itemConfig, $ctrl.productData)
       })
 
-      it('should submit a gift successfully and omit recurring-day-of-month if frequency is single', () => {
-        $ctrl.itemConfig['recurring-day-of-month'] = '01'
+      it('should submit a gift successfully and omit RECURRING_DAY_OF_MONTH if frequency is single', () => {
+        $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'] = '01'
         $ctrl.itemConfigForm.$dirty = true
         $ctrl.productData.frequency = 'NA'
         $ctrl.saveGiftToCart()
@@ -640,6 +700,41 @@ describe('product config form component', function () {
         expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorAlreadyInCart' })
         expect($ctrl.errorAlreadyInCart).toEqual(true)
         expect($ctrl.errorSavingGeneric).toEqual(false)
+      })
+
+      it('should handle an error when saving a bad decimal amount - old error style', () => {
+        const error = { data: 'Amount must be a valid decimal number without dollar signs or commas.' }
+        $ctrl.cartService[operation].mockReturnValue(Observable.throw(error))
+        $ctrl.itemConfigForm.$dirty = true
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.submittingGift).toEqual(false)
+        expect($ctrl.cartService[operation]).toHaveBeenCalledWith(...operationArgs)
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorSubmitting' })
+        expect($ctrl.errorAlreadyInCart).toEqual(false)
+        expect($ctrl.errorSavingGeneric).toEqual(false)
+        expect($ctrl.amountFormatError).toEqual = error.data
+      })
+
+      it('should handle an error when saving a bad decimal amount - new error style', () => {
+        const error = {
+          data: {
+            messages: [{
+              id: 'field.invalid.decimal.format',
+              'debug-message': 'Amount must be a valid decimal number without dollar signs or commas.'
+            }]
+          }
+        }
+        $ctrl.cartService[operation].mockReturnValue(Observable.throw(error))
+        $ctrl.itemConfigForm.$dirty = true
+        $ctrl.saveGiftToCart()
+
+        expect($ctrl.submittingGift).toEqual(false)
+        expect($ctrl.cartService[operation]).toHaveBeenCalledWith(...operationArgs)
+        expect($ctrl.onStateChange).toHaveBeenCalledWith({ state: 'errorSubmitting' })
+        expect($ctrl.errorAlreadyInCart).toEqual(false)
+        expect($ctrl.errorSavingGeneric).toEqual(false)
+        expect($ctrl.amountFormatError).toEqual = error.data.messages[0]['debug-message']
       })
 
       it('should clear the cover fee decision when editing the amount of an item in the cart', () => {
