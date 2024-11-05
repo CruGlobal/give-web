@@ -12,6 +12,24 @@
       </label>
     </div>
 
+      <form name="$ctrl.form" class="loading-overlay-parent">
+        <div class="form-group" ng-class="{'has-success': $ctrl.form.cvv.$valid, 'has-error': ($ctrl.form.cvv | showErrors) }">
+          <label for="cvv" translate>CVV</label>
+          <input id="cvv"
+                 name="cvv"
+                 type="cvv"
+                 class="form-control form-control-subtle"
+                 ng-model="$ctrl.cvv"
+                 credit-card-cvv="cvv"
+                 required
+                 >
+          <div ng-if="($ctrl.form.cvv | showErrors)" ng-messages="$ctrl.form.cvv.$error">
+            <span class="help-block" ng-message="required" translate>CVV is required.</span>
+          </div>
+        </div>
+        <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
+      </form>
+    
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
       <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>
