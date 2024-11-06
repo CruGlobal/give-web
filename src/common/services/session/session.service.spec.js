@@ -401,20 +401,20 @@ describe('session service', function () {
 
   describe('removeOktaRedirectIndicator', () => {
     it('should remove the Okta redirect session storage variable', () => {
-      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+      sessionService.session.isOktaRedirecting = true
       sessionService.removeOktaRedirectIndicator()
-      expect($window.sessionStorage.getItem(redirectingIndicator)).toEqual(null)
+      expect(sessionService.session.isOktaRedirecting).toEqual(false)
     })
   })
 
   describe('isOktaRedirecting', () => {
-    it('should be true if the session storage variable is set', () => {
-      $window.sessionStorage.setItem(redirectingIndicator, 'true')
+    it('should be true if the session variable is set', () => {
+      sessionService.session.isOktaRedirecting = true
       expect(sessionService.isOktaRedirecting()).toBeTruthy()
     })
 
-    it('should be false if the session storage variable is not set', () => {
-      $window.sessionStorage.removeItem(redirectingIndicator)
+    it('should be false if the session variable is not set', () => {
+      delete sessionService.session.isOktaRedirecting
       expect(sessionService.isOktaRedirecting()).toBeFalsy()
     })
   })
