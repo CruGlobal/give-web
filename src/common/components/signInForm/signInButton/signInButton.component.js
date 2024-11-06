@@ -21,6 +21,8 @@ class SignInButtonController {
     this.isSigningIn = false
     this.onSignInPage = this.onSignInPage || false
 
+    console.log('this.onSignInPage', this.onSignInPage)
+
     this.sessionService.handleOktaRedirect()
       .subscribe((data) => {
         if (data) {
