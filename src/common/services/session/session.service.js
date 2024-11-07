@@ -28,7 +28,6 @@ export const Sessions = {
   profile: 'cru-profile'
 }
 
-export const redirectingIndicator = 'redirectingFromOkta'
 export const locationOnLogin = 'locationOnLogin'
 export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
@@ -99,7 +98,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function signIn (lastPurchaseId) {
-    setOktaRedirecting()
+    session.isOktaRedirecting = true;
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
       .finally(() => {
@@ -298,7 +297,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   async function internalSignOut (redirectHome = true) {
     const oktaSignOut = async () => {
-      // Add session data so on return to page we can show an explaination to the user about what happened.
+      // Add session data so on return to page we can show an explanation to the user about what happened.
       if (!redirectHome) {
         $window.sessionStorage.setItem(forcedUserToLogout, true)
         // Save location we need to redirect the user back to
@@ -398,12 +397,12 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     }
   }
 
-  function removeOktaRedirectIndicator () {
-    $window.sessionStorage.removeItem(redirectingIndicator)
+  function isOktaRedirecting () {
+    return session.isOktaRedirecting ?? false
   }
 
-  function isOktaRedirecting () {
-    return $window.sessionStorage.getItem(redirectingIndicator)
+  function removeOktaRedirectIndicator () {
+    session.isOktaRedirecting = false;
   }
 
   function updateCurrentProfile () {
@@ -419,10 +418,6 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   /* Private Methods */
-  function setOktaRedirecting () {
-    $window.sessionStorage.setItem(redirectingIndicator, 'true')
-  }
-
   function updateCurrentSession () {
     const cortexRole = decodeCookie(Sessions.role)
     const cruProfile = updateCurrentProfile()

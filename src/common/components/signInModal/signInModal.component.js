@@ -45,6 +45,7 @@ export default angular
       lastPurchaseId: '<',
       onStateChange: '&',
       onSuccess: '&',
-      onFailure: '&'
+      onFailure: '&',
+      isInsideAnotherModal: '='
     }
   })
