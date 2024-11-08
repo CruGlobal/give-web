@@ -17,14 +17,9 @@ export enum ButtonType {
   Button = 'button'
 }
 
-const isValidAction = (action: string): boolean => {
-  return action === 'submit_gift' || action === 'branded_submit'
-}
-
 interface RecaptchaProps {
   action: string
   onSuccess: (componentInstance: any) => void
-  onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
   buttonType?: ButtonType
@@ -32,15 +27,13 @@ interface RecaptchaProps {
   buttonDisabled: boolean
   buttonLabel: string
   $translate: any
-  $log: any,
-  recaptchaKey: string,
-  apiUrl: string,
+  $log: any
+  recaptchaKey: string
 }
 
 export const Recaptcha = ({
   action,
   onSuccess,
-  onFailure,
   componentInstance,
   buttonId,
   buttonType,
@@ -50,7 +43,6 @@ export const Recaptcha = ({
   $translate,
   $log,
   recaptchaKey,
-  apiUrl
 }: RecaptchaProps): JSX.Element => {
 
   const [ready, setReady] = useState(false)
@@ -81,41 +73,7 @@ export const Recaptcha = ({
       try {
         const token = await grecaptcha.enterprise.execute(recaptchaKey, { action: action })
         window.sessionStorage.setItem('recaptchaToken', token)
-        const serverResponse = await fetch(`${apiUrl}/recaptcha/verify`, {
-          method: 'POST',
-          body: JSON.stringify({ token: token }),
-          headers: { 'Content-Type': 'application/json' }
-        })
-        const data = await serverResponse.json()
-
-        if (!data || !data.score || !data.action) {
-          $log.warn('Recaptcha returned an unusual response:', data)
-          onSuccess(componentInstance)
-          return
-        }
-
-        if (data?.success === true && isValidAction(data?.action)) {
-          if (data.score < 0.5) {
-            const errorMessage = `Captcha score was below the threshold: ${data.score}`
-            $log.warn(errorMessage)
-            datadogRum.addError(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'lowScore' })
-            onFailure(componentInstance)
-            return
-          }
-          onSuccess(componentInstance)
-          return
-        }
-        if (data?.success === false && isValidAction(data?.action)) {
-          $log.warn('Recaptcha call was unsuccessful, continuing anyway')
-          onSuccess(componentInstance)
-          return
-        }
-        if (!isValidAction(data?.action)) {
-          const errorMessage = `Invalid action: ${data?.action}`
-          $log.warn(errorMessage)
-          datadogRum.addError(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'invalidAction' })
-          onFailure(componentInstance)
-        }
+        onSuccess(componentInstance)
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
         onSuccess(componentInstance)
@@ -141,15 +99,13 @@ export default angular
       [
         'action',
         'onSuccess',
-        'onFailure',
         'componentInstance',
         'buttonId',
         'buttonType',
         'buttonClasses',
         'buttonDisabled',
         'buttonLabel',
-        'recaptchaKey',
-        'apiUrl'
+        'recaptchaKey'
       ],
       ['$translate', '$log']))
 
