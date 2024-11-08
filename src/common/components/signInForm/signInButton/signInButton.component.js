@@ -20,17 +20,18 @@ class SignInButtonController {
   $onInit () {
     this.isSigningIn = false
     this.onSignInPage = this.onSignInPage || false
-
-    console.log('this.onSignInPage', this.onSignInPage)
+    console.log('called #0')
 
     this.sessionService.handleOktaRedirect()
       .subscribe((data) => {
+        console.log('called #3')
         if (data) {
           // Successfully redirected from Okta
           this.onSuccess()
         }
       },
       error => {
+        console.log('called #4')
         this.errorMessage = 'generic'
         this.$log.error('Failed to redirect from Okta', error)
         this.sessionService.removeLocationOnLogin()
@@ -42,7 +43,10 @@ class SignInButtonController {
   signInWithOkta () {
     this.isSigningIn = true
     delete this.errorMessage
+    console.log('called #7')
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
+      console.log('called #1')
+      this.isSigningIn = false
       const $injector = this.$injector
       if (!$injector.has('sessionService')) {
         $injector.loadNewModules(['sessionService'])
@@ -51,6 +55,7 @@ class SignInButtonController {
         new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
       this.onSuccess()
     }, error => {
+      console.log('called #5')
       this.isSigningIn = false
       if (error && error.config && error.config.data && error.config.data.password) {
         delete error.config.data.password
