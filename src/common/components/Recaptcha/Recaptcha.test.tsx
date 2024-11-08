@@ -21,7 +21,6 @@ const mockRecaptcha = {
   }
 }
 const onSuccess = jest.fn()
-const onFailure = jest.fn()
 
 describe('Recaptcha component', () => {
   const $translate = {
@@ -35,16 +34,15 @@ describe('Recaptcha component', () => {
 
   beforeEach(() => {
     global.window.grecaptcha = mockRecaptcha
+    onSuccess.mockImplementation(() => console.log('success'))
 
     $translate.instant.mockImplementation((input) => input)
     mockExecuteRecaptcha.mockImplementation(() => Promise.resolve('token'))
     mockRecaptchaReady.mockImplementation((callback) => { callback() })
     onSuccess.mockClear()
-    onFailure.mockClear()
   })
 
   it('should render', () => {
-    onSuccess.mockImplementation(() => console.log('success'))
     const { getAllByRole } = render(
       buildRecaptcha()
     )
@@ -79,15 +77,6 @@ describe('Recaptcha component', () => {
   })
 
   it('should successfully pass the recaptcha', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.resolve({ success: true, score: 0.9, action: 'submit_gift' })
-      })
-    })
-
-    onSuccess.mockImplementation(() => console.log('success'))
-
     const { getByRole } = render(
       buildRecaptcha()
     )
@@ -95,96 +84,6 @@ describe('Recaptcha component', () => {
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect(global.fetch).toHaveBeenCalledWith('https://give-stage2.cru.org/recaptcha/verify', expect.anything())
-    })
-  })
-
-  it('should successfully pass the recaptcha on branded checkout', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.resolve({ success: true, score: 0.6, action: 'branded_submit' })
-      })
-    })
-
-    onSuccess.mockImplementation(() => console.log('success'))
-
-    const { getByRole } = render(
-      buildRecaptcha()
-    )
-
-    await userEvent.click(getByRole('button'))
-    await waitFor(() => {
-      expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect(global.fetch).toHaveBeenCalledWith('https://give-stage2.cru.org/recaptcha/verify', expect.anything())
-    })
-  })
-
-  it('should log a warning due to low score', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.resolve({ success: true, score: 0.2, action: 'submit_gift' })
-      })
-    })
-
-    onFailure.mockImplementation(() => console.log('warning'))
-
-    const { getByRole } = render(
-      buildRecaptcha()
-    )
-
-    await userEvent.click(getByRole('button'))
-    await waitFor(() => {
-      const errorMessage = 'Captcha score was below the threshold: 0.2'
-      expect($log.warn).toHaveBeenCalledWith(errorMessage)
-      expect(datadogRum.addError).toHaveBeenCalledWith(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'lowScore' })
-      expect(onFailure).toHaveBeenCalledTimes(1)
-    })
-  })
-
-  it('should fail the recaptcha call', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.resolve({ success: false, error: 'some error', action: 'submit_gift' })
-      })
-    })
-
-    onFailure.mockImplementation(() => console.log('fail'))
-
-    const { getByRole } = render(
-      buildRecaptcha()
-    )
-
-    await userEvent.click(getByRole('button'))
-    await waitFor(() => {
-      expect(onSuccess).toHaveBeenCalled()
-      expect(onFailure).not.toHaveBeenCalled()
-    })
-  })
-
-  it('should call the fail function when not a valid action', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.resolve({ success: true, action: 'read', score: 0.9 })
-      })
-    })
-
-    onSuccess.mockImplementation(() => console.log('fail'))
-
-    const { getByRole } = render(
-      buildRecaptcha()
-    )
-
-    await userEvent.click(getByRole('button'))
-    await waitFor(() => {
-      const errorMessage = 'Invalid action: read'
-      expect(onSuccess).not.toHaveBeenCalled()
-      expect(onFailure).toHaveBeenCalled()
-      expect($log.warn).toHaveBeenCalledWith(errorMessage)
-      expect(datadogRum.addError).toHaveBeenCalledWith(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'invalidAction' })
     })
   })
 
@@ -201,16 +100,11 @@ describe('Recaptcha component', () => {
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalled()
-      expect(onFailure).not.toHaveBeenCalled()
     })
   })
 
   it('should not block the gift if something went wrong with recaptcha', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.reject('Failed')
-    })
-
+    mockExecuteRecaptcha.mockImplementationOnce(() => Promise.reject(('Failed')))
     onSuccess.mockImplementation(() => console.log('success after error'))
 
     const { getByRole } = render(
@@ -220,96 +114,7 @@ describe('Recaptcha component', () => {
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect(onFailure).not.toHaveBeenCalled()
       expect($log.error).toHaveBeenCalledWith('Failed to verify recaptcha, continuing on: Failed')
-    })
-  })
-
-  it('should not block the gift if something went wrong with recaptcha JSON', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.reject('Failed')
-      })
-    })
-
-    onSuccess.mockImplementation(() => console.log('success after JSON error'))
-
-    const { getByRole } = render(
-      buildRecaptcha()
-    )
-
-    await userEvent.click(getByRole('button'))
-    await waitFor(() => {
-      expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect(onFailure).not.toHaveBeenCalled()
-      expect($log.error).toHaveBeenCalledWith(`Failed to verify recaptcha, continuing on: Failed`)
-    })
-  })
-
-  it('should not block gifts if data is empty', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.resolve({})
-      })
-    })
-
-    onSuccess.mockImplementation(() => console.log('success after weird'))
-
-    const { getByRole } = render(
-      buildRecaptcha()
-    )
-
-    await userEvent.click(getByRole('button'))
-    await waitFor(() => {
-      expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect(onFailure).not.toHaveBeenCalled()
-      expect($log.warn).toHaveBeenCalledWith('Recaptcha returned an unusual response:', {})
-    })
-  })
-
-  it('should not block gifts if action is undefined', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.resolve({ success: true, score: 0.9 })
-      })
-    })
-
-    onSuccess.mockImplementation(() => console.log('success after weird'))
-
-    const { getByRole } = render(
-      buildRecaptcha()
-    )
-
-    await userEvent.click(getByRole('button'))
-    await waitFor(() => {
-      expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect(onFailure).not.toHaveBeenCalled()
-      expect($log.warn).toHaveBeenCalledWith('Recaptcha returned an unusual response:', { success: true, score: 0.9 })
-    })
-  })
-
-  it('should not block gifts if score is undefined', async () => {
-    //@ts-ignore
-    global.fetch = jest.fn(() => {
-      return Promise.resolve({
-        json: () => Promise.resolve({ success: true, action: 'submit_gift' })
-      })
-    })
-
-    onSuccess.mockImplementation(() => console.log('success after weird'))
-
-    const { getByRole } = render(
-      buildRecaptcha()
-    )
-
-    await userEvent.click(getByRole('button'))
-    await waitFor(() => {
-      expect(onSuccess).toHaveBeenCalledTimes(1)
-      expect(onFailure).not.toHaveBeenCalled()
-      expect($log.warn).toHaveBeenCalledWith('Recaptcha returned an unusual response:', { success: true, action: 'submit_gift' })
     })
   })
 
@@ -317,7 +122,6 @@ describe('Recaptcha component', () => {
     return <Recaptcha
       action='submit_gift'
       onSuccess={onSuccess}
-      onFailure={onFailure}
       componentInstance={{}}
       buttonId='id'
       buttonType={ButtonType.Submit}
@@ -327,7 +131,6 @@ describe('Recaptcha component', () => {
       $translate={$translate}
       $log={$log}
       recaptchaKey='key'
-      apiUrl={'https://give-stage2.cru.org'}
     />
   }
 })
