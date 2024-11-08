@@ -11,7 +11,6 @@ import cartService from 'common/services/api/cart.service'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
-import creditCardCvv from '../../../../common/directives/creditCardCvv.directive'
 
 import template from './existingPaymentMethods.tpl.html'
 
@@ -145,8 +144,7 @@ export default angular
     paymentMethodFormModal.name,
     coverFees.name,
     orderService.name,
-    cartService.name,
-    creditCardCvv.name
+    cartService.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,

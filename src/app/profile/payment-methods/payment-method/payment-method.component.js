@@ -47,7 +47,7 @@ class PaymentMethodController {
       resolve: {
         paymentForm: this.paymentFormResolve,
         paymentMethod: this.model,
-        hideCvv: false,
+        hideCvv: true,
         mailingAddress: this.mailingAddress,
         onPaymentFormStateChange: () => params => this.onPaymentFormStateChange(params.$event)
       }
