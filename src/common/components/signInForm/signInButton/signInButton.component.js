@@ -7,10 +7,11 @@ const componentName = 'signInButton'
 
 class SignInButtonController {
   /* @ngInject */
-  constructor ($log, $scope, $document, sessionService, gettext, envService) {
+  constructor ($log, $scope, $document, $timeout, sessionService, gettext, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$document = $document
+    this.$timeout = $timeout
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
@@ -38,8 +39,9 @@ class SignInButtonController {
   }
 
   signInWithOkta () {
-    this.isSigningIn = true
     delete this.errorMessage
+    this.isSigningIn = true
+    this.watchSigningIn()
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
       const $injector = this.$injector
       if (!$injector.has('sessionService')) {
@@ -65,6 +67,16 @@ class SignInButtonController {
       this.$scope.$apply()
       this.onFailure()
     })
+  }
+
+  watchSigningIn () {
+    // We have to add this timeout to prevent the button from being disabled indefinitely.
+    // This happens when the user gets redirected to Okta and then navigates back to the page
+    if (this.isSigningIn) {
+      this.$timeout(() => {
+        this.isSigningIn = false
+      }, 3000)
+    }
   }
 }
 

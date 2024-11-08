@@ -38,9 +38,6 @@ class SessionModalController {
     })
     this.stateChanged(this.resolve.state)
     this.lastPurchaseId = this.resolve.lastPurchaseId
-    if (this.sessionService.isOktaRedirecting()) {
-      this.setLoading({ loading: true })
-    }
   }
 
   $onDestroy () {
@@ -50,7 +47,6 @@ class SessionModalController {
   stateChanged (state) {
     this.state = state
     this.scrollModalToTop()
-    this.setLoading(!!this.sessionService.isOktaRedirecting())
   }
 
   onSignInSuccess () {
