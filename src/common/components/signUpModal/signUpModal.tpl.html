@@ -13,7 +13,7 @@
   </div>
 </div>
 
-<div ng-class="{'modal-body': !$ctrl.isInsideAnotherModal }">
+<div ng-class="{'modal-body': !$ctrl.isInsideAnotherModal }" class="sticky-buttons">
   <div class="content">
 
 
@@ -40,10 +40,6 @@
       </div>
     </div>
 
-    <div class="loading-overlay-parent">
-      <loading type="overlay" ng-if="$ctrl.loadingDonorDetails">
-        <translate>{{'CHECKING_FOR_EXISTING'}}</translate>
-      </loading>
 
       <form novalidate name="$ctrl.signUpForm">
         <div class="row">
@@ -104,20 +100,28 @@
           </div>
         </div>
 
-        <div class="row buttons">
-          <div class="col-xs-6">
-            <button
-              id="submitChangesButton"
-              type="submit"
-              class="btn btn-primary pull-right"
-              ng-click="$ctrl.submitDetails()"
-              translate
-              ng-disabled="$ctrl.submitting"
-            >
-            {{$ctrl.submitting ? 'Creating An Account...' : 'Register'}}  
-            </button>
+        <div class="buttons">
+          <div class="next-action">
+              <button
+                id="submitChangesButton"
+                type="submit"
+                class="btn btn-primary pull-right"
+                ng-click="$ctrl.submitDetails()"
+                translate
+                ng-disabled="$ctrl.submitting"
+                ng-if="!$ctrl.loadingDonorDetails"
+              >
+              {{$ctrl.submitting
+                ? 'Creating An Account...'
+                : 'Register'
+              }}  
+              </button>
+
+              <loading inline="true" ng-if="$ctrl.loadingDonorDetails">
+                <translate class="checking-for-existing-data" >{{'CHECKING_FOR_EXISTING'}}</translate>
+              </loading>
           </div>
-          <div class="col-xs-6"  ng-if="$ctrl.isInsideAnotherModal">
+          <div class="back-to-sign-in" >
             <a ng-click="$ctrl.onStateChange({state:'sign-in'})" class="back-to-sign-in">Back to sign in</a>
           </div>
         </div>
@@ -127,14 +131,5 @@
         </div>
 
       </form>
-    </div>
-
-    <div class="bottom-links">
-      <div>Powered by Okta</div>
-      <div>
-        <a href="{{$ctrl.publicCru}}/us/en/about/privacy.html" target="_blank" class="pull-right">Privacy Policy</a>
-      </div>
-    </div>
-
   </div>
 </div>
