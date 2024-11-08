@@ -40,6 +40,11 @@ class SignInButtonController {
       )
   }
 
+  $onDestroy () {
+    console.log('called #8')
+    this.isSigningIn = false
+  }
+
   signInWithOkta () {
     this.isSigningIn = true
     delete this.errorMessage
