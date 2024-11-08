@@ -16,10 +16,10 @@ class SignInButtonController {
     this.sessionService = sessionService
     this.gettext = gettext
     this.imgDomain = envService.read('imgDomain')
-
-    // Listen for location change success event
-    this.$rootScope.$on('$locationChange', () => {
-      console.log('when location chnages, set sign in button to false')
+    console.log('signInButtonController')
+    // Listen for location change start event
+    this.$rootScope.$on('$locationChangeStart', () => {
+      console.log('when location changes, set sign in button to false')
       this.isSigningIn = false
     })
   }
@@ -42,10 +42,6 @@ class SignInButtonController {
         this.onFailure()
       }
       )
-  }
-
-  $onDestroy () {
-    this.isSigningIn = false
   }
 
   signInWithOkta () {
