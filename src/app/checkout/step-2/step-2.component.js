@@ -117,6 +117,9 @@ class Step2Controller {
   }
 
   getContinueDisabled () {
+    if (this.invalidCvv) {
+      return true
+    }
     if (this.loadingPaymentMethods) {
       return true
     }
@@ -129,7 +132,13 @@ class Step2Controller {
     }
     return false
   }
+
+  test(isCvvValid) {
+    console.log('isCvvValid', isCvvValid)
+    this.invalidCvv = true
+  }
 }
+
 
 export default angular
   .module(componentName, [
@@ -151,6 +160,6 @@ export default angular
       cartData: '<',
       brandedCheckoutItem: '<',
       changeStep: '&',
-      onStateChange: '&'
+      onStateChange: '&',
     }
   })
