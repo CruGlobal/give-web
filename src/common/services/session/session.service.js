@@ -98,7 +98,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function signIn (lastPurchaseId) {
-    session.isOktaRedirecting = true;
+    session.isOktaRedirecting = true
     return Observable.from(internalSignIn(lastPurchaseId))
       .map((response) => response ? response.data : response)
       .finally(() => {
@@ -402,7 +402,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function removeOktaRedirectIndicator () {
-    session.isOktaRedirecting = false;
+    session.isOktaRedirecting = false
   }
 
   function updateCurrentProfile () {
