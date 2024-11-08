@@ -7,9 +7,10 @@ const componentName = 'signInButton'
 
 class SignInButtonController {
   /* @ngInject */
-  constructor ($log, $scope, $document, sessionService, gettext, envService) {
+  constructor ($log, $scope, $rootScope, $document, sessionService, gettext, envService) {
     this.$log = $log
     this.$scope = $scope
+    this.$rootScope = $rootScope
     this.$document = $document
     this.$injector = angular.injector()
     this.sessionService = sessionService
@@ -17,7 +18,7 @@ class SignInButtonController {
     this.imgDomain = envService.read('imgDomain')
 
     // Listen for location change success event
-    $scope.$on('$locationChangeSuccess', () => {
+    this.$rootScope.$on('$locationChangeSuccess', () => {
       this.isSigningIn = false
     })
   }
