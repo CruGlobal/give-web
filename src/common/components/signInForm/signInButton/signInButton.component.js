@@ -15,6 +15,11 @@ class SignInButtonController {
     this.sessionService = sessionService
     this.gettext = gettext
     this.imgDomain = envService.read('imgDomain')
+
+    // Listen for location change success event
+    $scope.$on('$locationChangeSuccess', () => {
+      this.isSigningIn = false
+    })
   }
 
   $onInit () {
