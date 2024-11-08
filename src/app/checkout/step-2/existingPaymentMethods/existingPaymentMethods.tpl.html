@@ -29,7 +29,9 @@
         </div>
         <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
       </form>
-    
+    <button ng-click="$ctrl.disableContinue(false)">click</button>
+
+
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
       <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>

@@ -28,13 +28,18 @@ class ExistingPaymentMethodsController {
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
 
+   
+
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
     })
   }
+  
 
   $onInit () {
+    console.log(this.hidePaymentTypeOptions)
     this.loadPaymentMethods()
+    this.disableContinue(false)
   }
 
   $onChanges (changes) {
@@ -161,6 +166,7 @@ export default angular
       brandedCheckoutItem: '<',
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
-      onLoad: '&'
+      onLoad: '&',
+      disableContinue: '&',
     }
   })
