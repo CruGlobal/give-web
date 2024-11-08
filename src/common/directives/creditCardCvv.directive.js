@@ -8,7 +8,7 @@ const creditCardCvv = /* @ngInject */ function () {
     restrict: 'AE',
     require: ['^ngModel', '^form'],
     scope: {
-      disableContinue: '&' 
+      setCvvValid: '&' 
     },
 
     link: function (scope, element, attributes, controllers) {
@@ -22,7 +22,7 @@ const creditCardCvv = /* @ngInject */ function () {
 
       ngModel.$validators.creditCardCvv = function (modelValue) {
         const isCvvValid = (cruPayments.creditCard.cvv.validate.minLength(modelValue)) && (cruPayments.creditCard.cvv.validate.maxLength(modelValue))
-        scope.disableContinue({$event: isCvvValid})
+        scope.setCvvValid({$event: isCvvValid})
 
 				return isCvvValid
       }
