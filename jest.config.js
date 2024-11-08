@@ -11,7 +11,7 @@ module.exports = {
     'angular',
     'angular-mocks',
     'jest-date-mock',
-    '<rootDir>/jest/setup.js',
+    '<rootDir>/jest/setup.js'
   ],
   moduleNameMapper: {
     '^.+\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js',
