@@ -7,21 +7,16 @@ const componentName = 'signInButton'
 
 class SignInButtonController {
   /* @ngInject */
-  constructor ($log, $scope, $rootScope, $document, sessionService, gettext, envService) {
+  constructor ($log, $scope, $rootScope, $document, $timeout, sessionService, gettext, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$rootScope = $rootScope
     this.$document = $document
+    this.$timeout = $timeout
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
     this.imgDomain = envService.read('imgDomain')
-    console.log('signInButtonController')
-    // Listen for location change start event
-    this.$rootScope.$on('$locationChangeStart', () => {
-      console.log('when location changes, set sign in button to false')
-      this.isSigningIn = false
-    })
   }
 
   $onInit () {
@@ -45,8 +40,9 @@ class SignInButtonController {
   }
 
   signInWithOkta () {
-    this.isSigningIn = true
     delete this.errorMessage
+    this.isSigningIn = true
+    this.watchSigningIn()
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
       this.isSigningIn = false
       const $injector = this.$injector
@@ -73,6 +69,17 @@ class SignInButtonController {
       this.$scope.$apply()
       this.onFailure()
     })
+  }
+
+  watchSigningIn () {
+    // We have to add this timeout to prevent the button from being disabled indefinitely.
+    // This happens when the user gets redirected to Okta and then navigates back to the page
+    if (this.isSigningIn) {
+      this.$timeout(() => {
+        console.log('resetting the signIn button')
+        this.isSigningIn = false
+      }, 3000)
+    }
   }
 }
 
