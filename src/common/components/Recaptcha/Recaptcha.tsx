@@ -80,6 +80,7 @@ export const Recaptcha = ({
     grecaptcha.enterprise.ready(async () => {
       try {
         const token = await grecaptcha.enterprise.execute(recaptchaKey, { action: action })
+        window.sessionStorage.setItem('recaptchaToken', token)
         const serverResponse = await fetch(`${apiUrl}/recaptcha/verify`, {
           method: 'POST',
           body: JSON.stringify({ token: token }),
