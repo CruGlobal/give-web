@@ -117,7 +117,7 @@ class Step2Controller {
   }
 
   getContinueDisabled () {
-    if (this.invalidCvv) {
+    if (!this.isCvvValid) {
       return true
     }
     if (this.loadingPaymentMethods) {
@@ -133,9 +133,8 @@ class Step2Controller {
     return false
   }
 
-  test(isCvvValid) {
-    console.log('isCvvValid', isCvvValid)
-    this.invalidCvv = true
+  setCvvValid(isCvvValid) {
+    this.isCvvValid = isCvvValid
   }
 }
 

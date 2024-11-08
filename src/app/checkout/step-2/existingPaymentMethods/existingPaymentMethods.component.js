@@ -35,11 +35,14 @@ class ExistingPaymentMethodsController {
     })
   }
   
-
   $onInit () {
     console.log(this.hidePaymentTypeOptions)
     this.loadPaymentMethods()
     this.disableContinue(false)
+  }
+
+  test (test) {
+    console.log('test', test)
   }
 
   $onChanges (changes) {
@@ -167,6 +170,6 @@ export default angular
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
       onLoad: '&',
-      disableContinue: '&',
+      setCvvValid: '&',
     }
   })
