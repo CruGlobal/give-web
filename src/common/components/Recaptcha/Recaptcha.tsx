@@ -73,6 +73,7 @@ export const Recaptcha = ({
       try {
         const token = await grecaptcha.enterprise.execute(recaptchaKey, { action: action })
         window.sessionStorage.setItem('recaptchaToken', token)
+        window.sessionStorage.setItem('recaptchaAction', action)
         onSuccess(componentInstance)
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`)

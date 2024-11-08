@@ -65,7 +65,7 @@ describe('Recaptcha component', () => {
     await waitFor(() => expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(false))
   })
 
-  it('should store the recaptcha token', async () => {
+  it('should store the recaptcha token and action', async () => {
     const { getByRole } = render(
       buildRecaptcha()
     )
@@ -73,6 +73,7 @@ describe('Recaptcha component', () => {
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(window.sessionStorage.getItem('recaptchaToken')).toEqual('token')
+      expect(window.sessionStorage.getItem('recaptchaAction')).toEqual('submit_gift')
     })
   })
 
