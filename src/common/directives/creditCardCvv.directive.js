@@ -17,8 +17,8 @@ const creditCardCvv = /* @ngInject */ function () {
       })
 
       ngModel.$validators.creditCardCvv = function (modelValue) {
-				console.log(modelValue)
-				return (cruPayments.creditCard.cvv.validate.minLength(modelValue)) && (cruPayments.creditCard.cvv.validate.maxLength(modelValue))
+        console.log(modelValue)
+        return (cruPayments.creditCard.cvv.validate.minLength(modelValue)) && (cruPayments.creditCard.cvv.validate.maxLength(modelValue))
       }
     }
   }

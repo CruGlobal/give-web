@@ -1,8 +1,5 @@
 import angular from 'angular'
-import appConfig from 'common/app.config'
-import get from 'lodash/get'
 import template from './paymentMethodDisplay.tpl.html'
-import creditCardForm from './creditCardForm/creditCardForm.component'
 import tsys from 'common/services/api/tsys.service'
 import { Observable } from 'rxjs/Observable'
 import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
@@ -18,12 +15,12 @@ const componentName = 'paymentMethodDisplay'
 class PaymentMethodDisplayController {
   /* @ngInject */
   constructor ($scope, $log, analyticsFactory, envService, tsysService) {
-    this.imgDomain = envService.read('imgDomain');
+    this.imgDomain = envService.read('imgDomain')
     this.tsysService = tsysService
     this.$log = $log
     this.envService = envService
     this.analyticsFactory = analyticsFactory
-    this.$scope = $scope;
+    this.$scope = $scope
   }
 
   $onInit () {
@@ -42,7 +39,6 @@ class PaymentMethodDisplayController {
   savePayment () {
     this.creditCardPaymentForm.$setSubmitted()
     if (this.creditCardPaymentForm.$valid) {
-
       this.onPaymentFormStateChange({
         $event: {
           state: 'encrypting'
@@ -69,7 +65,7 @@ class PaymentMethodDisplayController {
             state: 'loading',
             payload: {
               creditCard: {
-                address: this.paymentMethod['address'],
+                address: this.paymentMethod.address,
                 'card-number': tokenObj.tsepToken,
                 'card-type': this.paymentMethod['card-type'], /* eslint-disable-line no-mixed-operators */
                 'cardholder-name': this.paymentMethod['cardholder-name'],
