@@ -67,6 +67,17 @@ describe('Recaptcha component', () => {
     await waitFor(() => expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(false))
   })
 
+  it('should store the recaptcha token', async () => {
+    const { getByRole } = render(
+      buildRecaptcha()
+    )
+
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => {
+      expect(window.sessionStorage.getItem('recaptchaToken')).toEqual('token')
+    })
+  })
+
   it('should successfully pass the recaptcha', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
