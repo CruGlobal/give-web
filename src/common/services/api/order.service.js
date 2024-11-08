@@ -309,6 +309,7 @@ class Order {
         postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()
         postData['tsys-device'] = this.tsysService.getDevice()
         postData['recaptcha-token'] = this.sessionStorage.getItem('recaptchaToken')
+        postData['recaptcha-action'] = this.sessionStorage.getItem('recaptchaAction')
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'submitenhancedpurchaseaction'),
           data: postData,
@@ -319,6 +320,7 @@ class Order {
         this.storeLastPurchaseLink(data.self.uri)
         this.cartService.setCartCountCookie(0)
         this.sessionStorage.removeItem('recaptchaToken')
+        this.sessionStorage.removeItem('recaptchaAction')
       })
   }
 
