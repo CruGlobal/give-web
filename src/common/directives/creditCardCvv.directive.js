@@ -5,8 +5,12 @@ const directiveName = 'creditCardCvv'
 
 const creditCardCvv = /* @ngInject */ function () {
   const directiveDefinitionObject = {
-    restrict: 'A',
+    restrict: 'AE',
     require: ['^ngModel', '^form'],
+    scope: {
+      disableContinue: '&' 
+    },
+
     link: function (scope, element, attributes, controllers) {
       const ngModel = controllers[0]
       const formController = controllers[1]
@@ -17,7 +21,10 @@ const creditCardCvv = /* @ngInject */ function () {
       })
 
       ngModel.$validators.creditCardCvv = function (modelValue) {
-				return (cruPayments.creditCard.cvv.validate.minLength(modelValue)) && (cruPayments.creditCard.cvv.validate.maxLength(modelValue))
+        const isCvvValid = (cruPayments.creditCard.cvv.validate.minLength(modelValue)) && (cruPayments.creditCard.cvv.validate.maxLength(modelValue))
+        scope.disableContinue({$event: isCvvValid})
+
+				return isCvvValid
       }
     }
   }

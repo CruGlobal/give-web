@@ -20,6 +20,7 @@
                  type="cvv"
                  class="form-control form-control-subtle"
                  ng-model="$ctrl.cvv"
+                 disable-continue="$ctrl.setCvvValid({$event: $event})"
                  credit-card-cvv="cvv"
                  required
                  >
@@ -29,8 +30,6 @@
         </div>
         <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
       </form>
-    <button ng-click="$ctrl.disableContinue(false)">click</button>
-
 
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
