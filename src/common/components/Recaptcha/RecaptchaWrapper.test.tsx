@@ -38,7 +38,6 @@ describe('RecaptchaWrapper component', () => {
       <RecaptchaWrapper
         action='submit_gift'
         onSuccess={onSuccess}
-        onFailure={jest.fn()}
         componentInstance={{}}
         buttonId='id'
         buttonType={ButtonType.Submit}
@@ -65,7 +64,6 @@ describe('RecaptchaWrapper component', () => {
       <RecaptchaWrapper
         action='submit_gift'
         onSuccess={jest.fn()}
-        onFailure={jest.fn()}
         componentInstance={{}}
         buttonId='id'
         buttonType={ButtonType.Submit}

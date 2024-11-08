@@ -205,7 +205,6 @@
                 <recaptcha-wrapper
                            action="$ctrl.isBranded ? 'branded_submit' : 'submit_gift'"
                            on-success="$ctrl.submitOrderInternal"
-                           on-failure="$ctrl.handleRecaptchaFailure"
                            component-instance="$ctrl.selfReference"
                            button-id="'submitOrderButton'"
                            button-type="'submit'"
