@@ -1,7 +1,7 @@
 <div class="panel loading-overlay-parent">
   <div class="panel-body">
-    <h3 class="panel-name" translate>Cart Summary</h3>
-    <table class="table giftsum-table giftsum-table-cart">
+    <h3 id="cart-summary-header" class="panel-name" translate>Cart Summary</h3>
+    <table class="table giftsum-table giftsum-table-cart" aria-labelledby="cart-summary-header">
       <thead>
         <tr>
           <th class="th-title-gift"></th>
@@ -28,7 +28,17 @@
         <tr>
           <td colspan="2" class="text-right">
             <a id="editCartButton" ng-href="{{$ctrl.buildCartUrl()}}" class="btn btn-subtle mt" translate>Edit Cart</a>
-            <button id="submitGiftButton" ng-if="$ctrl.showSubmitBtn" class="btn btn-primary mt" ng-click="$ctrl.onSubmit()" ng-disabled="!$ctrl.enableSubmitBtn" translate>Submit Your Gift</button>
+            <recaptcha-wrapper
+                ng-if="$ctrl.showSubmitBtn"
+                action="'submit_gift'"
+                on-success="$ctrl.onSubmit"
+                on-failure="$ctrl.handleRecaptchaFailure"
+                component-instance="$ctrl.componentReference"
+                button-id="'submitGiftButton'"
+                button-type="'submit'"
+                button-classes="'btn btn-primary mt'"
+                button-disabled="!$ctrl.enableSubmitBtn"
+                button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
           </td>
         </tr>
       </tfoot>

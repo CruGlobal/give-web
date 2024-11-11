@@ -114,9 +114,9 @@
         <div class="col-md-12">
           <div class="panel panel-default">
             <div class="panel-body">
-              <h4 class="panel-name" translate>{{'GIFT_SUMMARY'}}</h4>
+              <h4 id="thank-you-header" class="panel-name" translate>{{'GIFT_SUMMARY'}}</h4>
 
-              <table class="table giftsum-table giftsum-table-cart">
+              <table class="table giftsum-table giftsum-table-cart" aria-labelledby="thank-you-header">
                 <tbody>
                 <tr class="giftsum-gift-row" ng-repeat="item in $ctrl.purchase.lineItems" ng-init="$ctrl.loadFacebookPixel(item)">
                   <td class="td-gift">

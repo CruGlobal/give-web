@@ -188,7 +188,6 @@ describe('analytics factory', () => {
               "giftStartDate": moment(new Date(2024, 8, 15)),
               "giftStartDateDaysFromNow": 361,
               "giftStartDateWarning": true,
-              "$$hashKey": "object:506"
           }
       ],
       "frequencyTotals": [
@@ -216,7 +215,7 @@ describe('analytics factory', () => {
       self.analyticsFactory.buildProductVar(cartData)
 
       expect(self.$window.digitalData.cart.id).toEqual(cartData.id)
-      expect(self.$window.digitalData.cart.hash).not.toEqual(null)
+      expect(self.$window.digitalData.cart.hash).toEqual('330c050e7344971e9250')
       expect(self.$window.digitalData.cart.price.cartTotal).toEqual(cartData.cartTotal)
       expect(self.$window.digitalData.cart.item.length).toEqual(1)
     });
@@ -249,7 +248,6 @@ describe('analytics factory', () => {
       "giftStartDate": moment(new Date(2024, 8, 15)),
       "giftStartDateDaysFromNow": 361,
       "giftStartDateWarning": true,
-      "$$hashKey": "object:22",
       "removing": true
     }
 
@@ -532,7 +530,6 @@ describe('analytics factory', () => {
       "startMonth": null,
       "ministry": "Staff Giving",
       "orgId": "STAFF",
-      "$$hashKey": "object:26"
     }
     it('should add product-detail-click event', () => {
       self.analyticsFactory.productViewDetailsEvent(productData)
@@ -590,7 +587,6 @@ describe('analytics factory', () => {
       "giftStartDate": null,
       "giftStartDateDaysFromNow": 0,
       "giftStartDateWarning": false,
-      "$$hashKey": "object:66"
     }
     const transactionCart = {
       "id": "grsgezrxhfqtsljrga3gkljugvtdaljygjqtcl",
@@ -602,7 +598,6 @@ describe('analytics factory', () => {
               "amountWithFees": 51.2,
               "total": "$50.00",
               "totalWithFees": "$51.20",
-              "$$hashKey": "object:68"
           }
       ],
       "cartTotal": 50,

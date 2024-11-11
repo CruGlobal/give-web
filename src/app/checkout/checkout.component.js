@@ -39,6 +39,7 @@ class CheckoutController {
     this.sessionEnforcerService = sessionEnforcerService
     this.loadingCartData = true
     this.analyticsFactory = analyticsFactory
+    this.selfReference = this
   }
 
   $onInit () {
@@ -86,11 +87,10 @@ class CheckoutController {
   changeStep (newStep, replace) {
     switch (newStep) {
       case 'cart':
-        this.$window.location.href = `/cart.html${this.buildQueryStringWithoutStep()}`
+        this.$window.location.href = `/cart.html${this.buildRedirectQueryString()}`
         break
       case 'thankYou':
-        this.$location.search('step', null)
-        this.$window.location.href = `/thank-you.html${this.buildQueryStringWithoutStep()}`
+        this.$window.location.href = `/thank-you.html${this.buildRedirectQueryString()}`
         break
       default:
         this.$window.scrollTo(0, 0)
@@ -101,17 +101,19 @@ class CheckoutController {
     }
   }
 
-  buildQueryStringWithoutStep () {
+  buildRedirectQueryString () {
     let queryString = ''
-    let index = 0
-    this.$location.search('step', null)
     Object.entries(this.$location.search()).forEach(([key, value]) => {
-      if (index === 0) {
+      // remove step and email from query string
+      if (key === 'step' || key === 'e') {
+        return
+      }
+
+      if (queryString === '') {
         queryString += `?${key}=${value}`
       } else {
         queryString += `&${key}=${value}`
       }
-      index++
     })
     return queryString
   }

@@ -8,14 +8,26 @@ import template from './cart-summary.tpl.html'
 
 const componentName = 'checkoutCartSummary'
 
+export const recaptchaFailedEvent = 'recaptchaFailedEvent'
+export const submitOrderEvent = 'submitOrderEvent'
+
 class CartSummaryController {
   /* @ngInject */
-  constructor (cartService) {
+  constructor (cartService, $scope) {
+    this.$scope = $scope
     this.cartService = cartService
   }
 
   buildCartUrl () {
     return this.cartService.buildCartUrl()
+  }
+
+  handleRecaptchaFailure (componentInstance) {
+    componentInstance.$rootScope.$emit(recaptchaFailedEvent)
+  }
+
+  onSubmit (componentInstance) {
+    componentInstance.$rootScope.$emit(submitOrderEvent)
   }
 }
 
@@ -32,7 +44,7 @@ export default angular
       cartData: '<',
       showSubmitBtn: '<',
       enableSubmitBtn: '<',
-      onSubmit: '&',
-      submittingOrder: '<'
+      submittingOrder: '<',
+      componentReference: '<'
     }
   })

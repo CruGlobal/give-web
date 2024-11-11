@@ -118,7 +118,7 @@ describe('checkout', function () {
     it('should watch the url and update the state', () => {
       jest.spyOn(self.controller, 'initStepParam').mockImplementation(() => {})
       jest.spyOn(self.controller.cartService, 'get').mockReturnValue(Observable.of('cartData'))
-      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepEvent').mockImplementation(() => {})  
+      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepEvent').mockImplementation(() => {})
       self.controller.listenForLocationChange()
       self.controller.$location.search('step', 'review')
       self.controller.$rootScope.$digest()
@@ -197,7 +197,8 @@ describe('checkout', function () {
       const searchObject = {
         one: '1',
         two: '2',
-        step: 'review'
+        step: 'review',
+        e: 'bill.bright@cru.org'
       }
       mockSearch(searchObject)
       self.controller.changeStep('thankYou')
@@ -205,13 +206,7 @@ describe('checkout', function () {
     })
 
     const mockSearch = (searchObject) => {
-      jest.spyOn(self.controller.$location, 'search').mockImplementation((key) => {
-        if (key === 'step') {
-          delete searchObject.step
-        } else if (!key) {
-          return searchObject
-        }
-      })
+      jest.spyOn(self.controller.$location, 'search').mockReturnValue(searchObject)
     }
   })
 

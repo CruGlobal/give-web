@@ -114,6 +114,10 @@ output {
 // input[type="tel"]
 // input[type="color"]
 
+label:has(.form-control) {
+    width: 100%;
+}
+
 .form-control {
   display: block;
   width: 100%;
@@ -442,7 +446,7 @@ input[type="checkbox"] {
         }
 
         // Input groups need that 100% width though
-        .input-group > .form-control {
+        .input-group > label > .form-control {
             width: 100%;
         }
 
