@@ -14,6 +14,7 @@ const giveComponents = [
   'app/thankYou/thankYou.component.js',
   'app/productConfig/productConfig.component.js',
   'app/signIn/signIn.component.js',
+  'app/signOut/signOut.component.js',
   'app/searchResults/searchResults.component.js',
   'app/profile/yourGiving/yourGiving.component.js',
   'app/profile/profile.component.js',
