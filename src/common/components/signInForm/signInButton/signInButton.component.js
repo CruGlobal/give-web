@@ -7,9 +7,10 @@ const componentName = 'signInButton'
 
 class SignInButtonController {
   /* @ngInject */
-  constructor ($log, $scope, $document, $timeout, sessionService, gettext, envService) {
+  constructor ($log, $rootScope, $scope, $document, $timeout, sessionService, gettext, envService) {
     this.$log = $log
     this.$scope = $scope
+    this.$rootScope = $rootScope
     this.$document = $document
     this.$timeout = $timeout
     this.$injector = angular.injector()
@@ -43,6 +44,7 @@ class SignInButtonController {
     this.isSigningIn = true
     this.watchSigningIn()
     this.sessionService.signIn(this.lastPurchaseId).subscribe(() => {
+      this.isSigningIn = false
       const $injector = this.$injector
       if (!$injector.has('sessionService')) {
         $injector.loadNewModules(['sessionService'])

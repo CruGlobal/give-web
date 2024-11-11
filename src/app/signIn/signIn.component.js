@@ -23,7 +23,7 @@ class SignInController {
   $onInit () {
     this.subscription = this.sessionService.sessionSubject.subscribe(() => this.sessionChanged())
     this.analyticsFactory.pageLoaded()
-    if (this.sessionService.hasLocationOnLogin()) {
+    if (this.sessionService.hasLocationOnLogin() && this.sessionService.getRole() === Roles.registered) {
       this.showRedirectingLoadingIcon = true
     } else {
       this.showRedirectingLoadingIcon = false
