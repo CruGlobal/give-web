@@ -46,10 +46,20 @@
   </div>
   <div class="panel">
     <div class="panel-body text-right">
-      <button class="btn btn-primary"
+       <recaptcha-wrapper
+              action="'branded_submit'"
+              on-success="$ctrl.submitOrderInternal"
+              on-failure="$ctrl.handleRecaptchaFailure"
+              component-instance="$ctrl.selfReference"
+              button-id="'submitOrderButton'"
+              button-type="'submit'"
+              button-classes="'btn btn-primary btn-lg btn-block'"
+              button-disabled="!$ctrl.canSubmitOrder()"
+              button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
+      <!-- <button class="btn btn-primary"
               ng-click="$ctrl.submit()"
               ng-disabled="$ctrl.errorLoadingProductConfig"
-              translate>{{'CONTINUE'}}</button>
+              translate>{{'CONTINUE'}}</button> -->
     </div>
   </div>
 </div>

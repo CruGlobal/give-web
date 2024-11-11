@@ -154,11 +154,78 @@ class BrandedCheckoutStep1Controller {
   checkSuccessfulSubmission () {
     if (every(this.submission, 'completed')) {
       if (every(this.submission, { error: false })) {
-        this.next()
+        this.submitOrderInternal()
       } else {
         this.submitted = false
       }
     }
+  }
+
+  loadCart () {
+    this.cartService.get()
+      .finally(() => {
+        this.loadingCartData = false
+      })
+      .subscribe((data) => {
+        this.cartData = data
+        this.analyticsFactory.buildProductVar(data)
+      },
+      (error) => {
+        this.$log.error('Error loading cart', error)
+      })
+  }
+
+  handleSubmit () {
+    this.submitted = true
+  }
+
+  submitOrderInternal () {
+
+    // Load cart here because it is updated now
+
+
+    delete this.submissionError
+    delete this.submissionErrorStatus
+    // Prevent multiple submissions
+    if (this.submittingOrder) return
+    this.submittingOrder = true
+    this.onSubmittingOrder({ value: true })
+
+    let submitRequest
+    if (this.bankAccountPaymentDetails) {
+      submitRequest = this.orderService.submit()
+    } else if (this.creditCardPaymentDetails) {
+      const cvv = this.orderService.retrieveCardSecurityCode()
+      submitRequest = this.orderService.submit(cvv)
+    } else {
+      submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
+    }
+    submitRequest.subscribe(() => {
+      this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
+      this.submittingOrder = false
+      this.onSubmittingOrder({ value: false })
+      this.orderService.clearCardSecurityCodes()
+      this.orderService.clearCoverFees()
+      this.onSubmitted()
+      this.$scope.$emit(cartUpdatedEvent)
+      this.changeStep({ newStep: 'thankYou' })
+    },
+    error => {
+      this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+      this.submittingOrder = false
+      this.onSubmittingOrder({ value: false })
+
+      // this.loadCart()
+
+      if (error.config && error.config.data && error.config.data['security-code']) {
+        error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
+      }
+      this.$log.error('Error submitting purchase:', error)
+      this.onSubmitted()
+      this.submissionErrorStatus = error.status
+      this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
+      this.$window.scrollTo(0, 0)
+    })
   }
 }
 
