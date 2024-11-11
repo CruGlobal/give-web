@@ -96,35 +96,6 @@
 
         <p class="data-refresh">The page refreshes every 10 seconds.</p>
       </div>
-
-
-      <div ng-if="$ctrl.unverifiedAccount.status && $ctrl.unverifiedAccount.status === 'Active'">
-        <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage" ng-switch="$ctrl.errorMessage">
-          <span ng-switch-when="generic" translate>
-            An error has occurred. Please try again or contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.
-          </span>
-          <span ng-switch-default>
-            {{$ctrl.errorMessage | translate}}
-          </span>
-        </div>
-        
-        <div class="row text-center">
-          <div class="col-xs-12">
-            <h4 translate>Your email has been verified!</h4>
-            <p translate style="margin-bottom: 0px">You are almost done creating your new account!</p>
-            <p>All that is left to do is sign in, and fill out your profile information.</p>
-          </div>
-        </div>
-
-        <div class="row active-account">
-          <sign-in-button
-            on-success="$ctrl.onSuccessfulSignIn()"
-            on-failure="$ctrl.onFailure()"
-            last-purchase-id="$ctrl.lastPurchaseId"
-            error-message="$ctrl.errorMessage"
-          ></sign-in-button>
-        </div>
-      </div>
     </div>
   </div>
 </div>

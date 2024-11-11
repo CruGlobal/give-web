@@ -7,10 +7,11 @@ import module from './signInButton.component'
 
 describe('signInButton', function () {
   beforeEach(angular.mock.module(module.name))
-  let $ctrl, bindings, $rootScope
+  let $ctrl, bindings, $rootScope, $timeout
 
-  beforeEach(inject(function (_$rootScope_, _$componentController_) {
+  beforeEach(inject(function (_$rootScope_, _$componentController_, _$timeout_) {
     $rootScope = _$rootScope_
+    $timeout = _$timeout_
     bindings = {
       onSuccess: jest.fn(),
       onFailure: jest.fn(),
@@ -148,6 +149,15 @@ describe('signInButton', function () {
       expect(bindings.onFailure).toHaveBeenCalled()
       expect($ctrl.errorMessage).toEqual('This functionality is not currently available. Please try again later.')
       expect($ctrl.isSigningIn).toEqual(false)
+    })
+
+    describe('watchSigningIn', () => {
+      it('should reset isSigningIn after timeout', () => {
+        $ctrl.isSigningIn = true
+        $ctrl.watchSigningIn()
+        $timeout.flush()
+        expect($ctrl.isSigningIn).toEqual(false)
+      })
     })
   })
 })

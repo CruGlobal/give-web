@@ -7,7 +7,7 @@ const componentName = 'signInButton'
 
 class SignInButtonController {
   /* @ngInject */
-  constructor ($log, $scope, $rootScope, $document, $timeout, sessionService, gettext, envService) {
+  constructor ($log, $scope, $document, $timeout, sessionService, gettext, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$rootScope = $rootScope
@@ -76,7 +76,6 @@ class SignInButtonController {
     // This happens when the user gets redirected to Okta and then navigates back to the page
     if (this.isSigningIn) {
       this.$timeout(() => {
-        console.log('resetting the signIn button')
         this.isSigningIn = false
       }, 3000)
     }

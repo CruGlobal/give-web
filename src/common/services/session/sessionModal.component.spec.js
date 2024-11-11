@@ -47,13 +47,6 @@ describe('sessionModalController', function () {
       expect($ctrl.lastPurchaseId).toEqual('<some id>')
     })
 
-    it('should show loading if Okta rdirecting', () => {
-      expect($ctrl.isLoading).toEqual(false)
-      jest.spyOn($ctrl.sessionService, 'isOktaRedirecting').mockImplementation(() => true)
-      $ctrl.$onInit()
-      expect($ctrl.isLoading).toEqual(true)
-    })
-
     it('should stateChanged on LoginOktaOnlyEvent', () => {
       expect($ctrl.isLoading).toEqual(false)
       $ctrl.$onInit()

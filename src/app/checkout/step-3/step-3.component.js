@@ -10,13 +10,12 @@ import sessionService, { SignInEvent } from 'common/services/session/session.ser
 import capitalizeFilter from 'common/filters/capitalize.filter'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
-import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
-
 import analyticsFactory from 'app/analytics/analytics.factory'
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import displayAddressComponent from 'common/components/display-address/display-address.component'
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
 import template from './step-3.tpl.html'
+import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
 import { recaptchaFailedEvent, submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
 
 const componentName = 'checkoutStep3'

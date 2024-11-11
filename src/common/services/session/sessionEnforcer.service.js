@@ -21,7 +21,7 @@ export const EnforcerModes = {
   donor: 'donor'
 }
 
-const SessionEnforcerService = /* @ngInject */ function (orderService, sessionService, sessionModalService) {
+const SessionEnforcerService = /* @ngInject */ function ($window, orderService, sessionService, sessionModalService) {
   const enforcers = {}; let modal
 
   /**
@@ -98,10 +98,13 @@ const SessionEnforcerService = /* @ngInject */ function (orderService, sessionSe
       })
 
       if (angular.isUndefined(modal)) {
-        modal = sessionModalService.open(find(enforced, { mode: EnforcerModes.donor }) ? 'register-account' : 'sign-in', {
+        const urlParams = new URLSearchParams($window.location.search)
+        const modalType = urlParams.get('returningFromOkta') === 'true' ? 'returning-from-okta' : (find(enforced, { mode: EnforcerModes.donor }) ? 'register-account' : 'sign-in')
+        modal = sessionModalService.open(modalType, {
           backdrop: 'static',
           keyboard: false
         }).result
+
         modal && modal.then(() => {
           angular.forEach(enforced, (enforcer) => {
             if (angular.isFunction(enforcer[EnforcerCallbacks.signIn])) enforcer[EnforcerCallbacks.signIn]()

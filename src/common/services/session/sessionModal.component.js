@@ -3,6 +3,7 @@ import angular from 'angular'
 import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
 import signUpActivationModal from 'common/components/signUpActivationModal/signUpActivationModal.component'
+import returningFromOktaModal from 'common/components/returningFromOktaModal/returningFromOktaModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component'
@@ -30,7 +31,7 @@ class SessionModalController {
   }
 
   $onInit () {
-    this.$rootScope.$on(LoginOktaOnlyEvent, (event, state) => {
+    this.$rootScope.$on(LoginOktaOnlyEvent, (_, state) => {
       this.stateChanged(state)
     })
     this.subscription = this.sessionService.sessionSubject.subscribe((session) => {
@@ -38,9 +39,6 @@ class SessionModalController {
     })
     this.stateChanged(this.resolve.state)
     this.lastPurchaseId = this.resolve.lastPurchaseId
-    if (this.sessionService.isOktaRedirecting()) {
-      this.setLoading({ loading: true })
-    }
   }
 
   $onDestroy () {
@@ -50,7 +48,6 @@ class SessionModalController {
   stateChanged (state) {
     this.state = state
     this.scrollModalToTop()
-    this.setLoading(!!this.sessionService.isOktaRedirecting())
   }
 
   onSignInSuccess () {
@@ -99,6 +96,7 @@ export default angular
     signInModal.name,
     signUpModal.name,
     signUpActivationModal.name,
+    returningFromOktaModal.name,
     userMatchModal.name,
     contactInfoModal.name,
     accountBenefitsModal.name,

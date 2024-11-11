@@ -4,7 +4,6 @@ import sessionService, { Roles, createAccountDataCookieName } from 'common/servi
 import orderService from 'common/services/api/order.service'
 import template from './signUpActivationModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
-import signInButtonComponent from '../signInForm/signInButton/signInButton.component'
 
 const componentName = 'signUpActivationModal'
 
@@ -95,6 +94,7 @@ class signUpActivationModalController {
 
           if (response.data.status === 'ACTIVE') {
             clearInterval(this.getUnverifiedAccountTimoutId)
+            this.onStateChange({ state: 'sign-in' })
           }
           this.$scope.$apply()
         }
@@ -115,8 +115,7 @@ export default angular
   .module(componentName, [
     sessionService.name,
     orderService.name,
-    cartService.name,
-    signInButtonComponent.name
+    cartService.name
   ])
   .component(componentName, {
     controller: signUpActivationModalController,
