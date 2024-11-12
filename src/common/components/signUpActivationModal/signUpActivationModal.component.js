@@ -94,7 +94,7 @@ class signUpActivationModalController {
 
           if (response.data.status === 'ACTIVE') {
             clearInterval(this.getUnverifiedAccountTimoutId)
-            this.onStateChange({ state: 'sign-in' })
+            this.onStateChange({ state: 'register-account' })
           }
           this.$scope.$apply()
         }
