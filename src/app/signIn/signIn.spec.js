@@ -21,7 +21,6 @@ describe('signIn', function () {
         }
       }
     )
-    $ctrl.$rootScope.$broadcast = jest.spyOn($ctrl.$rootScope, '$broadcast')
   }))
   
   it('to be defined', function () {
@@ -30,7 +29,9 @@ describe('signIn', function () {
 
   describe('as \'GUEST\'', () => {
     beforeEach(() => {
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
       jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue('GUEST')
+      jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
       jest.spyOn($ctrl, 'sessionChanged')
       $ctrl.$onInit()
     })
@@ -45,8 +46,6 @@ describe('signIn', function () {
     })
 
     it('does not show redirecting loading sign when not fully registered', () => {
-      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
-      $ctrl.$onInit()
       expect($ctrl.sessionChanged).toHaveBeenCalled()
       expect($ctrl.showRedirectingLoadingIcon).toEqual(false)
       expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
