@@ -43,6 +43,14 @@ describe('signIn', function () {
       expect($ctrl.sessionChanged).toHaveBeenCalled()
       expect($ctrl.$window.location).toEqual('/sign-in.html')
     })
+
+    it('does not show redirecting loading sign when not fully registered', () => {
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      $ctrl.$onInit()
+      expect($ctrl.sessionChanged).toHaveBeenCalled()
+      expect($ctrl.showRedirectingLoadingIcon).toEqual(false)
+      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
+    })
   })
 
   describe('as \'IDENTIFIED\'', () => {
@@ -63,6 +71,14 @@ describe('signIn', function () {
       expect($ctrl.$window.location).toEqual('/sign-in.html')
       expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
       expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not show redirecting loading sign when not fully registered', () => {
+      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
+      $ctrl.$onInit()
+      expect($ctrl.sessionChanged).toHaveBeenCalled()
+      expect($ctrl.showRedirectingLoadingIcon).toEqual(false)
+      expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
     })
   })
 
@@ -91,6 +107,7 @@ describe('signIn', function () {
         jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue('https://give-stage2.cru.org/search-results.html')
         $ctrl.$onInit()
         expect($ctrl.sessionChanged).toHaveBeenCalled()
+        expect($ctrl.showRedirectingLoadingIcon).toEqual(true)
         expect($ctrl.sessionModalService.registerAccount).toHaveBeenCalled()
         expect($ctrl.$window.location).toEqual('/sign-in.html')
         expect($ctrl.sessionModalService.userMatch).not.toHaveBeenCalled()

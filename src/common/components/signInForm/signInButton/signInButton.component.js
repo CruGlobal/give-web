@@ -7,7 +7,7 @@ const componentName = 'signInButton'
 
 class SignInButtonController {
   /* @ngInject */
-  constructor ($log, $scope, $document, $timeout, sessionService, gettext, envService) {
+  constructor ($log, $rootScope, $scope, $document, $timeout, sessionService, gettext, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$rootScope = $rootScope
