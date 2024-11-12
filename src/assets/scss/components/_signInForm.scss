@@ -1,0 +1,70 @@
+sign-in-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  margin-top: 20px;
+
+  hr {
+    width: 65%;
+    margin: 12px auto;
+  }
+
+  a {
+    cursor: pointer;
+  }
+
+  .sign-in-info {
+    margin-bottom: 0;
+
+    .sup {
+      font-size: 12px;
+
+      i {
+        color: #333333;
+      }
+    }
+  }
+
+  .need-help {
+    &--header {
+      cursor: pointer;
+
+      i {
+        font-size: 11px;
+        margin-right: 3px;
+      }
+    }
+
+    &--content {
+      max-height: 0px;
+      overflow: hidden;
+      transition: max-height 0.3s ease 0s;;
+    }
+
+    &.open {
+      i {
+        transform: rotate(90deg);
+      }
+
+      .need-help--content {
+        max-height: 140px;
+      }
+    }
+  }
+
+  .alert {
+    text-align: left;
+  }
+}
+
+sign-in-button {
+  .okta-button {
+    width: 100%;
+
+    &:not(.normal-padding) {
+      width: 70%;
+      padding: 1em 0.5em;
+    }
+  }
+}
