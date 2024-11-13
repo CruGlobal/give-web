@@ -80,8 +80,8 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
 - `campaign-page` - the campaign page you would like to use, used for suggested amounts - *Optional*
 - `campaign-code` - the campaign code you would like to use - *Optional*
 - `premium-code` - the premium code you would like to use - *Optional* - make sure you use the proper premium code associated with the campaign
-- `premium-name` - the name of the premium offered to donors - *optional*
-- `premium-image-url` - the custom image to appear when selecting a premium - *optional*
+- `premium-name` - the name of the premium offered to donors - *Optional*
+- `premium-image-url` - the custom image to appear when selecting a premium - *Optional*
 - `tsys-device` - the device name that corresponds to the TSYS Merchant Account which will be used for tokenizing your site's credit cards with TSYS - **Required** - Will be provided by DPS when adding your domain to the TSYS whitelist. `cru` is the default and corresponds with Cru's main TSYS Merchant ID
 - `amount` - defaults the gift's amount - *Optional*
 - `frequency` - defaults the gift's frequency - *Optional* - can be one of the following values:
