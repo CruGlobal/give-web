@@ -180,6 +180,7 @@ export default angular
       premiumCode: '@',
       premiumName: '@',
       premiumImageUrl: '@',
+      itemConfig: '=',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
