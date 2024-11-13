@@ -12,7 +12,6 @@ import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentM
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
 import creditCardCvv from '../../../../common/directives/creditCardCvv.directive'
-
 import template from './existingPaymentMethods.tpl.html'
 
 const componentName = 'checkoutExistingPaymentMethods'
@@ -38,10 +37,6 @@ class ExistingPaymentMethodsController {
   $onInit () {
     console.log(this.hidePaymentTypeOptions)
     this.loadPaymentMethods()
-  }
-
-  test (test) {
-    console.log('test', test)
   }
 
   $onChanges (changes) {
