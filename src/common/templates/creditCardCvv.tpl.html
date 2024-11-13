@@ -1,0 +1,17 @@
+<form name="$ctrl.form" class="loading-overlay-parent">
+	<div class="form-group" ng-class="{'has-success': $ctrl.form.cvv.$valid, 'has-error': ($ctrl.form.cvv | showErrors) }">
+		<label for="cvv" translate>CVV</label>
+		<input id="cvv"
+					 name="cvv"
+					 type="cvv"
+					 class="form-control form-control-subtle"
+					 ng-model="$ctrl.cvv"
+					 set-cvv-valid="$ctrl.setCvvValid({$event: $event})"
+					 required
+					 >
+		<div ng-if="($ctrl.form.cvv | showErrors)" ng-messages="$ctrl.form.cvv.$error">
+			<span class="help-block" ng-message="required" translate>CVV is required.</span>
+		</div>
+	</div>
+	<loading type="overlay" ng-if="$ctrl.isLoading"></loading>
+</form>
