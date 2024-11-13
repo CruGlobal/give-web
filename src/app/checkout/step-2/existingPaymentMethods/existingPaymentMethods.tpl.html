@@ -12,7 +12,7 @@
       </label>
     </div>
 
-      <form name="$ctrl.form" class="loading-overlay-parent">
+      <!-- <form name="$ctrl.form" class="loading-overlay-parent">
         <div class="form-group" ng-class="{'has-success': $ctrl.form.cvv.$valid, 'has-error': ($ctrl.form.cvv | showErrors) }">
           <label for="cvv" translate>CVV</label>
           <input id="cvv"
@@ -29,7 +29,8 @@
           </div>
         </div>
         <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
-      </form>
+      </form> -->
+      <credit-card-cvv set-cvv-valid="$ctrl.setCvvValid({$event: $event})" ></credit-card-cvv>
 
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
