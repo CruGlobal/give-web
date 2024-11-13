@@ -65,8 +65,8 @@ class BrandedCheckoutStep1Controller {
 
     this.premiumSelected = false
 
-    if (this.defaultItemConfig && this.defaultItemConfig['premium-code']) {
-      this.itemConfig['premium-code'] = this.defaultItemConfig['premium-code']
+    if (this.defaultItemConfig && this.defaultItemConfig.PREMIUM_CODE) {
+      this.itemConfig.PREMIUM_CODE = this.defaultItemConfig.PREMIUM_CODE
       this.premiumSelected = true
     }
   }
@@ -162,9 +162,9 @@ class BrandedCheckoutStep1Controller {
 
   onSelectPremiumOption () {
     if (this.premiumSelected) {
-      this.itemConfig['premium-code'] = this.premiumCode
+      this.itemConfig.PREMIUM_CODE = this.premiumCode
     } else {
-      this.itemConfig['premium-code'] = undefined
+      this.itemConfig.PREMIUM_CODE = undefined
     }
   }
 

@@ -86,9 +86,9 @@ describe('branded checkout step 1', () => {
     })
 
     it('should persist premium-code in item config', () => {
-      $ctrl.itemConfig = { 'premium-code': '112233' }
+      $ctrl.itemConfig = { PREMIUM_CODE: '112233' }
       $ctrl.initItemConfig()
-      expect($ctrl.itemConfig['premium-code']).toEqual('112233')
+      expect($ctrl.itemConfig.PREMIUM_CODE).toEqual('112233')
     })
   })
 
@@ -294,7 +294,7 @@ describe('branded checkout step 1', () => {
 
       $ctrl.onSelectPremiumOption()
 
-      expect($ctrl.itemConfig['premium-code']).toEqual($ctrl.premiumCode)
+      expect($ctrl.itemConfig.PREMIUM_CODE).toEqual($ctrl.premiumCode)
     })
 
     it('premium deselected', () => {
@@ -302,7 +302,7 @@ describe('branded checkout step 1', () => {
 
       $ctrl.onSelectPremiumOption()
 
-      expect($ctrl.itemConfig['premium-code']).toEqual(undefined)
+      expect($ctrl.itemConfig.PREMIUM_CODE).toEqual(undefined)
     })
   })
 
