@@ -44,7 +44,6 @@ class CreditCardController {
   }
 
   $onInit () {
-    console.log('scope4', this.$scope)
     this.initExistingPaymentMethod()
     this.waitForFormInitialization()
     this.initializeExpirationDateOptions()

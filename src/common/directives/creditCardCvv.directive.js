@@ -12,7 +12,6 @@ const creditCardCvv = /* @ngInject */ function () {
       disableContinue: '&',
     },
     link: function (scope) {
-      console.log(scope)
       const cvvForm = scope.paymentMethodForm.securityCode
     
       scope.$watch(() => cvvForm.$viewValue, () => {

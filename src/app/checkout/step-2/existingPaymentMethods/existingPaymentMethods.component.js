@@ -35,7 +35,6 @@ class ExistingPaymentMethodsController {
   }
   
   $onInit () {
-    console.log(this.hidePaymentTypeOptions)
     this.loadPaymentMethods()
   }
 
