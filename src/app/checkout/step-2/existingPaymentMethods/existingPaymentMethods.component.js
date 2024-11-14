@@ -6,6 +6,7 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component'
 import coverFees from 'common/components/paymentMethods/coverFees/coverFees.component'
 
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 import orderService from 'common/services/api/order.service'
 import cartService from 'common/services/api/cart.service'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
@@ -27,8 +28,6 @@ class ExistingPaymentMethodsController {
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
 
-   
-
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
     })
@@ -36,6 +35,7 @@ class ExistingPaymentMethodsController {
   
   $onInit () {
     this.loadPaymentMethods()
+    this.addCustomValidators()
   }
 
   $onChanges (changes) {
@@ -52,6 +52,17 @@ class ExistingPaymentMethodsController {
     if (changes.paymentFormError) {
       this.paymentFormResolve.error = changes.paymentFormError.currentValue
     }
+  }
+
+  addCustomValidators () {
+    this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', () => {
+      this.creditCardPaymentForm.securityCode.$validators.minLength = number => {
+        // If editing existing payment method, don't require a CVV
+        return !this.creditCardPaymentForm.securityCode.$viewValue && this.paymentMethod && !this.creditCardPayment.cardNumber || cruPayments.creditCard.cvv.validate.minLength(number) /* eslint-disable-line no-mixed-operators */
+      }
+      this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
+      this.disableContinue({ $event: this.creditCardPaymentForm.securityCode.$valid })
+    })
   }
 
   loadPaymentMethods () {
