@@ -9,7 +9,9 @@
         <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" ng-disabled="expired" required ng-change="$ctrl.switchPayment()">
         <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
         <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod['card-type']" translate>edit</button>
-        <credit-card-cvv disable-continue="$ctrl.disableContinue({$event: $event})"></credit-card-cvv>
+        <form novalidate name="$ctrl.creditCardPaymentForm">
+          <credit-card-cvv/>
+        </form>
       </label>
     </div>
       
