@@ -117,7 +117,7 @@ class Step2Controller {
   }
 
   getContinueDisabled () {
-    if (!this.isCvvValid) {
+    if (typeof this.isCvvValid !== 'undefined' && !this.isCvvValid) {
       return true
     }
     if (this.loadingPaymentMethods) {
