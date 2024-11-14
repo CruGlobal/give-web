@@ -9,9 +9,10 @@
         <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" ng-disabled="expired" required ng-change="$ctrl.switchPayment()">
         <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
         <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod['card-type']" translate>edit</button>
+        <credit-card-cvv disable-continue="$ctrl.disableContinue({$event: $event})"></credit-card-cvv>
       </label>
     </div>
-      <credit-card-cvv set-cvv-valid="$ctrl.setCvvValid({$event: $event})" ></credit-card-cvv>
+      
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
       <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>

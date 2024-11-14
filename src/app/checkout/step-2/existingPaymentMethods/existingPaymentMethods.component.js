@@ -164,6 +164,6 @@ export default angular
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
       onLoad: '&',
-      setCvvValid: '&',
+      disableContinue: '&',
     }
   })
