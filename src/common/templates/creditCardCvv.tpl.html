@@ -1,17 +1,22 @@
-<form name="$ctrl.form" class="loading-overlay-parent">
-	<div class="form-group" ng-class="{'has-success': $ctrl.form.cvv.$valid, 'has-error': ($ctrl.form.cvv | showErrors) }">
-		<label for="cvv" translate>CVV</label>
-		<input id="cvv"
-					 name="cvv"
-					 type="cvv"
-					 class="form-control form-control-subtle"
-					 ng-model="$ctrl.cvv"
-					 set-cvv-valid="$ctrl.setCvvValid({$event: $event})"
-					 required
-					 >
-		<div ng-if="($ctrl.form.cvv | showErrors)" ng-messages="$ctrl.form.cvv.$error">
-			<span class="help-block" ng-message="required" translate>CVV is required.</span>
+
+<form name="paymentMethodForm">
+	<div class="form-group" ng-class="{'has-error': (paymentMethodForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
+		<label translate>{{'SEC_CODE'}}</label>
+		<input type="text"
+					name="securityCode"
+					autocomplete="cc-csc"
+					class="form-control form-control-subtle"
+					ng-model="$ctrl.creditCardPayment.securityCode"
+					ng-required="!$ctrl.paymentMethod || $ctrl.creditCardPayment.cardNumber"
+					ng-attr-placeholder="{{$ctrl.paymentMethod && !$ctrl.creditCardPayment.cardNumber ? '***' : ''}}">
+		<div role="alert" ng-messages="paymentMethodForm.securityCode.$error" ng-if="(paymentMethodForm.securityCode | showErrors)">
+			<div class="help-block" ng-message="required" translate>{{'CARD_SEC_CODE_ERROR'}}</div>
+			<div class="help-block" ng-message="minLength" translate>{{'MIN_LENGTH_CARD_SEC_CODE'}}</div>
+			<div class="help-block" ng-message="maxLength" translate>{{'MAX_LENGTH_CARD_SEC_CODE'}}</div>
+			<div class="help-block" ng-message="cardTypeLength" ng-init="isAmex = $ctrl.cardInfo.type($ctrl.creditCardPayment.cardNumber) === 'American Express'">
+				<translate ng-if="!isAmex">{{'LOCATION_OF_CODE_OTHER'}}</translate>
+				<translate ng-if="isAmex">{{'LOCATION_OF_CODE_AMEX'}}</translate>
+			</div>
 		</div>
 	</div>
-	<loading type="overlay" ng-if="$ctrl.isLoading"></loading>
 </form>

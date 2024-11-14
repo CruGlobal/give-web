@@ -23,6 +23,7 @@ class Step2Controller {
     this.analyticsFactory = analyticsFactory
     this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.scrollModalToTop = scrollModalToTop
+    console.log('step2', $scope);
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -133,7 +134,7 @@ class Step2Controller {
     return false
   }
 
-  setCvvValid(isCvvValid) {
+  disableContinue(isCvvValid) {
     this.isCvvValid = isCvvValid
   }
 }

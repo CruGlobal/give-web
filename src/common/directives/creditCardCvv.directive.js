@@ -9,22 +9,17 @@ const creditCardCvv = /* @ngInject */ function () {
     restrict: 'E',
     templateUrl: template,
     scope: {
-      setCvvValid: '&' 
+      disableContinue: '&',
     },
-
     link: function (scope) {
-      const cvvForm = scope.$ctrl.form.cvv
-      
-      scope.$watch(() => cvvForm.$viewValue, function () {
-        console.log('validate')
-        scope.$ctrl.form.cvv.$validate()
+      console.log(scope)
+      const cvvForm = scope.paymentMethodForm.securityCode
+    
+      scope.$watch(() => cvvForm.$viewValue, () => {
+        cvvForm.$validators.minLength = modelValue => cruPayments.creditCard.cvv.validate.minLength(modelValue)
+        cvvForm.$validators.maxLength = modelValue => cruPayments.creditCard.cvv.validate.maxLength(modelValue)
+        scope.disableContinue({$event: cvvForm.$valid})
       })
-
-      cvvForm.$validators.creditCardCvv = function (modelValue) {
-        const isCvvValid = (cruPayments.creditCard.cvv.validate.minLength(modelValue)) && (cruPayments.creditCard.cvv.validate.maxLength(modelValue))
-        scope.setCvvValid({$event: isCvvValid})
-				return isCvvValid
-      }
     }
   }
   return directiveDefinitionObject
