@@ -203,7 +203,7 @@
               </div>
               <div class="checkout-cta pull-right">
                 <recaptcha-wrapper
-                           action="$ctrl.isBranded ? 'branded_submit' : 'submit_gift'"
+                           action="$ctrl.isBranded ? 'branded_checkout' : 'checkout'"
                            on-success="$ctrl.submitOrderInternal"
                            component-instance="$ctrl.selfReference"
                            button-id="'submitOrderButton'"
