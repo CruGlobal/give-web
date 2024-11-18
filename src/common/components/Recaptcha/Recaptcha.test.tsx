@@ -73,7 +73,7 @@ describe('Recaptcha component', () => {
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
       expect(window.sessionStorage.getItem('recaptchaToken')).toEqual('token')
-      expect(window.sessionStorage.getItem('recaptchaAction')).toEqual('submit_gift')
+      expect(window.sessionStorage.getItem('recaptchaAction')).toEqual('checkout')
     })
   })
 
@@ -121,7 +121,7 @@ describe('Recaptcha component', () => {
 
   const buildRecaptcha = () => {
     return <Recaptcha
-      action='submit_gift'
+      action='checkout'
       onSuccess={onSuccess}
       componentInstance={{}}
       buttonId='id'

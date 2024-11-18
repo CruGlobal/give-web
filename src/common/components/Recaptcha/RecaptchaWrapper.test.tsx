@@ -36,7 +36,7 @@ describe('RecaptchaWrapper component', () => {
     const onSuccess = jest.fn(() => console.log('success'))
     const { getAllByRole } = render(
       <RecaptchaWrapper
-        action='submit_gift'
+        action='checkout'
         onSuccess={onSuccess}
         componentInstance={{}}
         buttonId='id'
@@ -62,7 +62,7 @@ describe('RecaptchaWrapper component', () => {
     document.body.appendChild(script)
     render(
       <RecaptchaWrapper
-        action='submit_gift'
+        action='checkout'
         onSuccess={jest.fn()}
         componentInstance={{}}
         buttonId='id'
