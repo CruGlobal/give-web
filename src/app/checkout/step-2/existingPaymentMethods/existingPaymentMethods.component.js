@@ -34,6 +34,7 @@ class ExistingPaymentMethodsController {
   }
   
   $onInit () {
+    this.enableContinue({ $event: false })
     this.loadPaymentMethods()
     this.addCustomValidators()
   }
@@ -55,12 +56,11 @@ class ExistingPaymentMethodsController {
   }
 
   addCustomValidators () {
-    this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', () => {
-      this.creditCardPaymentForm.securityCode.$validators.minLength = number => {
-        return !this.creditCardPaymentForm.securityCode.$viewValue && this.paymentMethod && !this.creditCardPayment.cardNumber || cruPayments.creditCard.cvv.validate.minLength(number) /* eslint-disable-line no-mixed-operators */
-      }
+    this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', (number) => {
+      this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength /* eslint-disable-line no-mixed-operators */
       this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
-      this.disableContinue({ $event: this.creditCardPaymentForm.securityCode.$valid })
+      this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
+     
     })
   }
 
@@ -173,6 +173,6 @@ export default angular
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
       onLoad: '&',
-      disableContinue: '&',
+      enableContinue: '&',
     }
   })

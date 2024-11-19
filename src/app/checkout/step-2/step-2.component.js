@@ -133,7 +133,7 @@ class Step2Controller {
     return false
   }
 
-  disableContinue(isCvvValid) {
+  enableContinue(isCvvValid) {
     this.isCvvValid = isCvvValid
   }
 }
