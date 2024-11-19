@@ -143,7 +143,6 @@ class ExistingPaymentMethodsController {
   switchPayment () {
     this.creditCardPaymentForm.securityCode.$setViewValue('')
     this.creditCardPaymentForm.securityCode.$render()
-    console.log(this.selectedPaymentMethod)
     this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
     if (this.selectedPaymentMethod?.['bank-name']) {
       // This is an EFT payment method so we need to remove any fee coverage
