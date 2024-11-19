@@ -26,6 +26,17 @@ describe('checkout', () => {
           enableContinue: jest.fn(),
           onPaymentFormStateChange: jest.fn(),
           cartData: { items: [] },
+          creditCardPaymentForm: {
+            securityCode: {
+              $valid: true,
+              $validators: {
+                minLength: (value) => cruPayments.creditCard.cvv.validate.minLength(value),
+                maxLength: cruPayments.creditCard.cvv.validate.maxLength
+              },
+              $setViewValue: jest.fn(),
+              $render: jest.fn(),
+            }
+          }
         })
       }))
 
@@ -336,18 +347,6 @@ describe('checkout', () => {
       })
 
       describe('addCustomValidators', () => {
-        beforeEach(() => {
-          self.controller.creditCardPaymentForm = {
-            securityCode: {
-              $valid: true,
-              $validators: {
-                minLength: (value) => cruPayments.creditCard.cvv.validate.minLength(value),
-                maxLength: cruPayments.creditCard.cvv.validate.maxLength
-              }
-            }
-          }
-        })
-
         it('should add validator functions to creditCardPaymentForm.securityCode', () => {
           expect(size(self.controller.creditCardPaymentForm.securityCode.$validators)).toEqual(2)
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
@@ -374,6 +373,13 @@ describe('checkout', () => {
           self.controller.addCustomValidators()
           self.controller.$scope.$apply()
           expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
+        })
+
+        it('should reset securityCode viewValue on switch payment', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.switchPayment()
+          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
+          expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
         })
       })
     })
