@@ -365,9 +365,15 @@ describe('checkout', () => {
         })
         
         it('should call enableContinue with the correct validity state', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
           self.controller.addCustomValidators()
           self.controller.$scope.$apply()
           expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: true })
+
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '12345'
+          self.controller.addCustomValidators()
+          self.controller.$scope.$apply()
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
         })
       })
     })
