@@ -32,7 +32,7 @@ class ExistingPaymentMethodsController {
       this.$onInit()
     })
   }
-  
+
   $onInit () {
     this.enableContinue({ $event: false })
     this.loadPaymentMethods()
@@ -60,7 +60,6 @@ class ExistingPaymentMethodsController {
       this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength /* eslint-disable-line no-mixed-operators */
       this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
       this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
-     
     })
   }
 
@@ -175,6 +174,6 @@ export default angular
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
       onLoad: '&',
-      enableContinue: '&',
+      enableContinue: '&'
     }
   })

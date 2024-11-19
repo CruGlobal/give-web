@@ -23,7 +23,6 @@ import template from './creditCardForm.tpl.html'
 import creditCardNumberDirective from '../../../directives/creditCardNumber.directive'
 import creditCardCvv from '../../../../common/directives/creditCardCvv.directive'
 
-
 const componentName = 'creditCardForm'
 
 class CreditCardController {
@@ -45,7 +44,6 @@ class CreditCardController {
     this.cardInfo = cruPayments.creditCard.card.info
   }
 
-  
   $onInit () {
     this.initExistingPaymentMethod()
     this.waitForFormInitialization()

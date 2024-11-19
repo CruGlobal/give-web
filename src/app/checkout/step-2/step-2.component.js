@@ -133,11 +133,10 @@ class Step2Controller {
     return false
   }
 
-  enableContinue(isCvvValid) {
+  enableContinue (isCvvValid) {
     this.isCvvValid = isCvvValid
   }
 }
-
 
 export default angular
   .module(componentName, [
@@ -159,6 +158,6 @@ export default angular
       cartData: '<',
       brandedCheckoutItem: '<',
       changeStep: '&',
-      onStateChange: '&',
+      onStateChange: '&'
     }
   })
