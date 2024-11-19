@@ -103,7 +103,7 @@ class PaymentMethodsController {
       windowTemplateUrl: giveModalWindowTemplate,
       resolve: {
         paymentForm: this.paymentFormResolve,
-        hideCvv: true,
+        hideCvv: false,
         mailingAddress: this.mailingAddress,
         onPaymentFormStateChange: () => param => this.onPaymentFormStateChange(param.$event)
       }
