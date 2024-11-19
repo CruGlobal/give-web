@@ -14,7 +14,6 @@ declare global {
 interface RecaptchaWrapperProps {
   action: string
   onSuccess: (componentInstance: any) => void
-  onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
   buttonType?: ButtonType
@@ -29,7 +28,6 @@ interface RecaptchaWrapperProps {
 export const RecaptchaWrapper = ({
   action,
   onSuccess,
-  onFailure,
   componentInstance,
   buttonId,
   buttonType,
@@ -41,11 +39,10 @@ export const RecaptchaWrapper = ({
   $log
 }: RecaptchaWrapperProps): JSX.Element => {
   const recaptchaKey = envService.read('recaptchaKey')
-  const apiUrl = envService.read('apiUrl')
 
   useMemo(() => {
     const script = document.createElement('script')
-    script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`
+    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${recaptchaKey}`
     script.id = 'give-checkout-recaptcha'
     document.body.appendChild(script)
   }, [])
@@ -53,7 +50,6 @@ export const RecaptchaWrapper = ({
   return (
       <Recaptcha action={action}
                  onSuccess={onSuccess}
-                 onFailure={onFailure}
                  componentInstance={componentInstance}
                  buttonId={buttonId}
                  buttonType={buttonType}
@@ -62,8 +58,7 @@ export const RecaptchaWrapper = ({
                  buttonLabel={buttonLabel}
                  $translate={$translate}
                  $log={$log}
-                 recaptchaKey={recaptchaKey}
-                 apiUrl={apiUrl}></Recaptcha>
+                 recaptchaKey={recaptchaKey}></Recaptcha>
   )
 }
 
@@ -76,7 +71,6 @@ export default angular
       [
         'action',
         'onSuccess',
-        'onFailure',
         'componentInstance',
         'buttonId',
         'buttonType',

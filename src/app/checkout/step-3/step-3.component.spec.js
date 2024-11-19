@@ -463,33 +463,11 @@ describe('checkout', () => {
       })
     })
 
-    describe('handleRecaptchaFailure', () => {
-      it('should show an error if recaptcha fails', () => {
-        const componentInstance = self.controller
-        jest.spyOn(componentInstance.analyticsFactory, 'checkoutFieldError').mockImplementation(() => {})
-        self.controller.handleRecaptchaFailure(componentInstance)
-
-        expect(componentInstance.analyticsFactory.checkoutFieldError).toHaveBeenCalledWith('submitOrder', 'failed')
-        expect(componentInstance.submittingOrder).toEqual(false)
-        expect(componentInstance.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
-        expect(componentInstance.loadCart).toHaveBeenCalled()
-        expect(componentInstance.onSubmitted).toHaveBeenCalled()
-        expect(componentInstance.submissionError).toEqual('generic error')
-        expect(componentInstance.$window.scrollTo).toHaveBeenCalledWith(0, 0)
-      })
-    })
-
     describe('event handling', () => {
       it('should call submit order if the submitOrderEvent is received', () => {
         jest.spyOn(self.controller, 'submitOrder').mockImplementation(() => {})
         self.controller.$rootScope.$emit(submitOrderEvent)
         expect(self.controller.submitOrder).toHaveBeenCalled()
-      })
-
-      it('should call handleRecaptchaFailure if the recaptchaFailedEvent is received', () => {
-        jest.spyOn(self.controller, 'handleRecaptchaFailure').mockImplementation(() => {})
-        self.controller.$rootScope.$emit(recaptchaFailedEvent)
-        expect(self.controller.handleRecaptchaFailure).toHaveBeenCalledWith(self.controller)
       })
     })
   })

@@ -36,13 +36,5 @@ describe('checkout', function () {
         expect(componentInstance.$rootScope.$emit).toHaveBeenCalledWith(submitOrderEvent)
       })
     })
-
-    describe('handleRecaptchaFailure', () => {
-      it('should emit an event', () => {
-        jest.spyOn(componentInstance.$rootScope, '$emit').mockImplementation(() => {})
-        self.controller.handleRecaptchaFailure(componentInstance)
-        expect(componentInstance.$rootScope.$emit).toHaveBeenCalledWith(recaptchaFailedEvent)
-      })
-    })
   })
 })

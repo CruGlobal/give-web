@@ -16,7 +16,7 @@ import displayAddressComponent from 'common/components/display-address/display-a
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
 import template from './step-3.tpl.html'
 import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
-import { recaptchaFailedEvent, submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
+import { submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
 
 const componentName = 'checkoutStep3'
 
@@ -42,9 +42,6 @@ class Step3Controller {
       this.$onInit()
     })
 
-    this.$rootScope.$on(recaptchaFailedEvent, () => {
-      this.handleRecaptchaFailure(this)
-    })
     this.$rootScope.$on(submitOrderEvent, () => {
       this.submitOrder()
     })
@@ -191,18 +188,6 @@ class Step3Controller {
       componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
       componentInstance.$window.scrollTo(0, 0)
     })
-  }
-
-  handleRecaptchaFailure (componentInstance) {
-    componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-    componentInstance.submittingOrder = false
-    componentInstance.onSubmittingOrder({ value: false })
-
-    componentInstance.loadCart()
-
-    componentInstance.onSubmitted()
-    componentInstance.submissionError = 'generic error'
-    componentInstance.$window.scrollTo(0, 0)
   }
 }
 
