@@ -482,15 +482,78 @@ hr.horizontal-divider {
     display: inline-block;
     vertical-align: middle;
   }
-  input[type="radio"] {
-    display: inline-block;
-    float: none;
-    margin: 0;
-    margin-right: $gutter*.5;
-    position: static;
-    vertical-align: 0%;
+}
+
+/* Product Config Form - Suggested Amount Buttons Begin */
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.suggested-button {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: $colorGrayscale-pebble;
+  border: none;
+  border-radius: 5px;
+  overflow: hidden;
+  color: $colorCru-gray;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 60px;
+}
+
+.suggested-button.active {
+  background-color: #dddddd;
+  cursor: default;
+  height: 70px;
+
+  .amount-box {
+    background-color: #3a3a3a;
+    color: #fff;
+    font-weight: normal;
+  }
+
+  .label-text {
+    font-weight: normal;
   }
 }
+
+.suggested-button:hover {
+  background-color: #f5f5f5;
+}
+
+.amount-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  min-width: 100px;
+  height: 100%;
+  background-color: $colorGrayscale-rock;
+  font-size: 16px;
+  font-weight: normal;
+  color: #333;
+}
+
+.label-text {
+  flex-grow: 1;
+  padding: 0 15px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: normal;
+  color: inherit;
+  line-height: 1.5;
+}
+
+/* Product Config Form - Suggested Amount Buttons End */
 
 .btn-xs,
 .btn-sm {

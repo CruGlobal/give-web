@@ -70,15 +70,20 @@
         </h4>
         <div class="panel-body pt0">
           <div ng-if="$ctrl.useSuggestedAmounts">
-            <div class="radio radio-custom-amount"
-                 ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
-              <label>
-                <input name="suggestedAmount"
-                       type="radio"
-                       ng-click="$ctrl.changeAmount(suggested.amount)"
-                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount" />
-                {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
-              </label>
+            <div class="button-group">
+              <button 
+                  type="button"
+                  class="suggested-button"
+                  ng-click="$ctrl.changeAmount(suggested.amount)"
+                  ng-class=" {'active': !$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount}"
+                  ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
+                  <span class="amount-box">
+                    {{$ctrl.suggestedAmount(suggested.amount)}}
+                  </span>
+                  <span class="label-text">
+                    {{suggested.label}}
+                  </span>
+              </button>
             </div>
             <div class="radio radio-custom-amount form-inline" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
               <div class="form-group">
