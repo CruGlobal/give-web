@@ -6,12 +6,13 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component'
 import coverFees from 'common/components/paymentMethods/coverFees/coverFees.component'
 
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 import orderService from 'common/services/api/order.service'
 import cartService from 'common/services/api/cart.service'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
-
+import creditCardCvv from '../../../../common/directives/creditCardCvv.directive'
 import template from './existingPaymentMethods.tpl.html'
 
 const componentName = 'checkoutExistingPaymentMethods'
@@ -33,7 +34,9 @@ class ExistingPaymentMethodsController {
   }
 
   $onInit () {
+    this.enableContinue({ $event: false })
     this.loadPaymentMethods()
+    this.addCustomValidators()
   }
 
   $onChanges (changes) {
@@ -50,6 +53,14 @@ class ExistingPaymentMethodsController {
     if (changes.paymentFormError) {
       this.paymentFormResolve.error = changes.paymentFormError.currentValue
     }
+  }
+
+  addCustomValidators () {
+    this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', (number) => {
+      this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength /* eslint-disable-line no-mixed-operators */
+      this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
+      this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
+    })
   }
 
   loadPaymentMethods () {
@@ -129,6 +140,8 @@ class ExistingPaymentMethodsController {
   }
 
   switchPayment () {
+    this.creditCardPaymentForm.securityCode.$setViewValue('')
+    this.creditCardPaymentForm.securityCode.$render()
     this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
     if (this.selectedPaymentMethod?.['bank-name']) {
       // This is an EFT payment method so we need to remove any fee coverage
@@ -144,7 +157,8 @@ export default angular
     paymentMethodFormModal.name,
     coverFees.name,
     orderService.name,
-    cartService.name
+    cartService.name,
+    creditCardCvv.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,
@@ -159,6 +173,7 @@ export default angular
       brandedCheckoutItem: '<',
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
-      onLoad: '&'
+      onLoad: '&',
+      enableContinue: '&'
     }
   })

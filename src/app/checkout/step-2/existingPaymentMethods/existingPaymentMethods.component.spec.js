@@ -1,9 +1,11 @@
 import angular from 'angular'
 import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
+import size from 'lodash/size'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/toPromise'
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 
 import { SignInEvent } from 'common/services/session/session.service'
 
@@ -21,18 +23,31 @@ describe('checkout', () => {
         self.controller = $componentController(module.name, {}, {
           onLoad: jest.fn(),
           onPaymentChange: jest.fn(),
+          enableContinue: jest.fn(),
           onPaymentFormStateChange: jest.fn(),
-          cartData: { items: [] }
+          cartData: { items: [] },
+          creditCardPaymentForm: {
+            securityCode: {
+              $valid: true,
+              $validators: {
+                minLength: (value) => cruPayments.creditCard.cvv.validate.minLength(value),
+                maxLength: cruPayments.creditCard.cvv.validate.maxLength
+              },
+              $setViewValue: jest.fn(),
+              $render: jest.fn(),
+            }
+          }
         })
       }))
-
 
       describe('$onInit', () => {
         it('should call loadPaymentMethods', () => {
           jest.spyOn(self.controller, 'loadPaymentMethods').mockImplementation(() => {})
+          jest.spyOn(self.controller, 'addCustomValidators').mockImplementation(() => {})
           self.controller.$onInit()
 
           expect(self.controller.loadPaymentMethods).toHaveBeenCalled()
+          expect(self.controller.addCustomValidators).toHaveBeenCalled()
         })
 
         it('should be called on sign in', () => {
@@ -328,6 +343,43 @@ describe('checkout', () => {
           self.controller.switchPayment()
           expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: undefined })
           expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
+        })
+      })
+
+      describe('addCustomValidators', () => {
+        it('should add validator functions to creditCardPaymentForm.securityCode', () => {
+          expect(size(self.controller.creditCardPaymentForm.securityCode.$validators)).toEqual(2)
+          expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
+          expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.maxLength).toBe('function')
+        })
+
+        it('should validate minLength correctly', () => {
+          expect(self.controller.creditCardPaymentForm.securityCode.$validators.minLength('123')).toBe(true)
+          expect(self.controller.creditCardPaymentForm.securityCode.$validators.minLength('12')).toBe(false)
+        })
+
+        it('should validate maxLength correctly', () => {
+          expect(self.controller.creditCardPaymentForm.securityCode.$validators.maxLength('123')).toBe(true)
+          expect(self.controller.creditCardPaymentForm.securityCode.$validators.maxLength('12345')).toBe(false)
+        })
+        
+        it('should call enableContinue with the correct validity state', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.addCustomValidators()
+          self.controller.$scope.$apply()
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: true })
+
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '12345'
+          self.controller.addCustomValidators()
+          self.controller.$scope.$apply()
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
+        })
+
+        it('should reset securityCode viewValue on switch payment', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.switchPayment()
+          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
+          expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
         })
       })
     })
