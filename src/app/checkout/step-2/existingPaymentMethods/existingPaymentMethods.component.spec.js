@@ -23,7 +23,7 @@ describe('checkout', () => {
         self.controller = $componentController(module.name, {}, {
           onLoad: jest.fn(),
           onPaymentChange: jest.fn(),
-          disableContinue: jest.fn(),
+          enableContinue: jest.fn(),
           onPaymentFormStateChange: jest.fn(),
           cartData: { items: [] },
         })
@@ -347,7 +347,7 @@ describe('checkout', () => {
             }
           }
         })
-        
+
         it('should add validator functions to creditCardPaymentForm.securityCode', () => {
           expect(size(self.controller.creditCardPaymentForm.securityCode.$validators)).toEqual(2)
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
@@ -364,10 +364,10 @@ describe('checkout', () => {
           expect(self.controller.creditCardPaymentForm.securityCode.$validators.maxLength('12345')).toBe(false)
         })
         
-        it('should call disableContinue with the correct validity state', () => {
+        it('should call enableContinue with the correct validity state', () => {
           self.controller.addCustomValidators()
           self.controller.$scope.$apply()
-          expect(self.controller.disableContinue).toHaveBeenCalledWith({ $event: true })
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: true })
         })
       })
     })
