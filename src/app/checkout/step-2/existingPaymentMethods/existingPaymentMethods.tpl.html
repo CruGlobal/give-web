@@ -9,10 +9,14 @@
         <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" ng-disabled="expired" required ng-change="$ctrl.switchPayment()">
         <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
         <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod['card-type']" translate>edit</button>
-        <form novalidate name="$ctrl.creditCardPaymentForm">
+      </label>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <form novalidate name="$ctrl.creditCardPaymentForm" ng-if="!$ctrl.hideCvv">
           <credit-card-cvv/>
         </form>
-      </label>
+      </div>
     </div>
       
     <div class="panel panel-default tab-toggle mb0 mt"
