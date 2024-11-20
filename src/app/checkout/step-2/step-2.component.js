@@ -117,7 +117,8 @@ class Step2Controller {
   }
 
   getContinueDisabled () {
-    if (typeof this.isCvvValid !== 'undefined' && !this.isCvvValid) {
+    console.log(this.$scope)
+    if (this.selectedPaymentMethod?.['card-type'] && typeof this.isCvvValid !== 'undefined' && !this.isCvvValid) {
       return true
     }
     if (this.loadingPaymentMethods) {
