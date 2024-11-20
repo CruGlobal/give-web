@@ -89,29 +89,29 @@ export const Recaptcha = ({
         if (data?.success === true && isValidAction(data?.action)) {
           if (data.score < 0.5) {
             $log.warn(`Captcha score was below the threshold: ${data.score}`)
-            onFailure(componentInstance)
+            onFailure.call(componentInstance,componentInstance)
             return
           }
-          onSuccess(componentInstance)
+          onSuccess.call(componentInstance,componentInstance)
           return
         }
         if (data?.success === false && isValidAction(data?.action)) {
           $log.warn('Recaptcha call was unsuccessful, continuing anyway')
-          onSuccess(componentInstance)
+          onSuccess.call(componentInstance,componentInstance)
           return
         }
         if (!data) {
           $log.warn('Data was missing!')
-          onSuccess(componentInstance)
+          onSuccess.call(componentInstance,componentInstance)
           return
         }
         if (!isValidAction(data?.action)) {
           $log.warn(`Invalid action: ${data?.action}`)
-          onFailure(componentInstance)
+          onFailure.call(componentInstance,componentInstance)
         }
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
-        onSuccess(componentInstance)
+        onSuccess.call(componentInstance,componentInstance)
       }
     })
   }, [grecaptcha, buttonId, ready])
