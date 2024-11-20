@@ -21,7 +21,6 @@ import tsys from 'common/services/api/tsys.service'
 
 import template from './creditCardForm.tpl.html'
 import creditCardNumberDirective from '../../../directives/creditCardNumber.directive'
-import creditCardCvv from '../../../../common/directives/creditCardCvv.directive'
 
 const componentName = 'creditCardForm'
 
@@ -79,7 +78,7 @@ class CreditCardController {
   }
 
   waitForSecurityCodeInitialization () {
-    const unregister = this.$scope.$watch(() => '$ctrl.creditCardPaymentForm.securityCode', () => {
+    const unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
       unregister()
       this.creditCardPaymentForm.securityCode.$validators.minLength = number => {
         // If editing existing payment method, don't require a CVV
@@ -196,8 +195,7 @@ export default angular
     showErrors.name,
     analyticsFactory.name,
     tsys.name,
-    creditCardNumberDirective.name,
-    creditCardCvv.name
+    creditCardNumberDirective.name
   ])
   .component(componentName, {
     controller: CreditCardController,

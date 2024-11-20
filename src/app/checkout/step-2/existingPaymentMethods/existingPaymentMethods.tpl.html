@@ -11,14 +11,7 @@
         <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod['card-type']" translate>edit</button>
       </label>
     </div>
-    <div class="row">
-      <div class="col-sm-4">
-        <form novalidate name="$ctrl.creditCardPaymentForm" ng-if="!$ctrl.hideCvv">
-          <credit-card-cvv/>
-        </form>
-      </div>
-    </div>
-      
+
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
       <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>
