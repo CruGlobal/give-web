@@ -16,6 +16,7 @@ class AddressFormController {
   }
 
   $onInit () {
+
     this.loadCountries()
   }
 
@@ -71,6 +72,6 @@ export default angular
       parentForm: '<',
       onAddressChanged: '&',
       addressDisabled: '<',
-      useV3: '<'
+      useV3: '<?'
     }
   })

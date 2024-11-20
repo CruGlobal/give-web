@@ -137,6 +137,5 @@ export default angular
       resolve: '<',
       close: '&',
       dismiss: '&',
-      useV3: '<'
     }
   })
