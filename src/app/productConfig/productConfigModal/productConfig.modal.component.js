@@ -136,6 +136,7 @@ export default angular
     bindings: {
       resolve: '<',
       close: '&',
-      dismiss: '&'
+      dismiss: '&',
+      useV3: '<'
     }
   })
