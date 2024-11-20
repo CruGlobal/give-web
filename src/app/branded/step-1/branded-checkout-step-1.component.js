@@ -8,21 +8,25 @@ import checkoutStep2 from 'app/checkout/step-2/step-2.component'
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
 import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.factory'
-
+import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import template from './branded-checkout-step-1.tpl.html'
+import { Observable } from 'rxjs'
+import { tap, catchError, mergeMap } from 'rxjs/operators'
 
 const componentName = 'brandedCheckoutStep1'
 
 class BrandedCheckoutStep1Controller {
   /* @ngInject */
-  constructor ($log, $filter, brandedAnalyticsFactory, cartService, orderService) {
+  constructor ($scope, $log, $filter, brandedAnalyticsFactory, cartService, orderService) {
+    this.$scope = $scope
     this.$log = $log
     this.$filter = $filter
     this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.cartService = cartService
     this.orderService = orderService
+    this.selfReference = this
   }
 
   $onInit () {
@@ -89,6 +93,9 @@ class BrandedCheckoutStep1Controller {
   submit () {
     this.resetSubmission()
     this.submitted = true
+    if (this.useV3 === 'true') {
+      this.$scope.$digest()
+    }
   }
 
   resetSubmission () {
@@ -154,11 +161,175 @@ class BrandedCheckoutStep1Controller {
   checkSuccessfulSubmission () {
     if (every(this.submission, 'completed')) {
       if (every(this.submission, { error: false })) {
-        this.next()
+        if (this.useV3 === 'true') {
+          this.submitOrderInternal()
+        } else {
+          this.next()
+        }
       } else {
         this.submitted = false
       }
     }
+  }
+
+  loadCart () {
+    this.errorLoadingCart = false
+
+    // Return the observable instead of subscribing here
+    return this.cartService.get().pipe(
+      tap(data => {
+        // Setting cart data and analytics
+        this.cartData = data
+        this.brandedAnalyticsFactory.saveCoverFees(this.orderService.retrieveCoverFeeDecision())
+        this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
+        this.brandedAnalyticsFactory.addPaymentInfo()
+        this.brandedAnalyticsFactory.reviewOrder()
+        console.log('done loading cart')
+      }),
+      catchError(error => {
+        // Handle errors by setting flag and logging the error
+        this.errorLoadingCart = true
+        this.$log.error('Error loading cart data for branded checkout step 2', error)
+        return Observable.throw(error) // Rethrow the error so the observable chain can handle it
+      })
+    )
+  }
+
+  loadCurrentPayment () {
+    this.loadingCurrentPayment = true
+
+    return this.orderService.getCurrentPayment().pipe(
+      tap(data => {
+        if (!data) {
+          this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist')
+        } else if (data['account-type']) {
+          this.bankAccountPaymentDetails = data
+        } else if (data['card-type']) {
+          this.creditCardPaymentDetails = data
+        } else {
+          this.$log.error('Error loading current payment info: current payment type is unknown')
+        }
+        this.loadingCurrentPayment = false
+      }),
+      catchError(error => {
+        this.loadingCurrentPayment = false
+        this.$log.error('Error loading current payment info', error)
+        return Observable.throw(error) // Propagate error
+      })
+    )
+  }
+
+  checkErrors () {
+    // Then check for errors on the API
+    return this.orderService.checkErrors().pipe(
+      tap((data) => {
+        this.needinfoErrors = data
+        console.log('checking errors')
+      }),
+      catchError(error => {
+        this.$log.error('Error loading checkErrors', error)
+        return Observable.throw(error)
+      }))
+  }
+
+  submitOrderInternal () {
+    this.loadingAndSubmitting = true
+    // Start by loading the cart
+    this.loadCart().pipe(
+      mergeMap(() => {
+        // After loadCart completes, call loadCurrentPayment
+        console.log('loadCurrentPayment')
+        return this.loadCurrentPayment()
+      }),
+      mergeMap(() => {
+        // After loadCurrentPayment completes, call checkErrors
+        console.log('checkErrors')
+        return this.checkErrors()
+      }),
+      mergeMap(() => {
+      // Clear previous submission errors
+        delete this.submissionError
+        delete this.submissionErrorStatus
+
+        // Prevent multiple submissions
+        if (this.submittingOrder) return Observable.of(null)
+
+        this.submittingOrder = true
+        this.onSubmittingOrder({ value: true })
+
+        let submitRequest
+        if (this.bankAccountPaymentDetails) {
+          submitRequest = this.orderService.submit()
+        } else if (this.creditCardPaymentDetails) {
+          const cvv = this.orderService.retrieveCardSecurityCode()
+          submitRequest = this.orderService.submit(cvv)
+        } else {
+          return Observable.throw({ data: 'Current payment type is unknown' })
+        }
+        console.log('submitRequest', submitRequest)
+        // Return the observable from the submit request to continue processing
+        return submitRequest
+      })).subscribe({
+      next: () => {
+        // If order submission was successful, process analytics and proceed to the next steps
+        this.brandedAnalyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
+        console.log('purchase')
+        this.submittingOrder = false
+        this.loadingAndSubmitting = false
+        this.onSubmittingOrder({ value: false })
+        this.orderService.clearCardSecurityCodes()
+        this.orderService.clearCoverFees()
+        this.onSubmitted()
+        console.log('clearCardSecurityCodes')
+        this.$scope.$emit(cartUpdatedEvent)
+        console.log('cartUpdatedEvent')
+        this.next()
+      },
+      error: (error) => {
+        // Log the full error object for better understanding
+        this.$log.error('Error submitting purchase:', error)
+
+        // Check for specific error types
+        if (error.data && error.data.includes('payment')) {
+          this.submissionError = 'Payment details are invalid or missing.'
+        } else if (error.status === 400) {
+          this.submissionError = 'Bad request, please check your inputs.'
+        } else {
+          this.submissionError = 'An unknown error occurred during checkout.'
+        }
+        // Handle any errors that occur during either loadCart or submit
+        this.brandedAnalyticsFactory.checkoutFieldError('submitOrder', 'failed')
+        this.submittingOrder = false
+        this.loadingAndSubmitting = false
+        this.onSubmittingOrder({ value: false })
+
+        if (error.config && error.config.data && error.config.data['security-code']) {
+          error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
+        }
+        this.$log.error('Error submitting purchase:', error)
+        this.onSubmitted()
+        this.submissionErrorStatus = error.status
+        this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
+        this.$window.scrollTo(0, 0)
+      }
+    })
+  }
+
+  handleRecaptchaFailure () {
+    this.brandedAnalyticsFactory.checkoutFieldError('submitOrder', 'failed')
+    this.submittingOrder = false
+    this.loadingAndSubmitting = false
+    this.onSubmittingOrder({ value: false })
+
+    this.loadCart()
+
+    this.onSubmitted()
+    this.submissionError = 'generic error'
+    this.$window.scrollTo(0, 0)
+  }
+
+  canSubmitOrder () {
+    return !this.submittingOrder
   }
 }
 
@@ -189,6 +360,9 @@ export default angular
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
       radioStationRadius: '<',
+      onSubmittingOrder: '&',
+      onSubmitted: '&',
       useV3: '<',
+      loadingAndSubmitting: '<',
     }
   })
