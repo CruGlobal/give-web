@@ -66,6 +66,7 @@ class ProductConfigFormController {
   }
 
   $onInit () {
+    console.log(this.$scope)
     this.initItemConfig()
     this.loadData()
     this.waitForFormInitialization()
@@ -416,6 +417,7 @@ export default angular
       disableSessionRestart: '@',
       updateQueryParam: '&',
       submitted: '<',
-      onStateChange: '&'
+      onStateChange: '&',
+      useV3: '<',
     }
   })
