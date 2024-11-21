@@ -324,6 +324,37 @@ describe('checkout', () => {
         
         expect(self.controller.getContinueDisabled()).toBe(false)
       })
+
+      it('should return false when cvv is invalid and new payment type is credit card', () => {
+        jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
+        self.controller.handlePaymentChange({'card-type': 'visa'})
+        self.controller.isCvvValid = false
+        expect(self.controller.getContinueDisabled()).toBe(true)
+      })
+
+      it('should return false when cvv is invalid and new payment type is bankAccount', () => {
+        jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
+        self.controller.handlePaymentChange({'account-type': 'checking'})
+        self.controller.isCvvValid = false
+        expect(self.controller.getContinueDisabled()).toBe(false)
+      })
+    })
+    describe('enableContinue', () => {
+      it('should set isCvvValid to false', () => {
+        self.controller.enableContinue(false)
+        expect(self.controller.isCvvValid).toBe(false)
+        self.controller.handlePaymentChange({'card-type': 'visa'})
+        expect(self.controller.selectedPaymentMethod).toEqual({'card-type': 'visa'})
+        expect(self.controller.getContinueDisabled()).toBe(true)
+      })
+
+      it('should set isCvvValid to true', () => {
+        self.controller.enableContinue(true)
+        expect(self.controller.isCvvValid).toBe(true)
+        self.controller.handlePaymentChange({'card-type': 'visa'})
+        expect(self.controller.selectedPaymentMethod).toEqual({'card-type': 'visa'})
+        expect(self.controller.getContinueDisabled()).toBe(false)
+      })
     })
   })
 })
