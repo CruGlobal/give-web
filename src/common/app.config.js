@@ -54,7 +54,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
-        recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
+        recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       devcloud: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -63,7 +63,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://stage-cloud.cru.org',
         publicGive: 'https://give-dev-cloud.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
-        recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
+        recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       stagecloud: {
         apiUrl: 'https://give-stage-cloud.cru.org',
@@ -72,7 +72,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://stage-cloud.cru.org',
         publicGive: 'https://give-stage-cloud.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
-        recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
+        recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       prodcloud: {
         apiUrl: 'https://give-prod-cloud.cru.org',
@@ -90,7 +90,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
-        recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
+        recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       nonprod: {
         apiUrl: 'https://give-stage2-next.cru.org',
