@@ -312,7 +312,6 @@ describe('checkout', () => {
       it('should return true when cvv is invalid and card type is credit card', () => {
         self.controller.handleExistingPaymentLoading(true, true)
         self.controller.isCvvValid = false
-        jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
         self.controller.handlePaymentChange({'card-type': 'visa'})
         
         expect(self.controller.getContinueDisabled()).toBe(true)
@@ -321,7 +320,6 @@ describe('checkout', () => {
       it('should return false when cvv is invalid and card type is not credit card', () => {
         self.controller.handleExistingPaymentLoading(true, true)
         self.controller.isCvvValid = false
-        jest.spyOn(self.controller.brandedAnalyticsFactory, 'savePaymentType')
         self.controller.handlePaymentChange({'account-type': 'checking'})
         
         expect(self.controller.getContinueDisabled()).toBe(false)

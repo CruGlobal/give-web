@@ -79,7 +79,7 @@ class CreditCardController {
   }
 
   waitForSecurityCodeInitialization () {
-    const unregister = this.$scope.$watch(() => '$ctrl.creditCardPaymentForm.securityCode', () => {
+    const unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
       unregister()
       this.creditCardPaymentForm.securityCode.$validators.minLength = number => {
         // If editing existing payment method, don't require a CVV

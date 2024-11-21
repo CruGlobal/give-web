@@ -22,7 +22,7 @@ const template =
   </div>
 </div>`
 
-const creditCardCvv = /* @ngInject */ function () {
+const creditCardCvv = /* @ngInject */ () => {
   const directiveDefinitionObject = {
     restrict: 'E',
     template

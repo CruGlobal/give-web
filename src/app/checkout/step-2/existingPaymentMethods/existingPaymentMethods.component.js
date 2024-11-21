@@ -36,7 +36,7 @@ class ExistingPaymentMethodsController {
   $onInit () {
     this.enableContinue({ $event: false })
     this.loadPaymentMethods()
-    this.addCustomValidators()
+    this.addCvvValidators()
   }
 
   $onChanges (changes) {
@@ -55,9 +55,9 @@ class ExistingPaymentMethodsController {
     }
   }
 
-  addCustomValidators () {
+  addCvvValidators () {
     this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', (number) => {
-      this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength /* eslint-disable-line no-mixed-operators */
+      this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength
       this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
       this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
     })
@@ -91,6 +91,7 @@ class ExistingPaymentMethodsController {
       // Select the first payment method
       this.selectedPaymentMethod = paymentMethods[0]
     }
+   
     this.switchPayment()
   }
 
@@ -140,13 +141,18 @@ class ExistingPaymentMethodsController {
   }
 
   switchPayment () {
-    this.creditCardPaymentForm.securityCode.$setViewValue('')
-    this.creditCardPaymentForm.securityCode.$render()
     this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
+    if (this.selectedPaymentMethod?.['card-type'] && this.creditCardPaymentForm?.securityCode) {
+      // Clear CVV when switching between payment credit card payment methods
+      this.creditCardPaymentForm.securityCode.$setViewValue('')
+      this.creditCardPaymentForm.securityCode.$render()
+    }
+
     if (this.selectedPaymentMethod?.['bank-name']) {
       // This is an EFT payment method so we need to remove any fee coverage
       this.orderService.storeCoverFeeDecision(false)
-    }
+    } 
+
   }
 }
 
