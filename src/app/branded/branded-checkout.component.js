@@ -76,7 +76,7 @@ class BrandedCheckoutController {
     switch (this.checkoutStep) {
       case 'giftContactPayment':
         // If it is a single step form, the next step should be 'thankYou'
-        if(this.useV3 === 'true'){
+        if (this.useV3 === 'true') {
           this.checkoutStep = 'thankYou'
         } else {
           this.checkoutStep = 'review'
@@ -187,6 +187,6 @@ export default angular
       onOrderFailed: '&',
       language: '@',
       showCoverFees: '@',
-      useV3: '@',
+      useV3: '@'
     }
   })

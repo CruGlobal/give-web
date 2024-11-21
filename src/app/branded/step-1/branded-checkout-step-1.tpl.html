@@ -92,7 +92,6 @@
     <div class="panel-body text-right">
       <div class="checkout-cta pull-right" ng-if="$ctrl.useV3 === 'true'">
        <recaptcha-wrapper
-       
               action="'branded_submit'"
               on-success="$ctrl.submit"
               on-failure="$ctrl.handleRecaptchaFailure"
@@ -101,7 +100,8 @@
               button-type="'submit'"
               button-classes="'btn btn-primary btn-lg btn-block'"
               button-disabled="$ctrl.errorLoadingProductConfig || !$ctrl.canSubmitOrder()"
-              button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>  </div>
+              button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
+        </div>
 
       <button ng-if="$ctrl.useV3 === 'false'" class="btn btn-primary"
               ng-click="$ctrl.submit()"

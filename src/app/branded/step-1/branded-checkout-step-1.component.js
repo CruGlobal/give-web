@@ -252,7 +252,7 @@ class BrandedCheckoutStep1Controller {
         delete this.submissionErrorStatus
 
         // Prevent multiple submissions
-        if (this.submittingOrder) return Observable.of(null)
+        if (this.submittingOrder) { return Observable.of(null) }
 
         this.submittingOrder = true
         this.onSubmittingOrder({ value: true })
@@ -363,6 +363,6 @@ export default angular
       onSubmittingOrder: '&',
       onSubmitted: '&',
       useV3: '<',
-      loadingAndSubmitting: '<',
+      loadingAndSubmitting: '<'
     }
   })
