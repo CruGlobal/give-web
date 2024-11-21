@@ -103,7 +103,7 @@
               button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
         </div>
 
-      <button ng-if="$ctrl.useV3 === 'false'" class="btn btn-primary"
+      <button ng-if="$ctrl.useV3 !== 'true'" class="btn btn-primary"
               ng-click="$ctrl.submit()"
               ng-disabled="$ctrl.errorLoadingProductConfig"
               translate>{{'CONTINUE'}}</button>
