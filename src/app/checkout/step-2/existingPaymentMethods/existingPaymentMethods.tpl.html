@@ -11,7 +11,7 @@
         <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod['card-type']" translate>edit</button>
       </label>
     </div>
-    <div ng-if="$ctrl.selectedPaymentMethod['card-type'] && !$ctrl.hideCvv" class="row">
+    <div ng-if="$ctrl.selectedPaymentMethod['card-type']" class="row">
       <div class="col-sm-4">
         <form novalidate name="$ctrl.creditCardPaymentForm">
           <credit-card-cvv ></credit-card-cvv>
