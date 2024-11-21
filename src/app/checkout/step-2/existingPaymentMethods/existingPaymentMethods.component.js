@@ -91,7 +91,7 @@ class ExistingPaymentMethodsController {
       // Select the first payment method
       this.selectedPaymentMethod = paymentMethods[0]
     }
-   
+
     this.switchPayment()
   }
 
@@ -151,8 +151,7 @@ class ExistingPaymentMethodsController {
     if (this.selectedPaymentMethod?.['bank-name']) {
       // This is an EFT payment method so we need to remove any fee coverage
       this.orderService.storeCoverFeeDecision(false)
-    } 
-
+    }
   }
 }
 
