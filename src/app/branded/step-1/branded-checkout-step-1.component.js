@@ -220,32 +220,32 @@ class BrandedCheckoutStep1Controller {
 
   checkErrors () {
     // Then check for errors on the API
-    return this.orderService.checkErrors().pipe(
-      tap((data) => {
+    return this.orderService.checkErrors().do(
+      (data) => {
         this.needinfoErrors = data
         console.log('checking errors')
-      }),
-      catchError(error => {
+      })
+      .catch(error => {
         this.$log.error('Error loading checkErrors', error)
         return Observable.throw(error)
-      }))
+      })
   }
 
   submitOrderInternal () {
     this.loadingAndSubmitting = true
     // Start by loading the cart
-    this.loadCart().pipe(
-      mergeMap(() => {
+    this.loadCart()
+      .mergeMap(() => {
         // After loadCart completes, call loadCurrentPayment
         console.log('loadCurrentPayment')
         return this.loadCurrentPayment()
-      }),
-      mergeMap(() => {
+      })
+      .mergeMap(() => {
         // After loadCurrentPayment completes, call checkErrors
         console.log('checkErrors')
         return this.checkErrors()
-      }),
-      mergeMap(() => {
+      })
+      .mergeMap(() => {
       // Clear previous submission errors
         delete this.submissionError
         delete this.submissionErrorStatus
@@ -270,49 +270,49 @@ class BrandedCheckoutStep1Controller {
         console.log('submitRequest', submitRequest)
         // Return the observable from the submit request to continue processing
         return submitRequest
-      })).subscribe({
-      next: () => {
+      }).subscribe({
+        next: () => {
         // If order submission was successful, process analytics and proceed to the next steps
-        console.log('purchase')
-        this.submittingOrder = false
-        this.loadingAndSubmitting = false
-        this.onSubmittingOrder({ value: false })
-        this.orderService.clearCardSecurityCodes()
-        this.orderService.clearCoverFees()
-        this.onSubmitted()
-        console.log('clearCardSecurityCodes')
-        this.$scope.$emit(cartUpdatedEvent)
-        console.log('cartUpdatedEvent')
-        this.next()
-      },
-      error: (error) => {
+          console.log('purchase')
+          this.submittingOrder = false
+          this.loadingAndSubmitting = false
+          this.onSubmittingOrder({ value: false })
+          this.orderService.clearCardSecurityCodes()
+          this.orderService.clearCoverFees()
+          this.onSubmitted()
+          console.log('clearCardSecurityCodes')
+          this.$scope.$emit(cartUpdatedEvent)
+          console.log('cartUpdatedEvent')
+          this.next()
+        },
+        error: (error) => {
         // Log the full error object for better understanding
-        this.$log.error('Error submitting purchase:', error)
+          this.$log.error('Error submitting purchase:', error)
 
-        // Check for specific error types
-        if (error.data && error.data.includes('payment')) {
-          this.submissionError = 'Payment details are invalid or missing.'
-        } else if (error.status === 400) {
-          this.submissionError = 'Bad request, please check your inputs.'
-        } else {
-          this.submissionError = 'An unknown error occurred during checkout.'
-        }
-        // Handle any errors that occur during either loadCart or submit
-        this.brandedAnalyticsFactory.checkoutFieldError('submitOrder', 'failed')
-        this.submittingOrder = false
-        this.loadingAndSubmitting = false
-        this.onSubmittingOrder({ value: false })
+          // Check for specific error types
+          if (error.data && error.data.includes('payment')) {
+            this.submissionError = 'Payment details are invalid or missing.'
+          } else if (error.status === 400) {
+            this.submissionError = 'Bad request, please check your inputs.'
+          } else {
+            this.submissionError = 'An unknown error occurred during checkout.'
+          }
+          // Handle any errors that occur during either loadCart or submit
+          this.brandedAnalyticsFactory.checkoutFieldError('submitOrder', 'failed')
+          this.submittingOrder = false
+          this.loadingAndSubmitting = false
+          this.onSubmittingOrder({ value: false })
 
-        if (error.config && error.config.data && error.config.data['security-code']) {
-          error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
+          if (error.config && error.config.data && error.config.data['security-code']) {
+            error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
+          }
+          this.$log.error('Error submitting purchase:', error)
+          this.onSubmitted()
+          this.submissionErrorStatus = error.status
+          this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
+          this.$window.scrollTo(0, 0)
         }
-        this.$log.error('Error submitting purchase:', error)
-        this.onSubmitted()
-        this.submissionErrorStatus = error.status
-        this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
-        this.$window.scrollTo(0, 0)
-      }
-    })
+      })
   }
 
   handleRecaptchaFailure () {
