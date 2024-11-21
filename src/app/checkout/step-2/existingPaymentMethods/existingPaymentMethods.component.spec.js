@@ -43,11 +43,11 @@ describe('checkout', () => {
       describe('$onInit', () => {
         it('should call loadPaymentMethods', () => {
           jest.spyOn(self.controller, 'loadPaymentMethods').mockImplementation(() => {})
-          jest.spyOn(self.controller, 'addCustomValidators').mockImplementation(() => {})
+          jest.spyOn(self.controller, 'addCvvValidators').mockImplementation(() => {})
           self.controller.$onInit()
 
           expect(self.controller.loadPaymentMethods).toHaveBeenCalled()
-          expect(self.controller.addCustomValidators).toHaveBeenCalled()
+          expect(self.controller.addCvvValidators).toHaveBeenCalled()
         })
 
         it('should be called on sign in', () => {
@@ -346,7 +346,7 @@ describe('checkout', () => {
         })
       })
 
-      describe('addCustomValidators', () => {
+      describe('addCvvValidators', () => {
         it('should add validator functions to creditCardPaymentForm.securityCode', () => {
           expect(size(self.controller.creditCardPaymentForm.securityCode.$validators)).toEqual(2)
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
@@ -365,18 +365,19 @@ describe('checkout', () => {
         
         it('should call enableContinue with the correct validity state', () => {
           self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
-          self.controller.addCustomValidators()
+          self.controller.addCvvValidators()
           self.controller.$scope.$apply()
           expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: true })
 
           self.controller.creditCardPaymentForm.securityCode.$viewValue = '12345'
-          self.controller.addCustomValidators()
+          self.controller.addCvvValidators()
           self.controller.$scope.$apply()
           expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
         })
 
         it('should reset securityCode viewValue on switch payment', () => {
           self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: 'selected uri' }, selectAction: 'some uri' }
           self.controller.switchPayment()
           expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
           expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
