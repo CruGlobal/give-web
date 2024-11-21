@@ -58,7 +58,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         oktaUrl: 'https://cru.oktapreview.com',
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://localhost.cru.org:9000',
-        recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
+        recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       devcloud: {
         apiUrl: 'https://give-stage2.cru.org',
@@ -70,7 +70,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         oktaUrl: 'https://cru.oktapreview.com',
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://give-dev-cloud.cru.org',
-        recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
+        recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       stagecloud: {
         apiUrl: 'https://give-stage-cloud.cru.org',
@@ -82,7 +82,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         oktaUrl: 'https://cru.oktapreview.com',
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://give-stage-cloud.cru.org',
-        recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
+        recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       prodcloud: {
         apiUrl: 'https://give-prod-cloud.cru.org',
@@ -107,7 +107,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         oktaUrl: 'https://cru.oktapreview.com',
         oktaClientId: '0oa26fp9l9iFxuKJf0h8',
         oktaReferrer: 'https://give-stage2.cru.org',
-        recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
+        recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       nonprod: {
         apiUrl: 'https://give-stage2-next.cru.org',
