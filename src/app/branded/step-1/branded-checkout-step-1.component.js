@@ -26,7 +26,6 @@ class BrandedCheckoutStep1Controller {
     this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.cartService = cartService
     this.orderService = orderService
-    this.selfReference = this
   }
 
   $onInit () {
@@ -272,7 +271,6 @@ class BrandedCheckoutStep1Controller {
       })).subscribe({
       next: () => {
         // If order submission was successful, process analytics and proceed to the next steps
-        this.brandedAnalyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
         console.log('purchase')
         this.submittingOrder = false
         this.loadingAndSubmitting = false
