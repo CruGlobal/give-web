@@ -19,7 +19,7 @@ const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, cartService, $uibModal) {
+  constructor ($log, $scope, orderService, cartService, $uibModal, $window) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
@@ -27,6 +27,7 @@ class ExistingPaymentMethodsController {
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
+    this.sessionStorage = $window.sessionStorage
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -37,6 +38,7 @@ class ExistingPaymentMethodsController {
     this.enableContinue({ $event: false })
     this.loadPaymentMethods()
     this.addCvvValidators()
+    console.log(this.sessionStorage)
   }
 
   $onChanges (changes) {

@@ -309,7 +309,7 @@ describe('checkout', () => {
         expect(self.controller.getContinueDisabled()).toBe(false)
       })
 
-      it('should return true when cvv validity is false and card type is credit card', () => {
+      it('should return true when cvv is invalid and credit card is used', () => {
         self.controller.handleExistingPaymentLoading(true, true)
         self.controller.isCvvValid = false
         self.controller.handlePaymentChange({'card-type': 'visa'})
@@ -317,7 +317,7 @@ describe('checkout', () => {
         expect(self.controller.getContinueDisabled()).toBe(true)
       })
 
-      it('should return true when cvv validity is true and card type is credit card', () => {
+      it('should return true when cvv is valid and credit card is used', () => {
         self.controller.handleExistingPaymentLoading(true, true)
         self.controller.isCvvValid = true
         self.controller.handlePaymentChange({'card-type': 'visa'})
@@ -325,7 +325,7 @@ describe('checkout', () => {
         expect(self.controller.getContinueDisabled()).toBe(false)
       })
 
-      it('should return true when cvv validity is undefined and card type is credit card', () => {
+      it('should return true when cvv validity is undefined and credit card is used', () => {
         self.controller.handleExistingPaymentLoading(true, true)
         self.controller.isCvvValid = undefined
         self.controller.handlePaymentChange({'card-type': 'visa'})
@@ -333,7 +333,7 @@ describe('checkout', () => {
         expect(self.controller.getContinueDisabled()).toBe(false)
       })
 
-      it('should return false when cvv validity is false and card type is not credit card', () => {
+      it('should return false when cvv is invalid and credit card is used', () => {
         self.controller.handleExistingPaymentLoading(true, true)
         self.controller.isCvvValid = false
         self.controller.handlePaymentChange({'account-type': 'checking'})
@@ -341,7 +341,7 @@ describe('checkout', () => {
         expect(self.controller.getContinueDisabled()).toBe(false)
       })
 
-      it('should return false when cvv validity is undefined and card type is not credit card', () => {
+      it('should return false when cvv validity is undefined and EFT is used', () => {
         self.controller.handleExistingPaymentLoading(true, true)
         self.controller.isCvvValid = undefined
         self.controller.handlePaymentChange({'account-type': 'checking'})
@@ -349,7 +349,7 @@ describe('checkout', () => {
         expect(self.controller.getContinueDisabled()).toBe(false)
       })
 
-      it('should return false when cvv validity is true and card type is not credit card', () => {
+      it('should return false when cvv is valid and EFT is used', () => {
         self.controller.handleExistingPaymentLoading(true, true)
         self.controller.isCvvValid = true
         self.controller.handlePaymentChange({'account-type': 'checking'})
@@ -357,13 +357,13 @@ describe('checkout', () => {
         expect(self.controller.getContinueDisabled()).toBe(false)
       })
 
-      it('should return false when cvv is invalid and new payment type is credit card', () => {
+      it('should return false when cvv is invalid and new credit card payment is added', () => {
         self.controller.handlePaymentChange({'card-type': 'visa'})
         self.controller.isCvvValid = false
         expect(self.controller.getContinueDisabled()).toBe(true)
       })
 
-      it('should return false when cvv is invalid and new payment type is bankAccount', () => {
+      it('should return false when cvv is invalid and new EFT is added', () => {
         self.controller.handlePaymentChange({'account-type': 'checking'})
         self.controller.isCvvValid = false
         expect(self.controller.getContinueDisabled()).toBe(false)
