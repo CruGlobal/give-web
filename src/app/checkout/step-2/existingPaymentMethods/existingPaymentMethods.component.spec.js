@@ -1,7 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
-import size from 'lodash/size'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/toPromise'
@@ -344,43 +343,48 @@ describe('checkout', () => {
           expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: undefined })
           expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
         })
-      })
-
-      describe('addCvvValidators', () => {
-        it('should add validator functions to creditCardPaymentForm.securityCode', () => {
-          expect(size(self.controller.creditCardPaymentForm.securityCode.$validators)).toEqual(2)
-          expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
-          expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.maxLength).toBe('function')
-        })
-
-        it('should validate minLength correctly', () => {
-          expect(self.controller.creditCardPaymentForm.securityCode.$validators.minLength('123')).toBe(true)
-          expect(self.controller.creditCardPaymentForm.securityCode.$validators.minLength('12')).toBe(false)
-        })
-
-        it('should validate maxLength correctly', () => {
-          expect(self.controller.creditCardPaymentForm.securityCode.$validators.maxLength('123')).toBe(true)
-          expect(self.controller.creditCardPaymentForm.securityCode.$validators.maxLength('12345')).toBe(false)
-        })
-        
-        it('should call enableContinue with the correct validity state', () => {
-          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
-          self.controller.addCvvValidators()
-          self.controller.$scope.$apply()
-          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: true })
-
-          self.controller.creditCardPaymentForm.securityCode.$viewValue = '12345'
-          self.controller.addCvvValidators()
-          self.controller.$scope.$apply()
-          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
-        })
 
         it('should reset securityCode viewValue on switch payment', () => {
           self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
           self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: 'selected uri' }, selectAction: 'some uri' }
           self.controller.switchPayment()
+
           expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
           expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
+        })
+      })
+
+      describe('addCvvValidators', () => {
+        it('should add validator functions to creditCardPaymentForm.securityCode', () => {
+          self.controller.addCvvValidators()
+
+          expect(Object.keys(self.controller.creditCardPaymentForm.securityCode.$validators).length).toEqual(2)
+          expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
+          expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.maxLength).toBe('function')
+        })
+        
+        it('should call enableContinue when validity state is true', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.addCvvValidators()
+          self.controller.$scope.$apply()
+
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: true })
+        })
+
+        it('should call enableContinue when validity state is too long', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '12345'
+          self.controller.addCvvValidators()
+          self.controller.$scope.$apply()
+
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
+        })
+
+        it('should call enableContinue when validity state is too short', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '1'
+          self.controller.addCvvValidators()
+          self.controller.$scope.$apply()
+
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
         })
       })
     })
