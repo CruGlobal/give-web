@@ -13,8 +13,8 @@ declare global {
 
 interface RecaptchaWrapperProps {
   action: string
-  onSuccess: (componentInstance: any) => void
-  onFailure: (componentInstance: any) => void
+  onSuccess: () => void
+  onFailure: () => void
   componentInstance: any
   buttonId: string
   buttonType?: ButtonType

@@ -450,17 +450,16 @@ describe('checkout', () => {
 
     describe('handleRecaptchaFailure', () => {
       it('should show an error if recaptcha fails', () => {
-        const componentInstance = self.controller
-        jest.spyOn(componentInstance.analyticsFactory, 'checkoutFieldError').mockImplementation(() => {})
-        self.controller.handleRecaptchaFailure(componentInstance)
+        jest.spyOn(self.controller.analyticsFactory, 'checkoutFieldError').mockImplementation(() => {})
+        self.controller.handleRecaptchaFailure()
 
-        expect(componentInstance.analyticsFactory.checkoutFieldError).toHaveBeenCalledWith('submitOrder', 'failed')
-        expect(componentInstance.submittingOrder).toEqual(false)
-        expect(componentInstance.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
-        expect(componentInstance.loadCart).toHaveBeenCalled()
-        expect(componentInstance.onSubmitted).toHaveBeenCalled()
-        expect(componentInstance.submissionError).toEqual('generic error')
-        expect(componentInstance.$window.scrollTo).toHaveBeenCalledWith(0, 0)
+        expect(self.controller.analyticsFactory.checkoutFieldError).toHaveBeenCalledWith('submitOrder', 'failed')
+        expect(self.controller.submittingOrder).toEqual(false)
+        expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
+        expect(self.controller.loadCart).toHaveBeenCalled()
+        expect(self.controller.onSubmitted).toHaveBeenCalled()
+        expect(self.controller.submissionError).toEqual('generic error')
+        expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0)
       })
     })
 
@@ -474,7 +473,7 @@ describe('checkout', () => {
       it('should call handleRecaptchaFailure if the recaptchaFailedEvent is received', () => {
         jest.spyOn(self.controller, 'handleRecaptchaFailure').mockImplementation(() => {})
         self.controller.$rootScope.$emit(recaptchaFailedEvent)
-        expect(self.controller.handleRecaptchaFailure).toHaveBeenCalledWith(self.controller)
+        expect(self.controller.handleRecaptchaFailure).toHaveBeenCalled();
       })
     })
   })

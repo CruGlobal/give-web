@@ -38,7 +38,6 @@ class Step3Controller {
     this.commonService = commonService
     this.startDate = startDate
     this.sessionStorage = $window.sessionStorage
-    this.selfReference = this
     this.isBranded = envService.read('isBrandedCheckout')
 
     this.$scope.$on(SignInEvent, () => {
@@ -46,7 +45,7 @@ class Step3Controller {
     })
 
     this.$rootScope.$on(recaptchaFailedEvent, () => {
-      this.handleRecaptchaFailure(this)
+      this.handleRecaptchaFailure()
     })
     this.$rootScope.$on(submitOrderEvent, () => {
       this.submitOrder()
@@ -137,61 +136,61 @@ class Step3Controller {
     this.submitOrderInternal(this)
   }
 
-  submitOrderInternal (componentInstance) {
-    delete componentInstance.submissionError
-    delete componentInstance.submissionErrorStatus
+  submitOrderInternal () {
+    delete this.submissionError
+    delete this.submissionErrorStatus
     // Prevent multiple submissions
-    if (componentInstance.submittingOrder) return
-    componentInstance.submittingOrder = true
-    componentInstance.onSubmittingOrder({ value: true })
+    if (this.submittingOrder) return
+    this.submittingOrder = true
+    this.onSubmittingOrder({ value: true })
 
     let submitRequest
-    if (componentInstance.bankAccountPaymentDetails) {
-      submitRequest = componentInstance.orderService.submit()
-    } else if (componentInstance.creditCardPaymentDetails) {
-      const cvv = componentInstance.orderService.retrieveCardSecurityCode()
-      submitRequest = componentInstance.orderService.submit(cvv)
+    if (this.bankAccountPaymentDetails) {
+      submitRequest = this.orderService.submit()
+    } else if (this.creditCardPaymentDetails) {
+      const cvv = this.orderService.retrieveCardSecurityCode()
+      submitRequest = this.orderService.submit(cvv)
     } else {
       submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
     }
     submitRequest.subscribe(() => {
-      componentInstance.analyticsFactory.purchase(componentInstance.donorDetails, componentInstance.cartData, componentInstance.orderService.retrieveCoverFeeDecision())
-      componentInstance.submittingOrder = false
-      componentInstance.onSubmittingOrder({ value: false })
-      componentInstance.orderService.clearCardSecurityCodes()
-      componentInstance.orderService.clearCoverFees()
-      componentInstance.onSubmitted()
-      componentInstance.$scope.$emit(cartUpdatedEvent)
-      componentInstance.changeStep({ newStep: 'thankYou' })
+      this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
+      this.submittingOrder = false
+      this.onSubmittingOrder({ value: false })
+      this.orderService.clearCardSecurityCodes()
+      this.orderService.clearCoverFees()
+      this.onSubmitted()
+      this.$scope.$emit(cartUpdatedEvent)
+      this.changeStep({ newStep: 'thankYou' })
     },
     error => {
-      componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-      componentInstance.submittingOrder = false
-      componentInstance.onSubmittingOrder({ value: false })
+      this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+      this.submittingOrder = false
+      this.onSubmittingOrder({ value: false })
 
-      componentInstance.loadCart()
+      this.loadCart()
 
       if (error.config && error.config.data && error.config.data['security-code']) {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }
-      componentInstance.$log.error('Error submitting purchase:', error)
-      componentInstance.onSubmitted()
-      componentInstance.submissionErrorStatus = error.status
-      componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
-      componentInstance.$window.scrollTo(0, 0)
+      this.$log.error('Error submitting purchase:', error)
+      this.onSubmitted()
+      this.submissionErrorStatus = error.status
+      this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
+      this.$window.scrollTo(0, 0)
     })
   }
 
-  handleRecaptchaFailure (componentInstance) {
-    componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-    componentInstance.submittingOrder = false
-    componentInstance.onSubmittingOrder({ value: false })
+  handleRecaptchaFailure () {
+    this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+    this.submittingOrder = false
+    this.onSubmittingOrder({ value: false })
 
-    componentInstance.loadCart()
+    this.loadCart()
 
-    componentInstance.onSubmitted()
-    componentInstance.submissionError = 'generic error'
-    componentInstance.$window.scrollTo(0, 0)
+    this.onSubmitted()
+    this.submissionError = 'generic error'
+    this.$window.scrollTo(0, 0)
   }
 }
 

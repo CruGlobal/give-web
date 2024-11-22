@@ -31,17 +31,17 @@ describe('checkout', function () {
 
     describe('onSubmit', () => {
       it('should emit an event', () => {
-        jest.spyOn(componentInstance.$rootScope, '$emit').mockImplementation(() => {})
-        self.controller.onSubmit(componentInstance)
-        expect(componentInstance.$rootScope.$emit).toHaveBeenCalledWith(submitOrderEvent)
+        jest.spyOn(self.controller.$rootScope, '$emit').mockImplementation(() => {})
+        self.controller.onSubmit()
+        expect(self.controller.$rootScope.$emit).toHaveBeenCalledWith(submitOrderEvent)
       })
     })
 
     describe('handleRecaptchaFailure', () => {
       it('should emit an event', () => {
-        jest.spyOn(componentInstance.$rootScope, '$emit').mockImplementation(() => {})
-        self.controller.handleRecaptchaFailure(componentInstance)
-        expect(componentInstance.$rootScope.$emit).toHaveBeenCalledWith(recaptchaFailedEvent)
+        jest.spyOn(self.controller.$rootScope, '$emit').mockImplementation(() => {})
+        self.controller.handleRecaptchaFailure()
+        expect(self.controller.$rootScope.$emit).toHaveBeenCalledWith(recaptchaFailedEvent)
       })
     })
   })

@@ -22,8 +22,8 @@ const isValidAction = (action: string): boolean => {
 
 interface RecaptchaProps {
   action: string
-  onSuccess: (componentInstance: any) => void
-  onFailure: (componentInstance: any) => void
+  onSuccess: () => void
+  onFailure: () => void
   componentInstance: any
   buttonId: string
   buttonType?: ButtonType
@@ -89,29 +89,29 @@ export const Recaptcha = ({
         if (data?.success === true && isValidAction(data?.action)) {
           if (data.score < 0.5) {
             $log.warn(`Captcha score was below the threshold: ${data.score}`)
-            onFailure.call(componentInstance,componentInstance)
+            onFailure.call(componentInstance)
             return
           }
-          onSuccess.call(componentInstance,componentInstance)
+          onSuccess.call(componentInstance)
           return
         }
         if (data?.success === false && isValidAction(data?.action)) {
           $log.warn('Recaptcha call was unsuccessful, continuing anyway')
-          onSuccess.call(componentInstance,componentInstance)
+          onSuccess.call(componentInstance)
           return
         }
         if (!data) {
           $log.warn('Data was missing!')
-          onSuccess.call(componentInstance,componentInstance)
+          onSuccess.call(componentInstance)
           return
         }
         if (!isValidAction(data?.action)) {
           $log.warn(`Invalid action: ${data?.action}`)
-          onFailure.call(componentInstance,componentInstance)
+          onFailure.call(componentInstance)
         }
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
-        onSuccess.call(componentInstance,componentInstance)
+        onSuccess.call(componentInstance)
       }
     })
   }, [grecaptcha, buttonId, ready])
