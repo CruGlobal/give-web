@@ -1,5 +1,6 @@
 import angular from 'angular'
 import every from 'lodash/every'
+import isString from 'lodash/isString'
 
 import productConfigForm from 'app/productConfig/productConfigForm/productConfigForm.component'
 import contactInfo from 'common/components/contactInfo/contactInfo.component'
@@ -13,7 +14,7 @@ import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/cover
 
 import template from './branded-checkout-step-1.tpl.html'
 import { Observable } from 'rxjs'
-import { tap, catchError, mergeMap } from 'rxjs/operators'
+import { tap, catchError } from 'rxjs/operators'
 
 const componentName = 'brandedCheckoutStep1'
 
