@@ -92,9 +92,6 @@ class BrandedCheckoutStep1Controller {
   submit () {
     this.resetSubmission()
     this.submitted = true
-    if (this.useV3 === 'true') {
-      this.$scope.$digest()
-    }
   }
 
   resetSubmission () {
