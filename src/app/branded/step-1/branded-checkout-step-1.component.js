@@ -251,8 +251,6 @@ class BrandedCheckoutStep1Controller {
         // Prevent multiple submissions
         if (this.submittingOrder) { return Observable.of(null) }
 
-        this.radioStationName = this.orderService.retrieveRadioStationName()
-
         this.submittingOrder = true
         this.onSubmittingOrder({ value: true })
 
