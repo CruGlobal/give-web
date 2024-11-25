@@ -116,7 +116,10 @@ class Step2Controller {
     }
   }
 
-  getContinueDisabled () {
+  isContinueDisabled () {
+    if (this.selectedPaymentMethod?.['card-type'] && typeof this.isCvvValid !== 'undefined' && !this.isCvvValid) {
+      return true
+    }
     if (this.loadingPaymentMethods) {
       return true
     }
@@ -128,6 +131,10 @@ class Step2Controller {
       return true
     }
     return false
+  }
+
+  enableContinue (isCvvValid) {
+    this.isCvvValid = isCvvValid
   }
 }
 

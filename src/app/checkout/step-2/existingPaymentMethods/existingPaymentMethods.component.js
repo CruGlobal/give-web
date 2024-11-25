@@ -6,19 +6,20 @@ import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethod
 import paymentMethodFormModal from 'common/components/paymentMethods/paymentMethodForm/paymentMethodForm.modal.component'
 import coverFees from 'common/components/paymentMethods/coverFees/coverFees.component'
 
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 import orderService from 'common/services/api/order.service'
 import cartService from 'common/services/api/cart.service'
 import { validPaymentMethod } from 'common/services/paymentHelpers/validPaymentMethods'
 import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import { SignInEvent } from 'common/services/session/session.service'
-
+import creditCardCvv from '../../../../common/directives/creditCardCvv.directive'
 import template from './existingPaymentMethods.tpl.html'
 
 const componentName = 'checkoutExistingPaymentMethods'
 
 class ExistingPaymentMethodsController {
   /* @ngInject */
-  constructor ($log, $scope, orderService, cartService, $uibModal) {
+  constructor ($log, $scope, orderService, cartService, $uibModal, $window) {
     this.$log = $log
     this.$scope = $scope
     this.orderService = orderService
@@ -26,6 +27,7 @@ class ExistingPaymentMethodsController {
     this.$uibModal = $uibModal
     this.paymentFormResolve = {}
     this.validPaymentMethod = validPaymentMethod
+    this.sessionStorage = $window.sessionStorage
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -33,7 +35,9 @@ class ExistingPaymentMethodsController {
   }
 
   $onInit () {
+    this.enableContinue({ $event: false })
     this.loadPaymentMethods()
+    this.waitForFormInitialization()
   }
 
   $onChanges (changes) {
@@ -50,6 +54,23 @@ class ExistingPaymentMethodsController {
     if (changes.paymentFormError) {
       this.paymentFormResolve.error = changes.paymentFormError.currentValue
     }
+  }
+
+  waitForFormInitialization () {
+    const unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
+      if (this.creditCardPaymentForm && this.creditCardPaymentForm.securityCode) {
+        unregister()
+        this.addCvvValidators()
+      }
+    })
+  }
+
+  addCvvValidators () {
+    this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', (number) => {
+      this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength
+      this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
+      this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
+    })
   }
 
   loadPaymentMethods () {
@@ -80,6 +101,7 @@ class ExistingPaymentMethodsController {
       // Select the first payment method
       this.selectedPaymentMethod = paymentMethods[0]
     }
+
     this.switchPayment()
   }
 
@@ -130,6 +152,22 @@ class ExistingPaymentMethodsController {
 
   switchPayment () {
     this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
+    if (this.selectedPaymentMethod?.['card-type'] && this.creditCardPaymentForm?.securityCode) {
+      const selectedUri = this.selectedPaymentMethod.self.uri
+      const storage = JSON.parse(this.sessionStorage.getItem('storedCvvs'))
+      const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] : false
+
+      if (getSelectedCvv) {
+        // Set CVV to new credit card CVV
+        this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
+      } else {
+        // Clear CVV when switching between payment credit card payment methods
+        this.creditCardPaymentForm.securityCode.$setViewValue('')
+      }
+
+      this.creditCardPaymentForm.securityCode.$render()
+    }
+
     if (this.selectedPaymentMethod?.['bank-name']) {
       // This is an EFT payment method so we need to remove any fee coverage
       this.orderService.storeCoverFeeDecision(false)
@@ -144,7 +182,8 @@ export default angular
     paymentMethodFormModal.name,
     coverFees.name,
     orderService.name,
-    cartService.name
+    cartService.name,
+    creditCardCvv.name
   ])
   .component(componentName, {
     controller: ExistingPaymentMethodsController,
@@ -159,6 +198,7 @@ export default angular
       brandedCheckoutItem: '<',
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
-      onLoad: '&'
+      onLoad: '&',
+      enableContinue: '&'
     }
   })
