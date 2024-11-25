@@ -44,7 +44,7 @@
       <button id="previousStepButton1" class="btn btn-default" ng-click="$ctrl.changeStep({newStep: 'contact'})">Previous Step</button>
     </div>
     <div class="col-sm-5 col-sm-offset-2">
-      <button id="continueCheckoutButton" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submit()" ng-disabled="$ctrl.getContinueDisabled()">
+      <button id="continueCheckoutButton" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submit()" ng-disabled="$ctrl.isContinueDisabled()">
         Continue
       </button>
       <button id="previousStepButton2" class="btn btn-link btn-block visible-xs" ng-click="$ctrl.changeStep({newStep: 'contact'})"><i class="fa fa-angle-left"></i> Previous Step</button>

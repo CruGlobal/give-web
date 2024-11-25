@@ -37,8 +37,7 @@ class ExistingPaymentMethodsController {
   $onInit () {
     this.enableContinue({ $event: false })
     this.loadPaymentMethods()
-    this.addCvvValidators()
-    console.log(this.sessionStorage)
+    this.waitForFormInitialization()
   }
 
   $onChanges (changes) {
@@ -55,6 +54,15 @@ class ExistingPaymentMethodsController {
     if (changes.paymentFormError) {
       this.paymentFormResolve.error = changes.paymentFormError.currentValue
     }
+  }
+
+  waitForFormInitialization () {
+    const unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
+      if (this.creditCardPaymentForm && this.creditCardPaymentForm.securityCode) {
+        unregister()
+        this.addCvvValidators()
+      }
+    })
   }
 
   addCvvValidators () {
