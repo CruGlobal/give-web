@@ -356,9 +356,31 @@ describe('checkout', () => {
 
       describe('addCvvValidators', () => {
         it('should add validator functions to creditCardPaymentForm.securityCode', () => {
+          jest.spyOn(self.controller, 'addCvvValidators').mockImplementation(() => {
+            self.controller.creditCardPaymentForm.securityCode.$validators = {
+              minLength: cruPayments.creditCard.cvv.validate.minLength,
+              maxLength: cruPayments.creditCard.cvv.validate.maxLength
+            }
+          })
+          delete  self.controller.creditCardPaymentForm
+          self.controller.waitForFormInitialization()
+          self.controller.$scope.$digest()
+    
+          expect(self.controller.addCvvValidators).not.toHaveBeenCalled()
+          self.controller.creditCardPaymentForm = {
+            $valid: true,
+            $dirty: false,
+            securityCode: {
+              $viewValue: '123',
+            }
+          }
+          self.controller.$scope.$digest()
+    
+          expect(self.controller.addCvvValidators).toHaveBeenCalled()
           expect(Object.keys(self.controller.creditCardPaymentForm.securityCode.$validators).length).toEqual(2)
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.maxLength).toBe('function')
+   
         })
         
         it('should call enableContinue when cvv is valid', () => {
