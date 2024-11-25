@@ -66,7 +66,6 @@ class ProductConfigFormController {
   }
 
   $onInit () {
-    console.log(this.$scope)
     this.initItemConfig()
     this.loadData()
     this.waitForFormInitialization()
