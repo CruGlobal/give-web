@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/toPromise'
+import * as cruPayments from '@cruglobal/cru-payments/dist/cru-payments'
 
 import { SignInEvent } from 'common/services/session/session.service'
 
@@ -15,24 +16,39 @@ describe('checkout', () => {
       beforeEach(angular.mock.module(module.name))
       const self = {}
 
-      beforeEach(inject(($componentController, $timeout) => {
+      beforeEach(inject(($componentController, $timeout, $window) => {
         self.$timeout = $timeout
 
         self.controller = $componentController(module.name, {}, {
           onLoad: jest.fn(),
           onPaymentChange: jest.fn(),
+          enableContinue: jest.fn(),
           onPaymentFormStateChange: jest.fn(),
-          cartData: { items: [] }
+          cartData: { items: [] },
+          creditCardPaymentForm: {
+            securityCode: {
+              $valid: true,
+              $validators: {
+                minLength: (value) => cruPayments.creditCard.cvv.validate.minLength(value),
+                maxLength: cruPayments.creditCard.cvv.validate.maxLength
+              },
+              $setViewValue: jest.fn(),
+              $render: jest.fn(),
+            }
+          }
         })
+        self.$window = $window
+        self.$window.sessionStorage.clear()
       }))
-
 
       describe('$onInit', () => {
         it('should call loadPaymentMethods', () => {
           jest.spyOn(self.controller, 'loadPaymentMethods').mockImplementation(() => {})
+          jest.spyOn(self.controller, 'waitForFormInitialization').mockImplementation(() => {})
           self.controller.$onInit()
 
           expect(self.controller.loadPaymentMethods).toHaveBeenCalled()
+          expect(self.controller.waitForFormInitialization).toHaveBeenCalled()
         })
 
         it('should be called on sign in', () => {
@@ -328,6 +344,79 @@ describe('checkout', () => {
           self.controller.switchPayment()
           expect(self.controller.onPaymentChange).toHaveBeenCalledWith({ selectedPaymentMethod: undefined })
           expect(self.controller.orderService.storeCoverFeeDecision).not.toHaveBeenCalled()
+        })
+
+        it('should reset securityCode viewValue', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: 'selected uri' }, selectAction: 'some uri' }
+          self.controller.switchPayment()
+
+          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
+          expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
+        })
+
+        it('should add securityCode viewValue from sessionStorage', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: '/paymentmethods/crugive/giydsnjqgi=' }, selectAction: 'some uri' }
+          self.$window.sessionStorage.setItem('storedCvvs', '{"/paymentmethods/crugive/giydsnjqgi=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}')
+          self.controller.switchPayment()
+          
+          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('456')
+          expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
+        })
+      })
+
+      describe('addCvvValidators', () => {
+        it('should add validator functions to creditCardPaymentForm.securityCode', () => {
+          jest.spyOn(self.controller, 'addCvvValidators').mockImplementation(() => {
+            self.controller.creditCardPaymentForm.securityCode.$validators = {
+              minLength: cruPayments.creditCard.cvv.validate.minLength,
+              maxLength: cruPayments.creditCard.cvv.validate.maxLength
+            }
+          })
+          delete  self.controller.creditCardPaymentForm
+          self.controller.waitForFormInitialization()
+          self.controller.$scope.$digest()
+    
+          expect(self.controller.addCvvValidators).not.toHaveBeenCalled()
+          self.controller.creditCardPaymentForm = {
+            $valid: true,
+            $dirty: false,
+            securityCode: {
+              $viewValue: '123',
+            }
+          }
+          self.controller.$scope.$digest()
+    
+          expect(self.controller.addCvvValidators).toHaveBeenCalled()
+          expect(Object.keys(self.controller.creditCardPaymentForm.securityCode.$validators).length).toEqual(2)
+          expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
+          expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.maxLength).toBe('function')
+   
+        })
+        
+        it('should call enableContinue when cvv is valid', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.addCvvValidators()
+          self.controller.$scope.$apply()
+
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: true })
+        })
+
+        it('should call enableContinue when cvv is too long', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '12345'
+          self.controller.addCvvValidators()
+          self.controller.$scope.$apply()
+
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
+        })
+
+        it('should call enableContinue when cvv is too short', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '1'
+          self.controller.addCvvValidators()
+          self.controller.$scope.$apply()
+
+          expect(self.controller.enableContinue).toHaveBeenCalledWith({ $event: false })
         })
       })
     })
