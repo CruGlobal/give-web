@@ -42,11 +42,11 @@ describe('checkout', () => {
       describe('$onInit', () => {
         it('should call loadPaymentMethods', () => {
           jest.spyOn(self.controller, 'loadPaymentMethods').mockImplementation(() => {})
-          jest.spyOn(self.controller, 'addCvvValidators').mockImplementation(() => {})
+          jest.spyOn(self.controller, 'waitForFormInitialization').mockImplementation(() => {})
           self.controller.$onInit()
 
           expect(self.controller.loadPaymentMethods).toHaveBeenCalled()
-          expect(self.controller.addCvvValidators).toHaveBeenCalled()
+          expect(self.controller.waitForFormInitialization).toHaveBeenCalled()
         })
 
         it('should be called on sign in', () => {
