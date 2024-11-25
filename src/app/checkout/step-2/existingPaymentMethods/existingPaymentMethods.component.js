@@ -156,7 +156,7 @@ class ExistingPaymentMethodsController {
       const selectedUri = this.selectedPaymentMethod.self.uri
       const storage = JSON.parse(this.sessionStorage.getItem('storedCvvs'))
       const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] : false
-
+      console.log('sessionStorage', this.sessionStorage)
       if (getSelectedCvv) {
         // Set CVV to new credit card CVV
         this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
