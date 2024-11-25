@@ -155,16 +155,9 @@ class ExistingPaymentMethodsController {
     if (this.selectedPaymentMethod?.['card-type'] && this.creditCardPaymentForm?.securityCode) {
       const selectedUri = this.selectedPaymentMethod.self.uri
       const storage = JSON.parse(this.sessionStorage.getItem('storedCvvs'))
-      const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] : false
-      console.log('sessionStorage', this.sessionStorage)
-      if (getSelectedCvv) {
-        // Set CVV to new credit card CVV
-        this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
-      } else {
-        // Clear CVV when switching between payment credit card payment methods
-        this.creditCardPaymentForm.securityCode.$setViewValue('')
-      }
-
+      const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] || '' : ''
+      // Set CVV to new credit card CVV
+      this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
       this.creditCardPaymentForm.securityCode.$render()
     }
 
