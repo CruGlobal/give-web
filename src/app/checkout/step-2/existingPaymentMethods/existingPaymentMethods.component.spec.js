@@ -16,7 +16,7 @@ describe('checkout', () => {
       beforeEach(angular.mock.module(module.name))
       const self = {}
 
-      beforeEach(inject(($componentController, $timeout) => {
+      beforeEach(inject(($componentController, $timeout, $window) => {
         self.$timeout = $timeout
 
         self.controller = $componentController(module.name, {}, {
@@ -37,6 +37,8 @@ describe('checkout', () => {
             }
           }
         })
+        self.$window = $window
+        self.$window.sessionStorage.clear()
       }))
 
       describe('$onInit', () => {
@@ -350,6 +352,18 @@ describe('checkout', () => {
           self.controller.switchPayment()
 
           expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
+          expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
+        })
+
+        it('should add securityCode viewValue from sessionStorage', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: '/paymentmethods/crugive/giydsnjqgi=' }, selectAction: 'some uri' }
+          self.$window.sessionStorage.setItem('storedCvvs', '{"/paymentmethods/crugive/giydsnjqgi=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}')
+          console.log(self.$window.sessionStorage)
+          // self.controller.sessionStorage.setItem('storedCvvs', JSON.stringify({ 'selected uri': '456' }))
+          self.controller.switchPayment()
+
+          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('456')
           expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
         })
       })

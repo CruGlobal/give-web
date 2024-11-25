@@ -153,9 +153,21 @@ class ExistingPaymentMethodsController {
   switchPayment () {
     this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
     if (this.selectedPaymentMethod?.['card-type'] && this.creditCardPaymentForm?.securityCode) {
-      // Clear CVV when switching between payment credit card payment methods
-      this.creditCardPaymentForm.securityCode.$setViewValue('')
-      this.creditCardPaymentForm.securityCode.$render()
+ 
+      const selectedUri = this.selectedPaymentMethod.self.uri 
+      const storage = JSON.parse(this.sessionStorage.getItem('storedCvvs'))
+      // const storedUris = Object.keys(storage)
+      const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] : false;
+
+      if (getSelectedCvv) {
+        // Set CVV to new credit card CVV
+        this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
+      } else {
+        // Clear CVV when switching between payment credit card payment methods
+        this.creditCardPaymentForm.securityCode.$setViewValue('')
+      }
+
+        this.creditCardPaymentForm.securityCode.$render()
     }
 
     if (this.selectedPaymentMethod?.['bank-name']) {
