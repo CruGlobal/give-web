@@ -69,7 +69,9 @@ class ExistingPaymentMethodsController {
     this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', (number) => {
       this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength
       this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
+   
       this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
+      this.selectedPaymentMethod.cvv = number
     })
   }
 
@@ -155,16 +157,9 @@ class ExistingPaymentMethodsController {
     if (this.selectedPaymentMethod?.['card-type'] && this.creditCardPaymentForm?.securityCode) {
       const selectedUri = this.selectedPaymentMethod.self.uri
       const storage = JSON.parse(this.sessionStorage.getItem('storedCvvs'))
-      const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] : false
-
-      if (getSelectedCvv) {
-        // Set CVV to new credit card CVV
-        this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
-      } else {
-        // Clear CVV when switching between payment credit card payment methods
-        this.creditCardPaymentForm.securityCode.$setViewValue('')
-      }
-
+      const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] || '' : ''
+      // Set CVV to new credit card CVV
+      this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
       this.creditCardPaymentForm.securityCode.$render()
     }
 

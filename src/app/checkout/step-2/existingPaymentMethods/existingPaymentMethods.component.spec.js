@@ -357,11 +357,41 @@ describe('checkout', () => {
 
         it('should add securityCode viewValue from sessionStorage', () => {
           self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
-          self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: '/paymentmethods/crugive/giydsnjqgi=' }, selectAction: 'some uri' }
-          self.$window.sessionStorage.setItem('storedCvvs', '{"/paymentmethods/crugive/giydsnjqgi=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}')
+          self.controller.selectedPaymentMethod = { 
+            'card-type': 'Visa', 
+            self: { 
+              type: 'cru.creditcards.named-credit-card', 
+              uri: '/paymentmethods/crugive/giydsnjqgi=' 
+            }, 
+            selectAction: 'some uri' 
+          }
+          self.$window.sessionStorage.setItem(
+            'storedCvvs', 
+              '{"/paymentmethods/crugive/giydsnjqgi=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}'
+          )
           self.controller.switchPayment()
           
           expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('456')
+          expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
+        })
+
+        it('should not add securityCode viewValue from sessionStorage', () => {
+          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
+          self.controller.selectedPaymentMethod = { 
+            'card-type': 'Visa', 
+            self: { 
+              type: 'cru.creditcards.named-credit-card', 
+              uri: '/paymentmethods/crugive/giydsnjqgi=' 
+            }, 
+            selectAction: 'some uri' 
+          }
+          self.$window.sessionStorage.setItem(
+            'storedCvvs', 
+              '{"/paymentmethods/crugive/giydsnjqgs=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}'
+          )
+          self.controller.switchPayment()
+          
+          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
           expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
         })
       })
