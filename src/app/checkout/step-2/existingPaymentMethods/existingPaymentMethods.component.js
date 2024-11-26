@@ -69,7 +69,7 @@ class ExistingPaymentMethodsController {
     this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', (number) => {
       this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength
       this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
-   
+
       this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
       this.selectedPaymentMethod.cvv = number
     })
