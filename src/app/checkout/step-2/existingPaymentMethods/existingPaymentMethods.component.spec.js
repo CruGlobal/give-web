@@ -35,6 +35,9 @@ describe('checkout', () => {
               $setViewValue: jest.fn(),
               $render: jest.fn(),
             }
+          },
+          selectedPaymentMethod: {
+            cvv: ''
           }
         })
         self.$window = $window
