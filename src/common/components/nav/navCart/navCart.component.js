@@ -7,9 +7,7 @@ import orderService from 'common/services/api/order.service'
 import analyticsFactory from 'app/analytics/analytics.factory'
 
 import template from './navCart.tpl.html'
-
-export const giftAddedEvent = 'giftAddedToCart'
-export const cartUpdatedEvent = 'cartUpdatedEvent'
+import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 
 const componentName = 'navCart'
 

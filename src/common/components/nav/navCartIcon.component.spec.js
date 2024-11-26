@@ -2,7 +2,7 @@ import angular from 'angular'
 import 'angular-mocks'
 import module from './navCartIcon.component'
 
-import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { giftAddedEvent,cartUpdatedEvent } from 'common/lib/cartEvents'
 
 describe('nav cart icon', function () {
   beforeEach(angular.mock.module(module.name))

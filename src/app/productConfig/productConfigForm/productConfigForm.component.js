@@ -27,7 +27,7 @@ import {
 } from 'common/services/giftHelpers/giftDates.service'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 import showErrors from 'common/filters/showErrors.filter'
-import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 import { giveGiftParams } from '../giveGiftParams'
 import loading from 'common/components/loading/loading.component'
 import analyticsFactory from 'app/analytics/analytics.factory'
