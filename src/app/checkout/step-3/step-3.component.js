@@ -1,6 +1,4 @@
 import angular from 'angular'
-import isString from 'lodash/isString'
-import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/throw'
 
 import displayAddressComponent from 'common/components/display-address/display-address.component'
@@ -12,7 +10,6 @@ import orderService from 'common/services/api/order.service'
 import profileService from 'common/services/api/profile.service'
 import capitalizeFilter from 'common/filters/capitalize.filter'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
-import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { SignInEvent } from 'common/services/session/session.service'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
 import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
@@ -133,51 +130,12 @@ class Step3Controller {
   }
 
   submitOrder () {
-    this.submitOrderInternal(this)
-  }
-
-  submitOrderInternal () {
-    delete this.submissionError
-    delete this.submissionErrorStatus
-    // Prevent multiple submissions
-    if (this.submittingOrder) return
-    this.submittingOrder = true
-    this.onSubmittingOrder({ value: true })
-
-    let submitRequest
-    if (this.bankAccountPaymentDetails) {
-      submitRequest = this.orderService.submit()
-    } else if (this.creditCardPaymentDetails) {
-      const cvv = this.orderService.retrieveCardSecurityCode()
-      submitRequest = this.orderService.submit(cvv)
-    } else {
-      submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
-    }
-    submitRequest.subscribe(() => {
-      this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
-      this.submittingOrder = false
-      this.onSubmittingOrder({ value: false })
-      this.orderService.clearCardSecurityCodes()
-      this.orderService.clearCoverFees()
-      this.onSubmitted()
-      this.$scope.$emit(cartUpdatedEvent)
-      this.changeStep({ newStep: 'thankYou' })
-    },
-    error => {
-      this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-      this.submittingOrder = false
-      this.onSubmittingOrder({ value: false })
-
-      this.loadCart()
-
-      if (error.config && error.config.data && error.config.data['security-code']) {
-        error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
+    this.orderService.submitOrder(this).subscribe(() => {
+      if (!this.isBranded) {
+        // Branded checkout submits its purchase analytics event on the thank you page
+        this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.retrieveCoverFeeDecision())
       }
-      this.$log.error('Error submitting purchase:', error)
-      this.onSubmitted()
-      this.submissionErrorStatus = error.status
-      this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
-      this.$window.scrollTo(0, 0)
+      this.changeStep({ newStep: 'thankYou' })
     })
   }
 

@@ -1,6 +1,5 @@
 import angular from 'angular'
 import every from 'lodash/every'
-import isString from 'lodash/isString'
 
 import productConfigForm from 'app/productConfig/productConfigForm/productConfigForm.component'
 import contactInfo from 'common/components/contactInfo/contactInfo.component'
@@ -8,8 +7,8 @@ import checkoutStep2 from 'app/checkout/step-2/step-2.component'
 
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
+import analyticsFactory from '../../analytics/analytics.factory'
 import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.factory'
-import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import template from './branded-checkout-step-1.tpl.html'
@@ -20,13 +19,15 @@ const componentName = 'brandedCheckoutStep1'
 
 class BrandedCheckoutStep1Controller {
   /* @ngInject */
-  constructor ($scope, $log, $filter, brandedAnalyticsFactory, cartService, orderService) {
+  constructor ($scope, $log, $filter, $window, analyticsFactory, brandedAnalyticsFactory, cartService, orderService) {
     this.$scope = $scope
     this.$log = $log
     this.$filter = $filter
+    this.analyticsFactory = analyticsFactory
     this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.cartService = cartService
     this.orderService = orderService
+    this.$window = $window
   }
 
   $onInit () {
@@ -244,75 +245,16 @@ class BrandedCheckoutStep1Controller {
         return this.checkErrors()
       })
       .mergeMap(() => {
-      // Clear previous submission errors
-        delete this.submissionError
-        delete this.submissionErrorStatus
-
-        // Prevent multiple submissions
-        if (this.submittingOrder) { return Observable.of(null) }
-
-        this.submittingOrder = true
-        this.onSubmittingOrder({ value: true })
-
-        let submitRequest
-        if (this.bankAccountPaymentDetails) {
-          submitRequest = this.orderService.submit()
-        } else if (this.creditCardPaymentDetails) {
-          const cvv = this.orderService.retrieveCardSecurityCode()
-          submitRequest = this.orderService.submit(cvv)
-        } else {
-          return Observable.throw({ data: 'Current payment type is unknown' })
-        }
-        console.log('submitRequest', submitRequest)
-        // Return the observable from the submit request to continue processing
-        return submitRequest
-      }).subscribe({
-        next: () => {
-        // If order submission was successful, process analytics and proceed to the next steps
-          console.log('purchase')
-          this.submittingOrder = false
-          this.loadingAndSubmitting = false
-          this.onSubmittingOrder({ value: false })
-          this.orderService.clearCardSecurityCodes()
-          this.orderService.clearCoverFees()
-          this.onSubmitted()
-          console.log('clearCardSecurityCodes')
-          this.$scope.$emit(cartUpdatedEvent)
-          console.log('cartUpdatedEvent')
-          this.next()
-        },
-        error: (error) => {
-        // Log the full error object for better understanding
-          this.$log.error('Error submitting purchase:', error)
-
-          // Check for specific error types
-          if (error.data && error.data.includes('payment')) {
-            this.submissionError = 'Payment details are invalid or missing.'
-          } else if (error.status === 400) {
-            this.submissionError = 'Bad request, please check your inputs.'
-          } else {
-            this.submissionError = 'An unknown error occurred during checkout.'
-          }
-          // Handle any errors that occur during either loadCart or submit
-          this.brandedAnalyticsFactory.checkoutFieldError('submitOrder', 'failed')
-          this.submittingOrder = false
-          this.loadingAndSubmitting = false
-          this.onSubmittingOrder({ value: false })
-
-          if (error.config && error.config.data && error.config.data['security-code']) {
-            error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
-          }
-          this.$log.error('Error submitting purchase:', error)
-          this.onSubmitted()
-          this.submissionErrorStatus = error.status
-          this.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
-          this.$window.scrollTo(0, 0)
-        }
+        return this.orderService.submitOrder(this)
+      })
+      .subscribe(() => {
+        this.next()
+        this.loadingAndSubmitting = false
       })
   }
 
   handleRecaptchaFailure () {
-    this.brandedAnalyticsFactory.checkoutFieldError('submitOrder', 'failed')
+    this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
     this.submittingOrder = false
     this.loadingAndSubmitting = false
     this.onSubmittingOrder({ value: false })
@@ -336,6 +278,7 @@ export default angular
     checkoutStep2.name,
     cartService.name,
     orderService.name,
+    analyticsFactory.name,
     brandedAnalyticsFactory.name
   ])
   .component(componentName, {
