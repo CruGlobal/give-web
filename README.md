@@ -62,7 +62,7 @@ Add the following code to your page where appropriate. See the [Branded checkout
     radio-station-radius="100"
     premium-code="BOOKS01"
     premium-name="Books"
-    premium-image-url="https://api.images.com/">
+    premium-image-url="https://api.images.com/img.png">
 </branded-checkout>
 
 <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
