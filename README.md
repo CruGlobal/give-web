@@ -58,7 +58,10 @@ Add the following code to your page where appropriate. See the [Branded checkout
     show-cover-fees="true"
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)"
-    radio-station-api-url="https://api.domain.com/getStations">
+    radio-station-api-url="https://api.domain.com/getStations"
+    premium-code="BOOKS01"
+    premium-name="Books"
+    premium-image-url="https://api.images.com/">
 </branded-checkout>
 
 <script src="https://give-static.cru.org/branded-checkout.v2.js"></script>
