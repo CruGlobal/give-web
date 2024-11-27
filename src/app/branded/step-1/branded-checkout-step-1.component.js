@@ -189,6 +189,6 @@ export default angular
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
       radioStationRadius: '<',
-      useV3: '<',
+      useV3: '<'
     }
   })
