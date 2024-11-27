@@ -191,6 +191,7 @@ export default angular
       radioStationRadius: '<',
       hideSpouseDetails: '<',
       hideAnnual: '<',
-      hideQuarterly: '<'
+      hideQuarterly: '<',
+      useV3: '<',
     }
   })

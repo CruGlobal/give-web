@@ -184,6 +184,7 @@ export default angular
       showCoverFees: '@',
       hideSpouseDetails: '@',
       hideAnnual: '@',
-      hideQuarterly: '@'
+      hideQuarterly: '@',
+      useV3: '@',
     }
   })
