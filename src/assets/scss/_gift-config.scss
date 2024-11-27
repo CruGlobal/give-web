@@ -233,27 +233,36 @@ label.btn.btn-default-form.active {
   border: 0px;
   box-shadow: none;
   margin-bottom: 15px;
+
   .panel-heading {
     border-width: 0 0 1px 0;
     background: none;
     padding-left: 0;
     padding-right: 0;
   }
+
   .panel-body {
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;
     padding-top: 15px;
+
     .list-unstyled {
       padding: 0;
+
       li:before {
         content: "";
         display: none;
         text-indent: 0;
       }
+
       li {
         text-indent: 0;
       }
+    }
+
+    #sendMessageButton, #sendHandlingButton {
+      text-decoration: underline;
     }
   }
   input.number {

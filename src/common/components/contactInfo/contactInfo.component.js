@@ -30,6 +30,7 @@ class Step1Controller {
     this.radioStationsService = radioStationsService
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
+    this.showSpouseDetails = false
   }
 
   $onInit () {
@@ -191,6 +192,7 @@ export default angular
       donorDetails: '=?',
       onSubmit: '&',
       radioStationApiUrl: '<',
-      radioStationRadius: '<'
+      radioStationRadius: '<',
+      hideSpouseDetails: '<'
     }
   })
