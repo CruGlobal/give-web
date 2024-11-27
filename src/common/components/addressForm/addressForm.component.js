@@ -12,11 +12,9 @@ class AddressFormController {
   constructor ($scope, $log, geographiesService) {
     this.$log = $log
     this.geographiesService = geographiesService
-    console.log($scope)
   }
 
   $onInit () {
-
     this.loadCountries()
   }
 
