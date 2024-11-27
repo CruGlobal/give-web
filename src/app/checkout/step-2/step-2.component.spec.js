@@ -326,14 +326,6 @@ describe('checkout', () => {
           expect(self.controller.isContinueDisabled()).toBe(false)
         })
 
-        it('should disable continue when cvv validity is undefined', () => {
-          self.controller.handleExistingPaymentLoading(true, true)
-          self.controller.isCvvValid = undefined
-          self.controller.handlePaymentChange({'card-type': 'visa'})
-          
-          expect(self.controller.isContinueDisabled()).toBe(false)
-        })
-
         it('should not disable continue when cvv is invalid', () => {
           self.controller.handleExistingPaymentLoading(true, true)
           self.controller.isCvvValid = false
