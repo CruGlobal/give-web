@@ -417,6 +417,6 @@ export default angular
       updateQueryParam: '&',
       submitted: '<',
       onStateChange: '&',
-      useV3: '<?'
+      useV3: '<'
     }
   })
