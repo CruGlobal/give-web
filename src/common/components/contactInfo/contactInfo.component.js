@@ -192,6 +192,6 @@ export default angular
       onSubmit: '&',
       radioStationApiUrl: '<',
       radioStationRadius: '<',
-      useV3: '<?'
+      useV3: '<'
     }
   })
