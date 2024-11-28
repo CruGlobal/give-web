@@ -173,31 +173,32 @@ class BrandedCheckoutStep1Controller {
   loadCart () {
     this.errorLoadingCart = false
 
-    // Return the observable instead of subscribing here
-    return this.cartService.get().pipe(
-      tap(data => {
+    const cart = this.cartService.get()
+    cart.subscribe(
+      data => {
         // Setting cart data and analytics
         this.cartData = data
         this.brandedAnalyticsFactory.saveCoverFees(this.orderService.retrieveCoverFeeDecision())
         this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
         this.brandedAnalyticsFactory.addPaymentInfo()
         this.brandedAnalyticsFactory.reviewOrder()
-        console.log('done loading cart')
-      }),
-      catchError(error => {
+      },
+      error => {
         // Handle errors by setting flag and logging the error
         this.errorLoadingCart = true
         this.$log.error('Error loading cart data for branded checkout step 2', error)
         return Observable.throw(error) // Rethrow the error so the observable chain can handle it
-      })
+      }
     )
+    return cart
   }
 
   loadCurrentPayment () {
     this.loadingCurrentPayment = true
 
-    return this.orderService.getCurrentPayment().pipe(
-      tap(data => {
+    const getCurrentPayment = this.orderService.getCurrentPayment()
+    getCurrentPayment.subscribe(
+      data => {
         if (!data) {
           this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist')
         } else if (data['account-type']) {
@@ -208,13 +209,14 @@ class BrandedCheckoutStep1Controller {
           this.$log.error('Error loading current payment info: current payment type is unknown')
         }
         this.loadingCurrentPayment = false
-      }),
-      catchError(error => {
+      },
+      error => {
         this.loadingCurrentPayment = false
         this.$log.error('Error loading current payment info', error)
         return Observable.throw(error) // Propagate error
-      })
+      }
     )
+    return getCurrentPayment
   }
 
   checkErrors () {
@@ -222,26 +224,19 @@ class BrandedCheckoutStep1Controller {
     return this.orderService.checkErrors().do(
       (data) => {
         this.needinfoErrors = data
-        console.log('checking errors')
       })
       .catch(error => {
         this.$log.error('Error loading checkErrors', error)
-        return Observable.throw(error)
       })
   }
 
   submitOrderInternal () {
     this.loadingAndSubmitting = true
-    // Start by loading the cart
     this.loadCart()
       .mergeMap(() => {
-        // After loadCart completes, call loadCurrentPayment
-        console.log('loadCurrentPayment')
         return this.loadCurrentPayment()
       })
       .mergeMap(() => {
-        // After loadCurrentPayment completes, call checkErrors
-        console.log('checkErrors')
         return this.checkErrors()
       })
       .mergeMap(() => {

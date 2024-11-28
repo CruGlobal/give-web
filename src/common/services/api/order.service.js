@@ -404,7 +404,6 @@ class Order {
   }
 
   submitOrder (controller) {
-    console.log('submitOrder')
     delete controller.submissionError
     delete controller.submissionErrorStatus
     // Prevent multiple submissions
