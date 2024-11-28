@@ -324,8 +324,6 @@ describe('checkout', () => {
       })
     })
 
-
-
     describe('handleRecaptchaFailure', () => {
       it('should show an error if recaptcha fails', () => {
         jest.spyOn(self.controller.analyticsFactory, 'checkoutFieldError').mockImplementation(() => {})
@@ -352,6 +350,33 @@ describe('checkout', () => {
         jest.spyOn(self.controller, 'handleRecaptchaFailure').mockImplementation(() => {})
         self.controller.$rootScope.$emit(recaptchaFailedEvent)
         expect(self.controller.handleRecaptchaFailure).toHaveBeenCalled();
+      })
+    })
+
+    describe('submitOrder', () => {
+      beforeEach(() => {
+        jest.spyOn(self.controller.analyticsFactory, 'purchase')
+        self.controller.retrieveCoverFeeDecision = () => true;
+      })
+
+      it('should call analyticsFactory when it is not branded checkout', () => {
+        jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision')
+        self.controller.isBranded = false
+        
+        self.controller.submitOrder()
+        
+        expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.controller.retrieveCoverFeeDecision())
+        expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
+      })
+
+      it('should not call analyticsFactory when it is branded checkout', () => {
+        jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision')
+        self.controller.isBranded = true
+
+        self.controller.submitOrder()
+        
+        expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
+        expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
       })
     })
   })
