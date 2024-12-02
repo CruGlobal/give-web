@@ -71,50 +71,49 @@ export const Recaptcha = ({
   }, [grecaptcha, buttonId])
 
   const handleReCaptchaVerify = useCallback(async () => {
-    // if (!ready) {
-    //   $log.info('Execute recaptcha not yet available')
-    //   return
-    // }
+    if (!ready) {
+      $log.info('Execute recaptcha not yet available')
+      return
+    }
 
-    // grecaptcha.ready(async () => {
-    //   try {
-    //     const token = await grecaptcha.execute(recaptchaKey, { action: action })
-    //     const serverResponse = await fetch(`${apiUrl}/recaptcha/verify`, {
-    //       method: 'POST',
-    //       body: JSON.stringify({ token: token }),
-    //       headers: { 'Content-Type': 'application/json' }
-    //     })
-    //     const data = await serverResponse.json()
+    grecaptcha.ready(async () => {
+      try {
+        const token = await grecaptcha.execute(recaptchaKey, { action: action })
+        const serverResponse = await fetch(`${apiUrl}/recaptcha/verify`, {
+          method: 'POST',
+          body: JSON.stringify({ token: token }),
+          headers: { 'Content-Type': 'application/json' }
+        })
+        const data = await serverResponse.json()
 
-    //     if (data?.success === true && isValidAction(data?.action)) {
-    //       if (data.score < 0.5) {
-    //         $log.warn(`Captcha score was below the threshold: ${data.score}`)
-    //         onFailure(componentInstance)
-    //         return
-    //       }
-    //       onSuccess(componentInstance)
-    //       return
-    //     }
-    //     if (data?.success === false && isValidAction(data?.action)) {
-    //       $log.warn('Recaptcha call was unsuccessful, continuing anyway')
-    //       onSuccess(componentInstance)
-    //       return
-    //     }
-    //     if (!data) {
-    //       $log.warn('Data was missing!')
-    //       onSuccess(componentInstance)
-    //       return
-    //     }
-    //     if (!isValidAction(data?.action)) {
-    //       $log.warn(`Invalid action: ${data?.action}`)
-    //       onFailure(componentInstance)
-    //     }
-    //   } catch (error) {
-    //     $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
-    //     onSuccess(componentInstance)
-    //   }
-    // })
-    onSuccess(componentInstance)
+        if (data?.success === true && isValidAction(data?.action)) {
+          if (data.score < 0.5) {
+            $log.warn(`Captcha score was below the threshold: ${data.score}`)
+            onFailure(componentInstance)
+            return
+          }
+          onSuccess(componentInstance)
+          return
+        }
+        if (data?.success === false && isValidAction(data?.action)) {
+          $log.warn('Recaptcha call was unsuccessful, continuing anyway')
+          onSuccess(componentInstance)
+          return
+        }
+        if (!data) {
+          $log.warn('Data was missing!')
+          onSuccess(componentInstance)
+          return
+        }
+        if (!isValidAction(data?.action)) {
+          $log.warn(`Invalid action: ${data?.action}`)
+          onFailure(componentInstance)
+        }
+      } catch (error) {
+        $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
+        onSuccess(componentInstance)
+      }
+    })
   }, [grecaptcha, buttonId, ready])
 
   return (

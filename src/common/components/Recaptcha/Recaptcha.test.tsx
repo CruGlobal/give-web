@@ -45,7 +45,7 @@ describe('Recaptcha component', () => {
     expect(recaptchaEnabledButton.innerHTML).toEqual('Label')
   })
 
-  xit('should disable the button until ready', async () => {
+  it('should disable the button until ready', async () => {
     global.window.grecaptcha = undefined
 
     const { getByRole } = render(buildRecaptcha())
@@ -56,7 +56,7 @@ describe('Recaptcha component', () => {
     await waitFor(() => expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(false))
   })
 
-  xit('should successfully pass the recaptcha', async () => {
+  it('should successfully pass the recaptcha', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
@@ -77,7 +77,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  xit('should successfully pass the recaptcha on branded checkout', async () => {
+  it('should successfully pass the recaptcha on branded checkout', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
@@ -98,7 +98,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  xit('should log a warning due to low score', async () => {
+  it('should log a warning due to low score', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
@@ -119,7 +119,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  xit('should fail the recaptcha call', async () => {
+  it('should fail the recaptcha call', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
@@ -140,7 +140,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  xit('should call the fail function when not a valid action', async () => {
+  it('should call the fail function when not a valid action', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
@@ -161,7 +161,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  xit('should skip the recaptcha call', async () => {
+  it('should skip the recaptcha call', async () => {
     //@ts-ignore
     global.window.grecaptcha = { ready: mockRecaptchaReady }
 
@@ -178,7 +178,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  xit('should not block the gift if something went wrong with recaptcha', async () => {
+  it('should not block the gift if something went wrong with recaptcha', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.reject('Failed')
@@ -198,7 +198,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  xit('should not block the gift if something went wrong with recaptcha JSON', async () => {
+  it('should not block the gift if something went wrong with recaptcha JSON', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
@@ -220,7 +220,7 @@ describe('Recaptcha component', () => {
     })
   })
 
-  xit('should not block gifts if something weird happens', async () => {
+  it('should not block gifts if something weird happens', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
