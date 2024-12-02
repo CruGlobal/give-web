@@ -2,6 +2,15 @@ import { render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ButtonType, Recaptcha } from './Recaptcha'
 import React from 'react'
+import { datadogRum } from '@datadog/browser-rum'
+
+jest.mock('@datadog/browser-rum', () => {
+  return {
+    datadogRum: {
+      addError: jest.fn()
+    }
+  }
+})
 
 let mockExecuteRecaptcha = jest.fn()
 const mockRecaptchaReady = jest.fn()
@@ -114,7 +123,9 @@ describe('Recaptcha component', () => {
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
-      expect($log.warn).toHaveBeenCalledWith('Captcha score was below the threshold: 0.2')
+      const errorMessage = 'Captcha score was below the threshold: 0.2'
+      expect($log.warn).toHaveBeenCalledWith(errorMessage)
+      expect(datadogRum.addError).toHaveBeenCalledWith(new Error(`Error submitting purchase: ${errorMessage}`))
       expect(onFailure).toHaveBeenCalledTimes(1)
     })
   })
@@ -156,8 +167,11 @@ describe('Recaptcha component', () => {
 
     await userEvent.click(getByRole('button'))
     await waitFor(() => {
+      const errorMessage = 'Invalid action: read'
       expect(onSuccess).not.toHaveBeenCalled()
       expect(onFailure).toHaveBeenCalled()
+      expect($log.warn).toHaveBeenCalledWith(errorMessage)
+      expect(datadogRum.addError).toHaveBeenCalledWith(new Error(`Error submitting purchase: ${errorMessage}`))
     })
   })
 
