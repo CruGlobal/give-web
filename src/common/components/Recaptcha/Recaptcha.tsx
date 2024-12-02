@@ -86,6 +86,12 @@ export const Recaptcha = ({
         })
         const data = await serverResponse.json()
 
+        if (!data || !data.score || !data.action) {
+          $log.warn('Recaptcha returned an unusual response:', data)
+          onSuccess(componentInstance)
+          return
+        }
+
         if (data?.success === true && isValidAction(data?.action)) {
           if (data.score < 0.5) {
             $log.warn(`Captcha score was below the threshold: ${data.score}`)
@@ -97,11 +103,6 @@ export const Recaptcha = ({
         }
         if (data?.success === false && isValidAction(data?.action)) {
           $log.warn('Recaptcha call was unsuccessful, continuing anyway')
-          onSuccess(componentInstance)
-          return
-        }
-        if (!data) {
-          $log.warn('Data was missing!')
           onSuccess(componentInstance)
           return
         }

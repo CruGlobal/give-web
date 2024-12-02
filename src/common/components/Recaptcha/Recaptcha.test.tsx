@@ -144,7 +144,7 @@ describe('Recaptcha component', () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
-        json: () => Promise.resolve({ success: true, action: 'read' })
+        json: () => Promise.resolve({ success: true, action: 'read', score: 0.9 })
       })
     })
 
@@ -220,11 +220,11 @@ describe('Recaptcha component', () => {
     })
   })
 
-  it('should not block gifts if something weird happens', async () => {
+  it('should not block gifts if data is empty', async () => {
     //@ts-ignore
     global.fetch = jest.fn(() => {
       return Promise.resolve({
-        json: () => Promise.resolve()
+        json: () => Promise.resolve({})
       })
     })
 
@@ -238,7 +238,51 @@ describe('Recaptcha component', () => {
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1)
       expect(onFailure).not.toHaveBeenCalled()
-      expect($log.warn).toHaveBeenCalledWith('Data was missing!')
+      expect($log.warn).toHaveBeenCalledWith('Recaptcha returned an unusual response:', {})
+    })
+  })
+
+  it('should not block gifts if action is undefined', async () => {
+    //@ts-ignore
+    global.fetch = jest.fn(() => {
+      return Promise.resolve({
+        json: () => Promise.resolve({ success: true, score: 0.9 })
+      })
+    })
+
+    onSuccess.mockImplementation(() => console.log('success after weird'))
+
+    const { getByRole } = render(
+      buildRecaptcha()
+    )
+
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(onFailure).not.toHaveBeenCalled()
+      expect($log.warn).toHaveBeenCalledWith('Recaptcha returned an unusual response:', { success: true, score: 0.9 })
+    })
+  })
+
+  it('should not block gifts if score is undefined', async () => {
+    //@ts-ignore
+    global.fetch = jest.fn(() => {
+      return Promise.resolve({
+        json: () => Promise.resolve({ success: true, action: 'submit_gift' })
+      })
+    })
+
+    onSuccess.mockImplementation(() => console.log('success after weird'))
+
+    const { getByRole } = render(
+      buildRecaptcha()
+    )
+
+    await userEvent.click(getByRole('button'))
+    await waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1)
+      expect(onFailure).not.toHaveBeenCalled()
+      expect($log.warn).toHaveBeenCalledWith('Recaptcha returned an unusual response:', { success: true, action: 'submit_gift' })
     })
   })
 
