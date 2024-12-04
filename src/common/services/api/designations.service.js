@@ -254,6 +254,10 @@ class DesignationsService {
           // Map giving links
           if (data.data['jcr:content'].givingLinks) {
             angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
+              if (!v || !v.name || !v.url) {
+                return
+              }
+
               if (toFinite(k) > 0 || startsWith(k, 'item')) {
                 givingLinks.push({
                   name: v.name,
