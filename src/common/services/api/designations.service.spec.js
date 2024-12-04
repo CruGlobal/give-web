@@ -24,7 +24,7 @@ describe('designation service', () => {
   })
 
   describe('productSearch', () => {
-    it('should send a request to API and get results', () => {
+    it('should send a request to API and get results', done => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/search?keyword=steve').respond(200, searchResponse)
       self.designationsService.productSearch({
         keyword: 'steve'
@@ -36,11 +36,12 @@ describe('designation service', () => {
             name: 'John and Jane Doe',
             type: 'Staff'
           })])
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
 
-    it('should handle undefined fields', () => {
+    it('should handle undefined fields', done => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/search?keyword=steve').respond(200, { hits: [{}] })
       self.designationsService.productSearch({
         keyword: 'steve'
@@ -52,14 +53,15 @@ describe('designation service', () => {
             name: null,
             type: null
           })])
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
   })
 
   describe('productLookup', () => {
     const expectedResponse = {
-      uri: 'items/crugive/a5t4fmspmfpwpqvqli7teksyhu=',
+      uri: 'carts/items/crugive/a5t4fmspmfpwpqvqli7teksyhu=/form',
       frequencies: [
         {
           name: 'QUARTERLY',
@@ -90,58 +92,63 @@ describe('designation service', () => {
       frequency: 'NA',
       displayName: 'Steve Peck',
       designationType: 'Staff',
+      orgId: 'STAFF',
       code: '0354433',
       designationNumber: '0354433'
     }
-    it('should get product details for a designation number', () => {
+    it('should get product details for a designation number', done => {
       self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/items/crugive/lookups/form?FollowLocation=true&zoom=code,offer:code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description',
         { code: '0354433' })
         .respond(200, lookupResponse)
       self.designationsService.productLookup('0354433')
         .subscribe((data) => {
           expect(data).toEqual(expectedResponse)
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
 
-    it('should get product details for a uri', () => {
+    it('should get product details for a uri', done => {
       self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?FollowLocation=true&zoom=code,offer:code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, lookupResponse)
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(data => {
           expect(data).toEqual(expectedResponse)
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
 
-    it('should handle an empty response', () => {
+    it('should handle an empty response', done => {
       self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector?FollowLocation=true&zoom=code,offer:code,definition,definition:options:element:selector:choice,definition:options:element:selector:choice:description,definition:options:element:selector:choice:selectaction,definition:options:element:selector:chosen,definition:options:element:selector:chosen:description')
         .respond(200, '')
       self.designationsService.productLookup('/itemselections/crugive/a5t4fmspmhbkez6cwbnd6mrkla74hdgcupbl4xjb=/options/izzgk4lvmvxgg6i=/values/jzaq=/selector', true)
         .subscribe(() => {
-          fail('success should not have been called')
+          done('success should not have been called')
         }, error => {
-          expect(error).toEqual('Product lookup response contains no code data')
+          expect(error.message).toEqual('Product lookup response contains no code data')
+          done()
         })
       self.$httpBackend.flush()
     })
   })
 
   describe('bulkLookup', () => {
-    it('should take an array of designation numbers and return corresponding links for items', () => {
+    it('should take an array of designation numbers and return corresponding links for items', done => {
       self.$httpBackend.expectPOST('https://give-stage2.cru.org/cortex/items/crugive/lookups/batches/form?FollowLocation=true',
         { codes: ['0123456', '1234567'] })
         .respond(200, bulkLookupResponse)
       self.designationsService.bulkLookup(['0123456', '1234567'])
         .subscribe(data => {
           expect(data).toEqual(bulkLookupResponse)
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
   })
 
   describe('suggestedAmounts', () => {
-    it('should load suggested amounts', () => {
+    it('should load suggested amounts', done => {
       const itemConfig = { amount: 50, 'campaign-page': 9876 }
       self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
         .respond(200, campaignResponse)
@@ -154,11 +161,12 @@ describe('designation service', () => {
 
           expect(itemConfig['default-campaign-code']).toEqual('867EM1')
           expect(itemConfig['jcr-title']).toEqual('PowerPacksTM for Inner City Children')
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
 
-    it('should handle an invalid campaign page', () => {
+    it('should handle an invalid campaign page', done => {
       const itemConfig = { amount: 50, 'campaign-page': 9876 }
       self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/campaigns/0/1/2/3/4/0123456/9876.infinity.json')
         .respond(400, {})
@@ -167,11 +175,12 @@ describe('designation service', () => {
           expect(suggestedAmounts).toEqual([])
           expect(itemConfig['default-campaign-code']).toBeUndefined()
           expect(itemConfig['jcr-title']).toBeUndefined()
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
 
-    it('should handle no campaign page', () => {
+    it('should handle no campaign page', done => {
       const itemConfig = { amount: 50 }
       self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
@@ -180,25 +189,27 @@ describe('designation service', () => {
           expect(suggestedAmounts).toEqual([])
           expect(itemConfig['default-campaign-code']).toEqual('867EM1')
           expect(itemConfig['jcr-title']).toEqual('PowerPacksTM for Inner City Children')
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
   })
 
   describe('facebookPixel', () => {
-    it('should load facebook pixel id from JCR', () => {
+    it('should load facebook pixel id from JCR', done => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
       self.designationsService.facebookPixel('0123456')
         .subscribe(pixelId => {
           expect(pixelId).toEqual('123456')
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
   })
 
   describe('givingLinks', () => {
-    it('should load givingLinks from JCR', () => {
+    it('should load givingLinks from JCR', done => {
       self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, designationResponse)
       self.designationsService.givingLinks('0123456')
@@ -206,7 +217,8 @@ describe('designation service', () => {
           expect(givingLinks).toEqual([
             { name: 'Name', url: 'https://example.com', order: 0 }
           ])
-        })
+          done()
+        }, done)
       self.$httpBackend.flush()
     })
   })
@@ -244,31 +256,33 @@ describe('designation service', () => {
   })
 
   describe('ministriesList', () => {
-    it('should return a list of ministries', () => {
+    it('should return a list of ministries', done => {
       jest.spyOn(self.$location, 'protocol').mockImplementationOnce(() => 'https')
       jest.spyOn(self.$location, 'host').mockImplementationOnce(() => 'give-stage-cloud.cru.org')
       const pagePath = 'page.html'
       const ministriesResponse = {
-        ministries: [{
-          name: 'Some Ministry',
-          designationNumber: '0123456',
-          path: '/some-vanity',
-          extra: 'something-else'
-        }]
+        ministries: [
+          JSON.stringify({
+            name: 'Some Ministry',
+            designationNumber: '0123456',
+            path: '/some-vanity',
+            extra: 'something-else'
+          })
+        ]
       }
       self.$httpBackend.expectGET(`https://give-stage-cloud.cru.org/${pagePath}/jcr:content/content-parsys/designation_search_r.json`)
         .respond(200, ministriesResponse)
 
-      const expectedResult = {
-        ministries: [{
-          name: 'Some Ministry',
-          designationNumber: '0123456',
-          path: '/some-vanity'
-        }]
-      }
+      const expectedResult = [{
+        name: 'Some Ministry',
+        designationNumber: '0123456',
+        facet: null,
+        path: '/some-vanity'
+      }]
       self.designationsService.ministriesList(pagePath).subscribe(actualResult => {
         expect(actualResult).toEqual(expectedResult)
-      })
+        done()
+      }, done)
       self.$httpBackend.flush()
     })
   })
