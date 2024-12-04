@@ -31,6 +31,12 @@ const brandedComponents = [
   'assets/scss/branded-checkout.scss'
 ]
 
+// Okta sign-in widget assets files
+const oktaSignInLabelsDestinations = [
+  'dist/assets/okta-sign-in/labels',
+  'src/assets/okta-sign-in/labels',
+];
+
 const sharedConfig = {
   mode: isBuild ? 'production' : 'development',
   devtool: 'source-map',
@@ -45,10 +51,19 @@ const sharedConfig = {
   },
   plugins: [
     new CopyWebpackPlugin([
+      ...oktaSignInLabelsDestinations.map(destination => ({
+        from: path.resolve(__dirname, 'node_modules/@okta/okta-signin-widget/dist/labels'),
+        to: path.resolve(__dirname, destination),
+      })),
       {
         context: 'src',
         from: '**/*.+(eot|png|svg|ttf|woff)',
         to: '[path][name].[ext]'
+      },
+      {
+        context: 'src/assets/okta-sign-in/img',
+        from: '**/*.+(png|jpe?g|gif|svg|ico)',
+        to: 'img/[path][name].[ext]'
       },
       'unsupportedBrowser.html',
       'branded-checkout.html'

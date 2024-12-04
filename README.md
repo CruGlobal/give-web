@@ -202,3 +202,18 @@ Travis auto-deploys master builds to a pre-prod s3 bucket.
 http://devtools.aws.cru.org:8080/view/Give%20Site/job/Give%20NG%20prod%20deploy/ copies
 to the live bucket, which backs CloudFront.
 
+## Okta sign-in widget
+On the initial set up, [by their instructions](https://www.npmjs.com/package/@okta/okta-signin-widget#using-the-npm-module), we copied the /css, /images and /label folders to our `/assets/okta-sign-in` folder.
+When you update the `@okta/okta-signin-widget` package, you may also need to update the `/assets/okta-sign-in` folder.
+You can do so by copying the assets from `/node_modules/@okta/okta-signin-widget/dist/`.
+
+Below is a breakdown of the assets you will need to move.
+
+#### `node_modules/@okta/okta-signin-widget/dist/css/`
+Move the file `okta-sign-in.min.css` to the folder `/assets/okta-sign-in/css`. At the time of implementing the Okta sign-in widget, there wasn't a need to add the other css files.
+
+#### `node_modules/@okta/okta-signin-widget/dist/img/`
+_I highly doubt you will need to move over more images. I didn't want to use webpack for these images, as there are a lot of images we do not need._ But if you need to move them, please move them into the folder `/assets/okta-sign-in/img`.
+
+#### `node_modules/@okta/okta-signin-widget/dist/labels/`
+Webpack copies the labels from `@okta/okta-signin-widget` and stores them on our application, so do need to update these.
