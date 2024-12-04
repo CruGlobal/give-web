@@ -4,6 +4,7 @@ import toFinite from 'lodash/toFinite'
 import startsWith from 'lodash/startsWith'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
+import 'rxjs/add/observable/of'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import moment from 'moment'
@@ -233,7 +234,7 @@ class DesignationsService {
         }
         return suggestedAmounts
       })
-      .catch(() => [])
+      .catch(() => Observable.of([]))
   }
 
   facebookPixel (code) {
