@@ -225,12 +225,14 @@ describe('designation service', () => {
     it('should ignore givingLinks without names or urls', done => {
       const response = angular.copy(designationResponse)
       response['jcr:content'].givingLinks.item1 = { 'jcr:primaryType': 'nt:unstructured' }
+      response['jcr:content'].givingLinks.item2 = { 'jcr:primaryType': 'nt:unstructured', url: 'https://example2.com', name: 'Name 2' }
       self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
         .respond(200, response)
       self.designationsService.givingLinks('0123456')
         .subscribe(givingLinks => {
           expect(givingLinks).toEqual([
-            { name: 'Name', url: 'https://example.com', order: 0 }
+            { name: 'Name', url: 'https://example.com', order: 0 },
+            { name: 'Name 2', url: 'https://example2.com', order: 2 }
           ])
           done()
         }, done)
