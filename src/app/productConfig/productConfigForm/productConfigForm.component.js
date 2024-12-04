@@ -148,7 +148,7 @@ class ProductConfigFormController {
     const givingLinksObservable = this.designationsService
       .givingLinks(this.code, this.itemConfig['campaign-page'])
       .do(givingLinks => {
-        this.givingLinks = givingLinks || []
+        this.givingLinks = givingLinks?.filter(link => link.url) || []
       })
 
     Observable.merge(productLookupObservable, nextDrawDateObservable, suggestedAmountsObservable, givingLinksObservable)

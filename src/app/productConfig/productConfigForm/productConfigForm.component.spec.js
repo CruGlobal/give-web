@@ -195,6 +195,15 @@ describe('product config form component', function () {
       expect($ctrl.analyticsFactory.giveGiftModal($ctrl.productData))
     })
 
+    it('should filter out givingLinks with empty urls', () => {
+      const validLink = { url: 'https://give.cru.org/1234567' }
+      jest.spyOn($ctrl.designationsService, 'givingLinks').mockReturnValue(Observable.of([{}, {}, validLink]))
+
+      $ctrl.loadData()
+
+      expect($ctrl.givingLinks).toEqual([validLink])
+    })
+
     it('should called beginCheckout in branded checkout', () => {
       $ctrl.envService.read.mockReturnValue(true)
       $ctrl.loadData()
