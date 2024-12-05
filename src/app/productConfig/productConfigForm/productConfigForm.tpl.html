@@ -48,7 +48,6 @@
 
   <div ng-if="!$ctrl.loading && !$ctrl.errorLoading && !$ctrl.showGivingLinks">
     <div class="panel panel-default panel-plain mt">
-
         <div ng-if="$ctrl.errorChangingFrequency" class="alert alert-danger" role="alert">
           <p translate>{{'FREQUENCY_ERROR'}}</p>
         </div>
@@ -69,33 +68,35 @@
           {{'GIFT_AMOUNT'}}
         </h4>
         <div class="panel-body p0">
-          <div ng-if="$ctrl.useSuggestedAmounts">
-            <div class="button-group">
-              <div 
-                  role="button"
-                  class="suggested-button"
+          <fieldset aria-label="Suggested Gift Amounts. Tab for Custom Amount">
+            <div class="button-group" ng-if="$ctrl.useSuggestedAmounts">
+              <div ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
+                <input 
+                  type="radio"
+                  name="suggestedAmount"
+                  id="sa-{{$index}}"
                   ng-click="$ctrl.changeAmount(suggested.amount)"
                   ng-class=" {'active': !$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount}"
-                  ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
-                  <div class="amount-box">
-                    {{$ctrl.suggestedAmount(suggested.amount)}}
-                  </div>
-                  <div class="label-text">
-                    {{suggested.label}}
-                  </div>
+                />
+                <label for="sa-{{$index}}">
+                  <span class="amount-box">{{$ctrl.suggestedAmount(suggested.amount)}}</span>
+                  <span class="amount-description">{{suggested.label}}</span>
+                </label>
               </div>
               <div class="custom-amount-button" ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}">
                 <div class="input-prepend">
                   <span class="input-prepend-text">$</span>
                 </div>
-                <label>
+                <label for="ca">
                   <input 
                     name="suggestedAmount"
                     type="radio"
-                    ng-checked="$ctrl.customInputActive" />
+                    ng-checked="$ctrl.customInputActive"
+                  />
                   <input
                     name="amount"
                     type="text"
+                    id="ca"
                     step="1"
                     tabindex="-1"
                     ng-model="$ctrl.customAmount"
@@ -113,45 +114,45 @@
                   <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
                   <div class="help-block" ng-message="minimum" translate translate-values="{currencyLimit: (1 | currency)}">{{'AMOUNT_MIN_ERROR'}}</div>
                   <div class="help-block" ng-message="maximum" translate translate-values="{currencyLimit: (10000000 | currency)}">{{'AMOUNT_MAX_ERROR'}}</div>
+              </div>
+            </div>            
+            <div data-toggle="buttons"
+                ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
+                ng-if="!$ctrl.useSuggestedAmounts">
+              <label class="btn btn-radio"
+                    ng-click="$ctrl.changeAmount(a)"
+                    ng-class="{'active': $ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive}"
+                    ng-repeat-start="a in $ctrl.selectableAmounts">
+                <span class="number">&dollar;{{a}}</span>
+              </label>
+              <span ng-repeat-end></span>
+              <label
+                ng-class="{active: $ctrl.customInputActive}"
+                class="btn btn-default-form u-textLeft custom-amount">
+                <div class="form-group form-group-default u-inline">
+                  <input class="form-control form-control-subtle number"
+                        name="amount"
+                        type="text"
+                        step="1"
+                        ng-required="$ctrl.customInputActive"
+                        ng-model="$ctrl.customAmount"
+                        ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
+                        ng-focus="$ctrl.customInputActive = true;"
+                        tabindex="-1"
+                        placeholder="{{'Other' | translate}}"
+                        required />
                 </div>
-            </div>
-          </div>
-          <div data-toggle="buttons"
-               ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
-               ng-if="!$ctrl.useSuggestedAmounts">
-            <label class="btn btn-radio"
-                   ng-click="$ctrl.changeAmount(a)"
-                   ng-class="{'active': $ctrl.itemConfig.AMOUNT === a && !$ctrl.customInputActive}"
-                   ng-repeat-start="a in $ctrl.selectableAmounts">
-              <span class="number">&dollar;{{a}}</span>
-            </label>
-            <span ng-repeat-end></span>
-            <label
-              ng-class="{active: $ctrl.customInputActive}"
-              class="btn btn-default-form u-textLeft custom-amount">
-              <div class="form-group form-group-default u-inline">
-                <input class="form-control form-control-subtle number"
-                       name="amount"
-                       type="text"
-                       step="1"
-                       ng-required="$ctrl.customInputActive"
-                       ng-model="$ctrl.customAmount"
-                       ng-change="$ctrl.changeCustomAmount($ctrl.customAmount)"
-                       ng-focus="$ctrl.customInputActive = true;"
-                       tabindex="-1"
-                       placeholder="{{'Other' | translate}}"
-                       required />
-              </div>
-            </label>
-            <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
-                 ng-if="($ctrl.itemConfigForm.amount | showErrors)">
-              <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
-              <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
-              <div class="help-block" ng-message="minimum" translate="AMOUNT_MIN_ERROR" translate-values="{currencyLimit: (1 | currency)}"></div>
-              <div class="help-block" ng-message="maximum" translate="AMOUNT_MAX_ERROR" translate-values="{currencyLimit: (10000000 | currency)}">
+              </label>
+              <div role="alert" ng-messages="$ctrl.itemConfigForm.amount.$error"
+                  ng-if="($ctrl.itemConfigForm.amount | showErrors)">
+                <div class="help-block" ng-message="pattern" translate>{{'VALID_DOLLAR_AMOUNT_ERROR'}}</div>
+                <div class="help-block" ng-message="required" translate>{{'AMOUNT_EMPTY_ERROR'}}</div>
+                <div class="help-block" ng-message="minimum" translate="AMOUNT_MIN_ERROR" translate-values="{currencyLimit: (1 | currency)}"></div>
+                <div class="help-block" ng-message="maximum" translate="AMOUNT_MAX_ERROR" translate-values="{currencyLimit: (10000000 | currency)}">
+                </div>
               </div>
             </div>
-          </div>
+          </fieldset>
         </div><!-- // panel-body -->
       </div><!-- // panel -->
     <div class="panel panel-default give-modal-panel">
