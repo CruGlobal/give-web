@@ -18,8 +18,7 @@ export enum ButtonType {
 
 interface RecaptchaProps {
   action: string
-  onSuccess: (componentInstance: any) => void
-  componentInstance: any
+  onSuccess: () => void
   buttonId: string
   buttonType?: ButtonType
   buttonClasses: string
@@ -33,7 +32,6 @@ interface RecaptchaProps {
 export const Recaptcha = ({
   action,
   onSuccess,
-  componentInstance,
   buttonId,
   buttonType,
   buttonClasses,
@@ -73,10 +71,10 @@ export const Recaptcha = ({
         const token = await grecaptcha.enterprise.execute(recaptchaKey, { action: action })
         window.sessionStorage.setItem('recaptchaToken', token)
         window.sessionStorage.setItem('recaptchaAction', action)
-        onSuccess(componentInstance)
+        onSuccess()
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
-        onSuccess(componentInstance)
+        onSuccess()
       }
     })
   }, [grecaptcha, buttonId, ready])
@@ -99,7 +97,6 @@ export default angular
       [
         'action',
         'onSuccess',
-        'componentInstance',
         'buttonId',
         'buttonType',
         'buttonClasses',

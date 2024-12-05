@@ -13,7 +13,7 @@ declare global {
 
 interface RecaptchaWrapperProps {
   action: string
-  onSuccess: (componentInstance: any) => void
+  onSuccess: () => void
   componentInstance: any
   buttonId: string
   buttonType?: ButtonType
@@ -23,6 +23,7 @@ interface RecaptchaWrapperProps {
   envService: any
   $translate: any
   $log: any
+  $rootScope: any
 }
 
 export const RecaptchaWrapper = ({
@@ -36,7 +37,8 @@ export const RecaptchaWrapper = ({
   buttonLabel,
   envService,
   $translate,
-  $log
+  $log,
+  $rootScope
 }: RecaptchaWrapperProps): JSX.Element => {
   const recaptchaKey = envService.read('recaptchaKey')
 
@@ -47,10 +49,16 @@ export const RecaptchaWrapper = ({
     document.body.appendChild(script)
   }, [])
 
+  // Because The onSuccess callback is called by a React component, AngularJS doesn't know that an event happened and doesn't know it needs to rerender. We have to use $apply to ensure that AngularJS rerenders after the event handlers return.
+  const onSuccessWrapped = (()=>{
+    $rootScope.$apply(()=> {
+      onSuccess.call(componentInstance)
+    })
+  })
+
   return (
       <Recaptcha action={action}
-                 onSuccess={onSuccess}
-                 componentInstance={componentInstance}
+                 onSuccess={onSuccessWrapped}
                  buttonId={buttonId}
                  buttonType={buttonType}
                  buttonClasses={buttonClasses}
@@ -78,4 +86,4 @@ export default angular
         'buttonDisabled',
         'buttonLabel'
       ],
-      ['envService', '$translate', '$log']))
+      ['envService', '$translate', '$log', '$rootScope']))
