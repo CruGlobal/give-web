@@ -13,7 +13,7 @@ import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/cover
 
 import template from './branded-checkout-step-1.tpl.html'
 import { Observable } from 'rxjs'
-import { tap, catchError } from 'rxjs/operators'
+import errorMessages from 'app/checkout/error-messages/error-messages.component'
 
 const componentName = 'brandedCheckoutStep1'
 
@@ -274,7 +274,8 @@ export default angular
     cartService.name,
     orderService.name,
     analyticsFactory.name,
-    brandedAnalyticsFactory.name
+    brandedAnalyticsFactory.name,
+    errorMessages.name
   ])
   .component(componentName, {
     controller: BrandedCheckoutStep1Controller,
