@@ -8,6 +8,7 @@ import giveModalWindowTemplate from 'common/templates/giveModalWindow.tpl.html'
 import paymentMethodDisplay from 'common/components/paymentMethods/paymentMethodDisplay.component'
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
 import { Roles, SignOutEvent } from 'common/services/session/session.service'
+import sessionHandleOktaRedirectService from 'common/services/session/sessionHandleOktaRedirect.service'
 import commonModule from 'common/common.module'
 import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
 import formatAddressForTemplate from 'common/services/addressHelpers/formatAddressForTemplate'
@@ -16,7 +17,7 @@ import uibModal from 'angular-ui-bootstrap/src/modal'
 
 class PaymentMethodsController {
   /* @ngInject */
-  constructor ($rootScope, $uibModal, profileService, sessionEnforcerService, analyticsFactory, $log, $timeout, $window, $location) {
+  constructor ($rootScope, $uibModal, $log, $timeout, $window, $location, profileService, sessionEnforcerService, analyticsFactory, sessionHandleOktaRedirectService) {
     this.$log = $log
     this.$rootScope = $rootScope
     this.$uibModal = $uibModal
@@ -29,6 +30,7 @@ class PaymentMethodsController {
     this.paymentMethods = []
     this.$location = $location
     this.sessionEnforcerService = sessionEnforcerService
+    this.sessionHandleOktaRedirectService = sessionHandleOktaRedirectService
     this.analyticsFactory = analyticsFactory
   }
 
@@ -42,6 +44,11 @@ class PaymentMethodsController {
   }
 
   $onInit () {
+    this.sessionHandleOktaRedirectService.onHandleOktaRedirect()
+    this.sessionHandleOktaRedirectService.errorMessageSubject.subscribe((errorMessage) => {
+      this.errorMessage = errorMessage
+    })
+
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
         this.loadPaymentMethods()
@@ -170,6 +177,7 @@ export default angular
     profileService.name,
     paymentMethodDisplay.name,
     sessionEnforcerService.name,
+    sessionHandleOktaRedirectService.name,
     uibModal
   ])
   .component(componentName, {

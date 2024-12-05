@@ -1,0 +1,60 @@
+user-match-modal {
+  display: inline-block;
+  padding: 20px;
+
+  h4 {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  input {
+    accent-color: $colorCru-gold;
+  }
+
+  label {
+    display: block;
+  }
+
+  .activate-progress {
+    padding-bottom: 30px;
+
+    progress {
+      width: 100%;
+      accent-color: $colorCru-gold;
+    }
+
+    .step-label {
+      font-weight: bold;
+      padding-left: calc(var(--progress) * 320px);
+
+      .modal-dialog.modal-lg & {
+        padding-left: calc(var(--progress) * 370px);
+      }
+    }
+  }
+
+  .modal-dialog.modal-lg & .success .footer-buttons button {
+    margin-right: auto;
+  }
+}
+
+session-modal > div > div > user-match-modal {
+  width: 100%;
+
+  .footer-buttons {
+    padding: 15px;
+    background-color: #F5F5F5;
+    display: flex;
+
+    button:not(.back) {
+      margin-left: auto;
+      width: auto;
+    }
+    button.back {
+      display: block;
+    }
+  }
+  .success .footer-buttons {
+    flex-direction: column;
+  }
+}

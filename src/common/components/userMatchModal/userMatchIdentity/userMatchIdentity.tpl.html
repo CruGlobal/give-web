@@ -1,4 +1,4 @@
-<p class="text-center" translate>Is it you?</p>
+<h4 class="text-center" translate>Are you one of these people?</h4>
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.hasError">
   <div translate>You must choose one.</div>
 </div>
@@ -18,14 +18,15 @@
              ng-value="{}"
              type="radio"
              required
-             translate>None of the above. I would like a new account.
+             translate>None of the above. Please create a new account.
     </label>
   </div>
-  <p>
+  <div class="footer-buttons">
+    <button type="button" class="btn btn-md back" ng-click="$ctrl.onBack()" translate>Back</button>
     <button type="button"
             class="btn btn-md btn-block btn-primary"
             ng-click="$ctrl.selectContact()"
-            translate>Continue
+            translate>Next
     </button>
-  </p>
+  </div>
 </form>

@@ -1,0 +1,15 @@
+mfa-modal {
+  .mfa-authenicators {
+    display: flex;
+    flex-wrap: wrap;
+
+    .authenicator {
+      flex: 1 100%;
+      margin-bottom: 20px;
+    }
+  }
+
+  .button-centered {
+    text-align: center;
+  }
+}

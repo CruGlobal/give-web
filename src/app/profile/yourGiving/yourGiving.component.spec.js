@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import { Roles, SignOutEvent } from 'common/services/session/session.service'
+import { Subject } from 'rxjs/Subject'
 /* global inject */
 
 describe('your giving', function () {
@@ -16,6 +17,7 @@ describe('your giving', function () {
     $ctrl = _$componentController_(module.name, {
       $window: { location: '/your-giving.html' }
     })
+    $ctrl.$rootScope.$broadcast = jest.spyOn($ctrl.$rootScope, '$broadcast')
   }))
 
   it('to be defined', function () {
@@ -24,8 +26,8 @@ describe('your giving', function () {
     expect($ctrl.$location).toBeDefined()
     expect($ctrl.$rootScope).toBeDefined()
     expect($ctrl.sessionEnforcerService).toBeDefined()
+    expect($ctrl.sessionHandleOktaRedirectService).toBeDefined()
     expect($ctrl.profileService).toBeDefined()
-    expect($ctrl.sessionService).toBeDefined()
   })
 
   describe('$onInit()', () => {
@@ -39,7 +41,6 @@ describe('your giving', function () {
 
     describe('\'PUBLIC\' role', () => {
       it('sets profileLoading and registers sessionEnforcer', () => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public)
         $ctrl.$onInit()
 
         expect($ctrl.sessionEnforcerService).toHaveBeenCalledWith(
@@ -61,7 +62,6 @@ describe('your giving', function () {
 
     describe('\'REGISTERED\' role', () => {
       it('calls loadProfile and registers sessionEnforcer', () => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.registered)
         $ctrl.$onInit()
 
         expect($ctrl.sessionEnforcerService).toHaveBeenCalledWith(
@@ -97,9 +97,26 @@ describe('your giving', function () {
         $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']()
 
         expect($ctrl.$window.location).toEqual('/')
-      });
+      })
     })
-  });
+
+    describe('sessionHandleOktaRedirectService', () => {
+      it('should call onHandleOktaRedirect', () => {
+        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
+        $ctrl.$onInit()
+
+        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
+      })
+
+      it('handles an Okta redirect error', () => {
+        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
+        $ctrl.$onInit()
+        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject.next('generic')
+  
+        expect($ctrl.errorMessage).toEqual('generic')
+      })
+    })
+  })
 
   describe('$onDestroy()', () => {
     it('cleans up the component', () => {
