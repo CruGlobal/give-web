@@ -255,6 +255,9 @@ class DesignationsService {
           if (data.data['jcr:content'].givingLinks) {
             angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
               if (!v || !v.name || !v.url) {
+                // Some accounts contain multiple, empty giving links. Until we figure how how they
+                // are being created, we are ignoring them on the frontend.
+                // https://jira.cru.org/browse/EP-2554
                 return
               }
 
