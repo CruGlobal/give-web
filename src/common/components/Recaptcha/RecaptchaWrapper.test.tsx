@@ -16,6 +16,10 @@ describe('RecaptchaWrapper component', () => {
     warn: jest.fn()
   }
 
+  const $rootScope = {
+    $apply: jest.fn()
+  }
+
   const mockExecuteRecaptcha = jest.fn()
   const mockRecaptchaReady = jest.fn()
   const mockRecaptcha = {
@@ -48,6 +52,7 @@ describe('RecaptchaWrapper component', () => {
         envService={envService}
         $translate={$translate}
         $log={$log}
+        $rootScope={$rootScope}
       />
     )
     expect(getAllByRole('button')).toHaveLength(1)
@@ -75,6 +80,7 @@ describe('RecaptchaWrapper component', () => {
         envService={envService}
         $translate={$translate}
         $log={$log}
+        $rootScope={$rootScope}
       />
     )
     expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
