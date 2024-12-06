@@ -1,10 +1,10 @@
 import angular from 'angular'
 
-import template from './error-messages.tpl.html'
+import template from './checkout-error-messages.tpl.html'
 
-const componentName = 'errorMessages'
+const componentName = 'checkoutErrorMessages'
 
-class ErrorMessagesController {
+class CheckoutErrorMessagesController {
   /* @ngInject */
   constructor () /* eslint-disable-line no-useless-constructor */ {}
 }
@@ -12,7 +12,7 @@ class ErrorMessagesController {
 export default angular
   .module(componentName, [])
   .component(componentName, {
-    controller: ErrorMessagesController,
+    controller: CheckoutErrorMessagesController,
     templateUrl: template,
     bindings: {
       errors: '<',
