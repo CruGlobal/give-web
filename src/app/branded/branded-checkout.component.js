@@ -13,6 +13,7 @@ import thankYouSummary from 'app/thankYou/summary/thankYouSummary.component'
 
 import sessionService from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
+import * as checkoutService from 'common/services/checkoutHelpers/checkout.service'
 import brandedAnalyticsFactory from './analytics/branded-analytics.factory'
 
 import 'common/lib/fakeLocalStorage'
@@ -33,6 +34,7 @@ class BrandedCheckoutController {
     this.envService = envService
     this.orderService = orderService
     this.$translate = $translate
+    this.checkoutService = checkoutService
 
     this.orderService.clearCoverFees()
   }
@@ -57,6 +59,8 @@ class BrandedCheckoutController {
       console.error(err)
     })
     this.$translate.use(this.language || 'en')
+
+    this.checkoutService.initializeRecaptcha.call(this)
   }
 
   formatDonorDetails () {
