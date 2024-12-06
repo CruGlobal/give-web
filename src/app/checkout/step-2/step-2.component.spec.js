@@ -164,6 +164,7 @@ describe('checkout', () => {
 
       it('should update paymentFormState if transitioning to a different state', () => {
         self.controller.paymentFormState = 'unsubmitted'
+        self.controller.selectedPaymentMethod = { cvv: '123', self: { uri: 'uri'} }
         self.controller.onPaymentFormStateChange({ state: 'submitted' })
 
         expect(self.controller.paymentFormState).toEqual('submitted')

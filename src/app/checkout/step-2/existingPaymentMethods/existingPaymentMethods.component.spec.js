@@ -364,13 +364,13 @@ describe('checkout', () => {
             'card-type': 'Visa', 
             self: { 
               type: 'cru.creditcards.named-credit-card', 
-              uri: '/paymentmethods/crugive/giydsnjqgi=' 
+              uri: '/paymentinstruments/orders/crugive/hfsdoylfhbswk…4tmljug5qtqllcg44wcljvhezgcntcmvtdeojwgy=' 
             }, 
             selectAction: 'some uri' 
           }
           self.$window.sessionStorage.setItem(
             'storedCvvs', 
-              '{"/paymentmethods/crugive/giydsnjqgi=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}'
+              '{"/paymentinstruments/orders/crugive/hfsdoylfhbswk…4tmljug5qtqllcg44wcljvhezgcntcmvtdeojwgy=":"456"}'
           )
           self.controller.switchPayment()
           
@@ -400,32 +400,41 @@ describe('checkout', () => {
       })
 
       describe('addCvvValidators', () => {
-        it('should add validator functions to creditCardPaymentForm.securityCode', () => {
-          jest.spyOn(self.controller, 'addCvvValidators').mockImplementation(() => {
-            self.controller.creditCardPaymentForm.securityCode.$validators = {
-              minLength: cruPayments.creditCard.cvv.validate.minLength,
-              maxLength: cruPayments.creditCard.cvv.validate.maxLength
+        it('should add a watch on the security code value', () => {
+          self.controller.creditCardPaymentForm = {
+            $valid: true,
+            $dirty: false,
+            securityCode: {
+              $viewValue: '123',
+              $validators: {}
             }
-          })
+          }
+          self.controller.addCvvValidators()
+          expect(self.controller.$scope.$$watchers.length).toEqual(1)
+          expect(self.controller.$scope.$$watchers[0].exp).toEqual('$ctrl.creditCardPaymentForm.securityCode.$viewValue')
+        })
+        
+        it('should add validator functions to creditCardPaymentForm.securityCode', () => {
+          jest.spyOn(self.controller, 'addCvvValidators')
           delete  self.controller.creditCardPaymentForm
           self.controller.waitForFormInitialization()
           self.controller.$scope.$digest()
-    
+
           expect(self.controller.addCvvValidators).not.toHaveBeenCalled()
           self.controller.creditCardPaymentForm = {
             $valid: true,
             $dirty: false,
             securityCode: {
               $viewValue: '123',
+              $validators: {}
             }
           }
           self.controller.$scope.$digest()
-    
+
           expect(self.controller.addCvvValidators).toHaveBeenCalled()
           expect(Object.keys(self.controller.creditCardPaymentForm.securityCode.$validators).length).toEqual(2)
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.maxLength).toBe('function')
-   
         })
         
         it('should call enableContinue when cvv is valid', () => {
