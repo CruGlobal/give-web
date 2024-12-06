@@ -24,12 +24,19 @@ describe('RecaptchaWrapper component', () => {
   }
 
   const script = document.createElement('script')
-  script.src = 'https://www.google.com/recaptcha/api.js?render=123'
-  script.id = 'test-script'
 
   beforeEach(() => {
     $translate.instant.mockImplementation((input) => input)
     global.window.grecaptcha = mockRecaptcha
+    script.src = 'https://www.google.com/recaptcha/api.js?render=123'
+    script.id = 'test-script'
+  })
+
+  afterEach(() => {
+    const foundScript = document.getElementById('give-checkout-recaptcha')
+    if (foundScript) {
+      document.body.removeChild(foundScript)
+    }
   })
 
   it('should render', () => {
@@ -77,5 +84,27 @@ describe('RecaptchaWrapper component', () => {
     )
     expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
     expect(document.getElementById('test-script')).not.toBeNull()
+  })
+
+  it('should only add this script once', () => {
+    script.id = 'give-checkout-recaptcha'
+    document.body.appendChild(script)
+    expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
+    render(
+      <RecaptchaWrapper
+        action='checkout'
+        onSuccess={jest.fn()}
+        componentInstance={{}}
+        buttonId='id'
+        buttonType={ButtonType.Submit}
+        buttonClasses='btn'
+        buttonDisabled={false}
+        buttonLabel='Label'
+        envService={envService}
+        $translate={$translate}
+        $log={$log}
+      />
+    )
+    expect(document.querySelectorAll('#give-checkout-recaptcha')).toHaveLength(1)
   })
 })
