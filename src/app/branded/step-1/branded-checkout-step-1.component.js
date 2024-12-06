@@ -12,7 +12,7 @@ import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.f
 import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import template from './branded-checkout-step-1.tpl.html'
-import { Observable } from 'rxjs'
+import { Observable } from 'rxjs/Observable'
 import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
 
 const componentName = 'brandedCheckoutStep1'
