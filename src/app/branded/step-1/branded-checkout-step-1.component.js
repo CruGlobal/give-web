@@ -244,6 +244,9 @@ class BrandedCheckoutStep1Controller {
       .subscribe(() => {
         this.next()
         this.loadingAndSubmitting = false
+      },
+      () => {
+        this.loadingAndSubmitting = false
       })
   }
 
