@@ -181,12 +181,11 @@ class BrandedCheckoutStep1Controller {
         this.brandedAnalyticsFactory.saveCoverFees(this.orderService.retrieveCoverFeeDecision())
         this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
         this.brandedAnalyticsFactory.addPaymentInfo()
-        this.brandedAnalyticsFactory.reviewOrder()
       },
       error => {
         // Handle errors by setting flag and logging the error
         this.errorLoadingCart = true
-        this.$log.error('Error loading cart data for branded checkout step 2', error)
+        this.$log.error('Error loading cart data for branded checkout (single step)', error)
         return Observable.throw(error) // Rethrow the error so the observable chain can handle it
       }
     )
