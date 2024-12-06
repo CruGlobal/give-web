@@ -32,6 +32,8 @@ class BrandedCheckoutStep1Controller {
   }
 
   initItemConfig () {
+    this.defaultItemConfig = angular.copy(this.itemConfig)
+
     this.itemConfig = {}
     this.itemConfig.CAMPAIGN_CODE = this.campaignCode
     if (this.itemConfig.CAMPAIGN_CODE &&
@@ -60,6 +62,13 @@ class BrandedCheckoutStep1Controller {
     }
     this.itemConfig.RECURRING_DAY_OF_MONTH = this.day
     this.itemConfig.frequency = this.frequency
+
+    this.premiumSelected = false
+
+    if (this.defaultItemConfig && this.defaultItemConfig.PREMIUM_CODE) {
+      this.itemConfig.PREMIUM_CODE = this.defaultItemConfig.PREMIUM_CODE
+      this.premiumSelected = true
+    }
   }
 
   initCart () {
@@ -151,6 +160,14 @@ class BrandedCheckoutStep1Controller {
     }
   }
 
+  onSelectPremiumOption () {
+    if (this.premiumSelected) {
+      this.itemConfig.PREMIUM_CODE = this.premiumCode
+    } else {
+      this.itemConfig.PREMIUM_CODE = undefined
+    }
+  }
+
   checkSuccessfulSubmission () {
     if (every(this.submission, 'completed')) {
       if (every(this.submission, { error: false })) {
@@ -188,6 +205,10 @@ export default angular
       next: '&',
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
-      radioStationRadius: '<'
+      radioStationRadius: '<',
+      premiumCode: '<',
+      premiumName: '<',
+      premiumImageUrl: '<',
+      itemConfig: '='
     }
   })
