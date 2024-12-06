@@ -416,6 +416,7 @@ export default angular
       disableSessionRestart: '@',
       updateQueryParam: '&',
       submitted: '<',
-      onStateChange: '&'
+      onStateChange: '&',
+      useV3: '<'
     }
   })
