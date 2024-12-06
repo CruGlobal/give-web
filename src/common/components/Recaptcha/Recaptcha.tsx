@@ -97,7 +97,7 @@ export const Recaptcha = ({
           if (data.score < 0.5) {
             const errorMessage = `Captcha score was below the threshold: ${data.score}`
             $log.warn(errorMessage)
-            datadogRum.addError(new Error(`Error submitting purchase: ${errorMessage}`))
+            datadogRum.addError(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'lowScore' })
             onFailure(componentInstance)
             return
           }
@@ -112,7 +112,7 @@ export const Recaptcha = ({
         if (!isValidAction(data?.action)) {
           const errorMessage = `Invalid action: ${data?.action}`
           $log.warn(errorMessage)
-          datadogRum.addError(new Error(`Error submitting purchase: ${errorMessage}`))
+          datadogRum.addError(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'invalidAction' })
           onFailure(componentInstance)
         }
       } catch (error) {

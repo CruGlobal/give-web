@@ -125,7 +125,7 @@ describe('Recaptcha component', () => {
     await waitFor(() => {
       const errorMessage = 'Captcha score was below the threshold: 0.2'
       expect($log.warn).toHaveBeenCalledWith(errorMessage)
-      expect(datadogRum.addError).toHaveBeenCalledWith(new Error(`Error submitting purchase: ${errorMessage}`))
+      expect(datadogRum.addError).toHaveBeenCalledWith(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'lowScore' })
       expect(onFailure).toHaveBeenCalledTimes(1)
     })
   })
@@ -171,7 +171,7 @@ describe('Recaptcha component', () => {
       expect(onSuccess).not.toHaveBeenCalled()
       expect(onFailure).toHaveBeenCalled()
       expect($log.warn).toHaveBeenCalledWith(errorMessage)
-      expect(datadogRum.addError).toHaveBeenCalledWith(new Error(`Error submitting purchase: ${errorMessage}`))
+      expect(datadogRum.addError).toHaveBeenCalledWith(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'invalidAction' })
     })
   })
 

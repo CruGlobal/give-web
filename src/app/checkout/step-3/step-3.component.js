@@ -176,7 +176,7 @@ class Step3Controller {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }
       componentInstance.$log.error('Error submitting purchase:', error)
-      datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`)) // here in order to show up in Error Tracking in DD
+      datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status }) // here in order to show up in Error Tracking in DD
       componentInstance.onSubmitted()
       componentInstance.submissionErrorStatus = error.status
       componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
