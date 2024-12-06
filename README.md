@@ -60,6 +60,9 @@ Add the following code to your page where appropriate. See the [Branded checkout
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)"
     radio-station-api-url="https://api.domain.com/getStations"
     radio-station-radius="100"
+    premium-code="BOOKS01"
+    premium-name="Books"
+    premium-image-url="https://api.images.com/img.png"
     hide-spouse-details="true"
     hide-annual="true"
     hide-quarterly="true">
