@@ -19,6 +19,9 @@ describe('checkout', function () {
           search: ''
         }, scrollTo: jest.fn() }
     })
+    self.controller.checkoutService = {
+      initializeRecaptcha: jest.fn()
+    }
   }))
 
   it('to be defined', function () {
@@ -53,6 +56,7 @@ describe('checkout', function () {
       self.controller.$rootScope.$on.mock.calls[0][1]()
 
       expect(self.controller.signedOut).toHaveBeenCalled()
+      expect(self.controller.checkoutService.initializeRecaptcha).toHaveBeenCalled()
     })
 
     describe('sessionEnforcerService success', () => {
@@ -118,7 +122,7 @@ describe('checkout', function () {
     it('should watch the url and update the state', () => {
       jest.spyOn(self.controller, 'initStepParam').mockImplementation(() => {})
       jest.spyOn(self.controller.cartService, 'get').mockReturnValue(Observable.of('cartData'))
-      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepEvent').mockImplementation(() => {})  
+      jest.spyOn(self.controller.analyticsFactory, 'checkoutStepEvent').mockImplementation(() => {})
       self.controller.listenForLocationChange()
       self.controller.$location.search('step', 'review')
       self.controller.$rootScope.$digest()

@@ -14,6 +14,7 @@ import showErrors from 'common/filters/showErrors.filter'
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
 import designationsService from 'common/services/api/designations.service'
+import * as checkoutService from 'common/services/checkoutHelpers/checkout.service'
 
 import sessionEnforcerService, { EnforcerCallbacks } from 'common/services/session/sessionEnforcer.service'
 import { Roles, SignOutEvent } from 'common/services/session/session.service'
@@ -40,6 +41,7 @@ class CheckoutController {
     this.loadingCartData = true
     this.analyticsFactory = analyticsFactory
     this.selfReference = this
+    this.checkoutService = checkoutService
   }
 
   $onInit () {
@@ -56,6 +58,8 @@ class CheckoutController {
     this.initStepParam(true)
     this.listenForLocationChange()
     this.analyticsFactory.pageLoaded(true)
+
+    this.checkoutService.initializeRecaptcha.call(this)
   }
 
   $onDestroy () {

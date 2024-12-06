@@ -50,7 +50,10 @@ describe('branded checkout', () => {
         onOrderCompleted: jest.fn(),
         onOrderFailed: jest.fn(),
       },
-    );
+    )
+    $ctrl.checkoutService = {
+      initializeRecaptcha: jest.fn()
+    }
   }))
 
   describe('$onInit', () => {
@@ -73,6 +76,11 @@ describe('branded checkout', () => {
       expect($ctrl.checkoutStep).toEqual('giftContactPayment')
       expect($ctrl.formatDonorDetails).toHaveBeenCalled()
       expect($ctrl.$window.sessionStorage.removeItem).toHaveBeenCalledWith('initialLoadComplete')
+    })
+
+    it('should initialize recaptcha', () => {
+      $ctrl.$onInit()
+      expect($ctrl.checkoutService.initializeRecaptcha).toHaveBeenCalled()
     })
   })
 
