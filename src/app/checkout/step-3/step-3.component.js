@@ -134,7 +134,7 @@ class Step3Controller {
     this.orderService.submitOrder(this).subscribe(() => {
       if (!this.isBranded) {
         // Branded checkout submits its purchase analytics event on the thank you page
-        this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.retrieveCoverFeeDecision())
+        this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
       }
       this.changeStep({ newStep: 'thankYou' })
     })
