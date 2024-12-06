@@ -1,6 +1,6 @@
 import angular from 'angular'
 import { react2angular } from 'react2angular'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { ButtonType, Recaptcha } from './Recaptcha'
 
 const componentName = 'recaptchaWrapper'
@@ -39,13 +39,6 @@ export const RecaptchaWrapper = ({
   $log
 }: RecaptchaWrapperProps): JSX.Element => {
   const recaptchaKey = envService.read('recaptchaKey')
-
-  useMemo(() => {
-    const script = document.createElement('script')
-    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${recaptchaKey}`
-    script.id = 'give-checkout-recaptcha'
-    document.body.appendChild(script)
-  }, [])
 
   return (
       <Recaptcha action={action}

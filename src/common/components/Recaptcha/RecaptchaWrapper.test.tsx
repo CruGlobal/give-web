@@ -23,10 +23,6 @@ describe('RecaptchaWrapper component', () => {
     execute: mockExecuteRecaptcha
   }
 
-  const script = document.createElement('script')
-  script.src = 'https://www.google.com/recaptcha/api.js?render=123'
-  script.id = 'test-script'
-
   beforeEach(() => {
     $translate.instant.mockImplementation((input) => input)
     global.window.grecaptcha = mockRecaptcha
@@ -55,27 +51,5 @@ describe('RecaptchaWrapper component', () => {
     expect(recaptchaEnabledButton.className).toEqual('btn')
     expect((recaptchaEnabledButton as HTMLButtonElement).disabled).toEqual(false)
     expect(recaptchaEnabledButton.innerHTML).toEqual('Label')
-    expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
-  })
-
-  it('should add a script even if one already exists', () => {
-    document.body.appendChild(script)
-    render(
-      <RecaptchaWrapper
-        action='checkout'
-        onSuccess={jest.fn()}
-        componentInstance={{}}
-        buttonId='id'
-        buttonType={ButtonType.Submit}
-        buttonClasses='btn'
-        buttonDisabled={false}
-        buttonLabel='Label'
-        envService={envService}
-        $translate={$translate}
-        $log={$log}
-      />
-    )
-    expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
-    expect(document.getElementById('test-script')).not.toBeNull()
   })
 })
