@@ -45,7 +45,7 @@ export const RecaptchaWrapper = ({
     script.src = `https://www.google.com/recaptcha/enterprise.js?render=${recaptchaKey}`
     script.id = 'give-checkout-recaptcha'
     if (!document.getElementById(script.id)) {
-      document.body.appendChild(script)
+      document.head.appendChild(script)
     }
   }, [])
 
