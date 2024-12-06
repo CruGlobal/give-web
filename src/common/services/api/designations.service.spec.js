@@ -199,14 +199,14 @@ describe('designation service', () => {
 
   describe('facebookPixel', () => {
     it('should load facebook pixel id from JCR', done => {
-      jest.spyOn(self.designationsService, 'designationData').mockReturnValue(
-        Observable.of(designationResponse['jcr:content'])
-      )
+      self.$httpBackend.expectGET('https://give-stage2.cru.org/content/give/us/en/designations/0/1/2/3/4/0123456.infinity.json')
+        .respond(200, designationResponse)
       self.designationsService.facebookPixel('0123456')
         .subscribe(pixelId => {
           expect(pixelId).toEqual('123456')
           done()
         }, done)
+      self.$httpBackend.flush()
     })
   })
 

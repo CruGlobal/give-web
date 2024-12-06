@@ -2,6 +2,15 @@ import { render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ButtonType, Recaptcha } from './Recaptcha'
 import React from 'react'
+import { datadogRum } from '@datadog/browser-rum'
+
+jest.mock('@datadog/browser-rum', () => {
+  return {
+    datadogRum: {
+      addError: jest.fn()
+    }
+  }
+})
 
 let mockExecuteRecaptcha = jest.fn()
 const mockRecaptchaReady = jest.fn()

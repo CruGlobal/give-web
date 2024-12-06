@@ -1,6 +1,7 @@
 import angular from 'angular'
 import { react2angular } from 'react2angular'
 import React, { useCallback, useEffect, useState } from 'react'
+import { datadogRum } from '@datadog/browser-rum'
 
 const componentName = 'recaptcha'
 
