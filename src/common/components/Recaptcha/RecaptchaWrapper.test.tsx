@@ -35,7 +35,7 @@ describe('RecaptchaWrapper component', () => {
   afterEach(() => {
     const foundScript = document.getElementById('give-checkout-recaptcha')
     if (foundScript) {
-      document.body.removeChild(foundScript)
+      document.head.removeChild(foundScript)
     }
   })
 
@@ -66,7 +66,7 @@ describe('RecaptchaWrapper component', () => {
   })
 
   it('should add a script even if one already exists', () => {
-    document.body.appendChild(script)
+    document.head.appendChild(script)
     render(
       <RecaptchaWrapper
         action='checkout'
@@ -88,7 +88,7 @@ describe('RecaptchaWrapper component', () => {
 
   it('should only add this script once', () => {
     script.id = 'give-checkout-recaptcha'
-    document.body.appendChild(script)
+    document.head.appendChild(script)
     expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
     render(
       <RecaptchaWrapper
