@@ -2,8 +2,9 @@ import angular from 'angular'
 import 'angular-mocks'
 import omit from 'lodash/omit'
 import cloneDeep from 'lodash/cloneDeep'
-import { Observable } from 'rxjs'
+import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
+import 'rxjs/add/observable/empty'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
 import { Roles } from 'common/services/session/session.service'
 
@@ -1271,7 +1272,7 @@ describe('order service', () => {
 
         mockController.bankAccountPaymentDetails = {}
         self.orderService.submitOrder(mockController).subscribe(
-          ()=>{
+          () => {
             fail()
           },
           () => {
@@ -1309,8 +1310,6 @@ describe('order service', () => {
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
           done()
         })
-
-
       })
 
       it('should handle an error submitting an order with a credit card', (done) => {
