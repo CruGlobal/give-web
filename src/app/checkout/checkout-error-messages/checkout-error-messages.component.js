@@ -15,7 +15,7 @@ export default angular
     controller: CheckoutErrorMessagesController,
     templateUrl: template,
     bindings: {
-      errors: '<',
+      needinfoErrors: '<',
       submissionError: '<',
       submissionErrorStatus: '<'
     }
