@@ -407,7 +407,9 @@ class Order {
     delete controller.submissionError
     delete controller.submissionErrorStatus
     // Prevent multiple submissions
-    if (controller.submittingOrder) return Observable.empty()
+    if (controller.submittingOrder) {
+      return Observable.empty()
+    }
     controller.submittingOrder = true
     controller.onSubmittingOrder({ value: true })
 
@@ -430,7 +432,7 @@ class Order {
         controller.$scope.$emit(cartUpdatedEvent)
       })
       .catch((error) => {
-      // Handle the error side effects when the observable errors
+        // Handle the error side effects when the observable errors
         this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
         controller.submittingOrder = false
         controller.onSubmittingOrder({ value: false })
