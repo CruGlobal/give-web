@@ -494,76 +494,141 @@ hr.horizontal-divider {
   }
 }
 
-/* Product Config Form - Suggested Amount Buttons Begin */
+/* Product Config Form Amounts Begin */
 
 .button-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  .help-block {
+    padding: 10px;
+    color: #715927;
+    background-color: #f4d89d;
+    border: 2px solid #f9b625;
+    border-radius: 2px;
+  }
+
+  input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  label {
+    display: flex;
+    flex: 1;
+    cursor: pointer;
+    margin: 0;
+  
+    .amount-box {
+      margin: 0;
+      min-width: 50px;
+      text-align: center;
+      align-content: center;
+      aspect-ratio: 1 / 1;
+      background-color: #ddd;
+      color: inherit;
+      border-radius: 2px 0 0 2px;
+      transition: all 0.3s ease;
+    }
+
+    .amount-description {
+      width: 100%;
+      margin: 0;
+      padding: 5px 10px;
+      align-content: center;
+      background-color: #f0f0f0;
+      font-weight: normal;
+    }
+  }
+
+  input[type="radio"]:hover + label {
+    .amount-description {
+      background-color: #e4e4e4;
+    }
+  }
+  input[type="radio"]:focus + label {
+    .amount-box {
+      min-width: 55px;
+      color:#ddd;
+      background-color:#3a3a3a;
+    }
+  }
+  input[type="radio"]:checked + label {
+    .amount-box {
+      min-width: 55px;
+      color: #ddd;
+      background-color: #3a3a3a;
+    }
+  }
 }
 
-.suggested-button {
+.custom-amount-button {
+  
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0;
-  font-size: 16px;
-  font-weight: 500;
-  background-color: $colorGrayscale-pebble;
-  border: none;
-  border-radius: 5px;
-  overflow: hidden;
-  color: $colorCru-gray;
-  cursor: pointer;
+  flex-direction: row;
+  height: 50px;
+  border: 1px solid #ddd;
+
+  .input-prepend {
+    margin: 0;
+    min-width: 50px;
+    text-align: center;
+    align-content: center;
+    min-width: 50px;
+    aspect-ratio: 1 / 1;
+    background-color: #ddd;
+    cursor: default;
+  }
+
+  label {
+    all: unset;
+    width: 100%;
+    height: 100%;
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      height: 100%;
+      padding: 0 7px;
+      border: none;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+
+      &::placeholder {
+        color: $colorCru-gray;
+      }
+
+      &:focus {
+        border: 1px solid #3eb1c8;
+        outline: none;
+      }
+    }
+  }
+}
+
+/* Check for custom amount input */
+.custom-amount-button:has(.ng-not-empty) {
+  border: 1px solid #3a3a3a;
+  font-weight: 700;
+  color: #3a3a3a;
+}
+
+.custom-amount-button:has(.ng-not-empty) .input-prepend {
+  // @extend .button-common;
+  
+  min-width: 55px;
+  aspect-ratio: 1 / 1;
+  background-color: #3a3a3a;
+  color: #fff;
   transition: all 0.3s ease;
-  width: 100%;
-  height: 60px;
 }
-
-.suggested-button.active {
-  background-color: #dddddd;
-  cursor: default;
-  height: 70px;
-
-  .amount-box {
-    background-color: #3a3a3a;
-    color: #fff;
-    font-weight: normal;
-  }
-
-  .label-text {
-    font-weight: normal;
-  }
-}
-
-.suggested-button:hover {
-  background-color: #f5f5f5;
-}
-
-.amount-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 20px;
-  min-width: 100px;
-  height: 100%;
-  background-color: $colorGrayscale-rock;
-  font-size: 16px;
-  font-weight: normal;
-  color: #333;
-}
-
-.label-text {
-  flex-grow: 1;
-  padding: 0 15px;
-  text-align: left;
-  font-size: 16px;
-  font-weight: normal;
-  color: inherit;
-  line-height: 1.5;
-}
-
-/* Product Config Form - Suggested Amount Buttons End */
+/* Product Config Form Amounts End */
 
 .btn-xs,
 .btn-sm {
