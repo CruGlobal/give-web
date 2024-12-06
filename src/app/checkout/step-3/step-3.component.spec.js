@@ -343,8 +343,8 @@ describe('checkout', () => {
         self.controller.isBranded = false
 
         self.controller.submitOrder()
-
-        expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.controller.retrieveCoverFeeDecision())
+        
+        expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.controller.orderService.retrieveCoverFeeDecision())
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
       })
 

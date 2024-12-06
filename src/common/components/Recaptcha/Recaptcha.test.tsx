@@ -114,7 +114,6 @@ describe('Recaptcha component', () => {
     return <Recaptcha
       action='checkout'
       onSuccess={onSuccess}
-      componentInstance={{}}
       buttonId='id'
       buttonType={ButtonType.Submit}
       buttonClasses='btn'

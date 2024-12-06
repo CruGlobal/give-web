@@ -50,7 +50,7 @@ export const RecaptchaWrapper = ({
   }, [])
 
   // Because The onSuccess callback is called by a React component, AngularJS doesn't know that an event happened and doesn't know it needs to rerender. We have to use $apply to ensure that AngularJS rerenders after the event handlers return.
-  const onSuccessWrapped = (()=>{
+  const onSuccessWrapped = (() => {
     $rootScope.$apply(()=> {
       onSuccess.call(componentInstance)
     })

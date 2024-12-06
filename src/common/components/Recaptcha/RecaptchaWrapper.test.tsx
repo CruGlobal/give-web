@@ -51,6 +51,7 @@ describe('RecaptchaWrapper component', () => {
         envService={envService}
         $translate={$translate}
         $log={$log}
+        $rootScope={$rootScope}
       />
     )
     expect(getAllByRole('button')).toHaveLength(1)

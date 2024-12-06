@@ -12,8 +12,8 @@ import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.f
 import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import template from './branded-checkout-step-1.tpl.html'
-import { Observable } from 'rxjs'
-import { tap, catchError } from 'rxjs/operators'
+import { Observable } from 'rxjs/Observable'
+import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
 
 const componentName = 'brandedCheckoutStep1'
 
@@ -198,12 +198,11 @@ class BrandedCheckoutStep1Controller {
         this.brandedAnalyticsFactory.saveCoverFees(this.orderService.retrieveCoverFeeDecision())
         this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
         this.brandedAnalyticsFactory.addPaymentInfo()
-        this.brandedAnalyticsFactory.reviewOrder()
       },
       error => {
         // Handle errors by setting flag and logging the error
         this.errorLoadingCart = true
-        this.$log.error('Error loading cart data for branded checkout step 2', error)
+        this.$log.error('Error loading cart data for branded checkout (single step)', error)
         return Observable.throw(error) // Rethrow the error so the observable chain can handle it
       }
     )
@@ -262,6 +261,9 @@ class BrandedCheckoutStep1Controller {
       .subscribe(() => {
         this.next()
         this.loadingAndSubmitting = false
+      },
+      () => {
+        this.loadingAndSubmitting = false
       })
   }
 
@@ -291,7 +293,8 @@ export default angular
     cartService.name,
     orderService.name,
     analyticsFactory.name,
-    brandedAnalyticsFactory.name
+    brandedAnalyticsFactory.name,
+    checkoutErrorMessages.name
   ])
   .component(componentName, {
     controller: BrandedCheckoutStep1Controller,

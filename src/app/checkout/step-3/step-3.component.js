@@ -1,5 +1,10 @@
 import angular from 'angular'
 import 'rxjs/add/observable/throw'
+
+import displayAddressComponent from 'common/components/display-address/display-address.component'
+import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
+import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
+
 import commonService from 'common/services/api/common.service'
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
@@ -141,7 +146,7 @@ class Step3Controller {
     this.orderService.submitOrder(this).subscribe(() => {
       if (!this.isBranded) {
         // Branded checkout submits its purchase analytics event on the thank you page
-        this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.retrieveCoverFeeDecision())
+        this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
       }
       this.changeStep({ newStep: 'thankYou' })
     })
@@ -160,7 +165,8 @@ export default angular
     cartService.name,
     commonService.name,
     sessionService.name,
-    recaptchaComponent.name
+    recaptchaComponent.name,
+    checkoutErrorMessages.name
   ])
   .component(componentName, {
     controller: Step3Controller,
