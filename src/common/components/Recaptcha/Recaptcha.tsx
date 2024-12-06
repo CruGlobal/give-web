@@ -1,6 +1,7 @@
 import angular from 'angular'
 import { react2angular } from 'react2angular'
 import React, { useCallback, useEffect, useState } from 'react'
+import { datadogRum } from '@datadog/browser-rum'
 
 const componentName = 'recaptcha'
 
@@ -94,7 +95,9 @@ export const Recaptcha = ({
 
         if (data?.success === true && isValidAction(data?.action)) {
           if (data.score < 0.5) {
-            $log.warn(`Captcha score was below the threshold: ${data.score}`)
+            const errorMessage = `Captcha score was below the threshold: ${data.score}`
+            $log.warn(errorMessage)
+            datadogRum.addError(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'lowScore' })
             onFailure(componentInstance)
             return
           }
@@ -107,7 +110,9 @@ export const Recaptcha = ({
           return
         }
         if (!isValidAction(data?.action)) {
-          $log.warn(`Invalid action: ${data?.action}`)
+          const errorMessage = `Invalid action: ${data?.action}`
+          $log.warn(errorMessage)
+          datadogRum.addError(new Error(`Error submitting purchase: ${errorMessage}`), { context: 'Recaptcha', errorCode: 'invalidAction' })
           onFailure(componentInstance)
         }
       } catch (error) {
