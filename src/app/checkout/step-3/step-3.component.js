@@ -10,6 +10,7 @@ import sessionService, { SignInEvent } from 'common/services/session/session.ser
 import capitalizeFilter from 'common/filters/capitalize.filter'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
+import { datadogRum } from '@datadog/browser-rum'
 import analyticsFactory from 'app/analytics/analytics.factory'
 import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import displayAddressComponent from 'common/components/display-address/display-address.component'
@@ -183,6 +184,7 @@ class Step3Controller {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }
       componentInstance.$log.error('Error submitting purchase:', error)
+      datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`)) // here in order to show up in Error Tracking in DD
       componentInstance.onSubmitted()
       componentInstance.submissionErrorStatus = error.status
       componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
