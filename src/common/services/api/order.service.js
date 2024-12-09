@@ -6,6 +6,7 @@ import 'rxjs/add/operator/combineLatest'
 import 'rxjs/add/operator/pluck'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
+import 'rxjs/Observable/operator/finally'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import isString from 'lodash/isString'
@@ -424,8 +425,6 @@ class Order {
     }
     return submitRequest
       .do(() => {
-        controller.submittingOrder = false
-        controller.onSubmittingOrder({ value: false })
         this.clearCardSecurityCodes()
         this.clearCoverFees()
         controller.onSubmitted()
@@ -434,8 +433,6 @@ class Order {
       .catch((error) => {
         // Handle the error side effects when the observable errors
         this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-        controller.submittingOrder = false
-        controller.onSubmittingOrder({ value: false })
 
         controller.loadCart()
 
@@ -447,9 +444,11 @@ class Order {
         controller.submissionErrorStatus = error.status
         controller.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
         this.$window.scrollTo(0, 0)
-
-        return Observable.throw(error) // Return the error as an observable
       })
+      .finally(() => {
+        controller.submittingOrder = false
+        controller.onSubmittingOrder({ value: false })
+      });
   }
 }
 

@@ -15,6 +15,7 @@ import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/cover
 import template from './branded-checkout-step-1.tpl.html'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/do'
+import 'rxjs/Observable/operator/finally'
 
 const componentName = 'brandedCheckoutStep1'
 
@@ -187,7 +188,6 @@ class BrandedCheckoutStep1Controller {
         // Handle errors by setting flag and logging the error
         this.errorLoadingCart = true
         this.$log.error('Error loading cart data for branded checkout (single step)', error)
-        return Observable.throw(error) // Rethrow the error so the observable chain can handle it
       }
     )
     return cart
@@ -197,7 +197,9 @@ class BrandedCheckoutStep1Controller {
     this.loadingCurrentPayment = true
 
     const getCurrentPayment = this.orderService.getCurrentPayment()
-    getCurrentPayment.subscribe(
+    getCurrentPayment.finally(() => {
+      this.loadingCurrentPayment = false
+    }).subscribe(
       data => {
         if (!data) {
           this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist')
@@ -208,12 +210,9 @@ class BrandedCheckoutStep1Controller {
         } else {
           this.$log.error('Error loading current payment info: current payment type is unknown')
         }
-        this.loadingCurrentPayment = false
       },
       error => {
-        this.loadingCurrentPayment = false
         this.$log.error('Error loading current payment info', error)
-        return Observable.throw(error) // Propagate error
       }
     )
     return getCurrentPayment
@@ -242,12 +241,11 @@ class BrandedCheckoutStep1Controller {
       .mergeMap(() => {
         return this.orderService.submitOrder(this)
       })
+      .finally(() => {
+        this.loadingAndSubmitting = false
+      })
       .subscribe(() => {
         this.next()
-        this.loadingAndSubmitting = false
-      },
-      () => {
-        this.loadingAndSubmitting = false
       })
   }
 
