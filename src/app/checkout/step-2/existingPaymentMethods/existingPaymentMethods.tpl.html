@@ -4,8 +4,8 @@
     <i class="fas fa-lock u-floatRight mt--"></i>
   </div>
   <div class="panel-body">
-    <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods" ng-init="expired = !$ctrl.validPaymentMethod(paymentMethod)">
-    
+    <form novalidate name="$ctrl.creditCardPaymentForm">
+      <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods" ng-init="expired = !$ctrl.validPaymentMethod(paymentMethod)">
         <div class="col-sm-8">
           <label>
             <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" ng-disabled="expired" required ng-change="$ctrl.switchPayment()">
@@ -14,12 +14,10 @@
           </label>
         </div>
         <div ng-if="$ctrl.selectedPaymentMethod['card-type'] && $ctrl.selectedPaymentMethod === paymentMethod" class="col-sm-4">
-          <form novalidate name="$ctrl.creditCardPaymentForm">
-            <credit-card-cvv ></credit-card-cvv>
-          </form>
+          <credit-card-cvv ></credit-card-cvv>
         </div>
-
-    </div>
+      </div>
+    </form>
   </div>
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
