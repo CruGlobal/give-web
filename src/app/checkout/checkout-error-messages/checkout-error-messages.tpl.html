@@ -1,5 +1,5 @@
-<div class="alert alert-danger" role="alert" ng-if="$ctrl.errors || $ctrl.submissionError">
-  <p ng-repeat="error in $ctrl.errors" ng-switch="error">
+<div class="alert alert-danger" role="alert" ng-if="$ctrl.needinfoErrors || $ctrl.submissionError">
+  <p ng-repeat="error in $ctrl.needinfoErrors" ng-switch="error">
     <span ng-switch-when="need.email" translate>{{'REVIEW_EMAIL_ERROR'}}</span>
     <span ng-switch-when="need.payment.method" translate>{{'REVIEW_PAYMENT_ERROR'}}</span>
     <span ng-switch-when="need.billing.address" translate>{{'REVIEW_BILLING_ADDRESS_ERROR'}}</span>
