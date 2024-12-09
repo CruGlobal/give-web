@@ -1,17 +1,24 @@
-<div class="panel panel-default tab-toggle mb0">
+<div class="panel panel-default tab-toggle mb0 existing-payment-method">
   <div class="panel-title panel-heading">
     <span translate>Your Payment Methods</span>
     <i class="fas fa-lock u-floatRight mt--"></i>
   </div>
   <div class="panel-body">
-    <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods" ng-init="expired = !$ctrl.validPaymentMethod(paymentMethod)">
-      <label>
-        <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" ng-disabled="expired" required ng-change="$ctrl.switchPayment()">
-        <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
-        <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod['card-type']" translate>edit</button>
-      </label>
-    </div>
-
+    <form novalidate name="$ctrl.creditCardPaymentForm">
+      <div class="radio radio-method" ng-repeat="paymentMethod in $ctrl.paymentMethods" ng-init="expired = !$ctrl.validPaymentMethod(paymentMethod)">
+        <div class="col-sm-8">
+          <label>
+            <input type="radio" name="paymentMethod" ng-model="$ctrl.selectedPaymentMethod" ng-value="paymentMethod" ng-disabled="expired" required ng-change="$ctrl.switchPayment()">
+            <payment-method-display payment-method="paymentMethod" expired="expired"></payment-method-display>
+            <button class="btn btn-xs btn-link" ng-click="$ctrl.openPaymentMethodFormModal(paymentMethod)" ng-if="paymentMethod['card-type']" translate>edit</button>
+          </label>
+        </div>
+        <div ng-if="$ctrl.selectedPaymentMethod['card-type'] && $ctrl.selectedPaymentMethod === paymentMethod" class="col-sm-4">
+          <credit-card-cvv ></credit-card-cvv>
+        </div>
+      </div>
+    </form>
+  </div>
     <div class="panel panel-default tab-toggle mb0 mt"
          ng-if="(($ctrl.cartData && $ctrl.cartData.items) || $ctrl.brandedCheckoutItem) && $ctrl.selectedPaymentMethod && $ctrl.selectedPaymentMethod['card-type']">
       <div class="panel-title panel-heading" translate>{{'OPTIONAL'}}</div>
