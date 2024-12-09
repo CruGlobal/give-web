@@ -59,6 +59,7 @@ class ExistingPaymentMethodsController {
   waitForFormInitialization () {
     const unregister = this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode', () => {
       if (this.creditCardPaymentForm && this.creditCardPaymentForm.securityCode) {
+        this.switchPayment()
         unregister()
         this.addCvvValidators()
       }
