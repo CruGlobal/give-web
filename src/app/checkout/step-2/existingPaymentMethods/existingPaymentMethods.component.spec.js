@@ -390,7 +390,7 @@ describe('checkout', () => {
           }
           self.$window.sessionStorage.setItem(
             'storedCvvs', 
-              '{"/paymentmethods/crugive/giydsnjqgs=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}'
+              '{"/paymentmethods/crugive/sdjmksjsmw=":"456"}'
           )
           self.controller.switchPayment()
           
