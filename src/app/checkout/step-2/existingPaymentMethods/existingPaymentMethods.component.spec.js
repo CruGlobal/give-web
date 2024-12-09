@@ -364,13 +364,13 @@ describe('checkout', () => {
             'card-type': 'Visa', 
             self: { 
               type: 'cru.creditcards.named-credit-card', 
-              uri: '/paymentinstruments/orders/crugive/hfsdoylfhbswk…4tmljug5qtqllcg44wcljvhezgcntcmvtdeojwgy=' 
+              uri: '/paymentinstruments/orders/crugive/llcg44wcljvhezgcntcmvtdeojwgy=' 
             }, 
             selectAction: 'some uri' 
           }
           self.$window.sessionStorage.setItem(
             'storedCvvs', 
-              '{"/paymentinstruments/orders/crugive/hfsdoylfhbswk…4tmljug5qtqllcg44wcljvhezgcntcmvtdeojwgy=":"456"}'
+              '{"/paymentinstruments/orders/crugive/llcg44wcljvhezgcntcmvtdeojwgy=":"456"}'
           )
           self.controller.switchPayment()
           
