@@ -613,13 +613,13 @@ hr.horizontal-divider {
 }
 
 /* Check for custom amount input */
-.custom-amount-button:has(.ng-not-empty) {
+.custom-amount-button:has(input:checked) {
   border: 1px solid #3a3a3a;
   font-weight: 700;
   color: #3a3a3a;
 }
 
-.custom-amount-button:has(.ng-not-empty) .input-prepend {
+.custom-amount-button:has(input:checked) .input-prepend {
   // @extend .button-common;
   
   min-width: 55px;
