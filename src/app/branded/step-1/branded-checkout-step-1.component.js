@@ -15,7 +15,7 @@ import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/cover
 import template from './branded-checkout-step-1.tpl.html'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/do'
-import 'rxjs/Observable/operator/finally'
+import 'rxjs/add/operator/finally'
 
 const componentName = 'brandedCheckoutStep1'
 
