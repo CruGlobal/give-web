@@ -181,7 +181,9 @@ class BrandedCheckoutStep1Controller {
         // Setting cart data and analytics
         this.cartData = data
         this.brandedAnalyticsFactory.saveCoverFees(this.orderService.retrieveCoverFeeDecision())
-        this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
+        if (this.cartData && this.cartData.items) {
+          this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
+        }
         this.brandedAnalyticsFactory.addPaymentInfo()
       },
       error => {
