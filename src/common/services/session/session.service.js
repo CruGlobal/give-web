@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode'
 import moment from 'moment'
 import { Observable } from 'rxjs/Observable'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { OktaAuth } from '@okta/okta-auth-js'
+import OktaSignIn from '@okta/okta-signin-widget'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
@@ -44,12 +44,23 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   const sessionSubject = new BehaviorSubject(session)
   let sessionTimeout
   const maximumTimeout = 30 * 1000
-  const authClient = new OktaAuth({
-    issuer: envService.read('oktaUrl'),
+
+  const oktaSignInWidgetDefaultOptions = {
+    baseUrl: envService.read('oktaUrl'),
     clientId: envService.read('oktaClientId'),
+    issuer: envService.read('oktaUrl'),
     redirectUri: `${window.location.origin}/sign-in.html`,
-    scopes: ['openid', 'email', 'profile']
-  })
+    scopes: ['openid', 'email', 'profile'],
+    authParams: {
+      grantType: ['refresh_token', 'authorization_code'],
+      display: 'page',
+      pkce: true,
+      responseType: ['code']
+    },
+    useInteractionCodeFlow: true // Enable Interaction Code flow
+  }
+  const oktaSignInWidget = new OktaSignIn(oktaSignInWidgetDefaultOptions)
+  const { authClient } = oktaSignInWidget
 
   // Set initial session on load
   updateCurrentSession()
@@ -66,6 +77,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     session: session,
     sessionSubject: sessionSubject,
     authClient: authClient, // Exposed for tests only
+    oktaSignInWidgetDefaultOptions,
     catchCreateAccountErrors: catchCreateAccountErrors,
     clearCheckoutSavedData: clearCheckoutSavedData,
     checkCreateAccountStatus: checkCreateAccountStatus,

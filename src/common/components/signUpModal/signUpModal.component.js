@@ -1,17 +1,20 @@
 import angular from 'angular'
 import includes from 'lodash/includes'
+import OktaSignIn from '@okta/okta-signin-widget'
 import sessionService, { Roles } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './signUpModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
+require('assets/okta-sign-in/css/okta-sign-in.min.css')
 
 const componentName = 'signUpModal'
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $location, sessionService, cartService, orderService, envService) {
+  constructor ($log, $scope, $rootScope, $location, sessionService, cartService, orderService, envService) {
     this.$log = $log
     this.$scope = $scope
+    this.$rootScope = $rootScope
     this.$location = $location
     this.sessionService = sessionService
     this.orderService = orderService
@@ -24,6 +27,79 @@ class SignUpModalController {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
       this.onStateChange({ state: 'sign-in' })
     }
+    window.currentStep = '1' // Default to step 1
+    const rootScope = this.$rootScope // Capture the $rootScope
+    const scope = this.$scope // Capture the $scope
+    this.oktaSignInWidget = new OktaSignIn({
+      ...this.sessionService.oktaSignInWidgetDefaultOptions,
+      assets: {
+        baseUrl: `${window.location.origin}/assets/okta-sign-in/`
+      },
+      flow: 'signup',
+      registration: {
+        parseSchema: (schema, onSuccess) => {
+          const step = window.currentStep || '1'
+          const steps = {
+            1: [schema[0], schema[1], schema[2]],
+            2: [schema[3], schema[4], schema[5], schema[6], schema[7]],
+            3: [schema[8]]
+          }
+          onSuccess(steps[step])
+        },
+        preSubmit: (postData, onSuccess) => {
+          const step = window.currentStep
+          const userProfile = postData.userProfile
+
+          if (step === '1') {
+            Object.assign(rootScope, {
+              firstName: userProfile.firstName,
+              lastName: userProfile.lastName,
+              email: userProfile.email
+            })
+            scope.$apply(() => scope.goToNextStep('2'))
+          } else if (step === '2') {
+            Object.assign(rootScope, {
+              streetAddress: userProfile.streetAddress,
+              city: userProfile.city,
+              state: userProfile.state,
+              zipCode: userProfile.zipCode,
+              countryCode: userProfile.countryCode
+            })
+            scope.$apply(() => scope.goToNextStep('3'))
+          } else if (step === '3') {
+            postData.userProfile = {
+              firstName: rootScope.firstName,
+              lastName: rootScope.lastName,
+              email: rootScope.email,
+              streetAddress: rootScope.streetAddress,
+              city: rootScope.city,
+              state: rootScope.state,
+              zipCode: rootScope.zipCode,
+              countryCode: rootScope.countryCode
+            }
+            onSuccess(postData)
+          }
+        }
+      }
+    })
+    this.signIn()
+
+    this.oktaSignInWidget.on('afterRender', (context) => {
+      if (context.controller === 'registration-complete') {
+        window.currentStep = null
+      }
+    })
+
+    scope.goToNextStep = (nextStep) => {
+      window.currentStep = nextStep
+      this.oktaSignInWidget.remove()
+      this.oktaSignInWidget.renderEl(
+        { el: '#osw-container' },
+        () => console.log('Widget rendered successfully'),
+        (err) => console.error(err)
+      )
+    }
+
     if (!this.isInsideAnotherModal) {
       this.cartCount = 0
       this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe(count => {
@@ -35,6 +111,21 @@ class SignUpModalController {
     this.loadDonorDetails()
     this.isLoading = true
     this.submitting = false
+  }
+
+  $onDestroy () {
+    this.oktaSignInWidget.remove()
+  }
+
+  async signIn () {
+    try {
+      const tokens = await this.oktaSignInWidget.showSignInAndRedirect({
+        el: '#osw-container'
+      })
+      this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
+    } catch (error) {
+      this.$log.error('Error showing Okta sign in widget.', error)
+    }
   }
 
   loadDonorDetails () {
