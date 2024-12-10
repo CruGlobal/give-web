@@ -1210,7 +1210,7 @@ describe('order service', () => {
   })
 
   describe('submitOrder', () => {
-    let mockController;
+    let mockController
 
     beforeEach(() => {
       mockController = {
@@ -1220,33 +1220,33 @@ describe('order service', () => {
         $scope: {
           $emit: jest.fn(),
         },
-      };
+      }
 
       // Mock the submit() method to return a resolved observable
-      self.orderService.submit = jest.fn().mockReturnValue(Observable.of({}));
+      self.orderService.submit = jest.fn().mockReturnValue(Observable.of({}))
     })
 
     describe('another order submission in progress', () => {
       it('should not submit the order twice', () => {
-        mockController.submittingOrder = true;
+        mockController.submittingOrder = true
         // Call submitOrder
         const result = self.orderService.submitOrder(mockController)
 
         // The submit method should not be called
-        expect(self.orderService.submit).not.toHaveBeenCalled();
+        expect(self.orderService.submit).not.toHaveBeenCalled()
 
         // It should return an empty observable
-        expect(result).toEqual(Observable.empty());
+        expect(result).toEqual(Observable.empty())
       })
     })
 
     describe('submit single order', () => {
       beforeEach(() => {
-          self.orderService.clearCardSecurityCodes = jest.fn();
-          self.orderService.retrieveCardSecurityCode = jest.fn();
-          self.orderService.clearCoverFees = jest.fn();
-          mockController.loadCart = jest.fn();
-          self.$window.scrollTo = jest.fn();
+          self.orderService.clearCardSecurityCodes = jest.fn()
+          self.orderService.retrieveCardSecurityCode = jest.fn()
+          self.orderService.clearCoverFees = jest.fn()
+          mockController.loadCart = jest.fn()
+          self.$window.scrollTo = jest.fn()
         })
         
         afterEach(() => {
@@ -1275,19 +1275,19 @@ describe('order service', () => {
           () => done("Observable unexpectedly succeeded"),
           () => {
             // Handle the error and continue with assertions
-            expect(self.orderService.submit).toHaveBeenCalled();
-            expect(mockController.loadCart).toHaveBeenCalled();
-            expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled();
-            expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }]);
-            expect(mockController.submissionError).toEqual('error saving bank account');
-            expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0);
+            expect(self.orderService.submit).toHaveBeenCalled()
+            expect(mockController.loadCart).toHaveBeenCalled()
+            expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
+            expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
+            expect(mockController.submissionError).toEqual('error saving bank account')
+            expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
     
-            done();
+            done()
           })
       })
 
       it('should submit the order with a CVV if paying with a credit card', (done) => {
-        self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234');
+        self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234')
         mockController.creditCardPaymentDetails = {}
         mockController.coverFeeDecision = true
         self.orderService.submitOrder(mockController).subscribe(() => {
@@ -1300,7 +1300,7 @@ describe('order service', () => {
 
       it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', (done) => {
         mockController.creditCardPaymentDetails = {}
-        self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue(undefined);
+        self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue(undefined)
         mockController.coverFeeDecision = true
         self.orderService.submitOrder(mockController).subscribe(() => {
           expect(self.orderService.submit).toHaveBeenCalledWith(undefined)
@@ -1313,7 +1313,7 @@ describe('order service', () => {
       it('should handle an error submitting an order with a credit card', (done) => {
         self.orderService.submit.mockImplementation(() => Observable.throw({ data: 'CardErrorException: Invalid Card Number: some details' }))
         mockController.creditCardPaymentDetails = {}
-        self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234');
+        self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234')
         self.orderService.submitOrder(mockController).subscribe(
           () => done("Observable unexpectedly succeeded"),
           () => { // error handler
@@ -1321,21 +1321,21 @@ describe('order service', () => {
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
             expect(mockController.submissionError).toEqual('CardErrorException')
-            expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0);
-            done();
+            expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
+            done()
           })
       })
 
       it('should mask the security code on a credit card error', (done) => {
         self.orderService.submit.mockReturnValue(Observable.throw({ data: 'some error', config: { data: { 'security-code': '1234' } } }))
-        self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234');
+        self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234')
         mockController.creditCardPaymentDetails = {}
         self.orderService.submitOrder(mockController).subscribe(
           () => done("Observable unexpectedly succeeded"),
           () => { // error handler
             expect(self.orderService.submit).toHaveBeenCalledWith('1234')
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'some error', config: { data: { 'security-code': 'XXXX' } } }])
-            done();
+            done()
           })
       })
 
@@ -1347,8 +1347,8 @@ describe('order service', () => {
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'Current payment type is unknown' }])
             expect(mockController.submissionError).toEqual('Current payment type is unknown')
-            expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0);
-            done();
+            expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
+            done()
           })
       })
 
