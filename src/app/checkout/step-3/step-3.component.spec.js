@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 
-import { cartUpdatedEvent } from 'common/lib/cartEvents'
 import { SignInEvent } from 'common/services/session/session.service'
 
 import module from './step-3.component'
@@ -356,11 +355,10 @@ describe('checkout', () => {
     describe('submitOrder', () => {
       beforeEach(() => {
         jest.spyOn(self.controller.analyticsFactory, 'purchase')
-        self.controller.retrieveCoverFeeDecision = () => true;
+        jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
       })
 
       it('should call analyticsFactory when it is not branded checkout', () => {
-        jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision')
         self.controller.isBranded = false
         
         self.controller.submitOrder()
@@ -370,7 +368,6 @@ describe('checkout', () => {
       })
 
       it('should not call analyticsFactory when it is branded checkout', () => {
-        jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision')
         self.controller.isBranded = true
 
         self.controller.submitOrder()

@@ -54,13 +54,13 @@ export const RecaptchaWrapper = ({
 
   // Because The onSuccess and onFailure callbacks are called by a React component, AngularJS doesn't know that an event happened and doesn't know it needs to rerender. We have to use $apply to ensure that AngularJS rerenders after the event handlers return.
   const onSuccessWrapped = (() => {
-    $rootScope.$apply(()=> {
+    $rootScope.$apply(() => {
       onSuccess.call(componentInstance)
     })
   })
 
   const onFailureWrapped = (() => {
-    $rootScope.$apply(()=> {
+    $rootScope.$apply(() => {
       onFailure.call(componentInstance)
     })
   })
