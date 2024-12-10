@@ -1,0 +1,19 @@
+#okta-sign-in {
+  margin: 0;
+
+  .okta-sign-in-header {
+    display: none;
+  }
+}
+
+sign-up-modal {
+  #osw-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .back-to-sign-in {
+    margin-top: 20px;
+  }
+}
