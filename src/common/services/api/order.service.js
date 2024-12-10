@@ -429,8 +429,8 @@ class Order {
         this.clearCoverFees()
         controller.onSubmitted()
         controller.$scope.$emit(cartUpdatedEvent)
-      })
-      .catch((error) => {
+      },
+      (error) => {
         // Handle the error side effects when the observable errors
         this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
 
