@@ -42,7 +42,7 @@ class Step1Controller {
       }
     }
 
-    this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
+    this.requestRadioStation = !!(this.radioStationApiUrl)
 
     this.loadDonorDetails(donorDetailsDefaults)
     this.loadRadioStations()
@@ -122,11 +122,7 @@ class Step1Controller {
     if (this.requestRadioStation && postalCode) {
       this.loadingRadioStationsError = false
 
-      this.radioStationsService.getRadioStations(
-        this.radioStationApiUrl,
-        postalCode,
-        this.radioStationRadius
-      )
+      this.radioStationsService.getRadioStations(this.radioStationApiUrl, postalCode)
         .subscribe((data) => {
           this.radioStations = data
         },
@@ -190,7 +186,6 @@ export default angular
       submitted: '<',
       donorDetails: '=?',
       onSubmit: '&',
-      radioStationApiUrl: '<',
-      radioStationRadius: '<'
+      radioStationApiUrl: '<'
     }
   })

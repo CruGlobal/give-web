@@ -11,10 +11,10 @@ class RadioStations {
     this.$http = $http
   }
 
-  getRadioStations (radioStationApiUrl, postalCode, radioStationRadius) {
+  getRadioStations (radioStationApiUrl, postalCode) {
     return Observable.from(this.$http({
       method: 'GET',
-      url: radioStationApiUrl + '/' + postalCode + '/' + radioStationRadius,
+      url: radioStationApiUrl + '/' + postalCode,
       withCredentials: true
     }))
       .map((response) => {

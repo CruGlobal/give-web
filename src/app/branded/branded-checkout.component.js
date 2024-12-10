@@ -174,7 +174,6 @@ export default angular
       day: '@',
       apiUrl: '@',
       radioStationApiUrl: '@',
-      radioStationRadius: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
