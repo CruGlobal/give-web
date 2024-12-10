@@ -1272,9 +1272,7 @@ describe('order service', () => {
 
         mockController.bankAccountPaymentDetails = {}
         self.orderService.submitOrder(mockController).subscribe(
-          () => {
-            fail()
-          },
+          () => done("Observable unexpectedly succeeded"),
           () => {
             // Handle the error and continue with assertions
             expect(self.orderService.submit).toHaveBeenCalled();
@@ -1309,7 +1307,7 @@ describe('order service', () => {
           expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
           expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
           done()
-        })
+        }, done)
       })
 
       it('should handle an error submitting an order with a credit card', (done) => {
@@ -1317,7 +1315,7 @@ describe('order service', () => {
         mockController.creditCardPaymentDetails = {}
         self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234');
         self.orderService.submitOrder(mockController).subscribe(
-          () => {},
+          () => done("Observable unexpectedly succeeded"),
           () => { // error handler
             expect(self.orderService.submit).toHaveBeenCalledWith('1234')
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
@@ -1333,7 +1331,7 @@ describe('order service', () => {
         self.orderService.retrieveCardSecurityCode = jest.fn().mockReturnValue('1234');
         mockController.creditCardPaymentDetails = {}
         self.orderService.submitOrder(mockController).subscribe(
-          () => {},
+          () => done("Observable unexpectedly succeeded"),
           () => { // error handler
             expect(self.orderService.submit).toHaveBeenCalledWith('1234')
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'some error', config: { data: { 'security-code': 'XXXX' } } }])
@@ -1343,7 +1341,7 @@ describe('order service', () => {
 
       it('should throw an error if neither bank account or credit card details are loaded', (done) => {
         self.orderService.submitOrder(mockController).subscribe(
-          () => {},
+          () => done("Observable unexpectedly succeeded"),
           () => { // error handler
             expect(self.orderService.submit).not.toHaveBeenCalled()
             expect(self.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
@@ -1358,7 +1356,7 @@ describe('order service', () => {
         mockController.creditCardPaymentDetails = {}
         self.orderService.submitOrder(mockController).subscribe(() => {
           done()
-        })
+        }, done)
         expect(self.orderService.clearCoverFees).toHaveBeenCalled()
       })
     })
