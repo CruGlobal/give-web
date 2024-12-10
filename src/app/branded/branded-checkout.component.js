@@ -57,6 +57,8 @@ class BrandedCheckoutController {
       console.error(err)
     })
     this.$translate.use(this.language || 'en')
+
+    this.itemConfig = {}
   }
 
   formatDonorDetails () {
@@ -175,6 +177,9 @@ export default angular
       apiUrl: '@',
       radioStationApiUrl: '@',
       radioStationRadius: '@',
+      premiumCode: '@',
+      premiumName: '@',
+      premiumImageUrl: '@',
       donorDetailsVariable: '@donorDetails',
       defaultPaymentType: '@',
       hidePaymentTypeOptions: '@',
