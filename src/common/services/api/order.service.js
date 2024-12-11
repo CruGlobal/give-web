@@ -376,8 +376,8 @@ class Order {
   }
 
   storeRadioStationData (radioStationData) {
-    this.sessionStorage.setItem('radioStationName', radioStationData.Description)
-    this.sessionStorage.setItem('radioStationCallLetters', radioStationData.MediaId)
+    this.sessionStorage.setItem('radioStationName', Object.values(radioStationData)[0])
+    this.sessionStorage.setItem('radioStationCallLetters', Object.keys(radioStationData)[0])
   }
 
   retrieveRadioStationName () {

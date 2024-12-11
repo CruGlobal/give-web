@@ -205,7 +205,6 @@ export default angular
       next: '&',
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
-      radioStationRadius: '<',
       premiumCode: '<',
       premiumName: '<',
       premiumImageUrl: '<',

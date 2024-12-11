@@ -59,7 +59,6 @@ Add the following code to your page where appropriate. See the [Branded checkout
     on-order-completed="$event.$window.onOrderCompleted($event.purchase)"
     on-order-failed="$event.$window.onOrderFailed($event.donorDetails)"
     radio-station-api-url="https://api.domain.com/getStations"
-    radio-station-radius="100"
     premium-code="BOOKS01"
     premium-name="Books"
     premium-image-url="https://api.images.com/img.png"
@@ -140,7 +139,6 @@ The `<branded-checkout>` element is where the branded checkout Angular app will 
   - `$event.$window` - Provides access to the browser's global `window` object. This allows you to call a custom callback function like `onOrderCompleted` in the example.
   - `$event.purchase` - contains the order's details that are loaded for the thank you page
 - `radio-station-api-url` - Provides a URL path for fetching a list of radio stations in the donor's vicinity.  If you plan to use this feature, contact Cru's Digital Products and Services (DPS) department ([help@cru.org](mailto:help@cru.org)) to have your URL domain whitelisted to interact with our API - *Optional*
-- `radio-station-radius` - Provides a radius (in miles) for fetching a list of radio stations in the donor's vicinity - *Optional*
 - `hide-spouse-details` - Hides the spouse detail line initially, and adds a link to toggle the spouse details. If you don't want this feature, do not add this attribute at all. - *Optional*
 - `hide-annual` - Hides the annual frequency option. If you don't want this feature, do not add this attribute at all. - *Optional*
 - `hide-quarterly` - Hides the quarterly frequency option. If you don't want this feature, do not add this attribute at all. - *Optional*

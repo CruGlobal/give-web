@@ -180,7 +180,6 @@ export default angular
       day: '@',
       apiUrl: '@',
       radioStationApiUrl: '@',
-      radioStationRadius: '@',
       premiumCode: '@',
       premiumName: '@',
       premiumImageUrl: '@',

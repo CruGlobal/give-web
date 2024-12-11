@@ -44,10 +44,9 @@ class Step1Controller {
     }
     this.showSpouseFields = false
 
-    this.requestRadioStation = !!(this.radioStationApiUrl && this.radioStationRadius)
+    this.requestRadioStation = !!(this.radioStationApiUrl)
 
     this.loadDonorDetails(donorDetailsDefaults)
-    this.loadRadioStations()
     this.waitForFormInitialization()
 
     this.$scope.$on(SignInEvent, () => {
@@ -121,6 +120,7 @@ class Step1Controller {
             this.spouseFieldsDisabled = false
           }
         }
+        this.loadRadioStations()
       },
       error => {
         this.loadingDonorDetails = false
@@ -135,13 +135,10 @@ class Step1Controller {
     if (this.requestRadioStation && postalCode) {
       this.loadingRadioStationsError = false
 
-      this.radioStationsService.getRadioStations(
-        this.radioStationApiUrl,
-        postalCode,
-        this.radioStationRadius
-      )
+      this.radioStationsService.getRadioStations(this.radioStationApiUrl, postalCode)
         .subscribe((data) => {
           this.radioStations = data
+          this.radioStationName = this.orderService.retrieveRadioStationName()
         },
         error => {
           this.loadingRadioStationsError = true
@@ -151,7 +148,9 @@ class Step1Controller {
   }
 
   onSelectRadioStation () {
-    this.radioStationData = this.radioStations.filter((station) => station.Description === this.radioStationName)[0]
+    this.radioStationData = Object.fromEntries(
+      Object.entries(this.radioStations).filter(([stationCallLetters, stationName]) => stationName === this.radioStationName)
+    )
   }
 
   submitDetails () {
@@ -217,7 +216,6 @@ export default angular
       donorDetails: '=?',
       onSubmit: '&',
       radioStationApiUrl: '<',
-      radioStationRadius: '<',
       hideSpouseDetails: '<',
       compactAddress: '<'
     }

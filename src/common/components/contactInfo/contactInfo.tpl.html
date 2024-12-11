@@ -294,7 +294,7 @@
           name="radioStation"
           ng-model="$ctrl.radioStationName"
           ng-change="$ctrl.onSelectRadioStation()"
-          ng-options="v.Description as v['Description'] for v in $ctrl.radioStations | orderBy:Description"
+          ng-options="value for (key, value) in $ctrl.radioStations"
         >
         </select>
         <div role="alert" ng-if="$ctrl.loadingRadioStationsError">
