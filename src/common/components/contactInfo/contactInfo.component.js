@@ -126,6 +126,7 @@ class Step1Controller {
       this.radioStationsService.getRadioStations(this.radioStationApiUrl, postalCode)
         .subscribe((data) => {
           this.radioStations = data
+          this.radioStationName = this.orderService.retrieveRadioStationName()
         },
         error => {
           this.loadingRadioStationsError = true

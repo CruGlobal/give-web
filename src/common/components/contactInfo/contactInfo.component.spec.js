@@ -327,6 +327,11 @@ describe('contactInfo', function () {
     const radioStationApiUrl = 'https://api.domain.com/getStations'
     const radioStations = { WXYZ: 'Radio Station' }
 
+    beforeEach(() => {
+      self.controller.radioStationApiUrl = radioStationApiUrl
+      self.controller.requestRadioStation = true
+    })
+
     it('should not load if not requesting radio station', () => {
       self.controller.radioStationApiUrl = undefined
       self.controller.requestRadioStation = false
@@ -340,8 +345,6 @@ describe('contactInfo', function () {
     })
 
     it('should not load if no postal code selected', () => {
-      self.controller.radioStationApiUrl = radioStationApiUrl
-      self.controller.requestRadioStation = true
       self.controller.donorDetails = { mailingAddress: { } }
 
       jest.spyOn(self.controller.radioStationsService, 'getRadioStations').mockImplementation(() => Observable.of([]))
@@ -352,8 +355,6 @@ describe('contactInfo', function () {
     })
 
     it('should load if requesting radio station and postal code selected', () => {
-      self.controller.radioStationApiUrl = radioStationApiUrl
-      self.controller.requestRadioStation = true
       self.controller.donorDetails = { mailingAddress: { postalCode } }
 
       jest.spyOn(self.controller.radioStationsService, 'getRadioStations').mockImplementation(() => Observable.of(radioStations))
@@ -364,8 +365,6 @@ describe('contactInfo', function () {
     })
 
     it('should log error on failure', () => {
-      self.controller.radioStationApiUrl = radioStationApiUrl
-      self.controller.requestRadioStation = true
       self.controller.donorDetails = { mailingAddress: { postalCode } }
 
       jest.spyOn(self.controller.radioStationsService, 'getRadioStations').mockImplementation(() => Observable.throw('some error'))
@@ -374,6 +373,16 @@ describe('contactInfo', function () {
       expect(self.controller.radioStationsService.getRadioStations).toHaveBeenCalledWith(radioStationApiUrl, postalCode)
       expect(self.controller.radioStations).toBeUndefined()
       expect(self.controller.$log.error.logs[0]).toEqual(['Error loading radio stations.', 'some error'])
+    })
+
+    it('should prepopulate the radio station name previously selected', () => {
+      self.controller.donorDetails = { mailingAddress: { postalCode } }
+
+      jest.spyOn(self.controller.radioStationsService, 'getRadioStations').mockImplementation(() => Observable.of(radioStations))
+      jest.spyOn(self.controller.orderService, 'retrieveRadioStationName').mockReturnValue('Radio Station')
+      self.controller.loadRadioStations()
+
+      expect(self.controller.radioStationName).toEqual('Radio Station')
     })
   })
 
