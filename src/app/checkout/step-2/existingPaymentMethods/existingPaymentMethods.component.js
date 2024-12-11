@@ -157,14 +157,12 @@ class ExistingPaymentMethodsController {
   switchPayment () {
     this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
     if (this.selectedPaymentMethod?.['card-type'] && this.creditCardPaymentForm?.securityCode) {
-      const selectedUri = this.selectedPaymentMethod.self.uri
-      const storage = JSON.parse(this.sessionStorage.getItem('storedCvvs'))
-      const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] || '' : ''
-      // Set CVV to new credit card CVV
-      this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
+      // Set cvv from session storage
+      const storage = JSON.parse(this.sessionStorage.getItem('cvv')) || ''
+      this.creditCardPaymentForm.securityCode.$setViewValue(storage)
       this.creditCardPaymentForm.securityCode.$render()
+      this.sessionStorage.removeItem('cvv')
     }
-
     if (this.selectedPaymentMethod?.['bank-name']) {
       // This is an EFT payment method so we need to remove any fee coverage
       this.orderService.storeCoverFeeDecision(false)
