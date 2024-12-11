@@ -45,7 +45,6 @@ class Step1Controller {
     this.requestRadioStation = !!(this.radioStationApiUrl)
 
     this.loadDonorDetails(donorDetailsDefaults)
-    this.loadRadioStations()
     this.waitForFormInitialization()
 
     this.$scope.$on(SignInEvent, () => {
@@ -108,6 +107,8 @@ class Step1Controller {
             this.$window.sessionStorage.setItem('initialLoadComplete', 'true')
           }
         }
+
+        this.loadRadioStations()
       },
       error => {
         this.loadingDonorDetails = false

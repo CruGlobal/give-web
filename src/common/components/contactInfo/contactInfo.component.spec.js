@@ -26,12 +26,10 @@ describe('contactInfo', function () {
   describe('$onInit', () => {
     it('should load the necessary data', () => {
       jest.spyOn(self.controller, 'loadDonorDetails').mockImplementation(() => {})
-      jest.spyOn(self.controller, 'loadRadioStations').mockImplementation(() => {})
       jest.spyOn(self.controller, 'waitForFormInitialization').mockImplementation(() => {})
       self.controller.$onInit()
 
       expect(self.controller.loadDonorDetails).toHaveBeenCalled()
-      expect(self.controller.loadRadioStations).toHaveBeenCalled()
       expect(self.controller.waitForFormInitialization).toHaveBeenCalled()
     })
 
@@ -92,6 +90,10 @@ describe('contactInfo', function () {
   })
 
   describe('loadDonorDetails', () => {
+    beforeEach(() => {
+      jest.spyOn(self.controller, 'loadRadioStations').mockImplementation(() => {})
+    })
+
     it('should get the donor\'s details', () => {
       jest.spyOn(self.controller.orderService, 'getDonorDetails').mockImplementation(() => Observable.of({ 'donor-type': 'Organization', 'spouse-name': {}, staff: false }))
       self.controller.loadDonorDetails()
@@ -129,6 +131,7 @@ describe('contactInfo', function () {
       expect(self.controller.nameFieldsDisabled).toEqual(true)
       expect(self.controller.spouseFieldsDisabled).toEqual(true)
       expect(self.controller.orderService.spouseEditableForOrder).toHaveBeenCalledWith(donorDetails)
+      expect(self.controller.loadRadioStations).toHaveBeenCalled()
     })
 
     it('should set the donor type if it is an empty string', () => {
@@ -238,7 +241,6 @@ describe('contactInfo', function () {
 
       beforeEach(() => {
         jest.spyOn(self.controller.orderService, 'getDonorDetails').mockImplementation(() => Observable.of(cloneDeep(initDonorDetails)))
-        jest.spyOn(self.controller, 'loadRadioStations').mockImplementation(() => {})
         jest.spyOn(self.controller, 'waitForFormInitialization').mockImplementation(() => {})
       })
 
