@@ -1083,7 +1083,7 @@ describe('order service', () => {
 
   describe('storeRadioStationData', () => {
     it('should save the choice of radio station', () => {
-      self.orderService.storeRadioStationData({ Description: 'Radio Station', MediaId: 'WXYZ' })
+      self.orderService.storeRadioStationData({ WXYZ: 'Radio Station' })
       expect(self.$window.sessionStorage.getItem('radioStationName')).toEqual('Radio Station')
       expect(self.$window.sessionStorage.getItem('radioStationCallLetters')).toEqual('WXYZ')
     })
