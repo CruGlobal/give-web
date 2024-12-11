@@ -323,7 +323,7 @@ describe('contactInfo', function () {
   describe('loadRadioStations', () => {
     const postalCode = '33333';
     const radioStationApiUrl = 'https://api.domain.com/getStations'
-    const radioStations = [{ Description: 'Radio Station', MediaId: 'WXYZ' }]
+    const radioStations = { WXYZ: 'Radio Station' }
 
     it('should not load if not requesting radio station', () => {
       self.controller.radioStationApiUrl = undefined
@@ -376,20 +376,20 @@ describe('contactInfo', function () {
   })
 
   describe('onSelectRadioStation', () => {
-    const radioStations = [{ Description: 'Radio Station', MediaId: 'WXYZ' }, { Description: 'Another Station', MediaId: 'ZYXW' }]
+    const radioStations = { WXYZ: 'Radio Station', ZYXW: 'Another Station' }
 
     it('should find selected radio station in list', () => {
       self.controller.radioStations = radioStations
-      self.controller.radioStationName = radioStations[0].Description
+      self.controller.radioStationName = Object.values(radioStations)[0]
 
       self.controller.onSelectRadioStation()
 
-      expect(self.controller.radioStationData).toEqual(radioStations[0])
+      expect(self.controller.radioStationData).toEqual({ WXYZ: 'Radio Station' })
     })
   })
 
   describe('submitDetails', () => {
-    const radioStationData = { Description: 'Radio Station', MediaId: 'WXYZ' }
+    const radioStationData = { WXYZ: 'Radio Station' }
 
     it('should call onSubmit binding if there are errors', () => {
       self.controller.detailsForm.$valid = false

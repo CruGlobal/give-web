@@ -19,10 +19,10 @@ describe('radio station service', () => {
 
   describe('getRadioStations', () => {
     it('returns a list of radio stations', (done) => {
-      const expectedRadioStations = [{ Description: 'Radio Station', MediaId: 'WXYZ' }, { Description: 'Other Station', MediaId: 'ZYXW' }]
+      const expectedRadioStations = { WXYZ: 'Radio Station', ZYXW: 'Other Station' }
 
       self.$httpBackend.expectGET('https://api.domain.com/getStations/33333')
-        .respond(200, { GetMediaNearPostalCodeResult: expectedRadioStations })
+        .respond(200, expectedRadioStations)
       self.radioStationsService.getRadioStations('https://api.domain.com/getStations', '33333')
         .subscribe((data) => {
           expect(data).toEqual(expectedRadioStations)

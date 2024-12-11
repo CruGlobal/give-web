@@ -18,7 +18,7 @@ class RadioStations {
       withCredentials: true
     }))
       .map((response) => {
-        return response.data.GetMediaNearPostalCodeResult
+        return response.data
       })
   }
 }
