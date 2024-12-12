@@ -620,6 +620,32 @@ hr.horizontal-divider {
 }
 /* Product Config Form Amounts End */
 
+.radio-method,
+.radio-custom-amount {
+  label {
+    font-weight: normal;
+  }
+  .expiring {
+    text-indent: 60px;
+    font-size: 1em;
+    line-height: 1em;
+    color: red;
+  }
+  img {
+    margin-right: $gutter*.5;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  input[type="radio"] {
+    display: inline-block;
+    float: none;
+    margin: 0;
+    margin-right: $gutter*.5;
+    position: static;
+    vertical-align: 0%;
+  }
+}
+
 .btn-xs,
 .btn-sm {
   font-size: .85rem;
