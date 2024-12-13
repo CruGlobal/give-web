@@ -69,6 +69,6 @@ export default angular
       address: '=',
       parentForm: '<',
       onAddressChanged: '&',
-      addressDisabled: '<',
+      addressDisabled: '<'
     }
   })
