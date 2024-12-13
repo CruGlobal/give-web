@@ -1,7 +1,7 @@
 import angular from 'angular'
-const directiveName = 'creditCardCvv'
 
 import './creditCardCvv.directive.scss'
+const directiveName = 'creditCardCvv'
 
 const template =
 `<div class="credit-card-cvv-container form-group" ng-class="{'has-error': ($ctrl.creditCardPaymentForm.securityCode | showErrors), 'is-required': !$ctrl.paymentMethod}">
