@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
-    <div ng-if="$ctrl.useV3 !== 'true'" class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressCountry | showErrors) || $ctrl.loadingCountriesError}">
+    <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressCountry | showErrors) || $ctrl.loadingCountriesError}">
       <label>
         <span translate>{{'COUNTRY'}}</span>
         <select class="form-control form-control-subtle"

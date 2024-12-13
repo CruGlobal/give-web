@@ -9,7 +9,7 @@ const componentName = 'addressForm'
 
 class AddressFormController {
   /* @ngInject */
-  constructor ($scope, $log, geographiesService) {
+  constructor ($log, geographiesService) {
     this.$log = $log
     this.geographiesService = geographiesService
   }
@@ -70,6 +70,5 @@ export default angular
       parentForm: '<',
       onAddressChanged: '&',
       addressDisabled: '<',
-      useV3: '<?'
     }
   })
