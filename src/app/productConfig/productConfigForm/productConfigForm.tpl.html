@@ -49,26 +49,24 @@
   <div ng-if="!$ctrl.loading && !$ctrl.errorLoading && !$ctrl.showGivingLinks">
     <div ng-class="{'give-selection-reverse-order': ($ctrl.useV3 === 'true')}">
       <div class="panel panel-default panel-plain mt">
-
           <div ng-if="$ctrl.errorChangingFrequency" class="alert alert-danger" role="alert">
             <p translate>{{'FREQUENCY_ERROR'}}</p>
           </div>
-
           <div ng-if="$ctrl.errorSavingGeneric" role="alert" class="alert alert-danger">
             <p translate>{{'ADDING_CART_ERROR'}}</p>
           </div>
-
           <div ng-if="$ctrl.amountFormatError" role="alert" class="alert alert-danger">
             <p translate>{{$ctrl.amountFormatError}}</p>
           </div>
-
           <div ng-if="$ctrl.errorAlreadyInCart" class="alert alert-warning" role="alert">
             <p translate>{{'GIFT_IN_CART_ERROR'}}</p>
           </div>
+      </div>
+      <div class="panel panel-default give-modal-panel">
         <h4 class="panel-title border-bottom-small" translate>
           {{'GIFT_AMOUNT'}}
         </h4>
-        <div class="panel-body p0" ng-if="$ctrl.useV3 == 'true'">
+        <div class="panel-body p0" ng-if="$ctrl.useV3 === 'true'">
           <fieldset aria-label="Suggested Gift Amounts. Tab for Custom Amount">
             <div class="button-group" ng-if="$ctrl.useSuggestedAmounts">
               <div ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
@@ -158,12 +156,12 @@
         <div class="panel-body pt0" ng-if="$ctrl.useV3 !== 'true'">
           <div ng-if="$ctrl.useSuggestedAmounts">
             <div class="radio radio-custom-amount"
-                 ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
+                  ng-repeat="suggested in $ctrl.suggestedAmounts | orderBy:'order'">
               <label>
                 <input name="suggestedAmount"
-                       type="radio"
-                       ng-click="$ctrl.changeAmount(suggested.amount)"
-                       ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount" />
+                        type="radio"
+                        ng-click="$ctrl.changeAmount(suggested.amount)"
+                        ng-checked="!$ctrl.customInputActive && $ctrl.itemConfig.AMOUNT === suggested.amount" />
                 {{$ctrl.suggestedAmount(suggested.amount)}} {{suggested.label}}
               </label>
             </div>
@@ -177,6 +175,7 @@
                   />
                   <input
                     name="amount"
+                    class="form-control form-control-subtle"
                     type="text"
                     id="ca"
                     step="1"
@@ -236,6 +235,7 @@
             </div>
           </div>
         </div><!-- // panel-body -->
+      </div> 
       <div class="panel panel-default give-modal-panel">
         <h4 class="panel-title border-bottom-small mt" translate>
           {{'GIFT_FREQUENCY'}}
@@ -258,7 +258,7 @@
             <translate>{{'CHANGING_FREQUENCY'}}</translate>
           </loading>
         </div><!-- // panel-body -->
-      </div><!-- // panel -->
+      </div>
       <div ng-if="$ctrl.productData.frequency !== 'NA'">
         <div class="panel panel-default give-modal-panel">
           <h4 class="panel-title border-bottom-small mt0 pt-" translate>
@@ -302,55 +302,54 @@
           </div><!-- // panel-body -->
         </div><!-- // panel -->
       </div>
+      <div class="panel panel-default give-modal-panel">
+        <h4 class="panel-title border-bottom-small mt" translate>
+          {{'OPTIONAL'}}
+        </h4>
+        <div class="panel-body pt0">
+          <ul class="list-unstyled">
+            <li>
+              <button type="button"
+                      id="sendMessageButton"
+                      class="btn btn-link"
+                      tabindex="-1"
+                      ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
+                      translate='SEND_MESSAGE_TO'
+                      translate-values="{ministry: $ctrl.productData.displayName}">
+              </button>
+              <textarea class="staff-comments give-modal-comments"
+                        name="recipientComments"
+                        rows="3"
+                        maxlength="250"
+                        aria-labelledby="sendMessageButton"
+                        ng-model="$ctrl.itemConfig.RECIPIENT_COMMENTS"
+                        ng-if="$ctrl.showRecipientComments"
+                        tabindex="-1"
+                        style="display:block;"></textarea>
+            </li>
+            <li>
+              <button type="button"
+                      id="sendHandlingButton"
+                      class="btn btn-link"
+                      tabindex="-1"
+                      ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
+                      translate>
+                {{'SPECIAL_INSTRUCTIONS'}}
+              </button>
+              <textarea class="cru-comments give-modal-comments"
+                        name="donationServicesComments"
+                        rows="3"
+                        maxlength="250"
+                        aria-labelledby="sendHandlingButton"
+                        ng-model="$ctrl.itemConfig.DONATION_SERVICES_COMMENTS"
+                        ng-if="$ctrl.showDSComments"
+                        tabindex="-1"
+                        placeholder="{{'MESSAGE_EXAMPLE' | translate}}"
+                        style="display:block;"></textarea>
+            </li>
+          </ul>
+        </div><!-- // panel-body -->
+      </div>
     </div>
-    <div class="panel panel-default give-modal-panel">
-      <h4 class="panel-title border-bottom-small mt" translate>
-        {{'OPTIONAL'}}
-      </h4>
-      <div class="panel-body pt0">
-        <ul class="list-unstyled">
-          <li>
-            <button type="button"
-                    id="sendMessageButton"
-                    class="btn btn-link"
-                    tabindex="-1"
-                    ng-click="$ctrl.showRecipientComments = !$ctrl.showRecipientComments"
-                    translate='SEND_MESSAGE_TO'
-                    translate-values="{ministry: $ctrl.productData.displayName}">
-            </button>
-            <textarea class="staff-comments give-modal-comments"
-                      name="recipientComments"
-                      rows="3"
-                      maxlength="250"
-                      aria-labelledby="sendMessageButton"
-                      ng-model="$ctrl.itemConfig.RECIPIENT_COMMENTS"
-                      ng-if="$ctrl.showRecipientComments"
-                      tabindex="-1"
-                      style="display:block;"></textarea>
-          </li>
-          <li>
-            <button type="button"
-                    id="sendHandlingButton"
-                    class="btn btn-link"
-                    tabindex="-1"
-                    ng-click="$ctrl.showDSComments = !$ctrl.showDSComments"
-                    translate>
-              {{'SPECIAL_INSTRUCTIONS'}}
-            </button>
-            <textarea class="cru-comments give-modal-comments"
-                      name="donationServicesComments"
-                      rows="3"
-                      maxlength="250"
-                      aria-labelledby="sendHandlingButton"
-                      ng-model="$ctrl.itemConfig.DONATION_SERVICES_COMMENTS"
-                      ng-if="$ctrl.showDSComments"
-                      tabindex="-1"
-                      placeholder="{{'MESSAGE_EXAMPLE' | translate}}"
-                      style="display:block;"></textarea>
-          </li>
-        </ul>
-      </div><!-- // panel-body -->
-    </div><!-- // panel -->
-  </div>
 </form>
 <loading type="overlay" ng-if="$ctrl.submittingGift"></loading>
