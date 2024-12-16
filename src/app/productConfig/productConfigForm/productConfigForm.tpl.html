@@ -65,7 +65,6 @@
           <div ng-if="$ctrl.errorAlreadyInCart" class="alert alert-warning" role="alert">
             <p translate>{{'GIFT_IN_CART_ERROR'}}</p>
           </div>
-
         <h4 class="panel-title border-bottom-small" translate>
           {{'GIFT_AMOUNT'}}
         </h4>
@@ -198,7 +197,7 @@
                   <div class="help-block" ng-message="minimum" translate translate-values="{currencyLimit: (1 | currency)}">{{'AMOUNT_MIN_ERROR'}}</div>
                   <div class="help-block" ng-message="maximum" translate translate-values="{currencyLimit: (10000000 | currency)}">{{'AMOUNT_MAX_ERROR'}}</div>
               </div>
-            </div>            
+            </div>         
             <div data-toggle="buttons"
                 ng-class="{'has-error': ($ctrl.itemConfigForm.amount | showErrors)}"
                 ng-if="!$ctrl.useSuggestedAmounts">
@@ -235,74 +234,74 @@
                 </div>
               </div>
             </div>
-          </fieldset>
+          </div>
+        </div><!-- // panel-body -->
+      <div class="panel panel-default give-modal-panel">
+        <h4 class="panel-title border-bottom-small mt" translate>
+          {{'GIFT_FREQUENCY'}}
+        </h4>
+        <div class="panel-body">
+          <div data-toggle="buttons">
+            <label class="btn btn-radio btn-wide"
+                  ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
+                  ng-if="f.name !== 'SEMIANNUAL'"
+                  ng-class="{'active': f.name === $ctrl.productData.frequency}"
+                  ng-click="$ctrl.changeFrequency(f)">
+                  <span class="giftsum-about giftsum-title" ng-switch="f.name">
+                    <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
+                    <span ng-switch-default>{{f.display}}</span>
+                  </span>
+            </label>
+            <span ng-repeat-end></span>
+          </div>
+          <loading inline="true" ng-if="$ctrl.changingFrequency" class="mt-- text-center">
+            <translate>{{'CHANGING_FREQUENCY'}}</translate>
+          </loading>
         </div><!-- // panel-body -->
       </div><!-- // panel -->
-    <div class="panel panel-default give-modal-panel">
-      <h4 class="panel-title border-bottom-small mt" translate>
-        {{'GIFT_FREQUENCY'}}
-      </h4>
-      <div class="panel-body">
-        <div data-toggle="buttons">
-          <label class="btn btn-radio btn-wide"
-                 ng-repeat-start="f in $ctrl.productData.frequencies | orderBy: $ctrl.frequencyOrder track by $index"
-                 ng-if="f.name !== 'SEMIANNUAL'"
-                 ng-class="{'active': f.name === $ctrl.productData.frequency}"
-                 ng-click="$ctrl.changeFrequency(f)">
-                <span class="giftsum-about giftsum-title" ng-switch="f.name">
-                  <span ng-switch-when="NA" translate>{{'SINGLE_GIFT'}}</span>
-                  <span ng-switch-default>{{f.display}}</span>
-                </span>
-          </label>
-          <span ng-repeat-end></span>
-        </div>
-        <loading inline="true" ng-if="$ctrl.changingFrequency" class="mt-- text-center">
-          <translate>{{'CHANGING_FREQUENCY'}}</translate>
-        </loading>
-      </div><!-- // panel-body -->
-    </div><!-- // panel -->
-    <div ng-if="$ctrl.productData.frequency !== 'NA'">
-      <div class="panel panel-default give-modal-panel">
-        <h4 class="panel-title border-bottom-small mt0 pt-" translate>
-          {{'RECURRING_START'}}
-        </h4>
-        <div class="panel-body pt0">
-          <div class="row">
-            <div class="col-sm-3">
-              <div class="form-group">
-                <label>
-                  <span translate>{{'MONTH'}}</span>
-                  <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['RECURRING_START_MONTH']"
-                          ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
-                  </select>
-                </label>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="form-group">
-                <label>
-                  <span translate>{{'DAY'}}</span>
-                  <select class="form-control form-control-subtle"
-                          ng-model="$ctrl.itemConfig['RECURRING_DAY_OF_MONTH']"
-                          ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate)"
-                          ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
-                  </select>
-                </label>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label translate>{{'GIFT_START_DATE'}}</label>
+      <div ng-if="$ctrl.productData.frequency !== 'NA'">
+        <div class="panel panel-default give-modal-panel">
+          <h4 class="panel-title border-bottom-small mt0 pt-" translate>
+            {{'RECURRING_START'}}
+          </h4>
+          <div class="panel-body pt0">
+            <div class="row">
+              <div class="col-sm-3">
                 <div class="form-group">
-                  {{$ctrl.startMonth( $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate ).format('ll')}}
+                  <label>
+                    <span translate>{{'MONTH'}}</span>
+                    <select class="form-control form-control-subtle"
+                            ng-model="$ctrl.itemConfig['RECURRING_START_MONTH']"
+                            ng-options="(m | date:'MM') as (m | date:'MMMM, yyyy') for m in $ctrl.possibleTransactionMonths($ctrl.nextDrawDate)"
+                            ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
+                    </select>
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>
+                    <span translate>{{'DAY'}}</span>
+                    <select class="form-control form-control-subtle"
+                            ng-model="$ctrl.itemConfig['RECURRING_DAY_OF_MONTH']"
+                            ng-options="o as (o | ordinal) for o in $ctrl.possibleTransactionDays($ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate)"
+                            ng-change="$ctrl.changeStartDay($ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'])">
+                    </select>
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label translate>{{'GIFT_START_DATE'}}</label>
+                  <div class="form-group">
+                    {{$ctrl.startMonth( $ctrl.itemConfig['RECURRING_DAY_OF_MONTH'], $ctrl.itemConfig['RECURRING_START_MONTH'], $ctrl.nextDrawDate ).format('ll')}}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div><!-- // panel-body -->
-      </div><!-- // panel -->
+          </div><!-- // panel-body -->
+        </div><!-- // panel -->
+      </div>
     </div>
     <div class="panel panel-default give-modal-panel">
       <h4 class="panel-title border-bottom-small mt" translate>
