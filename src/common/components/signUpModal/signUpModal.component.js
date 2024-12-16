@@ -11,11 +11,12 @@ const componentName = 'signUpModal'
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $rootScope, $location, sessionService, cartService, orderService, envService) {
+  constructor ($log, $scope, $rootScope, $location, $window, sessionService, cartService, orderService, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$rootScope = $rootScope
     this.$location = $location
+    this.$window = $window
     this.sessionService = sessionService
     this.orderService = orderService
     this.cartService = cartService
@@ -27,55 +28,57 @@ class SignUpModalController {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
       this.onStateChange({ state: 'sign-in' })
     }
-    window.currentStep = '1' // Default to step 1
-    const rootScope = this.$rootScope // Capture the $rootScope
-    const scope = this.$scope // Capture the $scope
+    this.$window.currentStep = '1' // Default to step 1
     this.oktaSignInWidget = new OktaSignIn({
       ...this.sessionService.oktaSignInWidgetDefaultOptions,
       assets: {
-        baseUrl: `${window.location.origin}/assets/okta-sign-in/`
+        baseUrl: `${this.$window.location.origin}/assets/okta-sign-in/`
       },
       flow: 'signup',
       registration: {
         parseSchema: (schema, onSuccess) => {
-          const step = window.currentStep || '1'
+          const step = this.$window.currentStep || '1'
+          console.log('schema', schema)
           const steps = {
+            // Step 1: Name and email
             1: [schema[0], schema[1], schema[2]],
-            2: [schema[3], schema[4], schema[5], schema[6], schema[7]],
-            3: [schema[8]]
+            // Step 2: Address plus phone number
+            2: [schema[3], schema[4], schema[5], schema[6], schema[8]],
+            // Step 3: Password
+            3: [schema[9]]
           }
           onSuccess(steps[step])
         },
         preSubmit: (postData, onSuccess) => {
-          const step = window.currentStep
+          const step = this.$window.currentStep
           const userProfile = postData.userProfile
 
           if (step === '1') {
-            Object.assign(rootScope, {
+            Object.assign(this.$rootScope, {
               firstName: userProfile.firstName,
               lastName: userProfile.lastName,
               email: userProfile.email
             })
-            scope.$apply(() => scope.goToNextStep('2'))
+            this.$scope.$apply(() => this.$scope.goToNextStep('2'))
           } else if (step === '2') {
-            Object.assign(rootScope, {
+            Object.assign(this.$rootScope, {
               streetAddress: userProfile.streetAddress,
               city: userProfile.city,
               state: userProfile.state,
               zipCode: userProfile.zipCode,
               countryCode: userProfile.countryCode
             })
-            scope.$apply(() => scope.goToNextStep('3'))
+            this.$scope.$apply(() => this.$scope.goToNextStep('3'))
           } else if (step === '3') {
             postData.userProfile = {
-              firstName: rootScope.firstName,
-              lastName: rootScope.lastName,
-              email: rootScope.email,
-              streetAddress: rootScope.streetAddress,
-              city: rootScope.city,
-              state: rootScope.state,
-              zipCode: rootScope.zipCode,
-              countryCode: rootScope.countryCode
+              firstName: this.$rootScope.firstName,
+              lastName: this.$rootScope.lastName,
+              email: this.$rootScope.email,
+              streetAddress: this.$rootScope.streetAddress,
+              city: this.$rootScope.city,
+              state: this.$rootScope.state,
+              zipCode: this.$rootScope.zipCode,
+              countryCode: this.$rootScope.countryCode
             }
             onSuccess(postData)
           }
@@ -86,12 +89,12 @@ class SignUpModalController {
 
     this.oktaSignInWidget.on('afterRender', (context) => {
       if (context.controller === 'registration-complete') {
-        window.currentStep = null
+        this.$window.currentStep = null
       }
     })
 
-    scope.goToNextStep = (nextStep) => {
-      window.currentStep = nextStep
+    this.$scope.goToNextStep = (nextStep) => {
+      this.$window.currentStep = nextStep
       this.oktaSignInWidget.remove()
       this.oktaSignInWidget.renderEl(
         { el: '#osw-container' },
