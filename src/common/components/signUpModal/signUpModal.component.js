@@ -28,7 +28,7 @@ class SignUpModalController {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
       this.onStateChange({ state: 'sign-in' })
     }
-    this.$window.currentStep = '1' // Default to step 1
+    this.$window.currentStep = 1 // Default to step 1
     this.oktaSignInWidget = new OktaSignIn({
       ...this.sessionService.oktaSignInWidgetDefaultOptions,
       assets: {
@@ -37,15 +37,14 @@ class SignUpModalController {
       flow: 'signup',
       registration: {
         parseSchema: (schema, onSuccess) => {
-          const step = this.$window.currentStep || '1'
-          console.log('schema', schema)
+          const step = this.$window.currentStep || 1
           const steps = {
             // Step 1: Name and email
             1: [schema[0], schema[1], schema[2]],
             // Step 2: Address plus phone number
             2: [schema[3], schema[4], schema[5], schema[6], schema[8]],
             // Step 3: Password
-            3: [schema[9]]
+            3: [schema[8]]
           }
           onSuccess(steps[step])
         },
@@ -53,14 +52,14 @@ class SignUpModalController {
           const step = this.$window.currentStep
           const userProfile = postData.userProfile
 
-          if (step === '1') {
+          if (step === 1) {
             Object.assign(this.$rootScope, {
               firstName: userProfile.firstName,
               lastName: userProfile.lastName,
               email: userProfile.email
             })
             this.$scope.$apply(() => this.$scope.goToNextStep('2'))
-          } else if (step === '2') {
+          } else if (step === 2) {
             Object.assign(this.$rootScope, {
               streetAddress: userProfile.streetAddress,
               city: userProfile.city,
@@ -69,7 +68,9 @@ class SignUpModalController {
               countryCode: userProfile.countryCode
             })
             this.$scope.$apply(() => this.$scope.goToNextStep('3'))
-          } else if (step === '3') {
+          } else if (step === 3) {
+            // Add the user profile to the postData object
+            // Okta widget handles the password
             postData.userProfile = {
               firstName: this.$rootScope.firstName,
               lastName: this.$rootScope.lastName,
@@ -88,13 +89,36 @@ class SignUpModalController {
     this.signIn()
 
     this.oktaSignInWidget.on('afterRender', (context) => {
+      // Change the text of the sign up button to ensure it's clear what the user is doing
+      const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'));
+      if (this.$window.currentStep === 3) {
+        signUpButton.attr('value', 'Create an Account')
+      } else {
+        signUpButton.attr('value', 'Next')
+      }
+      // Stop tracking the current step after registration is complete
       if (context.controller === 'registration-complete') {
         this.$window.currentStep = null
       }
+      this.injectBackButton()
     })
 
     this.$scope.goToNextStep = (nextStep) => {
+      // Set the current step to the next step
       this.$window.currentStep = nextStep
+      // Render the widget again to show the next step
+      this.oktaSignInWidget.remove()
+      this.oktaSignInWidget.renderEl(
+        { el: '#osw-container' },
+        () => console.log('Widget rendered successfully'),
+        (err) => console.error(err)
+      )
+    }
+
+    this.$scope.goToPreviousStep = () => {
+      // Set the current step to the previous step
+      this.$window.currentStep = Math.max(this.$window.currentStep - 1, 1)
+      // Render the widget again to show the next step
       this.oktaSignInWidget.remove()
       this.oktaSignInWidget.renderEl(
         { el: '#osw-container' },
@@ -128,6 +152,25 @@ class SignUpModalController {
       this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
     } catch (error) {
       this.$log.error('Error showing Okta sign in widget.', error)
+    }
+  }
+
+  injectBackButton () {
+    // Do't show back button on the first step
+    if (this.$window.currentStep  === 1) {
+      return
+    }
+    const buttonBar = document.querySelector('.o-form-button-bar');
+    // Ensure the button is only added once
+    if (buttonBar && !document.querySelector('.o-form-button-bar #backButton')) {
+      const backButton = angular.element('<button id="backButton" class="btn btn-secondary">Back</button>');
+      // Add click behavior to go back a step
+      backButton.on('click', (e) => {
+        e.preventDefault();
+        this.$scope.$apply(() => this.$scope.goToPreviousStep())
+      });
+      // Prepend the Back button before the "Next" button
+      angular.element(buttonBar).prepend(backButton)
     }
   }
 

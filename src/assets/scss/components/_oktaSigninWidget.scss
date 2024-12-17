@@ -17,3 +17,23 @@ sign-up-modal {
     margin-top: 20px;
   }
 }
+
+// Back button
+#okta-sign-in.auth-container {
+  .o-form-button-bar {
+    display: flex;
+    gap: 50px;
+    justify-content: space-between;
+    align-items: center;
+
+    #backButton {
+      width: 100%;
+    }
+
+    .button.button-primary {
+      height: auto;
+      @extend .btn;
+      @extend .btn-primary;
+    }
+  }
+}
