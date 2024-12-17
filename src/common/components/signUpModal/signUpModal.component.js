@@ -28,7 +28,30 @@ class SignUpModalController {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
       this.onStateChange({ state: 'sign-in' })
     }
+
+    this.setUpSignUpWidget()
+
+    if (!this.isInsideAnotherModal) {
+      this.cartCount = 0
+      this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe(count => {
+        this.cartCount = count
+      }, () => {
+        this.cartCount = 0
+      })
+    }
+
+    this.isLoading = true
+    this.submitting = false
+  }
+
+  $onDestroy () {
+    this.oktaSignInWidget.remove()
+  }
+
+  async setUpSignUpWidget () {
+    const prePopulatedData = await this.loadDonorDetails()
     this.$window.currentStep = 1 // Default to step 1
+
     this.oktaSignInWidget = new OktaSignIn({
       ...this.sessionService.oktaSignInWidgetDefaultOptions,
       assets: {
@@ -38,11 +61,51 @@ class SignUpModalController {
       registration: {
         parseSchema: (schema, onSuccess) => {
           const step = this.$window.currentStep || 1
+          // Split the form into multiple steps for better user experience.
+          // Retain the values entered by the user in each step.
+          // Pre-populate the form fields with existing user details to save time.
           const steps = {
             // Step 1: Name and email
-            1: [schema[0], schema[1], schema[2]],
+            1: [
+              {
+                ...schema[0],
+                value: this.$rootScope.firstName ?? prePopulatedData.name['given-name'] ?? this.sessionService.session.first_name ?? ''
+              },
+              {
+                ...schema[1],
+                value: this.$rootScope.lastName ?? prePopulatedData.name['family-name'] ?? this.sessionService.session.last_name ?? ''
+              },
+              {
+                ...schema[2],
+                value: this.$rootScope.email ?? prePopulatedData.email ?? this.sessionService.session.email ?? ''
+              }
+            ],
             // Step 2: Address plus phone number
-            2: [schema[3], schema[4], schema[5], schema[6], schema[8]],
+            2: [
+              {
+                ...schema[3],
+                value: this.$rootScope.streetAddress ?? prePopulatedData.mailingAddress.streetAddress ?? ''
+              },
+              {
+                ...schema[4],
+                value: this.$rootScope.city ?? prePopulatedData.mailingAddress.locality ?? ''
+              },
+              {
+                ...schema[5],
+                value: this.$rootScope.state ?? prePopulatedData.mailingAddress.region ?? ''
+              },
+              {
+                ...schema[6],
+                value: this.$rootScope.zipCode ?? prePopulatedData.mailingAddress.postalCode ?? ''
+              },
+              {
+                ...schema[7],
+                value: this.$rootScope.countryCode ?? prePopulatedData.mailingAddress.country ?? ''
+              },
+              {
+                ...schema[8],
+                value: this.$rootScope.primaryPhone ?? prePopulatedData['phone-number'] ?? ''
+              }],
             // Step 3: Password
             3: [schema[8]]
           }
@@ -58,16 +121,17 @@ class SignUpModalController {
               lastName: userProfile.lastName,
               email: userProfile.email
             })
-            this.$scope.$apply(() => this.$scope.goToNextStep('2'))
+            this.$scope.$apply(() => this.goToNextStep())
           } else if (step === 2) {
             Object.assign(this.$rootScope, {
               streetAddress: userProfile.streetAddress,
               city: userProfile.city,
               state: userProfile.state,
               zipCode: userProfile.zipCode,
-              countryCode: userProfile.countryCode
+              countryCode: userProfile.countryCode,
+              primaryPhone: userProfile.primaryPhone
             })
-            this.$scope.$apply(() => this.$scope.goToNextStep('3'))
+            this.$scope.$apply(() => this.goToNextStep())
           } else if (step === 3) {
             // Add the user profile to the postData object
             // Okta widget handles the password
@@ -79,72 +143,67 @@ class SignUpModalController {
               city: this.$rootScope.city,
               state: this.$rootScope.state,
               zipCode: this.$rootScope.zipCode,
-              countryCode: this.$rootScope.countryCode
+              countryCode: this.$rootScope.countryCode,
+              primaryPhone: this.$rootScope.primaryPhone
             }
             onSuccess(postData)
           }
         }
       }
     })
+
     this.signIn()
 
-    this.oktaSignInWidget.on('afterRender', (context) => {
-      // Change the text of the sign up button to ensure it's clear what the user is doing
-      const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'));
-      if (this.$window.currentStep === 3) {
-        signUpButton.attr('value', 'Create an Account')
-      } else {
-        signUpButton.attr('value', 'Next')
-      }
-      // Stop tracking the current step after registration is complete
-      if (context.controller === 'registration-complete') {
-        this.$window.currentStep = null
-      }
-      if (context.controller === 'primary-auth') {
-        this.$scope.$apply(() => this.onStateChange({state:'sign-in'}))
-      }
-      this.injectBackButton()
-    })
-
-    this.$scope.goToNextStep = (nextStep) => {
-      // Set the current step to the next step
-      this.$window.currentStep = nextStep
-      // Render the widget again to show the next step
-      this.oktaSignInWidget.remove()
-      this.oktaSignInWidget.renderEl(
-        { el: '#osw-container' },
-        () => console.log('Widget rendered successfully'),
-        (err) => console.error(err)
-      )
-    }
-
-    this.$scope.goToPreviousStep = () => {
-      // Set the current step to the previous step
-      this.$window.currentStep = Math.max(this.$window.currentStep - 1, 1)
-      // Render the widget again to show the next step
-      this.oktaSignInWidget.remove()
-      this.oktaSignInWidget.renderEl(
-        { el: '#osw-container' },
-        () => console.log('Widget rendered successfully'),
-        (err) => console.error(err)
-      )
-    }
-
-    if (!this.isInsideAnotherModal) {
-      this.cartCount = 0
-      this.getTotalQuantitySubscription = this.cartService.getTotalQuantity().subscribe(count => {
-        this.cartCount = count
-      }, () => {
-        this.cartCount = 0
-      })
-    }
-    this.loadDonorDetails()
-    this.isLoading = true
-    this.submitting = false
+    this.oktaSignInWidget.on('afterRender', this.afterRenderFn.bind(this))
   }
 
-  $onDestroy () {
+  afterRenderFn (context) {
+    // Change the text of the sign up button to ensure it's clear what the user is doing
+    const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'))
+    if (this.$window.currentStep === 3) {
+      signUpButton.attr('value', 'Create an Account')
+    } else {
+      signUpButton.attr('value', 'Next')
+    }
+
+    // Stop tracking the current step after registration is complete
+    if (context.controller === 'registration-complete') {
+      this.$window.currentStep = null
+      console.log('Registration complete')
+    }
+
+    // Send users to the login modal if they try to go to the login form
+    if (context.controller === 'primary-auth') {
+      this.$scope.$apply(() => this.onStateChange({ state: 'sign-in' }))
+    }
+
+    this.injectBackButton()
+  }
+
+  goToNextStep () {
+    // Set the current step to the next step
+    this.$window.currentStep++
+    this.reRenderWidget()
+  }
+
+  goToPreviousStep () {
+    // Set the current step to the previous step
+    this.$window.currentStep = Math.max(this.$window.currentStep - 1, 1)
+    this.reRenderWidget()
+  }
+
+  reRenderWidget () {
+  // Render the widget again to show new step
     this.oktaSignInWidget.remove()
+    this.oktaSignInWidget.renderEl(
+      { el: '#osw-container' },
+      null,
+      (error) => {
+        const errorName = 'Error rendering Okta sign up widget.'
+        console.error(errorName, error)
+        this.$log.error(errorName, error)
+      }
+    )
   }
 
   async signIn () {
@@ -160,86 +219,83 @@ class SignUpModalController {
 
   injectBackButton () {
     // Do't show back button on the first step
-    if (this.$window.currentStep  === 1) {
+    if (this.$window.currentStep === 1) {
       return
     }
-    const buttonBar = document.querySelector('.o-form-button-bar');
+    const buttonBar = document.querySelector('.o-form-button-bar')
     // Ensure the button is only added once
     if (buttonBar && !document.querySelector('.o-form-button-bar #backButton')) {
-      const backButton = angular.element('<button id="backButton" class="btn btn-secondary">Back</button>');
+      const backButton = angular.element('<button id="backButton" class="btn btn-secondary">Back</button>')
       // Add click behavior to go back a step
       backButton.on('click', (e) => {
-        e.preventDefault();
-        this.$scope.$apply(() => this.$scope.goToPreviousStep())
-      });
+        e.preventDefault()
+        this.$scope.$apply(() => this.goToPreviousStep())
+      })
       // Prepend the Back button before the "Next" button
       angular.element(buttonBar).prepend(backButton)
     }
   }
 
-  loadDonorDetails () {
+  async loadDonorDetails () {
     this.loadingDonorDetails = true
-    // Check to see if we have user details saved.
-    this.orderService
-      .getDonorDetails()
-      .subscribe(
+    return new Promise((resolve) => {
+      this.orderService.getDonorDetails().subscribe(
         (data) => {
           this.loadingDonorDetails = false
-          this.donorDetails = data
-          // Pre-populate first, last and email from session if missing from donorDetails
-          if (!this.donorDetails.name['given-name'] && angular.isDefined(this.sessionService.session.first_name)) {
-            this.donorDetails.name['given-name'] = this.sessionService.session.first_name
-          }
-          if (!this.donorDetails.name['family-name'] && angular.isDefined(this.sessionService.session.last_name)) {
-            this.donorDetails.name['family-name'] = this.sessionService.session.last_name
-          }
-          if (angular.isUndefined(this.donorDetails.email) && angular.isDefined(this.sessionService.session.email)) {
-            this.donorDetails.email = this.sessionService.session.email
-          }
+          resolve(data)
         },
-        error => {
+        (error) => {
           this.loadingDonorDetails = false
           this.$log.error('Error loading donorDetails.', error)
+          resolve({})
         }
       )
+    })
   }
 
-  async submitDetails () {
-    this.submitting = true
-    this.submissionError = []
-    try {
-      this.signUpForm.$setSubmitted()
-      if (!this.signUpForm.$valid) {
-        throw new Error('Some fields are invalid')
-      }
+  // TODO list
+  // make sure errors on the Okta are displayed on the form.
+  // Make sure checkoutSessiondata ti used on this form.
+  // Remove submit detail method and create account session.service method.
+  // Remove the verification modal
+  // Make sure this form redirects to the user matching modal after a successful account creation.
 
-      const details = this.donorDetails
-      const { email, name } = details
-      const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name'])
-      if (createAccount.status === 'error') {
-        if (createAccount.accountPending) {
-          this.onStateChange({ state: 'sign-up-activation' })
-        } else {
-          if (createAccount.redirectToSignIn) {
-            setTimeout(() => {
-              this.onStateChange({ state: 'sign-in' })
-              this.$scope.$apply()
-            }, 5000)
-          };
-          this.submissionError = createAccount.data
-        }
-      } else {
-        this.onStateChange({ state: 'sign-up-activation' })
-      }
-    } catch (error) {
-      this.$scope.$apply(() => {
-        this.submissionError = [error.message]
-      })
-    } finally {
-      this.submitting = false
-      this.$scope.$apply()
-    }
-  }
+  //   async submitDetails () {
+  //     this.submitting = true
+  //     this.submissionError = []
+  //     try {
+  //       this.signUpForm.$setSubmitted()
+  //       if (!this.signUpForm.$valid) {
+  //         throw new Error('Some fields are invalid')
+  //       }
+
+//       const details = this.donorDetails
+//       const { email, name } = details
+//       const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name'])
+//       if (createAccount.status === 'error') {
+//         if (createAccount.accountPending) {
+//           this.onStateChange({ state: 'sign-up-activation' })
+//         } else {
+//           if (createAccount.redirectToSignIn) {
+//             setTimeout(() => {
+//               this.onStateChange({ state: 'sign-in' })
+//               this.$scope.$apply()
+//             }, 5000)
+//           };
+//           this.submissionError = createAccount.data
+//         }
+//       } else {
+//         this.onStateChange({ state: 'sign-up-activation' })
+//       }
+//     } catch (error) {
+//       this.$scope.$apply(() => {
+//         this.submissionError = [error.message]
+//       })
+//     } finally {
+//       this.submitting = false
+//       this.$scope.$apply()
+//     }
+//   }
 }
 
 export default angular

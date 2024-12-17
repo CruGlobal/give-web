@@ -1,7 +1,18 @@
-#okta-sign-in {
+#okta-sign-in.main-container {
+  border: none;
+  box-shadow: none;
   margin: 0;
 
   .okta-sign-in-header {
+    display: none;
+  }
+
+  .auth-content {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .okta-form-title {
     display: none;
   }
 }
