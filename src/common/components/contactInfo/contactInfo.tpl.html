@@ -45,7 +45,7 @@
 
   <form novalidate ng-keyup="$event.key === 'Enter' && $ctrl.submitDetails()" name="$ctrl.detailsForm">
     <div class="mb">
-      <h4 class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
+      <h4 ng-if="$ctrl.useV3 !== 'true'" class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
       <div class="row">
         <div class="col-sm-4">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div ng-if="$ctrl.useV3 !== 'true'" class="col-sm-2">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.nameMiddleInitial | showErrors)}">
             <label>
               <span translate>{{'MIDDLE_ABBREV'}}</span>
@@ -99,7 +99,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-2">
+        <div ng-if="$ctrl.useV3 !== 'true'" class="col-sm-2">
           <div class="form-group">
             <label>
               <span translate>{{'SUFFIX'}}</span>
@@ -121,7 +121,7 @@
 
       </div>
 
-      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
+      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.useV3 !== 'true'">
         <div class="col-sm-4">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
             <label>
@@ -218,8 +218,7 @@
         address="$ctrl.donorDetails.mailingAddress"
         parent-form="$ctrl.detailsForm"
         on-address-changed="$ctrl.loadRadioStations()"
-        address-disabled="$ctrl.donorDetails.staff"
-      >
+        address-disabled="$ctrl.donorDetails.staff">
       </address-form>
     </div>
 
@@ -239,7 +238,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6">
+        <div ng-if="$ctrl.useV3 !== 'true'" class="col-sm-6">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">
             <label>
               <span translate>{{'PHONE'}}</span>
