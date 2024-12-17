@@ -61,17 +61,19 @@ class ExistingPaymentMethodsController {
       if (this.creditCardPaymentForm && this.creditCardPaymentForm.securityCode) {
         unregister()
         this.addCvvValidators()
+        this.switchPayment()
       }
     })
   }
 
   addCvvValidators () {
     this.$scope.$watch('$ctrl.creditCardPaymentForm.securityCode.$viewValue', (number) => {
-      this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength
-      this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
-
-      this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
-      this.selectedPaymentMethod.cvv = number
+      if (this.selectedPaymentMethod?.['card-type'] && this.creditCardPaymentForm.securityCode) {
+        this.creditCardPaymentForm.securityCode.$validators.minLength = cruPayments.creditCard.cvv.validate.minLength
+        this.creditCardPaymentForm.securityCode.$validators.maxLength = cruPayments.creditCard.cvv.validate.maxLength
+        this.enableContinue({ $event: cruPayments.creditCard.cvv.validate.minLength(number) && cruPayments.creditCard.cvv.validate.maxLength(number) })
+        this.selectedPaymentMethod.cvv = number
+      }
     })
   }
 
@@ -103,7 +105,7 @@ class ExistingPaymentMethodsController {
       // Select the first payment method
       this.selectedPaymentMethod = paymentMethods[0]
     }
-
+    this.shouldRecoverCvv = true
     this.switchPayment()
   }
 
@@ -155,14 +157,12 @@ class ExistingPaymentMethodsController {
   switchPayment () {
     this.onPaymentChange({ selectedPaymentMethod: this.selectedPaymentMethod })
     if (this.selectedPaymentMethod?.['card-type'] && this.creditCardPaymentForm?.securityCode) {
-      const selectedUri = this.selectedPaymentMethod.self.uri
-      const storage = JSON.parse(this.sessionStorage.getItem('storedCvvs'))
-      const getSelectedCvv = storage ? storage[Object.keys(storage).filter((item) => item === selectedUri)] || '' : ''
-      // Set CVV to new credit card CVV
-      this.creditCardPaymentForm.securityCode.$setViewValue(getSelectedCvv)
+      // Set cvv from session storage
+      const storage = this.shouldRecoverCvv ? JSON.parse(this.sessionStorage.getItem('cvv')) : ''
+      this.creditCardPaymentForm.securityCode.$setViewValue(storage)
       this.creditCardPaymentForm.securityCode.$render()
+      this.shouldRecoverCvv = false
     }
-
     if (this.selectedPaymentMethod?.['bank-name']) {
       // This is an EFT payment method so we need to remove any fee coverage
       this.orderService.storeCoverFeeDecision(false)

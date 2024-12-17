@@ -37,7 +37,8 @@ describe('checkout', () => {
             }
           },
           selectedPaymentMethod: {
-            cvv: ''
+            cvv: '',
+            'card-type': 'Visa'
           }
         })
         self.$window = $window
@@ -350,8 +351,6 @@ describe('checkout', () => {
         })
 
         it('should reset securityCode viewValue', () => {
-          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
-          self.controller.selectedPaymentMethod = { 'card-type': 'Visa', self: { type: 'cru.creditcards.named-credit-card', uri: 'selected uri' }, selectAction: 'some uri' }
           self.controller.switchPayment()
 
           expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
@@ -359,73 +358,46 @@ describe('checkout', () => {
         })
 
         it('should add securityCode viewValue from sessionStorage', () => {
-          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
-          self.controller.selectedPaymentMethod = { 
-            'card-type': 'Visa', 
-            self: { 
-              type: 'cru.creditcards.named-credit-card', 
-              uri: '/paymentmethods/crugive/giydsnjqgi=' 
-            }, 
-            selectAction: 'some uri' 
-          }
           self.$window.sessionStorage.setItem(
-            'storedCvvs', 
-              '{"/paymentmethods/crugive/giydsnjqgi=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}'
+            'cvv', 
+              '456'
           )
+          self.controller.shouldRecoverCvv = true
           self.controller.switchPayment()
           
-          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('456')
-          expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
-        })
-
-        it('should not add securityCode viewValue from sessionStorage', () => {
-          self.controller.creditCardPaymentForm.securityCode.$viewValue = '123'
-          self.controller.selectedPaymentMethod = { 
-            'card-type': 'Visa', 
-            self: { 
-              type: 'cru.creditcards.named-credit-card', 
-              uri: '/paymentmethods/crugive/giydsnjqgi=' 
-            }, 
-            selectAction: 'some uri' 
-          }
-          self.$window.sessionStorage.setItem(
-            'storedCvvs', 
-              '{"/paymentmethods/crugive/giydsnjqgs=":"456","/paymentmethods/crugive/giydsnjqgy=":"321"}'
-          )
-          self.controller.switchPayment()
-          
-          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith('')
+          expect(self.controller.creditCardPaymentForm.securityCode.$setViewValue).toHaveBeenCalledWith(456)
           expect(self.controller.creditCardPaymentForm.securityCode.$render).toHaveBeenCalled()
         })
       })
 
       describe('addCvvValidators', () => {
-        it('should add validator functions to creditCardPaymentForm.securityCode', () => {
-          jest.spyOn(self.controller, 'addCvvValidators').mockImplementation(() => {
-            self.controller.creditCardPaymentForm.securityCode.$validators = {
-              minLength: cruPayments.creditCard.cvv.validate.minLength,
-              maxLength: cruPayments.creditCard.cvv.validate.maxLength
-            }
-          })
-          delete  self.controller.creditCardPaymentForm
-          self.controller.waitForFormInitialization()
-          self.controller.$scope.$digest()
-    
-          expect(self.controller.addCvvValidators).not.toHaveBeenCalled()
+        it('should add a watch on the security code value', () => {
           self.controller.creditCardPaymentForm = {
             $valid: true,
             $dirty: false,
             securityCode: {
               $viewValue: '123',
+              $validators: {}
             }
           }
+          self.controller.addCvvValidators()
+          expect(self.controller.$scope.$$watchers.length).toEqual(1)
+          expect(self.controller.$scope.$$watchers[0].exp).toEqual('$ctrl.creditCardPaymentForm.securityCode.$viewValue')
+        })
+        
+        it('should add validator functions to creditCardPaymentForm.securityCode', () => {
+          jest.spyOn(self.controller, 'addCvvValidators')
+          self.controller.selectedPaymentMethod.self = { 
+              type: 'cru.creditcards.named-credit-card', 
+              uri: 'selected uri' 
+          }
+          self.controller.waitForFormInitialization()
           self.controller.$scope.$digest()
-    
+
           expect(self.controller.addCvvValidators).toHaveBeenCalled()
           expect(Object.keys(self.controller.creditCardPaymentForm.securityCode.$validators).length).toEqual(2)
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.minLength).toBe('function')
           expect(typeof self.controller.creditCardPaymentForm.securityCode.$validators.maxLength).toBe('function')
-   
         })
         
         it('should call enableContinue when cvv is valid', () => {
