@@ -100,6 +100,9 @@ class SignUpModalController {
       if (context.controller === 'registration-complete') {
         this.$window.currentStep = null
       }
+      if (context.controller === 'primary-auth') {
+        this.$scope.$apply(() => this.onStateChange({state:'sign-in'}))
+      }
       this.injectBackButton()
     })
 
