@@ -211,6 +211,7 @@ export default angular
       itemConfig: '=',
       hideSpouseDetails: '<',
       hideAnnual: '<',
-      hideQuarterly: '<'
+      hideQuarterly: '<',
+      useV3: '<'
     }
   })

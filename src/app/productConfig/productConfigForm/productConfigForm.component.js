@@ -440,6 +440,7 @@ export default angular
       submitted: '<',
       onStateChange: '&',
       hideAnnual: '<',
-      hideQuarterly: '<'
+      hideQuarterly: '<',
+      useV3: '<'
     }
   })

@@ -217,6 +217,7 @@ export default angular
       onSubmit: '&',
       radioStationApiUrl: '<',
       hideSpouseDetails: '<',
-      compactAddress: '<'
+      compactAddress: '<',
+      useV3: '<'
     }
   })
