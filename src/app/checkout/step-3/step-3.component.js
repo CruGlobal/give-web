@@ -139,16 +139,16 @@ class Step3Controller {
     })
   }
 
-  handleRecaptchaFailure (componentInstance) {
-    componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-    componentInstance.submittingOrder = false
-    componentInstance.onSubmittingOrder({ value: false })
+  handleRecaptchaFailure () {
+    this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+    this.submittingOrder = false
+    this.onSubmittingOrder({ value: false })
 
-    componentInstance.loadCart()
+    this.loadCart()
 
-    componentInstance.onSubmitted()
-    componentInstance.submissionError = 'generic error'
-    componentInstance.$window.scrollTo(0, 0)
+    this.onSubmitted()
+    this.submissionError = 'generic error'
+    this.$window.scrollTo(0, 0)
   }
 }
 
