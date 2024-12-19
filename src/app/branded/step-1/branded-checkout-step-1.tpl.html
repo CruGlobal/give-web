@@ -46,10 +46,26 @@
   </div>
   <div class="panel">
     <div class="panel-body text-right">
-      <button class="btn btn-primary"
+      <div class="checkout-cta pull-right" ng-if="$ctrl.useV3 === 'true'">
+       <recaptcha-wrapper
+              action="'branded_submit'"
+              on-success="$ctrl.submit"
+              on-failure="$ctrl.handleRecaptchaFailure"
+              component-instance="$ctrl"
+              button-id="'submitOrderButton'"
+              button-type="'submit'"
+              button-classes="'btn btn-primary btn-lg btn-block'"
+              button-disabled="$ctrl.errorLoadingProductConfig || !$ctrl.canSubmitOrder()"
+              button-label="'SUBMIT_GIFT'"></recaptcha-wrapper>
+        </div>
+
+      <button ng-if="$ctrl.useV3 !== 'true'" class="btn btn-primary"
               ng-click="$ctrl.submit()"
               ng-disabled="$ctrl.errorLoadingProductConfig"
               translate>{{'CONTINUE'}}</button>
-    </div>
+  </div>
   </div>
 </div>
+<loading type="fixed" ng-if="$ctrl.loadingAndSubmitting">
+  <translate>{{'SUBMITTING_GIFT'}}</translate>
+</loading>
