@@ -10,7 +10,7 @@ import productModalService from 'common/services/productModal.service'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
-import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { cartUpdatedEvent } from 'common/lib/cartEvents'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
 
