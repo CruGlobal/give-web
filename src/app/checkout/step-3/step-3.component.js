@@ -2,6 +2,7 @@ import angular from 'angular'
 import 'rxjs/add/observable/throw'
 
 import displayAddressComponent from 'common/components/display-address/display-address.component'
+import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
 
 import commonService from 'common/services/api/common.service'
@@ -163,7 +164,8 @@ export default angular
     analyticsFactory.name,
     cartService.name,
     commonService.name,
-    recaptchaComponent.name
+    recaptchaComponent.name,
+    checkoutErrorMessages.name
   ])
   .component(componentName, {
     controller: Step3Controller,
