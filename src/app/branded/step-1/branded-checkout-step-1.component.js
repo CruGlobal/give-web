@@ -4,22 +4,29 @@ import every from 'lodash/every'
 import productConfigForm from 'app/productConfig/productConfigForm/productConfigForm.component'
 import contactInfo from 'common/components/contactInfo/contactInfo.component'
 import checkoutStep2 from 'app/checkout/step-2/step-2.component'
+import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
 
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
+import analyticsFactory from '../../analytics/analytics.factory'
 import brandedAnalyticsFactory from '../../branded/analytics/branded-analytics.factory'
-
 import { FEE_DERIVATIVE } from 'common/components/paymentMethods/coverFees/coverFees.component'
 
 import template from './branded-checkout-step-1.tpl.html'
+import 'rxjs/add/operator/catch'
+import 'rxjs/add/operator/do'
+import 'rxjs/add/operator/finally'
 
 const componentName = 'brandedCheckoutStep1'
 
 class BrandedCheckoutStep1Controller {
   /* @ngInject */
-  constructor ($log, $filter, brandedAnalyticsFactory, cartService, orderService) {
+  constructor ($scope, $log, $filter, $window, analyticsFactory, brandedAnalyticsFactory, cartService, orderService) {
+    this.$scope = $scope
     this.$log = $log
     this.$filter = $filter
+    this.$window = $window
+    this.analyticsFactory = analyticsFactory
     this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.cartService = cartService
     this.orderService = orderService
@@ -154,11 +161,111 @@ class BrandedCheckoutStep1Controller {
   checkSuccessfulSubmission () {
     if (every(this.submission, 'completed')) {
       if (every(this.submission, { error: false })) {
-        this.next()
+        if (this.useV3 === 'true') {
+          this.submitOrderInternal()
+        } else {
+          this.next()
+        }
       } else {
         this.submitted = false
       }
     }
+  }
+
+  loadCart () {
+    this.errorLoadingCart = false
+
+    const cart = this.cartService.get()
+    cart.subscribe(
+      data => {
+        // Setting cart data and analytics
+        this.cartData = data
+        this.brandedAnalyticsFactory.saveCoverFees(this.orderService.retrieveCoverFeeDecision())
+        if (this.cartData && this.cartData.items) {
+          this.brandedAnalyticsFactory.saveItem(this.cartData.items[0])
+        }
+        this.brandedAnalyticsFactory.addPaymentInfo()
+      },
+      error => {
+        // Handle errors by setting flag and logging the error
+        this.errorLoadingCart = true
+        this.$log.error('Error loading cart data for branded checkout (single step)', error)
+      }
+    )
+    return cart
+  }
+
+  loadCurrentPayment () {
+    this.loadingCurrentPayment = true
+
+    const getCurrentPayment = this.orderService.getCurrentPayment()
+    getCurrentPayment.finally(() => {
+      this.loadingCurrentPayment = false
+    }).subscribe(
+      data => {
+        if (!data) {
+          this.$log.error('Error loading current payment info: current payment doesn\'t seem to exist')
+        } else if (data['account-type']) {
+          this.bankAccountPaymentDetails = data
+        } else if (data['card-type']) {
+          this.creditCardPaymentDetails = data
+        } else {
+          this.$log.error('Error loading current payment info: current payment type is unknown')
+        }
+      },
+      error => {
+        this.$log.error('Error loading current payment info', error)
+      }
+    )
+    return getCurrentPayment
+  }
+
+  checkErrors () {
+    // Then check for errors on the API
+    return this.orderService.checkErrors().do(
+      (data) => {
+        this.needinfoErrors = data
+      })
+      .catch(error => {
+        this.$log.error('Error loading checkErrors', error)
+      })
+  }
+
+  submitOrderInternal () {
+    this.loadingAndSubmitting = true
+    this.loadCart()
+      .mergeMap(() => {
+        return this.loadCurrentPayment()
+      })
+      .mergeMap(() => {
+        return this.checkErrors()
+      })
+      .mergeMap(() => {
+        return this.orderService.submitOrder(this)
+      })
+      .finally(() => {
+        this.loadingAndSubmitting = false
+      })
+      .subscribe(() => {
+        this.next()
+      })
+  }
+
+  handleRecaptchaFailure () {
+    this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+    this.submittingOrder = false
+    this.loadingAndSubmitting = false
+    this.onSubmittingOrder({ value: false })
+
+    this.loadCart()
+
+    this.onSubmitted()
+    this.submissionError = 'generic error'
+    this.$window.scrollTo(0, 0)
+  }
+
+  canSubmitOrder () {
+    return !this.submittingOrder
   }
 }
 
@@ -167,8 +274,10 @@ export default angular
     productConfigForm.name,
     contactInfo.name,
     checkoutStep2.name,
+    checkoutErrorMessages.name,
     cartService.name,
     orderService.name,
+    analyticsFactory.name,
     brandedAnalyticsFactory.name
   ])
   .component(componentName, {
@@ -189,6 +298,9 @@ export default angular
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
       radioStationRadius: '<',
-      useV3: '<'
+      onSubmittingOrder: '&',
+      onSubmitted: '&',
+      useV3: '<',
+      loadingAndSubmitting: '<'
     }
   })

@@ -22,9 +22,8 @@ const isValidAction = (action: string): boolean => {
 
 interface RecaptchaProps {
   action: string
-  onSuccess: (componentInstance: any) => void
-  onFailure: (componentInstance: any) => void
-  componentInstance: any
+  onSuccess: () => void
+  onFailure: () => void
   buttonId: string
   buttonType?: ButtonType
   buttonClasses: string
@@ -40,7 +39,6 @@ export const Recaptcha = ({
   action,
   onSuccess,
   onFailure,
-  componentInstance,
   buttonId,
   buttonType,
   buttonClasses,
@@ -89,29 +87,29 @@ export const Recaptcha = ({
         if (data?.success === true && isValidAction(data?.action)) {
           if (data.score < 0.5) {
             $log.warn(`Captcha score was below the threshold: ${data.score}`)
-            onFailure(componentInstance)
+            onFailure()
             return
           }
-          onSuccess(componentInstance)
+          onSuccess()
           return
         }
         if (data?.success === false && isValidAction(data?.action)) {
           $log.warn('Recaptcha call was unsuccessful, continuing anyway')
-          onSuccess(componentInstance)
+          onSuccess()
           return
         }
         if (!data) {
           $log.warn('Data was missing!')
-          onSuccess(componentInstance)
+          onSuccess()
           return
         }
         if (!isValidAction(data?.action)) {
           $log.warn(`Invalid action: ${data?.action}`)
-          onFailure(componentInstance)
+          onFailure()
         }
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
-        onSuccess(componentInstance)
+        onSuccess()
       }
     })
   }, [grecaptcha, buttonId, ready])
@@ -135,7 +133,6 @@ export default angular
         'action',
         'onSuccess',
         'onFailure',
-        'componentInstance',
         'buttonId',
         'buttonType',
         'buttonClasses',

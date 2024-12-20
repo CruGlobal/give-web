@@ -247,7 +247,6 @@ describe('Recaptcha component', () => {
       action='submit_gift'
       onSuccess={onSuccess}
       onFailure={onFailure}
-      componentInstance={{}}
       buttonId='id'
       buttonType={ButtonType.Submit}
       buttonClasses='btn'
