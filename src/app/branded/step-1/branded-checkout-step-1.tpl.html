@@ -13,7 +13,9 @@
                          hide-annual="$ctrl.hideAnnual"
                          on-state-change="$ctrl.onGiftConfigStateChange(state)"
                          disable-session-restart="true"
-                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
+                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
+                         use-v3="$ctrl.useV3"
+                         >
     </product-config-form>
     <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
       <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
@@ -23,13 +25,14 @@
 <div ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig">
   <div class="panel">
     <div class="panel-body">
-      <h3 class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
+      <h3 ng-if="$ctrl.useV3 !== 'true'" class="panel-name" translate>{{'YOUR_INFORMATION'}}</h3>
       <contact-info
         submitted="$ctrl.submitted"
         on-submit="$ctrl.onContactInfoSubmit(success)"
         donor-details="$ctrl.donorDetails"
         radio-station-api-url="$ctrl.radioStationApiUrl"
-        hide-spouse-details="$ctrl.hideSpouseDetails">
+        hide-spouse-details="$ctrl.hideSpouseDetails"
+        use-v3="$ctrl.useV3">
       </contact-info>
     </div>
   </div>
