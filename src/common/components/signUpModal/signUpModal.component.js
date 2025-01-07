@@ -218,13 +218,13 @@ class SignUpModalController {
   }
 
   injectBackButton () {
-    // Do't show back button on the first step
+    // Don't show back button on the first step
     if (this.currentStep === 1) {
       return
     }
     const buttonBar = document.querySelector('.o-form-button-bar')
     // Ensure the button is only added once
-    if (buttonBar && !document.querySelector('.o-form-button-bar #backButton')) {
+    if (buttonBar && !buttonBar.querySelector('#backButton')) {
       const backButton = angular.element('<button id="backButton" class="btn btn-secondary">Back</button>')
       // Add click behavior to go back a step
       backButton.on('click', (e) => {
