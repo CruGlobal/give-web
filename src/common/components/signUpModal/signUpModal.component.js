@@ -13,10 +13,9 @@ const componentName = 'signUpModal'
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $rootScope, $location, $window, sessionService, cartService, orderService, envService) {
+  constructor ($log, $scope, $location, $window, sessionService, cartService, orderService, envService) {
     this.$log = $log
     this.$scope = $scope
-    this.$rootScope = $rootScope
     this.$location = $location
     this.$window = $window
     this.sessionService = sessionService
@@ -57,7 +56,7 @@ class SignUpModalController {
     this.oktaSignInWidget = new OktaSignIn({
       ...this.sessionService.oktaSignInWidgetDefaultOptions,
       assets: {
-        baseUrl: `${this.$window.location.origin}/assets/okta-sign-in/`
+        baseUrl: `/assets/okta-sign-in/`
       },
       flow: 'signup',
       registration: {
@@ -71,42 +70,42 @@ class SignUpModalController {
             1: [
               {
                 ...schema[0],
-                value: this.$rootScope.firstName ?? donorData.name['given-name'] ?? this.sessionService.session.first_name ?? ''
+                value: this.$scope.firstName ?? donorData.name['given-name'] ?? this.sessionService.session.first_name ?? ''
               },
               {
                 ...schema[1],
-                value: this.$rootScope.lastName ?? donorData.name['family-name'] ?? this.sessionService.session.last_name ?? ''
+                value: this.$scope.lastName ?? donorData.name['family-name'] ?? this.sessionService.session.last_name ?? ''
               },
               {
                 ...schema[2],
-                value: this.$rootScope.email ?? donorData.email ?? this.sessionService.session.email ?? ''
+                value: this.$scope.email ?? donorData.email ?? this.sessionService.session.email ?? ''
               }
             ],
             // Step 2: Address plus phone number
             2: [
               {
                 ...schema[3],
-                value: this.$rootScope.streetAddress ?? donorData.mailingAddress.streetAddress ?? ''
+                value: this.$scope.streetAddress ?? donorData.mailingAddress.streetAddress ?? ''
               },
               {
                 ...schema[4],
-                value: this.$rootScope.city ?? donorData.mailingAddress.locality ?? ''
+                value: this.$scope.city ?? donorData.mailingAddress.locality ?? ''
               },
               {
                 ...schema[5],
-                value: this.$rootScope.state ?? donorData.mailingAddress.region ?? ''
+                value: this.$scope.state ?? donorData.mailingAddress.region ?? ''
               },
               {
                 ...schema[6],
-                value: this.$rootScope.zipCode ?? donorData.mailingAddress.postalCode ?? ''
+                value: this.$scope.zipCode ?? donorData.mailingAddress.postalCode ?? ''
               },
               {
                 ...schema[7],
-                value: this.$rootScope.countryCode ?? donorData.mailingAddress.country ?? ''
+                value: this.$scope.countryCode ?? donorData.mailingAddress.country ?? ''
               },
               {
                 ...schema[8],
-                value: this.$rootScope.primaryPhone ?? donorData['phone-number'] ?? ''
+                value: this.$scope.primaryPhone ?? donorData['phone-number'] ?? ''
               }],
             // Step 3: Password
             3: [schema[8]]
@@ -118,14 +117,14 @@ class SignUpModalController {
           const userProfile = postData.userProfile
 
           if (step === 1) {
-            Object.assign(this.$rootScope, {
+            Object.assign(this.$scope, {
               firstName: userProfile.firstName,
               lastName: userProfile.lastName,
               email: userProfile.email
             })
             this.$scope.$apply(() => this.goToNextStep())
           } else if (step === 2) {
-            Object.assign(this.$rootScope, {
+            Object.assign(this.$scope, {
               streetAddress: userProfile.streetAddress,
               city: userProfile.city,
               state: userProfile.state,
@@ -138,15 +137,15 @@ class SignUpModalController {
             // Add the user profile to the postData object
             // Okta widget handles the password
             postData.userProfile = {
-              firstName: this.$rootScope.firstName,
-              lastName: this.$rootScope.lastName,
-              email: this.$rootScope.email,
-              streetAddress: this.$rootScope.streetAddress,
-              city: this.$rootScope.city,
-              state: this.$rootScope.state,
-              zipCode: this.$rootScope.zipCode,
-              countryCode: this.$rootScope.countryCode,
-              primaryPhone: this.$rootScope.primaryPhone
+              firstName: this.$scope.firstName,
+              lastName: this.$scope.lastName,
+              email: this.$scope.email,
+              streetAddress: this.$scope.streetAddress,
+              city: this.$scope.city,
+              state: this.$scope.state,
+              zipCode: this.$scope.zipCode,
+              countryCode: this.$scope.countryCode,
+              primaryPhone: this.$scope.primaryPhone
             }
             onSuccess(postData)
           }
