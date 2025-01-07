@@ -9,7 +9,6 @@ import { scrollModalToTop } from 'common/services/modalState.service'
 
 import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
-import signUpActivationModal from 'common/components/signUpActivationModal/signUpActivationModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
@@ -143,7 +142,7 @@ class RegisterAccountModalController {
 
   stateChanged (state) {
     this.element.dataset.state = state
-    if (state === 'sign-up' || state === 'sign-up-activation') {
+    if (state === 'sign-up') {
       this.setModalSize('md')
     } else {
       this.setModalSize(this.$window.screen.width >= 1200 ? 'lg' : state === 'contact-info' ? undefined : 'sm')
@@ -174,7 +173,6 @@ export default angular
     sessionService.name,
     signInModal.name,
     signUpModal.name,
-    signUpActivationModal.name,
     userMatchModal.name,
     failedVerificationModal.name,
     verificationService.name

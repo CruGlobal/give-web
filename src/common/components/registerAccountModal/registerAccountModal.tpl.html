@@ -2,15 +2,12 @@
   <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
     <span aria-hidden="true">×</span>
   </button>
-  <div ng-if="$ctrl.state !== 'sign-up' && $ctrl.state !== 'sign-up-activation'">
+  <div ng-if="$ctrl.state !== 'sign-up'">
     <h3 ng-if="$ctrl.firstName" translate>Welcome back, {{$ctrl.firstName}}!</h3>
     <h3 ng-if="!$ctrl.firstName" translate>Welcome back!</h3>
   </div>
   <div ng-if="$ctrl.state === 'sign-up'" class="signup-header">
     <h3 translate>Create Your Account</h3>
-  </div>
-  <div ng-if="$ctrl.state === 'sign-up-activation'" class="signup-header">
-    <h3 translate>Create a new account</h3>
   </div>
   <div ng-if="$ctrl.state === 'sign-in'" class="section">
     <ul>
@@ -39,13 +36,6 @@
     on-failure="$ctrl.onIdentityFailure()"
     is-inside-another-modal="true"
   ></sign-up-modal>
-  <sign-up-activation-modal 
-    ng-switch-when="sign-up-activation"
-    on-state-change="$ctrl.stateChanged(state)"
-    on-success="$ctrl.onIdentitySuccess()"
-    on-failure="$ctrl.onIdentityFailure()"
-    is-inside-another-modal="true"
-  ></sign-up-activation-modal>
   <div ng-switch-when="loading">
     <loading></loading>
   </div>

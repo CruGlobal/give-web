@@ -604,11 +604,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
-    PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
-    SOMETHING_WENT_WRONG: 'Something went wrong. Please try again',
-    OKTA_EMAIL_ALREADY_EXISTS: 'The email address you used belongs to an existing Okta user.',
-    OKTA_ERROR_WHILE_SAVING_EMAIL: 'There was an error saving your email address. Make sure it was entered correctly.',
-    OKTA_ERROR_WHILE_SAVING_DATA: 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
   })
   $translateProvider.preferredLanguage('en')
 }

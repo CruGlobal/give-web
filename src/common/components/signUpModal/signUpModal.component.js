@@ -262,50 +262,8 @@ class SignUpModalController {
     })
   }
 
-  // TODO list
-  // make sure errors on the Okta are displayed on the form. - could just be Okta enroll issue
-  // Make sure checkoutSessiondata is used on this form.
-  // Should we add spouse and organization name to the form?
-  // Remove submit detail method and create account session.service method.
-  // Remove the verification modal
-  // Make sure this form redirects to the user matching modal after a successful account creation.
-
-  //   async submitDetails () {
-  //     this.submitting = true
-  //     this.submissionError = []
-  //     try {
-  //       this.signUpForm.$setSubmitted()
-  //       if (!this.signUpForm.$valid) {
-  //         throw new Error('Some fields are invalid')
-  //       }
-
-//       const details = this.donorDetails
-//       const { email, name } = details
-//       const createAccount = await this.sessionService.createAccount(email, name['given-name'], name['family-name'])
-//       if (createAccount.status === 'error') {
-//         if (createAccount.accountPending) {
-//           this.onStateChange({ state: 'sign-up-activation' })
-//         } else {
-//           if (createAccount.redirectToSignIn) {
-//             setTimeout(() => {
-//               this.onStateChange({ state: 'sign-in' })
-//               this.$scope.$apply()
-//             }, 5000)
-//           };
-//           this.submissionError = createAccount.data
-//         }
-//       } else {
-//         this.onStateChange({ state: 'sign-up-activation' })
-//       }
-//     } catch (error) {
-//       this.$scope.$apply(() => {
-//         this.submissionError = [error.message]
-//       })
-//     } finally {
-//       this.submitting = false
-//       this.$scope.$apply()
-//     }
-//   }
+  // On registration complete we need to send the data to Cortex and then redirect the user to the next step
+  // this.onStateChange({ state: 'sign-up-activation' })
 }
 
 export default angular

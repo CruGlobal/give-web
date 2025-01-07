@@ -12,20 +12,6 @@
       on-state-change="$ctrl.stateChanged(state)"
       on-cancel="$ctrl.close()"
     ></sign-up-modal>
-    <sign-up-activation-modal ng-switch-when="sign-up-activation"
-      modal-title="$ctrl.modalTitle"
-      last-purchase-id="$ctrl.lastPurchaseId"
-      on-state-change="$ctrl.stateChanged(state)"
-      on-success="$ctrl.onSignUpActivationSuccess()"
-      on-cancel="$ctrl.close()"
-    ></sign-up-activation-modal>
-    <returning-from-okta-modal ng-switch-when="returning-from-okta"
-      modal-title="$ctrl.modalTitle"
-      last-purchase-id="$ctrl.lastPurchaseId"
-      on-state-change="$ctrl.stateChanged(state)"
-      on-success="$ctrl.onSignInSuccess()"
-      on-cancel="$ctrl.close()"
-    ></returning-from-okta-modal>
     <register-account-modal ng-switch-when="register-account"
       first-name="$ctrl.firstName"
       modal-title="$ctrl.modalTitle"

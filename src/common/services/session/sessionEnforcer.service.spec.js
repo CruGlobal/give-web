@@ -366,47 +366,4 @@ describe('sessionEnforcerService Tests', () => {
       })
     })
   })
-
-
-
-  describe('Open Returning from Okta URL', () => {
-    beforeEach(angular.mock.module(function ($provide) {
-      $provide.decorator('$window', function ($delegate) {
-        const spy = jest.fn($delegate)
-        spy.location = {
-          search: '?returningFromOkta=true',
-        }
-        return spy
-      })
-    }))
-    beforeEach(angular.mock.module(module.name))
-    let sessionEnforcerService,
-      sessionModalService,
-      sessionService,
-      deferred,
-      $rootScope,
-      $window
-
-    beforeEach(inject(function (_$window_, _$rootScope_, _sessionEnforcerService_, _sessionModalService_, _sessionService_, _$q_) {
-      sessionEnforcerService = _sessionEnforcerService_
-      sessionModalService = _sessionModalService_
-      sessionService = _sessionService_
-      $rootScope = _$rootScope_
-      $window = _$window_
-      jest.spyOn(sessionService, 'getRole').mockReturnValue(Roles.public)
-      deferred = _$q_.defer()
-      jest.spyOn(sessionModalService, 'open').mockImplementation(() => {
-        return { result: deferred.promise }
-      })
-    })) 
-
-    it('should open returning-from-okta modal if returningFromOkta URL parameter is true', () => {
-      sessionService.getRole.mockReturnValue(Roles.public)
-      sessionEnforcerService([Roles.registered], {}, EnforcerModes.session)
-
-      $rootScope.$digest()
-
-      expect(sessionModalService.open).toHaveBeenCalledWith('returning-from-okta', { backdrop: 'static', keyboard: false })
-    })
-  })
 });

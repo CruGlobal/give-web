@@ -72,7 +72,6 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
     accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId }, size: 'sm' }).result,
     registerAccount: () => openModal('register-account', { backdrop: 'static', keyboard: false }).result,
     createAccount: () => openModal('sign-up', { backdrop: 'static', keyboard: false }).result,
-    returningFromOkta: () => openModal('returning-from-okta', { backdrop: 'static', keyboard: false }).result
   }
 }
 
