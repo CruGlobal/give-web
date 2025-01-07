@@ -49,7 +49,7 @@ class SignUpModalController {
   }
 
   async setUpSignUpWidget () {
-    const prePopulatedData = await this.loadDonorDetails()
+    const donorData = await this.loadDonorDetails()
     this.$window.currentStep = 1 // Default to step 1
 
     this.oktaSignInWidget = new OktaSignIn({
@@ -69,42 +69,42 @@ class SignUpModalController {
             1: [
               {
                 ...schema[0],
-                value: this.$rootScope.firstName ?? prePopulatedData.name['given-name'] ?? this.sessionService.session.first_name ?? ''
+                value: this.$rootScope.firstName ?? donorData.name['given-name'] ?? this.sessionService.session.first_name ?? ''
               },
               {
                 ...schema[1],
-                value: this.$rootScope.lastName ?? prePopulatedData.name['family-name'] ?? this.sessionService.session.last_name ?? ''
+                value: this.$rootScope.lastName ?? donorData.name['family-name'] ?? this.sessionService.session.last_name ?? ''
               },
               {
                 ...schema[2],
-                value: this.$rootScope.email ?? prePopulatedData.email ?? this.sessionService.session.email ?? ''
+                value: this.$rootScope.email ?? donorData.email ?? this.sessionService.session.email ?? ''
               }
             ],
             // Step 2: Address plus phone number
             2: [
               {
                 ...schema[3],
-                value: this.$rootScope.streetAddress ?? prePopulatedData.mailingAddress.streetAddress ?? ''
+                value: this.$rootScope.streetAddress ?? donorData.mailingAddress.streetAddress ?? ''
               },
               {
                 ...schema[4],
-                value: this.$rootScope.city ?? prePopulatedData.mailingAddress.locality ?? ''
+                value: this.$rootScope.city ?? donorData.mailingAddress.locality ?? ''
               },
               {
                 ...schema[5],
-                value: this.$rootScope.state ?? prePopulatedData.mailingAddress.region ?? ''
+                value: this.$rootScope.state ?? donorData.mailingAddress.region ?? ''
               },
               {
                 ...schema[6],
-                value: this.$rootScope.zipCode ?? prePopulatedData.mailingAddress.postalCode ?? ''
+                value: this.$rootScope.zipCode ?? donorData.mailingAddress.postalCode ?? ''
               },
               {
                 ...schema[7],
-                value: this.$rootScope.countryCode ?? prePopulatedData.mailingAddress.country ?? ''
+                value: this.$rootScope.countryCode ?? donorData.mailingAddress.country ?? ''
               },
               {
                 ...schema[8],
-                value: this.$rootScope.primaryPhone ?? prePopulatedData['phone-number'] ?? ''
+                value: this.$rootScope.primaryPhone ?? donorData['phone-number'] ?? ''
               }],
             // Step 3: Password
             3: [schema[8]]
@@ -242,7 +242,16 @@ class SignUpModalController {
       this.orderService.getDonorDetails().subscribe(
         (data) => {
           this.loadingDonorDetails = false
-          resolve(data)
+
+          let donorData = data
+
+          const checkoutSavedData = this.sessionService.session.checkoutSavedData
+          if (checkoutSavedData) {
+            donorData = assign(this.donorDetails, pick(checkoutSavedData, [
+              'name', 'email', 'mailingAddress', 'phone-number'
+            ]))
+          }
+          resolve(donorData)
         },
         (error) => {
           this.loadingDonorDetails = false
@@ -254,8 +263,9 @@ class SignUpModalController {
   }
 
   // TODO list
-  // make sure errors on the Okta are displayed on the form.
-  // Make sure checkoutSessiondata ti used on this form.
+  // make sure errors on the Okta are displayed on the form. - could just be Okta enroll issue
+  // Make sure checkoutSessiondata is used on this form.
+  // Should we add spouse and organization name to the form?
   // Remove submit detail method and create account session.service method.
   // Remove the verification modal
   // Make sure this form redirects to the user matching modal after a successful account creation.
