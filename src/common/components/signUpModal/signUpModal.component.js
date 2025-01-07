@@ -13,11 +13,10 @@ const componentName = 'signUpModal'
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $location, $window, sessionService, cartService, orderService, envService) {
+  constructor ($log, $scope, $location, sessionService, cartService, orderService, envService) {
     this.$log = $log
     this.$scope = $scope
     this.$location = $location
-    this.$window = $window
     this.sessionService = sessionService
     this.orderService = orderService
     this.cartService = cartService
@@ -51,7 +50,7 @@ class SignUpModalController {
 
   async setUpSignUpWidget () {
     const donorData = await this.loadDonorDetails()
-    this.$window.currentStep = 1 // Default to step 1
+    this.currentStep = 1 // Default to step 1
 
     this.oktaSignInWidget = new OktaSignIn({
       ...this.sessionService.oktaSignInWidgetDefaultOptions,
@@ -61,7 +60,7 @@ class SignUpModalController {
       flow: 'signup',
       registration: {
         parseSchema: (schema, onSuccess) => {
-          const step = this.$window.currentStep || 1
+          const step = this.currentStep || 1
           // Split the form into multiple steps for better user experience.
           // Retain the values entered by the user in each step.
           // Pre-populate the form fields with existing user details to save time.
@@ -113,7 +112,7 @@ class SignUpModalController {
           onSuccess(steps[step])
         },
         preSubmit: (postData, onSuccess) => {
-          const step = this.$window.currentStep
+          const step = this.currentStep
           const userProfile = postData.userProfile
 
           if (step === 1) {
@@ -161,7 +160,7 @@ class SignUpModalController {
   afterRenderFn (context) {
     // Change the text of the sign up button to ensure it's clear what the user is doing
     const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'))
-    if (this.$window.currentStep === 3) {
+    if (this.currentStep === 3) {
       signUpButton.attr('value', 'Create an Account')
     } else {
       signUpButton.attr('value', 'Next')
@@ -169,7 +168,7 @@ class SignUpModalController {
 
     // Stop tracking the current step after registration is complete
     if (context.controller === 'registration-complete') {
-      this.$window.currentStep = null
+      this.currentStep = null
       console.log('Registration complete')
     }
 
@@ -183,13 +182,13 @@ class SignUpModalController {
 
   goToNextStep () {
     // Set the current step to the next step
-    this.$window.currentStep++
+    this.currentStep++
     this.reRenderWidget()
   }
 
   goToPreviousStep () {
     // Set the current step to the previous step
-    this.$window.currentStep = Math.max(this.$window.currentStep - 1, 1)
+    this.currentStep = Math.max(this.currentStep - 1, 1)
     this.reRenderWidget()
   }
 
@@ -220,7 +219,7 @@ class SignUpModalController {
 
   injectBackButton () {
     // Do't show back button on the first step
-    if (this.$window.currentStep === 1) {
+    if (this.currentStep === 1) {
       return
     }
     const buttonBar = document.querySelector('.o-form-button-bar')
