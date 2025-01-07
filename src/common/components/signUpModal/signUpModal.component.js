@@ -193,7 +193,7 @@ class SignUpModalController {
   }
 
   reRenderWidget () {
-  // Render the widget again to show new step
+    // Render the widget again to show new step
     this.oktaSignInWidget.remove()
     this.oktaSignInWidget.renderEl(
       { el: '#osw-container' },
