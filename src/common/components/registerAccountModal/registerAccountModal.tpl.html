@@ -32,9 +32,8 @@
   ></sign-in-modal>
   <sign-up-modal
     ng-switch-when="sign-up"
-    on-state-change="$ctrl.stateChanged(state)"
-    on-success="$ctrl.onIdentitySuccess()"
-    on-failure="$ctrl.onIdentityFailure()"
+    on-sign-up="$ctrl.onSignUp()"
+    on-sign-in="$ctrl.onSignIn()"
     is-inside-another-modal="true"
   ></sign-up-modal>
   <div ng-switch-when="loading">

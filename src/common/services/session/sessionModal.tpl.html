@@ -3,7 +3,8 @@
     <sign-up-modal ng-switch-when="sign-up"
       modal-title="$ctrl.modalTitle"
       last-purchase-id="$ctrl.lastPurchaseId"
-      on-state-change="$ctrl.stateChanged(state)"
+      on-sign-up="$ctrl.onSignUpSuccess()"
+      on-sign-in="$ctrl.onSignIn()"
       on-cancel="$ctrl.close()"
     ></sign-up-modal>
     <register-account-modal ng-switch-when="register-account"
@@ -17,9 +18,9 @@
     ></register-account-modal>
     <account-benefits-modal ng-switch-when="account-benefits"
       modal-title="$ctrl.modalTitle"
+      on-state-change="$ctrl.stateChanged(state)"
       on-success="$ctrl.onAccountBenefitsSuccess()"
       on-cancel="$ctrl.onCancel()"
-      on-state-change="$ctrl.stateChanged(state)"
     ></account-benefits-modal>
     <user-match-modal ng-switch-when="user-match"
       modal-title="$ctrl.modalTitle"

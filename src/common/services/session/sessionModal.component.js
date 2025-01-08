@@ -48,6 +48,10 @@ class SessionModalController {
     this.scrollModalToTop()
   }
 
+  onSignIn () {
+    this.stateChanged('register-account')
+  }
+
   onSignUpSuccess () {
     this.analyticsFactory.track('ga-sign-in-create-login')
     this.sessionService.removeOktaRedirectIndicator()

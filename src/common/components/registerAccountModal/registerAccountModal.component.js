@@ -87,6 +87,10 @@ class RegisterAccountModalController {
     this.stateChanged('sign-up')
   }
 
+  onSignIn () {
+    this.stateChanged('sign-in')
+  }
+
   onIdentitySuccess () {
     this.sessionService.removeOktaRedirectIndicator()
 

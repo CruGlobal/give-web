@@ -16,13 +16,12 @@ describe('signUpForm', function () {
   beforeEach(inject(function (_$rootScope_,  _$componentController_) {
     $rootScope = _$rootScope_
     bindings = {
-      onStateChange: jest.fn(),
-      onSuccess: jest.fn(),
+      onSignIn: jest.fn(),
+      onSignUp: jest.fn(),
       signUpForm: {
         $valid: false,
         $setSubmitted: jest.fn()
       },
-      onSubmit: jest.fn()
     }
     const scope = { $apply: jest.fn() }
     scope.$apply.mockImplementation(() => {})
@@ -51,17 +50,17 @@ describe('signUpForm', function () {
       })
 
       it('Redirects user to sign in modal', () => {
-        jest.spyOn($ctrl, 'onStateChange')
+        jest.spyOn($ctrl, 'onSignIn')
         $ctrl.$onInit()
 
-        expect($ctrl.onStateChange).toHaveBeenCalled()
+        expect($ctrl.onSignIn).toHaveBeenCalled()
       })
     })
 
     it('Loads user cart details', () => {
       $ctrl.isInsideAnotherModal = false
       jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockImplementation(() => Observable.from([5]))
- 
+
       $ctrl.$onInit()
 
       expect($ctrl.cartCount).toEqual(5)
@@ -83,7 +82,7 @@ describe('signUpForm', function () {
       },
       email: 'email@cru.org',
     };
-    
+
     it('Inherits data from orderService', (done) => {
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
         [signUpFormData]
