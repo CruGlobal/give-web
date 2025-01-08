@@ -283,15 +283,10 @@ describe('session service', function () {
       $window.sessionStorage.removeItem(locationOnLogin)
     })
 
-    it('should return SignInEvent broadcast', done => {
+    it('should return SignInEvent broadcast when not authenticated', done => {
       jest.spyOn($rootScope, '$broadcast')
       jest.spyOn(sessionService.authClient, 'isAuthenticated').mockResolvedValueOnce(false)
-      jest.spyOn(sessionService.authClient.tokenManager, 'getTokens').mockResolvedValueOnce({
-        accessToken: {
-          accessToken: 'accessToken'
-        }
-      })
-      jest.spyOn(sessionService.authClient.token, 'getWithRedirect').mockResolvedValue(true)
+      jest.spyOn(sessionService.authClient.token, 'getWithRedirect').mockResolvedValue(undefined)
 
       sessionService.signIn('lastPurchaseId-SignInEvent').subscribe();
 
@@ -302,6 +297,31 @@ describe('session service', function () {
         done()
       })
     })
+
+    it('should return SignInEvent broadcast when authenticated', done => {
+      $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
+        access_token: 'accessToken',
+      }).respond(200, 'success')
+
+      jest.spyOn($rootScope, '$broadcast')
+      jest.spyOn(sessionService.authClient, 'isAuthenticated').mockResolvedValueOnce(true)
+      jest.spyOn(sessionService.authClient.tokenManager, 'getTokens').mockResolvedValueOnce({
+        accessToken: {
+          accessToken: 'accessToken'
+        }
+      })
+      sessionService.signIn().subscribe();
+      // Observable.finally is fired after the test, this defers until it's called.
+      // eslint-disable-next-line angular/timeout-service
+      setTimeout(() => {
+        $httpBackend.flush();
+
+        setTimeout(() => {
+          expect($rootScope.$broadcast).toHaveBeenCalledWith(SignInEvent);
+          done(); // Signal the test has finished
+        })
+      })
+    });
 
     it('should handle a failed login', done => {
       jest.spyOn(sessionService.authClient, 'isAuthenticated').mockResolvedValueOnce(false)
@@ -346,7 +366,7 @@ describe('session service', function () {
             accessToken
           }
         })
-        jest.spyOn(sessionService.authClient.token, 'getWithRedirect').mockResolvedValue(true)
+        jest.spyOn(sessionService.authClient.token, 'getWithRedirect').mockResolvedValue(undefined)
       });
 
 
@@ -371,7 +391,9 @@ describe('session service', function () {
         $httpBackend.expectPOST('https://give-stage2.cru.org/okta/login', {
           access_token: accessToken
         }).respond(200, 'success')
-        sessionService.handleOktaRedirect().toPromise().then(() => {
+
+        sessionService.handleOktaRedirect().subscribe();
+        setTimeout(() => {
           expect($window.sessionStorage.getItem('locationSearchOnLogin')).toEqual(null)
           expect($location.search).toHaveBeenCalledTimes(3)
           expect($location.search).toHaveBeenNthCalledWith(1, 'ga', '111111')
@@ -379,7 +401,7 @@ describe('session service', function () {
           expect($location.search).toHaveBeenNthCalledWith(3, 'anotherQuery', '00000')
           $httpBackend.flush()
           done()
-        })
+        });
       })
 
       it('should pass along lastPurchaseId', done => {
@@ -388,10 +410,11 @@ describe('session service', function () {
           lastPurchaseId: 'gxbcdviu='
         }).respond(200, 'success')
   
-        sessionService.handleOktaRedirect('gxbcdviu=').toPromise().then(() => {
+        sessionService.handleOktaRedirect('gxbcdviu=').subscribe();
+        setTimeout(() => {
           $httpBackend.flush()
           done()
-        })
+        });
       })
 
       it('should redirect to Okta from the login screen if the login has not yet happened', done => {

@@ -94,57 +94,98 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     signOutWithoutRedirectToOkta: signOutWithoutRedirectToOkta
   }
 
-  function handleOktaRedirect (lastPurchaseId) {
+  function handleOktaRedirect(lastPurchaseId) {
     if (authClient.isLoginRedirect()) {
-      return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
-        authClient.tokenManager.setTokens(tokenResponse.tokens)
-        return signIn(lastPurchaseId)
-      }))
+        return new Observable(observer => {
+          authClient.token.parseFromUrl()
+            .then((tokenResponse) => {
+              authClient.tokenManager.setTokens(tokenResponse.tokens);
+              return signIn(lastPurchaseId).subscribe({
+                next: result => {
+                  observer.next(result);
+                  observer.complete();
+                },
+                error: err => {
+                  observer.error(err);
+                }
+              });
+            })
+            .catch(err => {
+                observer.error(err);
+            });
+        });
     } else {
-      return Observable.of(false)
+        return Observable.of(false);
     }
   }
 
   function signIn (lastPurchaseId) {
     session.isOktaRedirecting = true
-    return Observable.from(internalSignIn(lastPurchaseId))
-      .map((response) => response ? response.data : response)
-      .finally(() => {
-        $rootScope.$broadcast(SignInEvent)
-      })
+    return new Observable(observer => {
+      internalSignIn(lastPurchaseId)
+        .finally(() => {
+          $rootScope.$broadcast(SignInEvent);
+        })
+        .subscribe({
+            next: response => {
+              const data = response ? response.data : response;
+              observer.next(data);
+              observer.complete();
+            },
+            error: err => {
+              observer.error(err);
+            }
+        });
+    });
   }
 
-  async function internalSignIn (lastPurchaseId) {
-    const isAuthenticated = await authClient.isAuthenticated()
-    if (!isAuthenticated) {
-      setRedirectingOnLogin()
-      return authClient.token.getWithRedirect()
-    }
-    const tokens = await authClient.tokenManager.getTokens()
-    const data = { access_token: tokens.accessToken.accessToken }
-    // Only send lastPurchaseId if present and currently public
-    if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
-      data.lastPurchaseId = lastPurchaseId
-    }
-    // Add marketing search queries back to URL once returned from Okta
-    const locationSearch = $window.sessionStorage.getItem(locationSearchOnLogin) || ''
-    if (locationSearch) {
-      // eslint-disable-next-line
-      const searchQueries = locationSearch.split(/\?|\&/)
-      $window.sessionStorage.removeItem(locationSearchOnLogin)
-      searchQueries.forEach((searchQuery) => {
-        const [search, value] = searchQuery.split('=')
-        if (search && value) {
-          $location.search(search, value)
+  function internalSignIn (lastPurchaseId) {
+    return new Observable(observer => {
+      authClient.isAuthenticated()
+        .then(isAuthenticated => {
+          if (!isAuthenticated) {
+            setRedirectingOnLogin();
+            return authClient.token.getWithRedirect();
         }
+        return authClient.tokenManager.getTokens();
       })
-    }
-    removeOktaRedirectIndicator()
-    return $http({
-      method: 'POST',
-      url: oktaApiUrl('login'),
-      data: data,
-      withCredentials: true
+      .then(tokens => {
+        if (!tokens) {
+          return
+        }
+        const data = { access_token: tokens.accessToken.accessToken };
+        // Only send lastPurchaseId if present and currently public
+        if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
+          data.lastPurchaseId = lastPurchaseId;
+        }
+        // Add marketing search queries back to URL once returned from Okta
+        const locationSearch = $window.sessionStorage.getItem(locationSearchOnLogin) || '';
+        if (locationSearch) {
+          // eslint-disable-next-line
+            const searchQueries = locationSearch.split(/\?|\&/);
+            $window.sessionStorage.removeItem(locationSearchOnLogin);
+            searchQueries.forEach((searchQuery) => {
+              const [search, value] = searchQuery.split('=');
+              if (search && value) {
+                $location.search(search, value);
+              }
+            });
+        }
+        removeOktaRedirectIndicator();
+        return $http({
+            method: 'POST',
+            url: oktaApiUrl('login'),
+            data: data,
+            withCredentials: true
+        });
+      })
+      .then(response => {
+          observer.next(response);
+          observer.complete();
+      })
+      .catch(err => {
+        observer.error(err);
+      });
     })
   }
 
