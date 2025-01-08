@@ -32,7 +32,7 @@
   ></sign-in-modal>
   <sign-up-modal
     ng-switch-when="sign-up"
-    on-sign-up="$ctrl.onSignUp()"
+    on-sign-up="$ctrl.onSignUpSuccess(donorDetails)"
     on-sign-in="$ctrl.onSignIn()"
     is-inside-another-modal="true"
   ></sign-up-modal>
@@ -42,6 +42,7 @@
   <contact-info-modal
     ng-switch-when="contact-info"
     modal-title="$ctrl.modalTitle"
+    sign-up-donor-details="$ctrl.signUpDonorDetails"
     on-success="$ctrl.onContactInfoSuccess()"
     on-cancel="$ctrl.onCancel()"
   ></contact-info-modal>

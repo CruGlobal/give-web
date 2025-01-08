@@ -46,15 +46,15 @@ describe('registerAccountModal', function () {
 
   describe('$onInit()', () => {
     beforeEach(() => {
-      jest.spyOn($ctrl, 'getDonorDetails').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'checkDonorDetails').mockImplementation(() => {})
       jest.spyOn($ctrl, 'stateChanged').mockImplementation(() => {})
     })
 
     it('should get donor details', () => {
       $ctrl.$onInit()
-      expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
+      expect($ctrl.checkDonorDetails).not.toHaveBeenCalled()
       $rootScope.$broadcast(LoginOktaOnlyEvent)
-      expect($ctrl.getDonorDetails).toHaveBeenCalled()
+      expect($ctrl.checkDonorDetails).toHaveBeenCalled()
     })
 
     describe('with \'REGISTERED\' cortex-session', () => {
@@ -64,7 +64,7 @@ describe('registerAccountModal', function () {
       })
 
       it('proceeds to donor details', () => {
-        expect($ctrl.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.checkDonorDetails).toHaveBeenCalled()
         expect($ctrl.stateChanged).not.toHaveBeenCalled()
       })
     })
@@ -76,7 +76,7 @@ describe('registerAccountModal', function () {
       })
 
       it('proceeds to sign-in', () => {
-        expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
+        expect($ctrl.checkDonorDetails).not.toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('sign-in')
       })
 
@@ -84,13 +84,13 @@ describe('registerAccountModal', function () {
         $ctrl.sessionService.sessionSubject.next({
           firstName: 'Daniel'
         })
-        expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
+        expect($ctrl.checkDonorDetails).not.toHaveBeenCalled()
 
         $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
         $ctrl.sessionService.sessionSubject.next({
           firstName: 'Daniel'
         })
-        expect($ctrl.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.checkDonorDetails).toHaveBeenCalled()
       })
     })
 
@@ -114,7 +114,7 @@ describe('registerAccountModal', function () {
       $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ }))
       $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
       $ctrl.$onInit()
-      $ctrl.getDonorDetails()
+      $ctrl.checkDonorDetails()
       $ctrl.postDonorMatches()
       expect($ctrl.getTotalQuantitySubscription.closed).toEqual(false)
       expect($ctrl.subscription.closed).toEqual(false)
@@ -128,15 +128,15 @@ describe('registerAccountModal', function () {
   })
 
   describe('onIdentitySuccess()', () => {
-    it('calls getDonorDetails', () => {
-      jest.spyOn($ctrl, 'getDonorDetails').mockImplementation(() => {})
+    it('calls checkDonorDetails', () => {
+      jest.spyOn($ctrl, 'checkDonorDetails').mockImplementation(() => {})
       $ctrl.onIdentitySuccess()
-      expect($ctrl.getDonorDetails).toHaveBeenCalled()
+      expect($ctrl.checkDonorDetails).toHaveBeenCalled()
     });
   })
 
   describe('onIdentityFailure()', () => {
-    it('calls getDonorDetails', () => {
+    it('calls checkDonorDetails', () => {
       jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator')
       $ctrl.onIdentityFailure()
       expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
@@ -169,16 +169,16 @@ describe('registerAccountModal', function () {
     })
   })
 
-  describe('getDonorDetails()', () => {
+  describe('checkDonorDetails()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'stateChanged').mockImplementation(() => {})
     })
 
-    describe('orderService.getDonorDetails success', () => {
+    describe('orderService.checkDonorDetails success', () => {
       describe('\'registration-state\' COMPLETED', () => {
         it('changes state to \'contact-info\'', () => {
           $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'COMPLETED' }))
-          $ctrl.getDonorDetails()
+          $ctrl.checkDonorDetails()
 
           expect($ctrl.modalTitle).toEqual('Checking your donor account')
           expect($ctrl.stateChanged).toHaveBeenCalledWith('loading')
@@ -191,7 +191,7 @@ describe('registerAccountModal', function () {
       describe('\'registration-state\' NEW', () => {
         it('changes state to \'contact-info\'', () => {
           $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'NEW' }))
-          $ctrl.getDonorDetails()
+          $ctrl.checkDonorDetails()
 
           expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
           expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
@@ -202,17 +202,17 @@ describe('registerAccountModal', function () {
     describe('\'registration-state\' FAILED', () => {
       it('changes state to \'failed-verification\'', () => {
         $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'FAILED' }))
-        $ctrl.getDonorDetails()
+        $ctrl.checkDonorDetails()
 
         expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('failed-verification')
       })
     })
 
-    describe('orderService.getDonorDetails failure', () => {
+    describe('orderService.checkDonorDetails failure', () => {
       it('changes state to \'contact-info\'', () => {
         $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.throw({}))
-        $ctrl.getDonorDetails()
+        $ctrl.checkDonorDetails()
 
         expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
