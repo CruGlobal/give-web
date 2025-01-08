@@ -19,9 +19,6 @@ describe('checkout', function () {
           search: ''
         }, scrollTo: jest.fn() }
     })
-    self.controller.checkoutService = {
-      initializeRecaptcha: jest.fn()
-    }
   }))
 
   it('to be defined', function () {
@@ -38,6 +35,7 @@ describe('checkout', function () {
       jest.spyOn(self.controller, 'sessionEnforcerService').mockImplementation(() => {})
       jest.spyOn(self.controller.$rootScope, '$on').mockImplementation(() => {})
       jest.spyOn(self.controller, 'signedOut').mockImplementation(() => {})
+      jest.spyOn(self.controller.checkoutService, 'initializeRecaptcha').mockImplementation(() => {})
       self.controller.$onInit()
     })
 
