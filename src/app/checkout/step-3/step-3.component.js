@@ -139,7 +139,7 @@ class Step3Controller {
       storeSessionData['donor-type'] = this.donorDetails['donor-type']
       storeSessionData['organization-name'] = this.donorDetails['organization-name']
       storeSessionData['phone-number'] = this.donorDetails['phone-number']
-      storeSessionData['email'] = this.donorDetails['email']
+      storeSessionData.email = this.donorDetails.email
       this.sessionService.updateCheckoutSavedData(storeSessionData)
     }
   }
