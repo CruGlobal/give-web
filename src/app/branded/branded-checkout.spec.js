@@ -51,12 +51,13 @@ describe('branded checkout', () => {
         onOrderFailed: jest.fn(),
       },
     )
-    $ctrl.checkoutService = {
-      initializeRecaptcha: jest.fn()
-    }
   }))
 
   describe('$onInit', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.checkoutService, 'initializeRecaptcha').mockImplementation(() => {})
+    })
+
     it('should set API Url if custom one is set', () => {
       $ctrl.apiUrl = 'https://custom-api.cru.org'
       $ctrl.$onInit()

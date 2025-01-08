@@ -1,42 +1,55 @@
-import * as checkoutService from './checkout.service'
+import angular from 'angular'
+import 'angular-mocks'
 
-describe('initializeRecaptcha()', () => {
-  const $ctrl = {
-    $window: {
-      document: document
-    },
-    envService: {
-      read: jest.fn()
-    }
-  }
-  const script = document.createElement('script')
+import module from './checkout.service'
 
-  beforeEach(() => {
-    script.src = 'https://www.google.com/recaptcha/enterprise.js?render=123'
-    script.id = 'test-script'
-    $ctrl.envService.read.mockReturnValue('123')
-  })
+describe('checkout service', () => {
+  beforeEach(angular.mock.module(module.name))
 
-  afterEach(() => {
-    const foundScript = document.getElementById('give-checkout-recaptcha')
-    if (foundScript) {
-      document.head.removeChild(foundScript)
-    }
-  })
+  beforeEach(angular.mock.module(($provide) => {
+    $provide.value('envService', {
+      read: () => '123'
+    })
+  }))
 
-  it('should add a script even if one already exists', () => {
-    document.head.appendChild(script)
-    checkoutService.initializeRecaptcha.call($ctrl)
-    expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
-    expect(document.getElementById('test-script')).not.toBeNull()
-  })
+  const self = {}
+  let script
 
-  it('should only add this script once', () => {
-    script.id = 'give-checkout-recaptcha'
-    document.head.appendChild(script)
-    expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
-    checkoutService.initializeRecaptcha.call($ctrl)
-    expect(document.querySelectorAll('#give-checkout-recaptcha')).toHaveLength(1)
+  beforeEach(inject((checkoutService, envService, $window) => {
+    self.checkoutService = checkoutService
+    self.envService = envService
+    self.$window = $window
+    self.$window.document = document
+
+    script = self.$window.document.createElement('script')
+  }))
+
+  describe('initializeRecaptcha()', () => {
+    beforeEach(() => {
+      script.src = 'https://www.google.com/recaptcha/enterprise.js?render=123'
+      script.id = 'test-script'
+    })
+
+    afterEach(() => {
+      const foundScript = self.$window.document.getElementById('give-checkout-recaptcha')
+      if (foundScript) {
+        document.head.removeChild(foundScript)
+      }
+    })
+
+    it('should add a script even if one already exists', () => {
+      self.$window.document.head.appendChild(script)
+      self.checkoutService.initializeRecaptcha.call(self)
+      expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
+      expect(document.getElementById('test-script')).not.toBeNull()
+    })
+
+    it('should only add this script once', () => {
+      script.id = 'give-checkout-recaptcha'
+      self.$window.document.head.appendChild(script)
+      expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
+      self.checkoutService.initializeRecaptcha.call(self)
+      expect(document.querySelectorAll('#give-checkout-recaptcha')).toHaveLength(1)
+    })
   })
 })
-
