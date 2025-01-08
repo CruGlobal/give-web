@@ -194,42 +194,58 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function signOut (redirectHome = true) {
-    return Observable.from(internalSignOut(redirectHome))
+    return new Observable(observer => {
+      internalSignOut(redirectHome).subscribe({
+        next: response => {
+          observer.next(response)
+          observer.complete()
+        },
+        error: err => {
+          observer.error(err)
+        }
+      })
+    })
   }
 
-  async function internalSignOut (redirectHome = true) {
-    const oktaSignOut = async () => {
-      // Add session data so on return to page we can show an explanation to the user about what happened.
-      if (!redirectHome) {
-        $window.sessionStorage.setItem(forcedUserToLogout, true)
-        // Save location we need to redirect the user back to
-        $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
+  function internalSignOut (redirectHome = true) {
+    return new Observable(observer => {
+      const oktaSignOut = () => {
+        // Add session data so on return to page we can show an explanation to the user about what happened.
+        if (!redirectHome) {
+          $window.sessionStorage.setItem(forcedUserToLogout, true)
+          // Save location we need to redirect the user back to
+          $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
+        }
+        return authClient.signOut({
+          postLogoutRedirectUri: redirectHome ? null : `${envService.read('oktaReferrer')}/sign-out.html`
+        })
       }
-      return await authClient.signOut({
-        postLogoutRedirectUri: redirectHome ? null : `${envService.read('oktaReferrer')}/sign-out.html`
-      })
-    }
 
-    try {
-      await $http({
+      $http({
         method: 'DELETE',
         url: oktaApiUrl('logout'),
         withCredentials: true
-      })
-      await clearCheckoutSavedData()
-      // Use revokeAccessToken, revokeRefreshToken to ensure authClient is cleared before logging out entirely.
-      await authClient.revokeAccessToken()
-      await authClient.revokeRefreshToken()
-
-      return await oktaSignOut()
-    } catch {
-      try {
-        return await oktaSignOut()
-      } catch {
-        $window.location.href = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
-      }
-    }
-  }
+      }).then(() => clearCheckoutSavedData())
+        // Use revokeAccessToken, revokeRefreshToken to ensure authClient is cleared before logging out entirely.
+        .then(() => authClient.revokeAccessToken())
+        .then(() => authClient.revokeRefreshToken())
+        .then(() => oktaSignOut())
+        .then(response => {
+          observer.next(response)
+          observer.complete()
+        })
+        .catch(() => {
+          // If the DELETE request fails, try to sign out of Okta
+          oktaSignOut().then(response => {
+            observer.next(response)
+            observer.complete()
+          }).catch(() => {
+            // If Okta sign out fails, redirect to Okta sign out page
+            $window.location.href = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
+          })
+        })
+    })
+  };
 
   function signOutWithoutRedirectToOkta () {
     // ** This function requires third-party cookies **
