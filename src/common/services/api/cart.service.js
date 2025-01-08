@@ -169,7 +169,7 @@ class Cart {
         if (total <= 0) {
           return this.sessionService.oktaIsUserAuthenticated().mergeMap((isAuthenticated) => {
             if (!isAuthenticated) {
-               return this._addItem(uri, data)
+              return this._addItem(uri, data)
             }
             // SignOut() will redirect user to Okta to clear session,
             // but will be brought back to this page with an error message shown.
