@@ -6,10 +6,15 @@ import 'rxjs/add/operator/combineLatest'
 import 'rxjs/add/operator/pluck'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
+import 'rxjs/add/operator/do'
+import 'rxjs/add/operator/finally'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
+import isString from 'lodash/isString'
+import { datadogRum } from '@datadog/browser-rum'
 import sortPaymentMethods from 'common/services/paymentHelpers/paymentMethodSort'
 import extractPaymentAttributes from 'common/services/paymentHelpers/extractPaymentAttributes'
+import { cartUpdatedEvent } from 'common/lib/cartEvents'
 
 import cortexApiService from '../cortexApi.service'
 import cartService from './cart.service'
@@ -35,6 +40,7 @@ class Order {
     this.analyticsFactory = analyticsFactory
     this.sessionStorage = $window.sessionStorage
     this.localStorage = $window.localStorage
+    this.$window = $window
     this.$log = $log
     this.$filter = $filter
   }
@@ -402,6 +408,68 @@ class Order {
     } else {
       return startedOrderWithoutSpouse
     }
+  }
+
+    saveDonorDataForRegistration (donorDetails) {
+    if (donorDetails['registration-state'] !== 'COMPLETED') {
+      const storeSessionData = {}
+      storeSessionData.name = { ...donorDetails.name }
+      storeSessionData.mailingAddress = { ...donorDetails.mailingAddress }
+      storeSessionData['spouse-name'] = { ...donorDetails['spouse-name'] }
+      storeSessionData['donor-type'] = donorDetails['donor-type']
+      storeSessionData['organization-name'] = donorDetails['organization-name']
+      storeSessionData['phone-number'] = donorDetails['phone-number']
+      this.sessionService.updateCheckoutSavedData(storeSessionData)
+    }
+  }
+
+  submitOrder (controller) {
+    delete controller.submissionError
+    delete controller.submissionErrorStatus
+    // Prevent multiple submissions
+    if (controller.submittingOrder) {
+      return Observable.empty()
+    }
+    controller.submittingOrder = true
+    controller.onSubmittingOrder({ value: true })
+
+    let submitRequest
+    if (controller.bankAccountPaymentDetails) {
+      submitRequest = this.submit()
+    } else if (controller.creditCardPaymentDetails) {
+      const cvv = this.retrieveCardSecurityCode()
+      submitRequest = this.submit(cvv)
+    } else {
+      submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
+    }
+    return submitRequest
+      .do(() => {
+        this.clearCardSecurityCodes()
+        this.clearCoverFees()
+        controller.onSubmitted()
+        controller.$scope.$emit(cartUpdatedEvent)
+        this.saveDonorDataForRegistration(controller.donorDetails)
+      },
+      (error) => {
+        // Handle the error side effects when the observable errors
+        this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
+
+        controller.loadCart()
+
+        if (error.config && error.config.data && error.config.data['security-code']) {
+          error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
+        }
+        this.$log.error('Error submitting purchase:', error)
+        datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status }) // here in order to show up in Error Tracking in DD
+        controller.onSubmitted()
+        controller.submissionErrorStatus = error.status
+        controller.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
+        this.$window.scrollTo(0, 0)
+      })
+      .finally(() => {
+        controller.submittingOrder = false
+        controller.onSubmittingOrder({ value: false })
+      });
   }
 }
 

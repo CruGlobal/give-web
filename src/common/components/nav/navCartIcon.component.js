@@ -1,6 +1,7 @@
 import angular from 'angular'
 
-import navCart, { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import navCart from 'common/components/nav/navCart/navCart.component'
+import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
 import analyticsFactory from 'app/analytics/analytics.factory'
 

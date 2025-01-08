@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 
-import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { SignInEvent } from 'common/services/session/session.service'
 
 import module from './step-3.component'
@@ -37,6 +36,7 @@ describe('checkout', () => {
           getCurrentPayment: () => Observable.of(self.loadedPayment),
           checkErrors: () => Observable.of(['email-info']),
           submit: () => Observable.of('called submit'),
+          submitOrder: () => Observable.of('called submitOrder'),
           retrieveCardSecurityCode: () => self.storedCvv,
           retrieveLastPurchaseLink: () => Observable.of('purchaseLink'),
           retrieveCoverFeeDecision: () => self.coverFeeDecision,
@@ -323,151 +323,36 @@ describe('checkout', () => {
       })
     })
 
-    describe('submitOrder', () => {
-      beforeEach(() => {
-        jest.spyOn(self.controller.orderService, 'submit')
-        jest.spyOn(self.controller.profileService, 'getPurchase')
-        jest.spyOn(self.controller.analyticsFactory, 'purchase')
-      })
-
-      describe('another order submission in progress', () => {
-        it('should not submit the order twice', () => {
-          self.controller.submittingOrder = true
-          self.controller.submitOrder()
-
-          expect(self.controller.onSubmittingOrder).not.toHaveBeenCalled()
-          expect(self.controller.onSubmitted).not.toHaveBeenCalled()
-        })
-      })
-
-      describe('submit single order', () => {
-        beforeEach(() => {
-          jest.spyOn(self.controller.$scope, '$emit').mockImplementation(() => {})
-          jest.spyOn(self.controller.sessionService, 'updateCheckoutSavedData')          
-        })
-
-        afterEach(() => {
-          expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({ value: true })
-          expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
-          expect(self.controller.onSubmitted).toHaveBeenCalled()
-        })
-
-        it('should submit the order normally if paying with a bank account', () => {
-          self.controller.bankAccountPaymentDetails = {}
-          self.controller.donorDetails = {
-            'registration-state': 'NEW'
-          }
-          self.controller.submitOrder()
-          expect(self.controller.orderService.submit).toHaveBeenCalled()
-          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
-          expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
-          expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
-          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-          expect(self.controller.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
-        })
-
-        it('should handle an error submitting an order with a bank account', () => {
-          self.controller.orderService.submit.mockImplementation(() => Observable.throw({ data: 'error saving bank account' }))
-          self.controller.bankAccountPaymentDetails = {}
-          self.controller.submitOrder()
-
-          expect(self.controller.orderService.submit).toHaveBeenCalled()
-          expect(self.controller.loadCart).toHaveBeenCalled()
-          expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
-          expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
-          expect(self.controller.changeStep).not.toHaveBeenCalled()
-          expect(self.controller.submissionError).toEqual('error saving bank account')
-          expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0)
-        })
-
-        it('should submit the order with a CVV if paying with a credit card', () => {
-          self.controller.creditCardPaymentDetails = {}
-          self.controller.donorDetails = {
-            'registration-state': 'MATCHED'
-          }
-          self.storedCvv = '1234'
-          self.coverFeeDecision = true
-          self.controller.submitOrder()
-
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
-          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
-          expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
-          expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
-          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-          expect(self.controller.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
-        })
-
-        it('should submit the order without a CVV if paying with an existing credit card or the cvv in session storage is missing', () => {
-          self.controller.donorDetails = {
-            'registration-state': 'COMPLETED'
-          }
-          self.controller.creditCardPaymentDetails = {}
-          self.storedCvv = undefined
-          self.coverFeeDecision = true
-          self.controller.submitOrder()
-
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith(undefined)
-          expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.coverFeeDecision)
-          expect(self.controller.orderService.clearCardSecurityCodes).toHaveBeenCalled()
-          expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
-          expect(self.controller.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
-          expect(self.controller.sessionService.updateCheckoutSavedData).not.toHaveBeenCalled()
-        })
-
-        it('should handle an error submitting an order with a credit card', () => {
-          self.controller.orderService.submit.mockImplementation(() => Observable.throw({ data: 'CardErrorException: Invalid Card Number: some details' }))
-          self.controller.creditCardPaymentDetails = {}
-          self.storedCvv = '1234'
-          self.controller.submitOrder()
-
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
-          expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
-          expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'CardErrorException: Invalid Card Number: some details' }])
-          expect(self.controller.changeStep).not.toHaveBeenCalled()
-          expect(self.controller.submissionError).toEqual('CardErrorException')
-          expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0)
-        })
-
-        it('should mask the security code on a credit card error', () => {
-          self.controller.orderService.submit.mockReturnValue(Observable.throw({ data: 'some error', config: { data: { 'security-code': '1234' } } }))
-          self.controller.creditCardPaymentDetails = {}
-          self.storedCvv = '1234'
-          self.controller.submitOrder()
-
-          expect(self.controller.orderService.submit).toHaveBeenCalledWith('1234')
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'some error', config: { data: { 'security-code': 'XXXX' } } }])
-        })
-
-        it('should throw an error if neither bank account or credit card details are loaded', () => {
-          self.controller.submitOrder()
-
-          expect(self.controller.orderService.submit).not.toHaveBeenCalled()
-          expect(self.controller.orderService.clearCardSecurityCodes).not.toHaveBeenCalled()
-          expect(self.controller.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'Current payment type is unknown' }])
-          expect(self.controller.changeStep).not.toHaveBeenCalled()
-          expect(self.controller.submissionError).toEqual('Current payment type is unknown')
-          expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0)
-        })
-
-        it('should clear out cover fee data', () => {
-          self.controller.donorDetails = {
-            'registration-state': 'NEW'
-          }
-          self.controller.creditCardPaymentDetails = {}
-          self.controller.submitOrder()
-
-          expect(self.controller.orderService.clearCoverFees).toHaveBeenCalled()
-        })
-      })
-    })
-
     describe('event handling', () => {
       it('should call submit order if the submitOrderEvent is received', () => {
         jest.spyOn(self.controller, 'submitOrder').mockImplementation(() => {})
         self.controller.$rootScope.$emit(submitOrderEvent)
         expect(self.controller.submitOrder).toHaveBeenCalled()
+      })
+    })
+
+    describe('submitOrder', () => {
+      beforeEach(() => {
+        jest.spyOn(self.controller.analyticsFactory, 'purchase')
+        jest.spyOn(self.controller.orderService, 'retrieveCoverFeeDecision').mockReturnValue(true)
+      })
+
+      it('should call analyticsFactory when it is not branded checkout', () => {
+        self.controller.isBranded = false
+        
+        self.controller.submitOrder()
+        
+        expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.controller.orderService.retrieveCoverFeeDecision())
+        expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
+      })
+
+      it('should not call analyticsFactory when it is branded checkout', () => {
+        self.controller.isBranded = true
+
+        self.controller.submitOrder()
+        
+        expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
+        expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
       })
     })
   })
