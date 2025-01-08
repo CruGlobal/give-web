@@ -55,7 +55,7 @@ class SignUpModalController {
     this.oktaSignInWidget = new OktaSignIn({
       ...this.sessionService.oktaSignInWidgetDefaultOptions,
       assets: {
-        baseUrl: `/assets/okta-sign-in/`
+        baseUrl: '/assets/okta-sign-in/'
       },
       flow: 'signup',
       registration: {
