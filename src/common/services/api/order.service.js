@@ -410,7 +410,7 @@ class Order {
     }
   }
 
-    saveDonorDataForRegistration (donorDetails) {
+  saveDonorDataForRegistration (donorDetails) {
     if (donorDetails['registration-state'] !== 'COMPLETED') {
       const storeSessionData = {}
       storeSessionData.name = { ...donorDetails.name }
@@ -469,7 +469,7 @@ class Order {
       .finally(() => {
         controller.submittingOrder = false
         controller.onSubmittingOrder({ value: false })
-      });
+      })
   }
 }
 

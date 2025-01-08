@@ -135,7 +135,6 @@ class Step3Controller {
       this.changeStep({ newStep: 'thankYou' })
     })
   }
-
 }
 
 export default angular
