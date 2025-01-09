@@ -33,23 +33,23 @@ describe('checkout service', () => {
     afterEach(() => {
       const foundScript = self.$window.document.getElementById('give-checkout-recaptcha')
       if (foundScript) {
-        document.head.removeChild(foundScript)
+        self.$window.document.head.removeChild(foundScript)
       }
     })
 
     it('should add a script even if one already exists', () => {
       self.$window.document.head.appendChild(script)
       self.checkoutService.initializeRecaptcha.call(self)
-      expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
-      expect(document.getElementById('test-script')).not.toBeNull()
+      expect(self.$window.document.getElementById('give-checkout-recaptcha')).not.toBeNull()
+      expect(self.$window.document.getElementById('test-script')).not.toBeNull()
     })
 
     it('should only add this script once', () => {
       script.id = 'give-checkout-recaptcha'
       self.$window.document.head.appendChild(script)
-      expect(document.getElementById('give-checkout-recaptcha')).not.toBeNull()
+      expect(self.$window.document.getElementById('give-checkout-recaptcha')).not.toBeNull()
       self.checkoutService.initializeRecaptcha.call(self)
-      expect(document.querySelectorAll('#give-checkout-recaptcha')).toHaveLength(1)
+      expect(self.$window.document.querySelectorAll('#give-checkout-recaptcha')).toHaveLength(1)
     })
   })
 })
