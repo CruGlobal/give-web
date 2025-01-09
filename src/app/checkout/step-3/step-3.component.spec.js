@@ -339,9 +339,9 @@ describe('checkout', () => {
 
       it('should call analyticsFactory when it is not branded checkout', () => {
         self.controller.isBranded = false
-        
+
         self.controller.submitOrder()
-        
+
         expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.controller.orderService.retrieveCoverFeeDecision())
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
       })
@@ -350,7 +350,7 @@ describe('checkout', () => {
         self.controller.isBranded = true
 
         self.controller.submitOrder()
-        
+
         expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
       })
