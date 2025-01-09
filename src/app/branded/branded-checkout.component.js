@@ -62,7 +62,7 @@ class BrandedCheckoutController {
     this.$translate.use(this.language || 'en')
 
     this.itemConfig = {}
-    this.checkoutService.initializeRecaptcha.call(this)
+    this.checkoutService.initializeRecaptcha()
   }
 
   formatDonorDetails () {

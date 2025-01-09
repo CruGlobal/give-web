@@ -59,7 +59,7 @@ class CheckoutController {
     this.listenForLocationChange()
     this.analyticsFactory.pageLoaded(true)
 
-    this.checkoutService.initializeRecaptcha.call(this)
+    this.checkoutService.initializeRecaptcha()
   }
 
   $onDestroy () {
