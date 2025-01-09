@@ -211,19 +211,10 @@
       </div>
 
       <div ng-if="$ctrl.useV3 === 'true'" class="row">
-        <div class="col-sm-12">
-          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.email | showErrors)}">
-            <label>
-              <span translate>{{'EMAIL'}}</span>
-              <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required ng-maxlength="100" ng-disabled="$ctrl.donorDetails.staff">
-            </label>
-            <div role="alert" ng-messages="$ctrl.detailsForm.email.$error" ng-if="($ctrl.detailsForm.email | showErrors)">
-              <div class="help-block" ng-message="required" translate>{{'EMAIL_MISSING_ERROR'}}</div>
-              <div class="help-block" ng-message="email" translate>{{'EMAIL_INVALID_ERROR'}}</div>
-              <div class="help-block" ng-message="maxlength" translate>{{'EMAIL_LENGTH_ERROR'}}</div>
-            </div>
-          </div>
-        </div>
+        <email-field
+          details-form =$ctrl.detailsForm
+          donor-details="$ctrl.donorDetails">
+        </email-field>
       </div>
 
     </div>
@@ -243,17 +234,10 @@
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
       <div class="row">
         <div class="col-sm-6">
-          <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.email | showErrors)}">
-            <label>
-              <span translate>{{'EMAIL'}}</span>
-              <input type="email" class="form-control  form-control-subtle" name="email" ng-model="$ctrl.donorDetails['email']" required ng-maxlength="100" ng-disabled="$ctrl.donorDetails.staff">
-            </label>
-            <div role="alert" ng-messages="$ctrl.detailsForm.email.$error" ng-if="($ctrl.detailsForm.email | showErrors)">
-              <div class="help-block" ng-message="required" translate>{{'EMAIL_MISSING_ERROR'}}</div>
-              <div class="help-block" ng-message="email" translate>{{'EMAIL_INVALID_ERROR'}}</div>
-              <div class="help-block" ng-message="maxlength" translate>{{'EMAIL_LENGTH_ERROR'}}</div>
-            </div>
-          </div>
+          <email-field
+            details-form =$ctrl.detailsForm
+            donor-details="$ctrl.donorDetails">
+          </email-field>
         </div>
         <div class="col-sm-6">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.phoneNumber | showErrors)}">
