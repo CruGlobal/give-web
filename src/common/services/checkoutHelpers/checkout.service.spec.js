@@ -39,7 +39,7 @@ describe('checkout service', () => {
 
     it('should add a script even if one already exists', () => {
       self.$window.document.head.appendChild(script)
-      self.checkoutService.initializeRecaptcha.call(self)
+      self.checkoutService.initializeRecaptcha()
       expect(self.$window.document.getElementById('give-checkout-recaptcha')).not.toBeNull()
       expect(self.$window.document.getElementById('test-script')).not.toBeNull()
     })
@@ -48,7 +48,7 @@ describe('checkout service', () => {
       script.id = 'give-checkout-recaptcha'
       self.$window.document.head.appendChild(script)
       expect(self.$window.document.getElementById('give-checkout-recaptcha')).not.toBeNull()
-      self.checkoutService.initializeRecaptcha.call(self)
+      self.checkoutService.initializeRecaptcha()
       expect(self.$window.document.querySelectorAll('#give-checkout-recaptcha')).toHaveLength(1)
     })
   })
