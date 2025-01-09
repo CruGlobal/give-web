@@ -213,7 +213,7 @@
       <div ng-if="$ctrl.useV3 === 'true'" class="row">
         <div class="col-sm-12">
           <email-field
-            details-form=$ctrl.detailsForm
+            details-form="$ctrl.detailsForm"
             donor-details="$ctrl.donorDetails">
           </email-field>
         </div>
@@ -237,7 +237,7 @@
       <div class="row">
         <div class="col-sm-6">
           <email-field
-            details-form=$ctrl.detailsForm
+            details-form="$ctrl.detailsForm"
             donor-details="$ctrl.donorDetails">
           </email-field>
         </div>
