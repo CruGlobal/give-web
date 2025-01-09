@@ -3,12 +3,12 @@ import template from './emailField.tpl.html'
 
 const componentName = 'emailField'
 
-class emailFieldController {}
+class EmailFieldController {}
 
 export default angular
   .module(componentName, [])
   .component(componentName, {
-    controller: emailFieldController,
+    controller: EmailFieldController,
     templateUrl: template,
     bindings: {
       donorDetails: '<',
