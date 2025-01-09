@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { submitOrderEvent, recaptchaFailedEvent } from './cart-summary.component'
+import module, { submitOrderEvent } from './cart-summary.component'
 
 describe('checkout', function () {
   describe('cart summary', function () {
