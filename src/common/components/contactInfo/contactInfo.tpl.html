@@ -44,7 +44,7 @@
   </div>
 
   <form novalidate ng-keyup="$event.key === 'Enter' && $ctrl.submitDetails()" name="$ctrl.detailsForm">
-    <div class="name mb">
+    <div class="mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
       <div class="row">
         <div class="col-sm-4">
@@ -121,22 +121,7 @@
 
       </div>
 
-      <h4 class="panel-title  border-bottom-small  visible" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'" translate>{{'SPOUSE_NAME'}}</h4>
-
-      <div class="row">
-        <div class="col-xs-12">
-          <button
-            type="button"
-            class="btn pull-left add-spouse-btn"
-            ng-class="{ 'btn-default': $ctrl.showSpouseFields, 'btn-primary': !$ctrl.showSpouseFields }"
-            ng-click="$ctrl.toggleSpouseFields()"
-            ng-if="$ctrl.donorDetails['donor-type'] === 'Household'"
-            translate
-          >{{$ctrl.showSpouseFields ? "Remove spouse" : "Add spouse"}}</button>
-        </div>
-      </div>
-
-      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && $ctrl.showSpouseFields">
+      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
         <div class="col-sm-4">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
             <label>
@@ -226,7 +211,7 @@
       </div>
     </div>
 
-    <div class="address mb">
+    <div class="mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'MAILING_ADDRESS'}}</h4>
 
       <address-form
@@ -238,7 +223,7 @@
       </address-form>
     </div>
 
-    <div class="contact-info mb">
+    <div class="mb">
       <h4 class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
       <div class="row">
         <div class="col-sm-6">

@@ -205,7 +205,6 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     MESSAGE_EXAMPLE: 'For example: stop my gift after 18 months, make this gift anonymous (note: please remove any messages to ministry or missionary to remain anonymous), etc.',
     YOUR_INFORMATION: 'Your information',
     YOUR_NAME: 'Your name',
-    SPOUSE_NAME: "Your Spouse's name",
     PAYMENT: 'Payment',
     CONTINUE: 'Continue',
     LOADING_ERROR_RETRY: 'There was an error loading your profile. You can use the retry button to try loading it again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
