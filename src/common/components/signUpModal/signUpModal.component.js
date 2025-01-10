@@ -234,7 +234,7 @@ class SignUpModalController {
   }
 
   reRenderWidget () {
-  // Render the widget again to show new step
+    // Render the widget again to show new step
     this.oktaSignInWidget.remove()
     this.oktaSignInWidget.renderEl(
       { el: '#osw-container' },
@@ -265,7 +265,7 @@ class SignUpModalController {
     }
     const buttonBar = document.querySelector('.o-form-button-bar')
     // Ensure the button is only added once
-    if (buttonBar && !document.querySelector('.o-form-button-bar #backButton')) {
+    if (buttonBar && !buttonBar.querySelector('#backButton')) {
       const backButton = angular.element('<button id="backButton" class="btn btn-secondary">Back</button>')
       // Add click behavior to go back a step
       backButton.on('click', (e) => {
