@@ -187,6 +187,7 @@ export default angular
     bindings: {
       firstName: '=',
       modalTitle: '=',
+      lastPurchaseId: '<',
       onSuccess: '&',
       onCancel: '&',
       setLoading: '&'
