@@ -48,6 +48,10 @@ class SessionModalController {
     this.scrollModalToTop()
   }
 
+  onSignUp () {
+    this.stateChanged('sign-up')
+  }
+
   onSignInSuccess () {
     this.sessionService.removeOktaRedirectIndicator()
     const $injector = this.$injector

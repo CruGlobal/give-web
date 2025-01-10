@@ -83,6 +83,10 @@ class RegisterAccountModalController {
     }
   }
 
+  onSignUp () {
+    this.stateChanged('sign-up')
+  }
+
   onIdentitySuccess () {
     // Success Sign-In/Up, Proceed to Step 2.
     this.getDonorDetails()
