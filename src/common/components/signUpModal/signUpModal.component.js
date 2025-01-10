@@ -34,15 +34,14 @@ class SignUpModalController {
     this.currentStep = 1
     this.donorDetails = {}
     this.loadDonorDetails().finally(() => {
-      this.setUpSignUpWidget();
-    }).subscribe();
-    
+      this.setUpSignUpWidget()
+    }).subscribe()
+
     this.$translate(['GIVE_AS_INDIVIDUAL', 'GIVE_AS_ORGANIZATION', 'ORGANIZATION_NAME']).then(translations => {
-      this.giveAsIndividualTxt = translations.GIVE_AS_INDIVIDUAL;
-      this.giveAsOrganizationTxt = translations.GIVE_AS_ORGANIZATION;
-      this.organizationNameTxt = translations.ORGANIZATION_NAME;
-    });
-    
+      this.giveAsIndividualTxt = translations.GIVE_AS_INDIVIDUAL
+      this.giveAsOrganizationTxt = translations.GIVE_AS_ORGANIZATION
+      this.organizationNameTxt = translations.ORGANIZATION_NAME
+    })
 
     if (!this.isInsideAnotherModal) {
       this.cartCount = 0
@@ -78,15 +77,17 @@ class SignUpModalController {
           // Retain the values entered by the user in each step.
           // Pre-populate the form fields with existing user details.
 
-          const organizationNameField = this.$scope.accountType === 'organization' ? [{
-            name: 'organizationName',
-            type: 'text',
-            'label-top': true,
-            label: this.organizationNameTxt,
-            required: true,
-            maxLength: 50,
-            value: this.$scope.organizationName ?? donorData['organization-name'] ?? ''
-          }] : [];
+          const organizationNameField = this.$scope.accountType === 'organization'
+            ? [{
+                name: 'organizationName',
+                type: 'text',
+                'label-top': true,
+                label: this.organizationNameTxt,
+                required: true,
+                maxLength: 50,
+                value: this.$scope.organizationName ?? donorData['organization-name'] ?? ''
+              }]
+            : []
 
           const steps = {
             // Step 1: Name, email and account type
@@ -108,14 +109,14 @@ class SignUpModalController {
                 type: 'select',
                 options: {
                   household: this.giveAsIndividualTxt,
-                  organization: this.giveAsOrganizationTxt,
+                  organization: this.giveAsOrganizationTxt
                 },
                 'label-top': true,
                 label: 'Account Type',
                 required: true,
                 wide: true,
-                value: this.$scope.accountType ?? 'household',
-              },
+                value: this.$scope.accountType ?? 'household'
+              }
             ],
             // Step 2: Address, phone number and organization name (if applicable)
             2: [
@@ -159,7 +160,7 @@ class SignUpModalController {
               firstName: userProfile.firstName,
               lastName: userProfile.lastName,
               email: userProfile.email,
-              accountType: postData.accountType,
+              accountType: postData.accountType
             })
             this.$scope.$apply(() => this.goToNextStep())
           } else if (step === 2) {
@@ -170,7 +171,7 @@ class SignUpModalController {
               zipCode: userProfile.zipCode,
               countryCode: userProfile.countryCode,
               primaryPhone: userProfile.primaryPhone,
-              organizationName: postData.organizationName,
+              organizationName: postData.organizationName
             })
             this.$scope.$apply(() => this.goToNextStep())
           } else if (step === 3) {
@@ -300,7 +301,7 @@ class SignUpModalController {
           observer.error(error)
         }
       })
-    });
+    })
   }
 
   // On registration complete we need to send the data to Cortex and then redirect the user to the next step

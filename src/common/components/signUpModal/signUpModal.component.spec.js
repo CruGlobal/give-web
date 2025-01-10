@@ -84,16 +84,17 @@ describe('signUpForm', function () {
       email: 'email@cru.org',
     };
     
-    it('Inherits data from orderService', async () => {
+    it('Inherits data from orderService', (done) => {
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
         [signUpFormData]
       ))
-      const donorDetails = await $ctrl.loadDonorDetails()
-
-      expect(donorDetails).toEqual(signUpFormData)
+      $ctrl.loadDonorDetails().subscribe((data) => {
+        expect(data).toEqual(signUpFormData)
+        done()
+      })
     })
 
-    it('grabs data from orderService if data from both orderService and sessionService are set', async () => {
+    it('grabs data from orderService if data from both orderService and sessionService are set', (done) => {
       jest.spyOn($ctrl, 'loadDonorDetails')
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockImplementation(() => Observable.from(
         [signUpFormData]
@@ -103,19 +104,24 @@ describe('signUpForm', function () {
         email: 'emailFromCheckoutSavedData@cru.org'
       };
 
-      const donorDetails = await $ctrl.loadDonorDetails()
-
-      expect(donorDetails).toEqual({
-        ...signUpFormData,
+      $ctrl.loadDonorDetails().subscribe((data) => {
+        expect(data).toEqual({
+          ...signUpFormData,
         email: 'emailFromCheckoutSavedData@cru.org'
+        })
+        done()
       })
     })
 
-    it('should set loadingDonorDetails to false', () => {
+    it('should set loadingDonorDetails to false', (done) => {
       jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.throw({status: 404}))
       $ctrl.loadingDonorDetails = true
-      $ctrl.loadDonorDetails()
-      expect($ctrl.loadingDonorDetails).toEqual(false)
+      $ctrl.loadDonorDetails().subscribe({
+        error: () => {
+          expect($ctrl.loadingDonorDetails).toEqual(false)
+          done()
+        }
+      })
     })
   })
 })
