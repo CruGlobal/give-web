@@ -58,11 +58,4 @@ describe('signInModal', function () {
       expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled()
     })
   })
-
-  describe('stateChanged', () => {
-    it('updates the state value', () => {
-      $ctrl.stateChanged('newState')
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({state: 'newState'})
-    })
-  })
 })

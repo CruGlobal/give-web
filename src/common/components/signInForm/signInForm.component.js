@@ -42,7 +42,6 @@ export default angular
     bindings: {
       onSuccess: '&',
       onFailure: '&',
-      onStateChange: '&',
       lastPurchaseId: '<',
       onSignUpWithOkta: '&',
       onSignInPage: '<'
