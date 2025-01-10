@@ -1,11 +1,5 @@
 <div class="loading-overlay-parent">
   <div ng-switch="$ctrl.state">
-    <sign-in-modal ng-switch-when="sign-in"
-      modal-title="$ctrl.modalTitle"
-      last-purchase-id="$ctrl.lastPurchaseId"
-      on-sign-up="$ctrl.onSignUp()"
-      on-success="$ctrl.onSignInSuccess()"
-    ></sign-in-modal>
     <sign-up-modal ng-switch-when="sign-up"
       modal-title="$ctrl.modalTitle"
       last-purchase-id="$ctrl.lastPurchaseId"
@@ -15,7 +9,8 @@
     <register-account-modal ng-switch-when="register-account"
       first-name="$ctrl.firstName"
       modal-title="$ctrl.modalTitle"
-      minimal="$ctrl.minimal"
+      welcome-back="$ctrl.welcomeBack"
+      last-purchase-id="$ctrl.lastPurchaseId"
       on-success="$ctrl.onSignUpSuccess()"
       on-cancel="$ctrl.onCancel()"
       set-loading="$ctrl.setLoading(loading)"

@@ -24,7 +24,7 @@ describe('registerAccountModal', function () {
       $element: [{ dataset: {} }],
       orderService: { getDonorDetails: jest.fn() },
       verificationService: { postDonorMatches: jest.fn() },
-      sessionService: { 
+      sessionService: {
         getRole: jest.fn(),
         isOktaRedirecting: jest.fn(),
         removeOktaRedirectIndicator: jest.fn(),

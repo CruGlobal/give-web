@@ -108,7 +108,7 @@ class DesignationEditorController {
       this.updateCarousel()
     }, error => {
       if (error.status === 422 && !this.retried) {
-        return this.sessionModalService.open('sign-in', {
+        return this.sessionModalService.open('register-account', {
           backdrop: 'static',
           keyboard: false
         }).result.then(() => {

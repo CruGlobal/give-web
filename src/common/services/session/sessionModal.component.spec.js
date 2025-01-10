@@ -80,31 +80,6 @@ describe('sessionModalController', function () {
     })
   })
 
-  describe('$ctrl.onSignInSuccess', () => {
-    it('should close modal', () => {
-      jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})
-      $ctrl.$injector.has.mockImplementation(() => true)
-      $ctrl.onSignInSuccess()
-      const $injector = $ctrl.$injector
-
-      expect($ctrl.close).toHaveBeenCalled()
-      expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
-      expect($ctrl.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-    })
-
-    it('should add the sessionService module', () => {
-      $ctrl.$injector.has.mockImplementation(() => false)
-      $ctrl.$injector.loadNewModules.mockImplementation(() => {})
-      $ctrl.onSignInSuccess()
-      const $injector = $ctrl.$injector
-
-      expect($injector.loadNewModules).toHaveBeenCalledWith(['sessionService'])
-      expect($ctrl.$document[0].body.dispatchEvent).toHaveBeenCalledWith(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-    })
-  })
-
   describe('$ctrl.onSignUpSuccess', () => {
     it('should close modal', () => {
       jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator').mockImplementation(() => {})

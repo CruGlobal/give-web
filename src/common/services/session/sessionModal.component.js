@@ -1,6 +1,5 @@
 import angular from 'angular'
 
-import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
@@ -36,6 +35,7 @@ class SessionModalController {
       this.firstName = session.first_name
     })
     this.stateChanged(this.resolve.state)
+    this.welcomeBack = this.resolve.welcomeBack
     this.lastPurchaseId = this.resolve.lastPurchaseId
   }
 
@@ -46,21 +46,6 @@ class SessionModalController {
   stateChanged (state) {
     this.state = state
     this.scrollModalToTop()
-  }
-
-  onSignUp () {
-    this.stateChanged('sign-up')
-  }
-
-  onSignInSuccess () {
-    this.sessionService.removeOktaRedirectIndicator()
-    const $injector = this.$injector
-    if (!$injector.has('sessionService')) {
-      $injector.loadNewModules(['sessionService'])
-    }
-    this.$document[0].body.dispatchEvent(
-      new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-    this.close()
   }
 
   onSignUpSuccess () {
@@ -91,7 +76,6 @@ class SessionModalController {
 
 export default angular
   .module(componentName, [
-    signInModal.name,
     signUpModal.name,
     userMatchModal.name,
     contactInfoModal.name,

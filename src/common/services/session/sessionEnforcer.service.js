@@ -98,8 +98,7 @@ const SessionEnforcerService = /* @ngInject */ function ($window, orderService, 
       })
 
       if (angular.isUndefined(modal)) {
-        const modalType = find(enforced, { mode: EnforcerModes.donor }) ? 'register-account' : 'sign-in'
-        modal = sessionModalService.open(modalType, {
+        modal = sessionModalService.open('register-account', {
           backdrop: 'static',
           keyboard: false
         }).result
