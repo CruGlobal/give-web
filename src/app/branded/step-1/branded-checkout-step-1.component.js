@@ -187,7 +187,6 @@ export default angular
       showCoverFees: '<',
       next: '&',
       onPaymentFailed: '&',
-      radioStationApiUrl: '<',
-      radioStationRadius: '<'
+      radioStationApiUrl: '<'
     }
   })
