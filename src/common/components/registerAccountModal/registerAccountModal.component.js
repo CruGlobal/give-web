@@ -88,6 +88,8 @@ class RegisterAccountModalController {
   }
 
   onIdentitySuccess () {
+    this.sessionService.removeOktaRedirectIndicator()
+
     // Success Sign-In/Up, Proceed to Step 2.
     this.getDonorDetails()
   }
