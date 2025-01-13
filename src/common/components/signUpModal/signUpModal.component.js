@@ -281,24 +281,23 @@ class SignUpModalController {
 
   loadDonorDetails () {
     return this.orderService.getDonorDetails().map((data) => {
-        let donorData = data
-        const checkoutSavedData = this.sessionService.session.checkoutSavedData
-        if (checkoutSavedData) {
-          donorData = assign(this.donorDetails, pick(checkoutSavedData, [
-            'name', 'email', 'mailingAddress', 'organization-name', 'phone-number'
-          ]))
-        }
-        this.donorDetails = donorData
-        return donorData
-      })
+      let donorData = data
+      const checkoutSavedData = this.sessionService.session.checkoutSavedData
+      if (checkoutSavedData) {
+        donorData = assign(this.donorDetails, pick(checkoutSavedData, [
+          'name', 'email', 'mailingAddress', 'organization-name', 'phone-number'
+        ]))
+      }
+      this.donorDetails = donorData
+      return donorData
+    })
       .catch(error => {
-        this.$log.error('Error loading donorDetails.', error);
-        return Observable.throw(error);
+        this.$log.error('Error loading donorDetails.', error)
+        return Observable.throw(error)
       })
       .finally(() => {
-        this.loadingDonorDetails = false;
+        this.loadingDonorDetails = false
       })
-    
   }
 
   // On registration complete we need to send the data to Cortex and then redirect the user to the next step
