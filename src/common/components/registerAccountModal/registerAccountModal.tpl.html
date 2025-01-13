@@ -1,4 +1,4 @@
-<div class="modal-header {{$ctrl.state}}" >
+<div class="modal-header {{$ctrl.state}}" ng-if="$ctrl.state !== 'sign-in' || $ctrl.welcomeBack">
   <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()">
     <span aria-hidden="true">×</span>
   </button>
@@ -24,7 +24,8 @@
   <sign-in-modal
     ng-switch-when="sign-in"
     modal-title="$ctrl.modalTitle"
-    on-state-change="$ctrl.stateChanged(state)"
+    last-purchase-id="$ctrl.lastPurchaseId"
+    on-sign-up="$ctrl.onSignUp()"
     on-success="$ctrl.onIdentitySuccess()"
     on-failure="$ctrl.onIdentityFailure()"
     is-inside-another-modal="true"

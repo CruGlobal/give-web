@@ -25,10 +25,6 @@ class SignInModalController {
   getOktaUrl () {
     return this.sessionService.getOktaUrl()
   }
-
-  stateChanged (state) {
-    this.onStateChange({ state })
-  }
 }
 
 export default angular
@@ -43,7 +39,8 @@ export default angular
     bindings: {
       modalTitle: '=',
       lastPurchaseId: '<',
-      onStateChange: '&',
+      // Called when the user clicks the create account link
+      onSignUp: '&',
       onSuccess: '&',
       onFailure: '&',
       isInsideAnotherModal: '='

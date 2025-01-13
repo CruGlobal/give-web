@@ -70,9 +70,9 @@ describe('sessionEnforcerService Tests', () => {
             }, EnforcerModes.session)
           }))
 
-          it('opens sign-in modal and calls \'change\' callback', () => {
+          it('opens register-account modal and calls \'change\' callback', () => {
             expect(change).toHaveBeenCalledWith(Roles.public, 'NEW')
-            expect(sessionModalService.open).toHaveBeenCalledWith('sign-in', { backdrop: 'static', keyboard: false })
+            expect(sessionModalService.open).toHaveBeenCalledWith('register-account', { backdrop: 'static', keyboard: false })
           })
 
           describe('sign-in success', () => {
@@ -98,13 +98,13 @@ describe('sessionEnforcerService Tests', () => {
               sessionService.getRole.mockReturnValue(Roles.registered)
               jest.spyOn(sessionModalService, 'currentModal')
             })
-    
+
             it('should call \'signIn\' and sessionModalService.currentModal callback', () => {
               $rootScope.$digest()
               expect(signIn).toHaveBeenCalled()
               expect(sessionModalService.currentModal).toHaveBeenCalled()
             })
-    
+
             it('should close sessionModalService.currentModal', () => {
               let currentModalCloseMock = jest.fn()
               jest.spyOn(sessionModalService, 'currentModal').mockImplementation(() => {
@@ -128,13 +128,13 @@ describe('sessionEnforcerService Tests', () => {
             sessionEnforcerService([Roles.registered], {}, EnforcerModes.session)
           }))
 
-          it('opens sign-in modal and does not call \'change\' callback', () => {
+          it('opens register-account modal and does not call \'change\' callback', () => {
             expect(change).not.toHaveBeenCalled()
-            expect(sessionModalService.open).toHaveBeenCalledWith('sign-in', { backdrop: 'static', keyboard: false })
+            expect(sessionModalService.open).toHaveBeenCalledWith('register-account', { backdrop: 'static', keyboard: false })
           })
 
-          describe('sign-in success', () => {
-            it('does not call \'sign-in\' callback', () => {
+          describe('register-account success', () => {
+            it('does not call \'signIn\' callback', () => {
               deferred.resolve()
               $rootScope.$digest()
 
@@ -142,7 +142,7 @@ describe('sessionEnforcerService Tests', () => {
             })
           })
 
-          describe('sign-in canceled', () => {
+          describe('register-account canceled', () => {
             it('does not call \'cancel\' callback', () => {
               deferred.reject()
               $rootScope.$digest()

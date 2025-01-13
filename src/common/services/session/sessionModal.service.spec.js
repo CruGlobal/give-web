@@ -29,12 +29,12 @@ describe('sessionModalService', function () {
       expect(sessionModalService.open).toBeDefined()
     })
 
-    it('should open \'sign-in\' by default', () => {
+    it('should open \'register-account\' by default', () => {
       const modal = sessionModalService.open()
 
       expect($uibModal.open).toHaveBeenCalled()
       expect($uibModal.open.mock.calls.length).toEqual(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-in')
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
       expect(modal).toEqual(sessionModalService.currentModal())
     })
 
@@ -65,8 +65,8 @@ describe('sessionModalService', function () {
         expect(analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in')
       })
 
-      it('send analytics event for sign-in', () => {
-        sessionModalService.open('sign-in', {
+      it('send analytics event for register-account', () => {
+        sessionModalService.open('register-account', {
           openAnalyticsEvent: 'ga-sign-in'
         })
         deferred.resolve()
@@ -117,8 +117,8 @@ describe('sessionModalService', function () {
         expect(analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in-exit')
       })
 
-      it('sends analytics event for sign-in', () => {
-        sessionModalService.open('sign-in', {
+      it('sends analytics event for register-account', () => {
+        sessionModalService.open('register-account', {
           dismissAnalyticsEvent: 'ga-sign-in-exit'
         })
         deferred.reject()
@@ -156,11 +156,11 @@ describe('sessionModalService', function () {
   })
 
   describe('signIn', () => {
-    it('should open signIn modal', () => {
+    it('should open registerAccount modal', () => {
       sessionModalService.signIn()
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-in')
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
     })
 
     it('should open signIn modal with last purchase id', () => {
@@ -186,6 +186,7 @@ describe('sessionModalService', function () {
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
+      expect($uibModal.open.mock.calls[0][0].resolve.welcomeBack()).toBe(true)
     })
   })
 

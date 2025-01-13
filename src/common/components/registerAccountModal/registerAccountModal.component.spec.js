@@ -24,7 +24,7 @@ describe('registerAccountModal', function () {
       $element: [{ dataset: {} }],
       orderService: { getDonorDetails: jest.fn() },
       verificationService: { postDonorMatches: jest.fn() },
-      sessionService: { 
+      sessionService: {
         getRole: jest.fn(),
         isOktaRedirecting: jest.fn(),
         removeOktaRedirectIndicator: jest.fn(),
@@ -250,10 +250,18 @@ describe('registerAccountModal', function () {
   })
 
   describe('stateChanged( state )', () => {
+    let originalWidth
+
     beforeEach(() => {
+      originalWidth = $ctrl.$window.innerWidth
+
       $ctrl.state = 'unknown'
       jest.spyOn($ctrl, 'setModalSize').mockImplementation(() => {})
       jest.spyOn($ctrl, 'scrollModalToTop').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      $ctrl.$window.innerWidth = originalWidth
     })
 
     it('should scroll to the top of the modal', () => {
@@ -273,7 +281,7 @@ describe('registerAccountModal', function () {
     it('changes to \'sign-up\' state', () => {
       $ctrl.stateChanged('sign-up')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('sign-up')
     })
@@ -281,7 +289,7 @@ describe('registerAccountModal', function () {
     it('changes to \'contact-info\' state', () => {
       $ctrl.stateChanged('contact-info')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith(undefined)
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('contact-info')
     })
@@ -292,6 +300,61 @@ describe('registerAccountModal', function () {
       expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('failed-verification')
+    })
+
+    describe('when welcomeBack is true', () => {
+      beforeEach(() => {
+        $ctrl.welcomeBack = true
+      })
+
+      it('sets the sign-in modal size to large on wide screens', () => {
+        $ctrl.$window.innerWidth = 1200
+        $ctrl.stateChanged('sign-in')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('lg')
+      })
+
+      it('sets the sign-in modal size to small on narrow screens', () => {
+        $ctrl.stateChanged('sign-in')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      })
+
+      it('sets the sign-up modal size to small', () => {
+        $ctrl.stateChanged('sign-up')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      })
+
+      it('sets the contact-info modal size to medium', () => {
+        $ctrl.stateChanged('contact-info')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
+      })
+    })
+
+    describe('when the screen is wide', () => {
+      beforeEach(() => {
+        $ctrl.$window.innerWidth = 1200
+      })
+
+      it('sets the sign-in modal size to small', () => {
+        $ctrl.stateChanged('sign-in')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      })
+
+      it('sets the sign-up modal size to small', () => {
+        $ctrl.stateChanged('sign-up')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      })
+
+      it('sets the contact-info modal size to large', () => {
+        $ctrl.stateChanged('contact-info')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('lg')
+      })
     })
   })
 
@@ -308,13 +371,6 @@ describe('registerAccountModal', function () {
 
       expect(modal.removeClass).toHaveBeenCalledWith('modal-sm modal-md modal-lg')
       expect(modal.addClass).toHaveBeenCalledWith('modal-sm')
-    })
-
-    it('sets size missing param', () => {
-      $ctrl.setModalSize()
-
-      expect(modal.removeClass).toHaveBeenCalledWith('modal-sm modal-md modal-lg')
-      expect(modal.addClass).not.toHaveBeenCalled()
     })
   })
 })
