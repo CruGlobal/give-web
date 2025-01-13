@@ -146,10 +146,19 @@ class RegisterAccountModalController {
 
   stateChanged (state) {
     this.element.dataset.state = state
-    if (state === 'sign-up') {
+    if ((!this.welcomeBack && state === 'sign-in') || state === 'sign-up') {
+      // Use a small modal for sign in modals without a welcome back message and for sign up modals
+      // regardless of the screen size because they can't take advantage of the extra width
+      this.setModalSize('sm')
+    } else if (this.$window.innerWidth >= 1200) {
+      // Use a large modal on wide screens for other modals
+      this.setModalSize('lg')
+    } else if (state === 'contact-info') {
+      // Use a medium modal for contact info modals, even on narrow screens, because they need the extra width
       this.setModalSize('md')
     } else {
-      this.setModalSize(this.$window.screen.width >= 1200 ? 'lg' : state === 'contact-info' ? undefined : 'sm')
+      // Use a small modal for all other modals on narrow screens
+      this.setModalSize('sm')
     }
 
     this.state = state
@@ -163,9 +172,7 @@ class RegisterAccountModalController {
     // Modal size is unchangeable after initialization. This fetches the modal and changes the size classes.
     const modal = angular.element(document.getElementsByClassName('session-modal'))
     modal.removeClass('modal-sm modal-md modal-lg')
-    if (angular.isDefined(size)) {
-      modal.addClass(`modal-${size}`)
-    }
+    modal.addClass(`modal-${size}`)
   }
 }
 
