@@ -114,13 +114,21 @@ describe('signUpForm', function () {
     })
 
     it('should set loadingDonorDetails to false', (done) => {
-      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.throw({status: 404}))
+      const error = { status: 404 }
+      jest.spyOn($ctrl.orderService, 'getDonorDetails').mockReturnValue(Observable.throw(error))
+      jest.spyOn($ctrl.$log, 'error')
       $ctrl.loadingDonorDetails = true
       $ctrl.loadDonorDetails().subscribe({
         error: () => {
-          expect($ctrl.loadingDonorDetails).toEqual(false)
-          done()
+          expect($ctrl.$log.error).toHaveBeenCalledWith('Error loading donorDetails.', error)
         }
+      })
+
+      // Observable.finally is fired after the test, this defers until it's called.
+      // eslint-disable-next-line angular/timeout-service
+      setTimeout(() => {
+        expect($ctrl.loadingDonorDetails).toEqual(false)
+        done()
       })
     })
   })

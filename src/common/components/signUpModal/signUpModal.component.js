@@ -3,6 +3,7 @@ import includes from 'lodash/includes'
 import assign from 'lodash/assign'
 import pick from 'lodash/pick'
 import 'rxjs/add/operator/finally'
+import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable'
 import OktaSignIn from '@okta/okta-signin-widget'
 import sessionService, { Roles } from 'common/services/session/session.service'
@@ -115,7 +116,7 @@ class SignUpModalController {
                 label: 'Account Type',
                 required: true,
                 wide: true,
-                value: this.$scope.accountType ?? 'household'
+                value: this.$scope.accountType ?? donorData['donor-type'] ?? 'household'
               }
             ],
             // Step 2: Address, phone number and organization name (if applicable)
@@ -279,29 +280,25 @@ class SignUpModalController {
   }
 
   loadDonorDetails () {
-    this.loadingDonorDetails = true
-    return new Observable(observer => {
-      this.orderService.getDonorDetails().subscribe({
-        next: data => {
-          let donorData = data
-          const checkoutSavedData = this.sessionService.session.checkoutSavedData
-          if (checkoutSavedData) {
-            donorData = assign(this.donorDetails, pick(checkoutSavedData, [
-              'name', 'email', 'mailingAddress', 'organization-name', 'phone-number'
-            ]))
-          }
-          this.donorDetails = donorData
-          this.loadingDonorDetails = false
-          observer.next(donorData)
-          observer.complete()
-        },
-        error: error => {
-          this.loadingDonorDetails = false
-          this.$log.error('Error loading donorDetails.', error)
-          observer.error(error)
+    return this.orderService.getDonorDetails().map((data) => {
+        let donorData = data
+        const checkoutSavedData = this.sessionService.session.checkoutSavedData
+        if (checkoutSavedData) {
+          donorData = assign(this.donorDetails, pick(checkoutSavedData, [
+            'name', 'email', 'mailingAddress', 'organization-name', 'phone-number'
+          ]))
         }
+        this.donorDetails = donorData
+        return donorData
       })
-    })
+      .catch(error => {
+        this.$log.error('Error loading donorDetails.', error);
+        return Observable.throw(error);
+      })
+      .finally(() => {
+        this.loadingDonorDetails = false;
+      })
+    
   }
 
   // On registration complete we need to send the data to Cortex and then redirect the user to the next step
