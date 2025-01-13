@@ -70,8 +70,10 @@ class Step1Controller {
   }
 
   addCustomValidators () {
-    this.detailsForm.phoneNumber.$validators.phone = number => {
-      return !number || phoneNumberRegex.test(number)
+    if (this.useV3 !== 'true') {
+      this.detailsForm.phoneNumber.$validators.phone = number => {
+        return !number || phoneNumberRegex.test(number)
+      }
     }
   }
 
