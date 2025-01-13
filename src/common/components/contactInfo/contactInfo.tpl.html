@@ -48,17 +48,18 @@
       <h4 ng-if="$ctrl.useV3 !== 'true'" class="panel-title  border-bottom-small  visible" translate>{{'YOUR_INFORMATION'}}</h4>
       <h4 ng-if="$ctrl.useV3 === 'true'" class="panel-title  border-bottom-small  visible" translate>{{'CONTACT_INFO'}}</h4>
       <div class="row">
-        <div class="col-sm-4">
+        <div ng-class="{'col-sm-4': $ctrl.useV3 !== 'true', 'col-sm-6': $ctrl.useV3 === 'true'}">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameGivenName | showErrors)}">
             <label>
               <span translate>{{'FIRST_NAME'}}</span>
-              <input type="text"
-                      class="form-control  form-control-subtle"
-                      name="nameGivenName"
-                      ng-model="$ctrl.donorDetails['name']['given-name']"
-                      required
-                      ng-maxlength="50"
-                      ng-disabled="$ctrl.nameFieldsDisabled">
+              <input 
+                type="text"
+                class="form-control  form-control-subtle"
+                name="nameGivenName"
+                ng-model="$ctrl.donorDetails['name']['given-name']"
+                required
+                ng-maxlength="50"
+                ng-disabled="$ctrl.nameFieldsDisabled">
             </label>
             <div role="alert" ng-messages="$ctrl.detailsForm.nameGivenName.$error" ng-if="($ctrl.detailsForm.nameGivenName | showErrors)">
               <div class="help-block" ng-message="required" translate>{{'FIRST_NAME_ERROR'}}</div>
@@ -82,7 +83,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-4">
+        <div ng-class="{'col-sm-4': $ctrl.useV3 !== 'true', 'col-sm-6': $ctrl.useV3 === 'true'}">
           <div class="form-group is-required" ng-class="{'has-error': ($ctrl.detailsForm.nameFamilyName | showErrors)}">
             <label>
               <span translate>{{'LAST_NAME'}}</span>
