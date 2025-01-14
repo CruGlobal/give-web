@@ -47,7 +47,7 @@ class SignUpModalController {
     this.oktaSignInWidget?.remove()
   }
 
-  initializeVariables() {
+  initializeVariables () {
     this.currentStep = 1
     this.donorDetails = {}
     this.signUpErrors = []
@@ -55,7 +55,7 @@ class SignUpModalController {
     this.submitting = false
   }
 
-  loadTranslations() {
+  loadTranslations () {
     this.$translate(['GIVE_AS_INDIVIDUAL', 'GIVE_AS_ORGANIZATION', 'ORGANIZATION_NAME']).then(translations => {
       this.giveAsIndividualTxt = translations.GIVE_AS_INDIVIDUAL
       this.giveAsOrganizationTxt = translations.GIVE_AS_ORGANIZATION
@@ -64,7 +64,6 @@ class SignUpModalController {
   }
 
   setUpSignUpWidget () {
-    const donorData = this.donorDetails ?? {}
     this.currentStep = 1
 
     this.oktaSignInWidget = new OktaSignIn({
@@ -86,15 +85,14 @@ class SignUpModalController {
     this.oktaSignInWidget.on('afterError', this.afterError.bind(this))
   }
 
-  parseSchema(schema, onSuccess) {
+  parseSchema (schema, onSuccess) {
     // Split the form into multiple steps for better user experience.
     const step = this.currentStep || 1
     const steps = this.getSteps(schema)
     onSuccess(steps[step])
   }
 
-
-  getSteps(schema) {
+  getSteps (schema) {
     return {
       // Step 1: Name, email and account type
       1: this.getStep1Fields(schema),
@@ -106,7 +104,7 @@ class SignUpModalController {
     }
   }
 
-  getStep1Fields(schema) {
+  getStep1Fields (schema) {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
     return [
@@ -138,21 +136,21 @@ class SignUpModalController {
     ]
   }
 
-  getStep2Fields(schema) {
+  getStep2Fields (schema) {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
 
     const organizationNameField = this.$scope.accountType === 'organization'
-    ? [{
-        name: 'organizationName',
-        type: 'text',
-        'label-top': true,
-        label: this.organizationNameTxt,
-        required: true,
-        maxLength: 50,
-        value: this.$scope.organizationName ?? this.donorDetails?.['organization-name'] ?? ''
-      }]
-    : []
+      ? [{
+          name: 'organizationName',
+          type: 'text',
+          'label-top': true,
+          label: this.organizationNameTxt,
+          required: true,
+          maxLength: 50,
+          value: this.$scope.organizationName ?? this.donorDetails?.['organization-name'] ?? ''
+        }]
+      : []
 
     return [
       ...organizationNameField,
@@ -183,7 +181,7 @@ class SignUpModalController {
     ]
   }
 
-  preSubmit(postData, onSuccess) {
+  preSubmit (postData, onSuccess) {
     const step = this.currentStep
     const userProfile = postData.userProfile
     if (step === 1) {
@@ -195,7 +193,7 @@ class SignUpModalController {
     }
   }
 
-  saveStep1Data(userProfile, postData) {
+  saveStep1Data (userProfile, postData) {
     Object.assign(this.$scope, {
       firstName: userProfile.firstName,
       lastName: userProfile.lastName,
@@ -205,7 +203,7 @@ class SignUpModalController {
     this.$scope.$apply(() => this.goToNextStep())
   }
 
-  saveStep2Data(userProfile, postData) {
+  saveStep2Data (userProfile, postData) {
     Object.assign(this.$scope, {
       streetAddress: userProfile.streetAddress,
       city: userProfile.city,
@@ -218,8 +216,8 @@ class SignUpModalController {
     this.$scope.$apply(() => this.goToNextStep())
   }
 
-  submitFinalData(postData, onSuccess) {
-     // Clear errors from previous steps
+  submitFinalData (postData, onSuccess) {
+    // Clear errors from previous steps
     this.signUpErrors = []
     // Add the user profile to the postData object
     // Okta widget handles the password
@@ -237,7 +235,7 @@ class SignUpModalController {
     onSuccess(postData)
   }
 
-  postSubmit(response, onSuccess) {
+  postSubmit (response, onSuccess) {
     const donorDetails = {
       name: {
         'given-name': this.$scope.firstName,
@@ -273,39 +271,39 @@ class SignUpModalController {
     this.injectBackButton()
   }
 
-  updateSignUpButtonText() {
+  updateSignUpButtonText () {
     // Change the text of the sign up button to ensure it's clear what the user is doing
     const signUpButton = angular.element(document.querySelector('.o-form-button-bar input.button.button-primary'))
     signUpButton.attr('value', this.currentStep === 3 ? signUpButtonText : nextButtonText)
   }
 
-  resetCurrentStepOnRegistrationComplete(context) {
+  resetCurrentStepOnRegistrationComplete (context) {
     // Stop tracking the current step after registration is complete
     if (context.controller === 'registration-complete') {
       this.currentStep = null
     }
   }
 
-  redirectToSignInModalIfNeeded(context) {
+  redirectToSignInModalIfNeeded (context) {
     // Send users to the login modal if they try to go to the login form
     if (context.controller === 'primary-auth') {
       this.$scope.$apply(() => this.onSignIn())
     }
   }
 
-  injectErrorMessages() {
+  injectErrorMessages () {
     // Inject error messages into the form since errors are cleared when switching steps/rerendering.
     this.signUpErrors.forEach(error => {
-      const field = document.querySelector(`.o-form-input-name-${error.property.replace(/\./g, '\\.')}`);
+      const field = document.querySelector(`.o-form-input-name-${error.property.replace(/\./g, '\\.')}`)
       if (field) {
-        const errorElement = document.createElement('div');
-        errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain');
-        field.parentNode.classList.add('o-form-has-errors');
-        errorElement.setAttribute('role', 'alert');
-        errorElement.innerHTML = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${error.errorSummary}`;
-        field.parentNode.appendChild(errorElement);
+        const errorElement = document.createElement('div')
+        errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
+        field.parentNode.classList.add('o-form-has-errors')
+        errorElement.setAttribute('role', 'alert')
+        errorElement.innerHTML = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${error.errorSummary}`
+        field.parentNode.appendChild(errorElement)
       }
-    });
+    })
   }
 
   injectBackButton () {
@@ -314,7 +312,7 @@ class SignUpModalController {
       return
     }
     const buttonBar = document.querySelector('.o-form-button-bar')
-     // Ensure the button is only added once
+    // Ensure the button is only added once
     if (buttonBar && !buttonBar.querySelector(`#${backButtonId}`)) {
       const backButton = angular.element(`<button id="${backButtonId}" class="btn btn-secondary">${backButtonText}</button>`)
       // Add click behavior to go back a step
