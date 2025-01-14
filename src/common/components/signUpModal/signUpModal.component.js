@@ -30,7 +30,7 @@ class SignUpModalController {
 
   $onInit () {
     if (includes([Roles.identified, Roles.registered], this.sessionService.getRole())) {
-      this.onStateChange({ state: 'sign-in' })
+      this.onSignIn()
     }
     this.currentStep = 1
     this.donorDetails = {}
@@ -191,6 +191,28 @@ class SignUpModalController {
             }
             onSuccess(postData)
           }
+        },
+        postSubmit: (response, onSuccess) => {
+          const donorDetails = {
+            name: {
+              'given-name': this.$scope.firstName,
+              'family-name': this.$scope.lastName
+            },
+            'donor-type': this.$scope.accountType,
+            'organization-name': this.$scope.organizationName,
+            email: this.$scope.email,
+            phone: this.$scope.primaryPhone,
+            mailingAddress: {
+              streetAddress: this.$scope.streetAddress,
+              locality: this.$scope.city,
+              region: this.$scope.state,
+              postalCode: this.$scope.zipCode,
+              country: this.$scope.countryCode
+            }
+          }
+          this.$scope.$apply(() => this.onSignUp({ donorDetails }))
+
+          onSuccess(response)
         }
       }
     })
@@ -217,7 +239,7 @@ class SignUpModalController {
 
     // Send users to the login modal if they try to go to the login form
     if (context.controller === 'primary-auth') {
-      this.$scope.$apply(() => this.onStateChange({ state: 'sign-in' }))
+      this.$scope.$apply(() => this.onSignIn())
     }
 
     this.injectBackButton()
@@ -299,9 +321,6 @@ class SignUpModalController {
         this.loadingDonorDetails = false
       })
   }
-
-  // On registration complete we need to send the data to Cortex and then redirect the user to the next step
-  // this.onStateChange({ state: 'sign-up-activation' })
 }
 
 export default angular
@@ -314,8 +333,11 @@ export default angular
     controller: SignUpModalController,
     templateUrl: template,
     bindings: {
-      onStateChange: '&',
-      onFailure: '&',
+      // Called with `donorDetails` after the user creates an account with Okta
+      onSignUp: '&',
+      // Called when the user clicks back to sign in link
+      onSignIn: '&',
+      // Called with the user dismisses the modal via the close button
       onCancel: '&',
       isInsideAnotherModal: '='
     }

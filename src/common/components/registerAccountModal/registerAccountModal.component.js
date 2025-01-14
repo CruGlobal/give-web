@@ -13,6 +13,14 @@ import userMatchModal from 'common/components/userMatchModal/userMatchModal.comp
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
 
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/forkJoin'
+import 'rxjs/add/observable/of'
+import 'rxjs/add/operator/do'
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/switchMap'
+import merge from 'lodash/merge'
+
 const componentName = 'registerAccountModal'
 
 class RegisterAccountModalController {
@@ -42,7 +50,7 @@ class RegisterAccountModalController {
 
   $onInit () {
     this.$rootScope.$on(LoginOktaOnlyEvent, () => {
-      this.getDonorDetails()
+      this.checkDonorDetails()
     })
 
     // Ensure loading icon isn't rendered on screen.
@@ -57,7 +65,7 @@ class RegisterAccountModalController {
     // Step 1. Sign-In/Up (skipped if already Signed In)
     if (this.sessionService.getRole() === Roles.registered) {
       // Proceed to Step 2
-      this.getDonorDetails()
+      this.checkDonorDetails()
     } else {
       // Proceed to Step 1.
       this.stateChanged('sign-in')
@@ -67,7 +75,7 @@ class RegisterAccountModalController {
     this.subscription = this.sessionService.sessionSubject.subscribe(() => {
       if (this.sessionService.getRole() === Roles.registered) {
         // Proceed to Step 2
-        this.getDonorDetails()
+        this.checkDonorDetails()
       }
     })
   }
@@ -83,15 +91,25 @@ class RegisterAccountModalController {
     }
   }
 
+  // Called after the user finishes creating a new Okta account
+  onSignUpSuccess (signUpDonorDetails) {
+    this.checkDonorDetails(signUpDonorDetails)
+  }
+
+  // Called when the user requests to sign up from the sign in modal
   onSignUp () {
     this.stateChanged('sign-up')
+  }
+
+  onSignIn () {
+    this.stateChanged('sign-in')
   }
 
   onIdentitySuccess () {
     this.sessionService.removeOktaRedirectIndicator()
 
     // Success Sign-In/Up, Proceed to Step 2.
-    this.getDonorDetails()
+    this.checkDonorDetails()
   }
 
   onIdentityFailure () {
@@ -108,7 +126,7 @@ class RegisterAccountModalController {
     this.onSuccess()
   }
 
-  getDonorDetails () {
+  checkDonorDetails (signUpDonorDetails) {
     // Show loading state
     this.modalTitle = this.gettext('Checking your donor account')
     this.stateChanged('loading')
@@ -117,7 +135,27 @@ class RegisterAccountModalController {
     if (angular.isDefined(this.getDonorDetailsSubscription)) {
       this.getDonorDetailsSubscription.unsubscribe()
     }
-    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe({
+    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().switchMap((donorDetails) => {
+      if (signUpDonorDetails && donorDetails['registration-state'] === 'NEW') {
+        // Save the contact info from signup
+        merge(donorDetails, signUpDonorDetails)
+
+        // Send each of the requests and pass donorDetails to the next step after the requests complete
+        return Observable.forkJoin([
+          this.orderService.updateDonorDetails(donorDetails),
+          this.orderService.addEmail(donorDetails.email, donorDetails.emailFormUri)
+        ]).map(() => donorDetails).do({
+          error: () => {
+            // If there was an error, save the donor details from sign up so that they will be added
+            // to the contact info form. The error handler below will change the step to contact-info.
+            this.signUpDonorDetails = signUpDonorDetails
+          }
+        })
+      }
+
+      // Pass donorDetails to the next step
+      return Observable.of(donorDetails)
+    }).subscribe({
       next: (donorDetails) => {
         // Workflow Complete if 'registration-state' is COMPLETED
         if (donorDetails['registration-state'] === 'COMPLETED') {
