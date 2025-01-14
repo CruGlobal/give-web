@@ -34,6 +34,7 @@ class SignUpModalController {
     }
     this.currentStep = 1
     this.donorDetails = {}
+    this.signUpErrors = []
     this.loadDonorDetails().finally(() => {
       this.setUpSignUpWidget()
     }).subscribe()
@@ -58,7 +59,7 @@ class SignUpModalController {
   }
 
   $onDestroy () {
-    this.oktaSignInWidget.remove()
+    this.oktaSignInWidget?.remove()
   }
 
   setUpSignUpWidget () {
@@ -109,8 +110,8 @@ class SignUpModalController {
                 name: 'accountType',
                 type: 'select',
                 options: {
-                  household: this.giveAsIndividualTxt,
-                  organization: this.giveAsOrganizationTxt
+                  Household: this.giveAsIndividualTxt,
+                  Organization: this.giveAsOrganizationTxt
                 },
                 'label-top': true,
                 label: 'Account Type',
@@ -155,7 +156,6 @@ class SignUpModalController {
         preSubmit: (postData, onSuccess) => {
           const step = this.currentStep
           const userProfile = postData.userProfile
-
           if (step === 1) {
             Object.assign(this.$scope, {
               firstName: userProfile.firstName,
@@ -176,6 +176,8 @@ class SignUpModalController {
             })
             this.$scope.$apply(() => this.goToNextStep())
           } else if (step === 3) {
+            // Clear errors from previous steps
+            this.signUpErrors = []
             // Add the user profile to the postData object
             // Okta widget handles the password
             postData.userProfile = {
@@ -198,6 +200,13 @@ class SignUpModalController {
     this.signIn()
 
     this.oktaSignInWidget.on('afterRender', this.afterRenderFn.bind(this))
+    this.oktaSignInWidget.on('afterError', this.afterErrorFn.bind(this))
+  }
+
+  afterErrorFn (_, error) {
+    // Save errors to local variable to inject into the form
+    // Since errors are cleared on each step change
+    this.signUpErrors = error.xhr.responseJSON.errorCauses
   }
 
   afterRenderFn (context) {
@@ -219,6 +228,19 @@ class SignUpModalController {
     if (context.controller === 'primary-auth') {
       this.$scope.$apply(() => this.onStateChange({ state: 'sign-in' }))
     }
+
+    // Inject error messages into the form as errors are cleared on each step change
+    this.signUpErrors.forEach(error => {
+      const field = document.querySelector(`.o-form-input-name-${error.property.replace(/\./g, '\\.')}`);
+      if (field) {
+        const errorElement = document.createElement('div');
+        errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain');
+        field.parentNode.classList.add('o-form-has-errors');
+        errorElement.setAttribute('role', 'alert');
+        errorElement.innerHTML = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${error.errorSummary}`;
+        field.parentNode.appendChild(errorElement);
+      }
+    });
 
     this.injectBackButton()
   }
