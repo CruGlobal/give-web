@@ -148,7 +148,7 @@ class SignUpModalController {
               }
             ],
             // Step 3: Password
-            3: [schema[8]]
+            3: [schema[9]]
           }
           onSuccess(steps[step])
         },
