@@ -78,10 +78,6 @@ class SignInController {
     })
   }
 
-  onSignUpWithOkta () {
-    this.sessionModalService.createAccount()
-  }
-
   closeRedirectingLoading () {
     this.showRedirectingLoadingIcon = false
   }

@@ -22,7 +22,7 @@ describe('signIn', function () {
       }
     )
   }))
-  
+
   it('to be defined', function () {
     expect($ctrl).toBeDefined()
   })
@@ -174,16 +174,6 @@ describe('signIn', function () {
         $ctrl.checkoutAsGuest()
 
         expect($ctrl.$window.location).toEqual('/checkout.html')
-      })
-    })
-
-
-    describe('onSignUpWithOkta()', () => {
-      it('should call createAccount()', () => {
-        jest.spyOn($ctrl.sessionModalService, 'createAccount')
-        $ctrl.onSignUpWithOkta()
-
-        expect($ctrl.sessionModalService.createAccount).toHaveBeenCalled()
       })
     })
   })

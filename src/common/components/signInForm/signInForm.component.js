@@ -43,7 +43,8 @@ export default angular
       onSuccess: '&',
       onFailure: '&',
       lastPurchaseId: '<',
-      onSignUpWithOkta: '&',
+      // Optional if on-sign-in-page is true
+      onSignUpWithOkta: '&?',
       onSignInPage: '<'
     }
   })
