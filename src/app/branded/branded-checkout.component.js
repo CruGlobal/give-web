@@ -13,6 +13,7 @@ import thankYouSummary from 'app/thankYou/summary/thankYouSummary.component'
 
 import sessionService from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
+import checkoutService from 'common/services/checkoutHelpers/checkout.service'
 import brandedAnalyticsFactory from './analytics/branded-analytics.factory'
 
 import 'common/lib/fakeLocalStorage'
@@ -23,7 +24,7 @@ const componentName = 'brandedCheckout'
 
 class BrandedCheckoutController {
   /* @ngInject */
-  constructor ($element, $window, analyticsFactory, brandedAnalyticsFactory, tsysService, sessionService, envService, orderService, $translate) {
+  constructor ($element, $window, analyticsFactory, brandedAnalyticsFactory, tsysService, sessionService, envService, orderService, checkoutService, $translate) {
     this.$element = $element[0] // extract the DOM element from the jqLite wrapper
     this.$window = $window
     this.analyticsFactory = analyticsFactory
@@ -33,6 +34,7 @@ class BrandedCheckoutController {
     this.envService = envService
     this.orderService = orderService
     this.$translate = $translate
+    this.checkoutService = checkoutService
 
     this.orderService.clearCoverFees()
   }
@@ -57,6 +59,8 @@ class BrandedCheckoutController {
       console.error(err)
     })
     this.$translate.use(this.language || 'en')
+
+    this.checkoutService.initializeRecaptcha()
   }
 
   formatDonorDetails () {
@@ -152,6 +156,7 @@ export default angular
     thankYouSummary.name,
     sessionService.name,
     orderService.name,
+    checkoutService.name,
     brandedAnalyticsFactory.name,
     uibModal,
     'environment',

@@ -35,6 +35,7 @@ describe('checkout', function () {
       jest.spyOn(self.controller, 'sessionEnforcerService').mockImplementation(() => {})
       jest.spyOn(self.controller.$rootScope, '$on').mockImplementation(() => {})
       jest.spyOn(self.controller, 'signedOut').mockImplementation(() => {})
+      jest.spyOn(self.controller.checkoutService, 'initializeRecaptcha').mockImplementation(() => {})
       self.controller.$onInit()
     })
 
@@ -53,6 +54,7 @@ describe('checkout', function () {
       self.controller.$rootScope.$on.mock.calls[0][1]()
 
       expect(self.controller.signedOut).toHaveBeenCalled()
+      expect(self.controller.checkoutService.initializeRecaptcha).toHaveBeenCalled()
     })
 
     describe('sessionEnforcerService success', () => {
