@@ -2,7 +2,8 @@
   <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()" ng-if="!$ctrl.hideCloseButton">
     <span aria-hidden="true">×</span>
   </button>
-  <div ng-if="$ctrl.state !== 'sign-up'">
+  <h3 ng-if="$ctrl.state === 'loading-donor'" translate>Checking your donor account</h3>
+  <div ng-if="$ctrl.state !== 'loading-donor' && $ctrl.state !== 'sign-up'">
     <h3 ng-if="$ctrl.firstName" translate>Welcome back, {{$ctrl.firstName}}!</h3>
     <h3 ng-if="!$ctrl.firstName" translate>Welcome back!</h3>
   </div>
@@ -36,7 +37,7 @@
     on-sign-in="$ctrl.onSignIn()"
     is-inside-another-modal="true"
   ></sign-up-modal>
-  <div ng-switch-when="loading">
+  <div ng-switch-when="loading-donor">
     <loading></loading>
   </div>
   <contact-info-modal

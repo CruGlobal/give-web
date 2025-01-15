@@ -123,8 +123,7 @@ class RegisterAccountModalController {
 
   checkDonorDetails (signUpDonorDetails) {
     // Show loading state
-    this.modalTitle = this.gettext('Checking your donor account')
-    this.stateChanged('loading')
+    this.stateChanged('loading-donor')
 
     // Step 2. Fetch Donor Details
     if (angular.isDefined(this.getDonorDetailsSubscription)) {

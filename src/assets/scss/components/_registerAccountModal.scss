@@ -6,7 +6,7 @@ sign-up-modal {
   a {
     cursor: pointer;
   }
-  
+
   ul {
     padding-left: 1em;
   }
@@ -19,7 +19,7 @@ sign-up-modal {
     padding: 30px;
     background-color: #EBECEC;
   }
-  
+
   .signup-header {
     text-align: center;
   }
@@ -45,10 +45,10 @@ register-account-modal {
       width: auto;
     }
   }
-  
+
   .modal-dialog.modal-sm & {
     &[data-state=sign-in],
-    &[data-state=loading] {
+    &[data-state=loading-donor] {
       .modal-body {
         padding-top: 30px;
       }
@@ -57,7 +57,7 @@ register-account-modal {
 
   .modal-dialog.modal-lg & {
     &[data-state=sign-in],
-    &[data-state=loading] {  
+    &[data-state=loading-donor] {
       @media screen and (min-width: 550px) {
         sign-in-modal {
           padding: 50px;
@@ -70,7 +70,7 @@ register-account-modal {
         .modal-header {
           flex: 1
         }
-      }  
+      }
     }
     &[data-state=contact-info] {
 

@@ -193,8 +193,7 @@ describe('registerAccountModal', function () {
           $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'COMPLETED' }))
           $ctrl.checkDonorDetails()
 
-          expect($ctrl.modalTitle).toEqual('Checking your donor account')
-          expect($ctrl.stateChanged).toHaveBeenCalledWith('loading')
+          expect($ctrl.stateChanged).toHaveBeenCalledWith('loading-donor')
           expect($ctrl.stateChanged.mock.calls.length).toEqual(1)
           expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
           expect($ctrl.onSuccess).toHaveBeenCalled()
