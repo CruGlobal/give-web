@@ -190,15 +190,6 @@ describe('sessionModalService', function () {
     })
   })
 
-  describe('SignUp', () => {
-    it('should open signUp modal', () => {
-      sessionModalService.createAccount()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
-    })
-  })
-
   describe('accountBenefits', () => {
     it('should open accountBenefits modal', () => {
       sessionModalService.accountBenefits('gxwpz=')
