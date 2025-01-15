@@ -28,9 +28,9 @@
         </div>
       </div>
       <user-match-identity ng-switch-when="identity"
-                          contacts="$ctrl.contacts"
-                          on-back="$ctrl.changeMatchState('intro')"
-                          on-select-contact="$ctrl.onSelectContact(contact)">
+                           contacts="$ctrl.contacts"
+                           on-back="$ctrl.changeMatchState('intro')"
+                           on-select-contact="$ctrl.onSelectContact(contact)">
       </user-match-identity>
       <div ng-switch-when="activate">
         <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingQuestionsError">
@@ -45,12 +45,12 @@
         </p>
       </div>
       <user-match-question ng-switch-when="question"
-                          ng-init="$ctrl.analyticsFactory.track('ga-registration-match-security-question'+$ctrl.questionCount)"
-                          question="$ctrl.questions[$ctrl.questionIndex - 1]"
-                          question-index="$ctrl.questionIndex"
-                          question-count="$ctrl.questionCount"
-                          on-back="$ctrl.back()"
-                          on-question-answer="$ctrl.onQuestionAnswer(question, answer)">
+                           ng-init="$ctrl.analyticsFactory.track('ga-registration-match-security-question'+$ctrl.questionCount)"
+                           question="$ctrl.questions[$ctrl.questionIndex - 1]"
+                           question-index="$ctrl.questionIndex"
+                           question-count="$ctrl.questionCount"
+                           on-back="$ctrl.back()"
+                           on-question-answer="$ctrl.onQuestionAnswer(question, answer)">
       </user-match-question>
       <div ng-switch-when="success" class="success">
         <h4 class="text-center" translate>Success!</h4>
@@ -76,9 +76,9 @@
         </div>
       </div>
       <failed-verification-modal ng-switch-when="failure"
-                                ng-init="$ctrl.analyticsFactory.track('ga-registration-match-failed-questions')"
-                                modal-title="$ctrl.modalTitle"
-                                on-ok="$ctrl.onFailure()">
+                                 ng-init="$ctrl.analyticsFactory.track('ga-registration-match-failed-questions')"
+                                 modal-title="$ctrl.modalTitle"
+                                 on-ok="$ctrl.onFailure()">
       </failed-verification-modal>
       <div ng-switch-default style="height: 100px;" ng-if="!$ctrl.loadingDonorDetailsError"></div>
     </div>
