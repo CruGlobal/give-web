@@ -36,7 +36,7 @@ describe('userMatchModal', function () {
         $ctrl.$onInit()
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
-        expect($ctrl.modalTitle).toEqual('Activate your Account')
+        expect($ctrl.modalTitle).toEqual('Activate Your Account')
         expect($ctrl.profileService.getDonorDetails).toHaveBeenCalled()
         expect($ctrl.verificationService.getContacts).not.toHaveBeenCalled()
         expect($ctrl.changeMatchState).toHaveBeenCalledWith('success')
@@ -49,7 +49,7 @@ describe('userMatchModal', function () {
       $ctrl.$onInit()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
-      expect($ctrl.modalTitle).toEqual('Activate your Account')
+      expect($ctrl.modalTitle).toEqual('Activate Your Account')
       expect($ctrl.profileService.getDonorDetails).toHaveBeenCalled()
       expect($ctrl.changeMatchState).not.toHaveBeenCalled()
       expect($ctrl.loadingDonorDetailsError).toEqual(true)
@@ -80,7 +80,7 @@ describe('userMatchModal', function () {
           $ctrl.$onInit()
 
           expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
-          expect($ctrl.modalTitle).toEqual('Activate your Account')
+          expect($ctrl.modalTitle).toEqual('Activate Your Account')
           expect($ctrl.profileService.getDonorDetails).toHaveBeenCalled()
           expect($ctrl.changeMatchState).toHaveBeenCalledWith('intro')
           expect($ctrl.loadingDonorDetailsError).toEqual(false)

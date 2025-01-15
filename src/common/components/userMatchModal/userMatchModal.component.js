@@ -27,7 +27,7 @@ class UserMatchModalController {
     this.setLoading({ loading: true })
     this.loadingDonorDetailsError = false
     this.skippedQuestions = false
-    this.modalTitle = this.gettext('Activate your Account')
+    this.modalTitle = this.gettext('Activate Your Account')
     this.profileService.getDonorDetails().subscribe((donorDetails) => {
       if (angular.isDefined(donorDetails['registration-state'])) {
         if (donorDetails['registration-state'] === 'COMPLETED') {
@@ -106,6 +106,7 @@ class UserMatchModalController {
         break
       default:
         this.modalTitle = this.gettext('Activate Your Account')
+        break
     }
     this.matchState = state
     this.setLoading({ loading: false })
