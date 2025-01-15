@@ -193,6 +193,17 @@ describe('registerAccountModal', function () {
       })
     })
 
+    describe('\'registration-state\' MATCHED', () => {
+      it('changes state to \'user-match\'', () => {
+        $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'MATCHED' }))
+        $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
+        $ctrl.checkDonorDetails()
+
+        expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.stateChanged).toHaveBeenCalledWith('user-match')
+      })
+    })
+
     describe('\'registration-state\' NEW', () => {
       const signUpDonorDetails = {
         name: {

@@ -155,6 +155,8 @@ class RegisterAccountModalController {
         // Workflow Complete if 'registration-state' is COMPLETED
         if (donorDetails['registration-state'] === 'COMPLETED') {
           this.onSuccess()
+        } else if (donorDetails['registration-state'] === 'MATCHED') {
+          this.onContactInfoSuccess()
         } else if (donorDetails['registration-state'] === 'FAILED') {
           this.stateChanged('failed-verification')
         } else {
