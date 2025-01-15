@@ -165,6 +165,8 @@ class RegisterAccountModalController {
         } else {
           // Proceed to Step 3
           this.stateChanged('contact-info')
+          // Ensure modal is large enough to display contact info form
+          this.setModalSize('md')
         }
       },
       error: () => this.stateChanged('contact-info') // Error fetching donor details, proceed to step 3.
@@ -239,6 +241,7 @@ export default angular
       lastPurchaseId: '<',
       onSuccess: '&',
       onCancel: '&',
-      setLoading: '&'
+      setLoading: '&',
+      hideCloseButton: '<?'
     }
   })
