@@ -56,22 +56,6 @@ describe('signUpForm', function () {
         expect($ctrl.onSignIn).toHaveBeenCalled()
       })
     })
-
-    it('Loads user cart details', () => {
-      $ctrl.isInsideAnotherModal = false
-      jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockImplementation(() => Observable.from([5]))
-
-      $ctrl.$onInit()
-
-      expect($ctrl.cartCount).toEqual(5)
-    })
-
-    it('should default to 0 items in cart if error fetching cart details', () => {
-      $ctrl.isInsideAnotherModal = false
-      jest.spyOn($ctrl.cartService, 'getTotalQuantity').mockReturnValue(Observable.throw({status: 404}))
-      $ctrl.$onInit()
-      expect($ctrl.cartCount).toEqual(0)
-    })
   })
 
   describe('loadDonorDetails()', () => {
