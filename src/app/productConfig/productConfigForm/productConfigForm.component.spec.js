@@ -39,6 +39,8 @@ describe('product config form component', function () {
       defaultFrequency: 'MON',
       updateQueryParam: jest.fn(),
       onStateChange: jest.fn(),
+      hideQuarterly: false,
+      hideAnnual: true,
       $window: { location: '', sessionStorage: { getItem: jest.fn() } }
     })
   }))
@@ -368,15 +370,15 @@ describe('product config form component', function () {
   })
 
   describe('frequencyOrder()', () => {
-    it.skip('orders frequency by name', () => {
+    it('orders frequency by name', () => {
       expect($ctrl.frequencyOrder({ name: 'NA' })).toEqual(0)
       expect($ctrl.frequencyOrder({ name: 'MON' })).toEqual(1)
-      if (!this.hideQuarterly) {
+      if (!$ctrl.hideQuarterly) {
         expect($ctrl.frequencyOrder({ name: 'QUARTERLY' })).toEqual(2)
       }
-      if (this.hideAnnual === true && !this.hideQuarterly) {
+      if ($ctrl.hideAnnual === true && !$ctrl.hideQuarterly) {
         expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(3)
-      } else if (this.hideAnnual === true) {
+      } else if ($ctrl.hideAnnual === true) {
         expect($ctrl.frequencyOrder({ name: 'ANNUAL' })).toEqual(2)
       }
     })
@@ -434,6 +436,7 @@ describe('product config form component', function () {
         }
         return false
       })
+      $ctrl.hideAnnual = false
       $ctrl.changeFrequency({ name: 'NA', selectAction: '/a', display: 'Single' })
       expect($ctrl.itemConfig.frequency).toEqual('Single')
     })
