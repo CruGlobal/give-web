@@ -61,6 +61,15 @@ describe('registerAccountModal', function () {
       expect($ctrl.checkDonorDetails).toHaveBeenCalled()
     })
 
+    it('should load donor details initially and reload when session changes', () => {
+      $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
+
+      $ctrl.$onInit()
+      expect($ctrl.checkDonorDetails).toHaveBeenCalledTimes(1)
+      $ctrl.sessionService.sessionSubject.next({})
+      expect($ctrl.checkDonorDetails).toHaveBeenCalledTimes(2)
+    })
+
     describe('with \'REGISTERED\' cortex-session', () => {
       beforeEach(() => {
         $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
