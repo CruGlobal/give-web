@@ -600,25 +600,4 @@ describe('contactInfo', function () {
       expect(self.controller.onSubmit).toHaveBeenCalledWith({ success: false })
     })
   })
-
-  describe('toggleSpouseFields', () => {
-    it('should toggle spouse field and remove all data', () => {
-      self.controller.showSpouseFields = true
-      self.controller.donorDetails = {
-        'spouse-name': {
-          'given-name': 'given-name',
-          'middle-initial': 'middle-initial',
-          'family-name': 'family-name',
-          suffix: 'suffix'
-        }
-      }
-      expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('given-name')
-      self.controller.toggleSpouseFields()
-      expect(self.controller.showSpouseFields).toEqual(false)
-      expect(self.controller.donorDetails['spouse-name']['given-name']).toEqual('')
-      expect(self.controller.donorDetails['spouse-name']['middle-initial']).toEqual('')
-      expect(self.controller.donorDetails['spouse-name']['family-name']).toEqual('')
-      expect(self.controller.donorDetails['spouse-name'].suffix).toEqual('')
-    })
-  })
 })

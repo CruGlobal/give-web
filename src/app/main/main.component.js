@@ -29,7 +29,7 @@ class MainController {
   }
 
   signOut () {
-    this.sessionService.signOut()
+    this.sessionService.signOut().subscribe()
   }
 
   signInModal () {

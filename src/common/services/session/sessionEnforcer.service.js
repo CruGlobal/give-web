@@ -98,9 +98,7 @@ const SessionEnforcerService = /* @ngInject */ function ($window, orderService, 
       })
 
       if (angular.isUndefined(modal)) {
-        const urlParams = new URLSearchParams($window.location.search)
-        const modalType = urlParams.get('returningFromOkta') === 'true' ? 'returning-from-okta' : (find(enforced, { mode: EnforcerModes.donor }) ? 'register-account' : 'sign-in')
-        modal = sessionModalService.open(modalType, {
+        modal = sessionModalService.open('register-account', {
           backdrop: 'static',
           keyboard: false
         }).result

@@ -22,9 +22,13 @@ describe('registerAccountModal', function () {
     }
     locals = {
       $element: [{ dataset: {} }],
-      orderService: { getDonorDetails: jest.fn() },
+      orderService: {
+        getDonorDetails: jest.fn(),
+        updateDonorDetails: jest.fn(),
+        addEmail: jest.fn()
+      },
       verificationService: { postDonorMatches: jest.fn() },
-      sessionService: { 
+      sessionService: {
         getRole: jest.fn(),
         isOktaRedirecting: jest.fn(),
         removeOktaRedirectIndicator: jest.fn(),
@@ -46,15 +50,15 @@ describe('registerAccountModal', function () {
 
   describe('$onInit()', () => {
     beforeEach(() => {
-      jest.spyOn($ctrl, 'getDonorDetails').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'checkDonorDetails').mockImplementation(() => {})
       jest.spyOn($ctrl, 'stateChanged').mockImplementation(() => {})
     })
 
     it('should get donor details', () => {
       $ctrl.$onInit()
-      expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
+      expect($ctrl.checkDonorDetails).not.toHaveBeenCalled()
       $rootScope.$broadcast(LoginOktaOnlyEvent)
-      expect($ctrl.getDonorDetails).toHaveBeenCalled()
+      expect($ctrl.checkDonorDetails).toHaveBeenCalled()
     })
 
     describe('with \'REGISTERED\' cortex-session', () => {
@@ -64,7 +68,7 @@ describe('registerAccountModal', function () {
       })
 
       it('proceeds to donor details', () => {
-        expect($ctrl.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.checkDonorDetails).toHaveBeenCalled()
         expect($ctrl.stateChanged).not.toHaveBeenCalled()
       })
     })
@@ -76,7 +80,7 @@ describe('registerAccountModal', function () {
       })
 
       it('proceeds to sign-in', () => {
-        expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
+        expect($ctrl.checkDonorDetails).not.toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('sign-in')
       })
 
@@ -84,13 +88,13 @@ describe('registerAccountModal', function () {
         $ctrl.sessionService.sessionSubject.next({
           firstName: 'Daniel'
         })
-        expect($ctrl.getDonorDetails).not.toHaveBeenCalled()
+        expect($ctrl.checkDonorDetails).not.toHaveBeenCalled()
 
         $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
         $ctrl.sessionService.sessionSubject.next({
           firstName: 'Daniel'
         })
-        expect($ctrl.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.checkDonorDetails).toHaveBeenCalled()
       })
     })
 
@@ -114,7 +118,7 @@ describe('registerAccountModal', function () {
       $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ }))
       $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
       $ctrl.$onInit()
-      $ctrl.getDonorDetails()
+      $ctrl.checkDonorDetails()
       $ctrl.postDonorMatches()
       expect($ctrl.getTotalQuantitySubscription.closed).toEqual(false)
       expect($ctrl.subscription.closed).toEqual(false)
@@ -128,15 +132,15 @@ describe('registerAccountModal', function () {
   })
 
   describe('onIdentitySuccess()', () => {
-    it('calls getDonorDetails', () => {
-      jest.spyOn($ctrl, 'getDonorDetails').mockImplementation(() => {})
+    it('calls checkDonorDetails', () => {
+      jest.spyOn($ctrl, 'checkDonorDetails').mockImplementation(() => {})
       $ctrl.onIdentitySuccess()
-      expect($ctrl.getDonorDetails).toHaveBeenCalled()
+      expect($ctrl.checkDonorDetails).toHaveBeenCalled()
     });
   })
 
   describe('onIdentityFailure()', () => {
-    it('calls getDonorDetails', () => {
+    it('calls checkDonorDetails', () => {
       jest.spyOn($ctrl.sessionService, 'removeOktaRedirectIndicator')
       $ctrl.onIdentityFailure()
       expect($ctrl.sessionService.removeOktaRedirectIndicator).toHaveBeenCalled()
@@ -169,16 +173,16 @@ describe('registerAccountModal', function () {
     })
   })
 
-  describe('getDonorDetails()', () => {
+  describe('checkDonorDetails()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'stateChanged').mockImplementation(() => {})
     })
 
-    describe('orderService.getDonorDetails success', () => {
+    describe('orderService.checkDonorDetails success', () => {
       describe('\'registration-state\' COMPLETED', () => {
         it('changes state to \'contact-info\'', () => {
           $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'COMPLETED' }))
-          $ctrl.getDonorDetails()
+          $ctrl.checkDonorDetails()
 
           expect($ctrl.modalTitle).toEqual('Checking your donor account')
           expect($ctrl.stateChanged).toHaveBeenCalledWith('loading')
@@ -189,9 +193,68 @@ describe('registerAccountModal', function () {
       })
 
       describe('\'registration-state\' NEW', () => {
+        const signUpDonorDetails = {
+          name: {
+            'given-name': 'First',
+            'family-name': 'Last'
+          },
+          'donor-type': 'Household',
+          email: 'first.last@cru.org',
+          phone: '111-222-3333',
+          mailingAddress: {
+            streetAddress: '123 First St',
+            locality: 'Orlando',
+            region: 'FL',
+            postalCode: '12345',
+            country: 'US'
+          }
+        }
+
+        const emailFormUri = '/emails/crugive'
+
+        beforeEach(() => {
+          $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({
+            'registration-state': 'NEW',
+            name: {
+              'given-name': 'Existing',
+              'family-name': 'Existing'
+            },
+            'donor-type': '',
+            email: 'existing.email@cru.org',
+            phone: '',
+            mailingAddress: {
+              streetAddress: '',
+              locality: '',
+              region: '',
+              postalCode: '',
+              country: 'CANADA'
+            },
+            emailFormUri
+          }))
+          $ctrl.orderService.addEmail.mockImplementation(() => Observable.of({}))
+        })
+
+        describe('with sign up details', () => {
+          it('saves sign up contact info merged with existing contact info', () => {
+            $ctrl.checkDonorDetails(signUpDonorDetails)
+
+            expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
+            expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
+            expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
+          })
+
+          it('remembers contact info after error', () => {
+            $ctrl.orderService.addEmail.mockImplementation(() => Observable.throw(new Error('Error adding email')))
+
+            $ctrl.checkDonorDetails(signUpDonorDetails)
+
+            expect($ctrl.signUpDonorDetails).toBe(signUpDonorDetails)
+            expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
+          })
+        })
+
         it('changes state to \'contact-info\'', () => {
-          $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'NEW' }))
-          $ctrl.getDonorDetails()
+          $ctrl.checkDonorDetails()
 
           expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
           expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
@@ -202,17 +265,17 @@ describe('registerAccountModal', function () {
     describe('\'registration-state\' FAILED', () => {
       it('changes state to \'failed-verification\'', () => {
         $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'FAILED' }))
-        $ctrl.getDonorDetails()
+        $ctrl.checkDonorDetails()
 
         expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('failed-verification')
       })
     })
 
-    describe('orderService.getDonorDetails failure', () => {
+    describe('orderService.checkDonorDetails failure', () => {
       it('changes state to \'contact-info\'', () => {
         $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.throw({}))
-        $ctrl.getDonorDetails()
+        $ctrl.checkDonorDetails()
 
         expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
@@ -250,10 +313,18 @@ describe('registerAccountModal', function () {
   })
 
   describe('stateChanged( state )', () => {
+    let originalWidth
+
     beforeEach(() => {
+      originalWidth = $ctrl.$window.innerWidth
+
       $ctrl.state = 'unknown'
       jest.spyOn($ctrl, 'setModalSize').mockImplementation(() => {})
       jest.spyOn($ctrl, 'scrollModalToTop').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      $ctrl.$window.innerWidth = originalWidth
     })
 
     it('should scroll to the top of the modal', () => {
@@ -273,23 +344,15 @@ describe('registerAccountModal', function () {
     it('changes to \'sign-up\' state', () => {
       $ctrl.stateChanged('sign-up')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('sign-up')
-    })
-
-    it('changes to \'sign-up-activation\' state', () => {
-      $ctrl.stateChanged('sign-up-activation')
-
-      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
-      expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
-      expect($ctrl.state).toEqual('sign-up-activation')
     })
 
     it('changes to \'contact-info\' state', () => {
       $ctrl.stateChanged('contact-info')
 
-      expect($ctrl.setModalSize).toHaveBeenCalledWith(undefined)
+      expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('contact-info')
     })
@@ -300,6 +363,61 @@ describe('registerAccountModal', function () {
       expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
       expect($ctrl.state).toEqual('failed-verification')
+    })
+
+    describe('when welcomeBack is true', () => {
+      beforeEach(() => {
+        $ctrl.welcomeBack = true
+      })
+
+      it('sets the sign-in modal size to large on wide screens', () => {
+        $ctrl.$window.innerWidth = 1200
+        $ctrl.stateChanged('sign-in')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('lg')
+      })
+
+      it('sets the sign-in modal size to small on narrow screens', () => {
+        $ctrl.stateChanged('sign-in')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      })
+
+      it('sets the sign-up modal size to small', () => {
+        $ctrl.stateChanged('sign-up')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      })
+
+      it('sets the contact-info modal size to medium', () => {
+        $ctrl.stateChanged('contact-info')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('md')
+      })
+    })
+
+    describe('when the screen is wide', () => {
+      beforeEach(() => {
+        $ctrl.$window.innerWidth = 1200
+      })
+
+      it('sets the sign-in modal size to small', () => {
+        $ctrl.stateChanged('sign-in')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      })
+
+      it('sets the sign-up modal size to small', () => {
+        $ctrl.stateChanged('sign-up')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('sm')
+      })
+
+      it('sets the contact-info modal size to large', () => {
+        $ctrl.stateChanged('contact-info')
+
+        expect($ctrl.setModalSize).toHaveBeenCalledWith('lg')
+      })
     })
   })
 
@@ -316,13 +434,6 @@ describe('registerAccountModal', function () {
 
       expect(modal.removeClass).toHaveBeenCalledWith('modal-sm modal-md modal-lg')
       expect(modal.addClass).toHaveBeenCalledWith('modal-sm')
-    })
-
-    it('sets size missing param', () => {
-      $ctrl.setModalSize()
-
-      expect(modal.removeClass).toHaveBeenCalledWith('modal-sm modal-md modal-lg')
-      expect(modal.addClass).not.toHaveBeenCalled()
     })
   })
 })

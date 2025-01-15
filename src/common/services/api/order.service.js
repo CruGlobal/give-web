@@ -419,6 +419,7 @@ class Order {
       storeSessionData['donor-type'] = donorDetails['donor-type']
       storeSessionData['organization-name'] = donorDetails['organization-name']
       storeSessionData['phone-number'] = donorDetails['phone-number']
+      storeSessionData.email = donorDetails.email
       this.sessionService.updateCheckoutSavedData(storeSessionData)
     }
   }

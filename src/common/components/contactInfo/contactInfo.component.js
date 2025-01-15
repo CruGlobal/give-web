@@ -42,7 +42,6 @@ class Step1Controller {
         country: 'US'
       }
     }
-    this.showSpouseFields = false
 
     this.requestRadioStation = !!(this.radioStationApiUrl)
 
@@ -116,7 +115,6 @@ class Step1Controller {
             'name', 'mailingAddress', 'donor-type', 'organization-name', 'phone-number', 'spouse-name'
           ]))
           if (!!this.donorDetails['spouse-name']['given-name'] || !!this.donorDetails['spouse-name']['family-name']) {
-            this.showSpouseFields = true
             this.spouseFieldsDisabled = false
           }
         }
@@ -185,16 +183,6 @@ class Step1Controller {
     } else {
       this.analyticsFactory.handleCheckoutFormErrors(this.detailsForm)
       this.onSubmit({ success: false })
-    }
-  }
-
-  toggleSpouseFields () {
-    this.showSpouseFields = !this.showSpouseFields
-    if (!this.showSpouseFields) {
-      this.donorDetails['spouse-name']['given-name'] = ''
-      this.donorDetails['spouse-name']['middle-initial'] = ''
-      this.donorDetails['spouse-name']['family-name'] = ''
-      this.donorDetails['spouse-name'].suffix = ''
     }
   }
 }

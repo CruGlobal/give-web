@@ -19,7 +19,7 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
         return false
       }
     }
-    type = angular.isDefined(type) ? type : 'sign-in'
+    type = angular.isDefined(type) ? type : 'register-account'
     options = angular.isObject(options) ? options : {}
     const modalOptions = angular.merge({}, {
       component: sessionModalComponent.name,
@@ -59,8 +59,10 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
   return {
     open: openModal,
     currentModal: () => currentModal,
-    signIn: (lastPurchaseId) => openModal('sign-in', {
-      resolve: { lastPurchaseId: () => lastPurchaseId },
+    signIn: (lastPurchaseId) => openModal('register-account', {
+      resolve: {
+        lastPurchaseId: () => lastPurchaseId
+      },
       openAnalyticsEvent: 'ga-sign-in',
       dismissAnalyticsEvent: 'ga-sign-in-exit'
     }).result,
@@ -70,9 +72,14 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       dismissAnalyticsEvent: 'ga-registration-exit'
     }).result,
     accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId }, size: 'sm' }).result,
-    registerAccount: () => openModal('register-account', { backdrop: 'static', keyboard: false }).result,
-    createAccount: () => openModal('sign-up', { backdrop: 'static', keyboard: false }).result,
-    returningFromOkta: () => openModal('returning-from-okta', { backdrop: 'static', keyboard: false }).result
+    registerAccount: () => openModal('register-account', {
+      resolve: {
+        welcomeBack: () => true
+      },
+      backdrop: 'static',
+      keyboard: false
+    }).result,
+    createAccount: () => openModal('sign-up', { backdrop: 'static', keyboard: false }).result
   }
 }
 

@@ -58,27 +58,4 @@ describe('signInModal', function () {
       expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled()
     })
   })
-
-  describe('stateChanged', () => {
-    it('updates the state value', () => {
-      $ctrl.stateChanged('newState')
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({state: 'newState'})
-    })
-  })
-
-  describe('getOktaUrl', () => {
-    it('should call sessionService getOktaUrl', () => {
-      jest.spyOn($ctrl.sessionService, 'getOktaUrl').mockReturnValue('URL')
-      expect($ctrl.sessionService.getOktaUrl).not.toHaveBeenCalled()
-      $ctrl.getOktaUrl()
-      expect($ctrl.sessionService.getOktaUrl).toHaveBeenCalled()
-    })
-  })
-
-  describe('stateChanged', () => {
-    it('updates the state value', () => {
-      $ctrl.stateChanged('newState')
-      expect($ctrl.onStateChange).toHaveBeenCalledWith({state: 'newState'})
-    })
-  })
 })

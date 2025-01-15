@@ -9,10 +9,17 @@ import { scrollModalToTop } from 'common/services/modalState.service'
 
 import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
-import signUpActivationModal from 'common/components/signUpActivationModal/signUpActivationModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import failedVerificationModal from 'common/components/failedVerificationModal/failedVerificationModal.component'
+
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/forkJoin'
+import 'rxjs/add/observable/of'
+import 'rxjs/add/operator/do'
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/switchMap'
+import merge from 'lodash/merge'
 
 const componentName = 'registerAccountModal'
 
@@ -43,7 +50,7 @@ class RegisterAccountModalController {
 
   $onInit () {
     this.$rootScope.$on(LoginOktaOnlyEvent, () => {
-      this.getDonorDetails()
+      this.checkDonorDetails()
     })
 
     // Ensure loading icon isn't rendered on screen.
@@ -58,7 +65,7 @@ class RegisterAccountModalController {
     // Step 1. Sign-In/Up (skipped if already Signed In)
     if (this.sessionService.getRole() === Roles.registered) {
       // Proceed to Step 2
-      this.getDonorDetails()
+      this.checkDonorDetails()
     } else {
       // Proceed to Step 1.
       this.stateChanged('sign-in')
@@ -68,7 +75,7 @@ class RegisterAccountModalController {
     this.subscription = this.sessionService.sessionSubject.subscribe(() => {
       if (this.sessionService.getRole() === Roles.registered) {
         // Proceed to Step 2
-        this.getDonorDetails()
+        this.checkDonorDetails()
       }
     })
   }
@@ -84,9 +91,25 @@ class RegisterAccountModalController {
     }
   }
 
+  // Called after the user finishes creating a new Okta account
+  onSignUpSuccess (signUpDonorDetails) {
+    this.checkDonorDetails(signUpDonorDetails)
+  }
+
+  // Called when the user requests to sign up from the sign in modal
+  onSignUp () {
+    this.stateChanged('sign-up')
+  }
+
+  onSignIn () {
+    this.stateChanged('sign-in')
+  }
+
   onIdentitySuccess () {
+    this.sessionService.removeOktaRedirectIndicator()
+
     // Success Sign-In/Up, Proceed to Step 2.
-    this.getDonorDetails()
+    this.checkDonorDetails()
   }
 
   onIdentityFailure () {
@@ -103,7 +126,7 @@ class RegisterAccountModalController {
     this.onSuccess()
   }
 
-  getDonorDetails () {
+  checkDonorDetails (signUpDonorDetails) {
     // Show loading state
     this.modalTitle = this.gettext('Checking your donor account')
     this.stateChanged('loading')
@@ -112,7 +135,27 @@ class RegisterAccountModalController {
     if (angular.isDefined(this.getDonorDetailsSubscription)) {
       this.getDonorDetailsSubscription.unsubscribe()
     }
-    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().subscribe({
+    this.getDonorDetailsSubscription = this.orderService.getDonorDetails().switchMap((donorDetails) => {
+      if (signUpDonorDetails && donorDetails['registration-state'] === 'NEW') {
+        // Save the contact info from signup
+        merge(donorDetails, signUpDonorDetails)
+
+        // Send each of the requests and pass donorDetails to the next step after the requests complete
+        return Observable.forkJoin([
+          this.orderService.updateDonorDetails(donorDetails),
+          this.orderService.addEmail(donorDetails.email, donorDetails.emailFormUri)
+        ]).map(() => donorDetails).do({
+          error: () => {
+            // If there was an error, save the donor details from sign up so that they will be added
+            // to the contact info form. The error handler below will change the step to contact-info.
+            this.signUpDonorDetails = signUpDonorDetails
+          }
+        })
+      }
+
+      // Pass donorDetails to the next step
+      return Observable.of(donorDetails)
+    }).subscribe({
       next: (donorDetails) => {
         // Workflow Complete if 'registration-state' is COMPLETED
         if (donorDetails['registration-state'] === 'COMPLETED') {
@@ -143,10 +186,19 @@ class RegisterAccountModalController {
 
   stateChanged (state) {
     this.element.dataset.state = state
-    if (state === 'sign-up' || state === 'sign-up-activation') {
+    if ((!this.welcomeBack && state === 'sign-in') || state === 'sign-up') {
+      // Use a small modal for sign in modals without a welcome back message and for sign up modals
+      // regardless of the screen size because they can't take advantage of the extra width
+      this.setModalSize('sm')
+    } else if (this.$window.innerWidth >= 1200) {
+      // Use a large modal on wide screens for other modals
+      this.setModalSize('lg')
+    } else if (state === 'contact-info') {
+      // Use a medium modal for contact info modals, even on narrow screens, because they need the extra width
       this.setModalSize('md')
     } else {
-      this.setModalSize(this.$window.screen.width >= 1200 ? 'lg' : state === 'contact-info' ? undefined : 'sm')
+      // Use a small modal for all other modals on narrow screens
+      this.setModalSize('sm')
     }
 
     this.state = state
@@ -160,9 +212,7 @@ class RegisterAccountModalController {
     // Modal size is unchangeable after initialization. This fetches the modal and changes the size classes.
     const modal = angular.element(document.getElementsByClassName('session-modal'))
     modal.removeClass('modal-sm modal-md modal-lg')
-    if (angular.isDefined(size)) {
-      modal.addClass(`modal-${size}`)
-    }
+    modal.addClass(`modal-${size}`)
   }
 }
 
@@ -174,7 +224,6 @@ export default angular
     sessionService.name,
     signInModal.name,
     signUpModal.name,
-    signUpActivationModal.name,
     userMatchModal.name,
     failedVerificationModal.name,
     verificationService.name
@@ -185,6 +234,9 @@ export default angular
     bindings: {
       firstName: '=',
       modalTitle: '=',
+      // If true, show the "Welcome back!" message in the header/sidebar
+      welcomeBack: '<?',
+      lastPurchaseId: '<',
       onSuccess: '&',
       onCancel: '&',
       setLoading: '&'

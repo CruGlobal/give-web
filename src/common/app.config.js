@@ -207,7 +207,6 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     MESSAGE_EXAMPLE: 'For example: stop my gift after 18 months, make this gift anonymous (note: please remove any messages to ministry or missionary to remain anonymous), etc.',
     YOUR_INFORMATION: 'Your information',
     YOUR_NAME: 'Your name',
-    SPOUSE_NAME: "Your Spouse's name",
     PAYMENT: 'Payment',
     CONTINUE: 'Continue',
     LOADING_ERROR_RETRY: 'There was an error loading your profile. You can use the retry button to try loading it again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
@@ -612,11 +611,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
     PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
     CHOOSE_RESOURCE: 'Choose a Resource',
-    NO_THANK_YOU: 'Thank you, but please do not send me the resources.',
-    SOMETHING_WENT_WRONG: 'Something went wrong. Please try again',
-    OKTA_EMAIL_ALREADY_EXISTS: 'The email address you used belongs to an existing Okta user.',
-    OKTA_ERROR_WHILE_SAVING_EMAIL: 'There was an error saving your email address. Make sure it was entered correctly.',
-    OKTA_ERROR_WHILE_SAVING_DATA: 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
+    NO_THANK_YOU: 'Thank you, but please do not send me the resources.'
   })
   $translateProvider.preferredLanguage('en')
 }

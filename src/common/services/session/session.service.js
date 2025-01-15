@@ -31,7 +31,6 @@ export const Sessions = {
 export const locationOnLogin = 'locationOnLogin'
 export const locationSearchOnLogin = 'locationSearchOnLogin'
 export const checkoutSavedDataCookieName = 'checkoutSavedData'
-export const createAccountDataCookieName = 'createAccountData'
 export const forcedUserToLogout = 'forcedUserToLogout'
 export const cookieDomain = '.cru.org'
 
@@ -78,10 +77,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     sessionSubject: sessionSubject,
     authClient: authClient, // Exposed for tests only
     oktaSignInWidgetDefaultOptions,
-    catchCreateAccountErrors: catchCreateAccountErrors,
     clearCheckoutSavedData: clearCheckoutSavedData,
-    checkCreateAccountStatus: checkCreateAccountStatus,
-    createAccount: createAccount,
     downgradeToGuest: downgradeToGuest,
     getRole: currentRole,
     getOktaUrl: getOktaUrl,
@@ -100,10 +96,24 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function handleOktaRedirect (lastPurchaseId) {
     if (authClient.isLoginRedirect()) {
-      return Observable.from(authClient.token.parseFromUrl().then((tokenResponse) => {
-        authClient.tokenManager.setTokens(tokenResponse.tokens)
-        return signIn(lastPurchaseId)
-      }))
+      return new Observable(observer => {
+        authClient.token.parseFromUrl()
+          .then((tokenResponse) => {
+            authClient.tokenManager.setTokens(tokenResponse.tokens)
+            return signIn(lastPurchaseId).subscribe({
+              next: result => {
+                observer.next(result)
+                observer.complete()
+              },
+              error: err => {
+                observer.error(err)
+              }
+            })
+          })
+          .catch(err => {
+            observer.error(err)
+          })
+      })
     } else {
       return Observable.of(false)
     }
@@ -111,192 +121,72 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
 
   function signIn (lastPurchaseId) {
     session.isOktaRedirecting = true
-    return Observable.from(internalSignIn(lastPurchaseId))
-      .map((response) => response ? response.data : response)
-      .finally(() => {
-        $rootScope.$broadcast(SignInEvent)
-      })
-  }
-
-  async function internalSignIn (lastPurchaseId) {
-    const isAuthenticated = await authClient.isAuthenticated()
-    if (!isAuthenticated) {
-      setRedirectingOnLogin()
-      return authClient.token.getWithRedirect()
-    }
-    const tokens = await authClient.tokenManager.getTokens()
-    const data = { access_token: tokens.accessToken.accessToken }
-    // Only send lastPurchaseId if present and currently public
-    if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
-      data.lastPurchaseId = lastPurchaseId
-    }
-    // Add marketing search queries back to URL once returned from Okta
-    const locationSearch = $window.sessionStorage.getItem(locationSearchOnLogin) || ''
-    if (locationSearch) {
-      // eslint-disable-next-line
-      const searchQueries = locationSearch.split(/\?|\&/)
-      $window.sessionStorage.removeItem(locationSearchOnLogin)
-      searchQueries.forEach((searchQuery) => {
-        const [search, value] = searchQuery.split('=')
-        if (search && value) {
-          $location.search(search, value)
-        }
-      })
-    }
-    removeOktaRedirectIndicator()
-    return $http({
-      method: 'POST',
-      url: oktaApiUrl('login'),
-      data: data,
-      withCredentials: true
+    return new Observable(observer => {
+      internalSignIn(lastPurchaseId)
+        .finally(() => {
+          $rootScope.$broadcast(SignInEvent)
+        })
+        .subscribe({
+          next: response => {
+            const data = response ? response.data : response
+            observer.next(data)
+            observer.complete()
+          },
+          error: err => {
+            observer.error(err)
+          }
+        })
     })
   }
 
-  async function createAccount (email, firstName, lastName, isTest = false) {
-    const isAuthenticated = await authClient.isAuthenticated()
-    if (currentRole() !== Roles.public || isAuthenticated) {
-      const email = isAuthenticated && (await authClient.getUser()).email
-      return {
-        status: 'error',
-        data: [`Already logged in to Okta${email ? ` with email: ${email}` : ''}. You will be redirected to the Sign In page in a few seconds.`],
-        redirectToSignIn: true
-      }
-    }
-
-    const data = { }
-
-    if (angular.isDefined(email)) {
-      data.email = email
-    }
-    if (angular.isDefined(firstName)) {
-      data.first_name = firstName
-    }
-    if (angular.isDefined(lastName)) {
-      data.last_name = lastName
-    }
-    const dataAsString = JSON.stringify(data)
-    try {
-      const createAccount = await $http({
-        method: 'POST',
-        url: oktaApiUrl('create'),
-        data: data,
-        withCredentials: true
-      })
-
-      $cookies.put(
-        createAccountDataCookieName,
-        dataAsString,
-        {
-          path: '/',
-          domain: isTest ? '' : cookieDomain,
-          expires: moment().add(2, 'hours').toISOString()
-        }
-      )
-      return {
-        status: 'success',
-        data: createAccount
-      }
-    } catch (error) {
-      return await catchCreateAccountErrors(error, dataAsString, email, isTest)
-    }
-  }
-
-  async function catchCreateAccountErrors (errorObject, dataAsString, email, isTest) {
-    try {
-      if (errorObject.status === 401) {
-        throw new Error(errorObject.message)
-      }
-      const errors = errorObject?.data?.error
-        ? errorObject.data.error.split(',')
-            .filter((str) => str.includes(':errorSummary=>') && !str.includes('Api validation failed: login'))
-            .map((str) => str.match(/"([^"]+)"/)[1].replace(/["]/g, ''))
-        : errorObject
-
-      let checkIfAccountIsPending = false
-
-      const formattedErrors = errors.map((error) => {
-        switch (error) {
-          case 'login: An object with this field already exists in the current organization':
-            checkIfAccountIsPending = true
-            return 'OKTA_EMAIL_ALREADY_EXISTS'
-          case 'email: Does not match required pattern':
-            return 'OKTA_ERROR_WHILE_SAVING_EMAIL'
-          case 'Something went wrong. Please try again':
-            return 'OKTA_ERROR_WHILE_SAVING_DATA'
-          default:
-            return error
-        };
-      })
-      if (!checkIfAccountIsPending) {
-        return {
-          status: 'error',
-          data: formattedErrors,
-          accountPending: false
-        }
-      } else {
-        const accountPending = await checkCreateAccountStatus(email)
-        if (accountPending?.data?.status !== 'PROVISIONED') {
-          return {
-            status: 'error',
-            data: formattedErrors,
-            accountPending: false
+  function internalSignIn (lastPurchaseId) {
+    return new Observable(observer => {
+      authClient.isAuthenticated()
+        .then(isAuthenticated => {
+          if (!isAuthenticated) {
+            setRedirectingOnLogin()
+            return authClient.token.getWithRedirect()
           }
-        } else {
-          $cookies.put(
-            createAccountDataCookieName,
-            dataAsString,
-            {
-              path: '/',
-              domain: isTest ? '' : cookieDomain,
-              expires: moment().add(2, 'hours').toISOString()
-            }
-          )
-          return {
-            status: 'error',
-            data: formattedErrors,
-            accountPending: true
+          return authClient.tokenManager.getTokens()
+        })
+        .then(tokens => {
+          if (!tokens) {
+            return
           }
-        }
-      }
-    } catch {
-      return {
-        status: 'error',
-        data: ['SOMETHING_WENT_WRONG']
-      }
-    }
-  }
-
-  async function checkCreateAccountStatus (email) {
-    const isAuthenticated = await authClient.isAuthenticated()
-    if (currentRole() !== Roles.public || isAuthenticated) {
-      return 'Already logged in.'
-    }
-    try {
-      const createAccountStatus = await $http({
-        method: 'GET',
-        url: `${oktaApiUrl('status')}?email=${encodeURIComponent(email)}`,
-        withCredentials: true
-      })
-      return {
-        status: 'success',
-        data: createAccountStatus.data
-      }
-    } catch (err) {
-      try {
-        if (err.status === 401) {
-          throw new Error()
-        }
-        return {
-          status: 'error',
-          data: err?.data?.error ?? 'SOMETHING_WENT_WRONG'
-        }
-      } catch {
-        return {
-          status: 'error',
-          data: ['SOMETHING_WENT_WRONG']
-        }
-      }
-    }
+          const data = { access_token: tokens.accessToken.accessToken }
+          // Only send lastPurchaseId if present and currently public
+          if (angular.isDefined(lastPurchaseId) && currentRole() === Roles.public) {
+            data.lastPurchaseId = lastPurchaseId
+          }
+          // Add marketing search queries back to URL once returned from Okta
+          const locationSearch = $window.sessionStorage.getItem(locationSearchOnLogin) || ''
+          if (locationSearch) {
+          // eslint-disable-next-line
+            const searchQueries = locationSearch.split(/\?|\&/);
+            $window.sessionStorage.removeItem(locationSearchOnLogin)
+            searchQueries.forEach((searchQuery) => {
+              const [search, value] = searchQuery.split('=')
+              if (search && value) {
+                $location.search(search, value)
+              }
+            })
+          }
+          removeOktaRedirectIndicator()
+          return $http({
+            method: 'POST',
+            url: oktaApiUrl('login'),
+            data: data,
+            withCredentials: true
+          })
+        })
+        .then(response => {
+          observer.next(response)
+          observer.complete()
+        })
+        .catch(err => {
+          observer.error(err)
+        })
+    })
   }
 
   function oktaIsUserAuthenticated () {
@@ -304,42 +194,58 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   }
 
   function signOut (redirectHome = true) {
-    return Observable.from(internalSignOut(redirectHome))
+    return new Observable(observer => {
+      internalSignOut(redirectHome).subscribe({
+        next: response => {
+          observer.next(response)
+          observer.complete()
+        },
+        error: err => {
+          observer.error(err)
+        }
+      })
+    })
   }
 
-  async function internalSignOut (redirectHome = true) {
-    const oktaSignOut = async () => {
-      // Add session data so on return to page we can show an explanation to the user about what happened.
-      if (!redirectHome) {
-        $window.sessionStorage.setItem(forcedUserToLogout, true)
-        // Save location we need to redirect the user back to
-        $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
+  function internalSignOut (redirectHome = true) {
+    return new Observable(observer => {
+      const oktaSignOut = () => {
+        // Add session data so on return to page we can show an explanation to the user about what happened.
+        if (!redirectHome) {
+          $window.sessionStorage.setItem(forcedUserToLogout, true)
+          // Save location we need to redirect the user back to
+          $window.sessionStorage.setItem(locationOnLogin, $window.location.href)
+        }
+        return authClient.signOut({
+          postLogoutRedirectUri: redirectHome ? null : `${envService.read('oktaReferrer')}/sign-out.html`
+        })
       }
-      return await authClient.signOut({
-        postLogoutRedirectUri: redirectHome ? null : `${envService.read('oktaReferrer')}/sign-out.html`
-      })
-    }
 
-    try {
-      await $http({
+      $http({
         method: 'DELETE',
         url: oktaApiUrl('logout'),
         withCredentials: true
-      })
-      await clearCheckoutSavedData()
-      // Use revokeAccessToken, revokeRefreshToken to ensure authClient is cleared before logging out entirely.
-      await authClient.revokeAccessToken()
-      await authClient.revokeRefreshToken()
-
-      return await oktaSignOut()
-    } catch {
-      try {
-        return await oktaSignOut()
-      } catch {
-        $window.location.href = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
-      }
-    }
-  }
+      }).then(() => clearCheckoutSavedData())
+        // Use revokeAccessToken, revokeRefreshToken to ensure authClient is cleared before logging out entirely.
+        .then(() => authClient.revokeAccessToken())
+        .then(() => authClient.revokeRefreshToken())
+        .then(() => oktaSignOut())
+        .then(response => {
+          observer.next(response)
+          observer.complete()
+        })
+        .catch(() => {
+          // If the DELETE request fails, try to sign out of Okta
+          oktaSignOut().then(response => {
+            observer.next(response)
+            observer.complete()
+          }).catch(() => {
+            // If Okta sign out fails, redirect to Okta sign out page
+            $window.location.href = `${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`
+          })
+        })
+    })
+  };
 
   function signOutWithoutRedirectToOkta () {
     // ** This function requires third-party cookies **

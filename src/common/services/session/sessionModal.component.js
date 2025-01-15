@@ -1,9 +1,6 @@
 import angular from 'angular'
 
-import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
-import signUpActivationModal from 'common/components/signUpActivationModal/signUpActivationModal.component'
-import returningFromOktaModal from 'common/components/returningFromOktaModal/returningFromOktaModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component'
@@ -38,6 +35,7 @@ class SessionModalController {
       this.firstName = session.first_name
     })
     this.stateChanged(this.resolve.state)
+    this.welcomeBack = this.resolve.welcomeBack
     this.lastPurchaseId = this.resolve.lastPurchaseId
   }
 
@@ -50,15 +48,8 @@ class SessionModalController {
     this.scrollModalToTop()
   }
 
-  onSignInSuccess () {
-    this.sessionService.removeOktaRedirectIndicator()
-    const $injector = this.$injector
-    if (!$injector.has('sessionService')) {
-      $injector.loadNewModules(['sessionService'])
-    }
-    this.$document[0].body.dispatchEvent(
-      new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-    this.close()
+  onSignIn () {
+    this.stateChanged('register-account')
   }
 
   onSignUpSuccess () {
@@ -85,18 +76,11 @@ class SessionModalController {
   setLoading (loading) {
     this.isLoading = !!loading
   }
-
-  onSignUpActivationSuccess () {
-    this.stateChanged('register-account')
-  }
 }
 
 export default angular
   .module(componentName, [
-    signInModal.name,
     signUpModal.name,
-    signUpActivationModal.name,
-    returningFromOktaModal.name,
     userMatchModal.name,
     contactInfoModal.name,
     accountBenefitsModal.name,

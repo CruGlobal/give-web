@@ -66,7 +66,6 @@ class SignInButtonController {
         this.errorMessage = 'generic'
       }
       this.sessionService.removeLocationOnLogin()
-      this.$scope.$apply()
       this.onFailure()
     })
   }

@@ -259,7 +259,7 @@ describe('cart service', () => {
           ).respond(200)
         })
 
-        it('should delete cookies and addItem to cart when not authenicated', () => {
+        it('should delete cookies and addItem to cart when not authenticated', () => {
           jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([false]))
           jest.spyOn(self.cartService, '_addItem')
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()

@@ -1,7 +1,17 @@
-#okta-sign-in {
+#okta-sign-in.main-container {
+  border: none;
+  box-shadow: none;
   margin: 0;
 
   .okta-sign-in-header {
+    display: none;
+  }
+
+  .auth-content {
+    padding-bottom: 0;
+  }
+
+  .okta-form-title {
     display: none;
   }
 }
@@ -15,5 +25,25 @@ sign-up-modal {
 
   .back-to-sign-in {
     margin-top: 20px;
+  }
+}
+
+// Back button
+#okta-sign-in.auth-container {
+  .o-form-button-bar {
+    display: flex;
+    gap: 50px;
+    justify-content: space-between;
+    align-items: center;
+
+    #backButton {
+      width: 100%;
+    }
+
+    .button.button-primary {
+      height: auto;
+      @extend .btn;
+      @extend .btn-primary;
+    }
   }
 }

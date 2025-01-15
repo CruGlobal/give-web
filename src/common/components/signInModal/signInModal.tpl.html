@@ -1,11 +1,10 @@
 <div ng-class="{'modal-body': !$ctrl.isInsideAnotherModal }">
   <div class="content">
-    <sign-in-form 
+    <sign-in-form
       on-success="$ctrl.onSuccess()"
       on-failure="$ctrl.onFailure()"
-      last-purchase-id="$ctrl.lastPurchaseId" 
-      on-state-change="$ctrl.stateChanged(state)"
-      on-sign-up-with-okta="$ctrl.stateChanged('sign-up')"
+      last-purchase-id="$ctrl.lastPurchaseId"
+      on-sign-up-with-okta="$ctrl.onSignUp()"
     />
-</div>
+  </div>
 </div>
