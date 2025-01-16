@@ -68,23 +68,23 @@ describe('signOut', function () {
       jest.spyOn($ctrl.sessionService, 'removeLocationOnLogin')
     })
 
-    it('redirects to prior page if hasLocationOnLogin() returns value', () => {
+    it('redirects to prior page if getLocationOnLogin() returns value', () => {
       const priorLocation = 'https://give-stage2.cru.org/search-results.html'
-      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue(priorLocation)
+      jest.spyOn($ctrl.sessionService, 'getLocationOnLogin').mockReturnValue(priorLocation)
       $ctrl.showRedirectingLoadingIcon = false
       $ctrl.redirectToLocationPriorToSignOut()
       expect($ctrl.showRedirectingLoadingIcon).toEqual(true)
-      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalled()
+      expect($ctrl.sessionService.getLocationOnLogin).toHaveBeenCalled()
       expect($ctrl.sessionService.removeLocationOnLogin).toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual(priorLocation)
     })
 
-    it('redirects to home page if hasLocationOnLogin() returns no value', () => {
-      jest.spyOn($ctrl.sessionService, 'hasLocationOnLogin').mockReturnValue(undefined)
+    it('redirects to home page if getLocationOnLogin() returns no value', () => {
+      jest.spyOn($ctrl.sessionService, 'getLocationOnLogin').mockReturnValue(undefined)
       $ctrl.showRedirectingLoadingIcon = false
       $ctrl.redirectToLocationPriorToSignOut()
       expect($ctrl.showRedirectingLoadingIcon).toEqual(true)
-      expect($ctrl.sessionService.hasLocationOnLogin).toHaveBeenCalled()
+      expect($ctrl.sessionService.getLocationOnLogin).toHaveBeenCalled()
       expect($ctrl.sessionService.removeLocationOnLogin).not.toHaveBeenCalled()
       expect($ctrl.$window.location.href).toEqual('/')
     })

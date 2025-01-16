@@ -62,20 +62,15 @@ class RegisterAccountModalController {
       error: () => { this.cartCount = 0 }
     })
 
-    // Step 1. Sign-In/Up (skipped if already Signed In)
-    if (this.sessionService.getRole() === Roles.registered) {
-      // Proceed to Step 2
-      this.checkDonorDetails()
-    } else {
-      // Proceed to Step 1.
-      this.stateChanged('sign-in')
-    }
-
     // If there is a session change, update the state if needed.
     this.subscription = this.sessionService.sessionSubject.subscribe(() => {
+      // Step 1. Sign-In/Up (skipped if already Signed In)
       if (this.sessionService.getRole() === Roles.registered) {
         // Proceed to Step 2
         this.checkDonorDetails()
+      } else {
+        // Proceed to Step 1.
+        this.stateChanged('sign-in')
       }
     })
   }
@@ -165,8 +160,6 @@ class RegisterAccountModalController {
         } else {
           // Proceed to Step 3
           this.stateChanged('contact-info')
-          // Ensure modal is large enough to display contact info form
-          this.setModalSize('md')
         }
       },
       error: () => this.stateChanged('contact-info') // Error fetching donor details, proceed to step 3.
