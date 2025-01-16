@@ -78,6 +78,13 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       },
       backdrop: 'static',
       keyboard: false
+    }).result,
+    nonDismissibleRegisterAccount: () => openModal('register-account', {
+      resolve: {
+        hideCloseButton: () => true
+      },
+      backdrop: 'static',
+      keyboard: false
     }).result
   }
 }

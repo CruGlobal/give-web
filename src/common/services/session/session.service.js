@@ -48,7 +48,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     baseUrl: envService.read('oktaUrl'),
     clientId: envService.read('oktaClientId'),
     issuer: envService.read('oktaUrl'),
-    redirectUri: `${window.location.origin}/sign-in.html`,
+    redirectUri: `${window.location.origin}/okta-auth-callback.html`,
     scopes: ['openid', 'email', 'profile'],
     authParams: {
       grantType: ['refresh_token', 'authorization_code'],
@@ -82,7 +82,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
     getRole: currentRole,
     getOktaUrl: getOktaUrl,
     handleOktaRedirect: handleOktaRedirect,
-    hasLocationOnLogin: hasLocationOnLogin,
+    getLocationOnLogin: getLocationOnLogin,
     isOktaRedirecting: isOktaRedirecting,
     oktaIsUserAuthenticated: oktaIsUserAuthenticated,
     updateCurrentProfile: updateCurrentProfile,
@@ -302,7 +302,7 @@ const session = /* @ngInject */ function ($cookies, $rootScope, $http, $timeout,
   function removeLocationOnLogin () {
     $window.sessionStorage.removeItem(locationOnLogin)
   }
-  function hasLocationOnLogin () {
+  function getLocationOnLogin () {
     return $window.sessionStorage.getItem(locationOnLogin)
   }
   function setRedirectingOnLogin () {

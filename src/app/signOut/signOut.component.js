@@ -26,7 +26,7 @@ class SignOutController {
 
   redirectToLocationPriorToSignOut () {
     this.showRedirectingLoadingIcon = true
-    const locationToReturnUser = this.sessionService.hasLocationOnLogin()
+    const locationToReturnUser = this.sessionService.getLocationOnLogin()
     if (locationToReturnUser) {
       this.sessionService.removeLocationOnLogin()
       this.$window.location.href = locationToReturnUser

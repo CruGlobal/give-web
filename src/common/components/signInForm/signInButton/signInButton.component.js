@@ -50,8 +50,9 @@ class SignInButtonController {
         $injector.loadNewModules(['sessionService'])
       }
       this.$document[0].body.dispatchEvent(
-        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-      this.onSuccess()
+        new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } })
+      )
+      // Don't call this.onSuccess() here, because we redirect the user to Okta
     }, error => {
       this.isSigningIn = false
       if (error && error.config && error.config.data && error.config.data.password) {
