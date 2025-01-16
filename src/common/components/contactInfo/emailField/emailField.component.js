@@ -12,6 +12,6 @@ export default angular
     templateUrl: template,
     bindings: {
       donorDetails: '<',
-      detailsForm: '<',
+      detailsForm: '<'
     }
   })

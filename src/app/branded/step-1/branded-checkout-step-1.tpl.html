@@ -8,19 +8,19 @@
     <loading ng-if="$ctrl.loadingProductConfig">
       <translate>Loading gift details...</translate>
     </loading>
-    <product-config-form code="$ctrl.code"
-                         is-edit="$ctrl.isEdit"
-                         item-config="$ctrl.itemConfig"
-                         default-frequency="$ctrl.defaultFrequency"
-                         uri="$ctrl.item.uri"
-                         submitted="$ctrl.submitted"
-                         hide-quarterly="$ctrl.hideQuarterly"
-                         hide-annual="$ctrl.hideAnnual"
-                         on-state-change="$ctrl.onGiftConfigStateChange(state)"
-                         disable-session-restart="true"
-                         ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
-                         use-v3="$ctrl.useV3"
-                         >
+    <product-config-form
+      code="$ctrl.code"
+      is-edit="$ctrl.isEdit"
+      item-config="$ctrl.itemConfig"
+      default-frequency="$ctrl.defaultFrequency"
+      uri="$ctrl.item.uri"
+      submitted="$ctrl.submitted"
+      hide-quarterly="$ctrl.hideQuarterly"
+      hide-annual="$ctrl.hideAnnual"
+      on-state-change="$ctrl.onGiftConfigStateChange(state)"
+      disable-session-restart="true"
+      ng-if="!$ctrl.loadingProductConfig && !$ctrl.errorLoadingProductConfig"
+      use-v3="$ctrl.useV3">
     </product-config-form>
     <div ng-if="$ctrl.errorLoadingProductConfig" class="alert alert-danger" role="alert">
       <p translate='LOADING_ERROR' translate-values="{loadData: '$ctrl.loadData()'}" translate-compile></p>
@@ -92,7 +92,7 @@
     <div class="panel-body text-right">
       <div class="checkout-cta pull-right" ng-if="$ctrl.useV3 === 'true'">
        <recaptcha-wrapper
-              action="'branded_submit'"
+              action="'branded_checkout'"
               on-success="$ctrl.submit"
               component-instance="$ctrl"
               button-id="'submitOrderButton'"

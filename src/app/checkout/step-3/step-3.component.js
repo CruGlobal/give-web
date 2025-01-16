@@ -13,9 +13,11 @@ import { SignInEvent } from 'common/services/session/session.service'
 import capitalizeFilter from 'common/filters/capitalize.filter'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
-import analyticsFactory from 'app/analytics/analytics.factory'
-import template from './step-3.tpl.html'
 import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
+
+import template from './step-3.tpl.html'
+
+import analyticsFactory from 'app/analytics/analytics.factory'
 import { submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
 
 const componentName = 'checkoutStep3'

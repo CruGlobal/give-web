@@ -42,7 +42,7 @@ export const RecaptchaWrapper = ({
 }: RecaptchaWrapperProps): JSX.Element => {
   const recaptchaKey = envService.read('recaptchaKey')
 
-  // Because The onSuccess callback is called by a React component, AngularJS doesn't know that an event happened and doesn't know it needs to rerender. We have to use $apply to ensure that AngularJS rerenders after the event handlers return.
+  // Because the onSuccess callback is called by a React component, AngularJS doesn't know that an event happened and doesn't know it needs to rerender. We have to use $apply to ensure that AngularJS rerenders after the event handlers return.
   const onSuccessWrapped = (() => {
     $rootScope.$apply(() => {
       onSuccess.call(componentInstance)
