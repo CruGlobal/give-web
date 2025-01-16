@@ -30,9 +30,8 @@
             <a id="editCartButton" ng-href="{{$ctrl.buildCartUrl()}}" class="btn btn-subtle mt" translate>Edit Cart</a>
             <recaptcha-wrapper
                 ng-if="$ctrl.showSubmitBtn"
-                action="'submit_gift'"
+                action="'checkout'"
                 on-success="$ctrl.onSubmit"
-                on-failure="$ctrl.handleRecaptchaFailure"
                 component-instance="$ctrl.componentReference"
                 button-id="'submitGiftButton'"
                 button-type="'submit'"

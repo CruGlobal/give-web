@@ -8,7 +8,7 @@
     <loading ng-if="$ctrl.loadingProductConfig">
       <translate>Loading gift details...</translate>
     </loading>
-    <product-config-form 
+    <product-config-form
       code="$ctrl.code"
       is-edit="$ctrl.isEdit"
       item-config="$ctrl.itemConfig"
@@ -34,7 +34,6 @@
         on-submit="$ctrl.onContactInfoSubmit(success)"
         donor-details="$ctrl.donorDetails"
         radio-station-api-url="$ctrl.radioStationApiUrl"
-        radio-station-radius="$ctrl.radioStationRadius"
         use-v3="$ctrl.useV3">
       </contact-info>
     </div>
@@ -56,9 +55,8 @@
     <div class="panel-body text-right">
       <div class="checkout-cta pull-right" ng-if="$ctrl.useV3 === 'true'">
        <recaptcha-wrapper
-              action="'branded_submit'"
+              action="'branded_checkout'"
               on-success="$ctrl.submit"
-              on-failure="$ctrl.handleRecaptchaFailure"
               component-instance="$ctrl"
               button-id="'submitOrderButton'"
               button-type="'submit'"

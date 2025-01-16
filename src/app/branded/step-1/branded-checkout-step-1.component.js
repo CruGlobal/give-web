@@ -251,19 +251,6 @@ class BrandedCheckoutStep1Controller {
       })
   }
 
-  handleRecaptchaFailure () {
-    this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-    this.submittingOrder = false
-    this.loadingAndSubmitting = false
-    this.onSubmittingOrder({ value: false })
-
-    this.loadCart()
-
-    this.onSubmitted()
-    this.submissionError = 'generic error'
-    this.$window.scrollTo(0, 0)
-  }
-
   canSubmitOrder () {
     return !this.submittingOrder
   }
@@ -297,7 +284,6 @@ export default angular
       next: '&',
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
-      radioStationRadius: '<',
       onSubmittingOrder: '&',
       onSubmitted: '&',
       useV3: '<',

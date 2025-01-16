@@ -857,7 +857,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase', (done) => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': '' }
+        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': '', 'recaptcha-token': null, 'recaptcha-action': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -872,7 +872,7 @@ describe('order service', () => {
     it('should send a request to finalize the purchase and with a CVV', (done) => {
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'security-code': '123', 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': '' }
+        { 'security-code': '123', 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': '', 'recaptcha-token': null, 'recaptcha-action': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit('123')
@@ -889,7 +889,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'cover-cc-fees': true, 'radio-call-letters': null, 'tsys-device': '' }
+        { 'cover-cc-fees': true, 'radio-call-letters': null, 'tsys-device': '', 'recaptcha-token': null, 'recaptcha-action': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -906,7 +906,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'cover-cc-fees': false, 'radio-call-letters': 'WXYZ', 'tsys-device': '' }
+        { 'cover-cc-fees': false, 'radio-call-letters': 'WXYZ', 'tsys-device': '', 'recaptcha-token': null, 'recaptcha-action': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -923,7 +923,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': 'test-env' }
+        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device': 'test-env', 'recaptcha-token': null, 'recaptcha-action': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -940,7 +940,7 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device':'' }
+        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device':'', 'recaptcha-token': null, 'recaptcha-action': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
@@ -957,12 +957,53 @@ describe('order service', () => {
 
       self.$httpBackend.expectPOST(
         'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
-        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device':'' }
+        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device':'', 'recaptcha-token': null, 'recaptcha-action': null }
       ).respond(200, purchaseResponse)
 
       self.orderService.submit()
         .subscribe((data) => {
           expect(data).toEqual(purchaseResponse)
+          done()
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should send the recaptcha data to the server', (done) => {
+      const token = 'token'
+      const action = 'action'
+      self.$window.sessionStorage.setItem('recaptchaToken', token)
+      self.$window.sessionStorage.setItem('recaptchaAction', action)
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
+        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device':'', 'recaptcha-token': token, 'recaptcha-action': action }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(data).toEqual(purchaseResponse)
+          done()
+        })
+
+      self.$httpBackend.flush()
+    })
+
+    it('should clear the recaptcha data from session storage', (done) => {
+      const token = 'token'
+      const action = 'action'
+      self.$window.sessionStorage.setItem('recaptchaToken', token)
+      self.$window.sessionStorage.setItem('recaptchaAction', action)
+
+      self.$httpBackend.expectPOST(
+        'https://give-stage2.cru.org/cortex/enhancedpurchases/orders/crugive/me3gkzrrmm4dillegq4tiljugmztillbmq4weljqga3wezrwmq3tozjwmu=?FollowLocation=true',
+        { 'cover-cc-fees': false, 'radio-call-letters': null, 'tsys-device':'', 'recaptcha-token': token, 'recaptcha-action': action }
+      ).respond(200, purchaseResponse)
+
+      self.orderService.submit()
+        .subscribe((data) => {
+          expect(self.$window.sessionStorage.getItem('recaptchaToken')).toEqual(null)
+          expect(self.$window.sessionStorage.getItem('recaptchaAction')).toEqual(null)
           done()
         })
 
@@ -1085,7 +1126,7 @@ describe('order service', () => {
 
   describe('storeRadioStationData', () => {
     it('should save the choice of radio station', () => {
-      self.orderService.storeRadioStationData({ Description: 'Radio Station', MediaId: 'WXYZ' })
+      self.orderService.storeRadioStationData({ WXYZ: 'Radio Station' })
       expect(self.$window.sessionStorage.getItem('radioStationName')).toEqual('Radio Station')
       expect(self.$window.sessionStorage.getItem('radioStationCallLetters')).toEqual('WXYZ')
     })

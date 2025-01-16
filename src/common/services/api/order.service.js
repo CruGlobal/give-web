@@ -20,6 +20,7 @@ import cartService from './cart.service'
 import tsysService from './tsys.service'
 import hateoasHelperService from 'common/services/hateoasHelper.service'
 import sessionService, { Roles } from 'common/services/session/session.service'
+import { datadogRum } from '@datadog/browser-rum'
 
 import formatAddressForCortex from '../addressHelpers/formatAddressForCortex'
 import formatAddressForTemplate from '../addressHelpers/formatAddressForTemplate'
@@ -313,6 +314,8 @@ class Order {
         postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
         postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()
         postData['tsys-device'] = this.tsysService.getDevice()
+        postData['recaptcha-token'] = this.sessionStorage.getItem('recaptchaToken')
+        postData['recaptcha-action'] = this.sessionStorage.getItem('recaptchaAction')
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'submitenhancedpurchaseaction'),
           data: postData,
@@ -322,6 +325,8 @@ class Order {
       .do((data) => {
         this.storeLastPurchaseLink(data.self.uri)
         this.cartService.setCartCountCookie(0)
+        this.sessionStorage.removeItem('recaptchaToken')
+        this.sessionStorage.removeItem('recaptchaAction')
       })
   }
 
@@ -377,8 +382,8 @@ class Order {
   }
 
   storeRadioStationData (radioStationData) {
-    this.sessionStorage.setItem('radioStationName', radioStationData.Description)
-    this.sessionStorage.setItem('radioStationCallLetters', radioStationData.MediaId)
+    this.sessionStorage.setItem('radioStationName', Object.values(radioStationData)[0])
+    this.sessionStorage.setItem('radioStationCallLetters', Object.keys(radioStationData)[0])
   }
 
   retrieveRadioStationName () {
@@ -441,6 +446,7 @@ class Order {
           error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
         }
         this.$log.error('Error submitting purchase:', error)
+        datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status }) // here in order to show up in Error Tracking in DD
         controller.onSubmitted()
         controller.submissionErrorStatus = error.status
         controller.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
@@ -449,7 +455,7 @@ class Order {
       .finally(() => {
         controller.submittingOrder = false
         controller.onSubmittingOrder({ value: false })
-      });
+      })
   }
 }
 

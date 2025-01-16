@@ -1,6 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
-import module, { submitOrderEvent, recaptchaFailedEvent } from './cart-summary.component'
+import module, { submitOrderEvent } from './cart-summary.component'
 
 describe('checkout', function () {
   describe('cart summary', function () {
@@ -34,14 +34,6 @@ describe('checkout', function () {
         jest.spyOn(self.controller.$rootScope, '$emit').mockImplementation(() => {})
         self.controller.onSubmit()
         expect(self.controller.$rootScope.$emit).toHaveBeenCalledWith(submitOrderEvent)
-      })
-    })
-
-    describe('handleRecaptchaFailure', () => {
-      it('should emit an event', () => {
-        jest.spyOn(self.controller.$rootScope, '$emit').mockImplementation(() => {})
-        self.controller.handleRecaptchaFailure()
-        expect(self.controller.$rootScope.$emit).toHaveBeenCalledWith(recaptchaFailedEvent)
       })
     })
   })

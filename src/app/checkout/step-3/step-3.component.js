@@ -18,7 +18,7 @@ import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
 import template from './step-3.tpl.html'
 
 import analyticsFactory from 'app/analytics/analytics.factory'
-import { recaptchaFailedEvent, submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
+import { submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
 
 const componentName = 'checkoutStep3'
 
@@ -42,9 +42,6 @@ class Step3Controller {
       this.$onInit()
     })
 
-    this.$rootScope.$on(recaptchaFailedEvent, () => {
-      this.handleRecaptchaFailure()
-    })
     this.$rootScope.$on(submitOrderEvent, () => {
       this.submitOrder()
     })
@@ -138,18 +135,6 @@ class Step3Controller {
       }
       this.changeStep({ newStep: 'thankYou' })
     })
-  }
-
-  handleRecaptchaFailure () {
-    this.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-    this.submittingOrder = false
-    this.onSubmittingOrder({ value: false })
-
-    this.loadCart()
-
-    this.onSubmitted()
-    this.submissionError = 'generic error'
-    this.$window.scrollTo(0, 0)
   }
 }
 

@@ -8,7 +8,6 @@ import template from './cart-summary.tpl.html'
 
 const componentName = 'checkoutCartSummary'
 
-export const recaptchaFailedEvent = 'recaptchaFailedEvent'
 export const submitOrderEvent = 'submitOrderEvent'
 
 class CartSummaryController {
@@ -21,10 +20,6 @@ class CartSummaryController {
 
   buildCartUrl () {
     return this.cartService.buildCartUrl()
-  }
-
-  handleRecaptchaFailure () {
-    this.$rootScope.$emit(recaptchaFailedEvent)
   }
 
   onSubmit () {

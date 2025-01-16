@@ -7,7 +7,7 @@ import 'rxjs/add/observable/throw'
 import { SignInEvent } from 'common/services/session/session.service'
 
 import module from './step-3.component'
-import { recaptchaFailedEvent, submitOrderEvent } from '../cart-summary/cart-summary.component'
+import { submitOrderEvent } from '../cart-summary/cart-summary.component'
 
 describe('checkout', () => {
   describe('step 3', () => {
@@ -323,32 +323,11 @@ describe('checkout', () => {
       })
     })
 
-    describe('handleRecaptchaFailure', () => {
-      it('should show an error if recaptcha fails', () => {
-        jest.spyOn(self.controller.analyticsFactory, 'checkoutFieldError').mockImplementation(() => {})
-        self.controller.handleRecaptchaFailure()
-
-        expect(self.controller.analyticsFactory.checkoutFieldError).toHaveBeenCalledWith('submitOrder', 'failed')
-        expect(self.controller.submittingOrder).toEqual(false)
-        expect(self.controller.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
-        expect(self.controller.loadCart).toHaveBeenCalled()
-        expect(self.controller.onSubmitted).toHaveBeenCalled()
-        expect(self.controller.submissionError).toEqual('generic error')
-        expect(self.controller.$window.scrollTo).toHaveBeenCalledWith(0, 0)
-      })
-    })
-
     describe('event handling', () => {
       it('should call submit order if the submitOrderEvent is received', () => {
         jest.spyOn(self.controller, 'submitOrder').mockImplementation(() => {})
         self.controller.$rootScope.$emit(submitOrderEvent)
         expect(self.controller.submitOrder).toHaveBeenCalled()
-      })
-
-      it('should call handleRecaptchaFailure if the recaptchaFailedEvent is received', () => {
-        jest.spyOn(self.controller, 'handleRecaptchaFailure').mockImplementation(() => {})
-        self.controller.$rootScope.$emit(recaptchaFailedEvent)
-        expect(self.controller.handleRecaptchaFailure).toHaveBeenCalled();
       })
     })
 
@@ -360,9 +339,9 @@ describe('checkout', () => {
 
       it('should call analyticsFactory when it is not branded checkout', () => {
         self.controller.isBranded = false
-        
+
         self.controller.submitOrder()
-        
+
         expect(self.controller.analyticsFactory.purchase).toHaveBeenCalledWith(self.controller.donorDetails, self.controller.cartData, self.controller.orderService.retrieveCoverFeeDecision())
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
       })
@@ -371,7 +350,7 @@ describe('checkout', () => {
         self.controller.isBranded = true
 
         self.controller.submitOrder()
-        
+
         expect(self.controller.analyticsFactory.purchase).not.toHaveBeenCalled()
         expect(self.controller.changeStep).toHaveBeenCalledWith({ newStep: 'thankYou' })
       })

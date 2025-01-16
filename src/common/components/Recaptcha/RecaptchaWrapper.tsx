@@ -1,6 +1,6 @@
 import angular from 'angular'
 import { react2angular } from 'react2angular'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { ButtonType, Recaptcha } from './Recaptcha'
 
 const componentName = 'recaptchaWrapper'
@@ -14,7 +14,6 @@ declare global {
 interface RecaptchaWrapperProps {
   action: string
   onSuccess: () => void
-  onFailure: () => void
   componentInstance: any
   buttonId: string
   buttonType?: ButtonType
@@ -30,7 +29,6 @@ interface RecaptchaWrapperProps {
 export const RecaptchaWrapper = ({
   action,
   onSuccess,
-  onFailure,
   componentInstance,
   buttonId,
   buttonType,
@@ -43,32 +41,17 @@ export const RecaptchaWrapper = ({
   $rootScope
 }: RecaptchaWrapperProps): JSX.Element => {
   const recaptchaKey = envService.read('recaptchaKey')
-  const apiUrl = envService.read('apiUrl')
 
-  useMemo(() => {
-    const script = document.createElement('script')
-    script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`
-    script.id = 'give-checkout-recaptcha'
-    document.body.appendChild(script)
-  }, [])
-
-  // Because The onSuccess and onFailure callbacks are called by a React component, AngularJS doesn't know that an event happened and doesn't know it needs to rerender. We have to use $apply to ensure that AngularJS rerenders after the event handlers return.
+  // Because the onSuccess callback is called by a React component, AngularJS doesn't know that an event happened and doesn't know it needs to rerender. We have to use $apply to ensure that AngularJS rerenders after the event handlers return.
   const onSuccessWrapped = (() => {
     $rootScope.$apply(() => {
       onSuccess.call(componentInstance)
     })
   })
 
-  const onFailureWrapped = (() => {
-    $rootScope.$apply(() => {
-      onFailure.call(componentInstance)
-    })
-  })
-
   return (
       <Recaptcha action={action}
                  onSuccess={onSuccessWrapped}
-                 onFailure={onFailureWrapped}
                  buttonId={buttonId}
                  buttonType={buttonType}
                  buttonClasses={buttonClasses}
@@ -76,8 +59,7 @@ export const RecaptchaWrapper = ({
                  buttonLabel={buttonLabel}
                  $translate={$translate}
                  $log={$log}
-                 recaptchaKey={recaptchaKey}
-                 apiUrl={apiUrl}></Recaptcha>
+                 recaptchaKey={recaptchaKey}></Recaptcha>
   )
 }
 
@@ -90,7 +72,6 @@ export default angular
       [
         'action',
         'onSuccess',
-        'onFailure',
         'componentInstance',
         'buttonId',
         'buttonType',
