@@ -61,6 +61,15 @@ describe('registerAccountModal', function () {
       expect($ctrl.checkDonorDetails).toHaveBeenCalled()
     })
 
+    it('should load donor details initially and reload when session changes', () => {
+      $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
+
+      $ctrl.$onInit()
+      expect($ctrl.checkDonorDetails).toHaveBeenCalledTimes(1)
+      $ctrl.sessionService.sessionSubject.next({})
+      expect($ctrl.checkDonorDetails).toHaveBeenCalledTimes(2)
+    })
+
     describe('with \'REGISTERED\' cortex-session', () => {
       beforeEach(() => {
         $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
@@ -184,12 +193,22 @@ describe('registerAccountModal', function () {
           $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'COMPLETED' }))
           $ctrl.checkDonorDetails()
 
-          expect($ctrl.modalTitle).toEqual('Checking your donor account')
-          expect($ctrl.stateChanged).toHaveBeenCalledWith('loading')
+          expect($ctrl.stateChanged).toHaveBeenCalledWith('loading-donor')
           expect($ctrl.stateChanged.mock.calls.length).toEqual(1)
           expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
           expect($ctrl.onSuccess).toHaveBeenCalled()
         })
+      })
+    })
+
+    describe('\'registration-state\' MATCHED', () => {
+      it('changes state to \'user-match\'', () => {
+        $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'MATCHED' }))
+        $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
+        $ctrl.checkDonorDetails()
+
+        expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.stateChanged).toHaveBeenCalledWith('user-match')
       })
     })
 

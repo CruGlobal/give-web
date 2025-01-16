@@ -123,8 +123,7 @@ class RegisterAccountModalController {
 
   checkDonorDetails (signUpDonorDetails) {
     // Show loading state
-    this.modalTitle = this.gettext('Checking your donor account')
-    this.stateChanged('loading')
+    this.stateChanged('loading-donor')
 
     // Step 2. Fetch Donor Details
     if (angular.isDefined(this.getDonorDetailsSubscription)) {
@@ -155,6 +154,8 @@ class RegisterAccountModalController {
         // Workflow Complete if 'registration-state' is COMPLETED
         if (donorDetails['registration-state'] === 'COMPLETED') {
           this.onSuccess()
+        } else if (donorDetails['registration-state'] === 'MATCHED') {
+          this.onContactInfoSuccess()
         } else if (donorDetails['registration-state'] === 'FAILED') {
           this.stateChanged('failed-verification')
         } else {
