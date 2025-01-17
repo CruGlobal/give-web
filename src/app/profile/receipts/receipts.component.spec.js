@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 import { SignOutEvent } from 'common/services/session/session.service'
-import { Subject } from 'rxjs/Subject'
 
 describe('ReceiptsComponent', function () {
   beforeEach(angular.mock.module(module.name))
@@ -15,7 +14,6 @@ describe('ReceiptsComponent', function () {
     $ctrl = _$componentController_(module.name, {
       $window: { location: '/receipts.html' }
     })
-    $ctrl.$rootScope.$broadcast = jest.spyOn($ctrl.$rootScope, '$broadcast')
   }))
 
   it('to be defined', function () {
@@ -60,23 +58,6 @@ describe('ReceiptsComponent', function () {
         $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']()
 
         expect($ctrl.$window.location).toEqual('/')
-      })
-    })
-
-    describe('sessionHandleOktaRedirectService', () => {
-      it('should call onHandleOktaRedirect', () => {
-        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
-        $ctrl.$onInit()
-
-        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
-      })
-
-      it('handles an Okta redirect error', () => {
-        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
-        $ctrl.$onInit()
-        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject.next('generic')
-  
-        expect($ctrl.errorMessage).toEqual('generic')
       })
     })
   })

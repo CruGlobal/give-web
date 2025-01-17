@@ -1,7 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './payment-methods.component'
-import { Subject } from 'rxjs/Subject'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
@@ -32,7 +31,6 @@ describe('PaymentMethodsComponent', function () {
       $window: { location: '/payment-methods.html' },
       $uibModal: uibModal
     })
-    $ctrl.$rootScope.$broadcast = jest.spyOn($ctrl.$rootScope, '$broadcast')
   }))
 
   it('to be defined', function () {
@@ -78,23 +76,6 @@ describe('PaymentMethodsComponent', function () {
         $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']()
 
         expect($ctrl.$window.location).toEqual('/')
-      })
-    })
-
-    describe('sessionHandleOktaRedirectService', () => {
-      it('should call onHandleOktaRedirect', () => {
-        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
-        $ctrl.$onInit()
-
-        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
-      })
-
-      it('handles an Okta redirect error', () => {
-        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
-        $ctrl.$onInit()
-        $ctrl.sessionHandleOktaRedirectService.errorMessageSubject.next('generic')
-  
-        expect($ctrl.errorMessage).toEqual('generic')
       })
     })
   })

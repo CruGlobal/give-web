@@ -10,9 +10,8 @@ import sessionEnforcerService, {
   EnforcerCallbacks,
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
-import { Roles } from 'common/services/session/session.service'
-import sessionHandleOktaRedirectService from 'common/services/session/sessionHandleOktaRedirect.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
+import { Roles } from 'common/services/session/session.service'
 import designationEditorService from 'common/services/api/designationEditor.service'
 
 import titleModalController from './titleModal/title.modal'
@@ -39,11 +38,10 @@ const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($log, $q, $uibModal, $location, $window, $rootScope, $timeout, envService, sessionEnforcerService, sessionHandleOktaRedirectService, sessionModalService, designationEditorService) {
+  constructor ($log, $q, $uibModal, $location, $window, $rootScope, $timeout, envService, sessionEnforcerService, sessionModalService, designationEditorService) {
     this.$log = $log
     this.$timeout = $timeout
     this.sessionEnforcerService = sessionEnforcerService
-    this.sessionHandleOktaRedirectService = sessionHandleOktaRedirectService
     this.sessionModalService = sessionModalService
     this.designationEditorService = designationEditorService
 
@@ -67,11 +65,6 @@ class DesignationEditorController {
     if (!this.designationNumber) {
       this.$window.location = '/'
     }
-
-    this.sessionHandleOktaRedirectService.onHandleOktaRedirect()
-    this.sessionHandleOktaRedirectService.errorMessageSubject.subscribe((errorMessage) => {
-      this.errorMessage = errorMessage
-    })
 
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -409,7 +402,6 @@ export default angular
     'ngSanitize',
     commonModule.name,
     sessionEnforcerService.name,
-    sessionHandleOktaRedirectService.name,
     sessionModalService.name,
     designationEditorService.name,
     titleModalController.name,
