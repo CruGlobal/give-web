@@ -7,6 +7,7 @@ import orderService from 'common/services/api/order.service'
 import template from './oktaAuthCallback.tpl.html'
 
 const componentName = 'oktaAuthCallback'
+export const unknownErrorMessage = 'Failed to authenticate user when redirecting from Okta. Please try to sign in again.'
 
 class OktaAuthCallbackController {
   /* @ngInject */
@@ -27,7 +28,7 @@ class OktaAuthCallbackController {
       })
   }
 
-  initializeVariables() {
+  initializeVariables () {
     this.noticeToUser = 'Authenticating...'
     this.isLoading = true
     this.errorMessage = ''
@@ -56,7 +57,7 @@ class OktaAuthCallbackController {
   }
 
   onSignInFailure (error) {
-    const errorMessage = error || 'Failed to authenticate user when redirecting from Okta. Please try to sign in again.'
+    const errorMessage = error || unknownErrorMessage
     this.$log.error(errorMessage)
     this.sessionService.removeLocationOnLogin()
     this.errorMessage = errorMessage
