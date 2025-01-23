@@ -110,15 +110,15 @@ class SignUpModalController {
     return [
       {
         ...schema[0],
-        value: this.$scope.firstName ?? this.donorDetails?.name?.['given-name'] ?? this.sessionService.session.first_name ?? ''
+        value: this.$scope.firstName || this.donorDetails?.name?.['given-name'] || this.sessionService.session.first_name || ''
       },
       {
         ...schema[1],
-        value: this.$scope.lastName ?? this.donorDetails?.name?.['family-name'] ?? this.sessionService.session.last_name ?? ''
+        value: this.$scope.lastName || this.donorDetails?.name?.['family-name'] || this.sessionService.session.last_name || ''
       },
       {
         ...schema[2],
-        value: this.$scope.email ?? this.donorDetails?.email ?? this.sessionService.session.email ?? ''
+        value: this.$scope.email || this.donorDetails?.email || this.sessionService.session.email || ''
       },
       {
         name: 'accountType',
@@ -131,7 +131,7 @@ class SignUpModalController {
         label: 'Account Type',
         required: true,
         wide: true,
-        value: this.$scope.accountType ?? this.donorDetails?.['donor-type'] ?? 'Household'
+        value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household'
       }
     ]
   }
@@ -148,7 +148,7 @@ class SignUpModalController {
           label: this.organizationNameTxt,
           required: true,
           maxLength: 50,
-          value: this.$scope.organizationName ?? this.donorDetails?.['organization-name'] ?? ''
+          value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
         }]
       : []
 
@@ -156,27 +156,27 @@ class SignUpModalController {
       ...organizationNameField,
       {
         ...schema[3],
-        value: this.$scope.streetAddress ?? this.donorDetails?.mailingAddress?.streetAddress ?? ''
+        value: this.$scope.streetAddress || this.donorDetails?.mailingAddress?.streetAddress || ''
       },
       {
         ...schema[4],
-        value: this.$scope.city ?? this.donorDetails?.mailingAddress?.locality ?? ''
+        value: this.$scope.city || this.donorDetails?.mailingAddress?.locality || ''
       },
       {
         ...schema[5],
-        value: this.$scope.state ?? this.donorDetails?.mailingAddress?.region ?? ''
+        value: this.$scope.state || this.donorDetails?.mailingAddress?.region || ''
       },
       {
         ...schema[6],
-        value: this.$scope.zipCode ?? this.donorDetails?.mailingAddress?.postalCode ?? ''
+        value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
       },
       {
         ...schema[7],
-        value: this.$scope.countryCode ?? this.donorDetails?.mailingAddress?.country ?? ''
+        value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || ''
       },
       {
         ...schema[8],
-        value: this.$scope.primaryPhone ?? this.donorDetails?.['phone-number'] ?? ''
+        value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
       }
     ]
   }
@@ -350,15 +350,14 @@ class SignUpModalController {
     )
   }
 
-  async signIn () {
-    try {
-      const tokens = await this.oktaSignInWidget.showSignInAndRedirect({
-        el: '#osw-container'
-      })
+  signIn () {
+    return this.oktaSignInWidget.showSignInAndRedirect({
+      el: '#osw-container'
+    }).then(tokens => {
       this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
-    } catch (error) {
+    }).catch(error => {
       this.$log.error('Error showing Okta sign in widget.', error)
-    }
+    })
   }
 
   loadDonorDetails () {
@@ -366,7 +365,7 @@ class SignUpModalController {
       let donorData = data
       const checkoutSavedData = this.sessionService.session.checkoutSavedData
       if (checkoutSavedData) {
-        donorData = assign(this.donorDetails, pick(checkoutSavedData, [
+        donorData = assign(data, pick(checkoutSavedData, [
           'name', 'email', 'mailingAddress', 'organization-name', 'phone-number'
         ]))
       }
