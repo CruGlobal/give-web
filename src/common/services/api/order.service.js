@@ -308,6 +308,8 @@ class Order {
         postData['cover-cc-fees'] = !!this.retrieveCoverFeeDecision()
         postData['radio-call-letters'] = this.retrieveRadioStationCallLetters()
         postData['tsys-device'] = this.tsysService.getDevice()
+        postData['recaptcha-token'] = this.sessionStorage.getItem('recaptchaToken')
+        postData['recaptcha-action'] = this.sessionStorage.getItem('recaptchaAction')
         return this.cortexApiService.post({
           path: this.hateoasHelperService.getLink(data.enhancedpurchaseform, 'submitenhancedpurchaseaction'),
           data: postData,
@@ -317,6 +319,8 @@ class Order {
       .do((data) => {
         this.storeLastPurchaseLink(data.self.uri)
         this.cartService.setCartCountCookie(0)
+        this.sessionStorage.removeItem('recaptchaToken')
+        this.sessionStorage.removeItem('recaptchaAction')
       })
   }
 
@@ -372,8 +376,8 @@ class Order {
   }
 
   storeRadioStationData (radioStationData) {
-    this.sessionStorage.setItem('radioStationName', radioStationData.Description)
-    this.sessionStorage.setItem('radioStationCallLetters', radioStationData.MediaId)
+    this.sessionStorage.setItem('radioStationName', Object.values(radioStationData)[0])
+    this.sessionStorage.setItem('radioStationCallLetters', Object.keys(radioStationData)[0])
   }
 
   retrieveRadioStationName () {

@@ -1,6 +1,7 @@
 import angular from 'angular'
 import { react2angular } from 'react2angular'
 import React, { useCallback, useEffect, useState } from 'react'
+import { datadogRum } from '@datadog/browser-rum'
 
 const componentName = 'recaptcha'
 
@@ -16,14 +17,9 @@ export enum ButtonType {
   Button = 'button'
 }
 
-const isValidAction = (action: string): boolean => {
-  return action === 'submit_gift' || action === 'branded_submit'
-}
-
 interface RecaptchaProps {
   action: string
   onSuccess: (componentInstance: any) => void
-  onFailure: (componentInstance: any) => void
   componentInstance: any
   buttonId: string
   buttonType?: ButtonType
@@ -31,15 +27,13 @@ interface RecaptchaProps {
   buttonDisabled: boolean
   buttonLabel: string
   $translate: any
-  $log: any,
-  recaptchaKey: string,
-  apiUrl: string,
+  $log: any
+  recaptchaKey: string
 }
 
 export const Recaptcha = ({
   action,
   onSuccess,
-  onFailure,
   componentInstance,
   buttonId,
   buttonType,
@@ -49,7 +43,6 @@ export const Recaptcha = ({
   $translate,
   $log,
   recaptchaKey,
-  apiUrl
 }: RecaptchaProps): JSX.Element => {
 
   const [ready, setReady] = useState(false)
@@ -76,39 +69,12 @@ export const Recaptcha = ({
       return
     }
 
-    grecaptcha.ready(async () => {
+    grecaptcha.enterprise.ready(async () => {
       try {
-        const token = await grecaptcha.execute(recaptchaKey, { action: action })
-        const serverResponse = await fetch(`${apiUrl}/recaptcha/verify`, {
-          method: 'POST',
-          body: JSON.stringify({ token: token }),
-          headers: { 'Content-Type': 'application/json' }
-        })
-        const data = await serverResponse.json()
-
-        if (data?.success === true && isValidAction(data?.action)) {
-          if (data.score < 0.5) {
-            $log.warn(`Captcha score was below the threshold: ${data.score}`)
-            onFailure(componentInstance)
-            return
-          }
-          onSuccess(componentInstance)
-          return
-        }
-        if (data?.success === false && isValidAction(data?.action)) {
-          $log.warn('Recaptcha call was unsuccessful, continuing anyway')
-          onSuccess(componentInstance)
-          return
-        }
-        if (!data) {
-          $log.warn('Data was missing!')
-          onSuccess(componentInstance)
-          return
-        }
-        if (!isValidAction(data?.action)) {
-          $log.warn(`Invalid action: ${data?.action}`)
-          onFailure(componentInstance)
-        }
+        const token = await grecaptcha.enterprise.execute(recaptchaKey, { action: action })
+        window.sessionStorage.setItem('recaptchaToken', token)
+        window.sessionStorage.setItem('recaptchaAction', action)
+        onSuccess(componentInstance)
       } catch (error) {
         $log.error(`Failed to verify recaptcha, continuing on: ${error}`)
         onSuccess(componentInstance)
@@ -134,15 +100,13 @@ export default angular
       [
         'action',
         'onSuccess',
-        'onFailure',
         'componentInstance',
         'buttonId',
         'buttonType',
         'buttonClasses',
         'buttonDisabled',
         'buttonLabel',
-        'recaptchaKey',
-        'apiUrl'
+        'recaptchaKey'
       ],
       ['$translate', '$log']))
 

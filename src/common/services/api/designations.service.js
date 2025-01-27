@@ -4,6 +4,7 @@ import toFinite from 'lodash/toFinite'
 import startsWith from 'lodash/startsWith'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
+import 'rxjs/add/observable/of'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import moment from 'moment'
@@ -233,7 +234,7 @@ class DesignationsService {
         }
         return suggestedAmounts
       })
-      .catch(() => [])
+      .catch(() => Observable.of([]))
   }
 
   facebookPixel (code) {
@@ -253,6 +254,13 @@ class DesignationsService {
           // Map giving links
           if (data.data['jcr:content'].givingLinks) {
             angular.forEach(data.data['jcr:content'].givingLinks, (v, k) => {
+              if (!v || !v.name || !v.url) {
+                // Some accounts contain multiple, empty giving links. Until we figure how how they
+                // are being created, we are ignoring them on the frontend.
+                // https://jira.cru.org/browse/EP-2554
+                return
+              }
+
               if (toFinite(k) > 0 || startsWith(k, 'item')) {
                 givingLinks.push({
                   name: v.name,

@@ -50,10 +50,14 @@ describe('branded checkout', () => {
         onOrderCompleted: jest.fn(),
         onOrderFailed: jest.fn(),
       },
-    );
+    )
   }))
 
   describe('$onInit', () => {
+    beforeEach(() => {
+      jest.spyOn($ctrl.checkoutService, 'initializeRecaptcha').mockImplementation(() => {})
+    })
+
     it('should set API Url if custom one is set', () => {
       $ctrl.apiUrl = 'https://custom-api.cru.org'
       $ctrl.$onInit()
@@ -73,6 +77,11 @@ describe('branded checkout', () => {
       expect($ctrl.checkoutStep).toEqual('giftContactPayment')
       expect($ctrl.formatDonorDetails).toHaveBeenCalled()
       expect($ctrl.$window.sessionStorage.removeItem).toHaveBeenCalledWith('initialLoadComplete')
+    })
+
+    it('should initialize recaptcha', () => {
+      $ctrl.$onInit()
+      expect($ctrl.checkoutService.initializeRecaptcha).toHaveBeenCalled()
     })
   })
 

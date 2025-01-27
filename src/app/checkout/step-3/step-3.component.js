@@ -16,7 +16,8 @@ import displayAddressComponent from 'common/components/display-address/display-a
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
 import template from './step-3.tpl.html'
 import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
-import { recaptchaFailedEvent, submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
+import { submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
+import { datadogRum } from '@datadog/browser-rum'
 
 const componentName = 'checkoutStep3'
 
@@ -42,9 +43,6 @@ class Step3Controller {
       this.$onInit()
     })
 
-    this.$rootScope.$on(recaptchaFailedEvent, () => {
-      this.handleRecaptchaFailure(this)
-    })
     this.$rootScope.$on(submitOrderEvent, () => {
       this.submitOrder()
     })
@@ -187,23 +185,12 @@ class Step3Controller {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }
       componentInstance.$log.error('Error submitting purchase:', error)
+      datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status }) // here in order to show up in Error Tracking in DD
       componentInstance.onSubmitted()
       componentInstance.submissionErrorStatus = error.status
       componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
       componentInstance.$window.scrollTo(0, 0)
     })
-  }
-
-  handleRecaptchaFailure (componentInstance) {
-    componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-    componentInstance.submittingOrder = false
-    componentInstance.onSubmittingOrder({ value: false })
-
-    componentInstance.loadCart()
-
-    componentInstance.onSubmitted()
-    componentInstance.submissionError = 'generic error'
-    componentInstance.$window.scrollTo(0, 0)
   }
 }
 
