@@ -38,7 +38,8 @@ const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($log, $q, $uibModal, $location, $window, $rootScope, $timeout, envService, sessionEnforcerService, sessionModalService, designationEditorService) {
+  constructor ($scope, $log, $q, $uibModal, $location, $window, $timeout, envService, sessionEnforcerService, sessionModalService, designationEditorService) {
+    this.$scope = $scope
     this.$log = $log
     this.$timeout = $timeout
     this.sessionEnforcerService = sessionEnforcerService
@@ -54,7 +55,6 @@ class DesignationEditorController {
     this.$q = $q
     this.$uibModal = $uibModal
     this.$window = $window
-    this.$rootScope = $rootScope
   }
 
   $onInit () {
@@ -270,7 +270,7 @@ class DesignationEditorController {
     // pick up on the changes. Toggling contentLoaded off then back on will cause the ng-if on
     // `.secondaryPhoto` will forcibly recreate the carousel DOM element.
     this.contentLoaded = false
-    this.$rootScope.$applyAsync(() => {
+    this.$scope.$applyAsync(() => {
       this.contentLoaded = true
     })
   }
