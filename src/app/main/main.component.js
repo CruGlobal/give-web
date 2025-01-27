@@ -14,6 +14,7 @@ import designationEditorComponent from '../designationEditor/designationEditor.c
 import yourGivingComponent from '../profile/yourGiving/yourGiving.component'
 import profileComponent from '../profile/profile.component'
 import brandedCheckoutComponent from '../branded/branded-checkout.component'
+import oktaAuthCallbackComponent from '../oktaAuthCallback/oktaAuthCallback.component'
 import paymentMethodsComponent from '../profile/payment-methods/payment-methods.component'
 import receiptsComponent from '../profile/receipts/receipts.component'
 import template from './main.tpl.html'
@@ -91,6 +92,10 @@ const routingConfig = /* @ngInject */ function ($stateProvider, $locationProvide
       url: '/branded-checkout.html',
       template: '<branded-checkout designation-number="2294554" default-payment-type="creditCard"></branded-checkout>'
     })
+    .state('okta-auth-callback', {
+      url: '/okta-auth-callback.html',
+      template: '<okta-auth-callback></okta-auth-callback>'
+    })
 
   $locationProvider.html5Mode(true)
   $urlRouterProvider.otherwise('/cart.html')
@@ -112,6 +117,7 @@ export default angular
     paymentMethodsComponent.name,
     receiptsComponent.name,
     brandedCheckoutComponent.name,
+    oktaAuthCallbackComponent.name,
     sessionService.name,
     sessionModalService.name,
     'ui.router'

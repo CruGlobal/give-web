@@ -1,10 +1,5 @@
 import angular from 'angular'
 import 'rxjs/add/observable/throw'
-
-import displayAddressComponent from 'common/components/display-address/display-address.component'
-import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
-import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
-
 import commonService from 'common/services/api/common.service'
 import cartService from 'common/services/api/cart.service'
 import orderService from 'common/services/api/order.service'
@@ -13,11 +8,12 @@ import { SignInEvent } from 'common/services/session/session.service'
 import capitalizeFilter from 'common/filters/capitalize.filter'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
-import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
-
-import template from './step-3.tpl.html'
-
 import analyticsFactory from 'app/analytics/analytics.factory'
+import displayAddressComponent from 'common/components/display-address/display-address.component'
+import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
+import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
+import template from './step-3.tpl.html'
+import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
 import { submitOrderEvent } from 'app/checkout/cart-summary/cart-summary.component'
 
 const componentName = 'checkoutStep3'

@@ -61,6 +61,15 @@ describe('registerAccountModal', function () {
       expect($ctrl.checkDonorDetails).toHaveBeenCalled()
     })
 
+    it('should load donor details initially and reload when session changes', () => {
+      $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
+
+      $ctrl.$onInit()
+      expect($ctrl.checkDonorDetails).toHaveBeenCalledTimes(1)
+      $ctrl.sessionService.sessionSubject.next({})
+      expect($ctrl.checkDonorDetails).toHaveBeenCalledTimes(2)
+    })
+
     describe('with \'REGISTERED\' cortex-session', () => {
       beforeEach(() => {
         $ctrl.sessionService.getRole.mockReturnValue(Roles.registered)
@@ -184,81 +193,91 @@ describe('registerAccountModal', function () {
           $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'COMPLETED' }))
           $ctrl.checkDonorDetails()
 
-          expect($ctrl.modalTitle).toEqual('Checking your donor account')
-          expect($ctrl.stateChanged).toHaveBeenCalledWith('loading')
+          expect($ctrl.stateChanged).toHaveBeenCalledWith('loading-donor')
           expect($ctrl.stateChanged.mock.calls.length).toEqual(1)
           expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
           expect($ctrl.onSuccess).toHaveBeenCalled()
         })
       })
+    })
 
-      describe('\'registration-state\' NEW', () => {
-        const signUpDonorDetails = {
-          name: {
-            'given-name': 'First',
-            'family-name': 'Last'
-          },
-          'donor-type': 'Household',
-          email: 'first.last@cru.org',
-          phone: '111-222-3333',
-          mailingAddress: {
-            streetAddress: '123 First St',
-            locality: 'Orlando',
-            region: 'FL',
-            postalCode: '12345',
-            country: 'US'
-          }
+    describe('\'registration-state\' MATCHED', () => {
+      it('changes state to \'user-match\'', () => {
+        $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'MATCHED' }))
+        $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
+        $ctrl.checkDonorDetails()
+
+        expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.stateChanged).toHaveBeenCalledWith('user-match')
+      })
+    })
+
+    describe('\'registration-state\' NEW', () => {
+      const signUpDonorDetails = {
+        name: {
+          'given-name': 'First',
+          'family-name': 'Last'
+        },
+        'donor-type': 'Household',
+        email: 'first.last@cru.org',
+        phone: '111-222-3333',
+        mailingAddress: {
+          streetAddress: '123 First St',
+          locality: 'Orlando',
+          region: 'FL',
+          postalCode: '12345',
+          country: 'US'
         }
+      }
 
-        const emailFormUri = '/emails/crugive'
+      const emailFormUri = '/emails/crugive'
 
-        beforeEach(() => {
-          $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({
-            'registration-state': 'NEW',
-            name: {
-              'given-name': 'Existing',
-              'family-name': 'Existing'
-            },
-            'donor-type': '',
-            email: 'existing.email@cru.org',
-            phone: '',
-            mailingAddress: {
-              streetAddress: '',
-              locality: '',
-              region: '',
-              postalCode: '',
-              country: 'CANADA'
-            },
-            emailFormUri
-          }))
-          $ctrl.orderService.addEmail.mockImplementation(() => Observable.of({}))
-        })
+      beforeEach(() => {
+        $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({
+          'registration-state': 'NEW',
+          name: {
+            'given-name': 'Existing',
+            'family-name': 'Existing'
+          },
+          'donor-type': '',
+          email: 'existing.email@cru.org',
+          phone: '',
+          mailingAddress: {
+            streetAddress: '',
+            locality: '',
+            region: '',
+            postalCode: '',
+            country: 'CANADA'
+          },
+          emailFormUri
+        }))
+        $ctrl.orderService.addEmail.mockImplementation(() => Observable.of({}))
+      })
 
-        describe('with sign up details', () => {
-          it('saves sign up contact info merged with existing contact info', () => {
-            $ctrl.checkDonorDetails(signUpDonorDetails)
+      describe('with sign up details', () => {
+        it('saves sign up contact info merged with existing contact info', () => {
+          $ctrl.checkDonorDetails(signUpDonorDetails)
 
-            expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
-            expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
-            expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
-          })
-
-          it('remembers contact info after error', () => {
-            $ctrl.orderService.addEmail.mockImplementation(() => Observable.throw(new Error('Error adding email')))
-
-            $ctrl.checkDonorDetails(signUpDonorDetails)
-
-            expect($ctrl.signUpDonorDetails).toBe(signUpDonorDetails)
-            expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
-          })
-        })
-
-        it('changes state to \'contact-info\'', () => {
-          $ctrl.checkDonorDetails()
-
-          expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
+          expect($ctrl.orderService.updateDonorDetails).toHaveBeenCalledWith(expect.objectContaining(signUpDonorDetails))
+          expect($ctrl.orderService.addEmail).toHaveBeenCalledWith(signUpDonorDetails.email, emailFormUri)
           expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
         })
+
+        it('remembers contact info after error', () => {
+          $ctrl.orderService.addEmail.mockImplementation(() => Observable.throw(new Error('Error adding email')))
+
+          $ctrl.checkDonorDetails(signUpDonorDetails)
+
+          expect($ctrl.signUpDonorDetails).toBe(signUpDonorDetails)
+          expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
+        })
+      })
+
+      it('changes state to \'contact-info\'', () => {
+        $ctrl.checkDonorDetails()
+
+        expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
+        expect($ctrl.stateChanged).toHaveBeenCalledWith('contact-info')
       })
     })
 

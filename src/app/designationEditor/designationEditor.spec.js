@@ -1,8 +1,8 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './designationEditor.component'
-import { Subject } from 'rxjs/Subject'
 import designationConstants from 'common/services/api/designationEditor.constants'
+import { Roles } from 'common/services/session/session.service'
 
 const designationSecurityResponse = {
   designationNumber: '000555',
@@ -70,7 +70,6 @@ describe('Designation Editor', function () {
     $httpBackend = _$httpBackend_
     $q = _$q_
     $rootScope = _$rootScope_
-    $rootScope.$broadcast = jest.spyOn(_$rootScope_, '$broadcast')
     $ctrl = _$componentController_(module.name,
       {
         $window: {
@@ -109,11 +108,15 @@ describe('Designation Editor', function () {
     })
 
     describe('\'PUBLIC\' role', () => {
-      it('should call onHandleOktaRedirect onInit', () => {
-        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
+      it('sets profileLoading and registers sessionEnforcer', () => {
         $ctrl.$onInit()
 
-        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
+        expect($ctrl.sessionEnforcerService).toHaveBeenCalledWith(
+          [Roles.registered], expect.objectContaining({
+            'sign-in': expect.any(Function),
+            cancel: expect.any(Function)
+          }), 'session'
+        )
 
         expect($ctrl.getDesignationContent).not.toHaveBeenCalled()
       })

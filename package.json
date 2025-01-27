@@ -6,7 +6,7 @@
     "@babel/runtime-corejs2": "^7.25.9",
     "@cruglobal/cru-payments": "^1.2.4",
     "@datadog/browser-rum": "^5.16.0",
-    "@okta/okta-signin-widget": "^7.25.1",
+    "@okta/okta-signin-widget": "^7.27.3",
     "angular": "^1.8.3",
     "angular-cookies": "^1.8.2",
     "angular-environment": "https://github.com/jonshaffer/angular-environment.git#d3082c06fb16804d324faac9b7e753fd64a44e5d",

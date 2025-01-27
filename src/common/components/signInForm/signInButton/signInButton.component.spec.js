@@ -81,7 +81,8 @@ describe('signInButton', function () {
       deferred.resolve({})
       $rootScope.$digest()
 
-      expect(bindings.onSuccess).toHaveBeenCalled()
+      expect($ctrl.isSigningIn).toEqual(false)
+      expect($ctrl.errorMessage).toEqual(undefined)
     })
 
     it('adds the sessionService module', () => {

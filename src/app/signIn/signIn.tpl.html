@@ -1,15 +1,4 @@
 <div class="screenContent">
-  <div class="redirect-user-after-login" ng-if="$ctrl.showRedirectingLoadingIcon">
-    <div>
-      <loading>
-        <p><translate>Successfully logged in.</translate></p>
-        <p><translate>Redirecting to your previous page...</translate></p>
-      </loading>
-      <button id="closeButtonTop" type="button" ng-click="$ctrl.closeRedirectingLoading()" class="btn btn-block btn-secondary" aria-label="{{'Close' | translate}}">
-        Close <span aria-hidden="true">×</span>
-      </button>
-    </div>
-  </div>
   <div class="container">
     <div class="row">
       <div class="col-md-12 col-xs-12">
@@ -27,7 +16,7 @@
                 <h3 class="text-center" translate>Already have an account?</h3>
                 <p class="text-center section-description" translate>Sign in now for faster checkout by using saved contact and payment information.</p>
 
-                <sign-in-form on-sign-up-with-okta="$ctrl.onSignUpWithOkta()" on-sign-in-page="true"></sign-in-form>
+                <sign-in-form on-sign-in-page="true"></sign-in-form>
               </div>
             </div>
           </div>

@@ -11,6 +11,7 @@
       first-name="$ctrl.firstName"
       modal-title="$ctrl.modalTitle"
       welcome-back="$ctrl.welcomeBack"
+      hide-close-button="$ctrl.hideCloseButton"
       last-purchase-id="$ctrl.lastPurchaseId"
       on-success="$ctrl.onSignUpSuccess()"
       on-cancel="$ctrl.onCancel()"
@@ -26,9 +27,8 @@
       modal-title="$ctrl.modalTitle"
       on-state-change="$ctrl.stateChanged(state)"
       on-success="$ctrl.onSignUpSuccess()"
-      set-loading="$ctrl.setLoading(loading)">
-    </user-match-modal>
-    </div>
+      set-loading="$ctrl.setLoading(loading)"
+    ></user-match-modal>
   </div>
   <loading type="overlay" ng-if="$ctrl.isLoading"></loading>
 </div>
