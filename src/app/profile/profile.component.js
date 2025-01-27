@@ -16,7 +16,6 @@ import sessionEnforcerService, {
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
 import { Roles, SignOutEvent } from 'common/services/session/session.service'
-import sessionHandleOktaRedirectService from 'common/services/session/sessionHandleOktaRedirect.service'
 import showErrors from 'common/filters/showErrors.filter'
 import commonModule from 'common/common.module'
 import { titles, legacyTitles } from './titles.fixture'
@@ -25,14 +24,13 @@ const componentName = 'profile'
 
 class ProfileController {
   /* @ngInject */
-  constructor ($rootScope, $window, $location, $log, $scope, sessionEnforcerService, envService, profileService, analyticsFactory, sessionHandleOktaRedirectService) {
+  constructor ($rootScope, $window, $location, $log, $scope, sessionEnforcerService, envService, profileService, analyticsFactory) {
     this.$rootScope = $rootScope
     this.$window = $window
     this.$location = $location
     this.$log = $log
     this.$scope = $scope
     this.sessionEnforcerService = sessionEnforcerService
-    this.sessionHandleOktaRedirectService = sessionHandleOktaRedirectService
     this.profileService = profileService
     this.analyticsFactory = analyticsFactory
     this.phoneNumbers = []
@@ -44,11 +42,6 @@ class ProfileController {
   }
 
   $onInit () {
-    this.sessionHandleOktaRedirectService.onHandleOktaRedirect()
-    this.sessionHandleOktaRedirectService.errorMessageSubject.subscribe((errorMessage) => {
-      this.errorMessage = errorMessage
-    })
-
     // Enforce donor role view access manage-giving
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -439,7 +432,6 @@ export default angular
     profileService.name,
     'ngMessages',
     sessionEnforcerService.name,
-    sessionHandleOktaRedirectService.name,
     showErrors.name,
     addressForm.name,
     commonModule.name

@@ -4,16 +4,14 @@ import donationsService from 'common/services/api/donations.service'
 import filterByYear from './receipts.filter'
 import sessionEnforcerService, { EnforcerCallbacks, EnforcerModes } from 'common/services/session/sessionEnforcer.service'
 import { Roles, SignOutEvent } from 'common/services/session/session.service'
-import sessionHandleOktaRedirectService from 'common/services/session/sessionHandleOktaRedirect.service'
 import commonModule from 'common/common.module'
 import uibDropdown from 'angular-ui-bootstrap/src/dropdown'
 
 class ReceiptsController {
   /* @ngInject */
-  constructor ($rootScope, donationsService, sessionEnforcerService, sessionHandleOktaRedirectService, analyticsFactory, $location, $window, $log) {
+  constructor ($rootScope, donationsService, sessionEnforcerService, analyticsFactory, $location, $window, $log) {
     this.donationsService = donationsService
     this.sessionEnforcerService = sessionEnforcerService
-    this.sessionHandleOktaRedirectService = sessionHandleOktaRedirectService
     this.analyticsFactory = analyticsFactory
     this.$location = $location
     this.$window = $window
@@ -25,11 +23,6 @@ class ReceiptsController {
   }
 
   $onInit () {
-    this.sessionHandleOktaRedirectService.onHandleOktaRedirect()
-    this.sessionHandleOktaRedirectService.errorMessageSubject.subscribe((errorMessage) => {
-      this.errorMessage = errorMessage
-    })
-
     this.today = new Date()
     this.enforcerId = this.sessionEnforcerService([Roles.registered], {
       [EnforcerCallbacks.signIn]: () => {
@@ -116,7 +109,6 @@ export default angular
     donationsService.name,
     filterByYear.name,
     sessionEnforcerService.name,
-    sessionHandleOktaRedirectService.name,
     uibDropdown
   ])
   .component(componentName, {
