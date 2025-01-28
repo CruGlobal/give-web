@@ -57,10 +57,5 @@
     on-success="$ctrl.onUserMatchSuccess()"
     set-loading="$ctrl.setLoading({loading: loading})"
   ></user-match-modal>
-  <failed-verification-modal
-    ng-switch-when="failed-verification"
-    modal-title="$ctrl.modalTitle"
-    on-ok="$ctrl.onCancel()"
-  ></failed-verification-modal>
   <div ng-switch-default class="modal-body" style="height: 100px;"></div>
 </div>

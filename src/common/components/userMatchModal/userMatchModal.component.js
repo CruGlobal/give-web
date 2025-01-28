@@ -38,6 +38,8 @@ class UserMatchModalController {
         } else if (donorDetails['registration-state'] === 'NEW') {
           // Do donor matching if
           this.postDonorMatch()
+        } else if (donorDetails['registration-state'] === 'FAILED') {
+          this.changeMatchState('failure')
         } else {
           this.changeMatchState('intro')
         }

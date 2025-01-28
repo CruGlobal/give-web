@@ -157,7 +157,7 @@ class RegisterAccountModalController {
         } else if (donorDetails['registration-state'] === 'MATCHED') {
           this.onContactInfoSuccess()
         } else if (donorDetails['registration-state'] === 'FAILED') {
-          this.stateChanged('failed-verification')
+          this.stateChanged('user-match')
         } else {
           // Proceed to Step 3
           this.stateChanged('contact-info')
