@@ -1,34 +1,64 @@
-<div ng-switch="$ctrl.state">
-  <sign-in-modal ng-switch-when="sign-in"
-                 modal-title="$ctrl.modalTitle"
-                 on-state-change="$ctrl.stateChanged(state)"
-                 on-success="$ctrl.onIdentitySuccess()">
-  </sign-in-modal>
-  <sign-up-modal ng-switch-when="sign-up"
-                 modal-title="$ctrl.modalTitle"
-                 on-state-change="$ctrl.stateChanged(state)"
-                 on-success="$ctrl.onIdentitySuccess()">
-  </sign-up-modal>
-  <forgot-password-modal ng-switch-when="forgot-password"
-                         modal-title="$ctrl.modalTitle"
-                         on-state-change="$ctrl.stateChanged(state)">
-  </forgot-password-modal>
-  <div ng-switch-when="loading">
+<div class="modal-header {{$ctrl.state}}" ng-if="$ctrl.state !== 'sign-in' || $ctrl.welcomeBack">
+  <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()" ng-if="!$ctrl.hideCloseButton">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h3 ng-if="$ctrl.state === 'loading-donor'" translate>Checking your donor account</h3>
+  <div ng-if="$ctrl.state !== 'loading-donor' && $ctrl.state !== 'sign-up'">
+    <h3 ng-if="$ctrl.firstName" translate>Welcome back, {{$ctrl.firstName}}!</h3>
+    <h3 ng-if="!$ctrl.firstName" translate>Welcome back!</h3>
+  </div>
+  <div ng-if="$ctrl.state === 'sign-up'" class="signup-header">
+    <h3 translate>Create Your Account</h3>
+  </div>
+  <div ng-if="$ctrl.state === 'sign-in'" class="section">
+    <ul>
+      <li translate>Give to thousands of opportunities.</li>
+      <li translate>View giving history (online and offline).</li>
+      <li translate>Access your tax receipts and forms.</li>
+    </ul>
+  </div>
+  <div ng-if="$ctrl.state === 'contact-info'" class="section paragraph" translate>
+    Please fill in your information for your online account.
+  </div>
+</div>
+<div class="modal-body" ng-switch="$ctrl.state">
+  <sign-in-modal
+    ng-switch-when="sign-in"
+    modal-title="$ctrl.modalTitle"
+    last-purchase-id="$ctrl.lastPurchaseId"
+    on-sign-up="$ctrl.onSignUp()"
+    on-success="$ctrl.onIdentitySuccess()"
+    on-failure="$ctrl.onIdentityFailure()"
+    is-inside-another-modal="true"
+  ></sign-in-modal>
+  <sign-up-modal
+    ng-switch-when="sign-up"
+    on-sign-up="$ctrl.onSignUpSuccess(donorDetails)"
+    on-sign-in="$ctrl.onSignIn()"
+    is-inside-another-modal="true"
+  ></sign-up-modal>
+  <div ng-switch-when="loading-donor">
     <loading></loading>
   </div>
-  <contact-info-modal ng-switch-when="contact-info"
-                      modal-title="$ctrl.modalTitle"
-                      on-success="$ctrl.onContactInfoSuccess()"
-                      on-cancel="$ctrl.onCancel()">
-  </contact-info-modal>
-  <user-match-modal ng-switch-when="user-match"
-                    modal-title="$ctrl.modalTitle"
-                    on-success="$ctrl.onUserMatchSuccess()"
-                    set-loading="$ctrl.setLoading({loading: loading})">
-  </user-match-modal>
-  <failed-verification-modal ng-switch-when="failed-verification"
-                             modal-title="$ctrl.modalTitle"
-                             on-ok="$ctrl.onCancel()">
-  </failed-verification-modal>
+  <contact-info-modal
+    ng-switch-when="contact-info"
+    modal-title="$ctrl.modalTitle"
+    sign-up-donor-details="$ctrl.signUpDonorDetails"
+    on-success="$ctrl.onContactInfoSuccess()"
+    on-cancel="$ctrl.onCancel()"
+  ></contact-info-modal>
+  <user-match-modal
+    ng-switch-when="user-match"
+    cart-count="$ctrl.cartCount"
+    first-name="$ctrl.firstName"
+    modal-title="$ctrl.modalTitle"
+    on-success="$ctrl.onUserMatchSuccess()"
+    set-loading="$ctrl.setLoading({loading: loading})"
+  ></user-match-modal>
+  <failed-verification-modal
+    ng-switch-when="failed-verification"
+    modal-title="$ctrl.modalTitle"
+    on-ok="$ctrl.onCancel()"
+  ></failed-verification-modal>
   <div ng-switch-default style="height: 100px;"></div>
 </div>

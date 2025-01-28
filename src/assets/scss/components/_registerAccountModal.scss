@@ -1,0 +1,155 @@
+register-account-modal,
+sign-up-modal {
+  display: block;
+  line-height: 1.2em;
+
+  a {
+    cursor: pointer;
+  }
+
+  ul {
+    padding-left: 1em;
+  }
+
+  .modal-body {
+    padding: 30px;
+  }
+
+  .modal-header {
+    padding: 30px;
+    background-color: #EBECEC;
+  }
+
+  .signup-header {
+    text-align: center;
+  }
+}
+
+register-account-modal {
+
+  .modal-header ul:last-child {
+    margin-bottom: 0;
+  }
+
+  .section {
+    margin-top: 20px;
+  }
+
+  .footer-buttons {
+    button {
+      width: 100%;
+    }
+
+    button.back {
+      display: none;
+      width: auto;
+    }
+  }
+
+  .modal-dialog.modal-sm & {
+    &[data-state=sign-in],
+    &[data-state=loading-donor] {
+      .modal-body {
+        padding-top: 30px;
+      }
+    }
+  }
+
+  .modal-dialog.modal-lg & {
+    &[data-state=sign-in],
+    &[data-state=loading-donor] {
+      @media screen and (min-width: 550px) {
+        sign-in-modal {
+          padding: 50px;
+        }
+      }
+
+      @media screen and (min-width: 992px) {
+        display: flex;
+
+        .modal-header {
+          flex: 1
+        }
+      }
+    }
+    &[data-state=contact-info] {
+
+      .modal-header {
+        text-align: center;
+        width: 100%;
+
+        .paragraph {
+          max-width: 500px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
+      contact-info-modal form {
+        display: grid;
+        grid-template: 1fr auto / auto 320px;
+        column-gap: 20px;
+
+        .name {
+          grid-column: 1;
+          grid-row: 1;
+        }
+        .address {
+          grid-column: 2;
+          grid-row: 1 / 3;
+        }
+        .contact-info {
+          grid-column: 1;
+          grid-row: 2;
+        }
+
+        @media screen and (max-width: 991px) {
+          display: block;
+        }
+      }
+    }
+    &[data-state=user-match] {
+
+      .modal-header h3 {
+        text-align: center;
+      }
+
+      .modal-body {
+        margin-left: 200px;
+        margin-right: 200px;
+      }
+    }
+
+    .footer-buttons {
+      margin-left: -230px;
+      margin-right: -230px;
+      margin-bottom: -30px;
+      padding: 15px;
+      background-color: #F5F5F5;
+      display: flex;
+
+      button:not(.back) {
+        width: 400px;
+        margin-left: auto;
+      }
+      button.back {
+        display: block;
+      }
+    }
+    .success .footer-buttons {
+      flex-direction: column;
+    }
+  }
+
+  sign-in-form {
+    hr {
+      width: 65%;
+    }
+  }
+
+  sign-in-button {
+    .okta-button:not(.normal-padding) {
+      width: 100%;
+    }
+  }
+}
