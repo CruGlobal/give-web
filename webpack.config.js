@@ -14,6 +14,7 @@ const giveComponents = [
   'app/thankYou/thankYou.component.js',
   'app/productConfig/productConfig.component.js',
   'app/signIn/signIn.component.js',
+  'app/signOut/signOut.component.js',
   'app/searchResults/searchResults.component.js',
   'app/profile/yourGiving/yourGiving.component.js',
   'app/profile/profile.component.js',
@@ -28,6 +29,16 @@ const giveCss = ['assets/scss/styles.scss']
 const brandedComponents = [
   'app/branded/branded-checkout.component.js',
   'assets/scss/branded-checkout.scss'
+]
+
+// Okta sign-in widget assets files
+const oktaSignInLabelsDestinations = [
+  'dist/assets/okta-sign-in/labels',
+  'src/assets/okta-sign-in/labels'
+]
+const oktaSignInFontDestinations = [
+  'dist/assets/okta-sign-in/font/[name].[ext]',
+  'src/assets/okta-sign-in/font/[name].[ext]'
 ]
 
 const sharedConfig = {
@@ -45,9 +56,31 @@ const sharedConfig = {
   plugins: [
     new CopyWebpackPlugin([
       {
+        from: path.resolve(__dirname, 'node_modules/@okta/okta-signin-widget/dist/css/okta-sign-in.min.css'),
+        to: path.resolve(__dirname, 'src/assets/okta-sign-in/css'),
+        transform (content) {
+          // Replace `../font` with `/assets/fonts/okta-sign-in` to load the fonts correctly.
+          // Also changing the font to use our default font.
+          return content.toString().replace(/\.\.\/font/g, '/assets/okta-sign-in/font').replace(/Inter,montserrat-okta,Arial,Helvetica,sans-serif/g, '"Source Sans Pro", "Helvetica Neue", Helvetica, sans-serif')
+        }
+      },
+      ...oktaSignInLabelsDestinations.map(destination => ({
+        from: path.resolve(__dirname, 'node_modules/@okta/okta-signin-widget/dist/labels'),
+        to: path.resolve(__dirname, destination)
+      })),
+      ...oktaSignInFontDestinations.map(destination => ({
+        from: path.resolve(__dirname, 'node_modules/@okta/okta-signin-widget/dist/font/okticon.*'),
+        to: path.resolve(__dirname, destination)
+      })),
+      {
         context: 'src',
         from: '**/*.+(eot|png|svg|ttf|woff)',
         to: '[path][name].[ext]'
+      },
+      {
+        context: 'src/assets/okta-sign-in/img',
+        from: '**/*.+(png|jpe?g|gif|svg|ico)',
+        to: 'img/[path][name].[ext]'
       },
       'unsupportedBrowser.html',
       'branded-checkout.html'

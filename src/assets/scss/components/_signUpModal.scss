@@ -1,0 +1,61 @@
+sign-up-modal {
+  position: relative;
+
+  form {
+    margin-bottom: 40px;
+  }
+  .buttons {
+    position: absolute;
+    width: 100%;
+    padding: 15px 30px;
+    bottom: 0;
+    left: 0;
+    background-color: #ffffff;
+    border-top: rgba(0, 0, 0, 0.15) 1px solid;
+    align-items: center;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+
+    .back-to-sign-in {
+      width: 150px;
+    }
+
+    .next-action {
+      width: calc(100% - 150px);
+    }
+  }
+
+  .checking-for-existing-data {
+    font-size: 14px;
+  }
+
+  .sticky-buttons {
+    max-height: 560px;
+    overflow-y: auto;
+    position: unset;
+    height: calc(100vh - 170px);
+
+    // When inside another modal
+    &:not(.modal-body) {
+      max-height: 520px;
+      height: calc(100vh - 230px);
+
+      form {
+        margin-bottom: 60px;
+      }
+
+      .buttons {
+        padding: 15px 0px 0;
+      }
+    }
+  }
+
+  // Hide password requirements unless on the password step
+  section[data-se="password-authenticator--rules"] {
+    display: none;
+  }
+  div[data-se="o-form-fieldset-credentials.passcode"] ~ section[data-se="password-authenticator--rules"] {
+    display: block;
+  }
+}
