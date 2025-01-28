@@ -64,9 +64,7 @@
       </p>
     </div>
     <failed-verification-modal ng-switch-when="failure"
-                                ng-init="$ctrl.analyticsFactory.track('ga-registration-match-failed-questions')"
-                                modal-title="$ctrl.modalTitle"
-                                on-ok="$ctrl.onFailure()">
+                               ng-init="$ctrl.analyticsFactory.track('ga-registration-match-failed-questions')">
     </failed-verification-modal>
     <div ng-switch-default style="height: 100px;" ng-if="!$ctrl.loadingDonorDetailsError"></div>
   </div>
@@ -96,4 +94,5 @@
       <button type="button" class="btn btn-md btn-block" ng-click="$ctrl.goToGivingDashboard()" translate>Go to My Dashboard</button>
     </div>
   </div>
+  <button ng-switch-when="failure" type="button" class="btn btn-primary pull-right" ng-click="$ctrl.onFailure()" translate>OK</button>
 </div>
