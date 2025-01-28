@@ -28,8 +28,8 @@ sign-up-modal {
   }
 }
 
-// Back button
 #okta-sign-in.auth-container {
+  // Injected cru back button
   .o-form-button-bar {
     display: flex;
     gap: 50px;
@@ -45,5 +45,14 @@ sign-up-modal {
       @extend .btn;
       @extend .btn-primary;
     }
+  }
+  // Injected cru error message
+  .cru-error {
+    float: left
+  }
+
+  // Injected cru retry button
+  .cru-retry-button:hover {
+    text-decoration: underline;
   }
 }
