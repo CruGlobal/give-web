@@ -142,6 +142,11 @@ class SignUpModalController {
           Organization: this.giveAsOrganizationTxt
         },
         value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household'
+      },
+      {
+        ...customFields.countryCode,
+        label: this.countryField,
+        value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US'
       }
     ]
   }
@@ -209,9 +214,9 @@ class SignUpModalController {
       firstName: userProfile.firstName,
       lastName: userProfile.lastName,
       email: userProfile.email,
-      accountType: postData.accountType
+      accountType: postData.accountType,
+      countryCode: userProfile.countryCode,
     })
-    this.$scope.$apply(() => this.goToNextStep())
   }
 
   saveStep2Data (userProfile, postData) {
