@@ -49,6 +49,24 @@ export const customFields = {
     multirowError: true,
     "data-se": "o-form-fieldset-userProfile.streetAddressExtended"
   },
+  internationalAddressLine3: {
+    name: "userProfile.internationalAddressLine3",
+    type: "text",
+    label: "Address line 3",
+    required: false,
+    "label-top": true,
+    multirowError: true,
+    "data-se": "o-form-fieldset-userProfile.internationalAddressLine3"
+  },
+  internationalAddressLine4: {
+    name: "userProfile.internationalAddressLine4",
+    type: "text",
+    label: "Address line 4",
+    required: false,
+    "label-top": true,
+    multirowError: true,
+    "data-se": "o-form-fieldset-userProfile.internationalAddressLine4"
+  },
   city: {
       name: "userProfile.city",
       type: "text",

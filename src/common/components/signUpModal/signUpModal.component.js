@@ -164,7 +164,7 @@ class SignUpModalController {
     ]
   }
 
-  getStep2Fields (schema) {
+  getStep2Fields () {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
 
@@ -176,8 +176,22 @@ class SignUpModalController {
       }]
     : []
 
+    const addressFields = this.$scope.countryCode === 'US'
+      ? this.getUSAddressFields()
+      : this.getNonUSAddressFields();
+
     return [
       ...organizationNameField,
+      ...addressFields,
+      {
+        ...customFields.primaryPhone,
+        value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
+      }
+    ]
+  }
+
+  getUSAddressFields () {
+    return [
       {
         ...customFields.streetAddress,
         label: this.addressField,
@@ -203,15 +217,32 @@ class SignUpModalController {
         label: this.zipField,
         value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
       },
+    ]
+  }
+
+  getNonUSAddressFields() {
+    return [
       {
-        ...customFields.primaryPhone,
-        value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
+        ...customFields.streetAddress,
+        label: this.addressField,
+        value: this.$scope.streetAddress || this.donorDetails?.mailingAddress?.streetAddress || ''
+      },
+      {
+        ...customFields.streetAddressExtended,
+        value: this.$scope.streetAddressExtended || this.donorDetails?.mailingAddress?.extendedAddress || ''
+      },
+      {
+        ...customFields.internationalAddressLine3,
+        value: this.$scope.internationalAddressLine3 || this.donorDetails?.mailingAddress?.intAddressLine3 || ''
+      },
+      {
+        ...customFields.internationalAddressLine4,
+        value: this.$scope.internationalAddressLine4 || this.donorDetails?.mailingAddress?.intAddressLine4 || ''
       }
     ]
   }
 
   // TODO list
-  // Should have errors for not loading countries and regions With a retry button
   // If not US show different address address lines 3 + 4
   // if US, show City, State and Zip
   // Zip should follow this pattern: "/^\d{5}(?:[-\s]\d{4})?$/"
@@ -291,6 +322,9 @@ class SignUpModalController {
   saveStep2Data (userProfile, postData) {
     Object.assign(this.$scope, {
       streetAddress: userProfile.streetAddress,
+      streetAddressExtended: userProfile.streetAddressExtended,
+      internationalAddressLine3: userProfile.internationalAddressLine3,
+      internationalAddressLine4: userProfile.internationalAddressLine4,
       city: userProfile.city,
       state: userProfile.state,
       zipCode: userProfile.zipCode,
