@@ -10,6 +10,7 @@ import sessionService, { Roles } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './signUpModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
+import { customFields } from './signUpFormCustomFields'
 require('assets/okta-sign-in/css/okta-sign-in.min.css')
 
 const componentName = 'signUpModal'
@@ -56,10 +57,24 @@ class SignUpModalController {
   }
 
   loadTranslations () {
-    this.$translate(['GIVE_AS_INDIVIDUAL', 'GIVE_AS_ORGANIZATION', 'ORGANIZATION_NAME']).then(translations => {
+    this.$translate([
+      'GIVE_AS_INDIVIDUAL',
+      'GIVE_AS_ORGANIZATION',
+      'ORGANIZATION_NAME',
+      'COUNTRY',
+      'ADDRESS',
+      'CITY',
+      'STATE',
+      'ZIP',
+    ]).then(translations => {
       this.giveAsIndividualTxt = translations.GIVE_AS_INDIVIDUAL
       this.giveAsOrganizationTxt = translations.GIVE_AS_ORGANIZATION
       this.organizationNameTxt = translations.ORGANIZATION_NAME
+      this.countryField = translations.COUNTRY
+      this.addressField = translations.ADDRESS
+      this.cityField = translations.CITY
+      this.stateField = translations.STATE
+      this.zipField = translations.ZIP
     })
   }
 
@@ -121,16 +136,11 @@ class SignUpModalController {
         value: this.$scope.email || this.donorDetails?.email || this.sessionService.session.email || ''
       },
       {
-        name: 'accountType',
-        type: 'select',
+        ...customFields.accountType,
         options: {
           Household: this.giveAsIndividualTxt,
           Organization: this.giveAsOrganizationTxt
         },
-        'label-top': true,
-        label: 'Account Type',
-        required: true,
-        wide: true,
         value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household'
       }
     ]
@@ -140,42 +150,43 @@ class SignUpModalController {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
 
-    const organizationNameField = this.$scope.accountType === 'organization'
-      ? [{
-          name: 'organizationName',
-          type: 'text',
-          'label-top': true,
-          label: this.organizationNameTxt,
-          required: true,
-          maxLength: 50,
-          value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
-        }]
-      : []
+    const organizationNameField = this.$scope.accountType === 'Organization'
+    ? [{
+        ...customFields.organizationName,
+        label: this.organizationNameTxt,
+        value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
+      }]
+    : []
 
     return [
       ...organizationNameField,
       {
-        ...schema[3],
+        ...customFields.streetAddress,
+        label: this.addressField,
         value: this.$scope.streetAddress || this.donorDetails?.mailingAddress?.streetAddress || ''
       },
       {
-        ...schema[4],
+        ...customFields.streetAddressExtended,
+        value: this.$scope.streetAddressExtended || this.donorDetails?.mailingAddress?.extendedAddress || ''
+      },
+      {
+        ...customFields.city,
+        label: this.cityField,
         value: this.$scope.city || this.donorDetails?.mailingAddress?.locality || ''
       },
       {
-        ...schema[5],
+        ...customFields.state,
+        options: this.stateOptions,
+        label: this.stateField,
         value: this.$scope.state || this.donorDetails?.mailingAddress?.region || ''
       },
       {
-        ...schema[6],
+        ...customFields.zipCode,
+        label: this.zipField,
         value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
       },
       {
-        ...schema[7],
-        value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || ''
-      },
-      {
-        ...schema[8],
+        ...customFields.primaryPhone,
         value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
       }
     ]
@@ -225,11 +236,6 @@ class SignUpModalController {
       firstName: this.$scope.firstName,
       lastName: this.$scope.lastName,
       email: this.$scope.email,
-      streetAddress: this.$scope.streetAddress,
-      city: this.$scope.city,
-      state: this.$scope.state,
-      zipCode: this.$scope.zipCode,
-      countryCode: this.$scope.countryCode,
       primaryPhone: this.$scope.primaryPhone
     }
     onSuccess(postData)
