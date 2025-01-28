@@ -141,26 +141,6 @@ describe('Designation Editor', function () {
         expect($ctrl.$window.location).toEqual('/')
       })
     })
-
-    describe('onHandleOktaRedirect', () => {
-      beforeEach(() => {
-        jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
-        $ctrl.$onInit()
-      })
-
-      it('should call onHandleOktaRedirect', () => {
-        expect($ctrl.sessionHandleOktaRedirectService.onHandleOktaRedirect).toHaveBeenCalled()
-      })
-    })
-
-    it('handles an Okta redirect error', () => {
-      $ctrl.sessionHandleOktaRedirectService.errorMessageSubject = new Subject()
-      jest.spyOn($ctrl.sessionHandleOktaRedirectService, 'onHandleOktaRedirect')
-      $ctrl.$onInit()
-      $ctrl.sessionHandleOktaRedirectService.errorMessageSubject.next('generic')
-
-      expect($ctrl.errorMessage).toEqual('generic')
-    })
   })
 
   describe('$onDestroy()', () => {

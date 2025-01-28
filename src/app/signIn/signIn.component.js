@@ -13,7 +13,6 @@ class SignInController {
   /* @ngInject */
   constructor ($window, sessionService, analyticsFactory, sessionModalService) {
     this.$window = $window
-    this.$log = $log
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
     this.sessionModalService = sessionModalService
