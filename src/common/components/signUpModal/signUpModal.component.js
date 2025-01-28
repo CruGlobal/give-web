@@ -223,6 +223,8 @@ class SignUpModalController {
         if (initial || this.$scope.countryCode) {
           this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').subscribe();
         }
+
+        return this.countryCodeOptions
       })
       .catch(error => {
         this.loadingCountriesError = true
