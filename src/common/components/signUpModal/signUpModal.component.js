@@ -10,6 +10,7 @@ import sessionService, { Roles } from 'common/services/session/session.service'
 import orderService from 'common/services/api/order.service'
 import template from './signUpModal.tpl.html'
 import cartService from 'common/services/api/cart.service'
+import geographiesService from 'common/services/api/geographies.service'
 import { customFields } from './signUpFormCustomFields'
 require('assets/okta-sign-in/css/okta-sign-in.min.css')
 
@@ -21,7 +22,7 @@ const backButtonText = 'Back'
 
 class SignUpModalController {
   /* @ngInject */
-  constructor ($log, $scope, $location, $translate, sessionService, cartService, orderService, envService) {
+  constructor ($log, $scope, $location, $translate, sessionService, cartService, orderService, envService, geographiesService) {
     this.$log = $log
     this.$scope = $scope
     this.$location = $location
@@ -29,6 +30,7 @@ class SignUpModalController {
     this.sessionService = sessionService
     this.orderService = orderService
     this.cartService = cartService
+    this.geographiesService = geographiesService
     this.imgDomain = envService.read('imgDomain')
     this.publicCru = envService.read('publicCru')
   }
@@ -54,6 +56,9 @@ class SignUpModalController {
     this.signUpErrors = []
     this.isLoading = true
     this.submitting = false
+    this.countryCodeOptions = {}
+    this.stateOptions = {}
+    this.selectedCountry = {}
   }
 
   loadTranslations () {
@@ -95,6 +100,7 @@ class SignUpModalController {
     })
 
     this.signIn()
+    this.loadCountries({initial : true}).subscribe()
 
     this.oktaSignInWidget.on('afterRender', this.afterRender.bind(this))
     this.oktaSignInWidget.on('afterError', this.afterError.bind(this))
@@ -145,6 +151,7 @@ class SignUpModalController {
       },
       {
         ...customFields.countryCode,
+        options: this.countryCodeOptions,
         label: this.countryField,
         value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US'
       }
@@ -197,6 +204,57 @@ class SignUpModalController {
     ]
   }
 
+  // TODO list
+  // Should have errors for not loading countries and regions With a retry button
+  // If not US show different address address lines 3 + 4
+  // if US, show City, State and Zip
+  // Zip should follow this pattern: "/^\d{5}(?:[-\s]\d{4})?$/"
+
+  loadCountries ({initial = false}) {
+    this.loadingCountriesError = false
+    return this.geographiesService.getCountries()
+      .map((data) => {
+        this.countriesData = data
+        this.countryCodeOptions = {}
+        data.forEach(country => {
+          this.countryCodeOptions[country.name] = country['display-name']
+        })
+
+        if (initial || this.$scope.countryCode) {
+          this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').subscribe();
+        }
+      })
+      .catch(error => {
+        this.loadingCountriesError = true
+        this.$log.error('Error loading countries.', error)
+      })
+  }
+
+  refreshRegions (country, forceRetry = false) {
+    this.loadingRegionsError = false
+    // Prevent multiple calls for the same country, unless it's a retry
+    if (this.selectedCountry.name === country && !forceRetry) {
+      return Observable.of(null);
+    }
+    const countryData = this.countriesData.find(c => c.name === country)
+    if (!countryData) { 
+      return Observable.throw(new Error('Country not found'));
+    }
+    this.selectedCountry = countryData
+
+    return this.geographiesService.getRegions(countryData).map((data) => {
+        data.forEach(state => {
+          this.stateOptions[state.name] = state['display-name']
+        })
+        return data
+      })
+      .catch(error => {
+        this.loadingRegionsError = true
+        this.$log.error('Error loading regions.', error)
+        return Observable.throw(error);
+      })
+  }
+
   preSubmit (postData, onSuccess) {
     const step = this.currentStep
     const userProfile = postData.userProfile
@@ -217,6 +275,11 @@ class SignUpModalController {
       accountType: postData.accountType,
       countryCode: userProfile.countryCode,
     })
+    // Load regions for the selected country
+    // Using finally, so we always go to the next step, even if there's an error
+    this.refreshRegions(userProfile.countryCode).finally(() => {
+      this.goToNextStep()
+    }).subscribe()
   }
 
   saveStep2Data (userProfile, postData) {
@@ -225,7 +288,6 @@ class SignUpModalController {
       city: userProfile.city,
       state: userProfile.state,
       zipCode: userProfile.zipCode,
-      countryCode: userProfile.countryCode,
       primaryPhone: userProfile.primaryPhone,
       organizationName: postData.organizationName
     })
@@ -397,7 +459,8 @@ export default angular
   .module(componentName, [
     sessionService.name,
     orderService.name,
-    cartService.name
+    cartService.name,
+    geographiesService.name
   ])
   .component(componentName, {
     controller: SignUpModalController,
