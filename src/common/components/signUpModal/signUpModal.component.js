@@ -71,6 +71,9 @@ class SignUpModalController {
       'CITY',
       'STATE',
       'ZIP',
+      'COUNTRY_LIST_ERROR',
+      'REGIONS_LOADING_ERROR',
+      'RETRY'
     ]).then(translations => {
       this.giveAsIndividualTxt = translations.GIVE_AS_INDIVIDUAL
       this.giveAsOrganizationTxt = translations.GIVE_AS_ORGANIZATION
@@ -80,6 +83,9 @@ class SignUpModalController {
       this.cityField = translations.CITY
       this.stateField = translations.STATE
       this.zipField = translations.ZIP
+      this.countryListError = translations.COUNTRY_LIST_ERROR
+      this.regionsLoadingError = translations.REGIONS_LOADING_ERROR
+      this.retryTxt = translations.RETRY
     })
   }
 
@@ -342,6 +348,13 @@ class SignUpModalController {
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
+
+    if (this.loadingCountriesError && this.currentStep === 1) {
+      this.injectCountryLoadError()
+    }
+    if (this.loadingRegionsError && this.currentStep === 2) {
+      this.injectRegionLoadError()
+    }
   }
 
   updateSignUpButtonText () {
@@ -396,6 +409,44 @@ class SignUpModalController {
       // Prepend the Back button before the "Next" button
       angular.element(buttonBar).prepend(backButton)
     }
+  }
+
+  injectLoadError ({fieldSelector, errorMessage, retryCallback}) {
+    const errorElement = document.createElement('div')
+    errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
+    errorElement.setAttribute('role', 'alert')
+    errorElement.innerHTML = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${errorMessage}`
+
+    const retryButtonElement = document.createElement('a')
+    retryButtonElement.classList.add('cru-retry-button')
+    retryButtonElement.innerHTML = this.retryTxt
+
+    const field = document.querySelector(fieldSelector)
+    field.classList.add('o-form-has-errors')
+    field.appendChild(errorElement)
+    field.appendChild(retryButtonElement)
+
+    retryButtonElement.addEventListener('click', () => {
+      retryCallback().finally(() => {
+        this.reRenderWidget()
+      }).subscribe()
+    });
+  }
+
+  injectCountryLoadError () {
+    this.injectLoadError({
+      fieldSelector: `.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]`,
+      errorMessage: this.countryListError,
+      retryCallback: () => this.loadCountries({initial: false})
+    })
+  }
+
+  injectRegionLoadError () {
+    this.injectLoadError({
+      fieldSelector: `.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]`,
+      errorMessage: this.regionsLoadingError,
+      retryCallback: () => this.refreshRegions(this.$scope.countryCode, true)
+    })
   }
 
   goToNextStep () {
