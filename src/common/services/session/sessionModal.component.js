@@ -1,9 +1,6 @@
 import angular from 'angular'
 
-import signInModal from 'common/components/signInModal/signInModal.component'
 import signUpModal from 'common/components/signUpModal/signUpModal.component'
-import resetPasswordModal from 'common/components/resetPasswordModal/resetPasswordModal.component'
-import forgotPasswordModal from 'common/components/forgotPasswordModal/forgotPasswordModal.component'
 import userMatchModal from 'common/components/userMatchModal/userMatchModal.component'
 import contactInfoModal from 'common/components/contactInfoModal/contactInfoModal.component'
 import accountBenefitsModal from 'common/components/accountBenefitsModal/accountBenefitsModal.component'
@@ -11,6 +8,7 @@ import registerAccountModal from 'common/components/registerAccountModal/registe
 import analyticsFactory from 'app/analytics/analytics.factory'
 
 import { scrollModalToTop } from 'common/services/modalState.service'
+import { LoginOktaOnlyEvent } from 'common/services/session/session.service'
 
 import template from './sessionModal.tpl.html'
 
@@ -18,18 +16,32 @@ const componentName = 'sessionModal'
 
 class SessionModalController {
   /* @ngInject */
-  constructor (sessionService, analyticsFactory, $document) {
+  constructor ($rootScope, $document, $window, sessionService, analyticsFactory) {
+    this.$rootScope = $rootScope
+    this.$document = $document
+    this.$window = $window
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
-    this.$document = $document
     this.$injector = angular.injector()
     this.isLoading = false
     this.scrollModalToTop = scrollModalToTop
   }
 
   $onInit () {
+    this.$rootScope.$on(LoginOktaOnlyEvent, (_, state) => {
+      this.stateChanged(state)
+    })
+    this.subscription = this.sessionService.sessionSubject.subscribe((session) => {
+      this.firstName = session.first_name
+    })
     this.stateChanged(this.resolve.state)
+    this.welcomeBack = this.resolve.welcomeBack
+    this.hideCloseButton = this.resolve.hideCloseButton
     this.lastPurchaseId = this.resolve.lastPurchaseId
+  }
+
+  $onDestroy () {
+    this.subscription.unsubscribe()
   }
 
   stateChanged (state) {
@@ -37,26 +49,28 @@ class SessionModalController {
     this.scrollModalToTop()
   }
 
-  onSignInSuccess () {
-    const $injector = this.$injector
-    if (!$injector.has('sessionService')) {
-      $injector.loadNewModules(['sessionService'])
-    }
-    this.$document[0].body.dispatchEvent(
-      new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-    this.close()
+  onSignIn () {
+    this.stateChanged('register-account')
   }
 
   onSignUpSuccess () {
     this.analyticsFactory.track('ga-sign-in-create-login')
+    this.sessionService.removeOktaRedirectIndicator()
     this.close()
   }
 
+  onAccountBenefitsSuccess () {
+    this.sessionService.removeOktaRedirectIndicator()
+    this.stateChanged('register-account')
+  }
+
   onFailure () {
+    this.sessionService.removeOktaRedirectIndicator()
     this.dismiss({ $value: 'error' })
   }
 
   onCancel () {
+    this.sessionService.removeOktaRedirectIndicator()
     this.dismiss({ $value: 'cancel' })
   }
 
@@ -67,10 +81,7 @@ class SessionModalController {
 
 export default angular
   .module(componentName, [
-    signInModal.name,
     signUpModal.name,
-    resetPasswordModal.name,
-    forgotPasswordModal.name,
     userMatchModal.name,
     contactInfoModal.name,
     accountBenefitsModal.name,

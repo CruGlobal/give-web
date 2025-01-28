@@ -67,11 +67,11 @@ describe('branded checkout', () => {
     })
 
     it('should set initial checkout step and call formatDonorDetails', () => {
-      jest.spyOn($ctrl.sessionService, 'signOut').mockReturnValue(Observable.of(''))
+      jest.spyOn($ctrl.sessionService, 'signOutWithoutRedirectToOkta').mockReturnValue(Observable.of(''))
       jest.spyOn($ctrl, 'formatDonorDetails').mockImplementation(() => {})
       $ctrl.$onInit()
 
-      expect($ctrl.sessionService.signOut).toHaveBeenCalled()
+      expect($ctrl.sessionService.signOutWithoutRedirectToOkta).toHaveBeenCalled()
       expect($ctrl.code).toEqual('1234567')
       expect($ctrl.tsysService.setDevice).toHaveBeenCalledWith('test-env')
       expect($ctrl.checkoutStep).toEqual('giftContactPayment')

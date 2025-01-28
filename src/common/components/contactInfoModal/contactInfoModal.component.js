@@ -44,6 +44,7 @@ export default angular
     templateUrl: template,
     bindings: {
       modalTitle: '=',
+      signUpDonorDetails: '<?',
       onStateChange: '&',
       onSuccess: '&',
       onCancel: '&'

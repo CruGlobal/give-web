@@ -1,15 +1,17 @@
-<div class="modal-body">
-  <contact-info submitted="$ctrl.submitted" on-submit="$ctrl.onSubmit(success)"></contact-info>
-  <div class="row">
-    <div class="col-sm-5 hidden-xs">
-      <button id="cancelButtonTop" class="btn btn-default" ng-click="$ctrl.onCancel()" translate>Cancel</button>
-    </div>
-    <div class="col-sm-5 col-sm-offset-2">
-      <button id="submitChangesButton" type="button" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = true" translate>Submit</button>
-      <button id="cancelButton" class="btn btn-link btn-block visible-xs" ng-click="$ctrl.onCancel()">
-        <i class="fa fa-angle-left"></i>
-        <translate>Cancel</translate>
-      </button>
-    </div>
+<contact-info
+  submitted="$ctrl.submitted"
+  on-submit="$ctrl.onSubmit(success)"
+  donor-details="$ctrl.signUpDonorDetails"
+></contact-info>
+<div class="row">
+  <div class="col-sm-5 hidden-xs">
+    <button id="cancelButtonTop" class="btn btn-default" ng-click="$ctrl.onCancel()" translate>Cancel</button>
+  </div>
+  <div class="col-sm-6 col-sm-offset-1">
+    <button id="submitChangesButton" type="button" class="btn btn-primary pull-right btn-block-mobile" ng-click="$ctrl.submitted = true" translate>Submit</button>
+    <button id="cancelButton" class="btn btn-link btn-block visible-xs" ng-click="$ctrl.onCancel()">
+      <i class="fa fa-angle-left"></i>
+      <translate>Cancel</translate>
+    </button>
   </div>
 </div>

@@ -29,6 +29,7 @@ export default angular
     templateUrl: template,
     bindings: {
       contacts: '<',
+      onBack: '&',
       onSelectContact: '&'
     }
   })
