@@ -42,10 +42,6 @@ user-match-modal {
     }
   }
 
-  .modal-dialog.modal-lg & .success .footer-buttons button {
-    margin-right: auto;
-  }
-
   .modal-footer {
     display: flex;
     justify-content: flex-end;
@@ -56,26 +52,5 @@ user-match-modal {
     .btn-primary {
       width: 400px;
     }
-  }
-}
-
-session-modal > div > div > user-match-modal {
-  width: 100%;
-
-  .footer-buttons {
-    padding: 15px;
-    background-color: #F5F5F5;
-    display: flex;
-
-    button:not(.back) {
-      margin-left: auto;
-      width: auto;
-    }
-    button.back {
-      display: block;
-    }
-  }
-  .success .footer-buttons {
-    flex-direction: column;
   }
 }
