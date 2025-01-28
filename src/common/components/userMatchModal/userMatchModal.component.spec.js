@@ -314,7 +314,7 @@ describe('userMatchModal', function () {
 
     describe('more questions', () => {
       it('asks next question', () => {
-        $ctrl.onQuestionAnswer($ctrl.questions[1], 'answer')
+        $ctrl.onQuestionAnswer(true, $ctrl.questions[1], 'answer')
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.questions).toEqual([{ key: 'a', answer: 'a' }, { key: 'key', answer: 'answer' }, { key: 'b', answer: '' }])
@@ -331,7 +331,7 @@ describe('userMatchModal', function () {
       it('proceeds to success on submitAnswers success', () => {
         jest.spyOn($ctrl.verificationService, 'submitAnswers').mockReturnValue(Observable.of({}))
 
-        $ctrl.onQuestionAnswer($ctrl.questions[1], 'answer')
+        $ctrl.onQuestionAnswer(true, $ctrl.questions[1], 'answer')
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.questions).toEqual([{ key: 'a', answer: 'a' }, { key: 'key', answer: 'answer' }])
@@ -347,7 +347,7 @@ describe('userMatchModal', function () {
       it('proceeds to failure on submitAnswers failure', () => {
         jest.spyOn($ctrl.verificationService, 'submitAnswers').mockReturnValue(Observable.throw({}))
 
-        $ctrl.onQuestionAnswer($ctrl.questions[1], 'answer')
+        $ctrl.onQuestionAnswer(true, $ctrl.questions[1], 'answer')
 
         expect($ctrl.verificationService.submitAnswers).toHaveBeenCalledWith([{ key: 'a', answer: 'a' }, {
           key: 'key',
@@ -355,6 +355,15 @@ describe('userMatchModal', function () {
         }])
 
         expect($ctrl.changeMatchState).toHaveBeenCalledWith('failure')
+      })
+    })
+
+    describe('error', () => {
+      it('aborts', () => {
+        $ctrl.onQuestionAnswer(false)
+
+        expect($ctrl.answerSubmitted).toBe(false)
+        expect($ctrl.setLoading).not.toHaveBeenCalled()
       })
     })
   })

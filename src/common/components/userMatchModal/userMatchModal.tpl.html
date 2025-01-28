@@ -41,12 +41,12 @@
       </p>
     </div>
     <user-match-question ng-switch-when="question"
-                          ng-init="$ctrl.analyticsFactory.track('ga-registration-match-security-question'+$ctrl.questionCount)"
-                          question="$ctrl.questions[$ctrl.questionIndex - 1]"
-                          question-index="$ctrl.questionIndex"
-                          question-count="$ctrl.questionCount"
-                          on-back="$ctrl.back()"
-                          on-question-answer="$ctrl.onQuestionAnswer(question, answer)">
+                         ng-init="$ctrl.analyticsFactory.track('ga-registration-match-security-question'+$ctrl.questionCount)"
+                         question="$ctrl.getQuestion()"
+                         question-index="$ctrl.questionIndex"
+                         question-count="$ctrl.questionCount"
+                         submitted="$ctrl.answerSubmitted"
+                         on-question-answer="$ctrl.onQuestionAnswer(success, question, answer)">
     </user-match-question>
     <div ng-switch-when="success" class="success">
       <h4 class="text-center" translate>Success!</h4>
@@ -76,6 +76,15 @@
   <div ng-switch-when="identity">
     <button type="button" class="btn btn-md back" ng-click="$ctrl.changeMatchState('intro')" translate>Back</button>
     <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.requestIdentitySubmit()" translate>Next</button>
+  </div>
+  <div ng-switch-when="question">
+    <button type="button" class="btn btn-md back" ng-click="$ctrl.back()" translate>Back</button>
+    <button type="button" class="btn btn-md btn-block btn-primary"
+            ng-click="$ctrl.requestAnswerSubmit()"
+            ng-switch="$ctrl.getQuestion().key">
+      <span ng-switch-default translate>Next</span>
+      <span ng-switch-when="ministry-gift" translate>Finish Activation</span>
+    </button>
   </div>
   <div ng-switch-when="match-success">
     <div ng-if="$ctrl.cartCount > 0">

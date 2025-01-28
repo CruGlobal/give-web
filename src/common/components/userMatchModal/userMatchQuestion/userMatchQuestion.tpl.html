@@ -15,16 +15,4 @@
              required>{{answer.answer}}
     </label>
   </div>
-
-  <div class="footer-buttons">
-    <button type="button" class="btn btn-md back" ng-click="$ctrl.onBack()" translate>Back</button>
-    <button type="button"
-            class="btn btn-md btn-block btn-primary"
-            ng-if="$ctrl.question"
-            ng-click="$ctrl.selectAnswer()"
-            ng-switch="$ctrl.question.key">
-      <span ng-switch-default translate>Next</span>
-      <span ng-switch-when="ministry-gift" translate>Finish Activation</span>
-    </button>
-  </div>
 </form>

@@ -13,14 +13,21 @@ class UserMatchQuestionController {
     if (changes.question) {
       this.answer = this.question.answer
     }
+    if (changes.submitted && changes.submitted.currentValue === true) {
+      this.selectAnswer()
+    }
   }
 
   selectAnswer () {
     this.hasError = false
     if (!this.questionForm.$valid) {
       this.hasError = true
+      this.onQuestionAnswer({
+        success: false
+      })
     } else {
       this.onQuestionAnswer({
+        success: true,
         question: this.question,
         answer: this.answer
       })
@@ -37,7 +44,11 @@ export default angular
       question: '<',
       questionIndex: '<',
       questionCount: '<',
-      onBack: '&',
+      // Set to true from the parent to cause the form to submit and call onSubmit if it is valid
+      submitted: '<',
+      // Called with a `success` boolean to indicate whether the selection was valid
+      // If the selection is valid, it is also called with `question` set to the current question
+      // and `answer` set to the selected answer
       onQuestionAnswer: '&'
     }
   })
