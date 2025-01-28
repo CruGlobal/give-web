@@ -21,7 +21,7 @@
     Please fill in your information for your online account.
   </div>
 </div>
-<div class="modal-body" ng-switch="$ctrl.state">
+<div ng-switch="$ctrl.state">
   <sign-in-modal
     ng-switch-when="sign-in"
     modal-title="$ctrl.modalTitle"
@@ -38,7 +38,9 @@
     is-inside-another-modal="true"
   ></sign-up-modal>
   <div ng-switch-when="loading-donor">
-    <loading></loading>
+    <div class="modal-body">
+      <loading></loading>
+    </div>
   </div>
   <contact-info-modal
     ng-switch-when="contact-info"
@@ -60,5 +62,5 @@
     modal-title="$ctrl.modalTitle"
     on-ok="$ctrl.onCancel()"
   ></failed-verification-modal>
-  <div ng-switch-default style="height: 100px;"></div>
+  <div ng-switch-default class="modal-body" style="height: 100px;"></div>
 </div>
