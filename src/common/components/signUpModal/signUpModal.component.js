@@ -210,12 +210,6 @@ class SignUpModalController {
     ]
   }
 
-  // TODO list
-  // Should have errors for not loading countries and regions With a retry button
-  // If not US show different address address lines 3 + 4
-  // if US, show City, State and Zip
-  // Zip should follow this pattern: "/^\d{5}(?:[-\s]\d{4})?$/"
-
   loadCountries ({initial = false}) {
     this.loadingCountriesError = false
     return this.geographiesService.getCountries()
