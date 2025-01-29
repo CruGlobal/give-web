@@ -156,10 +156,9 @@ class SignUpModalController {
         value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household'
       },
       {
-        ...customFields.countryCode,
-        options: this.countryCodeOptions,
-        label: this.countryField,
-        value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US'
+        ...customFields.organizationName,
+        label: this.organizationNameTxt,
+        value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
       }
     ]
   }
@@ -168,20 +167,17 @@ class SignUpModalController {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
 
-    const organizationNameField = this.$scope.accountType === 'Organization'
-      ? [{
-          ...customFields.organizationName,
-          label: this.organizationNameTxt,
-          value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
-        }]
-      : []
-
     const addressFields = this.$scope.countryCode === 'US'
       ? this.getUSAddressFields()
       : this.getNonUSAddressFields()
 
     return [
-      ...organizationNameField,
+      {
+        ...customFields.countryCode,
+        options: this.countryCodeOptions,
+        label: this.countryField,
+        value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US'
+      },
       ...addressFields,
       {
         ...customFields.primaryPhone,
@@ -243,7 +239,7 @@ class SignUpModalController {
   }
 
   // TODO list
-  // If not US show different address address lines 3 + 4
+  // Add new tests
   // if US, show City, State and Zip
   // Zip should follow this pattern: "/^\d{5}(?:[-\s]\d{4})?$/"
 
