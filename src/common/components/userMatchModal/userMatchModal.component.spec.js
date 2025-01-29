@@ -377,22 +377,14 @@ describe('userMatchModal', function () {
   })
 
   describe('getCurrentStep()', () => {
-    it('returns intro step', () => {
-      $ctrl.matchState = 'intro'
-      expect($ctrl.getCurrentStep()).toEqual(0.1)
-    })
-    it('returns identity step', () => {
-      $ctrl.matchState = 'identity'
-      expect($ctrl.getCurrentStep()).toEqual(1)
-    })
     it('returns the next question step', () => {
       $ctrl.matchState = 'question'
       $ctrl.questionIndex = 2
-      expect($ctrl.getCurrentStep()).toEqual(3)
+      expect($ctrl.getCurrentStep()).toEqual(1)
     })
     it('returns success step', () => {
       $ctrl.matchState = 'success'
-      expect($ctrl.getCurrentStep()).toEqual(7)
+      expect($ctrl.getCurrentStep()).toEqual(5)
     })
     it('returns default step', () => {
       $ctrl.matchState = 'default'

@@ -20,7 +20,7 @@ class UserMatchModalController {
     this.profileService = profileService
     this.verificationService = verificationService
     this.analyticsFactory = analyticsFactory
-    this.stepCount = 8 // intro, name, 5 questions, and success
+    this.stepCount = 6 // 5 questions, and success
     this.identitySubmitted = false
     this.answerSubmitted = false
   }
@@ -53,14 +53,10 @@ class UserMatchModalController {
   }
 
   getCurrentStep () {
-    if (this.matchState === 'intro') {
-      return 0.1
-    } else if (this.matchState === 'identity') {
-      return 1
-    } else if (this.matchState === 'question') {
-      return this.questionIndex + 1 // questionIndex is 1-indexed, otherwise this would be + 2
+    if (this.matchState === 'question') {
+      return this.questionIndex - 1 // questionIndex is 1-indexed, otherwise this would be + 0
     } else if (this.matchState === 'success') {
-      return 7
+      return 5
     } else {
       return 0
     }
