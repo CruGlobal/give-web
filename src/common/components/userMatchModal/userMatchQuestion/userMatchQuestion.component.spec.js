@@ -22,7 +22,7 @@ describe('userMatchQuestion', function () {
   })
 
   describe('$onChanges', () => {
-    it('should set the new answer value', () => {
+    it('sets the new answer value', () => {
       expect($ctrl.answer).toEqual({'answer': 'answer'})
       $ctrl.question.answer = 'new answer'
       $ctrl.$onChanges({
@@ -32,6 +32,22 @@ describe('userMatchQuestion', function () {
       })
       expect($ctrl.answer).toEqual('new answer')
     })
+
+    it('submits the form when submitted changes to true', () => {
+      $ctrl.$onChanges({
+        submitted: { currentValue: true }
+      })
+
+      expect($ctrl.onQuestionAnswer).toHaveBeenCalled()
+    })
+
+    it('does nothing when the when submitted changes to false', () => {
+      $ctrl.$onChanges({
+        submitted: { currentValue: false }
+      })
+
+      expect($ctrl.onQuestionAnswer).not.toHaveBeenCalled()
+    })
   })
 
   describe('selectAnswer()', () => {
@@ -40,7 +56,7 @@ describe('userMatchQuestion', function () {
         $ctrl.selectAnswer()
 
         expect($ctrl.hasError).toEqual(true)
-        expect($ctrl.onQuestionAnswer).not.toHaveBeenCalled()
+        expect($ctrl.onQuestionAnswer).toHaveBeenCalledWith({ success: false })
         expect($ctrl.answer).toEqual({ answer: 'answer' })
       })
     })
@@ -52,7 +68,7 @@ describe('userMatchQuestion', function () {
         expect($ctrl.answer).toEqual({ answer: 'answer' })
         $ctrl.selectAnswer()
 
-        expect($ctrl.onQuestionAnswer).toHaveBeenCalledWith({question: { key: 'key' },  answer: { answer: 'answer' } })
+        expect($ctrl.onQuestionAnswer).toHaveBeenCalledWith({ success: true, question: { key: 'key' }, answer: { answer: 'answer' } })
         expect($ctrl.answer).toEqual({ answer: 'answer' })
       })
     })

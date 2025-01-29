@@ -1,6 +1,15 @@
 user-match-modal {
   display: inline-block;
-  padding: 20px;
+  width: 100%;
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .modal-footer > div {
+    // Treat the buttons as children of the footer even when they are nested inside a div
+    display: contents;
+  }
 
   h4 {
     font-weight: bold;
@@ -33,28 +42,15 @@ user-match-modal {
     }
   }
 
-  .modal-dialog.modal-lg & .success .footer-buttons button {
-    margin-right: auto;
-  }
-}
-
-session-modal > div > div > user-match-modal {
-  width: 100%;
-
-  .footer-buttons {
-    padding: 15px;
-    background-color: #F5F5F5;
+  .modal-footer {
     display: flex;
+    justify-content: flex-end;
 
-    button:not(.back) {
-      margin-left: auto;
-      width: auto;
+    .btn.back {
+      margin-right: auto;
     }
-    button.back {
-      display: block;
+    .btn-primary {
+      width: 400px;
     }
-  }
-  .success .footer-buttons {
-    flex-direction: column;
   }
 }

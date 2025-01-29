@@ -35,17 +35,6 @@ register-account-modal {
     margin-top: 20px;
   }
 
-  .footer-buttons {
-    button {
-      width: 100%;
-    }
-
-    button.back {
-      display: none;
-      width: auto;
-    }
-  }
-
   .modal-dialog.modal-sm & {
     &[data-state=sign-in],
     &[data-state=loading-donor] {
@@ -118,26 +107,6 @@ register-account-modal {
         margin-left: 200px;
         margin-right: 200px;
       }
-    }
-
-    .footer-buttons {
-      margin-left: -230px;
-      margin-right: -230px;
-      margin-bottom: -30px;
-      padding: 15px;
-      background-color: #F5F5F5;
-      display: flex;
-
-      button:not(.back) {
-        width: 400px;
-        margin-left: auto;
-      }
-      button.back {
-        display: block;
-      }
-    }
-    .success .footer-buttons {
-      flex-direction: column;
     }
   }
 
