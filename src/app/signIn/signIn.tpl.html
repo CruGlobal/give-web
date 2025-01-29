@@ -5,22 +5,18 @@
         <div class="panel sign-in-panel">
           <div class="panel-body">
             <div class="row vdivide">
-              <div class="col-md-6 sign-in-section">
+              <div class="col-md-6 col-xs-12 sign-in-section">
                 <h3 class="text-center" translate>Guest Checkout</h3>
                 <p class="text-center section-description" translate>If desired, you may create an account at the end of the checkout process.</p>
 
-                <button id="continueAsGuestButton" type="button" class="btn btn-block btn-primary" ng-click="$ctrl.checkoutAsGuest()" translate>Continue Checkout</button>
+                <button id="continueAsGuestButton" type="button" class="btn btn-block btn-primary" ng-click="$ctrl.checkoutAsGuest()" translate>Continue as Guest</button>
               </div>
 
-              <div class="col-md-6 sign-in-section">
+              <div class="col-md-6 col-xs-12 sign-in-section">
                 <h3 class="text-center" translate>Already have an account?</h3>
-                <p class="text-center section-description" translate>Sign in now for faster checkout and to save payment info for the next time.</p>
+                <p class="text-center section-description" translate>Sign in now for faster checkout by using saved contact and payment information.</p>
 
-                <sign-in-form></sign-in-form>
-
-                <div class="text-center self-service">
-                  <a href="" ng-click="$ctrl.resetPassword()" translate>Forgot your password?</a>
-                </div>
+                <sign-in-form on-sign-in-page="true"></sign-in-form>
               </div>
             </div>
           </div>
