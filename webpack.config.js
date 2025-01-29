@@ -20,7 +20,8 @@ const giveComponents = [
   'app/profile/receipts/receipts.component.js',
   'app/profile/payment-methods/payment-methods.component.js',
   'app/designationEditor/designationEditor.component.js',
-  'app/newsletterSubscription/newsletterSubscription.component.js'
+  'app/newsletterSubscription/newsletterSubscription.component.js',
+  'app/oktaAuthCallback/oktaAuthCallback.component.js'
 ]
 
 const giveCss = ['assets/scss/styles.scss']
