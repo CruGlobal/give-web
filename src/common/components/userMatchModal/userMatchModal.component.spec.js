@@ -209,7 +209,7 @@ describe('userMatchModal', function () {
       it('selects the contact', () => {
         jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
         jest.spyOn($ctrl, 'onActivate')
-        $ctrl.onSelectContact({ name: 'Batman' })
+        $ctrl.onSelectContact(true, { name: 'Batman' })
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.selectContact).toHaveBeenCalledWith({ name: 'Batman' })
@@ -220,7 +220,7 @@ describe('userMatchModal', function () {
 
       it('should log an error on failure', () => {
         jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.throw('some error'))
-        $ctrl.onSelectContact({ name: 'Batman' })
+        $ctrl.onSelectContact(true, { name: 'Batman' })
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.selectContact).toHaveBeenCalledWith({ name: 'Batman' })
@@ -232,13 +232,13 @@ describe('userMatchModal', function () {
 
       it('should only return the first name', () => {
         jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        $ctrl.onSelectContact({ name: 'firstName lastName' })
+        $ctrl.onSelectContact(true, { name: 'firstName lastName' })
         expect($ctrl.firstName).toEqual('firstName')
       })
 
       it('should return the first two first names', () => {
         jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        $ctrl.onSelectContact({ name: 'firstName secondFirstName lastName' })
+        $ctrl.onSelectContact(true, { name: 'firstName secondFirstName lastName' })
         expect($ctrl.firstName).toEqual('firstName secondFirstName')
       })
     })
@@ -246,7 +246,7 @@ describe('userMatchModal', function () {
     describe('undefined', () => {
       it('selects \'that-is-not-me\'', () => {
         jest.spyOn($ctrl.verificationService, 'thatIsNotMe').mockReturnValue(Observable.of({}))
-        $ctrl.onSelectContact()
+        $ctrl.onSelectContact(true)
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.thatIsNotMe).toHaveBeenCalled()
@@ -255,7 +255,7 @@ describe('userMatchModal', function () {
 
       it('should log an error on failure', () => {
         jest.spyOn($ctrl.verificationService, 'thatIsNotMe').mockReturnValue(Observable.throw('some error'))
-        $ctrl.onSelectContact()
+        $ctrl.onSelectContact(true)
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.thatIsNotMe).toHaveBeenCalled()
@@ -263,6 +263,15 @@ describe('userMatchModal', function () {
         expect($ctrl.selectContactError).toEqual(true)
         expect($ctrl.$log.error.logs[0]).toEqual(['Error selecting \'that-is-not-me\' verification contact', 'some error'])
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
+      })
+    })
+
+    describe('error', () => {
+      it('aborts', () => {
+        $ctrl.onSelectContact(false)
+
+        expect($ctrl.identitySubmitted).toBe(false)
+        expect($ctrl.setLoading).not.toHaveBeenCalled()
       })
     })
   })
@@ -305,7 +314,7 @@ describe('userMatchModal', function () {
 
     describe('more questions', () => {
       it('asks next question', () => {
-        $ctrl.onQuestionAnswer($ctrl.questions[1], 'answer')
+        $ctrl.onQuestionAnswer(true, $ctrl.questions[1], 'answer')
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.questions).toEqual([{ key: 'a', answer: 'a' }, { key: 'key', answer: 'answer' }, { key: 'b', answer: '' }])
@@ -322,7 +331,7 @@ describe('userMatchModal', function () {
       it('proceeds to success on submitAnswers success', () => {
         jest.spyOn($ctrl.verificationService, 'submitAnswers').mockReturnValue(Observable.of({}))
 
-        $ctrl.onQuestionAnswer($ctrl.questions[1], 'answer')
+        $ctrl.onQuestionAnswer(true, $ctrl.questions[1], 'answer')
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.questions).toEqual([{ key: 'a', answer: 'a' }, { key: 'key', answer: 'answer' }])
@@ -338,7 +347,7 @@ describe('userMatchModal', function () {
       it('proceeds to failure on submitAnswers failure', () => {
         jest.spyOn($ctrl.verificationService, 'submitAnswers').mockReturnValue(Observable.throw({}))
 
-        $ctrl.onQuestionAnswer($ctrl.questions[1], 'answer')
+        $ctrl.onQuestionAnswer(true, $ctrl.questions[1], 'answer')
 
         expect($ctrl.verificationService.submitAnswers).toHaveBeenCalledWith([{ key: 'a', answer: 'a' }, {
           key: 'key',
@@ -346,6 +355,15 @@ describe('userMatchModal', function () {
         }])
 
         expect($ctrl.changeMatchState).toHaveBeenCalledWith('failure')
+      })
+    })
+
+    describe('error', () => {
+      it('aborts', () => {
+        $ctrl.onQuestionAnswer(false)
+
+        expect($ctrl.answerSubmitted).toBe(false)
+        expect($ctrl.setLoading).not.toHaveBeenCalled()
       })
     })
   })

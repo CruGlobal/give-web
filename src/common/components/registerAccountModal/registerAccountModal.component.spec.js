@@ -282,12 +282,12 @@ describe('registerAccountModal', function () {
     })
 
     describe('\'registration-state\' FAILED', () => {
-      it('changes state to \'failed-verification\'', () => {
+      it('changes state to \'user-match\'', () => {
         $ctrl.orderService.getDonorDetails.mockImplementation(() => Observable.of({ 'registration-state': 'FAILED' }))
         $ctrl.checkDonorDetails()
 
         expect($ctrl.orderService.getDonorDetails).toHaveBeenCalled()
-        expect($ctrl.stateChanged).toHaveBeenCalledWith('failed-verification')
+        expect($ctrl.stateChanged).toHaveBeenCalledWith('user-match')
       })
     })
 

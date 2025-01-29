@@ -21,6 +21,8 @@ class UserMatchModalController {
     this.verificationService = verificationService
     this.analyticsFactory = analyticsFactory
     this.stepCount = 8 // intro, name, 5 questions, and success
+    this.identitySubmitted = false
+    this.answerSubmitted = false
   }
 
   $onInit () {
@@ -36,6 +38,8 @@ class UserMatchModalController {
         } else if (donorDetails['registration-state'] === 'NEW') {
           // Do donor matching if
           this.postDonorMatch()
+        } else if (donorDetails['registration-state'] === 'FAILED') {
+          this.changeMatchState('failure')
         } else {
           this.changeMatchState('intro')
         }
@@ -60,6 +64,10 @@ class UserMatchModalController {
     } else {
       return 0
     }
+  }
+
+  getQuestion () {
+    return this.questions[this.questionIndex - 1]
   }
 
   postDonorMatch () {
@@ -112,7 +120,14 @@ class UserMatchModalController {
     this.setLoading({ loading: false })
   }
 
-  onSelectContact (contact) {
+  onSelectContact (success, contact) {
+    // If the user-match-identity selection was invalid, success will be false, but we still need to
+    // reset identitySubmitted so that we can set it to true later when the user tries to submit again
+    this.identitySubmitted = false
+    if (!success) {
+      return
+    }
+
     this.setLoading({ loading: true })
     this.selectContactError = false
     if (angular.isDefined(contact)) {
@@ -140,6 +155,20 @@ class UserMatchModalController {
     }
   }
 
+  // Request that the user-match-identity component submit the form because the user clicked next
+  requestIdentitySubmit () {
+    // Changing this will trigger $onChanges in user-match-identity, which will ultimately call
+    // onSelectContact in this controller
+    this.identitySubmitted = true
+  }
+
+  // Request that the user-match-question component submit the form because the user clicked next
+  requestAnswerSubmit () {
+    // Changing this will trigger $onChanges in user-match-question, which will ultimately call
+    // onQuestionAnswer in this controller
+    this.answerSubmitted = true
+  }
+
   onActivate () {
     this.setLoading({ loading: true })
     this.loadingQuestionsError = false
@@ -156,7 +185,14 @@ class UserMatchModalController {
     })
   }
 
-  onQuestionAnswer (question, answer) {
+  onQuestionAnswer (success, question, answer) {
+    // If the user-match-question selection was invalid, success will be false, but we still need to
+    // reset answerSubmitted so that we can set it to true later when the user tries to submit again
+    this.answerSubmitted = false
+    if (!success) {
+      return
+    }
+
     this.setLoading({ loading: true })
     question.answer = answer
     if (this.questionIndex < this.questions.length) {
