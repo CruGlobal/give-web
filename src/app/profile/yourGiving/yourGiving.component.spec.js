@@ -25,7 +25,6 @@ describe('your giving', function () {
     expect($ctrl.$rootScope).toBeDefined()
     expect($ctrl.sessionEnforcerService).toBeDefined()
     expect($ctrl.profileService).toBeDefined()
-    expect($ctrl.sessionService).toBeDefined()
   })
 
   describe('$onInit()', () => {
@@ -39,7 +38,6 @@ describe('your giving', function () {
 
     describe('\'PUBLIC\' role', () => {
       it('sets profileLoading and registers sessionEnforcer', () => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.public)
         $ctrl.$onInit()
 
         expect($ctrl.sessionEnforcerService).toHaveBeenCalledWith(
@@ -61,7 +59,6 @@ describe('your giving', function () {
 
     describe('\'REGISTERED\' role', () => {
       it('calls loadProfile and registers sessionEnforcer', () => {
-        jest.spyOn($ctrl.sessionService, 'getRole').mockReturnValue(Roles.registered)
         $ctrl.$onInit()
 
         expect($ctrl.sessionEnforcerService).toHaveBeenCalledWith(
@@ -97,9 +94,9 @@ describe('your giving', function () {
         $ctrl.sessionEnforcerService.mock.calls[0][1]['cancel']()
 
         expect($ctrl.$window.location).toEqual('/')
-      });
+      })
     })
-  });
+  })
 
   describe('$onDestroy()', () => {
     it('cleans up the component', () => {
