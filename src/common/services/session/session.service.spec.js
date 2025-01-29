@@ -187,9 +187,9 @@ describe('session service', function () {
 
   describe('signOut()', () => {
     beforeEach(() => {
-      jest.spyOn(sessionService.authClient, 'revokeAccessToken')
-      jest.spyOn(sessionService.authClient, 'revokeRefreshToken')
-      jest.spyOn(sessionService.authClient, 'signOut')
+      jest.spyOn(sessionService.authClient, 'revokeAccessToken').mockResolvedValue()
+      jest.spyOn(sessionService.authClient, 'revokeRefreshToken').mockResolvedValue()
+      jest.spyOn(sessionService.authClient, 'signOut').mockResolvedValue({ data: {} })
 
       $window.sessionStorage.removeItem(forcedUserToLogout)
     })
@@ -201,9 +201,6 @@ describe('session service', function () {
       })
 
       it('makes a DELETE request to Cortex & sets postLogoutRedirectUri', done => {
-        jest.spyOn(sessionService.authClient, 'signOut').mockImplementationOnce(() => Promise.resolve({
-          data: {}
-        }))
         sessionService
           .signOut(false)
           .subscribe((response) => {
@@ -213,6 +210,7 @@ describe('session service', function () {
             })
             done()
           }, done)
+        $httpBackend.flush()
       })
 
       it('should revoke all tokens & run signOut returning the user home', done => {
@@ -226,10 +224,12 @@ describe('session service', function () {
             })
             done()
           }, done)
+        $httpBackend.flush()
       })
 
       it('should still sign user out if error during signout', done => {
-        jest.spyOn(sessionService.authClient, 'signOut').mockRejectedValueOnce()
+        sessionService.authClient.signOut.mockRejectedValue()
+
         sessionService
           .signOut()
           .subscribe(() => {
@@ -238,6 +238,7 @@ describe('session service', function () {
             expect(sessionService.authClient.signOut).toHaveBeenCalled()
             done()
           }, done)
+        $httpBackend.flush()
       })
 
       it('should add forcedUserToLogout session data', done => {
@@ -247,6 +248,7 @@ describe('session service', function () {
             expect($window.sessionStorage.getItem(forcedUserToLogout)).toEqual('true')
             done()
           }, done)
+        $httpBackend.flush()
       })
     })
 
@@ -263,21 +265,23 @@ describe('session service', function () {
             expect($window.sessionStorage.getItem(forcedUserToLogout)).toEqual('true')
             done()
           }, done)
+        $httpBackend.flush()
       })
 
       it('should redirect the user to okta if all else fails', done => {
-        jest.spyOn(sessionService.authClient, 'signOut').mockRejectedValue()
+        sessionService.authClient.signOut.mockRejectedValue()
+
         sessionService
           .signOut()
           .subscribe(() => {
             expect($window.location.href).toEqual(`${envService.read('oktaUrl')}/login/signout?fromURI=${envService.read('oktaReferrer')}`)
             done()
           }, done)
+        $httpBackend.flush()
       })
     })
 
     afterEach(() => {
-      $httpBackend.flush()
       $httpBackend.verifyNoOutstandingExpectation()
       $httpBackend.verifyNoOutstandingRequest()
     })
