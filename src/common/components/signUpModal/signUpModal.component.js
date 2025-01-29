@@ -106,7 +106,7 @@ class SignUpModalController {
     })
 
     this.signIn()
-    this.loadCountries({initial : true}).subscribe()
+    this.loadCountries({ initial: true }).subscribe()
 
     this.oktaSignInWidget.on('afterRender', this.afterRender.bind(this))
     this.oktaSignInWidget.on('afterError', this.afterError.bind(this))
@@ -169,16 +169,16 @@ class SignUpModalController {
     // Pre-populate the form fields with existing user details.
 
     const organizationNameField = this.$scope.accountType === 'Organization'
-    ? [{
-        ...customFields.organizationName,
-        label: this.organizationNameTxt,
-        value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
-      }]
-    : []
+      ? [{
+          ...customFields.organizationName,
+          label: this.organizationNameTxt,
+          value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
+        }]
+      : []
 
     const addressFields = this.$scope.countryCode === 'US'
       ? this.getUSAddressFields()
-      : this.getNonUSAddressFields();
+      : this.getNonUSAddressFields()
 
     return [
       ...organizationNameField,
@@ -216,11 +216,11 @@ class SignUpModalController {
         ...customFields.zipCode,
         label: this.zipField,
         value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
-      },
+      }
     ]
   }
 
-  getNonUSAddressFields() {
+  getNonUSAddressFields () {
     return [
       {
         ...customFields.streetAddress,
@@ -247,7 +247,7 @@ class SignUpModalController {
   // if US, show City, State and Zip
   // Zip should follow this pattern: "/^\d{5}(?:[-\s]\d{4})?$/"
 
-  loadCountries ({initial = false}) {
+  loadCountries ({ initial = false }) {
     this.loadingCountriesError = false
     return this.geographiesService.getCountries()
       .map((data) => {
@@ -258,8 +258,10 @@ class SignUpModalController {
         })
 
         if (initial || this.$scope.countryCode) {
-          this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').subscribe();
+          this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').subscribe()
         }
+
+        return this.countryCodeOptions
       })
       .catch(error => {
         this.loadingCountriesError = true
@@ -271,24 +273,24 @@ class SignUpModalController {
     this.loadingRegionsError = false
     // Prevent multiple calls for the same country, unless it's a retry
     if (this.selectedCountry.name === country && !forceRetry) {
-      return Observable.of(null);
+      return Observable.of(null)
     }
     const countryData = this.countriesData.find(c => c.name === country)
-    if (!countryData) { 
-      return Observable.throw(new Error('Country not found'));
+    if (!countryData) {
+      return Observable.throw(new Error('Country not found'))
     }
     this.selectedCountry = countryData
 
     return this.geographiesService.getRegions(countryData).map((data) => {
-        data.forEach(state => {
-          this.stateOptions[state.name] = state['display-name']
-        })
-        return data
+      data.forEach(state => {
+        this.stateOptions[state.name] = state['display-name']
       })
+      return data
+    })
       .catch(error => {
         this.loadingRegionsError = true
         this.$log.error('Error loading regions.', error)
-        return Observable.throw(error);
+        return Observable.throw(error)
       })
   }
 
@@ -310,7 +312,7 @@ class SignUpModalController {
       lastName: userProfile.lastName,
       email: userProfile.email,
       accountType: postData.accountType,
-      countryCode: userProfile.countryCode,
+      countryCode: userProfile.countryCode
     })
     // Load regions for the selected country
     // Using finally, so we always go to the next step, even if there's an error
@@ -445,7 +447,7 @@ class SignUpModalController {
     }
   }
 
-  injectLoadError ({fieldSelector, errorMessage, retryCallback}) {
+  injectLoadError ({ fieldSelector, errorMessage, retryCallback }) {
     const errorElement = document.createElement('div')
     errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
     errorElement.setAttribute('role', 'alert')
@@ -464,20 +466,20 @@ class SignUpModalController {
       retryCallback().finally(() => {
         this.reRenderWidget()
       }).subscribe()
-    });
+    })
   }
 
   injectCountryLoadError () {
     this.injectLoadError({
-      fieldSelector: `.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]`,
+      fieldSelector: '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]',
       errorMessage: this.countryListError,
-      retryCallback: () => this.loadCountries({initial: false})
+      retryCallback: () => this.loadCountries({ initial: false })
     })
   }
 
   injectRegionLoadError () {
     this.injectLoadError({
-      fieldSelector: `.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]`,
+      fieldSelector: '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]',
       errorMessage: this.regionsLoadingError,
       retryCallback: () => this.refreshRegions(this.$scope.countryCode, true)
     })
