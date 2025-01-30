@@ -323,15 +323,16 @@ class SignUpModalController {
   }
 
   saveStep2Data (userProfile) {
+    const isUSAddress = userProfile.countryCode === 'US'
     Object.assign(this.$scope, {
       countryCode: userProfile.countryCode,
       streetAddress: userProfile.streetAddress,
       streetAddressExtended: userProfile.streetAddressExtended,
-      internationalAddressLine3: userProfile.internationalAddressLine3,
-      internationalAddressLine4: userProfile.internationalAddressLine4,
-      city: userProfile.city,
-      state: userProfile.state,
-      zipCode: userProfile.zipCode,
+      internationalAddressLine3: isUSAddress ? '' : userProfile.internationalAddressLine3,
+      internationalAddressLine4: isUSAddress ? '' : userProfile.internationalAddressLine4,
+      city: isUSAddress ? userProfile.city : '',
+      state: isUSAddress ? userProfile.state : '',
+      zipCode: isUSAddress ? userProfile.zipCode : '',
       primaryPhone: userProfile.primaryPhone,
     })
 
