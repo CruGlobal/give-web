@@ -354,6 +354,14 @@ class SignUpModalController {
           errorSummary: this.translations.zipCodeError,
           property: 'userProfile.zipCode'
         })
+      } else {
+        const zipCodeRegex = /^\d{5}(?:[-\s]\d{4})?$/
+        if (!zipCodeRegex.test(this.$scope.zipCode)) { 
+          errors.push({
+            errorSummary: this.translations.invalidUSZipError,
+            property: 'userProfile.zipCode'
+          })
+        }
       }
     }
 
