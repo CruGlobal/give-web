@@ -80,7 +80,7 @@ class SignUpModalController {
       'CITY_ERROR',
       'SELECT_STATE_ERROR',
       'ZIP_CODE_ERROR',
-      'INVALID_US_ZIP_ERROR',
+      'INVALID_US_ZIP_ERROR'
     ]).then(translations => {
       this.translations = {
         giveAsIndividual: translations.GIVE_AS_INDIVIDUAL,
@@ -98,7 +98,7 @@ class SignUpModalController {
         cityError: translations.CITY_ERROR,
         selectStateError: translations.SELECT_STATE_ERROR,
         zipCodeError: translations.ZIP_CODE_ERROR,
-        invalidUSZipError: translations.INVALID_US_ZIP_ERROR,
+        invalidUSZipError: translations.INVALID_US_ZIP_ERROR
       }
     })
   }
@@ -167,12 +167,12 @@ class SignUpModalController {
           Household: this.translations.giveAsIndividual,
           Organization: this.translations.giveAsOrganization
         },
-        value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household',
+        value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household'
       },
       {
         ...customFields.organizationName,
         label: this.translations.organizationName,
-        value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || '',
+        value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
       }
     ]
   }
@@ -245,12 +245,10 @@ class SignUpModalController {
           this.countryCodeOptions[country.name] = country['display-name']
         })
         if (initial || this.$scope.countryCode) {
-          this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').finally(() => {
-            return this.countryCodeOptions
-          }).subscribe()
-        } else {
-          return this.countryCodeOptions
+          this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').subscribe()
         }
+
+        return this.countryCodeOptions
       })
       .catch(error => {
         this.loadingCountriesError = true
@@ -333,7 +331,7 @@ class SignUpModalController {
       city: isUSAddress ? userProfile.city : '',
       state: isUSAddress ? userProfile.state : '',
       zipCode: isUSAddress ? userProfile.zipCode : '',
-      primaryPhone: userProfile.primaryPhone,
+      primaryPhone: userProfile.primaryPhone
     })
 
     const errors = []
@@ -357,7 +355,7 @@ class SignUpModalController {
         })
       } else {
         const zipCodeRegex = /^\d{5}(?:[-\s]\d{4})?$/
-        if (!zipCodeRegex.test(this.$scope.zipCode)) { 
+        if (!zipCodeRegex.test(this.$scope.zipCode)) {
           errors.push({
             errorSummary: this.translations.invalidUSZipError,
             property: 'userProfile.zipCode'
