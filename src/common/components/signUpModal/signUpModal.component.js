@@ -456,12 +456,17 @@ class SignUpModalController {
     errors.forEach(error => {
       const field = document.querySelector(`.o-form-input-name-${error.property.replace(/\./g, '\\.')}`)
       if (field) {
-        const errorElement = document.createElement('div')
-        errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
-        field.parentNode.classList.add('o-form-has-errors')
-        errorElement.setAttribute('role', 'alert')
-        errorElement.innerHTML = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${error.errorSummary}`
-        field.parentNode.appendChild(errorElement)
+        // Only add an error message if it doesn't already exist
+        const existingErrorParentElement = field.parentNode.querySelector('.okta-form-input-error')
+        const errorText = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${error.errorSummary}`
+        if (!existingErrorParentElement || existingErrorParentElement.innerHTML !== errorText) {
+          const errorElement = document.createElement('div')
+          errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
+          field.parentNode.classList.add('o-form-has-errors')
+          errorElement.setAttribute('role', 'alert')
+          errorElement.innerHTML = errorText
+          field.parentNode.appendChild(errorElement)
+        }
       }
     })
   }
