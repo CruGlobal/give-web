@@ -53,6 +53,7 @@ class SignUpModalController {
   initializeVariables () {
     this.currentStep = 1
     this.donorDetails = {}
+    this.translations = {}
     this.signUpErrors = []
     this.isLoading = true
     this.submitting = false
@@ -75,17 +76,18 @@ class SignUpModalController {
       'REGIONS_LOADING_ERROR',
       'RETRY'
     ]).then(translations => {
-      this.giveAsIndividualTxt = translations.GIVE_AS_INDIVIDUAL
-      this.giveAsOrganizationTxt = translations.GIVE_AS_ORGANIZATION
-      this.organizationNameTxt = translations.ORGANIZATION_NAME
-      this.countryField = translations.COUNTRY
-      this.addressField = translations.ADDRESS
-      this.cityField = translations.CITY
-      this.stateField = translations.STATE
-      this.zipField = translations.ZIP
-      this.countryListError = translations.COUNTRY_LIST_ERROR
-      this.regionsLoadingError = translations.REGIONS_LOADING_ERROR
-      this.retryTxt = translations.RETRY
+      this.translations = {
+        giveAsIndividual: translations.GIVE_AS_INDIVIDUAL,
+        giveAsOrganization: translations.GIVE_AS_ORGANIZATION,
+        organizationName: translations.ORGANIZATION_NAME,
+        country: translations.COUNTRY,
+        address: translations.ADDRESS,
+        city: translations.CITY,
+        state: translations.STATE,
+        zip: translations.ZIP,
+        countryListError: translations.COUNTRY_LIST_ERROR,
+        regionsLoadingError: translations.REGIONS_LOADING_ERROR,
+      }
     })
   }
 
@@ -150,15 +152,15 @@ class SignUpModalController {
       {
         ...customFields.accountType,
         options: {
-          Household: this.giveAsIndividualTxt,
-          Organization: this.giveAsOrganizationTxt
+          Household: this.translations.giveAsIndividual,
+          Organization: this.translations.giveAsOrganization
         },
-        value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household'
+        value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household',
       },
       {
         ...customFields.organizationName,
-        label: this.organizationNameTxt,
-        value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
+        label: this.translations.organizationName,
+        value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || '',
       }
     ]
   }
@@ -166,61 +168,16 @@ class SignUpModalController {
   getStep2Fields () {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
-
-    const addressFields = this.$scope.countryCode === 'US'
-      ? this.getUSAddressFields()
-      : this.getNonUSAddressFields()
-
     return [
       {
         ...customFields.countryCode,
         options: this.countryCodeOptions,
-        label: this.countryField,
+        label: this.translations.country,
         value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US'
       },
-      ...addressFields,
-      {
-        ...customFields.primaryPhone,
-        value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
-      }
-    ]
-  }
-
-  getUSAddressFields () {
-    return [
       {
         ...customFields.streetAddress,
-        label: this.addressField,
-        value: this.$scope.streetAddress || this.donorDetails?.mailingAddress?.streetAddress || ''
-      },
-      {
-        ...customFields.streetAddressExtended,
-        value: this.$scope.streetAddressExtended || this.donorDetails?.mailingAddress?.extendedAddress || ''
-      },
-      {
-        ...customFields.city,
-        label: this.cityField,
-        value: this.$scope.city || this.donorDetails?.mailingAddress?.locality || ''
-      },
-      {
-        ...customFields.state,
-        options: this.stateOptions,
-        label: this.stateField,
-        value: this.$scope.state || this.donorDetails?.mailingAddress?.region || ''
-      },
-      {
-        ...customFields.zipCode,
-        label: this.zipField,
-        value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
-      }
-    ]
-  }
-
-  getNonUSAddressFields () {
-    return [
-      {
-        ...customFields.streetAddress,
-        label: this.addressField,
+        label: this.translations.address,
         value: this.$scope.streetAddress || this.donorDetails?.mailingAddress?.streetAddress || ''
       },
       {
@@ -234,6 +191,29 @@ class SignUpModalController {
       {
         ...customFields.internationalAddressLine4,
         value: this.$scope.internationalAddressLine4 || this.donorDetails?.mailingAddress?.intAddressLine4 || ''
+      },
+      {
+        ...customFields.city,
+        label: this.translations.city,
+        value: this.$scope.city || this.donorDetails?.mailingAddress?.locality || ''
+      },
+      {
+        ...customFields.state,
+        options: {
+          '': '',
+          ...this.stateOptions
+        },
+        label: this.translations.state,
+        value: this.$scope.state || this.donorDetails?.mailingAddress?.region || ''
+      },
+      {
+        ...customFields.zipCode,
+        label: this.translations.zip,
+        value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
+      },
+      {
+        ...customFields.primaryPhone,
+        value: this.$scope.primaryPhone || this.donorDetails?.['phone-number'] || ''
       }
     ]
   }
@@ -303,22 +283,19 @@ class SignUpModalController {
   }
 
   saveStep1Data (userProfile, postData) {
+    const isOrganization = postData.accountType === 'Organization'
     Object.assign(this.$scope, {
       firstName: userProfile.firstName,
       lastName: userProfile.lastName,
       email: userProfile.email,
       accountType: postData.accountType,
-      countryCode: userProfile.countryCode
+      organizationName: isOrganization ? postData.organizationName : ''
     })
-    // Load regions for the selected country
-    // Using finally, so we always go to the next step, even if there's an error
-    this.refreshRegions(userProfile.countryCode).finally(() => {
-      this.goToNextStep()
-    }).subscribe()
   }
 
-  saveStep2Data (userProfile, postData) {
+  saveStep2Data (userProfile) {
     Object.assign(this.$scope, {
+      countryCode: userProfile.countryCode,
       streetAddress: userProfile.streetAddress,
       streetAddressExtended: userProfile.streetAddressExtended,
       internationalAddressLine3: userProfile.internationalAddressLine3,
@@ -327,7 +304,6 @@ class SignUpModalController {
       state: userProfile.state,
       zipCode: userProfile.zipCode,
       primaryPhone: userProfile.primaryPhone,
-      organizationName: postData.organizationName
     })
     this.$scope.$apply(() => this.goToNextStep())
   }
@@ -451,7 +427,7 @@ class SignUpModalController {
 
     const retryButtonElement = document.createElement('a')
     retryButtonElement.classList.add('cru-retry-button')
-    retryButtonElement.innerHTML = this.retryTxt
+    retryButtonElement.innerHTML = this.translations.retry
 
     const field = document.querySelector(fieldSelector)
     field.classList.add('o-form-has-errors')
@@ -468,7 +444,7 @@ class SignUpModalController {
   injectCountryLoadError () {
     this.injectLoadError({
       fieldSelector: '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]',
-      errorMessage: this.countryListError,
+      errorMessage: this.translations.countryListError,
       retryCallback: () => this.loadCountries({ initial: false })
     })
   }
@@ -476,7 +452,7 @@ class SignUpModalController {
   injectRegionLoadError () {
     this.injectLoadError({
       fieldSelector: '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]',
-      errorMessage: this.regionsLoadingError,
+      errorMessage: this.translations.regionsLoadingError,
       retryCallback: () => this.refreshRegions(this.$scope.countryCode, true)
     })
   }
