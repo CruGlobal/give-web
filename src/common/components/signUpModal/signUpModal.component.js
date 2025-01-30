@@ -74,7 +74,12 @@ class SignUpModalController {
       'ZIP',
       'COUNTRY_LIST_ERROR',
       'REGIONS_LOADING_ERROR',
-      'RETRY'
+      'RETRY',
+      'ORG_NAME_ERROR',
+      'CITY_ERROR',
+      'SELECT_STATE_ERROR',
+      'ZIP_CODE_ERROR',
+      'INVALID_US_ZIP_ERROR',
     ]).then(translations => {
       this.translations = {
         giveAsIndividual: translations.GIVE_AS_INDIVIDUAL,
@@ -87,6 +92,12 @@ class SignUpModalController {
         zip: translations.ZIP,
         countryListError: translations.COUNTRY_LIST_ERROR,
         regionsLoadingError: translations.REGIONS_LOADING_ERROR,
+        retry: translations.RETRY,
+        orgNameError: translations.ORG_NAME_ERROR,
+        cityError: translations.CITY_ERROR,
+        selectStateError: translations.SELECT_STATE_ERROR,
+        zipCodeError: translations.ZIP_CODE_ERROR,
+        invalidUSZipError: translations.INVALID_US_ZIP_ERROR,
       }
     })
   }
@@ -291,6 +302,19 @@ class SignUpModalController {
       accountType: postData.accountType,
       organizationName: isOrganization ? postData.organizationName : ''
     })
+
+    const errors = []
+    if (isOrganization && !this.$scope.organizationName) {
+      errors.push({
+        errorSummary: this.translations.orgNameError,
+        property: 'organizationName'
+      })
+    }
+    if (errors.length) {
+      this.injectErrorMessages(errors)
+    } else {
+      this.$scope.$apply(() => this.goToNextStep())
+    }
   }
 
   saveStep2Data (userProfile) {
@@ -305,6 +329,34 @@ class SignUpModalController {
       zipCode: userProfile.zipCode,
       primaryPhone: userProfile.primaryPhone,
     })
+
+    const errors = []
+    if (userProfile.countryCode === 'US') {
+      if (!this.$scope.city) {
+        errors.push({
+          errorSummary: this.translations.cityError,
+          property: 'userProfile.city'
+        })
+      }
+      if (!this.$scope.state) {
+        errors.push({
+          errorSummary: this.translations.selectStateError,
+          property: 'userProfile.state'
+        })
+      }
+      if (!this.$scope.zipCode) {
+        errors.push({
+          errorSummary: this.translations.zipCodeError,
+          property: 'userProfile.zipCode'
+        })
+      }
+    }
+
+    if (errors.length) {
+      this.injectErrorMessages(errors)
+      return
+    }
+
     this.$scope.$apply(() => this.goToNextStep())
   }
 
@@ -385,9 +437,9 @@ class SignUpModalController {
     }
   }
 
-  injectErrorMessages () {
+  injectErrorMessages (errors = this.signUpErrors) {
     // Inject error messages into the form since errors are cleared when switching steps/rerendering.
-    this.signUpErrors.forEach(error => {
+    errors.forEach(error => {
       const field = document.querySelector(`.o-form-input-name-${error.property.replace(/\./g, '\\.')}`)
       if (field) {
         const errorElement = document.createElement('div')
