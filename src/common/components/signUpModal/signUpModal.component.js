@@ -3,7 +3,7 @@ import includes from 'lodash/includes'
 import assign from 'lodash/assign'
 import pick from 'lodash/pick'
 import 'rxjs/add/operator/finally'
-import 'rxjs/add/operator/map'
+import { map, catchError } from 'rxjs/operators'
 import { Observable } from 'rxjs/Observable'
 import OktaSignIn from '@okta/okta-signin-widget'
 import sessionService, { Roles } from 'common/services/session/session.service'
@@ -58,6 +58,7 @@ class SignUpModalController {
     this.isLoading = true
     this.submitting = false
     this.countryCodeOptions = {}
+    this.countriesData = []
     this.stateOptions = {}
     this.selectedCountry = {}
   }
@@ -243,12 +244,13 @@ class SignUpModalController {
         data.forEach(country => {
           this.countryCodeOptions[country.name] = country['display-name']
         })
-
         if (initial || this.$scope.countryCode) {
-          this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').subscribe()
+          this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').finally(() => {
+            return this.countryCodeOptions
+          }).subscribe()
+        } else {
+          return this.countryCodeOptions
         }
-
-        return this.countryCodeOptions
       })
       .catch(error => {
         this.loadingCountriesError = true
@@ -268,17 +270,20 @@ class SignUpModalController {
     }
     this.selectedCountry = countryData
 
-    return this.geographiesService.getRegions(countryData).map((data) => {
-      data.forEach(state => {
-        this.stateOptions[state.name] = state['display-name']
-      })
-      return data
-    })
-      .catch(error => {
+    return this.geographiesService.getRegions(countryData).pipe(
+      map((data) => {
+        this.stateOptions = {}
+        data.forEach(state => {
+          this.stateOptions[state.name] = state['display-name']
+        })
+        return this.stateOptions
+      }),
+      catchError((error) => {
         this.loadingRegionsError = true
         this.$log.error('Error loading regions.', error)
         return Observable.throw(error)
       })
+    )
   }
 
   preSubmit (postData, onSuccess) {
