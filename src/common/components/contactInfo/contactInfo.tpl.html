@@ -118,28 +118,9 @@
             </label>
           </div>
         </div>
-        <div class="col-sm-2">
-          <button type="button" 
-                  id="showSpouseButton"
-                  class="btn btn-link"
-                  style="font-weight:bold"
-                  ng-if="!$ctrl.showSpouseDetails"
-                  ng-click="$ctrl.showSpouseDetails = !$ctrl.showSpouseDetails"
-                  translate='SHOW_SPOUSE'>
-          </button>
-          <button type="button"
-                  id="hideSpouseButton"
-                  class="btn btn-link"
-                  style="font-weight:bold"
-                  ng-if="$ctrl.showSpouseDetails"
-                  ng-click="$ctrl.showSpouseDetails = !$ctrl.showSpouseDetails"
-                  translate='HIDE_SPOUSE'>
-          </button>
-        </div>
-
       </div>
 
-      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household' && ($ctrl.showSpouseDetails)">
+      <div class="row" ng-if="$ctrl.donorDetails['donor-type'] === 'Household'">
         <div class="col-sm-4">
           <div class="form-group" ng-class="{'has-error': ($ctrl.detailsForm.spouseGivenName | showErrors)}">
             <label>
