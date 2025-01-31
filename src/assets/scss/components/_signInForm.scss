@@ -14,6 +14,30 @@ sign-in-form {
     cursor: pointer;
   }
 
+  .details-wrapper {
+    display: flex;
+    flex-wrap: wrap; // Keep the summaries on the first line and wrap the description to the next line
+
+    details:first-of-type summary {
+      flex: 1; // Push the second summary to the right edge
+      min-width: 150px; // Ensure that the summaries are wide enough that the description is forced to wrap to the next line
+    }
+  }
+
+  // The goal is to have two <details> on one line that display their descriptions in the same
+  // location on the page on the line before
+  details {
+    display: contents; // Make the descriptions participate in the .details-wrapper flexbox layout
+    text-align: left;
+  }
+
+  summary {
+    display: list-item;
+    order: -1; // Make both summaries appear before the descriptions
+    margin: 1rem 0;
+    cursor: pointer;
+  }
+
   > p {
     margin-bottom: 0;
   }
@@ -43,33 +67,6 @@ sign-in-form {
       color: white;
       background-color: darken($okta-brand, 3%);
       border-color: darken($okta-brand, 3%);
-    }
-  }
-
-  .need-help {
-    &--header {
-      cursor: pointer;
-
-      i {
-        font-size: 11px;
-        margin-right: 3px;
-      }
-    }
-
-    &--content {
-      max-height: 0px;
-      overflow: hidden;
-      transition: max-height 0.3s ease 0s;;
-    }
-
-    &.open {
-      i {
-        transform: rotate(90deg);
-      }
-
-      .need-help--content {
-        max-height: 140px;
-      }
     }
   }
 
