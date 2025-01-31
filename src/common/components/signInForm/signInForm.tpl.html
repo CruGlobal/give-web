@@ -11,7 +11,6 @@
   on-failure="$ctrl.onFailure()"
   last-purchase-id="$ctrl.lastPurchaseId"
   error-message="$ctrl.errorMessage"
-  on-sign-in-page="$ctrl.onSignInPage"
 ></sign-in-button>
 
 <p ng-if="!$ctrl.onSignInPage" translate>You will be taken to Okta, then back to this site.</p>
@@ -19,7 +18,10 @@
 <hr />
 <div ng-if="!$ctrl.onSignInPage">
   <h4 translate>Don&rsquo;t have an account?</h4>
-  <a class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()">Create an account</a>
+  <button class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()">
+    <img src="/assets/img/okta-aura.svg" alt="Okta logo" width="24" height="24"></img>
+    <span translate>Sign up with Okta</span>
+  </button>
 </div>
 <div class="need-help" ng-class="{'open': $ctrl.needHelpAccordionOpened}">
   <div class="need-help--header" ng-click="$ctrl.toggleNeedHelpAccordion()" onKeyPress>
