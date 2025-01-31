@@ -11,7 +11,6 @@
   on-failure="$ctrl.onFailure()"
   last-purchase-id="$ctrl.lastPurchaseId"
   error-message="$ctrl.errorMessage"
-  on-sign-in-page="$ctrl.onSignInPage"
 ></sign-in-button>
 
 <p ng-if="!$ctrl.onSignInPage"><span translate>You will be taken to Okta,</span><br /><span translate>then back to this site.</span></p>
@@ -19,7 +18,13 @@
 <hr />
 <div ng-if="!$ctrl.onSignInPage">
   <h4 translate>Don&rsquo;t have an account?</h4>
-  <a class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()">Create an account</a>
+  <button class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()">
+    <!-- Circular Okta aura inlined so that the color can be changed with CSS for the :hover and :focus states -->
+    <svg width="24" height="24" viewBox="0 0 16 16" aria-label="Okta logo">
+      <circle cx="8" cy="8" r="5.25" stroke="currentColor" stroke-width="3.5" fill="none" />
+    </svg>
+    <span translate>Sign up with Okta</span>
+  </button>
 </div>
 <div class="need-help" ng-class="{'open': $ctrl.needHelpAccordionOpened}">
   <div class="need-help--header" ng-click="$ctrl.toggleNeedHelpAccordion()" onKeyPress>

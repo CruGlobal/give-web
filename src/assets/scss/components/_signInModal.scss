@@ -19,4 +19,8 @@ sign-in-modal {
   sign-in-button .btn-primary {
     @include button-variant(black, $btn-primary-bg, $btn-primary-border);
   }
+
+  .okta-button {
+    padding-block: 1.25em;
+  }
 }

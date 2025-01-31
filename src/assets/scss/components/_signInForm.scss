@@ -18,6 +18,34 @@ sign-in-form {
     margin-bottom: 0;
   }
 
+  .okta-signup-button {
+    $okta-brand: #007dc1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 20px;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: white;
+    color: $okta-brand;
+    border: 2px solid $okta-brand;
+    border-radius: 4px;
+
+    &:hover {
+      color: white;
+      background-color: $okta-brand;
+      border-color: $okta-brand;
+    }
+    &:focus {
+      color: white;
+      background-color: darken($okta-brand, 3%);
+      border-color: darken($okta-brand, 3%);
+    }
+  }
+
   .need-help {
     &--header {
       cursor: pointer;
@@ -53,14 +81,9 @@ sign-in-form {
 sign-in-button {
   .okta-button {
     width: 100%;
+  }
 
-    .fa {
-      padding-left: 0.25rem;
-    }
-
-    &:not(.normal-padding) {
-      width: 70%;
-      padding: 1em 0.5em;
-    }
+  .fa {
+    padding-left: 0.25rem;
   }
 }
