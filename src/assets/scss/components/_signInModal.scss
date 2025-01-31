@@ -9,8 +9,10 @@ sign-in-modal {
   sign-in-form {
     margin-top: 0;
 
-    hr {
-      width: 45%;
+    @media (min-width: 768px) {
+      hr {
+        width: 100%;
+      }
     }
   }
 
