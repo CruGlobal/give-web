@@ -62,6 +62,10 @@ sign-in-button {
   .okta-button {
     width: 100%;
 
+    .fa {
+      padding-left: 0.25rem;
+    }
+
     &:not(.normal-padding) {
       width: 70%;
       padding: 1em 0.5em;
