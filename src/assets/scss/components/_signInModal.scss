@@ -1,6 +1,6 @@
 sign-in-modal {
   display: block;
-  
+
   h4 {
     font-size: 1.3em;
     line-height: 1.5em;
@@ -12,5 +12,9 @@ sign-in-modal {
     hr {
       width: 45%;
     }
+  }
+
+  sign-in-button .btn-primary {
+    @include button-variant(black, $btn-primary-bg, $btn-primary-border);
   }
 }
