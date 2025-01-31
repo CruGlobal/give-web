@@ -6,32 +6,25 @@
     {{$ctrl.errorMessage | translate}}
   </span>
 </div>
-<div ng-if="!$ctrl.onSignInPage">
-  <h2 translate>Sign in</h2>
-</div>
-<div>
-  <sign-in-button
-    on-success="$ctrl.onSuccess()"
-    on-failure="$ctrl.onFailure()"
-    last-purchase-id="$ctrl.lastPurchaseId"
-    error-message="$ctrl.errorMessage"
-    on-sign-in-page="$ctrl.onSignInPage"
-  ></sign-in-button>
-</div>
+<sign-in-button
+  on-success="$ctrl.onSuccess()"
+  on-failure="$ctrl.onFailure()"
+  last-purchase-id="$ctrl.lastPurchaseId"
+  error-message="$ctrl.errorMessage"
+  on-sign-in-page="$ctrl.onSignInPage"
+></sign-in-button>
 
-<div>
-  <p class="sign-in-info" ng-if="!$ctrl.onSignInPage">
-    <span translate>You will be taken to Okta </span>
-    <span class="sup">
-      <i
-        class="fa fa-info-circle text-info"
-        uib-tooltip="{{'Okta is a trusted 3rd party security tool used by Cru to protect your personal information associated with your donor account.' | translate}}"
-      ></i>
-    </span>
-    <span translate>, then back to this site.</span>
-  </p>
-  <p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
-</div>
+<p class="sign-in-info" ng-if="!$ctrl.onSignInPage">
+  <span translate>You will be taken to Okta </span>
+  <span class="sup">
+    <i
+      class="fa fa-info-circle text-info"
+      uib-tooltip="{{'Okta is a trusted 3rd party security tool used by Cru to protect your personal information associated with your donor account.' | translate}}"
+    ></i>
+  </span>
+  <span translate>, then back to this site.</span>
+</p>
+<p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
 <hr />
 <div ng-if="!$ctrl.onSignInPage">
   <h4 translate>Don&rsquo;t have an account?</h4>
