@@ -3,14 +3,14 @@ import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/observable/of'
-import module from './signUpModal.component'
+import module, { countryFieldSelector, inputFieldErrorSelectorPrefix, regionFieldSelector } from './signUpModal.component'
 import { Sessions } from 'common/services/session/session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { accountTypeFieldSchema, organizationNameFieldSchema, schema, user } from './signUpModal.component.mock'
 
-describe.skip('signUpForm', function () {
+describe('signUpForm', function () {
   beforeEach(angular.mock.module(module.name))
   let $ctrl, bindings, $rootScope
 
@@ -588,6 +588,186 @@ describe.skip('signUpForm', function () {
       setTimeout(() => {
         expect($ctrl.$log.error).toHaveBeenCalledWith('Error rendering Okta sign up widget.', error);
         done();
+      });
+    });
+  });
+
+  describe('Injecting error messages', () => {
+    const retryFieldSelector = '.cru-retry-button';
+    const inputErrorFieldSelector = '.okta-form-input-error';
+
+    describe('injectErrorMessages()', () => {
+      const accountTypeFieldClass = `${inputFieldErrorSelectorPrefix}accountType`;
+      const countryFieldClass = `${inputFieldErrorSelectorPrefix}userProfile.country`;
+      beforeEach(() => {
+        document.body.innerHTML = `
+          <div>
+            <div class="o-form-input">
+              <div class="${accountTypeFieldClass.slice(1)}"></div>
+            </div>
+          </div>
+          <div>
+            <div class="o-form-input">
+              <div class="${countryFieldClass.slice(1)}"></div>
+            </div>
+          </div>
+        `;
+      });
+
+      it('should not inject any errors as this.signUpErrors is empty', () => {
+        $ctrl.signUpErrors = []
+        $ctrl.injectErrorMessages()
+
+        const field = document.querySelector(inputErrorFieldSelector);
+        expect(field).toBeNull();
+      });
+
+      it('should inject error message and add classes', () => {
+        const errorSummary = 'accountTypeError';
+        $ctrl.signUpErrors = [
+          {
+            property: 'accountType',
+            errorSummary
+          }
+        ]
+        $ctrl.injectErrorMessages()
+
+        const field = document.querySelector(accountTypeFieldClass);
+        const errorElement = field.parentNode.querySelector(inputErrorFieldSelector);
+        expect(errorElement).not.toBeNull();
+        expect(errorElement.getAttribute('role')).toBe('alert');
+        expect(errorElement.innerHTML).toContain(errorSummary);
+        expect(field.parentNode.classList).toContain('o-form-has-errors');
+        // Remove the dot from the selector
+        expect(errorElement.classList).toContain(inputErrorFieldSelector.slice(1));
+        expect(errorElement.classList).toContain('o-form-input-error');
+        expect(errorElement.classList).toContain('o-form-explain');
+      });
+
+      it('should only add the error message passed as a prop', () => {
+        $ctrl.signUpErrors = [
+          {
+            property: 'accountType',
+            errorSummary: 'accountTypeError'
+          }
+        ]
+        $ctrl.injectErrorMessages([
+          {
+            property: 'userProfile.country',
+            errorSummary: 'countryError'
+          }
+        ])
+        // No error injected for field accountType
+        const accountTypeField = document.querySelector(accountTypeFieldClass);
+        const accountTypeErrorElement = accountTypeField.parentNode.querySelector(inputErrorFieldSelector);
+        expect(accountTypeErrorElement).toBeNull();
+
+        // Error injected for field userProfile.country
+        // - also handling a class with a dot in the name
+        const countryTypeField = document.querySelector(`${inputFieldErrorSelectorPrefix}userProfile\\.country`);
+        const countryErrorElement = countryTypeField.parentNode.querySelector(inputErrorFieldSelector);
+        expect(countryErrorElement).not.toBeNull();
+      });
+
+      it('should not duplicate errors', () => {
+        $ctrl.signUpErrors = [
+          {
+            property: 'accountType',
+            errorSummary: 'accountTypeError'
+          }
+        ]
+        $ctrl.injectErrorMessages()
+
+        const accountTypeField = document.querySelector(accountTypeFieldClass);
+        const accountTypeErrorElement = accountTypeField.parentNode.querySelector(inputErrorFieldSelector);
+        expect(accountTypeErrorElement).not.toBeNull();
+
+        $ctrl.injectErrorMessages()
+        $ctrl.injectErrorMessages()
+
+        const accountTypeErrorElements = accountTypeField.parentNode.querySelectorAll(inputErrorFieldSelector);
+        expect(accountTypeErrorElements.length).toEqual(1);
+      });
+    });
+
+    describe('load errors', () => {
+      it('injectCountryLoadError()', () => {
+        jest.spyOn($ctrl, 'injectLoadError').mockImplementation(() => {});
+        const countryListError  = 'countryListError'
+        $ctrl.translations = {
+          countryListError
+        }
+        $ctrl.injectCountryLoadError()
+        expect($ctrl.injectLoadError).toBeCalledWith({
+          fieldSelector: countryFieldSelector,
+          errorMessage: countryListError,
+          retryCallback: expect.any(Function)
+        })
+      });
+
+      it('injectRegionLoadError()', () => {
+        jest.spyOn($ctrl, 'injectLoadError').mockImplementation(() => {});
+        const regionsLoadingError  = 'regionsLoadingError'
+        $ctrl.translations = {
+          regionsLoadingError
+        }
+        $ctrl.injectRegionLoadError()
+        expect($ctrl.injectLoadError).toBeCalledWith({
+          fieldSelector: regionFieldSelector,
+          errorMessage: regionsLoadingError,
+          retryCallback: expect.any(Function)
+        })
+      });
+
+      describe('injectLoadError()', () => {
+        let fieldSelector, errorMessage, retryCallback;
+
+        beforeEach(() => {
+          fieldSelector = '.o-form-fieldset';
+          errorMessage = 'errorMessage';
+          retryCallback = jest.fn().mockReturnValue({
+            finally: jest.fn().mockReturnValue({
+              subscribe: jest.fn()
+            })
+          });
+
+          document.body.innerHTML = `
+            <div class="o-form-fieldset">
+              <div class="fieldSelector"></div>
+            </div>
+          `;
+
+          $ctrl.translations = {
+            retry: 'Retry'
+          }
+
+          $ctrl.injectLoadError({
+            fieldSelector,
+            errorMessage,
+            retryCallback
+          });
+        });
+
+        it('should add error message to the field', () => {
+          const field = document.querySelector(fieldSelector);
+          const errorElement = field.querySelector(inputErrorFieldSelector);
+          expect(errorElement).not.toBeNull();
+          expect(errorElement.getAttribute('role')).toBe('alert');
+          expect(errorElement.innerHTML).toContain(errorMessage);
+        });
+
+        it('should add retry button to the field', () => {
+          const field = document.querySelector(fieldSelector);
+          const retryButton = field.querySelector(retryFieldSelector);
+          expect(retryButton).not.toBeNull();
+          expect(retryButton.innerHTML).toBe($ctrl.translations.retry);
+        });
+
+        it('should call retryCallback on retry button click', () => {
+          const retryButton = document.querySelector(retryFieldSelector);
+          retryButton.click();
+          expect(retryCallback).toHaveBeenCalled();
+        });
       });
     });
   });

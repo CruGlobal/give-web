@@ -14,11 +14,15 @@ import geographiesService from 'common/services/api/geographies.service'
 import { customFields } from './signUpFormCustomFields'
 require('assets/okta-sign-in/css/okta-sign-in.min.css')
 
+export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]';
+export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]';
+export const inputFieldErrorSelectorPrefix = '.o-form-input-name-'
 const componentName = 'signUpModal'
 const signUpButtonText = 'Create an Account'
 const nextButtonText = 'Next'
 const backButtonId = 'backButton'
 const backButtonText = 'Back'
+const errorIconHtml = '<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span>'
 
 class SignUpModalController {
   /* @ngInject */
@@ -452,11 +456,11 @@ class SignUpModalController {
   injectErrorMessages (errors = this.signUpErrors) {
     // Inject error messages into the form since errors are cleared when switching steps/rerendering.
     errors.forEach(error => {
-      const field = document.querySelector(`.o-form-input-name-${error.property.replace(/\./g, '\\.')}`)
+      const field = document.querySelector(`${inputFieldErrorSelectorPrefix}${error.property.replace(/\./g, '\\.')}`)
       if (field) {
         // Only add an error message if it doesn't already exist
         const existingErrorParentElement = field.parentNode.querySelector('.okta-form-input-error')
-        const errorText = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${error.errorSummary}`
+        const errorText = `${errorIconHtml} ${error.errorSummary}`
         if (!existingErrorParentElement || existingErrorParentElement.innerHTML !== errorText) {
           const errorElement = document.createElement('div')
           errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
@@ -492,7 +496,7 @@ class SignUpModalController {
     const errorElement = document.createElement('div')
     errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
     errorElement.setAttribute('role', 'alert')
-    errorElement.innerHTML = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${errorMessage}`
+    errorElement.innerHTML = `${errorIconHtml} ${errorMessage}`
 
     const retryButtonElement = document.createElement('a')
     retryButtonElement.classList.add('cru-retry-button')
@@ -512,7 +516,7 @@ class SignUpModalController {
 
   injectCountryLoadError () {
     this.injectLoadError({
-      fieldSelector: '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]',
+      fieldSelector: countryFieldSelector,
       errorMessage: this.translations.countryListError,
       retryCallback: () => this.loadCountries({ initial: false })
     })
@@ -520,7 +524,7 @@ class SignUpModalController {
 
   injectRegionLoadError () {
     this.injectLoadError({
-      fieldSelector: '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]',
+      fieldSelector: regionFieldSelector,
       errorMessage: this.translations.regionsLoadingError,
       retryCallback: () => this.refreshRegions(this.$scope.countryCode, true)
     })
