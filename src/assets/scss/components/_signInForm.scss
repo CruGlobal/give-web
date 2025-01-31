@@ -14,16 +14,8 @@ sign-in-form {
     cursor: pointer;
   }
 
-  .sign-in-info {
+  > p {
     margin-bottom: 0;
-
-    .sup {
-      font-size: 12px;
-
-      i {
-        color: #333333;
-      }
-    }
   }
 
   .need-help {
