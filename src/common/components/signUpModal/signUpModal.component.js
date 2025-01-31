@@ -294,7 +294,7 @@ class SignUpModalController {
     if (step === 1) {
       this.saveStep1Data(userProfile, postData)
     } else if (step === 2) {
-      this.saveStep2Data(userProfile, postData)
+      this.saveStep2Data(userProfile)
     } else if (step === 3) {
       this.submitFinalData(postData, onSuccess)
     }
@@ -339,7 +339,7 @@ class SignUpModalController {
     })
 
     const errors = []
-    if (userProfile.countryCode === 'US') {
+    if (isUSAddress) {
       if (!this.$scope.city) {
         errors.push({
           errorSummary: this.translations.cityError,

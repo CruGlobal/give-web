@@ -373,36 +373,158 @@ describe('signUpForm', function () {
       expect(onSuccess).not.toHaveBeenCalled();
     });
 
-    it('saveStep2Data()', () => {
-      $ctrl.currentStep = 2;
-      jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
-      jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
+    describe('saveStep2Data()', () => {
+      let postData = {}
+      const cityError = 'cityError';
+      const selectStateError = 'selectStateError';
+      const zipCodeError = 'zipCodeError';
+      const invalidUSZipError = 'invalidUSZipError';
+      
+      beforeEach(() => {
+        jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
+        jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
+        jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
+        $ctrl.currentStep = 2;
+        $ctrl.translations = {
+          cityError: cityError,
+          selectStateError,
+          zipCodeError,
+          invalidUSZipError
+        }
+        postData= {
+          userProfile: user,
+          organizationName: user.organizationName,
+        }
+      });
 
-      const postData = {
-        userProfile: {
-          streetAddress: user.streetAddress,
-          city: user.city,
-          state: user.state,
-          zipCode: user.zipCode,
-          countryCode: user.countryCode,
-          primaryPhone: user.primaryPhone,
-        },
-        organizationName: user.organizationName,
-      }
+      describe('Saves Information', () => {
+        beforeEach(() => {
+          expect($ctrl.$scope.streetAddress).not.toEqual(user.streetAddress);
+        });
 
-      expect($ctrl.$scope.streetAddress).not.toEqual(user.streetAddress);
-      $ctrl.preSubmit(postData, onSuccess);
+        afterEach(() => {
+          expect($ctrl.$scope.streetAddress).toEqual(user.streetAddress);
+          expect($ctrl.$scope.streetAddressExtended).toEqual(user.streetAddressExtended);
+          expect($ctrl.$scope.primaryPhone).toEqual(user.primaryPhone);
+          expect($ctrl.goToNextStep).toHaveBeenCalled();
+          expect(onSuccess).not.toHaveBeenCalled();
+        });
 
-      expect($ctrl.$scope.streetAddress).toEqual(user.streetAddress);
-      expect($ctrl.$scope.city).toEqual(user.city);
-      expect($ctrl.$scope.state).toEqual(user.state);
-      expect($ctrl.$scope.zipCode).toEqual(user.zipCode);
-      expect($ctrl.$scope.countryCode).toEqual(user.countryCode);
-      expect($ctrl.$scope.primaryPhone).toEqual(user.primaryPhone);
-      expect($ctrl.$scope.organizationName).toEqual(user.organizationName);
-      expect($ctrl.goToNextStep).toHaveBeenCalled();
-      expect(onSuccess).not.toHaveBeenCalled();
+        it('should save a US address and phone number', () => {
+          $ctrl.preSubmit(postData, onSuccess);
+
+          expect($ctrl.$scope.city).toEqual(user.city);
+          expect($ctrl.$scope.state).toEqual(user.state);
+          expect($ctrl.$scope.zipCode).toEqual(user.zipCode);
+          expect($ctrl.$scope.countryCode).toEqual(user.countryCode);
+          expect($ctrl.$scope.internationalAddressLine3).toEqual('');
+          expect($ctrl.$scope.internationalAddressLine4).toEqual('');
+        });
+
+        it('should save a non-US address and phone number', () => {
+          const internationalAddressLine3 = 'internationalAddressLine3';
+          const internationalAddressLine4 = 'internationalAddressLine4';
+          postData.userProfile.countryCode = 'UK';
+          postData.userProfile.internationalAddressLine3 = internationalAddressLine3;
+          postData.userProfile.internationalAddressLine4 = internationalAddressLine4;
+          $ctrl.preSubmit(postData, onSuccess);
+
+          expect($ctrl.$scope.city).toEqual('');
+          expect($ctrl.$scope.state).toEqual('');
+          expect($ctrl.$scope.zipCode).toEqual('');
+          expect($ctrl.$scope.countryCode).toEqual('UK');
+          expect($ctrl.$scope.internationalAddressLine3).toEqual(internationalAddressLine3)
+          expect($ctrl.$scope.internationalAddressLine4).toEqual(internationalAddressLine4)
+          postData.userProfile.countryCode = 'US';
+        });
+      });
+
+      it('should handle no country error', () => {
+        postData.userProfile = {...postData.userProfile, city: ''};
+        $ctrl.preSubmit(postData, onSuccess);
+        expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
+          {
+            property: 'userProfile.city',
+            errorSummary: cityError
+          }
+        ])
+      });
+
+      it('should handle no state error', () => {
+        postData.userProfile = {...postData.userProfile, state: ''};
+        $ctrl.preSubmit(postData, onSuccess);
+        expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
+          {
+            property: 'userProfile.state',
+            errorSummary: selectStateError
+          }
+        ])
+      });
+
+      it('should handle no zipCode error', () => {
+        postData.userProfile = {...postData.userProfile, zipCode: ''};
+        $ctrl.preSubmit(postData, onSuccess);
+        expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
+          {
+            property: 'userProfile.zipCode',
+            errorSummary: zipCodeError
+          }
+        ])
+      });
+
+      describe('Valid US zipCodes', () => {
+        afterEach(() => {
+          expect($ctrl.injectErrorMessages).not.toHaveBeenCalled();
+          expect($ctrl.goToNextStep).toHaveBeenCalled();
+        });
+        it('should ensure zipCode is valid', () => {
+          postData.userProfile.zipCode = '12345';
+          $ctrl.preSubmit(postData, onSuccess);
+        });
+
+        it('should ensure zipCode with extended format is valid', () => {
+          postData.userProfile.zipCode = '12345-6789';
+          $ctrl.preSubmit(postData, onSuccess);
+        });
+
+        it('should ensure zipCode with spaces is valid', () => {
+          postData.userProfile.zipCode = '12345 6789';
+          $ctrl.preSubmit(postData, onSuccess);
+        });
+      });
+
+      describe('Invalid US zipCodes', () => {
+        afterEach(() => {
+          expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
+            {
+              property: 'userProfile.zipCode',
+              errorSummary: invalidUSZipError
+            }
+          ])
+        });
+
+        it('should ensure zipCode with letters is invalid', () => {
+          postData.userProfile.zipCode = '1234A';
+          $ctrl.preSubmit(postData, onSuccess);
+        });
+
+        it('should ensure zipCode with too few digits is invalid', () => {
+          postData.userProfile.zipCode = '1234';
+          $ctrl.preSubmit(postData, onSuccess);
+        });
+
+        it('should ensure zipCode with too many digits is invalid', () => {
+          postData.userProfile.zipCode = '123456';
+          $ctrl.preSubmit(postData, onSuccess);
+        });
+
+        it('should ensure zipCode with invalid extended format is invalid', () => {
+          postData.userProfile.zipCode = '12345-678';
+          $ctrl.preSubmit(postData, onSuccess);
+        });
+      });
     });
+
 
     it('submitFinalData()', () => {
       const postData = {};
@@ -426,11 +548,6 @@ describe('signUpForm', function () {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          streetAddress: user.streetAddress,
-          city: user.city,
-          state: user.state,
-          zipCode: user.zipCode,
-          countryCode: user.countryCode,
           primaryPhone: user.primaryPhone,
         }
       });

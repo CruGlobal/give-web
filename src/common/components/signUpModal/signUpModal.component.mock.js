@@ -4,10 +4,11 @@ export const user = {
   email: 'email',
   accountType: 'accountType',
   streetAddress: 'streetAddress',
+  streetAddressExtended: 'streetAddressExtended',
   city: 'city',
   state: 'state',
-  zipCode: 'zipCode',
-  countryCode: 'countryCode',
+  zipCode: '11111',
+  countryCode: 'US',
   primaryPhone: 'primaryPhone',
   organizationName: 'organizationName'
 }
