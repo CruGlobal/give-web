@@ -189,7 +189,6 @@ export default angular
       onPaymentFailed: '&',
       radioStationApiUrl: '<',
       radioStationRadius: '<',
-      hideSpouseDetails: '<',
       hideAnnual: '<',
       hideQuarterly: '<',
       useV3: '<',

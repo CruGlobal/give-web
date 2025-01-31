@@ -193,6 +193,5 @@ export default angular
       onSubmit: '&',
       radioStationApiUrl: '<',
       radioStationRadius: '<',
-      hideSpouseDetails: '<'
     }
   })
