@@ -167,8 +167,15 @@ class Cart {
     if (!disableSessionRestart && this.sessionService.getRole() === Roles.public) {
       return this.getTotalQuantity().mergeMap((total) => {
         if (total <= 0) {
-          return this.sessionService.signOut().mergeMap(() => {
-            return this._addItem(uri, data)
+          return this.sessionService.oktaIsUserAuthenticated().mergeMap((isAuthenticated) => {
+            if (!isAuthenticated) {
+              return this._addItem(uri, data)
+            }
+            // SignOut() will redirect user to Okta to clear session,
+            // but will be brought back to this page with an error message shown.
+            return this.sessionService.signOut(false).mergeMap(() => {
+              return this._addItem(uri, data)
+            })
           })
         }
         return this._addItem(uri, data)

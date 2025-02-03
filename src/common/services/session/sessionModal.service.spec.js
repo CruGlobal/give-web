@@ -1,7 +1,6 @@
 import angular from 'angular'
 import 'angular-mocks'
 import module from './sessionModal.service'
-import modalStateModule from 'common/services/modalState.service'
 
 describe('sessionModalService', function () {
   beforeEach(angular.mock.module(module.name))
@@ -30,12 +29,12 @@ describe('sessionModalService', function () {
       expect(sessionModalService.open).toBeDefined()
     })
 
-    it('should open \'sign-in\' by default', () => {
+    it('should open \'register-account\' by default', () => {
       const modal = sessionModalService.open()
 
       expect($uibModal.open).toHaveBeenCalled()
       expect($uibModal.open.mock.calls.length).toEqual(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-in')
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
       expect(modal).toEqual(sessionModalService.currentModal())
     })
 
@@ -66,8 +65,8 @@ describe('sessionModalService', function () {
         expect(analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in')
       })
 
-      it('send analytics event for sign-in', () => {
-        sessionModalService.open('sign-in', {
+      it('send analytics event for register-account', () => {
+        sessionModalService.open('register-account', {
           openAnalyticsEvent: 'ga-sign-in'
         })
         deferred.resolve()
@@ -118,8 +117,8 @@ describe('sessionModalService', function () {
         expect(analyticsFactory.track).toHaveBeenCalledWith('ga-sign-in-exit')
       })
 
-      it('sends analytics event for sign-in', () => {
-        sessionModalService.open('sign-in', {
+      it('sends analytics event for register-account', () => {
+        sessionModalService.open('register-account', {
           dismissAnalyticsEvent: 'ga-sign-in-exit'
         })
         deferred.reject()
@@ -157,11 +156,11 @@ describe('sessionModalService', function () {
   })
 
   describe('signIn', () => {
-    it('should open signIn modal', () => {
+    it('should open registerAccount modal', () => {
       sessionModalService.signIn()
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-in')
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
     })
 
     it('should open signIn modal with last purchase id', () => {
@@ -169,33 +168,6 @@ describe('sessionModalService', function () {
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.lastPurchaseId()).toEqual('gxwpz=')
-    })
-  })
-
-  describe('signUp', () => {
-    it('should open signUp modal', () => {
-      sessionModalService.signUp()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('sign-up')
-    })
-  })
-
-  describe('forgotPassword', () => {
-    it('should open forgotPassword modal', () => {
-      sessionModalService.forgotPassword()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('forgot-password')
-    })
-  })
-
-  describe('resetPassword', () => {
-    it('should open resetPassword modal', () => {
-      sessionModalService.resetPassword()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('reset-password')
     })
   })
 
@@ -208,54 +180,23 @@ describe('sessionModalService', function () {
     })
   })
 
-  describe('contactInfo', () => {
-    it('should open contactInfo modal', () => {
-      sessionModalService.contactInfo()
-
-      expect($uibModal.open).toHaveBeenCalledTimes(1)
-      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('contact-info')
-    })
-  })
-
   describe('registerAccount', () => {
     it('should open registerAccount modal', () => {
       sessionModalService.registerAccount()
 
       expect($uibModal.open).toHaveBeenCalledTimes(1)
       expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('register-account')
+      expect($uibModal.open.mock.calls[0][0].resolve.welcomeBack()).toBe(true)
     })
   })
-})
 
-describe('sessionModalService module config', () => {
-  let modalStateServiceProvider
+  describe('accountBenefits', () => {
+    it('should open accountBenefits modal', () => {
+      sessionModalService.accountBenefits('gxwpz=')
 
-  beforeEach(() => {
-    angular.mock.module(modalStateModule.name, function (_modalStateServiceProvider_) {
-      modalStateServiceProvider = _modalStateServiceProvider_
-      jest.spyOn(modalStateServiceProvider, 'registerModal').mockImplementation(() => {})
-    })
-    angular.mock.module(module.name)
-  })
-
-  it('config to register \'reset-password\' modal', inject(function () {
-    expect(modalStateServiceProvider.registerModal).toHaveBeenCalledWith('reset-password', expect.any(Function))
-  }))
-
-  describe('invoke \'reset-password\' modal function', () => {
-    let sessionModalService, $injector
-
-    beforeEach(inject(function (_sessionModalService_, _$injector_) {
-      sessionModalService = _sessionModalService_
-      $injector = _$injector_
-      jest.spyOn(sessionModalService, 'resetPassword').mockImplementation(() => {})
-    }))
-
-    it('calls sessionModalService.resetPassword()', () => {
-      const fn = modalStateServiceProvider.registerModal.mock.calls[0][1]
-      $injector.invoke(fn)
-
-      expect(sessionModalService.resetPassword).toHaveBeenCalled()
+      expect($uibModal.open).toHaveBeenCalledTimes(1)
+      expect($uibModal.open.mock.calls[0][0].resolve.state()).toEqual('account-benefits')
+      expect($uibModal.open.mock.calls[0][0].resolve.lastPurchaseId()).toEqual('gxwpz=')
     })
   })
 })
