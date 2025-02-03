@@ -13,16 +13,11 @@ class SignInFormController {
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
-    this.needHelpAccordionOpened = false
   }
 
   $onInit () {
     this.onSignInPage = this.onSignInPage || false
   }
-
-  toggleNeedHelpAccordion () {
-    this.needHelpAccordionOpened = !this.needHelpAccordionOpened
-  };
 
   getOktaUrl () {
     return this.sessionService.getOktaUrl()
