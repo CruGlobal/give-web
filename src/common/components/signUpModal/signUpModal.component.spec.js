@@ -345,6 +345,87 @@ describe('signUpForm', function () {
     });
   });
 
+  describe('loadCountries()', () => {
+    const countries = [
+      { name: 'US', 'display-name': 'USA' },
+      { name: 'UK', 'display-name': 'United Kingdom' }
+    ];
+    beforeEach(() => {
+      $ctrl.countryCodeOptions = {}
+      $ctrl.countriesData = null
+      $ctrl.$scope.countryCode = null;
+      jest.spyOn($ctrl, 'refreshRegions').mockReturnValue(Observable.of(''));
+      jest.spyOn($ctrl.geographiesService, 'getCountries').mockReturnValue(Observable.of(countries));
+    });
+
+    it('should set loadingCountriesError to false', () => {
+      $ctrl.loadingCountriesError = true;
+      $ctrl.loadCountries({initial: false}).subscribe(() => {
+        expect($ctrl.loadingCountriesError).toBe(false);
+      });
+    });
+
+    it('should log an error if error occurs while calling getCountries()', (done) => {
+      const error = new Error('Error loading countries');
+      $ctrl.geographiesService.getCountries.mockReturnValue(Observable.throw(error));
+      jest.spyOn($ctrl.$log, 'error');
+      $ctrl.loadCountries({initial: false}).subscribe({
+        error: () => {
+          expect($ctrl.loadingCountriesError).toBe(true);
+          expect($ctrl.$log.error).toHaveBeenCalledWith('Error loading countries.', error);
+          done();
+        }
+      });
+    });
+
+    it('should set countryCodeOptions & countriesData when data is found', (done) => {
+      const expectedCountryCodeOptions = {
+        US: 'USA',
+        UK: 'United Kingdom'
+      }
+      $ctrl.loadCountries({initial: false}).subscribe((data) => {
+        expect($ctrl.countryCodeOptions).toEqual(expectedCountryCodeOptions);
+        expect(data).toEqual(expectedCountryCodeOptions);
+        expect($ctrl.countriesData).toEqual(countries);
+        done();
+      });
+    });
+
+    it('should not call refreshRegions()', (done) => {
+      $ctrl.loadCountries({initial: false}).subscribe(() => {
+        expect($ctrl.refreshRegions).not.toHaveBeenCalled()
+        done();
+      });
+    });
+
+    it('should call refreshRegions() is this.$scope.countryCode is set', (done) => {
+      $ctrl.$scope.countryCode = 'UK';
+      $ctrl.loadCountries({initial: false}).subscribe(() => {
+        expect($ctrl.refreshRegions).toHaveBeenCalledWith('UK')
+        done();
+      });
+    });
+
+    it('should call refreshRegions() when initial time running function', (done) => {
+      $ctrl.loadCountries({initial: true}).subscribe(() => {
+        expect($ctrl.refreshRegions).toHaveBeenCalledWith('US')
+        done();
+      });
+    });
+
+    it("should use donorDetails's country", (done) => {
+      $ctrl.donorDetails = {
+        mailingAddress: {
+          country: 'CA'
+        }
+      }
+      $ctrl.loadCountries({initial: true}).subscribe(() => {
+        expect($ctrl.refreshRegions).toHaveBeenCalledWith('CA')
+        done();
+      });
+    });
+  });
+
   describe('refreshRegions()', () => {
     beforeEach(() => {
       $ctrl.selectedCountry = {};

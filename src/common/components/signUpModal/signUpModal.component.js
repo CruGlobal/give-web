@@ -234,10 +234,6 @@ class SignUpModalController {
     ]
   }
 
-  // TODO list
-  // Add new tests
-  // if US, show City, State and Zip
-  // Zip should follow this pattern: "/^\d{5}(?:[-\s]\d{4})?$/"
 
   loadCountries ({ initial = false }) {
     this.loadingCountriesError = false
