@@ -9,6 +9,7 @@ import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
 import { accountTypeFieldSchema, organizationNameFieldSchema, schema, user } from './signUpModal.component.mock'
+import { customFields } from './signUpFormCustomFields'
 
 describe('signUpForm', function () {
   beforeEach(angular.mock.module(module.name))
@@ -202,18 +203,26 @@ describe('signUpForm', function () {
 
     describe('getStep2Fields()', () => {
       const onSuccess = jest.fn();
-
+      let defaultData = []
       beforeEach(() => {
         $ctrl.currentStep = 2;
-        $ctrl.organizationNameTxt = 'Organization Name';
-        $ctrl.$scope = {
-          organizationName: '',
-          streetAddress: '',
-          city: '',
-          state: '',
-          zipCode: '',
-          countryCode: '',
-          primaryPhone: '',
+        $ctrl.translations = {
+          country: 'Country code',
+          address: 'Street address',
+          city: 'City',
+          state: 'State',
+          zip:  'Zip code',
+          giveAsIndividualTxt: 'Household',
+          giveAsOrganizationTxt: 'Organization'
+        }
+        $ctrl.countryCodeOptions = {
+          US: 'USA',
+          UK: 'United Kingdom',
+          CA: 'Canada'
+        }
+        $ctrl.stateOptions = {
+          CA: 'California',
+          GA: 'Georgia'
         }
         $ctrl.donorDetails = {
           mailingAddress: {
@@ -223,123 +232,176 @@ describe('signUpForm', function () {
             postalCode: '',
             country: '',
           },
-          'phone-number': ''
+          'phone-number': '',
+          name: {
+            'given-name': '',
+            'family-name': ''
+          },
+          email: '',
+          'donor-type': ''
         }
+        $ctrl.$scope = {
+          streetAddress: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          countryCode: '',
+          primaryPhone: '',
+        }
+
+        defaultData = [
+          {
+            ...customFields.countryCode,
+            options: $ctrl.countryCodeOptions,
+            value: 'US'
+          },
+          {
+            ...customFields.streetAddress,
+            value: ''
+          },
+          {
+            ...customFields.streetAddressExtended,
+            value: ''
+          },
+          {
+            ...customFields.internationalAddressLine3,
+            value: ''
+          },
+          {
+            ...customFields.internationalAddressLine4,
+            value: ''
+          },
+          {
+            ...customFields.city,
+            value: ''
+          },
+          {
+            ...customFields.state,
+            options: {
+              '': '',
+              ...$ctrl.stateOptions,
+            },
+            value: ''
+          },
+          {
+            ...customFields.zipCode,
+            value: ''
+          },
+          {
+            ...customFields.primaryPhone,
+            value: ''
+          }
+        ]
       });
 
-      it('should return step 2 with no pre-filled values', () => {
+      it('should return step 2 using default data', () => {
         $ctrl.parseSchema(schema, onSuccess);
-
-        expect(onSuccess).toHaveBeenCalledWith([
-          schema[3],
-          schema[4],
-          schema[5],
-          schema[6],
-          schema[7],
-          schema[8],
-        ])
-      });
-
-      it('should include the organization field in step 2', () => {
-        $ctrl.$scope.accountType = 'organization'
-        $ctrl.parseSchema(schema, onSuccess);
-
-        expect(onSuccess).toHaveBeenCalledWith([
-          organizationNameFieldSchema,
-          schema[3],
-          schema[4],
-          schema[5],
-          schema[6],
-          schema[7],
-          schema[8],
-        ])
+        expect(onSuccess).toHaveBeenCalledWith(defaultData)
       });
 
       it('should use saved data from $scope', () => {
-        $ctrl.$scope.accountType = 'organization'
-        $ctrl.$scope.organizationName = user.organizationName;
+        $ctrl.$scope.countryCode = 'UK';
         $ctrl.$scope.streetAddress = user.streetAddress;
+        $ctrl.$scope.streetAddressExtended = user.streetAddressExtended;
+        $ctrl.$scope.internationalAddressLine3 = 'internationalAddressLine3';
+        $ctrl.$scope.internationalAddressLine4 = 'internationalAddressLine4';
         $ctrl.$scope.city = user.city;
         $ctrl.$scope.state = user.state;
         $ctrl.$scope.zipCode = user.zipCode;
-        $ctrl.$scope.countryCode = user.countryCode;
         $ctrl.$scope.primaryPhone = user.primaryPhone;
 
         $ctrl.parseSchema(schema, onSuccess);
 
         expect(onSuccess).toHaveBeenCalledWith([
           {
-            ...organizationNameFieldSchema,
-            value: user.organizationName,
+            ...defaultData[0],
+            value: $ctrl.$scope.countryCode
           },
           {
-            ...schema[3],
-            value: user.streetAddress,
+            ...defaultData[1],
+            value: $ctrl.$scope.streetAddress
           },
           {
-            ...schema[4],
-            value: user.city,
+            ...defaultData[2],
+            value: $ctrl.$scope.streetAddressExtended
           },
           {
-            ...schema[5],
-            value: user.state,
+            ...defaultData[3],
+            value: 'internationalAddressLine3'
           },
           {
-            ...schema[6],
-            value: user.zipCode,
+            ...defaultData[4],
+            value: 'internationalAddressLine4'
           },
           {
-            ...schema[7],
-            value: user.countryCode,
+            ...defaultData[5],
+            value: $ctrl.$scope.city
           },
           {
-            ...schema[8],
-            value: user.primaryPhone,
+            ...defaultData[6],
+            value: $ctrl.$scope.state
           },
+          {
+            ...defaultData[7],
+            value: $ctrl.$scope.zipCode
+          },
+          {
+            ...defaultData[8],
+            value: $ctrl.$scope.primaryPhone
+          }
         ])
       })
 
       it('should use saved data from donorDetails', () => {
-        $ctrl.$scope.accountType = 'organization'
-        $ctrl.donorDetails['organization-name'] = `${user.organizationName} donor`;
+        $ctrl.donorDetails.mailingAddress.country = `CA`;
         $ctrl.donorDetails.mailingAddress.streetAddress = `${user.streetAddress} donor`;
+        $ctrl.donorDetails.mailingAddress.extendedAddress = `extendedAddress`;
+        $ctrl.donorDetails.mailingAddress.intAddressLine3 = `intAddressLine3`;
+        $ctrl.donorDetails.mailingAddress.intAddressLine4 = `intAddressLine4`;
         $ctrl.donorDetails.mailingAddress.locality = `${user.city} donor`;
         $ctrl.donorDetails.mailingAddress.region = `${user.state} donor`;
         $ctrl.donorDetails.mailingAddress.postalCode = `${user.zipCode} donor`;
-        $ctrl.donorDetails.mailingAddress.country = `${user.countryCode} donor`;
         $ctrl.donorDetails['phone-number'] = `${user.primaryPhone} donor`;
 
         $ctrl.parseSchema(schema, onSuccess);
 
         expect(onSuccess).toHaveBeenCalledWith([
           {
-            ...organizationNameFieldSchema,
-            value: `${user.organizationName} donor`,
+            ...defaultData[0],
+            value: $ctrl.donorDetails.mailingAddress.country
           },
           {
-            ...schema[3],
-            value: `${user.streetAddress} donor`,
+            ...defaultData[1],
+            value: $ctrl.donorDetails.mailingAddress.streetAddress
           },
           {
-            ...schema[4],
-            value: `${user.city} donor`,
+            ...defaultData[2],
+            value: $ctrl.donorDetails.mailingAddress.extendedAddress
           },
           {
-            ...schema[5],
-            value: `${user.state} donor`,
+            ...defaultData[3],
+            value: $ctrl.donorDetails.mailingAddress.intAddressLine3
           },
           {
-            ...schema[6],
-            value: `${user.zipCode} donor`,
+            ...defaultData[4],
+            value: $ctrl.donorDetails.mailingAddress.intAddressLine4
           },
           {
-            ...schema[7],
-            value: `${user.countryCode} donor`,
+            ...defaultData[5],
+            value: $ctrl.donorDetails.mailingAddress.locality
           },
           {
-            ...schema[8],
-            value: `${user.primaryPhone} donor`,
+            ...defaultData[6],
+            value: $ctrl.donorDetails.mailingAddress.region
           },
+          {
+            ...defaultData[7],
+            value: $ctrl.donorDetails.mailingAddress.postalCode
+          },
+          {
+            ...defaultData[8],
+            value: $ctrl.donorDetails['phone-number']
+          }
         ])
       });
     });

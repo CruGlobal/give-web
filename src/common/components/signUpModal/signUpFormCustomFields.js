@@ -115,7 +115,7 @@ export const customFields = {
   zipCode: {
     name: 'userProfile.zipCode',
     type: 'text',
-    label: 'ZIP Code',
+    label: 'Zip code',
     required: false,
     'label-top': true,
     multirowError: true,
