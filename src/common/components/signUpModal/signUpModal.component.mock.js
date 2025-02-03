@@ -34,5 +34,5 @@ export const schema = [
     label: 'Email Address',
     type: 'email',
     value: ''
-  },
+  }
 ]

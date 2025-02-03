@@ -14,8 +14,8 @@ import geographiesService from 'common/services/api/geographies.service'
 import { customFields } from './signUpFormCustomFields'
 require('assets/okta-sign-in/css/okta-sign-in.min.css')
 
-export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]';
-export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]';
+export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]'
+export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]'
 export const inputFieldErrorSelectorPrefix = '.o-form-input-name-'
 const componentName = 'signUpModal'
 const signUpButtonText = 'Create an Account'
