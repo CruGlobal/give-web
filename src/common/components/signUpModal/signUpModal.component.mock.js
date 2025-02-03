@@ -2,7 +2,7 @@ export const user = {
   firstName: 'firstName',
   lastName: 'lastName',
   email: 'email',
-  accountType: 'accountType',
+  accountType: 'Household',
   streetAddress: 'streetAddress',
   streetAddressExtended: 'streetAddressExtended',
   city: 'city',

@@ -348,30 +348,68 @@ describe('signUpForm', function () {
   describe('preSubmit()', () => {
     const onSuccess = jest.fn();
 
-    it('saveStep1Data()', () => {
-      $ctrl.currentStep = 1;
-      jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
-      jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
+    describe('saveStep1Data()', () => {
+      let postData = {}
+      const orgNameError = 'orgNameError';
 
-      const postData = {
-        userProfile: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-        },
-        accountType: user.accountType,
-      }
+      beforeEach(() => {
+        jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
+        jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
+        jest.spyOn($ctrl, 'injectErrorMessages').mockImplementation(() => {});
+        $ctrl.currentStep = 1;
+        $ctrl.translations = {
+          orgNameError,
+        }
+        postData= {
+          userProfile: user,
+          accountType: user.accountType,
+          organizationName: user.organizationName,
+        }
+      });
 
-      expect($ctrl.$scope.firstName).not.toEqual(user.firstName);
-      $ctrl.preSubmit(postData, onSuccess);
+      it('saves Organisation account Information correctly', () => {
+        postData.accountType = 'Organization';
+        expect($ctrl.$scope.firstName).not.toEqual(user.firstName);
+        $ctrl.preSubmit(postData, onSuccess);
 
-      expect($ctrl.$scope.firstName).toEqual(user.firstName);
-      expect($ctrl.$scope.lastName).toEqual(user.lastName);
-      expect($ctrl.$scope.email).toEqual(user.email);
-      expect($ctrl.$scope.accountType).toEqual(user.accountType);
-      expect($ctrl.goToNextStep).toHaveBeenCalled();
-      expect(onSuccess).not.toHaveBeenCalled();
+        expect($ctrl.$scope.firstName).toEqual(user.firstName);
+        expect($ctrl.$scope.lastName).toEqual(user.lastName);
+        expect($ctrl.$scope.email).toEqual(user.email);
+        expect($ctrl.$scope.accountType).toEqual('Organization');
+        expect($ctrl.$scope.organizationName).toEqual(user.organizationName);
+        expect($ctrl.goToNextStep).toHaveBeenCalled();
+        expect(onSuccess).not.toHaveBeenCalled();
+      });
+
+      it('saves HouseHold account Information correctly', () => {
+        expect($ctrl.$scope.firstName).not.toEqual(user.firstName);
+        $ctrl.preSubmit(postData, onSuccess);
+
+        expect($ctrl.$scope.firstName).toEqual(user.firstName);
+        expect($ctrl.$scope.lastName).toEqual(user.lastName);
+        expect($ctrl.$scope.email).toEqual(user.email);
+        expect($ctrl.$scope.accountType).toEqual(user.accountType);
+        expect($ctrl.$scope.organizationName).toEqual('');
+        expect($ctrl.goToNextStep).toHaveBeenCalled();
+        expect(onSuccess).not.toHaveBeenCalled();
+      });
+
+      it('should handle no organisation name error', () => {
+        postData.accountType = 'Organization';
+        postData.organizationName = '';
+        $ctrl.preSubmit(postData, onSuccess);
+
+        expect($ctrl.injectErrorMessages).toHaveBeenCalledWith([
+          {
+            property: 'organizationName',
+            errorSummary: orgNameError
+          }
+        ])
+        expect($ctrl.injectErrorMessages).toHaveBeenCalled();
+        expect($ctrl.goToNextStep).not.toHaveBeenCalled();
+      });
     });
+
 
     describe('saveStep2Data()', () => {
       let postData = {}
@@ -379,7 +417,7 @@ describe('signUpForm', function () {
       const selectStateError = 'selectStateError';
       const zipCodeError = 'zipCodeError';
       const invalidUSZipError = 'invalidUSZipError';
-      
+
       beforeEach(() => {
         jest.spyOn($ctrl, 'goToNextStep').mockImplementation(() => {});
         jest.spyOn($ctrl.$scope, '$apply').mockImplementation((callback) => callback());
