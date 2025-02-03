@@ -548,6 +548,7 @@ describe('signUpForm', function () {
           ],
         },
       ]
+      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.of([]));
     });
 
     it('should return null if selectedCountry is equal to country and forceRetry is false', (done) => {
@@ -575,7 +576,6 @@ describe('signUpForm', function () {
     });
 
     it('should set selectedCountry to countryData', (done) => {
-      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.of([]));
       $ctrl.refreshRegions('country').subscribe(() => {
         expect($ctrl.selectedCountry.name).toBe('country');
         done();
@@ -583,7 +583,6 @@ describe('signUpForm', function () {
     });
 
     it('should call geographiesService.getRegions with countryData', (done) => {
-      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.of([]));
       $ctrl.refreshRegions('country').subscribe(() => {
         expect($ctrl.geographiesService.getRegions).toHaveBeenCalledWith($ctrl.countriesData[0]);
         done();
@@ -591,7 +590,7 @@ describe('signUpForm', function () {
     });
 
     it('should set stateOptions if data is found', (done) => {
-      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.of($ctrl.countriesData[0].regions));
+     $ctrl.geographiesService.getRegions.mockReturnValue(Observable.of($ctrl.countriesData[0].regions));
       $ctrl.refreshRegions('country').subscribe(() => {
         expect($ctrl.stateOptions).toEqual({
           region1: 'Region 1',
@@ -603,7 +602,7 @@ describe('signUpForm', function () {
 
     it('should handle error and set loadingRegionsError to true', (done) => {
       const error = new Error('Error loading regions');
-      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.throw(error));
+      $ctrl.geographiesService.getRegions.mockReturnValue(Observable.throw(error));
       jest.spyOn($ctrl.$log, 'error');
       $ctrl.refreshRegions('country').subscribe({
         error: () => {
