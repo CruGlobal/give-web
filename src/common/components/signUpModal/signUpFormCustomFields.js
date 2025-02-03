@@ -17,10 +17,14 @@ export const customFields = {
     type: 'text',
     'label-top': true,
     label: 'Organization Name',
-    required: true,
-    maxLength: 50
+    required: false,
+    maxLength: 50,
+    showWhen: {
+      accountType: 'Organization'
+    }
   },
   countryCode: {
+    inputId: 'countryCodeInput',
     name: 'userProfile.countryCode',
     type: 'select',
     label: 'Country code',
@@ -38,7 +42,8 @@ export const customFields = {
     required: true,
     'label-top': true,
     multirowError: true,
-    'data-se': 'o-form-fieldset-userProfile.streetAddress'
+    'data-se': 'o-form-fieldset-userProfile.streetAddress',
+    maxLength: 200
   },
   streetAddressExtended: {
     name: 'userProfile.streetAddressExtended',
@@ -47,36 +52,77 @@ export const customFields = {
     required: false,
     'label-top': true,
     multirowError: true,
-    'data-se': 'o-form-fieldset-userProfile.streetAddressExtended'
+    'data-se': 'o-form-fieldset-userProfile.streetAddressExtended',
+    maxLength: 100
+  },
+  internationalAddressLine3: {
+    name: 'userProfile.internationalAddressLine3',
+    type: 'text',
+    label: 'Address line 3',
+    required: false,
+    'label-top': true,
+    multirowError: true,
+    'data-se': 'o-form-fieldset-userProfile.internationalAddressLine3',
+    maxLength: 100,
+    showWhen: {
+      'userProfile.countryCode': function (value) {
+        return value !== 'US'
+      }
+    }
+  },
+  internationalAddressLine4: {
+    name: 'userProfile.internationalAddressLine4',
+    type: 'text',
+    label: 'Address line 4',
+    required: false,
+    'label-top': true,
+    multirowError: true,
+    'data-se': 'o-form-fieldset-userProfile.internationalAddressLine4',
+    maxLength: 100,
+    showWhen: {
+      'userProfile.countryCode': function (value) {
+        return value !== 'US'
+      }
+    }
   },
   city: {
     name: 'userProfile.city',
     type: 'text',
     label: 'City',
-    required: true,
+    required: false,
     'label-top': true,
     multirowError: true,
-    'data-se': 'o-form-fieldset-userProfile.city'
+    'data-se': 'o-form-fieldset-userProfile.city',
+    maxLength: 50,
+    showWhen: {
+      'userProfile.countryCode': 'US'
+    }
   },
   state: {
     name: 'userProfile.state',
     type: 'select',
     label: 'State',
-    required: true,
+    required: false,
     options: {},
     'label-top': true,
     multirowError: true,
     'data-se': 'o-form-fieldset-userProfile.state',
-    wide: true
+    wide: true,
+    showWhen: {
+      'userProfile.countryCode': 'US'
+    }
   },
   zipCode: {
     name: 'userProfile.zipCode',
     type: 'text',
-    label: 'ZIP Code',
-    required: true,
+    label: 'Zip code',
+    required: false,
     'label-top': true,
     multirowError: true,
-    'data-se': 'o-form-fieldset-userProfile.zipCode'
+    'data-se': 'o-form-fieldset-userProfile.zipCode',
+    showWhen: {
+      'userProfile.countryCode': 'US'
+    }
   },
   primaryPhone: {
     name: 'userProfile.primaryPhone',

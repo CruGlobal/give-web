@@ -3,7 +3,7 @@ import includes from 'lodash/includes'
 import assign from 'lodash/assign'
 import pick from 'lodash/pick'
 import 'rxjs/add/operator/finally'
-import 'rxjs/add/operator/map'
+import { map, catchError } from 'rxjs/operators'
 import { Observable } from 'rxjs/Observable'
 import OktaSignIn from '@okta/okta-signin-widget'
 import sessionService, { Roles } from 'common/services/session/session.service'
@@ -14,11 +14,15 @@ import geographiesService from 'common/services/api/geographies.service'
 import { customFields } from './signUpFormCustomFields'
 require('assets/okta-sign-in/css/okta-sign-in.min.css')
 
+export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]';
+export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]';
+export const inputFieldErrorSelectorPrefix = '.o-form-input-name-'
 const componentName = 'signUpModal'
 const signUpButtonText = 'Create an Account'
 const nextButtonText = 'Next'
 const backButtonId = 'backButton'
 const backButtonText = 'Back'
+const errorIconHtml = '<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span>'
 
 class SignUpModalController {
   /* @ngInject */
@@ -53,10 +57,12 @@ class SignUpModalController {
   initializeVariables () {
     this.currentStep = 1
     this.donorDetails = {}
+    this.translations = {}
     this.signUpErrors = []
     this.isLoading = true
     this.submitting = false
     this.countryCodeOptions = {}
+    this.countriesData = []
     this.stateOptions = {}
     this.selectedCountry = {}
   }
@@ -73,19 +79,31 @@ class SignUpModalController {
       'ZIP',
       'COUNTRY_LIST_ERROR',
       'REGIONS_LOADING_ERROR',
-      'RETRY'
+      'RETRY',
+      'ORG_NAME_ERROR',
+      'CITY_ERROR',
+      'SELECT_STATE_ERROR',
+      'ZIP_CODE_ERROR',
+      'INVALID_US_ZIP_ERROR'
     ]).then(translations => {
-      this.giveAsIndividualTxt = translations.GIVE_AS_INDIVIDUAL
-      this.giveAsOrganizationTxt = translations.GIVE_AS_ORGANIZATION
-      this.organizationNameTxt = translations.ORGANIZATION_NAME
-      this.countryField = translations.COUNTRY
-      this.addressField = translations.ADDRESS
-      this.cityField = translations.CITY
-      this.stateField = translations.STATE
-      this.zipField = translations.ZIP
-      this.countryListError = translations.COUNTRY_LIST_ERROR
-      this.regionsLoadingError = translations.REGIONS_LOADING_ERROR
-      this.retryTxt = translations.RETRY
+      this.translations = {
+        giveAsIndividual: translations.GIVE_AS_INDIVIDUAL,
+        giveAsOrganization: translations.GIVE_AS_ORGANIZATION,
+        organizationName: translations.ORGANIZATION_NAME,
+        country: translations.COUNTRY,
+        address: translations.ADDRESS,
+        city: translations.CITY,
+        state: translations.STATE,
+        zip: translations.ZIP,
+        countryListError: translations.COUNTRY_LIST_ERROR,
+        regionsLoadingError: translations.REGIONS_LOADING_ERROR,
+        retry: translations.RETRY,
+        orgNameError: translations.ORG_NAME_ERROR,
+        cityError: translations.CITY_ERROR,
+        selectStateError: translations.SELECT_STATE_ERROR,
+        zipCodeError: translations.ZIP_CODE_ERROR,
+        invalidUSZipError: translations.INVALID_US_ZIP_ERROR
+      }
     })
   }
 
@@ -150,37 +168,32 @@ class SignUpModalController {
       {
         ...customFields.accountType,
         options: {
-          Household: this.giveAsIndividualTxt,
-          Organization: this.giveAsOrganizationTxt
+          Household: this.translations.giveAsIndividual,
+          Organization: this.translations.giveAsOrganization
         },
         value: this.$scope.accountType || this.donorDetails?.['donor-type'] || 'Household'
       },
       {
-        ...customFields.countryCode,
-        options: this.countryCodeOptions,
-        label: this.countryField,
-        value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US'
+        ...customFields.organizationName,
+        label: this.translations.organizationName,
+        value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
       }
     ]
   }
 
-  getStep2Fields (schema) {
+  getStep2Fields () {
     // Retain the values entered by the user when navigating between steps.
     // Pre-populate the form fields with existing user details.
-
-    const organizationNameField = this.$scope.accountType === 'Organization'
-      ? [{
-          ...customFields.organizationName,
-          label: this.organizationNameTxt,
-          value: this.$scope.organizationName || this.donorDetails?.['organization-name'] || ''
-        }]
-      : []
-
     return [
-      ...organizationNameField,
+      {
+        ...customFields.countryCode,
+        options: this.countryCodeOptions,
+        label: this.translations.country,
+        value: this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US'
+      },
       {
         ...customFields.streetAddress,
-        label: this.addressField,
+        label: this.translations.address,
         value: this.$scope.streetAddress || this.donorDetails?.mailingAddress?.streetAddress || ''
       },
       {
@@ -188,19 +201,30 @@ class SignUpModalController {
         value: this.$scope.streetAddressExtended || this.donorDetails?.mailingAddress?.extendedAddress || ''
       },
       {
+        ...customFields.internationalAddressLine3,
+        value: this.$scope.internationalAddressLine3 || this.donorDetails?.mailingAddress?.intAddressLine3 || ''
+      },
+      {
+        ...customFields.internationalAddressLine4,
+        value: this.$scope.internationalAddressLine4 || this.donorDetails?.mailingAddress?.intAddressLine4 || ''
+      },
+      {
         ...customFields.city,
-        label: this.cityField,
+        label: this.translations.city,
         value: this.$scope.city || this.donorDetails?.mailingAddress?.locality || ''
       },
       {
         ...customFields.state,
-        options: this.stateOptions,
-        label: this.stateField,
+        options: {
+          '': '',
+          ...this.stateOptions
+        },
+        label: this.translations.state,
         value: this.$scope.state || this.donorDetails?.mailingAddress?.region || ''
       },
       {
         ...customFields.zipCode,
-        label: this.zipField,
+        label: this.translations.zip,
         value: this.$scope.zipCode || this.donorDetails?.mailingAddress?.postalCode || ''
       },
       {
@@ -219,7 +243,6 @@ class SignUpModalController {
         data.forEach(country => {
           this.countryCodeOptions[country.name] = country['display-name']
         })
-
         if (initial || this.$scope.countryCode) {
           this.refreshRegions(this.$scope.countryCode || this.donorDetails?.mailingAddress?.country || 'US').subscribe()
         }
@@ -244,17 +267,20 @@ class SignUpModalController {
     }
     this.selectedCountry = countryData
 
-    return this.geographiesService.getRegions(countryData).map((data) => {
-      data.forEach(state => {
-        this.stateOptions[state.name] = state['display-name']
-      })
-      return data
-    })
-      .catch(error => {
+    return this.geographiesService.getRegions(countryData).pipe(
+      map((data) => {
+        this.stateOptions = {}
+        data.forEach(state => {
+          this.stateOptions[state.name] = state['display-name']
+        })
+        return this.stateOptions
+      }),
+      catchError((error) => {
         this.loadingRegionsError = true
         this.$log.error('Error loading regions.', error)
         return Observable.throw(error)
       })
+    )
   }
 
   preSubmit (postData, onSuccess) {
@@ -263,36 +289,85 @@ class SignUpModalController {
     if (step === 1) {
       this.saveStep1Data(userProfile, postData)
     } else if (step === 2) {
-      this.saveStep2Data(userProfile, postData)
+      this.saveStep2Data(userProfile)
     } else if (step === 3) {
       this.submitFinalData(postData, onSuccess)
     }
   }
 
   saveStep1Data (userProfile, postData) {
+    const isOrganization = postData.accountType === 'Organization'
     Object.assign(this.$scope, {
       firstName: userProfile.firstName,
       lastName: userProfile.lastName,
       email: userProfile.email,
       accountType: postData.accountType,
-      countryCode: userProfile.countryCode
+      organizationName: isOrganization ? postData.organizationName : ''
     })
-    // Load regions for the selected country
-    // Using finally, so we always go to the next step, even if there's an error
-    this.refreshRegions(userProfile.countryCode).finally(() => {
-      this.goToNextStep()
-    }).subscribe()
+
+    const errors = []
+    if (isOrganization && !this.$scope.organizationName) {
+      errors.push({
+        errorSummary: this.translations.orgNameError,
+        property: 'organizationName'
+      })
+    }
+    if (errors.length) {
+      this.injectErrorMessages(errors)
+    } else {
+      this.$scope.$apply(() => this.goToNextStep())
+    }
   }
 
-  saveStep2Data (userProfile, postData) {
+  saveStep2Data (userProfile) {
+    const isUSAddress = userProfile.countryCode === 'US'
     Object.assign(this.$scope, {
+      countryCode: userProfile.countryCode,
       streetAddress: userProfile.streetAddress,
-      city: userProfile.city,
-      state: userProfile.state,
-      zipCode: userProfile.zipCode,
-      primaryPhone: userProfile.primaryPhone,
-      organizationName: postData.organizationName
+      streetAddressExtended: userProfile.streetAddressExtended,
+      internationalAddressLine3: isUSAddress ? '' : userProfile.internationalAddressLine3,
+      internationalAddressLine4: isUSAddress ? '' : userProfile.internationalAddressLine4,
+      city: isUSAddress ? userProfile.city : '',
+      state: isUSAddress ? userProfile.state : '',
+      zipCode: isUSAddress ? userProfile.zipCode : '',
+      primaryPhone: userProfile.primaryPhone
     })
+
+    const errors = []
+    if (isUSAddress) {
+      if (!this.$scope.city) {
+        errors.push({
+          errorSummary: this.translations.cityError,
+          property: 'userProfile.city'
+        })
+      }
+      if (!this.$scope.state) {
+        errors.push({
+          errorSummary: this.translations.selectStateError,
+          property: 'userProfile.state'
+        })
+      }
+      if (!this.$scope.zipCode) {
+        errors.push({
+          errorSummary: this.translations.zipCodeError,
+          property: 'userProfile.zipCode'
+        })
+      } else {
+        const zipCodeRegex = /^\d{5}(?:[-\s]\d{4})?$/
+        if (!zipCodeRegex.test(this.$scope.zipCode)) {
+          errors.push({
+            errorSummary: this.translations.invalidUSZipError,
+            property: 'userProfile.zipCode'
+          })
+        }
+      }
+    }
+
+    if (errors.length) {
+      this.injectErrorMessages(errors)
+      return
+    }
+
     this.$scope.$apply(() => this.goToNextStep())
   }
 
@@ -373,17 +448,22 @@ class SignUpModalController {
     }
   }
 
-  injectErrorMessages () {
+  injectErrorMessages (errors = this.signUpErrors) {
     // Inject error messages into the form since errors are cleared when switching steps/rerendering.
-    this.signUpErrors.forEach(error => {
-      const field = document.querySelector(`.o-form-input-name-${error.property.replace(/\./g, '\\.')}`)
+    errors.forEach(error => {
+      const field = document.querySelector(`${inputFieldErrorSelectorPrefix}${error.property.replace(/\./g, '\\.')}`)
       if (field) {
-        const errorElement = document.createElement('div')
-        errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
-        field.parentNode.classList.add('o-form-has-errors')
-        errorElement.setAttribute('role', 'alert')
-        errorElement.innerHTML = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${error.errorSummary}`
-        field.parentNode.appendChild(errorElement)
+        // Only add an error message if it doesn't already exist
+        const existingErrorParentElement = field.parentNode.querySelector('.okta-form-input-error')
+        const errorText = `${errorIconHtml} ${error.errorSummary}`
+        if (!existingErrorParentElement || existingErrorParentElement.innerHTML !== errorText) {
+          const errorElement = document.createElement('div')
+          errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain')
+          field.parentNode.classList.add('o-form-has-errors')
+          errorElement.setAttribute('role', 'alert')
+          errorElement.innerHTML = errorText
+          field.parentNode.appendChild(errorElement)
+        }
       }
     })
   }
@@ -411,11 +491,11 @@ class SignUpModalController {
     const errorElement = document.createElement('div')
     errorElement.classList.add('okta-form-input-error', 'o-form-input-error', 'o-form-explain', 'cru-error')
     errorElement.setAttribute('role', 'alert')
-    errorElement.innerHTML = `<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span> ${errorMessage}`
+    errorElement.innerHTML = `${errorIconHtml} ${errorMessage}`
 
     const retryButtonElement = document.createElement('a')
     retryButtonElement.classList.add('cru-retry-button')
-    retryButtonElement.innerHTML = this.retryTxt
+    retryButtonElement.innerHTML = this.translations.retry
 
     const field = document.querySelector(fieldSelector)
     field.classList.add('o-form-has-errors')
@@ -431,16 +511,16 @@ class SignUpModalController {
 
   injectCountryLoadError () {
     this.injectLoadError({
-      fieldSelector: '.o-form-fieldset[data-se="o-form-fieldset-userProfile.countryCode"]',
-      errorMessage: this.countryListError,
+      fieldSelector: countryFieldSelector,
+      errorMessage: this.translations.countryListError,
       retryCallback: () => this.loadCountries({ initial: false })
     })
   }
 
   injectRegionLoadError () {
     this.injectLoadError({
-      fieldSelector: '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]',
-      errorMessage: this.regionsLoadingError,
+      fieldSelector: regionFieldSelector,
+      errorMessage: this.translations.regionsLoadingError,
       retryCallback: () => this.refreshRegions(this.$scope.countryCode, true)
     })
   }
