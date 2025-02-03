@@ -345,6 +345,92 @@ describe('signUpForm', function () {
     });
   });
 
+  describe('refreshRegions()', () => {
+    beforeEach(() => {
+      $ctrl.selectedCountry = {};
+      $ctrl.countriesData = [
+        {
+          name: 'country',
+          regions: [
+            { name: 'region1', 'display-name': 'Region 1' },
+            { name: 'region2', 'display-name': 'Region 2' }
+          ],
+        },
+        {
+          name: 'country2',
+          regions: [
+            { name: 'region3', 'display-name': 'Region 3' },
+            { name: 'region4', 'display-name': 'Region 4' }
+          ],
+        },
+      ]
+    });
+
+    it('should return null if selectedCountry is equal to country and forceRetry is false', (done) => {
+      $ctrl.selectedCountry.name = 'country';
+      $ctrl.refreshRegions('country').subscribe((data) => {
+        expect(data).toBe(null);
+        done()
+      });
+    });
+
+    it('should return null if it can not find country in countriesData', (done) => {
+      $ctrl.refreshRegions('country3').subscribe({
+        error: (error) => {
+          expect(error.message).toBe('Country not found');
+          done();
+        }
+      });
+    });
+
+    it('should set loadingRegionsError to false', () => {
+      $ctrl.loadingRegionsError = true;
+      $ctrl.refreshRegions('country').subscribe(() => {
+        expect($ctrl.loadingRegionsError).toBe(false);
+      });
+    });
+
+    it('should set selectedCountry to countryData', (done) => {
+      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.of([]));
+      $ctrl.refreshRegions('country').subscribe(() => {
+        expect($ctrl.selectedCountry.name).toBe('country');
+        done();
+      });
+    });
+
+    it('should call geographiesService.getRegions with countryData', (done) => {
+      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.of([]));
+      $ctrl.refreshRegions('country').subscribe(() => {
+        expect($ctrl.geographiesService.getRegions).toHaveBeenCalledWith($ctrl.countriesData[0]);
+        done();
+      });
+    });
+
+    it('should set stateOptions if data is found', (done) => {
+      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.of($ctrl.countriesData[0].regions));
+      $ctrl.refreshRegions('country').subscribe(() => {
+        expect($ctrl.stateOptions).toEqual({
+          region1: 'Region 1',
+          region2: 'Region 2'
+        });
+        done();
+      });
+    });
+
+    it('should handle error and set loadingRegionsError to true', (done) => {
+      const error = new Error('Error loading regions');
+      jest.spyOn($ctrl.geographiesService, 'getRegions').mockReturnValue(Observable.throw(error));
+      jest.spyOn($ctrl.$log, 'error');
+      $ctrl.refreshRegions('country').subscribe({
+        error: () => {
+          expect($ctrl.loadingRegionsError).toBe(true);
+          expect($ctrl.$log.error).toHaveBeenCalledWith('Error loading regions.', error);
+          done();
+        }
+      });
+    });
+  });
+
   describe('preSubmit()', () => {
     const onSuccess = jest.fn();
 
