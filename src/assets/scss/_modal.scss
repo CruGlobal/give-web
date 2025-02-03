@@ -33,6 +33,13 @@
       }
     }
 
+    @media (min-width: 550px) and (max-width: 600px) {
+      button.close {
+        left: 10px;
+        right: 0px;
+      }
+    }
+
     @media (min-width: 992px) {
       button.close {
         background-image: url("/assets/img/close-icon.png");
