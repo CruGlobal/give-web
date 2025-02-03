@@ -89,7 +89,7 @@ describe('userMatchModal', function () {
     })
   })
 
-  describe('getContacts()', () => {
+  describe('loadContacts()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'changeMatchState')
       jest.spyOn($ctrl.verificationService, 'getContacts')
@@ -98,7 +98,7 @@ describe('userMatchModal', function () {
     it('initializes the component and proceeds to \'identity\'', () => {
       const contacts = [{ name: 'Charles Xavier', selected: false }, { name: 'Bruce Bannr', selected: false }]
       $ctrl.verificationService.getContacts.mockImplementation(() => Observable.of(contacts))
-      $ctrl.getContacts()
+      $ctrl.loadContacts()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
       expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
@@ -112,14 +112,14 @@ describe('userMatchModal', function () {
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.of([{ key: 'a' }, { key: 'b' }, { key: 'c' }]))
       $ctrl.verificationService.getContacts.mockImplementation(() => Observable.of(contacts))
       $ctrl.contacts = null
-      $ctrl.getContacts()
+      $ctrl.loadContacts()
       expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
       expect($ctrl.changeMatchState).toHaveBeenCalledWith('activate')
     })
 
     it('logs an error on failure', () => {
       $ctrl.verificationService.getContacts.mockReturnValue(Observable.throw('another error'))
-      $ctrl.getContacts()
+      $ctrl.loadContacts()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
       expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
@@ -130,7 +130,7 @@ describe('userMatchModal', function () {
 
     it('does not reload the contacts if they have already been loaded', () => {
       $ctrl.contacts = [{ name: 'Charles Xavier', selected: false }, { name: 'Bruce Bannr', selected: false }]
-      $ctrl.getContacts()
+      $ctrl.loadContacts()
 
       expect($ctrl.changeMatchState).toHaveBeenCalledWith('identity')
       expect($ctrl.verificationService.getContacts).not.toHaveBeenCalled()
@@ -144,11 +144,11 @@ describe('userMatchModal', function () {
 
     it('loads contacts on donor match success', () => {
       jest.spyOn($ctrl.verificationService, 'postDonorMatches').mockReturnValue(Observable.of({}))
-      jest.spyOn($ctrl, 'getContacts').mockReturnValue(Observable.of({}))
+      jest.spyOn($ctrl, 'loadContacts').mockReturnValue(Observable.of({}))
       $ctrl.postDonorMatch()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
-      expect($ctrl.getContacts).toHaveBeenCalled()
+      expect($ctrl.loadContacts).toHaveBeenCalled()
     })
 
     it('proceeds to success on donor match failure', () => {

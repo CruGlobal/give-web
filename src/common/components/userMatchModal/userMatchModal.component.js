@@ -41,7 +41,7 @@ class UserMatchModalController {
         } else if (donorDetails['registration-state'] === 'FAILED') {
           this.changeMatchState('failure')
         } else {
-          this.getContacts()
+          this.loadContacts()
         }
       }
     },
@@ -71,7 +71,7 @@ class UserMatchModalController {
     this.verificationService.postDonorMatches().subscribe({
       next: () => {
         // Donor match success, get contacts
-        this.getContacts()
+        this.loadContacts()
       },
       error: () => {
         // Donor Match failed, user match not required
@@ -81,7 +81,7 @@ class UserMatchModalController {
     })
   }
 
-  getContacts () {
+  loadContacts () {
     if (this.contacts) {
       // The user picked a contact then went back, so don't load the contacts again because there
       // probably won't even be any
