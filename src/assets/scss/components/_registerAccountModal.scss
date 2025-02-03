@@ -49,7 +49,7 @@ register-account-modal {
     &[data-state=loading-donor] {
       @media screen and (min-width: 550px) {
         sign-in-modal {
-          padding: 50px;
+          min-width: 400px;
         }
       }
 
