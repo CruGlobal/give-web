@@ -13,30 +13,6 @@ export const user = {
   organizationName: 'organizationName'
 }
 
-export const accountTypeFieldSchema = {
-  name: 'accountType',
-  type: 'select',
-  options: {
-    Household: 'Household',
-    Organization: 'Organization'
-  },
-  'label-top': true,
-  label: 'Account Type',
-  required: true,
-  wide: true,
-  value: 'Household'
-}
-
-export const organizationNameFieldSchema = {
-  name: 'organizationName',
-  type: 'text',
-  'label-top': true,
-  label: 'Organization Name',
-  required: true,
-  maxLength: 50,
-  value: ''
-}
-
 export const schema = [
   {
     name: 'given-name',

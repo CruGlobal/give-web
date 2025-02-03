@@ -8,7 +8,7 @@ import { Sessions } from 'common/services/session/session.service'
 import { cortexRole } from 'common/services/session/fixtures/cortex-role'
 import { giveSession } from 'common/services/session/fixtures/give-session'
 import { cruProfile } from 'common/services/session/fixtures/cru-profile'
-import { accountTypeFieldSchema, organizationNameFieldSchema, schema, user } from './signUpModal.component.mock'
+import { schema, user } from './signUpModal.component.mock'
 import { customFields } from './signUpFormCustomFields'
 
 describe('signUpForm', function () {
@@ -89,10 +89,18 @@ describe('signUpForm', function () {
   describe('parseSchema()', () => {
     describe('getStep1Fields()', () => {
       const onSuccess = jest.fn();
+      let defaultData = [
+        schema[0],
+        schema[1],
+        schema[2],
+      ]
 
       beforeEach(() => {
-        $ctrl.giveAsIndividualTxt = 'Household'
-        $ctrl.giveAsOrganizationTxt = 'Organization'
+        $ctrl.translations = {
+          giveAsIndividual: 'Household',
+          giveAsOrganization: 'Organization',
+          organizationName: 'Organization Name',
+        }
         $ctrl.sessionService.session = {
           first_name: '',
           last_name: '',
@@ -106,96 +114,131 @@ describe('signUpForm', function () {
           email: '',
           'donor-type': ''
         }
+        $ctrl.$scope = {}
+        defaultData= [
+          ...defaultData,
+          {
+            ...customFields.accountType,
+            options: {
+              Household: 'Household',
+              Organization: 'Organization'
+            },
+            value: 'Household'
+          },
+          {
+            ...customFields.organizationName,
+            label: 'Organization Name',
+            value: ''
+          }
+        ]
       });
 
       it('should default to Step 1 and return data correctly', () => {
         $ctrl.parseSchema(schema, onSuccess);
 
-        expect(onSuccess).toHaveBeenCalledWith([
-          schema[0],
-          schema[1],
-          schema[2],
-          accountTypeFieldSchema
-        ])
+        expect(onSuccess).toHaveBeenCalledWith(defaultData)
       });
 
       it('should use saved data from $scope', () => {
-        $ctrl.$scope.firstName = user.firstName;
-        $ctrl.$scope.lastName = user.lastName;
-        $ctrl.$scope.email = user.email;
-        $ctrl.$scope.accountType = user.accountType;
-
+        $ctrl.$scope = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          accountType: user.accountType,
+          organizationName: user.organizationName
+        }
         $ctrl.parseSchema(schema, onSuccess);
 
         expect(onSuccess).toHaveBeenCalledWith([
           {
-            ...schema[0],
-            value: user.firstName,
+            ...defaultData[0],
+            value: $ctrl.$scope.firstName,
           },
           {
-            ...schema[1],
-            value: user.lastName,
+            ...defaultData[1],
+            value: $ctrl.$scope.lastName,
           },
           {
-            ...schema[2],
-            value: user.email,
+            ...defaultData[2],
+            value: $ctrl.$scope.email,
           },
           {
-            ...accountTypeFieldSchema,
-            value: user.accountType
+            ...defaultData[3],
+            value: $ctrl.$scope.accountType
+          },
+          {
+            ...defaultData[4],
+            value: $ctrl.$scope.organizationName
           }
         ])
       })
 
       it('should use saved data from donorDetails', () => {
-        $ctrl.donorDetails.name['given-name'] = `${user.firstName} donor`;
-        $ctrl.donorDetails.name['family-name'] = `${user.lastName} donor`;
-        $ctrl.donorDetails.email = `${user.email} donor`;
-        $ctrl.donorDetails['donor-type'] = `${user.accountType} donor`;
+        $ctrl.donorDetails = {
+          name: {
+            'given-name': `${user.firstName} donor`,
+            'family-name': `${user.lastName} donor`
+          },
+          email: `${user.email} donor`,
+          'donor-type': 'Organization',
+          'organization-name': `${user.organizationName} donor`
 
+        }
         $ctrl.parseSchema(schema, onSuccess);
 
         expect(onSuccess).toHaveBeenCalledWith([
           {
-            ...schema[0],
+            ...defaultData[0],
             value: `${user.firstName} donor`,
           },
           {
-            ...schema[1],
+            ...defaultData[1],
             value: `${user.lastName} donor`,
           },
           {
-            ...schema[2],
+            ...defaultData[2],
             value: `${user.email} donor`,
           },
           {
-            ...accountTypeFieldSchema,
-            value: `${user.accountType} donor`
+            ...defaultData[3],
+            value: $ctrl.donorDetails['donor-type']
+          },
+          {
+            ...defaultData[4],
+            value: $ctrl.donorDetails['organization-name']
           }
         ])
       });
 
       it('should use saved data from the session', () => {
-        $ctrl.sessionService.session.first_name = `${user.firstName} session`;
-        $ctrl.sessionService.session.last_name = `${user.lastName} session`;
-        $ctrl.sessionService.session.email = `${user.email} session`;
-
+        $ctrl.sessionService.session = {
+          first_name: `${user.firstName} session`,
+          last_name: `${user.lastName} session`,
+          email: `${user.email} session`
+        }
         $ctrl.parseSchema(schema, onSuccess);
 
         expect(onSuccess).toHaveBeenCalledWith([
           {
-            ...schema[0],
+            ...defaultData[0],
             value: `${user.firstName} session`,
           },
           {
-            ...schema[1],
+            ...defaultData[1],
             value: `${user.lastName} session`,
           },
           {
-            ...schema[2],
+            ...defaultData[2],
             value: `${user.email} session`,
           },
-          accountTypeFieldSchema
+          {
+            ...defaultData[3],
+            value: 'Household'
+          },
+          {
+            ...defaultData[4],
+            value: ''
+          }
         ])
       });
     });
@@ -212,8 +255,6 @@ describe('signUpForm', function () {
           city: 'City',
           state: 'State',
           zip:  'Zip code',
-          giveAsIndividualTxt: 'Household',
-          giveAsOrganizationTxt: 'Organization'
         }
         $ctrl.countryCodeOptions = {
           US: 'USA',
