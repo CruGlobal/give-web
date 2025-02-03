@@ -17,7 +17,7 @@
 <p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
 <hr />
 <div ng-if="!$ctrl.onSignInPage">
-  <h4 translate>Don&rsquo;t have an account?</h4>
+  <p class="no-account" translate>Don&rsquo;t have an account?</p>
   <button class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()">
     <!-- Circular Okta aura inlined so that the color can be changed with CSS for the :hover and :focus states -->
     <svg width="24" height="24" viewBox="0 0 16 16" aria-label="Okta logo">

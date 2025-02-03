@@ -10,6 +10,10 @@ sign-in-form {
     margin: 12px auto;
   }
 
+  .no-account {
+    font-size: 1.2rem;
+  }
+
   .details-wrapper {
     display: flex;
     flex-wrap: wrap; // Keep the summaries on the first line and wrap the description to the next line
