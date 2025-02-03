@@ -9,7 +9,10 @@
       <p translate>There was an error saving your answer. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
     </div>
     <div class="activate-progress">
-      <h3 class="text-center" translate>Activate your account</h3>
+      <h3 class="text-center" translate>Access your account</h3>
+      <p ng-if="$ctrl.matchState === 'identity'" translate>
+        Has someone in your household donated before? We may already have an account for you.
+      </p>
       <div ng-if="$ctrl.matchState === 'question' || $ctrl.matchState === 'success'">
         <progress id="activation-progress" ng-attr-value="{{$ctrl.getCurrentStep()}}" ng-attr-max="{{$ctrl.stepCount - 1}}">Activation status</progress>
         <label for="activation-progress" class="step-label" ng-switch="$ctrl.matchState" style="--progress: {{$ctrl.getCurrentStep() / ($ctrl.stepCount - 1)}}">
@@ -18,10 +21,12 @@
         </label>
       </div>
     </div>
-    <div ng-switch-when="intro">
-      <h4 class="text-center" translate>According to our records, someone in your household has given to us before.</h4>
+    <div ng-switch-when="activate">
+      <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingQuestionsError">
+        <p class="text-center" translate>There was an error loading the verification questions. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+      </div>
       <p class="text-center" style="margin-bottom: 2em;" translate>
-        Please answer these questions to confirm this so that you can access your whole giving history from this account.
+        Please answer the following questions to confirm your identity so that you can access your account.
       </p>
     </div>
     <user-match-identity ng-switch-when="identity"
@@ -29,18 +34,6 @@
                          submitted="$ctrl.identitySubmitted"
                          on-submit="$ctrl.onSelectContact(success, contact)">
     </user-match-identity>
-    <div ng-switch-when="activate">
-      <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingQuestionsError">
-        <p translate>There was an error loading the verification questions. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
-      </div>
-      <h4 class="text-center" translate>According to our records, someone in your household has given to us before.</h4>
-      <p class="text-center" translate>
-        Please answer these questions to confirm this so that you can access your whole giving history from this account.
-      </p>
-      <p ng-if="$ctrl.matchState !== 'success'">
-        <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.onActivate()" translate>Next</button>
-      </p>
-    </div>
     <user-match-question ng-switch-when="question"
                          ng-init="$ctrl.analyticsFactory.track('ga-registration-match-security-question'+$ctrl.questionCount)"
                          question="$ctrl.getQuestion()"
@@ -70,11 +63,10 @@
     <div ng-switch-default style="height: 100px;" ng-if="!$ctrl.loadingDonorDetailsError"></div>
   </div>
 </div>
-<div class="modal-footer" ng-switch="$ctrl.matchState">
-  <button ng-switch-when="intro" type="button" class="btn btn-md btn-primary" ng-click="$ctrl.getContacts()" translate>Next</button>
-  <div ng-switch-when="identity">
-    <button type="button" class="btn btn-md back" ng-click="$ctrl.changeMatchState('intro')" translate>Back</button>
-    <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.requestIdentitySubmit()" translate>Next</button>
+  <button ng-switch-when="identity" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.requestIdentitySubmit()" translate>Next</button>
+  <div ng-switch-when="activate">
+    <button type="button" class="btn btn-md back" ng-click="$ctrl.changeMatchState('identity')" translate>Back</button>
+    <button type="button" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.loadQuestions()" translate>Next</button>
   </div>
   <div ng-switch-when="question">
     <button type="button" class="btn btn-md back" ng-click="$ctrl.back()" translate>Back</button>

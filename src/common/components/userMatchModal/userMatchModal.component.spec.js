@@ -76,13 +76,13 @@ describe('userMatchModal', function () {
       })
 
       describe('getContacts has selected contact', () => {
-        it('initializes the component and proceeds to \'intro\'', () => {
+        it('initializes the component and proceeds to \'identity\'', () => {
           $ctrl.$onInit()
 
           expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
           expect($ctrl.modalTitle).toEqual('Activate Your Account')
           expect($ctrl.profileService.getDonorDetails).toHaveBeenCalled()
-          expect($ctrl.changeMatchState).toHaveBeenCalledWith('intro')
+          expect($ctrl.changeMatchState).toHaveBeenCalledWith('identity')
           expect($ctrl.loadingDonorDetailsError).toEqual(false)
         })
       })
@@ -107,16 +107,14 @@ describe('userMatchModal', function () {
       expect($ctrl.loadingDonorDetailsError).not.toEqual(true)
     })
 
-    it('initializes the component and proceeds to \'question\'', () => {
-      jest.spyOn($ctrl, 'onActivate')
+    it('initializes the component and proceeds to \'activate\'', () => {
       const contacts = [{ name: 'Charles Xavier', selected: true }]
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.of([{ key: 'a' }, { key: 'b' }, { key: 'c' }]))
       $ctrl.verificationService.getContacts.mockImplementation(() => Observable.of(contacts))
       $ctrl.contacts = null
       $ctrl.getContacts()
       expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
-      expect($ctrl.onActivate).toHaveBeenCalled()
-      expect($ctrl.changeMatchState).toHaveBeenCalledWith('question')
+      expect($ctrl.changeMatchState).toHaveBeenCalledWith('activate')
     })
 
     it('logs an error on failure', () => {
@@ -144,12 +142,13 @@ describe('userMatchModal', function () {
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
     })
 
-    it('proceeds to intro on donor match success', () => {
+    it('loads contacts on donor match success', () => {
       jest.spyOn($ctrl.verificationService, 'postDonorMatches').mockReturnValue(Observable.of({}))
+      jest.spyOn($ctrl, 'getContacts').mockReturnValue(Observable.of({}))
       $ctrl.postDonorMatch()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
-      expect($ctrl.changeMatchState).toHaveBeenCalledWith('intro')
+      expect($ctrl.getContacts).toHaveBeenCalled()
     })
 
     it('proceeds to success on donor match failure', () => {
@@ -208,12 +207,11 @@ describe('userMatchModal', function () {
     describe('valid contact', () => {
       it('selects the contact', () => {
         jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        jest.spyOn($ctrl, 'onActivate')
         $ctrl.onSelectContact(true, { name: 'Batman' })
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.selectContact).toHaveBeenCalledWith({ name: 'Batman' })
-        expect($ctrl.onActivate).toHaveBeenCalled()
+        expect($ctrl.changeMatchState).toHaveBeenCalledWith('activate')
         expect($ctrl.selectContactError).toEqual(false)
         expect($ctrl.firstName).toEqual('Batman')
       })
@@ -276,12 +274,12 @@ describe('userMatchModal', function () {
     })
   })
 
-  describe('onActivate()', () => {
+  describe('loadQuestions()', () => {
     it('load questions and changes state', () => {
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.of([{ key: 'a' }, { key: 'b' }, { key: 'c' }]))
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
 
-      $ctrl.onActivate()
+      $ctrl.loadQuestions()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
       expect($ctrl.questions).toEqual([{ key: 'a' }, { key: 'b' }, { key: 'c' }])
@@ -295,7 +293,7 @@ describe('userMatchModal', function () {
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.throw('some error'))
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
 
-      $ctrl.onActivate()
+      $ctrl.loadQuestions()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
       expect($ctrl.changeMatchState).not.toHaveBeenCalled()

@@ -41,7 +41,7 @@ class UserMatchModalController {
         } else if (donorDetails['registration-state'] === 'FAILED') {
           this.changeMatchState('failure')
         } else {
-          this.changeMatchState('intro')
+          this.getContacts()
         }
       }
     },
@@ -69,7 +69,10 @@ class UserMatchModalController {
   postDonorMatch () {
     this.setLoading({ loading: true })
     this.verificationService.postDonorMatches().subscribe({
-      next: () => { this.changeMatchState('intro') }, // Donor match success, get contacts
+      next: () => {
+        // Donor match success, get contacts
+        this.getContacts()
+      },
       error: () => {
         // Donor Match failed, user match not required
         this.skippedQuestions = true
@@ -89,7 +92,7 @@ class UserMatchModalController {
     this.setLoading({ loading: true })
     this.verificationService.getContacts().subscribe((contacts) => {
       if (find(contacts, { selected: true })) {
-        this.onActivate()
+        this.changeMatchState('activate')
       } else {
         this.contacts = contacts
         this.changeMatchState('identity')
@@ -128,7 +131,7 @@ class UserMatchModalController {
     this.selectContactError = false
     if (angular.isDefined(contact)) {
       this.verificationService.selectContact(contact).subscribe(() => {
-        this.onActivate()
+        this.changeMatchState('activate')
         this.firstName = contact.name.includes(' ')
           ? contact.name.substring(0, contact.name.lastIndexOf(' '))
           : contact.name
@@ -165,7 +168,7 @@ class UserMatchModalController {
     this.answerSubmitted = true
   }
 
-  onActivate () {
+  loadQuestions () {
     this.setLoading({ loading: true })
     this.loadingQuestionsError = false
     this.verificationService.getQuestions().subscribe((questions) => {
