@@ -5,6 +5,7 @@ import 'angular-mocks'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/empty'
+import 'rxjs/add/observable/from'
 import { Roles } from 'common/services/session/session.service'
 
 import module from './cart.service'
@@ -246,10 +247,7 @@ describe('cart service', () => {
       describe('with empty cart', () => {
         beforeEach(() => {
           jest.spyOn(self.cartService, 'getTotalQuantity').mockReturnValue(Observable.of(0))
-          jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.of({}))
-        })
-
-        it('should delete cookies and addItem to cart', () => {
+          jest.spyOn(self.cartService.sessionService, 'signOut').mockReturnValue(Observable.from(['']))
           self.$httpBackend.expectPOST(
             'https://give-stage2.cru.org/cortex/items/crugive/<some id>?FollowLocation=true',
             {
@@ -259,8 +257,27 @@ describe('cart service', () => {
               quantity: 1
             }
           ).respond(200)
+        })
 
+        it('should delete cookies and addItem to cart when not authenticated', () => {
+          jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([false]))
+          jest.spyOn(self.cartService, '_addItem')
           self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
+          expect(self.cartService.sessionService.oktaIsUserAuthenticated).toHaveBeenCalled()
+          expect(self.cartService.sessionService.signOut).not.toHaveBeenCalled()
+          expect(self.cartService._addItem).toHaveBeenCalled()
+        })
+
+        it('should force user to sign out of Okta prior to adding item to cart', () => {
+          jest.spyOn(self.cartService.sessionService, 'oktaIsUserAuthenticated').mockReturnValue(Observable.from([true]))
+          jest.spyOn(self.cartService, '_addItem')
+          self.cartService.addItem('items/crugive/<some id>', { amount: 50 }).subscribe()
+          expect(self.cartService.sessionService.oktaIsUserAuthenticated).toHaveBeenCalled()
+          expect(self.cartService.sessionService.signOut).toHaveBeenCalled()
+          expect(self.cartService._addItem).toHaveBeenCalled()
+        })
+
+        afterEach(() => {
           self.$httpBackend.flush()
         })
       })

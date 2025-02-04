@@ -15,17 +15,14 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
       if (replace === true) {
         currentModal.dismiss('replaced')
       } else {
-        if (currentModal.type !== 'reset-password') {
-          $log.error('Attempted to open more than 1 modal')
-        }
+        $log.error('Attempted to open more than 1 modal')
         return false
       }
     }
-    type = angular.isDefined(type) ? type : 'sign-in'
+    type = angular.isDefined(type) ? type : 'register-account'
     options = angular.isObject(options) ? options : {}
     const modalOptions = angular.merge({}, {
       component: sessionModalComponent.name,
-      size: 'sm',
       windowTemplateUrl: sessionModalWindowTemplate,
       ariaLabelledBy: 'session-modal-title',
       resolve: {
@@ -62,22 +59,33 @@ const SessionModalService = /* @ngInject */ function ($uibModal, $log, modalStat
   return {
     open: openModal,
     currentModal: () => currentModal,
-    signIn: (lastPurchaseId) => openModal('sign-in', {
-      resolve: { lastPurchaseId: () => lastPurchaseId },
+    signIn: (lastPurchaseId) => openModal('register-account', {
+      resolve: {
+        lastPurchaseId: () => lastPurchaseId
+      },
       openAnalyticsEvent: 'ga-sign-in',
       dismissAnalyticsEvent: 'ga-sign-in-exit'
     }).result,
-    signUp: () => openModal('sign-up').result,
-    forgotPassword: () => openModal('forgot-password').result,
-    resetPassword: () => openModal('reset-password', { backdrop: 'static' }).result,
     userMatch: () => openModal('user-match', {
       backdrop: 'static',
       openAnalyticsEvent: 'ga-registration-match-is-this-you',
       dismissAnalyticsEvent: 'ga-registration-exit'
     }).result,
-    contactInfo: () => openModal('contact-info', { size: '', backdrop: 'static' }).result,
-    accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId } }).result,
-    registerAccount: () => openModal('register-account', { backdrop: 'static', keyboard: false }).result
+    accountBenefits: (lastPurchaseId) => openModal('account-benefits', { resolve: { lastPurchaseId: () => lastPurchaseId }, size: 'sm' }).result,
+    registerAccount: () => openModal('register-account', {
+      resolve: {
+        welcomeBack: () => true
+      },
+      backdrop: 'static',
+      keyboard: false
+    }).result,
+    nonDismissibleRegisterAccount: () => openModal('register-account', {
+      resolve: {
+        hideCloseButton: () => true
+      },
+      backdrop: 'static',
+      keyboard: false
+    }).result
   }
 }
 
@@ -91,9 +99,6 @@ export default angular
   .factory(serviceName, SessionModalService)
   .config(function (modalStateServiceProvider) {
     modalStateServiceProvider.registerModal(
-      'reset-password',
       /* @ngInject */
-      function (sessionModalService) {
-        sessionModalService.resetPassword()
-      })
+      function (sessionModalService) {})
   })
