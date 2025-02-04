@@ -43,6 +43,7 @@ class Order {
     this.$window = $window
     this.$log = $log
     this.$filter = $filter
+    this.datadogRum = datadogRum
   }
 
   getDonorDetails () {
@@ -461,7 +462,7 @@ class Order {
           error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
         }
         this.$log.error('Error submitting purchase:', error)
-        datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status }) // here in order to show up in Error Tracking in DD
+        this.logToDatadogRum(error)
         controller.onSubmitted()
         controller.submissionErrorStatus = error.status
         controller.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
@@ -471,6 +472,16 @@ class Order {
         controller.submittingOrder = false
         controller.onSubmittingOrder({ value: false })
       })
+  }
+
+  // Log error to Datadog in order to show up in Error Tracking (RUM)
+  logToDatadogRum (error) {
+    if (error?.data) {
+      if (error.data.includes('InvalidCVV2Exception')) {
+        return
+      }
+    }
+    this.datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
   }
 }
 

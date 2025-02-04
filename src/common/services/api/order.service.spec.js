@@ -1289,15 +1289,15 @@ describe('order service', () => {
           self.orderService.clearCoverFees = jest.fn()
           mockController.loadCart = jest.fn()
           self.$window.scrollTo = jest.fn()
-          jest.spyOn(self.sessionService, 'updateCheckoutSavedData')    
+          jest.spyOn(self.sessionService, 'updateCheckoutSavedData')
         })
-        
+
         afterEach(() => {
           expect(mockController.onSubmittingOrder).toHaveBeenCalledWith({ value: true })
           expect(mockController.onSubmittingOrder).toHaveBeenCalledWith({ value: false })
           expect(mockController.onSubmitted).toHaveBeenCalled()
         })
-        
+
         it('should submit the order normally if paying with a bank account', (done) => {
           mockController.bankAccountPaymentDetails = {}
           mockController.donorDetails = {
@@ -1307,7 +1307,7 @@ describe('order service', () => {
             () => {
               expect(self.orderService.submit).toHaveBeenCalled()
               expect(self.orderService.clearCardSecurityCodes).toHaveBeenCalled()
-      
+
               expect(mockController.$scope.$emit).toHaveBeenCalledWith(cartUpdatedEvent)
               expect(self.sessionService.updateCheckoutSavedData).toHaveBeenCalled()
               done()
@@ -1328,7 +1328,7 @@ describe('order service', () => {
             expect(self.$log.error.logs[0]).toEqual(['Error submitting purchase:', { data: 'error saving bank account' }])
             expect(mockController.submissionError).toEqual('error saving bank account')
             expect(self.$window.scrollTo).toHaveBeenCalledWith(0, 0)
-    
+
             done()
           })
       })
@@ -1417,6 +1417,41 @@ describe('order service', () => {
         }, done)
         expect(self.orderService.clearCoverFees).toHaveBeenCalled()
       })
+    })
+  })
+
+  describe('logToDatadogRum', () => {
+    beforeEach(() => {
+      self.orderService.datadogRum = {
+        addError: jest.fn()
+      }
+    })
+
+    it('should log a checkout error', () => {
+      const error = {
+        data: 'Server Error',
+        status: 500
+      }
+
+      self.orderService.logToDatadogRum(error)
+      expect(self.orderService.datadogRum.addError)
+        .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
+    })
+
+    it('should log a checkout error without data', () => {
+      const error = 'Some error that is unstructured'
+      self.orderService.logToDatadogRum(error)
+      expect(self.orderService.datadogRum.addError)
+        .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
+    })
+
+    it('should not log a user error', () => {
+      const error = {
+        data: 'InvalidCVV2Exception: Invalid CVV',
+        status: 500
+      }
+      self.orderService.logToDatadogRum(error)
+      expect(self.orderService.datadogRum.addError).not.toHaveBeenCalled()
     })
   })
 })
