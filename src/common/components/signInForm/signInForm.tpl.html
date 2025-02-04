@@ -6,44 +6,36 @@
     {{$ctrl.errorMessage | translate}}
   </span>
 </div>
-<div ng-if="!$ctrl.onSignInPage">
-  <h2 translate>Sign in</h2>
-</div>
-<div>
-  <sign-in-button
-    on-success="$ctrl.onSuccess()"
-    on-failure="$ctrl.onFailure()"
-    last-purchase-id="$ctrl.lastPurchaseId"
-    error-message="$ctrl.errorMessage"
-    on-sign-in-page="$ctrl.onSignInPage"
-  ></sign-in-button>
-</div>
+<sign-in-button
+  on-success="$ctrl.onSuccess()"
+  on-failure="$ctrl.onFailure()"
+  last-purchase-id="$ctrl.lastPurchaseId"
+  error-message="$ctrl.errorMessage"
+></sign-in-button>
 
-<div>
-  <p class="sign-in-info" ng-if="!$ctrl.onSignInPage">
-    <span translate>You will be taken to Okta </span>
-    <span class="sup">
-      <i
-        class="fa fa-info-circle text-info"
-        uib-tooltip="{{'Okta is a trusted 3rd party security tool used by Cru to protect your personal information associated with your donor account.' | translate}}"
-      ></i>
-    </span>
-    <span translate>, then back to this site.</span>
-  </p>
-  <p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
-</div>
+<p ng-if="!$ctrl.onSignInPage"><span translate>You will be taken to Okta,</span><br /><span translate>then back to this site.</span></p>
+<p ng-if="$ctrl.onSignInPage" translate>You will briefly be taken away from this site to login, then brought back right where you left off.</p>
 <hr />
-<div ng-if="!$ctrl.onSignInPage">
-  <h4 translate>Don&rsquo;t have an account?</h4>
-  <a class="okta-signup-button" ng-click="$ctrl.onSignUpWithOkta()">Create an account</a>
-</div>
-<div class="need-help" ng-class="{'open': $ctrl.needHelpAccordionOpened}">
-  <div class="need-help--header" ng-click="$ctrl.toggleNeedHelpAccordion()" onKeyPress>
-    <i class="fa fa-caret-right"></i>
-    <span translate>Need help?</span>
-  </div>
-  <div class="need-help--content">
+<p class="no-account" ng-if="!$ctrl.onSignInPage" translate>Don&rsquo;t have an account?</p>
+<button class="okta-signup-button" ng-if="!$ctrl.onSignInPage" ng-click="$ctrl.onSignUpWithOkta()">
+  <!-- Circular Okta aura inlined so that the color can be changed with CSS for the :hover and :focus states -->
+  <svg width="24" height="24" viewBox="0 0 16 16" aria-label="Okta logo">
+    <circle cx="8" cy="8" r="5.25" stroke="currentColor" stroke-width="3.5" fill="none" />
+  </svg>
+  <span translate>Sign up with Okta</span>
+</button>
+<div class="details-wrapper">
+  <details name="okta-help">
+    <summary translate>Need help?</summary>
     <p><a ng-href="{{$ctrl.getOktaUrl()}}/signin/forgot-password" target="_blank" translate>Forgot your password?</a></p>
-    <p>Call <a href="tel:+18882787233">(888) 278-7233</a> opt. 1, then 1.<br />9:00 a.m. to 5:00 p.m. ET, Monday-Friday,<br /> or email us at <a href="mailto:eGift@cru.org">eGift@cru.org</a>.</p>
-  </div>
+    <p>
+      <span translate>Call</span> <a href="tel:+18882787233">(888) 278-7233</a> <span translate>opt. 1, then 1.</span><br />
+      <span translate>9:00 a.m. to 5:00 p.m. ET, Monday-Friday,</span><br />
+      <span translate>or email us at</span> <a href="mailto:eGift@cru.org">eGift@cru.org</a>.
+    </p>
+  </details>
+  <details name="okta-help">
+    <summary translate>What is Okta?</summary>
+    <p translate>Okta is a trusted 3rd party security tool used by Cru to protect your personal information associated with your donor account.</p>
+  </details>
 </div>

@@ -7,49 +7,66 @@ sign-in-form {
 
   hr {
     width: 65%;
-    margin: 12px auto;
+    margin-block: auto;
   }
 
-  a {
+  .no-account {
+    font-size: 1.2rem;
+  }
+
+  .details-wrapper {
+    display: flex;
+    flex-wrap: wrap; // Keep the summaries on the first line and wrap the description to the next line
+
+    details:first-of-type summary {
+      flex: 1; // Push the second summary to the right edge
+      min-width: 150px; // Ensure that the summaries are wide enough that the description is forced to wrap to the next line
+    }
+  }
+
+  // The goal is to have two <details> on one line that display their descriptions in the same
+  // location on the page on the line before
+  details {
+    display: contents; // Make the descriptions participate in the .details-wrapper flexbox layout
+    text-align: left;
+  }
+
+  summary {
+    display: list-item;
+    order: -1; // Make both summaries appear before the descriptions
+    margin: 1rem 0;
     cursor: pointer;
   }
 
-  .sign-in-info {
+  > p {
     margin-bottom: 0;
-
-    .sup {
-      font-size: 12px;
-
-      i {
-        color: #333333;
-      }
-    }
   }
 
-  .need-help {
-    &--header {
-      cursor: pointer;
+  .okta-signup-button {
+    $okta-brand: #007dc1;
 
-      i {
-        font-size: 11px;
-        margin-right: 3px;
-      }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 20px;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: white;
+    color: $okta-brand;
+    border: 2px solid $okta-brand;
+    border-radius: 4px;
+
+    &:hover {
+      color: white;
+      background-color: $okta-brand;
+      border-color: $okta-brand;
     }
-
-    &--content {
-      max-height: 0px;
-      overflow: hidden;
-      transition: max-height 0.3s ease 0s;;
-    }
-
-    &.open {
-      i {
-        transform: rotate(90deg);
-      }
-
-      .need-help--content {
-        max-height: 140px;
-      }
+    &:focus {
+      color: white;
+      background-color: darken($okta-brand, 3%);
+      border-color: darken($okta-brand, 3%);
     }
   }
 
@@ -61,10 +78,9 @@ sign-in-form {
 sign-in-button {
   .okta-button {
     width: 100%;
+  }
 
-    &:not(.normal-padding) {
-      width: 70%;
-      padding: 1em 0.5em;
-    }
+  .fa {
+    padding-left: 0.25rem;
   }
 }
