@@ -80,6 +80,7 @@
     "build": "webpack -p",
     "build:analyze": "webpack -p --env.analyze",
     "test": "jest",
+    "test:coverage": "jest --coverage=true",
     "test:log": "jest --silent=false",
     "lint": "standard",
     "lint:write": "standard --fix",
