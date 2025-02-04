@@ -47,17 +47,15 @@ register-account-modal {
   .modal-dialog.modal-lg & {
     &[data-state=sign-in],
     &[data-state=loading-donor] {
-      @media screen and (min-width: 550px) {
-        sign-in-modal {
-          min-width: 400px;
-        }
-      }
-
       @media screen and (min-width: 992px) {
         display: flex;
 
         .modal-header {
           flex: 1
+        }
+
+        sign-in-modal {
+          width: 400px;
         }
       }
     }
