@@ -8,7 +8,7 @@ import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.componen
 import { SignInEvent } from 'common/services/session/session.service'
 
 import module from './step-3.component'
-import { recaptchaFailedEvent, submitOrderEvent } from '../cart-summary/cart-summary.component'
+import { submitOrderEvent } from '../cart-summary/cart-summary.component'
 
 describe('checkout', () => {
   describe('step 3', () => {
