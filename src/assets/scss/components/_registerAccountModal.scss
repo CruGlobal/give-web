@@ -49,7 +49,7 @@ register-account-modal {
     &[data-state=loading-donor] {
       @media screen and (min-width: 550px) {
         sign-in-modal {
-          padding: 50px;
+          min-width: 400px;
         }
       }
 
@@ -110,15 +110,4 @@ register-account-modal {
     }
   }
 
-  sign-in-form {
-    hr {
-      width: 65%;
-    }
-  }
-
-  sign-in-button {
-    .okta-button:not(.normal-padding) {
-      width: 100%;
-    }
-  }
 }
