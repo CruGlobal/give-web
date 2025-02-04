@@ -1,88 +1,34 @@
 import angular from 'angular'
 import 'angular-gettext'
-import includes from 'lodash/includes'
-
+import uibTooltip from 'angular-ui-bootstrap/src/tooltip'
 import sessionService from 'common/services/session/session.service'
-
+import signInButtonComponent from './signInButton/signInButton.component'
 import template from './signInForm.tpl.html'
 
 const componentName = 'signInForm'
 
 class SignInFormController {
   /* @ngInject */
-  constructor ($log, $document, sessionService, gettext) {
-    this.$log = $log
-    this.$document = $document
+  constructor (sessionService, gettext) {
     this.$injector = angular.injector()
     this.sessionService = sessionService
     this.gettext = gettext
   }
 
   $onInit () {
-    this.isSigningIn = false
-    this.signInState = 'identity'
-
-    if (includes(['IDENTIFIED', 'REGISTERED'], this.sessionService.getRole())) {
-      this.username = this.sessionService.session.email
-    }
+    this.onSignInPage = this.onSignInPage || false
   }
 
-  signIn () {
-    this.isSigningIn = true
-    delete this.errorMessage
-    this.sessionService
-      .signIn(this.username, this.password, this.mfa_token, this.trust_device, this.lastPurchaseId)
-      .subscribe(() => {
-        const $injector = this.$injector
-        if (!$injector.has('sessionService')) {
-          $injector.loadNewModules(['sessionService'])
-        }
-        this.$document[0].body.dispatchEvent(
-          new window.CustomEvent('giveSignInSuccess', { bubbles: true, detail: { $injector } }))
-        this.onSuccess()
-      }, error => {
-        this.isSigningIn = false
-        if (error && error.data && error.data.error && error.data.error === 'invalid_grant' && error.data.thekey_authn_error) {
-          switch (error.data.thekey_authn_error) {
-            case 'mfa_required':
-              if (this.signInState === 'mfa') {
-                this.errorMessage = 'mfa'
-                delete this.mfa_token
-              }
-              this.signInState = 'mfa'
-              break
-            case 'invalid_credentials':
-            case 'stale_password':
-            case 'email_unverified':
-            default:
-              this.errorMessage = 'Bad username or password'
-              this.signInState = 'identity'
-              this.onFailure()
-          }
-        } else if (error && error.data && error.data.code && error.data.code === 'SIEB-DOWN') {
-          if (error && error.config && error.config.data && error.config.data.password) {
-            delete error.config.data.password
-          }
-          this.$log.error('Siebel is down', error)
-          this.signInState = 'identity'
-          this.errorMessage = error.data.message
-          this.onFailure()
-        } else {
-          if (error && error.config && error.config.data && error.config.data.password) {
-            delete error.config.data.password
-          }
-          this.$log.error('Sign In Error', error)
-          this.signInState = 'identity'
-          this.errorMessage = 'generic'
-          this.onFailure()
-        }
-      })
+  getOktaUrl () {
+    return this.sessionService.getOktaUrl()
   }
 }
 
 export default angular
   .module(componentName, [
     sessionService.name,
+    signInButtonComponent.name,
+    uibTooltip,
     'gettext'
   ])
   .component(componentName, {
@@ -91,6 +37,9 @@ export default angular
     bindings: {
       onSuccess: '&',
       onFailure: '&',
-      lastPurchaseId: '<'
+      lastPurchaseId: '<',
+      // Optional if on-sign-in-page is true
+      onSignUpWithOkta: '&?',
+      onSignInPage: '<'
     }
   })

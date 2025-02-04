@@ -11,7 +11,7 @@ import sessionEnforcerService, {
   EnforcerModes
 } from 'common/services/session/sessionEnforcer.service'
 import sessionModalService from 'common/services/session/sessionModal.service'
-import sessionService, { Roles } from 'common/services/session/session.service'
+import { Roles } from 'common/services/session/session.service'
 import designationEditorService from 'common/services/api/designationEditor.service'
 
 import titleModalController from './titleModal/title.modal'
@@ -38,11 +38,10 @@ const componentName = 'designationEditor'
 
 class DesignationEditorController {
   /* @ngInject */
-  constructor ($scope, $log, $q, $uibModal, $location, $window, $timeout, envService, sessionService, sessionEnforcerService, sessionModalService, designationEditorService) {
+  constructor ($scope, $log, $q, $uibModal, $location, $window, $timeout, envService, sessionEnforcerService, sessionModalService, designationEditorService) {
     this.$scope = $scope
     this.$log = $log
     this.$timeout = $timeout
-    this.sessionService = sessionService
     this.sessionEnforcerService = sessionEnforcerService
     this.sessionModalService = sessionModalService
     this.designationEditorService = designationEditorService
@@ -102,7 +101,7 @@ class DesignationEditorController {
       this.updateCarousel()
     }, error => {
       if (error.status === 422 && !this.retried) {
-        return this.sessionModalService.open('sign-in', {
+        return this.sessionModalService.open('register-account', {
           backdrop: 'static',
           keyboard: false
         }).result.then(() => {
@@ -402,7 +401,6 @@ export default angular
     'environment',
     'ngSanitize',
     commonModule.name,
-    sessionService.name,
     sessionEnforcerService.name,
     sessionModalService.name,
     designationEditorService.name,
