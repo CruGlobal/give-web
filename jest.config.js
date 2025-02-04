@@ -10,10 +10,12 @@ module.exports = {
     'angular',
     'angular-mocks',
     'jest-date-mock',
-    '<rootDir>/jest/setup.js'
+    '<rootDir>/jest/setup.js',
+    'jest-canvas-mock'
   ],
   moduleNameMapper: {
-    '^.+\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js'
+    '^.+\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js',
+    '^@okta/okta-auth-js$': '<rootDir>/__mocks__/oktaMock.js'
   },
   modulePaths: [
     '<rootDir>/src'

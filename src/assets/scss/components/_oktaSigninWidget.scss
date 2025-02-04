@@ -1,0 +1,59 @@
+#okta-sign-in.main-container {
+  border: none;
+  box-shadow: none;
+  margin: 0;
+
+  .okta-sign-in-header {
+    display: none;
+  }
+
+  .auth-content {
+    padding-top: 10px;
+    padding-bottom: 0;
+  }
+
+  .okta-form-title {
+    display: none;
+  }
+}
+
+sign-up-modal {
+  #osw-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .back-to-sign-in {
+    margin-top: 20px;
+  }
+}
+
+#okta-sign-in.auth-container {
+  // Injected cru back button
+  .o-form-button-bar {
+    display: flex;
+    gap: 50px;
+    justify-content: space-between;
+    align-items: center;
+
+    #backButton {
+      width: 100%;
+    }
+
+    .button.button-primary {
+      height: auto;
+      @extend .btn;
+      @extend .btn-primary;
+    }
+  }
+  // Injected cru error message
+  .cru-error {
+    float: left
+  }
+
+  // Injected cru retry button
+  .cru-retry-button:hover {
+    text-decoration: underline;
+  }
+}

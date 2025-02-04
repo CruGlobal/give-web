@@ -108,6 +108,15 @@ class Step1Controller {
           }
         }
 
+        const checkoutSavedData = this.sessionService.session.checkoutSavedData
+        if (checkoutSavedData) {
+          this.donorDetails = assign(this.donorDetails, pick(checkoutSavedData, [
+            'name', 'mailingAddress', 'donor-type', 'organization-name', 'phone-number', 'spouse-name'
+          ]))
+          if (!!this.donorDetails['spouse-name']['given-name'] || !!this.donorDetails['spouse-name']['family-name']) {
+            this.spouseFieldsDisabled = false
+          }
+        }
         this.loadRadioStations()
       },
       error => {
@@ -146,6 +155,9 @@ class Step1Controller {
     if (this.detailsForm.$valid) {
       const details = this.donorDetails
       this.submissionError = ''
+
+      // Clear the saved checkout data
+      this.sessionService.clearCheckoutSavedData()
 
       const requests = [this.orderService.updateDonorDetails(details)]
       if (details.email) {
