@@ -50,7 +50,7 @@ jobs:
         run: yarn install --immutable --immutable-cache
       
       - name: Run Tests
-        run: yarn test
+        run: yarn test:coverage
       
       - name: Upload Codecov Reports
         uses: codecov/codecov-action@v2 
