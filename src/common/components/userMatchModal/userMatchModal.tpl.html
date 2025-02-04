@@ -63,6 +63,7 @@
     <div ng-switch-default style="height: 100px;" ng-if="!$ctrl.loadingDonorDetailsError"></div>
   </div>
 </div>
+<div class="modal-footer" ng-switch="$ctrl.matchState" ng-if="$ctrl.matchState">
   <button ng-switch-when="identity" class="btn btn-md btn-block btn-primary" ng-click="$ctrl.requestIdentitySubmit()" translate>Next</button>
   <div ng-switch-when="activate">
     <button type="button" class="btn btn-md back" ng-click="$ctrl.changeMatchState('identity')" translate>Back</button>
