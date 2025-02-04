@@ -31,17 +31,10 @@ class SessionModalController {
     this.$rootScope.$on(LoginOktaOnlyEvent, (_, state) => {
       this.stateChanged(state)
     })
-    this.subscription = this.sessionService.sessionSubject.subscribe((session) => {
-      this.firstName = session.first_name
-    })
     this.stateChanged(this.resolve.state)
     this.welcomeBack = this.resolve.welcomeBack
     this.hideCloseButton = this.resolve.hideCloseButton
     this.lastPurchaseId = this.resolve.lastPurchaseId
-  }
-
-  $onDestroy () {
-    this.subscription.unsubscribe()
   }
 
   stateChanged (state) {

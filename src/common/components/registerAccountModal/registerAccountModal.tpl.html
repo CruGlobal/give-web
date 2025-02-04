@@ -3,10 +3,6 @@
     <span aria-hidden="true">×</span>
   </button>
   <h3 ng-if="$ctrl.state === 'loading-donor'" translate>Checking your donor account</h3>
-  <div ng-if="$ctrl.state !== 'loading-donor' && $ctrl.state !== 'sign-up'">
-    <h3 ng-if="$ctrl.firstName" translate>Welcome back, {{$ctrl.firstName}}!</h3>
-    <h3 ng-if="!$ctrl.firstName" translate>Welcome back!</h3>
-  </div>
   <div ng-if="$ctrl.state === 'sign-up'" class="signup-header">
     <h3 translate>Create Your Account</h3>
   </div>
@@ -52,7 +48,6 @@
   <user-match-modal
     ng-switch-when="user-match"
     cart-count="$ctrl.cartCount"
-    first-name="$ctrl.firstName"
     modal-title="$ctrl.modalTitle"
     on-success="$ctrl.onUserMatchSuccess()"
     set-loading="$ctrl.setLoading({loading: loading})"

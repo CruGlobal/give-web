@@ -132,9 +132,6 @@ class UserMatchModalController {
     if (angular.isDefined(contact)) {
       this.verificationService.selectContact(contact).subscribe(() => {
         this.changeMatchState('activate')
-        this.firstName = contact.name.includes(' ')
-          ? contact.name.substring(0, contact.name.lastIndexOf(' '))
-          : contact.name
       },
       error => {
         this.setLoading({ loading: false })
@@ -250,7 +247,6 @@ export default angular
     templateUrl: template,
     bindings: {
       cartCount: '<',
-      firstName: '=',
       modalTitle: '=',
       setLoading: '&',
       onStateChange: '&',

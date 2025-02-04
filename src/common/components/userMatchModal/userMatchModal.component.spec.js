@@ -213,7 +213,6 @@ describe('userMatchModal', function () {
         expect($ctrl.verificationService.selectContact).toHaveBeenCalledWith({ name: 'Batman' })
         expect($ctrl.changeMatchState).toHaveBeenCalledWith('activate')
         expect($ctrl.selectContactError).toEqual(false)
-        expect($ctrl.firstName).toEqual('Batman')
       })
 
       it('should log an error on failure', () => {
@@ -226,18 +225,6 @@ describe('userMatchModal', function () {
         expect($ctrl.selectContactError).toEqual(true)
         expect($ctrl.$log.error.logs[0]).toEqual(['Error selecting verification contact.', 'some error'])
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
-      })
-
-      it('should only return the first name', () => {
-        jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        $ctrl.onSelectContact(true, { name: 'firstName lastName' })
-        expect($ctrl.firstName).toEqual('firstName')
-      })
-
-      it('should return the first two first names', () => {
-        jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        $ctrl.onSelectContact(true, { name: 'firstName secondFirstName lastName' })
-        expect($ctrl.firstName).toEqual('firstName secondFirstName')
       })
     })
 

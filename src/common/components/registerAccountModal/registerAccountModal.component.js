@@ -228,7 +228,6 @@ export default angular
     controller: RegisterAccountModalController,
     templateUrl: template,
     bindings: {
-      firstName: '=',
       modalTitle: '=',
       // If true, show the "Welcome back!" message in the header/sidebar
       welcomeBack: '<?',
