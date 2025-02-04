@@ -14,7 +14,7 @@
         Has someone in your household donated before? We may already have an account for you.
       </p>
       <div ng-if="$ctrl.matchState === 'question' || $ctrl.matchState === 'success'">
-        <progress id="activation-progress" ng-attr-value="{{$ctrl.getCurrentStep()}}" ng-attr-max="{{$ctrl.stepCount - 1}}">Activation status</progress>
+        <progress id="activation-progress" ng-attr-value="{{$ctrl.getCurrentStep()}}" ng-attr-max="{{$ctrl.stepCount - 1}}"></progress>
         <label for="activation-progress" class="step-label" ng-switch="$ctrl.matchState" style="--progress: {{$ctrl.getCurrentStep() / ($ctrl.stepCount - 1)}}">
           <span ng-switch-when="question"><span translate>Question</span><br />{{$ctrl.questionIndex}} <span translate>of</span> {{$ctrl.questionCount}}</span>
           <span ng-switch-when="success" translate>Activated</span>
