@@ -2,20 +2,20 @@
   <button type="button" class="close" aria-label="Close" ng-click="$ctrl.onCancel()" ng-if="!$ctrl.hideCloseButton">
     <span aria-hidden="true">×</span>
   </button>
-  <h3 ng-if="$ctrl.state === 'loading-donor'" translate>Checking your donor account</h3>
-  <div ng-if="$ctrl.state === 'sign-up'" class="signup-header">
-    <h3 translate>Create Your Account</h3>
-  </div>
-  <h3 ng-if="$ctrl.state === 'user-match'" translate>Access Your Account</h3>
-  <div ng-if="$ctrl.state === 'sign-in'" class="section">
-    <ul>
-      <li translate>Give to thousands of opportunities.</li>
-      <li translate>View giving history (online and offline).</li>
-      <li translate>Access your tax receipts and forms.</li>
-    </ul>
-  </div>
-  <div ng-if="$ctrl.state === 'contact-info'" class="section paragraph" translate>
-    Please fill in your information for your online account.
+  <div ng-switch="$ctrl.state">
+    <h3 ng-switch-when="loading-donor" translate>Checking your donor account</h3>
+    <h3 ng-switch-when="sign-up" class="signup-header" translate>Create Your Account</h3>
+    <h3 ng-switch-when="user-match" translate>Access Your Account</h3>
+    <div ng-switch-when="sign-in" class="section">
+      <ul>
+        <li translate>Give to thousands of opportunities.</li>
+        <li translate>View giving history (online and offline).</li>
+        <li translate>Access your tax receipts and forms.</li>
+      </ul>
+    </div>
+    <div ng-switch-when="contact-info" class="section paragraph" translate>
+      Please fill in your information for your online account.
+    </div>
   </div>
 </div>
 <div ng-switch="$ctrl.state">
