@@ -159,6 +159,7 @@ export default angular
       brandedCheckoutItem: '<',
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
-      onLoad: '&'
+      onLoad: '&',
+      useV3: '<'
     }
   })
