@@ -1,14 +1,9 @@
-register-account-modal,
-sign-up-modal {
+register-account-modal:has(sign-up-modal) {
   display: block;
   line-height: 1.2em;
 
   a {
     cursor: pointer;
-  }
-
-  ul {
-    padding-left: 1em;
   }
 
   .modal-body {
@@ -25,23 +20,135 @@ sign-up-modal {
   }
 }
 
-register-account-modal {
+.modal-content:has(register-account-modal):has(sign-in-modal) {
+  background-color: transparent;
 
-  .modal-header ul:last-child {
-    margin-bottom: 0;
-  }
+  /* Override .modal-content Bootstrap styles */
+  border: unset;
+  border-radius: unset;
+  @include box-shadow(none);
+}
 
-  .section {
-    margin-top: 20px;
-  }
+register-account-modal:has(sign-in-modal) {
+  .modal-header {
+    width: 450px;
+    background-color: #f5f5f5;
 
-  .modal-dialog.modal-sm & {
-    &[data-state=sign-in],
-    &[data-state=loading-donor] {
-      .modal-body {
-        padding-top: 30px;
+    /* Override ".modal-content.give-modal-content .modal-header" padding-top styles */
+    .modal-content.give-modal-content & {
+      padding: 0;
+    }
+
+    @media (max-width: 992px) {
+      margin-bottom: 1rem;
+
+      /* Position the image and the info blocks on top of each other */
+      .header-container {
+        display: grid;
+
+        > * {
+          grid-area: 1 / 1;
+        }
+      }
+
+      .header-image {
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 25%;
       }
     }
+
+    .cru-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      padding: 1rem 2rem;
+      background-color: white;
+      border-bottom: 2px solid $colorCru-gold;
+
+      @media (max-width: 992px) {
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: unset;
+        border-bottom: unset;
+        color: white;
+        /* Darken .header-image for better contrast */
+        background-color: rgba(0, 0, 0, 0.5);
+
+        img {
+          /* Make the Cru logo white */
+          filter: brightness(0) invert(1);
+        }
+      }
+
+      .tagline {
+        &.mobile {
+          display: none;
+        }
+
+        @media (max-width: 992px) {
+          &.mobile {
+            display: unset;
+          }
+
+          &.desktop {
+            display: none;
+          }
+        }
+      }
+
+      img {
+        width: auto;
+        height: $modal-line-height * 2;
+      }
+    }
+
+    .benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 2rem;
+
+      @media (max-width: 992px) {
+        display: none;
+      }
+
+      /* Override global styles */
+      h2 {
+        margin-bottom: 0;
+      }
+    }
+
+    .benefit {
+      font-weight: bold;
+    }
+
+    .okta-info {
+      display: flex;
+      align-items: end;
+      text-align: center;
+
+      p {
+        flex: 1;
+        /* Makes it easier to align the baseline of the text with the bottom of the image */
+        line-height: 1em;
+      }
+
+      img {
+        height: 1.5rem;
+      }
+    }
+  }
+
+  .modal-header, .content {
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .signup-header {
+    text-align: center;
   }
 
   .modal-dialog.modal-lg & {
@@ -49,10 +156,13 @@ register-account-modal {
     &[data-state=loading-donor] {
       @media screen and (min-width: 992px) {
         display: flex;
+        gap: 1rem;
 
+        /*
         .modal-header {
           flex: 1
         }
+        */
 
         sign-in-modal {
           width: 400px;

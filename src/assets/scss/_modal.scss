@@ -110,6 +110,8 @@ body{
   }
 }
 
+$modal-line-height: 1.425em;
+
 .modal-content {
     .form-group {
         label.radio {
@@ -120,7 +122,7 @@ body{
     }
 
   p {
-    line-height: 1.425em;
+    line-height: $modal-line-height;
   }
 }
 
@@ -154,7 +156,7 @@ body{
 }
 
 #addNewPaymentModal{
-	background-color: rgba(138, 138, 138, 0.9); 
+	background-color: rgba(138, 138, 138, 0.9);
 	.light-font{
 		font-size: 14px;
 		color: #d3d3d3;
