@@ -161,6 +161,7 @@ export default angular
       cartData: '<',
       brandedCheckoutItem: '<',
       changeStep: '&',
-      onStateChange: '&'
+      onStateChange: '&',
+      useV3: '<'
     }
   })
