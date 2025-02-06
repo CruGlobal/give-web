@@ -7,7 +7,7 @@ import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/throw'
 
 import module, { brandedCoverFeeCheckedEvent } from './productConfigForm.component'
-import { giftAddedEvent, cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
+import { giftAddedEvent, cartUpdatedEvent } from 'common/lib/cartEvents'
 import { giveGiftParams } from '../giveGiftParams'
 import { brandedCheckoutAmountUpdatedEvent } from '../../../common/components/paymentMethods/coverFees/coverFees.component'
 

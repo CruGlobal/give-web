@@ -1,9 +1,8 @@
 import angular from 'angular'
-import isString from 'lodash/isString'
-import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/throw'
 
 import displayAddressComponent from 'common/components/display-address/display-address.component'
+import checkoutErrorMessages from 'app/checkout/checkout-error-messages/checkout-error-messages.component'
 import displayRateTotals from 'common/components/displayRateTotals/displayRateTotals.component'
 
 import commonService from 'common/services/api/common.service'
@@ -12,11 +11,9 @@ import orderService from 'common/services/api/order.service'
 import profileService from 'common/services/api/profile.service'
 import capitalizeFilter from 'common/filters/capitalize.filter'
 import desigSrcDirective from 'common/directives/desigSrc.directive'
-import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.component'
 import { SignInEvent } from 'common/services/session/session.service'
 import { startDate } from 'common/services/giftHelpers/giftDates.service'
 import recaptchaComponent from 'common/components/Recaptcha/RecaptchaWrapper'
-import { datadogRum } from '@datadog/browser-rum'
 
 import template from './step-3.tpl.html'
 
@@ -39,7 +36,6 @@ class Step3Controller {
     this.commonService = commonService
     this.startDate = startDate
     this.sessionStorage = $window.sessionStorage
-    this.selfReference = this
     this.isBranded = envService.read('isBrandedCheckout')
 
     this.$scope.$on(SignInEvent, () => {
@@ -132,52 +128,12 @@ class Step3Controller {
   }
 
   submitOrder () {
-    this.submitOrderInternal(this)
-  }
-
-  submitOrderInternal (componentInstance) {
-    delete componentInstance.submissionError
-    delete componentInstance.submissionErrorStatus
-    // Prevent multiple submissions
-    if (componentInstance.submittingOrder) return
-    componentInstance.submittingOrder = true
-    componentInstance.onSubmittingOrder({ value: true })
-
-    let submitRequest
-    if (componentInstance.bankAccountPaymentDetails) {
-      submitRequest = componentInstance.orderService.submit()
-    } else if (componentInstance.creditCardPaymentDetails) {
-      const cvv = componentInstance.orderService.retrieveCardSecurityCode()
-      submitRequest = componentInstance.orderService.submit(cvv)
-    } else {
-      submitRequest = Observable.throw({ data: 'Current payment type is unknown' })
-    }
-    submitRequest.subscribe(() => {
-      componentInstance.analyticsFactory.purchase(componentInstance.donorDetails, componentInstance.cartData, componentInstance.orderService.retrieveCoverFeeDecision())
-      componentInstance.submittingOrder = false
-      componentInstance.onSubmittingOrder({ value: false })
-      componentInstance.orderService.clearCardSecurityCodes()
-      componentInstance.orderService.clearCoverFees()
-      componentInstance.onSubmitted()
-      componentInstance.$scope.$emit(cartUpdatedEvent)
-      componentInstance.changeStep({ newStep: 'thankYou' })
-    },
-    error => {
-      componentInstance.analyticsFactory.checkoutFieldError('submitOrder', 'failed')
-      componentInstance.submittingOrder = false
-      componentInstance.onSubmittingOrder({ value: false })
-
-      componentInstance.loadCart()
-
-      if (error.config && error.config.data && error.config.data['security-code']) {
-        error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
+    this.orderService.submitOrder(this).subscribe(() => {
+      if (!this.isBranded) {
+        // Branded checkout submits its purchase analytics event on the thank you page
+        this.analyticsFactory.purchase(this.donorDetails, this.cartData, this.orderService.retrieveCoverFeeDecision())
       }
-      componentInstance.$log.error('Error submitting purchase:', error)
-      datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status }) // here in order to show up in Error Tracking in DD
-      componentInstance.onSubmitted()
-      componentInstance.submissionErrorStatus = error.status
-      componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
-      componentInstance.$window.scrollTo(0, 0)
+      this.changeStep({ newStep: 'thankYou' })
     })
   }
 }
@@ -193,7 +149,8 @@ export default angular
     analyticsFactory.name,
     cartService.name,
     commonService.name,
-    recaptchaComponent.name
+    recaptchaComponent.name,
+    checkoutErrorMessages.name
   ])
   .component(componentName, {
     controller: Step3Controller,
