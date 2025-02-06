@@ -32,7 +32,7 @@ class Step2Controller {
 
   $onInit () {
     // If branded checkout, we don't need to load existing payment methods
-    if(!this.isBranded){
+    if (!this.isBranded) {
       this.loadingPaymentMethods = true
       this.existingPaymentMethods = true
     }
@@ -66,7 +66,7 @@ class Step2Controller {
 
   handleExistingPaymentLoading (success, hasExistingPaymentMethods, error) {
     if (success) {
-        this.existingPaymentMethods = hasExistingPaymentMethods
+      this.existingPaymentMethods = hasExistingPaymentMethods
     } else {
       this.existingPaymentMethods = false
       this.$log.warn('Error loading existing payment methods', error)
