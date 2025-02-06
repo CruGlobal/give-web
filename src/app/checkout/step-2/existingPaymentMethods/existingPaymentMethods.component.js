@@ -194,7 +194,6 @@ export default angular
       onPaymentFormStateChange: '&',
       onPaymentChange: '&',
       onLoad: '&',
-      enableContinue: '&',
-      useV3: '<'
+      enableContinue: '&'
     }
   })
