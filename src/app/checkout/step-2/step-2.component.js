@@ -110,7 +110,7 @@ class Step2Controller {
       this.changeStep({ newStep: 'review' })
       this.onStateChange({ state: 'submitted' })
       this.paymentFormState = 'success'
-    } else if ($event.state === 'submitted') {
+    } else if ($event.state === 'submitted' && this.selectedPaymentMethod?.['card-type']) {
       this.orderService.storeCardSecurityCode(this.selectedPaymentMethod.cvv, this.selectedPaymentMethod.self.uri)
     } else if ($event.state === 'unsubmitted') {
       this.onStateChange({ state: 'unsubmitted' })
