@@ -184,13 +184,13 @@ class Step3Controller {
 
   // Log error to Datadog in order to show up in Error Tracking (RUM)
   logToDatadogRum (error) {
+    let errorMessage = `Error submitting purchase: ${JSON.stringify(error)}`
     if (error?.data) {
       if (error.data.includes('InvalidCVV2Exception')) {
-        this.datadogRum.addError(new Error('Invalid CVV'), { context: 'Checkout Submission', errorCode: error.status })
-        return
+        errorMessage = 'Invalid CVV'
       }
     }
-    this.datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
+    this.datadogRum.addError(new Error(errorMessage), { context: 'Checkout Submission', errorCode: error.status })
   }
 }
 
