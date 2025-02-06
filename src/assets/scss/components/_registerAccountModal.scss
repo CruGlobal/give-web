@@ -20,7 +20,15 @@ register-account-modal:has(sign-up-modal) {
   }
 }
 
-.modal-content:has(register-account-modal):has(sign-in-modal) {
+.modal-dialog:has(register-account-modal sign-in-modal) {
+  width: 900px;
+
+  @media (max-width: 992px) {
+    width: calc(min(100vw, 400px) - 20px);
+  }
+}
+
+.modal-content:has(register-account-modal sign-in-modal) {
   background-color: transparent;
 
   /* Override .modal-content Bootstrap styles */
@@ -30,6 +38,11 @@ register-account-modal:has(sign-up-modal) {
 }
 
 register-account-modal:has(sign-in-modal) {
+  @media (min-width: 992px) {
+    display: flex;
+    gap: 1rem;
+  }
+
   .modal-header {
     width: 450px;
     background-color: #f5f5f5;
@@ -40,6 +53,7 @@ register-account-modal:has(sign-in-modal) {
     }
 
     @media (max-width: 992px) {
+      width: auto;
       margin-bottom: 1rem;
 
       /* Position the image and the info blocks on top of each other */
@@ -100,6 +114,8 @@ register-account-modal:has(sign-in-modal) {
 
       img {
         width: auto;
+        /* Override global styles */
+        max-width: unset;
         height: $modal-line-height * 2;
       }
     }
@@ -141,10 +157,14 @@ register-account-modal:has(sign-in-modal) {
     }
   }
 
-  .modal-header, .content {
+  .modal-header, .inner-modal {
     background-color: white;
     border-radius: 5px;
     overflow: hidden;
+  }
+
+  .inner-modal {
+    flex: 1;
   }
 
   .signup-header {
@@ -152,23 +172,6 @@ register-account-modal:has(sign-in-modal) {
   }
 
   .modal-dialog.modal-lg & {
-    &[data-state=sign-in],
-    &[data-state=loading-donor] {
-      @media screen and (min-width: 992px) {
-        display: flex;
-        gap: 1rem;
-
-        /*
-        .modal-header {
-          flex: 1
-        }
-        */
-
-        sign-in-modal {
-          width: 400px;
-        }
-      }
-    }
     &[data-state=contact-info] {
 
       .modal-header {

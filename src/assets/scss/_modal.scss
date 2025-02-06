@@ -1,3 +1,8 @@
+/* Center dialog on small screens. Bootstrap only applies this margin on screens wider than $screen-sm-min. */
+.modal-dialog {
+  margin-inline: auto;
+}
+
 .modal-content.give-modal-content {
   .hide-modal {
     display: none;
