@@ -15,7 +15,7 @@ const componentName = 'checkoutStep2'
 
 class Step2Controller {
   /* @ngInject */
-  constructor ($window, $log, $scope, orderService, analyticsFactory, brandedAnalyticsFactory) {
+  constructor ($window, $log, $scope, orderService, analyticsFactory, brandedAnalyticsFactory, envService) {
     this.$window = $window
     this.$log = $log
     this.$scope = $scope
@@ -23,6 +23,7 @@ class Step2Controller {
     this.analyticsFactory = analyticsFactory
     this.brandedAnalyticsFactory = brandedAnalyticsFactory
     this.scrollModalToTop = scrollModalToTop
+    this.isBranded = envService.read('isBrandedCheckout')
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -30,8 +31,11 @@ class Step2Controller {
   }
 
   $onInit () {
-    this.loadingPaymentMethods = true
-    this.existingPaymentMethods = true
+    // If branded checkout, we don't need to load existing payment methods
+    if(!this.isBranded){
+      this.loadingPaymentMethods = true
+      this.existingPaymentMethods = true
+    }
     !this.mailingAddress && this.loadDonorDetails()
   }
 
@@ -62,7 +66,7 @@ class Step2Controller {
 
   handleExistingPaymentLoading (success, hasExistingPaymentMethods, error) {
     if (success) {
-      this.existingPaymentMethods = hasExistingPaymentMethods
+        this.existingPaymentMethods = hasExistingPaymentMethods
     } else {
       this.existingPaymentMethods = false
       this.$log.warn('Error loading existing payment methods', error)
@@ -133,6 +137,7 @@ class Step2Controller {
 
 export default angular
   .module(componentName, [
+    'environment',
     paymentMethodForm.name,
     existingPaymentMethods.name,
     orderService.name,
@@ -151,7 +156,6 @@ export default angular
       cartData: '<',
       brandedCheckoutItem: '<',
       changeStep: '&',
-      onStateChange: '&',
-      useV3: '<'
+      onStateChange: '&'
     }
   })
