@@ -481,7 +481,7 @@ describe('checkout', () => {
           .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
       })
 
-      it('should not log a user error', () => {
+      it('should log InvalidCVV errors differently', () => {
         const error = {
           data: 'InvalidCVV2Exception: Invalid CVV',
           status: 500
