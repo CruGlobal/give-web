@@ -21,10 +21,12 @@ register-account-modal:has(sign-up-modal) {
 }
 
 .modal-dialog:has(register-account-modal sign-in-modal) {
-  width: 900px;
+  width: calc(min(100vw, 400px) - 20px);
 
-  @media (max-width: 992px) {
-    width: calc(min(100vw, 400px) - 20px);
+  @media (min-width: 992px) {
+    &:has(.user-state[data-new-user=true]) {
+      width: 900px;
+    }
   }
 }
 
@@ -39,8 +41,10 @@ register-account-modal:has(sign-up-modal) {
 
 register-account-modal:has(sign-in-modal) {
   @media (min-width: 992px) {
-    display: flex;
-    gap: 1rem;
+    .user-state {
+      display: flex;
+      gap: 1rem;
+    }
   }
 
   .modal-header {
@@ -157,6 +161,16 @@ register-account-modal:has(sign-in-modal) {
     }
   }
 
+  .user-state[data-new-user=false] {
+    .modal-header {
+      width: auto;
+    }
+
+    .new-user-info {
+      display: none;
+    }
+  }
+
   .modal-header, .inner-modal {
     background-color: white;
     border-radius: 5px;
@@ -165,6 +179,22 @@ register-account-modal:has(sign-in-modal) {
 
   .inner-modal {
     flex: 1;
+  }
+
+  @media (max-width: 992px) {
+    &:has(.user-state[data-new-user=false]) {
+      /* Because the .modal-hidden container is empty for returning users, the close button needs to be moved */
+
+      .modal-content.give-modal-content & button.close {
+        /* Move the close button inside the modal body */
+        top: 25px;
+      }
+
+      .inner-modal {
+        /* Make space for the close button in the modal body */
+        padding-top: 25px;
+      }
+    }
   }
 
   .signup-header {
