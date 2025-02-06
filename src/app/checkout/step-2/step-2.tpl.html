@@ -7,7 +7,7 @@
 </div>
 <div class="loading-overlay-parent">
   <loading type="overlay" ng-if="$ctrl.loadingPaymentMethods || $ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"></loading>
-  <div ng-if="!$ctrl.existingPaymentMethods || $ctrl.useV3==='true'">
+  <div ng-if="!$ctrl.existingPaymentMethods">
     <payment-method-form
       payment-form-state="$ctrl.paymentFormState"
       payment-form-error="$ctrl.paymentFormError"
@@ -31,8 +31,7 @@
       default-payment-type="$ctrl.defaultPaymentType"
       hide-payment-type-options="$ctrl.hidePaymentTypeOptions"
       cart-data="$ctrl.cartData"
-      branded-checkout-item="$ctrl.brandedCheckoutItem"
-      use-v3="$ctrl.useV3">
+      branded-checkout-item="$ctrl.brandedCheckoutItem">
     </checkout-existing-payment-methods>
   </div>
 </div>
