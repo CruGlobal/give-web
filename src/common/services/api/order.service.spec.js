@@ -1451,7 +1451,7 @@ describe('order service', () => {
         status: 500
       }
       self.orderService.logToDatadogRum(error)
-      expect(self.orderService.datadogRum.addError).not.toHaveBeenCalled()
+      expect(self.orderService.datadogRum.addError).toHaveBeenCalledWith(new Error('Invalid CVV'), { context: 'Checkout Submission', errorCode: error.status })
     })
   })
 })
