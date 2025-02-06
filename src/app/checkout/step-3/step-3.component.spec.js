@@ -487,7 +487,7 @@ describe('checkout', () => {
           status: 500
         }
         self.controller.logToDatadogRum(error)
-        expect(self.controller.datadogRum.addError).not.toHaveBeenCalled()
+        expect(self.controller.datadogRum.addError).toHaveBeenCalledWith(new Error('Invalid CVV'), { context: 'Checkout Submission', errorCode: error.status })
       })
     })
   })

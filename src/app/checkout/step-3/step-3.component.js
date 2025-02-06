@@ -186,6 +186,7 @@ class Step3Controller {
   logToDatadogRum (error) {
     if (error?.data) {
       if (error.data.includes('InvalidCVV2Exception')) {
+        this.datadogRum.addError(new Error('Invalid CVV'), { context: 'Checkout Submission', errorCode: error.status })
         return
       }
     }
