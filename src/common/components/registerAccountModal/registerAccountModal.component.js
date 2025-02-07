@@ -169,8 +169,6 @@ class RegisterAccountModalController {
   }
 
   postDonorMatches () {
-    this.setLoading({ loading: true })
-
     // Step 4. Post to Donor Matches.
     if (angular.isDefined(this.verificationServiceSubscription)) {
       this.verificationServiceSubscription.unsubscribe()

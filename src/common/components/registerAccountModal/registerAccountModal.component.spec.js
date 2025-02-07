@@ -312,7 +312,6 @@ describe('registerAccountModal', function () {
         $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.of({}))
         $ctrl.postDonorMatches()
 
-        expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.postDonorMatches).toHaveBeenCalled()
         expect($ctrl.stateChanged).toHaveBeenCalledWith('user-match')
       })
@@ -323,7 +322,6 @@ describe('registerAccountModal', function () {
         $ctrl.verificationService.postDonorMatches.mockImplementation(() => Observable.throw({}))
         $ctrl.postDonorMatches()
 
-        expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.postDonorMatches).toHaveBeenCalled()
         expect($ctrl.stateChanged).not.toHaveBeenCalled()
         expect($ctrl.onCancel).toHaveBeenCalled()

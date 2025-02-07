@@ -235,6 +235,12 @@ register-account-modal:has(contact-info-modal) {
   }
 }
 
-register-account-modal .modal-header h3 {
-  text-align: center;
+register-account-modal {
+  .modal-header h3 {
+    text-align: center;
+  }
+
+  .inner-modal > .modal-body {
+    height: 140px;
+  }
 }

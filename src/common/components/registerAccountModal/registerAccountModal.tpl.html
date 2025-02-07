@@ -63,10 +63,8 @@
       on-sign-in="$ctrl.onSignIn()"
       is-inside-another-modal="true"
     ></sign-up-modal>
-    <div ng-switch-when="loading-donor">
-      <div class="modal-body">
-        <loading></loading>
-      </div>
+    <div ng-switch-when="loading-donor" class="modal-body">
+      <loading></loading>
     </div>
     <contact-info-modal
       ng-switch-when="contact-info"
@@ -82,6 +80,6 @@
       on-success="$ctrl.onUserMatchSuccess()"
       set-loading="$ctrl.setLoading({loading: loading})"
     ></user-match-modal>
-    <div ng-switch-default class="modal-body" style="height: 100px;"></div>
+    <div ng-switch-default class="modal-body"></div>
   </div>
 </div>
