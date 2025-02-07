@@ -23,7 +23,7 @@ register-account-modal:has(sign-up-modal) {
 .modal-dialog:has(register-account-modal sign-in-modal) {
   width: calc(min(100vw, 400px) - 20px);
 
-  @media (min-width: 992px) {
+  @media (min-width: $screen-md-min) {
     &:has(.user-state[data-new-user=true]) {
       width: 900px;
     }
@@ -40,7 +40,7 @@ register-account-modal:has(sign-up-modal) {
 }
 
 register-account-modal:has(sign-in-modal) {
-  @media (min-width: 992px) {
+  @media (min-width: $screen-md-min) {
     .user-state {
       display: flex;
       gap: 1rem;
@@ -56,7 +56,7 @@ register-account-modal:has(sign-in-modal) {
       padding: 0;
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: ($screen-md-min - 1)) {
       width: auto;
       margin-bottom: 1rem;
 
@@ -84,7 +84,7 @@ register-account-modal:has(sign-in-modal) {
       background-color: white;
       border-bottom: 2px solid $colorCru-gold;
 
-      @media (max-width: 992px) {
+      @media (max-width: ($screen-md-min - 1)) {
         height: 100%;
         flex-direction: column;
         align-items: center;
@@ -105,7 +105,7 @@ register-account-modal:has(sign-in-modal) {
           display: none;
         }
 
-        @media (max-width: 992px) {
+        @media (max-width: ($screen-md-min - 1)) {
           &.mobile {
             display: unset;
           }
@@ -130,7 +130,7 @@ register-account-modal:has(sign-in-modal) {
       gap: 1rem;
       padding: 2rem;
 
-      @media (max-width: 992px) {
+      @media (max-width: ($screen-md-min - 1)) {
         display: none;
       }
 
@@ -181,7 +181,7 @@ register-account-modal:has(sign-in-modal) {
     flex: 1;
   }
 
-  @media (max-width: 992px) {
+  @media (max-width: ($screen-md-min - 1)) {
     &:has(.user-state[data-new-user=false]) {
       /* Because the .modal-hidden container is empty for returning users, the close button needs to be moved */
 
@@ -213,7 +213,7 @@ register-account-modal:has(contact-info-modal) {
     }
   }
 
-  @media (min-width: 991px) {
+  @media (min-width: $screen-md-min) {
     contact-info-modal form {
       display: grid;
       grid-template: 1fr auto / auto 320px;
@@ -231,7 +231,7 @@ register-account-modal:has(contact-info-modal) {
         grid-column: 1;
         grid-row: 2;
       }
-      }
+    }
   }
 }
 
