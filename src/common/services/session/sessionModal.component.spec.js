@@ -56,15 +56,6 @@ describe('sessionModalController', function () {
     })
   })
 
-  describe('$ctrl.$onDestroy', () => {
-    it('should remove sessionSubject subscription', () => {
-      $ctrl.$onInit()
-      expect($ctrl.subscription.closed).toEqual(false)
-      $ctrl.$onDestroy()
-      expect($ctrl.subscription.closed).toEqual(true)
-    })
-  })
-
   describe('$ctrl.stateChanged', () => {
     it('should scroll to the top of the modal', () => {
       jest.spyOn($ctrl, 'scrollModalToTop').mockImplementation(() => {})

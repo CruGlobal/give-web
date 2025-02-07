@@ -76,20 +76,20 @@ describe('userMatchModal', function () {
       })
 
       describe('getContacts has selected contact', () => {
-        it('initializes the component and proceeds to \'intro\'', () => {
+        it('initializes the component and proceeds to \'identity\'', () => {
           $ctrl.$onInit()
 
           expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
           expect($ctrl.modalTitle).toEqual('Activate Your Account')
           expect($ctrl.profileService.getDonorDetails).toHaveBeenCalled()
-          expect($ctrl.changeMatchState).toHaveBeenCalledWith('intro')
+          expect($ctrl.changeMatchState).toHaveBeenCalledWith('identity')
           expect($ctrl.loadingDonorDetailsError).toEqual(false)
         })
       })
     })
   })
 
-  describe('getContacts()', () => {
+  describe('loadContacts()', () => {
     beforeEach(() => {
       jest.spyOn($ctrl, 'changeMatchState')
       jest.spyOn($ctrl.verificationService, 'getContacts')
@@ -98,7 +98,7 @@ describe('userMatchModal', function () {
     it('initializes the component and proceeds to \'identity\'', () => {
       const contacts = [{ name: 'Charles Xavier', selected: false }, { name: 'Bruce Bannr', selected: false }]
       $ctrl.verificationService.getContacts.mockImplementation(() => Observable.of(contacts))
-      $ctrl.getContacts()
+      $ctrl.loadContacts()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
       expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
@@ -107,21 +107,19 @@ describe('userMatchModal', function () {
       expect($ctrl.loadingDonorDetailsError).not.toEqual(true)
     })
 
-    it('initializes the component and proceeds to \'question\'', () => {
-      jest.spyOn($ctrl, 'onActivate')
+    it('initializes the component and proceeds to \'activate\'', () => {
       const contacts = [{ name: 'Charles Xavier', selected: true }]
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.of([{ key: 'a' }, { key: 'b' }, { key: 'c' }]))
       $ctrl.verificationService.getContacts.mockImplementation(() => Observable.of(contacts))
       $ctrl.contacts = null
-      $ctrl.getContacts()
+      $ctrl.loadContacts()
       expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
-      expect($ctrl.onActivate).toHaveBeenCalled()
-      expect($ctrl.changeMatchState).toHaveBeenCalledWith('question')
+      expect($ctrl.changeMatchState).toHaveBeenCalledWith('activate')
     })
 
     it('logs an error on failure', () => {
       $ctrl.verificationService.getContacts.mockReturnValue(Observable.throw('another error'))
-      $ctrl.getContacts()
+      $ctrl.loadContacts()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
       expect($ctrl.verificationService.getContacts).toHaveBeenCalled()
@@ -132,7 +130,7 @@ describe('userMatchModal', function () {
 
     it('does not reload the contacts if they have already been loaded', () => {
       $ctrl.contacts = [{ name: 'Charles Xavier', selected: false }, { name: 'Bruce Bannr', selected: false }]
-      $ctrl.getContacts()
+      $ctrl.loadContacts()
 
       expect($ctrl.changeMatchState).toHaveBeenCalledWith('identity')
       expect($ctrl.verificationService.getContacts).not.toHaveBeenCalled()
@@ -144,12 +142,13 @@ describe('userMatchModal', function () {
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
     })
 
-    it('proceeds to intro on donor match success', () => {
+    it('loads contacts on donor match success', () => {
       jest.spyOn($ctrl.verificationService, 'postDonorMatches').mockReturnValue(Observable.of({}))
+      jest.spyOn($ctrl, 'loadContacts').mockReturnValue(Observable.of({}))
       $ctrl.postDonorMatch()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
-      expect($ctrl.changeMatchState).toHaveBeenCalledWith('intro')
+      expect($ctrl.loadContacts).toHaveBeenCalled()
     })
 
     it('proceeds to success on donor match failure', () => {
@@ -208,14 +207,12 @@ describe('userMatchModal', function () {
     describe('valid contact', () => {
       it('selects the contact', () => {
         jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        jest.spyOn($ctrl, 'onActivate')
         $ctrl.onSelectContact(true, { name: 'Batman' })
 
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
         expect($ctrl.verificationService.selectContact).toHaveBeenCalledWith({ name: 'Batman' })
-        expect($ctrl.onActivate).toHaveBeenCalled()
+        expect($ctrl.changeMatchState).toHaveBeenCalledWith('activate')
         expect($ctrl.selectContactError).toEqual(false)
-        expect($ctrl.firstName).toEqual('Batman')
       })
 
       it('should log an error on failure', () => {
@@ -228,18 +225,6 @@ describe('userMatchModal', function () {
         expect($ctrl.selectContactError).toEqual(true)
         expect($ctrl.$log.error.logs[0]).toEqual(['Error selecting verification contact.', 'some error'])
         expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: false })
-      })
-
-      it('should only return the first name', () => {
-        jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        $ctrl.onSelectContact(true, { name: 'firstName lastName' })
-        expect($ctrl.firstName).toEqual('firstName')
-      })
-
-      it('should return the first two first names', () => {
-        jest.spyOn($ctrl.verificationService, 'selectContact').mockReturnValue(Observable.of({}))
-        $ctrl.onSelectContact(true, { name: 'firstName secondFirstName lastName' })
-        expect($ctrl.firstName).toEqual('firstName secondFirstName')
       })
     })
 
@@ -276,12 +261,12 @@ describe('userMatchModal', function () {
     })
   })
 
-  describe('onActivate()', () => {
+  describe('loadQuestions()', () => {
     it('load questions and changes state', () => {
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.of([{ key: 'a' }, { key: 'b' }, { key: 'c' }]))
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
 
-      $ctrl.onActivate()
+      $ctrl.loadQuestions()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
       expect($ctrl.questions).toEqual([{ key: 'a' }, { key: 'b' }, { key: 'c' }])
@@ -295,7 +280,7 @@ describe('userMatchModal', function () {
       jest.spyOn($ctrl.verificationService, 'getQuestions').mockReturnValue(Observable.throw('some error'))
       jest.spyOn($ctrl, 'changeMatchState').mockImplementation(() => {})
 
-      $ctrl.onActivate()
+      $ctrl.loadQuestions()
 
       expect($ctrl.setLoading).toHaveBeenCalledWith({ loading: true })
       expect($ctrl.changeMatchState).not.toHaveBeenCalled()
@@ -377,22 +362,14 @@ describe('userMatchModal', function () {
   })
 
   describe('getCurrentStep()', () => {
-    it('returns intro step', () => {
-      $ctrl.matchState = 'intro'
-      expect($ctrl.getCurrentStep()).toEqual(0.1)
-    })
-    it('returns identity step', () => {
-      $ctrl.matchState = 'identity'
-      expect($ctrl.getCurrentStep()).toEqual(1)
-    })
     it('returns the next question step', () => {
       $ctrl.matchState = 'question'
       $ctrl.questionIndex = 2
-      expect($ctrl.getCurrentStep()).toEqual(3)
+      expect($ctrl.getCurrentStep()).toEqual(1)
     })
     it('returns success step', () => {
       $ctrl.matchState = 'success'
-      expect($ctrl.getCurrentStep()).toEqual(7)
+      expect($ctrl.getCurrentStep()).toEqual(5)
     })
     it('returns default step', () => {
       $ctrl.matchState = 'default'
