@@ -3,20 +3,11 @@ register-account-modal:has(sign-up-modal) {
   line-height: 1.2em;
 
   .modal-body {
-    padding: 30px;
-  }
-
-  .modal-header {
-    padding: 30px;
-    background-color: #EBECEC;
-  }
-
-  .signup-header {
-    text-align: center;
+    padding: 20px;
   }
 }
 
-.modal-dialog:has(register-account-modal sign-in-modal) {
+.modal-dialog:has(register-account-modal sign-in-modal, register-account-modal sign-up-modal) {
   width: calc(min(100vw, 400px) - 20px);
 
   @media (min-width: $screen-md-min) {
@@ -26,7 +17,7 @@ register-account-modal:has(sign-up-modal) {
   }
 }
 
-.modal-content:has(register-account-modal sign-in-modal) {
+.modal-content:has(register-account-modal sign-in-modal, register-account-modal sign-up-modal) {
   background-color: transparent;
 
   /* Override .modal-content Bootstrap styles */
@@ -35,7 +26,7 @@ register-account-modal:has(sign-up-modal) {
   @include box-shadow(none);
 }
 
-register-account-modal:has(sign-in-modal) {
+register-account-modal:has(sign-in-modal, sign-up-modal) {
   @media (min-width: $screen-md-min) {
     .user-state {
       display: flex;

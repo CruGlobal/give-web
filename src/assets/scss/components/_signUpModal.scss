@@ -1,6 +1,10 @@
 sign-up-modal {
   position: relative;
 
+  .sign-up-header {
+    text-align: center;
+  }
+
   .signup-steps {
     display: flex;
     justify-content: center;

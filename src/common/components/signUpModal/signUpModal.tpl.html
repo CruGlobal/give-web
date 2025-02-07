@@ -5,15 +5,14 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <div class="signup-header">
-          <h3 translate>Create Your Account</h3>
-        </div>
+        <h3 class="signup-header" translate>Create Your Account</h3>
       </div>
     </div>
   </div>
 </div>
 
 <div class="modal-body" class="sticky-buttons">
+  <h3 ng-if="$ctrl.isInsideAnotherModal" class="signup-header" translate>Create Your Account</h3>
   <div class="content">
     <div class="signup-steps">
       <div class="step">
