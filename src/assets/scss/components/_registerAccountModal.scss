@@ -2,10 +2,6 @@ register-account-modal:has(sign-up-modal) {
   display: block;
   line-height: 1.2em;
 
-  a {
-    cursor: pointer;
-  }
-
   .modal-body {
     padding: 30px;
   }
