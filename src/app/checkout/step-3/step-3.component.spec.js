@@ -8,7 +8,7 @@ import { cartUpdatedEvent } from 'common/components/nav/navCart/navCart.componen
 import { SignInEvent } from 'common/services/session/session.service'
 
 import module from './step-3.component'
-import { recaptchaFailedEvent, submitOrderEvent } from '../cart-summary/cart-summary.component'
+import { submitOrderEvent } from '../cart-summary/cart-summary.component'
 
 describe('checkout', () => {
   describe('step 3', () => {
@@ -453,6 +453,41 @@ describe('checkout', () => {
         jest.spyOn(self.controller, 'submitOrder').mockImplementation(() => {})
         self.controller.$rootScope.$emit(submitOrderEvent)
         expect(self.controller.submitOrder).toHaveBeenCalled()
+      })
+    })
+
+    describe('logToDatadogRum', () => {
+      beforeEach(() => {
+        self.controller.datadogRum = {
+          addError: jest.fn()
+        }
+      })
+
+      it('should log a checkout error', () => {
+        const error = {
+          data: 'Server Error',
+          status: 500
+        }
+
+        self.controller.logToDatadogRum(error)
+        expect(self.controller.datadogRum.addError)
+          .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
+      })
+
+      it('should log a checkout error without data', () => {
+        const error = 'Some error that is unstructured'
+        self.controller.logToDatadogRum(error)
+        expect(self.controller.datadogRum.addError)
+          .toHaveBeenCalledWith(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status })
+      })
+
+      it('should log InvalidCVV errors differently', () => {
+        const error = {
+          data: 'InvalidCVV2Exception: Invalid CVV',
+          status: 500
+        }
+        self.controller.logToDatadogRum(error)
+        expect(self.controller.datadogRum.addError).toHaveBeenCalledWith(new Error('Invalid CVV'), { context: 'Checkout Submission', errorCode: error.status })
       })
     })
   })

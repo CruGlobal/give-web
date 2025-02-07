@@ -41,6 +41,7 @@ class Step3Controller {
     this.sessionStorage = $window.sessionStorage
     this.selfReference = this
     this.isBranded = envService.read('isBrandedCheckout')
+    this.datadogRum = datadogRum
 
     this.$scope.$on(SignInEvent, () => {
       this.$onInit()
@@ -173,12 +174,23 @@ class Step3Controller {
         error.config.data['security-code'] = error.config.data['security-code'].replace(/./g, 'X') // Mask security-code
       }
       componentInstance.$log.error('Error submitting purchase:', error)
-      datadogRum.addError(new Error(`Error submitting purchase: ${JSON.stringify(error)}`), { context: 'Checkout Submission', errorCode: error.status }) // here in order to show up in Error Tracking in DD
+      componentInstance.logToDatadogRum(error)
       componentInstance.onSubmitted()
       componentInstance.submissionErrorStatus = error.status
       componentInstance.submissionError = isString(error && error.data) ? (error && error.data).replace(/[:].*$/, '') : 'generic error' // Keep prefix before first colon for easier ng-switch matching
       componentInstance.$window.scrollTo(0, 0)
     })
+  }
+
+  // Log error to Datadog in order to show up in Error Tracking (RUM)
+  logToDatadogRum (error) {
+    let errorMessage = `Error submitting purchase: ${JSON.stringify(error)}`
+    if (error?.data) {
+      if (error.data.includes('InvalidCVV2Exception')) {
+        errorMessage = 'Invalid CVV'
+      }
+    }
+    this.datadogRum.addError(new Error(errorMessage), { context: 'Checkout Submission', errorCode: error.status })
   }
 }
 
