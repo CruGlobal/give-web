@@ -13,12 +13,22 @@
             <img class="header-image" ng-src="{{$ctrl.imgDomain}}/assets/img/register-account-header.jpeg" alt="College students outside studying the Bible">
           </picture>
           <div class="cru-info">
-            <img ng-src="{{$ctrl.imgDomain}}/assets/img/cru-logo.png" width="64" height="40" alt="Cru logo">
+            <img class="cru-logo" ng-src="{{$ctrl.imgDomain}}/assets/img/cru-logo.png" width="64" height="40" alt="Cru logo">
             <p class="tagline desktop" translate>Cru&reg; is a caring community passionate about connecting people to Jesus Christ.</p>
-            <p class="tagline mobile" translate>Connect people to Jesus</p>
+            <p class="tagline mobile">
+              <span translate>One account to access:</span><br>
+              <span translate>Resources, Giving, and Events</span>
+            </p>
+            <p class="okta-info mobile">
+              <span translate>Powered by</span> &bull;
+              <img ng-src="{{$ctrl.imgDomain}}/assets/img/okta-logo.png" width="44" height="16" alt="Okta logo">
+              <span uib-tooltip="{{'Okta is our preferred partner for authentication. They help us keep your access to Cru&rsquo;s websites and software secure. You will be redirected to signon.okta.com next time you log in.' | translate}}">
+                <span translate>What does this mean?</span> <i class="fa fa-info-circle"></i>
+              </span>
+            </p>
           </div>
         </div>
-        <div class="benefits">
+        <div class="benefits desktop">
           <h2 translate>One account to access:</h2>
           <p>
             <span class="benefit" translate>Resources</span>
@@ -35,7 +45,9 @@
           <div class="okta-info">
             <p>
               <span translate>Powered by Okta</span> &bull;
-              <span uib-tooltip="{{'Okta is our preferred partner for authentication. They help us keep your access to Cru&rsquo;s websites and software secure. You will be redirected to signon.okta.com next time you log in.' | translate}}" translate>What does this mean?</span>
+              <span uib-tooltip="{{'Okta is our preferred partner for authentication. They help us keep your access to Cru&rsquo;s websites and software secure. You will be redirected to signon.okta.com next time you log in.' | translate}}" translate>
+                What does this mean?
+              </span>
             </p>
             <img ng-src="{{$ctrl.imgDomain}}/assets/img/okta-logo.png" width="66" height="24" alt="Okta logo">
           </div>

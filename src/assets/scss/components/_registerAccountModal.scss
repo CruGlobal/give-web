@@ -63,6 +63,18 @@ register-account-modal:has(sign-in-modal, sign-up-modal) {
       }
     }
 
+    @media (min-width: $screen-md-min) {
+      .mobile {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: ($screen-md-min - 1)) {
+      .desktop {
+        display: none !important;
+      }
+    }
+
     .cru-info {
       display: flex;
       justify-content: space-between;
@@ -75,32 +87,23 @@ register-account-modal:has(sign-in-modal, sign-up-modal) {
         height: 100%;
         flex-direction: column;
         align-items: center;
-        gap: unset;
+        gap: 1rem;
+        justify-content: unset;
         border-bottom: unset;
+        text-align: center;
         color: white;
         /* Darken .header-image for better contrast */
         background-color: rgba(0, 0, 0, 0.5);
 
         img {
-          /* Make the Cru logo white */
+          /* Make the Cru and Okta logos white */
           filter: brightness(0) invert(1);
         }
       }
 
-      .tagline {
-        &.mobile {
-          display: none;
-        }
-
-        @media (max-width: ($screen-md-min - 1)) {
-          &.mobile {
-            display: unset;
-          }
-
-          &.desktop {
-            display: none;
-          }
-        }
+      .tagline.mobile {
+        font-size: 1.5rem;
+        line-height: 1.2em;
       }
 
       img {
@@ -117,10 +120,6 @@ register-account-modal:has(sign-in-modal, sign-up-modal) {
       gap: 1rem;
       padding: 2rem;
 
-      @media (max-width: ($screen-md-min - 1)) {
-        display: none;
-      }
-
       /* Override global styles */
       h2 {
         margin-bottom: 0;
@@ -134,12 +133,27 @@ register-account-modal:has(sign-in-modal, sign-up-modal) {
     .okta-info {
       display: flex;
       align-items: end;
+      /* Makes it easier to align the baseline of the text with the bottom of the image */
+      line-height: 1em;
+
+      &.mobile {
+        gap: 1ch;
+
+        img {
+          height: 1rem;
+          /* Override global Bootstrap image styles */
+          display: unset;
+        }
+      }
+    }
+
+    .benefits .okta-info {
       text-align: center;
 
       p {
         flex: 1;
-        /* Makes it easier to align the baseline of the text with the bottom of the image */
-        line-height: 1em;
+        /* Override ".modal-content p" styles */
+        line-height: unset;
       }
 
       img {
@@ -229,5 +243,9 @@ register-account-modal {
 
   .inner-modal > .modal-body {
     height: 140px;
+  }
+
+  [uib-tooltip] {
+    cursor: pointer;
   }
 }
