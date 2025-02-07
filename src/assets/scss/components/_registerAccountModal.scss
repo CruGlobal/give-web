@@ -200,55 +200,41 @@ register-account-modal:has(sign-in-modal) {
   .signup-header {
     text-align: center;
   }
+}
 
-  .modal-dialog.modal-lg & {
-    &[data-state=contact-info] {
+register-account-modal:has(contact-info-modal) {
+  .modal-header {
+    text-align: center;
+    width: 100%;
 
-      .modal-header {
-        text-align: center;
-        width: 100%;
-
-        .paragraph {
-          max-width: 500px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-      }
-
-      contact-info-modal form {
-        display: grid;
-        grid-template: 1fr auto / auto 320px;
-        column-gap: 20px;
-
-        .name {
-          grid-column: 1;
-          grid-row: 1;
-        }
-        .address {
-          grid-column: 2;
-          grid-row: 1 / 3;
-        }
-        .contact-info {
-          grid-column: 1;
-          grid-row: 2;
-        }
-
-        @media screen and (max-width: 991px) {
-          display: block;
-        }
-      }
-    }
-    &[data-state=user-match] {
-
-      .modal-header h3 {
-        text-align: center;
-      }
-
-      .modal-body {
-        margin-left: 200px;
-        margin-right: 200px;
-      }
+    .paragraph {
+      max-width: 500px;
+      margin-inline: auto;
     }
   }
 
+  @media (min-width: 991px) {
+    contact-info-modal form {
+      display: grid;
+      grid-template: 1fr auto / auto 320px;
+      column-gap: 20px;
+
+      .name {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .address {
+        grid-column: 2;
+        grid-row: 1 / 3;
+      }
+      .contact-info {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      }
+  }
+}
+
+register-account-modal .modal-header h3 {
+  text-align: center;
 }
