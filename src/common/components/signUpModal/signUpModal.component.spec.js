@@ -1222,11 +1222,12 @@ describe('signUpForm', function () {
       });
     });
 
-    it('should handle an error with $log', (done) => {
-      const error = new Error('Error signing in');
-      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {});
-      const showSignInAndRedirect = jest.fn().mockRejectedValue(error);
-      const handleLoginRedirect = jest.fn();
+    it('should handle an error with $log and retry once', (done) => {
+      const error = new Error('Error signing in')
+      jest.spyOn($ctrl.$log, 'error').mockImplementation(() => {})
+      jest.spyOn($ctrl, 'reRenderWidget').mockResolvedValue()
+      const showSignInAndRedirect = jest.fn().mockRejectedValue(error)
+      const handleLoginRedirect = jest.fn()
       $ctrl.oktaSignInWidget = {
         showSignInAndRedirect,
         authClient: {
@@ -1235,12 +1236,14 @@ describe('signUpForm', function () {
       }
 
       $ctrl.signIn().then(() => {
-      expect(handleLoginRedirect).not.toHaveBeenCalled()
-      expect($ctrl.$log.error).toHaveBeenCalledWith('Error showing Okta sign in widget.', error)
-      done()
-      });
-    });
-  });
+        expect(handleLoginRedirect).not.toHaveBeenCalled()
+        expect($ctrl.reRenderWidget).toHaveBeenCalledTimes(1)
+        expect($ctrl.$log.error).toHaveBeenCalledTimes(1)
+        expect($ctrl.$log.error).toHaveBeenCalledWith('Error showing Okta sign in widget.', error)
+        done()
+      })
+    })
+  })
 
   describe('loadDonorDetails()', () => {
     const signUpFormData = {

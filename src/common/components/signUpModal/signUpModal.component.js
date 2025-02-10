@@ -539,7 +539,7 @@ class SignUpModalController {
     // Render the widget again to show new step
     // Unfortunately, this removes the error messages, which is why we inject them after rendering
     this.oktaSignInWidget.remove()
-    this.oktaSignInWidget.renderEl(
+    return this.oktaSignInWidget.renderEl(
       { el: '#osw-container' },
       null,
       (error) => {
@@ -550,12 +550,17 @@ class SignUpModalController {
     )
   }
 
-  signIn () {
+  signIn (retrying = false) {
     return this.oktaSignInWidget.showSignInAndRedirect({
       el: '#osw-container'
     }).then(tokens => {
       this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
     }).catch(error => {
+      if (!retrying) {
+        // Retry once
+        return this.reRenderWidget().then(() => this.signIn(true))
+      }
+
       this.$log.error('Error showing Okta sign in widget.', error)
     })
   }
