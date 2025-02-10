@@ -114,7 +114,7 @@
       </div>
     </div>
     <!-- TODO: Turn this into component structure when we have time -->
-    <div class="row" ng-if="$ctrl.compactAddress">
+    <div ng-if="$ctrl.compactAddress">
       <div class="col-sm-3">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressRegion | showErrors) || $ctrl.loadingRegionsError}">
           <label translate>{{'STATE'}}</label>

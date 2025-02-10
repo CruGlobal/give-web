@@ -31,7 +31,6 @@ class Step1Controller {
     this.radioStationsService = radioStationsService
     this.sessionService = sessionService
     this.analyticsFactory = analyticsFactory
-    this.showSpouseDetails = false
   }
 
   $onInit () {
