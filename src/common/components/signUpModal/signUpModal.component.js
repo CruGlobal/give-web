@@ -65,6 +65,7 @@ class SignUpModalController {
     this.countriesData = []
     this.stateOptions = {}
     this.selectedCountry = {}
+    this.floatingLabelAbortControllers = []
   }
 
   loadTranslations () {
@@ -419,6 +420,7 @@ class SignUpModalController {
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
+    this.initializeFloatingLabels()
 
     if (this.loadingCountriesError && this.currentStep === 1) {
       this.injectCountryLoadError()
@@ -523,6 +525,39 @@ class SignUpModalController {
       errorMessage: this.translations.regionsLoadingError,
       retryCallback: () => this.refreshRegions(this.$scope.countryCode, true)
     })
+  }
+
+  initializeFloatingLabels () {
+    // As the Label and Input fields are not directly related in the DOM, we need to manually
+    // add the active class to the label when the input is focused or has a value.
+
+    // Remove any existing listeners before adding new ones
+    this.floatingLabelAbortControllers.forEach(controller => controller.abort())
+    this.floatingLabelAbortControllers = []
+
+    document.querySelectorAll('.o-form-content input[type="text"], .o-form-content input[type="password"]').forEach((input) => {
+      const label = document.querySelector(`.o-form-content label[for="${input.id}"]`)?.parentNode;
+      if (!label) {
+        return;
+      }
+      // if the input already has a value, mark the label as active
+      if (input.value.trim() !== '') {
+        label.classList.add('active');
+      }
+      // Create and save the controller so we can later remove the listeners.
+      const controller = new AbortController();
+      this.floatingLabelAbortControllers.push(controller);
+
+      input.addEventListener('focus', () => {
+        label.classList.add('active');
+      }, { signal: controller.signal });
+      input.addEventListener('blur', () => {
+        // When the input loses focus, check its value.
+        if (input.value.trim() === '') {
+          label.classList.remove('active');
+        }
+      }, { signal: controller.signal });
+    });
   }
 
   goToNextStep () {
