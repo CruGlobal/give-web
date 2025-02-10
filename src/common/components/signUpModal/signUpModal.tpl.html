@@ -15,6 +15,52 @@
 
 <div class="modal-body" class="sticky-buttons">
   <div class="content">
+    <div class="signup-steps">
+      <div class="step">
+        <img
+          alt="Step 1 - Identity"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/one.svg"
+          ng-if="$ctrl.currentStep === 1"
+        />
+        <img
+          alt="Step 1 - Identity"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/one-complete.svg"
+          ng-if="$ctrl.currentStep > 1"        />
+      </div>
+      <span class="between-steps">
+        <img
+          alt="dots between steps"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/dots.svg"
+        />
+      </span>
+      <div class="step">
+        <img
+          alt="Step 2 - Address"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/two.svg"
+          ng-if="$ctrl.currentStep <= 2"
+          ng-class="{'semi-transparent': $ctrl.currentStep === 1}"
+        />
+        <img
+          alt="Step 2 - Address"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/two-complete.svg"
+          ng-if="$ctrl.currentStep > 2"
+        />
+      </div>
+      <span class="between-steps">
+        <img
+          alt="dots between steps"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/dots.svg"
+        />
+      </span>
+      <div class="step">
+        <img
+          alt="Step 3 - Security"
+          ng-src="{{$ctrl.imgDomain}}/assets/img/okta-sign-up-steps/three.svg"
+          ng-class="{'semi-transparent': $ctrl.currentStep < 3}"
+        />
+      </div>
+    </div>
+    
     <div id="osw-container"></div>
   </div>
 </div>

@@ -1,6 +1,32 @@
 sign-up-modal {
   position: relative;
 
+  .signup-steps {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+
+    .between-steps {
+      img {
+        width: 18px;
+      }
+    }
+
+    .step {
+      img {
+        width: 55px;
+        opacity: 1;
+
+        &.semi-transparent {
+          opacity: .5;
+        }
+      }
+    }
+  }
+
   form {
     margin-bottom: 40px;
   }
