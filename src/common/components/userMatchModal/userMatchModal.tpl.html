@@ -1,12 +1,20 @@
 <div class="modal-body">
   <div ng-switch="$ctrl.matchState">
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingDonorDetailsError">
-      <p translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+      <p>
+        <span translate>There was an error loading your profile. You can use the retry button to try loading them again. If you continue to see this message, contact</span>
+        <a href="mailto:eGift@cru.org">eGift@cru.org</a>
+        <span translate>for assistance.</span>
+      </p>
       <p><button type="button" class="btn btn-primary" ng-click="$ctrl.$onInit()" translate>Retry</button></p>
     </div>
 
     <div class="alert alert-danger" role="alert" ng-if="$ctrl.selectContactError">
-      <p translate>There was an error saving your answer. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+      <p>
+        <span translate>There was an error saving your answer. Please try again. If you continue to see this message, contact</span>
+        <a href="mailto:eGift@cru.org">eGift@cru.org</a>
+        <span translate>for assistance.</span>
+      </p>
     </div>
     <div class="activate-progress">
       <p ng-if="$ctrl.matchState === 'identity'" translate>
@@ -22,7 +30,11 @@
     </div>
     <div ng-switch-when="activate">
       <div class="alert alert-danger" role="alert" ng-if="$ctrl.loadingQuestionsError">
-        <p class="text-center" translate>There was an error loading the verification questions. Please try again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.</p>
+        <p>
+          <span translate>There was an error loading the verification questions. Please try again. If you continue to see this message, contact</span>
+          <a href="mailto:eGift@cru.org">eGift@cru.org</a>
+          <span translate>for assistance.</span>
+        </p>
       </div>
       <p class="text-center" style="margin-bottom: 2em;" translate>
         Please answer the following questions to confirm your identity so that you can access your account.
