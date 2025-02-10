@@ -8,8 +8,8 @@
   }
 
   .auth-content {
-    padding-top: 10px;
     padding-bottom: 0;
+    padding-top: 10px;
   }
 
   .okta-form-title {
@@ -19,8 +19,8 @@
 
 sign-up-modal {
   #osw-container {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
   }
 
@@ -29,31 +29,150 @@ sign-up-modal {
   }
 }
 
-#okta-sign-in.auth-container {
-  // Injected cru back button
-  .o-form-button-bar {
+#okta-sign-in.auth-container { 
+  $okta-grey: #D9D6D6;
+  // ============== Container ============== //
+
+  &.main-container {
+    box-shadow: none;
+  }
+
+  .o-form-fieldset-container {
+    border: 1px solid $okta-grey;
+    border-radius: 7px;
     display: flex;
-    gap: 50px;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    overflow: hidden;
+  }
+  // ============== Errors ============== //
+
+  .o-form-explain.o-form-input-error {
+    background: #ffe3e3;
+    padding-left: 20px;
+    padding-top: 6px;
+  }
+  // ============== Fields ============== //
+
+  .o-form-fieldset {
+    margin: 0;
+    position: relative;
+  }
+
+  .o-form-label {
+    @include transition(top 0.3s ease, font-size 0.3s ease);
+    padding: 0;
+    padding-left: 8px;
+    position: absolute;
+    top: 17px;
+    width: auto;
+    z-index: 20;
+
+    &.active {
+      top: 2px;
+
+      label {
+        font-size: 12px;
+      }
+    }
+
+    label {
+      color: #9C9C9C;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .o-form-explain {
+      font-size: 12px;
+    }
+  }
+
+  .o-form-select-fieldset {
+    .o-form-label {
+      top: 0px;
+
+      label {
+        font-size: 12px;
+      }
+    }
+
+    .chzn-container > .chzn-single {
+      border: none;
+      height: auto;
+      padding-top: 5px;
+
+div {
+        top: 6px;
+      }
+    }
+  }
+
+  .o-form-fieldset {
+    border-bottom: 1px solid $okta-grey;
+    width: 100%;
+
+    &[data-se="o-form-fieldset-userProfile.state"],
+    &[data-se="o-form-fieldset-userProfile.zipCode"] {
+      width: 50%;
+    }
+    &[data-se="o-form-fieldset-userProfile.zipCode"] {
+      border-left: 1px solid $okta-grey;
+    }
+  }
+
+  .o-form-input .o-form-control {
+    border: none;
+    border-radius: 0;
+    height: auto;
+
+    // Style input fields, but not input fields in dropdowns
+    input[type=text]:not(.chzn-search input),
+    input[type=password]:not(.chzn-search input) {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      border: none;
+      padding-bottom: 12px;
+      padding-top: 20px;
+    }
+  }
+  // ============== Password rules ============== //
+
+  section[data-se="password-authenticator--rules"] {
+    background: $okta-grey;
+    padding: 10px;
+    width: 100%;
+
+    .password-authenticator--list {
+      margin: 0;
+    }
+  }
+  // ============== Injected buttons ============== //
+
+  // cru back button
+  .o-form-button-bar {
     align-items: center;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
 
     #backButton {
       width: 100%;
     }
 
     .button.button-primary {
+      color: #3a3a3a;
       height: auto;
+
       @extend .btn;
       @extend .btn-primary;
     }
   }
-  // Injected cru error message
+  // cru error message
   .cru-error {
     float: left
   }
-
-  // Injected cru retry button
+  // cru retry button
   .cru-retry-button:hover {
     text-decoration: underline;
   }
-}
+  }
