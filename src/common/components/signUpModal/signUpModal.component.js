@@ -55,11 +55,11 @@ class SignUpModalController {
   }
 
   initializeVariables () {
+    this.isLoading = true
     this.currentStep = 1
     this.donorDetails = {}
     this.translations = {}
     this.signUpErrors = []
-    this.isLoading = true
     this.submitting = false
     this.countryCodeOptions = {}
     this.countriesData = []
@@ -127,6 +127,7 @@ class SignUpModalController {
     this.signIn()
     this.loadCountries({ initial: true }).subscribe()
 
+    this.oktaSignInWidget.on('ready', this.ready.bind(this))
     this.oktaSignInWidget.on('afterRender', this.afterRender.bind(this))
     this.oktaSignInWidget.on('afterError', this.afterError.bind(this))
   }
@@ -440,6 +441,12 @@ class SignUpModalController {
     if (this.loadingRegionsError && this.currentStep === 2) {
       this.injectRegionLoadError()
     }
+  }
+
+  ready (context) {
+    this.$scope.$apply(() => {
+      this.isLoading = false
+  })
   }
 
   updateSignUpButtonText () {

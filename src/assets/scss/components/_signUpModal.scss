@@ -6,7 +6,7 @@ sign-up-modal {
     display: flex;
     gap: 16px;
     justify-content: center;
-    padding: 10px 0;
+    padding: 20px 0 0;
     width: 100%;
 
     .between-steps img {
@@ -21,6 +21,10 @@ sign-up-modal {
         opacity: .5;
       }
     }
+  }
+
+  .okta-signup-loading {
+    padding: 153px 0 153px;
   }
 
   form {
