@@ -33,6 +33,11 @@ sign-up-modal {
   $okta-grey: #D9D6D6;
   // ============== Container ============== //
 
+  .o-form-content {
+    padding-top: 10px;
+    overflow: hidden;
+  }
+
   &.main-container {
     box-shadow: none;
   }
@@ -42,7 +47,6 @@ sign-up-modal {
     border-radius: 7px;
     display: flex;
     flex-wrap: wrap;
-    overflow: hidden;
   }
   // ============== Errors ============== //
 
@@ -88,26 +92,47 @@ sign-up-modal {
 
   .o-form-select-fieldset {
     .o-form-label {
-      top: 0px;
+      top: 2px;
 
       label {
         font-size: 12px;
       }
     }
 
-    .chzn-container > .chzn-single {
-      border: none;
-      height: auto;
-      padding-top: 5px;
+    .chzn-container {
+      &:focus-within {
+        box-shadow: none;
 
-div {
-        top: 6px;
+        & > .chzn-single {
+          box-shadow: none;
+          border-color: $colorCru-gold;
+        }
+      } 
+      & > .chzn-single {
+        border: 1px solid transparent;
+        height: auto;
+        padding-top: 12px;
+
+        div {
+          top: 6px;
+        }
       }
+    }
+    .chzn-container-single .chzn-drop {
+      border-radius: 0 0 6px 6px;
     }
   }
 
+  // override okta styles
+  .focused-input,
+  .link.help:focus,
+  input[type=radio]:focus + label,
+  input[type=text]:focus {
+    box-shadow: none
+  }
+
   .o-form-fieldset {
-    border-bottom: 1px solid $okta-grey;
+    border-top: 1px solid $okta-grey;
     width: 100%;
 
     &[data-se="o-form-fieldset-userProfile.state"],
@@ -117,12 +142,35 @@ div {
     &[data-se="o-form-fieldset-userProfile.zipCode"] {
       border-left: 1px solid $okta-grey;
     }
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &:first-of-type {
+      input[type=text]:not(.chzn-search input),
+      input[type=password]:not(.chzn-search input),
+      .chzn-container a {
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      }
+    }
+
+    &:last-of-type {
+      input[type=text]:not(.chzn-search input),
+      input[type=password]:not(.chzn-search input),
+      .chzn-container a {
+        border-bottom-left-radius: 7px;
+        border-bottom-right-radius: 7px;
+      }
+    }
   }
 
   .o-form-input .o-form-control {
     border: none;
     border-radius: 0;
     height: auto;
+    background: none;
 
     // Style input fields, but not input fields in dropdowns
     input[type=text]:not(.chzn-search input),
@@ -130,9 +178,14 @@ div {
       -moz-appearance: none;
       -webkit-appearance: none;
       appearance: none;
-      border: none;
+      border: 1px solid transparent;
       padding-bottom: 12px;
       padding-top: 20px;
+
+      &:focus {
+        box-shadow: none;
+        border-color: $colorCru-gold;
+      }
     }
   }
   // ============== Password rules ============== //
@@ -182,4 +235,14 @@ div {
   .cru-retry-button:hover {
     text-decoration: underline;
   }
-  }
+}
+
+// ============== Okta overrides ============== //
+// select dropdown focus style
+.chzn-container:focus-within {
+  box-shadow: none;
+}
+// select dropdown border radius style
+.chzn-container-single .chzn-single {
+  border-radius: 6px 6px 0 0;
+}
