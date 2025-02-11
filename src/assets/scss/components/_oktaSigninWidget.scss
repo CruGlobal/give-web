@@ -29,13 +29,14 @@ sign-up-modal {
   }
 }
 
-#okta-sign-in.auth-container { 
+#okta-sign-in.auth-container {
   $okta-grey: #D9D6D6;
+
   // ============== Container ============== //
 
   .o-form-content {
-    padding-top: 10px;
     overflow: hidden;
+    padding-top: 10px;
   }
 
   &.main-container {
@@ -48,6 +49,7 @@ sign-up-modal {
     display: flex;
     flex-wrap: wrap;
   }
+
   // ============== Errors ============== //
 
   .o-form-explain.o-form-input-error {
@@ -55,6 +57,7 @@ sign-up-modal {
     padding-left: 20px;
     padding-top: 6px;
   }
+
   // ============== Fields ============== //
 
   .o-form-fieldset {
@@ -103,12 +106,13 @@ sign-up-modal {
       &:focus-within {
         box-shadow: none;
 
-        & > .chzn-single {
-          box-shadow: none;
+        &>.chzn-single {
           border-color: $colorCru-gold;
+          box-shadow: none;
         }
-      } 
-      & > .chzn-single {
+      }
+
+      &>.chzn-single {
         border: 1px solid transparent;
         height: auto;
         padding-top: 12px;
@@ -118,6 +122,7 @@ sign-up-modal {
         }
       }
     }
+
     .chzn-container-single .chzn-drop {
       border-radius: 0 0 6px 6px;
     }
@@ -126,8 +131,9 @@ sign-up-modal {
   // override okta styles
   .focused-input,
   .link.help:focus,
-  input[type=radio]:focus + label,
+  input[type=radio]:focus+label,
   input[type=text]:focus {
+
     box-shadow: none
   }
 
@@ -139,6 +145,7 @@ sign-up-modal {
     &[data-se="o-form-fieldset-userProfile.zipCode"] {
       width: 50%;
     }
+
     &[data-se="o-form-fieldset-userProfile.zipCode"] {
       border-left: 1px solid $okta-grey;
     }
@@ -148,15 +155,17 @@ sign-up-modal {
     }
 
     &:first-of-type {
+
       input[type=text]:not(.chzn-search input),
       input[type=password]:not(.chzn-search input),
       .chzn-container a {
-      border-top-left-radius: 6px;
-      border-top-right-radius: 6px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
       }
     }
 
     &:last-of-type {
+
       input[type=text]:not(.chzn-search input),
       input[type=password]:not(.chzn-search input),
       .chzn-container a {
@@ -167,10 +176,10 @@ sign-up-modal {
   }
 
   .o-form-input .o-form-control {
+    background: none;
     border: none;
     border-radius: 0;
     height: auto;
-    background: none;
 
     // Style input fields, but not input fields in dropdowns
     input[type=text]:not(.chzn-search input),
@@ -183,11 +192,12 @@ sign-up-modal {
       padding-top: 20px;
 
       &:focus {
-        box-shadow: none;
         border-color: $colorCru-gold;
+        box-shadow: none;
       }
     }
   }
+
   // ============== Password rules ============== //
 
   section[data-se="password-authenticator--rules"] {
@@ -199,6 +209,7 @@ sign-up-modal {
       margin: 0;
     }
   }
+
   // ============== Injected buttons ============== //
 
   // cru back button
@@ -227,10 +238,12 @@ sign-up-modal {
       @extend .btn-primary;
     }
   }
+
   // cru error message
   .cru-error {
-    float: left
+    float: left;
   }
+
   // cru retry button
   .cru-retry-button:hover {
     text-decoration: underline;
@@ -242,6 +255,7 @@ sign-up-modal {
 .chzn-container:focus-within {
   box-shadow: none;
 }
+
 // select dropdown border radius style
 .chzn-container-single .chzn-single {
   border-radius: 6px 6px 0 0;
