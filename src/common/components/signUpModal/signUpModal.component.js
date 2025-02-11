@@ -415,6 +415,18 @@ class SignUpModalController {
   }
 
   afterRender (context) {
+    // Handle inactivity error
+    // The Okta widget has an issue where if the page is idle for a period of time,
+    // the Okta interaction session will expire, causing the widget to show an error "You have been logged out due to inactivity..."
+    // The user then has to click "back to sign in," to rerender the Okta widget.
+    // To avoid the error showing, we check if the context formName is 'terminal'. If it is, we know there was an error,
+    // and we re-render the widget to refresh the widget.
+    // We also set a flag to prevent the widget from refreshing multiple times.
+    if (context.formName === 'terminal' && !this.refreshedDueToInactivity) {
+      this.refreshedDueToInactivity = true
+      this.reRenderWidget()
+    }
+
     this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
@@ -585,17 +597,12 @@ class SignUpModalController {
     )
   }
 
-  signIn (retrying = false) {
+  signIn () {
     return this.oktaSignInWidget.showSignInAndRedirect({
       el: '#osw-container'
     }).then(tokens => {
       this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
     }).catch(error => {
-      if (!retrying) {
-        // Retry once
-        return this.reRenderWidget().then(() => this.signIn(true))
-      }
-
       this.$log.error('Error showing Okta sign in widget.', error)
     })
   }
