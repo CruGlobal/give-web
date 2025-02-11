@@ -2,27 +2,23 @@ sign-up-modal {
   position: relative;
 
   .signup-steps {
-    display: flex;
-    width: 100%;
-    justify-content: center;
     align-items: center;
+    display: flex;
     gap: 16px;
+    justify-content: center;
     padding: 10px 0;
+    width: 100%;
 
-    .between-steps {
-      img {
-        width: 18px;
-      }
+    .between-steps img {
+      width: 18px;
     }
 
-    .step {
-      img {
-        width: 55px;
-        opacity: 1;
+    .step img {
+      opacity: 1;
+      width: 55px;
 
-        &.semi-transparent {
-          opacity: .5;
-        }
+      &.semi-transparent {
+        opacity: .5;
       }
     }
   }
@@ -30,18 +26,19 @@ sign-up-modal {
   form {
     margin-bottom: 40px;
   }
+
   .buttons {
-    position: absolute;
-    width: 100%;
-    padding: 15px 30px;
-    bottom: 0;
-    left: 0;
+    align-items: center;
     background-color: #ffffff;
     border-top: rgba(0, 0, 0, 0.15) 1px solid;
-    align-items: center;
+    bottom: 0;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
+    left: 0;
+    padding: 15px 30px;
+    position: absolute;
+    width: 100%;
 
     .back-to-sign-in {
       width: 150px;
@@ -57,15 +54,15 @@ sign-up-modal {
   }
 
   .sticky-buttons {
+    height: calc(100vh - 170px);
     max-height: 560px;
     overflow-y: auto;
     position: unset;
-    height: calc(100vh - 170px);
 
     // When inside another modal
     &:not(.modal-body) {
-      max-height: 520px;
       height: calc(100vh - 230px);
+      max-height: 520px;
 
       form {
         margin-bottom: 60px;
@@ -81,7 +78,8 @@ sign-up-modal {
   section[data-se="password-authenticator--rules"] {
     display: none;
   }
-  div[data-se="o-form-fieldset-credentials.passcode"] ~ section[data-se="password-authenticator--rules"] {
+
+  div[data-se="o-form-fieldset-credentials.passcode"]~section[data-se="password-authenticator--rules"] {
     display: block;
   }
 }
