@@ -157,6 +157,13 @@ div {
 
     #backButton {
       width: 100%;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background: #f6f6f6 !important;
+        color: $colorCru-gray !important;
+      }
     }
 
     .button.button-primary {
