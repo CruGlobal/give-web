@@ -117,41 +117,45 @@
     <div ng-if="$ctrl.compactAddress">
       <div class="col-sm-3">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressRegion | showErrors) || $ctrl.loadingRegionsError}">
-          <label translate>{{'STATE'}}</label>
-          <div class="form-group">
-            <select class="form-control  form-control-subtle"
-                    name="addressRegion" required
-                    ng-model="$ctrl.address.region"
-                    ng-options="v.name as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''"
-                    ng-disabled="$ctrl.addressDisabled">
-            </select>
-            <div role="alert" ng-if="$ctrl.loadingRegionsError">
-              <div class="help-block">
-                <translate>{{'REGIONS_LOADING_ERROR'}}</translate>
-                <button id="retryButton2" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>{{'RETRY'}}</button>
+          <label>
+            <span translate>{{'STATE'}}</span>
+            <div class="form-group">
+              <select class="form-control  form-control-subtle"
+                      name="addressRegion" required
+                      ng-model="$ctrl.address.region"
+                      ng-options="v.name as v['display-name'] for v in $ctrl.regions | orderBy:'\'display-name\''"
+                      ng-disabled="$ctrl.addressDisabled">
+              </select>
+              <div role="alert" ng-if="$ctrl.loadingRegionsError">
+                <div class="help-block">
+                  <translate>{{'REGIONS_LOADING_ERROR'}}</translate>
+                  <button id="retryButton2" type="button" class="btn btn-default btn-sm" ng-click="$ctrl.refreshRegions($ctrl.address.addressCountry, true)" translate>{{'RETRY'}}</button>
+                </div>
+              </div>
+              <div role="alert" ng-messages="$ctrl.parentForm.addressRegion.$error" ng-if="($ctrl.parentForm.addressRegion | showErrors)">
+                <div class="help-block" ng-message="required" translate>{{'SELECT_STATE_ERROR'}}</div>
               </div>
             </div>
-            <div role="alert" ng-messages="$ctrl.parentForm.addressRegion.$error" ng-if="($ctrl.parentForm.addressRegion | showErrors)">
-              <div class="help-block" ng-message="required" translate>{{'SELECT_STATE_ERROR'}}</div>
-            </div>
-          </div>
+          </label>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressPostalCode | showErrors)}">
-          <label translate>{{'ZIP'}}</label>
-          <input type="text"
-                 class="form-control  form-control-subtle"
-                 name="addressPostalCode"
-                 ng-model="$ctrl.address.postalCode"
-                 required
-                 ng-pattern="/^\d{5}(?:[-\s]\d{4})?$/"
-                 ng-change="$ctrl.onPostalCodeChanged()"
-                 ng-disabled="$ctrl.addressDisabled">
-          <div role="alert" ng-messages="$ctrl.parentForm.addressPostalCode.$error" ng-if="($ctrl.parentForm.addressPostalCode | showErrors)">
-            <div class="help-block" ng-message="required" translate>{{'ZIP_CODE_ERROR'}}</div>
-            <div class="help-block" ng-message="pattern" translate>{{'INVALID_US_ZIP_ERROR'}}</div>
-          </div>
+          <label>
+            <span translate>{{'ZIP'}}</span>
+            <input type="text"
+                  class="form-control  form-control-subtle"
+                  name="addressPostalCode"
+                  ng-model="$ctrl.address.postalCode"
+                  required
+                  ng-pattern="/^\d{5}(?:[-\s]\d{4})?$/"
+                  ng-change="$ctrl.onPostalCodeChanged()"
+                  ng-disabled="$ctrl.addressDisabled">
+            <div role="alert" ng-messages="$ctrl.parentForm.addressPostalCode.$error" ng-if="($ctrl.parentForm.addressPostalCode | showErrors)">
+              <div class="help-block" ng-message="required" translate>{{'ZIP_CODE_ERROR'}}</div>
+              <div class="help-block" ng-message="pattern" translate>{{'INVALID_US_ZIP_ERROR'}}</div>
+            </div>
+          </label>
         </div>
       </div>
     </div>
