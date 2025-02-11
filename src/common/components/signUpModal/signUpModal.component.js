@@ -547,29 +547,29 @@ class SignUpModalController {
     this.floatingLabelAbortControllers.forEach(controller => controller.abort())
     this.floatingLabelAbortControllers = []
 
-    document.querySelectorAll('.o-form-content input[type="text"], .o-form-content input[type="password"]').forEach((input) => {
-      const label = document.querySelector(`.o-form-content label[for="${input.id}"]`)?.parentNode;
+    document.querySelectorAll('.o-form-content input[type="text"], .o-form-content input[type="password"]').forEach(input => {
+      const label = input.labels[0]?.parentNode
       if (!label) {
-        return;
+        return
       }
       // if the input already has a value, mark the label as active
       if (input.value.trim() !== '') {
-        label.classList.add('active');
+        label.classList.add('active')
       }
       // Create and save the controller so we can later remove the listeners.
-      const controller = new AbortController();
-      this.floatingLabelAbortControllers.push(controller);
+      const controller = new AbortController()
+      this.floatingLabelAbortControllers.push(controller)
 
       input.addEventListener('focus', () => {
-        label.classList.add('active');
-      }, { signal: controller.signal });
+        label.classList.add('active')
+      }, { signal: controller.signal })
       input.addEventListener('blur', () => {
         // When the input loses focus, check its value.
         if (input.value.trim() === '') {
-          label.classList.remove('active');
+          label.classList.remove('active')
         }
-      }, { signal: controller.signal });
-    });
+      }, { signal: controller.signal })
+    })
   }
 
   goToNextStep () {
