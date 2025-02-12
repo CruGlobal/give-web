@@ -97,6 +97,7 @@
     ]
   },
   "resolutions": {
-    "webpack-dev-server/**/spdy-transport": "^3.0.0"
+    "webpack-dev-server/**/spdy-transport": "^3.0.0",
+    "fsevents": "^2.3.2"
   }
 }
