@@ -114,6 +114,7 @@ sign-up-modal {
 
       &>.chzn-single {
         border: 1px solid transparent;
+        border-radius: 0;
         height: auto;
         padding-top: 12px;
 
@@ -157,7 +158,7 @@ sign-up-modal {
     &:first-of-type {
 
       input[type=text]:not(.chzn-search input),
-      input[type=password]:not(.chzn-search input),
+      input[type=password],
       .chzn-container a {
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
@@ -166,12 +167,18 @@ sign-up-modal {
 
     &:last-of-type {
 
+      // We don't include password as it's the only field on it's step and has the password requirements below it.
       input[type=text]:not(.chzn-search input),
-      input[type=password]:not(.chzn-search input),
       .chzn-container a {
-        border-bottom-left-radius: 7px;
-        border-bottom-right-radius: 7px;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
       }
+    }
+
+    // Allow the account type dropdown to have rounded corners if the organisation field is hidden
+    &:has(+ .o-form-fieldset[style="display: none;"]) .chzn-container a {
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
     }
   }
 
@@ -183,11 +190,12 @@ sign-up-modal {
 
     // Style input fields, but not input fields in dropdowns
     input[type=text]:not(.chzn-search input),
-    input[type=password]:not(.chzn-search input) {
+    input[type=password] {
       -moz-appearance: none;
       -webkit-appearance: none;
       appearance: none;
       border: 1px solid transparent;
+      height: auto;
       padding-bottom: 12px;
       padding-top: 20px;
 
@@ -201,7 +209,8 @@ sign-up-modal {
   // ============== Password rules ============== //
 
   section[data-se="password-authenticator--rules"] {
-    background: $okta-grey;
+    border-radius: 0 0 6px 6px;
+    border-top: 1px solid $okta-grey;
     padding: 10px;
     width: 100%;
 
@@ -219,14 +228,23 @@ sign-up-modal {
     gap: 10px;
     justify-content: space-between;
 
+    #backButton,
+    .button.button-primary {
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+
     #backButton {
+      color: $colorCru-gray !important;
+      background-color: $colorCru-white !important;
+      border-color: $colorCru-gray !important;
       width: 100%;
 
       &:hover,
       &:focus,
       &:active {
-        background: #f6f6f6 !important;
-        color: $colorCru-gray !important;
+        color: $colorCru-white !important;
+        background: $colorCru-gray !important;
       }
     }
 
@@ -258,5 +276,8 @@ sign-up-modal {
 
 // select dropdown border radius style
 .chzn-container-single .chzn-single {
+  border-radius: 0;
+}
+#countryCodeInput_chzn.chzn-container-single .chzn-single {
   border-radius: 6px 6px 0 0;
 }
