@@ -271,6 +271,9 @@ class SignUpModalController {
 
     return this.geographiesService.getRegions(countryData).pipe(
       map((data) => {
+        // Order regions in alphabetical order
+        data.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
+        
         this.stateOptions = {}
         data.forEach(state => {
           this.stateOptions[state.name] = state['display-name']
