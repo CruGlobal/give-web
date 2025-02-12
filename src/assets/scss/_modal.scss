@@ -1,6 +1,8 @@
-/* Center dialog on small screens. Bootstrap only applies this margin on screens wider than $screen-sm-min. */
 .modal-dialog {
+  /* Center dialog on small screens. Bootstrap only applies this margin on screens wider than $screen-sm-min. */
   margin-inline: auto;
+  /* Center dialog vertically */
+  align-content: center;
 }
 
 .modal-content.give-modal-content {
