@@ -95,7 +95,7 @@
 </div>
 <div ng-if="$ctrl.address.country === 'US'">
   <div class="row">
-    <div ng-class="$ctrl.compactAddress ? 'col-sm-6' : 'col-sm-12'">
+    <div ng-class="$ctrl.compactAddress ? 'col-sm-12 col-md-6' : 'col-sm-12'">
       <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressLocality | showErrors)}">
         <label>
           <span translate>{{'CITY'}}</span>
@@ -115,7 +115,7 @@
     </div>
     <!-- TODO: Turn this into component structure when we have time -->
     <div ng-if="$ctrl.compactAddress">
-      <div class="col-sm-3">
+      <div class="col-sm-6 col-md-3">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressRegion | showErrors) || $ctrl.loadingRegionsError}">
           <label>
             <span translate>{{'STATE'}}</span>
@@ -137,7 +137,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-6 col-md-3">
         <div class="form-group is-required" ng-class="{'has-error': ($ctrl.parentForm.addressPostalCode | showErrors)}">
           <label>
             <span translate>{{'ZIP'}}</span>
