@@ -425,10 +425,9 @@ class SignUpModalController {
     // The user then has to click "back to sign in," to rerender the Okta widget.
     // To avoid the error showing, we check if the context formName is 'terminal'. If it is, we know there was an error,
     // and we re-render the widget to refresh the widget.
-    // We also set a flag to prevent the widget from refreshing multiple times.
-    if (context.formName === 'terminal' && !this.refreshedDueToInactivity) {
-      this.refreshedDueToInactivity = true
+    if (context.formName === 'terminal') {
       this.reRenderWidget()
+      return
     }
 
     this.updateSignUpButtonText()
@@ -446,7 +445,7 @@ class SignUpModalController {
     }
   }
 
-  ready (context) {
+  ready () {
     this.$scope.$apply(() => {
       this.isLoading = false
   })
