@@ -1,6 +1,39 @@
 sign-up-modal {
   position: relative;
 
+  .signup-steps {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px 0 0;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+
+    .between-steps {
+      img {
+        width: 18px;
+      }
+    }
+
+    .step {
+      img {
+        width: 55px;
+        opacity: 1;
+
+        &.semi-transparent {
+          opacity: .5;
+        }
+      }
+    }
+  }
+
+  .okta-signup-loading {
+    padding: 153px 0 153px;
+  }
+
   form {
     margin-bottom: 40px;
   }

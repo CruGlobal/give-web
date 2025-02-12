@@ -18,8 +18,8 @@ export const countryFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-u
 export const regionFieldSelector = '.o-form-fieldset[data-se="o-form-fieldset-userProfile.state"]'
 export const inputFieldErrorSelectorPrefix = '.o-form-input-name-'
 const componentName = 'signUpModal'
-const signUpButtonText = 'Create an Account'
-const nextButtonText = 'Next'
+const signUpButtonText = 'Create Account'
+const nextButtonText = 'Continue'
 const backButtonId = 'backButton'
 const backButtonText = 'Back'
 const errorIconHtml = '<span class="icon icon-16 error-16-small" role="img" aria-label="Error"></span>'
@@ -55,16 +55,17 @@ class SignUpModalController {
   }
 
   initializeVariables () {
+    this.isLoading = true
     this.currentStep = 1
     this.donorDetails = {}
     this.translations = {}
     this.signUpErrors = []
-    this.isLoading = true
     this.submitting = false
     this.countryCodeOptions = {}
     this.countriesData = []
     this.stateOptions = {}
     this.selectedCountry = {}
+    this.floatingLabelAbortControllers = []
   }
 
   loadTranslations () {
@@ -126,6 +127,7 @@ class SignUpModalController {
     this.signIn()
     this.loadCountries({ initial: true }).subscribe()
 
+    this.oktaSignInWidget.on('ready', this.ready.bind(this))
     this.oktaSignInWidget.on('afterRender', this.afterRender.bind(this))
     this.oktaSignInWidget.on('afterError', this.afterError.bind(this))
   }
@@ -269,6 +271,9 @@ class SignUpModalController {
 
     return this.geographiesService.getRegions(countryData).pipe(
       map((data) => {
+        // Order regions in alphabetical order
+        data.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
+        
         this.stateOptions = {}
         data.forEach(state => {
           this.stateOptions[state.name] = state['display-name']
@@ -414,11 +419,23 @@ class SignUpModalController {
   }
 
   afterRender (context) {
+    // Handle inactivity error
+    // The Okta widget has an issue where if the page is idle for a period of time,
+    // the Okta interaction session will expire, causing the widget to show an error "You have been logged out due to inactivity..."
+    // The user then has to click "back to sign in," to rerender the Okta widget.
+    // To avoid the error showing, we check if the context formName is 'terminal'. If it is, we know there was an error,
+    // and we re-render the widget to refresh the widget.
+    if (context.formName === 'terminal') {
+      this.reRenderWidget()
+      return
+    }
+
     this.updateSignUpButtonText()
     this.resetCurrentStepOnRegistrationComplete(context)
     this.redirectToSignInModalIfNeeded(context)
     this.injectErrorMessages()
     this.injectBackButton()
+    this.initializeFloatingLabels()
 
     if (this.loadingCountriesError && this.currentStep === 1) {
       this.injectCountryLoadError()
@@ -426,6 +443,12 @@ class SignUpModalController {
     if (this.loadingRegionsError && this.currentStep === 2) {
       this.injectRegionLoadError()
     }
+  }
+
+  ready () {
+    this.$scope.$apply(() => {
+      this.isLoading = false
+  })
   }
 
   updateSignUpButtonText () {
@@ -525,6 +548,39 @@ class SignUpModalController {
     })
   }
 
+  initializeFloatingLabels () {
+    // As the Label and Input fields are not directly related in the DOM, we need to manually
+    // add the active class to the label when the input is focused or has a value.
+
+    // Remove any existing listeners before adding new ones
+    this.floatingLabelAbortControllers.forEach(controller => controller.abort())
+    this.floatingLabelAbortControllers = []
+
+    document.querySelectorAll('.o-form-content input[type="text"], .o-form-content input[type="password"]').forEach(input => {
+      const label = input.labels[0]?.parentNode
+      if (!label) {
+        return
+      }
+      // if the input already has a value, mark the label as active
+      if (input.value.trim() !== '') {
+        label.classList.add('active')
+      }
+      // Create and save the controller so we can later remove the listeners.
+      const controller = new AbortController()
+      this.floatingLabelAbortControllers.push(controller)
+
+      input.addEventListener('focus', () => {
+        label.classList.add('active')
+      }, { signal: controller.signal })
+      input.addEventListener('blur', () => {
+        // When the input loses focus, check its value.
+        if (input.value.trim() === '') {
+          label.classList.remove('active')
+        }
+      }, { signal: controller.signal })
+    })
+  }
+
   goToNextStep () {
     this.currentStep++
     this.reRenderWidget()
@@ -550,17 +606,12 @@ class SignUpModalController {
     )
   }
 
-  signIn (retrying = false) {
+  signIn () {
     return this.oktaSignInWidget.showSignInAndRedirect({
       el: '#osw-container'
     }).then(tokens => {
       this.oktaSignInWidget.authClient.handleLoginRedirect(tokens)
     }).catch(error => {
-      if (!retrying) {
-        // Retry once
-        return this.reRenderWidget().then(() => this.signIn(true))
-      }
-
       this.$log.error('Error showing Okta sign in widget.', error)
     })
   }
