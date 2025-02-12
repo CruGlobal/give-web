@@ -1,4 +1,4 @@
-<loading type="overlay" ng-if="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting' || $ctrl.paymentFormState === 'success'"></loading>
+<loading type="overlay" ng-if="$ctrl.paymentFormState === 'loading' || $ctrl.paymentFormState === 'encrypting'"></loading>
 
 <div class="alert alert-danger" role="alert" ng-if="$ctrl.paymentFormState === 'error'">
   <p ng-switch="$ctrl.paymentFormError">

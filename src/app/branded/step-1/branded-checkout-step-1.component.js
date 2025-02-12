@@ -262,6 +262,7 @@ class BrandedCheckoutStep1Controller {
       })
       .finally(() => {
         this.loadingAndSubmitting = false
+        this.submitted = false;
       })
       .subscribe(() => {
         this.next()
