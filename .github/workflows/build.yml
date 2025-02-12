@@ -24,9 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache
@@ -42,9 +42,9 @@ jobs:
           # Help Codecov detect commit SHA
           fetch-depth: 2
       
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache
@@ -64,9 +64,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.10.0
+          node-version-file: .tool-versions
       
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache
