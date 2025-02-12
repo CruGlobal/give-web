@@ -29,7 +29,8 @@ jobs:
           node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+      # --ignore-optional is used to avoid installing optional dependencies like fsevents which is not supported on Linux
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
       - name: Lint Check
         run: yarn lint
@@ -47,7 +48,7 @@ jobs:
           node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
       - name: Run Tests
         run: yarn test:coverage
@@ -69,7 +70,7 @@ jobs:
           node-version-file: .tool-versions
       
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache
+        run: yarn install --immutable --immutable-cache --ignore-optional
       
       - name: Build App
         env:
