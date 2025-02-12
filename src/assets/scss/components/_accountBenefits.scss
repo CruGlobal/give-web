@@ -12,25 +12,25 @@ account-benefits-modal {
     }
   }
 
-  .sign-up {
-    margin-bottom: 10px;
-    text-align: center;
 
+  .sign-up {
+    text-align: center;
+    margin-bottom: 10px;
     @media (max-width:550px) {
       margin-top: 10px;
     }
-
     p {
       margin-bottom: 3px;
     }
-
     button {
       width: 100%;
     }
   }
 
   .okta-link {
-    margin-top: 5px;
     text-align: center;
+    margin-top: 5px;
   }
 }
+
+
