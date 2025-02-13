@@ -273,7 +273,7 @@ class SignUpModalController {
       map((data) => {
         // Order regions in alphabetical order
         data.sort((a, b) => a['display-name'].localeCompare(b['display-name']))
-        
+
         this.stateOptions = {}
         data.forEach(state => {
           this.stateOptions[state.name] = state['display-name']
@@ -448,7 +448,7 @@ class SignUpModalController {
   ready () {
     this.$scope.$apply(() => {
       this.isLoading = false
-  })
+    })
   }
 
   updateSignUpButtonText () {
