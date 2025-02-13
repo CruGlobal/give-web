@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ManifestPlugin = require('webpack-manifest-plugin')
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 const giveComponents = [
   'app/cart/cart.component.js',
@@ -59,6 +60,18 @@ const sharedConfig = {
       ROLLBAR_ACCESS_TOKEN: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN) || 'development-token',
       DATADOG_RUM_CLIENT_TOKEN: process.env.DATADOG_RUM_CLIENT_TOKEN || ''
     }),
+    new StyleLintPlugin({
+      configFile: path.resolve(__dirname, '.stylelintrc'),
+      context: 'src/assets/scss',
+      files: '**/*.(css|scss)',
+      failOnError: true,
+      quiet: false,
+    }),
+    ...(isBuild ?
+      new MiniCssExtractPlugin({
+        filename: '[name].min.css',
+      })
+    : []),
     // To strip all locales except “en”
     new MomentLocalesPlugin()
   ],
@@ -186,10 +199,6 @@ module.exports = (env = {}) => [
       path: path.resolve(__dirname, 'dist')
     },
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: 'chunks/[name].[contenthash].min.css',
-        disable: !isBuild
-      }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
@@ -231,10 +240,6 @@ module.exports = (env = {}) => [
       'branded-checkout': brandedComponents
     },
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: '[name].min.css',
-        disable: !isBuild
-      }),
       ...sharedConfig.plugins,
       new BundleAnalyzerPlugin({
         analyzerMode: env.analyze ? 'static' : 'disabled'
