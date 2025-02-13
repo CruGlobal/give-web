@@ -54,6 +54,10 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false,
+        oktaUrl: 'https://cru.oktapreview.com',
+        oktaClientId: '0oa26fp9l9iFxuKJf0h8',
+        oktaReferrer: 'https://localhost.cru.org:9000',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       devcloud: {
@@ -63,6 +67,9 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://stage-cloud.cru.org',
         publicGive: 'https://give-dev-cloud.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        oktaUrl: 'https://cru.oktapreview.com',
+        oktaClientId: '0oa26fp9l9iFxuKJf0h8',
+        oktaReferrer: 'https://give-dev-cloud.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       stagecloud: {
@@ -72,6 +79,9 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://stage-cloud.cru.org',
         publicGive: 'https://give-stage-cloud.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        oktaUrl: 'https://cru.oktapreview.com',
+        oktaClientId: '0oa26fp9l9iFxuKJf0h8',
+        oktaReferrer: 'https://give-stage-cloud.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       prodcloud: {
@@ -81,15 +91,22 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give-prod-cloud.cru.org',
         acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
+        oktaUrl: 'https://signon.okta.com',
+        oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
+        oktaReferrer: 'https://give-prod-cloud.cru.org',
         recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
       },
       staging: {
         apiUrl: 'https://give-stage2.cru.org',
-        imgDomain: '//give-static.cru.org',
+        imgDomain: '//give-stage-static.cru.org',
         imgDomainDesignation: 'https://give-stage2.cru.org',
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
+        isBrandedCheckout: false,
+        oktaUrl: 'https://cru.oktapreview.com',
+        oktaClientId: '0oa26fp9l9iFxuKJf0h8',
+        oktaReferrer: 'https://give-stage2.cru.org',
         recaptchaKey: '6LcCMoYqAAAAABMoyLs5CyKWwE8qn_YslEaiRPRD'
       },
       nonprod: {
@@ -99,7 +116,10 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://stage.cru.org',
         publicGive: 'https://give-stage2-next.cru.org',
         acsUrl: 'https://cru-mkt-stage1.adobe-campaign.com/lp/LP63?_uuid=f1938f90-38ea-41a6-baad-9ac133f6d2ec&service=%404k83N_C5RZnLNvwz7waA2SwyzIuP6ATcN8vJjmT5km0iZPYKUUYk54sthkZjj-hltAuOKDYocuEi5Pxv8BSICoA4uppcvU_STKCzjv9RzLpE4hqj&pkey=',
-        isBrandedCheckout: false
+        isBrandedCheckout: false,
+        oktaUrl: 'https://signon.okta.com',
+        oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
+        oktaReferrer: 'https://give-stage2-next.cru.org'
       },
       preprod: {
         apiUrl: 'https://give-preprod.cru.org',
@@ -107,7 +127,10 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         imgDomainDesignation: 'https://give-preprod.cru.org',
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give-preprod.cru.org',
-        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey='
+        acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
+        oktaUrl: 'https://signon.okta.com',
+        oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
+        oktaReferrer: 'https://give-preprod.cru.org'
       },
       production: {
         apiUrl: 'https://give.cru.org',
@@ -116,6 +139,10 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
         publicCru: 'https://www.cru.org',
         publicGive: 'https://give.cru.org',
         acsUrl: 'https://cru-mkt-prod1-m.adobe-campaign.com/lp/LPEmailPrefCenter?_uuid=8831d67a-0d46-406b-8987-fd07c97c4ca7&service=%400fAlW4GPmxXExp8qlx7HDlAM6FSZUd0yYRlQg6HRsO_kglfi0gs650oHPZX6LrOvg7OHoIWWpobOeGZduxdNU_m5alc&pkey=',
+        isBrandedCheckout: false,
+        oktaUrl: 'https://signon.okta.com',
+        oktaClientId: '0oa1p8kb6gr1IGGdc0h8',
+        oktaReferrer: 'https://give.cru.org',
         recaptchaKey: '6LduSiQqAAAAAOLA7NEU8-3-mdCmBKEUCwaFQuJF'
       },
       defaults: {
@@ -158,6 +185,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     FREQUENCY_ERROR: 'There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     ADDING_CART_ERROR: 'There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     GIFT_IN_CART_ERROR: 'You already have this gift in your cart.',
+    FORCED_USER_TO_LOGOUT: 'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
     GIFT_AMOUNT: 'Gift Amount',
     OTHER_PLACEHOLDER: 'Other',
     GIFT_FREQUENCY: 'Gift Frequency',
@@ -176,6 +204,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     SPECIAL_INSTRUCTIONS: 'Special Handling Instructions for Processing This Gift',
     MESSAGE_EXAMPLE: 'For example: stop my gift after 18 months, make this gift anonymous (note: please remove any messages to ministry or missionary to remain anonymous), etc.',
     YOUR_INFORMATION: 'Your information',
+    YOUR_NAME: 'Your name',
     PAYMENT: 'Payment',
     CONTINUE: 'Continue',
     LOADING_ERROR_RETRY: 'There was an error loading your profile. You can use the retry button to try loading it again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
@@ -356,7 +385,11 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     RADIO_STATION: 'Radio Station',
     RADIO_STATION_LIST_ERROR: 'There was an error loading radio stations in your area.',
     RADIO_STATION_SELECT_ERROR: 'There was an error selecting a radio station.',
-    PREFERRED_RADIO_STATION: 'Preferred Radio Station: '
+    PREFERRED_RADIO_STATION: 'Preferred Radio Station: ',
+    SOMETHING_WENT_WRONG: 'Something went wrong. Please try again',
+    OKTA_EMAIL_ALREADY_EXISTS: 'The email address you used belongs to an existing Okta user.',
+    OKTA_ERROR_WHILE_SAVING_EMAIL: 'There was an error saving your email address. Make sure it was entered correctly.',
+    OKTA_ERROR_WHILE_SAVING_DATA: 'There was an error saving your contact info. Please try again or contact eGift@cru.org for assistance.'
   })
 
   $translateProvider.translations('es', {
@@ -369,6 +402,7 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     FREQUENCY_ERROR: 'There was an error configuring the frequency of your gift. You may try changing the frequency again but if you continue to experience issues, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     ADDING_CART_ERROR: 'There was an unknown error adding your gift to the cart. Please verify all your info and try again. If you are still seeing this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',
     GIFT_IN_CART_ERROR: 'Ya tienes este regalo en tu carrito.',
+    FORCED_USER_TO_LOGOUT: 'There was an error adding this item to your account due to session data. Please re-add the item to your cart.',
     GIFT_AMOUNT: 'Selecciona Una Cantidad',
     OTHER_PLACEHOLDER: 'Otro regalo generoso',
     GIFT_FREQUENCY: 'Frecuencia de la donación',
@@ -387,6 +421,8 @@ export const appConfig = /* @ngInject */ function (envServiceProvider, $compileP
     SPECIAL_INSTRUCTIONS: 'Instrucciones especiales de manejo para procesar este regalo',
     MESSAGE_EXAMPLE: 'Por ejemplo: Detener mi donación después de 18 meses, hacer esta donación anónima (nota: favor de quitar cualquier mensaje al ministerio o al misionero para permanecer en el anonimato), etc.',
     YOUR_INFORMATION: 'Tu información',
+    YOUR_NAME: 'Tu nombre',
+    SPOUSE_NAME: 'cónyuge nombre',
     PAYMENT: 'Pago',
     CONTINUE: 'Continuar',
     LOADING_ERROR_RETRY: 'There was an error loading your profile. You can use the retry button to try loading it again. If you continue to see this message, contact <a href="mailto:eGift@cru.org">eGift@cru.org</a> for assistance.',

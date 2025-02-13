@@ -1,3 +1,10 @@
+.modal-dialog {
+  /* Center dialog on small screens. Bootstrap only applies this margin on screens wider than $screen-sm-min. */
+  margin-inline: auto;
+  /* Center dialog vertically */
+  align-content: center;
+}
+
 .modal-content.give-modal-content {
   .hide-modal {
     display: none;
@@ -17,7 +24,7 @@
     }
 
     button.close {
-      background: url("/assets/img/close-mobile.png");
+      background-image: url("/assets/img/close-mobile.png");
       background-size: contain;
       width: 27px;
       height: 27px;
@@ -26,6 +33,7 @@
       right: 10px;
       position: absolute;
       z-index: 1000;
+      margin-top: 0;
 
       span {
         display: none;
@@ -34,18 +42,11 @@
 
     @media (min-width: 992px) {
       button.close {
-        background: url("/assets/img/close-icon.png");
-        background-size: contain;
+        background-image: url("/assets/img/close-icon.png");
         width: 36px;
         height: 36px;
-        margin-top: -30px;
-        margin-right: -85px;
-        opacity: 1;
-        position: static;
-
-        span {
-          display: none;
-        }
+        top: 0;
+        right: -68px;
       }
     }
 
@@ -116,6 +117,8 @@ body{
   }
 }
 
+$modal-line-height: 1.425em;
+
 .modal-content {
     .form-group {
         label.radio {
@@ -126,7 +129,7 @@ body{
     }
 
   p {
-    line-height: 1.425em;
+    line-height: $modal-line-height;
   }
 }
 
@@ -160,7 +163,7 @@ body{
 }
 
 #addNewPaymentModal{
-	background-color: rgba(138, 138, 138, 0.9); 
+	background-color: rgba(138, 138, 138, 0.9);
 	.light-font{
 		font-size: 14px;
 		color: #d3d3d3;

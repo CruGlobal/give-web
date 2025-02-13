@@ -1,0 +1,86 @@
+sign-in-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  margin-top: 20px;
+
+  hr {
+    width: 65%;
+    margin-block: auto;
+  }
+
+  .no-account {
+    font-size: 1.2rem;
+  }
+
+  .details-wrapper {
+    display: flex;
+    flex-wrap: wrap; // Keep the summaries on the first line and wrap the description to the next line
+
+    details:first-of-type summary {
+      flex: 1; // Push the second summary to the right edge
+      min-width: 150px; // Ensure that the summaries are wide enough that the description is forced to wrap to the next line
+    }
+  }
+
+  // The goal is to have two <details> on one line that display their descriptions in the same
+  // location on the page on the line before
+  details {
+    display: contents; // Make the descriptions participate in the .details-wrapper flexbox layout
+    text-align: left;
+  }
+
+  summary {
+    display: list-item;
+    order: -1; // Make both summaries appear before the descriptions
+    margin: 1rem 0;
+    cursor: pointer;
+  }
+
+  > p {
+    margin-bottom: 0;
+  }
+
+  .okta-signup-button {
+    $okta-brand: #007dc1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 20px;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: white;
+    color: $okta-brand;
+    border: 2px solid $okta-brand;
+    border-radius: 4px;
+
+    &:hover {
+      color: white;
+      background-color: $okta-brand;
+      border-color: $okta-brand;
+    }
+    &:focus {
+      color: white;
+      background-color: darken($okta-brand, 3%);
+      border-color: darken($okta-brand, 3%);
+    }
+  }
+
+  .alert {
+    text-align: left;
+  }
+}
+
+sign-in-button {
+  .okta-button {
+    width: 100%;
+  }
+
+  .fa {
+    padding-left: 0.25rem;
+  }
+}
